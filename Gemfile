@@ -47,7 +47,7 @@ gem 'thin'
 gem 'turnout'
 gem 'will_paginate', '~> 3.0'
 
-gem 'ontologies_api_client', :git => "https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git", :branch => 'master'
+gem 'ontologies_api_client', :git => "https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git", :branch => ENV['ONTOLOGIES_API_RUBY_CLIENT_GIT_BRANCH'] || 'master'
 
 group :staging, :production do
   # application monitoring
