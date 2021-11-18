@@ -18,11 +18,12 @@
       %td{:colspan => "2", :style => "text-align: right;"}
         = link_to "Edit Information", "/accounts/#{CGI.escape(@user.username)}/edit"
   %br/
-  %span{:style => "font-size: large; font-weight: bold;"}
-    API Key
-    %span{:style => "font-weight: normal; padding-left: 1em; font-size: x-small; color: gray;"} Your API Key can be used to access the NCBO API (REST) Services
-  %p{:style => "padding: .5em 0 0 1em;"}
-    = session[:user].apikey
+  - if session[:admin_user].nil? # if not login_as
+    %span{:style => "font-size: large; font-weight: bold;"}
+      API Key
+      %span{:style => "font-weight: normal; padding-left: 1em; font-size: x-small; color: gray;"} Your API Key can be used to access the NCBO API (REST) Services
+    %p{:style => "padding: .5em 0 0 1em;"}
+      = session[:user].apikey
   %br/
 
 
