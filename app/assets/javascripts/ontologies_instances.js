@@ -47,7 +47,7 @@ class InstancesTable{
         this.dataTable = $(this.tableElem).DataTable( {
             "paging": true,
             "pagingType": "full",
-            "info": false,
+            "info": true,
             "searching": false,
             "ordering": false,
             "serverSide":true,
