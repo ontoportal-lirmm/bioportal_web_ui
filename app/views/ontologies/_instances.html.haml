@@ -2,21 +2,23 @@
   $("##{id}").ready(function() {
     const ontology_acronym = "#{@ontology.acronym}"
     const concept_id = "#{@instances_concept_id}"
+
+    // render the instances data table
     const inst = InstancesTable.mount("##{id}" , ontology_acronym , concept_id)
+
+    //print the instance count append to the tab title
     inst.dataTable.on("xhr" ,  () => {
         $("#instances_count").text(inst.dataTable.ajax.json().totalCount)
     })
 
 
-    // if an instance conceptid is set an the uri, shows it's details
-    if(window.location.search.includes("conceptid=")){
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-      console.log(urlParams.get('conceptid'));
-      getInstanceDetailsFromURI(ontology_acronym , urlParams.get('conceptid') )
-      .then((data) => {
-        console.log(data)
+    const conceptIdValue = getInstanceConceptId()
+    // if an instance conceptid is set an the uri, shows it's details as a popup
+    if(conceptIdValue !== ""){
+      jQuery.blockUI()
+      getInstanceDetailsFromURI(ontology_acronym , conceptIdValue ).then((data) => {
         const details = new InstanceDetails(ontology_acronym , data["@id"] , data.types , data.properties)
+        jQuery.unblockUI()
         $.facebox(details.render().html())
       })
     }
