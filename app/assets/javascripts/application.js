@@ -30,7 +30,8 @@
 //= require bp_property_tree
 //= require home
 //= require fair_score
-//= require ontologies_instances
+//= require_tree ./components/instances
+//= require_tree ./helpers/instances
 //= require ontologies
 //= require projects
 //= require submissions
