@@ -24,7 +24,7 @@
 
     if (typeof state.data.p !== 'undefined') {
       if (state.data.p == "classes") {
-        setConceptId("root") // reset the conecpt id of instances if was set
+        InstancesHelper.setConceptId("root") // reset the conecpt id of instances if was set
         displayTree(state.data);
       }
 
