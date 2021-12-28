@@ -45,7 +45,8 @@ function  getInstanceDetailsFromURI(ontology , uri){
  */
 function getInstanceConceptId() {
     const ont_viewer_data =  jQuery(document).data().bp.ont_viewer
-    return ont_viewer_data.content_section === "instances" ? ont_viewer_data.concept_id : ""
+    const concept_id = ont_viewer_data.concept_id
+    return ont_viewer_data.content_section === "instances" ? (concept_id === "root" ? "" :concept_id)  : ""
 }
 
 
