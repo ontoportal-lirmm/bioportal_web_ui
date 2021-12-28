@@ -16,11 +16,13 @@
     // if an instance conceptid is set an the uri, shows it's details as a popup
     if(conceptIdValue !== ""){
       jQuery.blockUI()
-      getInstanceDetailsFromURI(ontology_acronym , conceptIdValue ).then((data) => {
+      getInstanceDetailsFromURI(ontology_acronym , conceptIdValue )
+      .then((data) => {
         const details = new InstanceDetails(ontology_acronym , data["@id"] , data.types , data.properties)
         jQuery.unblockUI()
         $.facebox(details.render().html())
       })
+      .catch(() => jQuery.unblockUI())
     }
   })
 
