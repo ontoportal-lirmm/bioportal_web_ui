@@ -32,6 +32,7 @@
 //= require fair_score
 //= require_tree ./components/instances
 //= require_tree ./helpers/instances
+//= require_tree ./helpers
 //= require ontologies
 //= require projects
 //= require submissions
