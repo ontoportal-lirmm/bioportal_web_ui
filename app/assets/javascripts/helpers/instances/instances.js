@@ -47,3 +47,8 @@ function getInstanceConceptId() {
     const ont_viewer_data =  jQuery(document).data().bp.ont_viewer
     return ont_viewer_data.content_section === "instances" ? ont_viewer_data.concept_id : ""
 }
+
+
+function setConceptId(conceptId) {
+    jQuery(document).data().bp.ont_viewer.concept_id = conceptId
+}

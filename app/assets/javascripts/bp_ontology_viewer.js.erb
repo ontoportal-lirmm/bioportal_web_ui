@@ -24,6 +24,7 @@
 
     if (typeof state.data.p !== 'undefined') {
       if (state.data.p == "classes") {
+        setConceptId("root") // reset the conecpt id of instances if was set
         displayTree(state.data);
       }
 
@@ -90,7 +91,6 @@ function displayTree(data) {
   if (typeof new_concept_id === 'undefined' || new_concept_id == concept_id) {
 
     if (concept_id !== "") {
-        console.log("more problems here")
       History.replaceState({p:"classes", conceptid:concept_id}, jQuery.bioportal.ont_pages["classes"].page_name + " | " + org_site, "?p=classes" + "&conceptid=" + concept_id);
     }
     jQuery.unblockUI();
