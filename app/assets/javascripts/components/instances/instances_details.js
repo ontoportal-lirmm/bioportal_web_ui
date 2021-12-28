@@ -1,5 +1,5 @@
 /**
- * Render an instance properties in the form of a table
+ * Render an instance properties in the form of a sample table
  */
 class InstanceDetails{
 
@@ -11,24 +11,14 @@ class InstanceDetails{
     }
 
     render(){
-        const toLink = function (uri, href) {
-            if(isALink(uri))
-                return `<a id="${uri}" href="${href}" title="${uri}" target="_blank">${getLabel(uri)}</a>`
-            else
-                return uri
-        }
-        const getPropertyHref = function (uri){
-            return  `?p=properties`
-        }
-        const getInstanceHref = function (uri) {
-            return `?p=instances&conceptid=${encodeURIComponent(uri)}`
-        }
-        const getClassHref = function (uri) {
-            return `?p=classes&conceptid=${encodeURIComponent(uri)}`
-        }
+
+        const instanceLabel = ConceptLabelLink.render(this.uri , InstancesHelper.getInstanceHref(this.uri) , "_blank")
+        const classesLabels = this.types.map(x => AjaxConceptLabelLink.render(this.ontology, x), "_blank")
+        const propertyLabel = (x) => ConceptLabelLink.render(x , InstancesHelper.getPropertyHref(x))
+        const propertyValueLabel = (x) => (UriHelper.isURI(x) ? ConceptLabelLink.render(x , InstancesHelper.getInstanceHref(x) , "_blank") : x)
 
         let container = $(`<div>
-                    <h4>Details of  ${toLink(this.uri , "javascript:void(0)")} of type : ${this.types.map(x => toLink(x , getClassHref(x)))}</h4>
+                    <h4>Details of  ${instanceLabel} of type : ${classesLabels}</h4>
             </div>`)
         let table = $(`<table class='zebra' style='width: 100% ; min-width: 60vw'>
                     <thead>
@@ -42,7 +32,7 @@ class InstanceDetails{
         let tbody = $(`<tbody></tbody>`)
         delete this.properties["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"]
         Object.entries(this.properties).forEach((x) => {
-            let row = `<tr><td>${toLink(x[0], getPropertyHref(x[0]))}</td><td>${x[1].map(x => toLink(x,getInstanceHref(x))).join(',')}</td></tr>`
+            let row = `<tr><td>${propertyLabel(x[0])}</td><td>${x[1].map(x => propertyValueLabel(x)).join(',')}</td></tr>`
             tbody.append(row)
         })
         table.append(tbody)

@@ -67,24 +67,19 @@ class InstancesTable{
     }
 
     render(){
-        const toLink = function (uri) {
-            return `<a id="${uri}" href="javascript:void(0)" title="${uri}">${getLabel(uri)}</a>`
-        }
-        const arr =["ID"];
-        if(!this.isClassURISet()){
-            arr.push("Types")
-        }
-        return arr.map((x,i) => {
-            return {
-                "targets" : i ,
-                "title":x,
-                "render": function (data, type ,row ,meta){
-                    if(typeof data === "string")
-                        data = [data]
-                    return data.map((x) => toLink(x)).join(',')
-                }
-            }
-        })
+        let columns = [{
+            "targets" : 0 ,
+            "title": 'ID',
+            "render" : (data) => ConceptLabelLink.render(data , "javascript:void(0)")
+        }]
+        if(!this.isClassURISet())
+            columns.push({
+                "targets" : 1 ,
+                "title": 'Types',
+                "render" : (data) => data.map(x => AjaxConceptLabelLink.render(this.ontologyAcronym , x))
+            })
+
+        return  columns
     }
 
     getAjaxUrl(page= null , size = null) {
