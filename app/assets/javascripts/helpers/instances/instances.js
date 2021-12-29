@@ -41,4 +41,18 @@ class InstancesHelper {
     static setConceptId(conceptId) {
         jQuery(document).data().bp.ont_viewer.concept_id = conceptId
     }
+
+
+    /**
+     *
+     * @param instance {Instance}
+     * @returns {*}
+     */
+    static getLabelFrom(instance){
+        let labels = instance.label
+        if(Array.isArray(labels))
+            labels = labels.shift()
+        return  labels || instance.prefLabel || UriHelper.extractLabelFrom(instance.uri)
+
+    }
 }
