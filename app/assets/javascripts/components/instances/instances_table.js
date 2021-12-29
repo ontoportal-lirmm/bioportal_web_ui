@@ -26,10 +26,11 @@ class InstancesTable{
                 "url": this.getAjaxUrl(),
                 "contentType": "application/json",
                 "dataSrc":  (json) => {
+                    console.log(json)
                     json.recordsTotal = json["totalCount"];
                     json.recordsFiltered = json.recordsTotal
                     return  json["collection"].map(x => [
-                        x["@id"],
+                        {id: x["@id"] , label: x["label"] , prefLabel:x["prefLabel"]},
                         x["types"],
                         x["properties"]
                     ])
@@ -67,11 +68,17 @@ class InstancesTable{
     }
 
     render(){
+
         let columns = [{
             "targets" : 0 ,
-            "title": 'ID',
-            "render" : (data) => ConceptLabelLink.render(data , "javascript:void(0)")
+            "title": 'Instance',
+            "render" : (data) => {
+                let {id,label,prefLabel} = data
+                return InstanceLabelLink.render( new Instance(id,label,prefLabel),"javascript:void(0)")
+
+            }
         }]
+
         if(!this.isClassURISet())
             columns.push({
                 "targets" : 1 ,
@@ -97,12 +104,13 @@ class InstancesTable{
     }
 
     openPopUpDetail(data){
+
         $.facebox(() => {
-            let uri = data[0]
+            let {id} = data[0]
             let types = data[1]
             let properties = data[2]
 
-            $.facebox( new InstanceDetails(this.ontologyAcronym, uri , types , properties).render().html())
+            $.facebox( new InstanceDetails(this.ontologyAcronym, new Instance(id , "", "" ,types, properties)).render().html())
         })
     }
 }
