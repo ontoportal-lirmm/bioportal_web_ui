@@ -11,7 +11,6 @@ class InstanceDetails{
     constructor(ontology, instance) {
         this.instance = instance
         this.ontology = ontology
-        console.log(this)
     }
 
     render(){
@@ -24,7 +23,7 @@ class InstanceDetails{
         let container = $(`<div>
                     <h4>Details of  ${instanceLabel} of type : ${classesLabels}</h4>
             </div>`)
-        let table = $(`<table class='zebra' style='width: 100% ; min-width: 60vw'>
+        let table = $(`<table class='zebra' style='min-width: 60vw; max-width: 90vw'>
                     <thead>
                             <tr>
                                 <th>Property name</th>    
@@ -36,7 +35,7 @@ class InstanceDetails{
         let tbody = $(`<tbody></tbody>`)
         delete properties["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"]
         Object.entries(properties).forEach((x) => {
-            let row = `<tr><td>${propertyLabel(x[0])}</td><td>${x[1].map(x => propertyValueLabel(x)).join(',')}</td></tr>`
+            let row = `<tr><td>${propertyLabel(x[0])}</td><td style="word-break: break-all">${x[1].map(x => propertyValueLabel(x)).join(',')}</td></tr>`
             tbody.append(row)
         })
         table.append(tbody)

@@ -12,7 +12,6 @@ class InstancesTable{
     init(){
         if ( $.fn.dataTable.isDataTable( this.tableElem ) ) {
             $(this.tableElem).DataTable().destroy();
-
         }
         this.dataTable = $(this.tableElem).DataTable( {
             "paging": true,
