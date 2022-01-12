@@ -56,7 +56,7 @@ class InstancesTable{
                 "search": "Search by labels:"
             },
             "createdRow":  (row, data, dataIndex ) => {
-                $(row).click(() => this.openPopUpDetail(data));
+                $(row).children().first().click(() => this.openPopUpDetail(data));
             }
 
         })
@@ -92,7 +92,7 @@ class InstancesTable{
                 "targets" : 1 ,
                 "name": "types",
                 "title": 'Types',
-                "render" : (data) => data.map(x => AjaxConceptLabelLink.render(this.ontologyAcronym , x))
+                "render" : (data) => data.map(x => AjaxConceptLabelLink.render(this.ontologyAcronym , x , "_blank"))
             })
 
         return  columns
