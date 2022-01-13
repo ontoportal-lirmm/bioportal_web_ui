@@ -7,24 +7,12 @@
     const inst = InstancesTable.mount("##{id}" , ontology_acronym , concept_id)
 
     //print the instance count append to the tab title
-    inst.dataTable.on("xhr" ,  () => {
-        $("#instances_count").text(inst.dataTable.ajax.json().totalCount)
-    })
-
-
-    const conceptIdValue = InstancesHelper.getInstanceConceptId()
-    // if an instance conceptid is set an the uri, shows it's details as a popup
-    if(conceptIdValue !== ""){
-      jQuery.blockUI()
-      InstancesHelper.getInstanceDetailsFromURI(ontology_acronym , conceptIdValue )
-      .then((data) => {
-        let instance = new Instance(data["@id"] ,"" ,"" ,data.types , data.properties)
-        const details = new InstanceDetails(ontology_acronym ,instance)
-        jQuery.unblockUI()
-        $.facebox(details.render().html())
+    if(concept_id){
+       inst.dataTable.on("xhr" ,  () => {
+          $("#instances_count").text(inst.dataTable.ajax.json().totalCount)
       })
-      .catch(() => jQuery.unblockUI())
     }
+
   })
 
 %div.ontologies_list_container.mt-3
