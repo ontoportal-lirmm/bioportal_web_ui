@@ -13,7 +13,6 @@ class UriHelper {
         return label
     }
     static isURI(uri){
-        console.log(uri)
         return uri.startsWith("http") || uri.startsWith("https")
     }
 
