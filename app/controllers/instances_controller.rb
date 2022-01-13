@@ -1,19 +1,15 @@
 class InstancesController < ApplicationController
-
+  include InstancesHelper
   def index_by_ontology
-    custom_render LinkedData::Client::HTTP.get("/ontologies/#{params[:ontology]}/instances", get_query_parameters , raw:true)
+    custom_render get_instances_by_ontology_json(params[:ontology], get_query_parameters)
   end
 
   def index_by_class
-    custom_render LinkedData::Client::HTTP
-                    .get("/ontologies/#{params[:ontology]}/classes/#{CGI.escape(params[:class])}/instances",
-                         get_query_parameters, raw: true)
+    custom_render get_instances_by_class_json(params[:ontology], params[:class], get_query_parameters)
   end
 
   def show
-    inst = LinkedData::Client::HTTP
-      .get("/ontologies/#{params[:ontology]}/instances/#{CGI.escape(params[:instance])}",
-           get_query_parameters, raw: true)
+    inst = get_instance_details_json(params[:ontology], params[:instance], get_query_parameters)
 
     render json: JSON.parse(inst)
   end
