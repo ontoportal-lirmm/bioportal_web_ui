@@ -17,7 +17,7 @@ class InstanceDetails{
 
         const instanceLabel = InstanceLabelLink.render(this.instance, "","_blank" )
         const classesLabels = this.instance.types.map(x => AjaxConceptLabelLink.render(this.ontology, x), "_blank")
-        const propertyLabel = (x) => ConceptLabelLink.render(x , InstancesHelper.getPropertyHref(x))
+        const propertyLabel = (x) => ConceptLabelLink.render(x , InstancesHelper.getPropertyHref(x),"_blank")
         const propertyValueLabel = (stringValue) => {
             if(UriHelper.isURI(stringValue))
                 return ConceptLabelLink.render(stringValue , InstancesHelper.getInstanceHref(stringValue ,"root") , "_blank")
@@ -28,7 +28,7 @@ class InstanceDetails{
         let container = $(`<div>
                     <h4>Details of  ${instanceLabel} of type : ${classesLabels}</h4>
             </div>`)
-        let table = $(`<table class='zebra' style='min-width: 60vw; max-width: 90vw'>
+        let table = $(`<table class='zebra' style='width: 80vw'>
                     <thead>
                             <tr>
                                 <th>Property name</th>    
