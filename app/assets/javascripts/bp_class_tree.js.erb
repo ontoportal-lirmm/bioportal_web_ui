@@ -87,6 +87,7 @@ function initClassTree() {
 };
 
 function nodeClicked(node_id) {
+
   // Get current html and store data in cache (to account for changes since the cache was retrieved)
   setCacheCurrent();
 
@@ -130,7 +131,8 @@ function nodeClicked(node_id) {
     insertNotesTable(tabData["notes_table_data"]);
 
     wrapupTabChange(selectedTab);
-  } else {
+  }
+  else {
     jQuery.blockUI({ message: '<h1>' + '<%= image_tag src="jquery.simple.tree/spinner.gif" %>' + ' Loading Class...</h1>', showOverlay: false });
     jQuery.get('/ajax_concepts/'+jQuery(document).data().bp.ont_viewer.ontology_id+'/?conceptid='+node_id+'&callback=load',
       function(data){
@@ -150,6 +152,20 @@ function nodeClicked(node_id) {
       }
     );
   }
+
+  //TODO: think of how to use the cache for instances
+  updateConceptInstances(getOntology() , node_id)
+
+}
+
+// Update instances table when a new concept in the tree view is clicked
+function updateConceptInstances(ontology_acronym,node_id){
+    $("#class-instances-data-table").ready(function() {
+        let inst = InstancesTable.mount("#class-instances-data-table" , ontology_acronym , decodeURIComponent(node_id) )
+        inst.dataTable.on("xhr" ,  () => {
+            $("#instances_count").text(inst.dataTable.ajax.json().totalCount)
+        })
+    })
 }
 
 // Keep trying to put the tree view content in place (looks for #sd_content)

@@ -1,0 +1,32 @@
+:javascript
+  $("##{id}").ready(function() {
+    const ontology_acronym = "#{@ontology.acronym}"
+    const concept_id = "#{@instances_concept_id}"
+    const inst = InstancesTable.mount("##{id}" , ontology_acronym , concept_id)
+    inst.dataTable.on("xhr" ,  () => {
+        $("#instances_count").text(inst.dataTable.ajax.json().totalCount)
+    })
+
+
+    // if an instance conceptid is set an the uri, shows it's details
+    if(window.location.search.includes("conceptid=")){
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      console.log(urlParams.get('conceptid'));
+      getInstanceDetailsFromURI(ontology_acronym , urlParams.get('conceptid') )
+      .then((data) => {
+        console.log(data)
+        const details = new InstanceDetails(ontology_acronym , data["@id"] , data.types , data.properties)
+        $.facebox(details.render().html())
+      })
+    }
+  })
+
+%div.ontologies_list_container.mt-3
+  %table.zebra{id: id,style:"width:100%; position:relative"}
+
+
+
+
+
+

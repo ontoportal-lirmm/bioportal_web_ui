@@ -37,7 +37,8 @@
           var paramValue = value.split("=")[1];
           params[paramName] = paramValue;
         });
-      } else {
+      }
+      else {
         queryStringParams = window.location.search.substring(1).split("&");
 
         jQuery(queryStringParams).each(function(index, value){
@@ -53,7 +54,8 @@
 
         // We need to get everything using AJAX
         content_section = null;
-      } else {
+      }
+      else {
         var pane = jQuery(document).data().bp.ont_viewer.content_section;
         showOntologyContent(pane);
         document.title = jQuery.bioportal.ont_pages[pane].page_name + " | " + jQuery(document).data().bp.ont_viewer.org_site;
@@ -93,7 +95,8 @@ function displayTree(data) {
     jQuery.unblockUI();
     return;
 
-  } else {
+  }
+  else {
 
     var new_concept_param = (typeof new_concept_id === 'undefined') ? "" : "&conceptid=" + new_concept_id;
 
@@ -200,10 +203,10 @@ function showOntologyContent(content_section) {
 
 // Prevent the default behavior of clicking the ontology page links
 // Instead, fire some history events
-var nav_ont = function(link) {
-  var page = jQuery(link).attr("data-bp-ont-page");
-  History.pushState({p:page}, jQuery.bioportal.ont_pages[page].page_name + " | " + jQuery(document).data().bp.ont_viewer.org_site, "?p=" + page);
-}
+const nav_ont = function (link) {
+    let page = jQuery(link).attr("data-bp-ont-page");
+    History.pushState({p: page}, jQuery.bioportal.ont_pages[page].page_name + " | " + jQuery(document).data().bp.ont_viewer.org_site, "?p=" + page);
+};
 
 jQuery(document).ready(function() {
   var metadata_only = jQuery(document).data().bp.ont_viewer.metadata_only;
@@ -280,6 +283,10 @@ jQuery(document).ready(function() {
     if (content_section !== "notes") {
       jQuery.bioportal.ont_pages["notes"].retrieve();
     }
+
+    if (content_section !== "instances" && metadataOnly !== "true") {
+          jQuery.bioportal.ont_pages["instances"].retrieve();
+      }
 
     if (content_section !== "widgets" && metadataOnly !== "true") {
       jQuery.bioportal.ont_pages["widgets"].retrieve();
@@ -398,6 +405,9 @@ jQuery.bioportal.OntologyPage = function(id, location_path, error_string, page_n
     setupNotesFacebox();
     jQuery("#ont_notes_content .link_button").button();
   });
+
+  jQuery.bioportal.ont_pages["instances"] = new jQuery.bioportal.OntologyPage("instances", "/ontologies/" + jQuery(document).data().bp.ont_viewer.ontology_id + "?p=instances&ajax=true", "Problem retrieving widgets", jQuery(document).data().bp.ont_viewer.ontology_name + " - Instances", "Instances");
+
 
   jQuery.bioportal.ont_pages["widgets"] = new jQuery.bioportal.OntologyPage("widgets", "/ontologies/" + jQuery(document).data().bp.ont_viewer.ontology_id + "?p=widgets&ajax=true", "Problem retrieving widgets", jQuery(document).data().bp.ont_viewer.ontology_name + " - Widgets", "Widgets");
 })(window);
