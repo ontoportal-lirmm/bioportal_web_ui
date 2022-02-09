@@ -22,6 +22,7 @@ Rails.application.routes.draw do
 
   resources :ontologies do
     resources :submissions
+    get 'instances/:instance_id', to: 'instances#show', constraints: { instance_id: /[\d\w\.\-\%\*\+\(\)]+/ }
   end
 
   resources :login

@@ -12,9 +12,8 @@ class InstancesController < ApplicationController
   end
 
   def show
-    inst = get_instance_details_json(params[:ontology], params[:instance], get_query_parameters)
-
-    render json: JSON.parse(inst)
+    @instance = get_instance_details_json(params[:ontology_id], params[:instance_id], {include: 'all'})
+    render partial: 'instances/instance_details'
   end
 
   private
@@ -25,6 +24,7 @@ class InstancesController < ApplicationController
   end
   # json render + adding next and prev pages links
   def custom_render(instances)
+    instances[:collection].map! { |i| add_labels_to_print(i, @ontology.acronym)}
     if (instances.respond_to? :links) && (!instances.respond_to? :errors)
       instances.links = {
         nextPage: get_page_link(instances.nextPage),
