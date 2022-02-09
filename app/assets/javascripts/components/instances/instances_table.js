@@ -73,7 +73,7 @@ class InstancesTable extends DataTable{
     update(ontologyAcronym, classUri){
         this.setAttribute("ontology-acronym" , ontologyAcronym)
         this.setAttribute("class-uri" ,classUri)
-        super.connectedCallback()
+        super.initDataTable()
     }
 
     render(){

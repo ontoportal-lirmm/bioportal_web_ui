@@ -20,15 +20,15 @@ class DataTable extends HTMLElement{
     }
 
     connectedCallback(){
-        if ( $.fn.dataTable.isDataTable( this.tableElem ) ) {
-            $(this.tableElem).DataTable().destroy();
-        }
         this.initDataTable()
         this.dispatchTableUpdateEvent()
         this.dispatchClickedRow()
     }
 
     initDataTable(){
+        if ( $.fn.dataTable.isDataTable( this.tableElem ) ) {
+            $(this.tableElem).DataTable().destroy();
+        }
         this.dataTable = $(this.tableElem).DataTable(this.config)
         this.appendChild(this.container)
     }
