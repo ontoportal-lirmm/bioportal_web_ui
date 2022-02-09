@@ -683,13 +683,7 @@ function getAjaxContent() {
       let elem = $(this)
       let parent = elem.parent()
       $.get(elem.attr("href"), (conceptLabel) => {
-
-          if(parent.attr("id") === conceptLabel){ // concept not found
-              parent.attr("href" ,parent.attr("id")) // extern redirection
-              parent.html(UriHelper.extractLabelFrom(conceptLabel))
-          }else {
-              parent.html(conceptLabel)
-          }
+          parent.html(conceptLabel)
       })
   });
   setTimeout(getAjaxContent, 500);

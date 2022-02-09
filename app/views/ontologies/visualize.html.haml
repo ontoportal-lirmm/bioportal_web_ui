@@ -4,9 +4,7 @@
     let data = #{raw @instance_details.to_json} || null
 
     if(data && Object.keys(data).length !== 0){
-      const instance = new Instance(data["@id"] ,"" ,"" ,data.types , data.properties)
-      const details = new InstanceDetails(ontology_acronym ,instance)
-      $.facebox(details.render().html())
+      $.facebox({ajax: `/ontologies/${ontology_acronym}/instances/${encodeURIComponent(data["@id"])}`})
     }
 
   })

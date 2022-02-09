@@ -161,10 +161,8 @@ function nodeClicked(node_id) {
 // Update instances table when a new concept in the tree view is clicked
 function updateConceptInstances(ontology_acronym,node_id){
     $("#class-instances-data-table").ready(function() {
-        let inst = InstancesTable.mount("#class-instances-data-table" , ontology_acronym , decodeURIComponent(node_id) )
-        inst.dataTable.on("xhr" ,  () => {
-            $("#instances_count").text(inst.dataTable.ajax.json()["table"].totalCount)
-        })
+        const instanceTable =  document.querySelector("#class-instances-data-table")
+        instanceTable.update(ontology_acronym, decodeURIComponent(node_id))
     })
 }
 

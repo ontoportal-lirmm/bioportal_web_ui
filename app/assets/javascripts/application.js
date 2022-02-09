@@ -29,7 +29,6 @@
 //= require bp_recommender
 //= require bp_property_tree
 //= require home
-//= require_tree ./helpers
 //= require_tree ./components
 //= require ontologies
 //= require projects

@@ -23,9 +23,9 @@
     jQuery(document).trigger("ont_view_change");
 
     if (typeof state.data.p !== 'undefined') {
-      if (state.data.p == "classes") {
-        InstancesHelper.setConceptId("root") // reset the conecpt id of instances if was set
-        displayTree(state.data);
+      if (state.data.p === "classes") {
+          jQuery(document).data().bp.ont_viewer.concept_id = "root" // reset the concept id of instances if was set
+          displayTree(state.data);
       }
 
       showOntologyContent(state.data.p);
