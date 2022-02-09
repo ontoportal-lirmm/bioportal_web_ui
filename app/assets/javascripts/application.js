@@ -29,11 +29,12 @@
 //= require bp_recommender
 //= require bp_property_tree
 //= require home
-//= require_tree ./interfaces
 //= require_tree ./helpers
-//= require_tree ./helpers/instances
-//= require_tree ./components/instances
+//= require_tree ./components
 //= require ontologies
 //= require projects
 //= require submissions
 
+customElements.define('data-table-loader', DataTableLoader );
+customElements.define('data-table', DataTable );
+customElements.define('instances-table', InstancesTable );

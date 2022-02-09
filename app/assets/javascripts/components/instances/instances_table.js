@@ -1,19 +1,19 @@
 /**
- * Render a jquery data table of an ontology (and class) instances inside a <table> element
+ * A web components that render a jquery data table of an ontology (and class) instances inside a <table> element
  */
-class InstancesTable{
-    constructor(tableElem , ontologyAcronym , classUri = ""){
-        this.tableElem = tableElem
-        this.ontologyAcronym = ontologyAcronym
-        this.classUri = classUri
-        this.dataTable = null
+class InstancesTable extends DataTable{
+
+
+    get ontologyAcronym(){
+        return this.getAttribute("ontology-acronym") || ""
     }
 
-    init(){
-        if ( $.fn.dataTable.isDataTable( this.tableElem ) ) {
-            $(this.tableElem).DataTable().destroy();
-        }
-        this.dataTable = $(this.tableElem).DataTable( {
+    get classUri(){
+        return this.getAttribute("class-uri") || ""
+    }
+
+    get config(){
+        return {
             "paging": true,
             "pagingType": "full",
             "info": true,
@@ -22,55 +22,58 @@ class InstancesTable{
             "serverSide":true,
             "processing": true,
             "ajax": {
-                "url": this.getAjaxUrl(),
+            "url": this.getAjaxUrl(),
                 "contentType": "application/json",
                 "dataSrc":  (json) => {
-                    json.recordsTotal = json["table"]["totalCount"]
-                    json.recordsFiltered = json.recordsTotal
-                    return  json["table"]["collection"].map(x => [
-                        {id: x["table"]["@id"] , label: x["table"]["label"] , prefLabel:x["table"]["prefLabel"]},
-                        x["table"]["types"],
-                        x["table"]["properties"]
-                    ])
-                },
-                "data": (d) => {
-
-                    //return parameters to send for the server
-                    let columns = d.columns
-                    let sortby =  (d.order[0] ? columns[d.order[0].column].name : "")
-                    let order =  (d.order[0] ? d.order[0].dir : "")
-                    return {
-                        page: (d.start/d.length)+ 1 ,
-                        pagesize: d.length ,
-                        search: d.search.value,
-                        sortby, order,
-                        include: "all"
-                    }
-                }
+                json.recordsTotal = json["table"]["totalCount"]
+                json.recordsFiltered = json.recordsTotal
+                return  json["table"]["collection"].map(x => [
+                    {id: x["table"]["@id"] , label: x["table"]["label"] , prefLabel:x["table"]["prefLabel"] ,labelToPrint:x["table"]["labelToPrint"] },
+                    x["table"]["types"],
+                    x["table"]["properties"]
+                ])
             },
+                "data": (d) => {
+                //return parameters to send for the server
+                let columns = d.columns
+                let sortby =  (d.order[0] ? columns[d.order[0].column].name : "")
+                let order =  (d.order[0] ? d.order[0].dir : "")
+                return {
+                    page: (d.start/d.length)+ 1 ,
+                    pagesize: d.length ,
+                    search: d.search.value,
+                    sortby, order
+                }
+            }
+        },
             "columnDefs": this.render(),
             "language": {
-                'loadingRecords': '&nbsp;',
-                'processing': this.renderLoader(),
+            'loadingRecords': '&nbsp;',
+                'processing': new DataTableLoader(),
                 "search": "Search by labels:"
-            },
-            "createdRow":  (row, data, dataIndex ) => {
-                $(row).children().first().click(() => this.openPopUpDetail(data));
-            }
+        }
 
-        })
+        }
     }
 
-    static mount(tableId , ontologyAcronym , conceptId){
-        if(tableId.toString().length>0){
-            const tableElm = document.querySelector(tableId)
+    constructor(){
+        super()
+    }
 
-            if(tableElm){
-                const instanceTable = new InstancesTable( tableElm , ontologyAcronym , conceptId)
-                instanceTable.init()
-                return instanceTable
-            }
-        }
+    connectedCallback(){
+        super.connectedCallback()
+        this.addEventListener("row-click", (e) => {
+            this.openPopUpDetail(e.detail.data)
+        })
+
+
+
+    }
+
+    update(ontologyAcronym, classUri){
+        this.setAttribute("ontology-acronym" , ontologyAcronym)
+        this.setAttribute("class-uri" ,classUri)
+        super.connectedCallback()
     }
 
     render(){
@@ -80,9 +83,8 @@ class InstancesTable{
             "name": "label",
             "title": 'Instance',
             "render" : (data) => {
-                let {id,label,prefLabel} = data
-                return InstanceLabelLink.render( new Instance(id,label,prefLabel),"javascript:void(0)")
-
+                const {id, labelToPrint} = data
+                return `<a id="${id}" href="javascript:void(0)" rel="facebox">${labelToPrint}</a>`
             }
         }]
 
@@ -91,11 +93,17 @@ class InstancesTable{
                 "targets" : 1 ,
                 "name": "types",
                 "title": 'Types',
-                "render" : (data) => data.map(x => AjaxConceptLabelLink.render(this.ontologyAcronym , x , "_blank"))
+                "render" : (data) => data.map(x => {
+                    const id = x.type
+                    const label = x.labelToPrint
+                    const href = (id===label ? id : `?p=classes&conceptid=${encodeURIComponent(id)}`)
+                    return `<a id="${id}" href="${href}" target="_blank">${label}</a>`
+                })
             })
 
         return  columns
     }
+
 
     getAjaxUrl() {
         let url = "/ajax/"+ this.ontologyAcronym
@@ -111,21 +119,11 @@ class InstancesTable{
     }
 
     openPopUpDetail(data){
+        let {id} = data[0]
+        const href= `/ontologies/${this.ontologyAcronym}/instances/${encodeURIComponent(id)}`
+        popUpElement({ajax:href})
 
-        $.facebox(() => {
-            let {id} = data[0]
-            let types = data[1]
-            let {context, links, ...properties} = data[2]["table"]
-
-            $.facebox( new InstanceDetails(this.ontologyAcronym, new Instance(id , "", "" ,types, properties)).render().html())
-        })
     }
 
-    renderLoader(){
-        return `           
-                                <div class="spinner-border m-2" role="status"> 
-                                    <span class="sr-only">Loading...</span>
-                                </div>           
-                `
-    }
+
 }
