@@ -59,7 +59,7 @@ function initClassTree() {
     }
   });
 
-  setConcept(jQuery(document).data().bp.ont_viewer.concept_id);
+  setConcept(getClassesConceptId());
   setOntology(jQuery(document).data().bp.ont_viewer.ontology_id);
   jQuery("#sd_content").scrollTo(jQuery('a.active'));
 
@@ -153,7 +153,7 @@ function nodeClicked(node_id) {
     );
   }
 
-  //TODO: think of how to use the cache for instances
+  //TODO: think of if we can use the cache for instances
   updateConceptInstances(getOntology() , node_id)
 
 }
@@ -196,10 +196,20 @@ function placeTreeView(treeHTML) {
   }
 }
 
+
+/**
+ * Return the conceptid from
+ * the section url if the section is "classes"
+ * @returns {*|string}
+ */
+function getClassesConceptId(default_concept_id = "root"){
+    const ont_viewer_data =  jQuery(document).data().bp.ont_viewer
+    return ont_viewer_data.content_section === "classes" ? ont_viewer_data.concept_id : default_concept_id
+}
 // Retrieve the tree view using ajax
 function getTreeView() {
   jQuery.ajax({
-    url: "/ajax/classes/treeview?ontology="+jQuery(document).data().bp.ont_viewer.ontology_id+"&conceptid="+encodeURIComponent(jQuery(document).data().bp.ont_viewer.concept_id),
+    url: "/ajax/classes/treeview?ontology="+jQuery(document).data().bp.ont_viewer.ontology_id+"&conceptid="+encodeURIComponent(getClassesConceptId()),
     success: function(data) {
       placeTreeView(data);
     },

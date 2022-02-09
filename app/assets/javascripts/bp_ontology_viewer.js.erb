@@ -77,7 +77,7 @@ function displayTree(data) {
   var ontology_version_id = jQuery(document).data().bp.ont_viewer.ontology_version_id;
   var ontology_name = jQuery(document).data().bp.ont_viewer.ontology_name;
   var org_site = jQuery(document).data().bp.ont_viewer.org_site;
-  var concept_id = jQuery(document).data().bp.ont_viewer.concept_id;
+  var concept_id = getClassesConceptId();
   var content_section = jQuery(document).data().bp.ont_viewer.content_section;
   var concept_param = jQuery(document).data().bp.ont_viewer.concept_param;
   var concept_name = jQuery(document).data().bp.ont_viewer.concept_name;
@@ -90,6 +90,7 @@ function displayTree(data) {
   if (typeof new_concept_id === 'undefined' || new_concept_id == concept_id) {
 
     if (concept_id !== "") {
+        console.log("more problems here")
       History.replaceState({p:"classes", conceptid:concept_id}, jQuery.bioportal.ont_pages["classes"].page_name + " | " + org_site, "?p=classes" + "&conceptid=" + concept_id);
     }
     jQuery.unblockUI();
@@ -97,7 +98,6 @@ function displayTree(data) {
 
   }
   else {
-
     var new_concept_param = (typeof new_concept_id === 'undefined') ? "" : "&conceptid=" + new_concept_id;
 
     if (typeof new_concept_id !== 'undefined') {
