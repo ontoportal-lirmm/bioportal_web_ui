@@ -29,7 +29,6 @@
 //= require bp_recommender
 //= require bp_property_tree
 //= require home
-//= require fair_score
 //= require_tree ./interfaces
 //= require_tree ./helpers
 //= require_tree ./helpers/instances

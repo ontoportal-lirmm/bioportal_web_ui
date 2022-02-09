@@ -62,7 +62,7 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     arel (9.0.0)
     ast (2.4.2)
-    autoprefixer-rails (10.4.0.0)
+    autoprefixer-rails (10.4.2.0)
       execjs (~> 2)
     bootstrap (4.1.3)
       autoprefixer-rails (>= 6.0.3)
@@ -109,7 +109,7 @@ GEM
     erubi (1.10.0)
     erubis (2.7.0)
     eventmachine (1.2.7)
-    excon (0.85.0)
+    excon (0.90.0)
     execjs (2.8.1)
     faraday (1.4.3)
       faraday-em_http (~> 1.0)
@@ -148,8 +148,8 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
-    json (2.5.1)
-    listen (3.7.0)
+    json (2.6.1)
+    listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     loofah (2.12.0)
@@ -175,7 +175,7 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (8.0.0)
     nio4r (2.5.8)
-    nokogiri (1.12.5-x86_64-darwin)
+    nokogiri (1.13.1-x86_64-darwin)
       racc (~> 1.4)
     oj (3.13.8)
     open_uri_redirections (0.2.1)
@@ -239,7 +239,7 @@ GEM
     rexml (3.2.5)
     rspec-core (3.10.1)
       rspec-support (~> 3.10.0)
-    rspec-expectations (3.10.1)
+    rspec-expectations (3.10.2)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
     rspec-mocks (3.10.2)
@@ -254,9 +254,9 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.10.3)
-    rubocop (1.24.1)
+    rubocop (1.25.0)
       parallel (~> 1.10)
-      parser (>= 3.0.0.0)
+      parser (>= 3.1.0.0)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml
@@ -296,8 +296,6 @@ GEM
     stackprof (0.2.17)
     stringio (3.0.1)
     temple (0.8.2)
-    terser (1.1.8)
-      execjs (>= 0.3.0, < 3)
     thin (1.8.1)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
@@ -307,6 +305,8 @@ GEM
     tilt (2.0.10)
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
+    uglifier (4.2.0)
+      execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.8)
@@ -361,9 +361,9 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   select2-rails
   stackprof
-  terser (~> 1.1, >= 1.1.1)
   thin
-  uglifier (>= 1.0.3)
+  turnout
+  uglifier (>= 4.2.0)
   will_paginate (~> 3.0)
 
 BUNDLED WITH
