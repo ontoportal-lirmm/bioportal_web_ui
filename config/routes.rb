@@ -99,8 +99,8 @@ Rails.application.routes.draw do
   get '/ajax/properties/tree' => 'concepts#property_tree'
   get '/ajax/biomixer' => 'concepts#biomixer'
   get '/ajax/:ontology/instances' => 'instances#index_by_ontology'
-  get '/ajax/:ontology/classes/:class/instances' => 'instances#index_by_class', :constraints => { class: /[^\/?]+/ }
-  get '/ajax/:ontology/instances/:instance' => 'instances#show', :constraints => { instance: /[\d\w\.\-\%\*\+\(\)]+/ }
+  get '/ajax/:ontology/classes/:conceptid/instances' => 'instances#index_by_class', :constraints => { conceptid: /[^\/?]+/ }
+  get '/ajax/:ontology/instances/:instanceid' => 'instances#show', :constraints => { instanceid: /[\d\w\.\-\%\*\+\(\)]+/ }
 
   # User
   get '/logout' => 'login#destroy', :as => :logout

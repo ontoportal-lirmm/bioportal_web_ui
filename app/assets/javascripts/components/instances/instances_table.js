@@ -25,12 +25,12 @@ class InstancesTable{
                 "url": this.getAjaxUrl(),
                 "contentType": "application/json",
                 "dataSrc":  (json) => {
-                    json.recordsTotal = json["totalCount"];
+                    json.recordsTotal = json["table"]["totalCount"]
                     json.recordsFiltered = json.recordsTotal
-                    return  json["collection"].map(x => [
-                        {id: x["@id"] , label: x["label"] , prefLabel:x["prefLabel"]},
-                        x["types"],
-                        x["properties"]
+                    return  json["table"]["collection"].map(x => [
+                        {id: x["table"]["@id"] , label: x["table"]["label"] , prefLabel:x["table"]["prefLabel"]},
+                        x["table"]["types"],
+                        x["table"]["properties"]
                     ])
                 },
                 "data": (d) => {
@@ -39,7 +39,6 @@ class InstancesTable{
                     let columns = d.columns
                     let sortby =  (d.order[0] ? columns[d.order[0].column].name : "")
                     let order =  (d.order[0] ? d.order[0].dir : "")
-
                     return {
                         page: (d.start/d.length)+ 1 ,
                         pagesize: d.length ,
@@ -116,7 +115,7 @@ class InstancesTable{
         $.facebox(() => {
             let {id} = data[0]
             let types = data[1]
-            let properties = data[2]
+            let {context, links, ...properties} = data[2]["table"]
 
             $.facebox( new InstanceDetails(this.ontologyAcronym, new Instance(id , "", "" ,types, properties)).render().html())
         })

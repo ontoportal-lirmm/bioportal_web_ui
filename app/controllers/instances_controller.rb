@@ -1,11 +1,14 @@
 class InstancesController < ApplicationController
   include InstancesHelper
   def index_by_ontology
-    custom_render get_instances_by_ontology_json(params[:ontology], get_query_parameters)
+    get_ontology(params)
+    custom_render get_instances_by_ontology_json(@ontology, get_query_parameters)
   end
 
   def index_by_class
-    custom_render get_instances_by_class_json(params[:ontology], params[:class], get_query_parameters)
+    get_ontology(params)
+    get_class(params)
+    custom_render get_instances_by_class_json(@concept, get_query_parameters)
   end
 
   def show
@@ -15,9 +18,13 @@ class InstancesController < ApplicationController
   end
 
   private
+
+  def get_ontology(params)
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
+    not_found if @ontology.nil?
+  end
   # json render + adding next and prev pages links
   def custom_render(instances)
-    instances = JSON.parse(instances)
     if (instances.respond_to? :links) && (!instances.respond_to? :errors)
       instances.links = {
         nextPage: get_page_link(instances.nextPage),

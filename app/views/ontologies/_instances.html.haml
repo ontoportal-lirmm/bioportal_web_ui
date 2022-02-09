@@ -9,7 +9,7 @@
     //print the instance count append to the tab title
     if(concept_id){
        inst.dataTable.on("xhr" ,  () => {
-          $("#instances_count").text(inst.dataTable.ajax.json().totalCount)
+          $("#instances_count").text(inst.dataTable.ajax.json()["table"]["totalCount"])
       })
     }
 
