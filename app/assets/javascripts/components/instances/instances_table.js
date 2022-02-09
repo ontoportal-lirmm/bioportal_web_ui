@@ -18,7 +18,7 @@ class InstancesTable{
             "paging": true,
             "pagingType": "full",
             "info": true,
-            "searching": false,
+            "searching": true,
             "ordering": false,
             "serverSide":true,
             "processing": true,
@@ -26,7 +26,6 @@ class InstancesTable{
                 "url": this.getAjaxUrl(),
                 "contentType": "application/json",
                 "dataSrc":  (json) => {
-                    console.log(json)
                     json.recordsTotal = json["totalCount"];
                     json.recordsFiltered = json.recordsTotal
                     return  json["collection"].map(x => [
@@ -36,17 +35,26 @@ class InstancesTable{
                     ])
                 },
                 "data": (d) => {
-                    return {page: (d.start/d.length)+ 1 , pagesize: d.length}
+
+                    //return parameters to send for the server
+                    let columns = d.columns
+                    let sortby =  (d.order[0] ? columns[d.order[0].column].name : "")
+                    let order =  (d.order[0] ? d.order[0].dir : "")
+
+                    return {
+                        page: (d.start/d.length)+ 1 ,
+                        pagesize: d.length ,
+                        search: d.search.value,
+                        sortby, order,
+                        include: "all"
+                    }
                 }
             },
             "columnDefs": this.render(),
             "language": {
                 'loadingRecords': '&nbsp;',
-                'processing': `           
-                                <div class="spinner-border m-2" role="status"> 
-                                    <span class="sr-only">Loading...</span>
-                                </div>           
-                `
+                'processing': this.renderLoader(),
+                "search": "Search by labels:"
             },
             "createdRow":  (row, data, dataIndex ) => {
                 $(row).click(() => this.openPopUpDetail(data));
@@ -71,6 +79,7 @@ class InstancesTable{
 
         let columns = [{
             "targets" : 0 ,
+            "name": "label",
             "title": 'Instance',
             "render" : (data) => {
                 let {id,label,prefLabel} = data
@@ -82,6 +91,7 @@ class InstancesTable{
         if(!this.isClassURISet())
             columns.push({
                 "targets" : 1 ,
+                "name": "types",
                 "title": 'Types',
                 "render" : (data) => data.map(x => AjaxConceptLabelLink.render(this.ontologyAcronym , x))
             })
@@ -89,13 +99,12 @@ class InstancesTable{
         return  columns
     }
 
-    getAjaxUrl(page= null , size = null) {
+    getAjaxUrl() {
         let url = "/ajax/"+ this.ontologyAcronym
-        let params =  ["page="+page,"pagesize="+size].filter(x => x !== null).join("&")
         if(this.isClassURISet() > 0){
             url += "/classes/" + encodeURIComponent(this.classUri)
         }
-        url +=  "/instances" + (page!==null || size!=null ? "?"+params : "");
+        url +=  "/instances"
         return url
     }
 
@@ -112,5 +121,13 @@ class InstancesTable{
 
             $.facebox( new InstanceDetails(this.ontologyAcronym, new Instance(id , "", "" ,types, properties)).render().html())
         })
+    }
+
+    renderLoader(){
+        return `           
+                                <div class="spinner-border m-2" role="status"> 
+                                    <span class="sr-only">Loading...</span>
+                                </div>           
+                `
     }
 }

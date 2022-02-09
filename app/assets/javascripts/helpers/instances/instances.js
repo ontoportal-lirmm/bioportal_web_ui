@@ -20,7 +20,7 @@ class InstancesHelper {
      */
     static  getInstanceDetailsFromURI(ontology , uri){
         return new Promise((resolve , reject) => {
-            $.getJSON("/ajax/"+ontology+"/instances/"+ encodeURIComponent(uri))
+            $.getJSON("/ajax/"+ontology+"/instances/"+ encodeURIComponent(uri)+"?include=all")
                 .done((data) => resolve(data))
                 .fail((error)=> reject(error))
         })

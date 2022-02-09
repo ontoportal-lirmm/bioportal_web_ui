@@ -1,15 +1,13 @@
 class InstancesController < ApplicationController
 
   def index_by_ontology
-    logger.debug params[:ontology].inspect
     custom_render LinkedData::Client::HTTP.get("/ontologies/#{params[:ontology]}/instances", get_query_parameters , raw:true)
   end
 
   def index_by_class
     custom_render LinkedData::Client::HTTP
                     .get("/ontologies/#{params[:ontology]}/classes/#{CGI.escape(params[:class])}/instances",
-                         get_query_parameters, raw: true )
-
+                         get_query_parameters, raw: true)
   end
 
   def show
@@ -47,8 +45,6 @@ class InstancesController < ApplicationController
   end
 
   def get_query_parameters
-    params = request.query_parameters.slice(:include, :display, :page, :pagesize) || {}
-    params[:include] = 'all' unless params.has_key? :include
-    params
+    request.query_parameters.slice(:include, :display, :page, :pagesize, :search , :sortby , :order) || {}
   end
 end
