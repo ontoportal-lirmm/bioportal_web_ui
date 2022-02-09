@@ -4,8 +4,16 @@ class InstancesHelper {
         return  `?p=properties`
     }
     // function to recover the redirection link to instances tab
-    static getInstanceHref(uri) {
-        return `?p=instances&conceptid=${encodeURIComponent(uri)}`
+    static getInstanceHref(instance_uri, class_uri = "") {
+        const encodedInstanceURI = encodeURIComponent(instance_uri)
+        let encodedClassURI = ""
+
+        if(class_uri !== ""){
+            encodedClassURI = encodeURIComponent(class_uri)
+            return `?p=classes&conceptid=${encodedClassURI}&instanceid=${encodedInstanceURI}`
+        }else {
+            return `?p=instances&instanceid=${encodedInstanceURI}`
+        }
     }
     // function to recover the redirection link to instances tab
     static getClassHref(uri) {
@@ -24,17 +32,6 @@ class InstancesHelper {
                 .done((data) => resolve(data))
                 .fail((error)=> reject(error))
         })
-    }
-
-    /**
-     * Return the conceptid from
-     * the section url if the section is "instances"
-     * @returns {*|string}
-     */
-    static getInstanceConceptId() {
-        const ont_viewer_data =  jQuery(document).data().bp.ont_viewer
-        const concept_id = ont_viewer_data.concept_id
-        return ont_viewer_data.content_section === "instances" ? (concept_id === "root" ? "" :concept_id)  : ""
     }
 
 
