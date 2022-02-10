@@ -144,7 +144,7 @@ class OntologiesController < ApplicationController
     @instance_details, type = get_instance_and_type(params[:instanceid])
 
 
-    unless @instance_details.empty? || type.nil? || conceptid_param_exist?(params)
+    unless @instance_details.empty? || type.nil? || concept_id_param_exist?(params)
       params[:conceptid] = type # set class id from the type of the specified instance id
     end
 
