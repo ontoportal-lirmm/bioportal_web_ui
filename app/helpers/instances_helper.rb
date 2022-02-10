@@ -20,9 +20,12 @@ module InstancesHelper
       [{}, nil]
     else
       instance_details = JSON.parse(get_instance_details_json(@ontology.acronym,instance_id, {}, raw: true))
-      types = instance_details['types'].reject{ |type| type.eql? 'http://www.w3.org/2002/07/owl#NamedIndividual'}
-
-      [instance_details, types[0]]
+      if(!instance_details['types'].nil?)
+        types = instance_details['types'].reject{ |type| type.eql? 'http://www.w3.org/2002/07/owl#NamedIndividual'}
+        [instance_details, types[0]]
+      else
+        [{}, nil]
+      end
     end
   end
 
@@ -63,10 +66,9 @@ module InstancesHelper
   def instance_property_value(property, ontology_acronym)
     if uri?(property)
       instance, types = get_instance_and_type(property)
-      link_to_instance instance, ontology_acronym
-    else
-      property
+      return link_to_instance instance, ontology_acronym unless instance.empty?
     end
+    property
   end
 
   def add_labels_to_print(instance, ontology_acronym)
