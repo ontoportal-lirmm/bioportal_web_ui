@@ -1,3 +1,27 @@
+- unless @errors.nil?
+  .enable-lists{:style => "color:red;"}
+    %strong Errors On Form
+    %ul
+      - if @errors[:error].instance_of? OpenStruct
+        - errors = @errors[:error].to_h
+        - errors.delete :links
+        - errors.delete :context
+        - errors.to_h.each do |errors_field, error|
+          - next if error.nil?
+          <style>#ontology_#{errors_field} { border: thin solid red; }</style>
+          %li
+            - if error.instance_of? OpenStruct
+              - error_hash = error.to_h
+              - error_hash.delete :links
+              - error_hash.delete :context
+              - error_hash.each do |error_type, e|
+                = "#{error_type} : #{e}"
+            - else
+              = errors_field
+      - else
+        -# A generic fallback
+        = @errors.to_json
+
 = form_for(:review, :url => reviews_path, :remote => true, :id => "new_review_form") do |f|
   = f.hidden_field :ontologyReviewed, value: @review.ontologyReviewed
   = f.hidden_field :creator, value: @review.creator
@@ -22,3 +46,9 @@
 :javascript
   // Do this after the HTML above loads
   jQuery('input.star').rating();
+  jQuery(document).on("ajax:success", function(e, data, status, xhr) {
+     if(data && e.target.parentElement && !data.includes('window.location')){
+        e.target.parentElement.innerHTML = data
+        jQuery('input.star').rating();
+     }
+  });
