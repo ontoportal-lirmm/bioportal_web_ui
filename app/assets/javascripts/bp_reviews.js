@@ -1,6 +1,5 @@
 function setupReviewFacebox() {
-  jQuery("a.create_review").attr("rel", "facebox[.facebox_review]");
-  jQuery("a.create_review").facebox();
+    jQuery("a.create_review").facebox();
 }
 
 function setupReviewFaceboxSizing() {
@@ -12,6 +11,3 @@ function setupReviewFaceboxSizing() {
   });
 }
 
-jQuery(document).on("ajax:success", ".facebox_review form", function() {
-  location.reload();
-});

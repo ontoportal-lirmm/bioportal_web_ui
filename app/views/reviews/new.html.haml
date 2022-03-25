@@ -46,8 +46,9 @@
 :javascript
   // Do this after the HTML above loads
   jQuery('input.star').rating();
-  jQuery(document).on("ajax:success", function(e, data, status, xhr) {
-     if(data && e.target.parentElement && !data.includes('window.location')){
+  jQuery(document).on("ajax:success", function(e, data) {
+
+     if(data && e.target.parentElement && data.includes("new_review_form")){
         e.target.parentElement.innerHTML = data
         jQuery('input.star').rating();
      }
