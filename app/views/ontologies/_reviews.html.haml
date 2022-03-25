@@ -1,0 +1,23 @@
+- require 'date'
+#reviews_content{:style => "margin-top: 2em;"}
+  %h2{:style => "margin-bottom: .5em;"}
+    %span{:style => "font-size: x-large; margin-right: 1.5em;"} Reviews
+    - if session[:user].nil?
+      %a{:href => "/login?redirect=/ontologies/#{@ontology.acronym}", style: "font-size: large"} Add your review
+    - else
+      %a.create_review{:href => "/reviews/new?ontology=#{CGI.escape(@ontology.id)}", :title => "add review for #{@ontology.name}",
+       style: "font-size: large" , rel:"facebox[.facebox_review]"} Add your review
+  #reviews_container.d-flex.flex-wrap
+    - if @reviews.nil? || @reviews.empty?
+      %h1{:style => "padding-bottom: .8em;"} No reviews available.
+    - else
+      - @reviews.each_with_index do |review, review_count|
+        - @review = review
+        = render partial: "reviews/review"
+:javascript
+  // Do this after the HTML above loads
+  jQuery(document).ready(function() {
+    jQuery('input.star').rating();
+    setupReviewFacebox();
+    setupReviewFaceboxSizing();
+  });

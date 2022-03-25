@@ -63,6 +63,8 @@
             %i.fas.fa-user-edit{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
     = render partial: "submissions"
 
+  %section.ont-reviews
+    = render partial: "reviews"
   -# Views pane (don't show if the ontology is a view - we don't allow views of views).
   - unless @ontology.view?
     %section.ont-metadata-card.ont-views-card
