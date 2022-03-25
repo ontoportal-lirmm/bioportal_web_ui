@@ -11,6 +11,10 @@ class ReviewsController < ApplicationController
     :documentationRating
   ].freeze
 
+  def index
+
+  end
+
   def new
     @rating_types = RATING_TYPES
     @ontology = LinkedData::Client::Models::Ontology.find(params[:ontology])
@@ -32,21 +36,21 @@ class ReviewsController < ApplicationController
   end
 
   def create
-    @review = LinkedData::Client::Models::Review.new(values: params[:review])
+    @review = LinkedData::Client::Models::Review.new(values: review_params)
     @ontology = LinkedData::Client::Models::Ontology.find(@review.ontologyReviewed)
     @review_saved = @review.save
-    if @review_saved.errors
-      @errors = response_errors(@review_saved)
-      render :action => "new"
-    else
-      respond_to do |format|
-        format.html do
-          flash[:notice] = 'Review was successfully created'
-          redirect_to "/ontologies/#{@ontology.acronym}?p=summary"
-        end
-        format.js do
-          render json: {}
-        end
+
+    respond_to do |format|
+      if @review_saved.errors
+        @errors = response_errors(@review_saved)
+        @rating_types = RATING_TYPES
+        format.html { render action: "new", layout: false }
+        format.json { render json: @errors, status: :unprocessable_entity }
+      else
+        flash[:notice] = 'Review was successfully created'
+        redirect_path = "/ontologies/#{@ontology.acronym}?p=summary"
+        format.html { redirect_to redirect_path }
+        format.js { render js: "window.location ='#{redirect_path}'" }
       end
     end
   end
@@ -58,21 +62,21 @@ class ReviewsController < ApplicationController
     ratings = Hash[*(@review.ratings.map{|rate| [rate.id.to_i, rate] }.flatten)]
     #puts ratings.inspect
      for rating_key in params.keys
-        if rating_key.include?("star")
+        if rating_key.include?('star')
           #puts rating_key.split("_")[1].to_i
-          ratings[rating_key.split("_")[1].to_i].value=params[rating_key].to_i
-          ratings[rating_key.split("_")[1].to_i].save
+          ratings[rating_key.split('_')[1].to_i].value=params[rating_key].to_i
+          ratings[rating_key.split('_')[1].to_i].save
         end
       end
-      if @review.update_attributes(params[:review])
+      if @review.update_attributes(review_params)
         @review.reload
          if request.xhr?
-            render :action=>'show', :layout=>false
+            render :show, layout: false
           else
-            redirect_to reviews(:ontology=>review.ontology_id)
+            redirect_to reviews(ontology: review.ontology_id)
           end
       else
-        render :action => "edit"
+        render :edit
       end
   end
 
@@ -86,5 +90,13 @@ class ReviewsController < ApplicationController
       format.html { redirect_to(reviews_url) }
       format.xml  { head :ok }
     end
+  end
+
+  private
+  def review_params
+    p = params[:review].permit(:ontologyReviewed, :creator, :usabilityRating,
+                               :coverageRating, :qualityRating, :formalityRating,
+                               :correctnessRating, :documentationRating, :body)
+    p.to_h
   end
 end
