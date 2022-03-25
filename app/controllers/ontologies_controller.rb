@@ -355,6 +355,7 @@ class OntologiesController < ApplicationController
     end
     
     @metrics = @ontology.explore.metrics rescue []
+    @reviews = @ontology.explore.reviews.sort {|a,b| b.created <=> a.created} || []
     @projects = @ontology.explore.projects.sort { |a,b| a.name.downcase <=> b.name.downcase } || []
     @analytics = LinkedData::Client::HTTP.get(@ontology.links["analytics"])
     @views = get_views(@ontology)
