@@ -28,11 +28,15 @@ module ApplicationHelper
   end
 
   def encode_param(string)
-    return URI.escape(string, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+    escape(string)
   end
 
-  def escape(string)
-    CGI.escape(string)
+  def escape(url)
+    CGI.escape(url)
+  end
+
+  def unescape(url)
+    CGI.unescape(url)
   end
 
   def clean(string)
