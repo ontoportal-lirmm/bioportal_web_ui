@@ -686,4 +686,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def escape(url)
+    helpers.escape(url)
+  end
+
+  def unescape(url)
+    helpers.unescape(url)
+  end
 end
