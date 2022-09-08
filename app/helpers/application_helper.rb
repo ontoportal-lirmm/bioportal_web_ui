@@ -172,12 +172,12 @@ module ApplicationHelper
       li_id = child.id.eql?("bp_fake_root") ? "bp_fake_root" : short_uuid
 
       if child.id.eql?("bp_fake_root")
-        string << "<li class='active' id='#{li_id}'><a id='#{CGI.escape(child.id)}' href='#' #{active_style}>#{child.prefLabel}</a></li>"
+        string << "<li class='active' id='#{li_id}'><a id='#{escape(child.id)}' href='#' #{active_style}>#{child.prefLabel}</a></li>"
       else
         icons = child.relation_icon(node)
-        string << "<li #{open} id='#{li_id}'><a id='#{CGI.escape(child.id)}' href='/ontologies/#{child.explore.ontology.acronym}/?p=classes&conceptid=#{CGI.escape(child.id)}' #{active_style}> #{child.prefLabel({use_html: true})}</a> #{icons}"
+        string << "<li #{open} id='#{li_id}'><a id='#{escape(child.id)}' href='/ontologies/#{child.explore.ontology.acronym}/?p=classes&conceptid=#{escape(child.id)}' #{active_style}> #{child.prefLabel({use_html: true})}</a> #{icons}"
         if child.hasChildren && !child.expanded?
-          string << "<ul class='ajax'><li id='#{li_id}'><a id='#{CGI.escape(child.id)}' href='/ajax_concepts/#{child.explore.ontology.acronym}/?conceptid=#{CGI.escape(child.id)}&callback=children'>ajax_class</a></li></ul>"
+          string << "<ul class='ajax'><li id='#{li_id}'><a id='#{escape(child.id)}' href='/ajax_concepts/#{child.explore.ontology.acronym}/?conceptid=#{escape(child.id)}&callback=children'>ajax_class</a></li></ul>"
         elsif child.expanded?
           string << "<ul>"
           build_tree(child, string, id)
@@ -414,7 +414,7 @@ module ApplicationHelper
     return "/ontologies/#{ont_acronym}"
   end
   def bp_class_link(cls_id, ont_acronym)
-    return "#{bp_ont_link(ont_acronym)}?p=classes&conceptid=#{URI.escape(cls_id, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))}"
+    return "#{bp_ont_link(ont_acronym)}?p=classes&conceptid=#{escape(cls_id)}"
   end
   def get_link_for_cls_ajax(cls_id, ont_acronym, target=nil)
     # Note: bp_ajax_controller.ajax_process_cls will try to resolve class labels.

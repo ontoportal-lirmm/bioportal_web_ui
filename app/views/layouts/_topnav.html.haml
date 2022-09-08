@@ -33,7 +33,7 @@
               %div.dropdown-divider
               %h6.dropdown-header Recently Viewed
               - for ont in session[:ontologies]
-                = link_to(ont.ontology_name, "/ontologies/#{ont.ontology_acronym}/?p=classes&conceptid=#{CGI.escape(ont.concept)}", class: "dropdown-item")
+                = link_to(ont.ontology_name, "/ontologies/#{ont.ontology_acronym}/?p=classes&conceptid=#{escape(ont.concept)}", class: "dropdown-item")
               %div.dropdown-divider
             = link_to("Logout", logout_path, class: "dropdown-item")
       -# Support menu

@@ -52,11 +52,11 @@ class SearchController < ApplicationController
       # Columns: synonym
       json << "|#{(result.synonym || []).join(";")}"
       if params[:id] && params[:id].split(",").length == 1
-        json << "|#{CGI.escape((result.definition || []).join(". "))}#{separator}"
+        json << "|#{escape((result.definition || []).join(". "))}#{separator}"
       else
         json << "|#{result.explore.ontology.name}"
         json << "|#{result.explore.ontology.acronym}"
-        json << "|#{CGI.escape((result.definition || []).join(". "))}#{separator}"
+        json << "|#{escape((result.definition || []).join(". "))}#{separator}"
       end
 
       # Obsolete results go at the end

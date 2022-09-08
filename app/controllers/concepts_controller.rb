@@ -114,7 +114,7 @@ class ConceptsController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     not_found if @ontology.nil?
 
-    @concept = @ontology.explore.single_class({full: true}, CGI.unescape(params[:conceptid]))
+    @concept = @ontology.explore.single_class({full: true}, unescape(params[:conceptid]))
     not_found if @concept.nil?
 
     if params[:styled].eql?("true")

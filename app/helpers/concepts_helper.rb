@@ -54,7 +54,7 @@ module ConceptsHelper
       k = key.to_s if key.kind_of?(Symbol)
       k ||= key
       if k.start_with?("http")
-        label = LinkedData::Client::HTTP.get("/ontologies/#{@ontology.acronym}/properties/#{CGI.escape(k)}/label").label rescue ""
+        label = LinkedData::Client::HTTP.get("/ontologies/#{@ontology.acronym}/properties/#{escape(k)}/label").label rescue ""
         if label.nil? || label.empty?
           k = k.gsub(/.*#/,'')  # greedy regex replace everything up to last '#'
           k = k.gsub(/.*\//,'') # greedy regex replace everything up to last '/'

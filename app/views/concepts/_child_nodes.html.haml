@@ -1,8 +1,8 @@
 - output =""
 - for child in @children
   - icons = child.relation_icon(@concept)
-  - output << "<li id='#{short_uuid}'><a id='#{CGI.escape(child.id)}' href='/ontologies/#{child.explore.ontology.acronym}/?p=classes&conceptid=#{CGI.escape(child.id)}'> #{child.prefLabel}</a> #{icons}"
+  - output << "<li id='#{short_uuid}'><a id='#{escape(child.id)}' href='/ontologies/#{child.explore.ontology.acronym}/?p=classes&conceptid=#{escape(child.id)}'> #{child.prefLabel}</a> #{icons}"
   - if child.hasChildren
-    - output << "<ul class='ajax'><li id='#{short_uuid}'><a id='#{CGI.escape(child.id)}' href='/ajax_concepts/#{child.explore.ontology.acronym}/?conceptid=#{CGI.escape(child.id)}&callback=children'>#{child.prefLabel}</a></li></ul>"
+    - output << "<ul class='ajax'><li id='#{short_uuid}'><a id='#{escape(child.id)}' href='/ajax_concepts/#{child.explore.ontology.acronym}/?conceptid=#{escape(child.id)}&callback=children'>#{child.prefLabel}</a></li></ul>"
   - output << "</li>"
 = raw output

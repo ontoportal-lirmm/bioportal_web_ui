@@ -24,7 +24,7 @@ class LoginController < ApplicationController
         redirect = "/"
 
         if session[:redirect]
-          redirect = CGI.unescape(session[:redirect])
+          redirect = unescape(session[:redirect])
         end
 
 

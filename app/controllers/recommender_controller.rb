@@ -12,8 +12,8 @@ class RecommenderController < ApplicationController
   #   input = params[:input].strip.gsub("\r\n", " ").gsub("\n", " ")
   #   start = Time.now
   #   query = RECOMMENDER_URI
-  #   query += "?input=" + CGI.escape(input)
-  #   query += "&ontologies=" + CGI.escape(params[:ontologies].join(',')) unless params[:ontologies].nil?
+  #   query += "?input=" + escape(input)
+  #   query += "&ontologies=" + escape(params[:ontologies].join(',')) unless params[:ontologies].nil?
   #   query += "&input_type=" + params[:input_type] unless params[:input_type].nil?
   #   query += "&output_type=" + params[:output_type] unless params[:output_type].nil?
   #   query += "&max_elements_set=" + params[:max_elements_set] unless params[:output_type].nil?

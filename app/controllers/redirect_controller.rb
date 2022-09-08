@@ -14,7 +14,7 @@ class RedirectController < ApplicationController
         next if ["url", "action", "controller"].include?(param)
         seperator = first_param ? "?" : "&"
         first_param = false
-        params_string += seperator + param + "=" + CGI.escape(value)
+        params_string += seperator + param + "=" + escape(value)
       end
       # Redirect with params intact
       redirect_to params[:url] + params_string, :status=>:moved_permanently

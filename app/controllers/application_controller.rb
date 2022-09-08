@@ -250,7 +250,7 @@ class ApplicationController < ActionController::Base
     params_array = []
     params.each do |key,value|
       next if stop_words.include?(key.to_s) || value.nil? || value.empty?
-      params_array << "#{key}=#{CGI.escape(value)}"
+      params_array << "#{key}=#{escape(value)}"
     end
     params_array.empty? ? "" : "#{prefix}#{params_array.join('&')}"
   end

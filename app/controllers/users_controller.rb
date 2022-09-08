@@ -162,7 +162,7 @@ class UsersController < ApplicationController
   end
 
   def unescape_id
-    params[:id] = CGI.unescape(params[:id])
+    params[:id] = unescape(params[:id])
   end
 
   def verify_owner

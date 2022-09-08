@@ -132,7 +132,7 @@ class NotesController < ApplicationController
   # Fix noteid parameters with bad prefixes (some application servers, e.g., Apache, NGINX, mangle encoded slashes).
   def clean_note_id(id)
     id = id.match(/\Ahttp:\/\w/) ? id.sub('http:/', 'http://') : id
-    CGI.unescape(id)
+    unescape(id)
   end
 
 end

@@ -41,11 +41,11 @@ class AnnotatorController < ApplicationController
 
     start = Time.now
     query = ANNOTATOR_URI
-    query += "?text=" + CGI.escape(text_to_annotate)
+    query += "?text=" + escape(text_to_annotate)
     query += "&include=prefLabel"
     query += "&expand_class_hierarchy=true" if options[:class_hierarchy_max_level] > 0
     query += "&class_hierarchy_max_level=" + options[:class_hierarchy_max_level].to_s if options[:class_hierarchy_max_level] > 0
-    query += "&ontologies=" + CGI.escape(options[:ontologies].join(',')) unless options[:ontologies].empty?
+    query += "&ontologies=" + escape(options[:ontologies].join(',')) unless options[:ontologies].empty?
     query += "&semantic_types=" + options[:semantic_types].join(',') unless options[:semantic_types].empty?
     query += "&mappings=" + options[:mappings].join(',') unless options[:mappings].empty?
     query += "&longest_only=#{options[:longest_only]}"

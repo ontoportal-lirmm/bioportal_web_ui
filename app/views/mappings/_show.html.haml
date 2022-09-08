@@ -13,10 +13,10 @@
           %tr
             - cls = map.classes.shift
             %td
-              = link_to("#{cls.id}<span href='/ajax/classes/label?ontology=#{cls.links["ontology"]}&concept=#{CGI.escape(cls.id)}' class='get_via_ajax'></span>".html_safe, ontology_path(cls.explore.ontology.acronym, p: "classes", conceptid: cls.id))
+              = link_to("#{cls.id}<span href='/ajax/classes/label?ontology=#{cls.links["ontology"]}&concept=#{escape(cls.id)}' class='get_via_ajax'></span>".html_safe, ontology_path(cls.explore.ontology.acronym, p: "classes", conceptid: cls.id))
             - cls = map.classes.shift
             %td
-              = link_to("#{cls.id}<span href='/ajax/classes/label?ontology=#{cls.links["ontology"]}&concept=#{CGI.escape(cls.id)}' class='get_via_ajax'></span>".html_safe, ontology_path(cls.explore.ontology.acronym, p: "classes", conceptid: cls.id))
+              = link_to("#{cls.id}<span href='/ajax/classes/label?ontology=#{cls.links["ontology"]}&concept=#{escape(cls.id)}' class='get_via_ajax'></span>".html_safe, ontology_path(cls.explore.ontology.acronym, p: "classes", conceptid: cls.id))
             %td
               #{map.source} #{(map.process || {})[:source_name]}
     = will_paginate @page_results, :update => 'mappings', :params => { :target => params[:target] }

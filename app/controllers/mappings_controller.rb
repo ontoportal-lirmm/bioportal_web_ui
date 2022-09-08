@@ -140,7 +140,7 @@ class MappingsController < ApplicationController
     mapping_ids = params[:mappingids].split(",")
     mapping_ids.each do |map_id|
       begin
-        map_uri = "#{MAPPINGS_URL}/#{CGI.escape(map_id)}"
+        map_uri = "#{MAPPINGS_URL}/#{escape(map_id)}"
         result = LinkedData::Client::HTTP.delete(map_uri)
         raise Exception if !result.nil? #&& result["errorCode"]
         successes << map_id
