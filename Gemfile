@@ -58,8 +58,8 @@ gem 'multi_json'
 gem 'mysql2', '0.5.2'
 gem 'oj'
 gem 'open_uri_redirections'
-gem 'psych', '< 4'
 gem 'pry'
+gem 'psych', '< 4'
 gem 'rack-mini-profiler'
 gem 'rails_autolink'
 gem 'rdoc'
@@ -67,6 +67,7 @@ gem 'recaptcha', '~> 5.2'
 gem 'rest-client'
 gem 'stackprof', require: false
 gem 'thin'
+gem 'view_component', '~> 2.72'
 gem 'will_paginate', '~> 3.0'
 
 gem 'ontologies_api_client', github: 'ontoportal-lirmm/ontologies_api_ruby_client', branch: 'development'
@@ -109,3 +110,4 @@ group :test do
   gem 'selenium-webdriver'
   gem 'webdrivers'
 end
+
