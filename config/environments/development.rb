@@ -67,7 +67,7 @@ Rails.application.configure do
 
   # Add custom data attributes to sanitize allowed list
   config.action_view.sanitized_allowed_attributes = ['id', 'class', 'style', 'data-cls', 'data-ont']
-
+  config.view_component.generate.sidecar = true
   # Include BioPortal-specific configuration options
   require Rails.root.join('config', "bioportal_config_#{Rails.env}.rb")
 

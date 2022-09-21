@@ -19,5 +19,7 @@ module BioportalWebUi
     # config.time_zone = "Central Time (US & Canada)"
     config.exceptions_app = self.routes
     config.settings = config_for(:settings)
+
+    config.generators.template_engine = :haml
   end
 end
