@@ -398,7 +398,7 @@ class ApplicationController < ActionController::Base
         roots = @ontology.explore.roots
         if roots.nil? || roots.empty?
           LOG.add :debug, "Missing roots for #{@ontology.acronym}"
-          not_found
+          not_found("Missing roots for #{@ontology.acronym}")
         end
 
         @root = LinkedData::Client::Models::Class.new(read_only: true)
@@ -411,14 +411,14 @@ class ApplicationController < ActionController::Base
         # Some ontologies have "too many children" at their root. These will not process and are handled here.
         if @concept.nil?
           LOG.add :debug, "Missing class #{root_child.links.self}"
-          not_found
+          not_found("Missing class #{root_child.links.self}")
         end
       else
         # if the id is coming from a param, use that to get concept
         @concept = @ontology.explore.single_class({full: true}, params[:conceptid])
         if @concept.nil? || @concept.errors
           LOG.add :debug, "Missing class #{@ontology.acronym} / #{params[:conceptid]}"
-          not_found
+          not_found("Missing class #{@ontology.acronym} / #{params[:conceptid]}")
         end
 
         # Create the tree
@@ -427,7 +427,7 @@ class ApplicationController < ActionController::Base
           roots = @ontology.explore.roots
           if roots.nil? || roots.empty?
             LOG.add :debug, "Missing roots for #{@ontology.acronym}"
-            not_found
+            not_found("Missing roots for #{@ontology.acronym}")
           end
           if roots.any? {|c| c.id == @concept.id}
             rootNode = roots
