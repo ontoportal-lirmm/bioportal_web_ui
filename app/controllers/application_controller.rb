@@ -233,7 +233,7 @@ class ApplicationController < ActionController::Base
       return
     end
     acronym = BPIDResolver.id_to_acronym(params[:ontology])
-    not_found unless acronym
+    ontology_not_found(acronym) unless acronym
     if class_view
       @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
       concept = get_class(params).first.to_s

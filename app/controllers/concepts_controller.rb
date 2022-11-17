@@ -47,7 +47,7 @@ class ConceptsController < ApplicationController
     end
     @ontology = LinkedData::Client::Models::Ontology.find(ont_id)
     @ontology ||= LinkedData::Client::Models::Ontology.find_by_acronym(ont_id).first
-    not_found unless @ontology
+    ontology_not_found(ont_id) unless @ontology
     # Retrieve a class prefLabel or return the class ID (URI)
     # - mappings may contain class URIs that are not in bioportal (e.g. obo-xrefs)
     cls = @ontology.explore.single_class(cls_id)
