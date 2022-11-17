@@ -82,13 +82,21 @@ class ApplicationController < ActionController::Base
     user ||= User.new({"id" => 0})
   end
 
-  def not_found
+  def ontology_not_found(ontology_acronym)
+    not_found("Ontology #{ontology_acronym} not found")
+  end
+
+  def concept_not_found(concept_id)
+    not_found("Concept #{concept_id} not found")
+  end
+
+  def not_found(message = '')
     if request.xhr?
-      render plain: "Error: load failed"
+      render plain: message || "Error: load failed"
       return
     end
-    
-    raise ActiveRecord::RecordNotFound.new('Not Found')
+
+    raise ActiveRecord::RecordNotFound.new(message || 'Not Found')
   end
 
   NOTIFICATION_TYPES = { :notes => "CREATE_NOTE_NOTIFICATION", :all => "ALL_NOTIFICATION" }
