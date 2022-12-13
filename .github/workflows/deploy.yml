@@ -1,0 +1,78 @@
+# Workflow to deploy OntoPortal UI to stage/prod systems
+#
+# Required github secrets:
+#
+# CONFIG_REPO - github repo containing config and customizations for UI. Format 'author/private_config_repo'
+# it is used for getting capistrano deployment configuration for stages on the github actions runner and
+# PRIVATE_CONFIG_REPO env var is constructed from it which is used by capistrano on the UI hosts for pulling configs.
+#
+# GH_PAT - github Personal Access Token for accessing private config repo
+#
+# SSH_JUMPHOST - ssh jump/proxy host though which deployments have to though if UI nodes live on private network.
+#
+# DEPLOY_ENC_KEY - key for decrypting deploymnet ssh key residing in config/
+# this SSH key is used for accessing jump host, UI nodes, and private github repo.
+
+name: Capistrano Deployment
+# Controls when the action will run.
+on:
+  push:
+    branches: [ master ]
+
+  # Allows running this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      BRANCH:
+        description: 'Branch/tag to deploy'
+        default: master
+        required: true
+      environment:
+        description: 'target environment to deploy to'
+        type: choice
+        options:
+          - staging
+          - production
+        default: staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      BUNDLE_WITHOUT: default #install gems required primarely for deployment in order to speed up workflow
+      PRIVATE_CONFIG_REPO: ${{ format('git@github.com:{0}.git', secrets.CONFIG_REPO) }}
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: set branch/tag and environment to deploy from inputs
+      run: |
+        # workflow_dispatch default input doesn't get set on push so we need to set defaults
+        # via shell parameter expansion
+        # https://dev.to/mrmike/github-action-handling-input-default-value-5f2g
+        USER_INPUT_BRANCH=${{ inputs.branch }}
+        echo "BRANCH=${USER_INPUT_BRANCH:-master}" >> $GITHUB_ENV
+
+        USER_INPUT_ENVIRONMENT=${{ inputs.environment }}
+        echo "TARGET=${USER_INPUT_ENVIRONMENT:-staging}" >> $GITHUB_ENV
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v3
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7.6 # Not needed with a .ruby-version file
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    - name: get-deployment-config
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ secrets.CONFIG_REPO }} # repository containing deployment settings
+        token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
+        path:  deploy_config
+    - name: copy-deployment-config
+      run:  cp -r deploy_config/bioportal_web_ui/* .
+    # add ssh hostkey so that capistrano doesn't complain
+    - name: Add jumphost's hostkey to Known Hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H ${{ secrets.SSH_JUMPHOST }} > ~/.ssh/known_hosts
+      shell: bash
+    - uses: miloserdow/capistrano-deploy@master
+      with:
+        target: ${{ env.TARGET }} # which environment to deploy
+        deploy_key: ${{ secrets.DEPLOY_ENC_KEY }} # Name of the variable configured in Settings/Secrets of your github project

@@ -9,7 +9,8 @@
       = text_field_tag("search_keywords", nil, class: "form-control", aria: {describedby: "classSearchHelpBlock"})
       %small#classSearchHelpBlock.form-text.text-muted
         = t(".search_keywords_placeholder")
-        = link_to("help", help_path(anchor: "Search_Tab"), id: "search-help", aria: {label: "View search documentation"}, class: "float-right")
+        = link_to("help", Rails.configuration.settings.links[:help_search], id: "search-help",
+                  aria: {label: "View search documentation"}, class: "float-right")
     %div.form-group
       = link_to("Show advanced options", "javascript:void(0)", id: "advanced_options", data: {text_swap: "Hide advanced options"}, class: "form-text")
 

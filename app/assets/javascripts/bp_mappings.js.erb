@@ -41,46 +41,37 @@ function updateMappingDeletePermissions() {
 }
 
 function loadMappings(value) {
-  jQuery('#mappingCount').html("");
-  jQuery('#mapping_load').show();
-  if (jQuery("#display_table").is(":checked")) {
-    jQuery('#mappingCount').load('/mappings/count/'+value, function() {
-      jQuery('#mapping_load').hide();
-      jQuery("#mapping_count_table").effect("highlight", { color: "#F5F5F5" }, 500);
-      jQuery("#mapping_count_table").dataTable({
-        "paging": false,
-        "info": false,
-        "searching": false,
-        "columns": [
-          { 
-            "className": "text-left" 
-          },
-          { 
-            "type": "num-fmt",
-            "orderSequence": [ "desc", "asc" ],
-            "className": "text-right"
-          }
-        ]
-      });
-      jQuery(".mappings.index a.facebox").facebox();
+    jQuery('#mappingCount').html("");
+    jQuery('#mapping_load').show();
+
+    jQuery('#mappingCount').load('/mappings/count/' + value, function () {
+        jQuery('#mapping_load').hide();
+        let mappings_table_elem = jQuery("#mapping_count_table");
+        mappings_table_elem.effect("highlight", {color: "#F5F5F5"}, 500);
+        mappings_table_elem.dataTable({
+            "paging": false,
+            "info": false,
+            "searching": false,
+            "columns": [
+                {
+                    "className": "text-left"
+                },
+                {
+                    "type": "num-fmt",
+                    "orderSequence": ["desc", "asc"],
+                    "className": "text-right"
+                }
+            ]
+        });
+        jQuery(".mappings.index a.facebox").facebox();
     });
-  } else {
-    jQuery('#mapping_load').hide();
-    var iframe = jQuery('<iframe>', {
-      src: "<%= $BIOMIXER_URL %>" + '/ontologyMappingOverview.html?ontology_acronym=' + value,
-      frameborder: '0',
-      width: '100%',
-      height: '800'
-    });
-    jQuery('#mappingCount').html(iframe);
-  }
 }
 
 jQuery(document).ready(function(){
   updateMappingCount();
   updateMappingDeletePermissions();
 
-  jQuery("#search_ontologies").chosen({search_contains: true});
+  jQuery("#search_ontologies").chosen({search_contains: true, width:"100%"});
 
   // Handle visualization changes
   jQuery("#display_options input").on("click", function(e, button){

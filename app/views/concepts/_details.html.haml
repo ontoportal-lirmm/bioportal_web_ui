@@ -1,31 +1,39 @@
 - require 'cgi'
 
 %div.py-3.pl-3
+  %div#change-request-notice
   %table.minimal.concept_details{cellpadding: "0", cellspacing: "0", width: "100%"}
     %tr
-      %td{nowrap: ""} Preferred Name
+      %td Preferred Name
       %td
         %p= @concept.prefLabel({:use_html => true}).html_safe
-    - unless @concept.synonym.nil? || @concept.synonym.empty?
-      %tr
-        %td{nowrap: ""} Synonyms
-        %td
-          - for synonym in @concept.synonym
-            %p= synonym
+      %td
+    %tr
+      %td Synonyms
+      %td
+        - for synonym in @concept.synonym
+          %p= synonym
+      %td 
+        %div.synonym-change-request
+          = add_synonym_button
+          = remove_synonym_button
     - unless @concept.definition.nil? || @concept.definition.empty?
       %tr
-        %td{nowrap: ""} Definitions
+        %td Definitions
         %td
           %p= @concept.definition.join(" ")
+        %td
     %tr
-      %td{nowrap: ""} ID
+      %td ID
       %td
         %p= @concept.id
+      %td
     - if @concept.obsolete?
       %tr
-        %td{nowrap: ""} Obsolete
+        %td Obsolete
         %td
           %p true
+        %td
 
     - concept_properties = concept_properties2hash(@concept.properties) # see concepts_helper.rb
     - keys = concept_properties.keys
@@ -59,12 +67,13 @@
         - full_key = data[:key]
         - values = data[:values]
         %tr
-          %td{nowrap: ""}= "#{remove_owl_notation(key)}"
+          %td= "#{remove_owl_notation(key)}"
           %td
             -# Note: get_link_for_cls_ajax is in application_helper.rb, it calls auto_link when necessary.
             - ajax_links = values.map {|v| get_link_for_cls_ajax(v, @ontology.acronym, '_blank') }
             = "<p>#{sanitize(ajax_links.join('</p><p>'))}</p>".html_safe
             -# auto_link("<p>#{sanitize(values.join("<br/>")).split("||%||").join("<\/p><p>")}</p>", :all, :target => "_blank")
+          %td
 
     -# LEFTOVER set of properties
     - for key in leftover
@@ -74,7 +83,7 @@
         - full_key = data[:key].to_s # handle symbols
         - values = data[:values]
         %tr
-          %td{nowrap: ""}= "#{remove_owl_notation(key)}"
+          %td= "#{remove_owl_notation(key)}"
           %td
 
             -# NCBO-648 Note: a property with complex values might return an array of nils from the REST-API client code.
@@ -84,6 +93,7 @@
             - ajax_links = values.map {|v| get_link_for_cls_ajax(v, @ontology.acronym, '_blank') }
             = "<p>#{sanitize(ajax_links.join('</p><p>'))}</p>".html_safe
             -# auto_link("<p>#{sanitize(values.join("<br/>")).split("||%||").join("<\/p><p>").gsub("%ONT%", @ontology.acronym)}</p>", :all, :target => "_blank")
+          %td
 
     -# BOTTOM set of properties
     - for key in bottom_set
@@ -93,12 +103,13 @@
         - full_key = data[:key]
         - values = data[:values]
         %tr
-          %td{nowrap: ""}= "#{remove_owl_notation(key)}"
+          %td= "#{remove_owl_notation(key)}"
           %td
             -# Note: get_link_for_cls_ajax is in application_helper.rb, it calls auto_link when necessary.
             - ajax_links = values.map {|v| get_link_for_cls_ajax(v, @ontology.acronym, '_blank')}
             = "<p>#{ajax_links.join('</p><p>')}</p>".html_safe
             -# auto_link("<p>#{values.split("||%||").join("<\/p><p>").gsub("%ONT%", @ontology.acronym)}</p>", :all, :target => "_blank")
+          %td
 
 :javascript
 

@@ -91,7 +91,7 @@
     %section.ont-metadata-card.ont-metrics-card
       %div.ont-section-toolbar
         %header.pb-2.font-weight-bold Metrics
-        = link_to("http://www.bioontology.org/wiki/index.php/Ontology_Metrics", target: "_blank", "aria-label": "View individual metrics definitions", title: "View individual metrics definitions") do
+        = link_to(Rails.configuration.settings.links[:metrics], target: "_blank", "aria-label": "View individual metrics definitions", title: "View individual metrics definitions") do
           %i.fas.fa-lg.fa-question-circle{"aria-hidden": "true", style: "margin-left: 0.5rem"}
       - if @metrics.nil? || (@metrics.is_a?(Array) && @metrics.empty?) || (@metrics.respond_to?(:status) && @metrics.status == 404)
         %p.font-italic= "We have not yet calculated metrics for #{@ontology.acronym}"

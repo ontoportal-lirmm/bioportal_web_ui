@@ -28,6 +28,7 @@
 //= require bp_admin
 //= require bp_recommender
 //= require bp_property_tree
+//= require concepts
 //= require home
 //= require ontologies
 //= require projects

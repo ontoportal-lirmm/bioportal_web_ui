@@ -1,12 +1,19 @@
+
+
+@media (min-width: 1000px)  {
+  #mappings_container{
+    max-width: 1140px;
+  }
+}
+
 p#mappings_select {
-	font-size: 15px;
+  font-size: 15px;
   font-weight: bold;
-  padding: 10px;
   margin-bottom: 0;
 }
 
 p#display_options {
-  padding-left: 10px; 
+  padding-left: 10px;
   margin-bottom: 0;
 }
 
@@ -16,8 +23,8 @@ p#display_options {
 }
 
 div#mapping_load {
-  padding: 1em 1em 0; 
-  margin-bottom: -1em; 
+  padding: 1em 1em 0;
+  margin-bottom: -1em;
   display: none;
 
   img {
@@ -28,11 +35,7 @@ div#mapping_load {
 div#mappingCount {
   text-align: center;
   overflow: hidden;
-  padding: 10px;
-
-  > div {
-    width: 50%;
-  }
+  padding-top: 10px;
 }
 
 #mapping_count_table {
@@ -52,7 +55,7 @@ div#map_from_picker_chosen, div#map_to_picker_chosen {
 div#map_from_concept_details_table, div#map_to_concept_details_table {
   border: thin solid lightgray;
   height: 200px;
-  overflow: auto; 
+  overflow: auto;
 }
 
 #map_to_picker, .select2-container {

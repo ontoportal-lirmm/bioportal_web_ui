@@ -1,17 +1,16 @@
-%div
-  %table#mapping_count_table.zebra{cellpadding: "0", cellspacing: "0"}
-    %thead
+%table#mapping_count_table.zebra{cellpadding: "0", cellspacing: "0"}
+  %thead
+    %tr
+      %th Ontology
+      %th Mappings
+  %tbody
+    - if @mapping_counts.blank?
       %tr
-        %th Ontology
-        %th Mappings
-    %tbody
-      - if @mapping_counts.blank?
+        %td There are no mappings to or from this ontology
+        %td &nbsp;
+    - else
+      - for mapping_count in @mapping_counts
         %tr
-          %td There are no mappings to or from this ontology
-          %td &nbsp;
-      - else
-        - for mapping_count in @mapping_counts
-          %tr
-            %td
-              %a.facebox{href: "/mappings/show/#{@ontology.acronym}?target=#{mapping_count[:target_ontology].id}&height=600&width=800"}= mapping_count[:target_ontology].name
-            %td= number_with_delimiter(mapping_count[:count], delimiter: ',')
+          %td
+            %a.facebox{href: "/mappings/show/#{@ontology.acronym}?target=#{mapping_count[:target_ontology].id}&height=600&width=800"}= mapping_count[:target_ontology].name
+          %td= number_with_delimiter(mapping_count[:count], delimiter: ',')

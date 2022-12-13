@@ -42,6 +42,9 @@ Rails.application.routes.draw do
 
   resources :virtual_appliance
 
+  get 'change_requests/create_synonym'
+  match 'change_requests', to: 'change_requests#create', via: :post
+
   get '' => 'home#index'
 
   # Top-level pages

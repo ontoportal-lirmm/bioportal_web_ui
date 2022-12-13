@@ -351,7 +351,7 @@ class ApplicationController < ActionController::Base
   end
 
   def using_captcha?
-    !ENV['USE_RECAPTCHA'].nil? && ENV['USE_RECAPTCHA'] == 'true'
+    ENV['USE_RECAPTCHA'].present? && ENV['USE_RECAPTCHA'] == 'true'
   end
 
   def get_class(params)
