@@ -191,9 +191,6 @@ class UsersController < ApplicationController
     if params[:email].nil? || params[:email].length < 1 || !params[:email].match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)
       errors << "Please enter an email address"
     end
-    if !params[:email].eql?(params[:email_confirmation])
-      errors << "Your Email and Email Confirmation do not match"
-    end
     if params[:password].nil? || params[:password].length < 1
       errors << "Please enter a password"
     end
