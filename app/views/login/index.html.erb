@@ -13,22 +13,18 @@ Errors On Form
 </ul>
 </div>
 <%end%>
-<center>
-  <table class="form" width="400px" style="margin-top:30px">
-    <tr>
-      <th nowrap align="right" >Account Name:</th>
-      <td class="top"><%= text_field 'user', 'username', :size => 25 %></td>
-    </tr>
-    <tr>
-      <th nowrap align="right" >Password:</th>
-      <td><%= password_field 'user','password', :size => 25, :autocomplete => "off" %></td>
-    </tr>
-    <tr>
-      <td colspan="2" align="right"><%= submit_tag "Login"%></td>
-    </tr>
-  </table>
-  <span style="font-size:1.2em;">Not Registered Yet?  <%=link_to "Sign Up", new_user_path%></span><br><br>
-  <span style="font-size:1.2em;"><%=link_to "Lost Password", '/lost_pass'%></span><br><br>
-</center>
+
+    <div class="login-page-container">
+        <div class="login-form">
+            <p class="login-input-title">Username or Email</p>
+            <%= text_field 'user', 'username', class: "login-input email-input", placeholder: "Enter your password" %>
+            <p class="login-input-title">Password</p>
+            <%= password_field 'user','password', :autocomplete => "off", class: "login-input password-input", placeholder: "Enter your password"  %>      
+            <a class="login-forgot-password" href="/lost_pass"><p>Forgot password?</p></a>
+            <input class="login-button" name="commit" data-disable-with="Login" type="submit" value="Login">
+            <p class="dont-have-account">Don't have an account? <a class="login-register-button" href="<%= new_user_path %>">Register</a></p>
+        </div>
+    </div>
+
 
 <% end %>
