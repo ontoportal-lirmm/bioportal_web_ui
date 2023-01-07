@@ -1,7 +1,7 @@
 class SubscribeMailer < ApplicationMailer
     
     def register_for_announce_list(email,firstName,lastName)
-      if are_subscription_config_valid?
+      if are_subscription_configs_valid?
         mail(
           :to => $ANNOUNCE_SERVICE_HOST, 
           :from => email, 
@@ -10,7 +10,7 @@ class SubscribeMailer < ApplicationMailer
       end
        
     def unregister_for_announce_list(email)
-      if are_subscription_config_valid?
+      if are_subscription_configs_valid?
         mail(
           :to => $ANNOUNCE_SERVICE_HOST, 
           :from => email, 
@@ -21,7 +21,7 @@ class SubscribeMailer < ApplicationMailer
 
     private
 
-    def are_subscription_config_valid?
+    def are_subscription_configs_valid?
       $ANNOUNCE_LIST.present? &&  $ANNOUNCE_LIST_SERVICE.present? && $ANNOUNCE_LIST.present? 
     end
     
