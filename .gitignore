@@ -37,7 +37,6 @@ nohup.out
 
 .tags_sorted_by_file
 
-config/newrelic.yml
 node_modules
 .env
 config/site_config.rb
