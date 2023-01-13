@@ -52,6 +52,8 @@
         %div.modal-footer
           %button.btn.btn-secondary{"data-dismiss": "modal"} Close
 
+  = render partial: 'kgcl_dialogs'
+
   -# A header of sorts to display ontology name and subset of details.
   %div.row.pt-md-3.pb-md-2
     %div.col
@@ -102,13 +104,8 @@
             - sections.each do |section|
               %div.tab-pane{id: "ont_#{section}_content", class: selected_section?(section) ? 'active show' : ''}
                 = lazy_load_section(section) do
-                  = yield
+                  - yield
 
-- if Rails.env.appliance?
-  = render partial: "footer_appliance"
-  = javascript_include_tag "application", "data-turbo-track": "reload"
-  = render partial: "ga_tracking"
-- else
   = render partial: "layouts/footer"
 
 </body>

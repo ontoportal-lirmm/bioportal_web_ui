@@ -511,27 +511,6 @@ li.ac_over > .obsolete_class {
   cursor: inherit;  /*override the help cursor for selection menus*/
 }
 
-.concept_details p {
-  margin-bottom: .5em;
-}
-
-.concept_details .label {
-  vertical-align: top;
-  width: 180px;
-  max-width: 200px;
-}
-
-.concept_details tbody td {
-  padding: 0.6em 0.8em 0 !important;
-  white-space: normal; /* css-3 */
-  white-space: -moz-normal; /* Mozilla, since 1999 */
-  word-wrap: break-word; /* Internet Explorer 5.5+ */
-}
-
-.concept_details td:nth-child(1) {
-  white-space: nowrap;
-}
-
 #format_specific_options td {
   border-top: 1px solid #C1DAD7;
 }

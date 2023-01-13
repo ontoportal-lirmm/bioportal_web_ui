@@ -171,7 +171,8 @@
                 %a.btn.btn-info.thickbox{href: "#{get_code_prefix}&inlineId=vis".html_safe} Get code
           %td
             #bp_vis_container
-              <iframe frameborder="0" src="/widgets/visualization?ontology=#{@ontology.acronym}&class=#{CGI.escape(@ontology.explore.classes["collection"].first.id)}&apikey=#{$APIKEY}" width="100%" height="350"></iframe>
+              - rest_domain = $REST_URL.sub(/https?:\/\//, "")
+              <iframe frameborder="0" src="/widgets/visualization?ontology=#{@ontology.acronym}&class=#{CGI.escape(@ontology.explore.classes["collection"].first.id)}&apikey=#{$API_KEY}&restURLPrefix=#{rest_domain}" width="100%" height="350"></iframe>
             #vis{:style => "display:none;"}
               %h2 Step 2: Follow the Instructions
               %hr/
@@ -195,7 +196,18 @@
                   %p.card-text Display a class tree with a search field for #{@ontology.acronym}
                   %a.btn.btn-info.thickbox{href: "#{get_code_prefix}&inlineId=widget_tree_popup".html_safe} Get code
             %td
+              %link{rel:"stylesheet", type:"text/css", href:"/widgets/jquery.ncbo.tree.css"}
+              %script{src:"/widgets/jquery.ncbo.tree-2.0.2.js"}
+
               #bp_widget_tree_container
+                #widget_tree
+              :javascript
+                var widget_tree = $("#widget_tree").NCBOTree({
+                  apikey: "#{$API_KEY}",
+                  ontology: "#{@ontology.acronym}",
+                  ncboUIURL: "#{$UI_URL}",
+                  ncboAPIURL: "#{$REST_URL}"
+                });
 
               #widget_tree_popup{:style => "display:none;"}
                 %h2 Step 2: Follow the Instructions

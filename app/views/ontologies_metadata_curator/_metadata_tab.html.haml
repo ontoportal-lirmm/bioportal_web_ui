@@ -1,0 +1,23 @@
+%div.mt-5.d-flex
+  %div.mx-auto.w-75
+    = form_tag("/ontologies_metadata_curator/result", method: "post", data: { turbo: true, turbo_frame: 'selection_metadata_form'}) do
+      %div
+        %div.mx-1.pt-3
+          = render FormGroupComponent.new(label:' Ontologies', inline: false) do
+            = render :partial => "shared/ontology_picker", locals: {sel_text: '', selected_ontologies: @ontologies_ids}
+      %div.d-flex.align-items-center.mb-5
+        %div.mx-1{style: 'width: 65%'}
+          = render MetadataSelectorComponent.new(label: 'Metadata Properties', values: submission_editable_properties , selected:  @metadata_sel)
+        %div.mx-1.mt-3{style: 'width: 15%'}
+          = render SwitchInputComponent.new(id:"show_submissions", name: "show_submissions", label: "Include all submissions")
+        %div.mt-3.flex-shrink-0
+          %button{type: "submit", class: "btn btn-success"}
+            Get values
+        %div.mt-3.flex-shrink-0.flex-fill
+          = turbo_frame_tag "edit_metadata_btn"
+
+= render TurboFrameComponent.new(id: 'selection_metadata_form') do
+  %div.alert.alert-light.text-center
+    select ontologies and the metadata properties
+
+

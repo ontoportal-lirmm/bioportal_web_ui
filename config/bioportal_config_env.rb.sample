@@ -43,9 +43,8 @@ $ANNOTATOR_DISABLED = false
 # Unique string representing the UI's id for use with the BioPortal Core
 $API_KEY = ""
 
-# REST core service address
-#$REST_URL = "http://data.stageportal.lirmm.fr/"
-$REST_URL = ""
+# BioPortal API service address
+$REST_URL = "http://example.org:8080/"
 
 # Annotator REST service address
 #$ANNOTATOR_URL = "http://services.stageportal.lirmm.fr/annotator"
@@ -88,12 +87,8 @@ $MAX_POSSIBLE_DISPLAY = 10000
 # Release version text (appears in footer of all pages, except 404 and 500 errors)
 $RELEASE_VERSION = "4.24 (February 2016)"
 
-# Pairing a name with an array of ontology virtual ids will allow you to filter ontologies based on a subdomain.
-# If your main UI is hosted at example.org and you add custom.example.org pointing to the same Rails installation
-# you could filter the ontologies visible at custom.example.org by adding this to the hash: "custom" => { :name => "Custom Slice", :ontologies => [1032, 1054, 1099] }
-# Any number of slices can be added. Groups are added automatically using the group acronym as the subdomain.
+# Enable Slices, filtering of ontologies based on subdomain and ontology groups
 $ENABLE_SLICES = false
-$ONTOLOGY_SLICES = {}
 
 # Google Analytics ID (optional)
 $ANALYTICS_ID = ""

@@ -10,10 +10,14 @@
           %td.label
             ID
           %td
-            %p
-              = scheme["@id"]
+            %p= scheme["@id"]
         %tr
           %td{nowrap: ""} Preferred Name
           %td
             %p= get_scheme_label(scheme)
+        %tr
+          %td.label
+            Type
+          %td
+            %p= scheme["@type"]
 

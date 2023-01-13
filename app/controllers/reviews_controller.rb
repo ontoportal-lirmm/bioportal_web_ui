@@ -35,7 +35,7 @@ class ReviewsController < ApplicationController
     @review = LinkedData::Client::Models::Review.new(values: params[:review])
     @ontology = LinkedData::Client::Models::Ontology.find(@review.ontologyReviewed)
     @review_saved = @review.save
-    if @review_saved.errors
+    if response_error?(@review_saved)
       @errors = response_errors(@review_saved)
       render :action => "new"
     else

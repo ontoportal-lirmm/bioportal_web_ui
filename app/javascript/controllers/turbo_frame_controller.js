@@ -4,19 +4,19 @@ import {HistoryService} from "../mixins/useHistory";
 // Connects to data-controller="turbo-frame"
 export default class extends Controller {
     static values = {
-        frameId: String,
         url: String,
         placeHolder: {type: String, default: 'Nothing loaded'},
     }
+    static targets = ['frame']
 
     connect() {
-        this.frame = document.getElementById(this.frameIdValue)
+        this.frame = this.frameTarget
     }
 
     updateFrame(event) {
         const newData = event.detail.data
-        const values  = Object.entries(newData)[0][1]
-        if (values.filter( x => x.length !== 0).length === 0) {
+        const values = Object.entries(newData)[0][1]
+        if (values.filter(x => x.length !== 0).length === 0) {
             this.frame.innerHTML = this.placeHolderValue
         } else {
             this.frame.innerHTML = ""

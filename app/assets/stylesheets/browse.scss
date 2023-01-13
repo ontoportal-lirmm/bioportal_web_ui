@@ -1,0 +1,27 @@
+.browse-main-container{
+  margin: 2% 5%;
+}
+.browse-container{
+  display: flex;
+}
+#sorting{
+  margin-bottom: 2em;
+}
+@media (max-width: 991px){
+  .browse-container{
+    display: block;
+  }
+  #facets{
+    width: 100%;
+    margin-right: 0%;
+  }
+  #searching{
+    padding-bottom:5px;
+  }
+}
+
+@media (max-width: 650px){
+  #sorting{
+    margin-bottom: 4em;
+  }
+}

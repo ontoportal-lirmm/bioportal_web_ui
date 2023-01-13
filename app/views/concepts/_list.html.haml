@@ -1,12 +1,14 @@
-= turbo_frame_tag 'concepts_list_view' do
-  #tree_wrapper.hide-if-loading
-    %div
-      %ul.simpleTree{data:{controller: 'simple-tree history','simple-tree': { 'auto-click-value': "true" }, action: 'clicked->history#updateURL'}}
-        %li.root
-          %ul
-            - concepts = @concepts.sort_by{|concept| [concept.prefLabel]}
-            = raw tree_link_to_concept(child: concepts.shift, ontology_acronym: @ontology.acronym, active_style: 'active')
-            - concepts.each do  |concept|
-              = raw tree_link_to_concept(child: concept, ontology_acronym: @ontology.acronym, active_style: '')
+= render InfiniteScrollComponent.new(id: 'concepts_list',
+                                    collection: @concepts,
+                                    next_url: concept_list_url(@page.nextPage, request_collection_id, @ontology.acronym),
+                                    current_page: @page.page, next_page: @page.nextPage,
+                                    auto_click: @auto_click) do |c|
+  - concepts = c.collection.sort_by{|concept| [concept.prefLabel || concept.id]}
+  - if concepts && !concepts.empty?
+    = raw tree_link_to_concept(child: concepts.shift, ontology_acronym: @ontology.acronym, active_style: c.auto_click? ? 'active' : '')
+    - concepts.each do  |concept|
+      = raw tree_link_to_concept(child: concept, ontology_acronym: @ontology.acronym, active_style: '')
+  - c.error do
+    The Collection didn't define any member
 
 

@@ -1,12 +1,16 @@
 = turbo_frame_tag 'concept_details' do
-  - schemes_keys = %w[inScheme hasTopConcept topConceptOf]
+  - schemes_keys = %w[hasTopConcept topConceptOf]
   - label_xl_set = %w[skos-xl#prefLabel skos-xl#altLabel skos-xl#hiddenLabel]
   = render ConceptDetailsComponent.new(id:'concept-details', acronym: @ontology.acronym,
               properties: @concept.properties,
               top_keys: %w[description comment],
               bottom_keys: %w[disjoint subclass is_a has_part],
-              exclude_keys: schemes_keys + label_xl_set) do |c|
+              exclude_keys: schemes_keys + label_xl_set + ['inScheme']) do |c|
     - c.header do
+      %tr
+        %td{nowrap: ""} ID
+        %td
+          %p= @concept.id
       %tr
         %td{nowrap: ""} Preferred Name
         %td
@@ -17,26 +21,39 @@
           %td
             - for synonym in @concept.synonym
               %p= synonym
+          %td
+            %div.synonym-change-request
+              = add_synonym_button
+              = remove_synonym_button
       - unless @concept.definition.nil? || @concept.definition.empty?
         %tr
           %td{nowrap: ""} Definitions
           %td
             %p= @concept.definition.join(" ")
-        %tr
-          %td{nowrap: ""} ID
-          %td
-            %p= @concept.id
       - if @concept.obsolete?
         %tr
           %td{nowrap: ""} Obsolete
           %td
             %p true
       - if skos?
-        - unless @concept.inCollection.nil?  || @concept.inCollection.empty?
+        - unless @concept.memberOf.nil?  || @concept.memberOf.empty?
           %tr
-            %td{nowrap: ""} In Collections
+            %td{nowrap: ""} Member of
             %td
-              %p= @concept.inCollection&.join(',')
+              %div.my-1
+                - @concept.memberOf.each do |v|
+                  = raw get_link_for_collection_ajax(v, @ontology.acronym, '_blank')
+        - unless @concept.inScheme.nil?  || @concept.inScheme.empty?
+          %tr
+            %td{nowrap: ""} In Schemes
+            %td
+              %div.my-1
+                - @concept.inScheme.each do |v|
+                  = raw get_link_for_scheme_ajax(v, @ontology.acronym, '_blank')
+      %tr
+        %td{nowrap: ""} Type
+        %td
+          %p= @concept.type
 
     - scheme_set = c.properties_set_by_keys(schemes_keys, c.concept_properties)
     - label_xl_set = c.properties_set_by_keys(label_xl_set, c.concept_properties)
@@ -46,6 +63,3 @@
     - c.section do
       = c.render_properties(label_xl_set, c.concept_properties) do |v|
         - get_link_for_label_xl_ajax(v, @ontology.acronym, @concept.id)
-
-
-

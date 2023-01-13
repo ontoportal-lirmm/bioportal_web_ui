@@ -131,6 +131,11 @@
               #{ont.name} (#{ont.acronym})
       - else
         %p{style: "padding-left: 7px;"} You haven't picked any ontologies yet
+      
+        
+        %li= link_to("Subscribe","/users/subscribe/" + @user.username, class: "btn btn-sm btn-default")
+        %li= link_to("Unsubscribe","/users/un-subscribe/" + @user.email,class: "btn btn-sm btn-default")
+
   #custom_ontologies_picker{style: "left: -9999px; position: absolute;"}
     = form_tag custom_ontologies_path(url_encode(@user.username)) do
       - selected = @user.customOntology.map {|o| LinkedData::Client::Models::Ontology.get(o).acronym}

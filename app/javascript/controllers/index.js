@@ -7,6 +7,12 @@ import { application } from "./application"
 import ChosenController from "./chosen_controller"
 application.register("chosen", ChosenController)
 
+
+import Flatpickr from "stimulus-flatpickr"
+
+application.register("flatpickr", Flatpickr);
+import NestedForm from 'stimulus-rails-nested-form'
+application.register('nested-form', NestedForm)
 import ClassSearchAutoCompleteController from "./class_search_auto_complete_controller"
 application.register("class-search-auto-complete", ClassSearchAutoCompleteController)
 
@@ -21,6 +27,9 @@ application.register("history", HistoryController)
 
 import LabelAjaxController from "./label_ajax_controller"
 application.register("label-ajax", LabelAjaxController)
+
+import LabelsAjaxContainerController from "./labels_ajax_container_controller"
+application.register("labels-ajax-container", LabelsAjaxContainerController)
 
 import LoadChartController from "./load_chart_controller"
 application.register("load-chart", LoadChartController)
@@ -45,3 +54,6 @@ application.register("tooltip", TooltipController)
 
 import TurboFrameController from "./turbo_frame_controller"
 application.register("turbo-frame", TurboFrameController)
+
+import TurboFrameErrorController from "./turbo_frame_error_controller"
+application.register("turbo-frame-error", TurboFrameErrorController)

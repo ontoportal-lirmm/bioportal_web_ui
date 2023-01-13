@@ -6,10 +6,8 @@
       - else
         = render partial: 'schemes/tree_view'
     %div#scheme_contents.pl-3{data:{'container-splitter-target': 'container'}}
-      = turbo_frame_tag 'scheme' do
+      = render TurboFrameComponent.new(id:'scheme') do
         = render partial: 'schemes/scheme', locals: {scheme: @scheme}
-      %div.show-if-loading.align-self-center.my-auto
-        = loading_spinner(true)
 
 
 

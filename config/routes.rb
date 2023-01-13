@@ -14,6 +14,9 @@ Rails.application.routes.draw do
 
   resources :reviews
 
+  get '/users/subscribe/:username', to: 'users#subscribe'
+  get '/users/un-subscribe/:email', to: 'users#un_subscribe'
+
   get '/mappings/loader' , to: 'mappings#loader'
   post '/mappings/loader', to: 'mappings#loader_process'
   get 'mappings/count/:id', to: 'mappings#count', constraints: { id: /.+/ }
@@ -57,6 +60,18 @@ Rails.application.routes.draw do
 
   resources :virtual_appliance
 
+  get 'change_requests/create_synonym'
+  match 'change_requests', to: 'change_requests#create', via: :post
+
+  # resource for metadata ontologies
+  scope :ontologies_metadata_curator do
+    post '/result', to: 'ontologies_metadata_curator#result'
+    post '/edit', to: 'ontologies_metadata_curator#edit'
+    put '/update', to: 'ontologies_metadata_curator#update'
+    get '/:ontology/submissions/:submission_id/attributes/:attribute', to: 'ontologies_metadata_curator#show_metadata_value'
+    get '/:ontology/submissions/:submission_id', to: 'ontologies_metadata_curator#show_metadata_by_ontology'
+  end
+    
   get '' => 'home#index'
 
   # Top-level pages
@@ -115,8 +130,10 @@ Rails.application.routes.draw do
   get '/ajax/classes/definition' => 'concepts#show_definition'
   get '/ajax/classes/treeview' => 'concepts#show_tree'
   get '/ajax/classes/list' => 'collections#show_members'
+  get '/ajax/classes/date_sorted_list' => 'concepts#show_date_sorted_list'
   get '/ajax/properties/tree' => 'concepts#property_tree'
   get 'ajax/schemes/label', to: "schemes#show_label"
+  get 'ajax/collections/label', to: "collections#show_label"
   get 'ajax/label_xl/label', to: "label_xl#show_label"
   get 'ajax/label_xl', to: "label_xl#show"
   get '/ajax/biomixer' => 'concepts#biomixer'
@@ -155,7 +172,6 @@ Rails.application.routes.draw do
   match '/admin/update_check_enabled' => 'admin#update_check_enabled', via: [:get]
   match '/admin/users' => 'admin#users', via: [:get]
 
-
   # Ontolobridge
   # post '/ontolobridge/:save_new_term_instructions' => 'ontolobridge#save_new_term_instructions'
 
@@ -184,5 +200,5 @@ Rails.application.routes.draw do
   get '/visualize' => 'ontologies#visualize', :as => :visualize_concept, :constraints => { ontology: /[^\/?]+/, id: /[^\/?]+/, ontologyid: /[^\/?]+/, conceptid: /[^\/?]+/ }
 
   get '/exhibit/:ontology/:id' => 'concepts#exhibit'
-
+   
 end

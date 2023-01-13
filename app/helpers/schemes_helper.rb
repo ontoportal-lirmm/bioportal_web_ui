@@ -1,22 +1,18 @@
 module SchemesHelper
 
-  def schemes_namespace(ontology_acronym)
-    "/ontologies/#{ontology_acronym}/schemes"
+  def get_schemes(ontology)
+    ontology.explore.schemes
   end
 
-  def get_schemes(ontology_acronym)
-    LinkedData::Client::HTTP
-      .get(schemes_namespace(ontology_acronym))
-  end
-
-  def get_scheme(ontology_acronym, scheme_uri)
-    LinkedData::Client::HTTP
-      .get("#{schemes_namespace(ontology_acronym)}/#{CGI.escape(scheme_uri)}", { include: 'all' })
+  def get_scheme(ontology, scheme_uri)
+    ontology.explore.schemes({ include: 'all' }, scheme_uri)
   end
 
   def get_scheme_label(scheme)
+    return '' if scheme.nil?
+
     if scheme['prefLabel'].nil? || scheme['prefLabel'].empty?
-      extract_label_from(scheme['@id']).html_safe
+      extract_label_from(scheme['@id']).html_safe if scheme['@id']
     else
       scheme['prefLabel']
     end

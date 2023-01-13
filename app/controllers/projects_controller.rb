@@ -78,7 +78,7 @@ class ProjectsController < ApplicationController
     @project_saved = @project.save
     
     # Project successfully created.
-    if not @project_saved.errors
+    if response_success?(@project_saved)
       flash[:notice] = 'Project successfully created'
       redirect_to project_path(@project.acronym)
       return
@@ -114,7 +114,7 @@ class ProjectsController < ApplicationController
     @project = projects.first
     @project.update_from_params(project_params)
     error_response = @project.update
-    if error_response
+    if response_error?(error_response)
       @errors = response_errors(error_response)
     else
       flash[:notice] = 'Project successfully updated'
@@ -133,7 +133,7 @@ class ProjectsController < ApplicationController
     end
     @project = projects.first
     error_response = @project.delete
-    if error_response
+    if response_error?(error_response)
       @errors = response_errors(error_response)
       flash[:notice] = "Project delete failed: #{@errors}"
       respond_to do |format|

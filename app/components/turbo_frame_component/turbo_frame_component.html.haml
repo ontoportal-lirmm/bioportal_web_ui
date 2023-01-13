@@ -1,6 +1,9 @@
-= turbo_frame_tag @id, src: @src do
-  %div.hide-if-loading
-    = content
-%div.show-if-loading.my-auto.mx-auto
-  %div.p-3
-    = render partial: 'shared/ui-component/loader'
+%div.d-flex.flex-column{data: {controller: 'turbo-frame-error'}}
+  = turbo_frame_tag @id, src: @src , **turbo_frame_html_options do
+    %div.hide-if-loading
+      = content
+  %div.show-if-loading.my-auto.mx-auto
+    %div.p-3
+      = render LoaderComponent.new
+  %div{'data-turbo-frame-error-target': 'errorMessage', style:'display: none; width: 100%'}
+    = render AlertMessageComponent.new(id: "#{@id}_error-message", type:'danger')

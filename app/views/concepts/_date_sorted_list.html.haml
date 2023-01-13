@@ -1,0 +1,6 @@
+= render InfiniteScrollComponent.new(id: 'concepts_date_sorted_list',
+                                    collection: @concepts, next_url: sorted_by_date_url(@page.nextPage, @concepts.last),
+                                    current_page: @page.page, next_page: @page.nextPage) do |c|
+  = render_concepts_by_dates
+  - c.error do
+    The Classes/Concepts didn't define <strong>creation</strong> or <strong>modifications</strong> dates with dcterms
