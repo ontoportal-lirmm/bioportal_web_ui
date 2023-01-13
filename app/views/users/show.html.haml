@@ -132,9 +132,15 @@
       - else
         %p{style: "padding-left: 7px;"} You haven't picked any ontologies yet
       
-        
-        %li= link_to("Subscribe","/users/subscribe/" + @user.username, class: "btn btn-sm btn-default")
-        %li= link_to("Unsubscribe","/users/un-subscribe/" + @user.email,class: "btn btn-sm btn-default")
+        %div
+          %h5{style:"margin-top:18px"} Subscription service 
+
+          %div{style:"margin-top:12px"}
+            %span= link_to("Subscribe","/users/subscribe/" + @user.username)
+            %br
+            %span= link_to("Unsubscribe","/users/un-subscribe/" + @user.email)
+
+       
 
   #custom_ontologies_picker{style: "left: -9999px; position: absolute;"}
     = form_tag custom_ontologies_path(url_encode(@user.username)) do
