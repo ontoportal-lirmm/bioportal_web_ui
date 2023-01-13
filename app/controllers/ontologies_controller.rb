@@ -24,34 +24,6 @@ class OntologiesController < ApplicationController
 
 
   # GET /ontologies
-  # GET /ontologies.xml
-  def index_old
-    @ontologies = LinkedData::Client::Models::Ontology.all(include: LinkedData::Client::Models::Ontology.include_params)
-    @submissions = LinkedData::Client::Models::OntologySubmission.all
-    @submissions_map = Hash[@submissions.map {|sub| [sub.ontology.acronym, sub] }]
-    @categories = LinkedData::Client::Models::Category.all
-    @groups = LinkedData::Client::Models::Group.all
-
-    # Count the number of classes in each ontology
-    metrics_hash = get_metrics_hash
-    @class_counts = {}
-    @ontologies.each do |o|
-      @class_counts[o.id] = metrics_hash[o.id].classes if metrics_hash[o.id]
-      @class_counts[o.id] ||= 0
-    end
-
-    @mapping_counts = {}
-    @note_counts = {}
-    respond_to do |format|
-      format.html # index.rhtml
-    end
-  end
-
-  include FairScoreHelper
-  include InstancesHelper
-  include ActionView::Helpers::NumberHelper
-  include OntologiesHelper
-
   def index
     @app_name = 'FacetedBrowsing'
     @app_dir = '/browse'
@@ -181,8 +153,8 @@ display_context: false, include: browse_attributes)
     get_class(params)
 
     if @submission.hasOntologyLanguage == 'SKOS'
-      @schemes =  get_schemes(@ontology.acronym)
-      @collections = get_collections(@ontology.acronym, add_colors: true)
+      @schemes =  get_schemes(@ontology)
+      @collections = get_collections(@ontology, add_colors: true)
     else
       @instance_details, type = get_instance_and_type(params[:instanceid])
       unless @instance_details.empty? || type.nil? || concept_id_param_exist?(params)
@@ -200,8 +172,6 @@ display_context: false, include: browse_attributes)
 
     unless @concept.id == 'bp_fake_root'
       @notes = @concept.explore.notes
-      @mappings = get_concept_mappings(@concept)
-      @delete_mapping_permission = check_delete_mapping_permission(@mappings)
     end
 
     update_tab(@ontology, @concept.id)
@@ -228,7 +198,7 @@ display_context: false, include: browse_attributes)
 
     @ontology = LinkedData::Client::Models::Ontology.new(values: ontology_params)
     @ontology_saved = @ontology.save
-    if !@ontology_saved || @ontology_saved.errors
+    if response_error?(@ontology_saved)
       @categories = LinkedData::Client::Models::Category.all
       @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
       @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
@@ -295,9 +265,9 @@ display_links: false, display_context: false)
   end
 
   def schemes
-    @schemes = get_schemes(@ontology.acronym)
+    @schemes = get_schemes(@ontology)
     scheme_id = params[:scheme_id] || @submission_latest.URI || nil
-    @scheme = get_scheme(@ontology.acronym, scheme_id) if scheme_id
+    @scheme = get_scheme(@ontology, scheme_id) if scheme_id
 
     if request.xhr?
       render partial: 'ontologies/sections/schemes', layout: false
@@ -307,9 +277,9 @@ display_links: false, display_context: false)
   end
 
   def collections
-    @collections = get_collections(@ontology.acronym)
+    @collections = get_collections(@ontology)
     collection_id = params[:collection_id]
-    @collection = get_collection(@ontology.acronym, collection_id) if collection_id
+    @collection = get_collection(@ontology, collection_id) if collection_id
 
     if request.xhr?
       render partial: 'ontologies/sections/collections', layout: false
@@ -353,7 +323,7 @@ display_links: false, display_context: false)
 
     # Note: find_by_acronym includes ontology views
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-    not_found if @ontology.nil?
+    ontology_not_found(params[:ontology]) if @ontology.nil?
 
     # Handle the case where an ontology is converted to summary only.
     # See: https://github.com/ncbo/bioportal_web_ui/issues/133.
@@ -417,7 +387,7 @@ display_links: false, display_context: false)
   def summary
     # Note: find_by_acronym includes ontology views
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    not_found if @ontology.nil?
+    ontology_not_found(params[:id]) if @ontology.nil?
     # Check to see if user is requesting json-ld, return the file from REST service if so
 
     if request.accept.to_s.eql?('application/ld+json') || request.accept.to_s.eql?('application/json')
@@ -438,7 +408,8 @@ display_links: false, display_context: false)
 
     # retrieve submissions in descending submissionId order, should be reverse chronological order.
     # Only include metadata that we need for all other ontologies (faster)
-    @submissions = @ontology.explore.submissions({include: "submissionId,creationDate,released,modificationDate,submissionStatus,hasOntologyLanguage,version,diffFilePath"}).sort {|a,b| b.submissionId.to_i <=> a.submissionId.to_i } || []
+    @submissions = @ontology.explore.submissions({include: "submissionId,creationDate,released,modificationDate,submissionStatus,hasOntologyLanguage,version,diffFilePath,ontology"})
+                            .sort {|a,b| b.submissionId.to_i <=> a.submissionId.to_i } || []
     LOG.add :error, "No submissions for ontology: #{@ontology.id}" if @submissions.empty?
     # Get the latest submission, not necessarily the latest 'ready' submission
     @submission_latest = @ontology.explore.latest_submission rescue @ontology.explore.latest_submission(include: '')
@@ -461,7 +432,7 @@ display_links: false, display_context: false)
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology][:acronym] || params[:id]).first
     @ontology.update_from_params(ontology_params)
     error_response = @ontology.update
-    if error_response && (error_response.status != 204)
+    if response_error?(error_response)
       @categories = LinkedData::Client::Models::Category.all
       @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
       @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}

@@ -57,6 +57,10 @@ window.onmessage = function(e) {
     }
   }
 };
+jQuery(document).ready(() => {
+    let biomixer = $("#biomixer_iframe")
+    biomixer.attr('src', biomixer.data('src'))
+})
 </script>
 
 <div id="biomixer_container" style="padding-left: .5%; width: 99.5%; height: 900px;">

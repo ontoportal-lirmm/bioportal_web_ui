@@ -6,12 +6,7 @@
     - if no_main_scheme? || main_scheme.nil?
       = no_main_scheme_alert
 
-    #schemes.form-group{data:{controller: 'turbo-frame history',
-            'turbo-frame': {
-              'url-value': "/ajax/classes/treeview?ontology=#{@ontology.acronym}&conceptid=root",
-              'frame-id-value': "concepts_tree_view",
-              'place-holder-value': "Please select a scheme to display"
-              }}}
+    #schemes.form-group
       %label{:for => "schemes_select"} Schemes
       %div
         = select_tag(:concept_schemes,

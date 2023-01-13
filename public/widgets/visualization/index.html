@@ -29,7 +29,7 @@
         document.write("Please provide an API Key by using the `apikey` query string parameter");
         throw new Error("Please provide an API Key by using the `apikey` query string parameter");
       } else {
-        var biomixer_url = config.biomixer_url + "/?mode=embed&embed_mode=paths_to_root&ontology_acronym=" + params.ontology + "&full_concept_id=" + encodeURIComponent(params.class) + "&userapikey=" + params.apikey + "&embed_mode=concept_neighbourhood ";
+        var biomixer_url = config.biomixer_url + "/?mode=embed&embed_mode=paths_to_root&ontology_acronym=" + params.ontology + "&full_concept_id=" + encodeURIComponent(params.class) + "&userapikey=" + params.apikey + "&embed_mode=concept_neighbourhood&restURLPrefix="+ params.restURLPrefix;
         $("#vis_iframe").html($("<iframe>").attr("src", biomixer_url).attr("frameborder", "0").attr("width", "100%").attr("height", "100%"));
       }
     }

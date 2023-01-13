@@ -1,0 +1,30 @@
+test:
+  ontologies:
+    STY:
+      repository: 'jvendetti/bioportal-nigms-u24'
+
+development:
+  ontologies:
+    GO:
+      repository: 'hrshdhgd/go-ontology'
+    MONDO:
+      repository: 'hrshdhgd/mondo'
+    UBERON:
+      repository: 'hrshdhgd/uberon'
+
+staging:
+  ontologies:
+    GO:
+      repository: 'hrshdhgd/go-ontology'
+    MONDO:
+      repository: 'monarch-initiative/mondo'
+    UBERON:
+      repository: 'hrshdhgd/uberon'
+
+production:
+  ontologies:
+    MONDO:
+      repository: 'monarch-initiative/mondo'
+
+appliance:
+  ontologies: null

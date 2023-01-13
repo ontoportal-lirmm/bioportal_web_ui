@@ -162,7 +162,11 @@ class MappingsController < ApplicationController
     @mappings = @concept.explore.mappings
 
     @delete_mapping_permission = check_delete_mapping_permission(@mappings)
-    render partial: 'mappings/concept_mappings'
+    render turbo_stream: [
+      replace('mapping_count') { "#{@mappings.size}" },
+      replace('concept_mappings', partial: 'mappings/concept_mappings')
+    ]
+
   end
 
   def new
@@ -206,7 +210,7 @@ class MappingsController < ApplicationController
     if errors.empty?
       map_uri = "#{MAPPINGS_URL}/#{@mapping.id.split('/').last}"
       response = LinkedData::Client::HTTP.patch(map_uri, values)
-      errors <<  response.body if response.status != 204
+      errors << response.body if response.status != 204
     end
 
     respond_to do |format|
@@ -279,8 +283,8 @@ class MappingsController < ApplicationController
       @ontology_to = LinkedData::Client::Models::Ontology.find(params[:ontology_to])
       @concept_from = @ontology_from.explore.single_class({ full: true }, params[:conceptid_from]) if @ontology_from
       if @ontology_to
-       @concept_to = @ontology_to.explore.single_class({ full: true }, params[:conceptid_to])
-       @map_to_bioportal_ontology_id = @ontology_to.id
+        @concept_to = @ontology_to.explore.single_class({ full: true }, params[:conceptid_to])
+        @map_to_bioportal_ontology_id = @ontology_to.id
       end
     end
 
@@ -288,7 +292,6 @@ class MappingsController < ApplicationController
     INTERPORTAL_HASH.each do |key, value|
       @interportal_options.push([key, value['api']])
     end
-
 
     @mapping_relation_options = [
       ["Identical (skos:exactMatch)", "http://www.w3.org/2004/02/skos/core#exactMatch"],
@@ -332,7 +335,7 @@ class MappingsController < ApplicationController
 
   def request_mapping
     mapping = LinkedData::Client::Models::Mapping.find(params[:id])
-    not_found if mapping.nil? || mapping.errors
+    not_found("Mapping #{params[:id]} not found") if mapping.nil? || mapping.errors
     mapping
   end
 

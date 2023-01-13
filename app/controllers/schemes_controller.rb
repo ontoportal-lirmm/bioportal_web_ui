@@ -24,7 +24,7 @@ class SchemesController < ApplicationController
       return
     end
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
-    not_found if @ontology.nil?
-    get_scheme(@ontology.acronym, params[:id])
+    ontology_not_found(params[:ontology_id]) if @ontology.nil?
+    get_scheme(@ontology, params[:id])
   end
 end

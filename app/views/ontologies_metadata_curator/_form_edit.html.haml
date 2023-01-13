@@ -1,0 +1,45 @@
+= turbo_frame_tag 'application_modal_content' do
+  :javascript
+    function displayWarning() {
+      const container = document.getElementById("change_all_warning_container")
+      const display = container.style.display
+      container.style.display = display === 'block' ? 'none' : 'block'
+    }
+    function saveSelectedTab(value){
+      const input = document.getElementById("active_ontology")
+      input.value = value
+    }
+
+    $('#ontologies-pills-tab a[data-toggle="pill"]').on('shown.bs.tab',  (e) => {
+      saveSelectedTab(e.target.innerHTML.trim())
+    })
+
+  %div
+    = render_alerts_container
+
+    = form_for :submission, url: "/ontologies_metadata_curator/update", html: {method: :put}, data: { turbo: true} do
+      = hidden_field_tag :active_ontology, ontology_submission_id_label(*@selected_ontologies.first), id: 'active_ontology'
+      %div.d-flex.justify-content-between
+        %ul#ontologies-pills-tab.nav.nav-pills.mb-3
+          - @selected_ontologies.each_with_index do |value, index|
+            - onto, sub_i = value
+            %li.nav-item
+              %a.nav-link{id: "pills-"+onto+sub_i+"-tab", "data-toggle": "pill", href: "#pills-"+onto+sub_i, class: index.zero? ? 'active' : ''}
+                = ontology_submission_id_label(onto, sub_i)
+        %div{onchange: 'displayWarning()'}
+          = render SwitchInputComponent.new(id: 'change_all', name: 'change_all', label: "Apply the change for all")
+      %div#change_all_warning_container{style: 'display: none'}
+        = render AlertMessageComponent.new(id:'change_all_warning', type: 'warning') do
+          %strong Apply the change for all
+          will update the current displayed content to all the following submssions:
+          - @selected_ontologies.map{|x| ontology_submission_id_label(*x)}.each do |onto|
+            %span.badge.badge-primary
+              = onto
+      #pills-tabContent.tab-content
+        - @selected_ontologies.each_with_index  do |value, index|
+          - onto, sub_i = value
+          = hidden_field_tag  "selected_ontologies[]", ontology_submission_id_label(*value)
+          .tab-pane{id: "pills-"+ onto+sub_i, class: index.zero? ? 'active' : ''}
+            = render TurboFrameComponent.new(id: 'metadata_by_ontology', src: "ontologies_metadata_curator/#{onto}/submissions/#{sub_i}"+"?properties=#{@selected_metadata.join(',')}&form_id=metadata_by_ontology", loading:"lazy")
+
+      = submit_tag "Save", class: "btn btn-primary btn-block"

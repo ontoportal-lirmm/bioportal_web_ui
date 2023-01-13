@@ -16,12 +16,12 @@ class ConceptDetailsComponent < ViewComponent::Base
     @exclude_keys = exclude_keys
     @id = id
 
-    @concept_properties = concept_properties2hash(@properties)
+    @concept_properties = concept_properties2hash(@properties) if @properties
   end
 
   def render_properties(properties_set, ontology_acronym, &block)
     out = ''
-    properties_set.each do |key, data|
+    properties_set&.each do |key, data|
       next if exclude_relation?(key) || !data[:values]
 
       values = data[:values]
@@ -49,14 +49,14 @@ class ConceptDetailsComponent < ViewComponent::Base
   end
 
   def properties_set_by_keys(keys, concept_properties, exclude_keys = [])
-    concept_properties.select do |k, v|
+    concept_properties&.select do |k, v|
       (keys.include?(k) || !keys.select { |key| v[:key].to_s.include?(key) }.empty?) && !exclude_keys.include?(k) &&
         exclude_keys.select { |key| v[:key].to_s.include?(key) }.empty?
     end
   end
 
   def filter_properties(top_keys, bottom_keys, exclude_keys, concept_properties)
-    all_keys = concept_properties.keys
+    all_keys = concept_properties&.keys || []
     top_set = properties_set_by_keys(top_keys, concept_properties, exclude_keys)
     bottom_set = properties_set_by_keys(bottom_keys, concept_properties, exclude_keys)
     leftover = properties_set_by_keys(all_keys - top_keys - bottom_keys, concept_properties, exclude_keys)

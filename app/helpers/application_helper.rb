@@ -28,7 +28,7 @@ module ApplicationHelper
   end
 
   def encode_param(string)
-    return URI.escape(string, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+    CGI.escape(string)
   end
 
   def escape(string)
@@ -156,7 +156,6 @@ module ApplicationHelper
 
       # This fake root will be present at the root of "flat" ontologies, we need to keep the id intact
 
-
       if child.id.eql?('bp_fake_root')
         string << tree_link_to_concept(child: child, ontology_acronym: '',
                                        active_style: active_style, node: node)
@@ -185,11 +184,11 @@ module ApplicationHelper
     link = <<-EOS
         <a id='#{child.id}' data-conceptid='#{child.id}'
            data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
-           data-collections-value='#{child.inCollection}'
-           data-active-collections-value='#{child.isInActiveCollection}'
+           data-collections-value='#{child.memberOf || []}'
+           data-active-collections-value='#{child.isInActiveCollection || []}'
            data-skos-collection-colors-target='collection'
             class='#{muted_style} #{active_style}'>
-            #{child.prefLabel({ use_html: true })}
+            #{child.prefLabel ? child.prefLabel({ use_html: true }) : child.id}
         </a>
     EOS
 
@@ -235,7 +234,7 @@ module ApplicationHelper
     attribs = []
     html_attribs.each {|k,v| attribs << "#{k.to_s}='#{v}'"}
     return <<-BLOCK
-          <a class='pop_window tooltip_link #{[css_class].flatten.compact.join(' ')}' #{attribs.join(" ")}>
+          <a data-controller='tooltip' class='pop_window tooltip_link d-inline-block #{[css_class].flatten.compact.join(' ')}' #{attribs.join(" ")}>
             <i class="#{icon} d-flex"></i> #{text}
           </a>
     BLOCK
@@ -329,6 +328,19 @@ module ApplicationHelper
     @groups_for_js = @groups_map.to_json
   end
 
+  def metadata_for_select
+    get_metadata
+    return @metadata_for_select
+  end 
+
+  def get_metadata
+    @metadata_for_select = []
+    submission_metadata.each do |data|
+      @metadata_for_select << data["attribute"]
+    end
+  end    
+
+
   def ontologies_to_acronyms(ontologyIDs)
     acronyms = []
     ontologyIDs.each do |id|
@@ -421,16 +433,13 @@ module ApplicationHelper
   end
 
   def flash_class(level)
-    case level
-    when "notice" 
-      "alert alert-info"
-    when "success" 
-      "alert alert-success"
-    when "error"
-      "alert alert-danger"
-    when "alert" 
-      "alert alert-error"
-    end
+    bootstrap_alert_class = {
+      'notice' => 'alert-info',
+      'success' => 'alert-success',
+      'error' => 'alert-danger',
+      'alert' => 'alert-danger'
+    }
+    bootstrap_alert_class[level]
   end
 
   ###BEGIN ruby equivalent of JS code in bp_ajax_controller.
@@ -438,15 +447,21 @@ module ApplicationHelper
   def bp_ont_link(ont_acronym)
     return "/ontologies/#{ont_acronym}"
   end
+
   def bp_class_link(cls_id, ont_acronym)
-    return "#{bp_ont_link(ont_acronym)}?p=classes&conceptid=#{URI.escape(cls_id, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))}"
+    return "#{bp_ont_link(ont_acronym)}?p=classes&conceptid=#{escape(cls_id)}"
   end
+
   def bp_scheme_link(scheme_id, ont_acronym)
-    return "#{bp_ont_link(ont_acronym)}?p=schemes&schemeid=#{URI.escape(scheme_id, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))}"
+    return "#{bp_ont_link(ont_acronym)}?p=schemes&schemeid=#{escape(scheme_id)}"
   end
 
   def bp_label_xl_link(label_xl_id, ont_acronym)
-    return "#{bp_ont_link(ont_acronym)}/?label_xl_id=#{URI.escape(label_xl_id, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))}"
+    return "#{bp_ont_link(ont_acronym)}/?label_xl_id=#{escape(label_xl_id)}"
+  end
+
+  def bp_collection_link(collection_id, ont_acronym)
+    "#{bp_ont_link(ont_acronym)}?p=collection&collectionid=#{escape(collection_id)}"
   end
 
   def label_ajax_data_h(cls_id, ont_acronym, ajax_uri, cls_url)
@@ -477,7 +492,7 @@ module ApplicationHelper
     if cls_id.start_with?('http://') || cls_id.start_with?('https://')
       link = bp_class_link(cls_id, ont_acronym)
       ajax_url = '/ajax/classes/label'
-      cls_url = "#{ont_acronym}?p=classes&conceptid=#{CGI.escape(cls_id)}"
+      cls_url = "?p=classes&conceptid=#{CGI.escape(cls_id)}"
       label_ajax_link(link, cls_id, ont_acronym, ajax_url , cls_url ,target)
     else
       auto_link(cls_id, :all, target: '_blank')
@@ -497,6 +512,14 @@ module ApplicationHelper
     scheme_url = "?p=schemes&schemeid=#{CGI.escape(scheme)}"
     label_ajax_link(link, scheme, ont_acronym, ajax_url, scheme_url, target)
   end
+
+  def get_link_for_collection_ajax(collection, ont_acronym, target = '_blank')
+    link = bp_collection_link(collection, ont_acronym)
+    ajax_url = '/ajax/collections/label'
+    collection_url = "?p=collections&collectionid=#{CGI.escape(collection)}"
+    label_ajax_link(link, collection, ont_acronym, ajax_url, collection_url, target)
+  end
+
 
   def get_link_for_label_xl_ajax(label_xl, ont_acronym, cls_id)
     link = label_xl
@@ -529,6 +552,19 @@ module ApplicationHelper
     else
       link_to(name, options, html_options)
     end
+  end
+  def submit_to_modal(name, html_options = nil, &block)
+    new_data = {
+      controller: 'show-modal', turbo: true,
+      turbo_frame: 'application_modal_content',
+      action: 'click->show-modal#show'
+    }
+
+    html_options[:data].merge!(new_data) do |_, old, new|
+      "#{old} #{new}"
+    end
+
+    submit_tag(name || "save", html_options)
   end
 
   def uri?(url)

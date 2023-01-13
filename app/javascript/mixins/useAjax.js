@@ -1,3 +1,3 @@
 export default function useAjax(options){
-    jQuery.ajax(options)
+    return jQuery.ajax(options)
 }

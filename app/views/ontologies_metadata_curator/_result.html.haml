@@ -1,0 +1,33 @@
+= render TurboFrameComponent.new(id: 'selection_metadata_form') do
+  :javascript
+    function showEditForm(event) {
+      event.preventDefault()
+      document.getElementById('show_bulk_edit_from_btn').click()
+    }
+
+  = form_tag("/ontologies_metadata_curator/edit", id: "properties_result_form", method: "post", data: { turbo: true, turbo_frame: 'application_modal_content' }) do
+    = submit_to_modal("Edit metadata values" , id:"show_bulk_edit_from_btn", class: "d-none",
+      data: { show_modal_title_value: "Metadata curator editor", show_modal_size_value: 'modal-xl' })
+    %div.table-container.mx-3
+      %table.zebra
+        %thead
+          %tr
+            %th Ontologies
+            - @metadata_sel.each do |meta|
+              %th
+                %div
+                  = render SwitchInputComponent.new(id: meta, name: 'selected_metadata[]', value: meta) do
+                    %h6{style:'margin-top: 0.2rem'}=generate_attribute_label(meta, label_tag_sym: :span)
+
+        %tbody
+          - @submissions.each do |submission|
+            - acronym = submission.ontology.acronym
+            %tr
+              %th{scope:"row", style: 'width: 5%'}
+                %div
+                  - value = acronym + " / " + submission.submissionId.to_s
+                  = render SwitchInputComponent.new(id: submission.id, name: 'selected_acronyms[]', value: value) do
+                    %h6{style:'margin-top: 0.2rem'}=value
+              - @metadata_sel.each do |meta|
+                %td{style: "width: #{95 / @metadata_sel.size}%; vertical-align: top; word-break: break-word;"}
+                  = render partial: 'attribute_inline_editable', locals: {attribute: meta, submission: submission, ontology: submission.ontology}

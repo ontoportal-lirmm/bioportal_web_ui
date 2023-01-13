@@ -15,24 +15,13 @@
     }
   );
 
-  $(document).ready(function() {
-
-    $('.tooltip_link[title][title!=""]').tooltipster({
-      interactive: true,
-      position: "right",
-      contentAsHTML: true,
-      animation: 'fade',
-      delay: 200,
-      theme: 'tooltipster-shadow',
-      trigger: 'hover'
-    });
-  })
 
 
-- more_colspan = 4
-- more_colspan = 3 if @ont_restricted
+- more_colspan = 6
+- more_colspan = 5 if @ont_restricted
 
 %div.click_versions_collapse
+  = render_alerts_container(AdminController)
   %table#ontology_versions.table.table-sm.table-striped
     %thead
       %tr
@@ -45,16 +34,19 @@
           = generate_attribute_text("creationDate", "Uploaded")
         - unless @ont_restricted
           %th.align-middle Downloads
+        - if @ontology.admin?(session[:user])
+          %th.align-middle Actions
+
     - begin
-      - submission_ready = @ontology.explore.latest_submission({:include_status => 'ready'})
+      - submission_ready = @ontology.explore.latest_submission({:include_status => 'ready', display: 'submissionId'})
       - submission_readyId = submission_ready.submissionId unless submission_ready.nil?
-      - rescue
+    - rescue
       - submission_readyId = -1
     - @submissions.each_with_index do |sub, index|
       - hidden_row_class = index >= 5 ? "hidden_ont hidden_select" : ""
-      %tr{class: "#{hidden_row_class}"}
+      %tr{class: "#{hidden_row_class}", id: "submission_#{sub.submissionId}"}
         %td
-          = raw status_link(sub, @ontology, sub.submissionId==submission_readyId)
+          = raw status_link(sub, sub.submissionId==submission_readyId)
         %td
           = xmldatetime_to_date(sub.released) unless sub.released.nil?
         %td
@@ -64,6 +56,15 @@
         - unless @ont_restricted
           %td
             = raw download_link(sub, @ontology)
+        - if @ontology.admin?(session[:user])
+          %td
+            %div.d-flex
+              %a.btn.btn-sm.btn-link{:href => "#{@ontology.acronym}/submissions/#{sub.submissionId}/edit"}
+                %span Edit
+              - unless index.zero?
+                - alert_text = "Are you sure you want to delete submission <span style='color:red;font-weight:bold;'>" + sub.submissionId.to_s + "</span> for ontology <span style='color:red;font-weight:bold;'>" + @ontology.acronym + "</span>?<br/><b>This action CAN NOT be undone!!!</b>"
+                = button_to "Delete", "/admin/ontologies/#{@ontology.acronym}/submissions/#{sub.submissionId}?turbo_stream=true", method: :delete, class:'btn btn-sm btn-link',  form: {data: { turbo: true, turbo_confirm: alert_text, turbo_frame: '_top'}}
+
     - if @submissions.length >= 5
       %tr
         %td{colspan: more_colspan, class: "show_more_subs"}

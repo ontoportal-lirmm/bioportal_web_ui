@@ -1,0 +1,4 @@
+%div.custom-control.custom-switch
+  = check_box_tag  @name, @value, @checked, class: 'custom-control-input', id: @id
+  %label.custom-control-label{for: @id}
+    = content || @label

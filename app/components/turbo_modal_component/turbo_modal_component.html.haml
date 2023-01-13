@@ -7,8 +7,6 @@
         %button.close{type:'button', data: { action: "turbo-modal#hide" }}
           %span &times;
       %div.modal-body
-        = turbo_frame_tag 'application_modal_content', data: { 'turbo-modal-target': 'content'} do
+        = render TurboFrameComponent.new(id: 'application_modal_content', data: { 'turbo-modal-target': 'content'}) do
           = content
-        %div.show-if-loading
-          loading
 
