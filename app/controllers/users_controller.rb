@@ -167,7 +167,7 @@ class UsersController < ApplicationController
 
   def un_subscribe
     @email = params[:email] 
-    deliver "un_subscribe", SubscribeMailer.unregister_for_announce_list(@email)
+    deliver "unsubscribe", SubscribeMailer.unregister_for_announce_list(@email)
   end
 
   
@@ -176,7 +176,8 @@ class UsersController < ApplicationController
   def deliver(action,job)
     begin
       job.deliver
-      flash[:success] = "You have #{action} successfully"
+      to_or_from = action.eql?("subscribe") ? "to" : "from"
+      flash[:success] = "You have successfully  #{action} #{to_or_from} our user mailing list: #{$ANNOUNCE_LIST}"
     rescue => exception
       flash[:error] = "Something went wrong ..."
     end

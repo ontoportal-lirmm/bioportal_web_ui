@@ -8,6 +8,11 @@ class SubscribeMailer < ApplicationMailer
             :from => email, 
             :subject => "subscribe #{$ANNOUNCE_LIST} #{firstName} #{lastName}") 
           end  
+          
+          mail(
+            :to => $SUPPORT_EMAIL, 
+            :from => email, 
+            :subject => "#{email} has been subscribe to our user mailing list #{$ANNOUNCE_LIST}")
         end
       end
        
@@ -19,6 +24,11 @@ class SubscribeMailer < ApplicationMailer
             :from => email, 
             :subject => "unsubscribe #{$ANNOUNCE_LIST}")
         end
+
+        mail(
+          :to => $SUPPORT_EMAIL, 
+          :from => email, 
+          :subject => "#{email} has been unsubscribe from our user mailing list #{$ANNOUNCE_LIST}")
       end  
     end
     
