@@ -50,8 +50,7 @@ $REST_URL = "http://example.org:8080/"
 #$ANNOTATOR_URL = "http://services.stageportal.lirmm.fr/annotator"
 $ANNOTATOR_URL = "#{$REST_URL}/annotator"
 
-# Announcements mailman mailing list REQUEST address, EX: list-request@lists.example.org
-# NOTE: You must use the REQUEST address for the mailing list. ONLY WORKS WITH MAILMAN LISTS.
+# Announcements sympa mailing list REQUEST address, EX: list-request@lists.example.org
 $ANNOUNCE_LIST_SERVICE ||= "SERVICE_EXAMPLE"
 $ANNOUNCE_SERVICE_HOST ||= "service@test.com"
 $ANNOUNCE_LIST||= "users-list@test"  
