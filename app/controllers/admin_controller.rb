@@ -1,4 +1,5 @@
 class AdminController < ApplicationController
+  include TurboHelper
   layout :determine_layout
   before_action :cache_setup
 
@@ -180,21 +181,19 @@ class AdminController < ApplicationController
   end
 
   def delete_submission
-    response = {errors: '', success: ''}
-
+    response = { errors: '', success: '' }
+    submission_id = params["id"]
     begin
       ont = params["acronym"]
       ontology = LinkedData::Client::Models::Ontology.find_by_acronym(ont).first
 
       if ontology
-        submissions = ontology.explore.submissions
-        submission = submissions.select {|o| o.submissionId == params["id"].to_i}.first
+        submission = ontology.explore.submissions({ display: 'submissionId' }, submission_id)
 
         if submission
           error_response = submission.delete
-
-          if error_response
-            errors = response_errors(error_response) # see application_controller::response_errors
+          if response_error?(error_response)
+            errors = response_errors(error_response)
             _process_errors(errors, response, true)
           else
             response[:success] << "Submission #{params["id"]} for ontology #{ont} was deleted successfully"
@@ -208,14 +207,25 @@ class AdminController < ApplicationController
     rescue Exception => e
       response[:errors] << "Problem deleting submission #{params["id"]} for ontology #{ont} - #{e.class}: #{e.message}"
     end
-    render :json => response
+
+    if params[:turbo_stream]
+      if response[:errors].empty?
+        render_turbo_stream( alert_success { response[:success] }, remove('submission_' + submission_id.to_s))
+
+      else
+        render_turbo_stream alert_error { response[:errors] }
+      end
+    else
+      render :json => response
+    end
+
   end
 
   def users
     response = _users
     render :json => response
   end
-
+  
 
   private
 
@@ -285,7 +295,7 @@ class AdminController < ApplicationController
           if ontology
             error_response = self.send(process_proc, ontology, params)
 
-            if error_response
+            if response_error?(error_response)
               errors = response_errors(error_response) # see application_controller::response_errors
               _process_errors(errors, response, false)
             else

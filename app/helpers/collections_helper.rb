@@ -1,20 +1,14 @@
 module CollectionsHelper
 
-  def collections_namespace(ontology_acronym)
-    "/ontologies/#{ontology_acronym}/collections"
-  end
 
-  def get_collections(ontology_acronym, add_colors: false)
-    collections = LinkedData::Client::HTTP
-      .get(collections_namespace(ontology_acronym))
-
+  def get_collections(ontology, add_colors: false)
+    collections = ontology.explore.collections
     generate_collections_colors(collections) if add_colors
     collections
   end
 
-  def get_collection(ontology_acronym, collection_uri)
-    LinkedData::Client::HTTP
-      .get("#{collections_namespace(ontology_acronym)}/#{CGI.escape(collection_uri)}", { include: 'all' })
+  def get_collection(ontology, collection_uri)
+    ontology.explore.collections({ include: 'all' },collection_uri)
   end
 
   def get_collection_label(collection)

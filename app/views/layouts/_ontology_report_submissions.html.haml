@@ -34,7 +34,7 @@
       - hidden_row_class = index >= 10 ? "hidden_ont hidden_select" : ""
       <tr #{cycle("class='#{hidden_row_class}'", "class='alt #{hidden_row_class}'")} class="#{hidden_row_class}">
       %td
-        = raw status_link(sub, @ontology, sub.submissionId == submission_readyId, target="_blank")
+        = raw status_link(sub, sub.submissionId == submission_readyId, target="_blank")
       %td
         = xmldatetime_to_date(sub.released)
       %td

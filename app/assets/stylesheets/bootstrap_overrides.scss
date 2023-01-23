@@ -28,6 +28,10 @@ footer.footer .list-inline-item:not(:last-child) {
   margin-right: 1rem;
 }
 
+.not-disabled {
+  background-color: white !important;
+}
+
 @media only screen and (max-width: 992px) {
   body {
     margin-bottom: 350px; 

@@ -20,7 +20,7 @@ class InstancesController < ApplicationController
 
   def get_ontology(params)
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-    not_found if @ontology.nil?
+    ontology_not_found(params[:ontology]) if @ontology.nil?
   end
   # json render + adding next and prev pages links
   def custom_render(instances)

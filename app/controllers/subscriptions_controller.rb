@@ -58,7 +58,7 @@ class SubscriptionsController < ApplicationController
     # Try to update the user instance and the session user.
     begin
       error_response = u.update
-      if error_response.nil?
+      if response_success?(error_response)
         updated_sub = true
         session[:user].subscription = u.subscription
         #session[:user] = u

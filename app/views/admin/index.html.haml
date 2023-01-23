@@ -23,6 +23,8 @@
         =link_to("Licensing", "#licensing", id: "licensing-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: admin_licenses_path() }, aria: { controls: "licensing", selected: "false" })
       %li.nav-item
         =link_to("Users", "#users", id: "users-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: users_path() }, aria: { controls: "users", selected: "false" })
+      %li.nav-item
+        =link_to("Metadata Administration", "#ontologies_metadata_curator", id: "ontologies_metadata_curator-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab"}, aria: { controls: "ontologies_metadata_curator", selected: "false" })   
     %div#adminTabContent.tab-content
 
       -# Site Administration tab
@@ -88,3 +90,11 @@
       %div.tab-pane.fade{id: "users", role: "tabpanel", aria: { labelledby: "users-admin-tab" }}
         %div.ontologies_list_container.mt-3
           %table#adminUsers.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
+      
+      -# metadata tab
+      %div.tab-pane.fade{id: "ontologies_metadata_curator", role: "tabpanel", aria: { labelledby: "ontologies_metadata_curator-admin-tab" }}
+        = render partial: 'ontologies_metadata_curator/metadata_tab'
+
+
+
+  

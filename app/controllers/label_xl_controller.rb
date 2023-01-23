@@ -22,8 +22,9 @@ class LabelXlController < ApplicationController
       render text: 'Error: You must provide a valid label_xl id'
       return
     end
-    @ontology_acronym = params[:ontology_id]
-    get_label_xl(params[:ontology_id], params[:cls_id], params[:id])
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
+    @ontology_acronym = @ontology.acronym
+    get_label_xl(@ontology, params[:id])
   end
 
 end

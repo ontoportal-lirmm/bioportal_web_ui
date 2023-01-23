@@ -15,7 +15,7 @@ class FairScoreController < ApplicationController
   private
 
   def get_fair
-    not_found if params[:ontologies].nil? || params[:ontologies].empty?
+    ontology_not_found('') if params[:ontologies].nil? || params[:ontologies].empty?
     @ontologies = params[:ontologies]
     begin
       if @ontologies.include? ','

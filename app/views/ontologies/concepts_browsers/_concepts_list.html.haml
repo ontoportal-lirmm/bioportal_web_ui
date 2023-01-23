@@ -1,19 +1,17 @@
-%div.pb-2
-  %div.mb-1
-    = render partial: 'ontologies/concepts_browsers/jump_to', locals: {id: "#concepts-list-filter"}
-  %div#concepts-list-filter.collapse.card.p-2.show
-    %div#collections.pb-2{data:{controller: 'turbo-frame',
+%div{data:{controller: 'turbo-frame',
                                 'turbo-frame': {
                                       'url-value': "/ajax/classes/list?ontology_id=#{@ontology.acronym}",
-                                      'frame-id-value': "concepts_list_view",
                                       'place-holder-value': "Please select a collection to display"
                                       }}}
-      = render partial: 'ontologies/concepts_browsers/collections_picker' ,
-                 locals: {multiple: false, id: 'collections_select',
-                 data: {action: 'changed->turbo-frame#updateFrame'}}
+  %div.pb-2
+    %div.mb-1
+      = render partial: 'ontologies/concepts_browsers/jump_to', locals: {id: "#concepts-list-filter"}
+    %div#concepts-list-filter.collapse.card.p-2.show
+      %div#collections.pb-2
+        = render partial: 'ontologies/concepts_browsers/collections_picker' ,
+                   locals: {multiple: false, id: 'collections_select',
+                   data: {action: 'changed->turbo-frame#updateFrame'}}
 
-%div#sd_content.card.p-1.h-100
-  = turbo_frame_tag 'concepts_list_view'  do
-    Please select a collection to display
-  %div.show-if-loading.align-self-center.my-auto
-    = loading_spinner(true)
+  %div#sd_content.card.p-1{style: 'overflow-y: scroll; height: 60vh;'}
+    = render TurboFrameComponent.new(id: 'concepts_list_view-page-1', data: {'turbo-frame-target': 'frame'}) do
+      Please select a collection to display

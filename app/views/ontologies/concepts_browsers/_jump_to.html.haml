@@ -4,8 +4,8 @@
       %i.fas.fa-search
   = text_field_tag("search_box", nil, class: "form-control rounded-right", placeholder: "Jump to", aria: {label: "Jump to:"},
                 data: {controller: 'class-search-auto-complete',
-                       'class-search-auto-complete': { 'ontology-acronym-value': @ontology.acronym,
-                          'spinner-src-value': asset_path("jquery.simple.tree/spinner.gif")}})
+                       'class-search-auto-complete-ontology-acronym-value': @ontology.acronym,
+                          'class-search-auto-complete-spinner-src-value': asset_path("jquery.simple.tree/spinner.gif")})
   = hidden_field_tag("jump_to_concept_id")
   - if skos?
     %div.input-group-append

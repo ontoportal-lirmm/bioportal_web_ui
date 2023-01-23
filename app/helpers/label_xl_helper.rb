@@ -1,11 +1,7 @@
 module LabelXlHelper
-  def label_xls_namespace(ontology_acronym, cls_id)
-    "/ontologies/#{ontology_acronym}/classes/#{CGI.escape(cls_id)}/skos_xl_label"
-  end
 
-  def get_label_xl(ontology_acronym, cls_id, label_xl_uri)
-    LinkedData::Client::HTTP
-      .get("#{label_xls_namespace(ontology_acronym, cls_id)}/#{CGI.escape(label_xl_uri)}", { include: 'all' })
+  def get_label_xl(ontology, label_xl_uri)
+    ontology.explore.xl_labels({ include: 'all' }, label_xl_uri)
   end
 
   def get_label_xl_label(label_xl)

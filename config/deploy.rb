@@ -1,14 +1,20 @@
-set :application, 'bioportal_web_ui'
+set :author, "ncbo"
+set :application, "bioportal_web_ui"
 
-set :repo_url, "https://github.com/ncbo/#{fetch(:application)}.git"
+set :repo_url, "https://github.com/#{fetch(:author)}/#{fetch(:application)}.git"
 
 set :deploy_via, :remote_cache
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
+# default deployment branch is master wich can be overwritten with BRANCH env var
+# BRANCH env var can be set to specific branch of tag, i.e 'v6.8.1'
+
+set :branch, ENV.include?('BRANCH') ? ENV['BRANCH'] : 'master'
+
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, "/srv/rails/#{fetch(:application)}"
+set :deploy_to, "/srv/ontoportal/#{fetch(:application)}"
 
 # Default value for :scm is :git
 # set :scm, :git
@@ -17,7 +23,7 @@ set :deploy_to, "/srv/rails/#{fetch(:application)}"
 # set :format, :pretty
 
 # Default value for :log_level is :debug
-# set :log_level, :debug
+set :log_level, :error
 
 # Default value for :pty is false
 # set :pty, true
@@ -49,6 +55,17 @@ set :passenger_restart_with_touch, true
 # If you don't set `:passenger_restart_with_touch`, capistrano-passenger will check what version of passenger you are running
 # and use `passenger-config restart-app` if it is available in that version.
 
+desc "Check if agent forwarding is working"
+task :forwarding do
+  on roles(:all) do |h|
+    if test("env | grep SSH_AUTH_SOCK")
+      info "Agent forwarding is up to #{h}"
+    else
+      error "Agent forwarding is NOT up to #{h}"
+    end
+  end
+end
+
 namespace :deploy do
   desc 'display remote system env vars'
   task :show_remote_env do
@@ -66,12 +83,12 @@ namespace :deploy do
       TMP_CONFIG_PATH = "/tmp/#{SecureRandom.hex(15)}".freeze
       on roles(:app) do
         execute "git clone -q #{PRIVATE_CONFIG_REPO} #{TMP_CONFIG_PATH}"
-        execute "rsync -av #{TMP_CONFIG_PATH}/#{fetch(:application)}/ #{release_path}/"
+        execute "rsync -a #{TMP_CONFIG_PATH}/#{fetch(:application)}/ #{release_path}/"
         execute "rm -rf #{TMP_CONFIG_PATH}"
       end
     elsif defined?(LOCAL_CONFIG_PATH)
       on roles(:app) do
-        execute "rsync -av #{LOCAL_CONFIG_PATH}/#{fetch(:application)}/ #{release_path}/"
+        execute "rsync -a #{LOCAL_CONFIG_PATH}/#{fetch(:application)}/ #{release_path}/"
       end
     end
   end
