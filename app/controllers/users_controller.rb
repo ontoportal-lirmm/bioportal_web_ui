@@ -1,9 +1,8 @@
 class UsersController < ApplicationController
   
   before_action :unescape_id, only: [:edit, :show, :update]
-  before_action :verify_owner, only: [:edit, :show]
-  before_action :authorize_admin, only: [:index]
-
+  before_action :verify_owner, only: [:edit, :show, :subscribe, :un_subscribe]
+  before_action :authorize_admin, only: [:index,:subscribe, :un_subscribe]
   layout :determine_layout
 
   # GET /users
