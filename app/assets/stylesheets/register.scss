@@ -1,21 +1,8 @@
-.register-page-container{
-    display: flex;
-    justify-content: center;
-}
-
 .register-form{
     margin-top: 30px;
-    padding-top: 37px;
-    padding-bottom: 37px;
-    padding-left: 41px;
-    padding-right: 41px;
+    padding: 37px 41px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 20px 50px;
     border-radius: 14px;
-}
-
-.register-title-bar{
-    display: flex;
-    justify-content: space-between;
 }
 .register-arrowback{
     all: none;
@@ -50,7 +37,6 @@
 }
 .register-optional{
     font-weight: 300;
-
 }
 .register-input-long{
     width: 363px;
@@ -86,17 +72,8 @@
     box-sizing: unset;
 }
 .register-input-with-icon{
-
     padding-left: 45px;
-
 }
-.register-input-icon-container{
-    display: flex;
-}
-.register-email-list-container{
-    display: flex;
-}
-
 #register-check-text{
     margin-left: 10px;
     color: #666666;
