@@ -103,9 +103,6 @@ class OntologiesMetadataCuratorController < ApplicationController
 
   private
 
-  def ontology_and_submission_id(value)
-    value.split(' / ')
-  end
 
   def append_submission(ontology, submission)
     sub = submission

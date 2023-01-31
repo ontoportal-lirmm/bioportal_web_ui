@@ -25,7 +25,7 @@
             %tr
               %th{scope:"row", style: 'width: 5%'}
                 %div
-                  - value = acronym + " / " + submission.submissionId.to_s
+                  - value = ontology_submission_id_label(acronym, submission.submissionId)
                   = render SwitchInputComponent.new(id: submission.id, name: 'selected_acronyms[]', value: value) do
                     %h6{style:'margin-top: 0.2rem'}=value
               - @metadata_sel.each do |meta|

@@ -3,7 +3,7 @@
   = hidden_field object_name, :id, value: submissionId
   %div#general-card.mt-4
     = metadata_section('general', 'General', collapsed: false) do
-      = attribute_container('format') do
+      = attribute_container('format', required: true) do
         = turbo_frame_tag  "#{object_name(acronym, submissionId)}Format_from_group_input" do
           = render partial: 'submissions/submission_format_form'
       = attribute_text_field_container('version')
@@ -40,7 +40,7 @@
             e.g.: http://lexvo.org/id/iso639-3/eng
 
     %div#description-card.mt-4
-      = metadata_section('description', 'Description', collapsed: !@required_only) do
+      = metadata_section('description', 'Description', collapsed: !@required_only || !@submission.id.nil?) do
         -# Description
         = attribute_form_group_container('description', required: true) do |c|
           = text_area c.name, c.method_name, rows: 5, value: @submission.description, required: true, class: "form-control"
@@ -75,8 +75,8 @@
             = form_group_attribute(attr["attribute"])
 
     %div#ontology-dates-card.mt-4
-      = metadata_section('ontology-dates', 'Dates') do
-        = form_group_attribute("released", default: Date.today)
+      = metadata_section('ontology-dates', 'Dates', collapsed: !@required_only  || !@submission.id.nil?) do
+        = form_group_attribute("released", default: Date.today, required: true)
         = form_group_attribute("modificationDate")
       = metadata_section('more-dates', 'More dates', parent_id: "ontology-dates-card") do
         - for attr in @metadata.select { |m| m['display'] == 'dates' }
@@ -98,7 +98,7 @@
           = form_group_attribute(attr["attribute"])
 
     %div#community.mt-4
-      = metadata_section('contacts-panel', 'Contacts', parent_id: "community", collapsed: !@required_only) do
+      = metadata_section('contacts-panel', 'Contacts', parent_id: "community", collapsed: !@required_only  || !@submission.id.nil?) do
         -# Contact(s)
         = attribute_form_group_container('contact' ,required: true) do |c|
           - @submission.contact = [] unless @submission.contact && @submission.contact.size > 0

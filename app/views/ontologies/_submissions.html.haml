@@ -17,14 +17,16 @@
 
 
 
-- more_colspan = 6
-- more_colspan = 5 if @ont_restricted
+- more_colspan = 7
+- more_colspan = 6 if @ont_restricted
 
 %div.click_versions_collapse
   = render_alerts_container(AdminController)
   %table#ontology_versions.table.table-sm.table-striped
     %thead
       %tr
+        - if @ontology.admin?(session[:user])
+          %th.align-middle ID
         %th.align-middle Version
         %th
           = generate_attribute_text("released", "Released")
@@ -45,6 +47,9 @@
     - @submissions.each_with_index do |sub, index|
       - hidden_row_class = index >= 5 ? "hidden_ont hidden_select" : ""
       %tr{class: "#{hidden_row_class}", id: "submission_#{sub.submissionId}"}
+        - if @ontology.admin?(session[:user])
+          %td
+            =  sub.submissionId
         %td
           = raw status_link(sub, sub.submissionId==submission_readyId)
         %td

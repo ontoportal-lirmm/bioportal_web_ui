@@ -1,7 +1,10 @@
 module SubmissionsHelper
 
   def ontology_submission_id_label(acronym, submission_id)
-    [acronym, submission_id].join(' / ')
+    [acronym, submission_id].join('#')
+  end
+  def ontology_and_submission_id(value)
+    value.split('#')
   end
 
   def render_submission_attribute(attribute, submission = @submission, ontology = @ontology)
@@ -331,7 +334,11 @@ module SubmissionsHelper
   end
 
   def attribute_values(attr)
-    @submission.send(attr["attribute"])
+    begin
+      @submission.send(attr["attribute"])
+    rescue
+      nil
+    end
   end
 
   # Generate the HTML input for every attributes.
@@ -412,7 +419,7 @@ module SubmissionsHelper
   end
 
   def form_group_attribute(attr, options = {}, &block)
-    attribute_form_group_container(attr) do |c|
+    attribute_form_group_container(attr, required: !options[:required].nil?) do |c|
       c.label do
         generate_attribute_label(attr)
       end

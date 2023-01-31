@@ -200,6 +200,7 @@ display_context: false, include: browse_attributes)
     @ontology_saved = @ontology.save
     if response_error?(@ontology_saved)
       @categories = LinkedData::Client::Models::Category.all
+      @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
       @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
       @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
       @errors = response_errors(@ontology_saved)

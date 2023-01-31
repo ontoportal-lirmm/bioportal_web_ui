@@ -197,17 +197,20 @@
                   %a.btn.btn-info.thickbox{href: "#{get_code_prefix}&inlineId=widget_tree_popup".html_safe} Get code
             %td
               %link{rel:"stylesheet", type:"text/css", href:"/widgets/jquery.ncbo.tree.css"}
-              %script{src:"/widgets/jquery.ncbo.tree-2.0.2.js"}
 
               #bp_widget_tree_container
                 #widget_tree
               :javascript
-                var widget_tree = $("#widget_tree").NCBOTree({
-                  apikey: "#{$API_KEY}",
-                  ontology: "#{@ontology.acronym}",
-                  ncboUIURL: "#{$UI_URL}",
-                  ncboAPIURL: "#{$REST_URL}"
-                });
+                $.getScript( "/widgets/jquery.ncbo.tree-2.0.2.js", () => {
+                  var widget_tree = $("#widget_tree").NCBOTree({
+                    apikey: "#{$API_KEY}",
+                    ontology: "#{@ontology.acronym}",
+                    ncboUIURL: "#{$UI_URL}",
+                    ncboAPIURL: "#{$REST_URL}"
+                  });
+                })
+
+
 
               #widget_tree_popup{:style => "display:none;"}
                 %h2 Step 2: Follow the Instructions
