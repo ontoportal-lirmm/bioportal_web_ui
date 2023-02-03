@@ -1,0 +1,35 @@
+.chips-container div{
+    margin-right: 10px;
+}
+.chips-check-icon{
+    margin-left: 6px;
+    margin-right: 6px;
+    display: none;
+}
+
+.chips-container div label{
+    cursor: pointer;
+}
+.chips-container div label input[type="checkbox"]{
+    display: none;
+}
+.chips-container div label span{
+    position: relative;
+    display: inline-block;
+    background:white;
+    border: 0.5px solid #BDBDBD;
+    color: #a7a7a7;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 13px;
+    user-select: none;
+
+}
+.chips-container div label input[type="checkbox"]:checked ~ span{
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.chips-container div label input[type="checkbox"]:checked ~ span .chips-check-icon{
+    display:unset;
+}
