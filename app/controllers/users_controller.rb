@@ -1,5 +1,4 @@
 class UsersController < ApplicationController
-  
   before_action :unescape_id, only: [:edit, :show, :update]
   before_action :verify_owner, only: [:edit, :show]
   before_action :authorize_admin, only: [:index]
@@ -63,14 +62,14 @@ class UsersController < ApplicationController
 
     if @errors.size < 1
       @user_saved = @user.save
-      if response_error?(@user_saved)
+      if @user_saved.errors
         @errors = response_errors(@user_saved)
         # @errors = {acronym: "Username already exists, please use another"} if @user_saved.status == 409
         render action: "new"
       else
         # Attempt to register user to list
         if params[:user][:register_mail_list]
-          SubscribeMailer.register_for_announce_list(@user.email,@user.firstName,@user.lastName).deliver rescue nil
+          Notifier.register_for_announce_list(@user.email).deliver rescue nil
         end
 
         flash[:notice] = 'Account was successfully created'
@@ -85,10 +84,10 @@ class UsersController < ApplicationController
   # PUT /users/1
   # PUT /users/1.xml
   def update
-    @user = LinkedData::Client::Models::User.find(params[:id])
-    @user = LinkedData::Client::Models::User.find_by_username(params[:id]).first if @user.nil?
     @errors = validate_update(user_params)
     if @errors.size < 1
+      @user = LinkedData::Client::Models::User.find(params[:id])
+      @user = LinkedData::Client::Models::User.find_by_username(params[:id]).first if @user.nil?
 
       if params[:user][:password]
         error_response = @user.update(values: { password: params[:user][:password] })
@@ -103,7 +102,7 @@ class UsersController < ApplicationController
         error_response = @user.update
       end
 
-      if response_error?(error_response)
+      if error_response
         @errors = response_errors(error_response)
         # @errors = {acronym: "Username already exists, please use another"} if error_response.status == 409
         render action: "edit"
@@ -159,32 +158,10 @@ class UsersController < ApplicationController
     redirect_to user_path(@user.username)
   end
 
-  
-  def subscribe
-    @user = LinkedData::Client::Models::User.find_by_username(params[:username]).first
-    deliver "subscribe", SubscribeMailer.register_for_announce_list(@user.email,@user.firstName,@user.lastName)
-  end
-
-  def un_subscribe
-    @email = params[:email] 
-    deliver "un_subscribe", SubscribeMailer.unregister_for_announce_list(@email)
-  end
-
-  
   private
 
-  def deliver(action,job)
-    begin
-      job.deliver
-      flash[:success] = "You have #{action} successfully"
-    rescue => exception
-      flash[:error] = "Something went wrong ..."
-    end
-    redirect_to '/account'
-  end
-
   def user_params
-    p = params.require(:user).permit(:firstName, :lastName, :username, :email, :email_confirmation, :password,
+    p = params.require(:user).permit(:firstName, :lastName, :username, :orcidId, :githubId, :email, :email_confirmation, :password,
                                      :password_confirmation, :register_mail_list, :admin)
     p.to_h
   end
@@ -255,5 +232,4 @@ class UsersController < ApplicationController
 
     user_roles
   end
-
 end
