@@ -24,19 +24,16 @@
       Username
       %font{:color => "red"} *
     = text_field :user, :username, value: @user.username, class: "register-input-long"
-    .register-double-input
-      .register-first-input
-        %p.register-input-title
-          ORCIDE ID
-          %font.register-optional (optional)
-        %img.register-input-icon{:src => "#{asset_path("orcide.svg")}"}/
-        %input.register-input-short.register-input-with-icon{:type => "text"}/
-      %div
-        %p.register-input-title
-          Github ID
-          %font.register-optional (optional)
-        %img.register-input-icon{:src => "#{asset_path("github-icon.svg")}"}/
-        %input.register-input-short.register-input-with-icon{:type => "text"}/
+    %p.register-input-title
+      ORCIDE ID
+      %font.register-optional (optional)
+    %img.register-input-icon{:src => "#{asset_path("orcide.svg")}"}/
+    = number_field :user, :orcidId, value: @user.orcidId, class: "register-input-long register-input-with-icon"
+    %p.register-input-title
+      Github ID
+      %font.register-optional (optional)
+    %img.register-input-icon{:src => "#{asset_path("github-icon.svg")}"}/
+    = text_field :user, :githubId, value: @user.githubId, class: "register-input-long register-input-with-icon"
     %p.register-input-title
       Email
       %font{:color => "red"} *
@@ -50,6 +47,6 @@
       %font{:color => "red"} *
     = password_field :user, :password_confirmation, class: "register-input-long"
     .d-flex
-      %input{:type => "checkbox"}/
-      %p#register-check-text Register for the AgroPortal announcements email list
+      %input#user_register_mail_list{:checked => "checked", :name => "user[register_mail_list]", :type => "checkbox", :value => "1"}/
+      %p#register-check-text Register for the AgroPortal's mailing list
     %input.register-button{:type => "submit", :value => "Register"}/
