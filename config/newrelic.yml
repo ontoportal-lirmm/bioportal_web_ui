@@ -47,22 +47,5 @@ common: &default_settings
 # Environment-specific settings are in this section.
 # RAILS_ENV or RACK_ENV (as appropriate) is used to determine the environment.
 # If your application has other named environments, configure them here.
-development:
-  <<: *default_settings
-  app_name: <%= Rails.application.credentials[:newrelic][:app_name] (Development) =%>  
-
-test:
-  <<: *default_settings
-  # It doesn't make sense to report to New Relic from automated test runs.
-  monitor_mode: false
-  
 appliance:
-  <<: *default_settings
-  app_name: <%= Rails.application.credentials[:newrelic][:app_name] (Appliance) =%> 
-
-staging:
-  <<: *default_settings
-  app_name: <%= Rails.application.credentials[:newrelic][:app_name] (Staging) =%> 
-
-production:
   <<: *default_settings
