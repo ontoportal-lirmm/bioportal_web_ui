@@ -184,6 +184,17 @@ class UsersController < ApplicationController
   end
 
   def user_params
+    # extract githubID & orcidID from links
+    if params[:orcidId].to_s.include? "https://orcid.org/"
+      @orcidID = params[:orcidId].to_s
+      @orcidID["https://orcid.org/"] = ''
+      params[:orcidId] = @orcidID
+    end
+    if params[:githubId].to_s.include? "https://github.com/"
+      @githubID = params[:githubId].to_s
+      @githubID["https://github.com/"] = ''
+      params[:githubId] = @githubID
+    end
     p = params.require(:user).permit(:firstName, :lastName, :username, :orcidId, :githubId, :email, :email_confirmation, :password,
                                      :password_confirmation, :register_mail_list, :admin)
     p.to_h
