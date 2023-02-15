@@ -1,7 +1,7 @@
 .chips-container
   %div
-    %label{:for => "chips-#{@text}-check"}
-      %input{:id => "chips-#{@text}-check", :name => text_underscore, :type => "checkbox", :value => text_underscore}/
+    %label{:for => "chips-#{@name}-check"}
+      %input{:id => "chips-#{@name}-check", :name => @name, :type => "checkbox", :value => @value}/
       %span
         %img.chips-check-icon{:src => "#{asset_path('check.svg')}"}/
-        = @text
+        = @value
