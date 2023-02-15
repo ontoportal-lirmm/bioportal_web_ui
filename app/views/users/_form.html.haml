@@ -28,7 +28,7 @@
       ORCID ID
       %font.register-optional (optional)
     %img.register-input-icon{:src => "#{asset_path("orcid.svg")}"}/
-    = number_field :user, :orcidId, value: @user.orcidId, class: "register-input-long register-input-with-icon"
+    = text_field :user, :orcidId, value: @user.orcidId, class: "register-input-long register-input-with-icon"
     %p.register-input-title
       Github ID
       %font.register-optional (optional)
