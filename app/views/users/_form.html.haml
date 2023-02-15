@@ -47,7 +47,7 @@
       %font{:color => "red"} *
     = password_field :user, :password_confirmation, class: "register-input-long"
     - if using_captcha?
-      recaptcha_tags
+      = recaptcha_tags
     .d-flex
       %input#user_register_mail_list{:checked => "checked", :name => "user[register_mail_list]", :type => "checkbox", :value => "1"}/
       %p#register-check-text Register for the AgroPortal's mailing list
