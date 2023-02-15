@@ -73,4 +73,6 @@
             %span
               %img.feedback-check-icon{:src => "#{asset_path('check.svg')}"}/
               Ontology submissions request
+      - if using_captcha?
+        = recaptcha_tags  
       %input.feedback-button{:type => "submit", :value => "Send"}/
