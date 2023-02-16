@@ -27,7 +27,7 @@
 
 
   - unless @user.subscription.nil? || @user.subscription.empty?
-    %h2 Subscriptions
+    %h2{style: "font-size: large;"} Subscriptions
     %table
       - @user.subscription.each do |subscription|
         - ont = (!subscription[:ontology].nil? ? subscription[:ontology].split('/').last: nil) # ensure we get the acronym
@@ -131,36 +131,29 @@
               #{ont.name} (#{ont.acronym})
       - else
         %p{style: "padding-left: 7px;"} You haven't picked any ontologies yet
-      
+
         %div
-          %h5{style:"margin-top:18px"} Subscription service 
+          %h2{style:"margin-top:18px; font-size: large;"} Mailing list service
 
           %div{style:"margin-top:12px"}
+            %div
+              %button.btn.btn-primary{id: "subscribe"}
+                Subscribe
+              %span to the #{$ANNOUNCE_LIST} user mailing list
+            %div.mt-1
+              %button.btn.btn-primary{id: "unsubscribe"}
+                Unsubscribe
+              %span from the #{$ANNOUNCE_LIST} user mailing list
 
-            %label.switch
-              %input{type: "checkbox", id: "subscribe", data: {url: '/toggle'}}
-              %span Subscribe to the #{$ANNOUNCE_LIST} user mailing list
-              %span.slider.round
-      
-            %br
 
-            %label.switch
-              %input{type: "checkbox", id: "unsubscribe", data: {url: '/toggle'}}
-              %span Unsubscribe from the #{$ANNOUNCE_LIST} user mailing list
-              %span.slider.round
-
-            
             :javascript
-              document.getElementById('subscribe').addEventListener('change', function() {
-                if (this.checked) {
+              document.getElementById('subscribe').addEventListener('click', function() {
                   window.location.href = "/users/subscribe/" + "#{@user.username}"
-                }
+
               });
 
-              document.getElementById('unsubscribe').addEventListener('change', function() {
-                if (this.checked) {
+              document.getElementById('unsubscribe').addEventListener('click', function() {
                   window.location.href = "/users/un-subscribe/" + "#{@user.email}"
-                } 
               });
 
   #custom_ontologies_picker{style: "left: -9999px; position: absolute;"}
