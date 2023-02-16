@@ -49,10 +49,28 @@
         Tags
         %font.register-optional (optional)
       .feedback-checks
-        = render(ChipsComponent.new(name:"bug", value: "Bug"))
-        = render(ChipsComponent.new(name:"proposition", value: "Proposition"))
-        = render(ChipsComponent.new(name:"question", value: "Question"))
-        = render(ChipsComponent.new(name:"ontology_submissions_request", value: "Ontology submissions request"))
-      - if using_captcha?
-        = recaptcha_tags  
+        %div
+          %label{:for => "feedback-bug-check"}
+            %input#feedback-bug-check{:name => "bug", :type => "checkbox", :value => "Bug"}/
+            %span
+              %img.feedback-check-icon{:src => "#{asset_path('check.svg')}"}/
+              Bug
+        %div
+          %label{:for => "feedback-proposition-check"}
+            %input#feedback-proposition-check{:name => "proposition", :type => "checkbox", :value => "Proposition"}/
+            %span
+              %img.feedback-check-icon{:src => "#{asset_path('check.svg')}"}/
+              Proposition
+        %div
+          %label{:for => "feedback-question-check"}
+            %input#feedback-question-check{:name => "question", :type => "checkbox", :value => "Question"}/
+            %span
+              %img.feedback-check-icon{:src => "#{asset_path('check.svg')}"}/
+              Question
+        %div
+          %label{:for => "feedback-ontologysubmissionrequest-check"}
+            %input#feedback-ontologysubmissionrequest-check{:name => "ontology_submissions_request", :type => "checkbox", :value => "Ontology submissions request"}/
+            %span
+              %img.feedback-check-icon{:src => "#{asset_path('check.svg')}"}/
+              Ontology submissions request
       %input.feedback-button{:type => "submit", :value => "Send"}/
