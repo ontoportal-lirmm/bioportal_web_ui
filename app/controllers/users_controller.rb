@@ -184,20 +184,19 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    # extract githubID & orcidID from links
-    if params[:orcidId].to_s.include? "https://orcid.org/"
-      @orcidID = params[:orcidId].to_s
-      @orcidID["https://orcid.org/"] = ''
-      params[:orcidId] = @orcidID
-    end
-    if params[:githubId].to_s.include? "https://github.com/"
-      @githubID = params[:githubId].to_s
-      @githubID["https://github.com/"] = ''
-      params[:githubId] = @githubID
-    end
+    params[:user]["orcidId"] = extract_id_from_url(params[:user]["orcidId"], 'orcid.org')
+    params[:user]["githubId"] = extract_id_from_url(params[:user]["githubId"], 'github.com')
     p = params.require(:user).permit(:firstName, :lastName, :username, :orcidId, :githubId, :email, :email_confirmation, :password,
                                      :password_confirmation, :register_mail_list, :admin)
     p.to_h
+  end
+  
+  def extract_id_from_url(url, pattern)
+    if url.include? (pattern)
+      url.split('/').last 
+    else
+      url
+    end
   end
 
   def unescape_id
