@@ -1,10 +1,5 @@
 = turbo_frame_tag 'application_modal_content' do
   :javascript
-    function displayWarning() {
-      const container = document.getElementById("change_all_warning_container")
-      const display = container.style.display
-      container.style.display = display === 'block' ? 'none' : 'block'
-    }
     function saveSelectedTab(value){
       const input = document.getElementById("active_ontology")
       input.value = value
@@ -19,6 +14,7 @@
 
     = form_for :submission, url: "/ontologies_metadata_curator/update", html: {method: :put}, data: { turbo: true} do
       = hidden_field_tag :active_ontology, ontology_submission_id_label(*@selected_ontologies.first), id: 'active_ontology'
+      = hidden_field_tag :all_metadata, @all_metadata
       %div.d-flex.justify-content-between
         %ul#ontologies-pills-tab.nav.nav-pills.mb-3
           - @selected_ontologies.each_with_index do |value, index|
@@ -26,9 +22,7 @@
             %li.nav-item
               %a.nav-link{id: "pills-"+onto+sub_i+"-tab", "data-toggle": "pill", href: "#pills-"+onto+sub_i, class: index.zero? ? 'active' : ''}
                 = ontology_submission_id_label(onto, sub_i)
-        %div{onchange: 'displayWarning()'}
-          = render SwitchInputComponent.new(id: 'change_all', name: 'change_all', label: "Apply the change for all")
-      %div#change_all_warning_container{style: 'display: none'}
+      %div#change_all_warning_container
         = render AlertMessageComponent.new(id:'change_all_warning', type: 'warning') do
           %strong Apply the change for all
           will update the current displayed content to all the following submssions:

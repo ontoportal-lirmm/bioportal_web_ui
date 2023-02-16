@@ -8,7 +8,10 @@
     let frame = document.getElementById('metadata_by_ontology')
     let properties = document.getElementById('search_metadata')
     let required = document.getElementById('filter-required-only')
-    let selectedProperties = Array.from(properties.selectedOptions).map(({ value }) => value).join(',')
+    let selectedProperties = "all"
+    if(properties){
+       selectedProperties = Array.from(properties.selectedOptions).map(({ value }) => value).join(',')
+    }
     frame.src = "?properties=" + selectedProperties + "&required=" + required.checked + "&show_sections=true"
   }
 
@@ -18,8 +21,14 @@
       %strong Errors On Form
       %ul
         - for error in @errors
-          %li
-            = error          
+          - if error.is_a? Array
+            %ul
+              - error[1].each do |key, message|
+                %li
+                  = message
+          - else
+            %li
+              = error
 
 %div#editMetadataDiv
   %div{:style => "width: 50%;margin: 3em auto;"}
@@ -31,11 +40,13 @@
       %br
       = extractable_metadatum_tooltip({ text: 'Metadata that can be extracted from the ontology' , content: "Extractable metadatum"})
 
-%div.d-flex.align-items-center.justify-content-between{onchange: "onMetadataChange()"}
-  %div.w-75.mt-3
-    = render MetadataSelectorComponent.new(label: 'Filter properties to show', values: submission_editable_properties , selected:  nil, inline: true)
-  %div
-    = render SwitchInputComponent.new(id:"filter-required-only", name: "required-only", label: "Required only")
+  %div.d-flex.align-items-center.justify-content-between{onchange: "onMetadataChange()"}
+    - unless @filters_disabled
+      %div.w-75.mt-3
+        - if @submission.id
+          = render MetadataSelectorComponent.new(label: 'Filter properties to show', values: submission_editable_properties , selected:  nil, inline: true)
+      %div
+        = render SwitchInputComponent.new(id:"filter-required-only", name: "required-only", label: "Required only", checked: @required_only)
 
 
 = render partial: 'form_content', locals: {id: 'metadata_by_ontology', acronym: @ontology.acronym, submissionId: @submission.submissionId}

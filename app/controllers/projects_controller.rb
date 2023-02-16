@@ -113,9 +113,14 @@ class ProjectsController < ApplicationController
     end
     @project = projects.first
     @project.update_from_params(project_params)
+    @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
+    @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
+    @usedOntologies = @project.ontologyUsed || []
+    @ontologies = LinkedData::Client::Models::Ontology.all
     error_response = @project.update
     if response_error?(error_response)
       @errors = response_errors(error_response)
+      render :edit
     else
       flash[:notice] = 'Project successfully updated'
       redirect_to project_path(@project.acronym)

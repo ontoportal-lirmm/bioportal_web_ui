@@ -84,10 +84,10 @@ class UsersController < ApplicationController
   # PUT /users/1
   # PUT /users/1.xml
   def update
+    @user = LinkedData::Client::Models::User.find(params[:id])
+    @user = LinkedData::Client::Models::User.find_by_username(params[:id]).first if @user.nil?
     @errors = validate_update(user_params)
     if @errors.size < 1
-      @user = LinkedData::Client::Models::User.find(params[:id])
-      @user = LinkedData::Client::Models::User.find_by_username(params[:id]).first if @user.nil?
 
       if params[:user][:password]
         error_response = @user.update(values: { password: params[:user][:password] })

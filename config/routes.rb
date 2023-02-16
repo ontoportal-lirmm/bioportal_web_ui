@@ -2,6 +2,10 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
 
+  get '/notes/new_comment', to: 'notes#new_comment'
+  get '/notes/new_proposal', to: 'notes#new_proposal'
+  get '/notes/new_reply', to: 'notes#new_reply'
+  delete '/notes', to: 'notes#destroy'
   resources :notes, constraints: { id: /.+/ }
 
   resources :ontolobridge do
@@ -104,7 +108,8 @@ Rails.application.routes.draw do
   match '/ontologies/:acronym' => 'ontologies#update', via: [:get, :post]
   match '/ontologies/:acronym/submissions/:id' => 'submissions#update', via: [:get, :post]
   get '/ontologies/:ontology_id/submissions/new' => 'submissions#new', :ontology_id => /.+/
-  match '/ontologies/:ontology_id/submissions' => 'submissions#create', :ontology_id => /.+/, via: [:get, :post]
+  match '/ontologies/:ontology_id/submissions' => 'submissions#create', :ontology_id => /.+/, via: [:post]
+  match '/ontologies/:ontology_id/submissions' => 'submissions#index', :ontology_id => /.+/, via: [:get]
   get '/ontologies/:acronym/classes/:purl_conceptid', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
   get '/ontologies/:acronym/: f', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
   match '/ontologies/:acronym/submissions/:id/edit_metadata' => 'submissions#edit_metadata', via: [:get, :post]
@@ -114,6 +119,7 @@ Rails.application.routes.draw do
 
   # Notes
   get 'ontologies/:ontology/notes/:noteid', to: 'notes#virtual_show', as: :note_virtual, noteid: /.+/
+  get 'ontologies/:ontology/notes', to: 'notes#virtual_show'
 
   # Ajax
   get '/ajax/' => 'ajax_proxy#get', :as => :ajax
@@ -145,6 +151,7 @@ Rails.application.routes.draw do
   # User
   get '/logout' => 'login#destroy', :as => :logout
   get '/lost_pass' => 'login#lost_password'
+  get '/lost_pass_success' => 'login#lost_password_success'
   get '/reset_password' => 'login#reset_password'
   post '/accounts/:id/custom_ontologies' => 'users#custom_ontologies', :as => :custom_ontologies
   get '/login_as/:login_as' => 'login#login_as' , constraints: { login_as:  /[\d\w\.\-\%\+ ]+/ }

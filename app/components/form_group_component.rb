@@ -12,7 +12,11 @@ class FormGroupComponent < ViewComponent::Base
   def initialize(object:nil, name: '', method: nil, label: '', required: false, inline: true)
     @object_name = object.class.name
     @method_name = method || ''
-    @value = object.send(method) if object && method
+    begin
+      @value = object.send(method) if object && method
+    rescue
+      @value = ''
+    end
     @label_text = label && !label.empty? ? label : method.to_s.capitalize
     @required = required
     @name = name && !name.empty? ? name : @object_name

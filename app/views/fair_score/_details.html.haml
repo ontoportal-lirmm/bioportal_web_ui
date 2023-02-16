@@ -1,123 +1,120 @@
-:javascript
-  let scrollY = window.getScrollTop()
-  $(document).ready(function(){
-    $("#fair-details-content").scrollspy({
-        target: "#fair-navbar",
-        offset: 0
-    })
+= turbo_frame_tag 'application_modal_content' do
+  :javascript
+    var scrollY = window.getScrollTop()
+    $(document).ready(function(){
+      $("#fair-details-content").scrollspy({
+          target: "#fair-navbar",
+          offset: 0
+      })
 
-    $("#fair-details-content").on('activate.bs.scrollspy', function (e) {
-      window.scrollTo(0,scrollY)
-    })
+      $("#fair-details-content").on('activate.bs.scrollspy', function (e) {
+        window.scrollTo(0,scrollY)
+      })
 
-  });
-
-
-- if  @fair_scores_data
-  %div{style:"font-size:14px"}
-    %div.row
-      %div.col-3.navbar.navbar-light.bg-light{id:"fair-navbar" ,style:"overflow: scroll;height: 70vh;position: relative"}
-        %h1
-          FAIRness assessment questions
-        %nav.nav.nav-pills.flex-column
-          - @fair_scores_data[:criteria][:labels].each_with_index  do |label , index|
-            %a.nav-link{href:"#"+get_name_with_out_dot(label)}
-              =label
-            %nav.nav.pills.flex-column
-              - @fair_scores_data[:criteria][:questions][index].each do |question|
-                %a.nav-link.my-1.ml-3.text-dark{href:"#"+get_name_with_out_dot(question[0])}
-                  =question[0]
-      %div.col-9#fair-details-content{style:"overflow: scroll;height: 70vh"}
-        %div.alert.alert-light
-          - mod_link =link_to "MOD1.4", "https://github.com/sifrproject/MOD-Ontology"
-          - submission_link =link_to "see the used properties",@rest_uri, target: "_blank"
-          %div
-            Metadata properties listed in the following are picked from #{mod_link}.
-          %div
-            This ontology repository implements #{mod_link} but does not necessity encode a metadata with the same properties (#{submission_link})
-        %div{style:"margin-bottom:400px"}
-          - @fair_scores_data[:criteria][:labels].each_with_index  do |label , index|
-            %div.my-3.border{id:get_name_with_out_dot(label)}
-              %div.py-3.px-4
-                %h5.criterion-score-container
-                  %div
-                    = label +': '+ @fair_scores_data[:criteria][:descriptions][index]
-                  %div.progress.criterion-score-progress-bar
-                    - if @fair_scores_data[:criteria][:normalizedScores][index] > 0
-                      %div.progress-bar.bg-obtained_color{style:"width:#{@fair_scores_data[:criteria][:normalizedScores][index]}%"}
-                        #{@fair_scores_data[:criteria][:scores][index]} (#{@fair_scores_data[:criteria][:normalizedScores][index].round()}%)
-
-                    - not_obtained_score = get_not_obtained_score(@fair_scores_data , index)
-                    - not_obtained_score_normalized = get_not_obtained_score_normalized(@fair_scores_data , index)
-                    - score_rest = get_rest_score(@fair_scores_data , index)
-                    - score_rest_normalized = get_rest_score_normalized(@fair_scores_data , index)
+    });
 
 
-                    -if not_obtained_score_normalized > 0
-                      %div.progress-bar.bg-not-obtained_color{style:"width:#{not_obtained_score_normalized}%"}
-                        #{not_obtained_score} (#{not_obtained_score_normalized}%)
-                    - if score_rest_normalized > 0
-                      %div.progress-bar.bg-non-applicable_color{style:"width:#{score_rest_normalized}%"}
-                        #{score_rest} (#{score_rest_normalized}%)
-              %div.card-body
+  - if  @fair_scores_data
+    %div{style:"font-size:14px"}
+      %div.row.px-1
+        %div.col-3.navbar.navbar-light.bg-light.border{id:"fair-navbar" ,style:"overflow: scroll;height: 70vh;position: relative"}
+          %nav.nav.nav-pills.flex-column
+            - @fair_scores_data[:criteria][:labels].each_with_index  do |label , index|
+              = link_to label, "#"+get_name_with_out_dot(label) , data: {turbo: false}, class: "nav-link"
+              %nav.nav.pills.flex-column
                 - @fair_scores_data[:criteria][:questions][index].each do |question|
-                  %div.card.m-3{id:get_name_with_out_dot(question[0])}
-                    %div.card-body
-                      %div.card-title.d-flex.justify-content-between
-                        %h6.mr-2
-                          #{question[0]} : #{question[1]["question"]}
+                  = link_to question[0], "#"+get_name_with_out_dot(question[0]), data: {turbo: false}, class: "nav-link my-1 ml-3 text-dark"
+        %div.col-9#fair-details-content{style:"overflow: scroll;height: 70vh"}
+          %div.alert.alert-light
+            - mod_link =link_to "MOD1.4", "https://github.com/sifrproject/MOD-Ontology"
+            - submission_link =link_to "see the used properties",@rest_uri, target: "_blank"
+            %div
+              Metadata properties listed in the following are picked from #{mod_link}.
+            %div
+              This ontology repository implements #{mod_link} but does not necessity encode a metadata with the same properties (#{submission_link})
+          %div{style:"margin-bottom:400px"}
+            - @fair_scores_data[:criteria][:labels].each_with_index  do |label , index|
+              %div.my-3.border{id:get_name_with_out_dot(label)}
+                %div.py-3.px-4
+                  %h5.criterion-score-container
+                    %div
+                      = label +': '+ @fair_scores_data[:criteria][:descriptions][index]
+                    %div.progress.criterion-score-progress-bar
+                      - if @fair_scores_data[:criteria][:normalizedScores][index] > 0
+                        %div.progress-bar.bg-obtained_color{style:"width:#{@fair_scores_data[:criteria][:normalizedScores][index]}%"}
+                          #{@fair_scores_data[:criteria][:scores][index]} (#{@fair_scores_data[:criteria][:normalizedScores][index].round()}%)
+
+                      - not_obtained_score = get_not_obtained_score(@fair_scores_data , index)
+                      - not_obtained_score_normalized = get_not_obtained_score_normalized(@fair_scores_data , index)
+                      - score_rest = get_rest_score(@fair_scores_data , index)
+                      - score_rest_normalized = get_rest_score_normalized(@fair_scores_data , index)
+
+
+                      -if not_obtained_score_normalized > 0
+                        %div.progress-bar.bg-not-obtained_color{style:"width:#{not_obtained_score_normalized}%"}
+                          #{not_obtained_score} (#{not_obtained_score_normalized}%)
+                      - if score_rest_normalized > 0
+                        %div.progress-bar.bg-non-applicable_color{style:"width:#{score_rest_normalized}%"}
+                          #{score_rest} (#{score_rest_normalized}%)
+                %div.card-body
+                  - @fair_scores_data[:criteria][:questions][index].each do |question|
+                    %div.card.m-3{id:get_name_with_out_dot(question[0])}
+                      %div.card-body
+                        %div.card-title.d-flex.justify-content-between
+                          %h6.mr-2
+                            #{question[0]} : #{question[1]["question"]}
+                          %div
+                            %div.btn.text-white{class:"#{(
+                                               if question[1]["score"] > 0
+                                                   'bg-obtained_color'
+                                               elsif not_implemented?(question[1])
+                                                  'bg-non-applicable_color'
+                                               else
+                                                  'bg-not-obtained_color'
+                                               end
+                                               )}"}
+                              %span.badge.badge-pill.badge-light
+                                #{ print_score(question[1]["score"])} / #{print_score(question[1]["maxCredits"])}
+                        %div.mb-3
+                          -if not_implemented?(question[1])
+                            %span.badge.badge-pill.badge-danger{style:"white-space:normal;font-size:14px"}
+                              #{question[1]["explanation"]}
+                          -elsif default_score?(question[1])
+                            %span.badge.badge-pill.badge-success{style:"white-space:normal;font-size:14px"}
+                              #{question[1]["explanation"]}
                         %div
-                          %div.btn.text-white{class:"#{(
-                                             if question[1]["score"] > 0
-                                                 'bg-obtained_color'
-                                             elsif not_implemented?(question[1])
-                                                'bg-non-applicable_color'
-                                             else
-                                                'bg-not-obtained_color'
-                                             end
-                                             )}"}
-                            %span.badge.badge-pill.badge-light
-                              #{ print_score(question[1]["score"])} / #{print_score(question[1]["maxCredits"])}
-                      %div.mb-3
-                        -if not_implemented?(question[1])
-                          %span.badge.badge-pill.badge-danger{style:"white-space:normal;font-size:14px"}
-                            #{question[1]["explanation"]}
-                        -elsif default_score?(question[1])
-                          %span.badge.badge-pill.badge-success{style:"white-space:normal;font-size:14px"}
-                            #{question[1]["explanation"]}
-                      %div
-                        -if !not_implemented?(question[1]) && !default_score?(question[1])
-                          -if question[1]["points"]
-                            %button.btn.btn-outline-primary{'data-toggle':"collapse" ,'data-target':"#collapse-credits-"+get_name_with_out_dot(question[0])}
-                              See possible credits
+                          -if !not_implemented?(question[1]) && !default_score?(question[1])
+                            -if question[1]["points"]
+                              %button.btn.btn-outline-primary{'data-toggle':"collapse" ,'data-target':"#collapse-credits-"+get_name_with_out_dot(question[0])}
+                                See possible credits
+                            -if question[1]["properties"]
+                              %button.btn.btn-outline-primary{'data-toggle':"collapse" ,'data-target':"#collapse-properties-"+get_name_with_out_dot(question[0])}
+                                See metadata used properties
+                        %div.mt-2
+                          %div.collapse{id:"collapse-credits-"+get_name_with_out_dot(question[0])}
+                            %div.card.p-3
+                              - question[1]["points"].each do |point|
+                                %ul.list-group.list-group-flush
+                                  %li.list-group-item.d-flex.justify-content-between.align-items-center
+                                    %div.mr-2
+                                      = point["explanation"]
+                                    %span.badge.badge-pill.badge-primary
+                                      = point["score"]
                           -if question[1]["properties"]
-                            %button.btn.btn-outline-primary{'data-toggle':"collapse" ,'data-target':"#collapse-properties-"+get_name_with_out_dot(question[0])}
-                              See metadata used properties
-                      %div.mt-2
-                        %div.collapse{id:"collapse-credits-"+get_name_with_out_dot(question[0])}
-                          %div.card.p-3
-                            - question[1]["points"].each do |point|
-                              %ul.list-group.list-group-flush
-                                %li.list-group-item.d-flex.justify-content-between.align-items-center
-                                  %div.mr-2
-                                    = point["explanation"]
-                                  %span.badge.badge-pill.badge-primary
-                                    = point["score"]
-                        -if question[1]["properties"]
-                          %div.collapse{id:"collapse-properties-"+get_name_with_out_dot(question[0])}
-                            %div.card.p-3{style:"font-size:18px"}
-                              %div.d-flex.flex-wrap
-                                - question[1]["properties"].each do |key, value|
-                                  %div.badge.my-2.mx-1{class:(['', 'null', '[]',nil].include?(value) ? "badge-danger" : "badge-success") ,style:"white-space:normal"}
-                                    %span
-                                      = key
-                                    %span.badge.badge-light{style:"white-space:normal"}
-                                      - if value == nil
-                                        not found
-                                      -elsif value == "" || value == "[]"
-                                        null
-                                      - else
-                                        #{value}
+                            %div.collapse{id:"collapse-properties-"+get_name_with_out_dot(question[0])}
+                              %div.card.p-3{style:"font-size:18px"}
+                                %div.d-flex.flex-wrap
+                                  - question[1]["properties"].each do |key, value|
+                                    %div.badge.my-2.mx-1{class:(['', 'null', '[]',nil].include?(value) ? "badge-danger" : "badge-success") ,style:"white-space:normal"}
+                                      %span
+                                        = key
+                                      %span.badge.badge-light{style:"white-space:normal"}
+                                        - if value == nil
+                                          not found
+                                        -elsif value == "" || value == "[]"
+                                          null
+                                        - else
+                                          #{value}
 
 
 

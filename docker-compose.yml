@@ -47,5 +47,6 @@ services:
     profiles: ["web"]
     command: "yarn build --watch"
 volumes:
+  db-v:
   bundle:
   node:

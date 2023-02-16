@@ -1,6 +1,11 @@
 class NotesController < ApplicationController
-
+  include TurboHelper
   layout 'ontology'
+  NOTES_PROPOSAL_TYPES = {
+    ProposalNewClass: "New Class Proposal",
+    ProposalChangeHierarchy: "New Relationship Proposal",
+    ProposalChangeProperty: "Change Property Value Proposal"
+  }
 
   def show
     id = clean_note_id(params[:id])
@@ -12,10 +17,24 @@ class NotesController < ApplicationController
       render :partial => 'thread'
       return
     end
+  end
 
-    respond_to do |format|
-      format.html { render :template => 'notes/show' }
-    end
+  def new_comment
+    render partial: 'new_comment', locals: { parent_id: params[:parent_id], type: params[:parent_type],
+                                             user_id: session[:user].id, ontology_id: params[:ontology_id] }
+  end
+
+  def new_proposal
+    types = NOTES_PROPOSAL_TYPES.map { |x, y| [y, x.to_s] }
+    render partial: 'new_proposal', locals: { parent_id: params[:parent_id], type: params[:proposal_type],
+                                              parent_type: params[:parent_type], user_id: session[:user].id,
+                                              ontology_id: params[:ontology_id], types: types }
+  end
+
+  def new_reply
+    render 'notes/reply/new', locals: { frame_id: "#{params[:parent_id]}_new_reply",
+                                           parent_id: params[:parent_id], type: 'reply',
+                                           user_id: session[:user].id }
   end
 
   def virtual_show
@@ -46,56 +65,82 @@ class NotesController < ApplicationController
       return
     end
 
-    respond_to do |format|
-      format.html { render :show }
+    render 'notes/show', layout: false
     end
-  end
 
   def create
     if params[:type].eql?("reply")
       note = LinkedData::Client::Models::Reply.new(values: note_params)
-    elsif params[:type].eql?("ontology")
-      params[:relatedOntology] = [params.delete(:parent)]
-      note = LinkedData::Client::Models::Note.new(values: note_params)
-    elsif params[:type].eql?("class")
-      params[:relatedClass] = [params.delete(:parent)]
-      params[:relatedOntology] = params[:relatedClass].map {|c| c["ontology"]}
-      note = LinkedData::Client::Models::Note.new(values: note_params)
+      new_note = note.save
+      success_message = ''
+      locals =  { note: new_note, parent_id: params[:parent]}
+      partial = 'notes/reply/reply'
+      container_id = "#{params[:parent]}_thread_replay_container"
+      alerts_container_id = "#{params[:parent]}_reply"
     else
+      if params[:proposal]
+        cast_to_list = [:synonym, :definition, :newRelationshipType]
+        cast_to_list.each do |property|
+          params[:proposal][property] = params[:proposal][property].split(',') if params[:proposal][property]
+        end
+        params[:subject] = "#{NOTES_PROPOSAL_TYPES[params[:proposal][:type].to_sym]}: #{params[:proposal][:reasonForChange]}"
+      end
+
+      if params[:type].eql?("ontology")
+        params[:relatedOntology] = [params.delete(:parent)]
+
+      elsif params[:type].eql?("class")
+        related_class = params.delete(:parent)
+        ontology_id = params.delete(:ontology_id)
+        params[:relatedClass] = [{ ontology: ontology_id, class: related_class }]
+        params[:relatedOntology] = [ontology_id]
+      end
+
       note = LinkedData::Client::Models::Note.new(values: note_params)
+      new_note = note.save
+      parent_type = params[:type].eql?("ontology") ? 'ontology' : 'class'
+      ontology_acronym = new_note.relatedOntology.first.split('/').last
+      success_message = 'New comment added successfully'
+      locals =  { note: new_note, ontology_acronym: ontology_acronym, parent_type: parent_type }
+      partial = 'notes/note_line'
+      container_id = "#{parent_type}_notes_table_content"
+      alerts_container_id = nil
     end
 
-    new_note = note.save
 
     if new_note.errors
-      render :json => new_note.errors, :status => 500
-      return
-    end
+      render_turbo_stream alert_error(id: alerts_container_id) { response_errors(new_note).to_s }
+    else
+      streams = [prepend(container_id, partial: partial, locals: locals)]
+      streams.unshift(alert_success { success_message }) unless params[:type].eql?("reply")
 
-    unless new_note.nil?
-      render :json => new_note.to_hash.to_json
+      render_turbo_stream *streams
     end
   end
 
   def destroy
-    note_ids = params[:noteids].kind_of?(String) ? params[:noteids].split(",") : params[:noteids]
+    note_id = params[:noteid]
+    note = LinkedData::Client::Models::Note.get(note_id)
+    response = {}
+    if note
+      note.delete
 
-    ontology = DataAccess.getOntology(params[:ontologyid])
-
-    errors = []
-    successes = []
-    note_ids.each do |note_id|
-      begin
-        result = DataAccess.deleteNote(note_id, ontology.ontologyId, params[:concept_id])
-        raise Exception if !result.nil? && result["errorCode"]
-      rescue Exception => e
-        errors << note_id
-        next
+      if note.errors
+        response[:errors] = note.errors
+      else
+        response[:success] = "Note #{note_id}  was deleted successfully"
       end
-      successes << note_id
+    else
+      response[:errors] = "Note #{note_id}  was not found in the system"
+    end
+    parent_type = params[:parent_type]
+    alerts_container_id = "notes_#{parent_type}_list_table_alerts"
+    if response[:errors]
+      render_turbo_stream alert_error(id: alerts_container_id) { response[:errors].join(',').to_s }
+    else
+      render_turbo_stream(alert_success(id: alerts_container_id) { response[:success] }, remove("#{note_id}_tr_#{parent_type}"))
     end
 
-    render :json => { :success => successes, :error => errors }
   end
 
   def archive

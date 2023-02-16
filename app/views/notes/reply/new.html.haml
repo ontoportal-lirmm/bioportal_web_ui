@@ -1,0 +1,9 @@
+= turbo_frame_tag frame_id do
+  = form_with url: notes_path, method: 'post', data:{turbo: true}, class: 'reply_box' do
+    = hidden_field_tag 'parent', parent_id
+    = hidden_field_tag 'type', type
+    = hidden_field_tag 'creator', user_id
+    %textarea.reply_body{cols: "1", name: "body", placeholder: "Comment", rows: "1", style: "width: 500px; height: 100px;", tabindex: "0", required: true}
+    %br/
+    %button.save.btn.btn-primary{style: "margin-right: 1em;", type: "submit"} save
+    %button.cancel.btn.btn-primary{onclick: "this.parentNode.remove()", type: "button"} cancel

@@ -92,7 +92,7 @@ class LandscapeController < ApplicationController
     data_catalog_submissions.each do |catalog_sub|
       catalog_sub.includedInDataCatalog.each do |data_catalog|
         $DATA_CATALOG_VALUES.each do |uri, name|
-          if data_catalog.start_with?(uri)
+          if data_catalog[uri]
             dataCatalog_count_hash[name] += 1
           end
         end

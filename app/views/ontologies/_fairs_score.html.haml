@@ -1,17 +1,17 @@
 :javascript
-  jQuery(document).ready(function($) {
-    jQuery('a[rel*=facebox]').facebox()
+  jQuery(document).ready(function() {
     if(window.location.href.includes("#fair-details")){
       jQuery('#fair-details').click()
     }
   })
 
 - if @fair_scores_data
-  %a#fair-details.btn.btn-primary.w-100{href: "/ajax/fair_score/html/?ontologies=#{@ontology.acronym}" , rel:"facebox[.fair_score_details_pop]"}
-    %span
-      Total score : #{@fair_scores_data[:score]} ( #{@fair_scores_data[:normalizedScore]}% )
-    %span.badge.badge-light
-      details
+  - text = "<span>Total score : #{@fair_scores_data[:score]} ( #{@fair_scores_data[:normalizedScore]}% )</span> <span class='badge badge-light'>details</span>"
+  = link_to_modal(text.html_safe,
+                "/ajax/fair_score/html/?ontologies=#{@ontology.acronym}",
+                class: "btn btn-primary w-100",
+                data: { show_modal_title_value: "FAIRness assessment questions", show_modal_size_value: 'modal-xl' },
+                )
   %div.statistics_container
     %div
       = render partial: "shared/fair_score_radar" , locals: {data: @fair_scores_data}

@@ -1,4 +1,5 @@
-- ontology_name = @ontology ? " on #{@ontology.name}" : ""
-- @title = "Note#{ontology_name} | #{@note.subject}"
-#note_container{:style => "padding: 1em;"}
-  = render :partial => 'thread'
+= turbo_frame_tag 'application_modal_content' do
+  - ontology_name = @ontology ? " on #{@ontology.name}" : ""
+  - @title = "Note#{ontology_name} | #{@note.subject}"
+  #note_container{:style => "padding: 1em;"}
+    = render :partial => 'thread'

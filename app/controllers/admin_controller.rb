@@ -276,8 +276,7 @@ class AdminController < ApplicationController
   end
 
   def _process_ontology(ontology, params)
-    error_response = LinkedData::Client::HTTP.put(ONTOLOGY_URL.call(ontology.acronym), params)
-    error_response
+    LinkedData::Client::HTTP.put(ONTOLOGY_URL.call(ontology.acronym), params)
   end
 
   def _process_ontologies(success_keyword, error_keyword, process_proc)
@@ -294,8 +293,7 @@ class AdminController < ApplicationController
 
           if ontology
             error_response = self.send(process_proc, ontology, params)
-
-            if response_error?(error_response)
+            if error_response
               errors = response_errors(error_response) # see application_controller::response_errors
               _process_errors(errors, response, false)
             else

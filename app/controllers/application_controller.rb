@@ -30,14 +30,13 @@ class ApplicationController < ActionController::Base
   EXPIRY_ONTOLOGY_SIMPLIFIED = 60 * 1  #  0:01 minute
 
 
-  $DATA_CATALOG_VALUES = {"https://biosharing.org/" => "BioSharing",
-                         "http://aber-owl.net/ontology/" => "AberOWL",
-                         "http://vest.agrisemantics.org/content/" => "VEST Registry",
-                         "http://bioportal.bioontology.org/ontologies/" => "BioPortal",
-                         "https://bioportal.bioontology.org/ontologies/" => "BioPortal",
-                         "http://www.ontobee.org/ontology/" => "Ontobee",
-                         "http://www.obofoundry.org/ontology/" => "The OBO Foundry",
-                         "http://www.ebi.ac.uk/ols/ontologies/" => "EBI Ontology Lookup"}
+  $DATA_CATALOG_VALUES = {"fairsharing.org/" => "FAIRsharing",
+                         "aber-owl.net" => "AberOWL",
+                         "vest.agrisemantics.org" => "VEST Registry",
+                         "bioportal.bioontology.org" => "BioPortal",
+                         "ontobee.org" => "Ontobee",
+                         "obofoundry.org" => "The OBO Foundry",
+                         "ebi.ac.uk/ols" => "EBI Ontology Lookup"}
 
   RESOLVE_NAMESPACE = {:omv => "http://omv.ontoware.org/2005/05/ontology#", :skos => "http://www.w3.org/2004/02/skos/core#", :owl => "http://www.w3.org/2002/07/owl#",
                        :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#", :rdfs => "http://www.w3.org/2000/01/rdf-schema#", :metadata => "http://data.bioontology.org/metadata/",
@@ -208,19 +207,23 @@ class ApplicationController < ActionController::Base
 
   def parse_response_body(response)
     return nil if response.nil?
-    
-    OpenStruct.new(JSON.parse(response.body, symbolize_names: true))
+
+    if response.respond_to?(:errors) && response.errors
+      response
+    else
+      OpenStruct.new(JSON.parse(response.body, symbolize_names: true))
+    end
   end
 
-  def response_errors(error_struct)
-    error_struct = parse_response_body(error_struct)
+  def response_errors(error_response)
+    error_struct = parse_response_body(error_response)
+
     errors = {error: "There was an error, please try again"}
     return errors unless error_struct
     return errors unless error_struct.respond_to?(:errors)
     errors = {}
-    error_struct.errors.each {|e| ""}
     error_struct.errors.each do |error|
-      if error.is_a?(Struct)
+      if error.is_a?(OpenStruct) || error.is_a?(Struct)
         errors.merge!(struct_to_hash(error))
       else
         errors[:error] = error
@@ -230,7 +233,13 @@ class ApplicationController < ActionController::Base
   end
 
   def response_success?(response)
-    !response.nil? && ((response.status && response.status.to_i < 400) || !response.errors)
+    return false if response.nil?
+
+    if response.respond_to?(:status) && response.status
+        response.status.to_i < 400
+    else
+      !(response.respond_to?(:errors) && response.errors)
+    end
   end
 
   def response_error?(response)
@@ -241,7 +250,7 @@ class ApplicationController < ActionController::Base
     hash = {}
     struct.members.each do |attr|
       next if [:links, :context].include?(attr)
-      if struct[attr].is_a?(Struct)
+      if struct[attr].is_a?(Struct) || struct[attr].is_a?(OpenStruct)
         hash[attr] = struct_to_hash(struct[attr])
       else
         hash[attr] = struct[attr]
@@ -351,6 +360,10 @@ class ApplicationController < ActionController::Base
     session[:user] && session[:user].admin?
   end
 
+  def ontology_restricted?(acronym)
+    restrict_downloads = $NOT_DOWNLOADABLE
+    restrict_downloads.include? acronym
+  end
   # updates the 'history' tab with the current selected concept
   def update_tab(ontology, concept)
     array = session[:ontologies] || []

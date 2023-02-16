@@ -14,6 +14,7 @@ RUN apk add --no-cache \
     nodejs \
     tzdata \
     yarn \
+    less \
   && addgroup --gid ${GID} ruby \
   && adduser  -u ${UID} -G ruby -D  ruby \
   && chown ruby:ruby -R /app \

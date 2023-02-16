@@ -1,0 +1,113 @@
+.feedback-email{
+    font-size: 12px;
+    color: #666666;
+    width: 363px;
+    margin-bottom: 21px;
+}
+.feedback-email a{
+    color: #76A7CC;
+    font-weight: 600;
+    text-decoration: none;
+}
+.feedback-text{
+    font-size: 12px;
+    color: #666666;
+    width: 363px;
+    margin-bottom: 0;
+}
+.feedback-text font{
+    font-weight: 600;
+    color: black;
+}
+.feedback-title{
+    font-size: 18px;
+    text-align: center;
+    font-weight: 700;
+}
+#feedback-title-line{
+    width: 128px;
+    margin: auto;
+    margin-bottom: 17px;
+    margin-top: 3px;
+    border: 0.5px solid var(--primary-color);
+    border-radius: 5px;
+}
+.feedback-input-title{
+    font-size: 12px;
+    color: #666666;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+.register-optional{
+    font-weight: 300;
+
+}
+.feedback-input{
+    width: 363px;
+    outline: none;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 500;
+    border: 1px solid #BDBDBD;
+    border-radius: 9px;
+    margin-bottom: 14px;
+    resize: none;
+}
+.feedback-input:focus{
+    border: 1px solid var(--primary-color);
+}
+.feedback-button{
+    margin-top: 10px;
+   width: 363px;
+   font-size: 16px;
+   color: white;
+   padding: 17px;
+   background-color: var(--primary-color);
+   border: none;
+   border-radius: 9px;
+}
+.feedback-button:hover{
+    background-color: var(--hover-color);
+    cursor: pointer;
+}
+.feedback-check-icon{
+    margin-left: 6px;
+    margin-right: 6px;
+    display: none;
+}
+.feedback-checks{
+    max-width: 363px;
+    margin: 0 auto;    
+    display: flex;
+    flex-wrap: wrap;
+}
+.feedback-checks div{
+    margin-right: 10px;
+}
+
+.feedback-checks div label{
+    cursor: pointer;
+}
+.feedback-checks div label input[type="checkbox"]{
+    display: none;
+}
+.feedback-checks div label span{
+    position: relative;
+    display: inline-block;
+    background:white;
+    border: 0.5px solid #BDBDBD;
+    color: #a7a7a7;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 13px;
+    user-select: none;
+
+}
+.feedback-checks div label input[type="checkbox"]:checked ~ span{
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.feedback-checks div label input[type="checkbox"]:checked ~ span .feedback-check-icon{
+    display:unset;
+}

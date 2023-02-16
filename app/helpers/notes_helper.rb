@@ -129,34 +129,7 @@ module NotesHelper
       return "Change Property Value Proposal"
     end
   end
-
-  def subscribe_button(ontology_id)
-    user = session[:user]
-    if user.nil?
-      # subscribe button must redirect to login
-      return link_to 'Subscribe to notes emails', "/login?redirect=#{request.url}", {style:'font-size: .9em;', class:'link_button'}
-    end
-    # Init subscribe button parameters.
-    user = LinkedData::Client::Models::User.find(session[:user].id)
-    sub_text = "Subscribe"
-    params = "data-bp_ontology_id='#{ontology_id}' data-bp_is_subbed='false' data-bp_user_id='#{user.id}'"
-    begin
-      # Try to create an intelligent subscribe button.
-      if ontology_id.start_with? 'http'
-        ont = LinkedData::Client::Models::Ontology.find(ontology_id)
-      else
-        ont = LinkedData::Client::Models::Ontology.find_by_acronym(ontology_id).first
-      end
-      subscribed = subscribed_to_ontology?(ont.acronym, user)  # application_helper
-      sub_text = subscribed ? "Unsubscribe" : "Subscribe"
-      params = "data-bp_ontology_id='#{ont.acronym}' data-bp_is_subbed='#{subscribed}' data-bp_user_id='#{user.id}'"
-    rescue
-      # pass, fallback init done above begin block to scope parameters beyond the begin/rescue block
-    end
-    spinner = '<span class="notes_subscribe_spinner" style="display: none;">' + image_tag("spinners/spinner_000000_16px.gif", style: "vertical-align: text-bottom;") + '</span>'
-    error = "<span style='color: red;' class='notes_sub_error'></span>"
-    return "<a href='javascript:void(0);' class='subscribe_to_notes btn btn-primary' #{params}>#{sub_text} to notes emails</a> #{spinner} #{error}".html_safe
-  end
+  
 
   def delete_button
     user = session[:user]

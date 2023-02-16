@@ -1,7 +1,10 @@
 module SubmissionsHelper
 
   def ontology_submission_id_label(acronym, submission_id)
-    [acronym, submission_id].join(' / ')
+    [acronym, submission_id].join('#')
+  end
+  def ontology_and_submission_id(value)
+    value.split('#')
   end
 
   def render_submission_attribute(attribute, submission = @submission, ontology = @ontology)
@@ -150,40 +153,96 @@ module SubmissionsHelper
   def submission_properties
     out = [
       [:format, format_equivalent],
-      [:location, location_equivalent],
       :version,
       :status,
+      [:location, location_equivalent],
+      :URI,
+      :deprecated,
+      :hasOntologySyntax,
+      :hasFormalityLevel,
+      :isOfType,
+      :naturalLanguage,
       :description,
       :homepage,
       :documentation,
       :publication,
       :usedOntologyEngineeringTool,
       :abstract, :notes, :keywords, :alternative, :identifier,
+      :knownUsage,
+      :designedForOntologyTask,
+      :hasDomain,
+      :coverage,
+      :example,
+      :conformsToKnowledgeRepresentationParadigm,
+      :usedOntologyEngineeringMethodology,
+      :accrualMethod,
+      :accrualPeriodicity,
+      :accrualPolicy,
+      :competencyQuestion,
+      :versionIRI,
+      :source,
+      :isFormatOf,
+      :hasFormat,
+      :includedInDataCatalog,
+      :depiction,
+      :logo,
+      :associatedMedia,
       :released,
       :modificationDate,
+      :valid,
+      :curatedOn,
+      :publisher,
       :hasLicense,
+      :morePermissions,
+      :copyrightHolder,
       :contact,
       :hasContributor,
       :hasCreator,
+      :audience,
+      :toDoList,
+      :useGuidelines,
+      :repository,
+      :bugDatabase,
+      :mailingList,
+      :award,
+      :wasGeneratedBy,
+      :wasInvalidatedBy,
+      :curatedBy,
+      :endorsedBy,
+      :fundedBy,
+      :translator,
       :useImports,
       :hasPriorVersion,
       :isAlignedTo,
       :ontologyRelatedTo,
+      :isBackwardCompatibleWith,
+      :isIncompatibleWith,
+      :comesFromTheSameDomain,
+      :similarTo,
+      :explanationEvolution,
+      :generalizes,
+      :hasDisparateModelling,
+      :hasPart,
+      :usedBy,
+      :workTranslation,
+      :translationOfWork,
       :preferredNamespacePrefix,
       :preferredNamespaceUri,
-      :naturalLanguage
+      :keyClasses,
+      :endpoint,
+      :dataDump,
+      :csvDump,
+      :openSearchDescription,
+      :uriLookupEndpoint,
+      :uriRegexPattern,
+      :metadataVoc,
+      :exampleIdentifier,
+      :numberOfClasses,
+      :numberOfIndividuals,
+      :numberOfProperties,
+      :entities,
+      :numberOfAxioms
     ]
-
-    sections.each do |d|
-      submission_metadata.select { |m| m['display'] == d[2] }.each { |attr|
-        out << attr["attribute"].to_sym
-      }
-    end
-
-    displays = %w[dates license community people relations content metrics]
-    submission_metadata.select { |m| displays.include?(m['display']) }.each { |attr|
-      out << attr["attribute"].to_sym
-    }
     out.uniq
   end
 
@@ -312,14 +371,11 @@ module SubmissionsHelper
     generate_list_field_input(attr, name, values, :text_field_tag)
   end
 
-  def generate_boolean_input(attr)
-    content_tag(:div, class: "custom-control custom-switch") do
+  def generate_boolean_input(attr, name)
       value = attribute_values(attr)
-      options = { :type => 'checkbox', :class => "custom-control-input", :id => "customSwitch2" }
-      options[:checked] = 'checked' if value
-      concat content_tag(:input, nil, options)
-      concat label_tag("", "", { class: 'custom-control-label', for: "customSwitch2" })
-    end
+    value = value.to_s unless value.nil?
+
+    render SwitchInputComponent.new(id: name, name:  name, label: "", checked: value.eql?('true') , value: value, boolean_switch: true)
   end
 
   def input_type?(attr, type)
@@ -331,7 +387,11 @@ module SubmissionsHelper
   end
 
   def attribute_values(attr)
-    @submission.send(attr["attribute"])
+    begin
+      @submission.send(attr["attribute"])
+    rescue
+      nil
+    end
   end
 
   # Generate the HTML input for every attributes.
@@ -354,7 +414,7 @@ module SubmissionsHelper
       if input_type?(attr, "list")
         input_html << generate_select_input(attr, name, select_values, metadata_values, multiple: true)
       else
-        select_values << ["None", ""]
+        select_values << ["", ""]
         select_values << %w[Other other]
 
         metadata_values = "" if metadata_values.nil?
@@ -372,11 +432,11 @@ module SubmissionsHelper
       if input_type?(attr, "list")
         input_html << generate_url_input(attr, name, uri_values)
       else
-        input_html << text_field(object_name, attr["attribute"].to_s.to_sym, value: uri_values.first, class: "metadataInput form-control")
+        input_html << text_field(object_name, attr["attribute"].to_s.to_sym, value: Array(uri_values).first, class: "metadataInput form-control")
       end
       return input_html
     elsif input_type?(attr, "boolean")
-      input_html << generate_boolean_input(attr)
+      input_html << generate_boolean_input(attr, name)
     else
       # If input a simple text
       values = attribute_values(attr) || ['']
@@ -412,7 +472,7 @@ module SubmissionsHelper
   end
 
   def form_group_attribute(attr, options = {}, &block)
-    attribute_form_group_container(attr) do |c|
+    attribute_form_group_container(attr, required: !options[:required].nil?) do |c|
       c.label do
         generate_attribute_label(attr)
       end
