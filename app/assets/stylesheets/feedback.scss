@@ -70,44 +70,9 @@
     background-color: var(--hover-color);
     cursor: pointer;
 }
-.feedback-check-icon{
-    margin-left: 6px;
-    margin-right: 6px;
-    display: none;
-}
 .feedback-checks{
     max-width: 363px;
     margin: 0 auto;    
     display: flex;
     flex-wrap: wrap;
-}
-.feedback-checks div{
-    margin-right: 10px;
-}
-
-.feedback-checks div label{
-    cursor: pointer;
-}
-.feedback-checks div label input[type="checkbox"]{
-    display: none;
-}
-.feedback-checks div label span{
-    position: relative;
-    display: inline-block;
-    background:white;
-    border: 0.5px solid #BDBDBD;
-    color: #a7a7a7;
-    padding: 8px;
-    border-radius: 5px;
-    font-size: 13px;
-    user-select: none;
-
-}
-.feedback-checks div label input[type="checkbox"]:checked ~ span{
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-}
-
-.feedback-checks div label input[type="checkbox"]:checked ~ span .feedback-check-icon{
-    display:unset;
 }
