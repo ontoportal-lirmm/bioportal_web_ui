@@ -75,7 +75,7 @@ gem 'will_paginate', '~> 3.0'
 gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'development'
 
 
-group :staging, :production do
+group :staging, :production, :appliance do
   # application monitoring
   gem 'newrelic_rpm'
   # logs in json format, useful for shipping logs to logstash

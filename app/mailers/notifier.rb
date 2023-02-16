@@ -24,11 +24,12 @@ class Notifier < ApplicationMailer
     body :node => node.inspect
   end
 
-  def feedback(name, email, comment, location = "")
+  def feedback(name, email, comment, location, tags)
     @name = name
     @email = email
     @comment = comment
     @location = location
+    @tags = tags
 
     mail(:to => "#{$SUPPORT_EMAIL}, #{email}",
          :from => "#{$SUPPORT_EMAIL}",

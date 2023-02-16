@@ -75,6 +75,10 @@ class LoginController < ApplicationController
   def lost_password
   end
 
+  def lost_password_success
+  end
+
+
   # Sends a new password to the user
   def send_pass
     username = params[:user][:account_name]
@@ -82,7 +86,7 @@ class LoginController < ApplicationController
     resp = LinkedData::Client::HTTP.post("/users/create_reset_password_token", {username: username, email: email})
 
     if resp.nil?
-      redirect_to login_index_path, notice: "Please check your email for a message with reset instructions"
+      redirect_to "/lost_pass_success"
     else
       flash[:notice] = resp.errors.first + ". Please try again."
       redirect_to "/lost_pass"

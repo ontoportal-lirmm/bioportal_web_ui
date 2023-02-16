@@ -10,7 +10,7 @@
     <!-- Google Webmaster Tools verifications -->
   	<meta name="google-site-verification" content="IBxfKu6VbYH9atd5OLu2zXVD2ZRWi9SgMKTi8nvw3ks" />
   <% end %>
-
+	<meta name="turbo-cache-control" content="no-cache">
 	<%= csrf_meta_tag %>
 
 	<title><%if @title.nil?%><%=$ORG_SITE%><%else%><%="#{@title} | #{$ORG_SITE}"%><%end%></title>

@@ -1,0 +1,76 @@
+- if params[:pop].eql?("true")
+  - pop = true
+- unless @errors.nil?
+  %div{:style => "color:red;margin-bottom:1em;"}
+    Errors On Form
+    %ul
+      - for error in @errors
+        %li= error
+= form_tag('/feedback') do
+  -# Simulate form_for by providing a hidden field to check for submission
+  = hidden_field_tag 'sim_submit', 'true'
+  = hidden_field_tag("pop", pop)
+  .d-flex.justify-content-center.m-3
+    .feedback-form
+      .feedback-title-container
+        %h2.feedback-title
+          Leave your feedback
+        %hr#feedback-title-line/
+      - unless session[:user].nil?
+        %p.feedback-text
+          Hi
+          %font 
+            = session[:user].username
+            ,
+      %p.feedback-email
+        you can use the form below or email us directly at:
+        %a{:href => "mailto: #{$SUPPORT_EMAIL}"}= $SUPPORT_EMAIL
+      - if session[:user].nil?
+        %p.feedback-input-title
+          Email
+          %font{:color => "red"} *
+        %input.feedback-input{:name => "email", :type => "email"}/
+        %p.feedback-input-title
+          Name
+          %font.register-optional (optional)
+        %input.feedback-input{:name => "name", :type => "text"}/
+      - else
+        = hidden_field_tag "name", session[:user].username
+        = hidden_field_tag "email", session[:user].email
+      %p.feedback-input-title
+        Error/Proposition page URL
+        %font.register-optional (optional)
+      %input.feedback-input{:name => "location", :type => "text", :value => unescape(params[:location] || '')}
+      %p.feedback-input-title
+        Feedback
+        %font{:color => "red"} *
+      %textarea.feedback-input{:name => "comment", :rows => "6"}
+      %p.feedback-input-title
+        Tags
+        %font.register-optional (optional)
+      .feedback-checks
+        %div
+          %label{:for => "feedback-bug-check"}
+            %input#feedback-bug-check{:name => "bug", :type => "checkbox", :value => "Bug"}/
+            %span
+              %img.feedback-check-icon{:src => "#{asset_path('check.svg')}"}/
+              Bug
+        %div
+          %label{:for => "feedback-proposition-check"}
+            %input#feedback-proposition-check{:name => "proposition", :type => "checkbox", :value => "Proposition"}/
+            %span
+              %img.feedback-check-icon{:src => "#{asset_path('check.svg')}"}/
+              Proposition
+        %div
+          %label{:for => "feedback-question-check"}
+            %input#feedback-question-check{:name => "question", :type => "checkbox", :value => "Question"}/
+            %span
+              %img.feedback-check-icon{:src => "#{asset_path('check.svg')}"}/
+              Question
+        %div
+          %label{:for => "feedback-ontologysubmissionrequest-check"}
+            %input#feedback-ontologysubmissionrequest-check{:name => "ontology_submissions_request", :type => "checkbox", :value => "Ontology submissions request"}/
+            %span
+              %img.feedback-check-icon{:src => "#{asset_path('check.svg')}"}/
+              Ontology submissions request
+      %input.feedback-button{:type => "submit", :value => "Send"}/

@@ -1,0 +1,56 @@
+- colspan = 7
+- colspan = 8 if parent_type.eql?('ontology')
+.notes_list_container
+  %div.d-flex{style:"font-size: .9em;"}
+    .add_comment.mx-1
+      = add_comment_button(parent_id, parent_type)
+    .add_proposal.mx-1
+      = add_proposal_button(parent_id, parent_type)
+    .subscribe_to_notes.mx-1
+      = subscribe_button(@ontology.id)
+
+  %div.ont_notes_filter.my-1.d-flex.justify-content-end.align-items-baseline
+    Filter:
+    %input#hide_archived_ont.mx-1{:checked => "true", :name => "hide_archived_ont", :type => "checkbox"}
+    %label{:for => "hide_archived_ont"} Hide Archived
+
+  = render_alerts_container("notes_#{parent_type}_list_table_alerts")
+
+  .ont_notes_table_container
+    %table.zebra.notes_ont_list_table{:id => "#{notes_table_id}", :style => "width: 100%;", :width => "100%"}
+      %thead
+        %tr
+          %th
+            Delete
+          %th
+            Subject
+          %th.d-none
+            Subject Sort
+          %th.d-none
+            Archive Sort
+          %th
+            Author
+          %th
+            Type
+          - if parent_type.eql?('ontology')
+            %th
+              Class
+          %th
+            Created
+      %tbody{id: "#{parent_type}_notes_table_content"}
+        - if @notes.nil? || @notes.empty?
+          %tr#ont_no_notes
+            %td{colspan: colspan} No notes to display
+            - (colspan-1).times.each do
+              %td
+        - else
+          - @notes.each do |note|
+            = render partial: 'notes/note_line', locals: {note: note, ontology_acronym: @ontology.acronym, parent_type: parent_type}
+:javascript
+  jQuery(".ontologies.show").ready(function(){
+    jQuery("#hide_archived_ont").click(function(){
+      hideOrUnhideArchivedOntNotes();
+    });
+
+    wireOntTable(jQuery("##{notes_table_id}"), #{parent_type.eql?('ontology')}, #{current_user_admin?})
+  });

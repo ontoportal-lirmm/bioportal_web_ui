@@ -6,6 +6,7 @@
     }
 
   = form_tag("/ontologies_metadata_curator/edit", id: "properties_result_form", method: "post", data: { turbo: true, turbo_frame: 'application_modal_content' }) do
+    = hidden_field_tag :all_metadata, @metadata_sel
     = submit_to_modal("Edit metadata values" , id:"show_bulk_edit_from_btn", class: "d-none",
       data: { show_modal_title_value: "Metadata curator editor", show_modal_size_value: 'modal-xl' })
     %div.table-container.mx-3
@@ -21,13 +22,4 @@
 
         %tbody
           - @submissions.each do |submission|
-            - acronym = submission.ontology.acronym
-            %tr
-              %th{scope:"row", style: 'width: 5%'}
-                %div
-                  - value = ontology_submission_id_label(acronym, submission.submissionId)
-                  = render SwitchInputComponent.new(id: submission.id, name: 'selected_acronyms[]', value: value) do
-                    %h6{style:'margin-top: 0.2rem'}=value
-              - @metadata_sel.each do |meta|
-                %td{style: "width: #{95 / @metadata_sel.size}%; vertical-align: top; word-break: break-word;"}
-                  = render partial: 'attribute_inline_editable', locals: {attribute: meta, submission: submission, ontology: submission.ontology}
+            = render partial: 'metadata_table_row', locals: {submission: submission, attributes: @metadata_sel}

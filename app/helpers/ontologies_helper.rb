@@ -28,9 +28,9 @@ module OntologiesHelper
           sub.send("includedInDataCatalog").each do |catalog|
             catalog_btn_label = catalog
             $DATA_CATALOG_VALUES.each do |cat_uri, cat_label|
-              if catalog.start_with?(cat_uri)
+              if catalog[cat_uri]
                 catalog_btn_label = cat_label
-                break;
+                break
               end
             end
             concat(content_tag(:a, catalog_btn_label, { :class => "btn btn-primary", :href => catalog, :target => "_blank" }))
@@ -38,7 +38,7 @@ module OntologiesHelper
         end)
       end
     else
-      return ""
+       ""
     end
   end
 
@@ -390,7 +390,7 @@ module OntologiesHelper
     if current_section.eql?(section_title)
       block.call
     else
-      render TurboFrameComponent.new(id: section_title, src: "/ontologies/#{@ontology.acronym}?p=#{section_title}")
+      render TurboFrameComponent.new(id: section_title, src: "/ontologies/#{@ontology.acronym}?p=#{section_title}", target: '_top')
     end
   end
 

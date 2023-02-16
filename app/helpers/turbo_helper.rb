@@ -34,7 +34,8 @@ module TurboHelper
   end
 
   def render_alerts_container(controller_class = nil)
-    render AlertsContainerComponent.new(id: alerts_container_id(controller_class&.controller_name))
+    id = controller_class.is_a?(String) ? controller_class : alerts_container_id(controller_class&.controller_name)
+    render AlertsContainerComponent.new(id:  id)
   end
 
 end

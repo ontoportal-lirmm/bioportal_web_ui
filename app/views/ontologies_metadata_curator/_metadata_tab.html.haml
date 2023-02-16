@@ -13,7 +13,7 @@
         %div.mt-3.flex-shrink-0
           %button{type: "submit", class: "btn btn-success"}
             Get values
-        %div.mt-3.flex-shrink-0.flex-fill
+        %div.mt-3.flex-shrink-0.flex-fill.d-flex.align-items-center
           = turbo_frame_tag "edit_metadata_btn"
 
 = render TurboFrameComponent.new(id: 'selection_metadata_form') do

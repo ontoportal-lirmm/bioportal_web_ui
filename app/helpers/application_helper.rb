@@ -35,6 +35,10 @@ module ApplicationHelper
     CGI.escape(string)
   end
 
+  def unescape(string)
+    CGI.unescape(string)
+  end
+
   def clean(string)
     string = string.gsub("\"",'\'')
     return string.gsub("\n",'')
@@ -363,33 +367,44 @@ module ApplicationHelper
     output = "<span class='more_less_container'><span class='truncated_more'>#{truncate(text, :length => length, :omission => trailing_text)}" + more + "</span>"
   end
 
-  def subscribe_ontology_button(ontology_id, user = nil)
-    user = session[:user] if user.nil?
-    if user.nil?
-      # subscribe button must redirect to login
-      return sanitize("<a href='/login?redirect=#{request.url}' style='font-size: .9em;' class='subscribe_to_ontology'>Subscribe</a>")
+
+  def add_comment_button(parent_id, parent_type)
+    if session[:user].nil?
+      link_to "Add comment",  login_index_path(redirect: request.url), class: "link_button"
+    else
+      link_to_modal "Add comment", notes_new_comment_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
+                    class: "add_comment btn btn-primary", data: { show_modal_title_value: "Add a new comment"}
     end
-    # Init subscribe button parameters.
-    sub_text = "Subscribe"
-    params = "data-bp_ontology_id='#{ontology_id}' data-bp_is_subbed='false' data-bp_user_id='#{user.id}'"
-    begin
-      # Try to create an intelligent subscribe button.
-      if ontology_id.start_with? 'http'
-        ont = LinkedData::Client::Models::Ontology.find(ontology_id)
-      else
-        ont = LinkedData::Client::Models::Ontology.find_by_acronym(ontology_id).first
-      end
-      subscribed = subscribed_to_ontology?(ont.acronym, user)  # application_helper
-      sub_text = subscribed ? "Unsubscribe" : "Subscribe"
-      params = "data-bp_ontology_id='#{ont.acronym}' data-bp_is_subbed='#{subscribed}' data-bp_user_id='#{user.id}'"
-    rescue
-      # pass, fallback init done above begin block to scope parameters beyond the begin/rescue block
+  end
+
+  def add_reply_button(parent_id)
+    if session[:user].nil?
+      link_to "Reply", login_index_path, 'data-turbo': false
+    else
+      link_to 'Reply', notes_new_reply_path(parent_id: parent_id ), "data-turbo-frame": "#{parent_id}_new_reply"
     end
-    # TODO: modify/copy CSS for notes_sub_error => subscribe_error
-    # TODO: modify/copy CSS for subscribe_to_notes => subscribe_to_ontology
-    spinner = '<span class="subscribe_spinner" style="display: none;">' + image_tag("spinners/spinner_000000_16px.gif", style: "vertical-align: text-bottom;") + '</span>'
-    error = "<span style='color: red;' class='subscribe_error'></span>"
-    return "<a href='javascript:void(0);' class='subscribe_to_ontology btn btn-primary' #{params}>#{sub_text}</a> #{spinner} #{error}"
+  end
+
+
+  def add_proposal_button(parent_id, parent_type)
+    if session[:user].nil?
+        link_to "Add proposal",  login_index_path(redirect: request.url), class: "link_button"
+    else
+      link_to_modal "Add proposal", notes_new_proposal_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
+                    class: "add_proposal btn btn-primary", data: { show_modal_title_value: "Add a new proposal"}
+    end
+  end
+ 
+  def subscribe_button(ontology_id)
+    if session[:user].nil?
+      return link_to 'Subscribe to notes emails', "/login?redirect=#{request.url}", {style:'font-size: .9em;', class:'link_button'}
+    end
+
+    user = LinkedData::Client::Models::User.find(session[:user].id)
+    ontology_acronym = ontology_id.split('/').last
+    subscribed = subscribed_to_ontology?(ontology_acronym, user)
+
+    render OntologySubscribeButtonComponent.new(ontology_id: ontology_id, subscribed: subscribed, user_id: user.id)
   end
 
   def subscribed_to_ontology?(ontology_acronym, user)

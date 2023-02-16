@@ -89,8 +89,22 @@ class HomeController < ApplicationController
     # If sim_submit is nil, we know the form hasn't been submitted and we should
     # bypass form processing.
     if params[:sim_submit].nil?
-      render layout: feedback_layout
+      render 'home/feedback/feedback', layout: feedback_layout
       return
+    end
+
+    @tags = []
+    unless params[:bug].nil? || params[:bug].empty?
+      @tags << "Bug"
+    end
+    unless params[:proposition].nil? || params[:proposition].empty?
+      @tags << "Proposition"
+    end
+    unless params[:question].nil? || params[:question].empty?
+      @tags << "Question"
+    end
+    unless params[:ontology_submissions_request].nil? || params[:bug].empty?
+      @tags << "Ontology submissions request"
     end
 
     @errors = []
@@ -111,14 +125,14 @@ class HomeController < ApplicationController
     end
 
     unless @errors.empty?
-      render layout: feedback_layout
+      render render 'home/feedback/feedback', layout: feedback_layout
       return
     end
 
-    Notifier.feedback(params[:name], params[:email], params[:comment], params[:location]).deliver_now
+    Notifier.feedback(params[:name], params[:email], params[:comment], params[:location], @tags).deliver_later
 
     if params[:pop].eql?('true')
-      render 'feedback_complete', layout: 'popup'
+      render 'home/feedback/feedback_complete', layout: 'popup'
     else
       flash[:notice] = 'Feedback has been sent'
       redirect_to_home

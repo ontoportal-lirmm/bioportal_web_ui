@@ -1,0 +1,10 @@
+- acronym = submission.ontology.acronym
+- id = ontology_submission_id_label(acronym, submission.submissionId)
+%tr{id: id+'_row'}
+  %th{scope:"row", style: 'width: 5%'}
+    %div
+      = render SwitchInputComponent.new(id: submission.id, name: 'selected_acronyms[]', value: id) do
+        %h6{style:'margin-top: 0.2rem'}=id
+  - attributes.each do |meta|
+    %td{style: "width: #{95 / attributes.size}%; vertical-align: top; word-break: break-word;"}
+      = render partial: 'attribute_inline_editable', locals: {attribute: meta, submission: submission, ontology: submission.ontology}

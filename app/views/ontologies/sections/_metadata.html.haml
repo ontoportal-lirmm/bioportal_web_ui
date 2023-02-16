@@ -1,4 +1,4 @@
-= turbo_frame_tag 'summary' do
+= turbo_frame_tag 'summary', target:"_top" do
   %div.ont-metadata
     -# Details pane
     %section.ont-metadata-card.ont-details-card
@@ -49,6 +49,11 @@
               %tr
                 %td Groups
                 %td= groups.map {|g| groups_hash[g].name}.sort.join(", ")
+          - if @ontology.admin?(session[:user])
+            %tr
+              %td Pull URL
+              %td
+                = link_to @submission_latest.pullLocation, @submission_latest.pullLocation
           = raw additional_details
 
     = render partial: 'additional_metadata'
@@ -63,7 +68,8 @@
           - unless (@submission_latest.nil? || (@submission_latest.respond_to?(:status) && @submission_latest.status == 404))
             = link_to(edit_ontology_submission_path(@ontology.acronym, @submission_latest.submissionId), "aria-label": "Edit latest submission", title: "Edit latest submission") do
               %i.fas.fa-user-edit{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
-      = render partial: "submissions"
+      = render TurboFrameComponent.new(id: 'ontology_submissions', src: ontology_submissions_path(@ontology.acronym))
+
 
     -# Views pane (don't show if the ontology is a view - we don't allow views of views).
     - unless @ontology.view?

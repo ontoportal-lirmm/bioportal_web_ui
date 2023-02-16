@@ -2,7 +2,23 @@ class SubmissionsController < ApplicationController
   include SubmissionsHelper, SubmissionUpdater
   layout :determine_layout
   before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
-  before_action :submission_metadata, only: [:create, :edit, :new, :update]
+  before_action :submission_metadata, only: [:create, :edit, :new, :update, :index]
+
+
+  def index
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
+
+    ontology_not_found(params[:ontology_id]) if @ontology.nil?
+
+    @ont_restricted = ontology_restricted?(@ontology.acronym)
+
+    # Retrieve submissions in descending submissionId order (should be reverse chronological order)
+    @submissions = @ontology.explore.submissions({include: "submissionId,creationDate,released,modificationDate,submissionStatus,hasOntologyLanguage,version,diffFilePath,ontology"})
+                            .sort {|a,b| b.submissionId.to_i <=> a.submissionId.to_i } || []
+
+    LOG.add :error, "No submissions for ontology: #{@ontology.id}" if @submissions.empty?
+
+  end
 
   # When getting "Add submission" form to display
   def new

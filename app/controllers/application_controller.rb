@@ -30,14 +30,13 @@ class ApplicationController < ActionController::Base
   EXPIRY_ONTOLOGY_SIMPLIFIED = 60 * 1  #  0:01 minute
 
 
-  $DATA_CATALOG_VALUES = {"https://biosharing.org/" => "BioSharing",
-                         "http://aber-owl.net/ontology/" => "AberOWL",
-                         "http://vest.agrisemantics.org/content/" => "VEST Registry",
-                         "http://bioportal.bioontology.org/ontologies/" => "BioPortal",
-                         "https://bioportal.bioontology.org/ontologies/" => "BioPortal",
-                         "http://www.ontobee.org/ontology/" => "Ontobee",
-                         "http://www.obofoundry.org/ontology/" => "The OBO Foundry",
-                         "http://www.ebi.ac.uk/ols/ontologies/" => "EBI Ontology Lookup"}
+  $DATA_CATALOG_VALUES = {"fairsharing.org/" => "FAIRsharing",
+                         "aber-owl.net" => "AberOWL",
+                         "vest.agrisemantics.org" => "VEST Registry",
+                         "bioportal.bioontology.org" => "BioPortal",
+                         "ontobee.org" => "Ontobee",
+                         "obofoundry.org" => "The OBO Foundry",
+                         "ebi.ac.uk/ols" => "EBI Ontology Lookup"}
 
   RESOLVE_NAMESPACE = {:omv => "http://omv.ontoware.org/2005/05/ontology#", :skos => "http://www.w3.org/2004/02/skos/core#", :owl => "http://www.w3.org/2002/07/owl#",
                        :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#", :rdfs => "http://www.w3.org/2000/01/rdf-schema#", :metadata => "http://data.bioontology.org/metadata/",
@@ -361,6 +360,10 @@ class ApplicationController < ActionController::Base
     session[:user] && session[:user].admin?
   end
 
+  def ontology_restricted?(acronym)
+    restrict_downloads = $NOT_DOWNLOADABLE
+    restrict_downloads.include? acronym
+  end
   # updates the 'history' tab with the current selected concept
   def update_tab(ontology, concept)
     array = session[:ontologies] || []
