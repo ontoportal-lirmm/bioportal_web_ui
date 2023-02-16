@@ -2,8 +2,7 @@
   .register-form
     .d-flex.justify-content-between
       %a{:href => "javascript:javascript:history.go(-1)"}
-        %svg.register-arrowback{:fill => "none", :height => "12", :viewbox => "0 0 15 12", :width => "15", :xmlns => "http://www.w3.org/2000/svg"}
-          %path{:d => "M5.64176 1L1 6L5.64176 11M14 6H1.13", :stroke => "black", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-miterlimit" => "10", "stroke-width" => "1.5"}
+        %img.lost-password-arrowback{:src => "#{asset_path("arrow-back.svg")}"}
       .register-title-container
         %h2.register-title
           Create new account
