@@ -1,52 +1,51 @@
 en:
-  
   about: >
-      <div class='about p-2'>
-      <h2>Abstract</h2>
-      <p>
-      Many vocabularies and ontologies are produced to represent and annotate agronomic data. Therefore, there is a need of
-      a common platform to identify, host and use them in agro-informatics application. The AgroPortal project aims to offer
-      a reference ontology repository for agronomy, reusing the NCBO BioPortal technology. The scientific outcomes and the
-      experience of the biomedical domain are thus exploited and transposed in the agronomy domain, including plants, food,
-      environment and possibly animal sciences. We offer an ontology portal which features ontology hosting, search, versioning,
-      visualization, comment, recommendation, enables semantic annotation, as well as storing and exploiting ontology alignments.
-      All of these within a fully semantic web compliant infrastructure. The AgroPortal specifically pays attention to respect the
-      requirements of the agronomic community in terms of ontology formats (e.g., SKOS, trait dictionaries) or supported features.
-      AgroPortal project is based on five driving agronomic use cases which participate in the design and orientation of the platform.
-      AgroPortal already offers a robust and stable reference repository highly valuable for the agronomic domain.
-      </p>
-      <h2>Use cases</h2>
-      <ul class="bulletlist m-3">
-      <li class="bulletlist"><a href="http://www.agrold.org">IBC Rice Genomics & AgroLD project</a> (P. Larmande): Data integration and knowledge management related to rice</li>
-      <li class="bulletlist"><a href="https://www.rd-alliance.org/groups/wheat-data-interoperability-wg.html">RDA Wheat Data Interoperability working group</a> (E. Dzalé-Yeumo): Common framework for publishing wheat data</li>
-      <li class="bulletlist"><a href="http://lovinra.inra.fr">LovInra : INRA Linked Open Vocabularies</a> (S. Aubin): Vocabularies produced by INRA scientists</li>
-      <li class="bulletlist"><a href="http://www.cropontology.org">Crop Ontology project</a> (E. Arnaud): Ontologies for describing crop germplasm & traits</li>
-      <li class="bulletlist"><a href="http://vest.agrisemantics.org">GODAN global map of agri-food data standards</a> (V. Pesce): VEST/AgroPortal MAP of standards</li>
-      </ul>
-      <br>
-      <h2>New features</h2>
-      <p>
-      See the <a href="https://github.com/agroportal/documentation/wiki/Release-notes">release notes</a>
-      </p>
-      <br>
-      <h2>Partners</h2>
-      <p>The National Center For Biomedical Ontology (NCBO), Institut de Recherche pour le Développement (IRD), Research Data Alliance (RDA),
-      Bioversity International, Food & Agriculture Organization (FAO), Global Open Data for Agriculture & Nutrition (Godan Action), Institut National de la Recherche Agronomique (INRA)</p>
-      <h2>Acknowledgments</h2>
-      <p>The AgroPortal is partly achieved within the Semantic Indexing of French biomedical Resources (<a href="www.lirmm.fr/sifr">SIFR</a>) project
-      that received funding from the EU H2020 research and innovation programme under the Marie Sklodowska-Curie (grant 701771)
-      and the French National Research Agency (grant ANR-12-JS02-01001), the NUMEV Labex (grant ANR-10-LABX-20),
-      the Computational Biology Institute of Montpellier (grant ANR-11-BINF-0002) as well as by University of Montpellier and the CNRS.
-      We also thank the National Center for Biomedical Ontologies for help and time spent with us in deploying the AgroPortal.</p>
-      <h2>Team</h2>
-      To contact us: firstname.lastname@lirmm.fr
-      <ul class="bulletlist m-3">
-      <li class="bulletlist"><b>Clément Jonquet</b>, researcher at LIRMM (Univ. of Montpellier, France), main investigator of the AgroPortal project</li>
-      <li class="bulletlist"><b>Anne Toulet</b>, researcher at LIRMM (Univ. of Montpellier, France)</li>
-      <li class="bulletlist"><b>Vincent Emonet</b>, engineer at LIRMM (Univ. of Montpellier, France)</li>
-      </ul>
-      </div>
-  
+    <div class='about p-2'>
+    <h2>Abstract</h2>
+    <p>
+    Many vocabularies and ontologies are produced to represent and annotate agronomic data. Therefore, there is a need of
+    a common platform to identify, host and use them in agro-informatics application. The AgroPortal project aims to offer
+    a reference ontology repository for agronomy, reusing the NCBO BioPortal technology. The scientific outcomes and the
+    experience of the biomedical domain are thus exploited and transposed in the agronomy domain, including plants, food,
+    environment and possibly animal sciences. We offer an ontology portal which features ontology hosting, search, versioning,
+    visualization, comment, recommendation, enables semantic annotation, as well as storing and exploiting ontology alignments.
+    All of these within a fully semantic web compliant infrastructure. The AgroPortal specifically pays attention to respect the
+    requirements of the agronomic community in terms of ontology formats (e.g., SKOS, trait dictionaries) or supported features.
+    AgroPortal project is based on five driving agronomic use cases which participate in the design and orientation of the platform.
+    AgroPortal already offers a robust and stable reference repository highly valuable for the agronomic domain.
+    </p>
+    <h2>Use cases</h2>
+    <ul class="bulletlist m-3">
+    <li class="bulletlist"><a href="http://www.agrold.org">IBC Rice Genomics & AgroLD project</a> (P. Larmande): Data integration and knowledge management related to rice</li>
+    <li class="bulletlist"><a href="https://www.rd-alliance.org/groups/wheat-data-interoperability-wg.html">RDA Wheat Data Interoperability working group</a> (E. Dzalé-Yeumo): Common framework for publishing wheat data</li>
+    <li class="bulletlist"><a href="http://lovinra.inra.fr">LovInra : INRA Linked Open Vocabularies</a> (S. Aubin): Vocabularies produced by INRA scientists</li>
+    <li class="bulletlist"><a href="http://www.cropontology.org">Crop Ontology project</a> (E. Arnaud): Ontologies for describing crop germplasm & traits</li>
+    <li class="bulletlist"><a href="http://vest.agrisemantics.org">GODAN global map of agri-food data standards</a> (V. Pesce): VEST/AgroPortal MAP of standards</li>
+    </ul>
+    <br>
+    <h2>New features</h2>
+    <p>
+    See the <a href="https://github.com/agroportal/documentation/wiki/Release-notes">release notes</a>
+    </p>
+    <br>
+    <h2>Partners</h2>
+    <p>The National Center For Biomedical Ontology (NCBO), Institut de Recherche pour le Développement (IRD), Research Data Alliance (RDA),
+    Bioversity International, Food & Agriculture Organization (FAO), Global Open Data for Agriculture & Nutrition (Godan Action), Institut National de la Recherche Agronomique (INRA)</p>
+    <h2>Acknowledgments</h2>
+    <p>The AgroPortal is partly achieved within the Semantic Indexing of French biomedical Resources (<a href="www.lirmm.fr/sifr">SIFR</a>) project
+    that received funding from the EU H2020 research and innovation programme under the Marie Sklodowska-Curie (grant 701771)
+    and the French National Research Agency (grant ANR-12-JS02-01001), the NUMEV Labex (grant ANR-10-LABX-20),
+    the Computational Biology Institute of Montpellier (grant ANR-11-BINF-0002) as well as by University of Montpellier and the CNRS.
+    We also thank the National Center for Biomedical Ontologies for help and time spent with us in deploying the AgroPortal.</p>
+    <h2>Team</h2>
+    To contact us: firstname.lastname@lirmm.fr
+    <ul class="bulletlist m-3">
+    <li class="bulletlist"><b>Clément Jonquet</b>, researcher at LIRMM (Univ. of Montpellier, France), main investigator of the AgroPortal project</li>
+    <li class="bulletlist"><b>Anne Toulet</b>, researcher at LIRMM (Univ. of Montpellier, France)</li>
+    <li class="bulletlist"><b>Vincent Emonet</b>, engineer at LIRMM (Univ. of Montpellier, France)</li>
+    </ul>
+    </div>
+
   activerecord:
     errors:
       models:
@@ -64,48 +63,46 @@ en:
 
   date:
     formats:
-      year_month_day_concise: '%Y-%m-%d' # 2017-03-01
-      month_day_year: '%b %-d, %Y' # Mar 1, 2017
-      monthfull_day_year: '%B %-d, %Y' # March 1, 2017
+      year_month_day_concise: "%Y-%m-%d" # 2017-03-01
+      month_day_year: "%b %-d, %Y" # Mar 1, 2017
+      monthfull_day_year: "%B %-d, %Y" # March 1, 2017
 
   layouts:
     footer:
       copyright_html: Copyright &copy; 2005‑2022, The Board of Trustees of Leland Stanford Junior University. All rights reserved.
       grant_html: >
-        <strong>%{site}</strong> is currently being developed within French <a href="http://www.d2kab.org">ANR D2KAB project</a>  (<a href="http://www.agence-nationale-recherche.fr/Projet-ANR-18-CE23-0017">ANR-18-CE23-0017</a>). It also receives or received support from <a href="http://www.lirmm.fr/sifr">ANR SIFR project</a> (<a href="https://anr.fr/Projet-ANR-12-JS02-0010">ANR-12-JS02-0010</a>), European Union <a href="http://www.lirmm.fr/sifr">H2020-MSCA SIFRm project</a> (<a href="https://cordis.europa.eu/project/id/701771">No 701771</a>), the <a href="https://www.lirmm.fr/numev/">NUMEV Labex</a> (ANR-10-LABX-20), the <ahref="http://www.ibc-montpellier.fr/">IBC of Montpellier project</a> (ANR-11-BINF0002), the <a href="https://www.agropolis-fondation.fr/The-LabEx-AGRO?lang=en">Agro Labex</a> (ANR-10-LABX-0001) as well as from University of Montpellier and the CNRS.
+        <strong>%{site}</strong> is currently being developed within German <a href="https://www.nfdi4biodiversity.org">NFDI4Biodiversity project</a>.
     notices:
       license_contact: >
-        For more information, email <a href="mailto:support@ontoportal.org">support@ontoportal.org</a> or 
+        For more information, email <a href="mailto:support@ontoportal.org">support@ontoportal.org</a> or
         visit <a href="https://ontoportal.org/licensing" target="_blank">https://ontoportal.org/licensing</a>.
       license_obtain: >
-        If you are the owner of this OntoPortal installation, you can visit 
+        If you are the owner of this OntoPortal installation, you can visit
         <a href="https://license.ontoportal.org" target="_blank">https://license.ontoportal.org</a> to obtain a license.
       license_expired: >
-        We're sorry, but the license for this OntoPortal installation has expired. If you are the owner of this OntoPortal installation, 
+        We're sorry, but the license for this OntoPortal installation has expired. If you are the owner of this OntoPortal installation,
         please visit <a href="https://license.ontoportal.org" target="_blank">https://license.ontoportal.org</a> to renew your license.
       license_trial:
-        one:
-          This installation of the OntoPortal Appliance is a trial license, which will expire in 1 day.
-        other:
-          This installation of the OntoPortal Appliance is a trial license, which will expire in %{count} days.
+        one: This installation of the OntoPortal Appliance is a trial license, which will expire in 1 day.
+        other: This installation of the OntoPortal Appliance is a trial license, which will expire in %{count} days.
 
   home:
     index:
       find_ontology_placeholder: Start typing ontology name, then choose from list
-      query_placeholder: Enter a class, e.g. Melanoma
-      tagline: the world's most comprehensive repository of biomedical ontologies
-      title: Welcome to the %{organization} 
+      query_placeholder: Search for a term, e.g. honey bee
+      tagline: a vocabulary and ontology repository for biodiversity
+      title: Welcome to the %{organization}
       welcome: Welcome to %{site},
     help:
       welcome: Welcome to the National Center for Biomedical Ontology’s %{site}. %{site} is a web-based application for accessing and sharing biomedical ontologies.
       getting_started: >
         %{site} allows users to browse, upload, download, search, comment on, and create mappings for ontologies.
       browse: >
-        Users can browse and explore individual ontologies by navigating either a tree structure or an animated graphical view. Users can also view mappings and 
+        Users can browse and explore individual ontologies by navigating either a tree structure or an animated graphical view. Users can also view mappings and
         ontology metadata, and download ontologies. Additionally, users who are signed in may submit a new ontology to the library.
       rest_examples_html: View documentation and examples of the <a href="http://data.bioontology.org/documentation" target="_blank">%{site} REST API</a>.
       announce_list_html: >
-        To receive notices of new releases or site outages, please subscribe to the 
+        To receive notices of new releases or site outages, please subscribe to the
         <a href="https://mailman.stanford.edu/mailman/listinfo/bioontology-support" target="_blank">bioontology-support list</a>.
 
   annotator:
@@ -137,7 +134,7 @@ en:
       categories_placeholder: Start typing to select categories or leave blank to use all
       property_definition: Named association between two entities. Examples are "definition" (a relation between a class and some text) and "part-of" (a relation between two classes).
       obsolete_definition: >
-        A class that the authors of the ontology have flagged as being obsolete and which they recommend that people not use. These classes 
+        A class that the authors of the ontology have flagged as being obsolete and which they recommend that people not use. These classes
         are often left in ontologies (rather than removing them entirely) so that existing systems that depend on them will continue to function.
 
   projects:
@@ -168,4 +165,3 @@ en:
         </blockquote>
   mappings:
     intro: Browse mappings between classes in different ontologies
-
