@@ -709,7 +709,7 @@ class ApplicationController < ActionController::Base
 
   def total_mapping_count
     total_count = 0
-    
+
     begin
       stats = LinkedData::Client::HTTP.get("#{REST_URI}/mappings/statistics/ontologies")
       unless stats.blank?
@@ -718,10 +718,10 @@ class ApplicationController < ActionController::Base
         stats.transform_values!(&:to_i)
         total_count = stats.values.sum
       end
-    rescue
+    rescue Exception => e
       LOG.add :error, e.message
     end
-    
+
     return total_count
   end
 
@@ -745,7 +745,7 @@ class ApplicationController < ActionController::Base
       $trial_license_initialized = true
     end
   end
-  
+
   # Get the submission metadata from the REST API.
   def submission_metadata
     @metadata ||= JSON.parse(Net::HTTP.get(URI.parse("#{REST_URI}/submission_metadata?apikey=#{API_KEY}")))
