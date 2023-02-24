@@ -29,7 +29,7 @@ $ORG_SITE = ($ORG.nil? || $ORG.empty?) ? $SITE : "#{$ORG} #{$SITE}"
 
 # The URL for the BioPortal Rails UI (this application)
 $UI_URL = "http://#{$SITE_URL}:3000"
-
+$UI_THEME = "biodivportal"
 
 # If you are running a PURL server to provide URLs for ontologies in your BioPortal instance, enable this option
 $PURL_ENABLED = false
