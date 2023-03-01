@@ -1,8 +1,8 @@
-= form_with(model: [:admin, license]) do |form|
+= form_with(model: [:admin, license], local: false) do |form|
   - if license.errors.any?
     %div.alert.alert-danger{role: "alert"}
       %h5.alert-heading
-        = pluralize(license.errors.count, "error") 
+        = pluralize(license.errors.count, "error")
         prohibited this license from being saved:
       - license.errors.full_messages.each do |message|
         %p.font-italic.pl-3.mb-0= message
