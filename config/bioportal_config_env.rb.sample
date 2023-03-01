@@ -2,7 +2,7 @@
 
 #local IP address lookup.  This doesn't make connection to external hosts
 require 'socket'
-def local_ip   
+def local_ip
   orig, Socket.do_not_reverse_lookup = Socket.do_not_reverse_lookup, true  # turn off reverse DNS resolution temporarily
 
   UDPSocket.open do |s|
@@ -214,3 +214,5 @@ $NATURAL_LANGUAGES = {
     "http://lexvo.org/id/iso639-3/ita" => "Italian",
     "http://lexvo.org/id/iso639-3/deu" => "German"
 }
+
+$NOT_DOWNLOADABLE = []
