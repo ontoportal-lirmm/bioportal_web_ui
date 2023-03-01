@@ -226,3 +226,5 @@ $NATURAL_LANGUAGES = {
     "http://lexvo.org/id/iso639-3/ita" => "Italian",
     "http://lexvo.org/id/iso639-3/deu" => "German"
 }
+
+$NOT_DOWNLOADABLE = []
