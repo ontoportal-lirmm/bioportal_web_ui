@@ -104,6 +104,12 @@ group :development do
 
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
+  # vscode development environment
+  gem 'solargraph'
+  gem 'solargraph-rails'
+  gem 'rufo', require: false
+  gem 'reek', require: false
+
 end
 
 group :test, :development do
