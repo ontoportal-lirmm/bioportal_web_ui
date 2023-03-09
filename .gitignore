@@ -32,6 +32,10 @@ nohup.out
 .idea
 *.swp
 .rbenv-gemsets
+.vscode
+config/definitions.rb
+.solargraph.yml
+.rubocop.yml
 
 .tags
 
