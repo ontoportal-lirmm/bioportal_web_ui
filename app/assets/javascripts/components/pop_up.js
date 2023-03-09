@@ -1,5 +1,5 @@
-function popUpElement(element){
-    $.facebox(() => {
-        $.facebox(element)
-    })
+function popUpElement(element) {
+  $.facebox(() => {
+    $.facebox(element);
+  });
 }

@@ -529,5 +529,5 @@ BpidResolver::VIRTUAL_FROM_ACRONYM = {
   "TM-OTHER-FACTORS" => 1571,
   "RNPRIO" => 3240,
   "MSTDE" => 3219,
-  "NBO" => 1621
+  "NBO" => 1621,
 }

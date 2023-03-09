@@ -1,12 +1,12 @@
-require 'cgi'
-require 'ostruct'
-require 'json'
-require 'open-uri'
+require "cgi"
+require "ostruct"
+require "json"
+require "open-uri"
 
 class BpidResolver
-  require Rails.root + 'lib/resolver/acronym_from_virtual'
-  require Rails.root + 'lib/resolver/virtual_from_acronym'
-  require Rails.root + 'lib/resolver/virtual_from_version'
+  require Rails.root + "lib/resolver/acronym_from_virtual"
+  require Rails.root + "lib/resolver/virtual_from_acronym"
+  require Rails.root + "lib/resolver/virtual_from_version"
 
   def self.id_to_acronym(id)
     acronym = self.acronym_from_virtual_id(id)
@@ -42,5 +42,4 @@ class BpidResolver
   def self.virtual_id_from_acronym(acronym)
     VIRTUAL_FROM_ACRONYM["old:virtual_from_acronym:#{acronym}"]
   end
-
 end

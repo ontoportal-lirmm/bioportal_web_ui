@@ -9,14 +9,17 @@ a i {
   color: $color-primary;
 }
 
-.btn-info, .btn-outline-primary:hover, .btn-primary ,  .nav-pills .nav-link.active{
+.btn-info,
+.btn-outline-primary:hover,
+.btn-primary,
+.nav-pills .nav-link.active {
   background-color: $color-primary !important;
   border-color: $color-primary !important;
   color: #fff !important;
 }
-.btn-outline-primary{
+.btn-outline-primary {
   border-color: $color-primary !important;
-  color:  $color-primary !important;
+  color: $color-primary !important;
 }
 .btn-danger {
   color: #fff !important;
@@ -27,7 +30,7 @@ a i {
 }
 
 .btn-link {
-  color:  $color-primary !important;
+  color: $color-primary !important;
 }
 .card-header.bg-success {
   font-weight: bold;
@@ -46,6 +49,6 @@ a i {
 }
 #ontology_submission_form .add-value-btn {
   margin-bottom: 0.5em;
-  margin-top: 0.0em;
-  margin-left: 0.0em;
+  margin-top: 0em;
+  margin-left: 0em;
 }

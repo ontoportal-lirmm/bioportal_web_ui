@@ -1,4 +1,3 @@
-
 @import "annotator";
 @import "app";
 @import "bootstrap_overrides";
@@ -15,7 +14,6 @@
 @import "plugins/tooltipster/sideTip/themes/tooltipster-sideTip-punk.min";
 @import "plugins/tooltipster/sideTip/themes/tooltipster-sideTip-shadow.min";
 
-
 /************************************
  * MISC
  ************************************/
@@ -29,7 +27,7 @@
 
 .tabs a.active {
   background-color: $color-primary !important;
-  color:#fff !important;
+  color: #fff !important;
 }
 
 .minimal tbody tr:hover td {
@@ -72,13 +70,15 @@ tr.mainresource td {
   color: $color-primary !important;
 }
 .sf-menu ul {
-	width: 25em !important;
+  width: 25em !important;
 }
 .sf-menu li {
-	background:	$color-secondary !important;
+  background: $color-secondary !important;
 }
-.sf-menu a, .sf-menu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
-	color: $color-links !important;
+.sf-menu a,
+.sf-menu a:visited {
+  /* visited pseudo selector so IE6 applies text colour*/
+  color: $color-links !important;
 }
 .error {
   text-indent: 25px;
@@ -94,12 +94,12 @@ textarea.error {
  ************************************/
 
 .nav-tabs .nav-link {
-  color: #999 !important
+  color: #999 !important;
 }
 
 .nav-tabs .nav-link.active {
 }
- 
+
 .navbar-brand .site-name {
   color: #fff;
   font-size: 24px;
@@ -111,9 +111,9 @@ textarea.error {
 
 .navbar-nav .nav-link {
   color: rgba(255, 255, 255, 0.7) !important;
-  
+
   &:hover {
-    color: rgba(255, 255, 255, 1.0) !important;
+    color: rgba(255, 255, 255, 1) !important;
   }
 }
 
@@ -183,7 +183,7 @@ div.logos img {
   max-height: 75px;
   margin: 5px;
   opacity: 0.8;
-  
+
   &:hover {
     opacity: 1;
   }
@@ -198,19 +198,15 @@ div.logos a {
 }
 
 @media only screen and (max-width: 992px) {
-  
   div.logos img {
     max-height: 50px !important;
   }
-  
 }
 
 @media only screen and (max-width: 768px) {
-  
   div.logos img {
     max-width: 50px !important;
   }
-  
 }
 
 /************************************
@@ -220,12 +216,12 @@ div.logos a {
 .about {
   h2 {
     font-size: 150% !important;
-    padding-bottom: .17em;
-    border-bottom: 1px solid #AAAAAA;
+    padding-bottom: 0.17em;
+    border-bottom: 1px solid #aaaaaa;
     font-weight: normal !important;
     width: auto !important;
   }
-  
+
   p {
     text-align: justify;
   }
@@ -244,7 +240,8 @@ div.logos a {
 /************************************
  * FOOTER
 ************************************/
-footer, .footer {
+footer,
+.footer {
   background-color: $color-secondary !important;
   position: relative !important;
 }

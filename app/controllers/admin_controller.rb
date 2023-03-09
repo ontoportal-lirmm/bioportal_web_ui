@@ -23,14 +23,14 @@ class AdminController < ApplicationController
   def index
     @users = LinkedData::Client::Models::User.all
     if session[:user].nil? || !session[:user].admin?
-      redirect_to :controller => 'login', :action => 'index', :redirect => '/admin'
+      redirect_to :controller => "login", :action => "index", :redirect => "/admin"
     else
       render action: "index"
     end
   end
 
   def update_info
-    response = {update_info: Hash.new, errors: '', success: '', notices: ''}
+    response = { update_info: Hash.new, errors: "", success: "", notices: "" }
     json = LinkedData::Client::HTTP.get("#{ADMIN_URL}update_info", params, raw: true)
 
     begin
@@ -60,7 +60,7 @@ class AdminController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params["acronym"]).first
     begin
       submissions = @ontology.explore.submissions
-      @submissions = submissions.sort {|a,b| b.submissionId <=> a.submissionId }
+      @submissions = submissions.sort { |a, b| b.submissionId <=> a.submissionId }
     rescue
       @submissions = []
     end
@@ -72,7 +72,7 @@ class AdminController < ApplicationController
     @parse_log = LinkedData::Client::HTTP.get(PARSE_LOG_URL.call(params["acronym"]), {}, raw: false)
     ontologies_report = _ontologies_report
     ontology = ontologies_report[:ontologies][params["acronym"].to_sym]
-    @log_file_path = ''
+    @log_file_path = ""
 
     if ontology
       full_log_file_path = ontology[:logFilePath]
@@ -85,7 +85,7 @@ class AdminController < ApplicationController
   end
 
   def clearcache
-    response = {errors: '', success: ''}
+    response = { errors: "", success: "" }
 
     if @cache.respond_to?(:flush_all)
       begin
@@ -101,7 +101,7 @@ class AdminController < ApplicationController
   end
 
   def resetcache
-    response = {errors: '', success: ''}
+    response = { errors: "", success: "" }
 
     if @cache.respond_to?(:reset)
       begin
@@ -117,7 +117,7 @@ class AdminController < ApplicationController
   end
 
   def clear_goo_cache
-    response = {errors: '', success: ''}
+    response = { errors: "", success: "" }
 
     begin
       response_raw = LinkedData::Client::HTTP.post("#{ADMIN_URL}clear_goo_cache", params, raw: true)
@@ -129,7 +129,7 @@ class AdminController < ApplicationController
   end
 
   def clear_http_cache
-    response = {errors: '', success: ''}
+    response = { errors: "", success: "" }
 
     begin
       response_raw = LinkedData::Client::HTTP.post("#{ADMIN_URL}clear_http_cache", params, raw: true)
@@ -146,7 +146,7 @@ class AdminController < ApplicationController
   end
 
   def refresh_ontologies_report
-    response = {errors: '', success: ''}
+    response = { errors: "", success: "" }
 
     begin
       response_raw = LinkedData::Client::HTTP.post(ONTOLOGIES_URL, params, raw: true)
@@ -158,10 +158,10 @@ class AdminController < ApplicationController
         response = response_json
 
         if params["ontologies"].nil? || params["ontologies"].empty?
-          response[:success] = "Refresh of ontologies report started successfully";
+          response[:success] = "Refresh of ontologies report started successfully"
         else
-          ontologies = params["ontologies"].split(",").map {|o| o.strip}
-          response[:success] = "Refresh of report for ontologies: #{ontologies.join(", ")} started successfully";
+          ontologies = params["ontologies"].split(",").map { |o| o.strip }
+          response[:success] = "Refresh of report for ontologies: #{ontologies.join(", ")} started successfully"
         end
       end
     rescue Exception => e
@@ -172,15 +172,15 @@ class AdminController < ApplicationController
   end
 
   def process_ontologies
-    _process_ontologies('enqued for processing', 'processing', :_process_ontology)
+    _process_ontologies("enqued for processing", "processing", :_process_ontology)
   end
 
   def delete_ontologies
-    _process_ontologies('and all its artifacts deleted', 'deleting', :_delete_ontology)
+    _process_ontologies("and all its artifacts deleted", "deleting", :_delete_ontology)
   end
 
   def delete_submission
-    response = {errors: '', success: ''}
+    response = { errors: "", success: "" }
 
     begin
       ont = params["acronym"]
@@ -188,7 +188,7 @@ class AdminController < ApplicationController
 
       if ontology
         submissions = ontology.explore.submissions
-        submission = submissions.select {|o| o.submissionId == params["id"].to_i}.first
+        submission = submissions.select { |o| o.submissionId == params["id"].to_i }.first
 
         if submission
           error_response = submission.delete
@@ -216,7 +216,6 @@ class AdminController < ApplicationController
     render :json => response
   end
 
-
   private
 
   def cache_setup
@@ -224,7 +223,7 @@ class AdminController < ApplicationController
   end
 
   def _ontologies_report
-    response = {ontologies: Hash.new, report_date_generated: REPORT_NEVER_GENERATED, errors: '', success: ''}
+    response = { ontologies: Hash.new, report_date_generated: REPORT_NEVER_GENERATED, errors: "", success: "" }
     start = Time.now
 
     begin
@@ -244,7 +243,7 @@ class AdminController < ApplicationController
     response
   end
 
-  def _process_errors(errors, response, remove_trailing_comma=true)
+  def _process_errors(errors, response, remove_trailing_comma = true)
     if errors.is_a?(Hash)
       errors.each do |_, v|
         if v.kind_of?(Array)
@@ -255,7 +254,7 @@ class AdminController < ApplicationController
         end
       end
     elsif errors.kind_of?(Array)
-      errors.each {|err| response[:errors] << "#{err}, "}
+      errors.each { |err| response[:errors] << "#{err}, " }
     end
     response[:errors] = response[:errors][0...-2] if remove_trailing_comma
   end
@@ -270,12 +269,12 @@ class AdminController < ApplicationController
   end
 
   def _process_ontologies(success_keyword, error_keyword, process_proc)
-    response = {errors: '', success: ''}
+    response = { errors: "", success: "" }
 
     if params["ontologies"].nil? || params["ontologies"].empty?
       response[:errors] = "No ontologies parameter passed. Syntax: ?ontologies=ONT1,ONT2,...,ONTN"
     else
-      ontologies = params["ontologies"].split(",").map {|o| o.strip}
+      ontologies = params["ontologies"].split(",").map { |o| o.strip }
 
       ontologies.each do |ont|
         begin
@@ -303,17 +302,16 @@ class AdminController < ApplicationController
   end
 
   def _users
-    response = {users: Hash.new , errors: '', success: ''}
+    response = { users: Hash.new, errors: "", success: "" }
     start = Time.now
     begin
-      response[:users] = JSON.parse(LinkedData::Client::HTTP.get(USERS_URL, {include: 'all'}, raw: true))
+      response[:users] = JSON.parse(LinkedData::Client::HTTP.get(USERS_URL, { include: "all" }, raw: true))
 
       response[:success] = "users successfully retrieved in  #{Time.now - start}s"
-    LOG.add :debug, "Users - retrieved #{response[:users].length} users in #{Time.now - start}s"
+      LOG.add :debug, "Users - retrieved #{response[:users].length} users in #{Time.now - start}s"
     rescue Exception => e
       response[:errors] = "Problem retrieving users  - #{e.message}"
     end
     response
   end
-
 end

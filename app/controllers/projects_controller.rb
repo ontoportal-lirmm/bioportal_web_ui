@@ -7,9 +7,9 @@ class ProjectsController < ApplicationController
   def index
     @projects = LinkedData::Client::Models::Project.all
     @projects.reject! { |p| p.name.nil? }
-    @projects.sort! { |a,b| a.name.downcase <=> b.name.downcase }
+    @projects.sort! { |a, b| a.name.downcase <=> b.name.downcase }
     @ontologies = LinkedData::Client::Models::Ontology.all(include_views: true)
-    @ontologies_hash = Hash[@ontologies.map {|ont| [ont.id, ont]}]
+    @ontologies_hash = Hash[@ontologies.map { |ont| [ont.id, ont] }]
     if request.xhr?
       render action: "index", layout: false
     else
@@ -26,7 +26,7 @@ class ProjectsController < ApplicationController
       redirect_to projects_path
       return
     end
-    
+
     @project = projects.first
     @ontologies_used = []
     onts_used = @project.ontologyUsed
@@ -36,18 +36,18 @@ class ProjectsController < ApplicationController
         @ontologies_used << Hash["name", ont.name, "acronym", ont.acronym]
       end
     end
-    @ontologies_used.sort_by!{ |o| o["name"].downcase }
+    @ontologies_used.sort_by! { |o| o["name"].downcase }
   end
 
   # GET /projects/new
   # GET /projects/new.xml
   def new
     if session[:user].nil?
-      redirect_to :controller => 'login', :action => 'index'
+      redirect_to :controller => "login", :action => "index"
     else
       @project = LinkedData::Client::Models::Project.new
-      @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
-      @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
+      @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
+      @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
     end
   end
 
@@ -60,8 +60,8 @@ class ProjectsController < ApplicationController
       return
     end
     @project = projects.first
-    @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
-    @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
+    @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
+    @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
     @usedOntologies = @project.ontologyUsed || []
     @ontologies = LinkedData::Client::Models::Ontology.all
   end
@@ -69,17 +69,17 @@ class ProjectsController < ApplicationController
   # POST /projects
   # POST /projects.xml
   def create
-    if params['commit'] == 'Cancel'
+    if params["commit"] == "Cancel"
       redirect_to projects_path
       return
     end
 
     @project = LinkedData::Client::Models::Project.new(values: project_params)
     @project_saved = @project.save
-    
+
     # Project successfully created.
     if response_success?(@project_saved)
-      flash[:notice] = 'Project successfully created'
+      flash[:notice] = "Project successfully created"
       redirect_to project_path(@project.acronym)
       return
     end
@@ -93,15 +93,15 @@ class ProjectsController < ApplicationController
     end
 
     @project = LinkedData::Client::Models::Project.new(values: project_params)
-    @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
-    @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
+    @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
+    @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
     render action: "new"
   end
 
   # PUT /projects/1
   # PUT /projects/1.xml
   def update
-    if params['commit'] == 'Cancel'
+    if params["commit"] == "Cancel"
       redirect_to projects_path
       return
     end
@@ -113,8 +113,8 @@ class ProjectsController < ApplicationController
     end
     @project = projects.first
     @project.update_from_params(project_params)
-    @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
-    @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
+    @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
+    @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
     @usedOntologies = @project.ontologyUsed || []
     @ontologies = LinkedData::Client::Models::Ontology.all
     error_response = @project.update
@@ -122,7 +122,7 @@ class ProjectsController < ApplicationController
       @errors = response_errors(error_response)
       render :edit
     else
-      flash[:notice] = 'Project successfully updated'
+      flash[:notice] = "Project successfully updated"
       redirect_to project_path(@project.acronym)
     end
   end
@@ -143,33 +143,31 @@ class ProjectsController < ApplicationController
       flash[:notice] = "Project delete failed: #{@errors}"
       respond_to do |format|
         format.html { redirect_to projects_path }
-        format.xml  { head :internal_server_error }
+        format.xml { head :internal_server_error }
       end
     else
-      flash[:notice] = 'Project successfully deleted'
+      flash[:notice] = "Project successfully deleted"
       respond_to do |format|
         format.html { redirect_to projects_path }
-        format.xml  { head :ok }
+        format.xml { head :ok }
       end
     end
-
   end
 
   private
 
   def project_params
-    p = params.require(:project).permit(:name, :acronym, :institution, :contacts, { creator:[] }, :homePage,
-                                        :description, { ontologyUsed:[] })
+    p = params.require(:project).permit(:name, :acronym, :institution, :contacts, { creator: [] }, :homePage,
+                                        :description, { ontologyUsed: [] })
     p[:creator].reject!(&:blank?)
     p[:ontologyUsed].reject!(&:blank?)
     p.to_h
   end
 
   def flash_error(msg)
-    html = ''.html_safe
-    html << '<span style=color:red;>'.html_safe
+    html = "".html_safe
+    html << "<span style=color:red;>".html_safe
     html << msg
-    html << '</span>'.html_safe
+    html << "</span>".html_safe
   end
-
 end

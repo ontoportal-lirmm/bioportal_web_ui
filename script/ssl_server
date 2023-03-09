@@ -1,34 +1,34 @@
 #!/usr/bin/env ruby
-require_relative '../config/boot'
+require_relative "../config/boot"
 
-require 'active_support'
-require 'action_controller'
+require "active_support"
+require "action_controller"
 
-require 'webrick'
-require 'openssl'
-require 'webrick/https'
+require "webrick"
+require "openssl"
+require "webrick/https"
 
-require 'fileutils'
-require 'optparse'
+require "fileutils"
+require "optparse"
 
 # TODO: Push Thin adapter upstream so we don't need worry about requiring it
 begin
-  require_library_or_gem 'thin'
+  require_library_or_gem "thin"
 rescue Exception
   # Thin not available
 end
 
 options = {
-  :Port            => 443,
-  :Host            => "0.0.0.0",
-  :environment     => (Rails.env || "development").dup,
-  :config          => Rails.root + "/config.ru",
-  :detach          => false,
-  :debugger        => false,
-  :path            => nil,
-  :SSLEnable       => true,
+  :Port => 443,
+  :Host => "0.0.0.0",
+  :environment => (Rails.env || "development").dup,
+  :config => Rails.root + "/config.ru",
+  :detach => false,
+  :debugger => false,
+  :path => nil,
+  :SSLEnable => true,
   :SSLVerifyClient => OpenSSL::SSL::VERIFY_NONE,
-  :SSLCertName     => [ [ "CN", WEBrick::Utils::getservername ] ]
+  :SSLCertName => [["CN", WEBrick::Utils::getservername]],
 }
 
 ARGV.clone.options do |opts|
@@ -58,13 +58,13 @@ puts "=> Booting #{ActiveSupport::Inflector.demodulize(server)}"
 puts "=> Rails #{Rails.version} application starting on http://#{options[:Host]}:#{options[:Port]}#{options[:path]}"
 
 %w(cache pids sessions sockets).each do |dir_to_make|
-  FileUtils.mkdir_p(Rails.root.join('tmp', dir_to_make))
+  FileUtils.mkdir_p(Rails.root.join("tmp", dir_to_make))
 end
 
 if options[:detach]
   Process.daemon
   pid = "#{Rails.root}/tmp/pids/server.pid"
-  File.open(pid, 'w'){ |f| f.write(Process.pid) }
+  File.open(pid, "w") { |f| f.write(Process.pid) }
   at_exit { File.delete(pid) if File.exist?(pid) }
 end
 
@@ -81,10 +81,10 @@ if File.exist?(options[:config])
     inner_app = eval("Rack::Builder.new {( " + cfgfile + "\n )}.to_app", nil, config)
   else
     require config
-    inner_app = Object.const_get(File.basename(config, '.rb').capitalize)
+    inner_app = Object.const_get(File.basename(config, ".rb").capitalize)
   end
 else
-  require Rails.root.join('config', 'environment')
+  require Rails.root.join("config", "environment")
   inner_app = ActionController::Dispatcher.new
 end
 
@@ -113,5 +113,5 @@ puts "=> Ctrl-C to shutdown server"
 begin
   server.run(app, options.merge(:AccessLog => []))
 ensure
-  puts 'Exiting'
+  puts "Exiting"
 end

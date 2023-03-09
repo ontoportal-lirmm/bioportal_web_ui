@@ -18,11 +18,11 @@ jQuery(document).ready(function(){
   if (jQuery("#submission_isRemote_0").is(":checked")) {
     location_toggle("upload");
   }
-  
+
   if (jQuery("#submission_isRemote_1").is(":checked")) {
     location_toggle("remote");
   }
-  
+
   // Select default 'File Location' radio button
   if (!jQuery("#submission_isRemote_0").is(":checked") && !jQuery("#submission_isRemote_1").is(":checked") && !jQuery("#submission_isRemote_2").is(":checked")) {
     jQuery("#submission_isRemote_0").attr("checked", "checked")
@@ -56,7 +56,7 @@ jQuery(document).ready(function(){
       } else {
         error.insertAfter(element);
       }
-    }  
+    }
   });
 });
 
@@ -73,7 +73,7 @@ function addContact(event) {
   removeButton.classList.add("ml-1")
   removeButton.querySelector("i").classList.replace("fa-plus", "fa-minus");
   newContact.appendChild(removeButton);
-  
+
   var index = contacts.length;
   var inputs = newContact.getElementsByTagName("input");
   for (var i = 0; i < inputs.length; i++) {
@@ -84,7 +84,7 @@ function addContact(event) {
 
     var name = input.getAttribute("name").replace(/0/g, index);
     input.setAttribute("name", name);
-    
+
     input.setAttribute("value", "");
 
     input.removeAttribute("required");
@@ -110,7 +110,7 @@ function removeContact(event) {
 function toggleOntologyFormatOptions(selectedFormat) {
   var advancedOWLOptionsButton = jQuery("#collapseOWLOptions");
   var skosHelpText = jQuery("#helpSkosFormat");
-  
+
   switch(selectedFormat){
     case 'OWL':
       advancedOWLOptionsButton.show();

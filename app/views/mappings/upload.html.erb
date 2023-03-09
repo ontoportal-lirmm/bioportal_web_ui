@@ -2,13 +2,13 @@
 <h1><%=flash[:notice]%></h1>
 
 <%= form_tag ("/process/mapping", {:multipart => true}) do %>
-    <label for="file">File:</label> 
+    <label for="file">File:</label>
     <%= file_field_tag "file" %>
 <br>
 
 	<label for="user">User:</label>
 	<select name="user">
-		<%=options_from_collection_for_select(@users, "id", "username", selected = nil)%>	
+		<%=options_from_collection_for_select(@users, "id", "username", selected = nil)%>
 	</select>
 
 <br>
@@ -42,7 +42,7 @@
 	<input type="text" name="relationship">
 	<br>
 	<label for="delimiter">Delimiter use , or t for tab</label>
-	<input type="text" name="delimiter">	
+	<input type="text" name="delimiter">
 	<br>
     <%= submit_tag  "Upload" %>
 <% end %>

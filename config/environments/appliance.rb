@@ -11,7 +11,7 @@ BioportalWebUi::Application.configure do
   config.eager_load = true
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
   # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
@@ -38,7 +38,7 @@ BioportalWebUi::Application.configure do
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
   # Specifies the header that your server uses for sending files.
-  config.action_dispatch.x_sendfile_header = 'X-Sendfile' unless config.public_file_server.enabled # for Apache
+  config.action_dispatch.x_sendfile_header = "X-Sendfile" unless config.public_file_server.enabled # for Apache
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
@@ -75,18 +75,17 @@ BioportalWebUi::Application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Include the BioPortal-specific configuration options
-  require Rails.root.join('config', "bioportal_config_#{Rails.env}.rb")
+  require Rails.root.join("config", "bioportal_config_#{Rails.env}.rb")
 
   # Use a different cache store in the appliance.
-  config.cache_store = :mem_cache_store, ENV["MEMCACHE_SERVERS"] || "localhost:11211", { :namespace => 'bioportal_web_ui', :expires_in => 1.day }
-
+  config.cache_store = :mem_cache_store, ENV["MEMCACHE_SERVERS"] || "localhost:11211", { :namespace => "bioportal_web_ui", :expires_in => 1.day }
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
 
   # Add custom data attributes to sanitize allowed list
-  config.action_view.sanitized_allowed_attributes = ['id', 'class', 'style', 'data-cls', 'data-ont']
+  config.action_view.sanitized_allowed_attributes = ["id", "class", "style", "data-cls", "data-ont"]
 
   # TODO: Fix this?
   # enable json logging format.  Useful for logstash

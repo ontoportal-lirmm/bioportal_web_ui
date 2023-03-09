@@ -1,17 +1,13 @@
-require 'open-uri'
-require 'net/http'
-require 'uri'
-require 'cgi'
+require "open-uri"
+require "net/http"
+require "uri"
+require "cgi"
 
 class AjaxProxyController < ApplicationController
-
-
   def get
-
     page = open(params[:url])
-    content =  page.read
+    content = page.read
     render :text => content
-
   end
 
   def jsonp
@@ -33,7 +29,7 @@ class AjaxProxyController < ApplicationController
     headers = { "Accept" => "application/json" }
     res = http.get(full_path, headers)
     response = res.code.to_i >= 400 ? { :status => res.code.to_i, :body => res.body }.to_json : res.body
-    render_json response, {:status => 200}
+    render_json response, { :status => 200 }
   end
 
   def json_class
@@ -56,7 +52,6 @@ class AjaxProxyController < ApplicationController
     render_json @concept.to_json
   end
 
-
   def json_ontology
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     ontology_not_found(params[:ontology]) if @ontology.nil?
@@ -70,20 +65,19 @@ class AjaxProxyController < ApplicationController
 
   private
 
-  def render_json(json, options={})
+  def render_json(json, options = {})
     callback, variable = params[:callback], params[:variable]
     response = begin
-      if callback && variable
-        "var #{variable} = #{json};\n#{callback}(#{variable});"
-      elsif variable
-        "var #{variable} = #{json};"
-      elsif callback
-        "#{callback}(#{json});"
-      else
-        json
+        if callback && variable
+          "var #{variable} = #{json};\n#{callback}(#{variable});"
+        elsif variable
+          "var #{variable} = #{json};"
+        elsif callback
+          "#{callback}(#{json});"
+        else
+          json
+        end
       end
-    end
-    render({plain: response, content_type: "application/json"}.merge(options))
+    render({ plain: response, content_type: "application/json" }.merge(options))
   end
-
 end

@@ -1,7 +1,6 @@
-require 'uri'
+require "uri"
 
 class SearchController < ApplicationController
-
   skip_before_action :verify_authenticity_token
 
   layout :determine_layout
@@ -31,12 +30,12 @@ class SearchController < ApplicationController
 
       target_value = result.prefLabel
       case params[:target]
-        when "name"
-          target_value = result.prefLabel
-        when "shortid"
-          target_value = result.id
-        when "uri"
-          target_value = result.id
+      when "name"
+        target_value = result.prefLabel
+      when "shortid"
+        target_value = result.id
+      when "uri"
+        target_value = result.id
       end
 
       json = []
@@ -72,7 +71,7 @@ class SearchController < ApplicationController
 
     content_type = "text/html"
     if params[:response].eql?("json")
-      response = response.gsub("\"","'")
+      response = response.gsub("\"", "'")
       response = "#{params[:callback]}({data:\"#{response}\"})"
       content_type = "application/javascript"
     end
@@ -80,12 +79,11 @@ class SearchController < ApplicationController
     render plain: response, content_type: content_type
   end
 
-
   private
 
   def check_params_query(params)
     params[:q] = params[:q].strip
-    params[:q] = params[:q] + '*' unless params[:q].end_with?("*") # Add wildcard
+    params[:q] = params[:q] + "*" unless params[:q].end_with?("*") # Add wildcard
   end
 
   def check_params_ontologies(params)
@@ -97,7 +95,7 @@ class SearchController < ApplicationController
         params[:ontologies] = [params[:ontologies]]
       end
       if params[:ontologies].first.to_i > 0
-        params[:ontologies].map! {|o| BpidResolver.id_to_acronym(o)}
+        params[:ontologies].map! { |o| BpidResolver.id_to_acronym(o) }
       end
       params[:ontologies] = params[:ontologies].join(",")
     end
@@ -105,19 +103,18 @@ class SearchController < ApplicationController
 
   def format_record_type(record_type, obsolete = false)
     case record_type
-      when "apreferredname"
-        record_text = "Preferred Name"
-      when "bconceptid"
-        record_text = "Class ID"
-      when "csynonym"
-        record_text = "Synonym"
-      when "dproperty"
-        record_text = "Property"
-      else
-        record_text = ""
+    when "apreferredname"
+      record_text = "Preferred Name"
+    when "bconceptid"
+      record_text = "Class ID"
+    when "csynonym"
+      record_text = "Synonym"
+    when "dproperty"
+      record_text = "Property"
+    else
+      record_text = ""
     end
     record_text = "Obsolete Class" if obsolete
     record_text
   end
-
 end

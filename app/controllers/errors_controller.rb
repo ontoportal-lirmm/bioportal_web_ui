@@ -1,5 +1,4 @@
 class ErrorsController < ApplicationController
-
   layout :determine_layout
 
   def not_found
@@ -9,5 +8,4 @@ class ErrorsController < ApplicationController
   def internal_server_error
     render status: 500
   end
-
 end

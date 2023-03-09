@@ -7140,5 +7140,5 @@ BpidResolver::VIRTUAL_FROM_VERSION = {
   "old:virtual_from_version:44331" => 1070,
   "old:virtual_from_version:42200" => 1009,
   "old:virtual_from_version:45746" => 1125,
-  "old:virtual_from_version:44215" => 1109
+  "old:virtual_from_version:44215" => 1109,
 }

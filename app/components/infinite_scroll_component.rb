@@ -18,5 +18,4 @@ class InfiniteScrollComponent < ViewComponent::Base
   def auto_click?
     @auto_click
   end
-
 end

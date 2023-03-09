@@ -1,5 +1,5 @@
 $ont-metadata-bg-color: #e2ebf0;
-$widget-table-border-color: #EFEFEF;
+$widget-table-border-color: #efefef;
 $ont-show-bg-color: #e9ecef;
 
 .ontologies.show {
@@ -17,7 +17,7 @@ $ont-show-bg-color: #e9ecef;
 
   &.gutter-horizontal {
     cursor: col-resize;
-    background-image: image-url('split/vertical.png');
+    background-image: image-url("split/vertical.png");
   }
 }
 
@@ -26,7 +26,7 @@ $ont-show-bg-color: #e9ecef;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  
+
   background-color: white;
   padding: 0.75rem 1.25rem;
 
@@ -41,7 +41,7 @@ $ont-show-bg-color: #e9ecef;
 
   a {
     color: #6c757d;
- 
+
     &:hover {
       color: #0056b3;
       text-decoration: none;
@@ -78,11 +78,14 @@ $ont-show-bg-color: #e9ecef;
     grid-template-columns: 60% 40%;
   }
 
-  .ont-details-card, .ont-subs-card, .ont-views-card {
+  .ont-details-card,
+  .ont-subs-card,
+  .ont-views-card {
     margin-right: 16px;
   }
 
-  .ont-metrics-card, .ont-analytics-card {
+  .ont-metrics-card,
+  .ont-analytics-card {
     margin-bottom: 32px;
   }
 }
@@ -113,7 +116,7 @@ $ont-show-bg-color: #e9ecef;
   }
 
   dd {
-    font-size: .9em;
+    font-size: 0.9em;
     padding-left: 10px;
   }
 }
@@ -160,7 +163,7 @@ $ont-show-bg-color: #e9ecef;
 }
 
 #ontology_versions td.show_more_subs {
-  text-align: right; 
+  text-align: right;
   background-color: white;
 }
 
@@ -185,7 +188,6 @@ $ont-show-bg-color: #e9ecef;
   -webkit-box-shadow: none;
 }
 
-
 #bd .bd_content .cls-info-container #contents {
   float: left;
   width: 100%;
@@ -201,8 +203,9 @@ $ont-show-bg-color: #e9ecef;
 ************************************/
 
 #propTree a {
-  font-family: "Myriad Pro","Myriad Web Pro","Myriad Web","Myriad","Trebuchet MS","Tahoma","Helvetica","Arial",sans-serif;
-  font: small/1.231 arial,helvetica,clean,sans-serif;
+  font-family: "Myriad Pro", "Myriad Web Pro", "Myriad Web", "Myriad",
+    "Trebuchet MS", "Tahoma", "Helvetica", "Arial", sans-serif;
+  font: small/1.231 arial, helvetica, clean, sans-serif;
 }
 
 .ont-properties {
@@ -249,7 +252,7 @@ $ont-show-bg-color: #e9ecef;
 }
 
 #ontology-browse-help i {
-  margin-left: .25em;
+  margin-left: 0.25em;
 }
 
 /************************************
@@ -261,7 +264,8 @@ $ont-show-bg-color: #e9ecef;
   white-space: nowrap;
   min-width: 10%;
   a {
-    font-family: "Myriad Pro", "Myriad Web Pro", "Myriad Web", "Myriad", "Trebuchet MS", "Tahoma", "Helvetica", "Arial", sans-serif;
+    font-family: "Myriad Pro", "Myriad Web Pro", "Myriad Web", "Myriad",
+      "Trebuchet MS", "Tahoma", "Helvetica", "Arial", sans-serif;
     font: small/1.231 arial, helvetica, clean, sans-serif;
   }
 }
@@ -270,5 +274,3 @@ $ont-show-bg-color: #e9ecef;
   display: flex;
   flex-direction: row;
 }
-
-

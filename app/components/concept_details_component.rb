@@ -20,7 +20,7 @@ class ConceptDetailsComponent < ViewComponent::Base
   end
 
   def render_properties(properties_set, ontology_acronym, &block)
-    out = ''
+    out = ""
     properties_set.each do |key, data|
       next if exclude_relation?(key) || !data[:values]
 
@@ -31,7 +31,7 @@ class ConceptDetailsComponent < ViewComponent::Base
         if block_given?
           block.call(v)
         else
-          get_link_for_cls_ajax(v, ontology_acronym, '_blank')
+          get_link_for_cls_ajax(v, ontology_acronym, "_blank")
         end
       end
 
@@ -40,7 +40,7 @@ class ConceptDetailsComponent < ViewComponent::Base
                 <td nowrap= "" style="width:30%" >
                     <span title=#{url} data-controller="tooltip">#{remove_owl_notation(key)}</span>
                 </td>
-                <td>#{"<p>#{ajax_links.join('</p><p>')}</p>".html_safe}</td>
+                <td>#{"<p>#{ajax_links.join("</p><p>")}</p>".html_safe}</td>
               </tr>
       EOS
       out += line
@@ -64,6 +64,7 @@ class ConceptDetailsComponent < ViewComponent::Base
   end
 
   private
+
   def concept_properties2hash(properties)
     # NOTE: example properties
     #
@@ -104,8 +105,8 @@ class ConceptDetailsComponent < ViewComponent::Base
       if k.start_with?("http")
         label = LinkedData::Client::HTTP.get("/ontologies/#{@ontology.acronym}/properties/#{CGI.escape(k)}/label").label rescue ""
         if label.nil? || label.empty?
-          k = k.gsub(/.*#/, '') # greedy regex replace everything up to last '#'
-          k = k.gsub(/.*\//, '') # greedy regex replace everything up to last '/'
+          k = k.gsub(/.*#/, "") # greedy regex replace everything up to last '#'
+          k = k.gsub(/.*\//, "") # greedy regex replace everything up to last '/'
           # That might take care of nearly everything to be shortened.
           label = k
         end
@@ -124,7 +125,7 @@ class ConceptDetailsComponent < ViewComponent::Base
   end
 
   def exclude_relation?(relation_to_check, ontology = nil)
-    excluded_relations = [ "type", "rdf:type", "[R]", "SuperClass", "InstanceCount" ]
+    excluded_relations = ["type", "rdf:type", "[R]", "SuperClass", "InstanceCount"]
 
     # Show or hide property based on the property and ontology settings
     if ontology
@@ -140,5 +141,4 @@ class ConceptDetailsComponent < ViewComponent::Base
     end
     return false
   end
-
 end

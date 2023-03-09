@@ -13,7 +13,7 @@ Rails.application.configure do
   config.eager_load = true
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
   # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
@@ -37,7 +37,7 @@ Rails.application.configure do
   # config.asset_host = "http://assets.example.com"
 
   # Specifies the header that your server uses for sending files.
-  config.action_dispatch.x_sendfile_header = 'X-Sendfile' unless config.public_file_server.enabled # for Apache
+  config.action_dispatch.x_sendfile_header = "X-Sendfile" unless config.public_file_server.enabled # for Apache
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
@@ -56,7 +56,7 @@ Rails.application.configure do
   config.log_level = :info
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
+  config.log_tags = [:request_id]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -92,18 +92,18 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
   # Include the BioPortal-specific configuration options
-  require Rails.root.join('config', "bioportal_config_#{Rails.env}.rb")
-  
+  require Rails.root.join("config", "bioportal_config_#{Rails.env}.rb")
+
   # Use a different cache store in production.
-  config.cache_store = :mem_cache_store, ENV["MEMCACHE_SERVERS"] || "localhost:11211", { namespace: 'bioportal_web_ui', expires_in: 1.day }
+  config.cache_store = :mem_cache_store, ENV["MEMCACHE_SERVERS"] || "localhost:11211", { namespace: "bioportal_web_ui", expires_in: 1.day }
 
   # Add custom data attributes to sanitize allowed list
-  config.action_view.sanitized_allowed_attributes = ['id', 'class', 'style', 'data-cls', 'data-ont']
+  config.action_view.sanitized_allowed_attributes = ["id", "class", "style", "data-cls", "data-ont"]
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
 
   # Do not dump schema after migrations.

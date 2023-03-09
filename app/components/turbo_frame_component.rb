@@ -3,7 +3,7 @@
 class TurboFrameComponent < ViewComponent::Base
   include Turbo::FramesHelper
 
-  def initialize(id:, src: '', **html_options)
+  def initialize(id:, src: "", **html_options)
     @id = id
     @src = src
     @html_options = html_options
@@ -12,10 +12,10 @@ class TurboFrameComponent < ViewComponent::Base
   def turbo_frame_html_options
     out = {
       data: {
-        'turbo-frame-error-target': 'frame',
-        action: 'turbo:before-fetch-response->turbo-frame-error#showError turbo:before-fetch-request->turbo-frame-error#hideError'
+        'turbo-frame-error-target': "frame",
+        action: "turbo:before-fetch-response->turbo-frame-error#showError turbo:before-fetch-request->turbo-frame-error#hideError",
       },
-      class: 'w-100'
+      class: "w-100",
     }
     if @html_options.nil?
       @html_options = out
@@ -24,10 +24,9 @@ class TurboFrameComponent < ViewComponent::Base
       @html_options[:data].merge!(out[:data]) do |_, old, new|
         "#{old} #{new}"
       end
-      @html_options[:class] ||= ''
+      @html_options[:class] ||= ""
       @html_options[:class] += " #{out[:class]}"
     end
-
 
     @html_options
   end

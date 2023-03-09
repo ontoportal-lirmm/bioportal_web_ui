@@ -37,13 +37,13 @@ set :log_level, :error
 #   }
 # setting per server overrides global ssh_options
 set :ssh_options, {
-  user: 'deployer',
-  forward_agent: 'true',
+  user: "deployer",
+  forward_agent: "true",
   keys: %w(config/deploy_id_rsa),
   auth_methods: %w(publickey),
   # use ssh proxy if UI servers are on a private network
-  proxy: Net::SSH::Proxy::Command.new('ssh deployer@sshproxy.ontoportal.org -W %h:%p')
+  proxy: Net::SSH::Proxy::Command.new("ssh deployer@sshproxy.ontoportal.org -W %h:%p"),
 }
 
 #private git repo for configuraiton
-PRIVATE_CONFIG_REPO = ENV.include?('PRIVATE_CONFIG_REPO') ? ENV['PRIVATE_CONFIG_REPO'] : 'git@github.com:author/private_config_repo.git'
+PRIVATE_CONFIG_REPO = ENV.include?("PRIVATE_CONFIG_REPO") ? ENV["PRIVATE_CONFIG_REPO"] : "git@github.com:author/private_config_repo.git"

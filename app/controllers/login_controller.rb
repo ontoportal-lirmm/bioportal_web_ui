@@ -1,5 +1,4 @@
 class LoginController < ApplicationController
-
   layout :determine_layout
 
   def index
@@ -7,7 +6,7 @@ class LoginController < ApplicationController
     if params[:redirect]
       # Get the original, encoded redirect
       uri = URI.parse(request.url)
-      orig_params = Hash[uri.query.split("&").map {|e| e.split("=",2)}].symbolize_keys
+      orig_params = Hash[uri.query.split("&").map { |e| e.split("=", 2) }].symbolize_keys
       session[:redirect] = orig_params[:redirect]
     else
       session[:redirect] = request.referer
@@ -27,14 +26,13 @@ class LoginController < ApplicationController
           redirect = CGI.unescape(session[:redirect])
         end
 
-
         redirect_to redirect
       else
         @errors << "Invalid account name/password combination"
-        render :action => 'index'
+        render :action => "index"
       end
     else
-      render :action => 'index'
+      render :action => "index"
     end
   end
 
@@ -79,7 +77,7 @@ class LoginController < ApplicationController
   def send_pass
     username = params[:user][:account_name]
     email = params[:user][:email]
-    resp = LinkedData::Client::HTTP.post("/users/create_reset_password_token", {username: username, email: email})
+    resp = LinkedData::Client::HTTP.post("/users/create_reset_password_token", { username: username, email: email })
 
     if resp.nil?
       redirect_to login_index_path, notice: "Please check your email for a message with reset instructions"
@@ -93,7 +91,7 @@ class LoginController < ApplicationController
     username = params[:un]
     email = params[:em]
     token = params[:tk]
-    @user = LinkedData::Client::HTTP.post("/users/reset_password", {username: username, email: email, token: token})
+    @user = LinkedData::Client::HTTP.post("/users/reset_password", { username: username, email: email, token: token })
     if @user.is_a?(LinkedData::Client::Models::User)
       @user.validate_password = true
       login(@user)
@@ -115,17 +113,15 @@ class LoginController < ApplicationController
   end
 
   def validate(params)
-    errors=[]
+    errors = []
 
-    if params[:username].nil? || params[:username].length <1
+    if params[:username].nil? || params[:username].length < 1
       errors << "Please enter an account name"
     end
-    if params[:password].nil? || params[:password].length <1
+    if params[:password].nil? || params[:password].length < 1
       errors << "Please enter a password"
     end
 
     return errors
   end
-
-
 end

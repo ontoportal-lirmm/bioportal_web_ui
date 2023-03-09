@@ -1,10 +1,12 @@
-import {Controller} from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="labels-ajax-container"
 export default class extends Controller {
-    static outlets = ['label-ajax']
+  static outlets = ["label-ajax"];
 
-    abortAll() {
-        this.labelAjaxOutlets.forEach((link) => {link.abort()})
-    }
+  abortAll() {
+    this.labelAjaxOutlets.forEach((link) => {
+      link.abort();
+    });
+  }
 }

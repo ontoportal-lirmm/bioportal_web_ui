@@ -35,8 +35,6 @@
 //= require submissions
 //= require tooltipster.bundle.min
 //= require application_esbuild
-customElements.define('data-table-loader', DataTableLoader );
-customElements.define('data-table', DataTable );
-customElements.define('instances-table', InstancesTable );
-
-
+customElements.define("data-table-loader", DataTableLoader);
+customElements.define("data-table", DataTable);
+customElements.define("instances-table", InstancesTable);

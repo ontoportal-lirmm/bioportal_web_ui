@@ -1,10 +1,10 @@
 .create_note_container {
-  padding: .5em;
+  padding: 0.5em;
   width: 750px;
 }
 
 .create_note_buttons {
-  padding: .5em;
+  padding: 0.5em;
   margin-bottom: -1px;
 }
 
@@ -12,7 +12,7 @@
   cursor: pointer;
   color: #234979;
   background: white;
-  border: 1px solid #C1DAD7;
+  border: 1px solid #c1dad7;
   margin: 5px 5px 5px 0;
   padding: 5px 7px;
   text-align: center;
@@ -30,12 +30,12 @@
 }
 
 .note_buttons {
-  background: #E2EBF0;
+  background: #e2ebf0;
   color: #234979;
-  border-top: 1px solid #C1DAD7;
-  border-left: 1px solid #C1DAD7;
-  border-right: 1px solid #C1DAD7;
-  padding: .5em;
+  border-top: 1px solid #c1dad7;
+  border-left: 1px solid #c1dad7;
+  border-right: 1px solid #c1dad7;
+  padding: 0.5em;
 }
 
 .note_buttons:hover {
@@ -44,9 +44,9 @@
 }
 
 .create_note_options {
-  background: #E2EBF0;
-  padding: .5em;
-  border: 1px solid #C1DAD7;
+  background: #e2ebf0;
+  padding: 0.5em;
+  border: 1px solid #c1dad7;
 }
 
 .create_note_selected {
@@ -59,7 +59,7 @@
 
 .create_note_inputs {
   width: 350px;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 
 textarea.create_note_inputs {
@@ -68,12 +68,11 @@ textarea.create_note_inputs {
 
 .note_options_float {
   float: right;
-  padding: 0 1em 0
-  .5em;
+  padding: 0 1em 0 0.5em;
 }
 
 .new_note {
-  background: #F5FAFA;
+  background: #f5fafa;
 }
 
 .error_message {
@@ -99,7 +98,7 @@ textarea.create_note_inputs {
   cursor: pointer;
   color: #234979;
   background: white;
-  border: 1px solid #C1DAD7;
+  border: 1px solid #c1dad7;
   margin: 5px 5px 5px 0;
   padding: 5px 7px;
   text-align: center;
@@ -127,7 +126,8 @@ textarea.create_note_inputs {
   padding: 0 0 1em;
 }
 
-.status, .note_author {
+.status,
+.note_author {
   font-weight: bold;
   color: #646464;
 }
@@ -174,47 +174,49 @@ textarea.reply_body {
 
 /* Extra information (proposals) */
 .proposal_info {
-  border-bottom: 1px solid #A9A9A9;
-  border-left: 1px solid #A9A9A9;
-  border-right: 1px solid #A9A9A9;
+  border-bottom: 1px solid #a9a9a9;
+  border-left: 1px solid #a9a9a9;
+  border-right: 1px solid #a9a9a9;
   margin: 0 1em;
-  padding: .7em 1em 0.5em;
+  padding: 0.7em 1em 0.5em;
 }
 
 .proposal {
   width: 90%;
-  padding-top: .5em;
+  padding-top: 0.5em;
   font-size: 12pt;
 }
 
-.proposal th, .proposal td, .proposal tr {
+.proposal th,
+.proposal td,
+.proposal tr {
   border: none !important;
   background-color: inherit !important;
 }
 
 .proposal th {
-  color: #A9A9A9 !important;
+  color: #a9a9a9 !important;
   font-weight: bold;
   text-align: left !important;
   width: 25%;
 }
 
 .proposal_root {
-  background-color: #F2F8FF;
+  background-color: #f2f8ff;
   margin: -0.7em 0 0.5em;
   padding: 0.5em;
 }
 
 /* Reply box */
 .spacer {
-  padding: .8em 0 0 0;
-  margin-left: .8em;
+  padding: 0.8em 0 0 0;
+  margin-left: 0.8em;
 }
 
 .response_spacer {
-  padding: .8em 0 0 0;
-  margin-left: .8em;
-  border-left: dotted thin #D3D3D3;
+  padding: 0.8em 0 0 0;
+  margin-left: 0.8em;
+  border-left: dotted thin #d3d3d3;
 }
 
 .create_reply {
@@ -229,13 +231,13 @@ textarea.reply_body {
 
 /* Responses */
 .collapsible {
-  border-left: dotted thin #D3D3D3;
-  margin-left: .8em;
+  border-left: dotted thin #d3d3d3;
+  margin-left: 0.8em;
 }
 
 .note_corner {
-  border-bottom: dotted thin #D3D3D3;
-  bottom: .8em;
+  border-bottom: dotted thin #d3d3d3;
+  bottom: 0.8em;
   float: left;
   margin-bottom: -3em;
   position: relative;
@@ -244,7 +246,7 @@ textarea.reply_body {
 }
 
 .response_container {
-  margin-left: .8em;
+  margin-left: 0.8em;
   padding-left: 1.5em;
 }
 
@@ -256,14 +258,14 @@ textarea.reply_body {
 }
 
 .response_head {
-  border-top: dotted thin #D3D3D3;
-  border-right: dotted thin #D3D3D3;
-  border-left: dotted thin #D3D3D3;
+  border-top: dotted thin #d3d3d3;
+  border-right: dotted thin #d3d3d3;
+  border-left: dotted thin #d3d3d3;
   box-shadow: -1px 2px 5px grey;
   -moz-box-shadow: -1px 2px 5px grey;
   -webkit-box-shadow: -1px 2px 5px grey;
   background: #eeeeee;
-  padding: .4em .5em;
+  padding: 0.4em 0.5em;
   font-size: 9pt;
   color: #646464;
   cursor: pointer;
@@ -275,7 +277,7 @@ textarea.reply_body {
 }
 
 .response .collapsed {
-  border-bottom: dotted thin #D3D3D3;
+  border-bottom: dotted thin #d3d3d3;
 }
 
 .response_collapse {
@@ -311,11 +313,11 @@ textarea.reply_body {
 }
 
 .create_reply_container {
-  padding: .5em .3em;
+  padding: 0.5em 0.3em;
 }
 
 .reply_form_container {
-  background-color: #F5FAFA;
+  background-color: #f5fafa;
   padding: 10px 0 10px 10px;
   width: 770px;
   margin-right: 1em;
@@ -323,7 +325,7 @@ textarea.reply_body {
 
 .cancel_reply {
   float: right;
-  margin: 0.5em -.3em 0 0;
+  margin: 0.5em -0.3em 0 0;
 }
 
 .section_head {
@@ -360,7 +362,7 @@ textarea.reply_body {
 
 .notes_list_container .dataTables_info {
   text-align: center;
-  padding: .5em;
+  padding: 0.5em;
 }
 
 .notes_list_container .dataTables_paginate {
@@ -370,15 +372,18 @@ textarea.reply_body {
 .notes_list_container .dataTables_paginate .paginate_button {
   text-decoration: underline;
   cursor: pointer;
-  padding: 0 .5em;
+  padding: 0 0.5em;
 }
 
 .notes_list_container .dataTables_paginate .paginate_button:hover {
   text-decoration: none;
 }
 
-.notes_list_container .first, .notes_list_container .previous, .notes_list_container .next, .notes_list_container .last {
-  padding: 0 .5em;
+.notes_list_container .first,
+.notes_list_container .previous,
+.notes_list_container .next,
+.notes_list_container .last {
+  padding: 0 0.5em;
 }
 
 .notes_delete {

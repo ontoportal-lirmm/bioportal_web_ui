@@ -1,5 +1,4 @@
 module OntologyMetricsHelper
-
   def format_metric_list(metrics, metric, title)
     return 0 if metric.nil?
 
@@ -42,5 +41,4 @@ module OntologyMetricsHelper
 
     markup
   end
-
 end

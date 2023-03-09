@@ -11,7 +11,7 @@ set :deploy_via, :remote_cache
 # default deployment branch is master wich can be overwritten with BRANCH env var
 # BRANCH env var can be set to specific branch of tag, i.e 'v6.8.1'
 
-set :branch, ENV.include?('BRANCH') ? ENV['BRANCH'] : 'master'
+set :branch, ENV.include?("BRANCH") ? ENV["BRANCH"] : "master"
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, "/srv/ontoportal/#{fetch(:application)}"
@@ -40,7 +40,7 @@ set :linked_dirs, %w{log tmp/pids tmp/cache public/system public/assets}
 
 # Default value for keep_releases is 5
 set :keep_releases, 5
-set :bundle_without, 'development:test'
+set :bundle_without, "development:test"
 set :bundle_config, { deployment: true }
 
 # Defaults to [:web]
@@ -67,7 +67,7 @@ task :forwarding do
 end
 
 namespace :deploy do
-  desc 'display remote system env vars'
+  desc "display remote system env vars"
   task :show_remote_env do
     on roles(:all) do
       remote_env = capture("env")
@@ -75,7 +75,7 @@ namespace :deploy do
     end
   end
 
-  desc 'Incorporate the bioportal_conf private repository content'
+  desc "Incorporate the bioportal_conf private repository content"
   # Get cofiguration from repo if PRIVATE_CONFIG_REPO env var is set
   # or get config from local directory if LOCAL_CONFIG_PATH env var is set
   task :get_config do
@@ -93,11 +93,11 @@ namespace :deploy do
     end
   end
 
-  desc 'Restart application'
+  desc "Restart application"
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
-      execute :touch, release_path.join('tmp/restart.txt')
+      execute :touch, release_path.join("tmp/restart.txt")
     end
   end
 

@@ -38,14 +38,14 @@ class IssueCreatorService < ApplicationService
   def call
     data = query(FindRepoQuery, variables: { owner: repo_owner, name: repo_name })
     data = query(CreateIssueMutation, variables: { repositoryId: data.repository.id, title: @title, body: @body })
-    data.to_h.dig('createIssue', 'issue')
+    data.to_h.dig("createIssue", "issue")
   end
 
   private
 
   def query(definition, variables: {})
     response = GitHub::Client.query(definition, variables: variables)
-    raise QueryError, response.errors[:data].join(', ') if response.errors.any?
+    raise QueryError, response.errors[:data].join(", ") if response.errors.any?
 
     response.data
   end

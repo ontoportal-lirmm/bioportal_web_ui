@@ -1,5 +1,6 @@
 class AboutController < ApplicationController
-  layout 'ontology'
+  layout "ontology"
+
   def index
   end
 end

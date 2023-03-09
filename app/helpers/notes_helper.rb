@@ -1,7 +1,6 @@
-require 'cgi'
+require "cgi"
 
 module NotesHelper
-
   NOTES_TAGS = %w(a br b em strong i)
 
   def recurse_replies(replies)
@@ -134,7 +133,7 @@ module NotesHelper
     user = session[:user]
     if user.nil?
       # subscribe button must redirect to login
-      return link_to 'Subscribe to notes emails', "/login?redirect=#{request.url}", {style:'font-size: .9em;', class:'link_button'}
+      return link_to "Subscribe to notes emails", "/login?redirect=#{request.url}", { style: "font-size: .9em;", class: "link_button" }
     end
     # Init subscribe button parameters.
     user = LinkedData::Client::Models::User.find(session[:user].id)
@@ -142,7 +141,7 @@ module NotesHelper
     params = "data-bp_ontology_id='#{ontology_id}' data-bp_is_subbed='false' data-bp_user_id='#{user.id}'"
     begin
       # Try to create an intelligent subscribe button.
-      if ontology_id.start_with? 'http'
+      if ontology_id.start_with? "http"
         ont = LinkedData::Client::Models::Ontology.find(ontology_id)
       else
         ont = LinkedData::Client::Models::Ontology.find_by_acronym(ontology_id).first
@@ -153,7 +152,7 @@ module NotesHelper
     rescue
       # pass, fallback init done above begin block to scope parameters beyond the begin/rescue block
     end
-    spinner = '<span class="notes_subscribe_spinner" style="display: none;">' + image_tag("spinners/spinner_000000_16px.gif", style: "vertical-align: text-bottom;") + '</span>'
+    spinner = '<span class="notes_subscribe_spinner" style="display: none;">' + image_tag("spinners/spinner_000000_16px.gif", style: "vertical-align: text-bottom;") + "</span>"
     error = "<span style='color: red;' class='notes_sub_error'></span>"
     return "<a href='javascript:void(0);' class='subscribe_to_notes btn btn-primary' #{params}>#{sub_text} to notes emails</a> #{spinner} #{error}".html_safe
   end
@@ -164,9 +163,8 @@ module NotesHelper
     # user ||= anonymous_user
 
     params = "data-bp_user_id='#{user.id}'"
-    spinner = '<span class="delete_notes_spinner" style="display: none;">' + image_tag("spinners/spinner_000000_16px.gif", style: "vertical-align: text-bottom;") + '</span>'
+    spinner = '<span class="delete_notes_spinner" style="display: none;">' + image_tag("spinners/spinner_000000_16px.gif", style: "vertical-align: text-bottom;") + "</span>"
     error = "<span style='color: red;' class='delete_notes_error'></span>"
     return "<a href='#' onclick='deleteNotes(this);return false;' style='display: inline-block !important;' class='notes_delete link_button' #{params}>Delete selected notes</a> #{spinner} #{error}"
   end
-
 end

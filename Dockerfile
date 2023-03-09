@@ -6,14 +6,14 @@ ARG UID=1000
 ARG GID=1000
 
 RUN apk add --no-cache \
-    build-base \
-    libxml2-dev \
-    libxslt-dev \
-    mariadb-dev \
-    git \
-    nodejs \
-    tzdata \
-    yarn \
+  build-base \
+  libxml2-dev \
+  libxslt-dev \
+  mariadb-dev \
+  git \
+  nodejs \
+  tzdata \
+  yarn \
   && addgroup --gid ${GID} ruby \
   && adduser  -u ${UID} -G ruby -D  ruby \
   && chown ruby:ruby -R /app \
@@ -28,10 +28,10 @@ RUN chmod 0755 bin/*
 ARG RAILS_ENV="production"
 
 ENV RAILS_ENV="${RAILS_ENV}" \
-    NODE_ENV="${NODE_ENV}" \
-    PATH="${PATH}:/home/ruby/.local/bin:/node_modules/.bin" \
-    USER="ruby" \
-    BUNDLE_PATH=/usr/local/bundle
+  NODE_ENV="${NODE_ENV}" \
+  PATH="${PATH}:/home/ruby/.local/bin:/node_modules/.bin" \
+  USER="ruby" \
+  BUNDLE_PATH=/usr/local/bundle
 
 COPY --chown=ruby:ruby Gemfile* ./
 RUN bundle install --jobs "$(nproc)"

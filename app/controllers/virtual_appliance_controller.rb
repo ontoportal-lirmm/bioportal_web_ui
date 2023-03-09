@@ -1,5 +1,5 @@
 class VirtualApplianceController < ApplicationController
-  layout 'ontology'
+  layout "ontology"
   before_action :require_login
 
   def index
@@ -20,7 +20,7 @@ class VirtualApplianceController < ApplicationController
 
     if user.nil?
       flash[:error] = "Problem adding account <strong>#{params[:appliance_user][:user_id]}</strong>: account does not exist".html_safe
-      redirect_to action: 'index' and return
+      redirect_to action: "index" and return
     end
 
     @new_user = VirtualApplianceUser.where(user_id: user.id)
@@ -30,7 +30,7 @@ class VirtualApplianceController < ApplicationController
       @new_user.save
     end
 
-    redirect_to :action => 'index'
+    redirect_to :action => "index"
   end
 
   private
@@ -38,7 +38,7 @@ class VirtualApplianceController < ApplicationController
   def require_login
     return if session[:user]
 
-    flash[:error] = 'You must be logged in to access this section'
+    flash[:error] = "You must be logged in to access this section"
     redirect_to login_index_path(redirect: virtual_appliance_index_path)
   end
 end

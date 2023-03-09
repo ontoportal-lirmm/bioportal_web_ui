@@ -30,7 +30,7 @@ var uri_split = function(combinedURIs) {
 var bpResourceIndexEmbedded = false;
 jQuery(document).ready(function () {
   bpResourceIndexEmbedded = (jQuery("#resource_table").parents("div.resource_index_embed").length > 0);
-  
+
   // Hide/Show resources
   jQuery(".resource_link").live("click", function (event) {
     event.preventDefault();
@@ -113,7 +113,7 @@ jQuery(document).ready(function () {
               ontologyName: ontName
             }
           }),
-        
+
           pagination: {
             more: data.page <= data.pageCount
           }
@@ -406,7 +406,7 @@ function displayClasses(classes, completedCallback) {
   conceptsLength = ontClassPairs.length;
 
   jQuery("#resource_index_classes").html("");
-  
+
   for (var i = 0; i < ontClassPairs.length; i++) {
     ontClassPair = ontClassPairs[i];
     ontologyId = ontClassPair[0];

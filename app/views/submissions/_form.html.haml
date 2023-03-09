@@ -2,7 +2,7 @@
 
 :javascript
   $(document).ready(function() {
-    
+
     // Properly display the information for 'File Location' based on radio button
     if (jQuery("#submission_isRemote_0").is(":checked")) {
       location_toggle("upload");
@@ -10,19 +10,19 @@
     if (jQuery("#submission_isRemote_1").is(":checked")) {
       location_toggle("remote");
     }
-    
+
     // Select default 'File Location' radio button
     if (!jQuery("#submission_isRemote_0").is(":checked") && !jQuery("#submission_isRemote_1").is(":checked") && !jQuery("#submission_isRemote_2").is(":checked")) {
       jQuery("#submission_isRemote_0").attr("checked", "checked")
     }
     // Handles showing/hiding options for a particular ontology format
     jQuery("#submission_hasOntologyLanguage").change(ontologyFormatChange);
-    
+
     // Check to see if owl is selected, show options if so
     ontologyFormatChange();
     jQuery("#ontology_submission_form").validate();
   });
-  
+
   // Show/hide location inputs
   function location_toggle(input_div) {
     jQuery('.hidden_field').hide();
@@ -55,7 +55,7 @@
         jQuery(".format_options").optionsOut("fast");
     }
   }
-  
+
   jQuery.fn.optionsIn = function(speed, easing, callback){
     jQuery("#format_spacing").css("margin", "1em 0");
     this.fadeIn(speed);
@@ -73,7 +73,7 @@
       %ul
         - for error in @errors
           %li
-            = error          
+            = error
 
 %div#editMetadataDiv
   %div{:style => "width: 50%;margin: 3em auto;"}
@@ -122,10 +122,10 @@
           %div.col-sm-8.offset-sm-2
             %label{for: "submission_prefLabelProperty"} Preferred name
             = text_field :submission, :prefLabelProperty, value: @submission.prefLabelProperty, class: "form-control form-control-sm", aria: {describedBy: "preferredNameHelpBlock"}
-            %small.form-text.text-muted#preferredNameHelpBlock 
+            %small.form-text.text-muted#preferredNameHelpBlock
               Enter a property ID, or use the default setting: |
               <a href="http://www.w3.org/2004/02/skos/core#prefLabel", target="_blank">http://www.w3.org/2004/02/skos/core#prefLabel</a>. |
-  
+
         -# Synonym
         %div.form-group.row
           %div.col-sm-8.offset-sm-2
@@ -134,7 +134,7 @@
             %small.form-text.text-muted#synonymHelpBlock
               Enter a property ID, or leave blank to use the default setting: |
               <a href="http://www.w3.org/2004/02/skos/core#altLabel", target="_blank">http://www.w3.org/2004/02/skos/core#altLabel</a>. |
-  
+
         -# Definition
         %div.form-group.row
           %div.col-sm-8.offset-sm-2
@@ -158,11 +158,11 @@
           %div.col-sm-8.offset-sm-2
             %label Identify obsolete classes
 
-        %div.form-group.row 
+        %div.form-group.row
           %div.col-sm-8.offset-sm-2
             %label{for: "submission_obsoleteProperty"} Obsolete property
             = text_field :submission, :obsoleteProperty, value: @submission.obsoleteProperty, class: "form-control form-control-sm", aria: {describedBy: "obsoleteHelpBlock"}
-            %small.form-text.text-muted#obsoleteHelpBlock 
+            %small.form-text.text-muted#obsoleteHelpBlock
               Optionally enter a property ID that indicates obsolete status for ontology classes |
               (the property value must be set to "true"). Note that by default, BioPortal checks for existence of the owl:deprecated property. |
 
@@ -170,7 +170,7 @@
           %div.col-sm-8.offset-sm-2
             %label{for: "submission_obsoleteParent"} Obsolete branch root
             = text_field :submission, :obsoleteParent, value: @submission.obsoleteParent, class: "form-control form-control-sm", aria: {describedBy: "obsoleteRootHelpBlock"}
-            %small.form-text.text-muted#obsoleteRootHelpBlock 
+            %small.form-text.text-muted#obsoleteRootHelpBlock
               Optionally enter a class ID for the root of an obsolete branch. All classes in the branch will be marked as |
               obsolete, with the exception of the root class. |
 
@@ -182,7 +182,7 @@
 
       -# Status
       %div.form-group.row
-        %label.col-sm-4.col-form-lable{for: "submission_status"} 
+        %label.col-sm-4.col-form-lable{for: "submission_status"}
           Status
           %span.asterik *
         %div.col-sm-8
@@ -200,13 +200,13 @@
             %div.form-check
               - checked = @ontology.summaryOnly
               = radio_button(:submission, :isRemote, 3, :onclick=>"$('.hidden_field').hide();", checked: checked, aria: {describedBy: "metadataHelpBlock"}, class: "form-check-input")
-              %label.form-check-label{for: "submission_isRemote_3"} 
+              %label.form-check-label{for: "submission_isRemote_3"}
                 Metadata only
               %small.form-text.text-muted#metadataHelpBlock Allow users to view and search your ontology metadata, but not its classes and properties.
             %div.form-check
               - checked = !(@submission.pullLocation.nil? || @submission.pullLocation.empty?)
               = radio_button(:submission, :isRemote, 1, :onclick=>"location_toggle('remote');", checked: checked, aria: {describedBy: "loadFromURLHelpBlock"}, class: "form-check-input")
-              %label.form-check-label{for: "submission_isRemote_1"} 
+              %label.form-check-label{for: "submission_isRemote_1"}
                 Load from URL
               %small.form-text.text-muted#loadFromURLHelpBlock New versions loaded on a nightly basis.
               - display = (checked and "" or "display:none;")
@@ -216,7 +216,7 @@
             %div.form-check
               - checked = (!@ontology.summaryOnly) && @submission.pullLocation.nil?
               = radio_button(:submission, :isRemote, 0, :onclick=>"location_toggle('upload');", checked: checked, class: "form-check-input")
-              %label.form-check-label{for: "submission_isRemote_0"} 
+              %label.form-check-label{for: "submission_isRemote_0"}
                 Upload local file
               - display = (checked and "" or "display:none;")
               %div.hidden_field#upload{style: display}
@@ -323,7 +323,7 @@
         %div.form-group.row
           %label.col-sm-4.col-form-label{for: "submission_publication"} Publications
           %div.col-sm-8
-            = text_field :submission, :publication, value: @submission.publication, class: "form-control", aria: {describedBy: "pubsHelpBlock"}        
+            = text_field :submission, :publication, value: @submission.publication, class: "form-control", aria: {describedBy: "pubsHelpBlock"}
             %small.form-text.text-muted#pubsHelpBlock Enter a URL for a page that lists publications about your ontology.
 
         -# Used ontology engineering tool
@@ -605,7 +605,7 @@
 
 %div.form-group.row
   %div.col-12.text-center
-    %label.col-form-label.font-italic.asterik * Fields marked with an asterisk are required.  
+    %label.col-form-label.font-italic.asterik * Fields marked with an asterisk are required.
 
 %div.form-group.row
   %div.col-6

@@ -1,5 +1,5 @@
-require 'rest-client'
-require 'multi_json'
+require "rest-client"
+require "multi_json"
 
 class OntolobridgeController < ApplicationController
 
@@ -27,7 +27,7 @@ class OntolobridgeController < ApplicationController
         end
       }
 
-      headers = {'Authorization' => $ONTOLOBRIDGE_AUTHENTICATION_TOKEN}
+      headers = { "Authorization" => $ONTOLOBRIDGE_AUTHENTICATION_TOKEN }
       response_raw = RestClient.post("#{$ONTOLOBRIDGE_BASE_URL}#{endpoint}", h_params, headers)
       code = response_raw.code
       response.merge!(MultiJson.load(response_raw))
@@ -44,21 +44,20 @@ class OntolobridgeController < ApplicationController
 
   def save_new_term_instructions
     code = 200
-    response = {error: '', success: ''}
-    response[:success] = "New term request instructions for #{params['acronym']} saved"
-    ont_data = Ontology.find_by(acronym: params['acronym'])
+    response = { error: "", success: "" }
+    response[:success] = "New term request instructions for #{params["acronym"]} saved"
+    ont_data = Ontology.find_by(acronym: params["acronym"])
     ont_data ||= Ontology.new
-    ont_data.acronym = params['acronym']
-    ont_data.new_term_instructions = params['new_term_instructions']
+    ont_data.acronym = params["acronym"]
+    ont_data.new_term_instructions = params["new_term_instructions"]
 
     begin
       ont_data.save
     rescue Exception => e
       code = 500
-      response[:error] = "Unable to save new term instructions for #{params['acronym']} due to a server error"
+      response[:error] = "Unable to save new term instructions for #{params["acronym"]} due to a server error"
     end
     sleep(1)
     render json: [response, code], status: code
   end
-
 end

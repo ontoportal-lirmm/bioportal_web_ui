@@ -71,12 +71,12 @@
             %label{for: "score"} Include score
             - options = [["none", ""], ["old", "old"], ["cvalue", "cvalue"], ["cvalueh", "cvalueh"]]
             = select_tag(:score, options_for_select(options, 0), class: "form-control", "aria-describedby": "includeScoreHelpBlock")
-            %small#includeScoreHelpBlock.form-text.text-muted Score annotations following the previous 2009 NCBO measure (old) or the C-Value measure (cvalue). If hierarchy expansion is used, then prefer cvalueh. 
+            %small#includeScoreHelpBlock.form-text.text-muted Score annotations following the previous 2009 NCBO measure (old) or the C-Value measure (cvalue). If hierarchy expansion is used, then prefer cvalueh.
 
           %div.form-group
             %label{for: "score_threshold"} Filter by score threshold
             = number_field_tag(:score_threshold, 0, id: "score_threshold", class: "form-control", "aria-describedby": "scoreThresholdHelpBlock")
-            %small#scoreThresholdHelpBlock.form-text.text-muted Specify the minimum score value for annotations 
+            %small#scoreThresholdHelpBlock.form-text.text-muted Specify the minimum score value for annotations
 
           %div.form-group
             %label{for: "confidence_threshold"} Filter confidence threshold
@@ -165,7 +165,7 @@
           %span#download_links_text.link_button.ui_button
           -# %span#download_links_xml.link_button.ui_button
         %div.mt-3
-          Reproduce these results using the 
+          Reproduce these results using the
           %span#annotator_parameters
         %div.mb-4
           Additional parameters explained at

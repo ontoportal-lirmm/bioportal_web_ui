@@ -1,5 +1,4 @@
 class SubscriptionsController < ApplicationController
-
   def create
     # Try to get the user linked data instance
     user_id = params[:user_id]
@@ -8,7 +7,7 @@ class SubscriptionsController < ApplicationController
 
     # Try to get the ontology linked data instance
     ontology_id = params[:ontology_id]
-    if ontology_id.start_with? 'http'
+    if ontology_id.start_with? "http"
       ont = LinkedData::Client::Models::Ontology.find(ontology_id)
     else
       ont = LinkedData::Client::Models::Ontology.find_by_acronym(ontology_id).first
@@ -26,8 +25,8 @@ class SubscriptionsController < ApplicationController
       all_subs = []
       u.subscription.each do |subs|
         # Add all subscription to the array, but not the one to be deleted
-        if !subs.ontology.split('/').last.eql?(ont.acronym)
-          all_subs.push({ontology: subs.ontology, notification_type: subs.notification_type})
+        if !subs.ontology.split("/").last.eql?(ont.acronym)
+          all_subs.push({ ontology: subs.ontology, notification_type: subs.notification_type })
         end
       end
       u.subscription = all_subs
@@ -43,14 +42,14 @@ class SubscriptionsController < ApplicationController
       all_subs = []
       u.subscription.each do |subs|
         # add all existing subscriptions
-        all_subs.push({ontology: subs.ontology, notification_type: subs.notification_type})
+        all_subs.push({ ontology: subs.ontology, notification_type: subs.notification_type })
         if subs.ontology.split("/").last == ont.acronym && subs.notification_type == "NOTES"
           # avoid to subscribe many times to the same ontology
           already_subscribed = true
         end
       end
       if already_subscribed == false
-        all_subs.push({ontology: ont.acronym, notification_type: "NOTES"})  # the new subscription
+        all_subs.push({ ontology: ont.acronym, notification_type: "NOTES" })  # the new subscription
       end
       u.subscription = all_subs
     end
@@ -83,5 +82,4 @@ class SubscriptionsController < ApplicationController
 
     render :json => { :updated_sub => updated_sub, :user_subscriptions => u.subscription }
   end
-
 end

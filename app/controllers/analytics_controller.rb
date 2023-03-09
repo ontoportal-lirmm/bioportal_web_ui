@@ -1,7 +1,6 @@
-require 'csv'
+require "csv"
 
 class AnalyticsController < ApplicationController
-
   def track
     entry = Analytics.new
     entry.segment = params[:segment]
@@ -30,7 +29,7 @@ class AnalyticsController < ApplicationController
         click.created_at,
         click.user,
         click.bp_slice,
-        click.ip
+        click.ip,
       ]
     end
     respond_with_csv_file(rows, "search_result_clicked")
@@ -47,7 +46,7 @@ class AnalyticsController < ApplicationController
         survey.created_at,
         survey.user,
         survey.bp_slice,
-        survey.ip
+        survey.ip,
       ]
     end
     respond_with_csv_file(rows, "user_intention_survey")
@@ -56,11 +55,10 @@ class AnalyticsController < ApplicationController
   private
 
   def respond_with_csv_file(rows, filename = "output")
-    output = ''
+    output = ""
     rows.each do |row|
-      output << row.to_csv.force_encoding('UTF-8')
+      output << row.to_csv.force_encoding("UTF-8")
     end
-    send_data output, :type => 'text/csv', :disposition => "attachment; filename=#{filename}.csv"
+    send_data output, :type => "text/csv", :disposition => "attachment; filename=#{filename}.csv"
   end
-
 end

@@ -1,4 +1,4 @@
-require 'rest_client'
+require "rest_client"
 
 class LOG
 
@@ -41,7 +41,7 @@ class LOG
     begin
       ms = Benchmark.ms { log.post(params) }
       LOG.add :debug, "Logging action remotely (#{ms}ms)"
-    rescue Exception=>e
+    rescue Exception => e
       LOG.add :debug, "Remote logging failed: #{e.message}"
     end
   end
@@ -65,5 +65,4 @@ class LOG
       p "#{level} || #{message}"
     end
   end
-
 end

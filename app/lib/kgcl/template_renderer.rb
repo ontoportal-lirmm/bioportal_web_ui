@@ -20,12 +20,12 @@ module KGCL
 
     def title
       f = File.read(@title_template)
-      ERB.new(f, trim_mode: '%<>').result(@bind)
+      ERB.new(f, trim_mode: "%<>").result(@bind)
     end
 
     def body
       f = File.read(@body_template)
-      ERB.new(f, trim_mode: '<>').result(@bind)
+      ERB.new(f, trim_mode: "<>").result(@bind)
     end
   end
 end

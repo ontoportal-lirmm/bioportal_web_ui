@@ -2,7 +2,7 @@
 
 module KGCL
   module Operations
-    NEW_SYNONYM = 'NewSynonymContent'
-    REMOVE_SYNONYM = 'RemoveSynonymContent'
+    NEW_SYNONYM = "NewSynonymContent"
+    REMOVE_SYNONYM = "RemoveSynonymContent"
   end
 end

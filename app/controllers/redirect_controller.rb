@@ -1,4 +1,4 @@
-require 'cgi'
+require "cgi"
 
 # The redirect controller allows for routes-based redirects
 # as we move old content to new URL locations.
@@ -17,10 +17,10 @@ class RedirectController < ApplicationController
         params_string += seperator + param + "=" + CGI.escape(value)
       end
       # Redirect with params intact
-      redirect_to params[:url] + params_string, :status=>:moved_permanently
+      redirect_to params[:url] + params_string, :status => :moved_permanently
       return
     else # Default redirect to the home page
-      redirect_to "/", :status=>:moved_permanently
+      redirect_to "/", :status => :moved_permanently
     end
   end
 end

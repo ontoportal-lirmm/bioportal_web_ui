@@ -25,7 +25,7 @@ Rails.application.configure do
 
     config.cache_store = :memory_store
     config.public_file_server.headers = {
-      "Cache-Control" => "public, max-age=#{2.days.to_i}"
+      "Cache-Control" => "public, max-age=#{2.days.to_i}",
     }
   else
     config.action_controller.perform_caching = false
@@ -60,19 +60,19 @@ Rails.application.configure do
   config.assets.quiet = true
 
   # memcache setup
-  config.cache_store = ActiveSupport::Cache::MemCacheStore.new('cache:11211', namespace: 'BioPortal')
+  config.cache_store = ActiveSupport::Cache::MemCacheStore.new("cache:11211", namespace: "BioPortal")
 
   # Silence cache output
   config.cache_store.logger = Logger.new("/dev/null") if config.cache_store.respond_to?(:logger)
 
   # Add custom data attributes to sanitize allowed list
-  config.action_view.sanitized_allowed_attributes = ['id', 'class', 'style', 'data-cls', 'data-ont']
+  config.action_view.sanitized_allowed_attributes = ["id", "class", "style", "data-cls", "data-ont"]
   config.view_component.generate.sidecar = true
 
   config.file_watcher = ActiveSupport::FileUpdateChecker
 
   # Include BioPortal-specific configuration options
-  require Rails.root.join('config', "bioportal_config_#{Rails.env}.rb")
+  require Rails.root.join("config", "bioportal_config_#{Rails.env}.rb")
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true

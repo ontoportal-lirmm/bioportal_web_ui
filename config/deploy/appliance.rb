@@ -14,7 +14,7 @@
 # definition into the server list. The second argument
 # something that quacks like a hash can be used to set
 # extended properties on the server.
-server 'localhost', roles: %w{app db}
+server "localhost", roles: %w{app db}
 
 # you can set custom ssh options
 # it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options
@@ -39,15 +39,15 @@ server 'localhost', roles: %w{app db}
 # setting per server overrides global ssh_options
 #
 
-BRANCH = ENV.include?('BRANCH') ? ENV['BRANCH'] : 'master'
+BRANCH = ENV.include?("BRANCH") ? ENV["BRANCH"] : "master"
 set :branch, "#{BRANCH}"
 
 set :deploy_to, "/srv/ontoportal/#{fetch(:application)}"
 # install gems into a common direcotry shared across ui, api and ncbo_cron to reduce disk usage
-set :bundle_path, '/srv/ontoportal/.bundle'
+set :bundle_path, "/srv/ontoportal/.bundle"
 
 #private git repo for configuraiton
 #PRIVATE_CONFIG_REPO = ENV.include?('PRIVATE_CONFIG_REPO') ? ENV['PRIVATE_CONFIG_REPO'] : 'git@github.com:your_org/private-config-repo.git'
 
 #location of configuration files
-LOCAL_CONFIG_PATH = ENV.include?('LOCAL_CONFIG_PATH') ? ENV['LOCAL_CONFIG_PATH'] : '/srv/ontoportal/virtual_appliance/appliance_config'
+LOCAL_CONFIG_PATH = ENV.include?("LOCAL_CONFIG_PATH") ? ENV["LOCAL_CONFIG_PATH"] : "/srv/ontoportal/virtual_appliance/appliance_config"

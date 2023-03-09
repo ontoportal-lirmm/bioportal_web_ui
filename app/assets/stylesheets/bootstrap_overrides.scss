@@ -1,4 +1,4 @@
-/* Sticky footer styles from Bootstrap: 
+/* Sticky footer styles from Bootstrap:
    https://getbootstrap.com/docs/4.1/examples/sticky-footer/sticky-footer.css
 -------------------------------------------------- */
 html {
@@ -13,12 +13,12 @@ html {
   background-color: #ccc;
 }
 
-body{
+body {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
-/* Footer 
+/* Footer
 -------------------------------------------------- */
 footer.footer h6 {
   font-weight: bold;
@@ -30,8 +30,8 @@ footer.footer .list-inline-item:not(:last-child) {
 
 @media only screen and (max-width: 992px) {
   body {
-    margin-bottom: 350px; 
-  }  
+    margin-bottom: 350px;
+  }
   .footer {
     height: 350px;
   }

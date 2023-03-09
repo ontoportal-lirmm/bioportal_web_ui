@@ -32,11 +32,11 @@
 	<tr>
 		<td align="right">Note Type:</td>
 		<td><%=
-                options = MarginNote::NOTE_TYPES                       
+                options = MarginNote::NOTE_TYPES
                 select('margin_note','note_type',options.invert)
                 %></td>
 	</tr>
-	
+
 	<tr>
 		<td align="right">Subject:</td><td><%=text_field 'margin_note', 'subject',:size=>70,:id=>'subject'%></td>
 	<tr>
@@ -68,11 +68,11 @@
 	<tr>
 		<td align="right">Note Type:</td>
 		<td><%=
-                options = MarginNote::NOTE_TYPES                       
+                options = MarginNote::NOTE_TYPES
                 select('margin_note','note_type',options.invert)
                 %></td>
 	</tr>
-	
+
 	<tr>
 		<td align="right">Subject:</td><td><%=text_field 'margin_note', 'subject',:size=>70%></td>
 	<tr>
@@ -86,7 +86,7 @@
 <% end %>
 </div>
 <div id="buttons" style="clear:both;">
-<input type="button" class ="blueButton" value="New Proposal" onclick ="newProposal('<%="#{@old_value}" %>');toggleHide('proposalForm','forms');toggleHide('form','');toggleHide('buttons','');document.getElementById('noteParent').value='';"> 
+<input type="button" class ="blueButton" value="New Proposal" onclick ="newProposal('<%="#{@old_value}" %>');toggleHide('proposalForm','forms');toggleHide('form','');toggleHide('buttons','');document.getElementById('noteParent').value='';">
 <%if @modal%><input type="button" value="Close" onclick="Dialog.cancelCallback()" class='blueButton'><%end%>
 </div>
 </div>

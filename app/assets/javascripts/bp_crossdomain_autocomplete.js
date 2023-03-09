@@ -1,9 +1,9 @@
 // Generally we use jQuery as the keyword but some people
 // will use another framework which takes control of the $.
 // To avoid re-writing this script we'll use a wrapper.
-(function($) {
-  $(function() {
-    jQuery.bp_autocomplete = function(input, options) {
+(function ($) {
+  $(function () {
+    jQuery.bp_autocomplete = function (input, options) {
       // Create a link to self
       var me = this;
 
@@ -18,8 +18,12 @@
         var results = document.createElement("div");
         // Create jQuery object for results
         var $results = $(results);
-        $results.hide().addClass(options.resultsClass).css("position", "absolute").attr("id", options.resultsClass);
-        if( options.width > 0 ) $results.css("width", options.width);
+        $results
+          .hide()
+          .addClass(options.resultsClass)
+          .css("position", "absolute")
+          .attr("id", options.resultsClass);
+        if (options.width > 0) $results.css("width", options.width);
 
         // Add to body element
         $("body").append(results);
@@ -39,41 +43,46 @@
       var lastKeyPressCode = null;
 
       // flush cache
-      function flushCache(){
+      function flushCache() {
         cache = {};
         cache.data = {};
         cache.length = 0;
-      };
+      }
 
       // flush cache
       flushCache();
 
       // if there is a data array supplied
-      if( options.data != null ){
-        var sFirstChar = "", stMatchSets = {}, row = [];
+      if (options.data != null) {
+        var sFirstChar = "",
+          stMatchSets = {},
+          row = [];
 
         // no url was specified, we need to adjust the cache length to make sure it fits the local data store
-        if( typeof options.url != "string" ) options.cacheLength = 1;
+        if (typeof options.url != "string") options.cacheLength = 1;
 
         // loop through the array and create a lookup structure
-        for( var i=0; i < options.data.length; i++ ){
+        for (var i = 0; i < options.data.length; i++) {
           // if row is a string, make an array otherwise just reference the array
 
-          row = ((typeof options.data[i] == "string") ? [options.data[i]] : options.data[i]);
+          row =
+            typeof options.data[i] == "string"
+              ? [options.data[i]]
+              : options.data[i];
 
           // if the length is zero, don't add to list
-          if( row[0].length > 0 ){
+          if (row[0].length > 0) {
             // get the first character
             sFirstChar = row[0].substring(0, 1).toLowerCase();
             // if no lookup array for this character exists, look it up now
-            if( !stMatchSets[sFirstChar] ) stMatchSets[sFirstChar] = [];
+            if (!stMatchSets[sFirstChar]) stMatchSets[sFirstChar] = [];
             // if the match is a string
             stMatchSets[sFirstChar].push(row);
           }
         }
 
         // add the data items to the cache
-        for( var k in stMatchSets ){
+        for (var k in stMatchSets) {
           // increase the cache size
           options.cacheLength++;
           // add to the cache
@@ -83,48 +92,54 @@
       }
 
       $input
-      .keydown(function(e) {
-        // track last key pressed
-        lastKeyPressCode = e.keyCode;
-        switch(e.keyCode) {
-          case 38: // up
-            e.preventDefault();
-            moveSelect(-1);
-            break;
-          case 40: // down
-            e.preventDefault();
-            moveSelect(1);
-            break;
-          case 9:  // tab
-          case 13: // return
-            if( selectCurrent() ){
-              // make sure to blur off the current field
-              $input.get(0).blur();
+        .keydown(function (e) {
+          // track last key pressed
+          lastKeyPressCode = e.keyCode;
+          switch (e.keyCode) {
+            case 38: // up
               e.preventDefault();
-            }
-            break;
-          default:
-            active = -1;
-            if (timeout) clearTimeout(timeout);
-            timeout = setTimeout(function(){onChange();}, options.delay);
-            break;
-        }
-      })
-      .focus(function(){
-        // track whether the field has focus, we shouldn't process any results if the field no longer has focus
-        hasFocus = true;
-      })
-      .blur(function() {
-        // track whether the field has focus
-        hasFocus = false;
-        hideResults();
-      });
+              moveSelect(-1);
+              break;
+            case 40: // down
+              e.preventDefault();
+              moveSelect(1);
+              break;
+            case 9: // tab
+            case 13: // return
+              if (selectCurrent()) {
+                // make sure to blur off the current field
+                $input.get(0).blur();
+                e.preventDefault();
+              }
+              break;
+            default:
+              active = -1;
+              if (timeout) clearTimeout(timeout);
+              timeout = setTimeout(function () {
+                onChange();
+              }, options.delay);
+              break;
+          }
+        })
+        .focus(function () {
+          // track whether the field has focus, we shouldn't process any results if the field no longer has focus
+          hasFocus = true;
+        })
+        .blur(function () {
+          // track whether the field has focus
+          hasFocus = false;
+          hideResults();
+        });
 
       // hideResultsNow();
 
       function onChange() {
         // ignore if the following keys are pressed: [del] [shift] [capslock]
-        if( lastKeyPressCode == 46 || (lastKeyPressCode > 8 && lastKeyPressCode < 32) ) return $results.hide();
+        if (
+          lastKeyPressCode == 46 ||
+          (lastKeyPressCode > 8 && lastKeyPressCode < 32)
+        )
+          return $results.hide();
         var v = $input.val();
         if (v == prev) return;
         prev = v;
@@ -135,10 +150,9 @@
           $input.removeClass(options.loadingClass);
           $results.hide();
         }
-      };
+      }
 
       function moveSelect(step) {
-
         var lis = $("li", results);
         if (!lis) return;
 
@@ -158,8 +172,7 @@
         // if (lis[active] && lis[active].scrollIntoView) {
         //  lis[active].scrollIntoView(false);
         // }
-
-      };
+      }
 
       function selectCurrent() {
         var li = $("li.ac_over", results)[0];
@@ -177,7 +190,7 @@
         } else {
           return false;
         }
-      };
+      }
 
       function selectItem(li) {
         if (!li) {
@@ -191,63 +204,72 @@
         $results.html("");
         $input.val(v);
         hideResultsNow();
-        if (options.onItemSelect) setTimeout(function() { options.onItemSelect(li) }, 1);
-        setTimeout(function() { $input.trigger("autocomplete_selected"); }, 2);
-      };
+        if (options.onItemSelect)
+          setTimeout(function () {
+            options.onItemSelect(li);
+          }, 1);
+        setTimeout(function () {
+          $input.trigger("autocomplete_selected");
+        }, 2);
+      }
 
       // selects a portion of the input string
-      function createSelection(start, end){
+      function createSelection(start, end) {
         // get a reference to the input element
         var field = $input.get(0);
-        if( field.createTextRange ){
+        if (field.createTextRange) {
           var selRange = field.createTextRange();
           selRange.collapse(true);
           selRange.moveStart("character", start);
           selRange.moveEnd("character", end);
           selRange.select();
-        } else if( field.setSelectionRange ){
+        } else if (field.setSelectionRange) {
           field.setSelectionRange(start, end);
         } else {
-          if( field.selectionStart ){
+          if (field.selectionStart) {
             field.selectionStart = start;
             field.selectionEnd = end;
           }
         }
         field.focus();
-      };
+      }
 
       // fills in the input box w/the first match (assumed to be the best match)
-      function autoFill(sValue){
+      function autoFill(sValue) {
         // if the last user key pressed was backspace, don't autofill
-        if( lastKeyPressCode != 8 ){
+        if (lastKeyPressCode != 8) {
           // fill in the value (keep the case the user has typed)
           $input.val($input.val() + sValue.substring(prev.length));
           // select the portion of the value not typed by the user (so the next character will erase)
           createSelection(prev.length, sValue.length);
         }
-      };
+      }
 
       function showResults() {
         // get the position of the input field right now (in case the DOM is shifted)
         var pos = findPos(input);
         // either use the specified width, or autocalculate based on form element
-        var iWidth = (options.width > 0) ? options.width : $input.width();
+        var iWidth = options.width > 0 ? options.width : $input.width();
         // add any footer information
-        if (typeof options.header !== 'undefined') $results.prepend(options.header);
+        if (typeof options.header !== "undefined")
+          $results.prepend(options.header);
         // add any footer information
-        if (typeof options.footer !== 'undefined') $results.append(options.footer);
+        if (typeof options.footer !== "undefined")
+          $results.append(options.footer);
         // reposition
-        $results.css({
-          width: parseInt(iWidth) + "px",
-          top: (pos.y + input.offsetHeight) + "px",
-          left: pos.x + "px"
-        }).show();
-      };
+        $results
+          .css({
+            width: parseInt(iWidth) + "px",
+            top: pos.y + input.offsetHeight + "px",
+            left: pos.x + "px",
+          })
+          .show();
+      }
 
       function hideResults() {
         if (timeout) clearTimeout(timeout);
         timeout = setTimeout(hideResultsNow, 200);
-      };
+      }
 
       function hideResultsNow() {
         if (timeout) clearTimeout(timeout);
@@ -261,7 +283,7 @@
             $input.addClass("help_text_font").val($input.attr("title"));
           }
         }
-      };
+      }
 
       function receiveData(q, data) {
         if (data) {
@@ -269,47 +291,52 @@
           results.innerHTML = "";
 
           // if the field no longer has focus or if there are no matches, do not display the drop down
-          if( !hasFocus ) return hideResultsNow();
+          if (!hasFocus) return hideResultsNow();
 
-          if( data.length == 0 )
-            results.appendChild("<div style='padding: 5px; font-size: normal; font-style: oblique;'>No results found</div>")
+          if (data.length == 0)
+            results.appendChild(
+              "<div style='padding: 5px; font-size: normal; font-style: oblique;'>No results found</div>"
+            );
 
           if ($.browser.msie && $.browser.version < 9) {
             // we put a styled iframe behind the calendar so HTML SELECT elements don't show through
-            $results.append(document.createElement('iframe'));
+            $results.append(document.createElement("iframe"));
           }
           results.appendChild(dataToDom(data));
           // autofill in the complete box w/the first match as long as the user hasn't entered in more data
-          if( options.autoFill && ($input.val().toLowerCase() == q.toLowerCase()) ) autoFill(data[0][0]);
+          if (options.autoFill && $input.val().toLowerCase() == q.toLowerCase())
+            autoFill(data[0][0]);
           showResults();
         } else {
           $input.removeClass(options.loadingClass);
-          results.innerHTML = "<div style='padding: 5px; font-size: normal; font-style: oblique;'>No results found</div>";
+          results.innerHTML =
+            "<div style='padding: 5px; font-size: normal; font-style: oblique;'>No results found</div>";
           showResults();
         }
-      };
+      }
 
       function parseData(data) {
         if (!data) return null;
         var parsed = [];
         var rows = data.split(options.lineSeparator);
-        for (var i=0; i < rows.length; i++) {
+        for (var i = 0; i < rows.length; i++) {
           var row = $.trim(rows[i]);
           if (row) {
             parsed[parsed.length] = row.split(options.cellSeparator);
           }
         }
         return parsed;
-      };
+      }
 
       function dataToDom(data) {
         var ul = document.createElement("ul");
         var num = data.length;
 
         // limited results to a max number
-        if( (options.maxItemsToShow > 0) && (options.maxItemsToShow < num) ) num = options.maxItemsToShow;
+        if (options.maxItemsToShow > 0 && options.maxItemsToShow < num)
+          num = options.maxItemsToShow;
 
-        for (var i=0; i < num; i++) {
+        for (var i = 0; i < num; i++) {
           var row = data[i];
           if (!row) continue;
           var li = document.createElement("li");
@@ -323,19 +350,31 @@
           var extra = null;
           if (row.length > 1) {
             extra = [];
-            for (var j=1; j < row.length; j++) {
+            for (var j = 1; j < row.length; j++) {
               extra[extra.length] = row[j];
             }
           }
           li.extra = extra;
           ul.appendChild(li);
-          $(li).hover(
-            function() { $("li", ul).removeClass("ac_over"); $(this).addClass("ac_over"); active = $("li", ul).indexOf($(this).get(0)); },
-            function() { $(this).removeClass("ac_over"); }
-          ).click(function(e) { e.preventDefault(); e.stopPropagation(); selectItem(this) });
+          $(li)
+            .hover(
+              function () {
+                $("li", ul).removeClass("ac_over");
+                $(this).addClass("ac_over");
+                active = $("li", ul).indexOf($(this).get(0));
+              },
+              function () {
+                $(this).removeClass("ac_over");
+              }
+            )
+            .click(function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              selectItem(this);
+            });
         }
         return ul;
-      };
+      }
 
       function requestData(q) {
         if (!options.matchCase) q = q.toLowerCase();
@@ -343,19 +382,19 @@
         // recieve the cached data
         if (data) {
           receiveData(q, data);
-        // if an AJAX url has been supplied, try loading the data now
-        } else if( (typeof options.url == "string") && (options.url.length > 0) ){
-          $.getJSON(makeUrl(q)+"&response=json&callback=?", function(data) {
-    //                alert(data.data)
+          // if an AJAX url has been supplied, try loading the data now
+        } else if (typeof options.url == "string" && options.url.length > 0) {
+          $.getJSON(makeUrl(q) + "&response=json&callback=?", function (data) {
+            //                alert(data.data)
             data = parseData(data.data);
             addToCache(q, data);
             receiveData(q, data);
           });
-        // if there's been no data found, remove the loading class
+          // if there's been no data found, remove the loading class
         } else {
           $input.removeClass(options.loadingClass);
         }
-      };
+      }
 
       function makeUrl(q) {
         var url = options.url + "?q=" + encodeURI(q);
@@ -363,7 +402,7 @@
           url += "&" + i + "=" + encodeURI(options.extraParams[i]);
         }
         return url;
-      };
+      }
 
       function loadFromCache(q) {
         if (!q) return null;
@@ -386,41 +425,41 @@
           }
         }
         return null;
-      };
+      }
 
       function matchSubset(s, sub) {
         if (!options.matchCase) s = s.toLowerCase();
         var i = s.indexOf(sub);
         if (i == -1) return false;
         return i == 0 || options.matchContains;
-      };
+      }
 
-      this.flushCache = function() {
+      this.flushCache = function () {
         flushCache();
       };
 
-      this.setExtraParams = function(p) {
+      this.setExtraParams = function (p) {
         options.extraParams = p;
       };
 
-      this.getExtraParams = function() {
+      this.getExtraParams = function () {
         return options.extraParams;
       };
 
-      this.getOptions = function() {
+      this.getOptions = function () {
         return options;
       };
 
-      this.findValue = function(){
+      this.findValue = function () {
         var q = $input.val();
 
         if (!options.matchCase) q = q.toLowerCase();
         var data = options.cacheLength ? loadFromCache(q) : null;
         if (data) {
           findValueCallback(q, data);
-        } else if( (typeof options.url == "string") && (options.url.length > 0) ){
-          $.get(makeUrl(q), function(data) {
-            data = parseData(data)
+        } else if (typeof options.url == "string" && options.url.length > 0) {
+          $.get(makeUrl(q), function (data) {
+            data = parseData(data);
             addToCache(q, data);
             findValueCallback(q, data);
           });
@@ -428,18 +467,18 @@
           // no matches
           findValueCallback(q, null);
         }
-      }
+      };
 
-      function findValueCallback(q, data){
+      function findValueCallback(q, data) {
         if (data) $input.removeClass(options.loadingClass);
 
-        var num = (data) ? data.length : 0;
+        var num = data ? data.length : 0;
         var li = null;
 
-        for (var i=0; i < num; i++) {
+        for (var i = 0; i < num; i++) {
           var row = data[i];
 
-          if( row[0].toLowerCase() == q.toLowerCase() ){
+          if (row[0].toLowerCase() == q.toLowerCase()) {
             li = document.createElement("li");
             if (options.formatItem) {
               li.innerHTML = options.formatItem(row, i, num);
@@ -449,16 +488,19 @@
               li.selectValue = row[0];
             }
             var extra = null;
-            if( row.length > 1 ){
+            if (row.length > 1) {
               extra = [];
-              for (var j=1; j < row.length; j++) {
+              for (var j = 1; j < row.length; j++) {
                 extra[extra.length] = row[j];
               }
             }
             li.extra = extra;
           }
         }
-        if( options.onFindValue ) setTimeout(function() { options.onFindValue(li) }, 1);
+        if (options.onFindValue)
+          setTimeout(function () {
+            options.onFindValue(li);
+          }, 1);
       }
 
       function addToCache(q, data) {
@@ -470,26 +512,27 @@
           cache.length++;
         }
         cache.data[q] = data;
-      };
+      }
 
       function findPos(obj) {
         var curleft = obj.offsetLeft || 0;
         var curtop = obj.offsetTop || 0;
-        while (obj = obj.offsetParent) {
-          curleft += obj.offsetLeft
-          curtop += obj.offsetTop
+        while ((obj = obj.offsetParent)) {
+          curleft += obj.offsetLeft;
+          curtop += obj.offsetTop;
         }
-        return {x:curleft,y:curtop};
+        return { x: curleft, y: curtop };
       }
-    }
+    };
 
-    jQuery.fn.bp_autocomplete = function(url, options, data) {
+    jQuery.fn.bp_autocomplete = function (url, options, data) {
       // Make sure options exists
       options = options || {};
       // Set url as option
       options.url = url;
       // set some bulk local data
-      options.data = ((typeof data == "object") && (data.constructor == Array)) ? data : null;
+      options.data =
+        typeof data == "object" && data.constructor == Array ? data : null;
 
       // Set default values for required options
       options.inputClass = options.inputClass || "ac_input";
@@ -510,22 +553,22 @@
       options.maxItemsToShow = options.maxItemsToShow || -1;
       options.autoFill = options.autoFill || false;
       options.width = parseInt(options.width, 10) || 0;
-      this.each(function() {
+      this.each(function () {
         var input = this;
         new jQuery.bp_autocomplete(input, options);
       });
 
       // Don't break the chain
       return this;
-    }
+    };
 
-    jQuery.fn.bp_autocompleteArray = function(data, options) {
+    jQuery.fn.bp_autocompleteArray = function (data, options) {
       return this.bp_autocomplete(null, options, data);
-    }
+    };
 
-    jQuery.fn.indexOf = function(e){
-      for( var i=0; i<this.length; i++ ){
-        if( this[i] == e ) return i;
+    jQuery.fn.indexOf = function (e) {
+      for (var i = 0; i < this.length; i++) {
+        if (this[i] == e) return i;
       }
       return -1;
     };

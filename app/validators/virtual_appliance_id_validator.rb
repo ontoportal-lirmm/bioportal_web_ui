@@ -1,7 +1,7 @@
 # VirtualApplianceIdValidator
 #
-# Custom validator for virtual appliance IDs. The virtual appliance ID in a 
-# license key must match the ID of the virtual appliance against which a 
+# Custom validator for virtual appliance IDs. The virtual appliance ID in a
+# license key must match the ID of the virtual appliance against which a
 # license is submitted.
 #
 #   class License < ApplicationRecord
@@ -10,7 +10,6 @@
 #
 
 class VirtualApplianceIdValidator < ActiveModel::EachValidator
-
   def validate_each(record, attribute, value)
     return if record.is_trial?
 
@@ -21,7 +20,7 @@ class VirtualApplianceIdValidator < ActiveModel::EachValidator
       record.errors.add(attribute, :no_appliance_id_for_comparison)
       return false
     end
-    
+
     unless valid_virtual_appliance_id?(value, response["appliance_id"])
       record.errors.add(attribute, :appliance_id_mismatch)
     end
@@ -31,10 +30,9 @@ class VirtualApplianceIdValidator < ActiveModel::EachValidator
 
   def valid_virtual_appliance_id?(value, appliance_id)
     decrypted_key = LicenseKeyDecrypter.call(value)
-    decrypted_appliance_id = decrypted_key.split(';')[0]
+    decrypted_appliance_id = decrypted_key.split(";")[0]
     appliance_id.eql?(decrypted_appliance_id)
   rescue OpenSSL::Cipher::CipherError, OpenSSL::PKey::RSAError
     false
   end
-
 end
