@@ -3,11 +3,18 @@
 }
 
 #inputTextHighlighted {
-  display:none;
+  display: none;
   background-color: #e2ebf0;
 }
 
-.generalError, .invalidMaxOntError, .invalidWeightsError, .notTextError, .sumWeightsError, .rangeWeightsError, .maxOntologiesError, .inputSizeError {
+.generalError,
+.invalidMaxOntError,
+.invalidWeightsError,
+.notTextError,
+.sumWeightsError,
+.rangeWeightsError,
+.maxOntologiesError,
+.inputSizeError {
   display: none;
   color: red;
 }
@@ -33,5 +40,5 @@
 }
 
 #recommender-help i {
-  margin-left: .25em;
+  margin-left: 0.25em;
 }

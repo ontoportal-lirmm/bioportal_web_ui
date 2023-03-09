@@ -1,4 +1,4 @@
-<select value="neighbor" onchange="toggleHide(this.value,'images')">	
+<select value="neighbor" onchange="toggleHide(this.value,'images')">
 	<option value="neighbor">Show Network Neighborhood</option>
 	<option value="root">Show Hierarchy To Root (All Relationships)</option>
 </select>

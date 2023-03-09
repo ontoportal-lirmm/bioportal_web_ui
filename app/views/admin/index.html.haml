@@ -27,7 +27,7 @@
 
       -# Site Administration tab
       %div.tab-pane.active.show.fade{id: "site-admin", role: "tabpanel", aria: { labelledby: "site-admin-tab" }}
-        
+
         -# Clear caches
         %div#site-admin-clear-caches.my-5
           %div.site-admin-page-header
@@ -37,7 +37,7 @@
             = link_to("Reset UI cache connection", "#", id: "reset_memcache_connection_action", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
             = link_to("Flush GOO cache", "#", id: "flush_goo_cache_action", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
             = link_to("Flush HTTP cache", "#", id: "flush_http_cache_action", class: "btn btn-outline-secondary btn-sm",  role: "button")
-        
+
         -# Check for updates
         %div#site-admin-update-check.mb-5
           %div.site-admin-page-header
@@ -75,7 +75,7 @@
             %tr
               %th{scope: "col"} Licensed to
               %th{scope: "col"} Appliance ID
-              %th{scope: "col"} Valid till  
+              %th{scope: "col"} Valid till
               %th{scope: "col"} Days remaining
           %tbody
 

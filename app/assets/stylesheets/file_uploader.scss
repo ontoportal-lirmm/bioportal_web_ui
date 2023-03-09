@@ -1,12 +1,11 @@
 .file_uploader {
-  color: #D7D7EF;
-  font-family: 'Lato', sans-serif;
+  color: #d7d7ef;
+  font-family: "Lato", sans-serif;
 }
 
 .file_uploader > h2 {
   margin: 50px 0;
 }
-
 
 .file-drop-area {
   position: relative;
@@ -18,7 +17,6 @@
   border: 1px dashed rgba(255, 255, 255, 0.4);
   border-radius: 3px;
   transition: 0.2s;
-
 }
 
 .choose-file-button {
@@ -49,5 +47,4 @@
   width: 100%;
   cursor: pointer;
   opacity: 0;
-
 }

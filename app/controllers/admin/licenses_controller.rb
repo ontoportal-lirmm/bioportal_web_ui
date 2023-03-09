@@ -1,5 +1,4 @@
 class Admin::LicensesController < ApplicationController
-
   def index
     @licenses = License.current_license
     respond_to :js
@@ -14,7 +13,7 @@ class Admin::LicensesController < ApplicationController
 
     respond_to do |format|
       if @license.save
-         format.js { flash.now[:notice] = t(".success") }
+        format.js { flash.now[:notice] = t(".success") }
       else
         format.js { render :new }
       end
@@ -26,5 +25,4 @@ class Admin::LicensesController < ApplicationController
   def license_params
     params.require(:license).permit(:encrypted_key)
   end
-
 end

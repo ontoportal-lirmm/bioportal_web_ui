@@ -1,6 +1,5 @@
 class ReviewsController < ApplicationController
-
-  layout 'ontology_viewer'
+  layout "ontology_viewer"
 
   RATING_TYPES = [
     :usabilityRating,
@@ -8,13 +7,13 @@ class ReviewsController < ApplicationController
     :qualityRating,
     :formalityRating,
     :correctnessRating,
-    :documentationRating
+    :documentationRating,
   ].freeze
 
   def new
     @rating_types = RATING_TYPES
     @ontology = LinkedData::Client::Models::Ontology.find(params[:ontology])
-    @review = LinkedData::Client::Models::Review.new(values: {ontologyReviewed: @ontology.id, creator: session[:user].id})
+    @review = LinkedData::Client::Models::Review.new(values: { ontologyReviewed: @ontology.id, creator: session[:user].id })
 
     if request.xhr?
       render layout: false
@@ -41,7 +40,7 @@ class ReviewsController < ApplicationController
     else
       respond_to do |format|
         format.html do
-          flash[:notice] = 'Review was successfully created'
+          flash[:notice] = "Review was successfully created"
           redirect_to "/ontologies/#{@ontology.acronym}?p=summary"
         end
         format.js do
@@ -55,25 +54,25 @@ class ReviewsController < ApplicationController
   # PUT /reviews/1.xml
   def update
     @review = Review.find(params[:id])
-    ratings = Hash[*(@review.ratings.map{|rate| [rate.id.to_i, rate] }.flatten)]
+    ratings = Hash[*(@review.ratings.map { |rate| [rate.id.to_i, rate] }.flatten)]
     #puts ratings.inspect
-     for rating_key in params.keys
-        if rating_key.include?("star")
-          #puts rating_key.split("_")[1].to_i
-          ratings[rating_key.split("_")[1].to_i].value=params[rating_key].to_i
-          ratings[rating_key.split("_")[1].to_i].save
-        end
+    for rating_key in params.keys
+      if rating_key.include?("star")
+        #puts rating_key.split("_")[1].to_i
+        ratings[rating_key.split("_")[1].to_i].value = params[rating_key].to_i
+        ratings[rating_key.split("_")[1].to_i].save
       end
-      if @review.update_attributes(params[:review])
-        @review.reload
-         if request.xhr?
-            render :action=>'show', :layout=>false
-          else
-            redirect_to reviews(:ontology=>review.ontology_id)
-          end
+    end
+    if @review.update_attributes(params[:review])
+      @review.reload
+      if request.xhr?
+        render :action => "show", :layout => false
       else
-        render :action => "edit"
+        redirect_to reviews(:ontology => review.ontology_id)
       end
+    else
+      render :action => "edit"
+    end
   end
 
   # DELETE /reviews/1
@@ -84,7 +83,7 @@ class ReviewsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(reviews_url) }
-      format.xml  { head :ok }
+      format.xml { head :ok }
     end
   end
 end

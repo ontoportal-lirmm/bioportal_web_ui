@@ -1,6 +1,5 @@
 class Notifier < ActionMailer::Base
   def signup(user)
-
   end
 
   def lost_password(user, password)
@@ -45,6 +44,4 @@ class Notifier < ActionMailer::Base
       subject "subscribe address=#{email}"
     end
   end
-
-
 end

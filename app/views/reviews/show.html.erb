@@ -12,15 +12,15 @@
         <td id="review_<%=@review.id%>">
         	<div class="star_ratings">
           	<ul>
-            	<%for rating in @review.ratings%>				
+            	<%for rating in @review.ratings%>
               	<li>
                 			<%if rating.value.eql?(0)%>
                   			<span style="float:left;">Not Rated</span>
                 			<%else%>
-                  			<input name="star_<%=rating.id%>" type="radio" class="star" value="1" <% if rating.value.to_i.eql?(1)%> checked="checked" <%end%>disabled="disabled" /> 
-                  			<input name="star_<%=rating.id%>" type="radio" class="star" value="2" <% if rating.value.to_i.eql?(2)%> checked="checked" <%end%>disabled="disabled" /> 
-                  			<input name="star_<%=rating.id%>" type="radio" class="star" value="3" <% if rating.value.to_i.eql?(3)%> checked="checked" <%end%>disabled="disabled" /> 
-                  			<input name="star_<%=rating.id%>" type="radio" class="star" value="4" <% if rating.value.to_i.eql?(4)%> checked="checked" <%end%>disabled="disabled" /> 
+                  			<input name="star_<%=rating.id%>" type="radio" class="star" value="1" <% if rating.value.to_i.eql?(1)%> checked="checked" <%end%>disabled="disabled" />
+                  			<input name="star_<%=rating.id%>" type="radio" class="star" value="2" <% if rating.value.to_i.eql?(2)%> checked="checked" <%end%>disabled="disabled" />
+                  			<input name="star_<%=rating.id%>" type="radio" class="star" value="3" <% if rating.value.to_i.eql?(3)%> checked="checked" <%end%>disabled="disabled" />
+                  			<input name="star_<%=rating.id%>" type="radio" class="star" value="4" <% if rating.value.to_i.eql?(4)%> checked="checked" <%end%>disabled="disabled" />
                   			<input name="star_<%=rating.id%>" type="radio" class="star" value="5" <% if rating.value.to_i.eql?(5)%> checked="checked" <%end%>disabled="disabled" />
                 			<%end%>
                 		<b>&nbsp;<%=rating.rating_type.name%></b>
@@ -28,7 +28,7 @@
             	<%end%>
           	</ul>
         	</div>
-        	
+
         	<p><%=@review.review%></p>
       	</td>
     	</tr>

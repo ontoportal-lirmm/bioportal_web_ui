@@ -3,7 +3,6 @@
 module MappingStatistics
   extend ActiveSupport::Concern
 
-
   MAPPINGS_URL = "#{LinkedData::Client.settings.rest_url}/mappings"
 
   MAPPING_STATISTICS_URL = "#{LinkedData::Client.settings.rest_url}/mappings/statistics/ontologies/"
@@ -17,24 +16,22 @@ module MappingStatistics
     mapping_counts = []
 
     ontologies = LinkedData::Client::Models::Ontology.all(
-      include: 'acronym,name,summaryOnly',
+      include: "acronym,name,summaryOnly",
       display_links: false,
-      display_context: false
+      display_context: false,
     )
 
     statistics = get_statistics source_acronym
     statistics&.each_pair do |target_acronym, count|
       if target_acronym.to_s == EXTERNAL_MAPPINGS_GRAPH
-        ont = OpenStruct.new({:id => target_acronym.to_s, :name => "External Mappings"})
+        ont = OpenStruct.new({ :id => target_acronym.to_s, :name => "External Mappings" })
       elsif target_acronym.to_s.start_with?(INTERPORTAL_MAPPINGS_GRAPH)
-        ont =OpenStruct.new( {:id => target_acronym.to_s, :name => "#{target_acronym.to_s.split("/")[-1].upcase} Interportal"})
+        ont = OpenStruct.new({ :id => target_acronym.to_s, :name => "#{target_acronym.to_s.split("/")[-1].upcase} Interportal" })
       else
         ont = ontologies.find { |o| o.acronym.eql? target_acronym.to_s }
         # Handle the case where statistics are still present for a deleted ontology
-        next  if ont.nil? || ont.summaryOnly
+        next if ont.nil? || ont.summaryOnly
       end
-
-
 
       mapping_counts << { target_ontology: ont, count: count }
     end
@@ -43,6 +40,7 @@ module MappingStatistics
   end
 
   private
+
   def get_statistics(source_acronym)
     ontology_label = source_acronym.split(":")
     if ontology_label[-1] == "external"
@@ -54,7 +52,4 @@ module MappingStatistics
     end
     counts
   end
-
-
-
 end

@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-Dir[Rails.root.join('app', 'lib', 'kgcl', 'renderers', '*.rb')].sort.each { |file| require file }
+Dir[Rails.root.join("app", "lib", "kgcl", "renderers", "*.rb")].sort.each { |file| require file }
 
 module KGCL
   module IssueContentGenerator
     RENDERERS = {
       KGCL::Operations::NEW_SYNONYM => NewSynonymContent,
-      KGCL::Operations::REMOVE_SYNONYM => RemoveSynonymContent
+      KGCL::Operations::REMOVE_SYNONYM => RemoveSynonymContent,
     }.freeze
 
     def self.call(params)

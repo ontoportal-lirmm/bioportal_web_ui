@@ -1,26 +1,26 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 import Split from "split.js";
 // Connects to data-controller="container-splitter"
 export default class extends Controller {
-  static targets = ['container']
+  static targets = ["container"];
 
   connect() {
-    this.element.style.display= 'flex'
+    this.element.style.display = "flex";
     Split(this.containerTargets, {
       elementStyle: function (dimension, size, gutterSize) {
         return {
-          'flex-basis': 'calc(' + size + '% - ' + gutterSize + 'px)'
-        }
+          "flex-basis": "calc(" + size + "% - " + gutterSize + "px)",
+        };
       },
       gutterStyle: function (dimension, gutterSize) {
         return {
-          'flex-basis': gutterSize + 'px'
-        }
+          "flex-basis": gutterSize + "px",
+        };
       },
       gutterSize: 10,
       direction: "horizontal",
       sizes: [30, 70],
-      cursor: "col-resize"
-    })
+      cursor: "col-resize",
+    });
   }
 }

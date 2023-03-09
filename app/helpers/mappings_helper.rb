@@ -1,10 +1,9 @@
 module MappingsHelper
-
   RELATIONSHIP_URIS = {
     "http://www.w3.org/2004/02/skos/core" => "skos:",
     "http://www.w3.org/2000/01/rdf-schema" => "rdfs:",
     "http://www.w3.org/2002/07/owl" => "owl:",
-    "http://www.w3.org/1999/02/22-rdf-syntax-ns" => "rdf:"
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns" => "rdf:",
   }
 
   # Used to replace the full URI by the prefixed URI
@@ -14,7 +13,7 @@ module MappingsHelper
     "http://www.w3.org/2002/07/owl#" => "owl:",
     "http://www.w3.org/1999/02/22-rdf-syntax-ns#" => "rdf:",
     "http://purl.org/linguistics/gold/" => "gold:",
-    "http://lemon-model.net/lemon#" => "lemon:"
+    "http://lemon-model.net/lemon#" => "lemon:",
   }
 
   INTERPORTAL_HASH = $INTERPORTAL_HASH
@@ -58,13 +57,13 @@ module MappingsHelper
     else
       target = " target='#{target}' "
     end
-    if cls_id.start_with? 'http://'
+    if cls_id.start_with? "http://"
       href_cls = " href='#{bp_class_link(cls_id, ont_acronym)}' "
       data_cls = " data-cls='#{cls_id}' "
       data_ont = " data-ont='#{ont_acronym}' "
       return "<a class='cls4ajax' #{data_ont} #{data_cls} #{href_cls} #{target}>#{cls_id}</a>"
     else
-      return auto_link(cls_id, :all, :target => '_blank')
+      return auto_link(cls_id, :all, :target => "_blank")
     end
   end
 
@@ -80,12 +79,11 @@ module MappingsHelper
     else
       raw("<a #{href_cls} target='_blank'>#{cls.id}</a>")
     end
-
   end
 
   def ajax_to_internal_cls(cls)
     link_to("#{cls.id}<span href='/ajax/classes/label?ontology=#{cls.links["ontology"]}&concept=#{escape(cls.id)}' class='get_via_ajax'></span>".html_safe,
-            ontology_path(cls.explore.ontology.acronym, p: 'classes', conceptid: cls.id))
+            ontology_path(cls.explore.ontology.acronym, p: "classes", conceptid: cls.id))
   end
 
   # to get the apikey from the interportal instance of the interportal class.
@@ -113,12 +111,12 @@ module MappingsHelper
   end
 
   def ajax_to_external_cls(cls)
-    raw("<a href='#{cls.links['self']}' target='_blank'>#{get_label_for_external_cls(cls.id)}</a>")
+    raw("<a href='#{cls.links["self"]}' target='_blank'>#{get_label_for_external_cls(cls.id)}</a>")
   end
 
   # Replace the inter_portal mapping ontology URI (that link to the API) by the link to the ontology in the UI
   def get_inter_portal_ui_link(uri, process_name)
-    process_name = '' if process_name.nil?
+    process_name = "" if process_name.nil?
     interportal_acronym = process_name.split(" ")[2]
     if interportal_acronym.nil? || interportal_acronym.empty?
       uri
@@ -157,7 +155,7 @@ module MappingsHelper
   end
 
   def internal_mapping?(cls)
-    cls.links['self'].to_s.start_with?(LinkedData::Client.settings.rest_url) || ($LOCAL_IP.present? && cls.links['self'].to_s.include?($LOCAL_IP))
+    cls.links["self"].to_s.start_with?(LinkedData::Client.settings.rest_url) || ($LOCAL_IP.present? && cls.links["self"].to_s.include?($LOCAL_IP))
   end
 
   def inter_portal_mapping?(cls)
@@ -168,10 +166,10 @@ module MappingsHelper
     mapping_type = Array(params[:mapping_type]).first
     external = true
     case mapping_type
-    when 'interportal'
+    when "interportal"
       ontology_to = "#{params[:map_to_interportal]}/ontologies/#{params[:map_to_interportal_ontology]}"
       concept_to_id = params[:map_to_interportal_class]
-    when 'external'
+    when "external"
       ontology_to = params[:map_to_external_ontology]
       concept_to_id = params[:map_to_external_class]
     else
@@ -182,12 +180,12 @@ module MappingsHelper
     [ontology_to, concept_to_id, external]
   end
 
-  def set_mapping_target(concept_to_id:, ontology_to:, mapping_type: )
+  def set_mapping_target(concept_to_id:, ontology_to:, mapping_type:)
     case mapping_type
-    when 'interportal'
+    when "interportal"
       @map_to_interportal, @map_to_interportal_ontology = ontology_to.match(%r{(.*)/ontologies/(.*)}).to_a[1..]
       @map_to_interportal_class = concept_to_id
-    when 'external'
+    when "external"
       @map_to_external_ontology = ontology_to
       @map_to_external_class = concept_to_id
     else
@@ -198,7 +196,7 @@ module MappingsHelper
 
   def get_mappings_target
     ontology_to, concept_to_id, external_mapping = get_mappings_target_params
-    target = ''
+    target = ""
     if external_mapping
       target_ontology = ontology_to
       target = concept_to_id
@@ -217,6 +215,6 @@ module MappingsHelper
   end
 
   def type?(type)
-    @mapping_type.nil? && type.eql?('internal') || @mapping_type.eql?(type)
+    @mapping_type.nil? && type.eql?("internal") || @mapping_type.eql?(type)
   end
 end

@@ -1,10 +1,10 @@
-.annotator, .ncbo_annotatorplus {
-
+.annotator,
+.ncbo_annotatorplus {
   #annotator-help {
     display: none;
   }
   #annotator-help > i.fa.fa-question-circle {
-    margin-left: .25em;
+    margin-left: 0.25em;
     vertical-align: middle;
   }
 
@@ -18,7 +18,7 @@
 
   .annotator_spinner {
     display: none;
-    
+
     img {
       margin-left: 3px;
       vertical-align: middle;

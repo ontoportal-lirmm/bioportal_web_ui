@@ -7,7 +7,7 @@ class SchemesController < ApplicationController
 
   def show_label
     scheme = get_request_scheme
-    scheme_label = scheme ? scheme['prefLabel'] : params[:id]
+    scheme_label = scheme ? scheme["prefLabel"] : params[:id]
     scheme_label = scheme_label.nil? || scheme_label.empty? ? params[:id] : scheme_label
 
     render LabelLinkComponent.inline(params[:id], scheme_label)

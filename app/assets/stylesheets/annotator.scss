@@ -6,7 +6,8 @@ div#semanticTypes_chzn.chzn-container-active input.default {
   font-style: normal !important;
 }
 
-div#annotations_filter, div#annotations_info {
+div#annotations_filter,
+div#annotations_info {
   display: none;
 }
 
@@ -15,7 +16,7 @@ div#annotations_filter, div#annotations_info {
 }
 
 #annotations th {
-	padding-right: 6px;
+  padding-right: 6px;
 }
 
 #annotations span[class="popup_container"] {
@@ -23,32 +24,31 @@ div#annotations_filter, div#annotations_info {
 }
 
 #annotator_parameters {
-  color: gray; 
+  color: gray;
   font-weight: bold;
 }
 
 #annotations_container {
-  display: none; 
-  margin-top: 10px; 
+  display: none;
+  margin-top: 10px;
   margin-bottom: 25px;
 }
 
 #annotations_container #result_counts {
-  float: right; 
-  font-style: oblique; 
+  float: right;
+  font-style: oblique;
   color: gray;
 }
 
 #annotator-help i {
-  margin-left: .25em;
+  margin-left: 0.25em;
 }
 
 /* AnnotatorPlus */
 
 .annotatorplus {
-
   #annotator-help > i.fa.fa-question-circle {
-    margin-left: .25em;
+    margin-left: 0.25em;
     vertical-align: middle;
   }
 
@@ -62,7 +62,7 @@ div#annotations_filter, div#annotations_info {
 
   .annotator_spinner {
     display: none;
-    
+
     img {
       margin-left: 3px;
       vertical-align: middle;

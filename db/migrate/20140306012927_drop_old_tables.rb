@@ -16,7 +16,7 @@ class DropOldTables < ActiveRecord::Migration[4.2]
       :surveys,
       :users,
       :uses,
-      :widget_logs
+      :widget_logs,
     ]
     old_tables.each do |table|
       drop_table table rescue next

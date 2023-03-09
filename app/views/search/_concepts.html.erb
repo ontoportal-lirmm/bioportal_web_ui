@@ -7,12 +7,12 @@
 				<%end%>
 			</select>
 		</div>
-		
+
 		<div style="float:left;margin:10px;"id="map_info"></div>
-		
+
 		<div style="margin: 10px; clear: both;">Comment<br/><%=text_area(:mapping, :comment, :size => "30x10")%></div>
 	</div>
-	
+
 	<div style="clear:both;white-space:nowrap">
 	  <%= select("mapping", "directionality", { "Bidirectional" => "bidirectional", "Unidirectional" => "unidirectional" })%><br><br>
     <%= submit_tag "Create", :class=>'blueButton'%> &nbsp;&nbsp;

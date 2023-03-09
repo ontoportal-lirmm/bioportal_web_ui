@@ -1,5 +1,6 @@
 class InstancesController < ApplicationController
   include InstancesHelper
+
   def index_by_ontology
     get_ontology(params)
     custom_render get_instances_by_ontology_json(@ontology, get_query_parameters)
@@ -12,8 +13,8 @@ class InstancesController < ApplicationController
   end
 
   def show
-    @instance = get_instance_details_json(params[:ontology_id], params[:instance_id], {include: 'all'})
-    render partial: 'instances/instance_details'
+    @instance = get_instance_details_json(params[:ontology_id], params[:instance_id], { include: "all" })
+    render partial: "instances/instance_details"
   end
 
   private
@@ -22,13 +23,14 @@ class InstancesController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     ontology_not_found(params[:ontology]) if @ontology.nil?
   end
+
   # json render + adding next and prev pages links
   def custom_render(instances)
-    instances[:collection].map! { |i| add_labels_to_print(i, @ontology.acronym)}
+    instances[:collection].map! { |i| add_labels_to_print(i, @ontology.acronym) }
     if (instances.respond_to? :links) && (!instances.respond_to? :errors)
       instances.links = {
         nextPage: get_page_link(instances.nextPage),
-        prevPage: get_page_link(instances.prevPage)
+        prevPage: get_page_link(instances.prevPage),
       }
     end
 
@@ -48,6 +50,6 @@ class InstancesController < ApplicationController
   end
 
   def get_query_parameters
-    request.query_parameters.slice(:include, :display, :page, :pagesize, :search , :sortby , :order) || {}
+    request.query_parameters.slice(:include, :display, :page, :pagesize, :search, :sortby, :order) || {}
   end
 end

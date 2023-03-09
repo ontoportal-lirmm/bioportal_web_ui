@@ -1,9 +1,9 @@
-require 'cgi'
+require "cgi"
 
 class ConceptsController < ApplicationController
   include MappingsHelper
   include ConceptsHelper
-  layout 'ontology'
+  layout "ontology"
 
   def show_concept
     params[:id] = params[:id] ? params[:id] : params[:conceptid]
@@ -19,12 +19,12 @@ class ConceptsController < ApplicationController
 
     @submission = get_ontology_submission_ready(@ontology)
     @ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
-    @concept = @ontology.explore.single_class({full: true}, params[:id])
+    @concept = @ontology.explore.single_class({ full: true }, params[:id])
     @instances_concept_id = @concept.id
 
     concept_not_found(params[:id]) if @concept.nil?
     gather_details
-    render :partial => 'show'
+    render :partial => "show"
   end
 
   def show
@@ -41,21 +41,21 @@ class ConceptsController < ApplicationController
     @ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
 
     if request.xhr?
-      display = params[:callback].eql?('load') ? {full: true} : {display: "prefLabel"}
+      display = params[:callback].eql?("load") ? { full: true } : { display: "prefLabel" }
       @concept = @ontology.explore.single_class(display, params[:id])
       concept_not_found(params[:id]) if @concept.nil?
-      @schemes = params[:concept_schemes].split(',')
+      @schemes = params[:concept_schemes].split(",")
       show_ajax_request # process an ajax call
     else
       # Get the latest 'ready' submission, or fallback to any latest submission
       # TODO: change the logic here if the fallback will crash the visualization
       @submission = get_ontology_submission_ready(@ontology)  # application_controller
 
-      @concept = @ontology.explore.single_class({full: true}, params[:id])
+      @concept = @ontology.explore.single_class({ full: true }, params[:id])
       concept_not_found(params[:id]) if @concept.nil?
 
       show_uri_request # process a full call
-      render :file => '/ontologies/visualize', :use_full_path => true, :layout => 'ontology'
+      render :file => "/ontologies/visualize", :use_full_path => true, :layout => "ontology"
     end
   end
 
@@ -95,9 +95,9 @@ class ConceptsController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     if @ontology.nil?
       ontology_not_found(params[:ontology])
-    else 
+    else
       get_class(params) #application_controller
-      render partial: 'ontologies/treeview', locals: { autoCLick: params[:auto_click] || true }
+      render partial: "ontologies/treeview", locals: { autoCLick: params[:auto_click] || true }
     end
   end
 
@@ -108,12 +108,12 @@ class ConceptsController < ApplicationController
     else
       page = params[:page]
       @last_date = params[:last_date]
-      auto_click = page.to_s.eql?('1')
+      auto_click = page.to_s.eql?("1")
       params = {
         page: page,
-        sortby:'modified,created',
-        order:'desc,desc',
-        display: 'prefLabel,modified,created'
+        sortby: "modified,created",
+        order: "desc,desc",
+        display: "prefLabel,modified,created",
       }
       if @last_date
         params.merge!(last_date: @last_date)
@@ -124,9 +124,8 @@ class ConceptsController < ApplicationController
       @concepts = filter_concept_with_no_date(@page.collection)
       @concepts_year_month = concepts_to_years_months(@concepts)
 
-      render partial: 'concepts/date_sorted_list', locals: { auto_click: auto_click }
+      render partial: "concepts/date_sorted_list", locals: { auto_click: auto_click }
     end
-
   end
 
   def property_tree
@@ -144,12 +143,12 @@ class ConceptsController < ApplicationController
 
   # Renders a details pane for a given ontology/concept
   def details
-    concept_not_found('') if params[:conceptid].nil? || params[:conceptid].empty?
+    concept_not_found("") if params[:conceptid].nil? || params[:conceptid].empty?
 
     if params[:ontology].to_i > 0
       orig_id = params[:ontology]
       params_cleanup_new_api()
-      options = {stop_words: ["controller", "action", "id"]}
+      options = { stop_words: ["controller", "action", "id"] }
       redirect_to "#{request.path.sub(orig_id, params[:ontology])}#{params_string_for_redirect(params, options)}", :status => :moved_permanently
       return
     end
@@ -157,7 +156,7 @@ class ConceptsController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     ontology_not_found(params[:ontology]) if @ontology.nil?
 
-    @concept = @ontology.explore.single_class({full: true}, CGI.unescape(params[:conceptid]))
+    @concept = @ontology.explore.single_class({ full: true }, CGI.unescape(params[:conceptid]))
     concept_not_found(CGI.unescape(params[:conceptid])) if @concept.nil?
 
     if params[:styled].eql?("true")
@@ -167,12 +166,11 @@ class ConceptsController < ApplicationController
     end
   end
 
-
   def biomixer
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     ontology_not_found(params[:ontology]) if @ontology.nil?
 
-    @concept = @ontology.explore.single_class({full: true}, params[:conceptid])
+    @concept = @ontology.explore.single_class({ full: true }, params[:conceptid])
     concept_not_found(params[:conceptid]) if @concept.nil?
 
     @immediate_load = true
@@ -180,18 +178,18 @@ class ConceptsController < ApplicationController
     render partial: "biomixer", layout: false
   end
 
-# PRIVATE -----------------------------------------
-private
+  # PRIVATE -----------------------------------------
+  private
 
   def show_ajax_request
     case params[:callback]
-    when 'load' # Load pulls in all the details of a node
+    when "load" # Load pulls in all the details of a node
       gather_details
-      render :partial => 'load'
-    when 'children' # Children is called only for drawing the tree
-      @children = @concept.explore.children(pagesize: 750, concept_schemes: @schemes.join(',')).collection || []
+      render :partial => "load"
+    when "children" # Children is called only for drawing the tree
+      @children = @concept.explore.children(pagesize: 750, concept_schemes: @schemes.join(",")).collection || []
       @children.sort! { |x, y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase } unless @children.empty?
-      render :partial => 'child_nodes'
+      render :partial => "child_nodes"
     end
   end
 
@@ -214,7 +212,7 @@ private
   end
 
   def filter_concept_with_no_date(concepts)
-    concepts.filter { |c| !concept_date(c).nil?}
+    concepts.filter { |c| !concept_date(c).nil? }
   end
 
   def concepts_to_years_months(concepts)
@@ -222,7 +220,7 @@ private
 
     concepts.group_by { |c| concept_date(c).year }
             .transform_values do |items|
-      items.group_by { |c| concept_date(c).strftime('%B') }
+      items.group_by { |c| concept_date(c).strftime("%B") }
     end
   end
 end

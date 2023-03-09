@@ -8,7 +8,6 @@
 #
 
 class EncryptedKeyValidator < ActiveModel::EachValidator
-
   def validate_each(record, attribute, value)
     return if record.is_trial?
 
@@ -24,5 +23,4 @@ class EncryptedKeyValidator < ActiveModel::EachValidator
   rescue OpenSSL::Cipher::CipherError, OpenSSL::PKey::RSAError
     false
   end
-
 end

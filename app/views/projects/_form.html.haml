@@ -42,7 +42,7 @@
       %td= text_field :project, :contacts, value: @project.contacts, :tabindex => 3
     %tr
       %th Administrators: *
-      %td= f.select :creator, @user_select_list, { selected: @project.creator || session[:user].id }, { multiple: true, :"data-placeholder" => "Select administrators", tabindex: 4 }    
+      %td= f.select :creator, @user_select_list, { selected: @project.creator || session[:user].id }, { multiple: true, :"data-placeholder" => "Select administrators", tabindex: 4 }
     %tr
       %th
         Homepage: *

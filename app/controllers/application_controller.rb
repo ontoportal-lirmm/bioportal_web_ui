@@ -1,13 +1,13 @@
-require 'uri'
-require 'open-uri'
-require 'net/http'
-require 'net/https'
-require 'net/ftp'
-require 'json'
-require 'cgi'
-require 'rexml/document'
-require 'rest-client'
-require 'ontologies_api_client'
+require "uri"
+require "open-uri"
+require "net/http"
+require "net/https"
+require "net/ftp"
+require "json"
+require "cgi"
+require "rexml/document"
+require "rest-client"
+require "ontologies_api_client"
 
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   REST_URI = $REST_URL
   API_KEY = $API_KEY
   PROXY_URI = $PROXY_URL
-  REST_URI_BATCH = REST_URI + '/batch'
+  REST_URI_BATCH = REST_URI + "/batch"
 
   # Rails.cache expiration
   EXPIRY_RI_STATS = 60 * 60 * 24       # 24:00 hours
@@ -29,27 +29,26 @@ class ApplicationController < ActionController::Base
   EXPIRY_RECENT_MAPPINGS = 60 * 60     #  1:00 hours
   EXPIRY_ONTOLOGY_SIMPLIFIED = 60 * 1  #  0:01 minute
 
+  $DATA_CATALOG_VALUES = { "https://biosharing.org/" => "BioSharing",
+                           "http://aber-owl.net/ontology/" => "AberOWL",
+                           "http://vest.agrisemantics.org/content/" => "VEST Registry",
+                           "http://bioportal.bioontology.org/ontologies/" => "BioPortal",
+                           "https://bioportal.bioontology.org/ontologies/" => "BioPortal",
+                           "http://www.ontobee.org/ontology/" => "Ontobee",
+                           "http://www.obofoundry.org/ontology/" => "The OBO Foundry",
+                           "http://www.ebi.ac.uk/ols/ontologies/" => "EBI Ontology Lookup" }
 
-  $DATA_CATALOG_VALUES = {"https://biosharing.org/" => "BioSharing",
-                         "http://aber-owl.net/ontology/" => "AberOWL",
-                         "http://vest.agrisemantics.org/content/" => "VEST Registry",
-                         "http://bioportal.bioontology.org/ontologies/" => "BioPortal",
-                         "https://bioportal.bioontology.org/ontologies/" => "BioPortal",
-                         "http://www.ontobee.org/ontology/" => "Ontobee",
-                         "http://www.obofoundry.org/ontology/" => "The OBO Foundry",
-                         "http://www.ebi.ac.uk/ols/ontologies/" => "EBI Ontology Lookup"}
-
-  RESOLVE_NAMESPACE = {:omv => "http://omv.ontoware.org/2005/05/ontology#", :skos => "http://www.w3.org/2004/02/skos/core#", :owl => "http://www.w3.org/2002/07/owl#",
-                       :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#", :rdfs => "http://www.w3.org/2000/01/rdf-schema#", :metadata => "http://data.bioontology.org/metadata/",
-                       :metadata_def => "http://data.bioontology.org/metadata/def/", :dc => "http://purl.org/dc/elements/1.1/", :xsd => "http://www.w3.org/2001/XMLSchema#",
-                       :oboinowl_gen => "http://www.geneontology.org/formats/oboInOwl#", :obo_purl => "http://purl.obolibrary.org/obo/",
-                       :umls => "http://bioportal.bioontology.org/ontologies/umls/", :door => "http://kannel.open.ac.uk/ontology#", :dct => "http://purl.org/dc/terms/",
-                       :void => "http://rdfs.org/ns/void#", :foaf => "http://xmlns.com/foaf/0.1/", :vann => "http://purl.org/vocab/vann/", :adms => "http://www.w3.org/ns/adms#",
-                       :voaf => "http://purl.org/vocommons/voaf#", :dcat => "http://www.w3.org/ns/dcat#", :mod => "http://www.isibang.ac.in/ns/mod#", :prov => "http://www.w3.org/ns/prov#",
-                       :cc => "http://creativecommons.org/ns#", :schema => "http://schema.org/", :doap => "http://usefulinc.com/ns/doap#", :bibo => "http://purl.org/ontology/bibo/",
-                       :wdrs => "http://www.w3.org/2007/05/powder-s#", :cito => "http://purl.org/spar/cito/", :pav => "http://purl.org/pav/", :nkos => "http://w3id.org/nkos/nkostype#",
-                       :oboInOwl => "http://www.geneontology.org/formats/oboInOwl#", :idot => "http://identifiers.org/idot/", :sd => "http://www.w3.org/ns/sparql-service-description#",
-                       :cclicense => "http://creativecommons.org/licenses/"}
+  RESOLVE_NAMESPACE = { :omv => "http://omv.ontoware.org/2005/05/ontology#", :skos => "http://www.w3.org/2004/02/skos/core#", :owl => "http://www.w3.org/2002/07/owl#",
+                        :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#", :rdfs => "http://www.w3.org/2000/01/rdf-schema#", :metadata => "http://data.bioontology.org/metadata/",
+                        :metadata_def => "http://data.bioontology.org/metadata/def/", :dc => "http://purl.org/dc/elements/1.1/", :xsd => "http://www.w3.org/2001/XMLSchema#",
+                        :oboinowl_gen => "http://www.geneontology.org/formats/oboInOwl#", :obo_purl => "http://purl.obolibrary.org/obo/",
+                        :umls => "http://bioportal.bioontology.org/ontologies/umls/", :door => "http://kannel.open.ac.uk/ontology#", :dct => "http://purl.org/dc/terms/",
+                        :void => "http://rdfs.org/ns/void#", :foaf => "http://xmlns.com/foaf/0.1/", :vann => "http://purl.org/vocab/vann/", :adms => "http://www.w3.org/ns/adms#",
+                        :voaf => "http://purl.org/vocommons/voaf#", :dcat => "http://www.w3.org/ns/dcat#", :mod => "http://www.isibang.ac.in/ns/mod#", :prov => "http://www.w3.org/ns/prov#",
+                        :cc => "http://creativecommons.org/ns#", :schema => "http://schema.org/", :doap => "http://usefulinc.com/ns/doap#", :bibo => "http://purl.org/ontology/bibo/",
+                        :wdrs => "http://www.w3.org/2007/05/powder-s#", :cito => "http://purl.org/spar/cito/", :pav => "http://purl.org/pav/", :nkos => "http://w3id.org/nkos/nkostype#",
+                        :oboInOwl => "http://www.geneontology.org/formats/oboInOwl#", :idot => "http://identifiers.org/idot/", :sd => "http://www.w3.org/ns/sparql-service-description#",
+                        :cclicense => "http://creativecommons.org/licenses/" }
 
   $trial_license_initialized = false
 
@@ -62,8 +61,6 @@ class ApplicationController < ActionController::Base
 
   before_action :set_global_thread_values, :domain_ontology_set, :authorize_miniprofiler, :clean_empty_strings_from_params_arrays, :init_trial_license
 
-
-
   def set_global_thread_values
     Thread.current[:session] = session
     Thread.current[:request] = request
@@ -73,7 +70,7 @@ class ApplicationController < ActionController::Base
     params ||= params()
     params.keys.each do |k|
       clean_empty_strings_from_params_arrays(params[k]) if params[k].is_a?(Hash)
-      params[k] = params[k].select {|e| !e.eql?("")} if params[k].is_a?(Array)
+      params[k] = params[k].select { |e| !e.eql?("") } if params[k].is_a?(Array)
     end
   end
 
@@ -86,12 +83,12 @@ class ApplicationController < ActionController::Base
       subdomain = host_parts[0].downcase
 
       slices = LinkedData::Client::Models::Slice.all
-      slices_acronyms = slices.map {|s| s.acronym}
+      slices_acronyms = slices.map { |s| s.acronym }
 
       # Set custom ontologies if we're on a subdomain that has them
       # Else, make sure user ontologies are set appropriately
       if slices_acronyms && slices_acronyms.include?(subdomain)
-        slice = slices.select {|s| s.acronym.eql?(subdomain)}.first
+        slice = slices.select { |s| s.acronym.eql?(subdomain) }.first
         @subdomain_filter[:active] = true
         @subdomain_filter[:name] = slice.name
         @subdomain_filter[:acronym] = slice.acronym
@@ -103,7 +100,7 @@ class ApplicationController < ActionController::Base
 
   def anonymous_user
     user = DataAccess.getUser($ANONYMOUS_USER)
-    user ||= User.new({"id" => 0})
+    user ||= User.new({ "id" => 0 })
   end
 
   def ontology_not_found(ontology_acronym)
@@ -114,26 +111,26 @@ class ApplicationController < ActionController::Base
     not_found("Concept #{concept_id} not found")
   end
 
-  def not_found(message = '')
+  def not_found(message = "")
     if request.xhr?
       render plain: message || "Error: load failed"
       return
     end
 
-    raise ActiveRecord::RecordNotFound.new(message || 'Not Found')
+    raise ActiveRecord::RecordNotFound.new(message || "Not Found")
   end
 
   NOTIFICATION_TYPES = { :notes => "CREATE_NOTE_NOTIFICATION", :all => "ALL_NOTIFICATION" }
 
   def to_param(name) # Paramaterizes URLs without encoding
     unless name.nil?
-      name.to_s.gsub(' ',"_")
+      name.to_s.gsub(" ", "_")
     end
   end
 
   def undo_param(name) #Undo Paramaterization
     unless name.nil?
-      name.to_s.gsub('_'," ")
+      name.to_s.gsub("_", " ")
     end
   end
 
@@ -142,21 +139,21 @@ class ApplicationController < ActionController::Base
     # config/bioportal_config.rb
     # config/initializers/ontologies_api_client.rb
     config = {
-        org: $ORG,
-        org_url: $ORG_URL,
-        site: $SITE,
-        org_site: $ORG_SITE,
-        ui_url: $UI_URL,
-        apikey: LinkedData::Client.settings.apikey,
-        userapikey: get_apikey,
-        rest_url: LinkedData::Client.settings.rest_url,
-        proxy_url: $PROXY_URL,
-        biomixer_url: $BIOMIXER_URL,
-        annotator_url: $ANNOTATOR_URL,
-        ncbo_annotator_url: $NCBO_ANNOTATOR_URL,
-        ncbo_apikey: $NCBO_API_KEY,
-        interportal_hash: $INTERPORTAL_HASH,
-        resolve_namespace: RESOLVE_NAMESPACE
+      org: $ORG,
+      org_url: $ORG_URL,
+      site: $SITE,
+      org_site: $ORG_SITE,
+      ui_url: $UI_URL,
+      apikey: LinkedData::Client.settings.apikey,
+      userapikey: get_apikey,
+      rest_url: LinkedData::Client.settings.rest_url,
+      proxy_url: $PROXY_URL,
+      biomixer_url: $BIOMIXER_URL,
+      annotator_url: $ANNOTATOR_URL,
+      ncbo_annotator_url: $NCBO_ANNOTATOR_URL,
+      ncbo_apikey: $NCBO_API_KEY,
+      interportal_hash: $INTERPORTAL_HASH,
+      resolve_namespace: RESOLVE_NAMESPACE,
     }
     config[:ncbo_slice] = @subdomain_filter[:acronym] if (@subdomain_filter[:active] && !@subdomain_filter[:acronym].empty?)
     config.to_json
@@ -171,7 +168,6 @@ class ApplicationController < ActionController::Base
       else
         check = check_http_file(url)
       end
-
     rescue
       return false
     end
@@ -218,7 +214,7 @@ class ApplicationController < ActionController::Base
 
   def response_errors(error_response)
     error_struct = parse_response_body(error_response)
-    errors = {error: "There was an error, please try again"}
+    errors = { error: "There was an error, please try again" }
     return errors unless error_struct
     return errors unless error_struct.respond_to?(:errors)
     errors = {}
@@ -236,7 +232,7 @@ class ApplicationController < ActionController::Base
     return false if response.nil?
 
     if response.respond_to?(:status) && response.status
-        response.status.to_i < 400
+      response.status.to_i < 400
     else
       !(response.respond_to?(:errors) && response.errors)
     end
@@ -272,8 +268,8 @@ class ApplicationController < ActionController::Base
       redirect_to_home
     else
       tab = find_tab(session[:redirect][:ontology])
-      session[:redirect]=nil
-      redirect_to uri_url(:ontology=>tab.ontology_id,:conceptid=>tab.concept)
+      session[:redirect] = nil
+      redirect_to uri_url(:ontology => tab.ontology_id, :conceptid => tab.concept)
     end
   end
 
@@ -309,11 +305,11 @@ class ApplicationController < ActionController::Base
     prefix = options[:prefix] || "?"
     stop_words = options[:stop_words] || ["ontology", "controller", "action", "id", "acronym"]
     params_array = []
-    params.each do |key,value|
+    params.each do |key, value|
       next if stop_words.include?(key.to_s) || value.nil? || value.empty?
       params_array << "#{key}=#{CGI.escape(value)}"
     end
-    params_array.empty? ? "" : "#{prefix}#{params_array.join('&')}"
+    params_array.empty? ? "" : "#{prefix}#{params_array.join("&")}"
   end
 
   # rack-mini-profiler authorization
@@ -333,12 +329,12 @@ class ApplicationController < ActionController::Base
   end
 
   # Verifies that a user owns an object
-  def authorize_owner(id=nil)
+  def authorize_owner(id = nil)
     if id.nil?
       id = params[:id].to_i
     end
 
-    id.map! {|i| i.to_i} if id.kind_of?(Array)
+    id.map! { |i| i.to_i } if id.kind_of?(Array)
 
     if session[:user].nil?
       redirect_to_home
@@ -366,8 +362,8 @@ class ApplicationController < ActionController::Base
     found = false
     for item in array
       if item.ontology_id.eql?(ontology.id)
-        item.concept=concept
-        found=true
+        item.concept = concept
+        found = true
       end
     end
 
@@ -375,14 +371,14 @@ class ApplicationController < ActionController::Base
       array << History.new(ontology.id, ontology.name, ontology.acronym, concept)
     end
 
-    session[:ontologies]=array
+    session[:ontologies] = array
   end
 
   # Removes a 'history' tab
   def remove_tab(ontology_id)
     array = session[:ontologies]
     array.delete(find_tab(ontology_id))
-    session[:ontologies]=array
+    session[:ontologies] = array
   end
 
   # Returns a specific 'history' tab
@@ -399,7 +395,7 @@ class ApplicationController < ActionController::Base
   def check_delete_mapping_permission(mappings)
     # ensure mappings is an Array of mappings (some calls may provide only a single mapping instance)
     mappings = [mappings] if mappings.instance_of? LinkedData::Client::Models::Mapping
-    return false if mappings.all? {|m| m.id.to_s.empty?}
+    return false if mappings.all? { |m| m.id.to_s.empty? }
     delete_mapping_permission = false
     if session[:user]
       delete_mapping_permission = session[:user].admin?
@@ -412,17 +408,15 @@ class ApplicationController < ActionController::Base
   end
 
   def using_captcha?
-    ENV['USE_RECAPTCHA'].present? && ENV['USE_RECAPTCHA'] == 'true'
+    ENV["USE_RECAPTCHA"].present? && ENV["USE_RECAPTCHA"] == "true"
   end
 
   def get_class(params)
-
     if @ontology.flat?
-
       ignore_concept_param = params[:conceptid].nil? ||
-          params[:conceptid].empty? ||
-          params[:conceptid].eql?("root") ||
-          params[:conceptid].eql?("bp_fake_root")
+                             params[:conceptid].empty? ||
+                             params[:conceptid].eql?("root") ||
+                             params[:conceptid].eql?("bp_fake_root")
       if ignore_concept_param
         # Don't display any classes in the tree
         @concept = LinkedData::Client::Models::Class.new
@@ -433,18 +427,17 @@ class ApplicationController < ActionController::Base
         @concept.children = []
       else
         # Display only the requested class in the tree
-        @concept = @ontology.explore.single_class({full: true}, params[:conceptid])
+        @concept = @ontology.explore.single_class({ full: true }, params[:conceptid])
         @concept.children = []
       end
       @root = LinkedData::Client::Models::Class.new
       @root.children = [@concept]
-
     else
 
       # not ignoring 'bp_fake_root' here
       ignore_concept_param = params[:conceptid].nil? ||
-          params[:conceptid].empty? ||
-          params[:conceptid].eql?("root")
+                             params[:conceptid].empty? ||
+                             params[:conceptid].eql?("root")
       if ignore_concept_param
         # get the top level nodes for the root
         # TODO_REV: Support views? Replace old view call: @ontology.top_level_classes(view)
@@ -454,7 +447,7 @@ class ApplicationController < ActionController::Base
           not_found("Missing roots for #{@ontology.acronym}")
         end
         @root = LinkedData::Client::Models::Class.new(read_only: true)
-        @root.children = roots.sort{|x,y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase}
+        @root.children = roots.sort { |x, y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase }
 
         # get the initial concept to display
         root_child = @root.children.first
@@ -467,7 +460,7 @@ class ApplicationController < ActionController::Base
         end
       else
         # if the id is coming from a param, use that to get concept
-        @concept = @ontology.explore.single_class({full: true}, params[:conceptid])
+        @concept = @ontology.explore.single_class({ full: true }, params[:conceptid])
         if @concept.nil? || @concept.errors
           LOG.add :debug, "Missing class #{@ontology.acronym} / #{params[:conceptid]}"
           not_found("Missing class #{@ontology.acronym} / #{params[:conceptid]}")
@@ -481,14 +474,14 @@ class ApplicationController < ActionController::Base
             LOG.add :debug, "Missing roots for #{@ontology.acronym}"
             not_found("Missing roots for #{@ontology.acronym}")
           end
-          if roots.any? {|c| c.id == @concept.id}
+          if roots.any? { |c| c.id == @concept.id }
             rootNode = roots
           else
             rootNode = [@concept]
           end
         end
         @root = LinkedData::Client::Models::Class.new(read_only: true)
-        @root.children = rootNode.sort{|x,y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase}
+        @root.children = rootNode.sort { |x, y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase }
       end
     end
 
@@ -499,13 +492,13 @@ class ApplicationController < ActionController::Base
     metrics_hash = {}
     # TODO: Metrics do not return for views on the backend, need to enable include_views param there
     @metrics = LinkedData::Client::Models::Metrics.all(include_views: true)
-    @metrics.each {|m| metrics_hash[m.links['ontology']] = m }
+    @metrics.each { |m| metrics_hash[m.links["ontology"]] = m }
     return metrics_hash
   end
 
   def get_ontology_submission_ready(ontology)
     # Get the latest 'ready' submission
-    submission = ontology.explore.latest_submission({:include_status => 'ready'})
+    submission = ontology.explore.latest_submission({ :include_status => "ready" })
     # Fallback to the latest submission, even if it's not ready.
     submission = ontology.explore.latest_submission if submission.nil?
     return submission
@@ -515,8 +508,8 @@ class ApplicationController < ActionController::Base
     # Note the simplify_ontology_model will cache individual ontology data.
     simple_ontologies = {}
     begin
-      ontology_models = LinkedData::Client::Models::Ontology.all({:include_views => true})
-      ontology_models.each {|o| simple_ontologies[o.id] = simplify_ontology_model(o) }
+      ontology_models = LinkedData::Client::Models::Ontology.all({ :include_views => true })
+      ontology_models.each { |o| simple_ontologies[o.id] = simplify_ontology_model(o) }
     rescue Exception => e
       LOG.add :error, e.message
       return nil
@@ -560,7 +553,7 @@ class ApplicationController < ActionController::Base
     classes_hash = {}
     classes.each do |cls|
       c = simplify_class_model(cls)
-      c[:ontology] = @ontologies_hash[ c[:ontology] ]
+      c[:ontology] = @ontologies_hash[c[:ontology]]
       classes_hash[c[:id]] = c
     end
     return classes_hash
@@ -574,26 +567,26 @@ class ApplicationController < ActionController::Base
     begin
       if cls_model.instance_of? Hash
         cls = {
-            :id => cls_model['@id'],
-            :ui =>  cls_model['links']['ui'],
-            :uri => cls_model['links']['self'],  # different from id
-            :ontology => cls_model['links']['ontology']
+          :id => cls_model["@id"],
+          :ui => cls_model["links"]["ui"],
+          :uri => cls_model["links"]["self"],  # different from id
+          :ontology => cls_model["links"]["ontology"],
         }
         # Try to carry through a prefLabel and the obsolete attribute, if they exist.
-        cls[:prefLabel] = cls_model['prefLabel']
-        cls[:obsolete] = cls_model['obsolete'] || false
+        cls[:prefLabel] = cls_model["prefLabel"]
+        cls[:obsolete] = cls_model["obsolete"] || false
       else
         # try to work with a struct object or a LinkedData::Client::Models::Class
         # if not a struct, then: cls_model.instance_of? LinkedData::Client::Models::Class
         cls = {
-            :id => cls_model.id,
-            :ui =>  cls_model.links['ui'],
-            :uri => cls_model.links['self'],  # different from id
-            :ontology => cls_model.links['ontology'],
+          :id => cls_model.id,
+          :ui => cls_model.links["ui"],
+          :uri => cls_model.links["self"],  # different from id
+          :ontology => cls_model.links["ontology"],
         }
         # Try to carry through a prefLabel and the obsolete attribute, if they exist.
-        cls[:prefLabel] = cls_model.prefLabel if cls_model.respond_to?('prefLabel')
-        cls[:obsolete] = cls_model.respond_to?('obsolete') && cls_model.obsolete || false
+        cls[:prefLabel] = cls_model.prefLabel if cls_model.respond_to?("prefLabel")
+        cls[:obsolete] = cls_model.respond_to?("obsolete") && cls_model.obsolete || false
       end
     rescue Exception => e
       LOG.add :error, e.message
@@ -605,7 +598,7 @@ class ApplicationController < ActionController::Base
   def simplify_ontology_model(ont_model)
     id = nil
     if ont_model.instance_of? Hash
-      id = ont_model['@id']
+      id = ont_model["@id"]
     elsif ont_model.instance_of? LinkedData::Client::Models::Ontology
       id = ont_model.id
     end
@@ -617,15 +610,15 @@ class ApplicationController < ActionController::Base
     ont[:id] = id
     ont[:uri] = id
     if ont_model.instance_of? Hash
-      ont[:acronym] = ont_model['acronym']
-      ont[:name] = ont_model['name']
-      ont[:ui] = ont_model['links']['ui']
+      ont[:acronym] = ont_model["acronym"]
+      ont[:name] = ont_model["name"]
+      ont[:ui] = ont_model["links"]["ui"]
     else
       # try to work with a struct object or a LinkedData::Client::Models::Ontology
       # if not a struct, then: ont_model.instance_of? LinkedData::Client::Models::Ontology
       ont[:acronym] = ont_model.acronym
       ont[:name] = ont_model.name
-      ont[:ui] = ont_model.links['ui']
+      ont[:ui] = ont_model.links["ui"]
     end
     # Only cache a complete representation of a simplified ontology
     if ont[:id].nil? || ont[:uri].nil? || ont[:acronym].nil? || ont[:name].nil? || ont[:ui].nil?
@@ -650,7 +643,7 @@ class ApplicationController < ActionController::Base
       response = open(uri, "Authorization" => "apikey token=#{get_apikey}").read
     rescue Exception => error
       @retries ||= 0
-      if @retries < 1  # retry once only
+      if @retries < 1 # retry once only
         @retries += 1
         retry
       else
@@ -660,13 +653,12 @@ class ApplicationController < ActionController::Base
     JSON.parse(response)
   end
 
-
   def get_batch_results(params)
     begin
       response = RestClient.post REST_URI_BATCH, params.to_json, :content_type => :json, :accept => :json, :authorization => "apikey token=#{get_apikey}"
     rescue Exception => error
       @retries ||= 0
-      if @retries < 1  # retry once only
+      if @retries < 1 # retry once only
         @retries += 1
         retry
       else
@@ -684,8 +676,8 @@ class ApplicationController < ActionController::Base
   # Each class in the list maps to all other classes in the list.
   def get_recent_mappings
     recent_mappings = {
-        :mappings => [],
-        :classes => {}
+      :mappings => [],
+      :classes => {},
     }
     begin
       recent_url = "#{REST_URI}/mappings/recent/"
@@ -694,7 +686,7 @@ class ApplicationController < ActionController::Base
       return cached_mappings unless (cached_mappings.nil? || cached_mappings.empty?)
       # No cache or it has expired
       class_details = {}
-      mappings = LinkedData::Client::HTTP.get(recent_url, {size: 20, display: "prefLabel"})
+      mappings = LinkedData::Client::HTTP.get(recent_url, { size: 20, display: "prefLabel" })
       recent_mappings[:mappings] = mappings
       unless mappings.nil? || mappings.empty?
         # Only cache a successful retrieval
@@ -727,9 +719,9 @@ class ApplicationController < ActionController::Base
 
   def determine_layout
     if Rails.env.appliance?
-      'appliance'
+      "appliance"
     else
-      'ontology'
+      "ontology"
     end
   end
 
@@ -739,8 +731,8 @@ class ApplicationController < ActionController::Base
 
   def init_trial_license
     unless $trial_license_initialized
-      unless License.where(encrypted_key: 'trial').exists?
-        License.create(encrypted_key: 'trial', created_at: Time.current)
+      unless License.where(encrypted_key: "trial").exists?
+        License.create(encrypted_key: "trial", created_at: Time.current)
       end
       $trial_license_initialized = true
     end
@@ -750,11 +742,13 @@ class ApplicationController < ActionController::Base
   def submission_metadata
     @metadata ||= JSON.parse(Net::HTTP.get(URI.parse("#{REST_URI}/submission_metadata?apikey=#{API_KEY}")))
   end
+
   helper_method :submission_metadata
 
   private
+
   def not_found_record(exception)
     @error_message = exception.message
-    render 'errors/not_found', status: 404
+    render "errors/not_found", status: 404
   end
 end

@@ -1,7 +1,5 @@
-
-
-@media (min-width: 1000px)  {
-  #mappings_container{
+@media (min-width: 1000px) {
+  #mappings_container {
     max-width: 1140px;
   }
 }
@@ -18,7 +16,7 @@ p#display_options {
 }
 
 #mappings-help > i.fas.fa-question-circle {
-  margin-left: .25em;
+  margin-left: 0.25em;
   vertical-align: middle;
 }
 
@@ -44,21 +42,25 @@ div#mappingCount {
 
 /* Create New Mapping dialog */
 
-div#map_from_picker_container, div#map_to_picker_container {
+div#map_from_picker_container,
+div#map_to_picker_container {
   margin-bottom: 7px;
 }
 
-div#map_from_picker_chosen, div#map_to_picker_chosen {
+div#map_from_picker_chosen,
+div#map_to_picker_chosen {
   width: 100% !important;
 }
 
-div#map_from_concept_details_table, div#map_to_concept_details_table {
+div#map_from_concept_details_table,
+div#map_to_concept_details_table {
   border: thin solid lightgray;
   height: 200px;
   overflow: auto;
 }
 
-#map_to_picker, .select2-container {
+#map_to_picker,
+.select2-container {
   width: 100% !important;
 }
 
@@ -75,4 +77,3 @@ div#map_from_concept_details_table, div#map_to_concept_details_table {
 #concept_mappings_table {
   width: 100%;
 }
-

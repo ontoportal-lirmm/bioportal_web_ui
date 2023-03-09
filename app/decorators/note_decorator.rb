@@ -32,5 +32,4 @@ class NoteDecorator < BaseDecorator
   def title
     view_context.content_tag(:span, "#{subject}", class: "note_title")
   end
-
 end

@@ -1,7 +1,5 @@
-jQuery(document).ready(function() {
-
-  jQuery('#changeRequestModal').on('submit', function() {
-    $('#changeRequestModal').modal('hide');
+jQuery(document).ready(function () {
+  jQuery("#changeRequestModal").on("submit", function () {
+    $("#changeRequestModal").modal("hide");
   });
-
 });

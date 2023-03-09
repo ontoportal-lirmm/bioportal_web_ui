@@ -9,9 +9,9 @@ class RemoveSynonymContent
 
   def render
     tr = KGCL::TemplateRenderer.new(
-      title_template: 'remove_synonym_title.erb',
-      body_template: 'remove_synonym_body.erb',
-      bind_klass: self
+      title_template: "remove_synonym_title.erb",
+      body_template: "remove_synonym_body.erb",
+      bind_klass: self,
     )
     tr.render
   end

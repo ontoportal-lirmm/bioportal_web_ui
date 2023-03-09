@@ -19,9 +19,9 @@ class NewSynonymContent
 
   def render
     tr = KGCL::TemplateRenderer.new(
-      title_template: 'new_synonym_title.erb',
-      body_template: 'new_synonym_body.erb',
-      bind_klass: self
+      title_template: "new_synonym_title.erb",
+      body_template: "new_synonym_body.erb",
+      bind_klass: self,
     )
     tr.render
   end

@@ -3,13 +3,13 @@
 <!--<div style="overflow:auto;width:300px"></div>-->
 <br>
 <table class="minimal">
-	<tbody>		
+	<tbody>
 <%@concept.properties.each_pair{|key,value| %>
 
 	<tr>
-	<td><%="#{remove_owl_notation(key)}:"%></td><td><%="#{value}"%></td>	
+	<td><%="#{remove_owl_notation(key)}:"%></td><td><%="#{value}"%></td>
 	</tr>
-	
+
 <% } %>
 </tbody>
 </table>

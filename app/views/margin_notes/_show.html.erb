@@ -16,7 +16,7 @@ javascripts = "resetNoteForm(#{uniq});"
 <div id ="margin_notes">
 <%end%>
 
-	<%if @margin_notes.size<1%>	
+	<%if @margin_notes.size<1%>
 		<h1>There are currently no notes.</h1>
 	<%end%>
 <%=draw_note_tree(@margin_notes,uniq)%>
@@ -32,10 +32,10 @@ javascripts = "resetNoteForm(#{uniq});"
 <%else%>
 <br>
 <%if @modal%>
-<input title="Add Note" type="button" value="New Note" onclick="jQuery('#modal_form').html(jQuery('#modal_comment').html());"/>  
+<input title="Add Note" type="button" value="New Note" onclick="jQuery('#modal_form').html(jQuery('#modal_comment').html());"/>
 <div id="modal_form"></div>
 <%else%>
-<input alt="#TB_inline?height=400&width=600&inlineId=commentForm" title="Add Note" class="thickbox" type="button" value="New Note" />  
+<input alt="#TB_inline?height=400&width=600&inlineId=commentForm" title="Add Note" class="thickbox" type="button" value="New Note" />
 <%end%>
 
 <!--	<input type="button" class ="blueButton" value="New Thread" onclick ="buildEditor('<%=uniq%>');toggleHide('form','');toggleHide('buttons','');document.getElementById('noteParent').value='';">  -->
@@ -45,7 +45,7 @@ javascripts = "resetNoteForm(#{uniq});"
 <div style="display:none;">
 <%# need seperate forms for if its a modal window%>
 <% if @modal%>
-<div id="modal_comment" name="forms">	
+<div id="modal_comment" name="forms">
 <%= form_for(:margin_note, :url => margin_notes_path,:html=>{:onsubmit=>"ajaxForm(this,'#modal_notes',function(){jQuery('#modal_form').html('');});return false;"}) do |f| %>
 	<%=hidden_field 'margin_note', 'concept_id'%>
 	<%unless @ontology.nil?%>
@@ -62,7 +62,7 @@ javascripts = "resetNoteForm(#{uniq});"
 	<tr>
 		<th>Note Type:</th>
 		<td class="top"><%=
-                options = MarginNote::NOTE_TYPES                       
+                options = MarginNote::NOTE_TYPES
                 select('margin_note','note_type',options.invert,:id=>'note_type')
                 %></td>
 	</tr>
@@ -73,10 +73,10 @@ javascripts = "resetNoteForm(#{uniq});"
 			</td>
 	</tr>
  	<tr>
-		<td colspan="2" align="right">			
-				<%= submit_tag "Save" ,:class =>"blueButton"%> | 
+		<td colspan="2" align="right">
+				<%= submit_tag "Save" ,:class =>"blueButton"%> |
 
-				<input class="blueButton" type="button" value="Cancel" onclick="tb_remove()"> 			
+				<input class="blueButton" type="button" value="Cancel" onclick="tb_remove()">
 	<!--							<input class="blueButton" type="button" value="Cancel" onclick="resetNoteForm(<%="#{uniq}"%>);toggleHide('form','');toggleHide('buttons','');destroyEditor();"> 			-->
 			 <%if @modal%>| <input type="button" value="Close" onclick="tb_remove()" class='blueButton'><%end%></td>
 </table>
@@ -84,7 +84,7 @@ javascripts = "resetNoteForm(#{uniq});"
 <% end %>
 </div>
 <%else%>
-<div id="commentForm" name="forms">	
+<div id="commentForm" name="forms">
 <%= form_for(:margin_note, :url => margin_notes_path,:html=>{:onsubmit=>"ajaxForm(this,'#notes',tb_remove());return false;"}) do |f| %>
 	<%=hidden_field 'margin_note', 'concept_id'%>
 	<%unless @ontology.nil?%>
@@ -101,7 +101,7 @@ javascripts = "resetNoteForm(#{uniq});"
 	<tr>
 		<th>Note Type:</th>
 		<td class="top"><%=
-                options = MarginNote::NOTE_TYPES                       
+                options = MarginNote::NOTE_TYPES
                 select('margin_note','note_type',options.invert,:id=>'note_type')
                 %></td>
 	</tr>
@@ -112,10 +112,10 @@ javascripts = "resetNoteForm(#{uniq});"
 			</td>
 	</tr>
  	<tr>
-		<td colspan="2" align="right">			
-				<%= submit_tag "Save" ,:class =>"blueButton"%> | 
+		<td colspan="2" align="right">
+				<%= submit_tag "Save" ,:class =>"blueButton"%> |
 
-				<input class="blueButton" type="button" value="Cancel" onclick="tb_remove()"> 			
+				<input class="blueButton" type="button" value="Cancel" onclick="tb_remove()">
 	<!--							<input class="blueButton" type="button" value="Cancel" onclick="resetNoteForm(<%="#{uniq}"%>);toggleHide('form','');toggleHide('buttons','');destroyEditor();"> 			-->
 			 <%if @modal%>| <input type="button" value="Close" onclick="tb_remove()" class='blueButton'><%end%></td>
 </table>

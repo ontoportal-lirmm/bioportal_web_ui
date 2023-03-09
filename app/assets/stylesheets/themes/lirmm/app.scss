@@ -1,6 +1,4 @@
-
 body.ontologies.index {
-
   .grid-container {
     /*max-width: 1400px;*/
   }
@@ -16,7 +14,7 @@ body.ontologies.index {
     padding: 2em;
     text-align: center;
     margin: 2em auto;
-    background-color: #ECECEC;
+    background-color: #ececec;
     border-radius: 3px;
   }
 
@@ -49,7 +47,7 @@ body.ontologies.index {
 
   .smaller {
     color: gray;
-    font-size: .8em;
+    font-size: 0.8em;
     padding-bottom: 2px;
   }
 
@@ -107,7 +105,7 @@ body.ontologies.index {
 
   #sorting_float {
     float: right;
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
   }
 
   @keyframes highlight {
@@ -127,7 +125,8 @@ body.ontologies.index {
     }
   }
 
-  .trigger_highlight-add, .trigger_highlight-remove {
+  .trigger_highlight-add,
+  .trigger_highlight-remove {
     -webkit-animation: highlight 1s;
     animation: highlight 1s;
   }
@@ -142,7 +141,7 @@ body.ontologies.index {
   .ontology {
     border: thin gray solid;
     border-radius: 5px;
-    padding: .5em 1em .5em;
+    padding: 0.5em 1em 0.5em;
     margin: 1em 0;
   }
 
@@ -165,8 +164,8 @@ body.ontologies.index {
   }
 
   .locked_ont {
-    font-size: .65em;
-    padding-left: .2em;
+    font-size: 0.65em;
+    padding-left: 0.2em;
     color: gray;
     cursor: help;
     /* Make the lock appear in the upper left corner */
@@ -188,7 +187,7 @@ body.ontologies.index {
     display: inline-block;
     padding: 5px 10px 3px;
     border-radius: 3px;
-    background-color: #ECECEC;
+    background-color: #ececec;
     font-size: 11px;
   }
 
@@ -202,7 +201,6 @@ body.ontologies.index {
     font-size: 12px;
     color: white;
     background-color: $color-primary;
-
   }
 
   .badge_count {
@@ -254,5 +252,3 @@ body.ontologies.index {
     background-color: rgba(220, 235, 255, 0.79);
   }
 }
-
-

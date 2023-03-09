@@ -2,20 +2,17 @@ import ShowModalController from "../../javascript/controllers/show_modal_control
 
 // Connects to data-controller="turbo-modal"
 export default class extends ShowModalController {
+  static targets = ["content"];
 
-    static targets = ["content"]
+  show() {
+    this.modal.showModal(this.element);
+  }
 
-    show() {
-        this.modal.showModal(this.element)
+  hide() {
+    this.modal.hideModal(this.element);
+    if (this.contentTarget) {
+      this.contentTarget.removeAttribute("src");
+      this.contentTarget.replaceChildren();
     }
-
-    hide() {
-        this.modal.hideModal(this.element)
-        if (this.contentTarget) {
-            this.contentTarget.removeAttribute("src")
-            this.contentTarget.replaceChildren()
-        }
-    }
-
-
+  }
 }

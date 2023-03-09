@@ -19,24 +19,24 @@ class UsersController < ApplicationController
   # GET /users/1.xml
   def show
     @user = if session[:user].admin? && params.has_key?(:id)
-              LinkedData::Client::Models::User.find_by_username(params[:id]).first
-            else
-              LinkedData::Client::Models::User.find(session[:user].id)
-            end
+        LinkedData::Client::Models::User.find_by_username(params[:id]).first
+      else
+        LinkedData::Client::Models::User.find(session[:user].id)
+      end
 
     @all_ontologies = LinkedData::Client::Models::Ontology.all(ignore_custom_ontologies: true)
 
-    logger.info 'user show'
+    logger.info "user show"
     logger.info @user.bring_remaining
     logger.info @user
     @user_ontologies = @user.customOntology
 
     ## Copied from home controller , account action
-    onts = LinkedData::Client::Models::Ontology.all;
-    @admin_ontologies = onts.select {|o| o.administeredBy.include? @user.id }
+    onts = LinkedData::Client::Models::Ontology.all
+    @admin_ontologies = onts.select { |o| o.administeredBy.include? @user.id }
 
-    projects = LinkedData::Client::Models::Project.all;
-    @user_projects = projects.select {|p| p.creator.include? @user.id }
+    projects = LinkedData::Client::Models::Project.all
+    @user_projects = projects.select { |p| p.creator.include? @user.id }
   end
 
   # GET /users/new
@@ -72,7 +72,7 @@ class UsersController < ApplicationController
           Notifier.register_for_announce_list(@user.email).deliver rescue nil
         end
 
-        flash[:notice] = 'Account was successfully created'
+        flash[:notice] = "Account was successfully created"
         session[:user] = LinkedData::Client::Models::User.authenticate(@user.username, @user.password)
         redirect_to_browse
       end
@@ -88,7 +88,6 @@ class UsersController < ApplicationController
     @user = LinkedData::Client::Models::User.find_by_username(params[:id]).first if @user.nil?
     @errors = validate_update(user_params)
     if @errors.size < 1
-
       if params[:user][:password]
         error_response = @user.update(values: { password: params[:user][:password] })
       else
@@ -107,7 +106,7 @@ class UsersController < ApplicationController
         # @errors = {acronym: "Username already exists, please use another"} if error_response.status == 409
         render action: "edit"
       else
-        flash[:notice] = 'Account was successfully updated'
+        flash[:notice] = "Account was successfully updated"
 
         if session[:user].username == @user.username
           session[:user].update_from_params(user_params)
@@ -121,15 +120,14 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    response = {errors: '', success: ''}
+    response = { errors: "", success: "" }
     @user = LinkedData::Client::Models::User.find(params[:id])
     @user = LinkedData::Client::Models::User.find_by_username(params[:id]).first if @user.nil?
-    if(session[:user].admin?)
+    if (session[:user].admin?)
       @user.delete
-      response[:success] << 'User deleted successfully '
-
+      response[:success] << "User deleted successfully "
     else
-      response[:errors] << 'Not permitted '
+      response[:errors] << "Not permitted "
     end
 
     render json: response
@@ -145,15 +143,15 @@ class UsersController < ApplicationController
     error_response = @user.update
 
     if error_response
-      flash[:notice] = 'Error saving Custom Ontologies, please try again'
+      flash[:notice] = "Error saving Custom Ontologies, please try again"
     else
       updated_user = LinkedData::Client::Models::User.find(@user.id)
       session[:user].update_from_params(customOntology: updated_user.customOntology)
       flash[:notice] = if updated_user.customOntology.empty?
-                         'Custom Ontologies were cleared'
-                       else
-                         'Custom Ontologies were saved'
-                       end
+          "Custom Ontologies were cleared"
+        else
+          "Custom Ontologies were saved"
+        end
     end
     redirect_to user_path(@user.username)
   end
@@ -173,7 +171,7 @@ class UsersController < ApplicationController
   def verify_owner
     return if current_user_admin?
     if session[:user].nil? || (!session[:user].id.eql?(params[:id]) && !session[:user].username.eql?(params[:id]))
-      redirect_to controller: 'login', action: 'index', redirect: "/accounts/#{params[:id]}"
+      redirect_to controller: "login", action: "index", redirect: "/accounts/#{params[:id]}"
     end
   end
 
@@ -227,9 +225,9 @@ class UsersController < ApplicationController
     if session[:user].admin?
       user_roles = user_roles.dup
       if user.admin?
-        user_roles.map!{ |role| role == "ADMINISTRATOR" ? "LIBRARIAN" : role}
+        user_roles.map! { |role| role == "ADMINISTRATOR" ? "LIBRARIAN" : role }
       else
-        user_roles.map!{ |role| role == "LIBRARIAN" ? "ADMINISTRATOR" : role}
+        user_roles.map! { |role| role == "LIBRARIAN" ? "ADMINISTRATOR" : role }
       end
     end
 

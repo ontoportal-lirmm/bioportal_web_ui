@@ -531,5 +531,5 @@ BpidResolver::ACRONYM_FROM_VIRTUAL = {
   "old:acronym_from_virtual:3129" => "CONSENT-ONT",
   "old:acronym_from_virtual:1008" => "DDANAT",
   "old:acronym_from_virtual:1020" => "HC",
-  "old:acronym_from_virtual:1150" => "RS"
+  "old:acronym_from_virtual:1150" => "RS",
 }

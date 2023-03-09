@@ -29,12 +29,13 @@
 }
 
 .notice {
-  background:#e3f7fc image-url("notice.png") no-repeat 10px 50%;
-  border:1px solid #8ed9f6;
+  background: #e3f7fc image-url("notice.png") no-repeat 10px 50%;
+  border: 1px solid #8ed9f6;
 }
 
 .progress_box {
-  background: #f5f5f5 image-url("spinners/spinner_000000_16px.gif") no-repeat 10px 50%;
+  background: #f5f5f5 image-url("spinners/spinner_000000_16px.gif") no-repeat
+    10px 50%;
   border: 1px solid #8ed9f6;
 }
 /* end: message boxes */
@@ -44,7 +45,7 @@
 }
 
 table.dataTable tbody tr.selected {
-  background-color: #D7E3EA;
+  background-color: #d7e3ea;
 }
 
 .ontologies_list_container {
@@ -72,7 +73,7 @@ table.dataTable tbody tr.selected {
 
 .ontologies_list_container .dataTables_info {
   text-align: center;
-  padding: .5em;
+  padding: 0.5em;
 }
 
 .ontologies_list_container .dataTables_paginate {
@@ -82,15 +83,18 @@ table.dataTable tbody tr.selected {
 .ontologies_list_container .dataTables_paginate .paginate_button {
   text-decoration: underline;
   cursor: pointer;
-  padding: 0 .5em;
+  padding: 0 0.5em;
 }
 
 .ontologies_list_container .dataTables_paginate .paginate_button:hover {
   text-decoration: none;
 }
 
-.ontologies_list_container .first, .ontologies_list_container .previous, .ontologies_list_container .next, .ontologies_list_container .last {
-  padding: 0 .5em;
+.ontologies_list_container .first,
+.ontologies_list_container .previous,
+.ontologies_list_container .next,
+.ontologies_list_container .last {
+  padding: 0 0.5em;
 }
 
 .ontology_nav {
@@ -118,7 +122,8 @@ table.dataTable tbody tr.selected {
   color: red;
 }
 
-#site-admin-appliance-id, #site-admin-update-check {
+#site-admin-appliance-id,
+#site-admin-update-check {
   display: none;
 }
 

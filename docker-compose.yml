@@ -18,13 +18,13 @@ x-app: &default-app
   tty: true
   volumes:
     - "${DOCKER_WEB_VOLUME}"
-    -  bundle:/usr/local/bundle
+    - bundle:/usr/local/bundle
     - node:/node_modules
 
 services:
   db:
     environment:
-      MYSQL_ROOT_PASSWORD: 'bp_user'
+      MYSQL_ROOT_PASSWORD: "bp_user"
     image: "mysql:latest"
     profiles: ["db"]
     ports:

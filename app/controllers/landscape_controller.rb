@@ -1,4 +1,4 @@
-require 'action_view'
+require "action_view"
 include ActionView::Helpers::NumberHelper
 
 class LandscapeController < ApplicationController
@@ -11,7 +11,7 @@ class LandscapeController < ApplicationController
     #@submissions = LinkedData::Client::Models::OntologySubmission.all(values: params[:submission])
 
     # Array with color codes for the pie charts. iterate color_index to change color
-    pie_colors_array = ["#2484c1", "#0c6197", "#4daa4b", "#90c469", "#daca61", "#e4a14b", "#e98125", "#cb2121", "#830909", "#923e99", "#ae83d5", "#bf273e", "#ce2aeb", "#bca44a", "#618d1b", "#1ee67b", "#b0ec44", "#a4a0c9", "#322849", "#86f71a", "#d1c87f", "#7d9058", "#44b9b0", "#7c37c0", "#cc9fb1", "#e65414", "#8b6834", "#248838"];
+    pie_colors_array = ["#2484c1", "#0c6197", "#4daa4b", "#90c469", "#daca61", "#e4a14b", "#e98125", "#cb2121", "#830909", "#923e99", "#ae83d5", "#bf273e", "#ce2aeb", "#bca44a", "#618d1b", "#1ee67b", "#b0ec44", "#a4a0c9", "#322849", "#86f71a", "#d1c87f", "#7d9058", "#44b9b0", "#7c37c0", "#cc9fb1", "#e65414", "#8b6834", "#248838"]
 
     groups_count_hash = {}
     domains_count_hash = {}
@@ -41,18 +41,18 @@ class LandscapeController < ApplicationController
 
     ontology_relations_array = []
 
-    ontologyFormatsCount = {"OWL" => 0, "SKOS" => 0, "UMLS" => 0, "OBO" => 0}
+    ontologyFormatsCount = { "OWL" => 0, "SKOS" => 0, "UMLS" => 0, "OBO" => 0 }
 
-    @metrics_average = [{attr: "numberOfClasses", label: "Number of classes", array: []},
-                        {attr: "numberOfIndividuals", label: "Number of individuals", array: []},
-                        {attr: "numberOfProperties", label: "Number of properties", array: []},
-                        {attr: "maxDepth", label: "Max depth", array: []},
-                        {attr: "maxChildCount", label: "Max child count", array: []},
-                        {attr: "averageChildCount", label: "Average child count", array: []},
-                        {attr: "classesWithOneChild", label: "Classes with one child", array: []},
-                        {attr: "classesWithMoreThan25Children", label: "Classes with more than 25 children", array: []},
-                        {attr: "classesWithNoDefinition", label: "Classes with no definition	", array: []},
-                        {attr: "numberOfAxioms", label: "Number of axioms (triples)", array: []}]
+    @metrics_average = [{ attr: "numberOfClasses", label: "Number of classes", array: [] },
+                        { attr: "numberOfIndividuals", label: "Number of individuals", array: [] },
+                        { attr: "numberOfProperties", label: "Number of properties", array: [] },
+                        { attr: "maxDepth", label: "Max depth", array: [] },
+                        { attr: "maxChildCount", label: "Max child count", array: [] },
+                        { attr: "averageChildCount", label: "Average child count", array: [] },
+                        { attr: "classesWithOneChild", label: "Classes with one child", array: [] },
+                        { attr: "classesWithMoreThan25Children", label: "Classes with more than 25 children", array: [] },
+                        { attr: "classesWithNoDefinition", label: "Classes with no definition	", array: [] },
+                        { attr: "numberOfAxioms", label: "Number of axioms (triples)", array: [] }]
 
     # Attributes to include. To avoid to get everything and make it faster
     # They are also used to get the value of each property later in the controller
@@ -72,13 +72,12 @@ class LandscapeController < ApplicationController
     # "omv:hasPriorVersion" has been removed from this list to generate
 
     # We need prefixes to display them, we remove them to call them in the include
-    relations_attributes = @relations_array.map {|r| r.to_s.split(":")[1]}
-    metrics_attributes = @metrics_average.map {|m| m[:attr]}
+    relations_attributes = @relations_array.map { |r| r.to_s.split(":")[1] }
+    metrics_attributes = @metrics_average.map { |m| m[:attr] }
 
     # Concat all attributes array and generate a string separated with comma for include param
     all_attributes = sub_attributes.concat(contributors_attr_list).concat(org_attr_list)
-                         .concat(relations_attributes).concat(metrics_attributes).concat(pref_properties_attributes).join(",")
-
+      .concat(relations_attributes).concat(metrics_attributes).concat(pref_properties_attributes).join(",")
 
     # Special treatment for includedInDataCatalog: arrays with a lot of different values, so it trigger the SPARQL default
     # when we retrieve multiple attr with multiple values in the array, and make the request slower
@@ -88,7 +87,7 @@ class LandscapeController < ApplicationController
     # Add our Portal to the dataCatalog list
     dataCatalog_count_hash[$ORG_SITE] = data_catalog_submissions.length
     # Set all data_catalog count to 0
-    $DATA_CATALOG_VALUES.map {|uri,name| dataCatalog_count_hash[name] = 0}
+    $DATA_CATALOG_VALUES.map { |uri, name| dataCatalog_count_hash[name] = 0 }
     data_catalog_submissions.each do |catalog_sub|
       catalog_sub.includedInDataCatalog.each do |data_catalog|
         $DATA_CATALOG_VALUES.each do |uri, name|
@@ -158,7 +157,7 @@ class LandscapeController < ApplicationController
             [100, 1000, 10000, 100000].each do |slice_size|
               if (ontology_size < slice_size)
                 size_slices_hash["< #{number_with_delimiter(slice_size, delimiter: " ")}"] += 1
-                break;
+                break
               end
             end
           end
@@ -242,7 +241,7 @@ class LandscapeController < ApplicationController
 
           orgs_list.each do |orgs_comma_list|
             if !orgs_comma_list.nil? &&
-              orgs_comma_split = orgs_comma_list.split(",")
+               orgs_comma_split = orgs_comma_list.split(",")
               orgs_comma_split.each do |org_str|
                 # TODO: handle badly formatted strings and URI
                 org_uri = nil
@@ -252,7 +251,6 @@ class LandscapeController < ApplicationController
                   # Remove http, www and last / from URI
                   org_str = org_str.sub("http://", "").sub("https://", "").sub("www.", "")
                   org_str = org_str[0..-2] if org_str.last.eql?("/")
-
                 end
 
                 if org_count_hash.has_key?(org_str)
@@ -283,7 +281,7 @@ class LandscapeController < ApplicationController
               target_in_portal = false
               # if we find our portal URL in the ontology URL, then we just keep the ACRONYM to try to get the ontology.
               if relation_value.include?($UI_URL)
-                relation_value = relation_value.split('/').last
+                relation_value = relation_value.split("/").last
               end
               # Use acronym to get ontology from the portal
               target_ont = LinkedData::Client::Models::Ontology.find_by_acronym(relation_value).first
@@ -291,7 +289,7 @@ class LandscapeController < ApplicationController
                 target_id = target_ont.acronym
                 target_in_portal = true
               end
-              ontology_relations_array.push({source: ont.acronym, target: target_id, relation: relation_attr.to_s, targetInPortal: target_in_portal})
+              ontology_relations_array.push({ source: ont.acronym, target: target_id, relation: relation_attr.to_s, targetInPortal: target_in_portal })
             end
           end
         end
@@ -302,7 +300,6 @@ class LandscapeController < ApplicationController
     @metrics_average.each do |metrics|
       metrics[:average] = (metrics[:array].sum / metrics[:array].size.to_f).round(2)
     end
-
 
     notes_people_count_hash = {}
     notes_ontologies_count_hash = {}
@@ -336,7 +333,7 @@ class LandscapeController < ApplicationController
     notes_ontologies_json_cloud = []
     notes_people_json_cloud = []
 
-    notes_people_count_hash.each do |people,hash_counts|
+    notes_people_count_hash.each do |people, hash_counts|
       # Random color for each word in the cloud
       colour = "%06x" % (rand * 0xffffff)
       title_array = []
@@ -354,11 +351,11 @@ class LandscapeController < ApplicationController
         total_count += hash_counts[:reviews]
       end
       if total_count > 0
-        notes_people_json_cloud.push({"text"=>people.to_s,"weight"=>total_count, "html" => {style: "color: ##{colour};", title: title_array.join(", ")}, "link" => hash_counts[:uri]})
+        notes_people_json_cloud.push({ "text" => people.to_s, "weight" => total_count, "html" => { style: "color: ##{colour};", title: title_array.join(", ") }, "link" => hash_counts[:uri] })
       end
     end
 
-    notes_ontologies_count_hash.each do |onto,hash_counts|
+    notes_ontologies_count_hash.each do |onto, hash_counts|
       # Random color for each word in the cloud
       colour = "%06x" % (rand * 0xffffff)
       title_array = []
@@ -376,7 +373,7 @@ class LandscapeController < ApplicationController
         total_count += hash_counts[:reviews]
       end
       if total_count > 0
-        notes_ontologies_json_cloud.push({"text"=>onto.to_s,"weight"=>total_count, "html" => {style: "color: ##{colour};", title: title_array.join(", ")}, "link" => hash_counts[:uri]})
+        notes_ontologies_json_cloud.push({ "text" => onto.to_s, "weight" => total_count, "html" => { style: "color: ##{colour};", title: title_array.join(", ") }, "link" => hash_counts[:uri] })
       end
     end
 
@@ -391,7 +388,7 @@ class LandscapeController < ApplicationController
 
     # Get the different people and organizations to generate a tag cloud
     people_count_json_cloud = []
-    people_count_hash.each do |people,hash_count|
+    people_count_hash.each do |people, hash_count|
       # Random color for each word in the cloud
       colour = "%06x" % (rand * 0xffffff)
       title_array = []
@@ -416,15 +413,15 @@ class LandscapeController < ApplicationController
 
       if total_count > 1
         if people_count_emails[people.to_s].nil?
-          people_count_json_cloud.push({"text"=>people.to_s,"weight"=>total_count, "html" => {style: "color: ##{colour};", title: title_str}})
+          people_count_json_cloud.push({ "text" => people.to_s, "weight" => total_count, "html" => { style: "color: ##{colour};", title: title_str } })
         else
-          people_count_json_cloud.push({"text"=>people.to_s,"weight"=>total_count, "html" => {style: "color: ##{colour};", title: title_str}, "link" => "mailto:#{people_count_emails[people.to_s]}"})
+          people_count_json_cloud.push({ "text" => people.to_s, "weight" => total_count, "html" => { style: "color: ##{colour};", title: title_str }, "link" => "mailto:#{people_count_emails[people.to_s]}" })
         end
       end
     end
 
     org_count_json_cloud = []
-    org_count_hash.each do |org,hash_count|
+    org_count_hash.each do |org, hash_count|
       # Random color for each word in the cloud
       colour = "%06x" % (rand * 0xffffff)
       title_array = []
@@ -445,99 +442,99 @@ class LandscapeController < ApplicationController
 
       if total_count > 1
         if hash_count.has_key?(:uri)
-          org_count_json_cloud.push({"text"=>org.to_s,"weight"=>total_count, "html" => {style: "color: ##{colour};", title: title_str}, "link" => "#{hash_count[:uri]}"})
+          org_count_json_cloud.push({ "text" => org.to_s, "weight" => total_count, "html" => { style: "color: ##{colour};", title: title_str }, "link" => "#{hash_count[:uri]}" })
         else
-          org_count_json_cloud.push({"text"=>org.to_s,"weight"=>total_count, "html" => {style: "color: ##{colour};", title: title_str}})
+          org_count_json_cloud.push({ "text" => org.to_s, "weight" => total_count, "html" => { style: "color: ##{colour};", title: title_str } })
         end
       end
     end
 
     engineering_tool_cloud_json = []
-    engineering_tool_count.each do |tool,count|
+    engineering_tool_count.each do |tool, count|
       # Random color for each word in the cloud
       colour = "%06x" % (rand * 0xffffff)
-      engineering_tool_cloud_json.push({"text"=>tool.to_s,"weight"=>count, "html" => {style: "color: ##{colour};", title: "Used to build #{count.to_s} ontologies."}})
+      engineering_tool_cloud_json.push({ "text" => tool.to_s, "weight" => count, "html" => { style: "color: ##{colour};", title: "Used to build #{count.to_s} ontologies." } })
     end
 
     # Push the results in hash formatted for the Javascript lib that will be displaying it
     color_index = 0
-    natural_language_hash.each do |lang,count_hash|
-      natural_language_json_pie.push({"label"=>lang.to_s,"value"=>count_hash["count"], "color"=>pie_colors_array[color_index], "uri"=>count_hash["uri"]})
+    natural_language_hash.each do |lang, count_hash|
+      natural_language_json_pie.push({ "label" => lang.to_s, "value" => count_hash["count"], "color" => pie_colors_array[color_index], "uri" => count_hash["uri"] })
       color_index += 1
     end
 
     color_index = 0
-    licenseProperty_hash.each do |license,count_hash|
-      licenseProperty_json_pie.push({"label"=>license.to_s,"value"=>count_hash["count"], "color"=>pie_colors_array[color_index], "uri"=>count_hash["uri"]})
+    licenseProperty_hash.each do |license, count_hash|
+      licenseProperty_json_pie.push({ "label" => license.to_s, "value" => count_hash["count"], "color" => pie_colors_array[color_index], "uri" => count_hash["uri"] })
       color_index += 1
     end
 
     formalityLevelCount = {}
-    formalityProperty_hash.each do |formality_level,count_hash|
+    formalityProperty_hash.each do |formality_level, count_hash|
       # Generate formalityLevel JSON used to get the bar charts
       formalityLevelCount[formality_level.to_s] = count_hash["count"]
     end
 
     isOfTypeCount = {}
-    isOfTypeProperty_hash.each do |isOfType,count_hash|
+    isOfTypeProperty_hash.each do |isOfType, count_hash|
       isOfTypeCount[isOfType.to_s] = count_hash["count"]
     end
 
     color_index = 0
-    prefLabelProperty_hash.each do |pref_label,count_hash|
-      prefLabelProperty_json_pie.push({"label"=>pref_label.to_s,"value"=>count_hash["count"], "color"=>pie_colors_array[color_index], "uri"=>count_hash["uri"]})
+    prefLabelProperty_hash.each do |pref_label, count_hash|
+      prefLabelProperty_json_pie.push({ "label" => pref_label.to_s, "value" => count_hash["count"], "color" => pie_colors_array[color_index], "uri" => count_hash["uri"] })
       color_index += 2
     end
     color_index = 1
-    synonymProperty_hash.each do |synonym,count_hash|
-      synonymProperty_json_pie.push({"label"=>synonym.to_s,"value"=>count_hash["count"], "color"=>pie_colors_array[color_index], "uri"=>count_hash["uri"]})
+    synonymProperty_hash.each do |synonym, count_hash|
+      synonymProperty_json_pie.push({ "label" => synonym.to_s, "value" => count_hash["count"], "color" => pie_colors_array[color_index], "uri" => count_hash["uri"] })
       color_index += 2
     end
     color_index = 0
-    definitionProperty_hash.each do |definition,count_hash|
-      definitionProperty_json_pie.push({"label"=>definition.to_s,"value"=>count_hash["count"], "color"=>pie_colors_array[color_index], "uri"=>count_hash["uri"]})
+    definitionProperty_hash.each do |definition, count_hash|
+      definitionProperty_json_pie.push({ "label" => definition.to_s, "value" => count_hash["count"], "color" => pie_colors_array[color_index], "uri" => count_hash["uri"] })
       color_index += 2
     end
     color_index = 1
-    authorProperty_hash.each do |author,count_hash|
-      authorProperty_json_pie.push({"label"=>author.to_s,"value"=>count_hash["count"], "color"=>pie_colors_array[color_index], "uri"=>count_hash["uri"]})
+    authorProperty_hash.each do |author, count_hash|
+      authorProperty_json_pie.push({ "label" => author.to_s, "value" => count_hash["count"], "color" => pie_colors_array[color_index], "uri" => count_hash["uri"] })
       color_index += 2
     end
 
     # Format the ontologyFormatsCount hash as the JSON needed to generate the chart
     ontologyFormatsChartJson = { labels: ontologyFormatsCount.keys,
-                                 datasets: [{ label: "Number of ontologies using this format",
-                                                 data: ontologyFormatsCount.values,
-                                                 backgroundColor: pie_colors_array[3]}] }
+                                datasets: [{ label: "Number of ontologies using this format",
+                                             data: ontologyFormatsCount.values,
+                                             backgroundColor: pie_colors_array[3] }] }
 
     isOfTypeChartJson = { labels: isOfTypeCount.keys,
-                          datasets: [{ label: "Number of ontologies of this ontology type",
-                                          data: isOfTypeCount.values,
-                                          backgroundColor: pie_colors_array[0]}] }
+                         datasets: [{ label: "Number of ontologies of this ontology type",
+                                      data: isOfTypeCount.values,
+                                      backgroundColor: pie_colors_array[0] }] }
 
     formalityLevelChartJson = { labels: formalityLevelCount.keys,
-                                datasets: [{ label: "Number of ontologies of this formality level",
-                                                data: formalityLevelCount.values,
-                                                backgroundColor: pie_colors_array[2]}] }
+                               datasets: [{ label: "Number of ontologies of this formality level",
+                                            data: formalityLevelCount.values,
+                                            backgroundColor: pie_colors_array[2] }] }
 
     dataCatalogChartJson = { labels: dataCatalog_count_hash.keys,
-                             datasets: [{ label: "Number of ontologies in this catalog", data: dataCatalog_count_hash.values,
-                                                backgroundColor: pie_colors_array[5]}] }
+                            datasets: [{ label: "Number of ontologies in this catalog", data: dataCatalog_count_hash.values,
+                                         backgroundColor: pie_colors_array[5] }] }
 
     # Format the groupOntologiesCount hash as the JSON needed to generate the chart
     groupCountChartJson = { labels: groups_count_hash.keys,
-                            datasets: [{ label: "Number of ontologies", data: groups_count_hash.values,
-                                                  backgroundColor: pie_colors_array[3]}] }
+                           datasets: [{ label: "Number of ontologies", data: groups_count_hash.values,
+                                        backgroundColor: pie_colors_array[3] }] }
 
     domainCountChartJson = { labels: domains_count_hash.keys,
-                             datasets: [{ label: "Number of ontologies", data: domains_count_hash.values,
-                                             backgroundColor: pie_colors_array[4]}] }
+                            datasets: [{ label: "Number of ontologies", data: domains_count_hash.values,
+                                         backgroundColor: pie_colors_array[4] }] }
 
     # Format the groupOntologiesCount hash as the JSON needed to generate the chart
     sizeSlicesChartJson = { labels: size_slices_hash.keys,
-                            datasets: [{ label: "Number of ontologies with a class count in this range",
-                                            data: size_slices_hash.values,
-                                            backgroundColor: pie_colors_array[2]}] }
+                           datasets: [{ label: "Number of ontologies with a class count in this range",
+                                        data: size_slices_hash.values,
+                                        backgroundColor: pie_colors_array[2] }] }
 
     # Also pass groups and hasDomain name to resolve it and better label of bar charts
     groups = LinkedData::Client::Models::Group.all(include: "acronym,name,description")
@@ -550,7 +547,7 @@ class LandscapeController < ApplicationController
       groups_info_hash[group.acronym][:name] = group.name
       groups_info_hash[group.acronym][:description] = []
       # Slice the description in 6 words string to avoid too long sentence in the bar chart tooltip in js
-      group.description.split(" ").each_slice(6) {|slice| groups_info_hash[group.acronym][:description].push(slice.join(" ")) }
+      group.description.split(" ").each_slice(6) { |slice| groups_info_hash[group.acronym][:description].push(slice.join(" ")) }
     end
 
     domains_info_hash = {}
@@ -560,42 +557,42 @@ class LandscapeController < ApplicationController
       domains_info_hash[domain.acronym][:name] = domain.name
       domains_info_hash[domain.acronym][:description] = []
       # Slice the description in 6 words string to avoid too long sentence in the bar chart tooltip in js
-      domain.description.split(" ").each_slice(6) {|slice| domains_info_hash[domain.acronym][:description].push(slice.join(" ")) }
+      domain.description.split(" ").each_slice(6) { |slice| domains_info_hash[domain.acronym][:description].push(slice.join(" ")) }
     end
 
     @landscape_data = {
-        people_count_json_cloud: people_count_json_cloud,
-        org_count_json_cloud: org_count_json_cloud,
-        engineering_tool_cloud_json: engineering_tool_cloud_json,
-        notes_ontologies_json_cloud: notes_ontologies_json_cloud,
-        notes_people_json_cloud: notes_people_json_cloud,
-        natural_language_json_pie: natural_language_json_pie,
-        licenseProperty_json_pie: licenseProperty_json_pie,
-        ontology_relations_array: ontology_relations_array,
-        prefLabelProperty_json_pie: prefLabelProperty_json_pie,
-        synonymProperty_json_pie: synonymProperty_json_pie,
-        definitionProperty_json_pie: definitionProperty_json_pie,
-        authorProperty_json_pie: authorProperty_json_pie,
-        ontologyFormatsChartJson: ontologyFormatsChartJson,
-        isOfTypeChartJson: isOfTypeChartJson,
-        formalityLevelChartJson: formalityLevelChartJson,
-        dataCatalogChartJson: dataCatalogChartJson,
-        groupCountChartJson: groupCountChartJson,
-        groupsInfoHash: groups_info_hash,
-        domainCountChartJson: domainCountChartJson,
-        domainsInfoHash: domains_info_hash,
-        sizeSlicesChartJson: sizeSlicesChartJson
+      people_count_json_cloud: people_count_json_cloud,
+      org_count_json_cloud: org_count_json_cloud,
+      engineering_tool_cloud_json: engineering_tool_cloud_json,
+      notes_ontologies_json_cloud: notes_ontologies_json_cloud,
+      notes_people_json_cloud: notes_people_json_cloud,
+      natural_language_json_pie: natural_language_json_pie,
+      licenseProperty_json_pie: licenseProperty_json_pie,
+      ontology_relations_array: ontology_relations_array,
+      prefLabelProperty_json_pie: prefLabelProperty_json_pie,
+      synonymProperty_json_pie: synonymProperty_json_pie,
+      definitionProperty_json_pie: definitionProperty_json_pie,
+      authorProperty_json_pie: authorProperty_json_pie,
+      ontologyFormatsChartJson: ontologyFormatsChartJson,
+      isOfTypeChartJson: isOfTypeChartJson,
+      formalityLevelChartJson: formalityLevelChartJson,
+      dataCatalogChartJson: dataCatalogChartJson,
+      groupCountChartJson: groupCountChartJson,
+      groupsInfoHash: groups_info_hash,
+      domainCountChartJson: domainCountChartJson,
+      domainsInfoHash: domains_info_hash,
+      sizeSlicesChartJson: sizeSlicesChartJson,
     }.to_json.html_safe
-
   end
 
   private
+
   # For notes takes the hash and create the entry if not already existing
   # To create hash like this: {"user1": {"reviews": 3, "notes": 4, "projects": 4}}
   def notes_create_hash_entry(uri_id, notes_type, hash)
-    id = uri_id.split('/').last
+    id = uri_id.split("/").last
     if !hash.has_key?(id)
-      hash[id] = {uri: uri_id}
+      hash[id] = { uri: uri_id }
     end
     if !hash[id].has_key?(notes_type)
       hash[id][notes_type] = 1
@@ -604,7 +601,6 @@ class LandscapeController < ApplicationController
     end
     return hash
   end
-
 
   ##
   # Add metrics metadata from the param sub to the @metrics_average var to get the average for each metrics
@@ -637,7 +633,7 @@ class LandscapeController < ApplicationController
     RESOLVE_NAMESPACE.each do |prefix, namespace|
       if attr_value.start_with?(namespace)
         prefixed_attr_value = attr_value.sub(namespace, "#{prefix}:")
-        break;
+        break
       end
     end
 

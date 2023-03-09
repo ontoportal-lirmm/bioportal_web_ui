@@ -16,18 +16,18 @@
     %input#radioItText.form-check-input{name: "input_type", type: "radio", value: "1", checked: "checked"}
     %label.form-check-label{for: "radioItText"} Text
   %div.form-check.form-check-inline
-    %input#radioItKeywords.form-check-input{name: "input_type", type: "radio", value: "2"} 
+    %input#radioItKeywords.form-check-input{name: "input_type", type: "radio", value: "2"}
     %label.form-check-label{for: "radioItKeywords"} Keywords (separated by commas)
-  
+
   -# Specify output format
   %h5.pt-3 Output
   %div.form-check.form-check-inline
-    %input#radioOtSingle.form-check-input{name: "output_type", type: "radio", value: "1", checked: "checked"} 
+    %input#radioOtSingle.form-check-input{name: "output_type", type: "radio", value: "1", checked: "checked"}
     %label.form-check-label{for: "radioOtSingle"} Ontologies
   %div.form-check.form-check-inline
-    %input#radioOtSets.form-check-input{name: "output_type", type: "radio", value: "2"} 
+    %input#radioOtSets.form-check-input{name: "output_type", type: "radio", value: "2"}
     %label.form-check-label{for: "radioOtSets"} Ontology sets
-  
+
   -# Input text or keywords
   %div.form-group.mt-4
     = text_area_tag("inputText", nil, rows: 10, class: "form-control default", placeholder: "Paste a paragraph of text or some keywords to use in calculating ontology recommendations", aria: {describedby: "inputTextHelpBlock"})
