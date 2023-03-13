@@ -46,6 +46,7 @@ $API_KEY = ""
 
 # BioPortal API service address
 $REST_URL = "http://#{$SITE_URL}:8080"
+$PROXY_URL = $REST_URL
 
 # Annotator REST service address
 #$ANNOTATOR_URL = "http://services.stageportal.lirmm.fr/annotator"
