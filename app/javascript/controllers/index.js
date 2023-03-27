@@ -43,6 +43,9 @@ application.register("simple-tree", SimpleTreeController)
 import SkosCollectionColorsController from "./skos_collection_colors_controller"
 application.register("skos-collection-colors", SkosCollectionColorsController)
 
+import TabChangeController from "./tab_change_controller"
+application.register("tab-change", TabChangeController)
+
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
 

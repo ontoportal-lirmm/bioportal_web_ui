@@ -2,6 +2,9 @@ module OntologiesHelper
 
   REST_URI = $REST_URL
   API_KEY = $API_KEY
+  LANGUAGE_FILTERABLE_SECTIONS  = ['classes', 'schemes', 'collections']
+
+
 
   def additional_details
     return "" if $ADDITIONAL_ONTOLOGY_DETAILS.nil? || $ADDITIONAL_ONTOLOGY_DETAILS[@ontology.acronym].nil?
@@ -384,6 +387,10 @@ module OntologiesHelper
 
   def selected_section?(section_title)
     current_section.eql?(section_title)
+  end
+
+  def allowed_to_show_language_filter?(section)
+    LANGUAGE_FILTERABLE_SECTIONS.include?(section)
   end
 
   def lazy_load_section(section_title, &block)
