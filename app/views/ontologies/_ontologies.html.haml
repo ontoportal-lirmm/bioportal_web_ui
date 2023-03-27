@@ -1,0 +1,61 @@
+
+
+= turbo_frame_tag "search-results" do
+  %p.browse-desc-text{:style => "margin-bottom: 15px;"}
+    = "Showing "+ @ontologies.length.to_s
+  -# Here we put our turbo frame "ontologies_frame"
+  - @ontologies.each do |ontology|
+    .browse-ontology-container
+      .browse-ontology-description
+        .browse-ontology-title-bar
+          %a.browse-ontology-title{:href => "/ontologies/#{ontology[:acronym]}", data: {'turbo-frame': '_top'}}
+            = ontology[:name]+" ("+ontology[:acronym]+")"
+          - if ontology[:deprecated]
+            .browse-ontology-deprecated
+              deprecated
+          - if ontology[:viewOfOnt]
+            .browse-ontology-view
+              view
+
+        %p.browse-desc-text
+          = ontology[:description]
+
+        
+        - unless ontology[:fairScore].nil? || ontology[:acronym] == 'AGROVOC'
+          .browse-fair
+            %p.browse-fair-title
+              FAIR score
+            .browse-progress-bar
+              .browse-faire-progress{:style => "width: #{ontology[:normalizedFairScore].to_s+"%"}"}
+            %p.browse-fair-score
+              = ontology[:fairScore]
+            %a.browse-fair-details{:href => "/ontologies/#{ontology[:acronym]}#fair-details"} FAIR details ...
+        .browse-uploaded
+          %p Uploaded:
+          %p.browse-uploaded-date
+            = ontology[:creationDate].to_s[0, 10]
+      .browse-ontology-cards
+        - if ontology[:format] != 'SKOS' && ontology[:class_count] > 0
+          %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}?p=classes"}
+            %p.browse-card-number
+              = ontology[:class_count_formatted]
+            %p.browse-card-text
+              classes
+        - if ontology[:individual_count] > 0
+          %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}?p=classes"}
+            %p.browse-card-number
+              = ontology[:individual_count_formatted]
+            %p.browse-card-text
+              = ontology[:format] == 'SKOS' ? "concepts" : "instances"
+        - if ontology[:project_count] > 0
+          %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}#projects_content"}
+            %p.browse-card-number
+              = ontology[:project_count]
+            %p.browse-card-text
+              projects
+        - if ontology[:note_count] > 0
+          %a.browse-onology-card{:href => "#"}
+            %p.browse-card-number
+              = ontology[:note_count]
+            %p.browse-card-text
+              notes
