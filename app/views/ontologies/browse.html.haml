@@ -1,133 +1,75 @@
+
+
 .browse-center
   .browse-container
     %h2.browse-title Browse
     %hr#browse-title-line/
-    - if session[:user].nil?
-      %a.browse-upload-ontology-button{:href => "/login?redirect=/ontologies/new"}
-        %svg{:fill => "none", :height => "14", :viewbox => "0 0 15 14", :width => "15", :xmlns => "http://www.w3.org/2000/svg"}
-          %path{:d => "M3.46242 4.17686L6.91776 0.23682C6.98312 0.162278 7.06302 0.102677 7.15225 0.0618794C7.24149 0.0210821 7.33808 0 7.43576 0C7.53344 0 7.63003 0.0210821 7.71927 0.0618794C7.80851 0.102677 7.8884 0.162278 7.95377 0.23682L11.4092 4.17686C11.533 4.31795 11.5971 4.50373 11.5874 4.69334C11.5777 4.88295 11.4951 5.06086 11.3577 5.18792C11.2204 5.31498 11.0395 5.38079 10.8548 5.37087C10.6702 5.36095 10.497 5.27612 10.3732 5.13503L8.13286 2.58055V10.4116C8.13286 10.6015 8.05942 10.7836 7.92869 10.9178C7.79796 11.0521 7.62065 11.1275 7.43576 11.1275C7.25088 11.1275 7.07357 11.0521 6.94284 10.9178C6.8121 10.7836 6.73866 10.6015 6.73866 10.4116V2.58058L4.49846 5.13512C4.43719 5.20498 4.36313 5.26177 4.28049 5.30223C4.19785 5.3427 4.10826 5.36605 4.01684 5.37096C3.92541 5.37587 3.83394 5.36223 3.74764 5.33084C3.66135 5.29944 3.58192 5.2509 3.51389 5.18798C3.44586 5.12506 3.39057 5.04899 3.35117 4.96413C3.31176 4.87926 3.28902 4.78726 3.28425 4.69337C3.27947 4.59948 3.29274 4.50554 3.32331 4.41692C3.35388 4.32829 3.40115 4.24672 3.46242 4.17686ZM14.1744 12.488H0.697103C0.51222 12.488 0.334909 12.5635 0.204177 12.6977C0.0734445 12.832 0 13.0141 0 13.2039C0 13.3938 0.0734445 13.5759 0.204177 13.7101C0.334909 13.8444 0.51222 13.9198 0.697103 13.9198H14.1744C14.3593 13.9198 14.5366 13.8444 14.6673 13.7101C14.7981 13.5759 14.8715 13.3938 14.8715 13.2039C14.8715 13.0141 14.7981 12.832 14.6673 12.6977C14.5366 12.5635 14.3593 12.488 14.1744 12.488Z", :fill => "#31B404"}
-        Submit new ontology
-    - else
-      %a.browse-upload-ontology-button{:href => "/ontologies/new"}
-        %svg{:fill => "none", :height => "14", :viewbox => "0 0 15 14", :width => "15", :xmlns => "http://www.w3.org/2000/svg"}
-          %path{:d => "M3.46242 4.17686L6.91776 0.23682C6.98312 0.162278 7.06302 0.102677 7.15225 0.0618794C7.24149 0.0210821 7.33808 0 7.43576 0C7.53344 0 7.63003 0.0210821 7.71927 0.0618794C7.80851 0.102677 7.8884 0.162278 7.95377 0.23682L11.4092 4.17686C11.533 4.31795 11.5971 4.50373 11.5874 4.69334C11.5777 4.88295 11.4951 5.06086 11.3577 5.18792C11.2204 5.31498 11.0395 5.38079 10.8548 5.37087C10.6702 5.36095 10.497 5.27612 10.3732 5.13503L8.13286 2.58055V10.4116C8.13286 10.6015 8.05942 10.7836 7.92869 10.9178C7.79796 11.0521 7.62065 11.1275 7.43576 11.1275C7.25088 11.1275 7.07357 11.0521 6.94284 10.9178C6.8121 10.7836 6.73866 10.6015 6.73866 10.4116V2.58058L4.49846 5.13512C4.43719 5.20498 4.36313 5.26177 4.28049 5.30223C4.19785 5.3427 4.10826 5.36605 4.01684 5.37096C3.92541 5.37587 3.83394 5.36223 3.74764 5.33084C3.66135 5.29944 3.58192 5.2509 3.51389 5.18798C3.44586 5.12506 3.39057 5.04899 3.35117 4.96413C3.31176 4.87926 3.28902 4.78726 3.28425 4.69337C3.27947 4.59948 3.29274 4.50554 3.32331 4.41692C3.35388 4.32829 3.40115 4.24672 3.46242 4.17686ZM14.1744 12.488H0.697103C0.51222 12.488 0.334909 12.5635 0.204177 12.6977C0.0734445 12.832 0 13.0141 0 13.2039C0 13.3938 0.0734445 13.5759 0.204177 13.7101C0.334909 13.8444 0.51222 13.9198 0.697103 13.9198H14.1744C14.3593 13.9198 14.5366 13.8444 14.6673 13.7101C14.7981 13.5759 14.8715 13.3938 14.8715 13.2039C14.8715 13.0141 14.7981 12.832 14.6673 12.6977C14.5366 12.5635 14.3593 12.488 14.1744 12.488Z", :fill => "#31B404"}
-        Submit new ontology
-    .browse-search-bar
-      %input{:name => "search", :placeholder => "Ex: Agrovoc ...", :type => "text"}/
-      %select#format.browse-format-filter{:name => "format"}
-        %option{:disabled => "disabled", :hidden => "", :selected => "selected", :value => ""} Format
-        %option{:value => "OBO"} OBO
-        %option{:value => "OWL"} OWL
-        %option{:value => "SKOS"} SKOS
-        %option{:value => "UMLS"} UMLS
-      %select#Sort_by.browse-sort-by-filter{:name => "Sort_by"}
-        %option{:disabled => "disabled", :hidden => "", :selected => "selected", :value => ""} Sort by
-        %option{:value => "Popular"} Popular
-        %option{:value => "Name"} Name
-        %option{:value => "class count"} class count
-        %option{:value => "Instances/Concepts count"} Instances/Concepts count
-        %option{:value => "Projects"} Projects
-        %option{:value => "Notes"} Notes
-        %option{:value => "Upload date"} Upload date
-        %option{:value => "Release date"} Release date
-        %option{:value => "FAIR"} FAIR
-      .browse-search-button
-        %img{:src => "#{asset_path("search.svg")}"}/
-        %p Search
-    %br/
-    .browse-sub-container
-      .browse-first-row
-        %p.browse-filters-title Filters
-        %hr#browse-sub-title-line/
-        .browse-filter
-          .browse-filter-title-bar{"data-target" => "#browse-category-filtre", "data-toggle" => "collapse"}
-            %p Category
-            %img{:src => "#{asset_path("arrow-down.svg")}"}/
-          #browse-category-filtre.collapse
-            .browse-filter-checks-container
-              - @categories.each do |category|
-                %div
-                  = render ChipsComponent.new(name:category.id, value: category.name)
-        .browse-filter
-          .browse-filter-title-bar{"data-target" => "#browse-group-filtre", "data-toggle" => "collapse"}
-            %p Group
-            %img{:src => "#{asset_path("arrow-down.svg")}"}/
-          #browse-group-filtre.collapse
-            .browse-filter-checks-container
-              - @groups.each do |group|
-                %div
-                  = render ChipsComponent.new(name:group.id, value: group.name)
-        .browse-filter
-          .browse-filter-title-bar{"data-target" => "#browse-format-filtre", "data-toggle" => "collapse"}
-            %p Format
-            %img{:src => "#{asset_path("arrow-down.svg")}"}/
-          #browse-format-filtre.collapse
-            .browse-filter-checks-container
-              - @formats.each do |format|
-                %div
-                  = render ChipsComponent.new(name:format, value: format)
-        .browse-filter
-          .browse-filter-title-bar{"data-target" => "#browse-ontology-content-filtre", "data-toggle" => "collapse"}
-            %p Ontology content
-            %img{:src => "#{asset_path("arrow-down.svg")}"}/
-        .browse-filter
-          .browse-filter-title-bar{"data-target" => "#browse-natural-language-filtre", "data-toggle" => "collapse"}
-            %p Natural language
-            %img{:src => "#{asset_path("arrow-down.svg")}"}/
-        .browse-filter
-          .browse-filter-title-bar{"data-target" => "#browse-formality-levels-filtre", "data-toggle" => "collapse"}
-            %p Formality levels
-            %img{:src => "#{asset_path("arrow-down.svg")}"}/
-        .browse-filter
-          .browse-filter-title-bar{"data-target" => "#browse-is-of-type-filtre", "data-toggle" => "collapse"}
-            %p Is of type
-            %img{:src => "#{asset_path("arrow-down.svg")}"}/
-      .browse-second-row
-        %p.browse-desc-text{:style => "margin-bottom: 15px;"}
-          Showing 147 of 152
-        - @ontologies.each do |ontology|
-          .browse-ontology-container
-            .browse-ontology-description
-              %a.browse-ontology-title{:href => "/ontologies/#{ontology[:acronym]}"}
-                = ontology[:name]+" ("+ontology[:acronym]+")"
-              %p.browse-desc-text
-                = ontology[:description]
-              - unless ontology[:fairScore].nil? || ontology[:acronym] == 'AGROVOC'
-                .browse-fair
-                  %p.browse-fair-title
-                    FAIR score
-                  .browse-progress-bar
-                    .browse-faire-progress{:style => "width: #{ontology[:normalizedFairScore].to_s+"%"}"}
-                  %p.browse-fair-score
-                    = ontology[:fairScore]
-                  %a.browse-fair-details{:href => "/ontologies/#{ontology[:acronym]}#fair-details"} FAIR details ...
-              .browse-uploaded
-                %p Uploaded:
-                %p.browse-uploaded-date
-                  = ontology[:creationDate].to_s[0, 10]
-            .browse-ontology-cards
-              - if ontology[:format] != 'SKOS' && ontology[:class_count] > 0
-                %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}?p=classes"}
-                  %p.browse-card-number
-                    = ontology[:class_count_formatted]
-                  %p.browse-card-text
-                    classes
-              - if ontology[:individual_count] > 0
-                %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}?p=classes"}
-                  %p.browse-card-number
-                    = ontology[:individual_count_formatted]
-                  %p.browse-card-text
-                    = ontology[:format] == 'SKOS' ? "concepts" : "instances"
-              - if ontology[:project_count] > 0
-                %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}#projects_content"}
-                  %p.browse-card-number
-                    = ontology[:project_count]
-                  %p.browse-card-text
-                    projects
-              - if ontology[:note_count] > 0
-                %a.browse-onology-card{:href => "#"}
-                  %p.browse-card-number
-                    = ontology[:note_count]
-                  %p.browse-card-text
-                    notes
+    .browse-submit-new-ontology-and-you-are-admin-container
+      - if session[:user].nil?
+        %a.browse-upload-ontology-button{:href => "/login?redirect=/ontologies/new"}
+          %svg{:fill => "none", :height => "14", :viewbox => "0 0 15 14", :width => "15", :xmlns => "http://www.w3.org/2000/svg"}
+            %path{:d => "M3.46242 4.17686L6.91776 0.23682C6.98312 0.162278 7.06302 0.102677 7.15225 0.0618794C7.24149 0.0210821 7.33808 0 7.43576 0C7.53344 0 7.63003 0.0210821 7.71927 0.0618794C7.80851 0.102677 7.8884 0.162278 7.95377 0.23682L11.4092 4.17686C11.533 4.31795 11.5971 4.50373 11.5874 4.69334C11.5777 4.88295 11.4951 5.06086 11.3577 5.18792C11.2204 5.31498 11.0395 5.38079 10.8548 5.37087C10.6702 5.36095 10.497 5.27612 10.3732 5.13503L8.13286 2.58055V10.4116C8.13286 10.6015 8.05942 10.7836 7.92869 10.9178C7.79796 11.0521 7.62065 11.1275 7.43576 11.1275C7.25088 11.1275 7.07357 11.0521 6.94284 10.9178C6.8121 10.7836 6.73866 10.6015 6.73866 10.4116V2.58058L4.49846 5.13512C4.43719 5.20498 4.36313 5.26177 4.28049 5.30223C4.19785 5.3427 4.10826 5.36605 4.01684 5.37096C3.92541 5.37587 3.83394 5.36223 3.74764 5.33084C3.66135 5.29944 3.58192 5.2509 3.51389 5.18798C3.44586 5.12506 3.39057 5.04899 3.35117 4.96413C3.31176 4.87926 3.28902 4.78726 3.28425 4.69337C3.27947 4.59948 3.29274 4.50554 3.32331 4.41692C3.35388 4.32829 3.40115 4.24672 3.46242 4.17686ZM14.1744 12.488H0.697103C0.51222 12.488 0.334909 12.5635 0.204177 12.6977C0.0734445 12.832 0 13.0141 0 13.2039C0 13.3938 0.0734445 13.5759 0.204177 13.7101C0.334909 13.8444 0.51222 13.9198 0.697103 13.9198H14.1744C14.3593 13.9198 14.5366 13.8444 14.6673 13.7101C14.7981 13.5759 14.8715 13.3938 14.8715 13.2039C14.8715 13.0141 14.7981 12.832 14.6673 12.6977C14.5366 12.5635 14.3593 12.488 14.1744 12.488Z", :fill => "#31B404"}
+          Submit new ontology
+      - else
+        %a.browse-upload-ontology-button{:href => "/ontologies/new"}
+          %svg{:fill => "none", :height => "14", :viewbox => "0 0 15 14", :width => "15", :xmlns => "http://www.w3.org/2000/svg"}
+            %path{:d => "M3.46242 4.17686L6.91776 0.23682C6.98312 0.162278 7.06302 0.102677 7.15225 0.0618794C7.24149 0.0210821 7.33808 0 7.43576 0C7.53344 0 7.63003 0.0210821 7.71927 0.0618794C7.80851 0.102677 7.8884 0.162278 7.95377 0.23682L11.4092 4.17686C11.533 4.31795 11.5971 4.50373 11.5874 4.69334C11.5777 4.88295 11.4951 5.06086 11.3577 5.18792C11.2204 5.31498 11.0395 5.38079 10.8548 5.37087C10.6702 5.36095 10.497 5.27612 10.3732 5.13503L8.13286 2.58055V10.4116C8.13286 10.6015 8.05942 10.7836 7.92869 10.9178C7.79796 11.0521 7.62065 11.1275 7.43576 11.1275C7.25088 11.1275 7.07357 11.0521 6.94284 10.9178C6.8121 10.7836 6.73866 10.6015 6.73866 10.4116V2.58058L4.49846 5.13512C4.43719 5.20498 4.36313 5.26177 4.28049 5.30223C4.19785 5.3427 4.10826 5.36605 4.01684 5.37096C3.92541 5.37587 3.83394 5.36223 3.74764 5.33084C3.66135 5.29944 3.58192 5.2509 3.51389 5.18798C3.44586 5.12506 3.39057 5.04899 3.35117 4.96413C3.31176 4.87926 3.28902 4.78726 3.28425 4.69337C3.27947 4.59948 3.29274 4.50554 3.32331 4.41692C3.35388 4.32829 3.40115 4.24672 3.46242 4.17686ZM14.1744 12.488H0.697103C0.51222 12.488 0.334909 12.5635 0.204177 12.6977C0.0734445 12.832 0 13.0141 0 13.2039C0 13.3938 0.0734445 13.5759 0.204177 13.7101C0.334909 13.8444 0.51222 13.9198 0.697103 13.9198H14.1744C14.3593 13.9198 14.5366 13.8444 14.6673 13.7101C14.7981 13.5759 14.8715 13.3938 14.8715 13.2039C14.8715 13.0141 14.7981 12.832 14.6673 12.6977C14.5366 12.5635 14.3593 12.488 14.1744 12.488Z", :fill => "#31B404"}
+          Submit new ontology
+      - if session[:user]&.admin?
+        .browse-you-are-admin
+          %h3 Welcome admin
+          %div
+            %svg{:fill => "none", :height => "11", :viewbox => "0 0 11 11", :width => "11", :xmlns => "http://www.w3.org/2000/svg"}
+              %circle{:cx => "5.5", :cy => "5.5", :fill => "#145FF4", :r => "5.5"}
+            %p This coloring indicates admin-only features
 
+    %div{data: { controller: "turbo-frame history browse-filters" , "turbo-frame-url-value": "/ontologies_filter", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL changed->turbo-frame#updateFrame"}}
+      .browse-search-bar
+        .browse-search-container
+          %input{:name => "search", :placeholder => "Ex: Agrovoc ...", :type => "text", :value => @search, data: {action: "input->browse-filters#dispatchInputEvent"}}
+          .browse-search-filters
+            %select#format.browse-format-filter{:name => "format"}
+              - format= [["All formats",""], "OBO", "OWL", "SKOS", "UMLS"]
+              = options_for_select(format, @selected_format)
+            %select#Sort_by.browse-sort-by-filter{:name => "Sort_by"}
+              %option{:disabled => "disabled", :hidden => "", :selected => "selected", :value => ""} Sort by
+              %option{:value => "Popular"} Popular
+              %option{:value => "Name"} Name
+              %option{:value => "class count"} class count
+              %option{:value => "Instances/Concepts count"} Instances/Concepts count
+              %option{:value => "Projects"} Projects
+              %option{:value => "Notes"} Notes
+              %option{:value => "Upload date"} Upload date
+              %option{:value => "Release date"} Release date
+              %option{:value => "FAIR"} FAIR
+
+      .browse-sub-container
+        .browse-first-row{data:{controller: "browse-filters", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL changed->turbo-frame#updateFrame"}}
+          %p.browse-filters-title Filters
+          %hr#browse-sub-title-line
+          = render SwitchInputComponent.new(id:'filter-views', name:'views', checked: @show_views) do
+            Show ontology views
+          = render SwitchInputComponent.new(id:'filter-retired', name:'retired',checked: @show_retired) do
+            Show retired ontologies
+
+          - @filters.each do |key, values|
+            - if session[:user]&.admin? ||  key != :missingStatus
+              .browse-filter{data:{controller: "show-filter-count browse-filters", action: "change->show-filter-count#updateCount change->browse-filters#dispatchFilterEvent"}, id: "#{key}_filter_container", style: "#{"border-color: #145FF4;" if key == :missingStatus}"}
+                .browse-filter-title-bar{"data-target" => "#browse-#{key}-filter", "data-toggle" => "collapse"}
+                  %p
+                    #{key.to_s.underscore.humanize.capitalize}
+                    %span.badge.badge-secondary{"data-show-filter-count-target":"countSpan", style: "#{values[2] && values[2].positive? ? '' : 'display: none;'}"}
+                      = values[2] 
+                  %img{:src => "#{asset_path("arrow-down.svg")}"}/
+                .collapse{id: "browse-#{key}-filter", class: "#{values[2].positive? ? 'show': ''}"}
+                  .browse-filter-checks-container
+                    - values.first.each do |object|
+                      %div
+                        = render ChipsComponent.new(name: object["acronym"], value: object["name"] || object["id"], checked: values[1]&.include?(object["id"]))
+
+
+
+        .browse-second-row
+          = render TurboFrameComponent.new(id:"search-results" , src: "/ontologies_filter?#{request.original_url.split('?').last}",
+              data:{"turbo-frame-target":"frame", "turbo-frame-url-value": "/ontologies_filter"})
+          
