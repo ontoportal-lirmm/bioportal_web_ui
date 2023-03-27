@@ -13,22 +13,27 @@
   integrity sha512-HGlzDcf9vv/EQrMJ5ZG6VWNs8Z/xMN+1o2OhV1gKiSG6CqZt5MCBB1gRg5ILiN3U0jEAxuDTNPRfBcnZBDmupQ==
 
 "@hotwired/turbo-rails@^7.1.1":
-  version "7.2.4"
-  resolved "https://registry.yarnpkg.com/@hotwired/turbo-rails/-/turbo-rails-7.2.4.tgz#d155533e79c4ebdac23e8fe12697d821d5c06307"
-  integrity sha512-givDUQqaccd19BvErz1Cf2j6MXF74m0G6I75oqFJGeXAa7vwkz9nDplefVNrALCR9Xi9j9gy32xmSI6wD0tZyA==
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@hotwired/turbo-rails/-/turbo-rails-7.3.0.tgz#422c21752509f3edcd6c7b2725bbe9e157815f51"
+  integrity sha512-fvhO64vp/a2UVQ3jue9WTc2JisMv9XilIC7ViZmXAREVwiQ2S4UC7Go8f9A1j4Xu7DBI6SbFdqILk5ImqVoqyA==
   dependencies:
-    "@hotwired/turbo" "^7.2.4"
+    "@hotwired/turbo" "^7.3.0"
     "@rails/actioncable" "^7.0"
 
-"@hotwired/turbo@^7.2.4":
-  version "7.2.4"
-  resolved "https://registry.yarnpkg.com/@hotwired/turbo/-/turbo-7.2.4.tgz#0d35541be32cfae3b4f78c6ab9138f5b21f28a21"
-  integrity sha512-c3xlOroHp/cCZHDOuLp6uzQYEbvXBUVaal0puXoGJ9M8L/KHwZ3hQozD4dVeSN9msHWLxxtmPT1TlCN7gFhj4w==
+"@hotwired/turbo@^7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@hotwired/turbo/-/turbo-7.3.0.tgz#2226000fff1aabda9fd9587474565c9929dbf15d"
+  integrity sha512-Dcu+NaSvHLT7EjrDrkEmH4qET2ZJZ5IcCWmNXxNQTBwlnE5tBZfN6WxZ842n5cHV52DH/AKNirbPBtcEXDLW4g==
 
 "@rails/actioncable@^7.0":
   version "7.0.4"
   resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.0.4.tgz#70a3ca56809f7aaabb80af2f9c01ae51e1a8ed41"
   integrity sha512-tz4oM+Zn9CYsvtyicsa/AwzKZKL+ITHWkhiu7x+xF77clh2b4Rm+s6xnOgY/sGDWoFWZmtKsE95hxBPkgQQNnQ==
+
+date-fns@^2.29.3:
+  version "2.29.3"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
+  integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
 
 debounce@^1.2.1:
   version "1.2.1"
@@ -183,3 +188,15 @@ stimulus-rails-nested-form@^4.0.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/stimulus-rails-nested-form/-/stimulus-rails-nested-form-4.1.0.tgz#bfce185cff908170a4eb9973875b72517c3bc83a"
   integrity sha512-ORqcTsg3sa4PGFEyUkbvcPG56F4K2fx1qJCUQIgngO1GaW5taKcvDkT0HvdTqtQAFe/1lN4CpJAqoSCt+nYF/Q==
+
+stimulus-read-more@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/stimulus-read-more/-/stimulus-read-more-4.1.0.tgz#f34efb2dcb33fd091936d84c569937bc100506c8"
+  integrity sha512-SJyCJqZrhDSKpfrepnhStBaxtyv6Jnvr+b84GDg3l+/BzL5HaFLYmc6QkSNCeR6y0x+Zw7lwKuzv+XzyAm1KzQ==
+
+stimulus-timeago@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/stimulus-timeago/-/stimulus-timeago-4.1.0.tgz#5e4b712d9eadd7f0e2b3b142f35f334dba4b3857"
+  integrity sha512-CHcB2rko2ItmDMIhBTaxEMe7sKqI0DOMU8dmWuQ+gzDfoxcrA8DAW/BElHAAw26HVqLTA43RSUsfug8Q+2Ua+g==
+  dependencies:
+    date-fns "^2.29.3"
