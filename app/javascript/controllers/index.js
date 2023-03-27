@@ -52,6 +52,9 @@ application.register("simple-tree", SimpleTreeController)
 import SkosCollectionColorsController from "./skos_collection_colors_controller"
 application.register("skos-collection-colors", SkosCollectionColorsController)
 
+import TextTruncateController from "./text_truncate_controller"
+application.register("text-truncate", TextTruncateController)
+
 import Ontology_viewer_tabs_controller from "./ontology_viewer_tabs_controller"
 application.register("ontology-viewer-tabs", Ontology_viewer_tabs_controller)
 
