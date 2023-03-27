@@ -14,13 +14,10 @@ export default class extends Controller {
     }
 
     updateFrame(event) {
-        const { data } = event.detail
-        const values = Object.values(data)
-
-        // remove null and empty values
-        values.filter((value) => value !== "" || value !== undefined)
-
-        if (values.length === 0) {
+        
+        const newData = event.detail.data
+        const values = Object.entries(newData)[0][1]
+        if (values.filter(x => x.length !== 0).length === 0 && this.placeHolderValue) {
             this.frame.innerHTML = this.placeHolderValue
         } else {
             this.frame.innerHTML = ""

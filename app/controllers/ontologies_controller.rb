@@ -14,51 +14,44 @@ class OntologiesController < ApplicationController
   helper :concepts
   helper :fair_score
 
-  layout :determine_layout
+  layout 'ontology'
 
-  before_action :authorize_and_redirect, :only=>[:edit,:update,:create,:new]
+  before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
   before_action :submission_metadata, only: [:show]
-  KNOWN_PAGES = Set.new(["terms", "classes", "mappings", "notes", "widgets", "summary", "properties" ,"instances", "schemes", "collections"])
+  KNOWN_PAGES = Set.new(["terms", "classes", "mappings", "notes", "widgets", "summary", "properties", "instances", "schemes", "collections"])
   EXTERNAL_MAPPINGS_GRAPH = "http://data.bioontology.org/metadata/ExternalMappings"
   INTERPORTAL_MAPPINGS_GRAPH = "http://data.bioontology.org/metadata/InterportalMappings"
 
-
   # GET /ontologies
   def index
-    @app_name = 'FacetedBrowsing'
-    @app_dir = '/browse'
-    @base_path = @app_dir
-    ontologies = LinkedData::Client::Models::Ontology.all(include: LinkedData::Client::Models::Ontology.include_params + ',viewOf', include_views: true, display_context: false)
-    ontologies_hash = Hash[ontologies.map {|o| [o.id, o] }]
+    @categories = LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
+    @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
+    @filters = ontology_filters_init(@categories, @groups)
+    render 'browse'
+  end
+
+  def ontologies_filter
+    ontologies = LinkedData::Client::Models::Ontology.all(
+      include: LinkedData::Client::Models::Ontology.include_params + ',viewOf', include_views: true, display_context: false)
+    ontologies_hash = Hash[ontologies.map { |o| [o.id, o] }]
     @admin = session[:user] ? session[:user].admin? : false
-    @development = Rails.env.development?
 
-    # We could get naturalLanguages, isOfType and formalityLevels from the API, but for performance we are storing it in config/bioportal_config_production.rb
-    #@metadata = submission_metadata
 
-    # The attributes used when retrieving the submission. We are not retrieving all attributes to be faster
-    browse_attributes = 'ontology,acronym,submissionStatus,description,pullLocation,creationDate,released,name,naturalLanguage,hasOntologyLanguage,hasFormalityLevel,isOfType,contact'
-    submissions = LinkedData::Client::Models::OntologySubmission.all(include_views: true, display_links: false,display_context: false, include: browse_attributes)
-    submissions_map = Hash[submissions.map {|sub| [sub.ontology.acronym, sub] }]
+    browse_attributes = 'ontology,acronym,submissionStatus,description,pullLocation,creationDate,released,name,
+                        naturalLanguage,hasOntologyLanguage,hasFormalityLevel,isOfType,contact,deprecated,status'
+    submissions = LinkedData::Client::Models::OntologySubmission.all(include_views: true, display_links: false,
+                                                                     display_context: false, include: browse_attributes)
+    submissions_map = Hash[submissions.map { |sub| [sub.ontology.acronym, sub] }]
 
     @categories = LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
-    @categories_hash = Hash[@categories.map {|c| [c.id, c] }]
-
     @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
-    @groups_hash = Hash[@groups.map {|g| [g.id, g] }]
 
     analytics = LinkedData::Client::Analytics.last_month
-    @analytics = Hash[analytics.onts.map {|o| [o[:ont].to_s, o[:views]]}]
+    @analytics = Hash[analytics.onts.map { |o| [o[:ont].to_s, o[:views]] }]
 
-    reviews = {}
-    LinkedData::Client::Models::Review.all(display_links: false, display_context: false).each do |r|
-      reviews[r.reviewedOntology] ||= []
-      reviews[r.reviewedOntology] << r
-    end
 
     metrics_hash = get_metrics_hash
 
-    @formats = Set.new
     #get fairscores of all ontologies
     @fair_scores = fairness_service_enabled? ? get_fair_score('all') : nil;
 
@@ -76,30 +69,29 @@ class OntologiesController < ApplicationController
       o[:class_count_formatted] = number_with_delimiter(o[:class_count], delimiter: ',')
       o[:individual_count_formatted] = number_with_delimiter(o[:individual_count], delimiter: ',')
 
-      o[:id]               = ont.id
-      o[:type]             = ont.viewOf.nil? ? 'ontology' : 'ontology_view'
-      o[:show]             = ont.viewOf.nil? ? true : false # show ontologies only by default
-      o[:reviews]          = reviews[ont.id] || []
-      o[:groups]           = ont.group || []
-      o[:categories]       = ont.hasDomain || []
-      o[:note_count]       = ont.notes.length
-      o[:review_count]     = ont.reviews.length
-      o[:project_count]    = ont.projects.length
-      o[:private]          = ont.private?
-      o[:popularity]       = @analytics[ont.acronym] || 0
+      o[:id] = ont.id
+      o[:type] = ont.viewOf.nil? ? 'ontology' : 'ontology_view'
+      o[:show] = ont.viewOf.nil? ? true : false # show ontologies only by default
+      o[:groups] = ont.group || []
+      o[:categories] = ont.hasDomain || []
+      o[:note_count] = ont.notes.length
+      o[:review_count] = ont.reviews.length
+      o[:project_count] = ont.projects.length
+      o[:private] = ont.private?
+      o[:popularity] = @analytics[ont.acronym] || 0
       o[:submissionStatus] = []
-      o[:administeredBy]   = ont.administeredBy
-      o[:name]             = ont.name
-      o[:acronym]          = ont.acronym
-      o[:projects]         = ont.projects
-      o[:notes]            = ont.notes
+      o[:administeredBy] = ont.administeredBy
+      o[:name] = ont.name
+      o[:acronym] = ont.acronym
+      o[:projects] = ont.projects
+      o[:notes] = ont.notes
 
       if !@fair_scores.nil? && !@fair_scores[ont.acronym].nil?
-        o[:fairScore]            = @fair_scores[ont.acronym]['score']
-        o[:normalizedFairScore]  = @fair_scores[ont.acronym]['normalizedScore']
+        o[:fairScore] = @fair_scores[ont.acronym]['score']
+        o[:normalizedFairScore] = @fair_scores[ont.acronym]['normalizedScore']
       else
-        o[:fairScore]            = nil
-        o[:normalizedFairScore]  = 0
+        o[:fairScore] = nil
+        o[:normalizedFairScore] = 0
       end
 
       if o[:type].eql?('ontology_view')
@@ -119,19 +111,20 @@ class OntologiesController < ApplicationController
 
       sub = submissions_map[ont.acronym]
       if sub
-        o[:submissionStatus]          = sub.submissionStatus
-        o[:submission]                = true
-        o[:pullLocation]              = sub.pullLocation
-        o[:description]               = sub.description
-        o[:creationDate]              = sub.creationDate
-        o[:released]                  = sub.released
-        o[:naturalLanguage]           = sub.naturalLanguage
-        o[:hasFormalityLevel]         = sub.hasFormalityLevel
-        o[:isOfType]                  = sub.isOfType
+        o[:submissionStatus] = sub.submissionStatus
+        o[:deprecated] = sub.deprecated
+        o[:status] = sub.status
+        o[:submission] = true
+        o[:pullLocation] = sub.pullLocation
+        o[:description] = sub.description
+        o[:creationDate] = sub.creationDate
+        o[:released] = sub.released
+        o[:naturalLanguage] = sub.naturalLanguage
+        o[:hasFormalityLevel] = sub.hasFormalityLevel
+        o[:isOfType] = sub.isOfType
         o[:submissionStatusFormatted] = submission_status2string(sub).gsub(/\(|\)/, '')
 
         o[:format] = sub.hasOntologyLanguage
-        @formats << sub.hasOntologyLanguage
       else
         # Used to sort ontologies without submissions to the end when sorting on upload date
         o[:creationDate] = DateTime.parse('19900601')
@@ -139,19 +132,20 @@ class OntologiesController < ApplicationController
 
       @ontologies << o
     end
+    
+    @ontologies.sort! { |a, b| b[:popularity] <=> a[:popularity] }
 
-    @ontologies.sort! {|a,b| b[:popularity] <=> a[:popularity]}
 
-
-    render 'browse'
+    @ontologies = apply_ontology_filters(@ontologies, @categories, @groups)
+    render partial: "ontologies"
   end
-
+  
   def classes
     @submission = get_ontology_submission_ready(@ontology)
     get_class(params)
 
     if @submission.hasOntologyLanguage == 'SKOS'
-      @schemes =  get_schemes(@ontology)
+      @schemes = get_schemes(@ontology)
       @collections = get_collections(@ontology, add_colors: true)
     else
       @instance_details, type = get_instance_and_type(params[:instanceid])
@@ -160,7 +154,6 @@ class OntologiesController < ApplicationController
       end
       @instances_concept_id = get_concept_id(params, @concept, @root)
     end
-
 
     if ['application/ld+json', 'application/json'].include?(request.accept)
       render plain: @concept.to_jsonld, content_type: request.accept and return
@@ -218,8 +211,8 @@ class OntologiesController < ApplicationController
     redirect_to_home unless session[:user] && @ontology.administeredBy.include?(session[:user].id) || session[:user].admin?
     @categories = LinkedData::Client::Models::Category.all
     @groups = LinkedData::Client::Models::Group.all
-    @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
-    @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
+    @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
+    @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
   end
 
   def mappings
@@ -234,11 +227,12 @@ class OntologiesController < ApplicationController
 
   def new
     @ontology = LinkedData::Client::Models::Ontology.new
-    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym', include_views: true,display_links: false, display_context: false)
+    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym', include_views: true,
+                                                           display_links: false, display_context: false)
     @categories = LinkedData::Client::Models::Category.all
     @groups = LinkedData::Client::Models::Group.all
-    @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
-    @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
+    @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
+    @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
   end
 
   def notes
@@ -256,9 +250,9 @@ class OntologiesController < ApplicationController
 
   def instances
     if request.xhr?
-      render partial: 'instances/instances', locals: { id: 'instances-data-table'}, layout: false
+      render partial: 'instances/instances', locals: { id: 'instances-data-table' }, layout: false
     else
-      render partial: 'instances/instances', locals: { id: 'instances-data-table'}, layout: 'ontology_viewer'
+      render partial: 'instances/instances', locals: { id: 'instances-data-table' }, layout: 'ontology_viewer'
     end
   end
 
@@ -392,7 +386,7 @@ class OntologiesController < ApplicationController
 
     @metrics = @ontology.explore.metrics rescue []
     #@reviews = @ontology.explore.reviews.sort {|a,b| b.created <=> a.created} || []
-    @projects = @ontology.explore.projects.sort {|a,b| a.name.downcase <=> b.name.downcase } || []
+    @projects = @ontology.explore.projects.sort { |a, b| a.name.downcase <=> b.name.downcase } || []
     @analytics = LinkedData::Client::HTTP.get(@ontology.links['analytics'])
 
     #Call to fairness assessment service
@@ -400,7 +394,7 @@ class OntologiesController < ApplicationController
     @fair_scores_data = create_fair_scores_data(tmp.values.first) unless tmp.nil?
 
     @views = get_views(@ontology)
-    @view_decorators = @views.map{ |view| ViewDecorator.new(view, view_context) }
+    @view_decorators = @views.map { |view| ViewDecorator.new(view, view_context) }
 
     if request.xhr?
       render partial: 'ontologies/sections/metadata', layout: false
@@ -421,8 +415,8 @@ class OntologiesController < ApplicationController
     error_response = @ontology.update
     if response_error?(error_response)
       @categories = LinkedData::Client::Models::Category.all
-      @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
-      @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
+      @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
+      @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
       @errors = response_errors(error_response)
       @errors = { acronym: 'Acronym already exists, please use another' } if error_response.status == 409
       flash[:error] = @errors
@@ -452,16 +446,92 @@ class OntologiesController < ApplicationController
     end
   end
 
-
   private
 
+  def views_filter(filtered_ontologies, check)
+    filtered_ontologies.select { |o| (o[:viewOfOnt] && check) || o[:viewOfOnt].nil? }
+  end
+
+  def retired_filter(filtered_ontologies, check)
+    filtered_ontologies.select { |o| (o[:status].eql?('retired') && check) || !o[:status].eql?('retired') }
+  end
+
+  def apply_ontology_filters(ontologies, categories, groups)
+    @filters = ontology_filters_init(categories, groups)
+    filtered_ontologies = ontologies
+
+    filtered_ontologies = views_filter(filtered_ontologies, @show_views)
+    filtered_ontologies = retired_filter(filtered_ontologies, @show_retired)
 
 
+    filtered_ontologies = search(filtered_ontologies, params[:search]) unless (params[:search].nil? || params[:search].empty?)
+    filtered_ontologies = format_filter(filtered_ontologies, params[:format]) unless params[:format].nil?
+    filtered_ontologies = sort_by_filter(filtered_ontologies, params[:sort_by]) unless params[:sort_by].nil?
 
+    filtered_ontologies = filter_ontologies_by(filtered_ontologies, :categories)
+    filtered_ontologies = filter_ontologies_by(filtered_ontologies, :groups)
+    filtered_ontologies = filter_ontologies_by(filtered_ontologies, :naturalLanguage)
+    filtered_ontologies = filter_ontologies_by(filtered_ontologies, :hasFormalityLevel)
+    filtered_ontologies = filter_ontologies_by(filtered_ontologies, :isOfType)
+    filtered_ontologies = filter_ontologies_by(filtered_ontologies, :missingStatus)
+
+    filtered_ontologies
+  end
+
+  def ontology_filters_init(categories, groups)
+    @languages = submission_metadata.select { |x| x["@id"]["naturalLanguage"] }.first["enforcedValues"].map do |id, name|
+      { "id" => id, "name" => name, "acronym" => id.split('/').last }
+    end
+
+    @formalityLevel = submission_metadata.select { |x| x["@id"]["hasFormalityLevel"] }.first["enforcedValues"].map do |id, name|
+      { "id" => id, "name" => name, "acronym" => name.camelize(:lower) }
+    end
+
+    @isOfType = submission_metadata.select { |x| x["@id"]["isOfType"] }.first["enforcedValues"].map do |id, name|
+      { "id" => id, "name" => name, "acronym" => name.camelize(:lower) }
+    end
+
+    @missingStatus = [
+      {"id" => "RDF", "name" => "RDF", "acronym" => "RDF"},
+      {"id" => "ABSOLETE", "name" => "ABSOLETE", "acronym" => "ABSOLETE"},
+      {"id" => "METRICS", "name" => "METRICS", "acronym" => "METRICS"},
+      {"id" => "RDF_LABELS", "name" => "RDF LABELS", "acronym" => "RDFLABELS"},
+      {"id" => "UPLOADED", "name" => "UPLOADED", "acronym" => "UPLOADED"},
+      {"id" => "INDEXED_PROPERTIES", "name" => "INDEXED PROPERTIES", "acronym" => "INDEXED_PROPERTIES"},
+      {"id" => "ANNOTATOR", "name" => "ANNOTATOR", "acronym" => "ANNOTATOR"},
+      {"id" => "DIFF", "name" => "DIFF", "acronym" => "DIFF"}
+    ]
+   
+    #@missingStatus = submission_metadata.select { |x| x["@id"]["submissionStatus"] }.first["enforcedValues"].map do |id, name|
+    #  { "id" => id, "name" => name, "acronym" => name.camelize(:lower) }
+    #end
+
+    @show_views = params[:show_views]&.eql?('true')
+    @show_retired = params[:show_retired]&.eql?('true')
+    @selected_format = params[:format]
+    @search = params[:search]
+
+    {
+      categories: object_filter(categories, :categories),
+      groups: object_filter(groups, :groups),
+      naturalLanguage: object_filter(@languages, :naturalLanguage),
+      hasFormalityLevel: object_filter(@formalityLevel, :hasFormalityLevel),
+      isOfType: object_filter(@isOfType, :isOfType),
+      missingStatus: object_filter(@missingStatus, :missingStatus)
+    }
+  end
+
+  def filter_ontologies_by(filtered_ontologies, object_name)
+    objects, checks, _ = @filters[object_name]
+
+    return filtered_ontologies if checks.empty?
+
+    filtered_ontologies(filtered_ontologies, checks, object_name)
+  end
 
   def ontology_params
-    p = params.require(:ontology).permit(:name, :acronym, { administeredBy:[] }, :viewingRestriction, { acl:[] },
-                                         { hasDomain:[] }, :isView, :viewOf, :subscribe_notifications, {group:[]})
+    p = params.require(:ontology).permit(:name, :acronym, { administeredBy: [] }, :viewingRestriction, { acl: [] },
+                                         { hasDomain: [] }, :isView, :viewOf, :subscribe_notifications, { group: [] })
 
     p[:administeredBy].reject!(&:blank?)
     p[:acl].reject!(&:blank?)
@@ -470,19 +540,152 @@ class OntologiesController < ApplicationController
     p.to_h
   end
 
-  def determine_layout
-    case action_name
-    when 'index'
-      'angular'
-    else
-      super
-    end
-  end
 
   def get_views(ontology)
     views = ontology.explore.views || []
-    views.select!{ |view| view.access?(session[:user]) }
-    views.sort{ |a,b| a.acronym.downcase <=> b.acronym.downcase }
+    views.select! { |view| view.access?(session[:user]) }
+    views.sort { |a, b| a.acronym.downcase <=> b.acronym.downcase }
   end
+
+  def search(ontologies_table, search_input)
+    # I need to fix the problem of capitale&small letters
+    filtered_table = []
+    ontologies_table.each do |ontology|
+      if ontology[:name].downcase.include? search_input.downcase
+          filtered_table << ontology  unless filtered_table.include? ontology
+      end
+    end
+    filtered_table
+  end
+
+  def format_filter(ontologies_table, format)
+    filtered_table = []
+    ontologies_table.each do |ontology|
+
+      if ontology[:format]&.downcase == format.downcase
+        filtered_table << ontology
+      end
+    end
+    
+    filtered_table
+  end
+
+  def sort_by_filter(ontologies_table, sort_by)
+
+    filtered_table = ontologies_table
+    case sort_by
+    when "Name"
+      for i in 0..ontologies_table.length-1 do
+        for j in i..ontologies_table.length-1 do
+          if ontologies_table[i][:name]>ontologies_table[j][:name]
+            tmp = ontologies_table[i]
+            ontologies_table[i] = ontologies_table[j]
+            ontologies_table[j] = tmp
+          end
+        end
+      end
+    when "class count"
+      for i in 0..ontologies_table.length-1 do
+        for j in i..ontologies_table.length-1 do
+          if ontologies_table[i][:class_count]<ontologies_table[j][:class_count]
+            tmp = ontologies_table[i]
+            ontologies_table[i] = ontologies_table[j]
+            ontologies_table[j] = tmp
+          end
+        end
+      end
+    when "Projects"
+      for i in 0..ontologies_table.length-1 do
+        for j in i..ontologies_table.length-1 do
+          if ontologies_table[i][:project_count]<ontologies_table[j][:project_count]
+            tmp = ontologies_table[i]
+            ontologies_table[i] = ontologies_table[j]
+            ontologies_table[j] = tmp
+          end
+        end
+      end
+    when "Release date"
+      for i in 0..ontologies_table.length-1 do
+        for j in i..ontologies_table.length-1 do
+          if ontologies_table[i][:released]<ontologies_table[j][:released]
+            tmp = ontologies_table[i]
+            ontologies_table[i] = ontologies_table[j]
+            ontologies_table[j] = tmp
+          end
+        end
+      end
+    when "FAIR"
+      for i in 0..ontologies_table.length-1 do
+        for j in i..ontologies_table.length-1 do
+          if ontologies_table[i][:fairScore]<ontologies_table[j][:fairScore]
+            tmp = ontologies_table[i]
+            ontologies_table[i] = ontologies_table[j]
+            ontologies_table[j] = tmp
+          end
+        end
+      end
+    when "Instances/Concepts count"
+      for i in 0..ontologies_table.length-1 do
+        for j in i..ontologies_table.length-1 do
+          if ontologies_table[i][:individual_count_formatted]<ontologies_table[j][:individual_count_formatted]
+            tmp = ontologies_table[i]
+            ontologies_table[i] = ontologies_table[j]
+            ontologies_table[j] = tmp
+          end
+        end
+      end
+    when "Notes"
+      for i in 0..ontologies_table.length-1 do
+        for j in i..ontologies_table.length-1 do
+          if ontologies_table[i][:note_count]<ontologies_table[j][:note_count]
+            tmp = ontologies_table[i]
+            ontologies_table[i] = ontologies_table[j]
+            ontologies_table[j] = tmp
+          end
+        end
+      end
+    end
+    filtered_table
+  end
+
+  def filtered_ontologies(ontologies_table, checks, object_name)
+    filtered_table = []
+    ontologies_table.each do |ontology|
+      checks.each do |check|
+        if (ontology[object_name].instance_of? String) || (ontology[object_name].nil?)
+          if check.eql?(ontology[object_name])
+            filtered_table << ontology unless filtered_table.include? ontology
+          end
+        else
+          ontology[object_name].each do |ontology_group|
+            if check.eql?(ontology_group)
+              filtered_table << ontology unless filtered_table.include? ontology
+            end
+          end
+        end
+      end
+    end
+    filtered_table
+  end
+
+  def check_id(name_value, objects, name_key)
+    selected_category = objects.select { |x| x[name_key].parameterize.underscore.eql?(name_value.parameterize.underscore) }
+    selected_category.first && selected_category.first["id"]
+  end
+
+  def object_checks(key)
+    params[key]&.split(',')
+  end
+
+  def object_filter(objects, object_name, name_key = "acronym")
+    checks = object_checks(object_name) || []
+    checks = checks.map { |x| check_id(x, objects, name_key) }.compact
+
+    ids = objects.map { |x| x["id"] }
+    count = ids.count { |x| checks.include?(x) }
+    [objects, checks, count]
+  end
+
+
 
 end

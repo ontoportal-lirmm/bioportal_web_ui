@@ -22,16 +22,20 @@ export class HistoryService {
     }
 
     getUpdatedURL(currentUrl, newData) {
-        const base = document.location.origin
-        const url = new URL(currentUrl, base)
 
-        this.#updateURLFromState(url.searchParams, this.getState().data)
-        this.#addNewDataToUrl(url, newData)
-        return url.pathname + url.search
-    }
+        const url = new URL(currentUrl, document.location.origin)
+        const urlParams = url.searchParams
+        this.#updateURLFromState(urlParams, this.getState())
 
-    #addNewDataToUrl(url, newData) {
-        const wantedData = this.#filterUnwantedData(newData, this.unWantedData);
+       
+        this.#filterUnwantedData(newData).forEach(([updatedParam, newValue]) => {
+            newValue = Array.isArray(newValue) ? newValue : [newValue]
+            if (newValue !== null && Array.from(newValue).length > 0) {
+                urlParams.set(updatedParam, newValue.join(','))
+            }else{
+                urlParams.delete(updatedParam)
+            }
+        })
 
         wantedData.forEach(([updatedParam, newValue]) => {
             if (newValue === null) {
@@ -43,9 +47,12 @@ export class HistoryService {
         });
     }
 
-    #filterUnwantedData(data, unWantedData) {
-        return Object.entries(data).filter(([key]) => !unWantedData.some(uw => key.toLowerCase().includes(uw.toLowerCase())))
+    #filterUnwantedData(newData) {
+        const unWantedData = ['turbo', 'controller', 'target', 'value']
+        return Object.entries(newData).filter(([key]) => unWantedData.filter(x => key.toLowerCase().includes(x)).length === 0)
     }
+
+    #initStateFromUrl(currentUrl) {
 
     #initStateFromUrl(currentUrl) {
         const url = new URL(currentUrl, document.location.origin)
@@ -58,9 +65,19 @@ export class HistoryService {
     }
 
     #updateURLFromState(urlParams, state) {
-        Object.entries(state).forEach(([key, val]) => {
-            if (key !== 'p'){
-                urlParams.set(key, val)
+        let oldValue = null
+        urlParams.forEach((newVal, key) => {
+            oldValue = state[key]
+            
+            if (oldValue !== undefined && oldValue !== newVal) {
+                if (newVal.length !== 0){
+                    urlParams.set(key, newVal)
+                }else{
+                    urlParams.remove(key)
+                }
+
+            } else if (oldValue !== undefined) {
+                state[key] = newVal
             }
         })
     }
