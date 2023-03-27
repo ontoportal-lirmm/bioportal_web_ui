@@ -23,7 +23,7 @@
 .browse-submit-new-ontology-and-you-are-admin-container{
     display: flex;
     margin-bottom: 20px;
-    
+
 }
 
 .browse-desc-text{
@@ -51,13 +51,13 @@
 .browse-you-are-admin h3{
     font-size: 20px;
     font-weight: 600;
-    
+
 }
 .browse-you-are-admin div{
     display: flex;
-    
+
     align-items: center;
-    
+
 }
 .browse-you-are-admin div p{
     margin-left: 20px;
@@ -112,12 +112,12 @@
 .browse-first-row{
     width: 300px;
     margin-right: 20px;
-    
+
 }
 
 .browse-second-row{
     width: 846px;
-    
+
 }
 
 #browse-title-line{
@@ -157,7 +157,7 @@
 .browse-uploaded{
     font-size: 13px;
     height: 37px;
-    width: 160px;
+    max-width: 400px;
     background-color: #E7E7E7;
     border-radius: 5px;
     display: flex;
@@ -169,6 +169,7 @@
 }
 .browse-uploaded-date{
     font-weight: 600;
+    white-space: nowrap;
 }
 .browse-ontology-cards{
     display: grid;
@@ -267,7 +268,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
     border-radius: 14px;
     padding: 20px;
     background-color: var(--primary-color);
@@ -285,7 +286,7 @@
     border-radius: 5px;
     padding: 14px 20px;
     margin-bottom: 10px;
-    
+
 
 }
 .browse-filter-checks-container{
@@ -374,9 +375,9 @@
         width: 24vw;
         margin-right: 20px;
     }
-    
+
     .browse-second-row{
-        width: 68vw; 
+        width: 68vw;
     }
     .browse-search-bar input{
         width: 94vw;
@@ -418,7 +419,7 @@
         width:46vw;
         box-shadow: rgba(100, 100, 111, 0.1) 0px 7px 29px 0px;
     }
-    
+
     .browse-sub-container{
         margin-top: 20px;
     }
@@ -444,6 +445,6 @@
     .browse-ontology-view{
         margin-right: 0;
     }
-    
+
 }
 

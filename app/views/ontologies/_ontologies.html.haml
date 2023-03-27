@@ -30,10 +30,21 @@
             %p.browse-fair-score
               = ontology[:fairScore]
             %a.browse-fair-details{:href => "/ontologies/#{ontology[:acronym]}#fair-details"} FAIR details ...
-        .browse-uploaded
-          %p Uploaded:
-          %p.browse-uploaded-date
-            = ontology[:creationDate].to_s[0, 10]
+        .d-flex.align-items-baseline
+          - if ontology[:creationDate]
+            .browse-uploaded
+              %p.mr-1 Uploaded
+              %p.browse-uploaded-date{data:{controller: 'timeago', 'timeago-datetime-value': ontology[:creationDate], 'timeago-add-suffix-value': 'true'}}
+              - if ontology[:contact]
+                %p.mx-1 by
+                %p.browse-uploaded-date.text-truncate
+                  = ontology[:contact].humanize
+
+
+          - if ontology[:format]
+            .browse-ontology-view
+              = ontology[:format]
+
       .browse-ontology-cards
         - if ontology[:format] != 'SKOS' && ontology[:class_count] > 0
           %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}?p=classes"}

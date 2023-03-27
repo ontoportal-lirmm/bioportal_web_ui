@@ -125,9 +125,7 @@ class OntologiesController < ApplicationController
         o[:submissionStatusFormatted] = submission_status2string(sub).gsub(/\(|\)/, '')
 
         o[:format] = sub.hasOntologyLanguage
-      else
-        # Used to sort ontologies without submissions to the end when sorting on upload date
-        o[:creationDate] = DateTime.parse('19900601')
+        o[:contact] = sub.contact.map{|c| c.name}.first
       end
 
       @ontologies << o
