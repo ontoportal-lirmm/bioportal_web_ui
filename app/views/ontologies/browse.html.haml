@@ -44,7 +44,7 @@
               %option{:value => "FAIR"} FAIR
 
       .browse-sub-container
-        .browse-first-row{data:{controller: "browse-filters", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL changed->turbo-frame#updateFrame"}}
+        .browse-first-row{data:{controller: "browse-filters", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL"}}
           %p.browse-filters-title Filters
           %hr#browse-sub-title-line
           = render SwitchInputComponent.new(id:'filter-views', name:'views', checked: @show_views) do
