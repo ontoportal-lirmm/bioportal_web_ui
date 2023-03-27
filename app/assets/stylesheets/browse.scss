@@ -66,6 +66,16 @@
     color: #666666;
     font-weight: 400;
     margin: 5px 0 !important;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Change this value to control the number of lines shown */
+    -webkit-box-orient: vertical;
+}
+.browse-show-more-button {
+    cursor: pointer;
+    font-size: 14px;
+    color: gray;
+    margin-bottom: 10px;
 }
 .browse-ontology-container{
     border: 1px solid #DFDFDF;
@@ -348,6 +358,8 @@
     margin-left: 15px;
     font-weight: 500;
 }
+
+
 
 
 
