@@ -25,6 +25,20 @@
     margin-bottom: 20px;
     
 }
+
+.browse-desc-text{
+    font-size: 16px;
+    color: #666666;
+    font-weight: 400;
+    margin: 5px 0 !important;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--read-more-line-clamp, 2);
+}
+
+
+
 .browse-you-are-admin{
     display: flex;
     flex-direction: column;
@@ -61,16 +75,7 @@
     border: 1px solid var(--primary-color);
     border-radius: 40px;
 }
-.browse-desc-text{
-    font-size: 16px;
-    color: #666666;
-    font-weight: 400;
-    margin: 5px 0 !important;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* Change this value to control the number of lines shown */
-    -webkit-box-orient: vertical;
-}
+
 .browse-show-more-button {
     cursor: pointer;
     font-size: 14px;

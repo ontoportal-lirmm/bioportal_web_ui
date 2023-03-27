@@ -1,5 +1,3 @@
-
-
 = turbo_frame_tag "search-results" do
   %p.browse-desc-text{:style => "margin-bottom: 15px;"}
     = "Showing "+ @ontologies.length.to_s
@@ -16,11 +14,11 @@
           - if ontology[:viewOfOnt]
             .browse-ontology-view
               view
-        .browse-desc-container
-          %p.browse-desc-text
+        .browse-desc-container{data:{controller:"text-truncate", 'text-truncate-more-text-value': '+ Show more ...' , 'text-truncate-less-text-value': '- Show less ...'}}
+          %p.browse-desc-text{'data-text-truncate-target': 'content'}
             = ontology[:description]
-          .browse-show-more-button 
-            Show more ...
+          .browse-show-more-button{data:{'text-truncate-target': 'button', 'action':"click->text-truncate#toggle"}}
+            + Show more ...
 
         
         - unless ontology[:fairScore].nil? || ontology[:acronym] == 'AGROVOC'
@@ -61,32 +59,3 @@
               = ontology[:note_count]
             %p.browse-card-text
               notes
-  :javascript
-    const textContainers = document.querySelectorAll('.browse-desc-container');
-    textContainers.forEach(container => {
-    const text = container.querySelector('.browse-desc-text');
-    const button = container.querySelector('.browse-show-more-button ');
-
-    // Get the height of the text element
-    text.style.display = 'block';
-    const textHeight = text.clientHeight;
-    text.style.display = '-webkit-box';
-
-    // Check if text has less than 3 lines so we don't display show more
-    if (textHeight <= text.clientHeight) {
-        button.style.display = 'none';
-    }
-
-    button.addEventListener('click', function() {
-        if (text.getAttribute('data-state') === 'truncated') {
-            text.style.display = "-webkit-box";
-            text.setAttribute('data-state', 'expanded');
-            button.textContent = 'Show more ...';
-        } else {
-            text.style.maxHeight = text.scrollHeight + 'px';
-            text.style.display = "unset";
-            button.textContent = 'Show Less ...';
-            text.setAttribute('data-state', 'truncated');
-        }
-    });
-    });
