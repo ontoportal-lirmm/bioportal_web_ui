@@ -11,11 +11,13 @@ export default class extends Turbo_frame_controller {
   showError(event) {
     let response = event.detail.fetchResponse;
     if (!response.succeeded) {
-      response = response.response.clone();
-      response.text().then((text) => {
-        this.#hideContent();
-        this.#displayError(text);
-      });
+      event.preventDefault()
+      response = response.response.clone()
+      response.text().then(text => {
+          this.#hideContent()
+          this.#displayError(text)
+      })
+
     }
   }
 

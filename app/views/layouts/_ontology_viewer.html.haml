@@ -36,6 +36,20 @@
     jQuery(document).data().bp.ont_viewer.concept_name_title = (jQuery(document).data().bp.ont_viewer.concept_name == "") ?
         "" : " - " + jQuery(document).data().bp.ont_viewer.concept_name;
 
+    var nav_ont = function (link) {
+      const page = jQuery(link).attr("data-bp-ont-page");
+      const page_name = jQuery(link).attr("data-bp-ont-page-name");
+      History.pushState({p: page}, page_name + " | " + jQuery(document).data().bp.ont_viewer.org_site, "?p=" + page);
+    }
+
+    jQuery(document).ready(() => {
+      jQuery("#navbar-ontology a").on("click", function (e) {
+        e.preventDefault();
+        nav_ont(this)
+      });
+    })
+
+
 
   = render TurboModalComponent.new(id: 'application_modal')
 
@@ -67,8 +81,8 @@
                 Last uploaded:
                 = l(Date.parse(sub.creationDate), format: :monthfull_day_year)
         %div.ont-info-links
-          - unless (@ontology.summaryOnly || @ont_restricted || @submissions.empty?)
-            = link_to(@submissions.first.id + "/download?apikey=#{get_apikey}", "aria-label": "Download latest version", title: "Download latest version") do
+          - unless (@ontology.summaryOnly || @ont_restricted || @submission_latest.nil?)
+            = link_to(@submission_latest.id + "/download?apikey=#{get_apikey}", "aria-label": "Download latest version", title: "Download latest version") do
               %i.fas.fa-lg.fa-download{"aria-hidden": true}
           - if details_available
             - if $PURL_ENABLED

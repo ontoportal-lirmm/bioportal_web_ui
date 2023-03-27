@@ -50,6 +50,11 @@ $REST_URL = "http://example.org:8080/"
 #$ANNOTATOR_URL = "http://services.stageportal.lirmm.fr/annotator"
 $ANNOTATOR_URL = "#{$REST_URL}/annotator"
 
+# Announcements sympa mailing list REQUEST address, EX: list-request@lists.example.org
+$ANNOUNCE_LIST_SERVICE ||= "SERVICE_EXAMPLE"
+$ANNOUNCE_SERVICE_HOST ||= "service@test.com"
+$ANNOUNCE_LIST||= "users-list@test"  
+
 # Used to define other bioportal that can be mapped to
 # Example to map to ncbo bioportal : {"ncbo" => {"api" => "http://data.bioontology.org", "ui" => "http://bioportal.bioontology.org", "apikey" => ""}
 # Then create the mapping using the following class in JSON : "http://purl.bioontology.org/ontology/MESH/C585345": "ncbo:MESH"

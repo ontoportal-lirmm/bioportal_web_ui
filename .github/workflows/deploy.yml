@@ -17,23 +17,26 @@ name: Capistrano Deployment
 # Controls when the action will run.
 on:
   push:
-    branches: [ master ]
-
+    branches: [ development staging ]
   # Allows running this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       BRANCH:
         description: 'Branch/tag to deploy'
-        default: master
+        options:
+          - development
+          - staging
+          - master
+        default: staging
         required: true
       environment:
         description: 'target environment to deploy to'
         type: choice
         options:
+          - development
           - staging
           - production
         default: staging
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -48,7 +51,7 @@ jobs:
         # via shell parameter expansion
         # https://dev.to/mrmike/github-action-handling-input-default-value-5f2g
         USER_INPUT_BRANCH=${{ inputs.branch }}
-        echo "BRANCH=${USER_INPUT_BRANCH:-master}" >> $GITHUB_ENV
+        echo "BRANCH=${USER_INPUT_BRANCH:github.head_ref:-master}" >> $GITHUB_ENV
 
         USER_INPUT_ENVIRONMENT=${{ inputs.environment }}
         echo "TARGET=${USER_INPUT_ENVIRONMENT:-staging}" >> $GITHUB_ENV
@@ -65,13 +68,7 @@ jobs:
         token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
         path:  deploy_config
     - name: copy-deployment-config
-      run:  cp -r deploy_config/bioportal_web_ui/* .
-    # add ssh hostkey so that capistrano doesn't complain
-    - name: Add jumphost's hostkey to Known Hosts
-      run: |
-        mkdir -p ~/.ssh
-        ssh-keyscan -H ${{ secrets.SSH_JUMPHOST }} > ~/.ssh/known_hosts
-      shell: bash
+      run:  cp -r deploy_config/ontoportal_web_ui/${{ inputs.environment }}/* .
     - uses: miloserdow/capistrano-deploy@master
       with:
         target: ${{ env.TARGET }} # which environment to deploy

@@ -1,0 +1,20 @@
+- @title = "Login"
+= form_for(:user, :url => {:controller => 'login',:action=>'create'}) do |f|
+  - unless @errors.nil?
+    %div{:style => "color:red;"}
+      Errors On Form
+      %ul
+        - for error in @errors
+          %li= error
+  .d-flex.justify-content-center
+    .login-form
+      %p.login-input-title Username or Email
+      = text_field 'user', 'username', class: "login-input email-input", placeholder: "Enter your password"
+      %p.login-input-title Password
+      = password_field 'user','password', :autocomplete => "off", class: "login-input password-input", placeholder: "Enter your password"
+      %a.login-forgot-password{:href => "/lost_pass"}
+        %p Forgot password?
+      %input.login-button{"data-disable-with" => "Login", :name => "commit", :type => "submit", :value => "Login"}/
+      %p.dont-have-account
+        Don't have an account?
+        %a.text-decoration-none{:href => new_user_path} Register

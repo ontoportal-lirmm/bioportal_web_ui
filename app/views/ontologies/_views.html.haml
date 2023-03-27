@@ -34,7 +34,7 @@
     %span{:style => "font-size: x-large; margin-right: 1.5em;"} Views
     - ont_id_esc = CGI.escape(@ontology.id)
     - if session[:user].nil?
-      %a{:href => "/login?redirect=#{URI.escape("/ontologies/new?ontology[viewOf]=#{ont_id_esc}", Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))}"} Create new view
+      %a{:href => "/login?redirect=#{escape("/ontologies/new?ontology[viewOf]=#{ont_id_esc}")}"} Create new view
     - else
       %a{:href => "/ontologies/new?ontology[viewOf]=#{ont_id_esc}"} Create new view
 

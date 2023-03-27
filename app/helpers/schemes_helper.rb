@@ -8,8 +8,10 @@ module SchemesHelper
   end
 
   def get_scheme_label(scheme)
-    if scheme["prefLabel"].nil? || scheme["prefLabel"].empty?
-      extract_label_from(scheme["@id"]).html_safe
+    return '' if scheme.nil?
+
+    if scheme['prefLabel'].nil? || scheme['prefLabel'].empty?
+      extract_label_from(scheme['@id']).html_safe if scheme['@id']
     else
       scheme["prefLabel"]
     end

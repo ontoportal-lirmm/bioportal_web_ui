@@ -27,11 +27,12 @@
 
 
   - unless @user.subscription.nil? || @user.subscription.empty?
-    %h2 Subscriptions
+    %h2{style: "font-size: large;"} Subscriptions
     %table
       - @user.subscription.each do |subscription|
-        - ont = (!subscription[:ontology].nil? ? subscription[:ontology].split('/').last: nil) # ensure we get the acronym
-        - type = (!subscription[:notification_type].nil? ? subscription[:notification_type].downcase : nil)
+        - ont_id = subscription[:ontology]
+        - ont = ont_id.nil? ? nil: subscription[:ontology].split('/').last
+        - type = subscription[:notification_type].nil? ? nil : subscription[:notification_type].downcase
         %tr{style: "padding: 5px;"}
           %td{style: "padding: 5px;"}
             %a{href: "/ontologies/#{ont}"}= ont
@@ -42,7 +43,7 @@
               = type
           %td{style: "padding: 5px;"}
             .subscribe_to_ontology{style: "float: left;"}
-              = raw subscribe_ontology_button(ont, @user)
+              = subscribe_button(ont_id)
     %br/
 
   - unless @user_projects.nil? || @user_projects.empty?
@@ -66,38 +67,8 @@
   :javascript
     jQuery(document).ready(function(){
       jQuery("#edit_custom_ontologies").click(editCustomOntologies);
-      // Wire up subscriptions button activity
-      jQuery("a.subscribe_to_ontology").live("click", function(){
-        subscribeToOntology(this);
-      });
     });
 
-    function subscribeToOntology(button) {
-      var ontologyId = jQuery(button).attr("data-bp_ontology_id");
-      var isSubbed = jQuery(button).attr("data-bp_is_subbed");
-      var userId = jQuery(button).attr("data-bp_user_id");
-      jQuery(".subscribe_error").html("");
-      jQuery(".subscribe_spinner").show();
-      jQuery.ajax({
-        type: "POST",
-        url: "/subscriptions?user_id="+userId+"&ontology_id="+ontologyId+"&subbed="+isSubbed,
-        dataType: "json",
-        success: function(data) {
-          jQuery(".subscribe_spinner").hide();
-          // Toggle subbed value on a element
-          var subbedVal = (isSubbed === "true") ? "false" : "true";
-          jQuery("a.subscribe_to_ontology").attr("data-bp_is_subbed", subbedVal);
-          // Change button text
-          var txt = jQuery("a.subscribe_to_ontology").html();
-          var newButtonText = txt.match("Unsubscribe") ? txt.replace("Unsubscribe", "Subscribe") : txt.replace("Subscribe", "Unsubscribe");
-          jQuery("a.subscribe_to_ontology").html(newButtonText);
-        },
-        error: function(data) {
-          jQuery(".subscribe_spinner").hide();
-          jQuery(".subscribe_error").html("Problem subscribing to emails, please try again");
-        }
-      });
-    }
 
     function editCustomOntologies() {
       jQuery("#custom_ontologies_picker").css("left", "").css("position", "");
@@ -131,6 +102,31 @@
               #{ont.name} (#{ont.acronym})
       - else
         %p{style: "padding-left: 7px;"} You haven't picked any ontologies yet
+
+        %div
+          %h2{style:"margin-top:18px; font-size: large;"} Mailing list service
+
+          %div{style:"margin-top:12px"}
+            %div
+              %button.btn.btn-primary{id: "subscribe"}
+                Subscribe
+              %span to the #{$ANNOUNCE_LIST} user mailing list
+            %div.mt-1
+              %button.btn.btn-primary{id: "unsubscribe"}
+                Unsubscribe
+              %span from the #{$ANNOUNCE_LIST} user mailing list
+
+
+            :javascript
+              document.getElementById('subscribe').addEventListener('click', function() {
+                  window.location.href = "/users/subscribe/" + "#{@user.username}"
+
+              });
+
+              document.getElementById('unsubscribe').addEventListener('click', function() {
+                  window.location.href = "/users/un-subscribe/" + "#{@user.email}"
+              });
+
   #custom_ontologies_picker{style: "left: -9999px; position: absolute;"}
     = form_tag custom_ontologies_path(url_encode(@user.username)) do
       - selected = @user.customOntology.map {|o| LinkedData::Client::Models::Ontology.get(o).acronym}

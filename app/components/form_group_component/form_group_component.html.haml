@@ -1,0 +1,23 @@
+%div.form-group{id: container_id, class: container_class, style: 'align-items: baseline'}
+  %div{class: label_class}
+    - if label?
+      = label
+    - elsif @label_text
+      %label{for: "#{@name}_#{@method_name}", }
+        = @label_text
+    - if required?
+      %span.asterik *
+  %div{class: content_class}
+    = render TurboFrameComponent.new(id: "#{container_id}_from_group_input") do
+      %div.d-flex.w-100
+        %div.flex-grow-1.mr-1
+          - if input?
+            = input
+          - else
+            = content
+          - if help?
+            %small.form-text.text-muted{id: "#{@name}_#{@method_name}_helpBlock"}
+              = help
+        - if submit?
+          %div.d-flex
+            = submit

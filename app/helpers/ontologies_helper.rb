@@ -20,24 +20,24 @@ module OntologiesHelper
     if !sub.send("includedInDataCatalog").nil? && sub.send("includedInDataCatalog").any?
       # Buttons for data catalogs
       return content_tag(:section, { :class => "ont-metadata-card ont-included-in-data-catalog-card" }) do
-               concat(content_tag(:div, { :class => "ont-section-toolbar" }) do
-                 concat(content_tag(:header, "includedInDataCatalog", { :class => "pb-2 font-weight-bold" }))
-               end)
-               concat(content_tag(:div, { :class => "" }) do
-                 sub.send("includedInDataCatalog").each do |catalog|
-                   catalog_btn_label = catalog
-                   $DATA_CATALOG_VALUES.each do |cat_uri, cat_label|
-                     if catalog.start_with?(cat_uri)
-                       catalog_btn_label = cat_label
-                       break
-                     end
-                   end
-                   concat(content_tag(:a, catalog_btn_label, { :class => "btn btn-primary", :href => catalog, :target => "_blank" }))
-                 end
-               end)
-             end
+        concat(content_tag(:div, { :class => "ont-section-toolbar" }) do
+          concat(content_tag(:header, "includedInDataCatalog", { :class => "pb-2 font-weight-bold" }))
+        end)
+        concat(content_tag(:div, { :class => "" }) do
+          sub.send("includedInDataCatalog").each do |catalog|
+            catalog_btn_label = catalog
+            $DATA_CATALOG_VALUES.each do |cat_uri, cat_label|
+              if catalog[cat_uri]
+                catalog_btn_label = cat_label
+                break
+              end
+            end
+            concat(content_tag(:a, catalog_btn_label, { :class => "btn btn-primary", :href => catalog, :target => "_blank" }))
+          end
+        end)
+      end
     else
-      return ""
+       ""
     end
   end
 
@@ -378,7 +378,7 @@ module OntologiesHelper
     if current_section.eql?(section_title)
       block.call
     else
-      render TurboFrameComponent.new(id: section_title, src: "/ontologies/#{@ontology.acronym}?p=#{section_title}")
+      render TurboFrameComponent.new(id: section_title, src: "/ontologies/#{@ontology.acronym}?p=#{section_title}", target: '_top')
     end
   end
 

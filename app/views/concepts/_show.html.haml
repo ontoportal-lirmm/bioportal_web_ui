@@ -32,7 +32,7 @@
             )
 
         %li#restlink_top.nav-item
-          %a.nav-link.py-1{:href => "#{@ontology.id}/classes/#{escape(@concept.id)}", :style => "margin-bottom: 1em; margin-left: 1em;", :target => "_blank"} Access #{concept_label_to_show(submission: @submission)} JSON
+          %a.nav-link.py-1{:href => "#{@ontology.id}/classes/#{escape(@concept.id)}?display=all", :style => "margin-bottom: 1em; margin-left: 1em;", :target => "_blank"} Access #{concept_label_to_show(submission: @submission)} JSON
         - if @enable_ontolobridge
           %li#request_term_top.nav-item
             %a.nav-link.py-1{:href => "#request_term", data:{toggle: 'tab', target: '#request_term'}}

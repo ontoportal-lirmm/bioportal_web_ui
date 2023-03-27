@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   root to: "home#index"
 
+  get '/notes/new_comment', to: 'notes#new_comment'
+  get '/notes/new_proposal', to: 'notes#new_proposal'
+  get '/notes/new_reply', to: 'notes#new_reply'
+  delete '/notes', to: 'notes#destroy'
   resources :notes, constraints: { id: /.+/ }
 
   resources :ontolobridge do
@@ -13,14 +17,17 @@ Rails.application.routes.draw do
 
   resources :reviews
 
-  get "/mappings/loader", to: "mappings#loader"
-  post "/mappings/loader", to: "mappings#loader_process"
-  get "mappings/count/:id", to: "mappings#count", constraints: { id: /.+/ }
-  get "mappings/show_mappings", to: "mappings#show_mappings"
-  get "mappings/new", to: "mappings#new"
-  get "mappings/:id", to: "mappings#show", constraints: { id: /.+/ }
-  post "mappings/:id", to: "mappings#update", constraints: { id: /.+/ }
-  delete "mappings/:id", to: "mappings#destroy", constraints: { id: /.+/ }
+  get '/users/subscribe/:username', to: 'users#subscribe'
+  get '/users/un-subscribe/:email', to: 'users#un_subscribe'
+
+  get '/mappings/loader' , to: 'mappings#loader'
+  post '/mappings/loader', to: 'mappings#loader_process'
+  get 'mappings/count/:id', to: 'mappings#count', constraints: { id: /.+/ }
+  get 'mappings/show_mappings', to: 'mappings#show_mappings'
+  get 'mappings/new', to: 'mappings#new'
+  get 'mappings/:id', to: 'mappings#show', constraints: { id: /.+/ }
+  post 'mappings/:id', to: 'mappings#update', constraints: { id: /.+/ }
+  delete 'mappings/:id', to: 'mappings#destroy', constraints: { id: /.+/ }
   resources :mappings
   get "mappings/:id", to: "mappings#show", constraints: { id: /.+/ }
 
@@ -59,7 +66,16 @@ Rails.application.routes.draw do
   get "change_requests/create_synonym"
   match "change_requests", to: "change_requests#create", via: :post
 
-  get "" => "home#index"
+  # resource for metadata ontologies
+  scope :ontologies_metadata_curator do
+    post '/result', to: 'ontologies_metadata_curator#result'
+    post '/edit', to: 'ontologies_metadata_curator#edit'
+    put '/update', to: 'ontologies_metadata_curator#update'
+    get '/:ontology/submissions/:submission_id/attributes/:attribute', to: 'ontologies_metadata_curator#show_metadata_value'
+    get '/:ontology/submissions/:submission_id', to: 'ontologies_metadata_curator#show_metadata_by_ontology'
+  end
+    
+  get '' => 'home#index'
 
   # Top-level pages
   match "/feedback", to: "home#feedback", via: [:get, :post]
@@ -83,24 +99,26 @@ Rails.application.routes.draw do
   get "/robots.txt" => "robots#index"
 
   # Ontologies
-  get "/ontologies/view/edit/:id" => "ontologies#edit_view", :constraints => { id: /[^\/?]+/ }
-  get "/ontologies/view/new/:id" => "ontologies#new_view"
-
-  get "/ontologies/virtual/:ontology" => "ontologies#virtual", :as => :ontology_virtual
-  get "/ontologies/success/:id" => "ontologies#submit_success"
-  match "/ontologies/:acronym" => "ontologies#update", via: [:get, :post]
-  match "/ontologies/:acronym/submissions/:id" => "submissions#update", via: [:get, :post]
-  get "/ontologies/:ontology_id/submissions/new" => "submissions#new", :ontology_id => /.+/
-  match "/ontologies/:ontology_id/submissions" => "submissions#create", :ontology_id => /.+/, via: [:get, :post]
-  get "/ontologies/:acronym/classes/:purl_conceptid", to: "ontologies#show", constraints: { purl_conceptid: /[^\/]+/ }
-  get "/ontologies/:acronym/: f", to: "ontologies#show", constraints: { purl_conceptid: /[^\/]+/ }
-  match "/ontologies/:acronym/submissions/:id/edit_metadata" => "submissions#edit_metadata", via: [:get, :post]
+  get '/ontologies/view/edit/:id' => 'ontologies#edit_view', :constraints => { id: /[^\/?]+/ }
+  get '/ontologies/view/new/:id' => 'ontologies#new_view'
+  
+  get '/ontologies/virtual/:ontology' => 'ontologies#virtual', :as => :ontology_virtual
+  get '/ontologies/success/:id' => 'ontologies#submit_success'
+  match '/ontologies/:acronym' => 'ontologies#update', via: [:get, :post]
+  match '/ontologies/:acronym/submissions/:id' => 'submissions#update', via: [:get, :post]
+  get '/ontologies/:ontology_id/submissions/new' => 'submissions#new', :ontology_id => /.+/
+  match '/ontologies/:ontology_id/submissions' => 'submissions#create', :ontology_id => /.+/, via: [:post]
+  match '/ontologies/:ontology_id/submissions' => 'submissions#index', :ontology_id => /.+/, via: [:get]
+  get '/ontologies/:acronym/classes/:purl_conceptid', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
+  get '/ontologies/:acronym/: f', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
+  match '/ontologies/:acronym/submissions/:id/edit_metadata' => 'submissions#edit_metadata', via: [:get, :post]
 
   # Analytics
   get "/analytics/:action" => "analytics#(?-mix:search_result_clicked|user_intention_surveys)"
 
   # Notes
-  get "ontologies/:ontology/notes/:noteid", to: "notes#virtual_show", as: :note_virtual, noteid: /.+/
+  get 'ontologies/:ontology/notes/:noteid', to: 'notes#virtual_show', as: :note_virtual, noteid: /.+/
+  get 'ontologies/:ontology/notes', to: 'notes#virtual_show'
 
   # Ajax
   get "/ajax/" => "ajax_proxy#get", :as => :ajax
@@ -130,12 +148,13 @@ Rails.application.routes.draw do
   get "/ajax/:ontology/classes/:conceptid/instances" => "instances#index_by_class", :constraints => { conceptid: /[^\/?]+/ }
 
   # User
-  get "/logout" => "login#destroy", :as => :logout
-  get "/lost_pass" => "login#lost_password"
-  get "/reset_password" => "login#reset_password"
-  post "/accounts/:id/custom_ontologies" => "users#custom_ontologies", :as => :custom_ontologies
-  get "/login_as/:login_as" => "login#login_as", constraints: { login_as: /[\d\w\.\-\%\+ ]+/ }
-  post "/login/send_pass", to: "login#send_pass"
+  get '/logout' => 'login#destroy', :as => :logout
+  get '/lost_pass' => 'login#lost_password'
+  get '/lost_pass_success' => 'login#lost_password_success'
+  get '/reset_password' => 'login#reset_password'
+  post '/accounts/:id/custom_ontologies' => 'users#custom_ontologies', :as => :custom_ontologies
+  get '/login_as/:login_as' => 'login#login_as' , constraints: { login_as:  /[\d\w\.\-\%\+ ]+/ }
+  post '/login/send_pass', to: 'login#send_pass'
 
   # History
   get "/tab/remove/:ontology" => "history#remove", :as => :remove_tab
@@ -144,20 +163,20 @@ Rails.application.routes.draw do
   get "jambalaya/:ontology/:id" => "visual#jam", :as => :jam
 
   # Admin
-  match "/admin/clearcache" => "admin#clearcache", via: [:post]
-  match "/admin/resetcache" => "admin#resetcache", via: [:post]
-  match "/admin/clear_goo_cache" => "admin#clear_goo_cache", via: [:post]
-  match "/admin/clear_http_cache" => "admin#clear_http_cache", via: [:post]
-  match "/admin/ontologies_report" => "admin#ontologies_report", via: [:get]
-  match "/admin/refresh_ontologies_report" => "admin#refresh_ontologies_report", via: [:post]
-  match "/admin/ontologies" => "admin#delete_ontologies", via: [:delete]
-  match "/admin/ontologies" => "admin#process_ontologies", via: [:put]
-  match "/admin/ontologies/:acronym/submissions/:id" => "admin#delete_submission", via: [:delete]
-  match "/admin/ontologies/:acronym/submissions" => "admin#submissions", via: [:get]
-  match "/admin/ontologies/:acronym/log" => "admin#parse_log", via: [:get]
-  match "/admin/update_info" => "admin#update_info", via: [:get]
-  match "/admin/update_check_enabled" => "admin#update_check_enabled", via: [:get]
-  match "/admin/users" => "admin#users", via: [:get]
+  match '/admin/clearcache' => 'admin#clearcache', via: [:post]
+  match '/admin/resetcache' => 'admin#resetcache', via: [:post]
+  match '/admin/clear_goo_cache' => 'admin#clear_goo_cache', via: [:post]
+  match '/admin/clear_http_cache' => 'admin#clear_http_cache', via: [:post]
+  match '/admin/ontologies_report' => 'admin#ontologies_report', via: [:get]
+  match '/admin/refresh_ontologies_report' => 'admin#refresh_ontologies_report', via: [:post]
+  match '/admin/ontologies' => 'admin#delete_ontologies', via: [:delete]
+  match '/admin/ontologies' => 'admin#process_ontologies', via: [:put]
+  match '/admin/ontologies/:acronym/submissions/:id' => 'admin#delete_submission', via: [:delete]
+  match '/admin/ontologies/:acronym/submissions' => 'admin#submissions', via: [:get]
+  match '/admin/ontologies/:acronym/log' => 'admin#parse_log', via: [:get]
+  match '/admin/update_info' => 'admin#update_info', via: [:get]
+  match '/admin/update_check_enabled' => 'admin#update_check_enabled', via: [:get]
+  match '/admin/users' => 'admin#users', via: [:get]
 
   # Ontolobridge
   # post '/ontolobridge/:save_new_term_instructions' => 'ontolobridge#save_new_term_instructions'
@@ -182,9 +201,10 @@ Rails.application.routes.draw do
   get "/ajax/json_term" => "redirect#index", :url => "/ajax/json_class"
 
   # Visualize
-  get "/visualize/:ontology" => "ontologies#visualize", :as => :visualize, :constraints => { ontology: /[^\/?]+/ }
-  get "/visualize/:ontology/:conceptid" => "ontologies#visualize", :as => :uri, :constraints => { ontology: /[^\/?]+/, conceptid: /[^\/?]+/ }
-  get "/visualize" => "ontologies#visualize", :as => :visualize_concept, :constraints => { ontology: /[^\/?]+/, id: /[^\/?]+/, ontologyid: /[^\/?]+/, conceptid: /[^\/?]+/ }
+  get '/visualize/:ontology' => 'ontologies#visualize', :as => :visualize, :constraints => { ontology: /[^\/?]+/ }
+  get '/visualize/:ontology/:conceptid' => 'ontologies#visualize', :as => :uri, :constraints => { ontology: /[^\/?]+/, conceptid: /[^\/?]+/ }
+  get '/visualize' => 'ontologies#visualize', :as => :visualize_concept, :constraints => { ontology: /[^\/?]+/, id: /[^\/?]+/, ontologyid: /[^\/?]+/, conceptid: /[^\/?]+/ }
 
-  get "/exhibit/:ontology/:id" => "concepts#exhibit"
+  get '/exhibit/:ontology/:id' => 'concepts#exhibit'
+   
 end

@@ -1,47 +1,42 @@
 class SubmissionsController < ApplicationController
+  include SubmissionsHelper, SubmissionUpdater
   layout :determine_layout
   before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
-  before_action :submission_metadata, only: [:create, :edit, :new, :update]
+  before_action :submission_metadata, only: [:create, :edit, :new, :update, :index]
+
+
+  def index
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
+
+    ontology_not_found(params[:ontology_id]) if @ontology.nil?
+
+    @ont_restricted = ontology_restricted?(@ontology.acronym)
+
+    # Retrieve submissions in descending submissionId order (should be reverse chronological order)
+    @submissions = @ontology.explore.submissions({include: "submissionId,creationDate,released,modificationDate,submissionStatus,hasOntologyLanguage,version,diffFilePath,ontology"})
+                            .sort {|a,b| b.submissionId.to_i <=> a.submissionId.to_i } || []
+
+    LOG.add :error, "No submissions for ontology: #{@ontology.id}" if @submissions.empty?
+
+  end
 
   # When getting "Add submission" form to display
   def new
+    @required_only = params[:required].nil? || !params[:required]&.eql?('false')
     @ontology = LinkedData::Client::Models::Ontology.get(CGI.unescape(params[:ontology_id])) rescue nil
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first unless @ontology
     @submission = @ontology.explore.latest_submission
     @submission ||= LinkedData::Client::Models::OntologySubmission.new
+    @submission.id = nil
   end
 
   # Called when form to "Add submission" is submitted
   def create
     # Make the contacts an array
-    params[:submission][:contact] = params[:submission][:contact].values
-
-    # Convert metadata that needs to be integer to int
-    @metadata.map do |hash|
-      if hash["enforce"].include?("integer")
-        if !params[:submission][hash["attribute"]].nil? && !params[:submission][hash["attribute"]].eql?("")
-          params[:submission][hash["attribute"].to_s.to_sym] = Integer(params[:submission][hash["attribute"].to_s.to_sym])
-        end
-      end
-      if hash["enforce"].include?("boolean") && !params[:submission][hash["attribute"]].nil?
-        if params[:submission][hash["attribute"]].eql?("true")
-          params[:submission][hash["attribute"].to_s.to_sym] = true
-        elsif params[:submission][hash["attribute"]].eql?("false")
-          params[:submission][hash["attribute"].to_s.to_sym] = false
-        else
-          params[:submission][hash["attribute"].to_s.to_sym] = nil
-        end
-      end
-    end
-
-    @submission = LinkedData::Client::Models::OntologySubmission.new(values: submission_params)
-    @ontology = LinkedData::Client::Models::Ontology.get(params[:submission][:ontology])
-
-    # Update summaryOnly on ontology object
-    @ontology.summaryOnly = @submission.isRemote.eql?("3")
-    @ontology.update
-
-    @submission_saved = @submission.save(cache_refresh_all: false)
+    _, submission_params = params[:submission].each.first
+    @required_only = !params['required-only'].nil?
+    @filters_disabled = true
+    @submission_saved = save_submission(submission_params)
     if response_error?(@submission_saved)
       @errors = response_errors(@submission_saved) # see application_controller::response_errors
       if @errors && @errors[:uploadFilePath]
@@ -58,99 +53,30 @@ class SubmissionsController < ApplicationController
 
   # Called when form to "Edit submission" is submitted
   def edit
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
-
-    #submissions = @ontology.explore.submissions
-    # Trying to get all submissions to get the latest. Useless and too long.
-    #@submission = submissions.select {|o| o.submissionId == params["id"].to_i}.first
-    @submission = @ontology.explore.latest_submission
+    display_submission_attributes params[:ontology_id], params[:properties]&.split(','), submissionId: params[:id],
+                                  required: params[:required]&.eql?('true'),
+                                  show_sections: params[:show_sections].nil? || params[:show_sections].eql?('true'),
+                                  inline_save: params[:inline_save]&.eql?('true')
   end
 
   # When editing a submission (called when submit "Edit submission information" form)
   def update
-    # Make the contacts an array
-    params[:submission][:contact] = params[:submission][:contact].values if !params[:submission][:contact].nil?
+    error_responses = []
+    _, submission_params = params[:submission].each.first
+    @required_only = !params['required-only'].nil?
+    @filters_disabled = true
+    
+    error_responses << update_submission(submission_params)
 
-    params[:submission][:contact].delete_if { |c| c[:name].empty? || c[:email].empty? }
-
-    @ontology = LinkedData::Client::Models::Ontology.get(params[:submission][:ontology])
-
-    #submissions = @ontology.explore.submissions
-    #@submission = submissions.select {|o| o.submissionId == params["id"].to_i}.first
-    @submission = @ontology.explore.latest_submission
-
-    # Convert metadata that needs to be integer to int
-    @metadata.map do |hash|
-      if hash["enforce"].include?("integer")
-        if !params[:submission][hash["attribute"]].nil? && !params[:submission][hash["attribute"]].eql?("")
-          params[:submission][hash["attribute"].to_s.to_sym] = Integer(params[:submission][hash["attribute"].to_s.to_sym])
-        end
-      end
-      if hash["enforce"].include?("boolean") && !params[:submission][hash["attribute"]].nil?
-        if params[:submission][hash["attribute"]].eql?("true")
-          params[:submission][hash["attribute"].to_s.to_sym] = true
-        elsif params[:submission][hash["attribute"]].eql?("false")
-          params[:submission][hash["attribute"].to_s.to_sym] = false
-        else
-          params[:submission][hash["attribute"].to_s.to_sym] = nil
-        end
-      end
+    if error_responses.compact.any? { |x| x.status != 204 }
+      @errors = error_responses.map { |error_response| response_errors(error_response) }
     end
 
-    @submission.update_from_params(submission_params)
-    # Update summaryOnly on ontology object
-    @ontology.summaryOnly = @submission.isRemote.eql?("3")
-    @ontology.update
-    error_response = @submission.update(cache_refresh_all: false)
-    if response_error?(error_response)
-      @errors = response_errors(error_response) # see application_controller::response_errors
+    if params[:attribute]
+      render_submission_attribute(params[:attribute])
     else
       redirect_to "/ontologies/#{@ontology.acronym}"
     end
-  end
 
-  private
-
-  def submission_params
-    attributes = [
-      :ontology,
-      :description,
-      :hasOntologyLanguage,
-      :prefLabelProperty,
-      :synonymProperty,
-      :definitionProperty,
-      :authorProperty,
-      :obsoleteProperty,
-      :obsoleteParent,
-      :version,
-      :status,
-      :released,
-      :isRemote,
-      :pullLocation,
-      :filePath,
-      { contact: [:name, :email] },
-      :homepage,
-      :documentation,
-      :publication,
-    ]
-
-    @metadata.each do |m|
-      m_attr = m["attribute"].to_sym
-
-      attributes << if m["enforce"].include?("list")
-        { m_attr => [] }
-      else
-        m_attr
-      end
-    end
-
-    p = params.require(:submission).permit(attributes.uniq)
-    p.to_h.transform_values do |v|
-      if v.is_a? Array
-        v.reject(&:empty?)
-      else
-        v
-      end
-    end
   end
 end

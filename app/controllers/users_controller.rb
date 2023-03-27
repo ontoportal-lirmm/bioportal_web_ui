@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
+  
   before_action :unescape_id, only: [:edit, :show, :update]
-  before_action :verify_owner, only: [:edit, :show]
-  before_action :authorize_admin, only: [:index]
-
+  before_action :verify_owner, only: [:edit, :show, :subscribe, :un_subscribe]
+  before_action :authorize_admin, only: [:index,:subscribe, :un_subscribe]
   layout :determine_layout
 
   # GET /users
@@ -69,7 +69,7 @@ class UsersController < ApplicationController
       else
         # Attempt to register user to list
         if params[:user][:register_mail_list]
-          Notifier.register_for_announce_list(@user.email).deliver rescue nil
+          SubscribeMailer.register_for_announce_list(@user.email,@user.firstName,@user.lastName).deliver rescue nil
         end
 
         flash[:notice] = "Account was successfully created"
@@ -156,12 +156,45 @@ class UsersController < ApplicationController
     redirect_to user_path(@user.username)
   end
 
+  
+  def subscribe
+    @user = LinkedData::Client::Models::User.find_by_username(params[:username]).first
+    deliver "subscribe", SubscribeMailer.register_for_announce_list(@user.email,@user.firstName,@user.lastName)
+  end
+
+  def un_subscribe
+    @email = params[:email] 
+    deliver "unsubscribe", SubscribeMailer.unregister_for_announce_list(@email)
+  end
+
+  
   private
 
+  def deliver(action,job)
+    begin
+      job.deliver
+      to_or_from = action.eql?("subscribe") ? "to" : "from"
+      flash[:success] = "You have successfully  #{action} #{to_or_from} our user mailing list: #{$ANNOUNCE_LIST}"
+    rescue => exception
+      flash[:error] = "Something went wrong ..."
+    end
+    redirect_to '/account'
+  end
+
   def user_params
-    p = params.require(:user).permit(:firstName, :lastName, :username, :email, :email_confirmation, :password,
+    params[:user]["orcidId"] = extract_id_from_url(params[:user]["orcidId"], 'orcid.org')
+    params[:user]["githubId"] = extract_id_from_url(params[:user]["githubId"], 'github.com')
+    p = params.require(:user).permit(:firstName, :lastName, :username, :orcidId, :githubId, :email, :email_confirmation, :password,
                                      :password_confirmation, :register_mail_list, :admin)
     p.to_h
+  end
+  
+  def extract_id_from_url(url, pattern)
+    if url.include? (pattern)
+      url.split('/').last 
+    else
+      url
+    end
   end
 
   def unescape_id
@@ -188,9 +221,6 @@ class UsersController < ApplicationController
     errors = []
     if params[:email].nil? || params[:email].length < 1 || !params[:email].match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)
       errors << "Please enter an email address"
-    end
-    if !params[:email].eql?(params[:email_confirmation])
-      errors << "Your Email and Email Confirmation do not match"
     end
     if params[:password].nil? || params[:password].length < 1
       errors << "Please enter a password"
@@ -233,4 +263,5 @@ class UsersController < ApplicationController
 
     user_roles
   end
+
 end

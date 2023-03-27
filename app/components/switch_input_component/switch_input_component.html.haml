@@ -1,0 +1,6 @@
+%div.custom-control.custom-switch
+  - if @boolean_switch
+    = hidden_field_tag @name, @value
+  = check_box_tag  check_box_name, @value, @checked, class: 'custom-control-input', id:  check_box_id, onChange: "#{boolean_switch_action}"
+  %label.custom-control-label{for: check_box_id}
+    = content || @label

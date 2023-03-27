@@ -13,7 +13,6 @@
 //= require bioportal
 //= require admin/licenses
 //= require bp_ajax_controller
-//= require bp_ontology_viewer
 //= require bp_reviews
 //= require bp_notes
 //= require bp_ontolobridge
@@ -32,7 +31,6 @@
 //= require_tree ./components
 //= require ontologies
 //= require projects
-//= require submissions
 //= require tooltipster.bundle.min
 //= require application_esbuild
 customElements.define("data-table-loader", DataTableLoader);

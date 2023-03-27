@@ -10,122 +10,7 @@ var ontSelectListPos = { top: 0, left: 0, width: 0 };
 var allSelected = false;
 var alignToDOMId = <%=(align_to_dom_id || @select_id).to_json.html_safe%>;
 
-jQuery(document).ready(function(){
-  ontSelectListPos.top = jQuery("#"+alignToDOMId).offset().top;
-  ontSelectListPos.left = jQuery("#"+alignToDOMId).offset().left;
-  ontSelectListPos.width = jQuery("#"+alignToDOMId).width();
 
-  // Watch for changes in the entry of the select list
-  jQuery("#<%=@select_id%>").change(function(e) {
-    ontLabelToAbbr();
-    syncFromList();
-  });
-
-  // Reset labels on page load and make sure checkbox is in sync
-  ontLabelToAbbr();
-  syncFromList();
-
-  // Hide the advanced select when focusing in the chosen select box
-  jQuery("#"+alignToDOMId).bind("focus", hideAdvancedSelect);
-
-  // Hide the advanced select when clicking anywhere except in advanced select
-  jQuery('html').click(function() {
-    hideAdvancedSelect();
-  });
-
-  // Hide advanced select when hitting escape
-  jQuery(document).keyup(function(e) {
-    if (e.keyCode == 27) { hideAdvancedSelect(); } // esc
-  });
-
-  // Wire advanced selection
-  jQuery('#ont_select_adv').click(function(event){
-    event.stopPropagation();
-    bp_popup_cleanup();
-  });
-
-  // Wire clear selections
-  jQuery("#ont_select_clear").click(clearAllSelections);
-
-  // Wire up the link to open dialog box
-  jQuery("#ont_select_adv_href").click(function() {
-    var ont_select = jQuery("#ont_select_adv");
-    var chzn_select = jQuery("#"+alignToDOMId);
-
-    ont_select.css("top", "50px");
-    ont_select.css("left", chzn_select.offset().left + chzn_select.width() - 1);
-    ont_select.css("width", jQuery(window).width() - (chzn_select.offset().left + chzn_select.width()) - 100 + "px");
-    ont_select.css("height", jQuery(window).height() - 80);
-
-    // Configure the chosen select list box to remove background, move z-index above the advanced select
-    chzn_select.css("z-index", "4000");
-    chzn_select.children("ul.chzn-choices").addClass("no_right_border");
-    chzn_select.children("ul.chzn-choices").css("background", "white");
-    // Chosen select list congig changes for IE
-    chzn_select.children("ul.chzn-choices").css("filter", "none");
-    jQuery("#<%=@select_id%>_chzn input").css("filter", "none");
-
-    jQuery("#<%=@select_id%>_container").css("box-shadow", "0 0 10px gray");
-
-
-    jQuery("#ont_list_container").height(ont_select.height() - 80);
-
-    jQuery("#ont_select_adv").show();
-
-    return false;
-  });
-
-  // Wire up close advanced select "X"
-  jQuery("#close_adv_select").click(function(){
-    hideAdvancedSelect();
-  });
-
-  // Wire up watcher for checkboxes for sync
-  jQuery(".ont_select_boxes_tr input:checkbox").click(function(){
-    syncFromCheckboxes();
-    if (allSelected = true) {
-      allSelected = false;
-      jQuery("#ont_select_all").attr("checked", false);
-    } else {
-      // Compare total checkboxes to checked to see if they're all checked
-      if (jQuery(".ont_select_boxes_tr input:checkbox").length == jQuery(".ont_select_boxes_tr input:checked").length) {
-        allSelected = true;
-        jQuery("#ont_select_all").attr("checked", true);
-      }
-    }
-  });
-
-  // Toggle all selected
-  jQuery("#ont_select_all").click(function(){
-    if (jQuery(this).attr("checked")) {
-      allSelected = true;
-    } else {
-      allSelected = false;
-    }
-    jQuery(".ont_select_boxes_tr input:checkbox").attr("checked", allSelected);
-    syncFromCheckboxes();
-    refreshOntList();
-  });
-
-  // Select ontologies that are visible in the filter list
-  jQuery("#ont_select_all_filtered").click(function(){
-    if (jQuery(this).attr("checked")) {
-      jQuery(".ont_select_boxes_tr input:checkbox:visible").attr("checked", true);
-    } else {
-      jQuery(".ont_select_boxes_tr input:checkbox:visible").attr("checked", false);
-    }
-    syncFromCheckboxes();
-    refreshOntList();
-  });
-
-  // Wire up group/category select
-  select_groups.init();
-  select_categories.init();
-
-  // Wire up show all filtered link
-  jQuery("#show_all_filtered_ontologies").bind("click", showAllFiltered);
-
-});
 
 var hideAdvancedSelect = function(){
   if (jQuery("#ont_select_adv").is(":visible")) {
@@ -310,10 +195,127 @@ function clearAllSelections() {
 
 
   //ondomready
-  jQuery(function () {
-    listFilter(jQuery("#advanced_filter_input"), jQuery("#ont_list"));
-  });
+    jQuery(document).ready(() => {
+        listFilter(jQuery("#advanced_filter_input"), jQuery("#ont_list"));
+    })
 }(jQuery));
+
+jQuery(document).ready(function(){
+    ontSelectListPos.top = jQuery("#"+alignToDOMId).offset().top;
+    ontSelectListPos.left = jQuery("#"+alignToDOMId).offset().left;
+    ontSelectListPos.width = jQuery("#"+alignToDOMId).width();
+
+    // Watch for changes in the entry of the select list
+    jQuery("#<%=@select_id%>").change(function(e) {
+        ontLabelToAbbr();
+        syncFromList();
+    });
+
+    // Reset labels on page load and make sure checkbox is in sync
+    ontLabelToAbbr();
+    syncFromList();
+
+    // Hide the advanced select when focusing in the chosen select box
+    jQuery("#"+alignToDOMId).bind("focus", hideAdvancedSelect);
+
+    // Hide the advanced select when clicking anywhere except in advanced select
+    jQuery('html').click(function() {
+        hideAdvancedSelect();
+    });
+
+    // Hide advanced select when hitting escape
+    jQuery(document).keyup(function(e) {
+        if (e.keyCode == 27) { hideAdvancedSelect(); } // esc
+    });
+
+    // Wire advanced selection
+    jQuery('#ont_select_adv').click(function(event){
+        event.stopPropagation();
+        bp_popup_cleanup();
+    });
+
+    // Wire clear selections
+    jQuery("#ont_select_clear").click(clearAllSelections);
+
+    // Wire up the link to open dialog box
+    jQuery("#ont_select_adv_href").click(function() {
+        var ont_select = jQuery("#ont_select_adv");
+        var chzn_select = jQuery("#"+alignToDOMId);
+
+        ont_select.css("top", "50px");
+        ont_select.css("left", chzn_select.offset().left + chzn_select.width() - 1);
+        ont_select.css("width", jQuery(window).width() - (chzn_select.offset().left + chzn_select.width()) - 100 + "px");
+        ont_select.css("height", jQuery(window).height() - 80);
+
+        // Configure the chosen select list box to remove background, move z-index above the advanced select
+        chzn_select.css("z-index", "4000");
+        chzn_select.children("ul.chzn-choices").addClass("no_right_border");
+        chzn_select.children("ul.chzn-choices").css("background", "white");
+        // Chosen select list congig changes for IE
+        chzn_select.children("ul.chzn-choices").css("filter", "none");
+        jQuery("#<%=@select_id%>_chzn input").css("filter", "none");
+
+        jQuery("#<%=@select_id%>_container").css("box-shadow", "0 0 10px gray");
+
+
+        jQuery("#ont_list_container").height(ont_select.height() - 80);
+
+        jQuery("#ont_select_adv").show();
+
+        return false;
+    });
+
+    // Wire up close advanced select "X"
+    jQuery("#close_adv_select").click(function(){
+        hideAdvancedSelect();
+    });
+
+    // Wire up watcher for checkboxes for sync
+    jQuery(".ont_select_boxes_tr input:checkbox").click(function(){
+        syncFromCheckboxes();
+        if (allSelected = true) {
+            allSelected = false;
+            jQuery("#ont_select_all").attr("checked", false);
+        } else {
+            // Compare total checkboxes to checked to see if they're all checked
+            if (jQuery(".ont_select_boxes_tr input:checkbox").length == jQuery(".ont_select_boxes_tr input:checked").length) {
+                allSelected = true;
+                jQuery("#ont_select_all").attr("checked", true);
+            }
+        }
+    });
+
+    // Toggle all selected
+    jQuery("#ont_select_all").click(function(){
+        if (jQuery(this).attr("checked")) {
+            allSelected = true;
+        } else {
+            allSelected = false;
+        }
+        jQuery(".ont_select_boxes_tr input:checkbox").attr("checked", allSelected);
+        syncFromCheckboxes();
+        refreshOntList();
+    });
+
+    // Select ontologies that are visible in the filter list
+    jQuery("#ont_select_all_filtered").click(function(){
+        if (jQuery(this).attr("checked")) {
+            jQuery(".ont_select_boxes_tr input:checkbox:visible").attr("checked", true);
+        } else {
+            jQuery(".ont_select_boxes_tr input:checkbox:visible").attr("checked", false);
+        }
+        syncFromCheckboxes();
+        refreshOntList();
+    });
+
+    // Wire up group/category select
+    select_groups.init();
+    select_categories.init();
+
+    // Wire up show all filtered link
+    jQuery("#show_all_filtered_ontologies").bind("click", showAllFiltered);
+
+});
 </script>
 
 <div id="ont_select_adv" style="overflow: visible; z-index: 100; display: none; text-align: left; border: thin solid gray; position: fixed; background: white; max-width: 550px; box-shadow: 0 0 10px gray;">
