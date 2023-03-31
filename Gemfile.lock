@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git
-  revision: 0c8cd2b377d88b66a979664d5b16e5068b6d4548
-  branch: development
+  revision: fe929a4dd156920d60ecde9e8f9ef30a2cf5088e
+  branch: master
   specs:
     ontologies_api_client (2.2.0)
       activesupport
@@ -305,6 +305,10 @@ GEM
     rdoc (6.3.3)
     recaptcha (5.9.0)
       json
+    reek (6.1.4)
+      kwalify (~> 0.7.0)
+      parser (~> 3.2.0)
+      rainbow (>= 2.0, < 4.0)
     regexp_parser (2.7.0)
     reline (0.3.2)
       io-console (~> 0.5)
@@ -446,6 +450,8 @@ GEM
     will_paginate (3.3.1)
     xpath (3.2.0)
       nokogiri (~> 1.8)
+    yard (0.9.28)
+      webrick (~> 1.7.0)
     zeitwerk (2.6.7)
 
 PLATFORMS
@@ -519,4 +525,4 @@ DEPENDENCIES
   will_paginate (~> 3.0)
 
 BUNDLED WITH
-   2.3.26
+   2.4.6
