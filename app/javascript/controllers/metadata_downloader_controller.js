@@ -116,7 +116,7 @@ export default class extends Controller {
         }
 
         // Add id and type
-        if (subJson["URI"] !== undefined) {
+        if (subJson["URI"] !== null) {
           jsonldObject["@id"] = subJson["URI"];
         } else {
           jsonldObject["@id"] = ontJson["id"];
@@ -127,7 +127,7 @@ export default class extends Controller {
         let context = {};
         for (let prop in added_props) {
           context[prop] = fullContext[prop];
-          if (context[prop] == undefined) {
+          if (context[prop] == null) {
             // If property URI not defined then we create it with bioontology.org URI
             context[prop] = "http://data.bioontology.org/metadata/" + prop;
           }
