@@ -1,5 +1,5 @@
 <%# This file contains all the color themes of ontoportal alliance%>
-<% if (ui_theme = $UI_THEME.to_s.parameterize).present? && File.exists?(Rails.root.join('app', 'assets', 'stylesheets', 'themes', ui_theme)) 
+<% if (ui_theme = $UI_THEME.to_s.parameterize).present? && File.exists?(Rails.root.join('app', 'assets', 'stylesheets', 'themes', ui_theme))
     case ui_theme
     when "agroportal" %>
         :root{
@@ -23,6 +23,12 @@
         :root{
             --primary-color: #6E98A2;
             --hover-color: #7BABB6;
+            --secondary-color: #ffc107;
+        }
+    <% when "biodivportal" %>
+        :root{
+            --primary-color: #33691B;
+            --hover-color: #5e7cb3;
             --secondary-color: #ffc107;
         }
     <%# Here to add a new theme ... %>
