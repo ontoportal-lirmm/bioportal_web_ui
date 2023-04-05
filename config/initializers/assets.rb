@@ -12,4 +12,9 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
-Rails.application.config.assets.precompile += %w( *.png *.jpg *.jpeg *.gif bp_annotator.js bp_annotatorplus.js vendor.js )
+
+# ECOPORTAL - REPLACED - BEGIN
+# Rails.application.config.assets.precompile += %w( *.png *.jpg *.jpeg *.gif bp_annotator.js bp_annotatorplus.js vendor.js )
+Rails.application.config.assets.precompile += %w( *.png *.jpg *.jpeg *.gif bp_annotator.js bp_annotatorplus.js vendor.js jsonld.js tooltipster.bundle.min.js jquery.outerHtml.min.js metadata_form.js)
+# ECOPORTAL - REPLACED - END
+

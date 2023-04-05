@@ -24,12 +24,19 @@ Rails.application.routes.draw do
     resources :submissions
   end
 
-  resources :login
+  if $SSO_ENABLED
+    get "/login" => "oauth2#login", as: :login_index
+    get "/logout" => "oauth2#logout"
+  else
+    resources :login
+  end
 
   resources :admin, only: [:index]
 
   namespace :admin do
     resources :licenses, only: [:index, :create, :new]
+    resources :groups, only: [:index, :create, :new, :edit, :update, :destroy]
+    resources :categories, only: [:index, :create, :new, :edit, :update, :destroy]
   end
 
   resources :subscriptions
@@ -96,13 +103,17 @@ Rails.application.routes.draw do
   get '/ajax/classes/treeview' => 'concepts#show_tree'
   get '/ajax/properties/tree' => 'concepts#property_tree'
   get '/ajax/biomixer' => 'concepts#biomixer'
+  match '/ajax/cancelIdentifierRequest' => 'ajax_proxy#cancelIdentifierRequest', via: :post
 
   # User
-  get '/logout' => 'login#destroy', :as => :logout
+  if !$SSO_ENABLED
+    get '/logout' => 'login#destroy', :as => :logout
+  end
+
   get '/lost_pass' => 'login#lost_password'
   get '/reset_password' => 'login#reset_password'
   post '/accounts/:id/custom_ontologies' => 'users#custom_ontologies', :as => :custom_ontologies
-  get '/login_as/:login_as' => 'login#login_as' , constraints: { login_as:  /[\d\w\.\-\%\+ ]+/ }
+  get '/login_as/:login_as' => 'login#login_as', constraints: { login_as:  /[\d\w\.\-\%\+ ]+/ }
   post '/login/send_pass', to: 'login#send_pass'
 
   # History
@@ -129,6 +140,12 @@ Rails.application.routes.draw do
 
   # Ontolobridge
   # post '/ontolobridge/:save_new_term_instructions' => 'ontolobridge#save_new_term_instructions'
+  
+  match '/admin/doi_requests_list' => 'admin#doi_requests_list', via: [:get]
+  match '/admin/doi_requests' => 'admin#process_doi_requests', via: [:put]
+  # match '/admin/doi_requests/reject' => 'admin#reject_doi_requests', via: [:put]
+  # match '/admin/doi_requests/create_doi' => 'admin#create_doi', via: [:put]
+  # match '/admin/doi_requests/update_doi' => 'admin#update_doi', via: [:put]
 
   ###########################################################################################################
   # Install the default route as the lowest priority.

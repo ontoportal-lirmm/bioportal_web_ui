@@ -1,0 +1,33 @@
+/********************
+## reviews panel
+*********************/
+
+
+.reviews_list_container {
+
+  .review_toolbar {
+    float: left;
+    margin-right: 1em;
+  }
+
+  .review_toolbar {
+
+    .link_button {
+      font-size: .9em;
+    }
+  }
+
+  .create_review_form {
+    clear: both;
+    margin: 1.0em 0em 0em;
+  }
+
+  .reviews_list{
+    clear: both;
+    margin: 2.0em 0em 0em;
+  }
+
+  .ontology_review ~ .reviews_list_empty_msg {
+    display: none;
+  }
+}

@@ -1,5 +1,5 @@
-- button_text ||= "Create ontology"
-- title_text ||= "Submit New Ontology"
+- button_text ||= "Create semantic resource"
+- title_text ||= "Submit a New Semantic Resource"
 
 :css
   div.ontologyFormError {
@@ -31,9 +31,10 @@
         -# A generic fallback
         = @errors.to_json
 
-%div{:style => "width:500px"}
-  %span.asterik{:style => "float:right;"} * fields are required
-  %h1 #{title_text}
+%div
+  %h1.mt-5 #{title_text}
+  %div
+    %span.asterik* fields are required
 %table#new_ontology.form{:width => "50%"}
   %tr
     %th
@@ -48,7 +49,7 @@
     %td
       - acronym_enabled = @ontology.acronym.nil? || ! @errors.nil?
       = f.text_field(:acronym, value: @ontology.acronym, :disabled => ! acronym_enabled, data: { acronyms: acronyms(@ontologies) })
-      %ul#acronym_errors.enable-lists{style: "color: red; padding: 3px;"}
+      %ul#acronym_errors.enable-lists
   %tr
     %th
       Administrators:
@@ -64,13 +65,13 @@
       - selected = @ontology.licensed? ? "licensed" : selected
       - display_private = @ontology.private? ? "" : "hidden"
       - display_licensed = @ontology.licensed? ? "" : "hidden"
-      = f.select :viewingRestriction, view_restiction_options, { :selected => selected }
+      = f.select :viewingRestriction, view_restiction_options, { :selected => selected}, {:style => "padding-right: 15px" }
       #viewingRestrictionsPrivate.viewing_restriction_types{:style => "padding: .5em; border: thin solid #C1DAD7; margin: .5em .5em .5em 0;", class: display_private}
-        %h3 Add or remove accounts that are allowed to view classes in this ontology using the account name
+        %h3{style: "font-size: 14px"} Add or remove accounts that are allowed to view classes in this semantic resource using the account name
         = f.select(:acl, @user_select_list, {include_blank: true, selected: @ontology.acl}, {multiple: true, :"data-placeholder" => "Select users who have access"})
       #viewingRestrictionsLicensed.viewing_restriction_types{:style => "padding: .5em; border: thin solid #C1DAD7; margin: .5em .5em .5em 0;", class: display_licensed}
         %b License Text:
-        The text below explains what licensing information you want to collect before allowing access. We will display this text and record the user's response when the user attempts to access your ontology.
+        The text below explains what licensing information you want to collect before allowing access. We will display this text and record the user's response when the user attempts to access your semantic resource.
         - disabled = @ontology.licensed? ? {} : {:disabled => "true"}
         = f.text_area :licenseInformation, { :rows => 5, :class => "viewing_restriction_disabled", :style => "width: 90%;" }.merge(disabled)
 
@@ -87,9 +88,9 @@
       View:
     %td
       = f.check_box :isView, checked: @ontology.view?
-      = f.label :isView, "This ontology is a view of:"
+      = f.label :isView, "This semantic resource is a view of:"
       #viewOf_picker{style: "padding-top: .3em;"}
-        - single_picker_locals = {:picker_id => "ontology_viewOf", placeholder: "Select an ontology to create a view on", field_name: "viewOf", disabled: !@ontology.view?, selected: @ontology.viewOf}
+        - single_picker_locals = {:picker_id => "ontology_viewOf", placeholder: "Select a semantic resource to create a view on", field_name: "viewOf", disabled: !@ontology.view?, selected: @ontology.viewOf}
         = render :partial => "shared/ontology_picker_single", :locals => single_picker_locals
 
   %tr

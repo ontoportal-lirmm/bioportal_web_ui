@@ -1,0 +1,34 @@
+= f.hidden_field :ontologyReviewed, value: @review.ontologyReviewed
+= f.hidden_field :creator, value: @review.creator
+%fieldset
+  %legend
+    %b
+      Review For #{@ontology.name}
+  %table
+    %tr
+      %td
+        Ratings
+        %br/
+        - for rating in @rating_types
+          %div{:style => "padding:2px;border-top:1px solid gray;"}
+            - (1..5).each do |i|
+              = f.radio_button rating, i, class: "star"
+            &nbsp;#{rating.to_s.chomp("Rating").capitalize}
+    %tr
+      %td= f.text_area :body, value: @review.body, cols: 80, rows: 5
+= f.submit "Submit Review", class: "btn btn-primary mr-sm-2"
+= link_to "Cancel", "javascript:;", class: "btn btn-primary dismiss-dialog"
+
+:javascript
+  // Do this after the HTML above loads
+  jQuery('form#' + '#{form_id} input.star').rating();
+  jQuery('form#' + '#{form_id}').validate({
+    errorClass: "reviewFormError",
+    errorElement: "div",
+    rules: {
+      "review[body]": "required",
+    },
+    messages: {
+      "review[body]": "Please enter a review",
+    }
+  });

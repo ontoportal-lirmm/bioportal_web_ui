@@ -34,7 +34,7 @@ function set_last_params(params) {
 function insertSampleText(event) {
   "use strict";
   event.preventDefault();
-  var text = "The patient has no sign of melanoma but his father had skin cancer. The epithelial tissue cells show no abnormal activity.";
+  var text = "Invasive alien species are plants, animals, pathogens and other organisms that are non-native to an ecosystem, and which may cause economic or environmental harm or adversely affect human health.";
   jQuery("#annotation_text").focus();
   jQuery("#annotation_text").val(text);
 }

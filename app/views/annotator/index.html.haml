@@ -6,11 +6,11 @@
 %div.mt-4
   = t(".annotatorplus_html", annotatorplus_href: annotatorplus_path())
 
-%h2.mt-4 Annotator
+%h1.mt-2 Annotator
 %p
   = t('.intro').html_safe
-  = link_to(Rails.configuration.settings.links[:help_annotator], id: "annotator-help", "aria-label": "View annotator help") do
-    %i.fas.fa-question-circle.fa-lg{"aria-hidden": "true"}
+  = link_to("https://github.com/lifewatch-eric/documentation/wiki/EcoTools#annotator", id: "annotator-help", target: "_blank") do
+    %i.fas.fa-question-circle.fa-lg{aria: {hidden: true}, style: "margin-left: .25em"}
 
 %form{style: "margin-bottom: 25px"}
   %div.form-group

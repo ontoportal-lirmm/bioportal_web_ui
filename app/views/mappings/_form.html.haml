@@ -7,7 +7,7 @@
 %div.row
   %div.col-xs-12
     %div.form-group
-      %label{for: "map_to_picker"} Target ontology or view
+      %label{for: "map_to_picker"} Target semantic resource or view
       = select_tag("map_to_picker", options_for_select(onts_and_views_for_select()), class: "form-control")
     %div.form-group
       %label{for: "map_to"} Target class

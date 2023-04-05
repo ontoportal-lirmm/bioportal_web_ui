@@ -72,7 +72,7 @@
   padding:6px 0 0 5px;
 }
 .tabs li.selected {
-  background:#234979;
+  background:#0f4e8a;
   border-top:1px solid #8ca0b9;
   height:23px;
 }
@@ -108,7 +108,7 @@
 /* Tables */
 
 .minimal {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  font-family: "Titillium Web", "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   font-size: 12px;
   background: #fff;
   text-align: left;
@@ -117,7 +117,7 @@
 .minimal caption {
   padding: 0 0 5px 0;
   width: 100%;
-  font: italic 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  font: italic 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
   text-align: right;
 }
 .minimal thead th {
@@ -133,7 +133,7 @@
   padding: .6em .8em;
 }
 .minimal tbody tr:hover td {
-  color: #234979;
+  color: #0f4e8a;
   background: #f5fafa;
   border-bottom: 1px solid #ccc;
 }
@@ -149,7 +149,7 @@ table.align-right th:nth-child(2) {
 .basic caption {
   padding: 0 0 5px 0;
   width: 100%;
-  font: italic 95% "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  font: italic 95% "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
   text-align: right;
 }
 .basic thead th, .basic tbody th {
@@ -170,7 +170,7 @@ table.align-right th:nth-child(2) {
 .annotations caption {
   padding: 0 0 5px 0;
   width: 100%;
-  font: italic 95% "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  font: italic 95% "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
   text-align: right;
 }
 .annotations thead th, .basic tbody th {
@@ -202,13 +202,13 @@ table.align-right th:nth-child(2) {
 .zebra caption {
   padding: 0 0 5px 0;
   width: 100%;
-  font: italic 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  font: italic 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
   text-align: right;
 }
 .zebra th {
   white-space:nowrap;
-  font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  color: #0f4e8a;
   border-left: 1px solid #C1DAD7;
   border-right: 1px solid #C1DAD7;
   border-bottom: 1px solid #C1DAD7;
@@ -220,8 +220,8 @@ table.align-right th:nth-child(2) {
   background-color: #e2ebf0;
 }
 .zebra tbody th {
-  font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  color: #0f4e8a;
   border-left: 1px solid #C1DAD7;
   border-right: 1px solid #C1DAD7;
   border-bottom: 1px solid #C1DAD7;
@@ -236,7 +236,7 @@ table.align-right th:nth-child(2) {
   border-left: 1px solid #C1DAD7;
   border-top: 0;
   background: #f5fafa;
-  font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  font: bold 10px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
   color: #797268;
 }
 .zebra th.nobg {
@@ -267,13 +267,13 @@ table.align-right th:nth-child(2) {
 .form caption {
   padding: 0 0 5px 0;
   width: 100%;
-  font: italic 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  font: italic 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
   text-align: right;
 }
 .form th {
   white-space:nowrap;
-  font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  color: #0f4e8a;
   border-left: 1px solid #C1DAD7;
   border-right: 1px solid #C1DAD7;
   border-bottom: 1px solid #C1DAD7;
@@ -288,7 +288,7 @@ table.align-right th:nth-child(2) {
   border-left: 1px solid #C1DAD7;
   border-top: 0;
   background: #f5fafa;
-  font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  font: bold 10px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
   color: #797268;
 }
 .form th.nobg {
@@ -323,13 +323,13 @@ table.align-right th:nth-child(2) {
 /* Notes*/
 
 .notetype {
-  font:12px bold "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  font:12px bold "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  color: #0f4e8a;
 }
 .header {
   cursor:pointer;
-  font:11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  font:14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  color: #0f4e8a;
   border-left: 1px solid #C1DAD7;
   border-right: 1px solid #C1DAD7;
   border-bottom: 1px solid #C1DAD7;
@@ -337,7 +337,7 @@ table.align-right th:nth-child(2) {
   letter-spacing: 2px;
   text-align: left;
   padding: 6px 6px 6px 12px;
-  background: #e2ebf0;
+  background: #f2f2f2;
 }
 .message {
   background: #ECF5FB;
@@ -361,13 +361,13 @@ table.align-right th:nth-child(2) {
 .resources caption {
   padding: 0 0 5px 0;
   width: 100%;
-  font: italic 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  font: italic 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
   text-align: right;
 }
 .resources th {
   white-space:nowrap;
-  font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  color: #0f4e8a;
   border-left: 1px solid #C1DAD7;
   border-right: 1px solid #C1DAD7;
   border-bottom: 1px solid #C1DAD7;
@@ -375,11 +375,11 @@ table.align-right th:nth-child(2) {
   text-transform: uppercase;
   text-align: left;
   padding: 6px 6px 6px 12px;
-  background: #e2ebf0;
+  background: #f2f2f2;
 }
 .resources tbody th {
-  font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  color: #0f4e8a;
   border-left: 1px solid #C1DAD7;
   border-right: 1px solid #C1DAD7;
   border-bottom: 1px solid #C1DAD7;
@@ -393,7 +393,7 @@ table.align-right th:nth-child(2) {
   border-left: 1px solid #C1DAD7;
   border-top: 0;
   background: #f5fafa;
-  font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  font: bold 10px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
   color: #797268;
 }
 .resources th.nobg {
@@ -426,22 +426,22 @@ table.align-right th:nth-child(2) {
 }
 tr.mainresource td {
   cursor:pointer;
-  font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  color: #0f4e8a;
   border-left: 1px solid #C1DAD7;
   border-right: 1px solid #C1DAD7;
   border-bottom: 1px solid #C1DAD7;
   border-top: 1px solid #C1DAD7;
   text-align: left;
   padding: 6px 6px 6px 12px;
-  background: #e2ebf0;
+  background: #f2f2f2;
 }
 
 /* Ratings */
 .star_ratings{
-    color: #234979;
+    color: #0f4e8a;
     border: 1px solid #C1DAD7;
-    background: #e2ebf0;
+    background: #f2f2f2;
     width:300px;
     float:left;
     margin-right:10px;
@@ -456,8 +456,8 @@ tr.mainresource td {
 .pheader {
   cursor:pointer;
   font-weight:bold;
-  font:14px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  font:14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  color: #0f4e8a;
   border-left: 1px solid #C1DAD7;
   border-right: 1px solid #C1DAD7;
   border-bottom: 1px solid #C1DAD7;
@@ -465,7 +465,7 @@ tr.mainresource td {
   letter-spacing: 1px;
   text-align: left;
   padding: 6px 6px 6px 12px;
-  background: #e2ebf0;
+  background: #f2f2f2;
 }
 
 .home_button{
@@ -714,7 +714,7 @@ div.tree_error {
   display:inline;
   margin-left:-32px;
   width: 28px;
-  height: 11px;
+  height: 14px;
   cursor:pointer;
 }
 .simpleTree .text {
@@ -740,7 +740,7 @@ div.tree_error {
 #drag_container {
   background:#ffffff;
   color:#000;
-  font: normal 11px arial, tahoma, helvetica, sans-serif;
+  font: normal 14px arial, tahoma, helvetica, sans-serif;
   border: 1px dashed #767676;
 }
 #drag_container ul {
@@ -893,12 +893,12 @@ button.fg-button-menu, button.fg-button {
   display: block;
   float: right;
   padding: .5px;
-  font-size: 11px;
-  line-height: 11px;
+  font-size: 14px;
+  line-height: 14px;
   text-align: left;
   margin: 1px 1px;
   text-decoration: none;
-  font-family: Lucida Console,Monaco,monospace;
+  font-family: "Titillium Web", Lucida Console,Monaco,monospace;
 }
 
 .ont_icons .disabled {
@@ -918,11 +918,11 @@ button.fg-button-menu, button.fg-button {
 }
 
 .too_many_children_override {
-  color: #234979 !important;
+  color: #0f4e8a !important;
 }
 
 .too_many_children_override:hover {
-  color: #234979 !important;
+  color: #0f4e8a !important;
   text-decoration: underline !important;
 }
 
@@ -950,16 +950,20 @@ button.fg-button-menu, button.fg-button {
  ************************************/
 .btn-bp-login {
   color: #C58612;
-  border-color: #C58612 !important;
+  border-color: #C58612 !important;#212529
 
   &:hover {
-    color: #234979;
+    color: #0f4e8a;
     background-color: #C58612;
   }
 }
 
 .navbar-custom {
-  background-color: #234979;
+  background-color: #0f4e8a;
+}
+
+.navbar {
+  margin: 0;
 }
 
 .nav_text a {
@@ -968,7 +972,7 @@ button.fg-button-menu, button.fg-button {
   padding: 25px 15px;
   position: relative;
   text-decoration: none;
-  top: 11px;
+  top: 14px;
 }
 
 .nav_text a:hover {
@@ -1171,5 +1175,37 @@ a.truncated_less, a.truncated_more {
 
 .highlighted .search_ontology_acronym {
   color: white;
+}
+
+/******* ADDED BY ECOPORTAL *******/
+
+/******* TEAM ******/
+.team-card-container .row {
+  background-color:  #f2f2f2;
+  margin: 5px 0;
+}
+.team-card-container .col-sm-6 {
+  padding: 0;
+}
+
+.team-card {
+  display: flex;
+}
+
+.team-card-container h4 {
+  color: #0f4e8a;
+}
+
+.team-card-image {
+  box-sizing: border-box;
+  flex-basis: 220px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  padding-right: 20px;
+  text-align: center;
+}
+
+.team-card-image img {
+  height: 200px;
 }
 

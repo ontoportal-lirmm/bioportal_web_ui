@@ -2,6 +2,8 @@ class NotesController < ApplicationController
 
   layout 'ontology'
 
+  before_action :authorize_admin, only: [:destroy]
+
   def show
     id = clean_note_id(params[:id])
 
@@ -77,6 +79,7 @@ class NotesController < ApplicationController
     end
   end
 
+=begin
   def destroy
     note_ids = params[:noteids].kind_of?(String) ? params[:noteids].split(",") : params[:noteids]
 
@@ -97,7 +100,29 @@ class NotesController < ApplicationController
 
     render :json => { :success => successes, :error => errors }
   end
+=end
 
+  def destroy
+    note_ids = params[:noteids].kind_of?(String) ? params[:noteids].split(",") : params[:noteids]
+
+    errors = []
+    successes = []
+    note_ids.each do |note_id|
+      begin
+        note = LinkedData::Client::Models::Note.get(note_id, include_threads: true)
+        response = note.delete
+        if response&.errors
+          errors << note_id
+        else
+          successes << note_id
+        end
+      rescue Exception => e
+        errors << note_id
+      end
+    end
+
+    render :json => { :success => successes, :error => errors }
+  end
   def archive
     ontology = DataAccess.getLatestOntology(params[:ontology_virtual_id])
 

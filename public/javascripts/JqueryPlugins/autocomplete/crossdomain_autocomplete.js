@@ -2,7 +2,7 @@
 // will use another framework which takes control of the $.
 // To avoid re-writing this script we'll use a wrapper.
 (function($) {
-  $(function() {
+  $(document).ready(function() {
     jQuery.bioportal_autocomplete = function(input, options) {
       // Create a link to self
       var me = this;

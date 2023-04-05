@@ -14,8 +14,10 @@
 / # This used to hold demo-specific info, now it's a placeholder
 &nbsp;
 |||
-/ # default notes count = 0
-=0
+- if @notes.nil? || @notes.empty?
+  = 0
+- else
+  = @notes.length
 |||
 -# TODO_REV support mappings
 -# #{@concept.mapping_count}

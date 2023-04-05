@@ -5,9 +5,8 @@ class HomeController < ApplicationController
 
   def index
     @ontologies_views = LinkedData::Client::Models::Ontology.all(include_views: true)
-    @ontologies = @ontologies_views.select { |o| !o.viewOf }
-    @ontologies_hash = Hash[@ontologies_views.map { |o| [o.acronym, o] }]
-
+    @ontologies = @ontologies_views.select {|o| !o.viewOf}
+    @ontologies_hash = Hash[@ontologies_views.map {|o| [o.acronym, o]}]
     @groups = LinkedData::Client::Models::Group.all
     organize_groups
 

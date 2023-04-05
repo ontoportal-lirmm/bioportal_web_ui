@@ -20,6 +20,8 @@
  *= require thickbox
  *= require select2
  *= require trumbowyg
+ *= require tooltipster.bundle.min
+ *= require tooltipster-sideTip-light.min
  *
  */
 
@@ -34,11 +36,15 @@
 @import "notice";
 @import "ontologies";
 @import "recommender";
+@import "reviews";
 @import "search";
 @import "submissions";
 @import "tree";
 @import "ontolobridge";
+@import "metadata_form";
 
 /* Bootstrap and Font Awesome */
 @import "bootstrap";
 @import "bootstrap_overrides";
+
+@import "//fonts.googleapis.com/css?family=Titillium+Web:400,700";

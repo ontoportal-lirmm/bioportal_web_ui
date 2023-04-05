@@ -281,7 +281,11 @@ jQuery(document).ready(function() {
       jQuery.bioportal.ont_pages["notes"].retrieve();
     }
 
-    if (content_section !== "widgets" && metadataOnly !== "true") {
+      if (content_section !== "reviews") {
+          jQuery.bioportal.ont_pages["reviews"].retrieve();
+      }
+
+      if (content_section !== "widgets" && metadataOnly !== "true") {
       jQuery.bioportal.ont_pages["widgets"].retrieve();
     }
   }
@@ -381,14 +385,15 @@ jQuery.bioportal.OntologyPage = function(id, location_path, error_string, page_n
 
   jQuery.bioportal.ont_pages["classes"] = new jQuery.bioportal.OntologyPage("classes", "/ontologies/" + jQuery(document).data().bp.ont_viewer.ontology_id + "?p=classes&ajax=true" + jQuery(document).data().bp.ont_viewer.concept_param, "Problem retrieving classes", jQuery(document).data().bp.ont_viewer.ontology_name + jQuery(document).data().bp.ont_viewer.concept_name_title + " - Classes", "Classes", function() {
     jQuery(document).data().bp.classesTab.search_box_init();
-    setupNotesFacebox();
   });
 
   jQuery.bioportal.ont_pages["properties"] = new jQuery.bioportal.OntologyPage("properties", "/ontologies/" + jQuery(document).data().bp.ont_viewer.ontology_id + "?p=properties&ajax=true", "Problem retrieving properties", jQuery(document).data().bp.ont_viewer.ontology_name + " - Properties", "Properties", function() {
     jQuery(document).data().bp.ontPropertiesTab.init();
   });
 
-  jQuery.bioportal.ont_pages["summary"] = new jQuery.bioportal.OntologyPage("summary", "/ontologies/" + jQuery(document).data().bp.ont_viewer.ontology_id + "?p=summary&ajax=true", "Problem retrieving summary", jQuery(document).data().bp.ont_viewer.ontology_name + " - Summary", "Summary");
+  jQuery.bioportal.ont_pages["summary"] = new jQuery.bioportal.OntologyPage("summary", "/ontologies/" + jQuery(document).data().bp.ont_viewer.ontology_id + "?p=summary&ajax=true", "Problem retrieving summary", jQuery(document).data().bp.ont_viewer.ontology_name + " - Summary", "Summary", function() {
+    window.Sharer.init();
+  });
 
   jQuery.bioportal.ont_pages["mappings"] = new jQuery.bioportal.OntologyPage("mappings", "/ontologies/" + jQuery(document).data().bp.ont_viewer.ontology_id + "?p=mappings&ajax=true", "Problem retrieving mappings", jQuery(document).data().bp.ont_viewer.ontology_name + " - Mappings", "Mappings", function() {
     jQuery(".facebox").facebox();
@@ -399,5 +404,300 @@ jQuery.bioportal.OntologyPage = function(id, location_path, error_string, page_n
     jQuery("#ont_notes_content .link_button").button();
   });
 
+  jQuery.bioportal.ont_pages["reviews"] = new jQuery.bioportal.OntologyPage("reviews", "/ontologies/" + jQuery(document).data().bp.ont_viewer.ontology_id + "?p=reviews&ajax=true", "Problem retrieving reviews", jQuery(document).data().bp.ont_viewer.ontology_name + " - Reviews", "Reviews", function() {
+      jQuery(document).data().bp.reviewsTab.init();
+  });
+
+
   jQuery.bioportal.ont_pages["widgets"] = new jQuery.bioportal.OntologyPage("widgets", "/ontologies/" + jQuery(document).data().bp.ont_viewer.ontology_id + "?p=widgets&ajax=true", "Problem retrieving widgets", jQuery(document).data().bp.ont_viewer.ontology_name + " - Widgets", "Widgets");
 })(window);
+
+//ECOPORTAL :from Agroportal (Modified) - BEGIN
+
+/**
+ * Format submission metadata to be downloaded
+ * @param format
+ */
+function downloadMetadata(format) {
+
+  jQuery.get(
+    // Get the submission metadata infos
+    jQuery(document).data().bp.config.rest_url + "/submission_metadata?apikey=" + jQuery(document).data().bp.config.apikey,
+
+    function (subMetadataArray) {
+      var subMetadataHash = {};
+      // Convert submission metadata array to a hash to be faster
+      for (var i = 0; i < subMetadataArray.length; i++) {
+        subMetadataHash[subMetadataArray[i]["attribute"]] = subMetadataArray[i];
+      }
+      var jsonldObject = {}
+      var added_props = {}
+
+      var subJson = jQuery.extend(true, {}, jQuery(document).data().bp.submission_latest);
+      var ontJson = jQuery(document).data().bp.ontology;
+      var fullContext = jQuery(document).data().bp.submission_latest["context"];
+
+      // Remove links, context and metrics from json
+      delete subJson["links"];
+      delete subJson["context"];
+      delete subJson["metrics"];
+
+      // Special case for publication and released that don't have namespace (so value generated to undefined)
+      fullContext["publication"] = "http://omv.ontoware.org/2005/05/ontology#reference";
+      fullContext["released"] = "http://purl.org/dc/terms/date";
+
+      // Add ontology properties to context and subJson
+      subJson["viewOf"] = ontJson["viewOf"];
+      fullContext["viewOf"] = "http://data.bioontology.org/metadata/viewOf";
+
+      subJson["group"] = ontJson["group"];
+      fullContext["group"] = "http://data.bioontology.org/metadata/group";
+      if (subJson["hasDomain"] == null) {
+        subJson["hasDomain"] = ontJson["hasDomain"];
+      } else {
+        subJson["hasDomain"] = subJson["hasDomain"].split(", ").concat(ontJson["hasDomain"]);
+        /* make the array unique:
+         var unique = arr.filter(function(elem, index, self) {
+         return index == self.indexOf(elem);
+         })
+         */
+      }
+
+
+      // Don't add null value and empty arrays
+      for (var attr in subJson) {
+        if (subJson[attr] === null || subJson[attr] === undefined) {
+          continue;
+        } else if (subJson[attr] instanceof Array && subJson[attr].length < 1) {
+          continue;
+        }
+        // Keep only metadata that have been extracted, are metrics or are in the metadata array below
+        var metadata_in_rdf = ["acronym", "name","hasOntologyLanguage", "creationDate", "released", "group", "viewOf"]
+        if (subMetadataHash[attr] != undefined && subMetadataHash[attr]["extracted"] !== true && subMetadataHash[attr]["display"] !== "metrics"
+          && !metadata_in_rdf.indexOf(attr)) {
+
+          continue;
+        }
+
+        if (fullContext[attr] !== undefined) {
+          // Add attr value to future jsonld object and keep track of the attr we added to build context
+          if (subMetadataHash[attr] != undefined) {
+            added_props[attr] = subMetadataHash[attr]["namespace"] + ":" + attr;
+          } else {
+            added_props[attr] = "bpm:" + attr;
+          }
+          jsonldObject[fullContext[attr]] = subJson[attr];
+        }
+      }
+
+      // Add id and type
+      if (subJson["URI"] !== undefined) {
+        jsonldObject["@id"] = subJson["URI"];
+      } else {
+        jsonldObject["@id"] = ontJson["id"];
+      }
+      jsonldObject["@type"] = "http://www.w3.org/2002/07/owl#Ontology";
+
+      // Get only context from returned properties
+      var context = {};
+      for (var prop in added_props) {
+        context[prop] = fullContext[prop];
+        if (context[prop] == undefined) {
+          // If property URI not defined then we create it with bioontology.org URI
+          context[prop] = "http://data.bioontology.org/metadata/" + prop;
+        }
+      }
+
+      var responseString = "Error while generating the RDF"
+      if (format === "nquads") {
+        jsonld.toRDF(jsonldObject, {format: 'application/nquads'}, function (err, nquads) {
+          generateDownloadFile(nquads, "nt")
+        });
+      } else if (format === "jsonld") {
+        // Generate proper jsonld
+        jsonld.compact(jsonldObject, context, function (err, compacted) {
+          generateDownloadFile(JSON.stringify(compacted, null, 2), "json");
+        });
+      } else if (format === "xml") {
+        // Generate RDF/XML
+        generateDownloadFile(generateRdfXml(jsonldObject, subMetadataHash), "rdf");
+      //} else if (format === "datacite-xml") {
+      //  // Generate RDF/XML
+      //  generateDownloadFile(generateDataciteXml(jsonldObject, subMetadataHash), "rdf");
+      }
+    }
+  );
+}
+
+/**
+ * Generate the RDF/XML string from the jsonldObject and context. Do it manually since no good lib
+ * @param jsonldObject
+ * @param context
+ */
+function generateRdfXml(jsonldObject, metadataDetails) {
+
+  // Get hash to resolve namespace
+  var resolveNamespace = jQuery(document).data().bp.config.resolve_namespace;
+
+  var xmlString = `<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:owl="http://www.w3.org/2002/07/owl#">
+  <rdf:Description rdf:about="` + jsonldObject["@id"] + `">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>`;
+
+  delete jsonldObject["@id"];
+  delete jsonldObject["@type"];
+
+  for (var prop in jsonldObject) {
+    var attr_uri = prop;
+    var attr = prop;
+    // Here we replace the full URI by namespace:attr
+    for (var ns in resolveNamespace) {
+      if (prop.indexOf(resolveNamespace[ns]) == 0) {
+        prop = prop.replace(resolveNamespace[ns], ns + ":");
+        attr = attr.replace(resolveNamespace[ns], "");
+        break;
+      }
+    }
+
+    // Check if the value is an URI using simple regex
+    var prop_values = jsonldObject[attr_uri];
+    if (!(prop_values instanceof Array)) {
+      prop_values = [prop_values];
+    }
+
+    for (var i in prop_values) {
+      var prop_value = prop_values[i];
+      if ((prop_value.toString().match(/https?:\/\//g) || []).length === 1 && prop_value.toString().indexOf(" ") === -1) {
+        xmlString = xmlString.concat(`
+    <` + prop + ` rdf:resource="` + prop_value + `"/>`);
+      } else {
+        xmlString = xmlString.concat(`
+    <` + prop + `>` + jsonldObject[attr_uri] + `</` + prop + `>`);
+      }
+    }
+
+  }
+
+  xmlString = xmlString.concat(`
+  </rdf:Description>
+</rdf:RDF>`);
+
+  return xmlString;
+}
+
+/**
+ * Generate the file with metadata to be downloaded, given the file content
+ * @param content
+ * @param fileExtension
+ */
+function generateDownloadFile(content, fileExtension) {
+  var element = document.createElement('a');
+  // TODO: change MIME type?
+  element.setAttribute('href', 'data:application/rdf+json;charset=utf-8,' + encodeURIComponent(content));
+  element.setAttribute('download', jQuery(document).data().bp.ontology.acronym + "_metadata." + fileExtension);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+}
+
+// jQuery("#getMetadataBackNquadsBtn").click(function(){
+//  downloadMetadata("nquads");
+// });
+// jQuery("#getMetadataBackJsonldBtn").click(function(){
+//   downloadMetadata("jsonld");
+// });
+// jQuery("#getMetadataBackXmlBtn").click(function(){
+//   downloadMetadata("xml");
+// });
+
+
+jQuery("#getMetadataDataciteJsonBtn").live("click", function(){
+  downloadMetadataJSON("datacite-json");
+});
+
+jQuery("#getMetadataEcoportalJsonBtn").live("click", function(){
+  downloadMetadataJSON("ecoportal-json");
+});
+
+
+function downloadMetadataJSON(type) {
+  URL = jQuery(document).data().bp.config.rest_url + "/ontologies/" + jQuery(document).data().bp.ontology.acronym + "/latest_submission/$1?apikey=" + jQuery(document).data().bp.config.apikey;
+  switch(type) {
+    case 'datacite-json':
+      URL = URL.replace('$1', 'datacite_metadata_json');
+      break;
+    case 'ecoportal-json':
+      URL = URL.replace('$1', 'ecoportal_metadata_json');
+      break;
+    default:
+      return
+  }
+  
+  jQuery.get(
+    URL,
+    function (json) {
+      //generateDownloadFile(JSON.stringify(json, null, 2), "json");
+      generateDownloadFile(json, "json");
+    });
+}
+
+
+
+function exportElementAs(format, attr_name, attr_values,  namespace){
+ let ns = namespace ? namespace + ':' : ''
+ let result=''
+ var doc = document.implementation.createDocument("", "", null);
+ if(attr_name==="creators" && attr_values && attr_values.length>0){	
+	if (format == 'XML') {
+		var creatorsElem = doc.createElement(attr_name);
+		for (var i in attr_values) {
+			var creatorElem = doc.createElement("creator");
+			var value = attr_values[i].table ? attr_values[i].table : attr_values[i];
+			if(value.creatorName){
+				let elem = doc.createElement("creatorName");
+				if(value.nameType){
+					elem.setAttribute("nameType", value.nameType)
+				}
+				creatorElem.appendChild(elem);
+			}
+			if(value.givenName){
+				let elem = doc.createElement("givenName");
+				creatorElem.appendChild(elem);
+			}
+			if(value.familyName){
+				let elem = doc.createElement("familyName");
+				creatorElem.appendChild(elem);
+			}
+			if(value.nameIdentifier){
+				var elem = doc.createElement("nameIdentifier");
+				if(value.nameIdentifierScheme){
+					creatorNameElem.setAttribute("nameIdentifierScheme", value.nameIdentifierScheme)
+				}
+				if(value.nameIdentifierSchemeURI){
+					creatorNameElem.setAttribute("SchemeURI", value.nameIdentifierSchemeURI)
+				}
+				creatorElem.appendChild(elem);
+			}
+			creatorsElem.appendChild(creatorElem)
+		}
+	  
+		var oSerializer = new XMLSerializer();
+		result = oSerializer.serializeToString(doc);
+	}
+ }
+ else if(attr_name==="resourceType" && attr_values){	
+	if (format == 'XML-RDF') {		
+        let resourceTypeElem = doc.createElement(attr_name);
+		resourceTypeElem.setAttribute("resourceTypeGeneral", "DATASET")		
+    }
+	 
+	var oSerializer = new XMLSerializer();
+	result = oSerializer.serializeToString(doc);
+ }
+ 
+ return result
+}
+
+
+//ECOPORTAL  : NEW - END

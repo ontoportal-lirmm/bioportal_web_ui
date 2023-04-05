@@ -38,11 +38,10 @@ nohup.out
 config/newrelic.yml
 
 node_modules
+_env_config/*
+config_prod/*
 
-# Encryption keys
-/config/master.key
-/config/credentials/development.key
-/config/credentials/test.key
-/config/credentials/staging.key
-/config/credentials/appliance.key
+TAGS
 
+config/site_config.rb
+.vs/

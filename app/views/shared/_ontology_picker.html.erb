@@ -3,7 +3,7 @@
 <%init_ontology_picker(custom_ontologies, selected_ontologies)%>
 <%form_object ||= :ontology%>
 <%form_attribute ||= "ontologyId"%>
-<%sel_text ||= "Select ontologies"%>
+<%sel_text ||= "Select semantic resources"%>
 <%@select_id = "#{form_object}_#{form_attribute}"%>
 
 <script type="text/javascript">
@@ -35,7 +35,7 @@ var hideChosenResults = function(){
   </h2>
 
   <div id="<%=@select_id%>_container">
-    <%=select form_object, form_attribute, options_for_select(@onts_for_select, selected_ontologies), { }, :multiple => 'true', "data-placeholder".to_sym => "Start typing to select ontologies or leave blank to use all", :style => "width: 432px;" %>
+    <%=select form_object, form_attribute, options_for_select(@onts_for_select, selected_ontologies), { }, :multiple => 'true', "data-placeholder".to_sym => "Start typing to select semantic resources or leave blank to use all", :style => "width: 432px;" %>
   </div>
 
   <div style="float: right; font-size: smaller;">

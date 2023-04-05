@@ -10,7 +10,7 @@ class OntologiesController < ApplicationController
 
   before_action :authorize_and_redirect, :only=>[:edit,:update,:create,:new]
 
-  KNOWN_PAGES = Set.new(["terms", "classes", "mappings", "notes", "widgets", "summary", "properties"])
+  KNOWN_PAGES = Set.new(["terms", "classes", "mappings", "notes", "reviews", "widgets", "summary", "properties"])
 
   # GET /ontologies
   # GET /ontologies.xml
@@ -174,10 +174,10 @@ class OntologiesController < ApplicationController
   end
 
   def create
+    #LOGGER.debug("\n\n=======================================\n  WEB_UI - ontologies_controller -> create:\n\n   >  params=#{params.nil? ? "nil" : params.inspect}")
     if params[:commit].eql? 'Cancel'
       redirect_to ontologies_path and return
     end
-
     @ontology = LinkedData::Client::Models::Ontology.new(values: ontology_params)
     @ontology_saved = @ontology.save
     if !@ontology_saved || @ontology_saved.errors
@@ -186,6 +186,7 @@ class OntologiesController < ApplicationController
       @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
       @errors = response_errors(@ontology_saved)
       render 'new'
+      render "new"
     else
       if @ontology_saved.summaryOnly
         redirect_to "/ontologies/success/#{@ontology.acronym}"
@@ -232,6 +233,16 @@ class OntologiesController < ApplicationController
       render :partial => 'notes', :layout => false
     else
       render :partial => 'notes', :layout => "ontology_viewer"
+    end
+  end
+
+  def reviews
+    @reviews = LinkedData::Client::Models::Review.sort_reviews @ontology.explore.reviews
+    @reviews_link = "/ontologies/#{@ontology.acronym}/reviews/"
+    if request.xhr?
+      render :partial => 'reviews', :layout => false
+    else
+      render :partial => 'reviews', :layout => "ontology_viewer"
     end
   end
 
@@ -305,6 +316,9 @@ class OntologiesController < ApplicationController
         return
       when "notes"
         self.notes #rescue self.summary
+        return
+      when "reviews"
+        self.reviews #rescue self.summary
         return
       when "widgets"
         self.widgets #rescue self.summary

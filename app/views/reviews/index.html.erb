@@ -1,8 +1,8 @@
-<%@title = "Reviews of the #{@ontology.displayLabel}"%>
+<%@title = "Reviews of the #{@ontology.name}"%>
 
 <br>
 <%if session[:user].nil?%>
-	<input type="button" class ="blueButton" value="Review Ontology" onclick ="window.location='/login'">
+	<input type="button" class="blueButton" value="Review Ontology" onclick ="window.location='/login'">
 <%else%>
 <span class="blueButton"><%=link_to "Review Ontology",new_review_path(:ontology=>@ontology.ontologyId)%></span>
 <%end%>

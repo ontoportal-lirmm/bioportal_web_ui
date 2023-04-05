@@ -41,7 +41,7 @@ rec.enableEdition = function() {
 
 rec.insertSampleText = function() {
     rec.enableEdition();
-    var text = 'Primary treatment of DCIS now includes 3 options: lumpectomy without lymph node surgery plus whole breast radiation (category 1); total mastectomy with or without sentinel node biopsy with or without reconstruction (category 2A); lumpectomy without lymph node surgery without radiation (category 2B). Workup for patients with clinical stage l, llA, llB, or T3,N1,M0 disease was reorganized to distinguish optional additional studies from those recommended for all of these patients. Recommendation for locoregional treatment for patients with clinical stage l, llA, llB, or T3,N1,M0 disease with 1-3 positive axillary nodes following total mastectomy was changed from "Consider" to "Strongly consider" postmastectomy radiation therapy. ';
+    var text = 'Ecological attributes (=ecological characteristics) are features of a taxon such as its range size, life history, geographical distribution, climatic tolerances, habitat types, environmental indicator values, edaphic preferences, and so on, that describe the overall ecology of the taxon.';
     jQuery("#inputText").focus();
     jQuery("#inputText").val(text);
     $(".notTextError").hide();
@@ -50,14 +50,14 @@ rec.insertSampleText = function() {
 
 rec.insertSampleKeywords = function() {
     rec.enableEdition();
-    var text = "Backpain, White blood cell, Carcinoma, Cavity of stomach, Ductal Carcinoma in Situ, Adjuvant chemotherapy, Axillary lymph node staging, Mastectomy, tamoxifen, serotonin reuptake inhibitors, Invasive Breast Cancer, hormone receptor positive breast cancer, ovarian ablation, premenopausal women, surgical management, biopsy of breast tumor, Fine needle aspiration, entinel lymph node, breast preservation, adjuvant radiation therapy, prechemotherapy, Inflammatory Breast Cancer, ovarian failure, Bone scan, lumpectomy, brain metastases, pericardial effusion, aromatase inhibitor, postmenopausal, Palliative care, Guidelines, Stage IV breast cancer disease, Trastuzumab, Breast MRI examination";
+    var text = "Ecological attributes (=ecological characteristics) are features of a taxon such as its range size, life history, geographical distribution, climatic tolerances, habitat types, environmental indicator values, edaphic preferences, and so on, that describe the overall ecology of the taxon.";
     jQuery("#inputText").focus();
     jQuery("#inputText").val(text);
     $(".notTextError").hide();
     $("#radioItKeywords").prop("checked", true);
 }
 
-rec.colors = ["#234979" , "#cc0000", "#339900", "#ff9900"];
+rec.colors = ["#0f4e8a" , "#cc0000", "#339900", "#ff9900"];
 rec.getHighlightedTerms = function(data, rowNumber) {
     var inputText = document.getElementById("inputText").value;
     var newText = '';
@@ -191,24 +191,24 @@ rec.getRecommendations = function() {
                 if (data) {
                     if (data.length > 0) {
                         $("#recommender-results").empty();
-                        $("#resultsHeader").text("Recommended ontologies");
+                        $("#resultsHeader").text("Recommended semantic resources");
 
                         if (params.output_type == 1) {
-                            var ontologyHeader = "Ontology";
+                            var ontologyHeader = "Semantic resource";
                         }
                         else {
-                            ontologyHeader = "Ontologies";
+                            ontologyHeader = "Semantic resources";
                         }
                         var table = $('<table id="recommendations" class="zebra" width="100%"></table>');
-                        var header = $('<thead><tr><th title="Position of the ontology in the ranking">POS.</th>'
-                        + '<th title="Ontology acronym">' + ontologyHeader + '</th>'
-                        + '<th title="Final recommendation score for the ontology. It represents the appropriateness of the ontology to describe the input data">Final score</th>'
-                        + '<th title="The coverage score represents the extent to what the ontology covers the input data">Coverage score</th>'
-                        + '<th title="The acceptance score represents how well known and trusted is the ontology by the biomedical community">Acceptance score</th>'
-                        + '<th title="The detail score represents the richness of the ontology representation for the input data">Detail score</th>'
-                        + '<th title="The specialization score represents the level of specialization of the ontology to the domain of the input data">Specialization score</th>'
-                        + '<th title="Number of annotations performed with the ontology for the input data">Annotations</th>'
-                        + '<th title="This columns makes it possible to highlight the annotations performed with each ontology" style="text-align: center">Highlight annotations</th>'
+                        var header = $('<thead><tr><th title="Position of the semantic resource in the ranking">POS.</th>'
+                        + '<th title="Semantic resource acronym">' + ontologyHeader + '</th>'
+                        + '<th title="Final recommendation score for the semantic resource. It represents the appropriateness of the semantic resource to describe the input data">Final score</th>'
+                        + '<th title="The coverage score represents the extent to what the semantic resource covers the input data">Coverage score</th>'
+                        + '<th title="The acceptance score represents how well known and trusted is the semantic resource by the ecology community">Acceptance score</th>'
+                        + '<th title="The detail score represents the richness of the semantic resource representation for the input data">Detail score</th>'
+                        + '<th title="The specialization score represents the level of specialization of the semantic resource to the domain of the input data">Specialization score</th>'
+                        + '<th title="Number of annotations performed with the semantic resource for the input data">Annotations</th>'
+                        + '<th title="This columns makes it possible to highlight the annotations performed with each semantic resource" style="text-align: center">Highlight annotations</th>'
                         + '</tr></thead>');
                         table.append(header);
                         table.append('<tbody>');
@@ -330,7 +330,7 @@ rec.checkFirst = function(data) {
     $("#inputTextHighlighted div.card-body").empty();
     $("#inputTextHighlighted div.card-body").append(terms);
     $("#inputTextHighlighted").show();
-    $("#chk0").parents(".row:first").css("background-color", "#e2ebf0");
+    $("#chk0").parents(".row:first").css("background-color", "#f2f2f2");
 }
 
 jQuery(document).ready(function() {

@@ -28,7 +28,12 @@
     })
 
     jQuery('#user_info').on('submit', function (event) {
-        event.preventDefault()
+        event.preventDefault();
+        if (!jQuery(this).valid()) {
+          jQuery('input[type="submit"]').prop('disabled',false);
+          return;
+        }
+
         let admin_checkbox = jQuery('input[id=user_admin]')
         if(admin_checkbox.attr('checked') && !admin_checkbox.hasClass('admin')){
           alertify.confirm('Are you sure you want to make this user an admin?', (e) => {

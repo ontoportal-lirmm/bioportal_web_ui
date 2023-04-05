@@ -5,4 +5,4 @@
     Edit submission information
     %small.text-muted for #{@submission.ontology.acronym}
   = form_for :submission, url: ontology_submission_path(@ontology.acronym, @submission.submissionId), html: { method: :put, multipart: true } do |f|
-    = render partial: "form", locals: {f: f, button_text: "Save submission"}
+    = render partial: "form", locals: {f: f, button_text: "Save Submission"}

@@ -45,7 +45,7 @@ gem 'stackprof', require: false
 gem 'thin'
 gem 'will_paginate', '~> 3.0'
 
-gem 'ontologies_api_client', github: 'ncbo/ontologies_api_ruby_client', tag: 'v2.1.0'
+gem 'ontologies_api_client', github: 'lifewatch-eric/ontologies_api_ruby_client', branch: 'master'
 
 group :staging, :production do
   # application monitoring
@@ -80,3 +80,5 @@ end
 group :test do
   gem 'capybara'
 end
+
+gem 'openid_connect', '~> 2.2.0'

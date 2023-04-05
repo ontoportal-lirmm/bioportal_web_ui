@@ -45,35 +45,42 @@ en:
 
   home:
     index:
-      find_ontology_placeholder: Start typing ontology name, then choose from list
-      query_placeholder: Enter a class, e.g. Melanoma
-      tagline: the world's most comprehensive repository of biomedical ontologies
+      find_ontology_placeholder: Start typing resource name, then choose from list
+      query_placeholder: Enter a class, e.g. Shape
+      tagline: the LifeWatch ERIC repository of semantic resources for ecology and related domains
       title: Welcome to the %{organization} 
       welcome: Welcome to %{site},
     help:
-      welcome: Welcome to the National Center for Biomedical Ontology’s %{site}. %{site} is a web-based application for accessing and sharing biomedical ontologies.
+      welcome: Welcome to the LifeWatch ERIC’s %{site}. %{site} is a repository of semantic resources for ecology and related domains.
       getting_started: >
-        %{site} allows users to browse, upload, download, search, comment on, and create mappings for ontologies.
+        %{site} supports the community in the creation, management, mapping and alignment of its semantic resources and subsequently also of its data.
       browse: >
-        Users can browse and explore individual ontologies by navigating either a tree structure or an animated graphical view. Users can also view mappings and 
-        ontology metadata, and download ontologies. Additionally, users who are signed in may submit a new ontology to the library.
-      rest_examples_html: View documentation and examples of the <a href="http://data.bioontology.org/documentation" target="_blank">%{site} REST API</a>.
+        Users can browse and explore individual semantic resources by navigating either a tree structure or 
+        an animated graphical view. Users can also view mappings and semantic resource metadata, and download 
+        semantic resources. Additionally, users who are signed in may also submit a new semantic resource to the 
+        library. All submissions to the library are reviewed.
+      documentation_html: >
+        General documentation is available on <a href="https://github.com/lifewatch-eric/documentation/wiki" target="_blank">GitHub</a>
+      rest_examples_html: View documentation and examples of the <a href="https://data.ecoportal.lifewatch.eu/documentation" target="_blank">%{site} REST API</a>.
       announce_list_html: >
         To receive notices of new releases or site outages, please subscribe to the 
         <a href="https://mailman.stanford.edu/mailman/listinfo/bioontology-support" target="_blank">bioontology-support list</a>.
-
+      contact_html: >
+        If you have any comment or need for support, please email <b>service.centre@lifewatch.eu</b>. 
+        If you are interested and would like to join our information mailing list, please subscribe to our user mailing 
+        list.
   annotator:
     index:
-      intro: Get annotations for biomedical text with classes from the ontologies
+      intro: Get annotations for ecological text with classes from the semantic resources
       annotatorplus_html: <em>Check out <a href="%{annotatorplus_href}">AnnotatorPlus</a> beta; a new version of the Annotator with added support for negation, and more!</em>
 
   recommender:
-    intro: Get recommendations for the most relevant ontologies based on an excerpt from a biomedical text or a list of keywords
+    intro: Get recommendations for the most relevant semantic resources based on an excerpt from a ecological text or a list of keywords
 
   search:
     index:
-      intro: Search for a class in multiple ontologies
-      search_keywords_placeholder: Enter a class, e.g. Melanoma
+      intro: Search for a class in multiple semantic resources
+      search_keywords_placeholder: Enter a class, e.g. Shape
       categories_placeholder: Start typing to select categories or leave blank to use all
       property_definition: Named association between two entities. Examples are "definition" (a relation between a class and some text) and "part-of" (a relation between two classes).
       obsolete_definition: >
@@ -85,7 +92,7 @@ en:
       intro: Browse a selection of projects that use %{site} resources
 
   ontologies:
-    intro: Browse the library of ontologies
+    intro: Browse the library of semantic resources
 
   concepts:
     request_term:
@@ -107,5 +114,5 @@ en:
           <p>Justification (optional)<br>Provide any additional information about the requested term here.</p>
         </blockquote>
   mappings:
-    intro: Browse mappings between classes in different ontologies
+    intro: Browse mappings between classes in different semantic resources
 

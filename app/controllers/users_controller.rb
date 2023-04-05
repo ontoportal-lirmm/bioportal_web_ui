@@ -1,3 +1,5 @@
+
+require 'json'
 class UsersController < ApplicationController
   before_action :unescape_id, only: [:edit, :show, :update]
   before_action :verify_owner, only: [:edit, :show]
@@ -199,6 +201,14 @@ class UsersController < ApplicationController
       if !verify_recaptcha
         errors << "Please fill in the proper text from the supplied image"
       end
+    end
+
+    # ECOPORTAL (new) : checks if the username exists and if it does not contain punctuation characters
+    if params[:username].nil?
+      errors << "Please enter an username"
+    end
+    if params[:username].match(/.*\W.*/i)
+      errors << "Your username must not contain any Punctuation characters (ex. .,:; etc)"
     end
 
     return errors

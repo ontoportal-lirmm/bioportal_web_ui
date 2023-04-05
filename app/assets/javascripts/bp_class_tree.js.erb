@@ -10,7 +10,7 @@ function setCacheCurrent() {
 
   // Store notes table data
   if (typeof notesTable !== 'undefined' && notesTable !== null && notesTable.length !== 0) {
-    currentData["notes_table_data"] = notesTable.fnGetData();
+    currentData["notes_table_data"] = notesTable.data();
   }
 
   // Reset the table
@@ -34,6 +34,31 @@ function insertNotesTable(aData) {
   jQuery(".notes_table_container").append(jQuery("#notes_list_table_clone").clone());
   jQuery(".notes_table_container #notes_list_table_clone").attr("id", "notes_list_table");
 //  wireTableWithData(jQuery("#notes_list_table"), aData);
+}
+
+function wireClassNotesTable() {
+    function isAdmin() {
+        return (jQuery(document).data().bp.user.role || []).indexOf("ADMINISTRATOR") != -1;
+    }
+
+    const class_note_columns = { date: 4 };
+
+    notesTable = jQuery(".notes_concept_list_table").DataTable({
+        "language": {
+          "zeroRecords": "No notes to display"
+        },
+        "pageLength": 50,
+        "pagingType": "full_numbers",
+        "order": [[class_note_columns.date, 'desc']],
+        "columns": [
+          { "visible": isAdmin(), "orderable" : false, target: 0 }, // Delete
+          null, // Subject link
+          null, // Author
+          null, // Type
+          null // Created
+        ]
+    }).draw();
+    setupNotesFacebox();
 }
 
 var simpleTreeCollection;
@@ -66,6 +91,9 @@ function initClassTree() {
   // Set the cache for the first concept we retrieved
   setCacheCurrent();
 
+  // Instantiate initialize DataTable for the class notes
+  wireClassNotesTable();
+
   // Setup the "Get all classes" link for times when the children is greater than our max
   jQuery(".too_many_children_override").live('click', function(event) {
     event.preventDefault();
@@ -87,11 +115,17 @@ function initClassTree() {
 };
 
 function nodeClicked(node_id) {
+  // remove all additions by DataTables and restore the table to its original state in the dom:
+  // this is imporant to avoid that when the table is reinitialized when the cache is restore, agumentations (e.g.
+  // search field, and pagination controls) are inserted again and again
+  if (notesTable != null) {
+      notesTable.destroy();
+      // Reset notesTable for next node
+      notesTable = null;
+  }
+
   // Get current html and store data in cache (to account for changes since the cache was retrieved)
   setCacheCurrent();
-
-  // Reset notesTable for next node
-  notesTable = null;
 
   if (node_id == 0) {
     alert("Sorry, we cannot display all the classes at this level in the hierarchy because there are too many of them. Please select another class or use the Search to find a specific concept in this ontology");
@@ -128,7 +162,7 @@ function nodeClicked(node_id) {
 
     // Insert notes table
     insertNotesTable(tabData["notes_table_data"]);
-
+    wireClassNotesTable();
     wrapupTabChange(selectedTab);
   } else {
     jQuery.blockUI({ message: '<h1>' + '<%= image_tag src="jquery.simple.tree/spinner.gif" %>' + ' Loading Class...</h1>', showOverlay: false });
@@ -146,6 +180,8 @@ function nodeClicked(node_id) {
         jQuery('#mapping_count').html(tabData[7]);
 
         setCache(node_id,tabData);
+        
+        wireClassNotesTable();
         wrapupTabChange(selectedTab);
       }
     );

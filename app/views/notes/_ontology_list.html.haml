@@ -16,9 +16,9 @@
       = link_to "Add proposal", "javascript:void(0);", class: "add_proposal link_button", style: "font-size: .9em", data: { parent_id: "#{@ontology.id}", parent_type: "ontology" }
   .subscribe_to_notes{:style => "float: left;"}
     = subscribe_button(@ontology.acronym)
-  .notes_delete{:style => "float: left; margin-left: 1em;"}
-    / TODO_REV: Enable notes deletion
-    / delete_button
+  .delete_note{:style => "float: left; margin-left: 1em;"}
+    - if current_user_admin?
+      = link_to "Delete selected notes", "javascript:void(0);", class: "delete_note link_button", style: "font-size: .9em;", data: { parent_id: "#{@ontology.id}", parent_type: "ontology" }
   %div.ont_notes_filter{style: "clear: both; padding-top: 10px; float: right;"}
     Filter:
     %input#hide_archived_ont{:checked => "true", :name => "hide_archived_ont", :type => "checkbox"}
@@ -29,7 +29,7 @@
     %table.zebra.notes_ont_list_table{:id => "ontology_notes_list", :style => "width: 100%; clear: both;", :width => "100%"}
       %thead
         %tr
-          %th.notes_delete
+          %th
             Delete
           %th
             Subject
@@ -46,39 +46,88 @@
           %th
             Created
       %tbody
-        - if @notes.nil? || @notes.empty?
-          %tr#ont_no_notes
-            %td No notes to display
+        - @notes.each do |note|
+          %tr{:class => "#{note.id}_tr", :id => "#{note.id}_tr"}
+            %td.notes_delete
+              - if note.deletable?(session[:user])
+                = delete_note_checkbox(note)
             %td
+              = link_to get_note_subject(note), "#{@note_link}#{CGI.escape(note.id)}", :id => "row_#{note.id}", :class => "ont_notes_list_link notes_list_link"
+              &nbsp;&nbsp;&nbsp;
+              %span{:id => "#{note.id}_row_archived", :style => "font-size: x-small; color: grey;"}
+                - if note.archived
+                  archived
             %td
+              = note.subject
             %td
+              = note.archived || "false"
             %td
+              = note.creator.split('/')[-1]
             %td
+              = note.proposal ? get_note_type_text(note.proposal.type) : "Comment"
             %td
+              - if note.relatedClass && note.relatedClass.length > 0
+                %a{href: "/ontologies/#{@ontology.acronym}?p=classes&conceptid=#{CGI.escape(note.relatedClass.first)}"}= @ontology.explore.single_class(note.relatedClass.first).prefLabel
             %td
-        - else
-          - @notes.each do |note|
-            %tr{:class => "#{note.id}_tr", :id => "#{note.id}_tr"}
-              %td.notes_delete
-                - if note.deletable?(session[:user])
-                  / TODO_REV: Handle notes deletion
-                  / %input.delete_note_checkbox{"data-applies_to" => note.appliesTo['id'], "data-note_id" => note.id, :id => "delete_#{note.id}", :type => "checkbox"}/
-              %td
-                = link_to note.subject, "#{@note_link}#{CGI.escape(note.id)}", :id => "row_#{note.id}", :class => "ont_notes_list_link notes_list_link"
-                &nbsp;&nbsp;&nbsp;
-                %span{:id => "#{note.id}_row_archived", :style => "font-size: x-small; color: grey;"}
-                  - if note.archived
-                    archived
-              %td
-                = note.subject
-              %td
-                = note.archived || "false"
-              %td
-                = note.creator.split('/')[-1]
-              %td
-                = note.proposal ? get_note_type_text(note.proposal.type) : "Comment"
-              %td
-                - if note.relatedClass && note.relatedClass.length > 0
-                  %a{href: "/ontologies/#{@ontology.acronym}?p=classes&conceptid=#{CGI.escape(note.relatedClass.first)}"}= note.relatedClass.first
-              %td
-                = DateTime.parse(note.created).strftime("%Y-%m-%d")
+              = DateTime.parse(note.created).strftime("%Y-%m-%d")
+  / render :partial => 'notes/add', :locals => { :applies_to => applies_to, :applies_to_type => applies_to_type, :action => "ont_list_" }
+:javascript
+  // Global data
+  var ontNotesTable;
+  var bp_notesDeletable = #{@notes_deletable.to_json};
+
+  // Data needed in the external JS file stored in the body 'cache'
+  jQuery.data(document.body, "ontology_id", "#{@ontology.acronym}");
+
+  var ont_columns = { archived: 3, date: 7, subjectSort: 2 };
+
+  // This will wire up a table with the dataTables config.
+  // Needs to stay inline because IE won't recognize it in an external file.
+  function wireOntTable(ontNotesTableNew) {
+    // Wire up table if it hasn't been done yet
+    ontNotesTable = ontNotesTableNew;
+    ontNotesTable.DataTable({
+      "language": {
+        "zeroRecords": "No notes to display"
+      },
+      "pageLength": 50,
+      "pagingType": "full_numbers",
+      "order": [[ont_columns.date, 'desc']],
+      "columns": [
+         { "visible": #{current_user_admin? == true}, "orderable" : false, target: 0 }, // Delete
+         { "orderData": ont_columns.subjectSort, target: 1 }, // Subject link
+         { "visible": false, target: 2 }, // Subject for sort
+         { "visible": false, target: 3 }, // Archived for filter
+         null, // Author
+         null, // Type
+         null, // Target
+         null // Created
+      ]
+    }).columns(ont_columns.archived)
+        .search("false")
+        .draw();
+
+    // Important! Table is somehow getting set to zero width. Reset here.
+    jQuery(ontNotesTable).css("width", "100%");
+  }
+
+  function hideOrUnhideArchivedOntNotes() {
+      if (jQuery("#hide_archived_ont:checked").val() !== undefined) {
+        // Checked
+        ontNotesTable.DataTable().columns(ont_columns.archived).search("false").draw();
+      } else {
+        // Unchecked
+        ontNotesTable.columns(ont_columns.archived).search('', ont_columns.archived, true, false);
+      }
+  }
+
+  jQuery(document).ready(function(){
+    // Enable datatable
+    wireOntTable(jQuery("#ontology_notes_list"));
+
+
+    jQuery("#hide_archived_ont").click(function(){
+      hideOrUnhideArchivedOntNotes();
+    });
+
+  });

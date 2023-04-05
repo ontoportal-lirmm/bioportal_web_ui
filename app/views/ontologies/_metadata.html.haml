@@ -51,6 +51,22 @@
           %td= groups.map {|g| groups_hash[g].name}.sort.join(", ")
       = raw additional_details
 
+  -# EcoPortal additional metadata
+  - unless @submission_latest.nil?
+    - additional_data = additional_metadata(@submission_latest)
+    - if additional_data != ""
+      %section.ont-metadata-card.ont-additionalmetadata-card
+        %header.pb-2.font-weight-bold#add_h{style: "cursor: pointer;"} Additional Metadata
+        #add_metadata_content
+          %div
+            %table.table.table-sm
+              = raw additional_data
+
+      :javascript
+        jQuery('#add_h').click(function() {
+          jQuery('#add_metadata_content').toggle();
+        });
+
   -# Submissions pane
   %section.ont-metadata-card.ont-subs-card
     %div.ont-section-toolbar
@@ -86,12 +102,30 @@
               %dd= view_decorator.description
       
   %div.right-hand-content
-    
+   
+    -# Metadata links pane
+    - unless @submission_latest.nil?
+      %section.ont-metadata-card.ont-metadatalinks-card
+        %div.ont-section-toolbar
+          %header.pb-2.font-weight-bold Get my metadata back
+        %div
+          %button.btn.btn-primary#getMetadataDataciteJsonBtn{style: "margin-bottom: 1em; margin-left: 1em;"} JSON DATACITE
+          %button.btn.btn-primary#getMetadataEcoportalJsonBtn{style: "margin-bottom: 1em; margin-left: 1em;"} JSON ECOPORTAL
+
+    -# Social share pane
+    %section.ont-metadata-card.ont-socialshare-card
+      %div.ont-section-toolbar
+        %header.pb-2.font-weight-bold Share on socials
+        = social_share_link(@ontology, "Facebook")
+        = social_share_link(@ontology, "Twitter")
+        = social_share_link(@ontology, "LinkedIn")
+      %div
+
     -# Metrics pane
     %section.ont-metadata-card.ont-metrics-card
       %div.ont-section-toolbar
         %header.pb-2.font-weight-bold Metrics
-        = link_to(Rails.configuration.settings.links[:metrics], target: "_blank", "aria-label": "View individual metrics definitions", title: "View individual metrics definitions") do
+        = link_to("https://www.bioontology.org/wiki/Ontology_Metrics", target: "_blank", "aria-label": "View individual metrics definitions", title: "View individual metrics definitions") do
           %i.fas.fa-lg.fa-question-circle{"aria-hidden": "true", style: "margin-left: 0.5rem"}
       - if @metrics.nil? || (@metrics.is_a?(Array) && @metrics.empty?) || (@metrics.respond_to?(:status) && @metrics.status == 404)
         %p.font-italic= "We have not yet calculated metrics for #{@ontology.acronym}"

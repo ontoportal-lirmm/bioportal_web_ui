@@ -19,7 +19,7 @@
       - else
         = @note_decorator.reply_link
 
-    - if @note.reply && !@note.reply.empty?
-      %div.discussion
-        %div.discussion_container
+    %div.discussion
+      %div.discussion_container
+        - if @note.reply && !@note.reply.empty?
           = recurse_replies(@note.reply).html_safe

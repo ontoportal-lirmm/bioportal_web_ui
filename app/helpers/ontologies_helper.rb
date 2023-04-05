@@ -1,5 +1,8 @@
 module OntologiesHelper
 
+  REST_URI = $REST_URL
+  API_KEY = $API_KEY
+  
   def additional_details
     return "" if $ADDITIONAL_ONTOLOGY_DETAILS.nil? || $ADDITIONAL_ONTOLOGY_DETAILS[@ontology.acronym].nil?
     details = $ADDITIONAL_ONTOLOGY_DETAILS[@ontology.acronym]
@@ -12,6 +15,222 @@ module OntologiesHelper
     end
     html.join("")
   end
+
+  # Ecoportal - BEGIN
+  # Generate a social share link
+  def social_share_link(ont, sharer)
+    return <<-HTML
+      <a href='javascript:;' 
+        aria-label='Share on #{sharer}'
+        title='Share on #{sharer}'
+        style='margin-left: 0.5rem'
+        data-sharer='#{sharer.downcase}'
+        data-title='#{ont.name}'
+        data-url='#{CGI::escapeHTML($UI_URL + ontology_path(ont.acronym))}'>
+        <i class="fab fa-lg fa-#{sharer.downcase}"></i>
+      </a>
+    HTML
+      .html_safe
+  end
+
+  # Add additional metadata as html for a submission
+  def additional_metadata(sub)
+    # Get the list of metadata attribute from the REST API
+    json_metadata = JSON.parse(Net::HTTP.get(URI.parse("#{REST_URI}/submission_metadata?apikey=#{API_KEY}")))
+    metadata_list = {}
+    # Get extracted metadata and put them in a hash with their label, if one, as value
+    json_metadata.each do |metadata|
+      if metadata["extracted"] == true
+        metadata_list[metadata["attribute"]] = metadata["label"]
+      end
+    end
+
+    html = []
+
+    metadata_not_displayed = ["status", "description", "documentation", "publication", "homepage", "openSearchDescription", "dataDump", "includedInDataCatalog", "logo", "depiction"]
+
+    begin
+      #LOGGER.debug("\n\n WEB_UI - ontologies_helper.rb -> additional_metadata: metadata_list=#{metadata_list.inspect}")
+      metadata_list.each do |metadata, label|
+        # Don't display documentation, publication, homepage, status and description, they are already in main details
+        if !metadata_not_displayed.include?(metadata)
+          # different html build if list or single value
+
+          # METADATA ARRAY
+          if sub.send(metadata).kind_of?(Array)
+            if sub.send(metadata).any?
+              if metadata.eql?("naturalLanguage")
+                # Special treatment for naturalLanguage: we want the flags in a bootstrap box
+                # UK is gb: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+                lang_codes = []
+
+                sub.send(metadata).each do |lang|
+                  if (lang.to_s.eql?("en") || lang.to_s.eql?("eng") || lang.to_s.eql?("http://lexvo.org/id/iso639-3/eng"))
+                    # We consider en and eng as english
+                    lang_codes << "gb"
+                  elsif lang.to_s.start_with?("http://lexvo.org")
+                    lang_codes << $LEXVO_TO_FLAG[lang]
+                  else
+                    lang_codes << lang
+                  end
+                end
+
+                html << content_tag(:tr) do
+                  concat(content_tag(:td, "Natural Language", " "))
+                  # Display naturalLanguage as flag
+                  concat(content_tag(:td) do
+                    concat(content_tag(:ul, {:class => "f32"}) do
+                      lang_codes.each do |lang_code|
+                        if lang_code.length == 2
+                          concat(content_tag(:li, "", {:class => "flag #{lang_code}", :style => "margin-right: 0.5em;"}))
+                        else
+                          concat(content_tag(:li, lang_code))
+                        end
+                      end
+                    end)
+                  end)
+                end
+
+              else
+                html << content_tag(:tr) do
+                  if label.nil?
+                    concat(content_tag(:td, metadata.gsub(/(?=[A-Z])/, " ")))
+                  else
+                    concat(content_tag(:td, label))
+                  end
+
+                  metadata_array = []
+                  if metadata.eql?("creators")
+                    # LOGGER.debug(" ontologies_helper.rb -> additional_metadata: sub=#{sub} sub.send(metadata)=#{sub.send(metadata)}\n sub=#{sub} sub.send(metadata)=#{sub.send("contact")}")
+                    html_creators = sub.send(metadata).map do |c| 
+                      html_creator = content_tag(:b,  raw(c.creatorName))
+                      html_id =c.creatorIdentifiers.map{|ci| [ci.schemeURI, ci.nameIdentifier].join("/").sub("//", "/")}.join(", ")
+                      html_aff = c.affiliations.map{|a| a.affiliationIdentifier}.join(", ")                 
+                      html_id = (html_id.nil? || html_id.empty?) ? "" : content_tag(:i,  raw("identifiers: ")) + raw(html_id)
+                      html_aff = (html_aff.nil? || html_aff.empty?) ? "" : content_tag(:i, raw("affiliations: ")) + raw(html_aff)
+                      html_creator += raw(" (" + [html_id, html_aff].join(", ") + ")")
+                      html_creator.sub("(, )", "").sub(", )", ")").sub("(,", "(")
+                    end.join(";<br/>")
+
+                    # concat(content_tag(:td, raw(sub.send(metadata).map {|c| [c.givenName, c.familyName].join(" ") if c.member?(:givenName) && c.member?(:familyName)}.join(",<br/>"))))
+                    concat(content_tag(:td, raw(html_creators)))
+                  elsif metadata.eql?("titles")
+                    html_titles = sub.send(metadata).map do |t| 
+                      html_title = content_tag(:b, raw(t.title))
+                      html_title += " (type: " +raw(t.titleType) + ")" if (!t.titleType.nil? && !t.titleType.empty?)
+                    end.join(",<br/>")
+
+                    concat(content_tag(:td, raw(html_titles)))
+                  else
+                    sub.send(metadata).each do |metadata_value|
+                      if metadata_value.to_s.start_with?("#{$REST_URL}/ontologies/")
+                        # For URI that links to our ontologies we display a button with only the acronym. And redirect to the UI
+                        # Warning! Redirection is done by removing "data." from the REST_URL. So might not work perfectly everywhere
+                        if metadata_value.to_s.split("/").length < 6
+                          # for ontologies/ACRONYM we redirect to the UI url
+                          metadata_array.push("<a href=\"#{metadata_value.to_s.sub("data.", "")}\" class=\"btn btn-primary\" target=\"_blank\">#{metadata_value.to_s.split("/")[4..-1].join("/")}</a>")
+                        else
+                          metadata_array.push("<a href=\"#{metadata_value.to_s}\" class=\"btn btn-primary\" target=\"_blank\">#{metadata_value.to_s.split("/")[4..-1].join("/")}</a>")
+                        end
+
+                      elsif metadata_value.to_s =~ /\A#{URI::regexp(['http', 'https'])}\z/
+                        # Don't create a link if it not an URI
+                        metadata_array.push("<a href=\"#{metadata_value.to_s}\" target=\"_blank\">#{metadata_value.to_s}</a>")
+                      else
+                        metadata_array.push(metadata_value)
+                      end
+                    end
+                    concat(content_tag(:td, raw(metadata_array.join(", "))))
+                  end                  
+                end
+              end
+            end
+          else
+
+            # SINGLE METADATA
+            if !sub.send(metadata).nil?
+              html << content_tag(:tr) do
+                if label.nil?
+                  concat(content_tag(:td, metadata.gsub(/(?=[A-Z])/, " ")))
+                else
+                  concat(content_tag(:td, label))
+                end
+                if (metadata.to_s.eql?("hasLicense"))
+                  if (sub.send(metadata).to_s.start_with?("http://creativecommons.org/licenses") || sub.send(metadata).start_with?("https://creativecommons.org/licenses"))
+                    concat(content_tag(:td) do
+                      concat(content_tag(:a, {:rel => "license", :alt=>"Creative Commons License",
+                                              :href => sub.send(metadata), :target => "_blank", :style=>"border-width:0", :title => sub.send(metadata),
+                                              :src=>"https://i.creativecommons.org/l/by/4.0/88x31.png"}) do
+
+                        concat(content_tag(:img, "",{:rel => "license", :alt=>"Creative Commons License", :title => sub.send(metadata),
+                                                     :style=>"border-width:0", :src=>"https://i.creativecommons.org/l/by/4.0/88x31.png"}))
+                      end)
+                    end)
+
+                  elsif (sub.send(metadata).to_s.start_with?("http://opensource.org/licenses") || sub.send(metadata).start_with?("https://opensource.org/licenses"))
+                    concat(content_tag(:td) do
+                      concat(content_tag(:a, {:rel => "license", :alt=>"Open Source License",
+                                              :href => sub.send(metadata), :title => sub.send(metadata),:target => "_blank", :style=>"border-width:0;",
+                                              :src=>"https://opensource.org/files/osi_logo_bold_100X133_90ppi.png"}) do
+
+                        concat(content_tag(:img, "",{:rel => "license", :alt=>"Open Source License", :title => sub.send(metadata),
+                                                     :style=>"height: 80px; border-width:0;", :src=>"https://opensource.org/files/osi_logo_bold_100X133_90ppi.png"}))
+                      end)
+                    end)
+
+                  else
+                    concat(content_tag(:td) do
+                      concat(content_tag(:a, sub.send(metadata), {:rel => "license", :href => sub.send(metadata), :target => "_blank"}))
+                    end)
+                  end
+
+                elsif (metadata.to_s.eql?("endpoint") && (sub.send(metadata).start_with?("http://sparql.") || sub.send(metadata).start_with?("https://sparql.")))
+                  concat(content_tag(:td) do
+                    concat(content_tag(:a, {:href => sub.send(metadata), :title => sub.send(metadata),
+                                            :target => "_blank", :style=>"border-width:0;"}) do
+
+                      concat(content_tag(:img, "",{:title => sub.send(metadata),
+                                                   :style=>"height: 40px; border-width:0;", :src=>"/images/sparql_logo.png"}))
+                    end)
+                  end)
+
+                elsif sub.send(metadata).to_s.start_with?("#{$REST_URL}/ontologies/")
+                  # For URI that links to our ontologies we display a button with only the acronym. And redirect to the UI
+                  # Warning! Redirection is done by removing "data." from the REST_URL. So might not work perfectly everywhere
+                  if sub.send(metadata).to_s.split("/").length < 6
+                    # for ontologies/ACRONYM we redirect to the UI url
+                    concat(content_tag(:td) do
+                      concat(content_tag(:a, sub.send(metadata).to_s.split("/")[4..-1].join("/"), {:class=>"btn btn-primary",
+                                                                                                   :href => sub.send(metadata).sub("data.", ""), :target => "_blank", :title => sub.send(metadata)}))
+                    end)
+                  else
+                    concat(content_tag(:td) do
+                      concat(content_tag(:a, sub.send(metadata).to_s.split("/")[4..-1].join("/"), {:class=>"btn btn-primary",
+                                                                                                   :href => sub.send(metadata), :target => "_blank", :title => sub.send(metadata)}))
+                    end)
+                  end
+
+                else
+                  if sub.send(metadata).to_s =~ /\A#{URI::regexp(['http', 'https'])}\z/
+                    # Don't create a link if it not an URI
+                    concat(content_tag(:td, raw("<a href=\"#{sub.send(metadata).to_s}\" target=\"_blank\">#{sub.send(metadata).to_s}</a>")))
+                  else
+                    concat(content_tag(:td, raw(sub.send(metadata).to_s)))
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    rescue => e
+      LOG.add :debug, "Unable to retrieve additional ontology metadata"
+      LOG.add :debug, "error: #{e}"
+      LOG.add :debug, "error message: #{e.message}"
+    end
+    html.join("")
+  end
+  # Ecoportal - END
 
   def count_links(ont_acronym, page_name='summary', count=0)
     ont_url = "/ontologies/#{ont_acronym}"

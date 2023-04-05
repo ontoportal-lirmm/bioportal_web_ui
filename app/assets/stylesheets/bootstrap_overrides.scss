@@ -1,63 +1,251 @@
 /* Sticky footer styles from Bootstrap: 
-   https://getbootstrap.com/docs/4.1/examples/sticky-footer/sticky-footer.css
+   http://getbootstrap.com/examples/sticky-footer/sticky-footer.css
 -------------------------------------------------- */
+body {
+  font-family: "Titillium Web";
+  font-size: 14px;
+}
+
+a {
+  color:#0f4e8a;
+}
+
+a:hover, a:focus {
+  color:#0f4e8a;
+}
+
 html {
   position: relative;
   min-height: 100%;
 }
 body {
-  margin-bottom: body_margin_bottom(); /* Margin bottom by footer height */
+  /* Margin bottom by footer height */
+  margin-bottom: body_margin_bottom();
 }
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 300px; /* Set the fixed height of the footer here */
-  color: #757575;
-  background-color: #ccc;
+  /* Set the fixed height of the footer here */
+  height: body_margin_bottom();
+  color: #fff;
+  background-color: #0f4e8a;
+  padding: 30px 0;
+
+  a {
+    color: #fff !important;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  h6 {
+    font-size: 24px;
+    font-weight: 600;
+  }
+}
+
+/* Top navigation bar
+-------------------------------------------------- */
+.navbar-inverse {
+  background-color: #0f4e8a;
+  border: 0;
+  box-shadow: 0 3px 5px #999;
+}
+
+.navbar-brand {
+  height: 80px;
+  padding: 15px 0;
+}
+
+.img_logo {
+  height: 40px;
+  margin: 6px;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+  font-size: 150%;
+  height: 80px;
+  line-height: 80px;
+  padding: 0 15px 15px !important;
+  color:#fff;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+  color:#fff;
+}
+
+.navbar-inverse .navbar-nav>.show>a,
+.navbar-inverse .navbar-nav>.show>a:hover,
+.navbar-inverse .navbar-nav>.show>a:focus {
+  background-color: #0f4e8a;
+}
+
+.navbar .navbar>li>a{
+  color:#fff;
+}
+
+.navbar:hover .navbar>li>a:hover{  
+  color:#fff;
+}
+
+.navbar-nav>li>.dropdown-menu {
+  margin-top: 0;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  color: #fff;
+  background-color: #0f4e8a;
+}
+
+.navbar {
+  padding: 0px;
 }
 
 /* Footer 
 -------------------------------------------------- */
-footer.footer h6 {
-  font-weight: bold;
+.social-icons li {
+  margin-right: 2px !important;
 }
 
-footer.footer .list-inline-item:not(:last-child) {
-  margin-right: 1rem;
+.social-icons li a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background-color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.social-icons a:hover {
+  opacity: 0.9;
+}
+
+.social-icons a i {
+  font-size: 20px;
+  color: #0f4e8a;
 }
 
 @media only screen and (max-width: 992px) {
   body {
-    margin-bottom: 350px; 
+    margin-bottom: 375px; 
   }  
   .footer {
-    height: 350px;
+    height: 375px;
   }
 }
 
 @media only screen and (max-width: 768px) {
   body {
-    margin-bottom: 560px;
+    margin-bottom: 650px;
   }
   .footer {
-    height: 560px;
-  }
-}
-
-@media only screen and (max-width: 576px) {
-  body {
-    margin-bottom: 625px;
-  }
-  .footer {
-    height: 625px;
+    height: 650px;
   }
 }
 
 /* Customized styles for appliance mode
 -------------------------------------------------- */
 .footer-appliance {
-  height: 60px; /* Set the fixed height of the footer here */
+  height: body_margin_bottom();
   background-color: #f5f5f5;
   padding: 20px 0;
+}
+
+/* Buttons 
+-------------------------------------------------- */
+
+.btn-primary {
+  color: #fff;
+  background-color: #0f4e8a;
+  border: none;
+  border-radius: 0px;
+}
+
+
+.btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
+.btn-primary:active:hover, .btn-primary:active:focus, .btn-primary:active.focus, .btn-primary.active:hover, .btn-primary.active:focus,
+.btn-primary.active.focus, .open>.btn-primary.dropdown-toggle:hover, .show>.btn-primary.dropdown-toggle, .show>.btn-primary.dropdown-toggle:focus,
+.show>.btn-primary.dropdown-toggle.focus, .btn-primary:focus, .btn-primary.focus, .btn-primary:hover,
+.btn-primary:active {
+  color: #fff;
+  background-color: #0f4e8a;
+  border: none;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.btn-info {
+  color: #fff;
+  background-color: #0f4e8a;
+  border: none;
+  border-radius: 0px;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.btn-info:not(:disabled):not(.disabled):active, .btn-info:not(:disabled):not(.disabled).active,
+.btn-info:active:hover, .btn-info:active:focus, .btn-info:active.focus, .btn-info.active:hover, .btn-info.active:focus,
+.btn-info.active.focus,.open>.btn-info.dropdown-toggle:hover, .show>.btn-info.dropdown-toggle, .show>.btn-info.dropdown-toggle:focus,
+.show>.btn-info.dropdown-toggle.focus, .btn-info:focus, .btn-info.focus, .btn-info:hover,
+.btn-info:active {
+  color: #fff;
+  background-color: #0f4e8a;
+  border: none;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Form controls
+-------------------------------------------------- */
+.form-control {
+  font-size: 14px;
+}
+
+/* Cards
+-------------------------------------------------- */
+.card-header {
+  font-weight: bold;
+  color: #0f4e8a;
+}
+
+/* Titles
+-------------------------------------------------- */
+
+.h1, .h2, .h3, .h4, .h5, .h6,
+h1, h2, h3, h4, h5, h6 {
+  color: #0f4e8a;
+}
+
+.h1, h1 {
+  font-weight: bold;
+  font-size: 36px;
+}
+
+.h2, h2 {
+  font-weight: bold;
+  font-size: 21px;
+}
+
+.h2, h2 {
+  font-weight: bold;
+  font-size: 21px;
+}
+
+footer h6 {
+  color: inherit;
+}
+
+/* Ordinary form buttons styled as primary buttons
+-------------------------------------------------- */
+
+input[type=submit], input[type=button] {
+  @extend .btn;
+  @extend .btn-primary;
 }

@@ -1,0 +1,20 @@
+- require 'cgi'
+- # Check to see if we have reviews, if not then try to get them
+- if @reviews.nil? && @ontology
+  - @reviews_link = "/ontologies/#{@ontology.acronym}/reviews/"
+
+.reviews_list_container
+  .review_toolbar
+    - if session[:user].nil?
+      = link_to "Add review", login_index_path, class: "link_button", data: { ontology: "#{@ontology.id}" }
+    - else
+      = link_to "Add review", "javascript:void(0);", class: "add_review link_button", style: "font-size: .9em", data: { ontology: "#{@ontology.id}" }
+    %img{src: asset_path("jquery.simple.tree/spinner.gif"), class: "review_toolbar_spinner", style: "display:none"}
+  %div.create_review_form{style: "display: none"}
+
+  .reviews_list{:style => "clear: both; margin: 2.0em 0em 0em"}
+    - @reviews.each do |review|
+      - @review = review
+      = render :partial => 'reviews/review'
+    .reviews_list_empty_msg
+      = "There are currently no reviews"

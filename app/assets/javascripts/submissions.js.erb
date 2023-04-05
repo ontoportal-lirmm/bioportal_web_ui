@@ -42,7 +42,7 @@ jQuery(document).ready(function(){
 
   jQuery("#contacts").on("click", ".add-contact", addContact);
   jQuery("#contacts").on("click", ".remove-contact", removeContact);
-
+  
   jQuery("#ontology_submission_form").validate({
     highlight: function(element) {
       $(element).closest('.form-group').addClass('has-error');
@@ -61,6 +61,7 @@ jQuery(document).ready(function(){
     }  
   });
 });
+
 
 function addContact(event) {
   event.preventDefault();
@@ -87,9 +88,11 @@ function addContact(event) {
     var name = input.getAttribute("name").replace(/0/g, index);
     input.setAttribute("name", name);
     
-    input.setAttribute("value", "");
+    // input.setAttribute("value", "");
 
-    input.removeAttribute("required");
+    //input.removeAttribute("required");
+
+    input.value = "";
   }
 
   contacts[index - 1].insertAdjacentElement('afterend', newContact);
@@ -108,7 +111,7 @@ function removeContact(event) {
 
   document.querySelector("#contacts").removeChild(contact);
 }
-
+  
 function toggleOntologyFormatOptions(selectedFormat) {
   var advancedOWLOptionsButton = jQuery("#collapseOWLOptions");
   var skosHelpText = jQuery("#helpSkosFormat");
