@@ -868,6 +868,74 @@ jQuery(".admin.index").ready(function() {
 });
 
 
+
+  //==============================================================
+  //      PROCESS SCHEDULING
+  //==============================================================
+
+  jQuery("#process-scheduling .job-schedule").each(function() { renderSchedule(this) });
+
+  jQuery(".show-scheduler-log").on("click", function(event) {
+    let jobName = event.target.dataset.jobName;
+
+    if (jobName) {
+      window.open(
+          BP_CONFIG.rest_url + "/admin/scheduled_jobs/" + encodeURIComponent(jobName) + "/log?apikey=" + BP_CONFIG.apikey + "&userapikey=" + BP_CONFIG.userapikey,
+          "_blank");
+    } else {
+      window.open(
+          BP_CONFIG.rest_url + "/admin/scheduled_jobs/log?apikey=" + BP_CONFIG.apikey + "&userapikey=" + BP_CONFIG.userapikey,
+          "_blank");
+    }
+  })
+
+});
+
+function renderSchedule(scheduleElement) {
+  let enabled = scheduleElement.dataset.enabled;
+  let schedulerType = scheduleElement.dataset.schedulerType;
+  let schedule = scheduleElement.dataset.schedule;
+
+  if (enabled != "true")
+    return;
+
+  if (schedule == "")
+    return;
+
+  let s = "";
+
+  if (schedulerType == "every") {
+    let unit = null;
+    if (schedule.endsWith("m")) {
+      schedule = schedule.substr(0, schedule.length - 1);
+      unit = "minute";
+    } else if(schedule.endsWith("s")) {
+      schedule = schedule.substr(0, schedule.length - 1);
+      unit = "second";
+    }
+
+    schedule = schedule.trim();
+
+    if (schedule.match(/^[1-9]\d*$/)) { // schedule number
+      if (!unit) {
+        unit = "second"; // default to unit second
+      }
+      s = "Every " + schedule + " " + unit + (Number.parseInt(schedule) != 1 ? "s" : "");
+    } else {
+      s = "Every " + schedule + (unit ? " " + unit : "");
+    }
+  } else {
+    try {
+      s = window.cronstrue.toString(schedule);
+    } catch(e) {
+      console.log("An error occurred when verbalizing the following cron: " + schedule, e);
+    }
+  }
+
+  if (s) {
+    scheduleElement.textContent = s;
+  }
+}
 /* users part */
 function populateUserRows(data) {
     let users = data['users'];
