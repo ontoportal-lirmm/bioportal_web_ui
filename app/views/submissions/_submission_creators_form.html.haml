@@ -1,0 +1,148 @@
+%div.form-group.row
+  %label.col-sm-2.col-form-label{for: "Creators"}
+    Creator(s)
+    %span.asterik<> *
+  .col-sm-10
+    #creators
+      - unless @submission.creators && @submission.creators.size > 0
+        - @submission.creators = []
+        - @submission.creators << empty_creator_object()
+
+      - @submission.creators.each_with_index do |creator, i|
+        .row.row-creator{id: "creator-#{i}"}
+          / CREATOR DATA
+          .col-sm-12
+            / RADIO BUTTON TO CHOOSE BETWEEN PERSONAL or ORGANIZATIONAL CREATOR
+            .row.creatorType
+              / <input type="hidden" id="submission_creators[0][nameType]" name="submission[creators[0][nameType]]" value="Personal">
+              .col-sm-4.radio-xs
+                %label.lbl-creatorType
+                  - checked = creator.nameType == "Personal"
+                  %input{id: "radio-creatorType-Personal-#{i}", checked: checked, name: "submission[creators[#{i}][nameType]]", onclick: "changeCreatorType(#{i})", type: "radio", value: "Personal"}/
+                  Person
+              .col-sm-4.radio-xs
+                %label.lbl-creatorType
+                  - checked = creator.nameType == "Organizational"
+                  %input{id: "radio-creatorType-Organizational-#{i}", checked: checked, name: "submission[creators[#{i}][nameType]]", onclick: "changeCreatorType(#{i})", type: "radio", value: "Organizational"}/
+                  Organization
+              / BUTTON REMOVE CREATOR ROW
+              .col-sm-offset-1.col-sm-3
+                %button.btn.btn-primary.btn-sm{id: "button-remove-creator-#{i}", access: "false", onclick: "removeCreator('creator-#{i}')", type: "button"}
+                  Remove This Creator
+                  %i.fas.fa-trash-alt
+            / CREATORS IDENTIFIER
+            #creatorIdentifiers.sub-section
+              %div{id: "creatorIdentifiers-#{i}"}
+                - if creator.creatorIdentifiers && creator.creatorIdentifiers.size > 0
+                  - creator.creatorIdentifiers.each_with_index do |creatorIdentifier, j|
+                    .row.row-creatorIdentifier{id: "creatorIdentifier-#{i}_#{j}"}
+                      .col-sm-11
+                        .row.nested-row-values
+                          .col-sm-2
+                            %label.float-right.lb-sm.col-form-label{for: "submission_creators[#{i}][creatorIdentifiers][#{j}][nameIdentifierScheme]"}
+                              Scheme:
+                              %span.asterik<> *
+                          .col-sm-4
+                            %input.form-control.input-sm.w100perc{id: "submission_creators[#{i}][creatorIdentifiers][#{j}][nameIdentifierScheme]", name: "submission[creators[#{i}][creatorIdentifiers][#{j}][nameIdentifierScheme]]", type: "text", value: creatorIdentifier.nameIdentifierScheme, required: true}/
+                            %small.form-text.text-muted Ex.: ISNI, ORCID
+                          .col-sm-2
+                            %label.float-right.lb-sm.col-form-label{for: "submission_creators[#{i}][creatorIdentifiers][#{j}][schemeURI]"}
+                              Scheme URI:
+                              %span.asterik<> *
+                          .col-sm-4
+                            %input.form-control.input-sm.w100perc{id: "submission_creators[#{i}][creatorIdentifiers][#{j}][schemeURI]", name: "submission[creators[#{i}][creatorIdentifiers][#{j}][schemeURI]]", type: "text", value: creatorIdentifier.schemeURI, required: true}/
+                            %small.form-text.text-muted Ex.: http://isni.org/isni/, http://orcid.org/
+                        .row.nested-row-values
+                          .col-sm-2
+                            %label.float-right.lb-sm.col-form-label{for: "submission_creators[#{i}][creatorIdentifiers][#{j}][nameIdentifier]"}
+                              Name Identifier:
+                              %span.asterik<> *
+                          .col-sm-10
+                            %input.form-control.input-sm.w100perc{id: "submission_creators[#{i}][creatorIdentifiers][#{j}][nameIdentifier]", name: "submission[creators[#{i}][creatorIdentifiers][#{j}][nameIdentifier]]", type: "text", value: creatorIdentifier.nameIdentifier, required: true}/
+                            %small.form-text.text-muted Ex. ISNI: 0000000134596520 or Ex. ORCID: 0000-0001-5393-1421
+                      / BUTTON REMOVE CREATOR IDENTIFIER ROW
+                      .col-sm-1
+                        %button.btn.btn-default.btn-sm.btn-remove-row{access: "false", id: "button-remove-creatorIdentifier-#{i}_#{j}", onclick: "removeCreatorIdentifier('creatorIdentifier-#{i}_#{j}')", type: "button"}
+                          %i.fas.fa-trash-alt
+
+                    / here will be added the creator creatorIdentifiers
+
+              .row.row-creatorIdentifier-buttons
+                .col-sm-11
+                  %button#button-add-creatorIdentifier.btn.btn-primary{access: "false", onclick: "addCreatorIdentifier(#{i})", type: "button"}
+                    %span.fas.fa-plus{"aria-hidden" => "true"}
+                    Add Creator Identifier
+            / PERSON
+            - readonly = false
+            - require_personal_fields = false
+            - if creator.nameType == "Personal"
+              - readonly = 'true'
+              - require_personal_fields = 'required'
+            .row.nested-row-values{id: "div-creator-personal-field-#{i}", style: !require_personal_fields ? "display:none" : nil}
+              .col-sm-2
+                %label.float-right.col-form-label{for: "submission_creators[#{i}][givenName]"}
+                  First Name:
+                  %span.asterik<> *
+              .col-sm-4
+                %input.form-control.input-sm.w100perc{id: "submission_creators[#{i}][givenName]", name: "submission[creators[#{i}][givenName]]", oninput: "updateCreatorName(#{i})", type: "text", value: creator.givenName, required: require_personal_fields}/
+              .col-sm-2
+                %label.float-right.col-form-label{for: "submission_creators[#{i}][familyName]"}
+                  Surname:
+                  %span.asterik<> *
+              .col-sm-4
+                %input.form-control.input-sm.w100perc{id: "submission_creators[#{i}][familyName]", name: "submission[creators[#{i}][familyName]]", oninput: "updateCreatorName(#{i})", type: "text", value: creator.familyName, required: require_personal_fields}/
+            / ORGANIZATION
+            .row.nested-row-values
+              .col-sm-2
+                %label.float-right.col-form-label{for: "submission_creators[#{i}][creatorName]"}
+                  Name:
+                  %span.asterik<> *
+              .col-sm-10
+                %input.form-control.input-sm.w100perc{readonly: readonly, id: "submission_creators[#{i}][creatorName]", name: "submission[creators[#{i}][creatorName]]", type: "text", value: creator.creatorName, required: true}/
+            / AFFILIATION
+            #affiliations.sub-section
+              %div{id: "creatorAffiliations-#{i}"}
+                - if creator.affiliations && creator.affiliations.size > 0
+                  - creator.affiliations.each_with_index do |affiliation, j|
+                    .row.row-creatorAffiliation{id: "creatorAffiliation-#{i}_#{j}"}
+                      .col-sm-11
+                        .row.nested-row-values
+                          .col-sm-2
+                            %label.float-right.lb-sm.col-form-label{for: "submission_creators[#{i}][affiliations][#{j}][affiliationIdentifierScheme]"}
+                              Scheme:
+                              %span.asterik<> *
+                          .col-sm-4
+                            %input.form-control.input-sm.w100perc{id: "submission_creators[#{i}][affiliations][#{j}][affiliationIdentifierScheme]", name: "submission[creators[#{i}][affiliations][#{j}][affiliationIdentifierScheme]]", type: "text", value: affiliation.affiliationIdentifierScheme, required: true}/
+                            %small.form-text.text-muted Ex. ROR
+                          .col-sm-2
+                            %label.float-right.lb-sm.col-form-label{for: "submission_creators[#{i}][affiliations][#{j}][affiliationIdentifier]"}
+                              Affiliation Ident. URI:
+                              %span.asterik<> *
+                          .col-sm-4
+                            %input.form-control.input-sm.w100perc{id: "submission_creators[#{i}][affiliations][#{j}][affiliationIdentifier]", name: "submission[creators[#{i}][affiliations][#{j}][affiliationIdentifier]]", type: "text", value: affiliation.affiliationIdentifier, required: true}/
+                            %small.form-text.text-muted Ex. https://ror.org/04wxnsj81
+                        .row.nested-row-values
+                          .col-sm-2
+                            %label.float-right.lb-sm.col-form-label{for: "submission_creators[#{i}][affiliations][#{j}][affiliation]"}
+                              Affiliation Name:
+                              %span.asterik<> *
+                          .col-sm-10
+                            %input.form-control.input-sm.w100perc{id: "submission_creators[#{i}][affiliations][#{j}][affiliation]", name: "submission[creators[#{i}][affiliations][#{j}][affiliation]]", type: "text", value: affiliation.affiliation, required: true}/
+                            %small.form-text.text-muted Enter the name of the formal institution to which the creator belongs, e.g. LifeWatch ERIC, DataCite, etc.
+                      / BUTTON REMOVE CREATOR AFFILIATION ROW
+                      .col-sm-1
+                        %button.btn.btn-default.btn-sm.btn-remove-row{access: "false", id: "button-remove-creatorAffiliation-#{i}_#{j}", onclick: "removeCreatorAffiliation('creatorAffiliation-#{i}_#{j}')", type: "button"}
+                          %i.fas.fa-trash-alt
+
+                  / here will be added the creator affiliations
+              .row.row-creatorAffiliation-buttons
+                .col-sm-11
+                  %button#button-add-creatorAffiliation.btn.btn-primary{onclick: "addCreatorAffiliation(#{i})", type: "button"}
+                    %span.fas.fa-plus{"aria-hidden" => "true"}
+                    Add Affiliation
+        / here will be added the creators
+    .row.row-creator-add-button
+      .col-sm-5
+        %button#button-add-creator.btn.btn-primary{access: "false", name: "button-add-creator", type: "button"}
+          %span.fas.fa-plus{"aria-hidden" => "true"}
+          Creator

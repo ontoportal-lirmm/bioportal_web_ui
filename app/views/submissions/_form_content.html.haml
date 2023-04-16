@@ -32,6 +32,9 @@
       = attribute_form_group_container('titles', required: true) do
         = render partial: 'submissions/submission_titles_form'
 
+      = attribute_form_group_container('creators', required: true) do
+        = render partial: 'submissions/submission_creators_form'
+
     %div#key-properties-card.mt-4
       = metadata_section('key-properties', 'Key properties', collapsed: false) do
         = form_group_attribute("URI")
