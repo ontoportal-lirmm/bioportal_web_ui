@@ -36,8 +36,4 @@
 //= require select2 
 //= require jquery.readyselector
 //= require trumbowyg
-//= require jquery.outerHtml.min
 //= require sharer.min
-//= require tooltipster.bundle.min
-//= require jsonld
-//= require cronstrue.min
