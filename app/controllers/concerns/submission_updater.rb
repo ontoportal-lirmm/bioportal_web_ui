@@ -74,10 +74,15 @@ module SubmissionUpdater
       :isRemote,
       :pullLocation,
       :filePath,
-      { contact: [:name, :email] },
+      { contact: %i[name email] },
       :homepage,
       :documentation,
-      :publication
+      :publication,
+      { creators: [:nameType, :givenName, :familyName, :creatorName,
+                   { creatorIdentifiers: %i[nameIdentifierScheme schemeURI nameIdentifier] },
+                   { affiliations: %i[affiliationIdentifierScheme affiliationIdentifier affiliation] }] },
+      { titles: %i[title lang titleType]},
+      :publisher, :publicationYear, :resourceType, :resourceTypeGeneral
     ]
 
     @metadata.each do |m|
