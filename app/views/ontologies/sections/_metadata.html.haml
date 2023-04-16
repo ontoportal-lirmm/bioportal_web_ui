@@ -94,7 +94,14 @@
                 %dd= view_decorator.description
 
     %div.right-hand-content
-
+      -# Social share pane
+      %section.ont-metadata-card.ont-socialshare-card
+        %div.ont-section-toolbar
+          %header.pb-2.font-weight-bold Share on socials
+          = social_share_link(@ontology, "Facebook")
+          = social_share_link(@ontology, "Twitter")
+          = social_share_link(@ontology, "LinkedIn")
+        %div
       -# Misc links pane
       %section.ont-metadata-card.ont-links-card
         %div.ont-section-toolbar
