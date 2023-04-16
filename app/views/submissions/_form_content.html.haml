@@ -16,6 +16,8 @@
       = attribute_form_group_container('location', required: true) do
         = render partial: 'submissions/submission_location_form'
 
+      = attribute_form_group_container('resourceType', required: true) do
+        = render partial: 'submissions/submission_resource_type_form'
     %div#key-properties-card.mt-4
       = metadata_section('key-properties', 'Key properties', collapsed: false) do
         = form_group_attribute("URI")
