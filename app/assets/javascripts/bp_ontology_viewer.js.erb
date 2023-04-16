@@ -1,0 +1,47 @@
+/**
+ * Generate the file with metadata to be downloaded, given the file content
+ * @param content
+ * @param fileExtension
+ */
+function generateDownloadFile(content, fileExtension) {
+  var element = document.createElement('a');
+  // TODO: change MIME type?
+  element.setAttribute('href', 'data:application/rdf+json;charset=utf-8,' + encodeURIComponent(content));
+  element.setAttribute('download', jQuery(document).data().bp.ontology.acronym + "_metadata." + fileExtension);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+}
+
+
+
+jQuery("#getMetadataDataciteJsonBtn").live("click", function(){
+  downloadMetadataJSON("datacite-json");
+});
+
+jQuery("#getMetadataEcoportalJsonBtn").live("click", function(){
+  downloadMetadataJSON("ecoportal-json");
+});
+
+
+function downloadMetadataJSON(type) {
+  let URL = jQuery(document).data().bp.config.rest_url + "/ontologies/" + jQuery(document).data().bp.ontology.acronym + "/latest_submission/$1?apikey=" + jQuery(document).data().bp.config.apikey;
+  switch(type) {
+    case 'datacite-json':
+      URL = URL.replace('$1', 'datacite_metadata_json');
+      break;
+    case 'ecoportal-json':
+      URL = URL.replace('$1', 'ecoportal_metadata_json');
+      break;
+    default:
+      return
+  }
+  
+  jQuery.get(
+    URL,
+    function (json) {
+      generateDownloadFile(json, "json");
+    });
+}
