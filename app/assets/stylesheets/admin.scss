@@ -139,3 +139,23 @@ table.dataTable tbody tr.selected {
     margin-right: 8px;
   }
 }
+
+#process-scheduling {
+
+  .site-admin-page-header {
+    justify-content: space-between;
+
+    .job-title {
+      text-transform: uppercase;
+    }
+  }
+
+  .site-admin-page-section {
+    @extend .mb-5
+  }
+
+  .job-schedule {
+    font-style: italic;
+    cursor: help;
+  }
+}
