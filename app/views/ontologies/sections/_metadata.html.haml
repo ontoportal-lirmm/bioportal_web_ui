@@ -101,6 +101,8 @@
           = social_share_link(@ontology, "Facebook")
           = social_share_link(@ontology, "Twitter")
           = social_share_link(@ontology, "LinkedIn")
+          :javascript
+             window.Sharer.init()
         %div
       -# Misc links pane
       %section.ont-metadata-card.ont-links-card
