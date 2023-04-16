@@ -37,6 +37,16 @@ module SubmissionUpdater
       new_submission_hash[:contact].delete_if { |c| c[:name].empty? || c[:email].empty? }
     end
 
+    new_submission_hash[:titles] = new_submission_hash[:titles].values unless new_submission_hash[:titles].nil?
+    unless new_submission_hash[:creators].nil?
+      new_submission_hash[:creators] = new_submission_hash[:creators].values
+
+      new_submission_hash[:creators].each do |c|
+        c[:creatorIdentifiers] = c[:creatorIdentifiers].values unless c[:creatorIdentifiers].nil?
+        c[:affiliations] = c[:affiliations].values  unless c[:affiliations].nil?
+      end
+    end
+
     # Convert metadata that needs to be integer to int
     @metadata.map do |hash|
       if hash["enforce"].include?("integer")
