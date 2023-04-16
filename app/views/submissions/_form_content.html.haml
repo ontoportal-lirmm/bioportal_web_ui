@@ -26,6 +26,9 @@
             %span.asterik<> *
           %div.col-sm-10
             = number_field :submission, :publicationYear, value: @submission.publicationYear, required: true, class: "form-control"
+
+      = attribute_text_field_container('publisher', required: true)
+
     %div#key-properties-card.mt-4
       = metadata_section('key-properties', 'Key properties', collapsed: false) do
         = form_group_attribute("URI")
