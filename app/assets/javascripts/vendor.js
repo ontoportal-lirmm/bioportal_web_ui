@@ -37,3 +37,4 @@
 //= require jquery.readyselector
 //= require trumbowyg
 
+//= require cronstrue.min
