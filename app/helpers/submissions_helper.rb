@@ -510,5 +510,12 @@ module SubmissionsHelper
     end
     [metadata_values, select_values]
   end
-
+  def empty_creator_object
+    OpenStruct.new(
+      :nameType => "",
+      :givenName => "",
+      :familyName => "",
+      :creatorName => ""
+    )
+  end
 end
