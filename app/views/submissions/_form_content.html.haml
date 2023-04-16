@@ -18,6 +18,14 @@
 
       = attribute_form_group_container('resourceType', required: true) do
         = render partial: 'submissions/submission_resource_type_form'
+
+      = attribute_form_group_container('publicationYear', required: true) do
+        .div.form-group.row
+          %label.col-sm-2.col-form-label{for: "submission_publicationYear"}
+            Publication Year
+            %span.asterik<> *
+          %div.col-sm-10
+            = number_field :submission, :publicationYear, value: @submission.publicationYear, required: true, class: "form-control"
     %div#key-properties-card.mt-4
       = metadata_section('key-properties', 'Key properties', collapsed: false) do
         = form_group_attribute("URI")
