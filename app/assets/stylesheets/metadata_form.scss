@@ -1,0 +1,200 @@
+/************** 
+ |   WIDTH    |
+***************/
+
+.w900px {
+  width: 900px;
+}
+
+.w80perc {
+  width: 80%;
+}
+
+.w100perc {
+  width: 100%;
+}
+
+
+/************** 
+|   MARGIN    |
+***************/
+
+.margin-top-10px {
+  margin-top: 10px;
+}
+
+.float-right {
+  float: right;
+}
+
+.field-label {
+  background: #f2f2f2;
+}
+
+.md_label {
+  font-size: 12px;
+  text-align: center;
+}
+
+
+.cmd_column {
+  /* margin-top: 50%;
+  height: 100%; */
+  display: table-cell;
+  float: none;
+}
+
+
+/**************************/
+
+.submit-row{
+  border: 1px solid #C1DAD7;
+  padding:20px;
+}
+
+.field-row {
+  /* border-top: 1px solid #ccc; */
+  border-top: 1px solid #C1DAD7;
+  border-right: 1px solid #C1DAD7;
+  border-left: 1px solid #C1DAD7;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.row-btn-submit {
+  padding: 10px 0;
+  border-top: 1px solid #C1DAD7;
+}
+
+.field-label-col {
+  padding:10px;
+  margin-bottom: -9999px;
+  padding-bottom: 9999px; 
+  background: #f2f2f2;  
+}
+
+.field-value-col {
+  padding:10px;
+}
+
+.nested-row-values {
+  padding: 2px 0  
+}
+
+
+/* disable all sons: use $("#mydiv").addClass("all-disabled"); */
+.all-disabled {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.caption {
+  margin-top: 1px;
+  font-size: 11px;
+  /* color:#555; */
+}
+
+.separtor1{
+  border-top: 1px solid #f2f2f2;
+  margin: 5px;
+}
+
+.formControlErrorContainer {
+  @extend .w100perc;
+  @extend .flex-grow-1;
+  @extend .mx-2;
+
+  display: block;
+}
+
+.help-block.error-help-block {
+  color: red;
+}
+
+/********** CONTACT ***********/
+.row-contact {
+  margin-top:5px;
+}
+
+.row-contact-add-button {
+  margin-top: 5px;
+}
+
+
+/********** TITLE ***********/
+
+.row-title {
+  border: 1px solid #f2f2f2;
+  padding: 10px;
+  margin:5px 0px;
+}
+
+.btn-remove-title {
+  margin-top: 1.5em;
+  margin-left: -0.5em;
+}
+
+.row-title-add-button {
+  margin:0px 0px;
+}
+
+/********** CREATOR ***********/
+.creatorType {
+  margin:10px 0px;
+}
+
+.lbl-creatorType {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.row-creator{
+  border: 1px solid #f2f2f2;
+  padding-top:10px;
+  margin:5px 0px;
+}
+
+.row-creator-add-button {
+  margin:0px 0px;
+}
+
+.sub-section {
+  margin-top:15px;
+  margin-bottom:15px;
+  padding: 5px;
+  border: 1px solid #f2f2f2;
+}
+
+.btn-remove-row {
+  margin-top: 1.5em;
+  margin-left: -1em;
+}
+
+/********** CREATOR IDENTIFIER ***********/
+
+.row-creatorIdentifier {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 5px 0px !important;
+  padding-top: 5px;
+  border: 1px solid #f2f2f2;
+}
+
+/********** CREATOR IDENTIFIER ***********/
+.row-creatorAffiliation {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 5px 0px !important;
+  padding-top: 5px;
+  border: 1px solid #f2f2f2;
+}
+
+span.input_example {
+  font-size: 11px;
+}
+
+/********** MAX PRIORITY **************/
+.disabled {
+  color: #bbb;
+}
+
