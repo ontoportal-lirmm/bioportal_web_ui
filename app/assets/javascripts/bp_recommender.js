@@ -41,7 +41,7 @@ rec.enableEdition = function() {
 
 rec.insertSampleText = function() {
     rec.enableEdition();
-    var text = 'Ecological attributes (=ecological characteristics) are features of a taxon such as its range size, life history, geographical distribution, climatic tolerances, habitat types, environmental indicator values, edaphic preferences, and so on, that describe the overall ecology of the taxon.';
+    var text = jQuery("#recommender_sample_text").val();
     jQuery("#inputText").focus();
     jQuery("#inputText").val(text);
     $(".notTextError").hide();
@@ -50,14 +50,14 @@ rec.insertSampleText = function() {
 
 rec.insertSampleKeywords = function() {
     rec.enableEdition();
-    var text = "Ecological attributes (=ecological characteristics) are features of a taxon such as its range size, life history, geographical distribution, climatic tolerances, habitat types, environmental indicator values, edaphic preferences, and so on, that describe the overall ecology of the taxon.";
+    var text = jQuery("#recommender_sample_keywords").val();
     jQuery("#inputText").focus();
     jQuery("#inputText").val(text);
     $(".notTextError").hide();
     $("#radioItKeywords").prop("checked", true);
 }
 
-rec.colors = ["#0f4e8a" , "#cc0000", "#339900", "#ff9900"];
+rec.colors = ["#76A7CC" , "#cc0000", "#339900", "#ff9900"];
 rec.getHighlightedTerms = function(data, rowNumber) {
     var inputText = document.getElementById("inputText").value;
     var newText = '';

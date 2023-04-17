@@ -1,0 +1,21 @@
+.card
+  #headingTwo.card-header
+    %h2.mb-0
+      %button.btn.btn-link.btn-block.text-left.collapsed{"data-target" => "#collapseTwo", "data-toggle" => "collapse", :type => "button"}
+        Find mappings of a class/concept
+        = link_to(Rails.configuration.settings.links[:mappings], id: "mappings-help", "aria-label": "View mappings help") do
+          %i.fas.fa-question-circle.fa-lg{"aria-hidden": "true"}
+  #collapseTwo.collapse{"data-parent" => "#accordionExample"}
+    .card-body
+      %div
+      = render partial: 'shared/concept_picker', locals: {name: :concept_mapping_selector, concept_label: '', ontology_acronym: 'all', include_definition: true }
+    %div.mt-1
+      = render TurboFrameComponent.new(id:'concept_mappings')
+:javascript
+  const picker_name = 'concept_mapping_selector'
+  const frame = document.getElementById('concept_mappings')
+  $('input[name="concept_mapping_selector"]').on('selected', () => {
+      const ontology_id = $(`input[name="${picker_name}_bioportal_ontology_id"]`).val()
+      const concept_id = $(`input[name="${picker_name}_bioportal_concept_id"]`).val()
+      frame.src = `/ajax/mappings/get_concept_table?ontologyid=${ontology_id}&conceptid=${encodeURIComponent(concept_id)}`
+  })

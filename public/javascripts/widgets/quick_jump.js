@@ -111,11 +111,33 @@ function bpQuickJumpOnLoad() {
       jQuery("#bp_quick_jump").append("<input type='hidden' id='jump_to_ontology_id'>");
 
       // Grab the specific scripts we need and fires it start event
-      jQuery.getScript(BP_SEARCH_SERVER + "/javascripts/JqueryPlugins/autocomplete/crossdomain_autocomplete.js", function() {
+      getScript(BP_SEARCH_SERVER + "/javascripts/JqueryPlugins/autocomplete/crossdomain_autocomplete.js").then( function() {
           jumpTo_setup_functions();
       });
 
   });
+}
+
+function getScript(url){
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+
+        script.onerror = reject
+
+        script.onload = script.onreadystatechange = function() {
+            const loadState = this.readyState
+
+            if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+
+            script.onload = script.onreadystatechange = null
+
+            resolve()
+        }
+
+        document.head.appendChild(script)
+    })
 }
 
 function jumpTo_jumpToValue(li) {

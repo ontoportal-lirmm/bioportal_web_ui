@@ -12,24 +12,29 @@
 //
 //= require bioportal
 //= require admin/licenses
-//= require bp_class_tree
 //= require bp_ajax_controller
-//= require bp_ontology_viewer
 //= require bp_reviews
 //= require bp_notes
 //= require bp_ontolobridge
 //= require bp_form_complete
-//= require bp_create_mappings
 //= require bp_analytics
 //= require bp_user_intention_survey
 //= require bp_search
 //= require bp_mappings
-//= require bp_visualize
 //= require bp_admin
 //= require bp_recommender
 //= require bp_property_tree
+//= require concepts
 //= require home
+//= require fair_score
+//= require_tree ./helpers
+//= require_tree ./components
 //= require ontologies
 //= require projects
-//= require submissions
+//= require tooltipster.bundle.min
+//= require application_esbuild
+customElements.define('data-table-loader', DataTableLoader );
+customElements.define('data-table', DataTable );
+customElements.define('instances-table', InstancesTable );
+
 

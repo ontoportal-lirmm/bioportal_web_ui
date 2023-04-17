@@ -1,0 +1,25 @@
+= render TurboFrameComponent.new(id: 'selection_metadata_form') do
+  :javascript
+    function showEditForm(event) {
+      event.preventDefault()
+      document.getElementById('show_bulk_edit_from_btn').click()
+    }
+
+  = form_tag("/ontologies_metadata_curator/edit", id: "properties_result_form", method: "post", data: { turbo: true, turbo_frame: 'application_modal_content' }) do
+    = hidden_field_tag :all_metadata, @metadata_sel
+    = submit_to_modal("Edit metadata values" , id:"show_bulk_edit_from_btn", class: "d-none",
+      data: { show_modal_title_value: "Metadata curator editor", show_modal_size_value: 'modal-xl' })
+    %div.table-container.mx-3
+      %table.zebra
+        %thead
+          %tr
+            %th Ontologies
+            - @metadata_sel.each do |meta|
+              %th
+                %div
+                  = render SwitchInputComponent.new(id: meta, name: 'selected_metadata[]', value: meta) do
+                    %h6{style:'margin-top: 0.2rem'}=generate_attribute_label(meta, label_tag_sym: :span)
+
+        %tbody
+          - @submissions.each do |submission|
+            = render partial: 'metadata_table_row', locals: {submission: submission, attributes: @metadata_sel}

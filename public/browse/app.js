@@ -37,6 +37,10 @@ var app = angular.module('FacetedBrowsing.OntologyList', ['checklist-model', 'ng
   });
   $scope.groups_hash = jQuery(document).data().bp.groups_hash;
 
+  $scope.formality_levels = jQuery(document).data().bp.formality_levels;
+  $scope.natural_languages = jQuery(document).data().bp.natural_languages;
+  $scope.is_of_type = jQuery(document).data().bp.is_of_type;
+
   // Search setup
   $scope.searchText = null;
   $scope.ontIndex = lunr(function() {
@@ -133,6 +137,43 @@ var app = angular.module('FacetedBrowsing.OntologyList', ['checklist-model', 'ng
         if (ontDate >= compareDate)
           return true;
         return false;
+      }
+    },
+    formality_levels: {
+      active: [],
+      ont_property: "hasFormalityLevel",
+      filter: function(ontology) {
+        if ($scope.facets.formality_levels.active.length == 0)
+          return true;
+        if ($scope.facets.formality_levels.active.indexOf(ontology.hasFormalityLevel) === -1)
+          return false;
+        return true;
+      }
+    },
+    natural_languages: {
+      active: [],
+      ont_property: "naturalLanguage",
+      filter: function(ontology) {
+        if ($scope.facets.natural_languages.active.length == 0)
+          return true;
+        if ( !ontology.naturalLanguage )
+          return false;
+        for (var i = 0; i < ontology.naturalLanguage.length; i++) {
+          if ($scope.facets.natural_languages.active.indexOf(ontology.naturalLanguage[i]) !== -1)
+            return true;
+        }
+        return false;
+      }
+    },
+    is_of_type: {
+      active: [],
+      ont_property: "isOfType",
+      filter: function(ontology) {
+        if ($scope.facets.is_of_type.active.length == 0)
+          return true;
+        if ($scope.facets.is_of_type.active.indexOf(ontology.isOfType) === -1)
+          return false;
+        return true;
       }
     }
   }

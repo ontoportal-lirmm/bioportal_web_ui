@@ -1,5 +1,52 @@
 en:
   
+  about: >
+      <div class='about p-2'>
+      <h2>Abstract</h2>
+      <p>
+      Many vocabularies and ontologies are produced to represent and annotate agronomic data. Therefore, there is a need of
+      a common platform to identify, host and use them in agro-informatics application. The AgroPortal project aims to offer
+      a reference ontology repository for agronomy, reusing the NCBO BioPortal technology. The scientific outcomes and the
+      experience of the biomedical domain are thus exploited and transposed in the agronomy domain, including plants, food,
+      environment and possibly animal sciences. We offer an ontology portal which features ontology hosting, search, versioning,
+      visualization, comment, recommendation, enables semantic annotation, as well as storing and exploiting ontology alignments.
+      All of these within a fully semantic web compliant infrastructure. The AgroPortal specifically pays attention to respect the
+      requirements of the agronomic community in terms of ontology formats (e.g., SKOS, trait dictionaries) or supported features.
+      AgroPortal project is based on five driving agronomic use cases which participate in the design and orientation of the platform.
+      AgroPortal already offers a robust and stable reference repository highly valuable for the agronomic domain.
+      </p>
+      <h2>Use cases</h2>
+      <ul class="bulletlist m-3">
+      <li class="bulletlist"><a href="http://www.agrold.org">IBC Rice Genomics & AgroLD project</a> (P. Larmande): Data integration and knowledge management related to rice</li>
+      <li class="bulletlist"><a href="https://www.rd-alliance.org/groups/wheat-data-interoperability-wg.html">RDA Wheat Data Interoperability working group</a> (E. Dzalé-Yeumo): Common framework for publishing wheat data</li>
+      <li class="bulletlist"><a href="http://lovinra.inra.fr">LovInra : INRA Linked Open Vocabularies</a> (S. Aubin): Vocabularies produced by INRA scientists</li>
+      <li class="bulletlist"><a href="http://www.cropontology.org">Crop Ontology project</a> (E. Arnaud): Ontologies for describing crop germplasm & traits</li>
+      <li class="bulletlist"><a href="http://vest.agrisemantics.org">GODAN global map of agri-food data standards</a> (V. Pesce): VEST/AgroPortal MAP of standards</li>
+      </ul>
+      <br>
+      <h2>New features</h2>
+      <p>
+      See the <a href="https://github.com/agroportal/documentation/wiki/Release-notes">release notes</a>
+      </p>
+      <br>
+      <h2>Partners</h2>
+      <p>The National Center For Biomedical Ontology (NCBO), Institut de Recherche pour le Développement (IRD), Research Data Alliance (RDA),
+      Bioversity International, Food & Agriculture Organization (FAO), Global Open Data for Agriculture & Nutrition (Godan Action), Institut National de la Recherche Agronomique (INRA)</p>
+      <h2>Acknowledgments</h2>
+      <p>The AgroPortal is partly achieved within the Semantic Indexing of French biomedical Resources (<a href="www.lirmm.fr/sifr">SIFR</a>) project
+      that received funding from the EU H2020 research and innovation programme under the Marie Sklodowska-Curie (grant 701771)
+      and the French National Research Agency (grant ANR-12-JS02-01001), the NUMEV Labex (grant ANR-10-LABX-20),
+      the Computational Biology Institute of Montpellier (grant ANR-11-BINF-0002) as well as by University of Montpellier and the CNRS.
+      We also thank the National Center for Biomedical Ontologies for help and time spent with us in deploying the AgroPortal.</p>
+      <h2>Team</h2>
+      To contact us: firstname.lastname@lirmm.fr
+      <ul class="bulletlist m-3">
+      <li class="bulletlist"><b>Clément Jonquet</b>, researcher at LIRMM (Univ. of Montpellier, France), main investigator of the AgroPortal project</li>
+      <li class="bulletlist"><b>Anne Toulet</b>, researcher at LIRMM (Univ. of Montpellier, France)</li>
+      <li class="bulletlist"><b>Vincent Emonet</b>, engineer at LIRMM (Univ. of Montpellier, France)</li>
+      </ul>
+      </div>
+  
   activerecord:
     errors:
       models:
@@ -25,8 +72,7 @@ en:
     footer:
       copyright_html: Copyright &copy; 2005‑2022, The Board of Trustees of Leland Stanford Junior University. All rights reserved.
       grant_html: >
-        The <strong>National Center for Biomedical Ontology</strong> was founded as one of the National Centers for Biomedical 
-        Computing, supported by the NHGRI, the NHLBI, and the NIH Common Fund under grant U54-HG004028.
+        <strong>%{site}</strong> is currently being developed within French <a href="http://www.d2kab.org">ANR D2KAB project</a>  (<a href="http://www.agence-nationale-recherche.fr/Projet-ANR-18-CE23-0017">ANR-18-CE23-0017</a>). It also receives or received support from <a href="http://www.lirmm.fr/sifr">ANR SIFR project</a> (<a href="https://anr.fr/Projet-ANR-12-JS02-0010">ANR-12-JS02-0010</a>), European Union <a href="http://www.lirmm.fr/sifr">H2020-MSCA SIFRm project</a> (<a href="https://cordis.europa.eu/project/id/701771">No 701771</a>), the <a href="https://www.lirmm.fr/numev/">NUMEV Labex</a> (ANR-10-LABX-20), the <ahref="http://www.ibc-montpellier.fr/">IBC of Montpellier project</a> (ANR-11-BINF0002), the <a href="https://www.agropolis-fondation.fr/The-LabEx-AGRO?lang=en">Agro Labex</a> (ANR-10-LABX-0001) as well as from University of Montpellier and the CNRS.
     notices:
       license_contact: >
         For more information, email <a href="mailto:support@ontoportal.org">support@ontoportal.org</a> or 
@@ -73,6 +119,20 @@ en:
     index:
       intro: Get annotations for ecological text with classes from the semantic resources
       annotatorplus_html: <em>Check out <a href="%{annotatorplus_href}">AnnotatorPlus</a> beta; a new version of the Annotator with added support for negation, and more!</em>
+      fast_context:
+        tooltip: "Enable FastContext to detect : if a concept has been negated (affirmed, negated), who experienced the found concept (patient, other), when the annotated concept occurred (recent, historical, hypothetical), and/or if the annotated concept is uncertain (certain, uncertain)."
+      sample_text: Melanoma is a malignant tumor of melanocytes which are found predominantly in skin but also in the bowel and the eye.
+
+  nbco_annotatosplus:
+    index:
+      intro: >
+        The NCBO Annotator+ is a proxy calling the NCBO Annotator Web service on the NCBO BioPortal.
+        <br/><br/>
+        Tchechmedjiev, A., Abdaoui, A., Emonet, V., Melzi, S., Jonnagaddala, J., & Jonquet, C. (2018). <a href="https://doi.org/10.1093/bioinformatics/bty009" target="_blank">Enhanced functionalities for annotating and indexing clinical text with the NCBO Annotator+</a>. Bioinformatics, 34(11), 1962-1965.
+        </br><br/>
+        If using the API, please provide a valid NCBO BioPortal apikey and hit the service at <a href="http://services.bioportal.lirmm.fr/ncbo_annotatorplus">http://services.bioportal.lirmm.fr/ncbo_annotatorplus</a></br>
+        Text submitted to the NCBO Annotator+ must be in English.
+      sample_text: Melanoma is a malignant tumor of melanocytes which are found predominantly in skin but also in the bowel and the eye.
 
   recommender:
     intro: Get recommendations for the most relevant semantic resources based on an excerpt from a ecological text or a list of keywords

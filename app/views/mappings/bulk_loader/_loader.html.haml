@@ -1,0 +1,19 @@
+= turbo_frame_tag 'application_modal_content' do
+  %div.d-flex.flex-column{:style => "overflow: auto; max-height: 600px;"}
+    = render TurboFrameComponent.new(id: 'file_loader_result') do
+      %div.my-2
+        .card.mb-2
+          %div
+            %h2
+              %button.btn.btn-link{"data-target" => "#collapseOne", "data-toggle" => "collapse", :type => "button"}
+                See an example of a valid a file
+          #collapseOne.collapse
+            .card-body
+              %pre
+                %code
+                  = JSON.pretty_generate @example_code
+        = form_with url: '/mappings/loader', method: :post, multipart: true, data: { turbo: true} do
+          %div
+            = render FileInputLoaderComponent.new(name: :file)
+          %button.btn.btn-secondary.btn-block.mt-2{type:'submit'}
+            Save

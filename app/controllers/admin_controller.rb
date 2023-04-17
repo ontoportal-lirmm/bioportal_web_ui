@@ -5,10 +5,21 @@ require_relative '../utils/utils'
 require_relative '../utils/datacite_srv'
 
 class AdminController < ApplicationController
+  include TurboHelper
   layout :determine_layout
   before_action :cache_setup
-  #THE ROW BELOW HAS COMMENTED BY ECOPORTAL:
-  #DEBUG_BLACKLIST = [:"$,", :$ADDITIONAL_ONTOLOGY_DETAILS, :$rdebug_state, :$PROGRAM_NAME, :$LOADED_FEATURES, :$KCODE, :$-i, :$rails_rake_task, :$$, :$gems_build_rake_task, :$daemons_stop_proc, :$VERBOSE, :$DAEMONS_ARGV, :$daemons_sigterm, :$DEBUG_BEFORE, :$stdout, :$-0, :$-l, :$-I, :$DEBUG, :$', :$gems_rake_task, :$_, :$CODERAY_DEBUG, :$-F, :$", :$0, :$=, :$FILENAME, :$?, :$!, :$rdebug_in_irb, :$-K, :$TESTING, :$fileutils_rb_have_lchmod, :$EMAIL_EXCEPTIONS, :$binding, :$-v, :$>, :$SAFE, :$/, :$fileutils_rb_have_lchown, :$-p, :$-W, :$:, :$__dbg_interface, :$stderr, :$\, :$&, :$<, :$debug, :$;, :$~, :$-a, :$DEBUG_RDOC, :$CGI_ENV, :$LOAD_PATH, :$-d, :$*, :$., :$-w, :$+, :$@, :$`, :$stdin, :$1, :$2, :$3, :$4, :$5, :$6, :$7, :$8, :$9]
+
+  DEBUG_BLACKLIST = [:"$,", :$ADDITIONAL_ONTOLOGY_DETAILS, :$rdebug_state,
+                     :$PROGRAM_NAME, :$LOADED_FEATURES, :$KCODE, :$-i, :$rails_rake_task, :$$, :$gems_build_rake_task,
+                     :$daemons_stop_proc, :$VERBOSE, :$DAEMONS_ARGV, :$daemons_sigterm,
+                     :$DEBUG_BEFORE, :$stdout, :$-0, :$-l, :$-I, :$DEBUG, :$',
+                     :$gems_rake_task, :$_, :$CODERAY_DEBUG, :$-F, :$", :$0, :$=, :$FILENAME, :$?,
+                     :$!, :$rdebug_in_irb, :$-K, :$TESTING, :$fileutils_rb_have_lchmod,
+                     :$EMAIL_EXCEPTIONS, :$binding, :$-v, :$>, :$SAFE, :$/,
+                     :$fileutils_rb_have_lchown, :$-p, :$-W, :$:, :$__dbg_interface,
+                     :$stderr, :$\, :$&, :$<, :$debug, :$;, :$~, :$-a,
+                     :$DEBUG_RDOC, :$CGI_ENV, :$LOAD_PATH, :$-d, :$*, :$., :$-w, :$+,
+                     :$@, :$`, :$stdin, :$1, :$2, :$3, :$4, :$5, :$6, :$7, :$8, :$9]
   ADMIN_URL = "#{LinkedData::Client.settings.rest_url}/admin/"
   ONTOLOGIES_URL = "#{ADMIN_URL}ontologies_report"
   USERS_URL = "#{LinkedData::Client.settings.rest_url}/users"
@@ -186,21 +197,19 @@ class AdminController < ApplicationController
   end
 
   def delete_submission
-    response = {errors: '', success: ''}
-
+    response = { errors: '', success: '' }
+    submission_id = params["id"]
     begin
       ont = params["acronym"]
       ontology = LinkedData::Client::Models::Ontology.find_by_acronym(ont).first
 
       if ontology
-        submissions = ontology.explore.submissions
-        submission = submissions.select {|o| o.submissionId == params["id"].to_i}.first
+        submission = ontology.explore.submissions({ display: 'submissionId' }, submission_id)
 
         if submission
           error_response = submission.delete
-
-          if error_response
-            errors = response_errors(error_response) # see application_controller::response_errors
+          if response_error?(error_response)
+            errors = response_errors(error_response)
             _process_errors(errors, response, true)
           else
             response[:success] << "Submission #{params["id"]} for ontology #{ont} was deleted successfully"
@@ -214,14 +223,25 @@ class AdminController < ApplicationController
     rescue Exception => e
       response[:errors] << "Problem deleting submission #{params["id"]} for ontology #{ont} - #{e.class}: #{e.message}"
     end
-    render :json => response
+
+    if params[:turbo_stream]
+      if response[:errors].empty?
+        render_turbo_stream( alert_success { response[:success] }, remove('submission_' + submission_id.to_s))
+
+      else
+        render_turbo_stream alert_error { response[:errors] }
+      end
+    else
+      render :json => response
+    end
+
   end
   
   def users
     response = _users
     render :json => response
   end
-
+  
 
   #=============================================================
   #                   DOI REQUESTs MANAGEMENT
@@ -298,8 +318,7 @@ class AdminController < ApplicationController
   end
 
   def _process_ontology(ontology, params)
-    error_response = LinkedData::Client::HTTP.put(ONTOLOGY_URL.call(ontology.acronym), params)
-    error_response
+    LinkedData::Client::HTTP.put(ONTOLOGY_URL.call(ontology.acronym), params)
   end
 
   def _process_ontologies(success_keyword, error_keyword, process_proc)
@@ -316,7 +335,6 @@ class AdminController < ApplicationController
 
           if ontology
             error_response = self.send(process_proc, ontology, params)
-
             if error_response
               errors = response_errors(error_response) # see application_controller::response_errors
               _process_errors(errors, response, false)

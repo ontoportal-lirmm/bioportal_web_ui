@@ -7,6 +7,8 @@
     %i.fas.fa-question-circle.fa-lg{aria: {hidden: true}, style: "margin-left: .25em"}
 
 %form
+  = hidden_field_tag :recommender_sample_text, t('recommender.sample_text')
+  = hidden_field_tag :recommender_sample_keywords, t('recommender.sample_keywords')
   -# Specify input format
   %h5 Input
   %div.form-check.form-check-inline

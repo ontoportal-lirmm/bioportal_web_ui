@@ -1,0 +1,6 @@
+= text_field_tag(name, concept_label, class: "search_autocomplete form-control",
+                placeholder: "Start typing to select a class",
+                data: {controller: "form-auto-complete",
+                      "form-auto-complete-ontology_id-value": ontology_acronym ,
+                      "form-auto-complete-target_property-value": 'name',
+                      "form-auto-complete-include_definition-value": include_definition})

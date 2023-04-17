@@ -1,0 +1,24 @@
+
+- if no_schemes?
+  %div
+    = no_schemes_alert
+- else
+  - schemes_labels, main_scheme_label = get_schemes_labels(@schemes, @submission_latest.URI)
+  - selected_scheme_id = params[:scheme_id].nil? && !main_scheme_label.nil? ? main_scheme_label["@id"] : CGI.unescape(params[:scheme_id] || '')
+  - if main_scheme_label.nil?
+    = no_main_scheme_alert
+  %div
+    %ul.simpleTree{data:{controller: 'simple-tree history', action: 'clicked->history#updateURL'}}
+      %li.root
+        %ul
+          - if main_scheme_label.nil?
+            =  raw tree_link_to_schemes(schemes_labels ,main_scheme_label, selected_scheme_id)
+          - else
+            %li.open
+              %a{id: main_scheme_label["@id"],
+                             href: scheme_path(main_scheme_label["@id"]),
+                             data: { turbo: "true", 'turbo-frame': 'scheme', schemeid: main_scheme_label["@id"]},
+                             class: selected_scheme_id.eql?(main_scheme_label["@id"]) ? "active" : nil }
+                = get_scheme_label(main_scheme_label)
+              %ul
+                = raw tree_link_to_schemes(schemes_labels ,main_scheme_label, selected_scheme_id)

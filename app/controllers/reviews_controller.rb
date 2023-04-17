@@ -25,11 +25,12 @@ class ReviewsController < ApplicationController
   end
 
   def create
-    @review = LinkedData::Client::Models::Review.new(values: review_params)
-    review_saved = @review.save
-
-    if review_saved&.errors
-      render json: response_errors(review_saved), status: :bad_request
+    @review = LinkedData::Client::Models::Review.new(values: params[:review])
+    @ontology = LinkedData::Client::Models::Ontology.find(@review.ontologyReviewed)
+    @review_saved = @review.save
+    if response_error?(@review_saved)
+      @errors = response_errors(@review_saved)
+      render :action => "new"
     else
       @review = review_saved
       render action: 'show', status: :created

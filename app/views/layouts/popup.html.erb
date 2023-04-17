@@ -4,6 +4,7 @@
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
   <meta name="google-site-verification" content="IBxfKu6VbYH9atd5OLu2zXVD2ZRWi9SgMKTi8nvw3ks" />
+  <meta name="turbo-cache-control" content="no-cache">
   <title><%if @title.nil?%><%=$ORG_SITE%><%else%><%="#{@title} | #{$ORG_SITE}"%><%end%></title>
   <link rel="shortcut icon" href="/fav.ico" type="image/x-icon" />
   <link href='//fonts.googleapis.com/css?family=Droid+Sans:400' rel='stylesheet' type='text/css'>
@@ -13,7 +14,6 @@
   <%= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js" %>
   <%= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js" %>
   <%= javascript_include_tag "//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js" %>
-  <%= javascript_include_tag "//unpkg.com/split.js/dist/split.min.js" %>
   <script>
     jQuery(document).data({bp: {config: <%=bp_config_json.html_safe%>, user: <%=(session[:user] || {}).to_hash.to_json.html_safe%>}});
     jQuery(document).data().bp.ontology = <%=@ontology.to_json.html_safe%> || {};
@@ -25,9 +25,9 @@
 </head>
 <body class="<%= controller_name %> <%= action_name %>" style="min-width: 800px;">
 
-  <div class="navbar-inverse eco-popup-top">
-    <%= image_tag 'logos/ecoportal-logo.png' , :class => "img_logo"%>
-  </div>
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom" style="justify-content: normal">
+    <%= image_tag("logos/ontoportal-logo.png") + content_tag(:span, $SITE, class: 'site-name navbar-brand m-1') -%>
+  </nav>
 
   <div style="clear: both;"></div>
 

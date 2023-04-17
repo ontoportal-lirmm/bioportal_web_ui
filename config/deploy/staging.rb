@@ -4,8 +4,8 @@
 # server in each group is considered to be the first
 # unless any hosts have the primary property set.
 # Don't declare `role :all`, it's a meta role
-role :app, %w{ui1.stage.ontoportal.org ui2.stage.ontoportal.org}
-role :db, %w{ui1.stage.ontoportal.org} # sufficient to run db:migrate only on one system
+role :app, %w{stageportal.lirmm.fr}
+role :db, %w{stageportal.lirmm.fr} # sufficient to run db:migrate only on one system
 
 # Extended Server Syntax
 # ======================
@@ -37,12 +37,12 @@ set :log_level, :error
 #   }
 # setting per server overrides global ssh_options
 set :ssh_options, {
-  user: 'deployer',
+  user: 'deploy',
   forward_agent: 'true',
   keys: %w(config/deploy_id_rsa),
   auth_methods: %w(publickey),
   # use ssh proxy if UI servers are on a private network
-  proxy: Net::SSH::Proxy::Command.new('ssh deployer@sshproxy.ontoportal.org -W %h:%p')
+  # proxy: Net::SSH::Proxy::Command.new('ssh deployer@sshproxy.ontoportal.org -W %h:%p')
 }
 
 #private git repo for configuraiton

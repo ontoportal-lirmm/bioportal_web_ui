@@ -14,8 +14,8 @@ shared:
     twitter: 'https://twitter.com/lifewatcheric'
     virtual_appliance: 'https://ontoportal.github.io/administration/'
     widgets: 'http://www.bioontology.org/wiki/NCBO_Widgets'
-    wiki: 'https://github.com/lifewatch-eric/documentation/wiki'
-    youtube: 'https://www.youtube.com/channel/UCP6ag3SoJ6oeisE7ibg4-pg'
+    wiki: 'https://www.bioontology.org/wiki/'
+    mappings: 'https://www.bioontology.org/wiki/BioPortal_Help#Mappings_Tab'
 
 development:
   links:

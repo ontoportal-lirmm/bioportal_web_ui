@@ -1,0 +1,168 @@
+=javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"
+=javascript_include_tag "d3pie.min"
+=javascript_include_tag "jqcloud-1.0.4.min"
+=javascript_include_tag "vis.min"
+
+- @title = "Landscape"
+%div{:class => "container theme-showcase", :role => "main", :style => "width: 80%; display: block;", :align => "center"}
+  %h1{:style => "font-size: 45px;"}
+    = $SITE
+    Landscape
+  %p Visualize data retrieved from the ontologies stored in the portal
+
+  %div{:class => "panel panel-success", :style => "margin-top: 2em;"}
+    %div{:class => "panel-heading"}
+      %h3{:class => "panel-title"} Groups and categories
+    %div{:class => "panel-body"}
+      %div{:class => "row", :style => "width: 80%;"}
+        %div{:class => "col-md-6"}
+          %h2 Ontologies by group
+          %canvas#groupsCanvas
+
+        %div{:class => "col-md-6"}
+          %h2 Ontologies by category
+          %canvas#domainCanvas
+
+      %div{:class => "row", :style => "width: 80%; margin-top: 3em;"}
+        %div{:class => "col-md-7"}
+          %h2 Ontologies count in each data catalog
+          %canvas#dataCatalogCanvas
+
+        %div{:class => "col-md-5"}
+          %h2 Ontologies by size
+          %canvas#sizeSlicesCanvas
+
+  %hr{:style => "margin-top: 5em; margin-bottom: 5em;"}
+  %h1 Properties use
+  %p The proportion of properties usage among stored ontologies.
+  %div#pieChartDiv
+    %div{:class => "row"}
+      %div{:class => "col-md-4"}
+        %h2 Ontologies natural languages
+        %div#naturalLanguagePieChartDiv
+      %div{:class => "col-md-4"}
+        %h2 Licenses used by the ontologies
+        %div#licensePieChartDiv
+      %div{:class => "col-md-4"}
+        %h2 Most used tools to build ontologies
+        %div#toolCloudChart{:style => "width: 100%; height: 500px;"}
+
+      %div#chartTooltip{:style => "width: auto; display: none;"}
+        %span#chartTooltipValue none
+
+    %button#propertiesBtn{:style => "margin-top: 1em;", :type => "button", :class => "btn btn-success", :onclick => "toggleDiv('properties')"} More properties charts
+
+    %div#propertiesDiv{:class => "panel panel-info", :style => "margin-top: 2em;"}
+      %div{:class => "panel-heading"}
+        %h3{:class => "panel-title"} Pie charts for properties used for the ontologies
+      %div{:class => "panel-body"}
+        %div{:class => "row"}
+          %div{:class => "col-md-3"}
+            %h2 prefLabel property URIs used for OWL ontologies
+            %div#prefLabelPropertyPieChartDiv
+          %div{:class => "col-md-3"}
+            %h2 synonym property URIs used for OWL ontologies
+            %div#synonymPropertyPieChartDiv
+          %div{:class => "col-md-3"}
+            %h2 definition property URIs used for OWL ontologies
+            %div#definitionPropertyPieChartDiv
+          %div{:class => "col-md-3"}
+            %h2 author property URIs used for OWL ontologies
+            %div#authorPropertyPieChartDiv
+
+  %hr{:style => "margin-top: 5em; margin-bottom: 5em;"}
+
+  %div{:class => "panel panel-success", :style => "margin-top: 2em;"}
+    %div{:class => "panel-heading"}
+      %h3{:class => "panel-title"} Ontologies types
+    %div{:class => "panel-body"}
+      %div{:class => "row"}
+        %div{:class => "col-md-4"}
+          %h2 Format used
+          %canvas#formatCanvas
+
+        %div{:class => "col-md-4"}
+          %h2 Ontology types
+          %canvas#isOfTypeCanvas
+
+        %div{:class => "col-md-4"}
+          %h2 Ontology formality levels
+          %canvas#formalityLevelCanvas
+
+
+  %hr{:style => "margin-top: 5em; margin-bottom: 5em;"}
+
+  %div{:class => "panel panel-success", :style => "margin-top: 2em;"}
+    %div{:class => "panel-heading"}
+      %h3{:class => "panel-title"} Contributors to ontologies development
+    %div{:class => "panel-body"}
+      %div{:class => "row"}
+        %div{:class => "col-md-6"}
+          %h1 Most active people
+          %p Most mentioned people as contact, creator, contributor, curator.
+          %div#peopleCloudChart{:style => "width: 100%; height: 350px; margin-top: 2em; border-right: 1px solid #ccc;"}
+        %div{:class => "col-md-6"}
+          %h1 Most active organizations
+          %p Organizations that fund and endorse the greatest number of ontologies.
+          %div#orgCloudChart{:style => "width: 100%; height: 350px; margin-top: 2em;"}
+
+  %hr{:style => "margin-top: 4em; margin-bottom: 4em;"}
+
+  %div{:class => "panel panel-success", :style => "margin-top: 2em;"}
+    %div{:class => "panel-heading"}
+      %h3{:class => "panel-title"}
+        Ontologies activity on
+        = $SITE
+    %div{:class => "panel-body"}
+      %div{:class => "row"}
+        %div{:class => "col-md-6"}
+          %h1 Most active people as reviewer
+          %p People that posted notes, review and projects
+          %div#notesPeopleCloudChart{:style => "width: 100%; height: 350px; margin-top: 2em; border-right: 1px solid #ccc;"}
+        %div{:class => "col-md-6"}
+          %h1 Most active ontologies
+          %p Ontologies that have notes, review and projects
+          %div#notesOntologiesCloudChart{:style => "width: 100%; height: 350px; margin-top: 2em;"}
+
+  %hr{:style => "margin-top: 5em; margin-bottom: 5em;"}
+
+  %h1 Ontology relations network
+  %p{:style => "margin-bottom: 1em;"} Relations between ontologies stored in the portal
+
+  %div{:style => "display: flex;"}
+    %div{:style => "text-align: left; width: 23em;"}
+      - @relations_array.each do |relation|
+        = check_box_tag "selectedRelations[]", relation, true, :id => relation
+        = label_tag relation, relation
+        %br
+      %button{:type => "button", :class => "btn btn-success", :onclick => "buildNetwork(ontologyRelationsArray)", :style => "margin-bottom: 1em;"} Filter Network
+
+    %div{:style => "width: 100%;"}
+      %div#networkContainer{:style => "height: 80vh; width: 100%; border:1px solid #cecece;"}
+        %div#ontologyNetwork
+
+  -if fairness_service_enabled?
+    %hr{:style => "margin-top: 5em; margin-bottom: 5em;"}
+    %h1
+      Ontology FAIRness Evaluator (O’FAIRe)
+    %div#fairness_assessment.p-2
+      = render partial: "fair_score_landscape"
+
+  %hr{:style => "margin-top: 5em; margin-bottom: 5em;"}
+  %div
+    %h1 Average metrics
+    %table.minimal.align-right{width: "30%", style: "margin-bottom: 3em;"}
+      %tbody
+        - for metric in @metrics_average
+          %tr
+            %td
+              = metric[:label]
+            %td
+              = metric[:average]
+
+:javascript
+  // Get the data to generate the charts
+  var landscapeData = #{@landscape_data}
+
+/ This javascript needs to be called after pieJson and cloudJson have been set
+=javascript_include_tag "bp_landscape"

@@ -1,0 +1,64 @@
+.login-form{
+    margin-top: 30px;
+    padding: 37px 41px;
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 20px 50px;
+    border-radius: 14px;
+}
+
+.login-input{
+    box-sizing: border-box;
+    outline: none;
+    padding: 19px;
+    font-size: 16px;
+    border: 1px solid #BDBDBD;
+    border-radius: 9px;
+    width: 357px;
+}
+
+.login-input:focus{
+    border: 1px solid var(--primary-color);
+}
+.login-input::placeholder{
+    font-weight: 300;
+    color: #C1C1C1;
+}
+
+.login-input-title{
+    font-size: 13px;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #666666;
+}
+.email-input{
+    margin-bottom: 20px;
+}
+.password-input{
+    margin-bottom: 8px;
+}
+.login-forgot-password{
+    font-weight: 500 ;
+    text-align: end;
+    text-decoration:none;
+    font-size: 13px;
+}
+.login-button{
+    margin-top: 10px;
+   width: 357px;
+   font-size: 16px;
+   color: white;
+   padding: 17px;
+   background-color: var(--primary-color);
+   border: none;
+   border-radius: 9px;
+   margin-bottom: 20px;
+}
+.login-button:hover{
+    background-color: var(--hover-color);
+    cursor: pointer;
+}
+
+.dont-have-account{
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+}

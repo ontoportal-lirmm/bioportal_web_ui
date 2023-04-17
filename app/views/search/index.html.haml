@@ -39,7 +39,7 @@
       %div.form-group
         %h6{style: "font-size: 10pt !important"} Categories
         = select(:search, :categories, options_for_select(categories_for_select), {}, style: "width: 432px", multiple: "true", data: {placeholder: t(".categories_placeholder")})
-      %div.form-group.mb-5
+      %div.form-group.mb-5{style: "width:432px"}
         = render :partial => "shared/ontology_picker", locals: {sel_text: "Ontologies"}
 
     = button_tag("Search", id: "search_button", class: "btn btn-primary")

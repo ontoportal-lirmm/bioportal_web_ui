@@ -25,7 +25,7 @@ BioportalWebUi::Application.configure do
   # config.action_dispatch.rack_cache = true
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = Uglifier.new(harmony: true)
+  config.assets.js_compressor = :terser
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
@@ -87,9 +87,6 @@ BioportalWebUi::Application.configure do
   # Add custom data attributes to sanitize allowed list
   config.action_view.sanitized_allowed_attributes = ['id', 'class', 'style', 'data-cls', 'data-ont']
 
-  # TODO: Fix this?
-  # enable json logging format.  Useful for logstash
-  # require 'rackstash'
-  # config.rackstash.enabled = true
-  # config.rackstash.tags = ['ruby', 'rails2']
+  # Include BioPortal-specific configuration options
+  require Rails.root.join('config', "bioportal_config_staging.rb")
 end

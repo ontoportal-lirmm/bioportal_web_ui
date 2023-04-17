@@ -1,0 +1,11 @@
+.reply.mt-3.pl-4
+  = render_alerts_container("#{note.id}_reply")
+  - note_decorator = NoteDecorator.new(note, self)
+  .reply_author
+    %b #{note_decorator.author}
+    about #{note_decorator.created_date}
+  .reply_body
+    = note_decorator.body_content
+    %br/
+  = render partial: 'notes/reply/list', locals: {note: note}
+  %hr.w-100

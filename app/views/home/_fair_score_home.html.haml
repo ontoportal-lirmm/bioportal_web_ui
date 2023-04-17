@@ -1,0 +1,38 @@
+%div.col
+  %div.card.mb-3
+    %div.card-header.d-flex.justify-content-between
+      %span
+        = render partial: "fair_score/fair_service_header"
+      %span
+        %h2.p-2.badge.badge-secondary
+          Average
+          %span.badge.badge-light
+            %span#fair-score-average
+              0 (0%)
+        %h2.p-2.badge.badge-secondary
+          Min
+          %span.badge.badge-light
+            %span#fair-score-min
+              0 (0%)
+        %h2.p-2.badge.badge-secondary
+          Max
+          %span.badge.badge-light
+            %span#fair-score-max
+              0 (0%)
+        %h2.p-2.badge.badge-secondary
+          Median
+          %span.badge.badge-light
+            %span#fair-score-median
+              0 (0%)
+    %div.card-body
+      %div.p-3
+        %div.row#detailedFilter
+          = render :partial => "shared/ontology_picker", locals: {sel_text: ""}
+      %div.mt-2.text-center{style: "min-height: 260px"}
+        %div.row#fair-score-charts-container
+          %div.col-md-6.col-sm
+            = render partial: "shared/fair_score_radar" , locals: {data: nil }
+            %a.btn.btn-link{href:"/landscape#fairness_assessment"}
+              See details
+          %div.col-md-6.col-sm
+            = render partial: "shared/fair_score_bars", locals: {data: nil}

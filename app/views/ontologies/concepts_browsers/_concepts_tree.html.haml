@@ -1,0 +1,21 @@
+%div{data:{controller: 'skos-collection-colors turbo-frame history',
+    'skos-collection-colors': {'collections-color-select-target-value': 'collection-color-filter'},
+    'turbo-frame': {
+      'url-value': "/ajax/classes/treeview?ontology=#{@ontology.acronym}&conceptid=root",
+      'place-holder-value': "Please select a scheme to display"
+      }}}
+  %div.pb-2
+    %div.mb-1
+      = render partial: 'ontologies/concepts_browsers/jump_to', locals: {id: "#concepts-tree-filter"}
+    - if skos?
+      %div#concepts-tree-filter.collapse.card.p-2
+        = render partial: 'ontologies/concepts_browsers/scheme_picker'
+        = render partial: 'ontologies/concepts_browsers/collections_picker',
+                       locals: {multiple: true, id: 'collection-color-filter',
+                       data: {action: 'changed->skos-collection-colors#updateCollectionTags' ,
+                        'chosen-enable-colors-value': 'true'}}
+  -# Class tree
+  %div#sd_content.card.p-1.py-3{style: 'overflow-y: scroll; height: 60vh;'}
+    = render TurboFrameComponent.new(id: 'concepts_tree_view',
+                                     src: "/ajax/classes/treeview?ontology=#{@ontology.acronym}&conceptid=#{escape(@concept.id)}&concept_schemes=#{params[:concept_schemes]}&auto_click=false",
+                                     data: {'turbo-frame-target': 'frame'})

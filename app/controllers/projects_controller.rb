@@ -78,7 +78,7 @@ class ProjectsController < ApplicationController
     @project_saved = @project.save
     
     # Project successfully created.
-    if not @project_saved.errors
+    if response_success?(@project_saved)
       flash[:notice] = 'Project successfully created'
       redirect_to project_path(@project.acronym)
       return
@@ -113,9 +113,14 @@ class ProjectsController < ApplicationController
     end
     @project = projects.first
     @project.update_from_params(project_params)
+    @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
+    @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
+    @usedOntologies = @project.ontologyUsed || []
+    @ontologies = LinkedData::Client::Models::Ontology.all
     error_response = @project.update
-    if error_response
+    if response_error?(error_response)
       @errors = response_errors(error_response)
+      render :edit
     else
       flash[:notice] = 'Project successfully updated'
       redirect_to project_path(@project.acronym)
@@ -133,7 +138,7 @@ class ProjectsController < ApplicationController
     end
     @project = projects.first
     error_response = @project.delete
-    if error_response
+    if response_error?(error_response)
       @errors = response_errors(error_response)
       flash[:notice] = "Project delete failed: #{@errors}"
       respond_to do |format|

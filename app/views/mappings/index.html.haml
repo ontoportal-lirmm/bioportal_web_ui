@@ -1,21 +1,13 @@
 - @title = "Mappings"
+%div#mappings_container.container-fluid.py-4
+  %h1.my-1 Mappings
 
-%h1.mt-5 Mappings
-%p.tab_description
-  = t('mappings.intro').html_safe
-  = link_to("https://github.com/lifewatch-eric/documentation/wiki/EcoTools#mappings", id: "mappings-help", "aria-label": "View mappings help") do
-    %i.fas.fa-question-circle.fa-lg{"aria-hidden": "true"}
-%p#mappings_select
-  - if @options.empty?
-    No mappings available
-  - else
-    = select('search', 'ontologies', @options, {:include_blank => ""},{:onchange=>"loadMappings(this.value);", "data-placeholder".to_sym => "Select a Semantic Resource", autocomplete: "off"})
-    %p#display_options
-      %input{type: "radio", name: "display_type", value: "table", id: "display_table", checked: true, autocomplete: "off"}
-      %label{for: "display_table"} Table
-      -# %input{type: "radio", name: "display_type", value: "visualization", id: "display_visualization", autocomplete: "off"}
-      -# %label{for: "display_visualization"} Visualization
-    #mapping_load
-      %img{src: asset_path("jquery.simple.tree/spinner.gif")}/
-      Loading mappings...
-    #mappingCount
+  %div#mappings_uploader.my-2
+    = link_to_modal "Upload mappings" , "/mappings/loader", class: "btn btn-primary btn-block",
+       data: { show_modal_title_value: "Mappings bulk load", show_modal_size_value: 'modal-xl'}
+  %hr.my-3.w-100
+    #accordionExample.accordion
+      = render partial: 'ontology_mappings'
+      = render partial: 'concept_mappings_selector'
+
+

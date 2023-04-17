@@ -1,0 +1,126 @@
+$obtained_color : rgba(102, 187, 106, 0.4);
+$not_obtained_color : rgba(251, 192, 45, 0.4);
+$non_applicable_color :  rgba(176, 190, 197, 0.4);
+
+.bg-obtained_color{
+  background-color: $obtained_color !important;
+}
+.bg-not-obtained_color{
+  background-color: $not_obtained_color !important;
+}
+.bg-non-applicable_color{
+  background-color: $non_applicable_color !important;
+}
+
+@keyframes spinner-border {
+  to { transform: rotate(360deg); }
+}
+
+//
+// The following is for creating a spinner in the landscape page
+//
+
+.spinner-border {
+  position: relative;
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  overflow: hidden;
+  text-indent: -999em;
+  vertical-align: text-bottom;
+  border: .25em solid;
+  border-color: currentColor transparent currentColor currentColor;
+  border-radius: 50%;
+  animation-name: spinner-border;
+  animation-duration: .75s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.spinner-border-reverse {
+  border-color: transparent currentColor transparent transparent;
+
+  &::after {
+    position: absolute;
+    top: -.25em;
+    right: -.25em;
+    bottom: -.25em;
+    left: -.25em;
+    display: inline-block;
+    content: "";
+    border: .25em solid rgba(0, 0, 0, .1);
+    border-radius: 50%;
+  }
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: .2em;
+
+  &.spinner-border-reverse::after {
+    border-width: .2em;
+  }
+}
+
+
+@keyframes spinner-grow {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+.spinner-grow {
+  position: relative;
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  overflow: hidden;
+  text-indent: -999em;
+  vertical-align: text-bottom;
+  background-color: currentColor;
+  border-radius: 50%;
+  animation-name: spinner-grow;
+  animation-duration: .75s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.spinner-grow-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+
+.fair_score_details_pop {
+  overflow: hidden;
+  width: 1200px !important;
+  max-height: 80vh;
+  display: block !important;
+
+  .test-result{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+}
+
+.criterion-score-container{
+  .criterion-score-progress-bar{
+    flex-grow: 1;
+    height: 40px;
+    margin-top: 10px;
+  }
+}
+
+.nav-link.active{
+  color: white !important;
+}

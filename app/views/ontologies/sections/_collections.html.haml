@@ -1,0 +1,13 @@
+= turbo_frame_tag 'collections' do
+  - if no_collections?
+    = no_collections_alert
+  - else
+    %div.ont-collections{data:{controller: 'container-splitter'}}
+      %div#collectionsTree{data:{'container-splitter-target': 'container'}}
+        = render partial: 'collections/list_view'
+      %div#collection_contents.pl-3{data:{'container-splitter-target': 'container'}}
+        = render TurboFrameComponent.new(id: 'collection') do
+          - if @collection
+            = render partial: 'collections/collection', locals: {collection: @collection}
+
+

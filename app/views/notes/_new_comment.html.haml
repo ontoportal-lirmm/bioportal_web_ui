@@ -1,0 +1,14 @@
+= turbo_frame_tag "application_modal_content" do
+  = render_alerts_container
+  = form_with url: notes_path, method: 'post', data:{turbo: true, 'turbo-frame': '_top'} do
+    = hidden_field_tag 'parent', parent_id
+    = hidden_field_tag 'type', type
+    = hidden_field_tag 'creator', user_id
+    = hidden_field_tag 'ontology_id', ontology_id
+    .reply_box
+      %div.form-group
+        %input.form-control.comment_subject{placeholder: "Subject", type: "text", name: 'subject', required: true}
+      %div.form-group
+        %textarea.form-control.reply_body{cols: "1", name: "body", required: true, placeholder: "Comment", rows: "1", style: "height: 100px;", tabindex: "0"}
+
+      = submit_tag "Save" , class:'btn btn-success btn-block'

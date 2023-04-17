@@ -18,13 +18,8 @@ html {
   position: relative;
   min-height: 100%;
 }
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: body_margin_bottom();
-}
+
 .footer {
-  position: absolute;
-  bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
   height: body_margin_bottom();
@@ -106,6 +101,11 @@ body {
   padding: 0px;
 }
 
+body{
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 /* Footer 
 -------------------------------------------------- */
 .social-icons li {
@@ -130,6 +130,10 @@ body {
 .social-icons a i {
   font-size: 20px;
   color: #0f4e8a;
+}
+
+.not-disabled {
+  background-color: white !important;
 }
 
 @media only screen and (max-width: 992px) {
@@ -158,94 +162,6 @@ body {
   padding: 20px 0;
 }
 
-/* Buttons 
--------------------------------------------------- */
-
-.btn-primary {
-  color: #fff;
-  background-color: #0f4e8a;
-  border: none;
-  border-radius: 0px;
-}
-
-
-.btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
-.btn-primary:active:hover, .btn-primary:active:focus, .btn-primary:active.focus, .btn-primary.active:hover, .btn-primary.active:focus,
-.btn-primary.active.focus, .open>.btn-primary.dropdown-toggle:hover, .show>.btn-primary.dropdown-toggle, .show>.btn-primary.dropdown-toggle:focus,
-.show>.btn-primary.dropdown-toggle.focus, .btn-primary:focus, .btn-primary.focus, .btn-primary:hover,
-.btn-primary:active {
-  color: #fff;
-  background-color: #0f4e8a;
-  border: none;
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-.btn-info {
-  color: #fff;
-  background-color: #0f4e8a;
-  border: none;
-  border-radius: 0px;
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-.btn-info:not(:disabled):not(.disabled):active, .btn-info:not(:disabled):not(.disabled).active,
-.btn-info:active:hover, .btn-info:active:focus, .btn-info:active.focus, .btn-info.active:hover, .btn-info.active:focus,
-.btn-info.active.focus,.open>.btn-info.dropdown-toggle:hover, .show>.btn-info.dropdown-toggle, .show>.btn-info.dropdown-toggle:focus,
-.show>.btn-info.dropdown-toggle.focus, .btn-info:focus, .btn-info.focus, .btn-info:hover,
-.btn-info:active {
-  color: #fff;
-  background-color: #0f4e8a;
-  border: none;
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* Form controls
--------------------------------------------------- */
-.form-control {
-  font-size: 14px;
-}
-
-/* Cards
--------------------------------------------------- */
-.card-header {
-  font-weight: bold;
-  color: #0f4e8a;
-}
-
-/* Titles
--------------------------------------------------- */
-
-.h1, .h2, .h3, .h4, .h5, .h6,
-h1, h2, h3, h4, h5, h6 {
-  color: #0f4e8a;
-}
-
-.h1, h1 {
-  font-weight: bold;
-  font-size: 36px;
-}
-
-.h2, h2 {
-  font-weight: bold;
-  font-size: 21px;
-}
-
-.h2, h2 {
-  font-weight: bold;
-  font-size: 21px;
-}
-
-footer h6 {
-  color: inherit;
-}
-
-/* Ordinary form buttons styled as primary buttons
--------------------------------------------------- */
-
-input[type=submit], input[type=button] {
-  @extend .btn;
-  @extend .btn-primary;
+.border-radius-0 {
+  border-radius: 0;
 }

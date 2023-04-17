@@ -1,0 +1,2 @@
+module LandscapeHelper
+end

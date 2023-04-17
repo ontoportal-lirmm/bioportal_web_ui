@@ -1,0 +1,4 @@
+.alert.alert-dismissible.fade.show{:role => "alert", class: "#{@type}"}
+  = content
+  %button.close{"aria-label": "Close", "data-dismiss": "alert", type: "button", style: "background: transparent"}
+    %span{"aria-hidden" => "true"} &times;

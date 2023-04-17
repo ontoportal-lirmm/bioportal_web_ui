@@ -39,10 +39,18 @@ class SubscriptionsController < ApplicationController
       # This way was not working, updating subscription is failing when more than 1 subscription in the array
       # And we were updating with different types of object in the subscription array : OpenStruct and hash
       # So we are generating an array with only hash
-      all_subs = [{ontology: ont.acronym, notification_type: "NOTES"}] # the new subscription
+      already_subscribed = false
+      all_subs = []
       u.subscription.each do |subs|
         # add all existing subscriptions
         all_subs.push({ontology: subs.ontology, notification_type: subs.notification_type})
+        if subs.ontology.split("/").last == ont.acronym && subs.notification_type == "NOTES"
+          # avoid to subscribe many times to the same ontology
+          already_subscribed = true
+        end
+      end
+      if already_subscribed == false
+        all_subs.push({ontology: ont.acronym, notification_type: "NOTES"})  # the new subscription
       end
       u.subscription = all_subs
     end
@@ -50,7 +58,7 @@ class SubscriptionsController < ApplicationController
     # Try to update the user instance and the session user.
     begin
       error_response = u.update
-      if error_response.nil?
+      if response_success?(error_response)
         updated_sub = true
         session[:user].subscription = u.subscription
         #session[:user] = u

@@ -1,0 +1,13 @@
+= turbo_frame_tag 'schemes' do
+  %div.ont-schemes{data:{controller: 'container-splitter'}}
+    %div#schemesTree{data:{'container-splitter-target': 'container'}}
+      - if no_schemes?
+        = no_schemes_alert
+      - else
+        = render partial: 'schemes/tree_view'
+    %div#scheme_contents.pl-3{data:{'container-splitter-target': 'container'}}
+      = render TurboFrameComponent.new(id:'scheme') do
+        = render partial: 'schemes/scheme', locals: {scheme: @scheme}
+
+
+

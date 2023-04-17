@@ -2,8 +2,30 @@ require 'cgi'
 
 class ConceptsController < ApplicationController
   include MappingsHelper
-
+  include ConceptsHelper
   layout 'ontology'
+
+  def show_concept
+    params[:id] = params[:id] ? params[:id] : params[:conceptid]
+
+    if params[:id].nil? || params[:id].empty?
+      render :text => "Error: You must provide a valid concept id"
+      return
+    end
+
+    # Note that find_by_acronym includes views by default
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
+    ontology_not_found(params[:ontology_id]) if @ontology.nil?
+
+    @submission = get_ontology_submission_ready(@ontology)
+    @ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
+    @concept = @ontology.explore.single_class({full: true}, params[:id])
+    @instances_concept_id = @concept.id
+
+    concept_not_found(params[:id]) if @concept.nil?
+    gather_details
+    render :partial => 'show'
+  end
 
   def show
     # Handle multiple methods of passing concept ids
@@ -21,7 +43,8 @@ class ConceptsController < ApplicationController
     if request.xhr?
       display = params[:callback].eql?('load') ? {full: true} : {display: "prefLabel"}
       @concept = @ontology.explore.single_class(display, params[:id])
-      not_found if @concept.nil?
+      concept_not_found(params[:id]) if @concept.nil?
+      @schemes = params[:concept_schemes].split(',')
       show_ajax_request # process an ajax call
     else
       # Get the latest 'ready' submission, or fallback to any latest submission
@@ -29,7 +52,7 @@ class ConceptsController < ApplicationController
       @submission = get_ontology_submission_ready(@ontology)  # application_controller
 
       @concept = @ontology.explore.single_class({full: true}, params[:id])
-      not_found if @concept.nil?
+      concept_not_found(params[:id]) if @concept.nil?
 
       show_uri_request # process a full call
       render :file => '/ontologies/visualize', :use_full_path => true, :layout => 'ontology'
@@ -37,25 +60,17 @@ class ConceptsController < ApplicationController
   end
 
   def show_label
-    cls_id = params[:concept]   # cls_id should be a full URI
+    cls_id = params[:concept] || params[:id]  # cls_id should be a full URI
     ont_id = params[:ontology]  # ont_id could be a full URI or an acronym
+
     if ont_id.to_i > 0
       params_cleanup_new_api()
       stop_words = ["controller", "action"]
       redirect_to "#{request.path}#{params_string_for_redirect(params, stop_words: stop_words)}", :status => :moved_permanently
       return
     end
-    @ontology = LinkedData::Client::Models::Ontology.find(ont_id)
-    @ontology ||= LinkedData::Client::Models::Ontology.find_by_acronym(ont_id).first
-    not_found unless @ontology
-    # Retrieve a class prefLabel or return the class ID (URI)
-    # - mappings may contain class URIs that are not in bioportal (e.g. obo-xrefs)
-    cls = @ontology.explore.single_class(cls_id)
-    # TODO: log any cls.errors
-    # TODO: NCBO-402 might be implemented here, but it throws off a lot of ajax result rendering.
-    #cls_label = cls.prefLabel({:use_html => true}) || cls_id
-    cls_label = cls.prefLabel || cls_id
-    render plain: cls_label
+
+    render LabelLinkComponent.inline(cls_id, concept_label(ont_id, cls_id))
   end
 
   def show_definition
@@ -79,11 +94,39 @@ class ConceptsController < ApplicationController
     end
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     if @ontology.nil?
-      not_found
+      ontology_not_found(params[:ontology])
     else 
-      get_class(params)   # application_controller
-      render :partial => "ontologies/treeview"
+      get_class(params) #application_controller
+      render partial: 'ontologies/treeview', locals: { autoCLick: params[:auto_click] || true }
     end
+  end
+
+  def show_date_sorted_list
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
+    if @ontology.nil?
+      ontology_not_found(params[:ontology])
+    else
+      page = params[:page]
+      @last_date = params[:last_date]
+      auto_click = page.to_s.eql?('1')
+      params = {
+        page: page,
+        sortby:'modified,created',
+        order:'desc,desc',
+        display: 'prefLabel,modified,created'
+      }
+      if @last_date
+        params.merge!(last_date: @last_date)
+        @last_date = Date.parse(@last_date)
+      end
+
+      @page = @ontology.explore.classes(params)
+      @concepts = filter_concept_with_no_date(@page.collection)
+      @concepts_year_month = concepts_to_years_months(@concepts)
+
+      render partial: 'concepts/date_sorted_list', locals: { auto_click: auto_click }
+    end
+
   end
 
   def property_tree
@@ -94,14 +137,14 @@ class ConceptsController < ApplicationController
       return
     end
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-    not_found if @ontology.nil?
+    ontology_not_found(params[:ontology]) if @ontology.nil?
     @root = @ontology.property_tree
     render json: LinkedData::Client::Models::Property.properties_to_hash(@root.children)
   end
 
   # Renders a details pane for a given ontology/concept
   def details
-    not_found if params[:conceptid].nil? || params[:conceptid].empty?
+    concept_not_found('') if params[:conceptid].nil? || params[:conceptid].empty?
 
     if params[:ontology].to_i > 0
       orig_id = params[:ontology]
@@ -112,10 +155,10 @@ class ConceptsController < ApplicationController
     end
 
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-    not_found if @ontology.nil?
+    ontology_not_found(params[:ontology]) if @ontology.nil?
 
     @concept = @ontology.explore.single_class({full: true}, CGI.unescape(params[:conceptid]))
-    not_found if @concept.nil?
+    concept_not_found(CGI.unescape(params[:conceptid])) if @concept.nil?
 
     if params[:styled].eql?("true")
       render :partial => "details", :layout => "partial"
@@ -124,12 +167,13 @@ class ConceptsController < ApplicationController
     end
   end
 
+
   def biomixer
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-    not_found if @ontology.nil?
+    ontology_not_found(params[:ontology]) if @ontology.nil?
 
     @concept = @ontology.explore.single_class({full: true}, params[:conceptid])
-    not_found if @concept.nil?
+    concept_not_found(params[:conceptid]) if @concept.nil?
 
     @immediate_load = true
 
@@ -145,8 +189,8 @@ private
       gather_details
       render :partial => 'load'
     when 'children' # Children is called only for drawing the tree
-      @children = @concept.explore.children(pagesize: 750).collection || []
-      @children.sort!{|x,y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase} unless @children.empty?
+      @children = @concept.explore.children(pagesize: 750, concept_schemes: @schemes.join(',')).collection || []
+      @children.sort! { |x, y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase } unless @children.empty?
       render :partial => 'child_nodes'
     end
   end
@@ -158,9 +202,7 @@ private
   end
 
   def gather_details
-    @mappings = get_concept_mappings(@concept)
     @notes = @concept.explore.notes
-    @delete_mapping_permission = check_delete_mapping_permission(@mappings)
     update_tab(@ontology, @concept.id) #updates the 'history' tab with the current node
   end
 
@@ -171,5 +213,16 @@ private
     @root.children = rootNode unless rootNode.nil?
   end
 
+  def filter_concept_with_no_date(concepts)
+    concepts.filter { |c| !concept_date(c).nil?}
+  end
 
+  def concepts_to_years_months(concepts)
+    return unless concepts || concepts.nil?
+
+    concepts.group_by { |c| concept_date(c).year }
+            .transform_values do |items|
+      items.group_by { |c| concept_date(c).strftime('%B') }
+    end
+  end
 end

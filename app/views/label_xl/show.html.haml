@@ -1,0 +1,22 @@
+= turbo_frame_tag 'application_modal_content' do
+  - if @label_xl && !@label_xl.empty?
+    = render ConceptDetailsComponent.new(id:'skos-xl-label', acronym: @ontology_acronym,
+                properties: @label_xl.properties,
+                top_keys: %w[description comment],
+                bottom_keys: %w[disjoint subclass is_a has_part],
+                exclude_keys: []) do |c|
+      - c.header do
+        %tr
+          %td.label
+            ID
+          %td
+            %p
+              = @label_xl["@id"]
+        %tr
+          %td{nowrap: ""} Preferred Name
+          %td
+            %p= get_label_xl_label(@label_xl)
+        %tr
+          %td{nowrap: ""} Type
+          %td
+            %p= @label_xl["@type"]

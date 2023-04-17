@@ -1,0 +1,17 @@
+- if skos?
+  - if no_schemes?
+    = no_schemes_alert
+  - else
+    - schemes_labels, main_scheme, selected_scheme = schemes_data
+    - if no_main_scheme? || main_scheme.nil?
+      = no_main_scheme_alert
+
+    #schemes.form-group
+      %label{:for => "schemes_select"} Schemes
+      %div
+        = select_tag(:concept_schemes,
+                     options_for_select(schemes_labels.map{|s| [s["prefLabel"], s["@id"]]}, selected_scheme.compact.map{|x| x["@id"]} ),
+                      {multiple: true, id: "schemes_select",
+                      data:{controller:'chosen', 'chosen-name-value': :concept_schemes,
+                      action: 'changed->history#updateURL changed->turbo-frame#updateFrame'}})
+
