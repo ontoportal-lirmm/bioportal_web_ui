@@ -28,6 +28,29 @@ footer.footer .list-inline-item:not(:last-child) {
   margin-right: 1rem;
 }
 
+.social-icons a i {
+  font-size: 20px;
+  color: #0f4e8a;
+}
+.social-icons li {
+  margin-right: 2px !important;
+}
+
+.social-icons li a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background-color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.social-icons a:hover {
+  opacity: 0.9;
+}
+
 .not-disabled {
   background-color: white !important;
 }
