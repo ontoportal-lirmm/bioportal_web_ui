@@ -42,7 +42,7 @@
 }
 
 .tabs a.active {
-  background-color: #234979 !important;
+  background-color: #0f4e8a !important;
   color:#fff !important;
 }
 
@@ -97,7 +97,7 @@
   padding: .6em .8em;
 }
 .minimal tbody tr:hover td {
-  color: #234979;
+  color: #0f4e8a;
   background: #f5fafa;
   border-bottom: 1px solid #ccc;
 }
@@ -172,7 +172,7 @@ table.align-right th:nth-child(2) {
 .zebra th {
   white-space:nowrap;
   font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  color: #0f4e8a;
   border-left: 1px solid #C1DAD7;
   border-right: 1px solid #C1DAD7;
   border-bottom: 1px solid #C1DAD7;
@@ -185,7 +185,7 @@ table.align-right th:nth-child(2) {
 }
 .zebra tbody th {
   font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  color: #0f4e8a;
   border-left: 1px solid #C1DAD7;
   border-right: 1px solid #C1DAD7;
   border-bottom: 1px solid #C1DAD7;
@@ -237,7 +237,7 @@ table.align-right th:nth-child(2) {
 .form th {
   white-space:nowrap;
   font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  color: #0f4e8a;
   border-left: 1px solid #C1DAD7;
   border-right: 1px solid #C1DAD7;
   border-bottom: 1px solid #C1DAD7;
@@ -288,12 +288,12 @@ table.align-right th:nth-child(2) {
 
 .notetype {
   font:12px bold "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  color: #0f4e8a;
 }
 .header {
   cursor:pointer;
   font:14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  color: #0f4e8a;
   border-left: 1px solid #C1DAD7;
   border-right: 1px solid #C1DAD7;
   border-bottom: 1px solid #C1DAD7;
@@ -301,7 +301,7 @@ table.align-right th:nth-child(2) {
   letter-spacing: 2px;
   text-align: left;
   padding: 6px 6px 6px 12px;
-  background: #e2ebf0;
+  background: #f2f2f2;
 }
 .message {
   background: #ECF5FB;
@@ -331,7 +331,7 @@ table.align-right th:nth-child(2) {
 .resources th {
   white-space:nowrap;
   font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  color: #0f4e8a;
   border-left: 1px solid #C1DAD7;
   border-right: 1px solid #C1DAD7;
   border-bottom: 1px solid #C1DAD7;
@@ -339,11 +339,11 @@ table.align-right th:nth-child(2) {
   text-transform: uppercase;
   text-align: left;
   padding: 6px 6px 6px 12px;
-  background: #e2ebf0;
+  background: #f2f2f2;
 }
 .resources tbody th {
   font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  color: #0f4e8a;
   border-left: 1px solid #C1DAD7;
   border-right: 1px solid #C1DAD7;
   border-bottom: 1px solid #C1DAD7;
@@ -391,21 +391,21 @@ table.align-right th:nth-child(2) {
 tr.mainresource td {
   cursor:pointer;
   font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  color: #0f4e8a;
   border-left: 1px solid #C1DAD7;
   border-right: 1px solid #C1DAD7;
   border-bottom: 1px solid #C1DAD7;
   border-top: 1px solid #C1DAD7;
   text-align: left;
   padding: 6px 6px 6px 12px;
-  background: #e2ebf0;
+  background: #f2f2f2;
 }
 
 /* Ratings */
 .star_ratings{
-    color: #234979;
+    color: #0f4e8a;
     border: 1px solid #C1DAD7;
-    background: #e2ebf0;
+    background: #f2f2f2;
     width:300px;
     float:left;
     margin-right:10px;
@@ -421,7 +421,7 @@ tr.mainresource td {
   cursor:pointer;
   font-weight:bold;
   font:14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-  color: #234979;
+  color: #0f4e8a;
   border-left: 1px solid #C1DAD7;
   border-right: 1px solid #C1DAD7;
   border-bottom: 1px solid #C1DAD7;
@@ -429,7 +429,7 @@ tr.mainresource td {
   letter-spacing: 1px;
   text-align: left;
   padding: 6px 6px 6px 12px;
-  background: #e2ebf0;
+  background: #f2f2f2;
 }
 
 .home_button{
@@ -882,11 +882,11 @@ button.fg-button-menu, button.fg-button {
 }
 
 .too_many_children_override {
-  color: #234979 !important;
+  color: #0f4e8a !important;
 }
 
 .too_many_children_override:hover {
-  color: #234979 !important;
+  color: #0f4e8a !important;
   text-decoration: underline !important;
 }
 
@@ -914,16 +914,16 @@ button.fg-button-menu, button.fg-button {
  ************************************/
 .btn-bp-login {
   color: #C58612;
-  border-color: #C58612 !important;
+  border-color: #C58612 !important;#212529
 
   &:hover {
-    color: #234979;
+    color: #0f4e8a;
     background-color: #C58612;
   }
 }
 
 .navbar-custom {
-  background-color: #234979;
+  background-color: #0f4e8a;
 }
 
 .nav_text a {

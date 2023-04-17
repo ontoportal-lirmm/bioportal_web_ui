@@ -117,7 +117,7 @@
   margin-right: 5px;
   border-radius: 3px;
   color: white;
-  background-color: #234979;
+  background-color: #0f4e8a;
   font-size: 1em;
   font-weight: bold;
 }
@@ -177,7 +177,7 @@
   height: 22px;
   font-size: 1.1em;
   font-weight: bold;
-  color: #234979;
+  color: #0f4e8a;
 }
 .ontology_badge:hover .badge_count {
   background-color: rgba(220, 235, 255, 0.79);
