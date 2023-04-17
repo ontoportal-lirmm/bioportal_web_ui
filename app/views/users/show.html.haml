@@ -57,7 +57,7 @@
 
   - unless @admin_ontologies.nil? || @admin_ontologies.empty?
     %h2#admin_ontologies{style: "font-size: large;"}
-      Submitted Ontologies
+      Submitted Semantic Resources
     %ul{style: "padding-left: 1em;"}
       - @admin_ontologies.each do |ont|
         %li
@@ -76,24 +76,24 @@
     }
 
   %h2#custom_ontology_set{style: "font-size: large;"}
-    Custom Ontology Set
+    Custom Semantic Resource Set
   #custom_ontologies.enable-lists
     - if at_slice?
       %p{style: "padding-left: 7px; font-size: 10pt; margin: -3px 0 7px;"}
         Please
         %a{href: "#{$UI_URL}/account"} visit the main site
-        to modify your Custom Ontology Set.
+        to modify your Custom Semantic Resource Set.
     - else
       %p{style: "padding-left: 7px; font-size: 9pt; color: gray; margin: -3px 0 7px;"}
         %b
           Customize your #{$SITE} display:
-        Pick the ontologies that you want to see and #{$SITE} will hide all other ontologies. <br/>
+        Pick the semantic resources that you want to see and #{$SITE} will hide all other semantic resources. <br/>
         %b
           Note:
         this feature works only when you are logged in.
       %p
         %span{style: "font-weight: normal; font-size: 9pt; padding-left: 7px;"}
-          %a#edit_custom_ontologies{href: "javascript:void(0);"} select ontologies
+          %a#edit_custom_ontologies{href: "javascript:void(0);"} select semantic resources
       - if @user_ontologies && !@user_ontologies.empty?
         %ul
           - @user_ontologies.each do |ont|
@@ -101,7 +101,7 @@
             %li
               #{ont.name} (#{ont.acronym})
       - else
-        %p{style: "padding-left: 7px;"} You haven't picked any ontologies yet
+        %p{style: "padding-left: 7px;"} You haven't picked any semantic resources yet
 
         %div
           %h2{style:"margin-top:18px; font-size: large;"} Mailing list service
@@ -130,6 +130,6 @@
   #custom_ontologies_picker{style: "left: -9999px; position: absolute;"}
     = form_tag custom_ontologies_path(url_encode(@user.username)) do
       - selected = @user.customOntology.map {|o| LinkedData::Client::Models::Ontology.get(o).acronym}
-      - locals = { custom_ontologies: @all_ontologies, selected_ontologies: selected, sel_text: "Select Custom Ontologies" }
+      - locals = { custom_ontologies: @all_ontologies, selected_ontologies: selected, sel_text: "Select Custom Semantic Resources" }
       = render partial: "shared/ontology_picker", locals: locals
-      = submit_tag "Save Custom Ontologies", class: "link_button"
+      = submit_tag "Save Custom Semantic Resources", class: "link_button"
