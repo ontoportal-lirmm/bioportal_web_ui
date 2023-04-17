@@ -1146,6 +1146,11 @@ a.truncated_less, a.truncated_more {
 
 }
 
+.img_logo {
+  height: 40px;
+  margin: 6px;
+}
+
 turbo-frame[busy] .hide-if-loading, .show-if-loading {
   display: none;
 }
