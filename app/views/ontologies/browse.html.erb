@@ -34,13 +34,9 @@
 
     <div id="facets" class="grid-20">
       <%if session[:user].nil?%>
-        <a class="new_ontology_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" href="/login?redirect=/ontologies/new">
-          <span class="ui-button-text">Submit New Ontology</span>
-        </a>
+        <a class="new_ontology_button btn btn-primary" href="/login?redirect=/ontologies/new">Submit New Semantic Resource</a>
       <%else%>
-        <a class="new_ontology_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" href="/ontologies/new">
-          <span class="ui-button-text">Submit New Ontology</span>
-        </a>
+        <a class="new_ontology_button btn btn-primary" href="/ontologies/new">Submit New Semantic Resource</a>
       <%end%>
 
       <!-- To add a new facet: set new filter to $scope.facets in angular defined in public/browse/app.js
