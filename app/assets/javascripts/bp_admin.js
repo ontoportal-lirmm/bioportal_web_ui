@@ -826,6 +826,7 @@ jQuery(".admin.index").ready(function() {
     DeleteUsers.act(this.dataset.accountName);
   });
 
+
   // BUTTON onclick actions ---------------------------------------
 
   // onclick action for "Go" button for performing an action on a set of ontologies

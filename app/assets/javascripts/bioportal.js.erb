@@ -15,22 +15,6 @@ var cache = new Object();
 var que= new Array();
 var queIndex = 0;
 var thread=0;
-var currentOntology;
-var currentConcept;
-
-    function setOntology(ontology){
-        currentOntology = ontology;
-    }
-    function setConcept(concept){
-        currentConcept = concept;
-    }
-
-    function getOntology(){
-        return currentOntology;
-    }
-    function getConcept(){
-        return currentConcept;
-    }
 
 // Invalidate and Refetch
   function refreshCache(nodeID){
@@ -528,7 +512,7 @@ function bpPopWindow(e) {
     newWindow.focus()
   };
 }
-jQuery("div.footer-support, div.dropdown-menu.dropdown-menu-right").on("click", "a.pop_window", { w: "800", h: "600" }, bpPopWindow)
+jQuery(".footer, div.dropdown-menu.dropdown-menu-right").on("click", "a.pop_window", { w: "800", h: "600" }, bpPopWindow)
 
 /**************************************************************
  * Standardized BP modal popups
@@ -627,6 +611,11 @@ jQuery(window).ready(function(){
 // Initialize all link buttons using jQuery UI button widget
 jQuery(document).ready(function(){
   jQuery("a.link_button, input.link_button").button();
+  // Properly define Chosen select width
+  jQuery(".chzn-container").css("width", "auto");
+  jQuery(".chzn-container").css("min-width", "30em");
+  jQuery("input.default").css("width", "100%");
+  jQuery(".chzn-drop").css({"width": "100%"});
 });
 
 // Truncate more/less show and hide
@@ -680,10 +669,11 @@ jQuery(document).ready(function(){
 function getAjaxContent() {
   // Look for anchors with a get_via_ajax class and replace the parent with the resulting ajax call
   $(".get_via_ajax").each(function(){
-    if (typeof $(this).attr("getting_content") === 'undefined') {
-      $(this).parent().load($(this).attr("href"));
-      $(this).attr("getting_content", true);
-    }
+      let elem = $(this)
+      let parent = elem.parent()
+      $.get(elem.attr("href"), (conceptLabel) => {
+          parent.html(conceptLabel)
+      })
   });
   setTimeout(getAjaxContent, 500);
 }

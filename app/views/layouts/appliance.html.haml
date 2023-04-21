@@ -2,6 +2,7 @@
 %html
   %head
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta name="turbo-cache-control" content="no-cache">
 
     %title= @title.nil? ? "#{$ORG_SITE}" : "#{@title} | #{$ORG_SITE}"
 
@@ -16,7 +17,6 @@
     = javascript_include_tag "vendor"
     = javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"
     = javascript_include_tag "//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"
-    = javascript_include_tag "//unpkg.com/split.js/dist/split.min.js"
 
     %script
       jQuery(document).data({bp: {config: #{bp_config_json.html_safe}, user: #{(session[:user] || {}).to_hash.to_json.html_safe}}});
@@ -30,11 +30,8 @@
     
     %div.container-fluid
       = render partial: "layouts/notices"
+      = render TurboModalComponent.new(id: 'application_modal')
       = yield
 
-    = render partial: "footer_appliance"
+    = render partial: "layouts/footer"
 
-    -# BioPortal-specific JavaScript
-    = javascript_include_tag "application"
-
-    = render partial: "ga_tracking"

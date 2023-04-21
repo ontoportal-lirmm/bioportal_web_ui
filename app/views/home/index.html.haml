@@ -8,7 +8,8 @@
       document.cookie="front_page_notice_closed=true; expires="+exdate.toGMTString();
       jQuery("#notice_message").hide();
     }
-    %p#notice_message{:style => "padding: 10px; margin: 10px; border:1px solid #EFEFEF; background-color: #F9F9F9;"}
+
+  %p#notice_message{:style => "padding: 10px; margin: 10px; border:1px solid #EFEFEF; background-color: #F9F9F9;"}
     = $FRONT_NOTICE
     \&nbsp;&nbsp;
     %a{:href => "#", :onclick => "close_message(); return false;", :style => "font-size: small; color: darkGray;"} [close]
@@ -34,7 +35,7 @@
                 = text_field_tag("query", nil, class: "form-control", placeholder: placeholder)
                 %div.input-group-append
                   = button_tag(type: "submit", class: "btn btn-primary", aria: {label: "Search for a class"}) do
-                    %i{class: "fas fa-search fa-lg", aria: {hidden: "true"}}              
+                    %i{class: "fas fa-search fa-lg", aria: {hidden: "true"}}
               %a{:href => "/search?opt=advanced"} Advanced Search
         -# Search for an ontology
         %div.card
@@ -67,20 +68,74 @@
         %div.card
           %div.card-header #{$SITE} Statistics #{"in full #{$SITE}" if at_slice?}
           %ul.list-group.list-group-flush
-            %li.list-group-item 
+            %li.list-group-item
               %div.d-flex.justify-content-between.align-items-center
                 %span Ontologies
                 %span= number_with_delimiter(@ont_count)
             %li.list-group-item
               %div.d-flex.justify-content-between.align-items-center
                 %span Classes
-                %span= number_with_delimiter(@cls_count)
+                %span= number_with_delimiter(@cls_count, :delimiter => ",")
             %li.list-group-item
               %div.d-flex.justify-content-between.align-items-center
-                %span Properties
-                %span= number_with_delimiter(@prop_count)
+                %span Individuals
+                %span= number_with_delimiter(@individuals_count, :delimiter => ",")
             %li.list-group-item
               %div.d-flex.justify-content-between.align-items-center
-                %span Mappings
-                %span= number_with_delimiter(@map_count)
+                %span Projects
+                %span= LinkedData::Client::Models::Project.all.length
+            %li.list-group-item
+              %div.d-flex.justify-content-between.align-items-center
+                %span Users
+                %span= LinkedData::Client::Models::User.all.length
+  - if fairness_service_enabled?
+    %div#fair-home.row.mt-3
+      = render partial: "fair_score_home"
+  %div.row.pt-3.extra
+    %div.col
+      %div.card-deck
+        -# Latest Notes
+        %div.card
+          %div.card-header Latest Notes
+          %ul.list-group.list-group-flush
+            - if @last_notes.nil? || @last_notes.empty?
+              %li.list-group-item
+                %span No recent notes have been submitted
+            - else
+              - for note in @last_notes
+                %li.list-group-item
+                  - begin
+                    = link_to "#{note[:subject]} (#{note[:ont_name]})", note_path(CGI.escape(note[:id]))
+                    %br/
+                    %span{:style => "color: #AAAAAA"}
+                      = "#{time_ago_in_words(note[:created])} ago"
+                      by #{note[:author]}
+                    - if note[:body]
+                      %p
+                        = truncate(strip_tags(note[:body]), :length => 100)
+                        \&nbsp;
+                  - rescue
+        - if !$ENABLE_SLICES.nil? && $ENABLE_SLICES == true && !at_slice?
+          -# Slices
+          %div.card
+            %div.card-header Slices
+            %ul.list-group.list-group-flush
+              - LinkedData::Client::Models::Slice.all.each_with_index do |slice, index|
+                - break if index == 10
+                - slice_name = "#{slice.name} (#{slice.acronym})"
+                - slice_link = "http://#{slice.acronym}.#{$UI_URL.sub("http://", "")}"
+                %li.list-group-item
+                  = link_to slice_name, slice_link
 
+
+
+  - $HOME_PAGE_LOGOS.to_a.each do |home_page_logos_row|
+    - unless home_page_logos_row[:links].to_a.empty?
+      %div.row.pt-3
+        %div.col
+          %div.card-deck
+            %div.card
+              %div.card-header= home_page_logos_row[:title]
+              %div.logos
+                - home_page_logos_row[:links].to_a.each do |logo|
+                  = link_to(image_tag(logo[:img_src]), logo[:url], target: logo[:target])

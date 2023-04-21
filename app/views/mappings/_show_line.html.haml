@@ -1,0 +1,55 @@
+- process = map.process || {}
+- source = "#{map.source} #{process[:source_name]}"
+- relations = process[:relation]&.each { |relation| get_prefixed_uri(relation)}
+- map_id = map.id.to_s.split("/").last
+- target_concept = map.classes.select {|target_concept| target_concept.id != concept.id && target_concept.links['ontology'] != concept.links['ontology']}.first || map.classes.last
+
+- if inter_portal_mapping?(target_concept)
+  - cls_link = ajax_to_inter_portal_cls(target_concept)
+  - ont_name = target_concept.links['ontology']
+  - ont_acronym = ont_name
+  - ont_link = link_to ont_acronym , get_inter_portal_ui_link(target_concept.links['ontology'], process["name"]), target: '_blank'
+  - type = 'Inter-portal'
+- elsif internal_mapping?(target_concept)
+  - begin
+    - ont = target_concept.explore.ontology
+    - ont_name = ont.acronym
+    - ont_link =  link_to ont_name, ontology_path(ont_name)
+  - rescue
+    - ont_name =   target_concept.links['ontology'] || target_concept.id
+    - ont_link =   ont_name
+  - cls_link = raw(get_link_for_cls_ajax(target_concept.id, ont_name))
+  - type = 'Internal'
+- else
+  - cls_label = get_label_for_external_cls(target_concept.links["self"])
+  - cls_link = raw("<a href='#{target_concept.links["self"]}' target='_blank'>#{cls_label}</a>")
+  - ont_name = target_concept.links['ontology']
+  - ont_link = link_to ont_name, target_concept.links['ontology'], target: "_blank"
+  - type = 'External'
+  
+%tr.human{:id => map_id}
+  %td
+    = cls_link
+  %td
+    = ont_link
+  %td
+    - relations&.each do  |r|
+      = r
+      %br/
+  %td
+    #{source}
+    - if !process.nil?
+      - if translation?(process["relation"])
+        %img{:src => asset_path('sifr/english_language_flag.png'), :style => "padding: 5px", :align => "right", :title => "Traduction"}
+  %td
+    = type
+  %td{:class => 'delete_mappings_column'}
+    - if map.id && !map.id.empty? && session[:user] && (session[:user].id.to_i == map.creator || session[:user].admin?) && map.source.eql?('REST')
+      %div.d-flex
+        = link_to_modal("Edit",
+                mapping_path(map_id, {conceptid_from: @concept.id}),
+                role: "button",
+                class: "btn btn-link",
+                data: { show_modal_title_value: "Edit mapping for #{@concept.prefLabel}" },
+                )
+        = button_to "Delete", CGI.unescape(mapping_path(map.id)), method: :delete, class:'btn btn-link',  form: {data: { turbo: true, turbo_confirm: "Are you sure?", turbo_frame: '_top'}}

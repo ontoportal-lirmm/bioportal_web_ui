@@ -11,13 +11,12 @@
 <head>
   <!-- Angular doesn't work well in sub-directories, this provides a base path that everything is relative to (HTML and Angular alike) -->
   <base href="<%=@base_path%>">
-
+  <meta name="turbo-cache-control" content="no-cache">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="lib/html5-boilerplate/css/normalize.css">
   <link rel="stylesheet" href="lib/html5-boilerplate/css/main.css">
-  <link rel="stylesheet" href="app.css">
 
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
@@ -36,7 +35,6 @@
   <%=javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"%>
   <%=javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js"%>
   <%=javascript_include_tag "//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"%>
-  <%=javascript_include_tag "//unpkg.com/split.js/dist/split.min.js"%>
   <script>
     jQuery(document).data({bp: {config: <%=bp_config_json.html_safe%>, user: <%=(session[:user] || {}).to_hash.to_json.html_safe%>}});
     jQuery(document).data().bp.ontology = <%=@ontology.to_json.html_safe%> || {};
@@ -68,13 +66,7 @@
   <script src="checklist-model.js"></script>
   <script src="app.js"></script>
 
-  <% if appliance_mode %>
-    <%= render partial: "footer_appliance" %>
-    <%= javascript_include_tag "application" %>
-    <%= render partial: "ga_tracking" %>    
-  <% else %>
-    <%= render partial: 'layouts/footer' %>
-  <% end %>
+  <%= render partial: 'layouts/footer' %>
 
 </body>
 </html>

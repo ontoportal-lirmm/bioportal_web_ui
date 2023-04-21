@@ -15,7 +15,7 @@ require 'ontologies_api_client'
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   helper_method :bp_config_json, :current_license, :using_captcha?
-
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found_record
   # Pull configuration parameters for REST connection.
   REST_URI = $REST_URL
   API_KEY = $API_KEY
@@ -29,6 +29,27 @@ class ApplicationController < ActionController::Base
   EXPIRY_RECENT_MAPPINGS = 60 * 60     #  1:00 hours
   EXPIRY_ONTOLOGY_SIMPLIFIED = 60 * 1  #  0:01 minute
 
+
+  $DATA_CATALOG_VALUES = {"fairsharing.org/" => "FAIRsharing",
+                         "aber-owl.net" => "AberOWL",
+                         "vest.agrisemantics.org" => "VEST Registry",
+                         "bioportal.bioontology.org" => "BioPortal",
+                         "ontobee.org" => "Ontobee",
+                         "obofoundry.org" => "The OBO Foundry",
+                         "ebi.ac.uk/ols" => "EBI Ontology Lookup"}
+
+  RESOLVE_NAMESPACE = {:omv => "http://omv.ontoware.org/2005/05/ontology#", :skos => "http://www.w3.org/2004/02/skos/core#", :owl => "http://www.w3.org/2002/07/owl#",
+                       :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#", :rdfs => "http://www.w3.org/2000/01/rdf-schema#", :metadata => "http://data.bioontology.org/metadata/",
+                       :metadata_def => "http://data.bioontology.org/metadata/def/", :dc => "http://purl.org/dc/elements/1.1/", :xsd => "http://www.w3.org/2001/XMLSchema#",
+                       :oboinowl_gen => "http://www.geneontology.org/formats/oboInOwl#", :obo_purl => "http://purl.obolibrary.org/obo/",
+                       :umls => "http://bioportal.bioontology.org/ontologies/umls/", :door => "http://kannel.open.ac.uk/ontology#", :dct => "http://purl.org/dc/terms/",
+                       :void => "http://rdfs.org/ns/void#", :foaf => "http://xmlns.com/foaf/0.1/", :vann => "http://purl.org/vocab/vann/", :adms => "http://www.w3.org/ns/adms#",
+                       :voaf => "http://purl.org/vocommons/voaf#", :dcat => "http://www.w3.org/ns/dcat#", :mod => "http://www.isibang.ac.in/ns/mod#", :prov => "http://www.w3.org/ns/prov#",
+                       :cc => "http://creativecommons.org/ns#", :schema => "http://schema.org/", :doap => "http://usefulinc.com/ns/doap#", :bibo => "http://purl.org/ontology/bibo/",
+                       :wdrs => "http://www.w3.org/2007/05/powder-s#", :cito => "http://purl.org/spar/cito/", :pav => "http://purl.org/pav/", :nkos => "http://w3id.org/nkos/nkostype#",
+                       :oboInOwl => "http://www.geneontology.org/formats/oboInOwl#", :idot => "http://identifiers.org/idot/", :sd => "http://www.w3.org/ns/sparql-service-description#",
+                       :cclicense => "http://creativecommons.org/licenses/"}
+
   $trial_license_initialized = false
 
   if !$EMAIL_EXCEPTIONS.nil? && $EMAIL_EXCEPTIONS == true
@@ -39,6 +60,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   before_action :set_global_thread_values, :domain_ontology_set, :authorize_miniprofiler, :clean_empty_strings_from_params_arrays, :init_trial_license
+
+
 
   def set_global_thread_values
     Thread.current[:session] = session
@@ -82,13 +105,21 @@ class ApplicationController < ActionController::Base
     user ||= User.new({"id" => 0})
   end
 
-  def not_found
+  def ontology_not_found(ontology_acronym)
+    not_found("Ontology #{ontology_acronym} not found")
+  end
+
+  def concept_not_found(concept_id)
+    not_found("Concept #{concept_id} not found")
+  end
+
+  def not_found(message = '')
     if request.xhr?
-      render plain: "Error: load failed"
+      render plain: message || "Error: load failed"
       return
     end
-    
-    raise ActiveRecord::RecordNotFound.new('Not Found')
+
+    raise ActiveRecord::RecordNotFound.new(message || 'Not Found')
   end
 
   NOTIFICATION_TYPES = { :notes => "CREATE_NOTE_NOTIFICATION", :all => "ALL_NOTIFICATION" }
@@ -119,7 +150,12 @@ class ApplicationController < ActionController::Base
         userapikey: get_apikey,
         rest_url: LinkedData::Client.settings.rest_url,
         proxy_url: $PROXY_URL,
-        biomixer_url: $BIOMIXER_URL
+        biomixer_url: $BIOMIXER_URL,
+        annotator_url: $ANNOTATOR_URL,
+        ncbo_annotator_url: $NCBO_ANNOTATOR_URL,
+        ncbo_apikey: $NCBO_API_KEY,
+        interportal_hash: $INTERPORTAL_HASH,
+        resolve_namespace: RESOLVE_NAMESPACE
     }
     config[:ncbo_slice] = @subdomain_filter[:acronym] if (@subdomain_filter[:active] && !@subdomain_filter[:acronym].empty?)
     config.to_json
@@ -169,14 +205,25 @@ class ApplicationController < ActionController::Base
     file_exists
   end
 
-  def response_errors(error_struct)
+  def parse_response_body(response)
+    return nil if response.nil?
+
+    if response.respond_to?(:errors) && response.errors
+      response
+    else
+      OpenStruct.new(JSON.parse(response.body, symbolize_names: true))
+    end
+  end
+
+  def response_errors(error_response)
+    error_struct = parse_response_body(error_response)
+
     errors = {error: "There was an error, please try again"}
     return errors unless error_struct
     return errors unless error_struct.respond_to?(:errors)
     errors = {}
-    error_struct.errors.each {|e| ""}
     error_struct.errors.each do |error|
-      if error.is_a?(Struct)
+      if error.is_a?(OpenStruct) || error.is_a?(Struct)
         errors.merge!(struct_to_hash(error))
       else
         errors[:error] = error
@@ -185,11 +232,25 @@ class ApplicationController < ActionController::Base
     errors
   end
 
+  def response_success?(response)
+    return false if response.nil?
+
+    if response.respond_to?(:status) && response.status
+        response.status.to_i < 400
+    else
+      !(response.respond_to?(:errors) && response.errors)
+    end
+  end
+
+  def response_error?(response)
+    !response_success?(response)
+  end
+
   def struct_to_hash(struct)
     hash = {}
     struct.members.each do |attr|
       next if [:links, :context].include?(attr)
-      if struct[attr].is_a?(Struct)
+      if struct[attr].is_a?(Struct) || struct[attr].is_a?(OpenStruct)
         hash[attr] = struct_to_hash(struct[attr])
       else
         hash[attr] = struct[attr]
@@ -224,8 +285,8 @@ class ApplicationController < ActionController::Base
       @error = "Please provide an ontology id or concept id with an ontology id."
       return
     end
-    acronym = BPIDResolver.id_to_acronym(params[:ontology])
-    not_found unless acronym
+    acronym = BpidResolver.id_to_acronym(params[:ontology])
+    ontology_not_found(params[:ontology]) unless acronym
     if class_view
       @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
       concept = get_class(params).first.to_s
@@ -238,7 +299,7 @@ class ApplicationController < ActionController::Base
   def params_cleanup_new_api
     params = @_params
     if params[:ontology] && params[:ontology].to_i > 0
-      params[:ontology] = BPIDResolver.id_to_acronym(params[:ontology])
+      params[:ontology] = BpidResolver.id_to_acronym(params[:ontology])
     end
 
     params
@@ -299,6 +360,10 @@ class ApplicationController < ActionController::Base
     session[:user] && session[:user].admin?
   end
 
+  def ontology_restricted?(acronym)
+    restrict_downloads = $NOT_DOWNLOADABLE
+    restrict_downloads.include? acronym
+  end
   # updates the 'history' tab with the current selected concept
   def update_tab(ontology, concept)
     array = session[:ontologies] || []
@@ -387,12 +452,11 @@ class ApplicationController < ActionController::Base
       if ignore_concept_param
         # get the top level nodes for the root
         # TODO_REV: Support views? Replace old view call: @ontology.top_level_classes(view)
-        roots = @ontology.explore.roots
+        roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
         if roots.nil? || roots.empty?
           LOG.add :debug, "Missing roots for #{@ontology.acronym}"
-          not_found
+          not_found("Missing roots for #{@ontology.acronym}")
         end
-
         @root = LinkedData::Client::Models::Class.new(read_only: true)
         @root.children = roots.sort{|x,y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase}
 
@@ -403,23 +467,23 @@ class ApplicationController < ActionController::Base
         # Some ontologies have "too many children" at their root. These will not process and are handled here.
         if @concept.nil?
           LOG.add :debug, "Missing class #{root_child.links.self}"
-          not_found
+          not_found("Missing class #{root_child.links.self}")
         end
       else
         # if the id is coming from a param, use that to get concept
         @concept = @ontology.explore.single_class({full: true}, params[:conceptid])
         if @concept.nil? || @concept.errors
           LOG.add :debug, "Missing class #{@ontology.acronym} / #{params[:conceptid]}"
-          not_found
+          not_found("Missing class #{@ontology.acronym} / #{params[:conceptid]}")
         end
 
         # Create the tree
-        rootNode = @concept.explore.tree(include: "prefLabel,hasChildren,obsolete")
+        rootNode = @concept.explore.tree(include: "prefLabel,hasChildren,obsolete", concept_schemes: params[:concept_schemes])
         if rootNode.nil? || rootNode.empty?
-          roots = @ontology.explore.roots
+          roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
           if roots.nil? || roots.empty?
             LOG.add :debug, "Missing roots for #{@ontology.acronym}"
-            not_found
+            not_found("Missing roots for #{@ontology.acronym}")
           end
           if roots.any? {|c| c.id == @concept.id}
             rootNode = roots
@@ -685,5 +749,16 @@ class ApplicationController < ActionController::Base
       $trial_license_initialized = true
     end
   end
+  
+  # Get the submission metadata from the REST API.
+  def submission_metadata
+    @metadata ||= JSON.parse(Net::HTTP.get(URI.parse("#{REST_URI}/submission_metadata?apikey=#{API_KEY}")))
+  end
+  helper_method :submission_metadata
 
+  private
+  def not_found_record(exception)
+    @error_message = exception.message
+    render 'errors/not_found', status: 404
+  end
 end

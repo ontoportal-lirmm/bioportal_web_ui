@@ -1,0 +1,51 @@
+body {
+  margin-bottom: 0px !important;
+}
+
+a {
+  color: $color-links !important;
+}
+a i {
+  color: $color-primary;
+}
+
+.btn-info, .btn-outline-primary:hover, .btn-primary ,  .nav-pills .nav-link.active{
+  background-color: $color-primary !important;
+  border-color: $color-primary !important;
+  color: #fff !important;
+}
+.btn-outline-primary{
+  border-color: $color-primary !important;
+  color:  $color-primary !important;
+}
+.btn-danger {
+  color: #fff !important;
+}
+
+.bg-success {
+  background-color: $color-secondary !important;
+}
+
+.btn-link {
+  color:  $color-primary !important;
+}
+.card-header.bg-success {
+  font-weight: bold;
+}
+
+#ontology_submission_form .card-link:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\f078";
+  display: inline-block;
+  margin-right: 5px;
+  vertical-align: middle;
+  font-weight: 900;
+}
+#ontology_submission_form .card-link.collapsed:before {
+  content: "\f054";
+}
+#ontology_submission_form .add-value-btn {
+  margin-bottom: 0.5em;
+  margin-top: 0.0em;
+  margin-left: 0.0em;
+}

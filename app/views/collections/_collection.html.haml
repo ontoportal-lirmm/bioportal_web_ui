@@ -1,0 +1,27 @@
+= turbo_frame_tag 'collection' do
+  = render ConceptDetailsComponent.new(id:'collection-label', acronym: @ontology.acronym,
+                properties: collection.properties,
+                top_keys: %w[created modified comment note],
+                bottom_keys: [],
+                exclude_keys: %w[member]) do |c|
+    = c.header do
+      %tr
+        %td.label
+          ID
+        %td
+          %p
+            = collection["@id"]
+      %tr
+        %td{nowrap: ""} Preferred Name
+        %td
+          %p= get_collection_label(collection)
+      %tr
+        %td{nowrap: ""} Members count
+        %td
+          %p= collection["memberCount"]
+      %tr
+        %td.label
+          Type
+        %td
+          %p
+            = collection["@type"]

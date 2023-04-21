@@ -1,0 +1,117 @@
+- require 'cgi'
+- require 'rails_autolink'
+=javascript_include_tag "jsonld"
+%link{:type => "text/css", :rel => "stylesheet", :href => "/stylesheets/bootstrap.css"}
+%link{:type => "text/css", :rel => "stylesheet", :href => "/stylesheets/bootstrap-theme.css"}
+%link{:type => "text/css", :rel => "stylesheet", :href => "//cloud.github.com/downloads/lafeber/world-flags-sprite/flags32.css"}
+
+%h2{:style => "font-size: x-large;"}
+  Details
+#metadata_content
+  %div{:style => "overflow: hidden; min-width: 550px"}
+    %table.form{:width => "100%"}
+      %tr
+        %th Acronym
+        %td.top= @ontology.acronym
+      %tr
+        %th Visibility
+        %td= strip_links(visibility_link(@ontology))
+
+      - if !$PURL_ENABLED.nil? && $PURL_ENABLED && !@ontology.summaryOnly
+        %tr
+          %th
+            = "#{$SITE} PURL".strip
+          %td
+            = auto_link(@ontology.purl, :all, :target => "_blank")
+
+      - if @ontology.viewing_restricted?
+        %tr
+          %th
+            Viewing Restriction
+          %td
+            = @ontology.viewingRestriction.capitalize
+
+      - if @ontology.respond_to?('viewOf')
+        - unless @ontology.viewOf.nil?
+          %tr
+            %th
+              View of Ontology
+            %td
+              - ont_parent_acronym = @ontology.viewOf.split('/').last
+              - if !$PURL_ENABLED.nil? && $PURL_ENABLED
+                - ont_url = @ontology.purl.sub(@ontology.acronym, ont_parent_acronym)
+              - else
+                - ont_url = @ontology.links['ui'].sub(@ontology.acronym, ont_parent_acronym)
+              = auto_link(ont_url, :all, :target => "_blank")
+
+      -# Get the latest submission (not necessarily the latest ready submission).
+      - sub = @submission_latest
+      - unless sub.nil? || (sub.respond_to?(:status) && sub.status == 404)
+        %tr
+          %th
+            Description
+          %td
+            = sub.description rescue ""
+        %tr
+          %th
+            Status
+          %td
+            = sub.status.capitalize unless sub.status.nil?
+        %tr
+          %th
+            Format
+          %td
+            = sub.hasOntologyLanguage
+        %tr
+          %th
+            Contact
+          %td
+            = raw sub.contact.map {|c| [c.name, c.email].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
+        %tr
+          %th
+            Home Page
+          %td
+            %a{:href => sub.homepage, :target => "_blank"}= sub.homepage
+        //- sub.homepage.each |homepage| do %a{:href => homepage, :target => "_blank"}= homepage test for a array of value for homepage
+        %tr
+          %th
+            Publications Page
+          %td
+            %a{:href => sub.publication, :target => "_blank"}= sub.publication
+        %tr
+          %th
+            Documentation Page
+          %td
+            %a{:href => sub.documentation, :target => "_blank"}= sub.documentation
+
+      %tr
+        %th
+          Categories
+        %td
+          - categories_hash = LinkedData::Client::Models::Category.all_to_hash
+          - categories = @ontology.hasDomain
+          = categories.map {|c| categories_hash[c].name}.sort.join(", ")
+      %tr
+        %th
+          Groups
+        %td
+          - groups_hash = LinkedData::Client::Models::Group.all_to_hash
+          - groups = @ontology.group
+          = groups.map {|g| groups_hash[g].name}.sort.join(", ")
+
+      = raw additional_details
+
+- additional_data = additional_metadata(sub)
+- if additional_data != ""
+  %br/
+  %h2#add_h{:style => "font-size: large; cursor: pointer;"}
+    Additional Metadata
+  #add_metadata_content
+    %div{:style => "overflow: hidden; min-width: 550px;"}
+      %table.form{:width => "100%"}
+        = raw additional_data
+
+:javascript
+  jQuery('#add_h').click(function() {
+    jQuery('#add_metadata_content').toggle();
+  });

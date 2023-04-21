@@ -1,0 +1,18 @@
+.card
+  #headingOne.card-header
+    %h2.mb-0
+      %button.btn.btn-link.btn-block.text-left{"data-target" => "#collapseOne", "data-toggle" => "collapse", :type => "button"}
+        = t('mappings.intro').html_safe
+        = link_to(Rails.configuration.settings.links[:mappings], id: "mappings-help", "aria-label": "View mappings help") do
+          %i.fas.fa-question-circle.fa-lg{"aria-hidden": "true"}
+  #collapseOne.collapse{"data-parent" => "#accordionExample"}
+    .card-body
+      %div#mappings_select
+      - if @options.empty?
+        No mappings available
+      - else
+        = select('search', 'ontologies', @options, {:include_blank => ""},{:onchange=>"loadMappings(this.value);", "data-placeholder".to_sym => "Select an Ontology", autocomplete: "off"})
+        #mapping_load
+          %img{src: asset_path("jquery.simple.tree/spinner.gif")}/
+          Loading mappings...
+        #mappingCount{style:'min-height: 300px;'}

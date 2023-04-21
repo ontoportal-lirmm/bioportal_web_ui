@@ -25,7 +25,7 @@ BioportalWebUi::Application.configure do
   # config.action_dispatch.rack_cache = true
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = Uglifier.new(harmony: true)
+  config.assets.js_compressor = :terser
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
@@ -79,6 +79,7 @@ BioportalWebUi::Application.configure do
 
   # Use a different cache store in the appliance.
   config.cache_store = :mem_cache_store, ENV["MEMCACHE_SERVERS"] || "localhost:11211", { :namespace => 'bioportal_web_ui', :expires_in => 1.day }
+
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.

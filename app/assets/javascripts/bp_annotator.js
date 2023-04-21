@@ -2,7 +2,11 @@ var
   bp_last_params = null,
   annotationsTable = null,
   annotator_ontologies = null;
-
+  docUrl = document.URL.replace(/\/$/, ""),
+  last_slash_index = docUrl.lastIndexOf("/"),
+  annotatorUrl = '/' + docUrl.substr(last_slash_index+1),
+  isNcboAnnotatorPlus = annotatorUrl == '/ncbo_annotatorplus';
+  
 // Note: the configuration is in config/bioportal_config.rb.
 var BP_CONFIG = jQuery(document).data().bp.config;
 
@@ -12,7 +16,12 @@ var BP_COLUMNS = {
   types: 2,
   sem_types: 3,
   matched_classes: 5,
-  matched_ontologies: 6
+  matched_ontologies: 6,
+  score: 7,
+  negation: 8,
+  experiencer: 9,
+  temporality: 10,
+  certainty: 11
 };
 
 var CONCEPT_MAP = {
@@ -30,11 +39,13 @@ function set_last_params(params) {
 function insertSampleText(event) {
   "use strict";
   event.preventDefault();
-  var text = "Melanoma is a malignant tumor of melanocytes which are found predominantly in skin but also in the bowel and the eye.";
   jQuery("#annotation_text").focus();
-  jQuery("#annotation_text").val(text);
+  jQuery("#annotation_text").val(jQuery("#annotation_sample_text").val());
 }
 
+/**
+ * Main function called when the Get annotations button is clicked in the Annotator
+ */
 function get_annotations() {
   jQuery("#results_error").html("");
   jQuery("#annotator_error").html("");
@@ -63,9 +74,27 @@ function get_annotations() {
   params.ontologies = (ont_select.val() === null) ? [] : ont_select.val();
   params.longest_only = jQuery("#longest_only").is(':checked');
   params.exclude_numbers = jQuery("#exclude_numbers").is(':checked');
-  params.whole_word_only = !jQuery("#match_partial_words").is(':checked');
+  params.whole_word_only = !jQuery("#whole_word_only").is(':checked'); // in the UI it's the opposite value (Match partial words)
   params.exclude_synonyms = jQuery("#exclude_synonyms").is(':checked');
+  params.expand_mappings = jQuery("#expand_mappings").is(':checked');
   params.ncbo_slice = (("ncbo_slice" in BP_CONFIG) ? BP_CONFIG.ncbo_slice : '');
+
+  params.negation = params.experiencer = params.temporality = params.certainty = params.fast_context = jQuery("#fast_context").is(':checked');
+  params.lemmatize = jQuery("#lemmatize").is(':checked')
+  params.score_threshold = jQuery("#score_threshold").val();
+  params.confidence_threshold = jQuery("#confidence_threshold").val();
+
+  params.score = jQuery("#score").val();
+  if (params.score) {
+    annotationsTable.fnSetColumnVis(BP_COLUMNS.score, true);
+  } else {
+    annotationsTable.fnSetColumnVis(BP_COLUMNS.score, false);
+  }
+  
+  annotationsTable.fnSetColumnVis(BP_COLUMNS.negation, params.fast_context);
+  annotationsTable.fnSetColumnVis(BP_COLUMNS.experiencer, params.fast_context);
+  annotationsTable.fnSetColumnVis(BP_COLUMNS.temporality, params.fast_context);
+  annotationsTable.fnSetColumnVis(BP_COLUMNS.certainty, params.fast_context);
 
   var maxLevel = parseInt(jQuery("#class_hierarchy_max_level").val());
   if (maxLevel > 0) {
@@ -97,11 +126,20 @@ function get_annotations() {
     annotationsTable.fnSetColumnVis(BP_COLUMNS.sem_types, false);
   }
 
+  if (jQuery("#semantic_groups").val() !== null) {
+    params.semantic_groups = jQuery("#semantic_groups").val();
+    annotationsTable.fnSetColumnVis(BP_COLUMNS.sem_types, true);
+    jQuery("#results_error").html("Only results from ontologies with semantic types available are displayed.");
+  } else {
+    annotationsTable.fnSetColumnVis(BP_COLUMNS.sem_types, false);
+  }
+
+
   params["recognizer"] = jQuery("#recognizer").val();
 
   jQuery.ajax({
     type: "POST",
-    url: "/annotator", // Call back to the UI annotation_controller::create method
+    url: annotatorUrl, // Call back to the UI annotation_controller::create method
     data: params,
     dataType: "json",
     success: function(data) {
@@ -406,22 +444,41 @@ jQuery.fn.dataTableExt.oApi.fnSortNeutral = function(oSettings) {
   oSettings.oApi._fnReDraw(oSettings);
 };
 
-
+/**
+ * Generate Links to annotator REST API
+ */
 function annotatorFormatLink(param_string, format) {
   "use strict";
   // TODO: Check whether 'text' and 'tabDelimited' could work.
   // For now, assume that json and xml will work or should work.
   var format_map = {
     "json": "JSON",
+    "rdf": "RDF",
     "xml": "XML",
     "text": "Text",
-    "tabDelimited": "CSV"
+    "tabDelimited": "CSV",
+    "quaero": "QUAERO",
+    "brat": "BRAT"
   };
-  var query = BP_CONFIG.rest_url + "/annotator?apikey=" + BP_CONFIG.apikey + "&" + param_string;
+  //var query = BP_CONFIG.rest_url + "/annotator?apikey=" + BP_CONFIG.apikey + "&" + param_string;
+  var query = '';
+  if(isNcboAnnotatorPlus) {
+    query = BP_CONFIG.ncbo_annotator_url + "?" + param_string + "&apikey=" + BP_CONFIG.ncbo_apikey;
+  }
+  else {
+    query = BP_CONFIG.annotator_url + "?" + param_string;
+    if (jQuery(document).data().bp.user.apikey !== undefined) {
+      query += "&apikey=" + jQuery(document).data().bp.user.apikey;
+    } else {
+      query += "&apikey=" + BP_CONFIG.apikey;
+    }
+  }
+
   if (format !== 'json') {
     query += "&format=" + format;
   }
-  var link = "<a href=\"" + encodeURI(query) + "\" target=\"_blank\">" + format_map[format] + "</a>";
+  // var link = "<a href=\"" + encodeURI(query) + "\" class=\"btn btn-default btn-sm\" target=\"_blank\">" + format_map[format] + "</a>";
+  var link = "<a href=\"" + encodeURI(query) + "\" class = \"btn btn-outline-primary btn-sm\" target=\"_blank\">" + format_map[format] + "</a>";
   jQuery("#download_links_" + format.toLowerCase()).html(link);
 }
 
@@ -452,10 +509,26 @@ function generateParameters() {
 jQuery(document).ready(function() {
   "use strict";
   jQuery("#annotator_button").click(get_annotations);
-  jQuery("#semantic_types").chosen({
-    search_contains: true
+  
+  jQuery("#semantic_types").select2({
+    allowClear: true,
+    dropdownParent: jQuery(".annotator form")
+  });
+
+  jQuery("#semantic_groups").select2({
+    allowClear: true,
+    dropdownParent: jQuery(".annotator form")
+  });
+
+  jQuery("#ontology_ontologyId").select2({
+    allowClear: true,
+    dropdownParent: jQuery(".annotator form")
   });
   jQuery("#insert_text_link").click(insertSampleText);
+
+  jQuery("#advancedOptionsLink").click(toggle_advanced_options);
+  jQuery("#advanced-options-container").hide();
+  
   // Init annotation table
   annotationsTable = jQuery("#annotations").dataTable({
     bPaginate: false,
@@ -465,20 +538,47 @@ jQuery(document).ready(function() {
       sZeroRecords: "No annotations found"
     },
     "aoColumns": [{
+      // Class column
       "sWidth": "15%"
     }, {
+      // Ontology column
       "sWidth": "15%"
     }, {
+      // Type column
       "sWidth": "5%"
     }, {
+      // column not displayed
       "sWidth": "5%",
       "bVisible": false
     }, {
-      "sWidth": "30%"
+      // Context column
+      "sWidth": "20%"
     }, {
+      // Matched class column
       "sWidth": "15%"
     }, {
+      // matchedOntology column
       "sWidth": "15%"
+    }, {
+      // Score column
+      "sWidth": "5%",
+      "bVisible": false
+    }, {
+      // Negation column
+      "sWidth": "5%",
+      "bVisible": false
+    }, {
+      // Experiencer column
+      "sWidth": "5%",
+      "bVisible": false
+    }, {
+      // Temporality column
+      "sWidth": "5%",
+      "bVisible": false
+    }, {
+      // Certainty column
+      "sWidth": "5%",
+      "bVisible": false
     }]
   });
   filter_ontologies.init();
@@ -514,22 +614,38 @@ function get_class_details(cls) {
 function get_class_details_from_raw(cls) {
   var
     ont_acronym = cls.links.ontology.replace(/.*\//, ''),
-    ont_name = annotator_ontologies[cls.links.ontology].name,
+    //ont_name = annotator_ontologies[cls.links.ontology].name,
+    ont_name = undefined,
     ont_rel_ui = '/ontologies/' + ont_acronym,
     ont_link = null;
-  if (ont_name === undefined) {
-    ont_link = get_link_for_ont_ajax(ont_acronym);
-  } else {
-    ont_link = get_link(ont_rel_ui, ont_name); // no ajax required!
-  }
+  
   var
     cls_rel_ui = cls.links.ui.replace(/^.*\/\/[^\/]+/, ''),
     cls_label = cls.prefLabel,
     cls_link = null;
-  if (cls_label === undefined) {
-    cls_link = get_link_for_cls_ajax(cls['@id'], ont_acronym);
+  
+  if (isNcboAnnotatorPlus) {
+    ont_link = get_link(cls.links.ontology, ont_acronym);
+    ont_rel_ui = ont_link;
+    cls_link = get_link(cls.links.ui, cls_label);
+    cls_rel_ui = cls_link;
   } else {
-    cls_link = get_link(cls_rel_ui, cls_label); // no ajax required!
+    try {
+      ont_name = annotator_ontologies[cls.links.ontology].name;
+    }
+    catch (e) {
+      ont_name = undefined;
+    }
+    if (ont_name === undefined) {
+      ont_link = get_link_for_ont_ajax(ont_acronym);
+    } else {
+      ont_link = get_link(ont_rel_ui, ont_name); // no ajax required!
+    }
+    if (cls_label === undefined) {
+      cls_link = get_link_for_cls_ajax(cls['@id'], ont_acronym);
+    } else {
+      cls_link = get_link(cls_rel_ui, cls_label); // no ajax required!
+    }
   }
   return class_details = {
     cls_rel_ui: cls_rel_ui,
@@ -597,6 +713,26 @@ function get_annotation_rows(annotation, params) {
   return rows;
 }
 
+function get_annotation_score(cls) {
+  var score = '';
+  if (typeof cls.score !== 'undefined') {
+    score = parseFloat(cls.score).toFixed(3);
+  }
+  return score;
+}
+
+/**
+ * Set context value (negation, temporality, experienced or certainty) to empty string to avoid useless dataTable warning
+ * @param context
+ * @returns {*}
+ */
+function get_context_value(context) {
+  if (typeof context === 'undefined') {
+    return '';
+  }
+  return context;
+}
+
 function get_annotation_rows_from_raw(annotation, params) {
   "use strict";
   // data independent var declarations
@@ -613,20 +749,20 @@ function get_annotation_rows_from_raw(annotation, params) {
   // data dependent var declarations
   var cls = get_class_details_from_raw(annotation.annotatedClass);
   if (annotation.annotations.length == 0) {
-    cells = [cls.cls_link, cls.ont_link, "", cls.semantic_types, "", cls.cls_link, cls.ont_link];
+    cells = [cls.cls_link, cls.ont_link, "", cls.semantic_types, "", cls.cls_link, cls.ont_link, get_annotation_score(annotation)];
     rows.push(cells);
   } else {
     jQuery.each(annotation.annotations, function(i, a) {
       text_markup = get_text_markup(params.text, a.from, a.to);
       match_type = match_type_translation[a.matchType.toLowerCase()] || 'direct';
-      cells = [cls.cls_link, cls.ont_link, match_type, cls.semantic_types, text_markup, cls.cls_link, cls.ont_link];
+      cells = [cls.cls_link, cls.ont_link, match_type, cls.semantic_types, text_markup, cls.cls_link, cls.ont_link, get_annotation_score(annotation), get_context_value(a.negationContext), get_context_value(a.experiencerContext), get_context_value(a.temporalityContext), get_context_value(a.certaintyContext)];
       rows.push(cells);
       // Add rows for any classes in the hierarchy.
       match_type = 'ancestor';
       var h_c = null;
       jQuery.each(annotation.hierarchy, function(i, h) {
         h_c = get_class_details_from_raw(h.annotatedClass);
-        cells = [h_c.cls_link, h_c.ont_link, match_type, cls.semantic_types, text_markup, cls.cls_link, cls.ont_link];
+        cells = [h_c.cls_link, h_c.ont_link, match_type, cls.semantic_types, text_markup, cls.cls_link, cls.ont_link, get_annotation_score(h), get_context_value(a.negationContext), get_context_value(a.experiencerContext), get_context_value(a.temporalityContext), get_context_value(a.certaintyContext)];
         rows.push(cells);
       }); // hierarchy loop
       // Add rows for any classes in the mappings. Note the ont_link will be different.
@@ -634,7 +770,7 @@ function get_annotation_rows_from_raw(annotation, params) {
       var m_c = null;
       jQuery.each(annotation.mappings, function(i, m) {
         m_c = get_class_details_from_raw(m.annotatedClass);
-        cells = [m_c.cls_link, m_c.ont_link, match_type, cls.semantic_types, text_markup, cls.cls_link, cls.ont_link];
+        cells = [m_c.cls_link, m_c.ont_link, match_type, cls.semantic_types, text_markup, cls.cls_link, cls.ont_link, get_annotation_score(m), get_context_value(a.negationContext), get_context_value(a.experiencerContext), get_context_value(a.temporalityContext), get_context_value(a.certaintyContext)];
         rows.push(cells);
       }); // mappings loop
     }); // annotations loop
@@ -759,21 +895,43 @@ function display_annotations(data, params) {
   update_annotations_table(all_rows);
   // Generate parameters for list at bottom of page
   var param_string = generateParameters(); // uses bp_last_param
-  var query = BP_CONFIG.rest_url + "/annotator?" + param_string;
-  var query_encoded = BP_CONFIG.rest_url + "/annotator?" + encodeURIComponent(param_string);
-  jQuery("#annotator_parameters").html(query);
+  var query = '';
+  var query_encoded = '';
+  
+  if (isNcboAnnotatorPlus) {
+    query = BP_CONFIG.ncbo_annotator_url + "?" + param_string + "&display_links=false&display_context=false" + "&apikey=" + BP_CONFIG.ncbo_apikey;;
+    query_encoded = BP_CONFIG.ncbo_annotator_url + "?" + encodeURIComponent(param_string);
+  }
+  else {
+    query = BP_CONFIG.annotator_url + "?" + param_string + "&display_links=false&display_context=false";
+    if (jQuery(document).data().bp.user.apikey !== undefined) {
+      query += "&apikey=" + jQuery(document).data().bp.user.apikey;
+    } else {
+      query += "&apikey=" + BP_CONFIG.apikey;
+    }
+    query_encoded = BP_CONFIG.annotator_url + "?" + encodeURIComponent(param_string);
+  }
+  jQuery("#annotator_parameters").html("<a href=\"" + encodeURI(query) + "\" class=\"btn btn-info\" target=\"_blank\">Corresponding REST web service call</a>");
   jQuery("#annotator_parameters_encoded").html(query_encoded);
   // Add links for downloading results
   //annotatorFormatLink("tabDelimited");
   annotatorFormatLink(param_string, "json");
   annotatorFormatLink(param_string, "xml");
+  annotatorFormatLink(param_string, "brat");
+  annotatorFormatLink(param_string, "quaero");
+  annotatorFormatLink(param_string, "rdf");
+
   if (params.raw !== undefined && params.raw === true) {
     // Initiate ajax calls to resolve class ID to prefLabel and ontology acronym to name.
     ajax_process_init(); // see bp_ajax_controller.js
   }
 }
 
-
+function toggle_advanced_options() {
+  $("#advanced-options-container").toggle();
+  var text = $("#advanced-options-container").is(':visible') ? "Hide advanced options <<" : "Show advanced options >>";
+  $("#advancedOptionsLink").text(text);
+}
 
 // Creates an HTML form with a button that will POST to the annotator
 //function annotatorPostForm(format) {

@@ -89,7 +89,7 @@ $ont-show-bg-color: #e9ecef;
 
 .right-hand-content {
   grid-column: 2;
-  grid-row: 1 / span 4;
+  grid-row: 1 / span 5;
 }
 
 .ont-section-toolbar {
@@ -185,27 +185,6 @@ $ont-show-bg-color: #e9ecef;
   -webkit-box-shadow: none;
 }
 
-#bd .bd_content .cls-info-container .tabs {
-  height: 24px;
-  float: left;
-}
-
-#bd .bd_content .cls-info-container .tabs ul {
-  margin: 0;
-  float: left;
-}
-
-#bd .bd_content .cls-info-container .tabs li {
-  margin: 0;
-}
-
-#bd .bd_content .cls-info-container .tabs li.first {
-  padding-left: 0;
-}
-
-#bd .bd_content .cls-info-container .tabs a {
-  padding: 0 15px 0 15px;
-}
 
 #bd .bd_content .cls-info-container #contents {
   float: left;
@@ -272,3 +251,24 @@ $ont-show-bg-color: #e9ecef;
 #ontology-browse-help i {
   margin-left: .25em;
 }
+
+/************************************
+/* Schemes pane
+************************************/
+
+#schemesTree {
+  overflow-x: auto;
+  white-space: nowrap;
+  min-width: 10%;
+  a {
+    font-family: "Myriad Pro", "Myriad Web Pro", "Myriad Web", "Myriad", "Trebuchet MS", "Tahoma", "Helvetica", "Arial", sans-serif;
+    font: small/1.231 arial, helvetica, clean, sans-serif;
+  }
+}
+
+.ont-schemes {
+  display: flex;
+  flex-direction: row;
+}
+
+

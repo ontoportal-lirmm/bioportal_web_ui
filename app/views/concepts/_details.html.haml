@@ -1,111 +1,65 @@
-- require 'cgi'
-
-%div.py-3.pl-3
-  %table.minimal.concept_details{cellpadding: "0", cellspacing: "0", width: "100%"}
-    %tr
-      %td{nowrap: ""} Preferred Name
-      %td
-        %p= @concept.prefLabel({:use_html => true}).html_safe
-    - unless @concept.synonym.nil? || @concept.synonym.empty?
+= turbo_frame_tag 'concept_details' do
+  - schemes_keys = %w[hasTopConcept topConceptOf]
+  - label_xl_set = %w[skos-xl#prefLabel skos-xl#altLabel skos-xl#hiddenLabel]
+  = render ConceptDetailsComponent.new(id:'concept-details', acronym: @ontology.acronym,
+              properties: @concept.properties,
+              top_keys: %w[description comment],
+              bottom_keys: %w[disjoint subclass is_a has_part],
+              exclude_keys: schemes_keys + label_xl_set + ['inScheme']) do |c|
+    - c.header do
       %tr
-        %td{nowrap: ""} Synonyms
+        %td{nowrap: ""} ID
         %td
-          - for synonym in @concept.synonym
-            %p= synonym
-    - unless @concept.definition.nil? || @concept.definition.empty?
+          %p= @concept.id
       %tr
-        %td{nowrap: ""} Definitions
+        %td{nowrap: ""} Preferred Name
         %td
-          %p= @concept.definition.join(" ")
-    %tr
-      %td{nowrap: ""} ID
-      %td
-        %p= @concept.id
-    - if @concept.obsolete?
+          %p= @concept.prefLabel({:use_html => true}).html_safe
+      - unless @concept.synonym.nil? || @concept.synonym.empty?
+        %tr
+          %td{nowrap: ""} Synonyms
+          %td
+            - for synonym in @concept.synonym
+              %p= synonym
+          %td
+            %div.synonym-change-request
+              = add_synonym_button
+              = remove_synonym_button
+      - unless @concept.definition.nil? || @concept.definition.empty?
+        %tr
+          %td{nowrap: ""} Definitions
+          %td
+            %p= @concept.definition.join(" ")
+      - if @concept.obsolete?
+        %tr
+          %td{nowrap: ""} Obsolete
+          %td
+            %p true
+      - if skos?
+        - unless @concept.memberOf.nil?  || @concept.memberOf.empty?
+          %tr
+            %td{nowrap: ""} Member of
+            %td
+              %div.my-1
+                - @concept.memberOf.each do |v|
+                  = raw get_link_for_collection_ajax(v, @ontology.acronym, '_blank')
+        - unless @concept.inScheme.nil?  || @concept.inScheme.empty?
+          %tr
+            %td{nowrap: ""} In Schemes
+            %td
+              %div.my-1
+                - @concept.inScheme.each do |v|
+                  = raw get_link_for_scheme_ajax(v, @ontology.acronym, '_blank')
       %tr
-        %td{nowrap: ""} Obsolete
+        %td{nowrap: ""} Type
         %td
-          %p true
+          %p= @concept.type
 
-    - concept_properties = concept_properties2hash(@concept.properties) # see concepts_helper.rb
-    - keys = concept_properties.keys
-    - top_keys=["description", "comment"]
-    - bottom_keys=["disjoint", "subclass", "is_a", "has_part"]
-    - top_set=[]
-    - bottom_set=[]
-    - leftover=[]
-    - for key in keys
-      - key = key.to_s
-      - top=false
-      - bottom=false
-      - top_keys.each do |top_key|
-        - if key.downcase.include?(top_key)
-          - top_set << key
-          - top=true
-      - bottom_keys.each do |bottom_key|
-        - if key.downcase.include?(bottom_key)
-          - bottom_set << key
-          - bottom=true
-      - if !top && !bottom
-        - leftover << key
-    - leftover.sort! {|x,y| x.downcase <=> y.downcase }
-
-    -# TOP set of properties
-    - for key in top_set
-      - key = key.to_s
-      - next if exclude_relation?(key)
-      - if concept_properties[key]
-        - data = concept_properties[key]
-        - full_key = data[:key]
-        - values = data[:values]
-        %tr
-          %td{nowrap: ""}= "#{remove_owl_notation(key)}"
-          %td
-            -# Note: get_link_for_cls_ajax is in application_helper.rb, it calls auto_link when necessary.
-            - ajax_links = values.map {|v| get_link_for_cls_ajax(v, @ontology.acronym, '_blank') }
-            = "<p>#{sanitize(ajax_links.join('</p><p>'))}</p>".html_safe
-            -# auto_link("<p>#{sanitize(values.join("<br/>")).split("||%||").join("<\/p><p>")}</p>", :all, :target => "_blank")
-
-    -# LEFTOVER set of properties
-    - for key in leftover
-      - next if exclude_relation?(key, @ontology)
-      - if concept_properties[key]
-        - data = concept_properties[key]
-        - full_key = data[:key].to_s # handle symbols
-        - values = data[:values]
-        %tr
-          %td{nowrap: ""}= "#{remove_owl_notation(key)}"
-          %td
-
-            -# NCBO-648 Note: a property with complex values might return an array of nils from the REST-API client code.
-            -# If we use values.compact or values.any? we may miss exceptions on data that should be handled better.
-
-            -# Note: get_link_for_cls_ajax is in application_helper.rb, it calls auto_link when necessary.
-            - ajax_links = values.map {|v| get_link_for_cls_ajax(v, @ontology.acronym, '_blank') }
-            = "<p>#{sanitize(ajax_links.join('</p><p>'))}</p>".html_safe
-            -# auto_link("<p>#{sanitize(values.join("<br/>")).split("||%||").join("<\/p><p>").gsub("%ONT%", @ontology.acronym)}</p>", :all, :target => "_blank")
-
-    -# BOTTOM set of properties
-    - for key in bottom_set
-      - next if exclude_relation?(key)
-      - if concept_properties[key]
-        - data = concept_properties[key]
-        - full_key = data[:key]
-        - values = data[:values]
-        %tr
-          %td{nowrap: ""}= "#{remove_owl_notation(key)}"
-          %td
-            -# Note: get_link_for_cls_ajax is in application_helper.rb, it calls auto_link when necessary.
-            - ajax_links = values.map {|v| get_link_for_cls_ajax(v, @ontology.acronym, '_blank')}
-            = "<p>#{ajax_links.join('</p><p>')}</p>".html_safe
-            -# auto_link("<p>#{values.split("||%||").join("<\/p><p>").gsub("%ONT%", @ontology.acronym)}</p>", :all, :target => "_blank")
-
-:javascript
-
-  jQuery(document).ready(function(){
-    // Ajax globals and functions are in  "/javascripts/bp_ajax_controller.js"
-    // Note: bind any 'responsive elements' to the ajax_proces_halt() function, e.g.
-    jQuery("#facebox a.close").click(function(event){ ajax_process_halt(); });
-    // Initiate ajax calls to resolve class ID to prefLabel.
-    ajax_process_init();  // see bp_ajax_controller.js
-  })
+    - scheme_set = c.properties_set_by_keys(schemes_keys, c.concept_properties)
+    - label_xl_set = c.properties_set_by_keys(label_xl_set, c.concept_properties)
+    - c.section do
+      = c.render_properties(scheme_set, c.concept_properties) do |v|
+        - get_link_for_scheme_ajax(v, @ontology.acronym, '_blank')
+    - c.section do
+      = c.render_properties(label_xl_set, c.concept_properties) do |v|
+        - get_link_for_label_xl_ajax(v, @ontology.acronym, @concept.id)

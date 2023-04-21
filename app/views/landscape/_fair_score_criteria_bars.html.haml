@@ -1,0 +1,7 @@
+%canvas#ont-fair-scores-criteria-bars-canvas{style:"display: block; box-sizing: border-box" , height:"700" ,
+    data: {
+            labels: (data.nil? ? "[]" : data[:principles][:labels]),
+            scores: (data.nil? ? "[]" : data[:principles][:normalizedScores]),
+            maxCredits: (data.nil? ? "[]" : data[:principles][:maxCredits]),
+            portalMaxCredits: (data.nil? ? "[]" :data[:principles][:portalMaxCredits])
+    }}

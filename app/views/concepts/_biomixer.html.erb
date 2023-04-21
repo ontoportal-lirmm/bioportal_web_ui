@@ -1,5 +1,5 @@
 <%require 'cgi'%>
-<% user_api_key = session[:user].nil? ? "" : session[:user].apikey %>
+<% user_api_key = (session[:user].try(:apikey) || $BIOMIXER_APIKEY).to_s %>
 <% rest_domain = $REST_URL.sub(/https?:\/\//, "") %>
 <% src_url = "#{$BIOMIXER_URL}/?mode=embed&embed_mode=paths_to_root&ontology_acronym=#{@ontology.acronym}&full_concept_id=#{CGI.escape(@concept.fullId)}&userapikey=#{user_api_key}&restURLPrefix=#{rest_domain}" %>
 <% original_src = @immediate_load ? src_url : "/ajax/loading_spinner"%>
@@ -57,6 +57,10 @@ window.onmessage = function(e) {
     }
   }
 };
+jQuery(document).ready(() => {
+    let biomixer = $("#biomixer_iframe")
+    biomixer.attr('src', biomixer.data('src'))
+})
 </script>
 
 <div id="biomixer_container" style="padding-left: .5%; width: 99.5%; height: 900px;">

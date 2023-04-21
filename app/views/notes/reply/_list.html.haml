@@ -1,0 +1,9 @@
+.reply_meta
+  = add_reply_button(note.id)
+  .discussion
+    .discussion_container
+      = render TurboFrameComponent.new(id: "#{note.id}_new_reply")
+      = turbo_frame_tag "#{note.id}_thread_replay_container" do
+        - children = note&.reply || note&.children
+        - children&.each do |reply|
+          = render partial: 'notes/reply/reply', locals: {note: reply}

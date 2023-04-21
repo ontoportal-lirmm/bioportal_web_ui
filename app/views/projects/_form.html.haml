@@ -7,21 +7,12 @@
   .enable-lists{style: "color:red; padding-left:10px;"}
     %strong Errors On Form
     %ul
-      - if @errors[:error].instance_of? OpenStruct
-        - errors_hash = @errors[:error].to_h.except :links, :context
-        - errors_hash.each do |field, error|
-          -# Highlight fields with errors.
-          <style>#project_#{field} { border: thin solid red; }</style>
+      - @errors = @errors[:error ] if @errors[:error]
+      %ul
+        - @errors.each do |key, message|
+          <style>#project_#{key} { border: thin solid red; }</style>
           %li
-            -# Display error message to users.
-            - if error.instance_of? OpenStruct
-              - error_hash = error.to_h.except :links, :context
-              - error_hash.each do |f, e|
-                = "#{e}"
-            - else
-              = field
-      - else
-        = @errors.to_json
+            = message.values.join(',')
 
 / Override the bioportal.css for .required to avoid red text in the input fields.
 :css

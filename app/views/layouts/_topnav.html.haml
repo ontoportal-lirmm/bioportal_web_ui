@@ -1,21 +1,28 @@
 %nav.navbar.navbar-expand-lg.navbar-dark.navbar-custom
-  = link_to(image_tag("logos/bioportal-logo.png"), root_path, class: "navbar-brand")
+  = link_to(image_tag("logos/ontoportal-logo.png") + content_tag(:span, $SITE, class: 'site-name'), root_path(), class: "navbar-brand")
   = button_tag(type: "button", class: "navbar-toggler", data: {toggle: "collapse", target: "#topNavigationToggler"}, aria: {controls: "topNavigationToggler", expanded: "false", label: "Toggle navigation"}) do
     %span.navbar-toggler-icon
 
   %div#topNavigationToggler.navbar-collapse.collapse.justify-content-between
     %ul.navbar-nav
       %li.nav-item
-        = link_to("Ontologies", ontologies_path, class: "nav-link")
+        = link_to("Browse", ontologies_path(), class: "nav-link")
       %li.nav-item
         = link_to("Search", "/search", class: "nav-link")
       %li.nav-item
-        = link_to("Annotator", annotator_index_path, class: "nav-link")
+        = link_to("Mappings", mappings_path(), class: "nav-link")
       %li.nav-item
         = link_to("Recommender", recommender_index_path, class: "nav-link")
       %li.nav-item
-        = link_to("Mappings", mappings_path, class: "nav-link")
-      -if session[:user].present? && session[:user].admin?
+        = link_to("Annotator", annotator_index_path(), class: "nav-link")
+      - if $NCBO_ANNOTATORPLUS_ENABLED == true
+        %li.nav-item
+          = link_to("NCBO Annotator+", '/ncbo_annotatorplus', class: "nav-link")
+      %li.nav-item
+        = link_to("Projects", projects_path(), class: "nav-link")
+      %li.nav-item
+        = link_to("Landscape", '/landscape', class: "nav-link")
+      -if (!session[:user].nil? && session[:user].admin?)
         %li.nav-item
           = link_to("Admin", admin_index_path, class: "nav-link")
     %ul.navbar-nav
@@ -44,6 +51,6 @@
           = link_to("Submit Feedback", feedback_path(location: encode_param(request.url)), id: "submitFeedbackMenuItem", class: "dropdown-item pop_window")
           %div.dropdown-divider
           %h6.dropdown-header Documentation
-          = link_to("Help", Rails.configuration.settings.links[:help], target: "_blank", class: "dropdown-item")
-          = link_to("Release Notes", Rails.configuration.settings.links[:release_notes], target: "_blank", class: "dropdown-item")
-          = link_to("How to Cite", Rails.configuration.settings.links[:cite], target: "_blank", class: "dropdown-item")
+          = link_to("Help", "#{$WIKI_HELP_PAGE}", target: "_blank", class: "dropdown-item")
+          = link_to("Release Notes", "#{$RELEASE_NOTES}", target: "_blank", class: "dropdown-item")
+          = link_to("Publications", $PUBLICATIONS_URL, target: "_blank", class: "dropdown-item")

@@ -20,6 +20,7 @@ shared:
     virtual_appliance: 'https://ontoportal.github.io/administration/'
     widgets: 'http://www.bioontology.org/wiki/NCBO_Widgets'
     wiki: 'https://www.bioontology.org/wiki/'
+    mappings: 'https://www.bioontology.org/wiki/BioPortal_Help#Mappings_Tab'
 
 development:
   links:

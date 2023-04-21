@@ -10,30 +10,23 @@
 -# The delete mappings button display is controlled by JS on page ready (see bp_mappings.js)
 -# check_box_tag(name, value = "1", checked = false, options = {})
 = check_box_tag "delete_mappings_permission", @delete_mapping_permission, @delete_mapping_permission, style: "display: none;"
-
-%table#concept_mappings_table.zebra
-  %thead
-    %tr
-      %th.delete_mappings_column Delete
-      %th Mapping To
-      %th Ontology
-      %th Source
-  - if @mappings.length < 1
-    %tr
-      %td{:class => 'delete_mappings_column', :style => "display: none;"}
-      %td{:colspan => "3"} There are currently no mappings for this class.
-
-  - @mappings.each do |map|
-    - cls = map.classes[0]
-    - ont_acronym = cls.links['ontology'].split("/").last
-    - map_id = map.id.to_s.split("/").last
-    %tr.human{id: map_id}
-      %td.delete_mappings_column
-        - if map.id && !map.id.empty? && session[:user] && (session[:user].id.to_i == map.creator || session[:user].admin?)
-          = check_box_tag :delete_mapping_checkbox, map.id
-      %td
-        = link_to cls.id, ontology_path(id: ont_acronym, p: 'classes', conceptid: cls.id)
-      %td
-        = link_to ont_acronym, ontology_path(ont_acronym)
-      %td
-        #{map.source} #{(map.process || {})[:source_name]}
+%div#concept_mappings_tables_div
+  = render_alerts_container(MappingsController)
+  %table#concept_mappings_table.zebra{width: "100%", style:'word-break: break-word'}
+    %thead
+      %tr
+        %th Mapping To
+        %th{width: "30%"} Ontology
+        %th Relations
+        %th Source
+        %th Type
+        %th{:class => 'delete_mappings_column'} Actions
+    %tbody#concept_mappings_table_content
+      - @mappings.each do |map|
+        = render partial: 'mappings/show_line' , locals: {map: map, concept: @concept}
+      %tr.empty-state
+        %td.text-center{:colspan => "6"} There are currently no  mappings for this class.
+:javascript
+  jQuery(document).ready(function(){
+    ajax_process_init();
+  })

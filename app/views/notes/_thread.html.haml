@@ -1,5 +1,4 @@
 %div.note
-
   %div
     = @note_decorator.title
     = @note_decorator.status
@@ -11,15 +10,6 @@
 
   = @note_decorator.body_content
   = @note_decorator.proposal_content
+    
+  = render partial: 'notes/reply/list', locals: {note: @note}
 
-  %div.reply
-    %div.reply_meta
-      - if session[:user].nil?
-        = link_to "reply", login_index_path
-      - else
-        = @note_decorator.reply_link
-
-    - if @note.reply && !@note.reply.empty?
-      %div.discussion
-        %div.discussion_container
-          = recurse_replies(@note.reply).html_safe

@@ -3,23 +3,18 @@
 -# The appearance of that button is controlled by updateMappingDeletePermissions(), which
 -# relies on @delete_mapping_permission in /app/views/mappings/_mapping_table.html.haml; which,
 -# in turn, is set by /app/controllers/application_controller.check_delete_mapping_permission()
+= turbo_frame_tag 'concept_mappings' do
+  %div{:style => "padding: 1%; width: 98%"}
+    - if session[:user].nil?
+      = link_to "Create New Mapping", "/login?redirect=/ontologies/#{@ontology.acronym}/?p=classes&t=mappings&conceptid=#{escape(@concept.id)}", :method => :get, :class => "btn btn-default mb-3"
+    - else
+      = link_to_modal("Create New Mapping",
+                new_mapping_path(ontology_from: "#{@ontology.id}", conceptid_from: "#{@concept.id}"),
+                id: "new_mapping_btn",
+                role: "button",
+                class: "btn btn-default mb-3",
+                data: { show_modal_title_value: "Create a new mapping for #{@concept.prefLabel}" },
+                )
 
-%div{:style => "padding: 1%; width: 98%"}
-  - if session[:user].nil?
-    = link_to "Create New Mapping", "/login?redirect=/ontologies/#{@ontology.acronym}/?p=classes&t=mappings&conceptid=#{CGI.escape(@concept.id)}", :method => :get, :class => "link_button"
-  - else
-    = link_to("Create New Mapping", |
-              new_mapping_path(ontology_from: "#{@ontology.id}", conceptid_from: "#{@concept.id}"), |
-              id: "new_mapping_btn", |
-              role: "button", |
-              class: "btn btn-default", |
-              data: {toggle: "modal", target: "#createNewMappingModal", concept_label: "#{@concept.prefLabel}"}, | 
-              remote: "true")
-
-    = link_to "Delete Selected Mappings", "javascript:void(0);", :onclick => "if (confirm('Really delete mappings? This cannot be undone.')) deleteMappings()", :id => "delete_mappings_button", :class => "btn btn-default", role: "button"
-    %span#delete_mappings_spinner{:style => "display: none;"}= loading_spinner(false, true)
-    %span#delete_mappings_error{:style => "display: none; color: red; padding-left: 5px;"}
-  %br/
-  %br/
-  #mapping_details
-    = render :partial => '/mappings/mapping_table'
+    #mapping_details
+      = render :partial => '/mappings/mapping_table'

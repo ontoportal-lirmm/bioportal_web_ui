@@ -1,0 +1,58 @@
+%div.w-100.h-100
+  - if errors
+    - errors = errors.map {|k,v| "Mapping #{k.to_s.to_i + 1} errors: #{v}"}
+    = render AlertMessageComponent.new(type:'danger') do
+      - errors.each do |error|
+        %p
+          = error
+  %div.overflow-scroll
+    - if created
+      = render AlertsContainerComponent.new(id: alerts_container_id) do
+        = render AlertMessageComponent.new(type: 'success') do
+          #{created.size} mappings created successfully
+      %table.table.table-sm.zebra{data: {controller: 'data-table'}, style:"table-layout: fixed; font-size: 12px; word-break: break-word;"}
+        %thead
+          %tr
+            %th{style: 'width: 5%'}
+              Id
+            %th{style: 'width: 20%'}
+              Source
+            %th{style: 'width: 20%'}
+              Target
+            %th{style: 'width: 20%'}
+              Relation
+            %th{style: 'width: 25%'}
+              Properties
+            %th
+              Actions
+        %tbody
+          - created.each do |map|
+            -  map_id = map.id.to_s.split("/").last
+            %tr.human{id: map_id}
+              - first_class, second_class = map.classes
+              - process = map.process
+              - except_prop = [:id,:links,:context,:relation]
+              %td.text-truncate
+                = link_to map_id
+              %td
+                = link_to first_class.id
+              %td
+                = link_to second_class.id
+              %td
+                = process.relation.join(',')
+              %td
+                %div.accordion{id: "accordion-#{map_id}"}
+                  %div
+                    %button.btn.btn-link.btn-sm{"data-target" => "#collapse-#{map_id}", "data-toggle" => "collapse", :type => "button"}
+                      See other properties
+                  %div.collapse{id: "collapse-#{map_id}", "data-parent": "#accordion-#{map_id}"}
+                    %ul.list-group.list-group
+                      - process.to_h.except(*except_prop).each do |key,val|
+                        %li.list-group-item
+                          %strong
+                            #{key}:
+                          #{val}
+              %td
+                = button_to "Delete", CGI.unescape(mapping_path(map.id)), method: :delete, class:'btn tn-sm btn-link', form: { data: { turbo: true, turbo_confirm: "Are you sure?", turbo_frame:'_top'}}
+          %tr.empty-state
+            %td.text-center{:colspan => "6"} There are currently no  mappings for this class.

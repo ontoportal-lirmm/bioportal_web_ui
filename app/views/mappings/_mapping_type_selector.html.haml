@@ -1,0 +1,75 @@
+%div#mapping_to_content.form-group.my-3
+  - disabled = concept_to || @map_to_interportal || @map_to_external_ontology
+  - if disabled
+    = hidden_field_tag :mapping_type, @mapping_type
+    = hidden_field_tag :map_to_bioportal_full_id, concept_to.id
+    = hidden_field_tag :map_to_bioportal_ontology_id, @map_to_bioportal_ontology_id
+    = hidden_field_tag :map_to_interportal, @map_to_interportal
+    = hidden_field_tag :map_to_interportal_ontology, @map_to_interportal_ontology
+    = hidden_field_tag :map_to_interportal_class, @map_to_interportal_class
+    = hidden_field_tag :map_to_external_ontology, @map_to_external_ontology
+    = hidden_field_tag :map_to_external_class, @map_to_external_class
+
+  %div.form-group
+    %lable Mapping type
+    %div#display_options.mb-3
+      %div.form-group
+        %div.custom-control.custom-radio.custom-control-inline
+          = radio_button_tag "mapping_type", "internal", type?('internal'), {id: 'internal_form_radio', class:'mapping_radio custom-control-input',data: {target:"#internal_form"}, disabled: disabled}
+          %label.custom-control-label{for: "internal_form_radio"} Internal
+        %div.custom-control.custom-radio.custom-control-inline
+          = radio_button_tag "mapping_type", "interportal", type?('interportal'), {id: 'interportal_form_radio', class:'mapping_radio custom-control-input',data: {target:"#interportal_form"}, disabled: disabled}
+          %label.custom-control-label{for: "interportal_form_radio"} Interportal
+        %div.custom-control.custom-radio.custom-control-inline
+          = radio_button_tag "mapping_type", "external", type?('external'), {id: 'external_form_radio', class:'mapping_radio custom-control-input', data: {target:"#external_form"}, disabled: disabled}
+          %label.custom-control-label{for: "external_form_radio"} External
+
+
+    %div#internal_form.mapping_form{style: "display: #{type?('internal') ? 'block':'none'}"}
+      %div.form-group
+        %label{for: "map_to"} Target class
+        - if disabled
+          = text_field_tag('', concept_to.id, class: "form-control", disabled: true)
+        - else
+          = render partial: 'shared/concept_picker', locals: {name: :map_to, concept_label: concept_to&.label, ontology_acronym: 'all' , include_definition: true}
+      %div.form-group
+        %label{for: "map_to_concept_details_table"} Details
+        %div#map_to_concept_details_table.form-control
+          = render TurboFrameComponent.new(id:'concept_details')
+    %div#interportal_form.mapping_form{style: "display: #{type?('interportal') ? 'block':'none'}"}
+      %div.form-group
+        %label{for: :map_to_interportal} InterPortal
+        - options = interportal_options
+        = select_tag :map_to_interportal, options_for_select(options, @map_to_interportal), class: "form-control", disabled: disabled
+      %div.form-group
+        %label{for:  :map_to_interportal_ontology} Ontology (acronym)
+        = text_field_tag :map_to_interportal_ontology, @map_to_interportal_ontology, placeholder: 'Enter the ontology ACRONYM', class: "form-control", disabled: disabled
+      %div.form-group
+        %label{for:  :map_to_interportal_class} Class
+        = text_field_tag :map_to_interportal_class, @map_to_interportal_class, placeholder: 'Enter the class URI', class: "form-control", disabled: disabled
+
+    %div#external_form.mapping_form{style: "display: #{type?('external') ? 'block':'none'}"}
+      %div.form-group
+        %label{for: :map_to_external_ontology} Ontology
+        = text_field_tag :map_to_external_ontology, @map_to_external_ontology, placeholder: 'Enter the ontology URI', class: "form-control", disabled: disabled
+      %div.form-group
+        %label{for: :map_to_external_class} Class
+        = text_field_tag :map_to_external_class, @map_to_external_class, placeholder: 'Enter the class URI', class: "form-control", disabled: disabled
+
+:javascript
+    jQuery(document).ready(() => {
+       const picker_name  = 'map_to'
+       const concept_details_frame = document.getElementById('concept_details')
+       jQuery(".mapping_radio").live("click", function() {
+        var mapping_type = jQuery(this).data('target')
+        jQuery("div.mapping_form").hide()
+        jQuery(mapping_type).show()
+       })
+       jQuery(`input[name='${picker_name}']`).on('selected', () => {
+          if(concept_details_frame){
+            const ontology_id = $(`input[name="${picker_name}_bioportal_ontology_id"]`).val()
+            const concept_id = $(`input[name="${picker_name}_bioportal_concept_id"]`).val()
+            concept_details_frame.src = "/ajax/class_details?ontology=" + encodeURIComponent(ontology_id) + "&styled=false&conceptid=" + encodeURIComponent(concept_id)
+          }
+        })
+    })

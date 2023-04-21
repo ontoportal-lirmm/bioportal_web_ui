@@ -1,0 +1,53 @@
+= render TurboFrameComponent.new(id: 'application_modal_content') do
+  :javascript
+    function updateProposalForm(event){
+      let frame = document.getElementById('application_modal_content')
+      let type = event.target.value
+      frame.src = "#{notes_new_proposal_path}?parent_type=#{parent_type}&ontology_id=#{ontology_id}&parent_id=#{parent_id}&proposal_type="+type
+    }
+
+  = render_alerts_container
+  = form_with url: notes_path, method: 'post', data:{turbo: true} do
+    = hidden_field_tag 'parent', parent_id
+    = hidden_field_tag 'type', parent_type
+    = hidden_field_tag 'creator', user_id
+    = hidden_field_tag 'ontology_id', ontology_id
+    .form-group.d-flex.align-items-center
+      %label.w-25{for: 'proposal_type'}
+        Proposal type:
+      = select_tag 'proposal[type]', options_for_select(types, type), class: 'proposal_type form-control', id: 'proposal_type', onChange: 'updateProposalForm(event)'
+
+    - if type.eql?('ProposalChangeHierarchy')
+      .form-group
+        = text_field_tag 'proposal[reasonForChange]', '', placeholder: "Reason for change", class: "form-control", required: true
+      .form-group
+        = text_field_tag 'proposal[newTarget]', '', placeholder: "New target", class: "form-control", required: true
+      .form-group
+        = text_field_tag 'proposal[oldTarget]', '', placeholder: "Old target", class: "form-control", required: true
+      .form-group
+        = text_field_tag 'proposal[newRelationshipType]', '', placeholder: "Relationship type", class: "form-control", required: true
+
+    - elsif type.eql?('ProposalChangeProperty')
+      .form-group
+        = text_field_tag 'proposal[reasonForChange]', '', placeholder: "Reason for change", class: "form-control", required: true
+      .form-group
+        = text_field_tag 'proposal[propertyId]', '', placeholder: "Property id", class: "form-control", required: true
+      .form-group
+        = text_field_tag 'proposal[newValue]', '', placeholder: "New value", class: "form-control", required: true
+      .form-group
+        = text_field_tag 'proposal[oldValue]', '', placeholder: "Old value", class: "form-control", required: true
+    - else
+      .form-group
+        = text_field_tag 'proposal[reasonForChange]', '', placeholder: "Reason for change", class: "form-control", required: true
+      .form-group
+        = text_field_tag 'proposal[classId]','', placeholder: "Class id", class: "form-control", required: true
+      .form-group
+        = text_field_tag 'proposal[label]','', placeholder: "Label", class: "form-control", required: true
+      .form-group
+        = text_field_tag 'proposal[synonym]','', placeholder: "Synonym", class: "form-control", required: true
+      .form-group
+        = text_area_tag 'proposal[definition]','', placeholder: "Definition", class: "form-control", required: true
+      .form-group
+        = text_field_tag 'proposal[parent]','', placeholder: "Parent", class: "form-control", required: true
+
+    = submit_tag "Save" , class:'btn btn-success btn-block'

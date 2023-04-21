@@ -4,19 +4,26 @@
     - if @mappings.nil? or @mappings.empty?
       No mappings found
     - else
-      %table.zebra
+      %table.zebra.w-100
         %thead
-          %th #{@ontology.name}
-          %th #{@target_ontology.name}
+          %th #{@ontology_name}
+          %th #{@target_ontology_name}
           %th Source
         - for map in @mappings
           %tr
-            - cls = map.classes.shift
-            %td
-              = link_to("#{cls.id}<span href='/ajax/classes/label?ontology=#{cls.links["ontology"]}&concept=#{CGI.escape(cls.id)}' class='get_via_ajax'></span>".html_safe, ontology_path(cls.explore.ontology.acronym, p: "classes", conceptid: cls.id))
-            - cls = map.classes.shift
-            %td
-              = link_to("#{cls.id}<span href='/ajax/classes/label?ontology=#{cls.links["ontology"]}&concept=#{CGI.escape(cls.id)}' class='get_via_ajax'></span>".html_safe, ontology_path(cls.explore.ontology.acronym, p: "classes", conceptid: cls.id))
+            - map.classes.each do |cls|
+              %td
+                - if inter_portal_mapping?(cls)
+                  = ajax_to_inter_portal_cls(cls)
+                - elsif internal_mapping?(cls)
+                  = ajax_to_internal_cls(cls)
+                - else
+                  = ajax_to_external_cls(cls)
             %td
               #{map.source} #{(map.process || {})[:source_name]}
     = will_paginate @page_results, :update => 'mappings', :params => { :target => params[:target] }
+
+:javascript
+  jQuery(document).ready(function(){
+    ajax_process_init();  // see bp_ajax_controller.js
+  })

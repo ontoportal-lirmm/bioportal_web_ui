@@ -1,0 +1,21 @@
+!!!
+%html
+  %head
+    %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{content: "no-cache", name: "turbo-cache-control"}/
+  %body
+    %p
+      Name: #{@name}
+    %p
+      Email: #{@email}
+    %p
+      Location: #{@location}
+    %p Tags:
+    %ul
+      - for tag in @tags
+        %li
+          = tag
+    %p
+      %br/
+      %strong Feedback:
+      = simple_format(@comment)

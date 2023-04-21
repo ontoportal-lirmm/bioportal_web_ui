@@ -1,11 +1,6 @@
 <link href="font/whhg.css"rel="stylesheet" type="text/css" media="all" />
 <link href="//cdnjs.cloudflare.com/ajax/libs/unsemantic/0/unsemantic-grid-responsive-tablet.css" rel="stylesheet" type="text/css" media="screen" />
-<meta name="viewport" content="
-    width=device-width,
-    initial-scale=1,
-    minimum-scale=1,
-    maximum-scale=1
-  " />
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
 
 <div class="splash" ng-cloak>
   <div style="font-size: 3em;">Ontologies loading</div>
@@ -48,6 +43,9 @@
         </a>
       <%end%>
 
+      <!-- To add a new facet: set new filter to $scope.facets in angular defined in public/browse/app.js
+      Retrieve the attr value in browse_attributes and set it in the @ontologies in app/controllers/ontologies_controller.rb
+      Define possibles values for the attr in config/enforced_attribute_values.rb-->
       <div id="ont_view_facet" class="facet">
         <h4>Entry Type</h4>
         <div class="checkbox_list">
@@ -78,7 +76,7 @@
         <div class="checkbox_list">
           <span ng-repeat="category in categories">
             <input type="checkbox" checklist-model="facets.categories.active" checklist-value="category.id" name="category" id="category_{{category.acronym}}" ng-disabled="!facet_counts['categories'][category.id]">
-            <label for="category_{{category.acronym}}" ng-class="{facet_disabled: !facet_counts['categories'][category.id]}">{{category.name}}</label>
+            <label for="category_{{category.acronym}}" title="{{category.description}}" ng-class="{facet_disabled: !facet_counts['categories'][category.id]}">{{category.name}}</label>
             <span class="smaller">({{facet_counts["categories"][category.id] || 0}})</span>
             <br/>
           </span>
@@ -90,7 +88,7 @@
         <div class="checkbox_list">
           <span ng-repeat="group in groups">
             <input type="checkbox" checklist-model="facets.groups.active" checklist-value="group.id" name="group" id="group_{{group.acronym}}" ng-disabled="!facet_counts['groups'][group.id]">
-            <label for="group_{{group.acronym}}" title="{{group.name}}" ng-class="{facet_disabled: !facet_counts['groups'][group.id]}">{{group.acronym}}</label>
+            <label for="group_{{group.acronym}}" title="{{group.name}} : {{group.description}}" ng-class="{facet_disabled: !facet_counts['groups'][group.id]}">{{group.acronym}}</label>
             <span class="smaller">({{facet_counts["groups"][group.id] || 0}})</span>
             <br/>
           </span>
@@ -109,6 +107,57 @@
         </div>
       </div>
 
+      <div id="admin_facet" class="facet">
+        <h4>Ontology Content</h4>
+        <div class="checkbox_list">
+          <span ng-repeat="artifact in artifacts">
+            <input type="checkbox" checklist-model="facets.artifacts.active" checklist-value="artifact" name="artifact" id="artifact_{{artifact}}" ng-disabled="!facet_counts['artifacts'][artifact]">
+            <label for="artifact_{{artifact}}" ng-class="{facet_disabled: !facet_counts['artifacts'][artifact]}">{{artifact | idToTitle}}</label>
+            <span class="smaller">({{facet_counts["artifacts"][artifact] || 0}})</span>
+            <br/>
+          </span>
+        </div>
+      </div>
+
+      <div id="language_facet" class="facet">
+        <h4>Natural Language</h4>
+        <div class="checkbox_list">
+          <span ng-repeat="(language_uri,language_label) in natural_languages">
+            <input type="checkbox" checklist-model="facets.natural_languages.active" checklist-value="language_uri" name="natural_language"
+                   id="language_{{language_label.toLowerCase().split(' ').join('_')}}" ng-disabled="!facet_counts['natural_languages'][language_uri]">
+            <label for="language_{{language_label.toLowerCase().split(' ').join('_')}}" ng-class="{facet_disabled: !facet_counts['natural_languages'][language_uri]}">{{language_label}}</label>
+            <span class="smaller">({{facet_counts["natural_languages"][language_uri] || 0}})</span>
+            <br/>
+          </span>
+        </div>
+      </div>
+
+      <div id="formality_level_facet" class="facet">
+        <h4>Formality Levels</h4>
+        <div class="checkbox_list">
+          <span ng-repeat="(formality_uri,formality_label) in formality_levels">
+            <input type="checkbox" checklist-model="facets.formality_levels.active" checklist-value="formality_uri" name="formality_level"
+                   id="formality_{{formality_label.toLowerCase().split(' ').join('_')}}" ng-disabled="!facet_counts['formality_levels'][formality_uri]">
+            <label for="formality_{{formality_label.toLowerCase().split(' ').join('_')}}" ng-class="{facet_disabled: !facet_counts['formality_levels'][formality_uri]}">{{formality_label}}</label>
+            <span class="smaller">({{facet_counts["formality_levels"][formality_uri] || 0}})</span>
+            <br/>
+          </span>
+        </div>
+      </div>
+
+      <div id="is_of_type_facet" class="facet">
+        <h4>Is of Type</h4>
+        <div class="checkbox_list">
+          <span ng-repeat="(is_of_type_uri,is_of_type_label) in is_of_type">
+            <input type="checkbox" checklist-model="facets.is_of_type.active" checklist-value="is_of_type_uri" name="is_of_type"
+                   id="is_of_type_{{is_of_type_label.toLowerCase().split(' ').join('_')}}" ng-disabled="!facet_counts['is_of_type'][is_of_type_uri]">
+            <label for="is_of_type_{{is_of_type_label.toLowerCase().split(' ').join('_')}}" ng-class="{facet_disabled: !facet_counts['is_of_type'][is_of_type_uri]}">{{is_of_type_label}}</label>
+            <span class="smaller">({{facet_counts["is_of_type"][is_of_type_uri] || 0}})</span>
+            <br/>
+          </span>
+        </div>
+      </div>
+
       <div id="missing_status_facet" class="facet admin" ng-show="admin">
         <h4>Missing Status</h4>
         <div class="checkbox_list">
@@ -117,18 +166,6 @@
               {{status | idToTitle}}
             </option>
           </select>
-        </div>
-      </div>
-
-      <div id="admin_facet" class="facet admin" ng-show="admin">
-        <h4>Admin Only</h4>
-        <div class="checkbox_list">
-          <span ng-repeat="artifact in artifacts">
-            <input type="checkbox" checklist-model="facets.artifacts.active" checklist-value="artifact" name="artifact" id="artifact_{{artifact}}" ng-disabled="!facet_counts['artifacts'][artifact]">
-            <label for="artifact_{{artifact}}" ng-class="{facet_disabled: !facet_counts['artifacts'][artifact]}">{{artifact | idToTitle}}</label>
-            <span class="smaller">({{facet_counts["artifacts"][artifact] || 0}})</span>
-            <br/>
-          </span>
         </div>
       </div>
 
@@ -152,6 +189,8 @@
             <option value="-note_count">Notes</option>
             <!-- <option value="ratings">Rating</option> -->
             <option value="-creationDate">Upload Date</option>
+            <option value="-released">Release Date</option>
+            <option value="-fairScore">FAIR score</option>
             <option value="-search_rank" ng-show="searchText.length > 0">Search Rank</option>
           </select>
         </div>
@@ -209,8 +248,20 @@
           <span ng-hide="ontology.submission">No submissions available</span>
         </div>
 
-        <div class="badges grid-25 grid-parent" ng-if="ontology.submission !== null && ontology.class_count > 0">
-          <a href="/ontologies/{{ontology.acronym}}?p=classes" ng-if="ontology.format !== 'SKOS'">
+
+
+        <div class="badges grid-25 grid-parent" ng-if="ontology.submission !== null">
+
+          <a href="/ontologies/{{ontology.acronym}}#fair-details" ng-if="ontology.fairScore !==null && ontology.acronym != 'AGROVOC'">
+            <div class="grid-50 badge_grid badge-fair">
+              <div class="ontology_badge" title="{{ontology.normalizedFairScore}}%">
+                <div class="badge_title">FAIR score</div>
+                <div class="badge_count">{{ontology.fairScore}}</div>
+              </div>
+            </div>
+          </a>
+
+          <a href="/ontologies/{{ontology.acronym}}?p=classes" ng-if="ontology.format !== 'SKOS' && ontology.class_count > 0">
             <div class="grid-50 badge_grid">
               <div class="ontology_badge">
                 <div class="badge_title">classes</div>
@@ -264,6 +315,10 @@
   jQuery(document).data().bp.formats = <%=MultiJson.dump(@formats).html_safe%>;
   jQuery(document).data().bp.admin = <%=MultiJson.dump(@admin).html_safe%>;
   jQuery(document).data().bp.development = <%=MultiJson.dump(@development).html_safe%>;
+
+  jQuery(document).data().bp.formality_levels = <%=MultiJson.dump($FORMALITY_LEVELS).html_safe%>;
+  jQuery(document).data().bp.natural_languages = <%=MultiJson.dump($NATURAL_LANGUAGES).html_safe%>;
+  jQuery(document).data().bp.is_of_type = <%=MultiJson.dump($IS_OF_TYPE).html_safe%>;
 </script>
 
 <script src="lib/lunr.js/lunr.min.js"></script>

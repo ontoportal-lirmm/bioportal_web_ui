@@ -1,0 +1,147 @@
+- begin
+  - if @views.nil?
+    - @views = @ontology.explore.views.sort {|a,b| a.acronym.downcase <=> b.acronym.downcase }
+- rescue
+  - @views = []
+
+:javascript
+  jQuery(document).ready(function(){
+    jQuery(".click_view_collapse").click(function(){
+      var collapse = "#" + jQuery(this).parent().attr("id") + "_collapsible";
+      var icon = "#" + jQuery(this).parent().attr("id") + "_icon";
+      jQuery(icon).toggleClass("ui-icon-triangle-1-e");
+      jQuery(icon).toggleClass("ui-icon-triangle-1-s");
+      jQuery(collapse).toggle();
+    });
+
+    jQuery("#expand_views").click(function(){
+      jQuery(".view_collapsible").show();
+      jQuery(".click_view_collapse_icon").removeClass("ui-icon-triangle-1-e");
+      jQuery(".click_view_collapse_icon").addClass("ui-icon-triangle-1-s");
+    });
+
+    jQuery("#collapse_views").click(function(){
+      jQuery(".view_collapsible").hide();
+      jQuery(".click_view_collapse_icon").removeClass("ui-icon-triangle-1-s");
+      jQuery(".click_view_collapse_icon").addClass("ui-icon-triangle-1-e");
+    });
+  });
+
+
+%div{:style => "clear: both;"}
+#views_content
+  %h2{:style => "margin: 2em 0 0"}
+    %span{:style => "font-size: x-large; margin-right: 1.5em;"} Views
+    - ont_id_esc = CGI.escape(@ontology.id)
+    - if session[:user].nil?
+      %a{:href => "/login?redirect=#{escape("/ontologies/new?ontology[viewOf]=#{ont_id_esc}")}"} Create new view
+    - else
+      %a{:href => "/ontologies/new?ontology[viewOf]=#{ont_id_esc}"} Create new view
+
+  %div{:style => "float:left;"}
+    - if @views.empty? || @views.length < 1
+      %h1 No views available.
+    - else
+      :css
+        #view_head .lead {
+            color: #708090;
+            font-weight: bold;
+        }
+        .view_collapsible {
+            margin: 0 1em;
+        }
+        .click_view_collapse:hover {
+            text-decoration: underline;
+        }
+
+      %h4{:style => "margin-top: .5em;"}
+        %a#expand_views{:href => "javascript:void(0);"} Expand All
+        |
+        %a#collapse_views{:href => "javascript:void(0);"} Collapse All
+
+      - @views.each_with_index do |view, index|
+        - next unless view.access?(session[:user])
+        - viewN = "view_#{index}"
+        - viewName = view.name
+        - viewAdmin = view.admin?(session[:user])
+        - view_submissions = view.explore.submissions.sort {|a,b| b.released <=> a.released } || [] rescue []
+        - view_sub_latest = view.explore.latest_submission({:include_status => 'ready'}) rescue view.explore.latest_submission({:include_status => 'ready', include: ""})
+        - view_sub_latest ||= view_submissions.first # fallback, if any
+        - begin
+          - view_description = view_sub_latest.description
+        - rescue
+          - view_description = nil
+        - begin
+          - view_definition = view_sub_latest.definition
+        - rescue
+          - view_definition = nil
+        - begin
+          - view_contacts = view_sub_latest.contact.map {|c| "#{c.name}, #{c.email}" }.join('; ')
+        - rescue
+          - view_contacts = nil
+
+        .view_title{:id => viewN, :style => "margin: 1em 0 .5em; cursor: pointer;"}
+          %span.ui-icon.ui-icon-triangle-1-e.click_view_collapse.click_view_collapse_icon{:id => "#{viewN}_icon", :style => "float: left;"}
+          %span.click_view_collapse{:style => "font-size: 120%; font-weight: bold;"}
+            = viewName
+        .view_collapsible{:id => "#{viewN}_collapsible", :style => "margin: 0 1em .5em; display: none;"}
+          / Display basic view metadata
+          #view_head.enable-lists{:style => "margin: 0 0 .5em;"}
+            %ul
+              - if viewAdmin
+                - viewSubmitURL = "/ontologies/#{view.acronym}/submissions/new" # submit new view
+                %li
+                  %span.lead Administrator:
+                  %a{:href => viewSubmitURL} create new view submission
+              - unless view_description.nil?
+                %li
+                  %span.lead Description:
+                  = view_description
+              - unless view_definition.nil?
+                %li
+                  %span.lead Definition:
+                  = view_definition
+              -# unless view_language.nil?
+                %li
+                  %span.lead Definition Language:
+                  = view_language
+              - unless view_contacts.nil?
+                %li
+                  %span.lead Created By:
+                  = view_contacts
+          / Display view submissions data (if any)
+          - unless view_submissions.empty?
+            / view_head
+            %table.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
+              %thead
+                %tr
+                  %th Submission
+                  %th Release Date
+                  %th Upload Date
+                  %th Downloads
+                  - if viewAdmin
+                    %th Admin Links
+
+              - view_sub_latestId = -1
+              - view_sub_latestId = view_sub_latest.submissionId unless view_sub_latest.nil?
+              - view_submissions.each_with_index do |view_sub, view_index|
+                %tr
+                  %td
+                    = raw status_link(view_sub, view_sub.submissionId==view_sub_latestId)
+                  %td
+                    = xmldatetime_to_date(view_sub.released)
+                  %td
+                    = xmldatetime_to_date(view_sub.creationDate)
+                  %td
+                    = raw download_link(view_sub, view)
+                  - if (view_index == 0) && viewAdmin
+                    %td
+                      - viewEditURL = "/ontologies/#{view.acronym}/submissions/#{view_sub.submissionId}/edit"
+                      #{link_to "Edit", viewEditURL}
+            / view submission table
+        / collapsible div
+        / title div
+      / @views.each
+    / if views ...
+  / float left
+/ views_content

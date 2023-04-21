@@ -41,7 +41,7 @@ rec.enableEdition = function() {
 
 rec.insertSampleText = function() {
     rec.enableEdition();
-    var text = 'Primary treatment of DCIS now includes 3 options: lumpectomy without lymph node surgery plus whole breast radiation (category 1); total mastectomy with or without sentinel node biopsy with or without reconstruction (category 2A); lumpectomy without lymph node surgery without radiation (category 2B). Workup for patients with clinical stage l, llA, llB, or T3,N1,M0 disease was reorganized to distinguish optional additional studies from those recommended for all of these patients. Recommendation for locoregional treatment for patients with clinical stage l, llA, llB, or T3,N1,M0 disease with 1-3 positive axillary nodes following total mastectomy was changed from "Consider" to "Strongly consider" postmastectomy radiation therapy. ';
+    var text = jQuery("#recommender_sample_text").val();
     jQuery("#inputText").focus();
     jQuery("#inputText").val(text);
     $(".notTextError").hide();
@@ -50,14 +50,14 @@ rec.insertSampleText = function() {
 
 rec.insertSampleKeywords = function() {
     rec.enableEdition();
-    var text = "Backpain, White blood cell, Carcinoma, Cavity of stomach, Ductal Carcinoma in Situ, Adjuvant chemotherapy, Axillary lymph node staging, Mastectomy, tamoxifen, serotonin reuptake inhibitors, Invasive Breast Cancer, hormone receptor positive breast cancer, ovarian ablation, premenopausal women, surgical management, biopsy of breast tumor, Fine needle aspiration, entinel lymph node, breast preservation, adjuvant radiation therapy, prechemotherapy, Inflammatory Breast Cancer, ovarian failure, Bone scan, lumpectomy, brain metastases, pericardial effusion, aromatase inhibitor, postmenopausal, Palliative care, Guidelines, Stage IV breast cancer disease, Trastuzumab, Breast MRI examination";
+    var text = jQuery("#recommender_sample_keywords").val();
     jQuery("#inputText").focus();
     jQuery("#inputText").val(text);
     $(".notTextError").hide();
     $("#radioItKeywords").prop("checked", true);
 }
 
-rec.colors = ["#234979" , "#cc0000", "#339900", "#ff9900"];
+rec.colors = ["#76A7CC" , "#cc0000", "#339900", "#ff9900"];
 rec.getHighlightedTerms = function(data, rowNumber) {
     var inputText = document.getElementById("inputText").value;
     var newText = '';

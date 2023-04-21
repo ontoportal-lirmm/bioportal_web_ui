@@ -1,0 +1,23 @@
+= turbo_frame_tag 'scheme' do
+  - if @scheme && !@scheme.empty?
+    = render ConceptDetailsComponent.new(id:'scheme-label', acronym: @ontology.acronym,
+                properties: scheme.properties,
+                top_keys: %w[description comment],
+                bottom_keys: %w[disjoint subclass is_a has_part],
+                exclude_keys: []) do |c|
+      = c.header do
+        %tr
+          %td.label
+            ID
+          %td
+            %p= scheme["@id"]
+        %tr
+          %td{nowrap: ""} Preferred Name
+          %td
+            %p= get_scheme_label(scheme)
+        %tr
+          %td.label
+            Type
+          %td
+            %p= scheme["@type"]
+

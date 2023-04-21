@@ -1,9 +1,18 @@
 User-agent: *
+# This will match '/mappings', as well - due to path value wildcard [
+# https://developers.google.com/search/reference/robots_txt#url-matching-based-on-path-values ].
 Disallow: /*mappings
+Disallow: /projects
+Disallow: /projects/
 Disallow: /login
 Disallow: /virtual
 Disallow: /visualize
-Crawl-delay: 2
+Disallow: /resource_index
+Disallow: /feedback
+Disallow: /ajax
+Disallow: /javascripts
+Disalow: /widgets
+Crawl-delay: 5
 
 User-agent: SemrushBot
 Disallow: /
@@ -15,6 +24,16 @@ User-agent: SemrushBot-SI
 Disallow: /
 
 User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: DataForSeoBot
+Disallow: /
+User-agent: BLEXBot
+Disallow: /
+User agent: MTRobot
 Disallow: /
 
 

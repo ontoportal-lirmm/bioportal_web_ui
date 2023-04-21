@@ -1,0 +1,18 @@
+%nav
+  .nav.nav-tabs.text-center{:role => "tablist", style:"background-color: rgba(0, 0, 0, 0.03);"}
+
+    %a#concepts-tree-tab.nav-item.nav-link.active.flex-grow-1.border-radius-0{"data-toggle" => "tab", :href => "#concepts-tree-container", title: 'Hierarchy view', 'data-controller': "tooltip"}
+      %img{src: asset_path('list-tree.svg') , style:'width: 25px; height: 25px'}
+    - if skos?
+      %a#concepts-list-tab.nav-item.nav-link.flex-grow-1.border-radius-0{"data-toggle" => "tab", :href => "#concepts-list-container",  title: 'Collection view', 'data-controller': "tooltip"}
+        %i.fas.fa-list.text-dark{style:'font-size: 25px'}
+    %a#concepts-date-sort-tab.nav-item.nav-link.flex-grow-1.border-radius-0{"data-toggle" => "tab", :href => "#concepts-date-sort-container",  title: 'Date view', 'data-controller': "tooltip"}
+      %i.far.fa-calendar-alt.text-dark{style:'font-size: 25px'}
+.tab-content.px-1.py-2
+  #concepts-tree-container.tab-pane.fade.show.active
+    = render partial: 'ontologies/concepts_browsers/concepts_tree'
+  - if skos?
+    #concepts-list-container.tab-pane.fade
+      = render partial: 'ontologies/concepts_browsers/concepts_list'
+  #concepts-date-sort-container.tab-pane.fade
+    = render partial: 'ontologies/concepts_browsers/concepts_date_sort'

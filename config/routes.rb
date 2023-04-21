@@ -2,6 +2,10 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
 
+  get '/notes/new_comment', to: 'notes#new_comment'
+  get '/notes/new_proposal', to: 'notes#new_proposal'
+  get '/notes/new_reply', to: 'notes#new_reply'
+  delete '/notes', to: 'notes#destroy'
   resources :notes, constraints: { id: /.+/ }
 
   resources :ontolobridge do
@@ -14,14 +18,30 @@ Rails.application.routes.draw do
 
   resources :reviews
 
+  get '/users/subscribe/:username', to: 'users#subscribe'
+  get '/users/un-subscribe/:email', to: 'users#un_subscribe'
+
+  get '/mappings/loader' , to: 'mappings#loader'
+  post '/mappings/loader', to: 'mappings#loader_process'
+  get 'mappings/count/:id', to: 'mappings#count', constraints: { id: /.+/ }
+  get 'mappings/show_mappings', to: 'mappings#show_mappings'
+  get 'mappings/new', to: 'mappings#new'
+  get 'mappings/:id', to: 'mappings#show', constraints: { id: /.+/ }
+  post 'mappings/:id', to: 'mappings#update', constraints: { id: /.+/ }
+  delete 'mappings/:id', to: 'mappings#destroy', constraints: { id: /.+/ }
   resources :mappings
+  get 'mappings/:id', to: 'mappings#show', constraints: { id: /.+/ }
 
   resources :margin_notes
 
   resources :concepts
 
+  get 'ontologies/:ontology_id/concepts', to: 'concepts#show_concept'
   resources :ontologies do
     resources :submissions
+    get 'instances/:instance_id', to: 'instances#show', constraints: { instance_id: /[^\/?]+/ }
+    get 'schemes/show_scheme', to: 'schemes#show'
+    get 'collections/show'
   end
 
   resources :login
@@ -40,14 +60,29 @@ Rails.application.routes.draw do
 
   resources :annotatorplus
 
+  resources :ncbo_annotatorplus
+
   resources :virtual_appliance
 
+  get 'change_requests/create_synonym'
+  match 'change_requests', to: 'change_requests#create', via: :post
+
+  # resource for metadata ontologies
+  scope :ontologies_metadata_curator do
+    post '/result', to: 'ontologies_metadata_curator#result'
+    post '/edit', to: 'ontologies_metadata_curator#edit'
+    put '/update', to: 'ontologies_metadata_curator#update'
+    get '/:ontology/submissions/:submission_id/attributes/:attribute', to: 'ontologies_metadata_curator#show_metadata_value'
+    get '/:ontology/submissions/:submission_id', to: 'ontologies_metadata_curator#show_metadata_by_ontology'
+  end
+    
   get '' => 'home#index'
 
   # Top-level pages
   match '/feedback', to: 'home#feedback', via: [:get, :post]
   get '/account' => 'home#account'
   get '/help' => 'home#help'
+  get '/about' => 'home#about'
   get '/site_config' => 'home#site_config'
   get '/validate_ontology_file' => 'home#validate_ontology_file_show'
   match '/validate_ontology_file' => 'home#validate_ontology_file', via: [:get, :post]
@@ -65,21 +100,27 @@ Rails.application.routes.draw do
   get '/robots.txt' => 'robots#index'
 
   # Ontologies
+  get '/ontologies/view/edit/:id' => 'ontologies#edit_view', :constraints => { id: /[^\/?]+/ }
+  get '/ontologies/view/new/:id' => 'ontologies#new_view'
+  
   get '/ontologies/virtual/:ontology' => 'ontologies#virtual', :as => :ontology_virtual
   get '/ontologies/success/:id' => 'ontologies#submit_success'
   match '/ontologies/:acronym' => 'ontologies#update', via: [:get, :post]
   match '/ontologies/:acronym/submissions/:id' => 'submissions#update', via: [:get, :post]
   get '/ontologies/:ontology_id/submissions/new' => 'submissions#new', :ontology_id => /.+/
-  match '/ontologies/:ontology_id/submissions' => 'submissions#create', :ontology_id => /.+/, via: [:get, :post]
+  match '/ontologies/:ontology_id/submissions' => 'submissions#create', :ontology_id => /.+/, via: [:post]
+  match '/ontologies/:ontology_id/submissions' => 'submissions#index', :ontology_id => /.+/, via: [:get]
   get '/ontologies/:acronym/classes/:purl_conceptid', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
-  get '/ontologies/:acronym/:purl_conceptid', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
+  get '/ontologies/:acronym/: f', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
+  match '/ontologies/:acronym/submissions/:id/edit_metadata' => 'submissions#edit_metadata', via: [:get, :post]
 
   # Analytics
   get '/analytics/:action' => 'analytics#(?-mix:search_result_clicked|user_intention_surveys)'
 
   # Notes
   get 'ontologies/:ontology/notes/:noteid', to: 'notes#virtual_show', as: :note_virtual, noteid: /.+/
-  
+  get 'ontologies/:ontology/notes', to: 'notes#virtual_show'
+
   # Ajax
   get '/ajax/' => 'ajax_proxy#get', :as => :ajax
   get '/ajax_concepts/:ontology/' => 'concepts#show', :constraints => { id: /[^\/?]+/ }
@@ -94,12 +135,23 @@ Rails.application.routes.draw do
   get '/ajax/classes/label' => 'concepts#show_label'
   get '/ajax/classes/definition' => 'concepts#show_definition'
   get '/ajax/classes/treeview' => 'concepts#show_tree'
+  get '/ajax/classes/list' => 'collections#show_members'
+  get '/ajax/classes/date_sorted_list' => 'concepts#show_date_sorted_list'
   get '/ajax/properties/tree' => 'concepts#property_tree'
+  get 'ajax/schemes/label', to: "schemes#show_label"
+  get 'ajax/collections/label', to: "collections#show_label"
+  get 'ajax/label_xl/label', to: "label_xl#show_label"
+  get 'ajax/label_xl', to: "label_xl#show"
   get '/ajax/biomixer' => 'concepts#biomixer'
+  get '/ajax/fair_score/html' => 'fair_score#details_html'
+  get '/ajax/fair_score/json' => 'fair_score#details_json'
+  get '/ajax/:ontology/instances' => 'instances#index_by_ontology'
+  get '/ajax/:ontology/classes/:conceptid/instances' => 'instances#index_by_class', :constraints => { conceptid: /[^\/?]+/ }
 
   # User
   get '/logout' => 'login#destroy', :as => :logout
   get '/lost_pass' => 'login#lost_password'
+  get '/lost_pass_success' => 'login#lost_password_success'
   get '/reset_password' => 'login#reset_password'
   post '/accounts/:id/custom_ontologies' => 'users#custom_ontologies', :as => :custom_ontologies
   get '/login_as/:login_as' => 'login#login_as' , constraints: { login_as:  /[\d\w\.\-\%\+ ]+/ }
@@ -125,7 +177,7 @@ Rails.application.routes.draw do
   match '/admin/ontologies/:acronym/log' => 'admin#parse_log', via: [:get]
   match '/admin/update_info' => 'admin#update_info', via: [:get]
   match '/admin/update_check_enabled' => 'admin#update_check_enabled', via: [:get]
-
+  match '/admin/users' => 'admin#users', via: [:get]
 
   # Ontolobridge
   # post '/ontolobridge/:save_new_term_instructions' => 'ontolobridge#save_new_term_instructions'
@@ -155,5 +207,5 @@ Rails.application.routes.draw do
   get '/visualize' => 'ontologies#visualize', :as => :visualize_concept, :constraints => { ontology: /[^\/?]+/, id: /[^\/?]+/, ontologyid: /[^\/?]+/, conceptid: /[^\/?]+/ }
 
   get '/exhibit/:ontology/:id' => 'concepts#exhibit'
-
+   
 end

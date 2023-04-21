@@ -1,4 +1,4 @@
-set :author, "ncbo"
+set :author, "ontoportal-lirmm"
 set :application, "bioportal_web_ui"
 
 set :repo_url, "https://github.com/#{fetch(:author)}/#{fetch(:application)}.git"
@@ -8,7 +8,7 @@ set :deploy_via, :remote_cache
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
-# default deployment branch is master wich can be overwritten with BRANCH env var
+# default deployment branch is master which can be overwritten with BRANCH env var
 # BRANCH env var can be set to specific branch of tag, i.e 'v6.8.1'
 
 set :branch, ENV.include?('BRANCH') ? ENV['BRANCH'] : 'master'
@@ -101,7 +101,7 @@ namespace :deploy do
     end
   end
 
-  after :updating, :get_config
+
   after :publishing, :restart
 
   after :restart, :clear_cache do
