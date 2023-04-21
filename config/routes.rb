@@ -207,5 +207,6 @@ Rails.application.routes.draw do
   get '/visualize' => 'ontologies#visualize', :as => :visualize_concept, :constraints => { ontology: /[^\/?]+/, id: /[^\/?]+/, ontologyid: /[^\/?]+/, conceptid: /[^\/?]+/ }
 
   get '/exhibit/:ontology/:id' => 'concepts#exhibit'
-   
+  
+  mount Lookbook::Engine, at: "/lookbook"
 end

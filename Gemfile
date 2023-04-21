@@ -69,6 +69,7 @@ gem 'rest-client'
 gem 'stackprof', require: false
 gem 'thin'
 gem 'view_component', '~> 2.72'
+gem "lookbook"
 gem 'turnout'
 gem 'will_paginate', '~> 3.0'
 

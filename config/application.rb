@@ -27,5 +27,8 @@ module BioportalWebUi
     config.change_request = config_for :change_request
 
     config.generators.template_engine = :haml
+
+    # Set the default layout to app/views/layouts/component_preview.html.erb
+    config.view_component.default_preview_layout = "component_preview"
   end
 end

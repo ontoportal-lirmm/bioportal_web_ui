@@ -1,10 +1,10 @@
 class CardMessageComponent < ViewComponent::Base
-    def initialize(title: nil ,message:, button_text: nil, type:)
+    def initialize(title: nil ,message:, button_text: nil, button_link: "/" ,type:)
         @title = title
         @message = message
         @button_text = button_text
         @type = type
-
+        @button_link = button_link
     end
 
     def no_title?
