@@ -37,6 +37,10 @@ export default class extends Controller {
                 checks = event.target.checked ?  ['true'] : []
                 filter = "show_retired"
                 break;
+            case "private_only":
+                checks = event.target.checked ?  ['true'] : []
+                filter = "private_only"
+                break;
             default:
                 checks = this.#getSelectedChecks().map(x => x.name)
                 filter = this.element.id.split("_")[0]

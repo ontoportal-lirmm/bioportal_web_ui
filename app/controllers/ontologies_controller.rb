@@ -458,6 +458,12 @@ class OntologiesController < ApplicationController
 
   private
 
+  def private_only_filter(filtered_ontologies, check)
+    return filtered_ontologies unless check
+
+    filtered_ontologies.select { |o| o[:private] && check }
+  end
+
   def views_filter(filtered_ontologies, check)
     filtered_ontologies.select { |o| (o[:viewOfOnt] && check) || o[:viewOfOnt].nil? }
   end
@@ -470,6 +476,7 @@ class OntologiesController < ApplicationController
     @filters = ontology_filters_init(categories, groups)
     filtered_ontologies = ontologies
 
+    filtered_ontologies = private_only_filter(filtered_ontologies, @show_private_only)
     filtered_ontologies = views_filter(filtered_ontologies, @show_views)
     filtered_ontologies = retired_filter(filtered_ontologies, @show_retired)
 
@@ -517,6 +524,7 @@ class OntologiesController < ApplicationController
     #end
 
     @show_views = params[:show_views]&.eql?('true')
+    @show_private_only = params[:private_only]&.eql?('true')
     @show_retired = params[:show_retired]&.eql?('true')
     @selected_format = params[:format]
     @search = params[:search]
