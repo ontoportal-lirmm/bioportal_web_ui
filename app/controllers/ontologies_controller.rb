@@ -135,7 +135,7 @@ class OntologiesController < ApplicationController
 
 
     @ontologies = apply_ontology_filters(@ontologies, @categories, @groups)
-    render partial: "ontologies"
+    @object_count = count_objects(@ontologies, @filters.keys)
   end
   
   def classes
@@ -471,7 +471,7 @@ class OntologiesController < ApplicationController
     filtered_ontologies = filter_ontologies_by(filtered_ontologies, :naturalLanguage)
     filtered_ontologies = filter_ontologies_by(filtered_ontologies, :hasFormalityLevel)
     filtered_ontologies = filter_ontologies_by(filtered_ontologies, :isOfType)
-    filtered_ontologies = filter_ontologies_by(filtered_ontologies, :missingStatus)
+    #filtered_ontologies = filter_ontologies_by(filtered_ontologies, :missingStatus)
 
     filtered_ontologies
   end
@@ -515,7 +515,7 @@ class OntologiesController < ApplicationController
       naturalLanguage: object_filter(@languages, :naturalLanguage),
       hasFormalityLevel: object_filter(@formalityLevel, :hasFormalityLevel),
       isOfType: object_filter(@isOfType, :isOfType),
-      missingStatus: object_filter(@missingStatus, :missingStatus)
+      #missingStatus: object_filter(@missingStatus, :missingStatus)
     }
   end
 
@@ -684,6 +684,24 @@ class OntologiesController < ApplicationController
     [objects, checks, count]
   end
 
+  def count_objects(ontologies, object_names)
+    objects_count = {}
+    ontologies.each do |ontology|
+      object_names.each do |name|
+        values = Array(ontology[name])
+        values.each do |v|
+          objects_count[name] = {} unless objects_count[name]
+          objects_count[name][v] = (objects_count[name][v] || 0) + 1
+        end
 
+        remaining_objects = @filters[name][0].reject { |o| objects_count[name]&.include?(o['id']) }
+        remaining_objects.each do |o|
+          objects_count[name] = {} unless objects_count[name]
+          objects_count[name][o['id']] = 0
+        end
+      end
+    end
+    objects_count
+  end
 
 end
