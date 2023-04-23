@@ -20,7 +20,7 @@
           %h3 Welcome admin
           %div
             %svg{:fill => "none", :height => "11", :viewbox => "0 0 11 11", :width => "11", :xmlns => "http://www.w3.org/2000/svg"}
-              %circle{:cx => "5.5", :cy => "5.5", :fill => "#145FF4", :r => "5.5"}
+              %circle{:cx => "5.5", :cy => "5.5", :fill => 'var(--admin-color)', :r => "5.5"}
             %p This coloring indicates admin-only features
 
     %div{data: { controller: "turbo-frame history browse-filters" , "turbo-frame-url-value": "/ontologies_filter", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL changed->turbo-frame#updateFrame"}}
@@ -54,7 +54,7 @@
 
           - @filters.each do |key, values|
             - if session[:user]&.admin? ||  key != :missingStatus
-              .browse-filter{data:{controller: "show-filter-count browse-filters", action: "change->show-filter-count#updateCount change->browse-filters#dispatchFilterEvent"}, id: "#{key}_filter_container", style: "#{"border-color: #145FF4;" if key == :missingStatus}"}
+              .browse-filter{data:{controller: "show-filter-count browse-filters", action: "change->show-filter-count#updateCount change->browse-filters#dispatchFilterEvent"}, id: "#{key}_filter_container", style: "#{"border-color: var(--admin-color);" if key == :missingStatus}"}
                 .browse-filter-title-bar{"data-target" => "#browse-#{key}-filter", "data-toggle" => "collapse"}
                   %p
                     #{key.to_s.underscore.humanize.capitalize}
