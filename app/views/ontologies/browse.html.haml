@@ -64,12 +64,15 @@
                 .collapse{id: "browse-#{key}-filter", class: "#{values[2].positive? ? 'show': ''}"}
                   .browse-filter-checks-container
                     - values.first.each do |object|
-                      %div
-                        = render ChipsComponent.new(name: object["acronym"], value: object["name"] || object["id"], checked: values[1]&.include?(object["id"]))
-
-
+                      %div.mr-2
+                        = render ChipsComponent.new(name: object["acronym"], value: (object["acronym"] || object["id"]), checked: values[1]&.include?(object["id"])) do |c|
+                          - c.count do
+                            %div.ml-1
+                              = turbo_frame_tag "count_#{key}_#{object["id"]}" do
+                                %div.p-1.p-2
+                                  = render LoaderComponent.new(small:true)
 
         .browse-second-row
-          = render TurboFrameComponent.new(id:"search-results" , src: "/ontologies_filter?#{request.original_url.split('?').last}",
+          = render TurboFrameComponent.new(id:"ontologies-browse-results" , src: "/ontologies_filter?#{request.original_url.split('?').last}",
               data:{"turbo-frame-target":"frame", "turbo-frame-url-value": "/ontologies_filter"})
           
