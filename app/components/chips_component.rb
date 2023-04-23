@@ -1,4 +1,5 @@
 class ChipsComponent < ViewComponent::Base
+    renders_one :count
     def initialize(name:, value:, checked: false)
         @name = name
         @value = value
