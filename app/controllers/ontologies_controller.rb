@@ -7,6 +7,7 @@ class OntologiesController < ApplicationController
   include SchemesHelper
   include CollectionsHelper
   include MappingStatistics
+  include TurboHelper
 
   require 'multi_json'
   require 'cgi'
@@ -130,14 +131,25 @@ class OntologiesController < ApplicationController
 
       @ontologies << o
     end
-    
+
     @ontologies.sort! { |a, b| b[:popularity] <=> a[:popularity] }
 
 
     @ontologies = apply_ontology_filters(@ontologies, @categories, @groups)
     @object_count = count_objects(@ontologies, @filters.keys)
+    update_count_streams = @object_count.map do |section, values_count|
+      values_count.map do |value, count|
+        replace("count_#{section}_#{value}") do
+          helpers.turbo_frame_tag("count_#{section}_#{value}") do
+            helpers.content_tag(:span, class: 'p-1 px-2') {count.to_s}
+          end
+        end
+      end
+    end.flatten
+    render turbo_stream: [prepend('ontologies-browse-results', partial: 'ontologies')] + update_count_streams
+
   end
-  
+
   def classes
     @submission = get_ontology_submission_ready(@ontology)
     get_class(params)
@@ -499,7 +511,7 @@ class OntologiesController < ApplicationController
       {"id" => "ANNOTATOR", "name" => "ANNOTATOR", "acronym" => "ANNOTATOR"},
       {"id" => "DIFF", "name" => "DIFF", "acronym" => "DIFF"}
     ]
-   
+
     #@missingStatus = submission_metadata.select { |x| x["@id"]["submissionStatus"] }.first["enforcedValues"].map do |id, name|
     #  { "id" => id, "name" => name, "acronym" => name.camelize(:lower) }
     #end
@@ -564,7 +576,7 @@ class OntologiesController < ApplicationController
         filtered_table << ontology
       end
     end
-    
+
     filtered_table
   end
 
