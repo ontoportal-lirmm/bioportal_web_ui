@@ -52,10 +52,10 @@
               = render SwitchInputComponent.new(id:'filter-private', name:'private_only', checked: @show_private_only) do
                 Show private ontology only
             %div.browse-filter{style:'border: none'}
-          = render SwitchInputComponent.new(id:'filter-views', name:'views', checked: @show_views) do
-            Show ontology views
-          = render SwitchInputComponent.new(id:'filter-retired', name:'retired',checked: @show_retired) do
-            Show retired ontologies
+              = render SwitchInputComponent.new(id:'filter-views', name:'views', checked: @show_views) do
+                Show ontology views
+              = render SwitchInputComponent.new(id:'filter-retired', name:'retired',checked: @show_retired) do
+                Show retired ontologies
 
           - @filters.each do |key, values|
             - if session[:user]&.admin? ||  key != :missingStatus
@@ -69,8 +69,9 @@
                 .collapse{id: "browse-#{key}-filter", class: "#{values[2].positive? ? 'show': ''}"}
                   .browse-filter-checks-container
                     - values.first.each do |object|
-                      %div.mr-2
-                        = render ChipsComponent.new(name: object["acronym"], value: (object["acronym"] || object["id"]), checked: values[1]&.include?(object["id"])) do |c|
+                      %div.mr-2{data: {controller: 'tooltip'}, title:  object["name"] || object["acronym"] || object["id"] }
+                        = render ChipsComponent.new(name: object["acronym"], value: (object["acronym"] || object["id"]),
+                                  checked: values[1]&.include?(object["id"])) do |c|
                           - c.count do
                             %div.ml-1
                               = turbo_frame_tag "count_#{key}_#{object["id"]}" do
