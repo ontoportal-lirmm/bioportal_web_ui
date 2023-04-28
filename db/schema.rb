@@ -50,4 +50,5 @@ ActiveRecord::Schema[7.0].define(version: 2020_09_21_120918) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
   end
+
 end

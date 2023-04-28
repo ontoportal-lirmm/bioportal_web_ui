@@ -54,7 +54,7 @@ $ANNOTATOR_URL = "#{$REST_URL}/annotator"
 
 # NCBO annotator URL and apikey
 $NCBO_ANNOTATOR_URL = "#{$REST_URL}/ncbo_annotatorplus"
-$NCBO_ANNOTATORPLUS_ENABLED = true
+$NCBO_ANNOTATORPLUS_ENABLED = false
 $NCBO_API_KEY = ""
 
 $SPARQL_URL = "#{$REST_URL}/test/"
