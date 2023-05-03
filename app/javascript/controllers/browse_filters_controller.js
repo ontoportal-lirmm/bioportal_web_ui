@@ -4,7 +4,7 @@ import debounce from "debounce"
 export default class extends Controller {
 
     initialize() {
-        this.dispatchInputEvent = debounce(this.dispatchInputEvent.bind(this), 900);
+        this.dispatchInputEvent = debounce(this.dispatchInputEvent.bind(this), 700);
     }
 
     dispatchInputEvent(event) {
