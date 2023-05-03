@@ -461,3 +461,116 @@
 
 }
 
+
+// Browser loader skeleton
+
+.browse-sket{
+    display: flex;
+}
+.browse-sket-column-one{
+    margin-right: 37px;
+}
+.browse-sket-column-one .one{
+    width: 525px;
+    height: 50px;
+    background: linear-gradient(-90deg, #EEE, #F5F5F5, #EEE);
+    border-radius: 5px;
+    margin-bottom: 15px;
+    background-size: 400% 400%;
+    animation: skeleton 3s ease-in-out infinite;
+}
+.browse-sket-column-one .two{
+    width: 525px;
+    height: 44px;
+    background: linear-gradient(-90deg, #EEE, #F5F5F5, #EEE);
+    border-radius: 5px;
+    margin-bottom: 15px;
+    background-size: 400% 400%;
+    animation: skeleton 3s ease-in-out infinite;
+}
+.browse-sket-column-one .three{
+    width: 525px;
+    height: 18px;
+    background: linear-gradient(-90deg, #EEE, #F5F5F5, #EEE);
+    border-radius: 5px;
+    margin-bottom: 15px;
+    background-size: 400% 400%;
+    animation: skeleton 3s ease-in-out infinite;
+}
+.browse-sket-column-one .four{
+    width: 160px;
+    height: 36px;
+    background: linear-gradient(-90deg, #EEE, #F5F5F5, #EEE);
+    border-radius: 5px;
+    background-size: 400% 400%;
+    animation: skeleton 3s ease-in-out infinite;
+}
+.browse-sket-column-two{
+    margin-right:15px;
+}
+.browse-sket-column-two .one{
+    width: 113px;
+    height: 78px;
+    background: linear-gradient(-90deg, #EEE, #F5F5F5, #EEE);
+    border-radius: 5px;
+    margin-bottom: 15px;
+    background-size: 400% 400%;
+    animation: skeleton 3s ease-in-out infinite;
+}
+.browse-sket-column-two .two{
+    width: 113px;
+    height: 78px;
+    background: linear-gradient(-90deg, #EEE, #F5F5F5, #EEE);
+    border-radius: 5px;
+    margin-bottom: 15px;
+    background-size: 400% 400%;
+    animation: skeleton 3s ease-in-out infinite;
+}
+.browse-sket-column-three .one{
+    width: 113px;
+    height: 78px;
+    background: linear-gradient(-90deg, #EEE, #F5F5F5, #EEE);
+    border-radius: 5px;
+    margin-bottom: 15px;
+    background-size: 400% 400%;
+    animation: skeleton 3s ease-in-out infinite;
+}
+.browse-sket-column-three .two{
+    width: 113px;
+    height: 78px;
+    background: linear-gradient(-90deg, #EEE, #F5F5F5, #EEE);
+    border-radius: 5px;
+    margin-bottom: 15px;
+    background-size: 400% 400%;
+    animation: skeleton 3s ease-in-out infinite;
+}
+
+@keyframes skeleton {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 400% 0;
+
+    }
+
+
+}
+
+
+#back_top_btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    transition: background-color .3s,
+    opacity .5s, visibility .5s;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+}
+
+
+#back_top_btn.show {
+    opacity: 1;
+    visibility: visible;
+}
