@@ -1,5 +1,3 @@
-
-
 .browse-center
   .browse-container
     %h2.browse-title Browse
@@ -23,62 +21,82 @@
               %circle{:cx => "5.5", :cy => "5.5", :fill => 'var(--admin-color)', :r => "5.5"}
             %p This coloring indicates admin-only features
 
+    %a#back_top_btn.btn.btn-primary.btn-floating.btn-lg
+      %i.fas.fa-arrow-up.text-white
+
+    :javascript
+      const btn = document.getElementById("back_top_btn");
+      window.addEventListener("scroll", function() {
+        if (window.scrollY > 300) {
+          btn.classList.add("show");
+        } else {
+          btn.classList.remove("show");
+        }
+      });
+
+      btn.addEventListener("click", function(e) {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      });
+
     %div{data: { controller: "turbo-frame history browse-filters" , "turbo-frame-url-value": "/ontologies_filter", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL changed->turbo-frame#updateFrame"}}
       .browse-search-bar
         .browse-search-container
           %input{:name => "search", :placeholder => "Ex: Agrovoc ...", :type => "text", :value => @search, data: {action: "input->browse-filters#dispatchInputEvent"}}
           .browse-search-filters
             %select#format.browse-format-filter{:name => "format"}
-              - format= [["All formats",""], "OBO", "OWL", "SKOS", "UMLS"]
-              = options_for_select(format, @selected_format)
+              = options_for_select(@formats, @selected_format)
             %select#Sort_by.browse-sort-by-filter{:name => "Sort_by"}
-              %option{:disabled => "disabled", :hidden => "", :selected => "selected", :value => ""} Sort by
-              %option{:value => "Popular"} Popular
-              %option{:value => "Name"} Name
-              %option{:value => "class count"} class count
-              %option{:value => "Instances/Concepts count"} Instances/Concepts count
-              %option{:value => "Projects"} Projects
-              %option{:value => "Notes"} Notes
-              %option{:value => "Upload date"} Upload date
-              %option{:value => "Release date"} Release date
-              %option{:value => "FAIR"} FAIR
+              = options_for_select(@sorts_options, '')
+
 
       .browse-sub-container
         .browse-first-row{data:{controller: "browse-filters", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL"}}
-          %p.browse-filters-title Filters
-          %hr#browse-sub-title-line
-          - if session[:user]&.admin?
-            %div.browse-filter{style: "border-color: var(--admin-color);"}
-              = render SwitchInputComponent.new(id:'filter-private', name:'private_only', checked: @show_private_only) do
-                Show private ontology only
+          %div{style:'position: sticky; top: 10px'}
+            %p.browse-filters-title Filters
+            %hr#browse-sub-title-line
+            - if session[:user]&.admin?
+              %div.browse-filter{style: "border-color: var(--admin-color);"}
+                = render SwitchInputComponent.new(id:'filter-private', name:'private_only', checked: @show_private_only) do
+                  Show private ontology only
             %div.browse-filter{style:'border: none'}
               = render SwitchInputComponent.new(id:'filter-views', name:'views', checked: @show_views) do
                 Show ontology views
               = render SwitchInputComponent.new(id:'filter-retired', name:'retired',checked: @show_retired) do
                 Show retired ontologies
 
-          - @filters.each do |key, values|
-            - if session[:user]&.admin? ||  key != :missingStatus
-              .browse-filter{data:{controller: "show-filter-count browse-filters", action: "change->show-filter-count#updateCount change->browse-filters#dispatchFilterEvent"}, id: "#{key}_filter_container", style: "#{"border-color: var(--admin-color);" if key == :missingStatus}"}
-                .browse-filter-title-bar{"data-target" => "#browse-#{key}-filter", "data-toggle" => "collapse"}
-                  %p
-                    #{key.to_s.underscore.humanize.capitalize}
-                    %span.badge.badge-secondary{"data-show-filter-count-target":"countSpan", style: "#{values[2] && values[2].positive? ? '' : 'display: none;'}"}
-                      = values[2] 
-                  %img{:src => "#{asset_path("arrow-down.svg")}"}/
-                .collapse{id: "browse-#{key}-filter", class: "#{values[2].positive? ? 'show': ''}"}
-                  .browse-filter-checks-container
-                    - values.first.each do |object|
-                      %div.mr-2{data: {controller: 'tooltip'}, title:  object["name"] || object["acronym"] || object["id"] }
-                        = render ChipsComponent.new(name: object["acronym"], value: (object["acronym"] || object["id"]),
-                                  checked: values[1]&.include?(object["id"])) do |c|
-                          - c.count do
-                            %div.ml-1
-                              = turbo_frame_tag "count_#{key}_#{object["id"]}" do
-                                %div.p-1.p-2
-                                  = render LoaderComponent.new(small:true)
+            - @filters.each do |key, values|
+              - if session[:user]&.admin? ||  key != :missingStatus
+                .browse-filter{data:{controller: "show-filter-count browse-filters", action: "change->show-filter-count#updateCount change->browse-filters#dispatchFilterEvent"}, id: "#{key}_filter_container", style: "#{"border-color: var(--admin-color);" if key == :missingStatus}"}
+                  .browse-filter-title-bar{"data-target" => "#browse-#{key}-filter", "data-toggle" => "collapse"}
+                    %p
+                      #{key.to_s.underscore.humanize.capitalize}
+                      %span.badge.badge-secondary{"data-show-filter-count-target":"countSpan", style: "#{values[2] && values[2].positive? ? '' : 'display: none;'}"}
+                        = values[2]
+                    %img{:src => "#{asset_path("arrow-down.svg")}"}/
+                  .collapse{id: "browse-#{key}-filter", class: "#{values[2].positive? ? 'show': ''}"}
+                    .browse-filter-checks-container
+                      - values.first.each do |object|
+                        %div.mr-2{data: {controller: 'tooltip'}, title:  object["name"] || object["acronym"] || object["id"] }
+                          = render ChipsComponent.new(name: object["acronym"], value: (object["acronym"] || object["id"]),
+                                    checked: values[1]&.include?(object["id"])) do |c|
+                            - c.count do
+                              %div.ml-1
+                                = turbo_frame_tag "count_#{key}_#{object["id"]}" do
+                                  %div.p-1.p-2
+                                    = render LoaderComponent.new(small:true)
 
         .browse-second-row
-          = render TurboFrameComponent.new(id:"ontologies-browse-results" , src: "/ontologies_filter?#{request.original_url.split('?').last}",
-              data:{"turbo-frame-target":"frame", "turbo-frame-url-value": "/ontologies_filter"})
-          
+          = render TurboFrameComponent.new(id:"ontologies_list_container", data:{"turbo-frame-target":"frame", "turbo-frame-url-value": "/ontologies_filter"}) do |container|
+            = turbo_frame_tag "ontologies_filter_count_request", src: "/ontologies_filter?count=true&#{request.original_url.split('?').last}" do
+              = browser_counter_loader
+            = render TurboFrameComponent.new(id: "ontologies_list_view-page-1" , src: "/ontologies_filter?page=1&#{request.original_url.split('?').last}") do |list|
+              - list.loader do
+                - ontologies_browse_skeleton
+            - container.loader do
+              = browser_counter_loader
+              - ontologies_browse_skeleton
+

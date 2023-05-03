@@ -5,6 +5,23 @@ module OntologiesHelper
   LANGUAGE_FILTERABLE_SECTIONS  = %w[classes schemes collections instances]
 
 
+  def browser_counter_loader
+    content_tag(:div, class: "browse-desc-text", style: "margin-bottom: 15px;") do
+      content_tag(:div, class: "d-flex align-items-center") do
+        str = content_tag(:span, "Showing")
+        str += content_tag(:span, "", class: "p-1 p-2", style: "color: #a7a7a7;") do
+          render LoaderComponent.new(small: true)
+        end
+        str
+      end
+    end
+  end
+
+  def ontologies_browse_skeleton(pagesize = 5)
+    pagesize.times do
+      concat render OntologyBrowseCardComponent.new
+    end
+  end
 
   def additional_details
     return "" if $ADDITIONAL_ONTOLOGY_DETAILS.nil? || $ADDITIONAL_ONTOLOGY_DETAILS[@ontology.acronym].nil?
