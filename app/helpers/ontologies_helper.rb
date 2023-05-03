@@ -23,6 +23,18 @@ module OntologiesHelper
     end
   end
 
+  def ontologies_filter_url(filters, page: 1, count: false)
+    url = 'ontologies_filter?'
+    url += "page=#{page}" if page
+    url += "count=#{page}" if count
+    if filters
+      filters_str = filters.reject { |k, v| v.nil? || (k.eql?(:sort_by) && count) }
+                           .map { |k, v| "#{k}=#{v}" }.join('&')
+      url += "&#{filters_str}"
+    end
+    url
+  end
+
   def additional_details
     return "" if $ADDITIONAL_ONTOLOGY_DETAILS.nil? || $ADDITIONAL_ONTOLOGY_DETAILS[@ontology.acronym].nil?
     details = $ADDITIONAL_ONTOLOGY_DETAILS[@ontology.acronym]
@@ -328,6 +340,7 @@ module OntologiesHelper
   end
 
   def submission_status2string(sub)
+    return '' if sub.submissionStatus.nil?
     # Massage the submission status into a UI string
     # submission status values, from:
     # https://github.com/ncbo/ontologies_linked_data/blob/master/lib/ontologies_linked_data/models/submission_status.rb

@@ -1,0 +1,13 @@
+= render InfiniteScrollComponent.new(id: 'ontologies_list',
+                                    collection: @ontologies,
+                                    next_url: ontologies_filter_url(@filters, page: @page.nextPage),
+                                    current_page: @page.page, next_page: @page.nextPage) do |c|
+  - ontologies = c.collection
+  - ontologies.each do |ontology|
+    = render OntologyBrowseCardComponent.new(ontology: ontology)
+  - c.loader do
+    - ontologies_browse_skeleton
+  - c.error do
+    .browse-empty-illustration
+      %img{:src => "#{asset_path("empty-box.svg")}"}
+      %p No result was found
