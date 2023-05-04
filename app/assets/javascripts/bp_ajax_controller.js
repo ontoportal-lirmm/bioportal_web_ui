@@ -16,7 +16,7 @@ function get_link_for_cls_ajax(cls_id, ont_acronym) {
   let ajax_uri = "/ajax/classes/label";
   let data_cls = `data-label-ajax-cls-id-value='${cls_id}' `;
   let data_ont = `data-label-ajax-ontology-acronym-value='${ont_acronym}'`;
-  let data_ajax_uri = `data-label-ajax-ajax-uri-value='${ajax_uri}' `;
+  let data_ajax_uri = `data-label-ajax-ajax-url-value='${ajax_uri}' `;
 
   let data = `data-controller='label-ajax' ${data_ont} ${data_cls} ${data_ajax_uri}`;
 
