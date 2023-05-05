@@ -54,7 +54,12 @@ export default class extends Controller {
       let cls_name = data;
       let cls_uri = this.clsIdUrlValue;
       this.linkA.html(cls_name);
-      this.linkA.attr("href", cls_uri);
+      if (cls_uri != "") {
+        this.linkA.attr("href", cls_uri);
+      } else {
+        this.linkA.attr("href", this.linkA.context.href);
+      }
+
       this.linkA.addClass("ajax-modified-cls");
       //find and process any identical classes (low probability)
       this.#fillIdenticalIds(cls_name, cls_uri);
