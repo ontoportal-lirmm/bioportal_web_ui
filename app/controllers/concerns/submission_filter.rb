@@ -59,7 +59,7 @@ module SubmissionFilter
     @filters = {}
 
     filters_boolean_map.each do |k, v|
-      next unless params[k].eql?('true') || params[k].eql?('true').eql?(v[:default])
+      next unless params[k].eql?('true') || params[k].eql?(v[:default])
 
       @filters.merge!(k => v[:default])
       request_params.merge!(v[:api_key] => v[:default])
