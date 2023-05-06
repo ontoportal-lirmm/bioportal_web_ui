@@ -4,6 +4,8 @@ import useTooltip from "../mixins/useTooltip";
 // Connects to data-controller="tooltip"
 export default class extends Controller {
   connect() {
-    useTooltip(this.element)
+    if(this.element.title && this.element.title !== ''){
+      useTooltip(this.element)
+    }
   }
 }
