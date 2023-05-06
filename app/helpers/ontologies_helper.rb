@@ -5,6 +5,16 @@ module OntologiesHelper
   LANGUAGE_FILTERABLE_SECTIONS  = %w[classes schemes collections instances]
 
 
+  def browse_filter_section_label(key)
+    labels = {
+      hasFormalityLevel: 'Formality levels',
+      isOfType: 'Generic Types',
+      naturalLanguage: 'Natural languages'
+    }
+
+    labels[key] || key.to_s.underscore.humanize.capitalize
+  end
+  
   def browser_counter_loader
     content_tag(:div, class: "browse-desc-text", style: "margin-bottom: 15px;") do
       content_tag(:div, class: "d-flex align-items-center") do

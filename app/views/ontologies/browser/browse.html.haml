@@ -73,7 +73,7 @@
                 .browse-filter{data:{controller: "show-filter-count browse-filters", action: "change->show-filter-count#updateCount change->browse-filters#dispatchFilterEvent"}, id: "#{key}_filter_container", style: "#{"border-color: var(--admin-color);" if key == :missingStatus}"}
                   .browse-filter-title-bar{"data-target" => "#browse-#{key}-filter", "data-toggle" => "collapse"}
                     %p
-                      #{key.to_s.underscore.humanize.capitalize}
+                      = browse_filter_section_label(key)
                       %span.badge.badge-secondary{"data-show-filter-count-target":"countSpan", style: "#{values[2] && values[2].positive? ? '' : 'display: none;'}"}
                         = values[2]
                     %img{:src => "#{asset_path("arrow-down.svg")}"}/
