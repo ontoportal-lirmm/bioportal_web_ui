@@ -161,15 +161,15 @@ module SubmissionFilter
 
   def ontology_filters_init(categories, groups)
     @languages = submission_metadata.select { |x| x['@id']['naturalLanguage'] }.first['enforcedValues'].map do |id, name|
-      { 'id' => id, 'name' => name, 'acronym' => id.split('/').last }
+      { 'id' => id, 'name' => name, 'value' => id.split('/').last, 'acronym' => name }
     end
 
     @formalityLevel = submission_metadata.select { |x| x['@id']['hasFormalityLevel'] }.first['enforcedValues'].map do |id, name|
-      { 'id' => id, 'name' => name, 'acronym' => name.camelize(:lower) }
+      { 'id' => id, 'name' => name, 'acronym' => name.camelize(:lower), 'value' => name.delete(' ')}
     end
 
     @isOfType = submission_metadata.select { |x| x['@id']['isOfType'] }.first['enforcedValues'].map do |id, name|
-      { 'id' => id, 'name' => name, 'acronym' => name.camelize(:lower) }
+      { 'id' => id, 'name' => name, 'acronym' => name.camelize(:lower), 'value' => name.delete(' ') }
     end
 
     @formats = [['All formats', ''], 'OBO', 'OWL', 'SKOS', 'UMLS']

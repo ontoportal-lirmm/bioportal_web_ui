@@ -80,8 +80,11 @@
                   .collapse{id: "browse-#{key}-filter", class: "#{values[2].positive? ? 'show': ''}"}
                     .browse-filter-checks-container
                       - values.first.each do |object|
-                        %div.mr-2{data: {controller: 'tooltip'}, title:  object["name"] || object["acronym"] || object["id"] }
-                          = render ChipsComponent.new(name: object["acronym"], value: (object["acronym"] || object["id"]),
+                        - title = (key.eql?(:categories) || key.eql?(:groups) ?  object["name"] : '')
+                        - value = (object["value"] || object["acronym"] || object["id"])
+                        %div.mr-2{data: {controller: 'tooltip'}, title: title}
+                          = render ChipsComponent.new(name: value, value: value ,
+                                    label:  object["acronym"].humanize,
                                     checked: values[1]&.include?(object["id"])) do |c|
                             - c.count do
                               %div.ml-1
