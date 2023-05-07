@@ -16,6 +16,15 @@ application.register("class-search-auto-complete", ClassSearchAutoCompleteContro
 import ContainerSplitterController from "./container_splitter_controller"
 application.register("container-splitter", ContainerSplitterController)
 
+import FairScoreHomeController from "./fair_score_home_controller"
+application.register("fair-score-home", FairScoreHomeController)
+
+import FairScoreLandscapeController from "./fair_score_landscape_controller"
+application.register("fair-score-landscape", FairScoreLandscapeController)
+
+import FairScoreSummaryController from "./fair_score_summary_controller"
+application.register("fair-score-summary", FairScoreSummaryController)
+
 import FormAutoCompleteController from "./form_auto_complete_controller"
 application.register("form-auto-complete", FormAutoCompleteController)
 
@@ -37,6 +46,9 @@ application.register("load-chart", LoadChartController)
 import MetadataDownloaderController from "./metadata_downloader_controller"
 application.register("metadata-downloader", MetadataDownloaderController)
 
+import OntologyViewerTabsController from "./ontology_viewer_tabs_controller"
+application.register("ontology-viewer-tabs", OntologyViewerTabsController)
+
 import OntoportalAutocompleteController from "./ontoportal_autocomplete_controller"
 application.register("ontoportal-autocomplete", OntoportalAutocompleteController)
 
@@ -54,9 +66,6 @@ application.register("skos-collection-colors", SkosCollectionColorsController)
 
 import TextTruncateController from "./text_truncate_controller"
 application.register("text-truncate", TextTruncateController)
-
-import Ontology_viewer_tabs_controller from "./ontology_viewer_tabs_controller"
-application.register("ontology-viewer-tabs", Ontology_viewer_tabs_controller)
 
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
