@@ -89,7 +89,7 @@
         %hr.home-section-line/
         .home-card.home-fair-scores
           - if fairness_service_enabled?
-            %div#fair-home
+            %div#fair-home{data:{controller:"fair-score-home"}}
               = render partial: "shared/fair_score_bars", locals: {data: nil}
           %a{:href => "#fairDetails"}
             %div.home-fair-details
