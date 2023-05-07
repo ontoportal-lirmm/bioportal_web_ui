@@ -68,7 +68,7 @@
           - unless (@submission_latest.nil? || (@submission_latest.respond_to?(:status) && @submission_latest.status == 404))
             = link_to(edit_ontology_submission_path(@ontology.acronym, @submission_latest.submissionId), "aria-label": "Edit latest submission", title: "Edit latest submission") do
               %i.fas.fa-user-edit{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
-      = render TurboFrameComponent.new(id: 'ontology_submissions', src: ontology_submissions_path(@ontology.acronym))
+      = render TurboFrameComponent.new(id: 'ontology_submissions', src: ontology_submissions_path(@ontology.acronym), target: '_top')
 
 
     -# Views pane (don't show if the ontology is a view - we don't allow views of views).

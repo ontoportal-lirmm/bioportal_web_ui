@@ -20,5 +20,5 @@
 
 
           %div
-            %a.btn.btn-sm.btn-light{href: "ontologies_metadata_curator/#{ontology.acronym}/submissions/#{submission_id}?properties=#{attribute}&inline_save=true", data: {turbo: true}}
+            = render EditSubmissionAttributeButtonComponent.new(acronym: ontology.acronym, submission_id: submission_id, attribute: attribute, inline: true) do
               %i.far.fa-edit

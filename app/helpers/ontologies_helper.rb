@@ -447,7 +447,18 @@ module OntologiesHelper
 
 
   def language_selector_tag(name)
-    select_tag name, languages_options, class: 'custom-select', disabled: !ontology_data_section?, data: {'ontology-viewer-tabs-target': 'languageSelector'}
+    languages = languages_options
+
+    if languages.empty?
+      content_tag(:div ,data: {'ontology-viewer-tabs-target': 'languageSelector'}, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'} ; margin-bottom: -1px;") do
+        render EditSubmissionAttributeButtonComponent.new(acronym: @ontology.acronym, submission_id: @submission_latest.submissionId, attribute: :naturalLanguage) do
+          concat "Enable multilingual display "
+          concat content_tag(:i , "", class: "fas fa-lg fa-question-circle")
+        end
+      end
+    else
+      select_tag name, languages_options, class: 'custom-select', disabled: !ontology_data_section?, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'}; margin-bottom: -10px;", data: {'ontology-viewer-tabs-target': 'languageSelector'}
+    end
   end
 
   def language_selector_hidden_tag(section)

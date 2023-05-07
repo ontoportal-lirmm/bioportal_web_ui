@@ -44,7 +44,7 @@
     - unless @filters_disabled
       %div.w-75.mt-3
         - if @submission.id
-          = render MetadataSelectorComponent.new(label: 'Filter properties to show', values: submission_editable_properties , selected:  nil, inline: true)
+          = render MetadataSelectorComponent.new(label: 'Filter properties to show', values: submission_editable_properties , selected:  @selected_attributes, inline: true)
       %div
         = render SwitchInputComponent.new(id:"filter-required-only", name: "required-only", label: "Required only", checked: @required_only)
 
