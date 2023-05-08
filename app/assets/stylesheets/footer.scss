@@ -1,3 +1,55 @@
-.legal-text {
-	font-size: 0.9rem;
+.footer-container{
+    display: flex;
+    justify-content: center;
+    background-color: var(--primary-color);
+}
+footer{
+    width: 1280px;
+    background-color: var(--primary-color);
+    padding: 40px 100px;
+}
+
+.footer-header{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+.footer-logo{
+    color: white;
+    display: flex;
+    align-items: center;
+}
+.footer-logo p{
+    margin-bottom: 0;
+    font-weight: 700;
+    font-size: 18px;
+    margin-left: 20px;
+}
+.footer-social-media-links a{
+    margin-left: 20px;
+}
+.footer-nav-links{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.footer-nav-links div h2{
+    font-size: 21px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 10px;
+}
+.footer-nav-links div div{
+    display:flex;
+    flex-direction: column;
+}
+.footer-nav-links div a{
+    font-size: 16px;
+    font-weight: 400;
+    color: white !important;
+    margin-bottom: 10px;
+    opacity: 60%;
+}
+.footer-nav-links div a:hover{
+    opacity: 100%;
 }

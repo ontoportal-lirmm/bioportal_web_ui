@@ -1,33 +1,32 @@
 </div>
 </div>
 
-%footer.footer.pt-4.mt-5
-  %div.container
-    %div.row
-      - $FOOTER_LINKS.to_h[:top].to_a.each do |footer_links_block|
-        %div.col-6.col-md
-          %h6= footer_links_block[:column_header]
-          %ul.list-unstyled
-            - footer_links_block[:links].each do |footer_links_row|
-              %li
-                - footer_links_row.each do |footer_link|
-                  = render_footer_link footer_link
-    %div.row.legal-text
-      %div.col
-        = t('.grant_html', site: $SITE)
-    %div.row.pt-2
-      - $FOOTER_LINKS.to_h[:bottom].to_a.each do |footer_links_block|
-        %div.col-6.col-md
-          - if footer_links_block[:column_header].present?
-            %h6= footer_links_block[:column_header]
-          %ul.list-inline
-            - footer_links_block[:links].each do |footer_links_row|
-              - footer_links_row.each_with_index do |footer_link, i|
-                %li.list-inline-item
-                  = render_footer_link footer_link
-                - unless i >= footer_links_row.size - 1
-                  %li.list-inline-item
-                    = raw(footer_links_block[:separator])
+%br
+%br/
+.footer-container
+  %footer
+    .footer-header
+      .footer-logo
+        %img{:src => "#{asset_path("logos/ontoportal.svg")}"}
+        - logo = $UI_THEME.to_s.capitalize
+        - logo.sub! 'portal' , 'Portal'
+        %p
+          = logo
+      .footer-social-media-links
+        - $FOOTER_LINKS[:social].each do |link|
+          %a{:href => link[:link], :target => "_blank"}
+            %img{:src => "#{asset_path(link[:logo])}"}/
+    .footer-nav-links
+      - $FOOTER_LINKS[:sections].each do |key, section_links|
+        %div
+          %h2
+            = t("layout.footer."+key.to_s)
+          %div
+            - section_links.each do |section , link|
+              %a{:href => link, :target => "_blank"}
+                = t("layout.footer."+section.to_s)
+          
+
 
 
 = javascript_include_tag "application"

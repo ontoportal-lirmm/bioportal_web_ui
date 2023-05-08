@@ -241,22 +241,3 @@ div.logos a {
   }
 }
 
-/************************************
- * FOOTER
-************************************/
-footer, .footer {
-  background-color: $color-secondary !important;
-  position: relative !important;
-}
-
-footer img {
-  height: 32px;
-}
-
-footer a.logo.connect img {
-  margin-right: 10px;
-}
-
-.legal-text {
-  font-size: 0.9rem;
-}
