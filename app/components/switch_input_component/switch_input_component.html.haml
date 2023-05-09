@@ -1,6 +1,9 @@
-%div.custom-control.custom-switch
+%div.switch-filter
   - if @boolean_switch
     = hidden_field_tag @name, @value
-  = check_box_tag  check_box_name, @value, @checked, class: 'custom-control-input', id:  check_box_id, onChange: "#{boolean_switch_action}"
-  %label.custom-control-label{for: check_box_id}
-    = content || @label
+  - if content || !@label.empty?
+    %p
+      = content || @label
+  %label.switch{for: check_box_id}
+    = check_box_tag  check_box_name, @value, @checked, class: '', id:  check_box_id, onChange: "#{boolean_switch_action}"
+    %span.slider
