@@ -502,13 +502,6 @@ class ApplicationController < ActionController::Base
     @concept
   end
 
-  def get_metrics_hash
-    metrics_hash = {}
-    # TODO: Metrics do not return for views on the backend, need to enable include_views param there
-    @metrics = LinkedData::Client::Models::Metrics.all(include_views: true)
-    @metrics.each {|m| metrics_hash[m.links['ontology']] = m }
-    return metrics_hash
-  end
 
   def get_ontology_submission_ready(ontology)
     # Get the latest 'ready' submission
