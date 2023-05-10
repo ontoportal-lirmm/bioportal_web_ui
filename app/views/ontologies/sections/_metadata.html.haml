@@ -1,189 +1,177 @@
 = turbo_frame_tag 'summary', target:"_top" do
-  %div.ont-metadata
-    -# Details pane
-    %section.ont-metadata-card.ont-details-card
-      %header.pb-2.font-weight-bold= t('ontology_details.metadata.details')
-      %table.table.table-sm
-        %tr
-          %td= t('ontology_details.metadata.acronym')
-          %td= @ontology.acronym
-        %tr
-          %td= t('ontology_details.metadata.visibility')
-          %td= strip_links(visibility_link(@ontology))
-        - if @ontology.viewing_restricted?
-          %tr
-            %td= t('ontology_details.metadata.viewing_restriction')
-            %td= @ontology.viewingRestriction.capitalize
-        - unless @ontology.viewOf.nil?
-          %tr
-            %td= t('ontology_details.metadata.view_of_ontology')
-            %td
-              - ont_parent_acronym = @ontology.viewOf.split('/').last
-              - if $PURL_ENABLED
-                - ont_url = @ontology.purl.sub(@ontology.acronym, ont_parent_acronym)
-              - else
-                - ont_url = @ontology.links['ui'].sub(@ontology.acronym, ont_parent_acronym)
-              = link_to(ont_parent_acronym, ont_url)
-        - unless @submission_latest.nil?
-          %tr
-            %td= t('ontology_details.metadata.description')
-            %td= sanitize(@submission_latest.description)
-          %tr
-            %td= t('ontology_details.metadata.status')
-            %td= @submission_latest.status.capitalize unless @submission_latest.status.nil?
-          %tr
-            %td= t('ontology_details.metadata.format')
-            %td= @submission_latest.hasOntologyLanguage
-          %tr
-            %td= t('ontology_details.metadata.contact')
-            %td= raw @submission_latest.contact.map {|c| [c.name, c.email].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
-          - categories_hash = LinkedData::Client::Models::Category.all_to_hash
-          - categories = @ontology.hasDomain
-          - unless categories.empty?
-            %tr
-              %td= t('ontology_details.metadata.categories')
-              %td= categories.map {|c| categories_hash[c].name}.sort.join(", ")
-            - groups_hash = LinkedData::Client::Models::Group.all_to_hash
-            - groups = @ontology.group
-            - unless groups.empty?
-              %tr
-                %td= t('ontology_details.metadata.groups')
-                %td= groups.map {|g| groups_hash[g].name}.sort.join(", ")
-          - if @ontology.admin?(session[:user])
-            %tr
-              %td= t('ontology_details.metadata.pull_url')
-              %td
-                = link_to @submission_latest.pullLocation, @submission_latest.pullLocation
-          = raw additional_details
-
-    = render partial: 'additional_metadata'
-
-    -# Submissions pane
-    %section.ont-metadata-card.ont-subs-card
-      %div.ont-section-toolbar
-        %header.pb-2.font-weight-bold= t('ontology_details.metadata.submissions')
-        - if @ontology.admin?(session[:user])
-          = link_to(new_ontology_submission_path(@ontology.acronym), "aria-label": t('ontology_details.metadata.add_submission'), title: t('ontology_details.metadata.add_submission')) do
-            %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.75rem;"}
-          - unless (@submission_latest.nil? || (@submission_latest.respond_to?(:status) && @submission_latest.status == 404))
-            = link_to(edit_ontology_submission_path(@ontology.acronym, @submission_latest.submissionId), "aria-label": t('ontology_details.metadata.edit_latest_submission'), title: t('ontology_details.metadata.edit_latest_submission')) do
-              %i.fas.fa-user-edit{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
-      = render TurboFrameComponent.new(id: 'ontology_submissions', src: ontology_submissions_path(@ontology.acronym), target: '_top')
-
-
-    -# Views pane (don't show if the ontology is a view - we don't allow views of views).
-    - unless @ontology.view?
-      %section.ont-metadata-card.ont-views-card
-        %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold= "#{t('ontology_details.metadata.views_of')} #{@ontology.acronym}"
-          - ont_id_esc = CGI.escape(@ontology.id)
-          -# TODO: I don't think we should have brackets in the URL parameters.
-          - if session[:user].nil?
-            %a{href: "/login?redirect=#{escape("/ontologies/new?ontology[viewOf]=#{ont_id_esc}")}", "aria-label": t('ontology_details.metadata.create_new_view'), title: t('ontology_details.metadata.create_new_view')}
-              %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
-          - else
-            %a{href: "/ontologies/new?ontology[viewOf]=#{ont_id_esc}"}
-              %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
-        - if @views.empty?
-          %p.font-italic= t('ontology_details.metadata.no_views_of', name: @ontology.acronym)
-        - else
-          %div.border-top
-            %dl
-              - @view_decorators.each do |view_decorator|
-                %dt= view_decorator.linked_name
-                %dd= view_decorator.description
-
-    %div.right-hand-content
-
-      -# Misc links pane
-      %section.ont-metadata-card.ont-links-card
-        %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold= t('ontology_details.metadata.links')
-        %a{:href => "#{(@submission_latest || @ontology).id}?display=all", :target => '_blank', :class => "btn btn-primary"}= t('ontology_details.metadata.go_to_rest_api_json_entry')
-
-      -# Metadata links pane
-      %section.ont-metadata-card.ont-metadatalinks-card
-        %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold= t('ontology_details.metadata.get_my_metadata_back')
-        %div
-          - unless @submission_latest.nil?
-            %div{data:{controller: 'metadata-downloader'}}
-              =javascript_include_tag "jsonld"
-              %button{:id => "getMetadataBackNquadsBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadNQuads'}= t('ontology_details.metadata.n_triple')
-              %button{:id => "getMetadataBackJsonldBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadJsonLd'}= t('ontology_details.metadata.json_ld')
-              %button{:id => "getMetadataBackXmlBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadXML'}= t('ontology_details.metadata.rdf_xml')
-            -# Listener in bp_ontology_viewer.js.erb
-      -# Fair score pane
-      -# TODO temporary hide  fairness_service for AGROVOC after there demand
-      - if fairness_service_enabled? && @ontology.acronym != 'AGROVOC'
-        %section.ont-metadata-card.ont-fair-score-card#fair-summary
-          %div.ont-section-toolbar
-            %header.pb-2.font-weight-bold
-              = render partial: "fair_score/fair_service_header"
-          %div#fair-score-charts-container
-            = render partial: "fairs_score"
-
-      -# Metrics pane
-      %section.ont-metadata-card.ont-metrics-card
-        %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold= t('ontology_details.metadata.metrics')
-          = link_to(Rails.configuration.settings.links[:metrics], target: "_blank", "aria-label": t('ontology_details.metadata.view_individual_metrics_definitions'), title: t('ontology_details.metadata.view_individual_metrics_definitions')) do
-            %i.fas.fa-lg.fa-question-circle{"aria-hidden": "true", style: "margin-left: 0.5rem"}
-        - if @metrics.nil? || (@metrics.is_a?(Array) && @metrics.empty?) || (@metrics.respond_to?(:status) && @metrics.status == 404)
-          %p.font-italic= "#{t('ontology_details.metadata.metrics_not_calculated_yet')} #{@ontology.acronym}"
-        - else
-          %table.table.table-sm
-            %tr
-              %td= t('ontology_details.metadata.classes')
-              %td{style: "text-align: right"}= number_with_delimiter(@metrics.classes)
-            %tr
-              %td= t('ontology_details.metadata.individuals')
-              %td= number_with_delimiter(@metrics.individuals)
-            %tr
-              %td= t('ontology_details.metadata.properties')
-              %td= number_with_delimiter(@metrics.properties)
-            %tr
-              %td= t('ontology_details.metadata.max_depth')
-              %td= number_with_delimiter(@metrics.maxDepth)
-            %tr
-              %td= t('ontology_details.metadata.max_children')
-              %td= number_with_delimiter(@metrics.maxChildCount)
-            %tr
-              %td= t('ontology_details.metadata.avg_children')
-              %td= number_with_delimiter(@metrics.averageChildCount)
-            %tr
-              %td= t('ontology_details.metadata.single_child_classes')
-              %td= number_with_delimiter(@metrics.classesWithOneChild)
-            %tr
-              %td= t('ontology_details.metadata.many_children_classes')
-              %td= number_with_delimiter(@metrics.classesWithMoreThan25Children)
-            %tr
-              %td= t('ontology_details.metadata.no_definition_classes')
-              %td= number_with_delimiter(@metrics.classesWithNoDefinition)
-      -# Visits pane
-      %section.ont-metadata-card.ont-analytics-card
-        %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold= t('ontology_details.metadata.visits')
-          - if visits_data(@ontology)
-            = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", "aria-label": t('ontology_details.metadata.download_as_csv'), title: t('ontology_details.metadata.download_as_csv')) do
-              %i.fas.fa-lg.fa-download{"aria-hidden": "true", style: "margin-left: 0.5rem"}
-        = render partial: "visits"
-
-      -# Included in data catalog pane
-      = raw display_data_catalog(@submission_latest) unless @submission_latest.nil?
-      -# Logo & depiction
-      = raw display_logo(@submission_latest) unless @submission_latest.nil?
-
-      -# Projects pane
-      %section.ont-metadata-card.ont-projects-card
-        %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold= "#{t('ontology_details.metadata.projects_using')} #{@ontology.acronym}"
-          = link_to(new_project_path(), "aria-label": t('ontology_details.metadata.create_new_project'), title: t('ontology_details.metadata.create_new_project')) do
-            %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.5rem"}
-        - if @projects.empty?
-          %p.font-italic= "#{t('ontology_details.metadata.no_projects_using')} #{@ontology.acronym}"
-        - else
-          %div.border-top
-            - for project in @projects
-              %p= link_to(project.name, project_path(project.acronym))
-
+  .summary-page-center
+    .summary-page-container
+      .summary-page-sub-container
+        .summary-page-first-row
+          .Summary-page-card
+            %h4.summary-page-card-title General information
+            .account-page-info-column.container
+              %div
+                %p.description_text
+                  = @submission_latest.description
+                %p.see_more_text ...see more
+              %img{height: "85", src: asset_path("summary/logo.png", width: "189")}/
+            %div
+              %p.description_text{style: "text-decoration-line: underline;"}
+                Additionnal Metadata...
+              %p.description_text Contact
+              %p.summary-page-card-title AGROVOC, AGROVOC@fao.org
+              %p.description_text Keywords and Key Classes
+              .keywords_keyclasses_section
+                %p.non_clickable_text Agriculture
+                %a{href: "#", style: "text-decoration: none;"}
+                %p.clickable_text Forest Science and Forest Products
+                %p.non_clickable_text Fisheries and Aquaculture
+                %a{href: "#", style: "text-decoration: none;"}
+                %p.clickable_text Forest Science and Forest Products
+                %p.non_clickable_text Natural Resources
+              %p.description_text Categories and Domains
+              .categories_section
+                .categories_box
+                  %p.non_clickable_text Agricultural Research
+                .categories_box
+                  %p.non_clickable_text Technology and Engineering
+                .categories_box
+                  %p.non_clickable_text Fisheries and Aquaculture
+                .categories_box
+                  %p.non_clickable_text knowledge and information systems
+                .categories_box
+                  %p.non_clickable_text Earth and Environment
+              .icons_container
+                %a{href: "#", style: "text-decoration: none;"}
+                  %img{src: asset_path("summary/download.svg")}/
+                %a{href: "#", style: "text-decoration: none;"}
+                  %img{src: asset_path("summary/homepage.svg")}/
+                %a{href: "#", style: "text-decoration: none;"}
+                  %img{src: asset_path("summary/documentation.svg")}/
+                %a{href: "#", style: "text-decoration: none;"}
+                  %img{src: asset_path("summary/github.svg")}/
+                %a{href: "#", style: "text-decoration: none;"}
+                  %img{src: asset_path("summary/sparql.svg")}/
+              .creation_info
+                %p.creation_text Originally created on
+                %p.date_creation_text 11/10/2022
+                %p.creation_text by
+                %p.creator_text
+                  = @submission_latest.hasCreator
+          %h2.card_title FAIR score
+          %hr#section_focused_line_fairScore/
+          .Summary-page-card
+            .summary-page-card-container
+              .account-page-card-sub-container
+          %h2.card_title Ontology relations network
+          %hr#section_focused_line_networkRelation/
+          .Summary-page-card
+            .summary-page-card-container
+              .account-page-card-sub-container
+          %h2.card_title Versions
+          %hr#section_focused_line_fairScore/
+          .Summary-page-card
+          %h2.card_title Metrics
+          %hr#section_focused_line_metrics/
+          .metrics-container
+            .metrics
+              .metrics-item
+                %hr/
+                %div
+                  %h4 34
+                  %p Classes
+              .metrics-item
+                %hr/
+                %div
+                  %h4 1,052,039
+                  %p Individuals
+              .metrics-item
+                %hr/
+                %div
+                  %h4 209
+                  %p Properties
+        .summary-page-second-row
+          .depiction
+            %img{src: asset_path("summary/depiction.svg")}/
+            %a{href: "#"}
+              .loop_icon
+                %img{src: asset_path("summary/loop.svg")}/
+          .right_metadata
+            .right_metadata-title-bar
+              %p Links
+              %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
+          .right_metadata
+            .right_metadata-title-bar
+              %p Identifiers
+              %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
+          .right_metadata
+            .right_metadata-title-bar
+              %p Persons and organizations
+              %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
+          .depiction
+            .vists_image
+              %p Visits
+              %img{alt: "", src: asset_path("summary/arrow_down.svg")}/
+            %img{src: asset_path("summary/test_visits.svg")}/
+          .depiction
+            %div{class: ".caintainer_vertical"}
+              .projects_card
+                %p Projects and usage information
+                %img{src: asset_path("summary/info.svg")}/
+              %a{href: "#"}
+                .openup_icon_projects
+                  %img{src: asset_path("summary/openUp.svg")}/
+            .projects_card
+              %p Projects and usage information
+              %img{src: asset_path("summary/info.svg")}/
+            %a{href: "#"}
+              .openup_icon_projects
+                %img{src: asset_path("summary/openUp.svg")}/
+            .creation_info
+              %p.description_text Projects using
+              %p.projects_using_onto_text AGROVOC
+              .projects_info
+                %img{src: asset_path("summary/plus.svg")}/
+            %a{href: "#", style: "text-decoration: none;"}
+              %p.clickable_text Agrisemantics Map of Data Standards
+            %a{href: "#", style: "text-decoration: none;"}
+              %p.clickable_text GO FAIR Food Systems Implementation Network
+            %a{href: "#", style: "text-decoration: none;"}
+              %p.clickable_text Data to Knowledge in Agronomy and Biodiversity
+            %a{href: "#", style: "text-decoration: none;"}
+              %p.clickable_text RDA Wheat Interoperability Working Group
+          .depiction
+            .caintainer_vertical
+              .projects_card
+                %p Methodology
+                %img{src: asset_path("summary/info.svg")}/
+            .creation_info
+              %p.description_text Accrual method
+            %p.normal_text http://www.fao.org/agrovoc/maintenance
+            .creation_info
+              %p.description_text Accrual periodicity
+            %p.normal_text Monthly
+            .creation_info
+              %p.description_text Accrual policy
+            %p.normal_text https://www.fao.org/agrovoc/maintenance
+            .creation_info
+              %p.description_text Knowledge representation paradigm
+            %p.normal_text knowledge graph
+            .creation_info
+              %p.description_text Engineering methodology
+            %p.normal_text
+              Follow the OBO Principle, used Protégé and the Ontology Development Kit.
+            .creation_info
+              %p.description_text Created With
+            %p.normal_text http://protege.stanford.edu/
+            .creation_info
+              %p.description_text Competency question
+            %p.normal_text
+              Quels sont les noms vernaculaires dune plante cultivée sur le
+              territoire français?
+          .Summary-page-card
+            %h2.card_title_2 Get my metadata back
+            %hr#section_focused_line_fairScore/
+            .metadata_back_button
+              .metadata_back_buttons
+                %p N-Triple
+              .metadata_back_buttons
+                %p Json-LD
+              .metadata_back_buttons
+                %p RDF/XML
