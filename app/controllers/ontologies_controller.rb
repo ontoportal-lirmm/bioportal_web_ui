@@ -336,7 +336,7 @@ class OntologiesController < ApplicationController
     #@ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
 
     # Get the latest submission (not necessarily the latest 'ready' submission)
-    @submission_latest = @ontology.explore.latest_submission rescue @ontology.explore.latest_submission(include: '')
+    @submission_latest = @ontology.explore.latest_submission(include: 'all')
     # Is the ontology downloadable?
     @ont_restricted = ontology_restricted?(@ontology.acronym)
 
