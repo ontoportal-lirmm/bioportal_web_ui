@@ -258,7 +258,7 @@ svg path {
 .loop_icon {
     position: absolute;
     margin-left: 338px;
-    top: 622px;
+    top: 326px;
     background-color: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
     border-radius: 28px;
@@ -288,6 +288,8 @@ svg path {
     font-size: 15;
     color: black;
 }
+
+.openUp
 
 .depiction {
     height: fit-content;
@@ -417,10 +419,9 @@ input:checked+.slider:before {
 
 .metrics-container {
     border-radius: 8px;
-    width: 577px;
     height: 90px;
     box-shadow: 2px 0px 60px rgba(0, 0, 0, 0.10);
-    padding: 30px 40px;
+    padding: 71px 40px;
     margin-top: 10px;
 
 }
