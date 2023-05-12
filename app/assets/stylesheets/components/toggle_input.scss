@@ -1,0 +1,92 @@
+.toggle-radio {
+  background: var(--primary-color);
+  border-radius: 50px;
+  padding: 5px 3px;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  position: relative;
+  transition: all .5s ease-in-out;
+
+  &.off {
+    background: #fff;
+
+    .bar {
+      background: var(--primary-color);
+      right: 0;
+    }
+
+    label.on-toggle-input-label {
+      color: #626262;
+    }
+
+    label.off-toggle-input-label {
+      color: white;
+    }
+  }
+
+  .wrap {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 50px;
+    overflow: hidden;
+    position: relative;
+    height: 40px;
+  }
+
+  input {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  label {
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+    transition: all .5s ease-in-out;
+    user-select: none;
+    margin-bottom: 0;
+    width: 50%;
+
+    &.on-toggle-input-label {
+      margin-left: 10px;
+      color: #000;
+    }
+
+    &.off-toggle-input-label {
+      margin-right: 10px;
+      text-align: end;
+    }
+  }
+
+  .on-input {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .off-input {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .bar {
+    position: absolute;
+    right: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #fff;
+    height: 100%;
+    width: 50%;
+    border-radius: 50px;
+    transition: all .5s ease-in-out;
+  }
+}

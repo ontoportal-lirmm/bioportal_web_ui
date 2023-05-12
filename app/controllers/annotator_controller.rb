@@ -29,6 +29,7 @@ class AnnotatorController < ApplicationController
       @recognizers = []
     end
     @annotator_ontologies = LinkedData::Client::Models::Ontology.all
+    @text = params[:text]
   end
 
 

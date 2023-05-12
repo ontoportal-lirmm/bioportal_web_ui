@@ -1,0 +1,12 @@
+.toggle-radio{data: {controller: 'toggle-input'}}
+  .wrap
+    - @options.each_with_index do |array, index|
+      - key, name, label = array
+      - input_class = index.zero?  ? 'on-input' : 'off-input'
+      - label_class = index.zero? ? 'on-toggle-input-label' : 'off-toggle-input--label'
+      - action = index.zero? ? "selectFirstOption" : "selectSecondOption"
+      %input{ type: "radio", id: key, name: name, data:{'toggle-input-target': 'option', action: "click->toggle-input##{action}"} , class: input_class , checked: index.zero?  }
+      %label{ for: key, class: label_class }
+        =label
+    .bar
+

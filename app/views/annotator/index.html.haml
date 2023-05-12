@@ -17,7 +17,7 @@
       %form
         %div.form-group
           = hidden_field_tag :annotation_sample_text, t('annotator.index.sample_text')
-          = text_area_tag("annotation_text", nil, rows: 10, class: "form-control", placeholder: t('annotator.enter_or_paste_text'), "aria-describedby": "annotateTextHelpBlock")
+          = text_area_tag("annotation_text", @text, rows: 10, class: "form-control", placeholder: "Enter or paste text to be annotated", "aria-describedby": "annotateTextHelpBlock")
           %small#annotateTextHelpBlock.form-text
             %a#insert_text_link{href: "javascript:void(0);"}= t('shared.insert_sample_text')
 
@@ -170,3 +170,11 @@
         %div.mb-4
           = t('additional_parameters')
           = link_to('Annotator API documentation', "#{$REST_URL}/documentation#nav_annotator", target: "_blank")
+          
+:javascript
+  window.addEventListener("load", function() {
+    if(document.getElementById("annotation_text").value != ''){
+      document.getElementById("annotator_button").click()
+      window.scrollBy(0, 1080);
+    }
+  });
