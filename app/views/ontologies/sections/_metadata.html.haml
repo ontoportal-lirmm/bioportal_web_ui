@@ -87,6 +87,52 @@
                   %h4 209
                   %p Properties
         .summary-page-second-row
+          .right_metadata
+            .depiction
+              %img{src: asset_path("summary/depiction.svg")}/
+              %a{href: "#"}
+                .loop_icon
+                  %img{src: asset_path("summary/loop.svg")}/
+          .right_metadata
+            .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#link_metadata_section"}
+              %p Links
+              %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
+            #link_metadata_section.collapse.right-metadata-content
+              .creation_info
+                %p.description_text 
+                  Accrual method
+              %p.normal_text 
+                = @submission_latest.accrualMethod
+              .creation_info
+                %p.description_text 
+                  Accrual periodicity
+              %p.normal_text 
+                Monthly
+              .creation_info
+                %p.description_text 
+                  Accrual policy
+              %p.normal_text 
+                https://www.fao.org/agrovoc/maintenance
+              .creation_info
+                %p.description_text 
+                  Knowledge representation paradigm
+              %p.normal_text 
+                knowledge graph
+              .creation_info
+                %p.description_text 
+                  Engineering methodology
+              %p.normal_text
+                Follow the OBO Principle, used Protégé and the Ontology Development Kit.
+              .creation_info
+                %p.description_text 
+                  Created With
+              %p.normal_text 
+                http://protege.stanford.edu/
+              .creation_info
+                %p.description_text 
+                  Competency question
+              %p.normal_text
+                Quels sont les noms vernaculaires dune plante cultivée sur le territoire français?
           .depiction
             %img{src: asset_path("summary/depiction.svg")}/
             %a{href: "#"}
