@@ -28,7 +28,7 @@
 
 .see_more_text {
 
-    color: #31B404;
+    color: var(--primary-color);
     font-size: 15px;
     margin-top: 10px;
 
@@ -40,7 +40,7 @@
 }
 
 .clickable_text {
-    color: #31B404;
+    color: var(--primary-color);
     font-size: 15px;
     font-weight: 550;
     margin-left: 10px;
@@ -129,7 +129,7 @@
 .text_link_line {
     width: 93px;
     margin-top: 3px;
-    border: 0.5px solid #31B404;
+    border: 0.5px solid var(--primary-color);
     border-radius: 5px;
 }
 
@@ -177,28 +177,28 @@
 #section_focused_line {
     width: 80px;
     margin-top: auto;
-    border: 0.5px solid #31B404;
+    border: 0.5px solid var(--primary-color);
     border-radius: 5px;
 }
 
 #section_focused_line_fairScore {
     width: 70px;
     margin-top: auto;
-    border: 0.5px solid #31B404;
+    border: 0.5px solid var(--primary-color);
     border-radius: 5px;
 }
 
 #section_focused_line_networkRelation {
     width: 190px;
     margin-top: auto;
-    border: 0.5px solid #31B404;
+    border: 0.5px solid var(--primary-color);
     border-radius: 5px;
 }
 
 #section_focused_line_metrics {
     width: 50px;
     margin-top: auto;
-    border: 0.5px solid #31B404;
+    border: 0.5px solid var(--primary-color);
     border-radius: 5px;
 }
 
@@ -339,11 +339,11 @@ svg path {
 }
 
 input:checked+.slider {
-    background-color: #43D112;
+    background-color: var(--primary-color);
 }
 
 input:focus+.slider {
-    box-shadow: 0 0 1px #43D112;
+    box-shadow: 0 0 1px var(--primary-color);
 }
 
 input:checked+.slider:before {
@@ -447,7 +447,7 @@ input:checked+.slider:before {
 .metrics-item hr {
     height: 73px;
     width: 0px;
-    border: 2px solid #31B404;
+    border: 2px solid var(--primary-color);
     border-radius: 5px;
     margin-right: 15px;
 
@@ -531,7 +531,7 @@ input:checked+.slider:before {
 .metadata_back_buttons {
     cursor: pointer;
     color: white;
-    background-color: #31B404;
+    background-color: var(--primary-color);
     display: flex;
     width: auto;
     padding: 15px 20px;
