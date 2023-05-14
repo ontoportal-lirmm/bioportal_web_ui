@@ -3,7 +3,7 @@
     %h2.mb-0
       %button.btn.btn-link.btn-block.text-left.collapsed{"data-target" => "#collapseTwo", "data-toggle" => "collapse", :type => "button"}
         Find mappings of a class/concept
-        = link_to(Rails.configuration.settings.links[:mappings], id: "mappings-help", "aria-label": "View mappings help") do
+        = link_to(Rails.configuration.settings.links[:help_mappings], target: '_blank') do
           %i.fas.fa-question-circle.fa-lg{"aria-hidden": "true"}
   #collapseTwo.collapse{"data-parent" => "#accordionExample"}
     .card-body

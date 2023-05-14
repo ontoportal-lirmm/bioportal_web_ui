@@ -1,0 +1,92 @@
+$color-primary: #0f4e8a;
+$color-secondary: #E4F1FB;
+$color-links: #0f4e8a;
+$color-warning: #ffc107;
+@import "../lirmm/main";
+@import "search";
+
+@import "//fonts.googleapis.com/css?family=Titillium+Web:400,700";
+
+body {
+  font-family: "Titillium Web";
+  font-size: 14px;
+}
+
+.minimal {
+  font-family: "Titillium Web", "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+}
+
+.minimal caption {
+  font: italic 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+.basic caption {
+  font: italic 95% "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+.annotations caption {
+  font: italic 95% "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+.zebra caption {
+  font: italic 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+.zebra th {
+  font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+.zebra tbody th {
+  font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+.zebra th.alt {
+  font: bold 10px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+.form caption {
+  font: italic 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+
+.form th {
+  font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+.form th.alt {
+  font: bold 10px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+.notetype {
+  font: 12px bold "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+.header {
+  cursor: pointer;
+  font: 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+.resources caption {
+  font: italic 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+.resources th {
+  font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+.resources tbody th {
+  font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+.resources th.alt {
+  font: bold 10px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+tr.mainresource td {
+  font: bold 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+.pheader {
+  font: 14px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+.ont_icons {
+  font-family: "Titillium Web", Lucida Console, Monaco, monospace;
+}
