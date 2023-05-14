@@ -61,8 +61,6 @@
           = link_to("Mappings", mappings_path(), class: "dropdown-item")
           = link_to("Recommender", recommender_index_path(), class: "dropdown-item")
           = link_to("VocBench", "http://vocbench.lifewatchitaly.eu", target: "_blank", class: "dropdown-item")
-          - unless Rails.env.appliance?
-            = link_to("Resource Index", resource_index_index_path())            
 
       -# Support menu
       %li.nav-item.dropdown
