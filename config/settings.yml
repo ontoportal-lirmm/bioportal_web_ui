@@ -1,7 +1,7 @@
 shared:
   links:
-    about: '/static_pages/aboutus'
-    cite: '/static_pages/citeus'
+    about: '/about'
+    cite: '/citeus'
     facebook: 'https://www.facebook.com/LifeWatch-ERIC-245225669516847'
     github: 'https://github.com/lifewatch-eric'
     help: 'https://github.com/lifewatch-eric/documentation/wiki'
@@ -9,7 +9,7 @@ shared:
     mission: 'https://www.bioontology.org/about-us/#mission'
     privacy_policy: 'https://www.lifewatch.eu/privacy-policy-2021'
     rest_api: 'http://data.bioontology.org/documentation'
-    team: '/static_pages/team'
+    team: '/team'
     terms: 'https://www.lifewatch.eu/terms-and-conditions'
     twitter: 'https://twitter.com/lifewatcheric'
     virtual_appliance: 'https://ontoportal.github.io/administration/'
