@@ -7,15 +7,6 @@ class UsersController < ApplicationController
   before_action :authorize_admin, only: [:index,:subscribe, :un_subscribe]
   layout :determine_layout
 
-  # GET /users
-  # GET /users.xml
-  def index
-    @users = LinkedData::Client::Models::User.all
-    respond_to do |format|
-      format.html
-      format.xml { render xml: @users.to_xml }
-    end
-  end
 
   # GET /users/1
   # GET /users/1.xml
@@ -144,7 +135,7 @@ class UsersController < ApplicationController
     custom_ontologies = params[:ontology] ? params[:ontology][:ontologyId] : []
     custom_ontologies.reject!(&:blank?)
     @user.update_from_params(customOntology: custom_ontologies)
-    error_response = @user.update
+    error_response = !@user.update
 
     if error_response
       flash[:notice] = 'Error saving Custom Ontologies, please try again'
@@ -194,7 +185,7 @@ class UsersController < ApplicationController
   end
   
   def extract_id_from_url(url, pattern)
-    if url.include? (pattern)
+    if url && url.include?(pattern)
       url.split('/').last 
     else
       url
@@ -237,22 +228,34 @@ class UsersController < ApplicationController
         errors << "Please fill in the proper text from the supplied image"
       end
     end
-
-    # ECOPORTAL (new) : checks if the username exists and if it does not contain punctuation characters
-    if params[:username].nil?
-      errors << "Please enter an username"
-    end
-    if params[:username].match(/.*\W.*/i)
-      errors << "Your username must not contain any Punctuation characters (ex. .,:; etc)"
+    if ((!params[:orcidId].match(/^\d{4}+(-\d{4})+$/)) || (params[:orcidId].length != 19)) && !(params[:orcidId].nil? || params[:orcidId].length < 1)
+      errors << "Please enter a valide orcid id"
     end
 
+
+    if params[:username].nil? || params[:username].length < 1 || !params[:username].match(/^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$/)
+      errors << "please enter a valid username"
+    end
+    
     return errors
   end
 
   def validate_update(params)
     errors = []
     if params[:email].nil? || params[:email].length < 1 || !params[:email].match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i)
-      errors << "Please enter an email address"
+      errors << "Please enter a valid email adresse"
+    end
+    if params[:firstName].nil? || params[:firstName].length < 1
+      errors << "First name field is required"
+    end
+    if params[:lastName].nil? || params[:lastName].length < 1
+      errors << "Last name field is required"
+    end
+    if params[:username].nil? || params[:username].length < 1
+      errors << "Last name field is required"
+    end
+    if ((!params[:orcidId].match(/^\d{4}+(-\d{4})+$/)) || (params[:orcidId].length != 19)) && !(params[:orcidId].nil? || params[:orcidId].length < 1)
+      errors << "Please enter a valide orcide id"
     end
     if !params[:password].eql?(params[:password_confirmation])
       errors << "Your Password and Password Confirmation do not match"
