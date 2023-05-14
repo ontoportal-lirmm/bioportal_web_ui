@@ -50,6 +50,8 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :licenses, only: [:index, :create, :new]
+    resources :groups, only: [:index, :create, :new, :edit, :update, :destroy]
+    resources :categories, only: [:index, :create, :new, :edit, :update, :destroy]
   end
 
   resources :subscriptions

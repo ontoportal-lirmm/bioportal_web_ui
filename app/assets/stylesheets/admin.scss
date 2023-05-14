@@ -16,6 +16,7 @@
 .error {
   background: #ffecec image-url("error.png") no-repeat 10px 50%;
   border: 1px solid #f5aca6;
+  padding-left: 30px;
 }
 
 .success {
@@ -138,4 +139,9 @@ table.dataTable tbody tr.selected {
   .admin-action-item {
     margin-right: 8px;
   }
+}
+
+div.groupFormError {
+  color: red;
+  padding-top: 3px;
 }
