@@ -21,7 +21,8 @@ body{
 /* Footer 
 -------------------------------------------------- */
 footer.footer h6 {
-  font-weight: bold;
+  font-size: 24px;
+  font-weight: 600;
 }
 
 footer.footer .list-inline-item:not(:last-child) {
@@ -30,7 +31,6 @@ footer.footer .list-inline-item:not(:last-child) {
 
 .social-icons a i {
   font-size: 20px;
-  color: #0f4e8a;
 }
 .social-icons li {
   margin-right: 2px !important;
