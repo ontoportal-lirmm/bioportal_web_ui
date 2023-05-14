@@ -99,14 +99,6 @@
   margin: 5px;
 }
 
-.formControlErrorContainer {
-  @extend .w100perc;
-  @extend .flex-grow-1;
-  @extend .mx-2;
-
-  display: block;
-}
-
 .help-block.error-help-block {
   color: red;
 }
