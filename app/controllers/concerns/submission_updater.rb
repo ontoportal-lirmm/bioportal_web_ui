@@ -8,7 +8,7 @@ module SubmissionUpdater
     @submission = LinkedData::Client::Models::OntologySubmission.new(values: submission_params(new_submission_hash))
 
     update_ontology_summary_only
-    @submission.save
+    @submission.save(cache_refresh_all: false)
   end
 
   def update_submission(new_submission_hash)

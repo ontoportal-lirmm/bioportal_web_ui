@@ -13,7 +13,6 @@
 
 %div.row
   %div.col
-
     %ul.nav.nav-tabs{id: "admin-tabs", role: "tablist"}
       %li.nav-item
         =link_to("Site Administration", "#site-admin", id: "site-admin-tab", class: "nav-link active", role: "tab", data: { toggle: "tab" }, aria: { controls: "site-admin", selected: "true" })
@@ -54,6 +53,15 @@
           %dive.site-admin-page-section
             %div#appliance-id
               %span
+        
+        -# Clear caches
+        %div#site-admin-clear-caches.my-5
+          %div.site-admin-page-header
+            MONITORING LINKS
+          %dive.site-admin-page-section
+            = link_to("Newrelic", "https://login.newrelic.com/login", target: '_blank', id: "newrelic_link", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
+            = link_to("StatusCake", "https://app.statuscake.com/Login", target: '_blank', id: "statuscake_link", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
+          
 
       -# Ontology Administration tab
       %div.tab-pane.fade{id: "ontology-admin", role: "tabpanel", aria: { labelledby: "ontology-admin-tab" }}
