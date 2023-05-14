@@ -191,24 +191,24 @@ rec.getRecommendations = function() {
                 if (data) {
                     if (data.length > 0) {
                         $("#recommender-results").empty();
-                        $("#resultsHeader").text("Recommended ontologies");
+                        $("#resultsHeader").text("Recommended semantic resources");
 
                         if (params.output_type == 1) {
-                            var ontologyHeader = "Ontology";
+                            var ontologyHeader = "Semantic resource";
                         }
                         else {
-                            ontologyHeader = "Ontologies";
+                            ontologyHeader = "Semantic resources";
                         }
                         var table = $('<table id="recommendations" class="zebra" width="100%"></table>');
-                        var header = $('<thead><tr><th title="Position of the ontology in the ranking">POS.</th>'
-                        + '<th title="Ontology acronym">' + ontologyHeader + '</th>'
-                        + '<th title="Final recommendation score for the ontology. It represents the appropriateness of the ontology to describe the input data">Final score</th>'
-                        + '<th title="The coverage score represents the extent to what the ontology covers the input data">Coverage score</th>'
-                        + '<th title="The acceptance score represents how well known and trusted is the ontology by the biomedical community">Acceptance score</th>'
-                        + '<th title="The detail score represents the richness of the ontology representation for the input data">Detail score</th>'
-                        + '<th title="The specialization score represents the level of specialization of the ontology to the domain of the input data">Specialization score</th>'
-                        + '<th title="Number of annotations performed with the ontology for the input data">Annotations</th>'
-                        + '<th title="This columns makes it possible to highlight the annotations performed with each ontology" style="text-align: center">Highlight annotations</th>'
+                        var header = $('<thead><tr><th title="Position of the semantic resource in the ranking">POS.</th>'
+                        + '<th title="Semantic resource acronym">' + ontologyHeader + '</th>'
+                        + '<th title="Final recommendation score for the semantic resource. It represents the appropriateness of the semantic resource to describe the input data">Final score</th>'
+                        + '<th title="The coverage score represents the extent to what the semantic resource covers the input data">Coverage score</th>'
+                        + '<th title="The acceptance score represents how well known and trusted is the semantic resource by the ecology community">Acceptance score</th>'
+                        + '<th title="The detail score represents the richness of the semantic resource representation for the input data">Detail score</th>'
+                        + '<th title="The specialization score represents the level of specialization of the semantic resource to the domain of the input data">Specialization score</th>'
+                        + '<th title="Number of annotations performed with the semantic resource for the input data">Annotations</th>'
+                        + '<th title="This columns makes it possible to highlight the annotations performed with each semantic resource" style="text-align: center">Highlight annotations</th>'
                         + '</tr></thead>');
                         table.append(header);
                         table.append('<tbody>');
