@@ -3,9 +3,8 @@
 %h2.mt-5 Ontology Recommender
 %p
   = t('recommender.intro').html_safe
-  = link_to(Rails.configuration.settings.links[:help_recommender], id: "recommender-help",
-            "aria-label": "View ontology recommender help") do
-    %i.fas.fa-question-circle.fa-lg{"aria-hidden": "true"}
+  = link_to(Rails.configuration.settings.links[:help_annotator], target: '_blank') do
+    %i.fas.fa-question-circle.fa-lg
 
 %form
   = hidden_field_tag :recommender_sample_text, t('recommender.sample_text')
@@ -16,16 +15,16 @@
     %input#radioItText.form-check-input{name: "input_type", type: "radio", value: "1", checked: "checked"}
     %label.form-check-label{for: "radioItText"} Text
   %div.form-check.form-check-inline
-    %input#radioItKeywords.form-check-input{name: "input_type", type: "radio", value: "2"} 
+    %input#radioItKeywords.form-check-input{name: "input_type", type: "radio", value: "2"}
     %label.form-check-label{for: "radioItKeywords"} Keywords (separated by commas)
   
   -# Specify output format
   %h5.pt-3 Output
   %div.form-check.form-check-inline
-    %input#radioOtSingle.form-check-input{name: "output_type", type: "radio", value: "1", checked: "checked"} 
+    %input#radioOtSingle.form-check-input{name: "output_type", type: "radio", value: "1", checked: "checked"}
     %label.form-check-label{for: "radioOtSingle"} Ontologies
   %div.form-check.form-check-inline
-    %input#radioOtSets.form-check-input{name: "output_type", type: "radio", value: "2"} 
+    %input#radioOtSets.form-check-input{name: "output_type", type: "radio", value: "2"}
     %label.form-check-label{for: "radioOtSets"} Ontology sets
   
   -# Input text or keywords
