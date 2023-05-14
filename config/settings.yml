@@ -1,5 +1,11 @@
 shared:
   links:
+    help_annotator: 'https://github.com/lifewatch-eric/documentation/wiki/EcoTools#annotator'
+    help_mappings: 'https://github.com/lifewatch-eric/documentation/wiki/EcoTools#mappings'
+    help_ontology_browse: 'https://github.com/lifewatch-eric/documentation/wiki/EcoTools#browse'
+    help_recommender: 'https://github.com/lifewatch-eric/documentation/wiki/EcoTools#recommender'
+    help_search: 'https://github.com/lifewatch-eric/documentation/wiki/EcoTools#search'
+    metrics: 'https://www.bioontology.org/wiki/Ontology_Metrics'
     about: '/about'
     cite: '/citeus'
     facebook: 'https://www.facebook.com/LifeWatch-ERIC-245225669516847'
