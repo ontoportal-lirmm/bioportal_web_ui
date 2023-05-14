@@ -2,33 +2,64 @@
 </div>
 
 %footer.footer.pt-4.mt-5
-  %div.container
+  %div.container-fluid
     %div.row
-      - $FOOTER_LINKS.to_h[:top].to_a.each do |footer_links_block|
-        %div.col-6.col-md
-          %h6= footer_links_block[:column_header]
-          %ul.list-unstyled
-            - footer_links_block[:links].each do |footer_links_row|
-              %li
-                - footer_links_row.each do |footer_link|
-                  = render_footer_link footer_link
-    %div.row.legal-text
       %div.col
-        = t('.grant_html', site: $SITE)
-    %div.row.pt-2
-      - $FOOTER_LINKS.to_h[:bottom].to_a.each do |footer_links_block|
-        %div.col-6.col-md
-          - if footer_links_block[:column_header].present?
-            %h6= footer_links_block[:column_header]
-          %ul.list-inline
-            - footer_links_block[:links].each do |footer_links_row|
-              - footer_links_row.each_with_index do |footer_link, i|
-                %li.list-inline-item
-                  = render_footer_link footer_link
-                - unless i >= footer_links_row.size - 1
-                  %li.list-inline-item
-                    = raw(footer_links_block[:separator])
-
-
+        = link_to(image_tag('logos/logoLW_eric_outline_white-01.svg', alt: "LifeWatch logo", class: "logo"), 'https://www.lifewatch.eu/', target: '_blank')
+      .col.col-md
+        %h6 Products
+        %ul.list-unstyled
+          %li
+            %a{href: "#{$REST_URL.chomp('/') + "/documentation"}", target: "_blank"} EcoPortal REST API
+      .col.footer-support
+        %h6 Support
+        %ul.list-unstyled
+          %li
+            %a.pop_window{href: "/feedback?location=http%253A%252F%252Fecoportal.lifewatchitaly.eu%252F"} Contact Us
+          %li
+            = link_to("Help", Rails.configuration.settings.links[:help], target: "_blank")
+          %li
+            %a{href: Rails.configuration.settings.links[:wiki], target: "_blank"} EcoPortal Wiki Documentation
+      .col.col-md
+        %h6 Disclaimers &amp; Agreements
+        %ul.list-unstyled
+          %li
+            = link_to('Terms & Conditions', Rails.configuration.settings.links[:terms], target: '_blank')
+          %li
+            = link_to('Privacy Policy', Rails.configuration.settings.links[:privacy_policy],  target: '_blank')
+          %li
+            = link_to('Cite Us', Rails.configuration.settings.links[:cite], target: '_blank')
+      .col.col-md
+        %h6 About
+        %ul.list-unstyled
+          %li
+            -# %a{href: "#", target: "_blank"} About Us
+            = link_to("About Us", Rails.configuration.settings.links[:about])
+          %li
+            -# %a{href: "#", target: "_blank"} Team
+            = link_to("Team", Rails.configuration.settings.links[:team])
+          %li
+            %a{href: "/projects"} Projects
+      .col.col-md
+        %ul.list-inline.social-icons
+          %li.list-inline-item
+            %a{href: Rails.configuration.settings.links[:twitter], target: "_blank"}
+              %i.fab.fa-twitter
+          %li.list-inline-item
+            %a{href: Rails.configuration.settings.links[:facebook], target: "_blank"}
+              %i.fab.fa-facebook
+          %li.list-inline-item
+            %a{href: Rails.configuration.settings.links[:youtube], target: "_blank"}
+              %i.fab.fa-youtube
+          %li.list-inline-item
+            %a{href: Rails.configuration.settings.links[:linkedin], target: "_blank"}
+              %i.fab.fa-linkedin-in
+          %li.list-inline-item
+            %a{href: Rails.configuration.settings.links[:github], target: "_blank"}
+              %i.fab.fa-github
+    .row
+      .col-sm-12{:style => "text-align:center;clear:both;"}
+        %a{:href => "http://bioportal.bioontology.org/", :title => "Powered by NCBO BioPortal", target: "_blank"} Powered by NCBO BioPortal
+          
 = javascript_include_tag "application"
 = render partial: "ga_tracking"

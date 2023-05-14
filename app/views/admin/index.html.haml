@@ -1,4 +1,4 @@
-- @title = "BioPortal Administration"
+- @title = "Administration"
 
 %div.row
   %div.col
@@ -13,7 +13,6 @@
 
 %div.row
   %div.col
-
     %ul.nav.nav-tabs{id: "admin-tabs", role: "tablist"}
       %li.nav-item
         =link_to("Site Administration", "#site-admin", id: "site-admin-tab", class: "nav-link active", role: "tab", data: { toggle: "tab" }, aria: { controls: "site-admin", selected: "true" })
@@ -25,6 +24,10 @@
         =link_to("Users", "#users", id: "users-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: users_path() }, aria: { controls: "users", selected: "false" })
       %li.nav-item
         =link_to("Metadata Administration", "#ontologies_metadata_curator", id: "ontologies_metadata_curator-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab"}, aria: { controls: "ontologies_metadata_curator", selected: "false" })   
+      %li.nav-item
+        =link_to("Groups", "#groups", id: "groups-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: "groups" }, aria: { controls: "groups", selected: "false" })
+      %li.nav-item
+        =link_to("Categories", "#categories", id: "categories-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: "categories" }, aria: { controls: "categories", selected: "false" })
     %div#adminTabContent.tab-content
 
       -# Site Administration tab
@@ -54,6 +57,15 @@
           %dive.site-admin-page-section
             %div#appliance-id
               %span
+        
+        -# Clear caches
+        %div#site-admin-clear-caches.my-5
+          %div.site-admin-page-header
+            MONITORING LINKS
+          %dive.site-admin-page-section
+            = link_to("Newrelic", "https://login.newrelic.com/login", target: '_blank', id: "newrelic_link", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
+            = link_to("StatusCake", "https://app.statuscake.com/Login", target: '_blank', id: "statuscake_link", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
+          
 
       -# Ontology Administration tab
       %div.tab-pane.fade{id: "ontology-admin", role: "tabpanel", aria: { labelledby: "ontology-admin-tab" }}
@@ -94,6 +106,17 @@
       -# metadata tab
       %div.tab-pane.fade{id: "ontologies_metadata_curator", role: "tabpanel", aria: { labelledby: "ontologies_metadata_curator-admin-tab" }}
         = render partial: 'ontologies_metadata_curator/metadata_tab'
+
+      -# Groups tab
+      %div.tab-pane.fade{id: "groups", role: "tabpanel", aria: { labelledby: "groups-admin-tab" }}
+        %div.ontologies_list_container.mt-3
+          %table#adminGroups.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
+
+      -# Categories tab
+      %div.tab-pane.fade{id: "categories", role: "tabpanel", aria: { labelledby: "categories-admin-tab" }}
+        %div.ontologies_list_container.mt-3
+          %table#adminCategories.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
+
 
 
 

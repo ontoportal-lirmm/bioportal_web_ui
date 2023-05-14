@@ -1,5 +1,5 @@
 %nav.navbar.navbar-expand-lg.navbar-dark.navbar-custom
-  = link_to(image_tag("logos/ontoportal-logo.png") + content_tag(:span, $SITE, class: 'site-name'), root_path(), class: "navbar-brand")
+  = link_to(image_tag("logos/ecoportal-logo.png", class: "img_logo"), root_path(), class: "navbar-brand")
   = button_tag(type: "button", class: "navbar-toggler", data: {toggle: "collapse", target: "#topNavigationToggler"}, aria: {controls: "topNavigationToggler", expanded: "false", label: "Toggle navigation"}) do
     %span.navbar-toggler-icon
 
@@ -25,7 +25,9 @@
       -if (!session[:user].nil? && session[:user].admin?)
         %li.nav-item
           = link_to("Admin", admin_index_path, class: "nav-link")
+
     %ul.navbar-nav
+      = link_to("VocBench", "http://vocbench.lifewatchitaly.eu", target: "_blank", class: "btn btn-outline-secondary text-white mx-1")
       - if session[:user].nil?
         %li.nav-item
           = link_to("Login", login_index_path(redirect: request.original_url), class: "btn btn-bp-login mr-md-2")
@@ -48,9 +50,8 @@
         = link_to("#", id: "supportMenuDropdownLink", class: "nav-link dropdown-toggle", role: "button", data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}) do
           Support
         %div.dropdown-menu.dropdown-menu-right{aria: {labelledby: "supportMenuDropdownLink"}}
-          = link_to("Submit Feedback", feedback_path(location: encode_param(request.url)), id: "submitFeedbackMenuItem", class: "dropdown-item pop_window")
+          = link_to("Contact Us", feedback_path(location: encode_param(request.url)), id: "submitFeedbackMenuItem", class: "dropdown-item pop_window")
+          = link_to("About Us",  Rails.configuration.settings.links[:about], class: "dropdown-item")
           %div.dropdown-divider
           %h6.dropdown-header Documentation
-          = link_to("Help", "#{$WIKI_HELP_PAGE}", target: "_blank", class: "dropdown-item")
-          = link_to("Release Notes", "#{$RELEASE_NOTES}", target: "_blank", class: "dropdown-item")
-          = link_to("Publications", $PUBLICATIONS_URL, target: "_blank", class: "dropdown-item")
+          = link_to("Help", Rails.configuration.settings.links[:help], target: "_blank", class: "dropdown-item")
