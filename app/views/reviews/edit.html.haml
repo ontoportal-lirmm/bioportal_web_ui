@@ -1,0 +1,5 @@
+- @title = "Edit review"
+- form_id = "edit_review_form"
+%div
+  = form_for(:review, url: reviews_path + "/" + URI::escape(@review.id.split("/")[-1]), method: "PATCH", remote: true, html: {id: "#{form_id}"}) do |f|
+    = render partial: "editable_review", locals: {f: f, form_id: form_id }

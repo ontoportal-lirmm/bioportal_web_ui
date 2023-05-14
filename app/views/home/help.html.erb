@@ -1,0 +1,111 @@
+<%@title = "Help"%>
+
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+    jQuery("#wiki_text a.external").attr("target", "_blank");
+  });
+</script>
+
+<div style="margin:20px;">
+    <span style="font-size:15px;font-weight:bold;color:green;"><%=flash[:notice] %></span>
+    <div style="float:left;width:95%;" class="enable-lists">
+
+
+      <style type="text/css">
+        /* hide extra wiki content */
+        #siteSub, #jump-to-nav, #contentSub, .printfooter,
+        #catlinks, .visualClear {
+          display: none;
+        }
+
+        /* style h2s on this page better */
+        h2 {
+          font-size: 150% !important;
+          padding-bottom: .17em;
+          border-bottom: 1px solid #AAAAAA;
+          font-weight: normal !important;
+          width: auto !important;
+        }
+
+        #toc {
+          margin: 1em 0;
+          padding: 5px 5px 10px;
+          background: #E2EBF0;
+          border: 1px solid gray;
+        }
+
+        #toc li {
+          padding: 3px 10px;
+        }
+
+        #toc ul {
+          padding-bottom: 10px;
+          margin-bottom: 0 !important;
+        }
+
+        #toc ul li {
+          list-style-type: none !important;
+          margin-left: 0 !important;
+        }
+
+        #toc h2 {
+          font-size: 120% !important;
+          border-bottom: none !important;
+          padding: 10px 0 0 10px;
+          margin-bottom: 0;
+        }
+
+        dd {
+          line-height: 1.5em;
+          margin-left: 2em;
+          margin-bottom: 0.1em;
+        }
+
+        dt {
+          font-weight: bold;
+          margin-bottom: 0.1em;
+        }
+
+        li.toclevel-1 > a > span.tocnumber {
+          display: none;
+        }
+      </style>
+
+      <h1><%=$SITE%> Help</h1>
+
+      <% help_text = get_help_page_from_wiki %>
+
+      <% if !help_text.nil? && !help_text.empty? %>
+
+        <div id="wiki_text">
+          <%= help_text.html_safe %>
+        </div>
+
+      <%else%>
+
+        <%= t('.welcome', site: $SITE) %>
+
+        <h2>Getting started</h2>
+        <%= t('.getting_started', site: $SITE) %>
+
+        <h2>Browse semantic resources</h2>
+        <%= t('.browse') %>
+
+        <h2>Documentation</h2>
+        <%= t('.documentation_html') %>
+
+        <h2>REST API</h2>
+        <%= t('.rest_examples_html', site: $SITE) %>
+
+        <% begin -%>
+        <h2>Announce list</h2>
+        <%= t('.announce_list_html') %>
+        <% end -%>
+
+      <h2>Contact</h2>
+        <%= t('.contact_html') %>
+
+      <%end%>
+
+    </div>
+</div>

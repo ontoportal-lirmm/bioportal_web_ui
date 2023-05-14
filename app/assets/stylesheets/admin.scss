@@ -16,6 +16,7 @@
 .error {
   background: #ffecec image-url("error.png") no-repeat 10px 50%;
   border: 1px solid #f5aca6;
+  padding-left: 30px;
 }
 
 .success {
@@ -137,5 +138,40 @@ table.dataTable tbody tr.selected {
 
   .admin-action-item {
     margin-right: 8px;
+  }
+}
+
+div.groupFormError {
+  color: red;
+  padding-top: 3px;
+}
+
+div.reviewFormError {
+  color: red;
+  padding-top: 3px;
+}
+
+#facebox div.alert-box.error ul {
+  padding-bottom: 0;
+  list-style-type: none;
+}
+
+#process-scheduling {
+
+  .site-admin-page-header {
+    justify-content: space-between;
+
+    .job-title {
+      text-transform: uppercase;
+    }
+  }
+
+  .site-admin-page-section {
+    @extend .mb-5
+  }
+
+  .job-schedule {
+    font-style: italic;
+    cursor: help;
   }
 }

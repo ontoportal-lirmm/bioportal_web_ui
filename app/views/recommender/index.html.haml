@@ -1,11 +1,10 @@
 - @title = "Recommender"
 
-%h2.mt-5 Ontology Recommender
+%h1.mt-5 Semantic Resource Recommender
 %p
   = t('recommender.intro').html_safe
-  = link_to(Rails.configuration.settings.links[:help_recommender], id: "recommender-help",
-            "aria-label": "View ontology recommender help") do
-    %i.fas.fa-question-circle.fa-lg{"aria-hidden": "true"}
+  = link_to("https://github.com/lifewatch-eric/documentation/wiki/EcoTools#recommender", id: "recommender-help", target: "_blank") do
+    %i.fas.fa-question-circle.fa-lg{aria: {hidden: true}, style: "margin-left: .25em"}
 
 %form
   = hidden_field_tag :recommender_sample_text, t('recommender.sample_text')
@@ -23,14 +22,14 @@
   %h5.pt-3 Output
   %div.form-check.form-check-inline
     %input#radioOtSingle.form-check-input{name: "output_type", type: "radio", value: "1", checked: "checked"} 
-    %label.form-check-label{for: "radioOtSingle"} Ontologies
+    %label.form-check-label{for: "radioOtSingle"} Semantic Resources
   %div.form-check.form-check-inline
     %input#radioOtSets.form-check-input{name: "output_type", type: "radio", value: "2"} 
-    %label.form-check-label{for: "radioOtSets"} Ontology sets
+    %label.form-check-label{for: "radioOtSets"} Semantic Resources sets
   
   -# Input text or keywords
   %div.form-group.mt-4
-    = text_area_tag("inputText", nil, rows: 10, class: "form-control default", placeholder: "Paste a paragraph of text or some keywords to use in calculating ontology recommendations", aria: {describedby: "inputTextHelpBlock"})
+    = text_area_tag("inputText", nil, rows: 10, class: "form-control default", placeholder: "Paste a paragraph of text or some keywords to use in calculating semantic resources recommendations", aria: {describedby: "inputTextHelpBlock"})
     %div.card#inputTextHighlighted
       %div.card-body
     %small#inputTextHelpBlock.form-text
@@ -56,7 +55,7 @@
         %label{for: "input_ws"} Specialization
         = number_field_tag("input_ws", "0.15", min: "0", step: "1", class: "form-control")
     -# Specify ontology set size
-    %h6 Maximum ontologies per set
+    %h6 Maximum semantic resources per set
     %div.form-row
       %div.form-group.col-md-2
         = number_field_tag("input_max_ontologies", "3", in: 2...5, class: "form-control")
@@ -73,7 +72,7 @@
 %div.row#recommenderErrorsDisplay.mb-4
   %div.col
     %span.notTextError
-      Please paste a paragraph of text or some keywords to use in calculating ontology recommendations.
+      Please paste a paragraph of text or some keywords to use in calculating semantic resources recommendations.
       %br/
     %span.sumWeightsError
       The sum of the weights must be greater than zero.
@@ -85,10 +84,10 @@
       All the weights must be valid numeric values.
       %br/
     %span.invalidMaxOntError
-      The maximum ontologies per set must be a valid integer value.
+      The maximum semantic resources per set must be a valid integer value.
       %br/
     %span.maxOntologiesError
-      The maximum ontologies per set must be a number between 2 and 4.
+      The maximum semantic resources per set must be a number between 2 and 4.
       %br/
     %span.generalError
       Problem getting recommendations, please try again.
@@ -97,7 +96,7 @@
       No recommendations found.
       %br/
     %span#noResultsSets
-      There are no ontology sets recommended for the input provided. Please try the "Ontologies" output.
+      There are no semantic resource sets recommended for the input provided. Please try the "Semantic Resources" output.
       %br/
     %span.inputSizeError
       Please use less than 500 words. If you need to annotate larger pieces of text you can use the Recommender Web Service

@@ -1,13 +1,19 @@
-%div{:id => "review_table_container_#{@review.hash}"}
-  %table.zebra{:cellpadding => "0", :cellspacing => "0", :id => "review_table_#{@review.hash}", :style => "margin-bottom: 1em;"}
+- divId = "review_table_container_#{@review.hash}"
+%div.ontology_review{:id => divId}
+  %table.zebra{:cellpadding => "0", :cellspacing => "0", :id => "review_table_#{@review.hash}", :style => "margin-bottom: 1em; width: 100%; box-sizing: border-box;"}
     %thead
       %tr
         %th
           Review By #{@review.creator.split("/").last}
           on #{DateTime.parse(@review.created).strftime('%m/%d/%Y')}
-          / TODO_REV: Support user review editing
-          /- if isOwner?(@review.user_id)
-          /  \&nbsp;&nbsp;#{link_to "Edit Review", edit_review_path(review) + "?height=500&width=600", :class => "thickbox"}
+          - if isOwner?(@review.creator)
+            &nbsp;
+            &nbsp;
+            %button.btn.btn-sm.delete-review{data: {review: @review.id}}
+              %i.fa.fa-trash
+            %button.btn.btn-sm.edit-review{data: {review: @review.id}}
+              %i.fa.fa-edit
+            %img.individual_review_spinner{src: asset_path("jquery.simple.tree/spinner.gif"), style: "visibility: hidden"}
     %tbody
       %tr
         %td
@@ -28,3 +34,6 @@
 
           %p
             = @review.body
+:javascript
+  // Do this after the HTML above loads
+  jQuery('div#' + '#{divId} input.star').rating();

@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" style="background: none !important;">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+  <meta name="google-site-verification" content="IBxfKu6VbYH9atd5OLu2zXVD2ZRWi9SgMKTi8nvw3ks" />
+  <title><%if @title.nil?%><%=$ORG_SITE%><%else%><%="#{@title} | #{$ORG_SITE}"%><%end%></title>
+  <link rel="shortcut icon" href="/fav.ico" type="image/x-icon" />
+  <link href='//fonts.googleapis.com/css?family=Droid+Sans:400' rel='stylesheet' type='text/css'>
+  <%= stylesheet_link_tag "application" %>  
+  <%= javascript_include_tag "vendor" %>
+  <%= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js" %>
+  <%= javascript_include_tag "//www.google.com/recaptcha/api/js/recaptcha_ajax.js" %>
+  <%= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js" %>
+  <%= javascript_include_tag "//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js" %>
+  <script>
+    jQuery(document).data({bp: {config: <%=bp_config_json.html_safe%>, user: <%=(session[:user] || {}).to_hash.to_json.html_safe%>}});
+    jQuery(document).data().bp.ontology = <%=@ontology.to_json.html_safe%> || {};
+    jQuery(document).data().bp.submission_latest = <%=@submission_latest.to_json.html_safe%> || {};
+    jQuery(document).data().bp.ont_viewer = {};
+    jQuery(document).data().bp.ont_chart = {};
+  </script>
+  <%= csrf_meta_tag %>
+</head>
+<body class="<%= controller_name %> <%= action_name %> eco-popup-body" style="min-width: 800px;">
+
+  <div class="navbar-inverse eco-popup-top">
+    <%= image_tag 'logos/ecoportal-logo.png' , :class => "img_logo"%>
+  </div>
+
+  <div style="clear: both;"></div>
+
+  <%if flash[:notice] %>
+  <div style="margin: 1em; padding: 5px; border: 1px solid gray; font-size:14px; background-color: #ffffcc;">
+      <p style="text-align: left; margin-bottom: 0;">
+          <%=flash[:notice] %>
+      </p>
+  </div>
+  <%end %>
+
+  <div id="bd">
+    <% message_name = "" %>
+    <% unless $SITE_NOTICE.nil? || $SITE_NOTICE.empty? %>
+      <% $SITE_NOTICE.each_key { |k| message_name = k } %>
+      <% unless cookies[message_name.to_sym].eql?("true") %>
+        <script type="text/javascript">
+          function close_message(){
+            var exdate = new Date();
+            exdate.setDate(exdate.getDate() + 365);
+            document.cookie="<%=message_name%>=true; expires="+exdate.toGMTString();
+            jQuery("#notice_message").hide();
+          }
+        </script>
+        <div style="padding: 13px 10px 10px; margin: 10px; border:1px solid #EFEFEF; background-color: #F9F9F9;" id="notice_message">
+          <%=$SITE_NOTICE[message_name.to_sym]%>&nbsp;&nbsp;<a href="#" onclick="close_message(); return false;" style="font-size: small; color: darkGray;">[close]</a>
+        </div>
+      <% end %>
+    <% end %>
+
+    <%=yield%>
+  </div>
+
+
+</body>
+</html>
+

@@ -59,13 +59,13 @@ var BP_FORM_COMPLETE_LOADED = true;
 
 // Set the defaults if they haven't been set yet
 if (typeof BP_SEARCH_SERVER === 'undefined') {
-  var BP_SEARCH_SERVER = "http://bioportal.bioontology.org";
+  var BP_SEARCH_SERVER = "http://ecoportal.lifewatch.eu";
 }
 if (typeof BP_SITE === 'undefined') {
-  var BP_SITE = "BioPortal";
+  var BP_SITE = "EcoPortal";
 }
 if (typeof BP_ORG === 'undefined') {
-  var BP_ORG = "NCBO";
+  var BP_ORG = "LifeWatch ERIC";
 }
 if (typeof BP_ONTOLOGIES === 'undefined') {
   var BP_ONTOLOGIES = "";
@@ -302,7 +302,7 @@ function formComplete_setup_functions() {
           maxItemsToShow: 20,
           width: result_width,
           onItemSelect: bpFormSelect,
-          footer: '<div style="color: grey; font-size: 8pt; font-family: Verdana; padding: .8em .5em .3em;">Results provided by <a style="color: grey;" href="' + BP_SEARCH_SERVER + '">' + BP_ORG_SITE + '</a></div>',
+          footer: '<div style="color: grey; font-size: 8pt; font-family: Titillium Web, Verdana; padding: .8em .5em .3em;">Results provided by <a style="color: grey;" href="' + BP_SEARCH_SERVER + '">' + BP_ORG_SITE + '</a></div>',
           formatItem: formComplete_formatItem
       }
     );

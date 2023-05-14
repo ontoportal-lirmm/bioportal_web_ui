@@ -28,7 +28,7 @@
     %ul.navbar-nav
       - if session[:user].nil?
         %li.nav-item
-          = link_to("Login", login_index_path(redirect: request.original_url), class: "btn btn-bp-login mr-md-2")
+          = link_to("Login", login_index_path(redirect: request.original_url), class: "nav-link")
       - else
         -# Account menu
         %li.nav-item.dropdown
@@ -42,13 +42,34 @@
               - for ont in session[:ontologies]
                 = link_to(ont.ontology_name, "/ontologies/#{ont.ontology_acronym}/?p=classes&conceptid=#{CGI.escape(ont.concept)}", class: "dropdown-item")
               %div.dropdown-divider
-            = link_to("Logout", logout_path, class: "dropdown-item")
+            = link_to("Logout", logout_path(), class: "dropdown-item")  
+
+      -# Tools menu
+      %li.nav-item.dropdown
+        = link_to("#", id: "toolsMenuDropdownLink", class: "nav-link dropdown-toggle", role: "button", data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}) do
+          Tools
+        %div.dropdown-menu.dropdown-menu-right{aria: {labelledby: "toolsMenuDropdownLink"}}
+          -if (!session[:user].nil? && session[:user].admin?)
+            = link_to("Admin", admin_index_path(), class: "dropdown-item") 
+          = link_to("Browse", ontologies_path(), class: "dropdown-item")
+          = link_to("Search", "/search", class: "dropdown-item")
+          -if (session[:user])
+            = link_to("Publish", new_ontology_path(), class: "dropdown-item")
+          -else
+            =link_to("Publish", "/login?redirect=" + new_ontology_path(), class: "dropdown-item")
+          = link_to("Annotator", annotator_index_path(), class: "dropdown-item")
+          = link_to("Mappings", mappings_path(), class: "dropdown-item")
+          = link_to("Recommender", recommender_index_path(), class: "dropdown-item")
+          = link_to("VocBench", "http://vocbench.lifewatchitaly.eu", target: "_blank", class: "dropdown-item")
+          - unless Rails.env.appliance?
+            = link_to("Resource Index", resource_index_index_path())            
+
       -# Support menu
       %li.nav-item.dropdown
         = link_to("#", id: "supportMenuDropdownLink", class: "nav-link dropdown-toggle", role: "button", data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}) do
           Support
         %div.dropdown-menu.dropdown-menu-right{aria: {labelledby: "supportMenuDropdownLink"}}
-          = link_to("Submit Feedback", feedback_path(location: encode_param(request.url)), id: "submitFeedbackMenuItem", class: "dropdown-item pop_window")
+          = link_to("Contact Us", feedback_path(location: encode_param(request.url)), id: "submitFeedbackMenuItem", class: "dropdown-item pop_window")
           %div.dropdown-divider
           %h6.dropdown-header Documentation
           = link_to("Help", "#{$WIKI_HELP_PAGE}", target: "_blank", class: "dropdown-item")

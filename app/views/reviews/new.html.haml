@@ -1,24 +1,6 @@
-= form_for(:review, :url => reviews_path, :remote => true, :id => "new_review_form") do |f|
-  = f.hidden_field :ontologyReviewed, value: @review.ontologyReviewed
-  = f.hidden_field :creator, value: @review.creator
-  %fieldset
-    %legend
-      %b
-        Review For #{@ontology.name}
-    %table
-      %tr
-        %td
-          Ratings
-          %br/
-          - for rating in @rating_types
-            %div{:style => "padding:2px;border-top:1px solid gray;"}
-              - (1..5).each do |i|
-                = f.radio_button rating, i, class: "star"
-              &nbsp;#{rating.to_s.chomp("Rating").capitalize}
-      %tr
-        %td= f.text_area :body, value: @review.body, cols: 80, rows: 5
-  = submit_tag "Submit Review", class: "blueButton"
+- @title = "New review"
+- form_id = "new_review_form"
 
-:javascript
-  // Do this after the HTML above loads
-  jQuery('input.star').rating();
+%div
+  = form_for(:review, url: reviews_path, method: "POST", remote: true, html: {id: "#{form_id}"}) do |f|
+    = render partial: "editable_review", locals: {f: f, form_id: form_id}

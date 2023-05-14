@@ -1,9 +1,9 @@
-%div.px-3.py-3.pt-md-5.pb-md-4.text-center
-  %h1.display-4 
+%div.container
+  %h1.mt-5
     Ontology Visits
-  %p.lead (#{@analytics.date.strftime("%B %Y")})
+    %small.text-muted
+      (#{@analytics.date.strftime("%B %Y")})
 
-%div.container.pb-3.pb-md-4
   %div.table-responsive
     %table.table.table-hover
       %thead.thead-light

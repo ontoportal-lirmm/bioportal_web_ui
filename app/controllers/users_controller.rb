@@ -1,3 +1,5 @@
+
+require 'json'
 class UsersController < ApplicationController
   
   before_action :unescape_id, only: [:edit, :show, :update]
@@ -230,9 +232,11 @@ class UsersController < ApplicationController
       errors << "Please enter a valide orcid id"
     end
 
+
     if params[:username].nil? || params[:username].length < 1 || !params[:username].match(/^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$/)
       errors << "please enter a valid username"
     end
+    
     return errors
   end
 

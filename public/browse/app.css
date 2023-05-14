@@ -29,7 +29,9 @@
   position: relative;
   float: right;
   left: -33%;
+  margin-bottom: -5em; /* To avoid that 5em of white space are left underneath */
 }
+
 .search {
   float: left;
   width: 150px;
@@ -43,14 +45,13 @@
   padding-bottom: 2px;
 }
 #facets {
-  margin-top: 1em;
+  margin-top: calc(1em - 5px);  /* account for the -5px margin on top .search */
 }
+
 .new_ontology_button {
-  display: inline-block;
+  box-sizing: border-box;
   width: 100%;
-  padding-left: 0px !important;
-  padding-right: 0px !important;
-  margin-top: 1em;
+  white-space: break-spaces !important;
 }
 .facet {
   margin: 1em 0;
@@ -61,6 +62,11 @@
 .facet_disabled {
   color: gray;
 }
+
+.facet h4 {
+  font-size: 1.3em;
+}
+
 .checkbox_list {
   max-height: 200px;
   overflow: auto;
@@ -81,7 +87,7 @@
 }
 @keyframes highlight {
   0% {
-    background: yellow;
+    background: #f2f2f2;
   }
   100% {
     background: none;
@@ -89,7 +95,7 @@
 }
 @-webkit-keyframes highlight {
   0% {
-    background: yellow;
+    background: #f2f2f2;
   }
   100% {
     background: none;
@@ -100,12 +106,13 @@
   animation: highlight 1s;
 }
 #ontologies {
+  margin-top: 1em;
 }
 .clear {
   clear: both;
 }
 .ontology {
-  border: thin gray solid;
+  border: thin #f2f2f2 solid;
   border-radius: 5px;
   padding: .5em 1em .5em;
   margin: 1em 0;
@@ -117,7 +124,7 @@
   margin-right: 5px;
   border-radius: 3px;
   color: white;
-  background-color: #234979;
+  background-color: #0f4e8a;
   font-size: 1em;
   font-weight: bold;
 }
@@ -132,7 +139,7 @@
   cursor: help;
   /* Make the lock appear in the upper left corner */
   /*
-  background-color: #234979;
+  background-color: #0f4e8a;
   padding: 2.5px 4px;
   font-size: 1em;
   color: white;
@@ -152,33 +159,34 @@
   font-size: 11px;
 }
 .badge_grid {
-  padding-bottom: 10px;
   float: right !important;
 }
 .ontology_badge {
-  border-radius: 5px;
+  /* border-radius: 5px; */
   text-align: center;
-  max-width: 120px;
+  max-width: 60px;
   height: 45px;
   max-height: 45px;
-  border: solid #234979 thin;
+  background:#f2f2f2;
+  /* border: solid #0f4e8a thin; */
 }
 .ontology_badge:hover {
   cursor: pointer;
 }
 .badge_title {
   border-radius: 4px 4px 0 0;
+  height: 1.5em;
   font-size: 12px;
-  color: white;
-  background-color: #234979;
+  color: #f2f2f2;
+  background-color: #0f4e8a;
 }
 .badge_count {
   border-radius: 0 0 4px 4px;
   height: 22px;
   font-size: 1.1em;
   font-weight: bold;
-  color: #234979;
+  color: #0f4e8a;
 }
-.ontology_badge:hover .badge_count {
+.ontology_badge:hover .eco-badge_count {
   background-color: rgba(220, 235, 255, 0.79);
 }

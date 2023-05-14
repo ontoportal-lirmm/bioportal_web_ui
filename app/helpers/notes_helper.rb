@@ -4,6 +4,10 @@ module NotesHelper
 
   NOTES_TAGS = %w(a br b em strong i)
 
+  def get_note_subject(note)
+    note.subject || "no subject"
+  end
+
   def recurse_replies(replies)
     return "" if replies.nil?
     html = ""
@@ -139,7 +143,11 @@ module NotesHelper
     params = "data-bp_user_id='#{user.id}'"
     spinner = '<span class="delete_notes_spinner" style="display: none;">' + image_tag("spinners/spinner_000000_16px.gif", style: "vertical-align: text-bottom;") + '</span>'
     error = "<span style='color: red;' class='delete_notes_error'></span>"
-    return "<a href='#' onclick='deleteNotes(this);return false;' style='display: inline-block !important;' class='notes_delete link_button' #{params}>Delete selected notes</a> #{spinner} #{error}"
+    return "<a href='javascript:void(0);' style='display: inline-block !important;' class='notes_delete link_button' #{params}>Delete selected notes</a> #{spinner} #{error}".html_safe
+  end
+
+  def delete_note_checkbox(note)
+    "<input type='checkbox' id='delete_#{note.id}' data-note_id='#{note.id}' data-related-class='#{JSON.generate(note.relatedClass)}' class='delete_note_checkbox'>".html_safe
   end
 
 end
