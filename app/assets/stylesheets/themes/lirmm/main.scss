@@ -247,11 +247,10 @@ div.logos a {
 footer, .footer {
   background-color: $color-secondary !important;
   position: relative !important;
+  padding: 30px 0;
 }
 
-footer img {
-  height: 32px;
-}
+
 
 footer a.logo.connect img {
   margin-right: 10px;
