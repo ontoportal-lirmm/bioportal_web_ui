@@ -1,38 +1,40 @@
 shared:
   links:
-    about: 'https://www.bioontology.org/about-us/'
-    cite: 'https://www.bioontology.org/about-us/#cite-bioportal'
-    facebook: 'https://www.facebook.com/National-Center-for-Biomedical-Ontology-127444774011153/'
-    github: 'http://github.com/ncbo'
-    help: 'https://www.bioontology.org/wiki/BioPortal_Help'
     help_annotator: 'https://github.com/lifewatch-eric/documentation/wiki/EcoTools#annotator'
     help_mappings: 'https://github.com/lifewatch-eric/documentation/wiki/EcoTools#mappings'
     help_ontology_browse: 'https://github.com/lifewatch-eric/documentation/wiki/EcoTools#browse'
     help_recommender: 'https://github.com/lifewatch-eric/documentation/wiki/EcoTools#recommender'
     help_search: 'https://github.com/lifewatch-eric/documentation/wiki/EcoTools#search'
     metrics: 'https://www.bioontology.org/wiki/Ontology_Metrics'
+    about: '/about'
+    cite: '/citeus'
+    facebook: 'https://www.facebook.com/LifeWatch-ERIC-245225669516847'
+    github: 'https://github.com/lifewatch-eric'
+    help: 'https://github.com/lifewatch-eric/documentation/wiki'
+    linkedin: 'https://www.linkedin.com/company/lifewatch-eric/'
     mission: 'https://www.bioontology.org/about-us/#mission'
-    privacy_policy: 'https://www.bioontology.org/privacy/'
+    privacy_policy: 'https://www.lifewatch.eu/privacy-policy-2021'
     rest_api: 'http://data.bioontology.org/documentation'
-    team: 'https://www.bioontology.org/about-us/#team'
-    terms: 'https://www.bioontology.org/terms/'
-    twitter: 'http://twitter.com/bioontology'
+    team: '/team'
+    terms: 'https://www.lifewatch.eu/terms-and-conditions'
+    twitter: 'https://twitter.com/lifewatcheric'
     virtual_appliance: 'https://ontoportal.github.io/administration/'
     widgets: 'http://www.bioontology.org/wiki/NCBO_Widgets'
-    wiki: 'https://www.bioontology.org/wiki/'
     mappings: 'https://www.bioontology.org/wiki/BioPortal_Help#Mappings_Tab'
+    wiki: 'https://github.com/lifewatch-eric/documentation/wiki'
+    youtube: 'https://www.youtube.com/channel/UCP6ag3SoJ6oeisE7ibg4-pg'
 
 development:
   links:
-    release_notes: 'https://github.com/ncbo/bioportal_web_ui/releases'
+    release_notes: 'https://github.com/lifewatch-eric/bioportal_web_ui/releases'
 
 staging:
   links:
-    release_notes: 'https://github.com/ncbo/bioportal_web_ui/releases'
+    release_notes: 'https://github.com/lifewatch-eric/bioportal_web_ui/releases'
 
 production:
   links:
-    release_notes: 'https://github.com/ncbo/bioportal_web_ui/releases'
+    release_notes: 'https://github.com/lifewatch-eric/bioportal_web_ui/releases'
 
 appliance:
   links:
