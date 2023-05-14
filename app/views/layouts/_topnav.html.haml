@@ -10,8 +10,6 @@
       %li.nav-item
         = link_to("Search", "/search", class: "nav-link")
       %li.nav-item
-        = link_to("VocBench", "http://vocbench.lifewatchitaly.eu", target: "_blank", class: "dropdown-item")
-      %li.nav-item
         = link_to("Mappings", mappings_path(), class: "nav-link")
       %li.nav-item
         = link_to("Recommender", recommender_index_path, class: "nav-link")
@@ -27,7 +25,9 @@
       -if (!session[:user].nil? && session[:user].admin?)
         %li.nav-item
           = link_to("Admin", admin_index_path, class: "nav-link")
+
     %ul.navbar-nav
+      = link_to("VocBench", "http://vocbench.lifewatchitaly.eu", target: "_blank", class: "btn btn-outline-secondary text-white mx-1")
       - if session[:user].nil?
         %li.nav-item
           = link_to("Login", login_index_path(redirect: request.original_url), class: "btn btn-bp-login mr-md-2")
