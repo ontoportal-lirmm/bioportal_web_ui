@@ -56,4 +56,4 @@
 <% if (ui_theme = $UI_THEME.to_s.parameterize).present? && File.exists?(Rails.root.join('app', 'assets', 'stylesheets', 'themes', ui_theme)) %>
   @import "themes/<%= ui_theme %>/main";
 <% end %>
-@import "//fonts.googleapis.com/css?family=Titillium+Web:400,700";
+
