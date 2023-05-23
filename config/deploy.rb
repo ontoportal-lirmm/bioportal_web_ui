@@ -42,6 +42,7 @@ set :keep_releases, 5
 set :bundle_without, 'development:test'
 set :bundle_config, { deployment: true }
 set :rails_env, "appliance"
+set :config_folder_path, "#{fetch(:application)}/#{fetch(:stage)}"
 # Defaults to [:web]
 set :assets_roles, [:web, :app]
 set :keep_assets, 3
@@ -82,7 +83,7 @@ namespace :deploy do
       TMP_CONFIG_PATH = "/tmp/#{SecureRandom.hex(15)}".freeze
       on roles(:app) do
         execute "git clone -q #{PRIVATE_CONFIG_REPO} #{TMP_CONFIG_PATH}"
-        execute "rsync -a #{TMP_CONFIG_PATH}/#{fetch(:application)}/ #{release_path}/"
+        execute "rsync -a #{TMP_CONFIG_PATH}/#{fetch(:config_folder_path)}/ #{release_path}/"
         execute "rm -rf #{TMP_CONFIG_PATH}"
       end
     elsif defined?(LOCAL_CONFIG_PATH)
