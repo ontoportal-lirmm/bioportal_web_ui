@@ -58,6 +58,10 @@ jobs:
 
         USER_INPUT_ENVIRONMENT=${{ inputs.environment }}
         echo "TARGET=${USER_INPUT_ENVIRONMENT:-staging}" >> $GITHUB_ENV
+        
+        CONFIG_REPO=${{ secrets.CONFIG_REPO }}
+        GH_PAT=${{ secrets.GH_PAT }}
+        echo "PRIVATE_CONFIG_REPO=https://${GH_PAT}@github.com/${CONFIG_REPO}" >> $GITHUB_ENV
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v3
     - uses: ruby/setup-ruby@v1
