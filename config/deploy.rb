@@ -11,7 +11,6 @@ set :deploy_via, :remote_cache
 # default deployment branch is master which can be overwritten with BRANCH env var
 # BRANCH env var can be set to specific branch of tag, i.e 'v6.8.1'
 
-set :branch, ENV.include?('BRANCH') ? ENV['BRANCH'] : 'master'
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, "/srv/ontoportal/#{fetch(:application)}"
