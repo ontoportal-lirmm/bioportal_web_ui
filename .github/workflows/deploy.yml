@@ -9,6 +9,7 @@
 # GH_PAT - github Personal Access Token for accessing private config repo
 #
 # SSH_JUMPHOST - ssh jump/proxy host though which deployments have to though if UI nodes live on private network.
+# SSH_JUMPHOST_USER - username  to use to connect to the ssh jump/proxy.
 #
 # DEPLOY_ENC_KEY - key for decrypting deploymnet ssh key residing in config/
 # this SSH key is used for accessing jump host, UI nodes, and private github repo.
@@ -62,6 +63,9 @@ jobs:
         CONFIG_REPO=${{ secrets.CONFIG_REPO }}
         GH_PAT=${{ secrets.GH_PAT }}
         echo "PRIVATE_CONFIG_REPO=https://${GH_PAT}@github.com/${CONFIG_REPO}" >> $GITHUB_ENV
+        
+        echo "SSH_JUMPHOST=${{ secrets.SSH_JUMPHOST }}" >> $GITHUB_ENV
+        echo "SSH_JUMPHOST_USER=${{ secrets.SSH_JUMPHOST_USER }}" >> $GITHUB_ENV
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v3
     - uses: ruby/setup-ruby@v1
