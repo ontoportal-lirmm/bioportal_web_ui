@@ -32,7 +32,16 @@ module SchemesHelper
         schemes_labels.append( { 'prefLabel' => label, '@id' => id })
       end
     end
-    schemes_labels.sort_by! { |s|  s['prefLabel']}
+
+    schemes_labels.sort_by! do |s|
+      prefLabel = process_concept(s['prefLabel'])
+      
+      if prefLabel.is_a? String
+        prefLabel
+      else
+        prefLabel.values.first
+      end
+    end
 
     if selected_label
       schemes_labels.unshift selected_label

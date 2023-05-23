@@ -32,7 +32,17 @@ module CollectionsHelper
         collections_labels.append( { 'prefLabel' => label, '@id' => id , 'color' => x['color'] })
       end
     end
-    collections_labels.sort_by! { |s|  s['prefLabel']}
+        
+    collections_labels.sort_by! do |s|
+      prefLabel = process_concept(s['prefLabel'])
+      
+      if prefLabel.is_a? String
+        prefLabel
+      else
+        prefLabel.values.first
+      end
+    end
+
     collections_labels.unshift selected_label if selected_label
     [collections_labels, selected_label]
   end
