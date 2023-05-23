@@ -90,6 +90,8 @@ set :ssh_options, {
   proxy: Net::SSH::Proxy::Command.new("ssh #{JUMPBOX_PROXY} -W %h:%p")
 }
 
+#private git repo for configuraiton
+PRIVATE_CONFIG_REPO = ENV.include?('PRIVATE_CONFIG_REPO') ? ENV['PRIVATE_CONFIG_REPO'] : 'https://your_github_pat_token@github.com/your_organization/ontoportal-configs.git'
 desc "Check if agent forwarding is working"
 task :forwarding do
   on roles(:all) do |h|
