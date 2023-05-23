@@ -17,7 +17,14 @@
           - if @concept.prefLabel().nil?
             = render(AlertMessageComponent.new(message: t('ontology_details.concept.no_preferred_name_for_selected_language'),  type: "warning", closeable: false))
           - else
-            %p= @concept.prefLabel({:use_html => true}).html_safe
+            - prefLabel = process_concept(@concept.prefLabel)
+            - if prefLabel.is_a? String
+              %p= prefLabel
+            - else
+              - prefLabel.each do |key, value|
+                .d-flex.gap-12.align-items-center
+                  %p= value
+                  %span.badge.badge-light= key.upcase
 
       - unless @concept.synonym.nil? || @concept.synonym.empty?
         %tr
