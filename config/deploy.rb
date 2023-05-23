@@ -41,7 +41,7 @@ set :linked_dirs, %w{log tmp/pids tmp/cache public/system public/assets}
 set :keep_releases, 5
 set :bundle_without, 'development:test'
 set :bundle_config, { deployment: true }
-
+set :rails_env, "appliance"
 # Defaults to [:web]
 set :assets_roles, [:web, :app]
 set :keep_assets, 3
@@ -101,6 +101,7 @@ namespace :deploy do
   end
 
 
+  after :updating, :get_config
   after :publishing, :restart
 
   after :restart, :clear_cache do
