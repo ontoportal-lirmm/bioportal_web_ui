@@ -549,8 +549,31 @@ module ApplicationHelper
   end
 
   ###END ruby equivalent of JS code in bp_ajax_controller.
-  def ontology_viewer_page_name(ontology_name, concept_name_title , page)
-    ontology_name + " | " +concept_name_title + " - #{page.capitalize}"
+  def ontology_viewer_page_name(ontology_name, concept_label, page)  
+    return ontology_name + " | " +  concept_title_value(concept_label) + " - #{page.capitalize}"
+  end
+
+  def concept_title_value(concept_label)
+    concept = process_concept(concept_label)
+
+    if concept.is_a?(String)
+      return concept
+    end
+
+    return concept.values.first
+
+  end
+
+  def process_concept(concept_label) 
+    if concept_label.is_a?(String) 
+      return concept_label  
+    end
+
+    return remove_fields(concept_label.to_h, [:links, :context])
+  end
+
+  def remove_fields(hash, fields_to_remove )
+    hash.reject { |key, _| fields_to_remove.include?(key) }
   end
 
   def link_to_modal(name, options = nil, html_options = nil, &block)
