@@ -386,6 +386,17 @@ class OntologiesController < ApplicationController
 
   private
 
+  def ontology_params
+    p = params.require(:ontology).permit(:name, :acronym, { administeredBy:[] }, :viewingRestriction, { acl:[] },
+                                         { hasDomain:[] }, :isView, :viewOf, :subscribe_notifications, {group:[]})
+
+    p[:administeredBy].reject!(&:blank?)
+    p[:acl].reject!(&:blank?)
+    p[:hasDomain].reject!(&:blank?)
+    p[:group].reject!(&:blank?)
+    p.to_h
+  end
+  
   def get_views(ontology)
     views = ontology.explore.views || []
     views.select! { |view| view.access?(session[:user]) }
