@@ -208,44 +208,50 @@
               %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
           .right_metadata
             .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#persons_orgs_metadata_section"}
-              %p Persons and organizations
+              %p.fix-margin-buttom
+                Persons and organizations
               %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
             #persons_orgs_metadata_section.collapse.right-metadata-conetent
               .creation_info
                 %p.description_text 
-                  Accrual method
+                  Creators
               %p.normal_text 
                 = @submission_latest.accrualMethod
               .creation_info
                 %p.description_text 
-                  Accrual periodicity
+                  Contributors
               %p.normal_text 
                 Monthly
               .creation_info
                 %p.description_text 
-                  Accrual policy
+                  Curators
               %p.normal_text 
                 https://www.fao.org/agrovoc/maintenance
               .creation_info
                 %p.description_text 
-                  Knowledge representation paradigm
+                  Translator
               %p.normal_text 
                 knowledge graph
               .creation_info
                 %p.description_text 
-                  Engineering methodology
+                  Publisher
               %p.normal_text
                 Follow the OBO Principle, used Protégé and the Ontology Development Kit.
               .creation_info
                 %p.description_text 
-                  Created With
+                  Funded By
               %p.normal_text 
                 http://protege.stanford.edu/
               .creation_info
                 %p.description_text 
-                  Competency question
+                  Endorsed By
               %p.normal_text
                 Quels sont les noms vernaculaires dune plante cultivée sur le territoire français?
+              .creation_info
+                %p.description_text 
+                  CopyRight Holder
+              %p.normal_text 
+                = @submission_latest.accrualMethod
           .depiction
             .vists_image
               %p Visits
