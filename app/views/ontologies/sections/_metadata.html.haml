@@ -252,13 +252,14 @@
                   CopyRight Holder
               %p.normal_text 
                 = @submission_latest.accrualMethod
-          .depiction
-            .vists_image
-              %p Visits
-              %img{alt: "", src: asset_path("summary/arrow_down.svg")}/
-            %img{src: asset_path("summary/test_visits.svg")}/
-          .depiction
-            %div{class: ".caintainer_vertical"}
+          .right_metadata
+            .depiction
+              .vists_image
+                %p Visits
+                - if visits_data(@ontology)
+                  = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", "aria-label": "Download as CSV", title: "Download as CSV") do
+                    %img{alt: "", src: asset_path("summary/arrow_down.svg")}
+              = render partial: "visits"
               .projects_card
                 %p Projects and usage information
                 %img{src: asset_path("summary/info.svg")}/
