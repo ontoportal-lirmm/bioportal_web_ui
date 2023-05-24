@@ -165,24 +165,25 @@
                 %img{src: asset_path("summary/loop.svg")}/
           .right_metadata
             .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#identifiers_metadata_section"}
-              %p Identifiers 
+              %p.fix-margin-buttom
+                Identifiers 
               %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
             #identifiers_metadata_section.collapse.right-metadata-conetent
               .creation_info
                 %p.description_text 
-                  Accrual method
+                  URI
               %p.normal_text 
-                = @submission_latest.accrualMethod
+                = @submission_latest.URI
               .creation_info
                 %p.description_text 
-                  Accrual periodicity
+                  VersionIRI
               %p.normal_text 
-                Monthly
+                = @submission_latest.versionIRI
               .creation_info
                 %p.description_text 
-                  Accrual policy
+                  Identifier
               %p.normal_text 
-                https://www.fao.org/agrovoc/maintenance
+                = @submission_latest.identifier
               .creation_info
                 %p.description_text 
                   Knowledge representation paradigm
