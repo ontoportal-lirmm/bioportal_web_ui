@@ -260,21 +260,23 @@
                   = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", "aria-label": "Download as CSV", title: "Download as CSV") do
                     %img{alt: "", src: asset_path("summary/arrow_down.svg")}
               = render partial: "visits"
+          .right_metadata
+            .depiction
+              %div{class: ".caintainer_vertical"}
+              %a{href: "#"}
+                .openup_icon_projects
+                  %img{src: asset_path("summary/openUp.svg")}/
               .projects_card
                 %p Projects and usage information
                 %img{src: asset_path("summary/info.svg")}/
               %a{href: "#"}
                 .openup_icon_projects
-                  %img{src: asset_path("summary/openUp.svg")}/
-            .projects_card
-              %p Projects and usage information
-              %img{src: asset_path("summary/info.svg")}/
-            %a{href: "#"}
-              .openup_icon_projects
-                %img{src: asset_path("summary/openUp.svg")}/
+                  - img = "<img src='#{asset_path("summary/openUp.svg")}'/>"
+                  = link_to_modal(img.html_safe,"/ajax/submission/show_projects/#{@ontology.acronym}",data: { show_modal_title_value: "Usage", show_modal_size_value: 'modal-xl' })               
             .creation_info
               %p.description_text Projects using
-              %p.projects_using_onto_text AGROVOC
+              %p.projects_using_onto_text 
+                = @ontology.acronym
               .projects_info
                 %img{src: asset_path("summary/plus.svg")}/
             %a{href: "#", style: "text-decoration: none;"}
@@ -282,7 +284,7 @@
             %a{href: "#", style: "text-decoration: none;"}
               %p.clickable_text GO FAIR Food Systems Implementation Network
             %a{href: "#", style: "text-decoration: none;"}
-              %p.clickable_text Data to Knowledge in Agronomy and Biodiversity
+              %p.clickable_text Data to Know ledge in Agronomy and Biodiversity
             %a{href: "#", style: "text-decoration: none;"}
               %p.clickable_text RDA Wheat Interoperability Working Group
           .depiction
