@@ -26,7 +26,7 @@
         = link_to(sub.documentation, "aria-label": "Ontology documentation", title: "Ontology documentation", target: "_blank") do
           %i.fas.fa-lg.fa-book-reader{"aria-hidden": true}
       - unless sub.publication.nil?
-        - sub.publication.each do |pub|
+        - Array(sub.publication).each do |pub|
           = link_to(pub, "aria-label": "Ontology publications", title: "Ontology publications", target: "_blank") do
             %i.fas.fa-lg.fa-book{"aria-hidden": true}
     - if @ontology.admin?(session[:user])
