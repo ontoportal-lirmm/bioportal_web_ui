@@ -384,7 +384,8 @@ class OntologiesController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first if @ontology.nil?
     ontology_not_found(params[:id]) if @ontology.nil?
     # Check to see if user is requesting json-ld, return the file from REST service if so
-
+    @relations_array = ["omv:useImports", "door:isAlignedTo", "door:ontologyRelatedTo", "omv:isBackwardCompatibleWith", "omv:isIncompatibleWith", "door:comesFromTheSameDomain", "door:similarTo",
+                        "door:explanationEvolution", "voaf:generalizes", "door:hasDisparateModelling", "dct:hasPart", "voaf:usedBy", "schema:workTranslation", "schema:translationOfWork"]
     if request.accept.to_s.eql?('application/ld+json') || request.accept.to_s.eql?('application/json')
       headers['Content-Type'] = request.accept.to_s
       render plain: @ontology.to_jsonld
