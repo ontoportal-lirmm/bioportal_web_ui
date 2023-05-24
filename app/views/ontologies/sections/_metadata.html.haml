@@ -5,12 +5,12 @@
         .summary-page-first-row
           .Summary-page-card
             %h4.summary-page-card-title General information
-            .account-page-info-column.container
-              %div
-                %p.description_text
-                  = @submission_latest.description
-                %p.see_more_text ...see more
-              %img{height: "85", src: asset_path("summary/logo.png", width: "189")}/
+            .account-page-info-column
+              %div{data:{controller:"text-truncate", 'text-truncate-more-text-value': 'See more...' , 'text-truncate-less-text-value': 'See less...'}}
+                %p.description_text{'data-text-truncate-target': 'content'}
+                  = "Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme"
+                %p.see_more_text{data:{'text-truncate-target': 'button', 'action':"click->text-truncate#toggle"}}
+                  see more...
             %div
               %p.description_text{style: "text-decoration-line: underline;"}
                 Additionnal Metadata...
