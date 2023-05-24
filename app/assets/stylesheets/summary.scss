@@ -12,10 +12,16 @@
     font-size: 15px;
 }
 
-.description_text {
-    color: #888888;
+.description_text , .description_text a{
+    color: #888888 !important;
     font-size: 15px;
     margin-top: 10px;
+}
+.description_text {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp:   var(--read-more-line-clamp, 5);
 }
 
 .projects_using_onto_text {
