@@ -79,25 +79,33 @@
           %h2.card_title Versions
           %hr#section_focused_line_fairScore/
           .Summary-page-card
-          %h2.card_title Metrics
+          %h2.card_title.d-flex.align-items-center
+            %span.mr-2
+              Metrics
+            %span
+              = link_to(Rails.configuration.settings.links[:metrics], target: "_blank", "aria-label": "View individual metrics definitions", title: "View individual metrics definitions") do
+                %i.fas.fa-lg.fa-question-circle{style: "color: var(--primary-color)"}
           %hr#section_focused_line_metrics/
-          .metrics-container
+          .metrics-container.metrics 
             .metrics
-              .metrics-item
-                %hr/
-                %div
-                  %h4 34
-                  %p Classes
-              .metrics-item
-                %hr/
-                %div
-                  %h4 1,052,039
-                  %p Individuals
-              .metrics-item
-                %hr/
-                %div
-                  %h4 209
-                  %p Properties
+            .metrics-item
+              %hr/
+              %div
+                %h4 
+                  = @metrics.classes
+                %p Classes
+            .metrics-item
+              %hr/
+              %div
+                %h4 
+                  = @metrics.individuals
+                %p Individuals
+            .metrics-item
+              %hr/
+              %div
+                %h4 
+                  = @metrics.properties
+                %p Properties
         .summary-page-second-row
           .right_metadata
             .depiction
