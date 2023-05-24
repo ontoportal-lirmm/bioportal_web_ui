@@ -60,9 +60,16 @@
               %p.creator_text
                 = @submission_latest.hasCreator
           %h2.card_title FAIR score
-          %hr#section_focused_line_fairScore/
+          %hr#section_focused_line_fairScore
           .Summary-page-card
             .summary-page-card-container
+            - if fairness_service_enabled? && @ontology.acronym != 'AGROVOC'
+              %section.ont-metadata-card.ont-fair-score-card#fair-summary
+                %div.ont-section-toolbar
+                  %header.pb-2.font-weight-bold
+                    = render partial: "fair_score/fair_service_header"
+              %div#fair-score-charts-container
+                = render partial: "fairs_score"
               .account-page-card-sub-container
           %h2.card_title Ontology relations network
           %hr#section_focused_line_networkRelation/
