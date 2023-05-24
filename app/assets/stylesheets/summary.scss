@@ -285,7 +285,7 @@ svg path {
 .openup_icon_projects {
     position: absolute;
     margin-left: 338px;
-    top: 1400px;
+    margin-top: 160px;
 
     padding: 12px;
     display: flex;
@@ -306,7 +306,7 @@ svg path {
 .openUp
 
 .depiction {
-    height: fit-content;
+    position: relative;
     border: 1px solid #DFDFDF;
     border-radius: 5px;
     padding: 14px 20px;
@@ -553,4 +553,7 @@ input:checked+.slider:before {
     border-radius: 8px;
     margin-left: 10px;
     font-size: 14px;
+}
+.fix-margin-buttom{
+    margin-bottom: 0 !important;
 }
