@@ -96,7 +96,7 @@ class Admin::CategoriesController < ApplicationController
     response = { categories: Hash.new, errors: '', success: '' }
     start = Time.now
     begin
-      response[:categories] = JSON.parse(LinkedData::Client::HTTP.get(CATEGORIES_URL, { include: 'all' }, raw: true))
+      response[:categories] = JSON.parse(LinkedData::Client::HTTP.get(CATEGORIES_URL, { include: 'ontologies,acronym,name,created,description,parentCategory' }, raw: true))
 
       response[:success] = "categories successfully retrieved in  #{Time.now - start}s"
       LOG.add :debug, "Categories - retrieved #{response[:categories].length} groups in #{Time.now - start}s"

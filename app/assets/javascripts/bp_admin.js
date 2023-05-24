@@ -1303,8 +1303,14 @@ function displayGroups(data, group) {
                     "targets": 4,
                     "searchable": false,
                     "orderable": false,
-                    "title": "Actions",
-                    "width": "210px"
+                    "title": "nb",
+                },
+                {
+                  "targets": 5,
+                  "searchable": false,
+                  "orderable": false,
+                  "title": "Actions",
+                  "width": "250px"
                 }
             ],
             "autoWidth": false,
@@ -1333,10 +1339,13 @@ function populateGroupRows(data) {
         let description = group['description']
         let created = group['created'];
         let id = group['acronym'];
+        let nb = [
+          '<a href="/ontologies?groups='+id+'" target="_blank"> ' + group['ontologies'].length + ' </a>',
+        ];
         let actions = [
             '<a href="javascript:;" class="edit-group mx-1" data-group-name="' + id + '">Edit</a>',
         ]
-        return [name, description, created, id , actions.join('|')];
+        return [name, description, created, id , nb, actions.join('|')];
     })
 
     return allRows;
@@ -1456,8 +1465,14 @@ function displayCategories(data, category) {
           "targets": 5,
           "searchable": false,
           "orderable": false,
+          "title": "nb",
+        },
+        {
+          "targets": 6,
+          "searchable": false,
+          "orderable": false,
           "title": "Actions",
-          "width": "210px"
+          "width": "250px"
         }
       ],
       "autoWidth": false,
@@ -1487,10 +1502,13 @@ function populateCategoryRows(data) {
     let created = category['created'];
     let id = category['acronym'];
     let parentCategory = category['parentCategory'];
+    let nb = [
+      '<a href="/ontologies?categories='+id+'" target="_blank"> ' + category['ontologies'].length + ' </a>',
+    ];
     let actions = [
       '<a href="javascript:;" class="edit-category mx-1" data-category-name="' + id + '">Edit</a>',
     ]
-    return [name, description, created, id , parentCategory, actions.join('|')];
+    return [name, description, created, id , parentCategory, nb , actions.join('|')];
   })
 
   return allRows;
