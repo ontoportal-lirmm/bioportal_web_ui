@@ -41,23 +41,24 @@
                   %p.non_clickable_text knowledge and information systems
                 .categories_box
                   %p.non_clickable_text Earth and Environment
-              .icons_container
-                %a{href: "#", style: "text-decoration: none;"}
-                  %img{src: asset_path("summary/download.svg")}/
-                %a{href: "#", style: "text-decoration: none;"}
-                  %img{src: asset_path("summary/homepage.svg")}/
-                %a{href: "#", style: "text-decoration: none;"}
-                  %img{src: asset_path("summary/documentation.svg")}/
-                %a{href: "#", style: "text-decoration: none;"}
-                  %img{src: asset_path("summary/github.svg")}/
-                %a{href: "#", style: "text-decoration: none;"}
-                  %img{src: asset_path("summary/sparql.svg")}/
-              .creation_info
-                %p.creation_text Originally created on
-                %p.date_creation_text 11/10/2022
-                %p.creation_text by
-                %p.creator_text
-                  = @submission_latest.hasCreator
+            .icons_container
+              %a{href: "#", style: "text-decoration: none;"}
+                %img{src: asset_path("summary/download.svg")}/
+              %a{href: "#", style: "text-decoration: none;"}
+                %img{src: asset_path("summary/homepage.svg")}/
+              %a{href: "#{@submission_latest.documentation}", style: "text-decoration: none;"}
+                %img{src: asset_path("summary/documentation.svg")}/
+              %a{href: "#", style: "text-decoration: none;"}
+                %img{src: asset_path("summary/github.svg")}/
+              %a{href: "#", style: "text-decoration: none;"}
+                %img{src: asset_path("summary/sparql.svg")}/
+            .creation_info
+              %p.creation_text Originally created on
+              %p.date_creation_text 
+                = @submission_latest.released
+              %p.creation_text by
+              %p.creator_text
+                = @submission_latest.hasCreator
           %h2.card_title FAIR score
           %hr#section_focused_line_fairScore/
           .Summary-page-card
