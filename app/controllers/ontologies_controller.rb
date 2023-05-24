@@ -468,6 +468,14 @@ class OntologiesController < ApplicationController
     render partial: 'ontologies/sections/additional_metadata'
   end
   
+  def show_projects
+    
+    @metadata = submission_metadata
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
+    @usage= ["knownUsage","designedForOntologyTask","example","coverage","includedInDataCatalog"]
+    @submission_latest = @ontology.explore.latest_submission(include: @usage.join(","))
+    render partial: 'ontologies/sections/usage'
+  end
   private
 
 
