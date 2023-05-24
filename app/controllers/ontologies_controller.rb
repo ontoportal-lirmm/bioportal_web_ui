@@ -7,6 +7,7 @@ class OntologiesController < ApplicationController
   include SchemesHelper
   include CollectionsHelper
   include MappingStatistics
+  include TurboHelper
 
   require 'multi_json'
   require 'cgi'
