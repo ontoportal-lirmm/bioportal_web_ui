@@ -266,14 +266,19 @@ svg path {
 
 .loop_icon {
     position: absolute;
-    margin-left: 338px;
+    width: 50px;
     top: 326px;
     background-color: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-    border-radius: 28px;
+    border-radius: 50%;
     padding: 12px;
     display: flex;
     align-items: center;
+    justify-content: center;
+    height: 50px;
+    position: absolute;
+    bottom: 0px;
+    right: 0;
 
 }
 
