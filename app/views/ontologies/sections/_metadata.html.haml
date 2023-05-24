@@ -32,8 +32,8 @@
               %p.description_text Categories and Domains
               .categories_section
                 .categories_box
-                  %p.non_clickable_text Agricultural Research
-                .categories_box
+                  %p.non_clickable_text 
+                    = @submission_latest.hasDomain
                   %p.non_clickable_text Technology and Engineering
                 .categories_box
                   %p.non_clickable_text Fisheries and Aquaculture
