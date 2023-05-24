@@ -107,15 +107,20 @@
                   = @metrics.properties
                 %p Properties
         .summary-page-second-row
-          .right_metadata
-            .depiction
-              %img{src: asset_path("summary/depiction.svg")}/
+          - depiction_url = @submission_latest.depiction
+          - unless depiction_url.nil?
+            .right_metadata
+              .depiction
+                %img{src: depiction_url}
               %a{href: "#"}
                 .loop_icon
-                  %img{src: asset_path("summary/loop.svg")}/
+                  - img = "<img src='#{asset_path("summary/loop.svg")}'/>"
+                  = link_to_modal(img.html_safe, "/ajax/submission/show_depiction?depiction_url=#{depiction_url}",data: { show_modal_title_value: "Depiction", show_modal_size_value: 'modal-xl' })
+  
           .right_metadata
             .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#link_metadata_section"}
-              %p Links
+              %p.fix-margin-buttom 
+                Links
               %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
             #link_metadata_section.collapse.right-metadata-content
               .creation_info
