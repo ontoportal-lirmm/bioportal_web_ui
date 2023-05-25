@@ -193,7 +193,7 @@ module ApplicationHelper
            data-active-collections-value='#{child.isInActiveCollection || []}'
            data-skos-collection-colors-target='collection'
             class='#{muted_style} #{active_style}'>
-            #{child.prefLabel ? child.prefLabel({ use_html: true }) : child.id}
+            #{child.prefLabel ? child.prefLabel({ use_html: true }) : child.id.split('/').last}
         </a>
     EOS
 
