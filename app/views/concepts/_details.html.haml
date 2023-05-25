@@ -1,11 +1,17 @@
 = turbo_frame_tag 'concept_details' do
   - schemes_keys = %w[hasTopConcept topConceptOf]
   - label_xl_set = %w[skos-xl#prefLabel skos-xl#altLabel skos-xl#hiddenLabel]
+
+  - if @concept.prefLabel.nil?
+    %div.py-3.px-2
+      = render(AlertMessageComponent.new(message: t('ontology_details.concept.no_preferred_name_for_selected_language'),  type: "warning", closeable: true))
+ 
   = render ConceptDetailsComponent.new(id:'concept-details', acronym: @ontology.acronym,
               properties: @concept.properties,
               top_keys: %w[description comment],
               bottom_keys: %w[disjoint subclass is_a has_part],
               exclude_keys: schemes_keys + label_xl_set + ['inScheme']) do |c|
+    
     - c.header do
       %tr
         %td{nowrap: ""}= t('ontology_details.concept.id')
@@ -14,17 +20,7 @@
       %tr
         %td{nowrap: ""}= t('ontology_details.concept.preferred_name')
         %td
-          - if @concept.prefLabel().nil?
-            = render(AlertMessageComponent.new(message: t('ontology_details.concept.no_preferred_name_for_selected_language'),  type: "warning", closeable: false))
-          - else
-            - prefLabel = process_concept(@concept.prefLabel)
-            - if prefLabel.is_a? String
-              %p= prefLabel
-            - else
-              - prefLabel.each do |key, value|
-                .d-flex.gap-12.align-items-center
-                  %p= value
-                  %span.badge.badge-light= key.upcase
+          %p= @concept.prefLabel({:use_html => true}).html_safe
 
       - unless @concept.synonym.nil? || @concept.synonym.empty?
         %tr
