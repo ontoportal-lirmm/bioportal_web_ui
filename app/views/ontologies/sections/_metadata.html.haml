@@ -76,6 +76,168 @@
           .Summary-page-card
             .summary-page-card-container
               .account-page-card-sub-container
+                %div
+                  %div.d-none{:style => "text-align: left; width: 23em;"}
+                    - @relations_array.each do |relation|
+                      = check_box_tag "selectedRelations[]", relation, true, :id => relation
+                      = label_tag relation, relation
+                      %br
+                    %button{:type => "button", :class => "btn btn-success", :onclick => "buildNetwork(ontologyRelationsArray)", :style => "margin-bottom: 1em;"}= t("landscape.filter_network")
+
+                  %div{:style => "width: 100%;"}
+                    %div#networkContainer{:style => "height: 80vh; width: 100%; border:1px solid #cecece;"}
+                      %div#ontologyNetwork
+                  = javascript_include_tag "vis.min"
+                  :javascript
+                    // Get the data to generate the charts
+                    var landscapeData = #{@landscape_data}
+                    var ontologyRelationsArray = landscapeData["ontology_relations_array"];
+                    buildNetwork(ontologyRelationsArray);
+
+                    /**
+                     * Build the VIS network for ontologies relations: http://visjs.org/docs/network/
+                     * @param ontologyRelationsArray
+                     */
+                    function buildNetwork(ontologyRelationsArray) {
+                      var nodes = new vis.DataSet([]);
+                      // create an array with edges
+                      var edges = new vis.DataSet();
+                      var propertyCount = 1; // To define nodes IDs
+
+                      // Hash with nodes id for each ontology URI
+                      var nodeIds = {};
+
+                      /* Get the relations that have been selected
+                      if (jQuery("#selected_relations").val() !== null) {
+                        selected_relations = jQuery("#selected_relations").val()
+                      }*/
+
+                      var selected_relations = [];
+                      $("input[name='selectedRelations[]']:checked").each(function (){
+                        selected_relations.push($(this).val());
+                      });
+
+                      // Iterate through all the ontology relations and add them to the network
+                      for (var i = 0; i < ontologyRelationsArray.length; i++) {
+                        // If relations have been selected for filtering then we don't show others relations
+                        if (jQuery("#selected_relations").val() !== null) {
+                          if (!selected_relations.includes(ontologyRelationsArray[i]["relation"])) {
+                            continue;
+                          }
+                        }
+                        // Don't create a new node if node exist already, just add a new edge
+                        if (nodeIds[ontologyRelationsArray[i]["source"]] != null) {
+                          var sourceNodeNumber = nodeIds[ontologyRelationsArray[i]["source"]];
+                        } else {
+                          var sourceNodeNumber = propertyCount;
+                          // If the node is the source it means it is from the Portal, so we colorate it in green
+                          nodes.add([
+                            {id: sourceNodeNumber, label: ontologyRelationsArray[i]["source"], color: "#5cb85c"}
+                          ]);
+                          nodeIds[ontologyRelationsArray[i]["source"]] = propertyCount;
+                          propertyCount++;
+                        }
+
+                        // Create the target node if don't exist
+                        if (nodeIds[ontologyRelationsArray[i]["target"]] != null) {
+                          var targetNodeNumber = nodeIds[ontologyRelationsArray[i]["target"]];
+                        } else {
+                          var targetNodeNumber = propertyCount;
+                          // If target node is an ontology from the portal then node in green
+                          if (ontologyRelationsArray[i]["targetInPortal"] == true) {
+                            nodes.add([
+                              {id: targetNodeNumber, label: ontologyRelationsArray[i]["target"], color: "#5cb85c"}
+                            ]);
+                          } else {
+                            nodes.add([
+                              {id: targetNodeNumber, label: ontologyRelationsArray[i]["target"]}
+                            ]);
+                          }
+                          nodeIds[ontologyRelationsArray[i]["target"]] = propertyCount;
+                          propertyCount++;
+                        }
+
+                        // Create edge with prefixed predicate when possible
+                        edges.add([
+                          {from: sourceNodeNumber, to: targetNodeNumber, label: ontologyRelationsArray[i]["relation"], font: {align: 'horizontal'}}
+                        ]);
+                      }
+
+
+                      // create a network
+                      var container = document.getElementById("ontologyNetwork");
+                      // provide the data in the vis format
+                      var data = {
+                        nodes: nodes,
+                        edges: edges
+                      };
+                      // Get height of div
+                      var networkHeight = document.getElementById("networkContainer").clientHeight.toString();
+
+                      var options = {
+                        autoResize: true,
+                        height: networkHeight,
+                        groups:{
+                          useDefaultGroups: true,
+                          myGroupId:{
+                            /*node options*/
+                          }
+                        },
+                        edges:{
+                          color:{inherit:'both'},
+                          smooth: {
+                            enabled: true,
+                            type: "dynamic",
+                            roundness: 0.5
+                          }
+                        },
+                        nodes: {
+                          shape: "box"
+                        },
+                        physics: {
+                          // http://visjs.org/docs/network/physics.html
+                          enabled: true,
+                          // To stabilize faster, increase the minVelocity value
+                          minVelocity: 1,
+                          stabilization: {
+                            enabled: true,
+                            onlyDynamicEdges: false,
+                            fit: true
+                          },
+                          barnesHut: {
+                            gravitationalConstant: -1500,
+                            centralGravity: 0,
+                            springLength: 300,
+                            springConstant: 0.01,
+                            damping: 0.2,
+                            avoidOverlap: 0.2
+                          },
+                          hierarchicalRepulsion: { // not used at the moment
+                            centralGravity: 0.0,
+                            springLength: 500,
+                            springConstant: 0.2,
+                            damping: 1,
+                            nodeDistance: 170
+                          },
+                          solver: 'barnesHut'
+                        }
+                        /*configure: {
+                          enabled: true,
+                          showButton: true
+                        }
+                        interaction:{
+                          zoomView:false,
+                          dragView: false
+                        }*/
+                      };
+
+                      // initialize your network!
+                      var network = new vis.Network(container, data, options);
+                      network.fit();
+                    }
+
+
+
           %h2.card_title Versions
           %hr#section_focused_line_fairScore/
           .Summary-page-card
