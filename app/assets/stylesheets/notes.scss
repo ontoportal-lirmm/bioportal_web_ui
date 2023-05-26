@@ -1,392 +1,162 @@
-.create_note_container {
-  padding: .5em;
-  width: 750px;
+.center {
+  display: flex;
+  justify-content: center;
 }
 
-.create_note_buttons {
-  padding: .5em;
-  margin-bottom: -1px;
-}
-
-.create_note_submit {
-  cursor: pointer;
-  color: #234979;
-  background: white;
-  border: 1px solid #C1DAD7;
-  margin: 5px 5px 5px 0;
-  padding: 5px 7px;
-  text-align: center;
-  width: 75px;
-  text-decoration: none;
-}
-
-.create_note_submit:hover {
-  background: #234979;
-  color: white;
-}
-
-.submit_container {
-  float: left;
-}
-
-.note_buttons {
-  background: #E2EBF0;
-  color: #234979;
-  border-top: 1px solid #C1DAD7;
-  border-left: 1px solid #C1DAD7;
-  border-right: 1px solid #C1DAD7;
-  padding: .5em;
-}
-
-.note_buttons:hover {
-  background: none;
-  cursor: pointer;
-}
-
-.create_note_options {
-  background: #E2EBF0;
-  padding: .5em;
-  border: 1px solid #C1DAD7;
-}
-
-.create_note_selected {
-  background: white;
-}
-
-.note_options {
-  display: none;
-}
-
-.create_note_inputs {
-  width: 350px;
-  margin-bottom: .5em;
-}
-
-textarea.create_note_inputs {
-  height: 225px;
-}
-
-.note_options_float {
-  float: right;
-  padding: 0 1em 0
-  .5em;
-}
-
-.new_note {
-  background: #F5FAFA;
-}
-
-.error_message {
-  color: red;
-  font-weight: bold;
-}
-
-.error_input {
-  color: red;
-  font-style: italic;
-}
-
-.required {
-  color: red;
-}
-
-.add_note_legend {
-  color: red;
-  margin: -5px 0 5px;
-}
-
-.add_reply_button {
-  cursor: pointer;
-  color: #234979;
-  background: white;
-  border: 1px solid #C1DAD7;
-  margin: 5px 5px 5px 0;
-  padding: 5px 7px;
-  text-align: center;
-  width: 125px;
-  text-decoration: none;
-}
-
-.add_reply_button:hover {
-  background: #234979;
-  color: white;
-}
-
-.add_reply_button_busy {
-  background-color: gray;
-  color: darkGray;
-  border: 1px solid darkGray;
-}
-
-.note_title {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.note_status {
-  padding: 0 0 1em;
-}
-
-.status, .note_author {
-  font-weight: bold;
-  color: #646464;
-}
-
-.note_body {
-  font-size: 12pt;
-}
-
-.ontologies.show div#facebox div.discussion {
-  padding-top: 1em;
-  padding-left: 1.5em;
-}
-
-.reply_author {
-  color: #234979;
-}
-
-.reply_body {
-  font-size: 12pt;
-}
-
-textarea.reply_body {
-  padding: 3px;
-}
-
-.reply:first-child {
-  padding-top: 0 !important;
-}
-
-.comment_subject {
-  margin: 5px 0;
-  padding: 1px;
-}
-
-.proposal_container {
-  padding: 12px 0;
-}
-
-.proposal_container input {
-  padding: 3px;
-  margin: 6px;
-  width: 170px;
-}
+.notes-container {
+  display: flex;
+  justify-content: space-between;
+  width: 1242px;
+  margin: 40px 60px;
 
-/* Extra information (proposals) */
-.proposal_info {
-  border-bottom: 1px solid #A9A9A9;
-  border-left: 1px solid #A9A9A9;
-  border-right: 1px solid #A9A9A9;
-  margin: 0 1em;
-  padding: .7em 1em 0.5em;
 }
 
-.proposal {
-  width: 90%;
-  padding-top: .5em;
-  font-size: 12pt;
+.left-column {
+  width: 352px;
 }
 
-.proposal th, .proposal td, .proposal tr {
-  border: none !important;
-  background-color: inherit !important;
-}
-
-.proposal th {
-  color: #A9A9A9 !important;
-  font-weight: bold;
-  text-align: left !important;
-  width: 25%;
-}
-
-.proposal_root {
-  background-color: #F2F8FF;
-  margin: -0.7em 0 0.5em;
-  padding: 0.5em;
-}
-
-/* Reply box */
-.spacer {
-  padding: .8em 0 0 0;
-  margin-left: .8em;
-}
-
-.response_spacer {
-  padding: .8em 0 0 0;
-  margin-left: .8em;
-  border-left: dotted thin #D3D3D3;
-}
-
-.create_reply {
-  padding: 0.5em 0.5em 1em 0.8em;
-}
-
-.reply_compose {
-  width: 770px;
-  padding: 1em;
-  display: none;
-}
-
-/* Responses */
-.collapsible {
-  border-left: dotted thin #D3D3D3;
-  margin-left: .8em;
-}
-
-.note_corner {
-  border-bottom: dotted thin #D3D3D3;
-  bottom: .8em;
-  float: left;
-  margin-bottom: -3em;
-  position: relative;
-  right: 2.3em;
-  width: 2.3em;
-}
-
-.response_container {
-  margin-left: .8em;
-  padding-left: 1.5em;
-}
-
-.response {
-  /*padding: .8em 0 0 0;*/
-}
-
-.response_children .response {
-}
-
-.response_head {
-  border-top: dotted thin #D3D3D3;
-  border-right: dotted thin #D3D3D3;
-  border-left: dotted thin #D3D3D3;
-  box-shadow: -1px 2px 5px grey;
-  -moz-box-shadow: -1px 2px 5px grey;
-  -webkit-box-shadow: -1px 2px 5px grey;
-  background: #eeeeee;
-  padding: .4em .5em;
-  font-size: 9pt;
-  color: #646464;
-  cursor: pointer;
-}
-
-.response_count {
-  float: right;
-  font-style: italic;
-}
-
-.response .collapsed {
-  border-bottom: dotted thin #D3D3D3;
-}
-
-.response_collapse {
-}
-
-.response_head a {
-  color: #646464;
-}
-
-.response_head a:hover {
-  color: #000000;
-  background: #a9a9a9;
-}
-
-.response_title {
-  font-weight: bold;
-  font-size: 12pt;
-}
-
-.response_author {
-}
-
-.response_date {
-}
-
-.response_body {
-  padding: 1em 1em 0;
-  font-size: 10pt;
-}
-
-.responses_head {
-  margin-bottom: 1em;
-}
-
-.create_reply_container {
-  padding: .5em .3em;
-}
-
-.reply_form_container {
-  background-color: #F5FAFA;
-  padding: 10px 0 10px 10px;
-  width: 770px;
-  margin-right: 1em;
-}
-
-.cancel_reply {
-  float: right;
-  margin: 0.5em -.3em 0 0;
-}
-
-.section_head {
-  font-size: 160%;
-  margin-bottom: 1em;
-}
-
-#top_level_reply {
-  margin-top: 1em;
-}
-
-.notes_list_container {
-  padding: 1em;
-}
-
-/* Datatables */
-.notes_list_table {
-  clear: both;
-}
-
-.notes_list_container .dataTables_length {
-  float: left;
-  padding: 1em 0;
-}
+.notes-inputs-column {
+  height: 268px;
 
-.notes_list_container .dataTables_filter {
-  float: right;
-  padding: 1em 0;
+  border-radius: 5px;
+  border: 1px solid #DFDFDF;
 }
 
-.notes_list_container .dataTables_filter input {
-  width: 200px;
-}
+.notes-details-column {
 
-.notes_list_container .dataTables_info {
-  text-align: center;
-  padding: .5em;
-}
+  margin-left: 27px;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid #DFDFDF;
 
-.notes_list_container .dataTables_paginate {
-  text-align: center;
 }
 
-.notes_list_container .dataTables_paginate .paginate_button {
-  text-decoration: underline;
-  cursor: pointer;
-  padding: 0 .5em;
+.note-container {
+  padding: 15px 20px;
 }
 
-.notes_list_container .dataTables_paginate .paginate_button:hover {
-  text-decoration: none;
-}
+.note-header {
+  display: flex;
+  justify-content: space-between;
 
-.notes_list_container .first, .notes_list_container .previous, .notes_list_container .next, .notes_list_container .last {
-  padding: 0 .5em;
 }
 
-.notes_delete {
-  display: none;
+.note-header-left {
+  display: flex;
+  align-items: center;
 }
 
-.archived_note {
-  color: grey;
+.note-header-left .note-author {
   font-size: 14px;
-  font-style: italic;
+  font-weight: 700;
+  margin-right: 20px;
+}
+
+.note-date {
+  font-size: 14px;
+  font-weight: 500;
+  color: #888888;
+  margin-left: 20px;
+}
+
+.note-class {
+  color: #888888;
+  font-size: 14px;
+}
+
+.note-content {
+  width: 428px;
+  font-size: 14px;
+  color: #888888;
+  margin: 10px 0;
+}
+
+.note-content .note-subject {
+  font-weight: 600;
+}
+
+.note-actions {
+  display: flex;
+  align-items: center;
+}
+
+.note-actions div {
+  display: flex;
+  align-items: center;
+  color: #31B404;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.note-actions div div {
+  margin-right: 10px;
+}
+
+.notes-details-column hr {
+  border-top: 1px solid #DFDFDF;
+  margin: 5px 0;
+  width: 100%;
+
+}
+
+.notes-input-tabs {
+  display: flex;
+  justify-content: space-around;
+
+}
+
+.notes-input-tabs div div {
+  display: flex;
+  align-items: baseline;
+  margin-top: 7px;
+}
+
+.notes-input-tabs div div div {
+  margin-right: 10px;
+  color: #888888;
+  font-size: 15px;
+
+}
+
+.notes-input-tabs .active div div {
+
+  color: #31B404;
+
+}
+
+.notes-input-tabs .active div svg path {
+  fill: #31B404;
+}
+
+.notes-inputs {
+  padding: 20px 10px;
+}
+
+.notes-subject-input {
+  border: 1px solid #DFDFDF;
+  border-radius: 5px;
+  outline: none;
+  padding: 10px;
+  width: 100%;
+}
+
+.notes-comment-input {
+  position: relative;
+
+}
+
+.notes-comment-input textarea {
+  margin-top: 10px;
+  border: 1px solid #DFDFDF;
+  border-radius: 5px;
+  outline: none;
+  padding: 10px;
+  width: 100%;
+  resize: none;
+}
+
+.notes-comment-input svg {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
 }

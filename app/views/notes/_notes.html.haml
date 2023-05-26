@@ -1,56 +1,68 @@
-- colspan = 7
-- colspan = 8 if parent_type.eql?('ontology')
-.notes_list_container
-  %div.d-flex{style:"font-size: .9em;"}
-    .add_comment.mx-1
-      = add_comment_button(parent_id, parent_type)
-    .add_proposal.mx-1
-      = add_proposal_button(parent_id, parent_type)
-    .subscribe_to_notes.mx-1
-      = subscribe_button(@ontology.id)
-
-  %div.ont_notes_filter.my-1.d-flex.justify-content-end.align-items-baseline
-    Filter:
-    %input#hide_archived_ont.mx-1{:checked => "true", :name => "hide_archived_ont", :type => "checkbox"}
-    %label{:for => "hide_archived_ont"} Hide Archived
-
-  = render_alerts_container("notes_#{parent_type}_list_table_alerts")
-
-  .ont_notes_table_container
-    %table.zebra.notes_ont_list_table{:id => "#{notes_table_id}", :style => "width: 100%;", :width => "100%"}
-      %thead
-        %tr
-          %th
-            Delete
-          %th
-            Subject
-          %th.d-none
-            Subject Sort
-          %th.d-none
-            Archive Sort
-          %th
-            Author
-          %th
-            Type
-          - if parent_type.eql?('ontology')
-            %th
-              Class
-          %th
-            Created
-      %tbody{id: "#{parent_type}_notes_table_content"}
-        - if @notes.nil? || @notes.empty?
-          %tr#ont_no_notes
-            %td{colspan: colspan} No notes to display
-            - (colspan-1).times.each do
-              %td
-        - else
-          - @notes.each do |note|
-            = render partial: 'notes/note_line', locals: {note: note, ontology_acronym: @ontology.acronym, parent_type: parent_type}
-:javascript
-  jQuery(".ontologies.show").ready(function(){
-    jQuery("#hide_archived_ont").click(function(){
-      hideOrUnhideArchivedOntNotes();
-    });
-
-    wireOntTable(jQuery("##{notes_table_id}"), #{parent_type.eql?('ontology')}, #{current_user_admin?})
-  });
+.center
+  .notes-container
+    .left-column
+      .notes-inputs-column
+        .notes-input-tabs
+          .notes-comment.active
+            %div
+              %div Comment
+              %svg{:fill => "none", :height => "14", :viewbox => "0 0 15 14", :width => "15", :xmlns => "http://www.w3.org/2000/svg"}
+                %path{:d => "M12.9378 0H2.06222C0.925148 0 0 0.92496 0 2.06222V8.71786C0 9.85256 0.921093 10.776 2.05491 10.7801V13.8003L6.39532 10.78H12.9378C14.0748 10.78 15 9.85493 15 8.71783V2.06222C15 0.92496 14.0748 0 12.9378 0ZM14.1211 8.71781C14.1211 9.37024 13.5903 9.90117 12.9378 9.90117H6.11958L2.93381 12.118V9.90114H2.06222C1.40972 9.90114 0.878906 9.37024 0.878906 8.71783V2.06222C0.878906 1.40965 1.40972 0.878906 2.06222 0.878906H12.9378C13.5903 0.878906 14.1211 1.40965 14.1211 2.06222V8.71781Z", :fill => "#888888"}
+                %path{:d => "M4.01465 3.10547H10.9853V3.98437H4.01465V3.10547ZM4.01465 4.98047H10.9853V5.85937H4.01465V4.98047ZM4.01465 6.85547H10.9853V7.73437H4.01465V6.85547Z", :fill => "#888888"}
+          .notes-proposition
+            %div
+              %div Proposition
+              %svg{:fill => "none", :height => "14", :viewbox => "0 0 14 14", :width => "14", :xmlns => "http://www.w3.org/2000/svg"}
+                %path{:d => "M11.4998 6.99989C11.2236 6.99989 10.9998 7.22375 10.9998 7.4999V12.4998C10.9998 12.7759 10.7759 12.9998 10.4998 12.9998H1.49997C1.22383 12.9998 0.999973 12.7759 0.999973 12.4998V2.49997C0.999973 2.22383 1.22383 1.99997 1.49997 1.99997H7.49987C7.77602 1.99997 7.99987 1.77612 7.99987 1.49997C7.99987 1.22382 7.77602 1 7.49987 1H1.49997C0.67156 1 0 1.67156 0 2.49997V12.4998C0 13.3282 0.67156 13.9998 1.49997 13.9998H10.4998C11.3282 13.9998 11.9998 13.3282 11.9998 12.4998V7.49987C11.9998 7.22375 11.7759 6.99989 11.4998 6.99989Z", :fill => "#888888"}
+                %path{:d => "M13.4395 0.560682C13.2618 0.382899 13.0507 0.241879 12.8185 0.145677C12.5862 0.0494752 12.3372 -2.37456e-05 12.0858 8.02667e-06C11.8343 -0.00072302 11.5852 0.0484892 11.3529 0.14479C11.1205 0.241091 10.9096 0.382564 10.7324 0.561004L4.14647 7.14636C4.09184 7.20141 4.05061 7.26831 4.02598 7.34185L3.02601 10.3418C2.93873 10.6038 3.08038 10.8869 3.34238 10.9742C3.39321 10.9911 3.44644 10.9997 3.49999 10.9998C3.55367 10.9997 3.607 10.9911 3.65799 10.9743L6.65793 9.97434C6.73162 9.94973 6.79856 9.9083 6.85343 9.85334L13.4393 3.26746C14.1868 2.52005 14.1869 1.30818 13.4395 0.560682ZM12.7323 2.56095L6.23243 9.06085L4.29047 9.70932L4.93695 7.76984L11.4393 1.26998C11.7968 0.913205 12.3759 0.913791 12.7326 1.27126C12.903 1.44203 12.9991 1.67322 12.9998 1.91447C13.0001 2.03455 12.9766 2.1535 12.9307 2.26446C12.8848 2.37542 12.8174 2.47619 12.7323 2.56095Z", :fill => "#888888"}
+        .notes-inputs
+          %input.notes-subject-input{:placeholder => "subject", :type => "text"}/
+          .notes-comment-input
+            %textarea{:placeholder => "leave a comment", :rows => "5"}
+            %svg{:fill => "none", :height => "18", :viewbox => "0 0 18 18", :width => "18", :xmlns => "http://www.w3.org/2000/svg"}
+              %path{"clip-rule" => "evenodd", :d => "M12.8764 5.12359L6.93639 9.24773L0.723373 7.17645C0.289694 7.0316 -0.00247938 6.62471 1.58589e-05 6.16759C0.00254393 5.71046 0.298066 5.30607 0.733419 5.16627L16.618 0.0508648C16.9956 -0.0705155 17.41 0.0290971 17.6905 0.309582C17.9709 0.590066 18.0706 1.00447 17.9492 1.38208L12.8338 17.2666C12.694 17.702 12.2896 17.9975 11.8324 18C11.3753 18.0025 10.9684 17.7103 10.8236 17.2767L8.74225 11.0335L12.8764 5.12359Z", :fill => "#31B404", "fill-rule" => "evenodd"}
+    .notes-details-column
+      .note-container
+        .note-header
+          .note-header-left
+            .note-author Clement Jonquet
+            %img{:src => "proposition.svg"}/
+            .note-date 2 Months ago
+          .note-class
+            class name
+        .note-content
+          .note-subject
+            Duplicate modelling wiith classes and instances
+          .note-details
+            We found out that picomole, nanomole and micromole are duplicated as instances of the class "Substance unit" and
+            subclasses of this same class.
+        .note-actions
+          .note-responds
+            %div 2 Responds
+            %img{:src => "arrow-down.svg"}/
+          .note-respond
+            %div Respond
+            %img{:src => "respond.svg"}/
+      %hr/
+      .note-container
+        .note-header
+          .note-header-left
+            .note-author Clement Jonquet
+            %img{:src => "comment.svg"}/
+            .note-date 2 Months ago
+          .note-class
+            class name
+        .note-content
+          .note-subject
+            Duplicate modelling wiith classes and instances
+          .note-details
+            We found out that picomole, nanomole and micromole are duplicated as instances of the class "Substance unit"
+            and
+            subclasses of this same class.
+        .note-actions
+          .note-responds
+            %div 2 Responds
+            %img{:src => "arrow-down.svg"}/
+          .note-respond
+            %div Respond
+            %img{:src => "respond.svg"}/
