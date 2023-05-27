@@ -60,21 +60,11 @@
             .summary-page-card-container
               .account-page-card-sub-container
           %h2.card_title Ontology relations network
-          %hr#section_focused_line_networkRelation/
+          %hr#section_focused_line_networkRelation
           .Summary-page-card
             .summary-page-card-container
               .account-page-card-sub-container
-                %div
-                  %div.d-none{:style => "text-align: left; width: 23em;"}
-                    - @relations_array.each do |relation|
-                      = check_box_tag "selectedRelations[]", relation, true, :id => relation
-                      = label_tag relation, relation
-                      %br
-                    %button{:type => "button", :class => "btn btn-success", :onclick => "buildNetwork(ontologyRelationsArray)", :style => "margin-bottom: 1em;"}= t("landscape.filter_network")
-
-                  %div{:style => "width: 100%;"}
-                    %div#networkContainer{:style => "height: 80vh; width: 100%; border:1px solid #cecece;"}
-                      %div#ontologyNetwork
+                = render partial: 'ontologies/sections/metadata/ontology_relations_network'
 
 
           %h2.card_title Versions
@@ -112,37 +102,37 @@
               %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
             #link_metadata_section.collapse.right-metadata-content
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Accrual method
-              %p.normal_text 
+              %p.normal_text
                 = @submission_latest.accrualMethod
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Accrual periodicity
-              %p.normal_text 
+              %p.normal_text
                 Monthly
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Accrual policy
-              %p.normal_text 
+              %p.normal_text
                 https://www.fao.org/agrovoc/maintenance
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Knowledge representation paradigm
-              %p.normal_text 
+              %p.normal_text
                 knowledge graph
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Engineering methodology
               %p.normal_text
                 Follow the OBO Principle, used Protégé and the Ontology Development Kit.
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Created With
-              %p.normal_text 
+              %p.normal_text
                 http://protege.stanford.edu/
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Competency question
               %p.normal_text
                 Quels sont les noms vernaculaires dune plante cultivée sur le territoire français?
@@ -157,37 +147,37 @@
               %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
             #identifiers_metadata_section.collapse.right-metadata-conetent
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Accrual method
-              %p.normal_text 
+              %p.normal_text
                 = @submission_latest.accrualMethod
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Accrual periodicity
-              %p.normal_text 
+              %p.normal_text
                 Monthly
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Accrual policy
-              %p.normal_text 
+              %p.normal_text
                 https://www.fao.org/agrovoc/maintenance
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Knowledge representation paradigm
-              %p.normal_text 
+              %p.normal_text
                 knowledge graph
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Engineering methodology
               %p.normal_text
                 Follow the OBO Principle, used Protégé and the Ontology Development Kit.
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Created With
-              %p.normal_text 
+              %p.normal_text
                 http://protege.stanford.edu/
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Competency question
               %p.normal_text
                 Quels sont les noms vernaculaires dune plante cultivée sur le territoire français?
@@ -199,37 +189,37 @@
               %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
             #persons_orgs_metadata_section.collapse.right-metadata-conetent
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Accrual method
-              %p.normal_text 
+              %p.normal_text
                 = @submission_latest.accrualMethod
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Accrual periodicity
-              %p.normal_text 
+              %p.normal_text
                 Monthly
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Accrual policy
-              %p.normal_text 
+              %p.normal_text
                 https://www.fao.org/agrovoc/maintenance
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Knowledge representation paradigm
-              %p.normal_text 
+              %p.normal_text
                 knowledge graph
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Engineering methodology
               %p.normal_text
                 Follow the OBO Principle, used Protégé and the Ontology Development Kit.
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Created With
-              %p.normal_text 
+              %p.normal_text
                 http://protege.stanford.edu/
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Competency question
               %p.normal_text
                 Quels sont les noms vernaculaires dune plante cultivée sur le territoire français?

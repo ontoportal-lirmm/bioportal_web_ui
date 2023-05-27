@@ -522,6 +522,6 @@ class OntologiesController < ApplicationController
       end
     end
 
-    { ontology_relations_array: ontology_relations_array }.to_json.html_safe
+    ontology_relations_array
   end
 end
