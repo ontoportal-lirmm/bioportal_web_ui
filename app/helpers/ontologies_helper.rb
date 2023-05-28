@@ -242,6 +242,21 @@ module OntologiesHelper
     html.join("")
   end
 
+  def social_share_link(ont, sharer)
+    return <<-HTML
+      <a href='javascript:;' 
+        aria-label='Share on #{sharer}'
+        title='Share on #{sharer}'
+        style='margin-left: 0.5rem'
+        data-sharer='#{sharer.downcase}'
+        data-title='#{ont.name}'
+        data-url='#{CGI::escapeHTML($UI_URL + ontology_path(ont.acronym))}'>
+        <i class="fab fa-lg fa-#{sharer.downcase}"></i>
+      </a>
+    HTML
+             .html_safe
+  end
+
   def count_links(ont_acronym, page_name = 'summary', count = 0)
     ont_url = "/ontologies/#{ont_acronym}"
     if count.nil? || count.zero?

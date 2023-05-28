@@ -1,32 +1,8 @@
-:css
-  .required {
-      color: black;
-  }
-  table.form {
-    width: auto;
-  }
-  table.form td {
-    width: 500px;
-  }
 
 :javascript
   /* refer to input fields by name for rules */
   /* refer to input fields by id for equalTo */
   jQuery(document).ready(function() {
-    jQuery("#user_info").validate({
-      rules: {
-        "user[email]": {
-          required: true,
-          email: true,
-        },
-        "user[password]": "required",
-        "user[password_confirmation]": {
-          required: true,
-          equalTo: "#user_password",
-        }
-      }
-    })
-
     jQuery('#user_info').on('submit', function (event) {
         event.preventDefault()
         let admin_checkbox = jQuery('input[id=user_admin]')
@@ -83,63 +59,74 @@
       });
     }
   })
-
-
-
-%div{:style => "padding: 1em;"}
-  = form_for(:user, :url => user_path(@user.username), :html => { :id => "user_info", :method => :put }) do |f|
-    - unless @errors.nil?
-      .enable-lists{:style => "color: red; padding: 1em;"}
-        Errors creating your account:
-        %ul
-          - for error in @errors
-            %li= error
-    %table.form
+= form_for(:user, :url => user_path(@user.username), :html => { :id => "user_info", :method => :put }) do |f|
+  - unless @errors.nil?
+    .enable-lists{:style => "color: red; padding: 1em;"}
+      Errors creating your account:
+      %ul
+        - for error in @errors
+          %li= error
+  .d-flex.justify-content-center
+    .register-form
+      .d-flex.justify-content-between
+        %a{:href => "javascript:javascript:history.go(-1)"}
+          %img.lost-password-arrowback{:src => "#{asset_path("arrow-back.svg")}"}
+        .register-title-container
+          %h2.register-title
+            Edit personal information
+          %hr#register-title-line/
+        %div
       - if @user.validate_password.nil?
-        %tr
-          %th
-            First Name
-          %td.top= text_field :user, :firstName, value: @user.firstName
-        %tr
-          %th
-            Last Name
-          %td= text_field :user, :lastName, value: @user.lastName
-        %tr
-          %th
-            Email Address *
-          %td
-            = text_field :user, :email, value: @user.email
+        .register-double-input
+          .register-first-input
+            %p.register-input-title
+              First name
+              %font{:color => "red"} *
+            = text_field :user, :firstName, value: @user.firstName, class: "register-input-short"
+          %div
+            %p.register-input-title
+              Last name
+              %font{:color => "red"} *
+            = text_field :user, :lastName, value: @user.lastName, class: "register-input-short"
+        %p.register-input-title
+          Username
+          %font{:color => "red"} *
+        = text_field :user, :username, value: @user.username, class: "register-input-long"
+        %p.register-input-title
+          Email
+          %font{:color => "red"} *
+        = text_field :user, :email, value: @user.email, class: "register-input-long"
+        %p.register-input-title
+          ORCID ID
+          %font.register-optional (optional)
+        %img.register-input-icon{:src => "#{asset_path("orcid.svg")}"}/
+        = text_field :user, :orcidId, value: @user.orcidId, class: "register-input-long register-input-with-icon"
+        %p.register-input-title
+          Github ID
+          %font.register-optional (optional)
+        %img.register-input-icon{:src => "#{asset_path("github-icon.svg")}"}/
+        = text_field :user, :githubId, value: @user.githubId, class: "register-input-long register-input-with-icon no-margin"
         - if session[:user].admin?
-          %tr
-            %th
-              Grant admin privileges
-            %td
-              = check_box :user, :admin?, { class: (@user.admin? ? 'admin' : '') }
-        \&nbsp;&nbsp;
-        = hidden_field :user, :username, value: @user.username
+          .d-flex{:style => "margin-top: 10px;"}
+            = check_box :user, :admin?, { class: (@user.admin? ? 'admin' : '') , id: "user_register_mail_list" }
+            %p#register-check-text Grant admin privileges
       - else
         = hidden_field :user, :username, value: @user.username
         = hidden_field :user, :firstName, value: @user.firstName
         = hidden_field :user, :lastName, value: @user.lastName
         = hidden_field :user, :email, value: @user.email
-        %tr
-          %th
-            Password: *
-          %td.top
-            = password_field :user, :password
-            &nbsp;&nbsp;
-        %tr
-          %th
-            Re-enter Password: *
-          %td
-            = password_field :user, :password_confirmation
-            &nbsp;&nbsp;
+        %p.register-input-title
+          New password
+          %font{:color => "red"} *
+        = password_field :user, :password, class: "register-input-long"
 
-      %tr
-        %td{:align => "left", :colspan => "2"}
-          = submit_tag "Update", :class=>"greenbtn btn btn-outline-secondary btn-sm "
-          \&nbsp;&nbsp;&nbsp;&nbsp;
-          - unless params[:password].eql?("true")
-            = link_to "Change Password", edit_user_path(@user.username, password: true)
-            -# use @user.username unstead of sessions
-    %br/
+        %p.register-input-title
+          Confirm password
+          %font{:color => "red"} *
+        = password_field :user, :password_confirmation, class: "register-input-long"
+      %br
+      %input.register-button{:type => "submit", :value => "Save", :name => "Update"}/
+      - unless params[:password].eql?("true")
+        .change-password
+          %a{:href => edit_user_path(@user.username, password: true)}
+            Change password

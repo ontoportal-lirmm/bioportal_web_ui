@@ -1,135 +1,139 @@
-- @title = "Account Information"
-
-%div{style: "padding: 1em;"}
-  %table.form
-    %tr
-      %th.top First Name:
-      %td.top= @user.firstName
-    %tr
-      %th Last Name:
-      %td= @user.lastName
-    %tr
-      %th Email Address:
-      %td= @user.email
-    %tr
-      %th Account Name:
-      %td= @user.username
-    %tr
-      %td{colspan: "2", style: "text-align: right;"}
-        = link_to "Edit Information", edit_user_path(url_encode(@user.username))
-  %br/
-  %span{style: "font-size: large; font-weight: bold;"}
-    API Key
-    %span{style: "font-weight: normal; padding-left: 1em; font-size: x-small; color: gray;"} Your API Key can be used to access the NCBO API (REST) Services
-  %p{style: "padding: .5em 0 0 1em;"}
-    = session[:user].apikey
-  %br/
-
-
-  - unless @user.subscription.nil? || @user.subscription.empty?
-    %h2{style: "font-size: large;"} Subscriptions
-    %table
-      - @user.subscription.each do |subscription|
-        - ont_id = subscription[:ontology]
-        - ont = ont_id.nil? ? nil: subscription[:ontology].split('/').last
-        - type = subscription[:notification_type].nil? ? nil : subscription[:notification_type].downcase
-        %tr{style: "padding: 5px;"}
-          %td{style: "padding: 5px;"}
-            %a{href: "/ontologies/#{ont}"}= ont
-          %td{style: "padding: 5px;"}
-            - if type == "notes"
-              %a{href: "/ontologies/#{ont}?p=notes"}= type
-            - else
-              = type
-          %td{style: "padding: 5px;"}
-            .subscribe_to_ontology{style: "float: left;"}
-              = subscribe_button(ont_id)
-    %br/
-
-  - unless @user_projects.nil? || @user_projects.empty?
-    %h2#user_projects{style: "font-size: large;"}
-      Projects Created
-    %ul{style: "padding-left: 1em;"}
-      - @user_projects.each do |project|
-        %li
-          %a{href: "/projects/#{project.acronym}"}= project.name
-    %br/
-
-  - unless @admin_ontologies.nil? || @admin_ontologies.empty?
-    %h2#admin_ontologies{style: "font-size: large;"}
-      Submitted Ontologies
-    %ul{style: "padding-left: 1em;"}
-      - @admin_ontologies.each do |ont|
-        %li
-          %a{href: "/ontologies/#{ont.acronym}"}= ont.name
-    %br
-
-  :javascript
-    jQuery(document).ready(function(){
-      jQuery("#edit_custom_ontologies").click(editCustomOntologies);
-    });
-
-
-    function editCustomOntologies() {
-      jQuery("#custom_ontologies_picker").css("left", "").css("position", "");
-      jQuery("#custom_ontologies").hide();
-    }
-
-  %h2#custom_ontology_set{style: "font-size: large;"}
-    Custom Ontology Set
-  #custom_ontologies.enable-lists
-    - if at_slice?
-      %p{style: "padding-left: 7px; font-size: 10pt; margin: -3px 0 7px;"}
-        Please
-        %a{href: "#{$UI_URL}/account"} visit the main site
-        to modify your Custom Ontology Set.
-    - else
-      %p{style: "padding-left: 7px; font-size: 9pt; color: gray; margin: -3px 0 7px;"}
-        %b
-          Customize your #{$SITE} display:
-        Pick the ontologies that you want to see and #{$SITE} will hide all other ontologies. <br/>
-        %b
-          Note:
-        this feature works only when you are logged in.
-      %p
-        %span{style: "font-weight: normal; font-size: 9pt; padding-left: 7px;"}
-          %a#edit_custom_ontologies{href: "javascript:void(0);"} select ontologies
-      - if @user_ontologies && !@user_ontologies.empty?
-        %ul
-          - @user_ontologies.each do |ont|
-            - ont = LinkedData::Client::Models::Ontology.get(ont)
-            %li
-              #{ont.name} (#{ont.acronym})
-      - else
-        %p{style: "padding-left: 7px;"} You haven't picked any ontologies yet
-
-        %div
-          %h2{style:"margin-top:18px; font-size: large;"} Mailing list service
-
-          %div{style:"margin-top:12px"}
-            %div
-              %button.btn.btn-primary{id: "subscribe"}
-                Subscribe
-              %span to the #{$ANNOUNCE_LIST} user mailing list
-            %div.mt-1
-              %button.btn.btn-primary{id: "unsubscribe"}
+.account-page-center
+  .account-page-container
+    %h3.account-page-title My account
+    %hr#account-page-title-line/
+    .account-page-sub-container
+      .account-page-first-row
+        .account-page-card
+          .account-page-personal-informations-title-bar
+            %h4.account-page-card-title Personal information
+            %a.account-page-rounded-button{:href => edit_user_path(url_encode(@user.username))}
+              = render partial: "shared/svgs/edit_icon"
+          .account-page-info-column
+            %p.title First name:
+            %p.info
+              = @user.firstName
+          .account-page-info-column
+            %p.title Last name:
+            %p.info
+              = @user.lastName
+          .account-page-info-column
+            %p.title Email address:
+            %p.info
+              = @user.email
+          .account-page-info-column
+            %p.title Username:
+            %p.info
+              = @user.username
+          .account-page-info-column
+            %p.title ORCID ID:
+            %p.info
+              =@user.orcidId
+          .account-page-info-column
+            %p.title Github ID:
+            %p.info
+              =@user.githubId
+        .account-page-card
+          .account-page-card-container
+            .account-page-card-sub-container
+              %h4.account-page-card-title Mailing list subscription
+              %p.account-page-card-desc AgroPortal announcements email list
+            - subscribed = false
+            - if subscribed 
+              %a.account-page-subscribe-button{:href =>"mailto:#{$ANNOUNCE_SERVICE_HOST}?Subject=unsubscribe%20#{$ANNOUNCE_LIST}"}
                 Unsubscribe
-              %span from the #{$ANNOUNCE_LIST} user mailing list
+            - else
+              %a.account-page-subscribe-button{:href => "mailto:#{$ANNOUNCE_SERVICE_HOST}?Subject=subscribe%20#{$ANNOUNCE_LIST}%20#{@user.firstName}%20#{@user.lastName}"}
+                Subscribe
+        .account-page-card
+          .account-page-card-container
+            .account-page-card-sub-container
+              %h4.account-page-card-title API Key
+              %p.account-page-card-desc Your API Key can be used to access the NCBO API (REST) Services
+              %p.apikey
+                = session[:user].apikey
+            %a{:href => "javascript:navigator.clipboard.writeText('"+session[:user].apikey+"');"}
+              = render partial: "shared/svgs/copy_icon"
+        .account-page-api-documentation-link
+          %a{href: "https://data.bioportal.lirmm.fr/documentation", target: "_blank"}
+            API documentation
+            = render partial: "shared/svgs/external_link_icon"
+        .account-page-card
+          %h4.account-page-card-title
+            Custom Ontology Set
+          #custom_ontologies.enable-lists
+            - if at_slice?
+              %p{style: "padding-left: 7px; font-size: 10pt; margin: -3px 0 7px;"}
+                Please
+                %a{href: "#{$UI_URL}/account"} visit the main site
+                to modify your Custom Ontology Set.
+            - else
+              %p.account-page-card-desc
+                Customize your AgroPortal display: Pick the ontologies that you want to see on AgroPortal will hide all other ontologies.
+              %p
+                %span{style: "font-weight: normal; font-size: 9pt; padding-left: 7px;"}
+                  %a#edit_custom_ontologies{href: "javascript:void(0);"} select ontologies
+              - if @user_ontologies && !@user_ontologies.empty?
+                %ul
+                  - @user_ontologies.each do |ont|
+                    - ont = LinkedData::Client::Models::Ontology.get(ont)
+                    %li
+                      #{ont.name} (#{ont.acronym})
+              - else
+                %p{style: "padding-left: 7px;"} You haven't picked any ontologies yet
+          %p.account-page-card-desc Note: This feature works only when you are logged in.
+          #custom_ontologies_picker{style: "left: -9999px; position: absolute;"}
+            = form_tag custom_ontologies_path(url_encode(@user.username)) do
+              - selected = @user.customOntology.map {|o| LinkedData::Client::Models::Ontology.get(o).acronym}
+              - locals = { custom_ontologies: @all_ontologies, selected_ontologies: selected, sel_text: "Select Custom Ontologies" }
+              = render partial: "shared/ontology_picker", locals: locals
+              = submit_tag "Save Custom Ontologies", class: "link_button"
+      .account-page-second-row
+        - unless @user.subscription.nil? || @user.subscription.empty?
+          .account-page-card
+            %h4.account-page-card-title Subscriptions
+            - @user.subscription.each do |subscription|
+              - ont_id = subscription[:ontology]
+              - ont = (!subscription[:ontology].nil? ? subscription[:ontology].split('/').last: nil) # ensure we get the acronym
+              - type = (!subscription[:notification_type].nil? ? subscription[:notification_type].downcase : nil)
+              .account-page-subscription
+                %a{:href => "/ontologies/#{ont}?p=notes"}= ont
+                %div
+                  - if type == "notes"
+                    %a.notes{:href => "/ontologies/#{ont}?p=notes"} Notes
+                  - else
+                    = type
+                  = subscribe_button(ont_id)
+        - no_ontologies = true
+        - unless @admin_ontologies.nil? || @admin_ontologies.empty?
+          - no_ontologies = false
+          .account-page-card
+            %h4.account-page-card-title Submitted ontologies
+            .account-page-small-cards-container
+              - @admin_ontologies.each do |ont|
+                .account-page-submitted-ontology
+                  %a{href: "/ontologies/#{ont.acronym}"}= ont.name
+        - unless @user_projects.nil? || @user_projects.empty?
+          - no_ontologies = false
+          .account-page-card
+            %h4.account-page-card-title Projects Created
+            .account-page-small-cards-container
+              - @user_projects.each do |project|
+                .account-page-submitted-ontology
+                  %a{href: "/projects/#{project.acronym}"}= project.name
+        - if no_ontologies
+          .account-page-card
+            .account-page-no-ontology
+              %img{:src => "#{asset_path("empty-box.svg")}"}/
+              %p You didn't upload any ontology yet
+              %a.account-page-upload-ontology-button{href: "/ontologies/new"} Upload ontology
+:javascript
+  jQuery(document).ready(function(){
+    jQuery("#edit_custom_ontologies").click(editCustomOntologies);
+  });
 
 
-            :javascript
-              document.getElementById('subscribe').addEventListener('click', function() {
-                  window.location.href = "/users/subscribe/" + "#{@user.username}"
-
-              });
-
-              document.getElementById('unsubscribe').addEventListener('click', function() {
-                  window.location.href = "/users/un-subscribe/" + "#{@user.email}"
-              });
-
-  #custom_ontologies_picker{style: "left: -9999px; position: absolute;"}
-    = form_tag custom_ontologies_path(url_encode(@user.username)) do
-      - selected = @user.customOntology.map {|o| LinkedData::Client::Models::Ontology.get(o).acronym}
-      - locals = { custom_ontologies: @all_ontologies, selected_ontologies: selected, sel_text: "Select Custom Ontologies" }
-      = render partial: "shared/ontology_picker", locals: locals
-      = submit_tag "Save Custom Ontologies", class: "link_button"
+  function editCustomOntologies() {
+    jQuery("#custom_ontologies_picker").css("left", "").css("position", "");
+    jQuery("#custom_ontologies").hide();
+  }
