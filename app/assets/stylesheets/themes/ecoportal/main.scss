@@ -2,18 +2,19 @@ $color-primary: #0f4e8a;
 $color-secondary: #E4F1FB;
 $color-links: #0f4e8a;
 $color-warning: #ffc107;
+
 @import "../lirmm/main";
 @import "search";
 
-@import "//fonts.googleapis.com/css?family=Titillium+Web:400,700";
+@import url("//fonts.googleapis.com/css?family=Titillium+Web:400,700");
 
 body {
-  font-family: "Titillium Web";
+  font-family: "Titillium Web", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: 16px !important;
 }
 
 .minimal {
-  font-family: "Titillium Web", "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  font-family: "Titillium Web", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 .minimal caption {
@@ -58,7 +59,7 @@ body {
 }
 
 .notetype {
-  font: 12px bold "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  font: bold 12px "Titillium Web", "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 }
 .header {
   cursor: pointer;
@@ -99,4 +100,311 @@ footer, .footer {
   a {
     color: white !important;
   }
+}
+
+.eco-bg-white {
+  background:#ffffff !important;
+}
+
+.eco-bg-darkgray {
+  background:#666666 !important;
+}
+
+.eco-bg-lightgray {
+  background:#f2f2f2 !important;
+}
+
+.eco-bg-blue {
+  background:#0f4e8a !important;
+}
+
+/**** FONT *****/
+
+.eco-blue-font {
+  color:#0f4e8a;
+}
+
+.eco-gray-font {
+  color:#666666;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+h3.separator-title {
+  color: #0f4e8a;
+  font-weight: normal;
+  line-height: 28px;
+  font-size: 28px;
+  font-family: 'Titillium Web',sans-serif!important;
+  text-align: center;
+  margin:10px;
+  padding:10px;
+}
+
+.abstract {
+  border: 1px solid #d6d6d6;
+  margin-top:10px;
+  margin-bottom:10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.abstract p {
+  padding-top: 10px;
+}
+
+
+/***** BUTTON *****/
+.eco-button {
+  background: #0f4e8a !important;
+  color: #f2f2f2 !important;
+}
+
+.eco-button:hover {
+  background: #155999 !important;
+  color: #f2f2f2 !important;
+  font-weight: bold !important;
+}
+
+/***** Contators *****/
+.eco-badge {
+  background: #ffffff;
+}
+
+.eco-badge_title {
+  padding: .2em;
+  height: 12px;
+  font-size: 11px;
+  color: #0f4e8a;
+}
+
+.eco-badge_count {
+  height: 22px;
+  padding-top: 7px;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #0f4e8a;
+}
+
+/***** GENERAL ELEMENT ****/
+
+html {
+  font-family: "Titillium Web", sans-serif;
+}
+
+.eco-navbar-inverse {
+  background: #0f4e8a ;
+}
+
+
+
+body {
+  color:#666666 !important;
+}
+
+
+.eco-navbar-font,
+.eco-navbar-inverse .eco-navbar-font>li>a {
+  color:#f2f2f2;
+}
+
+.eco-navbar-font:hover,
+.eco-navbar-font>li>a:hover {
+  color:#fff;
+}
+
+.eco-navbar-login,
+.eco-navbar-login>li>a {
+  color:#f2f2f2;
+}
+
+.eco-page-header{
+  padding-bottom:9px;
+  margin: 20px 0 20px;
+  border-bottom:1px solid #eeeeee;
+}
+
+/****** POPUP (fon example: feedback ***********/
+
+.eco-popup-body {
+  margin:0;
+}
+
+.eco-popup-top {
+  margin:0;
+  padding-top:5px;
+}
+
+.form th {
+  white-space: nowrap;
+  font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  color: #666666;
+  border-left: 1px solid #d2d2d2;
+  border-right: 1px solid #d2d2d2;
+  border-bottom: 1px solid #d2d2d2;
+  border-top: 1px solid #d2d2d2;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 6px 6px 6px 12px;
+  background: #f2f2f2;
+}
+
+
+/*****************Ontologies viewer********************/
+
+.eco-ontology {
+  background:#f2f2f2;
+  // border: thin gray solid;
+  // border-radius: 5px;
+  padding: 1.5em 1em 1.5em 1em !important;
+  margin: 2em 0;
+}
+
+.eco-ont-info {
+  margin: 5px 5px 0 0;
+  display: inline-block;
+  /* padding: 5px 10px 3px; */
+  border-radius: 3px;
+  /* background-color: #ECECEC; */
+  font-size: 12px;
+  color: #0f4e8a;
+}
+
+
+.eco-ontology-nav-bar {
+  background:#f2f2f2;
+  color:black;
+  padding: 14px;
+}
+
+.eco-ontology-nav-bar a:hover {
+  color:#666666;
+}
+
+#eco_nav_ontology {
+  // padding: 1em;
+  // padding-left: 2em;
+  font-family: 'Droid Sans', sans-serif;
+  margin-top: 10px;
+}
+
+#eco_ont_sum_link {
+  //padding-top: 1em;
+  padding-left: 14px;
+  color: #0f4e8a;
+}
+
+#eco_ont_sum_link:hover {
+  color:#666666;
+}
+
+#eco_nav_ontology {
+  //padding: 1em;
+  padding-left: 14px;
+  font-family: 'Droid Sans', sans-serif;
+}
+#eco_nav_ontology a {
+  color: #666666;
+  text-decoration: none;
+}
+#eco_nav_ontology a:hover {
+  text-decoration: underline;
+}
+#eco_nav_ontology li {
+  display: table-cell;
+  padding-right: 1em;
+}
+
+
+
+.card-container .col1 {
+  background-color:  #0f4e8a;
+  color:white;
+}
+
+.card-container .col2 {
+  background-color:  #f2f2f2;
+  margin-left: 1rem;
+  padding: 2rem !important;
+}
+
+.cards {
+  display: flex;
+  display: -webkit-flex;
+  flex-flow: row nowrap;
+  -webkit-flex-flow: row nowrap;
+  align-items: stretch;
+  -webkit-align-items: stretch;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.card-container {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  /*width: 33.3%;*/
+  padding: 10px;
+}
+
+.card-content img {
+  display: block;
+  height: auto;
+  margin: 0;
+  max-width: 100%;
+  width: 100%;
+}
+
+.card-content {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  padding: 0;
+}
+
+.card-content h2 {
+  padding-left: 20px;
+  margin: 10px 0;
+}
+
+/******* TEAM ******/
+.team-card-container .row {
+  background-color:  #f2f2f2;
+  margin: 5px 0;
+}
+.team-card-container .col-sm-6 {
+  padding: 0;
+}
+
+.team-card {
+  display: flex;
+}
+
+.team-card-container h4 {
+  color: #0f4e8a;
+}
+
+.team-card-image {
+  box-sizing: border-box;
+  width: 220px;
+}
+
+.team-card-image img {
+  height: 200px;
+}
+
+/******* GENERAL ******/
+.margin-bottom-20 {
+  margin-bottom: 20px;
 }
