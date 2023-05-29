@@ -72,7 +72,7 @@ gem 'view_component', '~> 2.72'
 gem 'turnout'
 gem 'will_paginate', '~> 3.0'
 
-gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'development'
+gem 'ontologies_api_client', git: 'https://github.com/lifewatch-eric/ontologies_api_ruby_client.git', branch: 'ecoportal-ontoportal-reset'
 
 
 group :staging, :production, :appliance do
