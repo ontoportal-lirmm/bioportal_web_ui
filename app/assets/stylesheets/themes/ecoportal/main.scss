@@ -9,7 +9,7 @@ $color-warning: #ffc107;
 
 body {
   font-family: "Titillium Web";
-  font-size: 14px;
+  font-size: 16px !important;
 }
 
 .minimal {
@@ -89,4 +89,14 @@ tr.mainresource td {
 }
 .ont_icons {
   font-family: "Titillium Web", Lucida Console, Monaco, monospace;
+}
+
+footer, .footer {
+  background-color: $color-primary !important;
+  position: relative !important;
+  padding: 30px 0;
+  color: white !important;
+  a {
+    color: white !important;
+  }
 }

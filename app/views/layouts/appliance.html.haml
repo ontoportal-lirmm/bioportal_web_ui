@@ -28,7 +28,7 @@
   %body{:class => "#{controller_name} #{action_name}"}
     = render partial: "layouts/topnav"
     
-    %div.container-fluid
+    %div.container-fluid.flex-grow-1
       = render partial: "layouts/notices"
       = render TurboModalComponent.new(id: 'application_modal')
       = yield
