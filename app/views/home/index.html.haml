@@ -91,41 +91,6 @@
   - if fairness_service_enabled?
     %div#fair-home.row.mt-3
       = render partial: "fair_score_home"
-  %div.row.pt-3.extra
-    %div.col
-      %div.card-deck
-        -# Latest Notes
-        %div.card
-          %div.card-header Latest Notes
-          %ul.list-group.list-group-flush
-            - if @last_notes.nil? || @last_notes.empty?
-              %li.list-group-item
-                %span No recent notes have been submitted
-            - else
-              - for note in @last_notes
-                %li.list-group-item
-                  - begin
-                    = link_to "#{note[:subject]} (#{note[:ont_name]})", note_path(CGI.escape(note[:id]))
-                    %br/
-                    %span{:style => "color: #AAAAAA"}
-                      = "#{time_ago_in_words(note[:created])} ago"
-                      by #{note[:author]}
-                    - if note[:body]
-                      %p
-                        = truncate(strip_tags(note[:body]), :length => 100)
-                        \&nbsp;
-                  - rescue
-        - if !$ENABLE_SLICES.nil? && $ENABLE_SLICES == true && !at_slice?
-          -# Slices
-          %div.card
-            %div.card-header Slices
-            %ul.list-group.list-group-flush
-              - LinkedData::Client::Models::Slice.all.each_with_index do |slice, index|
-                - break if index == 10
-                - slice_name = "#{slice.name} (#{slice.acronym})"
-                - slice_link = "http://#{slice.acronym}.#{$UI_URL.sub("http://", "")}"
-                %li.list-group-item
-                  = link_to slice_name, slice_link
 
 
 
