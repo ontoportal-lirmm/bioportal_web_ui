@@ -60,19 +60,19 @@
             = render partial: "shared/svgs/external_link_icon"
         .account-page-card
           %h4.account-page-card-title
-            Custom Ontology Set
+            Custom Semantic Resource Set
           #custom_ontologies.enable-lists
             - if at_slice?
               %p{style: "padding-left: 7px; font-size: 10pt; margin: -3px 0 7px;"}
                 Please
                 %a{href: "#{$UI_URL}/account"} visit the main site
-                to modify your Custom Ontology Set.
+                to modify your Custom Semantic Resource Set.
             - else
               %p.account-page-card-desc
-                Customize your AgroPortal display: Pick the ontologies that you want to see on AgroPortal will hide all other ontologies.
+                Customize your AgroPortal display: Pick the semantic resources that you want to see on AgroPortal will hide all other Semantic Resources.
               %p
                 %span{style: "font-weight: normal; font-size: 9pt; padding-left: 7px;"}
-                  %a#edit_custom_ontologies{href: "javascript:void(0);"} select ontologies
+                  %a#edit_custom_ontologies{href: "javascript:void(0);"} select semantic resources
               - if @user_ontologies && !@user_ontologies.empty?
                 %ul
                   - @user_ontologies.each do |ont|
@@ -80,14 +80,14 @@
                     %li
                       #{ont.name} (#{ont.acronym})
               - else
-                %p{style: "padding-left: 7px;"} You haven't picked any ontologies yet
+                %p{style: "padding-left: 7px;"} You haven't picked any Semantic Resources yet
           %p.account-page-card-desc Note: This feature works only when you are logged in.
           #custom_ontologies_picker{style: "left: -9999px; position: absolute;"}
             = form_tag custom_ontologies_path(url_encode(@user.username)) do
               - selected = @user.customOntology.map {|o| LinkedData::Client::Models::Ontology.get(o).acronym}
-              - locals = { custom_ontologies: @all_ontologies, selected_ontologies: selected, sel_text: "Select Custom Ontologies" }
+              - locals = { custom_ontologies: @all_ontologies, selected_ontologies: selected, sel_text: "Select Custom Semantic Resources" }
               = render partial: "shared/ontology_picker", locals: locals
-              = submit_tag "Save Custom Ontologies", class: "link_button"
+              = submit_tag "Save Custom Semantic Resources", class: "link_button"
       .account-page-second-row
         - unless @user.subscription.nil? || @user.subscription.empty?
           .account-page-card
@@ -108,7 +108,7 @@
         - unless @admin_ontologies.nil? || @admin_ontologies.empty?
           - no_ontologies = false
           .account-page-card
-            %h4.account-page-card-title Submitted ontologies
+            %h4.account-page-card-title Submitted Semantic Resources
             .account-page-small-cards-container
               - @admin_ontologies.each do |ont|
                 .account-page-submitted-ontology
@@ -125,8 +125,8 @@
           .account-page-card
             .account-page-no-ontology
               %img{:src => "#{asset_path("empty-box.svg")}"}/
-              %p You didn't upload any ontology yet
-              %a.account-page-upload-ontology-button{href: "/ontologies/new"} Upload ontology
+              %p You didn't upload any semantic resources yet
+              %a.account-page-upload-ontology-button{href: "/ontologies/new"} Upload Semantic Resource
 :javascript
   jQuery(document).ready(function(){
     jQuery("#edit_custom_ontologies").click(editCustomOntologies);
