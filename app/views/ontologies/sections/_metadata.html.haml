@@ -297,11 +297,11 @@
               %p.normal_text
                 = @submission_latest.wasInvalidatedBy
           .right_metadata
-            .depiction
-              %div{class: ".caintainer_vertical"}
-              %a{href: "#"}
-                .openup_icon_projects
-                  %img{src: asset_path("summary/openUp.svg")}/
+            .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#projects_section"}
+              %p.fix-margin-buttom
+                Projects and usage information
+              %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
+            #projects_section.collapse.right-metadata-content
               .projects_card
                 %p Projects and usage information
                 %img{src: asset_path("summary/info.svg")}/
@@ -309,21 +309,54 @@
                 .openup_icon_projects
                   - img = "<img src='#{asset_path("summary/openUp.svg")}'/>"
                   = link_to_modal(img.html_safe,"/ajax/submission/show_projects/#{@ontology.acronym}",data: { show_modal_title_value: "Usage", show_modal_size_value: 'modal-xl' })               
-            .creation_info
-              %p.description_text Projects using
-              %p.projects_using_onto_text 
-                = @ontology.acronym
-              .projects_info
-                %img{src: asset_path("summary/plus.svg")}/
-            %a{href: "#", style: "text-decoration: none;"}
-              %p.clickable_text Agrisemantics Map of Data Standards
-            %a{href: "#", style: "text-decoration: none;"}
-              %p.clickable_text GO FAIR Food Systems Implementation Network
-            %a{href: "#", style: "text-decoration: none;"}
-              %p.clickable_text Data to Know ledge in Agronomy and Biodiversity
-            %a{href: "#", style: "text-decoration: none;"}
-              %p.clickable_text RDA Wheat Interoperability Working Group
-          .depiction
+              .creation_info
+                %div.description_text
+                  Projects using
+                  = @ontology.acronym
+                .projects_info
+                  %img{src: asset_path("summary/plus.svg")}/
+              %a{href: "#", style: "text-decoration: none;"}
+                %p.clickable_text Agrisemantics Map of Data Standards
+              %a{href: "#", style: "text-decoration: none;"}
+                %p.clickable_text GO FAIR Food Systems Implementation Network
+              %a{href: "#", style: "text-decoration: none;"}
+                %p.clickable_text Data to Know ledge in Agronomy and Biodiversity
+              %a{href: "#", style: "text-decoration: none;"}
+              %p.normal_text
+                = @submission_latest.isFormatOf
+              .creation_info
+                %p.description_text
+                  known Usage
+              %p.normal_text
+                = @submission_latest.hasFormat
+              .creation_info
+                %p.description_text
+                  designed For Ontology Task
+              %p.normal_text
+                = @submission_latest.pullLocation
+              .creation_info
+                %p.description_text
+                  example
+              %p.normal_text
+                = @submission_latest.source
+              .creation_info
+                %p.description_text
+                  Coverage
+              %p.normal_text
+                = @submission_latest.wasGeneratedBy
+              .creation_info
+                %p.description_text
+                  Included In Data Catalog
+              %p.normal_text
+                = @submission_latest.wasInvalidatedBy
+          .right_metadata
+            .depiction
+              .vists_image
+                %p Visits
+                - if visits_data(@ontology)
+                  = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", "aria-label": "Download as CSV", title: "Download as CSV") do
+                    %img{alt: "", src: asset_path("summary/arrow_down.svg")}
+              = render partial: "visits"
           .right_metadata
             .depiction
               .caintainer_vertical
