@@ -324,33 +324,48 @@
             %a{href: "#", style: "text-decoration: none;"}
               %p.clickable_text RDA Wheat Interoperability Working Group
           .depiction
-            .caintainer_vertical
-              .projects_card
+          .right_metadata
+            .depiction
+              .caintainer_vertical
+                .projects_card
+                .projects_card
                 %p Methodology
-                %img{src: asset_path("summary/info.svg")}/
+                  %p Methodology
+                  %img{src: asset_path("summary/info.svg")}/
+                  %img{src: asset_path("summary/info.svg")}/
+                  %p Methodology
+                .projects_card
+              .caintainer_vertical
+            .depiction
+          .right_metadata
             .creation_info
               %p.description_text Accrual method
-            %p.normal_text http://www.fao.org/agrovoc/maintenance
+            %p.normal_text
+              = @submission_latest.accrualMethod
             .creation_info
               %p.description_text Accrual periodicity
-            %p.normal_text Monthly
+            %p.normal_text
+              = @submission_latest.accrualPeriodicity
             .creation_info
               %p.description_text Accrual policy
-            %p.normal_text https://www.fao.org/agrovoc/maintenance
+            %p.normal_text
+              = @submission_latest.accrualPolicy
             .creation_info
               %p.description_text Knowledge representation paradigm
-            %p.normal_text knowledge graph
+            %p.normal_text
+              = @submission_latest.conformsToKnowledgeRepresentationParadigm
             .creation_info
               %p.description_text Engineering methodology
             %p.normal_text
-              Follow the OBO Principle, used Protégé and the Ontology Development Kit.
+              = @submission_latest.usedOntologyEngineeringMethodology
             .creation_info
               %p.description_text Created With
-            %p.normal_text http://protege.stanford.edu/
+            %p.normal_text
+              = @submission_latest.usedOntologyEngineeringTool
             .creation_info
               %p.description_text Competency question
             %p.normal_text
-              Quels sont les noms vernaculaires dune plante cultivée sur le
+              = @submission_latest.competencyQuestion
               territoire français?
           .Summary-page-card
             %h2.card_title_2 Get my metadata back
