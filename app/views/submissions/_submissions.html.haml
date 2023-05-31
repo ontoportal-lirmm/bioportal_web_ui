@@ -13,8 +13,6 @@
             %th.align-middle ID
           %th.align-middle Version
           %th
-            = generate_attribute_text("released", "Released")
-          %th
             = generate_attribute_text("modificationDate", "Modified")
           %th
             = generate_attribute_text("creationDate", "Uploaded")
@@ -36,8 +34,6 @@
               =  sub.submissionId
           %td
             = raw status_link(sub, sub.submissionId==submission_readyId)
-          %td
-            = xmldatetime_to_date(sub.released) unless sub.released.nil?
           %td
             = xmldatetime_to_date(sub.modificationDate) unless sub.modificationDate.nil?
           %td
