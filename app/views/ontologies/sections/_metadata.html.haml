@@ -17,18 +17,20 @@
               %p.description_text{style: "text-decoration-line: underline;"}
                 = link_to_modal('Additionnal Metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "Additional Metadata", show_modal_size_value: 'modal-xl' })               
               %p.description_text Contact
-              %p.summary-page-card-title 
+              %p.summary-page-card-title
                 = @submission_latest.contact.map {|c| [c.name, c.email].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
-              %p.description_text Keywords and Key Classes
+            - unless @submission_latest.keywords.nil?
+              %p.description_text Keywords and Key classes
               .keywords_keyclasses_section
-                %p.non_clickable_text 
-                = @submission_latest.keywords
-                %a{href: "#", style: "text-decoration: none;"}
-                %p.clickable_text 
-                = @submission_latest.keyClasses
-            - if @submission_latest.hasDomain&.nil? 
-                %p.clickable_text Forest Science and Forest Products
-                %p.non_clickable_text Natural Resources
+                - @submission_latest.keywords.split(',').each do |keyword|
+                  %span.non_clickable_text.keywords_container= keyword
+                - if @submission_latest.keyClasses.is_a? String
+                  - @submission_latest.keyClasses&.split(',').each do |keyclass|
+                    %span.clickable_text.keywords_container= keyclass
+                - else
+                  - @submission_latest.keyClasses&.each do |keyclass|
+                    %span.clickable_text.keyclasses_container
+            - unless @submission_latest.hasDomain.nil?
               %p.description_text Categories and Domains
               .categories_section
                 .categories_box
