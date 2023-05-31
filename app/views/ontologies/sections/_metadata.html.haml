@@ -16,7 +16,6 @@
             %div
               %p.description_text{style: "text-decoration-line: underline;"}
                 = link_to_modal('Additionnal Metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "Additional Metadata", show_modal_size_value: 'modal-xl' })               
-              %p.description_text Contact
               %p.summary-page-card-title
                 = @submission_latest.contact.map {|c| [c.name, c.email].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
             - unless @submission_latest.keywords.nil?
@@ -410,10 +409,9 @@
           .Summary-page-card
             %h2.card_title_2 Get my metadata back
             %hr#section_focused_line_fairScore/
-            .metadata_back_button
-              .metadata_back_buttons
-                %p N-Triple
-              .metadata_back_buttons
-                %p Json-LD
-              .metadata_back_buttons
-                %p RDF/XML
+            - unless @submission_latest.nil?
+              %div{data:{controller: 'metadata-downloader'}}
+                =javascript_include_tag "jsonld"
+                %button{:id => "getMetadataBackNquadsBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadNQuads'} N-Triple
+                %button{:id => "getMetadataBackJsonldBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadJsonLd'} Json-LD
+                %button{:id => "getMetadataBackXmlBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadXML'} RDF/XML
