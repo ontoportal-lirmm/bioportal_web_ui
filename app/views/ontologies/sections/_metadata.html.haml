@@ -174,23 +174,23 @@
           .right_metadata
             .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#identifiers_metadata_section"}
               %p.fix-margin-buttom
-                Identifiers 
+                Identifiers
               %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
             #identifiers_metadata_section.collapse.right-metadata-conetent
               .creation_info
-                %p.description_text 
+                %p.description_text
                   URI
-              %p.normal_text 
+              %p.normal_text
                 = @submission_latest.URI
               .creation_info
-                %p.description_text 
+                %p.description_text
                   VersionIRI
-              %p.normal_text 
+              %p.normal_text
                 = @submission_latest.versionIRI
               .creation_info
-                %p.description_text 
+                %p.description_text
                   Identifier
-              %p.normal_text 
+              %p.normal_text
                 = @submission_latest.identifier
               .creation_info
                 %p.description_text
