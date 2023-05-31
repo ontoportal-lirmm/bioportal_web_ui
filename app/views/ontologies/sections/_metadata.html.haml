@@ -76,12 +76,13 @@
               %div#fair-score-charts-container
                 = render partial: "fairs_score"
               .account-page-card-sub-container
-          %h2.card_title Ontology relations network
-          %hr#section_focused_line_networkRelation
-          .Summary-page-card
+          - unless @landscape_data.empty?
+            %h2.card_title Ontology relations network
+            %hr#section_focused_line_networkRelation/
+            .Summary-page-card
             .summary-page-card-container
               .account-page-card-sub-container
-                = render partial: 'ontologies/sections/metadata/ontology_relations_network'
+              = render partial: 'ontologies/sections/metadata/ontology_relations_network'
 
 
           %h2.card_title Versions
