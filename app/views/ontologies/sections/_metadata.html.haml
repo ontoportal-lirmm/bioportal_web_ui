@@ -56,13 +56,6 @@
                 %img{src: asset_path("summary/github.svg")}/
               %a{href: "#{@submission_latest.endpoint}", style: "text-decoration: none;"}
                 %img{src: asset_path("summary/sparql.svg")}/
-            .creation_info
-              %p.creation_text Originally created on
-              %p.date_creation_text 
-                = @submission_latest.released
-              %p.creation_text by
-              %p.creator_text
-                = @submission_latest.hasCreator
           %h2.card_title FAIR score
           %hr#section_focused_line_fairScore
           .Summary-page-card
