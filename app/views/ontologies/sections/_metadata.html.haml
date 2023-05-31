@@ -228,13 +228,6 @@
                 Projects and usage information
               %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
             #projects_section.collapse.right-metadata-content
-              .projects_card
-                %p Projects and usage information
-                %img{src: asset_path("summary/info.svg")}/
-              %a{href: "#"}
-                .openup_icon_projects
-                  - img = "<img src='#{asset_path("summary/openUp.svg")}'/>"
-                  = link_to_modal(img.html_safe,"/ajax/submission/show_projects/#{@ontology.acronym}",data: { show_modal_title_value: "Usage", show_modal_size_value: 'modal-xl' })               
               .creation_info
                 %div.description_text
                   Projects using
