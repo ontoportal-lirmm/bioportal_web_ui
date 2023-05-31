@@ -292,6 +292,32 @@ svg path {
 
 }
 
+.keywords_container {
+    font-size: 13px;
+    height: 27px;
+    max-width: 400px;
+    background-color: #E7E7E7;
+    border-radius: 5px;
+    padding: 2px 15px;
+    justify-content: space-between;
+    align-items: center;
+    color: #666666;
+    margin: 10px 5px;
+}
+
+.keyclasses_container {
+    font-size: 13px;
+    height: 27px;
+    max-width: 400px;
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    padding: 2px 15px;
+    justify-content: space-between;
+    align-items: center;
+    color: #666666;
+    margin: 10px 5px;
+}
+
 
 .caintainer_vertical {
     align-content: space-between;
