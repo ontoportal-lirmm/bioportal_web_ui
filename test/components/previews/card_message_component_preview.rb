@@ -9,4 +9,4 @@ class CardMessageComponentPreview < ViewComponent::Preview
         render(CardMessageComponent.new(message: message, button_text: button_text, type: type, button_link: button_link))
     end
   
-  end
+end

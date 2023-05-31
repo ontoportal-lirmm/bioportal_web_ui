@@ -3,10 +3,10 @@
 - unless $FRONT_NOTICE.nil? || $FRONT_NOTICE.empty? || cookies[:front_page_notice_closed].eql?("true")
   :javascript
     function close_message(){
-      var exdate = new Date();
-      exdate.setDate(exdate.getDate() + 7);
-      document.cookie="front_page_notice_closed=true; expires="+exdate.toGMTString();
-      jQuery("#notice_message").hide();
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + 7);
+    document.cookie="front_page_notice_closed=true; expires="+exdate.toGMTString();
+    jQuery("#notice_message").hide();
     }
 
   %p#notice_message{:style => "padding: 10px; margin: 10px; border:1px solid #EFEFEF; background-color: #F9F9F9;"}
@@ -37,19 +37,21 @@
     %a.home-bubble.home-bubble-four{:href => "/visits"}
       %h5 ...
 
-  .home-header-title-container
+  .home-header-title-container{'data-controller': "home-search", 'data-home-search-ontologies-value': raw(@ontology_names.to_json)}
     .home-header-title
-      %h4 Welcome to AgroPortal
-      %p The home of vocabularies and ontologies in agronomy and related fields.
-      %input#home-search{:name => "search", :placeholder => "Ex: Agrovoc ...", :type => "text"}/
-      #home-search-drop-down
-        %a.home-search-ontology-content#home-search-ontology-content{href: "#"}
-          %p#seached-ontology
+      %h4 
+        = $WESBITE_TITLE[$UI_THEME]
+      %p
+        = $WEBSITE_SUB_TITLE[$UI_THEME]
+      %input#home-search{:name => "search", :placeholder => "Ex: Agrovoc ...", :type => "text", 'data-home-search-target': 'input', 'data-action': 'input->home-search#search blur->home-search#blur'}
+      #home-search-drop-down{'data-home-search-target': 'dropDown', 'data-action': 'mousedown->home-search#prevent'}
+        %a.home-search-ontology-content#home-search-ontology-content{href: "#", 'data-home-search-target': 'searchOntologyContent'}
+          %p#seached-ontology{'data-home-search-target': 'ontology'}
           %div
             %img{src: asset_path("loop.svg")}/
             %p Search ontology content
-        %a.home-search-ontology-content#home-search-ontologies{href: "#"}
-          %p#seached-ontologies
+        %a.home-search-ontology-content#home-search-ontologies{href: "#", 'data-home-search-target': 'homeSearchOntologies'}
+          %p#seached-ontologies{'data-home-search-target': 'searchedOntologies'}
           %div
             %img{src: asset_path("loop.svg")}/
             %p See all
@@ -67,27 +69,25 @@
             = benefit
     - if session[:user].nil?
       %a.home-upload-ontology-button{:href => "/login?redirect=/ontologies/new"}
-        %svg{:fill => "none", :height => "14", :viewbox => "0 0 15 14", :width => "15", :xmlns => "http://www.w3.org/2000/svg"}
-          %path{:d => "M3.46242 4.17686L6.91776 0.23682C6.98312 0.162278 7.06302 0.102677 7.15225 0.0618794C7.24149 0.0210821 7.33808 0 7.43576 0C7.53344 0 7.63003 0.0210821 7.71927 0.0618794C7.80851 0.102677 7.8884 0.162278 7.95377 0.23682L11.4092 4.17686C11.533 4.31795 11.5971 4.50373 11.5874 4.69334C11.5777 4.88295 11.4951 5.06086 11.3577 5.18792C11.2204 5.31498 11.0395 5.38079 10.8548 5.37087C10.6702 5.36095 10.497 5.27612 10.3732 5.13503L8.13286 2.58055V10.4116C8.13286 10.6015 8.05942 10.7836 7.92869 10.9178C7.79796 11.0521 7.62065 11.1275 7.43576 11.1275C7.25088 11.1275 7.07357 11.0521 6.94284 10.9178C6.8121 10.7836 6.73866 10.6015 6.73866 10.4116V2.58058L4.49846 5.13512C4.43719 5.20498 4.36313 5.26177 4.28049 5.30223C4.19785 5.3427 4.10826 5.36605 4.01684 5.37096C3.92541 5.37587 3.83394 5.36223 3.74764 5.33084C3.66135 5.29944 3.58192 5.2509 3.51389 5.18798C3.44586 5.12506 3.39057 5.04899 3.35117 4.96413C3.31176 4.87926 3.28902 4.78726 3.28425 4.69337C3.27947 4.59948 3.29274 4.50554 3.32331 4.41692C3.35388 4.32829 3.40115 4.24672 3.46242 4.17686ZM14.1744 12.488H0.697103C0.51222 12.488 0.334909 12.5635 0.204177 12.6977C0.0734445 12.832 0 13.0141 0 13.2039C0 13.3938 0.0734445 13.5759 0.204177 13.7101C0.334909 13.8444 0.51222 13.9198 0.697103 13.9198H14.1744C14.3593 13.9198 14.5366 13.8444 14.6673 13.7101C14.7981 13.5759 14.8715 13.3938 14.8715 13.2039C14.8715 13.0141 14.7981 12.832 14.6673 12.6977C14.5366 12.5635 14.3593 12.488 14.1744 12.488Z", :fill => "#31B404"}
+        = inline_svg_tag "upload.svg", class: "home-upload-icon"
         upload ontology
     - else
       %a.home-upload-ontology-button{:href => "/ontologies/new"}
-        %svg{:fill => "none", :height => "14", :viewbox => "0 0 15 14", :width => "15", :xmlns => "http://www.w3.org/2000/svg"}
-          %path{:d => "M3.46242 4.17686L6.91776 0.23682C6.98312 0.162278 7.06302 0.102677 7.15225 0.0618794C7.24149 0.0210821 7.33808 0 7.43576 0C7.53344 0 7.63003 0.0210821 7.71927 0.0618794C7.80851 0.102677 7.8884 0.162278 7.95377 0.23682L11.4092 4.17686C11.533 4.31795 11.5971 4.50373 11.5874 4.69334C11.5777 4.88295 11.4951 5.06086 11.3577 5.18792C11.2204 5.31498 11.0395 5.38079 10.8548 5.37087C10.6702 5.36095 10.497 5.27612 10.3732 5.13503L8.13286 2.58055V10.4116C8.13286 10.6015 8.05942 10.7836 7.92869 10.9178C7.79796 11.0521 7.62065 11.1275 7.43576 11.1275C7.25088 11.1275 7.07357 11.0521 6.94284 10.9178C6.8121 10.7836 6.73866 10.6015 6.73866 10.4116V2.58058L4.49846 5.13512C4.43719 5.20498 4.36313 5.26177 4.28049 5.30223C4.19785 5.3427 4.10826 5.36605 4.01684 5.37096C3.92541 5.37587 3.83394 5.36223 3.74764 5.33084C3.66135 5.29944 3.58192 5.2509 3.51389 5.18798C3.44586 5.12506 3.39057 5.04899 3.35117 4.96413C3.31176 4.87926 3.28902 4.78726 3.28425 4.69337C3.27947 4.59948 3.29274 4.50554 3.32331 4.41692C3.35388 4.32829 3.40115 4.24672 3.46242 4.17686ZM14.1744 12.488H0.697103C0.51222 12.488 0.334909 12.5635 0.204177 12.6977C0.0734445 12.832 0 13.0141 0 13.2039C0 13.3938 0.0734445 13.5759 0.204177 13.7101C0.334909 13.8444 0.51222 13.9198 0.697103 13.9198H14.1744C14.3593 13.9198 14.5366 13.8444 14.6673 13.7101C14.7981 13.5759 14.8715 13.3938 14.8715 13.2039C14.8715 13.0141 14.7981 12.832 14.6673 12.6977C14.5366 12.5635 14.3593 12.488 14.1744 12.488Z", :fill => "#31B404"}
+        = inline_svg_tag "upload.svg", class: "home-upload-icon"
         upload ontology
   .home-section
-    %h4 Agroportal services
+    %h4
+      = portal_name+" services"
     %hr.home-section-line/
     .home-card
       %form{action: "/annotator_recommender_form", method: "post"}
         %textarea.home-recommendations-and-annotations{rows: "6" , placeholder: "Paste a paragraph of text or some keywords ...", name: "text"}
-        %input.hide{type: "submit", name: "submit_button" ,value: "annotator", id: "annotator_submit"}/
-        %input.hide{type: "submit" , name: "submit_button" ,value: "recommender", id: "recommender_submit"}/
+        %input.d-none{type: "submit", name: "submit_button" ,value: "annotator", id: "annotator_submit"}/
+        %input.d-none{type: "submit" , name: "submit_button" ,value: "recommender", id: "recommender_submit"}/
         .home-services-buttons
           .home-get-recommendations{onclick: "submitRecommender()"}
             %p Get recommendations
-            %svg{:fill => "none", :height => "16", :viewbox => "0 0 15 16", :width => "15", :xmlns => "http://www.w3.org/2000/svg"}
-              %path{:d => "M2.61197 15.6472C1.16948 16.4746 0 15.7968 0 14.1344V1.86672C0 0.202676 1.16948 -0.474289 2.61197 0.352365L13.3345 6.50169C14.7775 7.32941 14.7775 8.67046 13.3345 9.49799L2.61197 15.6472Z", :fill => "#31B404"}
+            = inline_svg_tag "play.svg", class: "home-play-icon"
           .home-services-buttons
             .home-get-annotations{onclick: "submitAnnotator()"}
               %p Get annotations
@@ -104,11 +104,10 @@
           %a{:href => "#fairDetails"}
             %div.home-fair-details
               %p See details
-              %svg{:fill => "none", :height => "12", :viewbox => "0 0 7 12", :width => "7", :xmlns => "http://www.w3.org/2000/svg"}
-                %path{:d => "M0.828447 0.982555C0.668147 0.979582 0.510886 1.02651 0.378427 1.11684C0.245967 1.20716 0.144858 1.33643 0.0890904 1.48675C0.0333229 1.63706 0.0256545 1.801 0.0671467 1.95586C0.108639 2.11073 0.19724 2.24887 0.32069 2.35117L5.04517 6.39572L0.317771 10.4403C0.231406 10.5032 0.15903 10.5834 0.105209 10.6757C0.0513877 10.7681 0.0172914 10.8706 0.00507139 10.9767C-0.00714863 11.0829 0.00277318 11.1905 0.0342104 11.2926C0.0656476 11.3948 0.117918 11.4893 0.187722 11.5702C0.257526 11.6512 0.343349 11.7168 0.439774 11.7628C0.536199 11.8089 0.641133 11.8346 0.747953 11.8381C0.854772 11.8416 0.961158 11.8229 1.0604 11.7832C1.15964 11.7435 1.24957 11.6837 1.32453 11.6075L6.72894 6.9881C6.81393 6.9155 6.88218 6.82534 6.92897 6.72383C6.97577 6.62232 7 6.51187 7 6.40009C7 6.28832 6.97577 6.17787 6.92897 6.07636C6.88218 5.97485 6.81393 5.88469 6.72894 5.81209L1.32453 1.17807C1.18758 1.05615 1.01176 0.986851 0.828447 0.982555Z", :fill => "#31B404"}
+              = inline_svg_tag "arrow-right.svg"
       .home-sub-section-right
         %h4 Twitter news
-        %hr.home-section-line/
+        %hr.home-section-line
         .home-card.home-twitter-news
           %a.twitter-timeline{"data-height" => "349", "data-width" => "533", :href => "https://twitter.com/lagroportal?ref_src=twsrc%5Etfw"} Tweets by lagroportal
           %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
@@ -116,9 +115,9 @@
   .home-section
     .home-statistics-container
       .home-agroportal-figures
-        %svg{:fill => "none", :height => "26", :viewbox => "0 0 35 26", :width => "35", :xmlns => "http://www.w3.org/2000/svg"}
-          %path{:d => "M34.3828 6.44418C33.2599 4.04698 31.4332 2.31495 28.9364 1.29338C25.5484 -0.0996672 22.02 -0.272638 18.4279 0.325213C14.6484 0.954407 11.24 2.42988 8.13908 4.59143C7.52058 5.02327 6.92129 5.48066 6.31359 5.92179C6.28357 5.88812 6.25475 5.85446 6.22472 5.82195L9.85167 2.54597L9.7616 2.34513C9.43493 2.4264 9.05302 2.42872 8.79001 2.60053C5.93168 4.47882 3.58858 6.82611 1.9012 9.76312C0.682212 11.8782 -0.0587909 14.106 0.00365996 16.5542C0.0295292 18.387 0.756885 20.1455 2.04532 21.4903C2.93284 22.4364 4.01372 23.1387 5.14144 23.812C7.39327 25.1482 9.82525 25.8296 12.4374 25.9666C16.66 26.1895 20.6413 25.2921 24.3751 23.4127C25.6662 22.766 26.9022 22.0215 28.0717 21.1861C29.4879 20.1586 30.7312 18.9255 31.7575 17.5305C33.3188 15.4491 34.7191 13.3235 34.9461 10.65C35.0722 9.19545 35.0121 7.78847 34.3828 6.44418ZM31.3251 10.1009C31.1779 11.5537 30.748 12.9665 30.0581 14.265C28.1233 17.9275 24.9828 20.2655 21.1036 21.6946C18.2501 22.7487 15.2789 22.8798 12.3593 21.9268C10.4786 21.3115 8.9017 20.2098 7.83043 18.53C7.74095 18.3821 7.6306 18.2469 7.50256 18.1284C7.35925 18.0198 7.20702 17.9228 7.04739 17.8382C7.04739 18.0494 6.96092 18.3025 7.04739 18.4685C8.50538 21.2546 10.7428 23.0946 13.9518 23.7261C14.7106 23.8796 15.4788 23.9858 16.2517 24.0442C17.0251 24.0988 17.8057 24.057 18.6056 24.0895C17.9391 24.2172 17.2749 24.4296 16.6036 24.4563C14.7661 24.5283 12.9346 24.5051 11.1403 23.9711C8.87168 23.2966 7.07622 22.0904 5.91367 20.0438C4.97931 18.4012 4.66345 16.6692 5.04776 14.835C5.57513 12.2696 6.86135 9.90726 8.75038 8.03458C10.6532 6.11095 12.9173 4.55481 15.4218 3.44913C17.9919 2.30683 20.7061 1.89471 23.4756 2.40434C25.4992 2.78046 27.2779 3.69523 28.2795 5.58513C29.0001 6.93755 29.3315 8.3515 28.7755 9.85019C28.5089 10.5653 28.223 11.2734 27.966 11.992C27.9204 12.1197 27.966 12.2787 27.978 12.4238C28.1269 12.4169 28.2891 12.4436 28.42 12.3925C28.5665 12.3365 28.6921 12.239 28.7803 12.1127C29.5873 10.8358 30.3007 9.51121 30.3235 7.96493C30.3355 7.15231 30.2671 6.32577 30.2383 5.58049C31.0969 6.934 31.4782 8.52015 31.3251 10.1009Z", :fill => "#31B404"}
-        %p AgroPortal in figures:
+        = inline_svg_tag "ontoportal-icon.svg"
+        %p 
+          = portal_name+" in figures:"
       .home-statistics
         .home-statistics-item
           %hr/
@@ -168,136 +167,24 @@
         %p Supported by
         %hr.home-section-line/
       .home-support-items
-        %img{src: asset_path("logos/supports/numev.png")}/
-        %img{src: asset_path("logos/supports/anr.png")}/
-        %img{src: asset_path("logos/supports/eu.png")}/
+        - $HOME_PAGE_LOGOS[:supported_by].each do |logo|
+          %a{href:logo[:url], target: "_blanc"}
+            %img{src: asset_path(logo[:img_src])}
       .home-support-title
         %p With the collaboration of
         %hr.home-section-line/
       .home-support-items
-        %img{src: asset_path("logos/collaboration/d2kab.png")}/
-        %img{src: asset_path("logos/collaboration/lirmm.png")}/
-        %img{src: asset_path("logos/collaboration/stanford.png")}/
-        %img{src: asset_path("logos/collaboration/inrae.png")}/
+        - $HOME_PAGE_LOGOS[:with_the_collaboration_of].each do |logo|
+          %a{href:logo[:url], target: "_blanc"}
+            %img{src: asset_path(logo[:img_src])}
 
 
 
 :javascript
   function submitAnnotator(){
-    document.getElementById("annotator_submit").click()
+  document.getElementById("annotator_submit").click()
   }
   function submitRecommender(){
-    document.getElementById("recommender_submit").click()
+  document.getElementById("recommender_submit").click()
   }
 
-  var ontologies = #{raw(@ontology_names.to_json)};
-  
-  const input = document.getElementById("home-search");
-  const dropdown = document.getElementById("home-search-drop-down");
-  const ontology = document.getElementById("seached-ontology");
-  const searchedOntologies = document.getElementById("seached-ontologies");
-  const searchOntologyContent = document.getElementById("home-search-ontology-content")
-  const homeSearchOntologies = document.getElementById("home-search-ontologies")
-  let breaker = 0;
-  
-
-  function scrollDown(currentScroll) {
-    const startPosition = window.pageYOffset;
-    const distance = 300 - currentScroll;
-    const duration = 1000;
-    let start = null;
-
-    function scrollAnimation(timestamp) {
-      if (!start) start = timestamp;
-      const progress = timestamp - start;
-      const scrollPosition = startPosition + easeInOutCubic(progress, 0, distance, duration);
-      window.scrollTo(0, scrollPosition);
-      if (progress < duration) {
-        window.requestAnimationFrame(scrollAnimation);
-      }
-    }
-
-    function easeInOutCubic(t, b, c, d) {
-      t /= d / 2;
-      if (t < 1) return c / 2 * t * t * t + b;
-      t -= 2;
-      return c / 2 * (t * t * t + 2) + b;
-    }
-
-    window.requestAnimationFrame(scrollAnimation);
-  }
-
-  
-  
-  
-  input.addEventListener("input", function() {
-      let results_list = []
-      const inputValue = input.value.trim();
-      if (inputValue.length > 0) {
-          
-          ontology.innerHTML = inputValue;
-          searchedOntologies.innerHTML = inputValue;
-          searchOntologyContent.href = "/search?query="+inputValue;
-          homeSearchOntologies.href = "/ontologies?search="+inputValue;
-          dropdown.innerHTML = ""
-          breaker = 0
-          for (var i = 0; i < ontologies.length; i++) {
-            if (breaker == 4){
-              break;
-            }
-            // Get the current item from the ontologies array
-            var item = ontologies[i];
-
-            // Check if the item contains the substring
-            if (item[0].toLowerCase().includes(inputValue.toLowerCase()) || item[1].toLowerCase().includes(inputValue.toLowerCase())) {
-              results_list.push(item);
-              breaker = breaker + 1
-            }
-          }
-          
-          results_list.forEach(function(item) {
-              const link = document.createElement("a");
-              link.href = "/ontologies/"+item[1];
-              link.className = "home-search-ontology-content";
-
-              const p1 = document.createElement("p");
-              p1.id = "seached-ontology";
-              p1.className = "home-searched-ontology";
-              p1.textContent = item[0]+" "+"("+item[1]+")";
-
-              const p2 = document.createElement("p");
-              p2.className = "home-result-type";
-              p2.textContent = "Ontology";
-
-              link.appendChild(p1);
-              link.appendChild(p2);
-
-              dropdown.appendChild(link);
-              
-
-          });
-          dropdown.appendChild(homeSearchOntologies);
-          dropdown.appendChild(searchOntologyContent);
-          dropdown.style.display = "block";
-          input.classList.add("home-dropdown-active");
-
-          if (window.scrollY < 300) {
-            scrollDown(window.scrollY);
-          }
-          
-          
-      } else {
-          dropdown.style.display = "none";
-          input.classList.remove("home-dropdown-active");
-      }
-      });
-  dropdown.addEventListener("mousedown", function(event) {
-      event.preventDefault(); // prevent the blur event from firing
-  });
-
-  input.addEventListener("blur", function() {
-      
-      dropdown.style.display = "none";
-      input.classList.remove("home-dropdown-active");
-  });
-  

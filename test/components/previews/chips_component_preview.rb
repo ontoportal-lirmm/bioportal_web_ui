@@ -7,4 +7,4 @@ class ChipsComponentPreview < ViewComponent::Preview
         render(ChipsComponent.new(name: name, value: value))
     end
   
-  end
+end

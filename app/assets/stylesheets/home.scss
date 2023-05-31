@@ -3,9 +3,7 @@ i.fa.fa-caret-square-o-down {
   margin-left: 2px;
 }
 
-.container-fluid{
-  padding: 0 !important;
-}
+
 
 .home-header-container{
   height: 310px;
@@ -227,7 +225,7 @@ i.fa.fa-caret-square-o-down {
 .home-upload-ontology-button{
   margin-top: 30px;
   text-decoration: none;
-  color: var(--primary-color);;
+  color: var(--primary-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -236,7 +234,17 @@ i.fa.fa-caret-square-o-down {
   border: 1px solid var(--primary-color);
   border-radius: 8px;
   font-size: 15px;
+  transition: background-color 0.3s ease;
 }
+.home-upload-ontology-button:hover{
+  color: white !important;
+  background-color: var(--primary-color);
+}
+.home-upload-ontology-button:hover .home-upload-icon path{
+  fill: white;
+}
+
+
 .home-recommendations-and-annotations{
   font-size: 16px;
   outline: none;
@@ -269,6 +277,10 @@ i.fa.fa-caret-square-o-down {
   padding: 15px 20px;
   border-radius: 8px;
   margin-left: 10px;
+  transition: background-color 0.3s ease;
+}
+.home-get-annotations:hover{
+  background-color: var(--hover-color);
 }
 .home-get-annotations p{
   margin-right: 20px;
@@ -284,14 +296,18 @@ i.fa.fa-caret-square-o-down {
   padding: 15px 20px;
   border-radius: 8px;
   border: 1px solid var(--primary-color);
-  
+  transition: background-color 0.3s ease;
+}
+.home-get-recommendations:hover{
+  color: white !important;
+  background-color: var(--primary-color);
+}
+.home-get-recommendations:hover .home-play-icon path{
+  fill: white;
 }
 .home-get-recommendations p{
   margin-right: 20px;
   margin-bottom: 0;
-}
-.hide{
-  display: none;
 }
 .home-section-sub-sections-container{
   display: flex;
@@ -313,7 +329,7 @@ i.fa.fa-caret-square-o-down {
   padding-top: 35px;
 }
 .home-twitter-news{
-  
+  height: 349px;
 }
 .home-fair-scores a{
   text-decoration: none;
@@ -404,8 +420,13 @@ i.fa.fa-caret-square-o-down {
 .home-support-items  > *:not(:first-child){
   margin-left: 40px;
 }
-.home-support-items img{
+.home-support-items a{
   margin-bottom: 40px;
+  opacity: 85%;
+  transition: opacity 0.3s ease;
+}
+.home-support-items a:hover{
+  opacity: 100%;
 }
 .home-result-type{
   font-weight: 300;
