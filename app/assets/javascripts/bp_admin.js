@@ -1303,7 +1303,7 @@ function displayGroups(data, group) {
                     "targets": 4,
                     "searchable": false,
                     "orderable": false,
-                    "title": "nb",
+                    "title": "Count",
                 },
                 {
                   "targets": 5,
@@ -1465,7 +1465,7 @@ function displayCategories(data, category) {
           "targets": 5,
           "searchable": false,
           "orderable": false,
-          "title": "nb",
+          "title": "Count",
         },
         {
           "targets": 6,
