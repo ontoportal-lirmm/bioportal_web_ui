@@ -26,7 +26,7 @@ module SubmissionFilter
 
     # get fair scores of all ontologies
     @fair_scores = fairness_service_enabled? ? get_fair_score('all') : nil
-    submissions.map { |sub| ontology_hash(sub) }
+    submissions.reject{|sub| sub.ontology.nil?}.map { |sub| ontology_hash(sub) }
   end
 
   def ontologies_filter_url(filters, page: 1, count: false)
@@ -134,6 +134,8 @@ module SubmissionFilter
   end
 
   def add_ontology_attributes(ont_hash, ont)
+    return  if ont.nil?
+
     ont_hash[:id] = ont.id
     ont_hash[:type] = ont.viewOf.nil? ? 'ontology' : 'ontology_view'
     ont_hash[:show] = ont.viewOf.nil? ? true : false # show ontologies only by default
