@@ -99,20 +99,20 @@
             .metrics-item
               %hr/
               %div
-                %h4 
-                  = @metrics.classes
+                %h4
+                  = @metrics&.classes
                 %p Classes
             .metrics-item
               %hr/
               %div
-                %h4 
-                  = @metrics.individuals
+                %h4
+                  = @metrics&.individuals
                 %p Individuals
             .metrics-item
               %hr/
               %div
-                %h4 
-                  = @metrics.properties
+                %h4
+                  = @metrics&.properties
                 %p Properties
         .summary-page-second-row
           - depiction_url = @submission_latest.depiction
