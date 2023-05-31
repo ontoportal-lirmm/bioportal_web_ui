@@ -1343,17 +1343,12 @@ function populateGroupRows(data) {
           '<a href="/ontologies?groups='+id+'" target="_blank"> ' + group['ontologies'].length + ' </a>',
         ];
         let actions = [
-            '<a href="javascript:;" class="edit-group mx-1" data-group-name="' + id + '">Edit Groups</a>',
-            '<a class="mx-1" data-show-modal-title-value="Liste of ontologies" data-show-modal-size-value="modal-xl" data-controller="show-modal" data-turbo="true" data-turbo-frame="application_modal_content" data-action="click->show-modal#show" href="/ajax/ontologies/bygroup/bycategory?ontologies='+getOntologiesAcronyms(group['ontologies'])+'"><span>Edit Ontologies</span></a>'
+            '<a href="javascript:;" class="edit-group mx-1" data-group-name="' + id + '">Edit</a>',
         ]
         return [name, description, created, id , nb, actions.join('|')];
     })
 
     return allRows;
-}
-
-function getOntologiesAcronyms(ontologies) {
-  return ontologies.map(ontology => ontology.substring(ontology.lastIndexOf('/') +1))
 }
 
 function DeleteGroups() {
@@ -1511,8 +1506,7 @@ function populateCategoryRows(data) {
       '<a href="/ontologies?categories='+id+'" target="_blank"> ' + category['ontologies'].length + ' </a>',
     ];
     let actions = [
-      '<a href="javascript:;" class="edit-category mx-1" data-category-name="' + id + '">Edit Categories</a>',
-      '<a class="mx-1" data-show-modal-title-value="Liste of ontologies" data-show-modal-size-value="modal-xl" data-controller="show-modal" data-turbo="true" data-turbo-frame="application_modal_content" data-action="click->show-modal#show" href="/ajax/ontologies/bygroup/bycategory?ontologies='+getOntologiesAcronyms(category['ontologies'])+'"><span>Edit Ontologies</span></a>'
+      '<a href="javascript:;" class="edit-category mx-1" data-category-name="' + id + '">Edit</a>',
     ]
     return [name, description, created, id , parentCategory, nb , actions.join('|')];
   })

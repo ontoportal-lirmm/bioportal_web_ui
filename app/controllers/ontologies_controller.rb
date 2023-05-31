@@ -437,11 +437,6 @@ class OntologiesController < ApplicationController
     end
   end
 
-  def related_ontologies
-    get_related_ontologies
-    render partial: 'related_ontologies'
-  end
-
   def virtual
     redirect_new_api
   end
@@ -493,11 +488,6 @@ class OntologiesController < ApplicationController
     views = ontology.explore.views || []
     views.select!{ |view| view.access?(session[:user]) }
     views.sort{ |a,b| a.acronym.downcase <=> b.acronym.downcase }
-  end
-
-  def get_related_ontologies
-    ontologies_acronyms = params[:ontologies].split(',')
-    @onts = LinkedData::Client::Models::Ontology.all.select { |o| ontologies_acronyms.include?(o.acronym) }
   end
 
 end
