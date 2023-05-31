@@ -115,7 +115,6 @@
             .right_metadata
               .depiction
                 %img{src: depiction_url}
-              %a{href: "#"}
                 .loop_icon
                   - img = "<img src='#{asset_path("summary/loop.svg")}'/>"
                   = link_to_modal(img.html_safe, "/ajax/submission/show_depiction?depiction_url=#{depiction_url}",data: { show_modal_title_value: "Depiction", show_modal_size_value: 'modal-xl' })
