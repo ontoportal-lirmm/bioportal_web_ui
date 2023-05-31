@@ -47,15 +47,15 @@
                 - img = "<img src='#{asset_path("summary/openUp.svg")}'/>"
                 = link_to_modal(img.html_safe,"/ajax/submission/show_dates/#{@ontology.acronym}",data: { show_modal_title_value: "More dates", show_modal_size_value: 'modal-xl' })
             .icons_container
-              %a{href: "#", style: "text-decoration: none;"}
+              %a{href: "#{@submission_latest.download}", style: "text-decoration: none;"}
                 %img{src: asset_path("summary/download.svg")}/
-              %a{href: "#", style: "text-decoration: none;"}
+              %a{href: "#{@submission_latest.homepage}", style: "text-decoration: none;"}
                 %img{src: asset_path("summary/homepage.svg")}/
               %a{href: "#{@submission_latest.documentation}", style: "text-decoration: none;"}
                 %img{src: asset_path("summary/documentation.svg")}/
-              %a{href: "#", style: "text-decoration: none;"}
+              %a{href: "#{@submission_latest.repository}", style: "text-decoration: none;"}
                 %img{src: asset_path("summary/github.svg")}/
-              %a{href: "#", style: "text-decoration: none;"}
+              %a{href: "#{@submission_latest.endpoint}", style: "text-decoration: none;"}
                 %img{src: asset_path("summary/sparql.svg")}/
             .creation_info
               %p.creation_text Originally created on
