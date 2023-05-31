@@ -33,16 +33,19 @@
             - unless @submission_latest.hasDomain.nil?
               %p.description_text Categories and Domains
               .categories_section
-                .categories_box
-                  %p.non_clickable_text 
-                    = @submission_latest.hasDomain
-                  %p.non_clickable_text Technology and Engineering
-                .categories_box
-                  %p.non_clickable_text Fisheries and Aquaculture
-                .categories_box
-                  %p.non_clickable_text knowledge and information systems
-                .categories_box
-                  %p.non_clickable_text Earth and Environment
+                %p
+                  - @ontology.hasDomain.each do |domain|
+                    %span.non_clickable_text.keywords_container= domain
+            .creation_info
+              %p.creation_text Originally created on
+              %p.date_creation_text
+                = l(Date.parse(@submission_latest.released), format: :monthfull_day_year)
+              %p.creation_text by
+              %p.creator_text.text-truncate{data:{controller:"tooltip"},title:@submission_latest.hasCreator}
+                = @submission_latest.hasCreator
+              .openup_icon_projects
+                - img = "<img src='#{asset_path("summary/openUp.svg")}'/>"
+                = link_to_modal(img.html_safe,"/ajax/submission/show_dates/#{@ontology.acronym}",data: { show_modal_title_value: "More dates", show_modal_size_value: 'modal-xl' })
             .icons_container
               %a{href: "#", style: "text-decoration: none;"}
                 %img{src: asset_path("summary/download.svg")}/
