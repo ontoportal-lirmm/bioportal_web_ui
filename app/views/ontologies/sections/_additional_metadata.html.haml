@@ -1,10 +1,18 @@
 = turbo_frame_tag 'application_modal_content' do
-  - @additional_metadata.each do |attribute|
-    - attr = attribute_infos(attribute)
-    - value = Array(@submission_latest.send(attribute))
-    .creation_info
-      %p.description_text 
-        = attr["label"] || attribute
-    %p.normal_text 
-      = value.join(", ")
-        
+  - sub_hash = @submission_latest.to_hash.except(:context, :links, :ontology)
+  %div.card.overflow-hidden{style: 'border-radius: 20px;'}
+    %div
+      = render AlertMessageComponent.new(id:'additional_metadata_message', type:'light', closeable: false) do
+        %div.d-flex.align-items-center
+          %div{style:'width: 50px; height: 50px'}
+            - sub_values = sub_hash.values
+            - count = sub_values.count{|x| !(x.nil? || x.to_s.empty?)}
+            = render CircleProgressBarComponent.new(count: count , max: sub_values.size )
+          %div.mx-1
+            of the  metadata attributes were filled
+    %section.px-4{style:'height: 70vh; overflow-y: scroll'}
+      = render SubmissionMetadataComponent.new(values:  @submission_latest.to_hash.except(:context, :links, :ontology) ) unless @submission_latest.nil?
+    %div.scroll-message.text-center.py-3.bg-light.text-primary
+      %p.scroll-text.mb-0
+        Scroll down to see more
+      %i.scroll-icon.fa.fa-chevron-down
