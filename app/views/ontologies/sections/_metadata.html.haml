@@ -18,6 +18,11 @@
                 = link_to_modal('Additionnal Metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "Additional Metadata", show_modal_size_value: 'modal-xl' })               
               %p.summary-page-card-title
                 = @submission_latest.contact.map {|c| [c.name, c.email].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
+            - if @ontology.admin?(session[:user]) && @submission_latest.pullLocation
+              %p.description_text
+                Pull URL
+              %span
+                = link_to @submission_latest.pullLocation, @submission_latest.pullLocation
             - unless @submission_latest.keywords.nil?
               %p.description_text Keywords and Key classes
               .keywords_keyclasses_section
@@ -90,7 +95,7 @@
               = link_to(Rails.configuration.settings.links[:metrics], target: "_blank", "aria-label": "View individual metrics definitions", title: "View individual metrics definitions") do
                 %i.fas.fa-lg.fa-question-circle{style: "color: var(--primary-color)"}
           %hr#section_focused_line_metrics/
-          .metrics-container.metrics 
+          .metrics-container.metrics
             .metrics-item
               %hr/
               %div
@@ -118,7 +123,7 @@
                 .loop_icon
                   - img = "<img src='#{asset_path("summary/loop.svg")}'/>"
                   = link_to_modal(img.html_safe, "/ajax/submission/show_depiction?depiction_url=#{depiction_url}",data: { show_modal_title_value: "Depiction", show_modal_size_value: 'modal-xl' })
-  
+
           .right_metadata
             .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#identifiers_metadata_section"}
               %p.fix-margin-buttom
