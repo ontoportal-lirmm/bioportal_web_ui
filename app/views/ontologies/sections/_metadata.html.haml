@@ -231,21 +231,22 @@
             .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#projects_section"}
               %p.fix-margin-buttom
                 Projects and usage information
-              %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
+              %img{alt: "", src: asset_path("summary/arrow-down.svg")}
             #projects_section.collapse.right-metadata-content
               .creation_info
                 %div.description_text
                   Projects using
                   = @ontology.acronym
-                .projects_info
-                  %img{src: asset_path("summary/plus.svg")}/
-              %a{href: "#", style: "text-decoration: none;"}
-                %p.clickable_text Agrisemantics Map of Data Standards
-              %a{href: "#", style: "text-decoration: none;"}
-                %p.clickable_text GO FAIR Food Systems Implementation Network
-              %a{href: "#", style: "text-decoration: none;"}
-                %p.clickable_text Data to Know ledge in Agronomy and Biodiversity
-              %a{href: "#", style: "text-decoration: none;"}
+                = link_to(new_project_path(),  "aria-label": "Create new project", title: "Create new project", class: "mx-1 mt-1") do
+                  %img{src: asset_path("summary/plus.svg")}
+              .projects_container
+                - if @projects.empty?
+                  %p.font-italic= "No projects using #{@ontology.acronym}"
+                - else
+                  - for project in @projects
+                    = link_to(project_path(project.acronym)) do
+                      %p.clickable_text= project.name
+
               %p.normal_text
                 = @submission_latest.isFormatOf
               .creation_info

@@ -68,15 +68,13 @@
 .creation_info {
     display: flex;
     flex-wrap: wrap;
-
+    align-items: center;
 }
 
 .projects_info {
     display: flex;
     flex-wrap: wrap;
     margin-top: 10px;
-
-
 }
 
 .date_creation_text {
