@@ -2,8 +2,10 @@
 
 class AlertMessageComponent < ViewComponent::Base
   include Turbo::FramesHelper
-  def initialize(id: '', type: 'info')
+  def initialize(id: '', message: '', type: 'info', closeable: true)
     @id = id
+    @message = message
     @type = "alert-#{type}"
+    @closeable = closeable
   end
 end
