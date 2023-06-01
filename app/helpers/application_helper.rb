@@ -186,6 +186,17 @@ module ApplicationHelper
     icons = child.relation_icon(node)
     muted_style = child.isInActiveScheme&.empty? ? 'text-muted' : ''
     href = ontology_acronym.blank? ? '#' : "/ontologies/#{child.explore.ontology.acronym}/concepts/?id=#{CGI.escape(child.id)}&language=#{language}"
+
+    prefLabel = concept_title_value(child.prefLabel)
+
+    prefLabelLangHTML = prefLabel[0].nil? ? "" : "<span class='badge badge-light'>#{prefLabel[0]}</span>"
+
+    prefLabelHTML = <<-EOS
+        #{prefLabel[1]}
+        #{prefLabelLangHTML}
+    EOS
+
+
     link = <<-EOS
         <a id='#{child.id}' data-conceptid='#{child.id}'
            data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
@@ -193,7 +204,7 @@ module ApplicationHelper
            data-active-collections-value='#{child.isInActiveCollection || []}'
            data-skos-collection-colors-target='collection'
             class='#{muted_style} #{active_style}'>
-            #{child.prefLabel ? child.prefLabel({ use_html: true }) : child.id.split('/').last}
+            #{ child.prefLabel ? prefLabelHTML : child.id.split('/').last }
         </a>
     EOS
 
@@ -550,17 +561,18 @@ module ApplicationHelper
 
   ###END ruby equivalent of JS code in bp_ajax_controller.
   def ontology_viewer_page_name(ontology_name, concept_label, page)  
-    return ontology_name + " | " +  concept_title_value(concept_label) + " - #{page.capitalize}"
+    return ontology_name + " | " +  concept_title_value(concept_label)[1] + " - #{page.capitalize}"
   end
 
   def concept_title_value(concept_label)
     concept = process_concept(concept_label)
 
     if concept.is_a?(String)
-      return concept
+      return [nil, concept]
     end
 
-    return concept.values.first
+    # return first key with a value
+    return concept.first
 
   end
 
