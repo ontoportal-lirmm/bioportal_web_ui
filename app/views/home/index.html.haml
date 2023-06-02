@@ -37,13 +37,13 @@
     %a.home-bubble.home-bubble-four{:href => "/visits"}
       %h5 ...
 
-  .home-header-title-container{'data-controller': "home-search", 'data-home-search-ontologies-value': raw(@ontology_names.to_json)}
+  .home-header-title-container{'data-controller': "home-search"}
     .home-header-title
       %h4 
-        = $WESBITE_TITLE[$UI_THEME]
+        = t('.welcome', site: $SITE)
       %p
-        = $WEBSITE_SUB_TITLE[$UI_THEME]
-      %input#home-search{:name => "search", :placeholder => "Ex: Agrovoc ...", :type => "text", 'data-home-search-target': 'input', 'data-action': 'input->home-search#search blur->home-search#blur'}
+        = t('.tagline')
+      %input#home-search{:name => "search", :placeholder => "Search for an ontology or concept (Ex: Agrovoc ...)", :type => "text", 'data-home-search-target': 'input', 'data-action': 'input->home-search#search blur->home-search#blur'}
       #home-search-drop-down{'data-home-search-target': 'dropDown', 'data-action': 'mousedown->home-search#prevent'}
         %a.home-search-ontology-content#home-search-ontology-content{href: "#", 'data-home-search-target': 'searchOntologyContent'}
           %p#seached-ontology{'data-home-search-target': 'ontology'}
@@ -54,13 +54,13 @@
           %p#seached-ontologies{'data-home-search-target': 'searchedOntologies'}
           %div
             %img{src: asset_path("loop.svg")}/
-            %p See all
+            %p See all ontologies
 .home-body-container
   .home-section
     %h4 Wanna upload an ontology?
     %hr.home-section-line/
     %p Uploading an ontology is a way of sharing your domain knowledge with others.
-    %p By uploading your ontology to agroportal, you can:
+    %p By uploading your ontology to #{$SITE}, you can:
     .home-upload-benifits
       - @upload_benefits.each do |benefit|
         %div
@@ -74,7 +74,7 @@
     - else
       %a.home-upload-ontology-button{:href => "/ontologies/new"}
         = inline_svg_tag "upload.svg", class: "home-upload-icon"
-        upload ontology
+        Upload ontology
   .home-section
     %h4
       = portal_name+" services"
@@ -106,7 +106,7 @@
               %p See details
               = inline_svg_tag "arrow-right.svg"
       .home-sub-section-right
-        %h4 Twitter news
+        %h4 News
         %hr.home-section-line
         .home-card.home-twitter-news
           %a.twitter-timeline{"data-height" => "349", "data-width" => "533", :href => "https://twitter.com/lagroportal?ref_src=twsrc%5Etfw"} Tweets by lagroportal

@@ -76,6 +76,9 @@ application.register("text-truncate", TextTruncateController)
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
 
+import TopnavResponsivenessController from "./topnav_responsiveness_controller"
+application.register("topnav-responsiveness", TopnavResponsivenessController)
+
 import TurboFrameController from "./turbo_frame_controller"
 application.register("turbo-frame", TurboFrameController)
 

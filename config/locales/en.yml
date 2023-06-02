@@ -184,9 +184,9 @@ en:
     index:
       find_ontology_placeholder: Start typing the ontology name, then choose from
       query_placeholder: Enter a class, eg Melanoma
-      tagline: the world's most comprehensive repository of biomedical ontologies
+      tagline: The home of vocabularies and ontologies in agronomy and related fields.
       title: Welcome to the %{organization}
-      welcome: Welcome to the %{site},
+      welcome: Welcome to %{site},
     help:
       welcome: Welcome to the %{site} of the National Center for Biomedical Ontology. %{site} is a web application for accessing and sharing biomedical ontologies.
       getting_started: >
