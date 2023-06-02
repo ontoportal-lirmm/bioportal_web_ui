@@ -123,11 +123,11 @@
                   = link_to_modal(img.html_safe, "/ajax/submission/show_depiction?depiction_url=#{depiction_url}",data: { show_modal_title_value: "Depiction", show_modal_size_value: 'modal-xl' })
 
           .right_metadata
-            .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#identifiers_metadata_section"}
-              %p.fix-margin-buttom
-                Identifiers
-              %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
-            #identifiers_metadata_section.collapse.right-metadata-conetent
+            .depiction
+              .caintainer_vertical
+                .projects_card
+                  %p Identifiers
+                  %img{src: asset_path("summary/info.svg")}/
               .creation_info
                 %p.description_text
                   URI
