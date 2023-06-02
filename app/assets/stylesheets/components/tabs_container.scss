@@ -1,0 +1,46 @@
+.ontology-details-tabs{
+    margin: 40px 0;
+    border-bottom: 1px solid #DFDFDF;
+}
+
+.ontology-details-tabs hr{
+    border: 1px solid #f3f3f3;
+    width: 100%;
+    margin: 0;
+}
+.ontology-details-tabs .tab-items{
+    display: flex;
+    margin: 0 50px;
+}
+.ontology-details-tabs .tab-items div{
+    font-size: 16px;
+    font-weight: 400;
+    color: #5e5e5e;
+    margin-right: 50px;
+    cursor: pointer;
+    opacity: 60%;
+    transition: opacity 0.3s ease;
+    a {
+        color: #5e5e5e !important;
+    }
+}
+
+.ontology-details-tabs .tab-items div:hover{
+
+    opacity: 100%;
+}
+
+.ontology-details-tabs .tab-items div hr{
+    display: none;
+    margin-top: 10px;
+}
+.ontology-details-tabs .tab-items .active{
+    font-weight: 500;
+    color: black;
+    opacity: 100%;
+}
+.ontology-details-tabs .tab-items .active hr{
+    display: block;
+    border: 1px solid var(--primary-color);
+    opacity: 100%;
+}

@@ -31,9 +31,8 @@ export default class extends Controller {
   }
 
   #updateURL(event){
-    const page = event.target.getAttribute("data-bp-ont-page");
-    const page_name = event.target.getAttribute("data-bp-ont-page-name");
-
+    const page = event.currentTarget.getAttribute("data-bp-ont-page");
+    const page_name = event.currentTarget.getAttribute("data-bp-ont-page-name");
     (new HistoryService()).pushState({p: page}, page_name + " | " + jQuery(document).data().bp.ont_viewer.org_site, "?p=" + page);
 
     this.#disableLanguageSelector(page)

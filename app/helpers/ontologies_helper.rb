@@ -428,10 +428,9 @@ module OntologiesHelper
 
   def link_to_section(section_title)
     link_to(section_name(section_title) , ontology_path(@ontology.acronym, p: section_title),
-            id: "ont-#{section_title}-tab", class: "nav-link #{selected_section?(section_title) ? 'active show' : ''}",
-            data: { action: 'click->ontology-viewer-tabs#selectTab',
-                    toggle: "tab", target: "#ont_#{section_title}_content", 'bp-ont-page': section_title ,
-                   'bp-ont-page-name': ontology_viewer_page_name(@ontology.name, @concept&.prefLabel || '', section_title) })
+            id: "ont-#{section_title}-tab",
+            class: "#{selected_section?(section_title) ? 'active show' : ''}")
+
   end
 
   def selected_section?(section_title)
@@ -518,6 +517,11 @@ module OntologiesHelper
     options_for_select(submission_lang)
   end
 
+
+  def count_subscriptions(ontology_id)
+    users = LinkedData::Client::Models::User.all(include: 'subscription', display_context: false, display_links: false )
+    users.select{ |u| u.subscription.find{ |s| s.ontology.eql?(ontology_id)} }.count
+  end
   private
 
   def submission_languages(submission = @submission)

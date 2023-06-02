@@ -63,12 +63,12 @@
             %h2.card_title FAIR score
             %hr#section_focused_line_fairScore
             .Summary-page-card
-              .summary-page-card-container
+              .summary-page-card-container.flex-column
                 %section.ont-metadata-card.ont-fair-score-card#fair-summary
                   %div.ont-section-toolbar
                     %header.pb-2.font-weight-bold
                       = render partial: "fair_score/fair_service_header"
-                %div#fair-score-charts-container
+                %div#fair-score-charts-container.w-100
                   = render partial: "fairs_score"
                 .account-page-card-sub-container
           - unless @landscape_data.empty?

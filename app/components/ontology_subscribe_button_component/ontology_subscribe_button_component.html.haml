@@ -1,6 +1,13 @@
 %span{@controller_params}
-  %a.subscribe_to_notes.btn.btn-primary{href:'javascript:void(0);'}
-    #{@sub_text} to notes emails
-  %span{style:"display: none;", 'data-subscribe-notes-target': 'loader'}
-    = image_tag("spinners/spinner_000000_16px.gif", style: "vertical-align: text-bottom; background: transparent")
+  %a.ontology-details-watch-button{href: @link}
+    = inline_svg_tag "eye.svg"
+    %div
+      %span{'data-subscribe-notes-target': 'text'}
+        #{@sub_text}
+      (
+      %span{'data-subscribe-notes-target': 'count'}
+        #{@count}
+      )
+    %span{style:"display: none;", 'data-subscribe-notes-target': 'loader'}
+      = image_tag("spinners/spinner_000000_16px.gif", style: "vertical-align: text-bottom; background: transparent")
   %span.notes_sub_error{style:'color: red; display: none', 'data-subscribe-notes-target': 'error'}
