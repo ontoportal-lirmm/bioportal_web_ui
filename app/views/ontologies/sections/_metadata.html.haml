@@ -302,11 +302,11 @@
               %p.normal_text
                 = @submission_latest.audience
           .right_metadata
-            .depiction
-              .vists_image
-                %p Visits
-                - if visits_data(@ontology)
-                  = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", "aria-label": "Download as CSV", title: "Download as CSV") do
+            .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#methodology"}
+              %p.fix-margin-buttom
+                Methodology
+              %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
+            #methodology.collapse.right-metadata-conetent
                     %img{alt: "", src: asset_path("summary/arrow_down.svg")}
               = render partial: "visits"
           .right_metadata
@@ -315,34 +315,34 @@
                 .projects_card
                   %p Methodology
                   %img{src: asset_path("summary/info.svg")}/
-            .creation_info
-              %p.description_text Accrual method
-            %p.normal_text
-              = @submission_latest.accrualMethod
-            .creation_info
-              %p.description_text Accrual periodicity
-            %p.normal_text
-              = @submission_latest.accrualPeriodicity
-            .creation_info
-              %p.description_text Accrual policy
-            %p.normal_text
-              = @submission_latest.accrualPolicy
-            .creation_info
-              %p.description_text Knowledge representation paradigm
-            %p.normal_text
-              = @submission_latest.conformsToKnowledgeRepresentationParadigm
-            .creation_info
-              %p.description_text Engineering methodology
-            %p.normal_text
-              = @submission_latest.usedOntologyEngineeringMethodology
-            .creation_info
-              %p.description_text Created With
-            %p.normal_text
-              = @submission_latest.usedOntologyEngineeringTool
-            .creation_info
-              %p.description_text Competency question
-            %p.normal_text
-              = @submission_latest.competencyQuestion
+              .creation_info
+                %p.description_text Accrual method
+              %p.normal_text
+                = @submission_latest.accrualMethod
+              .creation_info
+                %p.description_text Accrual periodicity
+              %p.normal_text
+                = @submission_latest.accrualPeriodicity
+              .creation_info
+                %p.description_text Accrual policy
+              %p.normal_text
+                = @submission_latest.accrualPolicy
+              .creation_info
+                %p.description_text Knowledge representation paradigm
+              %p.normal_text
+                = @submission_latest.conformsToKnowledgeRepresentationParadigm
+              .creation_info
+                %p.description_text Engineering methodology
+              %p.normal_text
+                = @submission_latest.usedOntologyEngineeringMethodology
+              .creation_info
+                %p.description_text Created With
+              %p.normal_text
+                = @submission_latest.usedOntologyEngineeringTool
+              .creation_info
+                %p.description_text Competency question
+              %p.normal_text
+                = @submission_latest.competencyQuestion
           .Summary-page-card
             %h2.card_title_2 Get my metadata back
             %hr#section_focused_line_fairScore/
