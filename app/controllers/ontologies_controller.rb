@@ -464,7 +464,7 @@ class OntologiesController < ApplicationController
     
     @metadata = submission_metadata
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    @additional_metadata = ["naturalLanguage","isOfType","hasOntologySyntax","hasFormalityLevel","audience"]
+    @additional_metadata = ["naturalLanguage","isOfType","hasOntologySyntax","hasFormalityLevel"]
     @submission_latest = @ontology.explore.latest_submission(include: @additional_metadata.join(","))
     render partial: 'ontologies/sections/additional_metadata'
   end
