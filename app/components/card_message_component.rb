@@ -21,6 +21,8 @@ class CardMessageComponent < ViewComponent::Base
             "green-check.svg"
         when "failure"
             "red-warning.svg"
+        when "warning"
+            "orange-warning.svg"
         end
     end
 end

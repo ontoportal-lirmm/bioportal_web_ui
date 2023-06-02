@@ -18,3 +18,7 @@
       - when "failure"
         %a.card-message-button.card-message-button-failure{:href => @button_link}
           = @button_text
+      - when "warning"
+        %a.card-message-button.card-message-button-warning{:href => @button_link}
+          = @button_text
+
