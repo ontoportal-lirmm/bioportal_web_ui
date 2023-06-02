@@ -10,7 +10,14 @@
                 %p.description_text{'data-text-truncate-target': 'content'}
                   = "Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme"
                 %p.see_more_text{data:{'text-truncate-target': 'button', 'action':"click->text-truncate#toggle"}}
-                  See more...
+                  see more...
+            .creation_info
+              %p.creation_text Originally released on
+              %p.date_creation_text
+                = l(Date.parse(@submission_latest.released), format: :monthfull_day_year)
+              %p.creation_text if you want more information contact 
+              %p.creator_text
+                = @submission_latest.contact.map {|c| [c.name, c.email].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
             - unless @submission_latest.logo.nil?
               %img{height: "85", src: @submission_latest.logo, width: "189"}/
             %div
