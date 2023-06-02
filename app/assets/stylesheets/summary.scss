@@ -211,15 +211,16 @@
 
 .summary-page-sub-container {
   display: flex;
+  justify-content: center;
 }
 
 .summary-page-first-row {
-  width: 735px;
+  width: 40%;
   margin-right: 20px;
 }
 
 .summary-page-second-row {
-  width: 415px;
+  width: 20%;
 }
 
 .Summary-page-card {
