@@ -91,7 +91,16 @@ module SchemesHelper
 
   def tree_link_to_schemes(schemes_labels, main_scheme_label, selected_scheme_id)
     out = ''
-    schemes_labels.sort_by { |s| [s['prefLabel']] }.each do |s|
+   
+    schemes_labels.sort_by { |s|
+      prefLabel = process_concept(s['prefLabel'])
+      
+      if prefLabel.is_a? String
+        prefLabel
+      else
+        prefLabel.values.first
+      end
+    }.each do |s|
       next unless main_scheme_label.nil? || s['prefLabel'] != main_scheme_label['prefLabel']
 
       li = <<-EOS

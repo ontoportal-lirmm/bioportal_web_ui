@@ -8,7 +8,14 @@
     %ul.simpleTree{data:{controller: 'simple-tree', 'simple-tree': { 'auto-click-value': "true" }, action: 'clicked->history#updateURL'}}
       %li.root
         %ul
-          - collections_labels.sort_by{|s| [s["prefLabel"]]}.each do  |s|
+
+          - collections_labels.sort_by{|s| 
+            - prefLabel = process_concept(s['prefLabel'])
+            - if prefLabel.is_a? String
+              - prefLabel
+            -else
+              - prefLabel.values.first
+            -end }.each do  |s|
             %li.doc
               %a{id: s["@id"], href: collection_path(s["@id"]),
                     data: { turbo: "true", 'turbo-frame': 'collection', 'collectionid': s["@id"]},
