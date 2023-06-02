@@ -187,9 +187,10 @@ module ApplicationHelper
     muted_style = child.isInActiveScheme&.empty? ? 'text-muted' : ''
     href = ontology_acronym.blank? ? '#' : "/ontologies/#{child.explore.ontology.acronym}/concepts/?id=#{CGI.escape(child.id)}&language=#{language}"
 
-    prefLabel = concept_title_value(child.prefLabel)
+    prefLabel = get_concept_label(child.prefLabel)
 
-    prefLabelLangHTML = prefLabel[0].nil? ? "" : "<span class='badge badge-light'>#{prefLabel[0]}</span>"
+    
+    prefLabelLangHTML = prefLabel[0].eql?('@none') ? "" : "<span class='badge badge-light'>#{prefLabel[0]}</span>"
 
     prefLabelHTML = <<-EOS
         #{prefLabel[1]}
@@ -561,27 +562,43 @@ module ApplicationHelper
 
   ###END ruby equivalent of JS code in bp_ajax_controller.
   def ontology_viewer_page_name(ontology_name, concept_label, page)  
-    return ontology_name + " | " +  concept_title_value(concept_label)[1] + " - #{page.capitalize}"
+    return ontology_name + " | " +  get_concept_label(concept_label)[1] + " - #{page.capitalize}"
   end
 
   def concept_title_value(concept_label)
     concept = process_concept(concept_label)
 
     if concept.is_a?(String)
-      return [nil, concept]
+      return {"@none" => concept}
     end
 
-    # return first key with a value
-    return concept.first
+    return concept.to_h
 
   end
 
   def process_concept(concept_label) 
+    
     if concept_label.is_a?(String) 
       return concept_label  
     end
 
     return remove_fields(concept_label.to_h, [:links, :context])
+  end
+
+  def get_concept_label(concept_label)
+    platform_languges = [:en, :fr]
+    concept_value = nil
+    concept = concept_title_value(concept_label)
+
+    platform_languges.each do |lang|
+      if concept[lang]
+        concept_value =  [lang, concept[lang]]
+        break 
+      end
+    end
+
+    return concept_value || concept.to_a.first
+
   end
 
   def remove_fields(hash, fields_to_remove )
