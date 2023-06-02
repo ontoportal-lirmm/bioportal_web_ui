@@ -343,11 +343,33 @@
                   = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", "aria-label": "Download as CSV", title: "Download as CSV") do
                     %img{alt: "", src: asset_path("summary/arrow_down.svg")}
               = render partial: "visits"
-            %h2.card_title_2 Get my metadata back
-            %hr#section_focused_line_fairScore/
+          %h2.card_title_2 Get my metadata back
+          %hr#section_focused_line_fairScore/       
+          .Summary-page-card_back
             - unless @submission_latest.nil?
               %div{data:{controller: 'metadata-downloader'}}
                 =javascript_include_tag "jsonld"
                 %button{:id => "getMetadataBackNquadsBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadNQuads'} N-Triple
                 %button{:id => "getMetadataBackJsonldBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadJsonLd'} Json-LD
                 %button{:id => "getMetadataBackXmlBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadXML'} RDF/XML
+          .Summary-page-card
+            - unless @ontology.view?
+              %div.ont-section-toolbar
+                %header.pb-2.font-weight-bold= "Views of #{@ontology.acronym}"
+                - ont_id_esc = CGI.escape(@ontology.id)
+                -# TODO: I don't think we should have brackets in the URL parameters.
+                - if session[:user].nil?
+                  %a{href: "/login?redirect=#{escape("/ontologies/new?ontology[viewOf]=#{ont_id_esc}")}", "aria-label": "Create new view", title: "Create new view"}
+                    %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
+                - else
+                  %a{href: "/ontologies/new?ontology[viewOf]=#{ont_id_esc}"}
+                    %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
+              - if @views.empty?
+                %p.font-italic= "No views of #{@ontology.acronym} available"
+              - else
+                %div.border-top
+                  %dl
+                    - @view_decorators.each do |view_decorator|
+                      %dt= view_decorator.linked_name
+                      %dd= view_decorator.description
+          
