@@ -3,10 +3,10 @@
 - unless $FRONT_NOTICE.nil? || $FRONT_NOTICE.empty? || cookies[:front_page_notice_closed].eql?("true")
   :javascript
     function close_message(){
-      var exdate = new Date();
-      exdate.setDate(exdate.getDate() + 7);
-      document.cookie="front_page_notice_closed=true; expires="+exdate.toGMTString();
-      jQuery("#notice_message").hide();
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + 7);
+    document.cookie="front_page_notice_closed=true; expires="+exdate.toGMTString();
+    jQuery("#notice_message").hide();
     }
 
   %p#notice_message{:style => "padding: 10px; margin: 10px; border:1px solid #EFEFEF; background-color: #F9F9F9;"}
@@ -14,125 +14,177 @@
     \&nbsp;&nbsp;
     %a{:href => "#", :onclick => "close_message(); return false;", :style => "font-size: small; color: darkGray;"} [close]
 
-%div.container.pb-4.pb-md-5
-  %div.row
-    %div.col
-      %div.px-2.py-2.pt-md-5.border-bottom.text-center
-        %h2
-          = t("home.index.welcome", site: "#{$SITE}")
-          %small.text-muted
-            = t("home.index.tagline")
-  %div.row.search.pt-4
-    %div.col
-      %div.card-deck
-        -# Search for a class across ontologies
-        %div.card
-          %div.card-header= t('home.search_class')
-          %div.card-body
-            = form_tag("/search", method: "get") do
-              %div.input-group.mb-3
-                - placeholder = t("home.index.query_placeholder")
-                = text_field_tag("query", nil, class: "form-control", placeholder: placeholder)
-                %div.input-group-append
-                  = button_tag(type: "submit", class: "btn btn-primary", aria: {label: "Search for a class"}) do
-                    %i{class: "fas fa-search fa-lg", aria: {hidden: "true"}}
-              %a{:href => "/search?opt=advanced"}= t("home.advanced_search")
-        -# Search for an ontology
-        %div.card
-          %div.card-header= t('home.find_ontology')
-          %div.card-body
-            %input#find_ontology_id{:type => "hidden"}
-            %div.input-group.mb-3
-              = text_field_tag("ontology", nil, id: "find_ontology", class: "form-control", data: {ontologynames: @ontology_names}, placeholder: t(".find_ontology_placeholder"))
-              %div.input-group-append
-                = button_tag(class: "btn btn-primary", onclick: "jumpToValueOntology()", aria: {label: "Find an ontology"}) do
-                  %i{class: "fas fa-search fa-lg", aria: {hidden: "true"}}
-            %div.dropdown
-              = button_tag(t('home.browse_ontologies'), type: "button", id: "ontologyGroupsDropdown", class: "btn btn-info dropdown-toggle", data: {toggle: "dropdown", offset: "0,10"}, aria: {haspopup: "true", expanded: "false"})
-              %div.dropdown-menu{"aria-labelledby": "ontologyGroupsDropdown"}
-                = link_to(t('all'), ontologies_path(), class: "dropdown-item")
-                %div.dropdown-divider
-                %h6.dropdown-header= t("home.browse_by_group")
-                - @groups.each do |group|
-                  = link_to(group[:name], ontologies_path(filter: group[:acronym]), class: "dropdown-item")
-  %div.row.pt-3.statistics
-    %div.col
-      %div.card-deck
-        -# Ontology visits
-        %div.card
-          %div.card-header #{t('home.ontology_visits')} #{"in full #{$SITE} " if at_slice?} (#{@analytics.date.strftime("%B %Y")})
-          = content_tag(:div, nil, id: "ontology-visits-chart", class: "card-body", data: {ontnames: @anal_ont_names, ontnumbers: @anal_ont_numbers}) do
-            %canvas#myChart
-            = link_to(t('more'), visits_path())
-        -# Ontology statistics
-        %div.card
-          %div.card-header #{$SITE} #{t('statistics')} #{"in full #{$SITE}" if at_slice?}
-          %ul.list-group.list-group-flush
-            %li.list-group-item
-              %div.d-flex.justify-content-between.align-items-center
-                %span= t('home.ontologies')
-                %span= number_with_delimiter(@ont_count)
-            %li.list-group-item
-              %div.d-flex.justify-content-between.align-items-center
-                %span= t('home.classes')
-                %span= number_with_delimiter(@cls_count, :delimiter => ",")
-            %li.list-group-item
-              %div.d-flex.justify-content-between.align-items-center
-                %span= t('home.individuals')
-                %span= number_with_delimiter(@individuals_count, :delimiter => ",")
-            %li.list-group-item
-              %div.d-flex.justify-content-between.align-items-center
-                %span= t('home.projects')
-                %span= LinkedData::Client::Models::Project.all.length
-            %li.list-group-item
-              %div.d-flex.justify-content-between.align-items-center
-                %span= t('home.users')
-                %span= LinkedData::Client::Models::User.all.length
-  - if fairness_service_enabled?
-    %div#fair-home.row.mt-3
-      = render partial: "fair_score_home"
-  %div.row.pt-3.extra
-    %div.col
-      %div.card-deck
-        -# Latest Notes
-        %div.card
-          %div.card-header= t('home.latest_notes')
-          %ul.list-group.list-group-flush
-            - if @last_notes.nil? || @last_notes.empty?
-              %li.list-group-item
-                %span= t('home.no_recent_notes')
-            - else
-              - for note in @last_notes
-                %li.list-group-item
-                  - begin
-                    = link_to "#{note[:subject]} (#{note[:ont_name]})", note_path(CGI.escape(note[:id]))
-                    %br/
-                    %span{:style => "color: #AAAAAA"}
-                      = "#{time_ago_in_words(note[:created])} ago"
-                      by #{note[:author]}
-                    - if note[:body]
-                      %p
-                        = truncate(strip_tags(note[:body]), :length => 100)
-                        \&nbsp;
-                  - rescue
-        - if !$ENABLE_SLICES.nil? && $ENABLE_SLICES == true && !at_slice?
-          -# Slices
-          %div.card
-            %div.card-header= t("slices")
-            %ul.list-group.list-group-flush
-              - LinkedData::Client::Models::Slice.all.each_with_index do |slice, index|
-                - break if index == 10
-                - slice_name = "#{slice.name} (#{slice.acronym})"
-                - slice_link = "http://#{slice.acronym}.#{$UI_URL.sub("http://", "")}"
-                %li.list-group-item
-                  = link_to slice_name, slice_link
+.home-header-container
+  .home-header-background
+  .home-bubbles
+    .home-random-bubbles
+      %img{:src => asset_path("home-random-bubbles.svg")}/
+    .home-bubble.home-bubble-one
+      %h5
+        = @anal_ont_names[0]
+      %p 
+        = @anal_ont_numbers[0].to_s + " visits"
+    .home-bubble.home-bubble-two
+      %h5
+        = @anal_ont_names[1]
+      %p 
+        = @anal_ont_numbers[1].to_s + " visits"
+    .home-bubble.home-bubble-three
+      %h5
+        = @anal_ont_names[2]
+      %p 
+        = @anal_ont_numbers[2].to_s + " visits"
+    %a.home-bubble.home-bubble-four{:href => "/visits"}
+      %h5 ...
 
-  - $HOME_PAGE_LOGOS.each do |key, home_page_logos_row|
-    %div.row.pt-3
-      %div.col
-        %div.card-deck
-          %div.card
-            %div.card-header= t("home.#{key}")
-            %div.logos
-              - home_page_logos_row.each do |logo|
-                = link_to(image_tag(logo[:img_src]), logo[:url], target: logo[:target])
+  .home-header-title-container{'data-controller': "home-search", 'data-home-search-ontologies-value': raw(@ontology_names.to_json)}
+    .home-header-title
+      %h4 
+        = $WESBITE_TITLE[$UI_THEME]
+      %p
+        = $WEBSITE_SUB_TITLE[$UI_THEME]
+      %input#home-search{:name => "search", :placeholder => "Ex: Agrovoc ...", :type => "text", 'data-home-search-target': 'input', 'data-action': 'input->home-search#search blur->home-search#blur'}
+      #home-search-drop-down{'data-home-search-target': 'dropDown', 'data-action': 'mousedown->home-search#prevent'}
+        %a.home-search-ontology-content#home-search-ontology-content{href: "#", 'data-home-search-target': 'searchOntologyContent'}
+          %p#seached-ontology{'data-home-search-target': 'ontology'}
+          %div
+            %img{src: asset_path("loop.svg")}/
+            %p Search ontology content
+        %a.home-search-ontology-content#home-search-ontologies{href: "#", 'data-home-search-target': 'homeSearchOntologies'}
+          %p#seached-ontologies{'data-home-search-target': 'searchedOntologies'}
+          %div
+            %img{src: asset_path("loop.svg")}/
+            %p See all
+.home-body-container
+  .home-section
+    %h4 Wanna upload an ontology?
+    %hr.home-section-line/
+    %p Uploading an ontology is a way of sharing your domain knowledge with others.
+    %p By uploading your ontology to agroportal, you can:
+    .home-upload-benifits
+      - @upload_benefits.each do |benefit|
+        %div
+          %img{:src => asset_path("check-outlined.svg")}/
+          %p
+            = benefit
+    - if session[:user].nil?
+      %a.home-upload-ontology-button{:href => "/login?redirect=/ontologies/new"}
+        = inline_svg_tag "upload.svg", class: "home-upload-icon"
+        upload ontology
+    - else
+      %a.home-upload-ontology-button{:href => "/ontologies/new"}
+        = inline_svg_tag "upload.svg", class: "home-upload-icon"
+        upload ontology
+  .home-section
+    %h4
+      = portal_name+" services"
+    %hr.home-section-line/
+    .home-card
+      %form{action: "/annotator_recommender_form", method: "post"}
+        %textarea.home-recommendations-and-annotations{rows: "6" , placeholder: "Paste a paragraph of text or some keywords ...", name: "text"}
+        %input.d-none{type: "submit", name: "submit_button" ,value: "annotator", id: "annotator_submit"}/
+        %input.d-none{type: "submit" , name: "submit_button" ,value: "recommender", id: "recommender_submit"}/
+        .home-services-buttons
+          .home-get-recommendations{onclick: "submitRecommender()"}
+            %p Get recommendations
+            = inline_svg_tag "play.svg", class: "home-play-icon"
+          .home-services-buttons
+            .home-get-annotations{onclick: "submitAnnotator()"}
+              %p Get annotations
+              %img{:src => asset_path("play-white.svg")}/
+  .home-section
+    .home-section-sub-sections-container
+      .home-sub-section-left
+        %h4 FAIR scores
+        %hr.home-section-line/
+        .home-card.home-fair-scores
+          - if fairness_service_enabled?
+            %div#fair-home
+              = render partial: "shared/fair_score_bars", locals: {data: nil}
+          %a{:href => "#fairDetails"}
+            %div.home-fair-details
+              %p See details
+              = inline_svg_tag "arrow-right.svg"
+      .home-sub-section-right
+        %h4 Twitter news
+        %hr.home-section-line
+        .home-card.home-twitter-news
+          %a.twitter-timeline{"data-height" => "349", "data-width" => "533", :href => "https://twitter.com/lagroportal?ref_src=twsrc%5Etfw"} Tweets by lagroportal
+          %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
+
+  .home-section
+    .home-statistics-container
+      .home-agroportal-figures
+        = inline_svg_tag "ontoportal-icon.svg"
+        %p 
+          = portal_name+" in figures:"
+      .home-statistics
+        .home-statistics-item
+          %hr/
+          %div
+            %h4 
+              = number_with_delimiter(@ont_count, :delimiter => ",")
+            %p Ontologies
+        .home-statistics-item
+          %hr/
+          %div
+            %h4
+              = number_with_delimiter(@cls_count, :delimiter => ",")
+            %p Classes
+        .home-statistics-item
+          %hr/
+          %div
+            %h4
+              = number_with_delimiter(@individuals_count, :delimiter => ",")
+            %p Individuals
+        .home-statistics-item
+          %hr/
+          %div
+            %h4
+              = number_with_delimiter(@prop_count, :delimiter => ",")
+            %p Properties
+        .home-statistics-item
+          %hr/
+          %div
+            %h4
+              = number_with_delimiter(@projects_count, :delimiter => ",")
+            %p Projects
+        .home-statistics-item
+          %hr/
+          %div
+            %h4
+              = number_with_delimiter(@map_count, :delimiter => ",")
+            %p Mappings
+        .home-statistics-item
+          %hr/
+          %div
+            %h4
+              = number_with_delimiter(@users_count, :delimiter => ",")
+            %p Users
+  .home-section
+    .home-statistics-container
+      .home-support-title
+        %p Supported by
+        %hr.home-section-line/
+      .home-support-items
+        - $HOME_PAGE_LOGOS[:supported_by].each do |logo|
+          %a{href:logo[:url], target: "_blanc"}
+            %img{src: asset_path(logo[:img_src])}
+      .home-support-title
+        %p With the collaboration of
+        %hr.home-section-line/
+      .home-support-items
+        - $HOME_PAGE_LOGOS[:with_the_collaboration_of].each do |logo|
+          %a{href:logo[:url], target: "_blanc"}
+            %img{src: asset_path(logo[:img_src])}
+
+
+
+:javascript
+  function submitAnnotator(){
+  document.getElementById("annotator_submit").click()
+  }
+  function submitRecommender(){
+  document.getElementById("recommender_submit").click()
+  }
+

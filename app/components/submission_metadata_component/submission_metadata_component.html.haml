@@ -1,0 +1,7 @@
+- @values.each do |attr, val|
+  .creation_info
+    %p.description_text
+      = attr
+  %p.normal_text
+    = Array(val).join(',')
+

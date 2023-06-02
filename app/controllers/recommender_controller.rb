@@ -5,6 +5,7 @@ class RecommenderController < ApplicationController
   RECOMMENDER_URI = "/recommender"
 
   def index
+    @text = params[:text]
   end
 
   # def create

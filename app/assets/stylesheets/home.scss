@@ -2,3 +2,459 @@ i.fa.fa-caret-square-o-down {
   vertical-align: middle;
   margin-left: 2px;
 }
+
+
+
+.home-header-container{
+  height: 310px;
+}
+
+.home-header-background{
+  background-color: var(--primary-color);;
+  width: 100%;
+  height: 309px;
+  position: absolute;
+  z-index: 0;
+}
+
+.home-bubbles{
+  display: flex;
+  justify-content: center;
+}
+.home-bubble{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.4);
+  position: absolute;
+  box-shadow: 2px 30px 60px rgba(0, 0, 0, 0.05);
+  transform: scale(0.1);
+  animation: scale-up 1s ease forwards;
+}
+.home-bubble-one{
+  width: 232px;
+  height: 232px;
+  border-radius: 116px;
+  z-index: 1;
+  margin-left: 622px;
+}
+.home-bubble-two{
+  width: 194px;
+  height: 194px;
+  border-radius: 97px;
+  z-index: 2;
+  margin-left: 387px;
+  margin-top: 161px;
+}
+.home-bubble-three{
+  width: 130px;
+  height: 130px;
+  border-radius: 65px;
+  z-index: 3;
+  margin-left: 656px;
+  margin-top: 192px;
+}
+.home-bubble-four{
+  width: 70px;
+  height: 70px;
+  border-radius: 35px;
+  z-index: 4;
+  margin-left: 815px;
+  margin-top: 189px;
+  transform: scale(1);
+  
+}
+
+.home-bubble h5{
+  color: white;
+  font-size: 18px;
+  margin: 0;
+  font-weight: 600;
+}
+.home-bubble p{
+  color: white;
+  font-size: 15px;
+  margin: 0;
+}
+.home-random-bubbles{
+  position: absolute;
+  transform: scale(0.1);
+  animation: scale-up-random 1s ease forwards;
+}
+.home-header-title-container{
+  display: flex;
+  justify-content: center;
+}
+.home-header-title{
+  position: absolute;
+  z-index: 4;
+  width: 481px;
+  margin-right: 664px;
+  margin-top: 123px;
+  opacity: 0;
+  transform: translateY(-100%);
+  animation: slide-and-fade 1s ease forwards;
+}
+.home-header-title h4{
+  font-size: 40px;
+  font-weight: 800;
+  color: white;
+}
+
+.home-header-title > p{
+  font-size: 20px;
+  font-weight: 400;
+  color: white;
+}
+
+.home-header-title input{
+  font-size: 16px;
+  outline: none;
+  padding: 20px;
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 14px;
+  border: none;
+  box-shadow: 2px 30px 60px rgba(0, 0, 0, 0.1);
+}
+.home-header-title input:focus{
+  box-shadow: 2px 30px 60px rgba(0, 0, 0, 0.15);
+}
+
+
+.home-body-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.home-section{
+  margin-top: 70px;
+  width: 1138px;
+}
+.home-section > h4{
+  font-size: 20px;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
+.home-section-line{
+  width: 60px;
+  margin-top: 3px;
+  border: 0.5px solid var(--primary-color);;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+.home-statistics{
+  display: flex;
+  justify-content: space-between;
+}
+.home-statistics-container{
+  border-radius: 8px;
+  box-shadow: 2px 0px 60px rgba(0, 0, 0, 0.10);
+  padding: 30px 40px;
+
+}
+.home-statistics-container > div {
+  display: flex;
+  align-items: center;
+
+}
+.home-agroportal-figures{
+  margin-bottom: 20px;
+}
+
+.home-statistics-container > div > p {
+  font-size: 20px;
+  font-weight: 600;
+  margin-left: 18px;
+  margin-bottom: 0;
+}
+.home-statistics-item{
+  display: flex;
+  align-items: center;
+ 
+}
+.home-statistics-item hr{
+  height: 83px;
+  width: 0px;
+  border: 2px solid var(--primary-color);;
+  border-radius: 5px;
+  margin-right: 15px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.home-statistics-item h4{
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+}
+.home-statistics-item p{
+  font-size: 18px;
+  font-weight: 400;
+  margin: 0;
+  color: #888;
+}
+.home-section > p {
+  font-size: 16px;
+  color: #888888;
+  margin-bottom: 9px;
+}
+.home-upload-benifits{
+  display: flex;
+  flex-wrap: wrap;
+}
+.home-upload-benifits div{
+  display: flex;
+  width: 455px;
+  align-items: flex-start;
+  margin-right: 57px;
+  margin-top: 15px
+}
+
+.home-upload-benifits div p{
+  margin-left: 17px;
+  font-size: 16px;
+  color: #888888;
+  margin-bottom: 0;
+}
+.home-upload-benifits div img{
+  margin-top: 3px
+}
+.home-upload-ontology-button{
+  margin-top: 30px;
+  text-decoration: none;
+  color: var(--primary-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 193px;
+  padding: 15px 25px;
+  border: 1px solid var(--primary-color);
+  border-radius: 8px;
+  font-size: 15px;
+  transition: background-color 0.3s ease;
+}
+.home-upload-ontology-button:hover{
+  color: white !important;
+  background-color: var(--primary-color);
+}
+.home-upload-ontology-button:hover .home-upload-icon path{
+  fill: white;
+}
+
+
+.home-recommendations-and-annotations{
+  font-size: 16px;
+  outline: none;
+  padding: 20px;
+  width: 100%;
+  resize: none;
+  border-radius: 14px;
+  border: none;
+  
+}
+.home-services-buttons{
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.home-card{
+  border-radius: 8px;
+  box-shadow: 2px 30px 60px rgba(0, 0, 0, 0.1);
+}
+.home-get-annotations{
+  cursor: pointer;
+  color: white;
+  background-color: var(--primary-color);
+  display: flex;
+  width: fit-content; 
+  align-items: center;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-left: 10px;
+  transition: background-color 0.3s ease;
+}
+.home-get-annotations:hover{
+  background-color: var(--hover-color);
+}
+.home-get-annotations p{
+  margin-right: 20px;
+  margin-bottom: 0;
+}
+.home-get-recommendations{
+  cursor: pointer;
+  color: var(--primary-color);
+  display: flex;
+  width: fit-content;
+  height: fit-content;
+  align-items: center;
+  padding: 15px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--primary-color);
+  transition: background-color 0.3s ease;
+}
+.home-get-recommendations:hover{
+  color: white !important;
+  background-color: var(--primary-color);
+}
+.home-get-recommendations:hover .home-play-icon path{
+  fill: white;
+}
+.home-get-recommendations p{
+  margin-right: 20px;
+  margin-bottom: 0;
+}
+.home-section-sub-sections-container{
+  display: flex;
+  justify-content: space-between;
+}
+.home-sub-section-left{
+  width: 533px;
+}
+.home-sub-section-right{
+  width: 533px;
+}
+.home-sub-section-left h4, .home-sub-section-right h4{
+  font-size: 20px;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+.home-fair-scores{
+  height: 349px;
+  padding-top: 35px;
+}
+.home-twitter-news{
+  height: 349px;
+}
+.home-fair-scores a{
+  text-decoration: none;
+ 
+}
+.home-fair-details{
+  margin-right: 25px !important;
+}
+.home-fair-scores div{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 20px;
+  margin-left: 27px;
+  margin-bottom: 14px;
+  color: var(--primary-color);
+}
+.home-fair-scores div p{
+  margin-right: 10px;
+  margin-bottom: 0;
+}
+.home-logos{
+  height: 138px;
+  display: flex;
+  align-items: center;
+  overflow: auto;
+  
+}
+.home-logos img{
+  margin-left: 60px;
+}
+
+#home-search-drop-down{
+  display: none;
+  font-size: 16px;
+  background: white;
+  width: 100%; 
+  border-radius: 0 0 14px 14px;
+  border: none;
+  box-shadow: 2px 30px 60px rgba(0, 0, 0, 0.1);
+}
+
+.home-search-ontology-content{
+  display: flex;
+  color: #777777 !important;
+  justify-content: space-between;
+  padding: 20px 20px;
+  cursor: pointer;
+  border-top: 1px solid #f7f7f7
+}
+.home-search-ontology-content:hover{
+  background-color: rgba(0, 0, 0, 0.01);
+}
+.home-search-ontology-content div{
+  display: flex;
+}
+.home-search-ontology-content div img{
+  width: 12px;
+}
+.home-search-ontology-content div p{
+  font-weight: 300;
+  margin-left: 10px;
+  margin-bottom: 0;
+}
+
+.home-dropdown-active{
+  box-shadow: none !important;
+}
+#seached-ontology{
+  margin-bottom: 0;
+}
+#seached-ontologies{
+  margin-bottom: 0;
+}
+
+.home-support-title{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  
+}
+.home-support-items{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  
+}
+.home-support-items  > *:not(:first-child){
+  margin-left: 40px;
+}
+.home-support-items a{
+  margin-bottom: 40px;
+  opacity: 85%;
+  transition: opacity 0.3s ease;
+}
+.home-support-items a:hover{
+  opacity: 100%;
+}
+.home-result-type{
+  font-weight: 300;
+  margin-bottom: 0;
+}
+
+.home-searched-ontology{
+  margin-bottom: 0;
+  word-wrap: break-word;
+  max-width: 400px;
+  margin-right: 20px;
+
+}
+
+@keyframes scale-up {
+  from { transform: scale(0.1); }
+  to { transform: scale(1); }
+}
+
+@keyframes scale-up-random {
+  from { transform: scale(0.1); }
+  to { transform: scale(1.06); }
+}
+
+@keyframes slide-and-fade {
+  from { opacity: 0; transform: translateY(-100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+

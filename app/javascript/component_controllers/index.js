@@ -11,6 +11,9 @@ import Metadata_selector_component_controller
 import Ontology_subscribe_button_component_controller
     from "../../components/ontology_subscribe_button_component/ontology_subscribe_button_component_controller";
 
+import CircleProgressBarComponentController from "../../components/circle_progress_bar_component/circle_progress_bar_component_controller"
+
+application.register("circle-progress-bar", CircleProgressBarComponentController)
 application.register("turbo-modal", TurboModalController)
 application.register("file-input", FileInputLoaderController)
 application.register("select-input", Select_input_component_controller)

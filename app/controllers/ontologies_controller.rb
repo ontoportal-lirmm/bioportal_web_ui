@@ -460,12 +460,10 @@ class OntologiesController < ApplicationController
     render turbo_stream: replace('application_modal_content') { "<img src='#{url}'/>".html_safe }
   end
 
-  def show_additional_metadata 
-    
+  def show_additional_metadata
     @metadata = submission_metadata
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    @additional_metadata = ["naturalLanguage","isOfType","hasOntologySyntax","hasFormalityLevel"]
-    @submission_latest = @ontology.explore.latest_submission(include: @additional_metadata.join(","))
+    @submission_latest = @ontology.explore.latest_submission(include: 'all', display_context: false, display_links: false)
     render partial: 'ontologies/sections/additional_metadata'
   end
   

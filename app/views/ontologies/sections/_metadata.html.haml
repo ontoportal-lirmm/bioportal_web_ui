@@ -10,14 +10,17 @@
                 %p.description_text{'data-text-truncate-target': 'content'}
                   = "Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme"
                 %p.see_more_text{data:{'text-truncate-target': 'button', 'action':"click->text-truncate#toggle"}}
-                  see more...
+                  See more...
             - unless @submission_latest.logo.nil?
               %img{height: "85", src: @submission_latest.logo, width: "189"}/
             %div
-              %p.description_text{style: "text-decoration-line: underline;"}
-                = link_to_modal('Additionnal Metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "Additional Metadata", show_modal_size_value: 'modal-xl' })               
               %p.summary-page-card-title
                 = @submission_latest.contact.map {|c| [c.name, c.email].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
+            - if @ontology.admin?(session[:user]) && @submission_latest.pullLocation
+              %p.description_text
+                Pull URL
+              %span
+                = link_to @submission_latest.pullLocation, @submission_latest.pullLocation
             - unless @submission_latest.keywords.nil?
               %p.description_text Keywords and Key classes
               .keywords_keyclasses_section
@@ -56,6 +59,8 @@
                 %img{src: asset_path("summary/github.svg")}/
               %a{href: "#{@submission_latest.endpoint}", style: "text-decoration: none;"}
                 %img{src: asset_path("summary/sparql.svg")}/
+          %div.card.p-1.my-2.text-center
+            = link_to_modal('See all metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "Additional Metadata", show_modal_size_value: 'modal-xl' })
           %h2.card_title FAIR score
           %hr#section_focused_line_fairScore
           .Summary-page-card
@@ -90,7 +95,7 @@
               = link_to(Rails.configuration.settings.links[:metrics], target: "_blank", "aria-label": "View individual metrics definitions", title: "View individual metrics definitions") do
                 %i.fas.fa-lg.fa-question-circle{style: "color: var(--primary-color)"}
           %hr#section_focused_line_metrics/
-          .metrics-container.metrics 
+          .metrics-container.metrics
             .metrics-item
               %hr/
               %div
@@ -118,7 +123,7 @@
                 .loop_icon
                   - img = "<img src='#{asset_path("summary/loop.svg")}'/>"
                   = link_to_modal(img.html_safe, "/ajax/submission/show_depiction?depiction_url=#{depiction_url}",data: { show_modal_title_value: "Depiction", show_modal_size_value: 'modal-xl' })
-  
+
           .right_metadata
             .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#identifiers_metadata_section"}
               %p.fix-margin-buttom
@@ -226,21 +231,22 @@
             .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#projects_section"}
               %p.fix-margin-buttom
                 Projects and usage information
-              %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
+              %img{alt: "", src: asset_path("summary/arrow-down.svg")}
             #projects_section.collapse.right-metadata-content
               .creation_info
                 %div.description_text
                   Projects using
                   = @ontology.acronym
-                .projects_info
-                  %img{src: asset_path("summary/plus.svg")}/
-              %a{href: "#", style: "text-decoration: none;"}
-                %p.clickable_text Agrisemantics Map of Data Standards
-              %a{href: "#", style: "text-decoration: none;"}
-                %p.clickable_text GO FAIR Food Systems Implementation Network
-              %a{href: "#", style: "text-decoration: none;"}
-                %p.clickable_text Data to Know ledge in Agronomy and Biodiversity
-              %a{href: "#", style: "text-decoration: none;"}
+                = link_to(new_project_path(),  "aria-label": "Create new project", title: "Create new project", class: "mx-1 mt-1") do
+                  %img{src: asset_path("summary/plus.svg")}
+              .projects_container
+                - if @projects.empty?
+                  %p.font-italic= "No projects using #{@ontology.acronym}"
+                - else
+                  - for project in @projects
+                    = link_to(project_path(project.acronym)) do
+                      %p.clickable_text= project.name
+
               %p.normal_text
                 = @submission_latest.isFormatOf
               .creation_info
