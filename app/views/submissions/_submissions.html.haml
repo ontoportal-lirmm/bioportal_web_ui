@@ -6,7 +6,7 @@
 
   %div.click_versions_collapse
     = render_alerts_container(AdminController)
-    %table#ontology_versions.table.table-sm.table-striped
+    %table#ontology_versions.table.table-hover-group-divider
       %thead
         %tr
           - if @ontology.admin?(session[:user])
@@ -17,7 +17,7 @@
           %th
             = generate_attribute_text("creationDate", "Uploaded")
           - unless @ont_restricted
-            %th.align-middle Downloads
+            %th.align-middle Downloads     
           - if @ontology.admin?(session[:user])
             %th.align-middle Actions
 
@@ -40,7 +40,17 @@
             = xmldatetime_to_date(sub.creationDate) unless sub.creationDate.nil?
           - unless @ont_restricted
             %td
-              = raw download_link(sub, @ontology)
+              %div.dropdown
+                %button.btn.btn-outline-primary.rounded-pill.dropdown-toggle(type="button" data-toggle="dropdown" aria-expanded="false")
+                  Download
+                  %span.sr-only Toggle Dropdown
+                .dropdown-menu
+                  - links = download_link(sub,@ontology)
+                  - links.each do |value|
+                    - link,label = value.values               
+                    %a.dropdown-item{ href: link }= label
+                
+              -#= raw download_link(sub, @ontology)
           - if @ontology.admin?(session[:user])
             %td
               %div.d-flex
