@@ -335,7 +335,14 @@
                 %p.description_text Competency question
               %p.normal_text
                 = @submission_latest.competencyQuestion
-          .Summary-page-card
+          .right_metadata
+            .depiction
+              .vists_image
+                %p Visits
+                - if visits_data(@ontology)
+                  = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", "aria-label": "Download as CSV", title: "Download as CSV") do
+                    %img{alt: "", src: asset_path("summary/arrow_down.svg")}
+              = render partial: "visits"
             %h2.card_title_2 Get my metadata back
             %hr#section_focused_line_fairScore/
             - unless @submission_latest.nil?
