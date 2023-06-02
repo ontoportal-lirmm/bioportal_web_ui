@@ -150,6 +150,9 @@ Rails.application.routes.draw do
   get 'ajax/label_xl', to: "label_xl#show"
   get '/ajax/biomixer' => 'concepts#biomixer'
   get '/ajax/fair_score/html' => 'fair_score#details_html'
+  get '/ajax/submission/show_depiction' => 'ontologies#show_depiction'
+  get '/ajax/submission/show_additional_metadata/:id' => 'ontologies#show_additional_metadata'
+  get '/ajax/submission/show_dates/:id' => 'ontologies#show_dates'
   get '/ajax/fair_score/json' => 'fair_score#details_json'
   get '/ajax/:ontology/instances' => 'instances#index_by_ontology'
   get '/ajax/:ontology/classes/:conceptid/instances' => 'instances#index_by_class', :constraints => { conceptid: /[^\/?]+/ }

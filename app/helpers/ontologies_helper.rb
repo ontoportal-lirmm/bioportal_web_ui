@@ -302,29 +302,30 @@ module OntologiesHelper
   # Creates a link based on the status of an ontology submission
   def download_link(submission, ontology = nil)
     ontology ||= @ontology
+    links = []
     if ontology.summaryOnly
       if submission.homepage.nil?
-        link = 'N/A - metadata only'
+        links << {href: '', label:'N/A - metadata only'}
       else
         uri = submission.homepage
-        link = "<a href='#{uri}'>Home Page</a>"
+        links << {href: uri, label:'Home Page'}
       end
     else
       uri = submission.id + "/download?apikey=#{get_apikey}"
-      link = "<a href='#{uri}' 'rel='nofollow'>#{submission.pretty_format}</a>"
+      links << {href: uri, label:submission.pretty_format}
       latest = ontology.explore.latest_submission({ include_status: 'ready' })
       if latest && latest.submissionId == submission.submissionId
-        link += " | <a href='#{ontology.id}/download?apikey=#{get_apikey}&download_format=csv' rel='nofollow'>CSV</a>"
+        links << {href: "#{ontology.id}/download?apikey=#{get_apikey}&download_format=csv", label:"CSV"}
         if !latest.hasOntologyLanguage.eql?('UMLS')
-          link += " | <a href='#{ontology.id}/download?apikey=#{get_apikey}&download_format=rdf' rel='nofollow'>RDF/XML</a>"
+          links << {href: "#{ontology.id}/download?apikey=#{get_apikey}&download_format=rdf", label:"RDF/XML"}
         end
       end
       unless submission.diffFilePath.nil?
         uri = submission.id + "/download_diff?apikey=#{get_apikey}"
-        link = link + " | <a href='#{uri} 'rel='nofollow'>DIFF</a>"
+        links << {href: uri, label:"DIFF"}
       end
     end
-    link
+    links
   end
 
   def mappings_link(ontology, count)

@@ -1,0 +1,10 @@
+{
+    "overrides": [
+      {
+        "files": "*.haml",
+        "options": {
+          "parser": "ruby-haml"
+        }
+      }
+    ]
+  }

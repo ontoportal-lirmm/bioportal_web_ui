@@ -268,7 +268,7 @@ class OntologiesController < ApplicationController
     #@ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
 
     # Get the latest submission (not necessarily the latest 'ready' submission)
-    @submission_latest = @ontology.explore.latest_submission rescue @ontology.explore.latest_submission(include: '')
+    @submission_latest = @ontology.explore.latest_submission(include: 'all')
     # Is the ontology downloadable?
     @ont_restricted = ontology_restricted?(@ontology.acronym)
 
@@ -315,7 +315,8 @@ class OntologiesController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first if @ontology.nil?
     ontology_not_found(params[:id]) if @ontology.nil?
     # Check to see if user is requesting json-ld, return the file from REST service if so
-
+    @relations_array = ["omv:useImports", "door:isAlignedTo", "door:ontologyRelatedTo", "omv:isBackwardCompatibleWith", "omv:isIncompatibleWith", "door:comesFromTheSameDomain", "door:similarTo",
+                        "door:explanationEvolution", "voaf:generalizes", "door:hasDisparateModelling", "dct:hasPart", "voaf:usedBy", "schema:workTranslation", "schema:translationOfWork"]
     if request.accept.to_s.eql?('application/ld+json') || request.accept.to_s.eql?('application/json')
       headers['Content-Type'] = request.accept.to_s
       render plain: @ontology.to_jsonld
@@ -332,7 +333,8 @@ class OntologiesController < ApplicationController
     @fair_scores_data = create_fair_scores_data(tmp.values.first) unless tmp.nil?
 
     @views = get_views(@ontology)
-    @view_decorators = @views.map { |view| ViewDecorator.new(view, view_context) }
+    @view_decorators = @views.map{ |view| ViewDecorator.new(view, view_context) }
+    @landscape_data = landscape_data
 
     if request.xhr?
       render partial: 'ontologies/sections/metadata', layout: false
@@ -383,6 +385,27 @@ class OntologiesController < ApplicationController
       render partial: 'ontologies/sections/widgets', layout: 'ontology_viewer'
     end
   end
+
+  def show_depiction
+    url = params[:depiction_url]
+    render turbo_stream: replace('application_modal_content') { "<img src='#{url}'/>".html_safe }
+  end
+
+  def show_additional_metadata
+    @metadata = submission_metadata
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
+    @submission_latest = @ontology.explore.latest_submission(include: 'all', display_context: false, display_links: false)
+    render partial: 'ontologies/sections/additional_metadata'
+  end
+  
+  def show_dates
+    
+    @metadata = submission_metadata
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
+    @dates= ["released"]
+    @submission_latest = @ontology.explore.latest_submission(include: @dates.join(","))
+    render partial: 'ontologies/sections/dates'
+  end
   def ajax_ontologies
    
     
@@ -406,5 +429,44 @@ class OntologiesController < ApplicationController
     views = ontology.explore.views || []
     views.select! { |view| view.access?(session[:user]) }
     views.sort { |a, b| a.acronym.downcase <=> b.acronym.downcase }
+  end
+
+  def landscape_data
+    ontology_relations_array = []
+    @relations_array = ["omv:useImports", "door:isAlignedTo", "door:ontologyRelatedTo", "omv:isBackwardCompatibleWith", "omv:isIncompatibleWith", "door:comesFromTheSameDomain", "door:similarTo",
+                        "door:explanationEvolution", "voaf:generalizes", "door:hasDisparateModelling", "dct:hasPart", "voaf:usedBy", "schema:workTranslation", "schema:translationOfWork"]
+
+    submissions = [@submission_latest]
+    # Iterate ontologies to get the submissions with all metadata
+    submissions.each do |sub|
+      ont = sub.ontology
+      # Get ontology relations between each other (ex: STY isAlignedTo GO)
+      @relations_array.each do |relation_attr|
+        relation_values = sub.send(relation_attr.to_s.split(':')[1])
+        next if relation_values.nil? || relation_values.empty?
+
+        relation_values = [relation_values] unless relation_values.kind_of?(Array)
+
+        relation_values.each do |relation_value|
+          next if relation_value.eql?(ont.acronym)
+
+          target_id = relation_value
+          target_in_portal = false
+          # if we find our portal URL in the ontology URL, then we just keep the ACRONYM to try to get the ontology.
+          relation_value = relation_value.split('/').last if relation_value.include?($UI_URL)
+
+          # Use acronym to get ontology from the portal
+          target_ont = LinkedData::Client::Models::Ontology.find_by_acronym(relation_value).first
+          if target_ont
+            target_id = target_ont.acronym
+            target_in_portal = true
+          end
+
+          ontology_relations_array.push({ source: ont.acronym, target: target_id, relation: relation_attr.to_s, targetInPortal: target_in_portal })
+        end
+      end
+    end
+
+    ontology_relations_array
   end
 end
