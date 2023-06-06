@@ -19,6 +19,9 @@ application.register("form-auto-complete", FormAutoCompleteController)
 import HistoryController from "./history_controller"
 application.register("history", HistoryController)
 
+import HomeSearchController from "./home_search_controller"
+application.register("home-search", HomeSearchController)
+
 import LabelAjaxController from "./label_ajax_controller"
 application.register("label-ajax", LabelAjaxController)
 
@@ -54,6 +57,9 @@ application.register("skos-collection-colors", SkosCollectionColorsController)
 
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
+
+import TopnavResponsivenessController from "./topnav_responsiveness_controller"
+application.register("topnav-responsiveness", TopnavResponsivenessController)
 
 import TurboFrameController from "./turbo_frame_controller"
 application.register("turbo-frame", TurboFrameController)

@@ -31,7 +31,7 @@
   
   -# Input text or keywords
   %div.form-group.mt-4
-    = text_area_tag("inputText", nil, rows: 10, class: "form-control default", placeholder: t('paste_input_text'), aria: {describedby: "inputTextHelpBlock"})
+    = text_area_tag("inputText", @text, rows: 10, class: "form-control default", placeholder: "Paste a paragraph of text or some keywords to use in calculating ontology recommendations", aria: {describedby: "inputTextHelpBlock"})
     %div.card#inputTextHighlighted
       %div.card-body
     %small#inputTextHelpBlock.form-text
@@ -107,3 +107,14 @@
   %div.col
     %h5#resultsHeader
     %div#recommender-results.mb-5
+
+:javascript
+  window.addEventListener("load", function() {
+    const value = document.getElementById("inputText").value
+    document.getElementById("inputText").click();
+    document.getElementById("inputText").value = value
+    if(document.getElementById("inputText").value != ''){
+      document.getElementById("recommenderButton").click()
+      window.scrollBy(0, 1080);
+    }
+  });

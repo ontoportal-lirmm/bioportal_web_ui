@@ -1,7 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="language-change"
-// This controller is used to change the language of the Concepts, Schemes and Collections
 export default class extends Controller {
 
   dispatchLangChangeEvent() {
@@ -14,6 +13,6 @@ export default class extends Controller {
         }
       }
     }));
-  }
 
+  }
 }

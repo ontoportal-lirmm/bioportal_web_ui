@@ -89,6 +89,7 @@ Rails.application.routes.draw do
   get '/about' => 'home#about'
   get '/site_config' => 'home#site_config'
   get '/validate_ontology_file' => 'home#validate_ontology_file_show'
+  post '/annotator_recommender_form' => 'home#annotator_recommender_form'
   match '/validate_ontology_file' => 'home#validate_ontology_file', via: [:get, :post]
   get '/layout_partial/:partial' => 'home#render_layout_partial'
   match '/visits', to: 'visits#index', via: :get
@@ -151,6 +152,7 @@ Rails.application.routes.draw do
   get '/ajax/fair_score/json' => 'fair_score#details_json'
   get '/ajax/:ontology/instances' => 'instances#index_by_ontology'
   get '/ajax/:ontology/classes/:conceptid/instances' => 'instances#index_by_class', :constraints => { conceptid: /[^\/?]+/ }
+  get '/ajax/ontologies' , to:"ontologies#ajax_ontologies"
 
   # User
   get '/logout' => 'login#destroy', :as => :logout

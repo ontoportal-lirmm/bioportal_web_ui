@@ -451,8 +451,12 @@ class OntologiesController < ApplicationController
       render partial: 'ontologies/sections/widgets', layout: 'ontology_viewer'
     end
   end
-
-
+  def ajax_ontologies
+   
+    
+    render json: LinkedData::Client::Models::Ontology.all(include_views: true,
+       display: 'acronym,name', display_links: false, display_context: false)
+  end
   private
 
 
