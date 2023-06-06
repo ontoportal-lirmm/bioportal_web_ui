@@ -188,24 +188,21 @@ module ApplicationHelper
     href = ontology_acronym.blank? ? '#' : "/ontologies/#{child.explore.ontology.acronym}/concepts/?id=#{CGI.escape(child.id)}&language=#{language}"
 
     prefLabel = get_concept_label(child.prefLabel)
-
+    prefLabelLang = prefLabel[0]
+    prefLabelHTML =  child.prefLabel ? prefLabel[1] : child.id.split('/').last
     
-    prefLabelLangHTML = prefLabel[0].eql?('@none') ? "" : "<span class='badge badge-light'>#{prefLabel[0]}</span>"
-
-    prefLabelHTML = <<-EOS
-        #{prefLabel[1]}
-        #{prefLabelLangHTML}
-    EOS
 
 
     link = <<-EOS
         <a id='#{child.id}' data-conceptid='#{child.id}'
-           data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
+        data-toggle="tooltip" data-placement="top" title="#{prefLabelLang}"   
+        data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
            data-collections-value='#{child.memberOf || []}'
            data-active-collections-value='#{child.isInActiveCollection || []}'
            data-skos-collection-colors-target='collection'
             class='#{muted_style} #{active_style}'>
-            #{ child.prefLabel ? prefLabelHTML : child.id.split('/').last }
+            #{ prefLabelHTML }
+            
         </a>
     EOS
 
