@@ -289,6 +289,10 @@ module OntologiesHelper
     links
   end
 
+  def link?(string)
+    string.start_with?('http://') || string.start_with?('https://')
+  end
+
   def mappings_link(ontology, count)
     return '0' if ontology.summaryOnly || count.nil? || count.zero?
 

@@ -1,0 +1,54 @@
+.Summary-page-card
+  %h4.summary-page-card-title General information
+  .account-page-info-column.align-items-center
+    %div{data:{controller:"text-truncate", 'text-truncate-more-text-value': 'See more...' , 'text-truncate-less-text-value': 'See less...'}}
+      %p.description_text{'data-text-truncate-target': 'content'}
+        = "Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme"
+      %p.see_more_text{data:{'text-truncate-target': 'button', 'action':"click->text-truncate#toggle"}}
+        see more...
+    - unless @submission_latest.logo.nil?
+      %img{height: "85", src: @submission_latest.logo, width: "189"}/
+  .creation_info
+    %p.creation_text Originally released on
+    %p.date_creation_text
+      = l(Date.parse(@submission_latest.released), format: :monthfull_day_year)
+    %p.creation_text if you want more information contact
+    %p.creator_text
+      = @submission_latest.contact.map {|c| [c.name, c.email].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
+  - if @ontology.admin?(session[:user]) && @submission_latest.pullLocation
+    %p.description_text
+      Pull URL
+    %span
+      = link_to @submission_latest.pullLocation, @submission_latest.pullLocation
+  - unless @submission_latest.keywords.nil?
+    %p.description_text Keywords and Key classes
+    .keywords_keyclasses_section
+      - @submission_latest.keywords.split(',').each do |keyword|
+        %div.m-1
+          = render ChipButtonComponent.new(text: keyword, type: "static")
+      - @submission_latest.keyClasses&.split(',').each do |keyclass|
+        %div.m-1
+          - if link?(keyclass)
+            = render ChipButtonComponent.new(url: '', text: keyclass, type: "clickable")
+          - else
+            = render ChipButtonComponent.new(text: keyclass, type: "static")
+
+  - unless @submission_latest.hasDomain.nil?
+    %p.description_text Categories and subjects
+    .categories_section
+      - @ontology.hasDomain.each do |domain|
+        %p.m-1
+          = render ChipButtonComponent.new(text: show_category_name(domain), type: "static")
+
+
+  .icons_container
+    %a{href: "#{@submission_latest.download}", style: "text-decoration: none;"}
+      %img{src: asset_path("summary/download.svg")}/
+    %a{href: "#{@submission_latest.homepage}", style: "text-decoration: none;"}
+      %img{src: asset_path("summary/homepage.svg")}/
+    %a{href: "#{@submission_latest.documentation}", style: "text-decoration: none;"}
+      %img{src: asset_path("summary/documentation.svg")}/
+    %a{href: "#{@submission_latest.repository}", style: "text-decoration: none;"}
+      %img{src: asset_path("summary/github.svg")}/
+    %a{href: "#{@submission_latest.endpoint}", style: "text-decoration: none;"}
+      %img{src: asset_path("summary/sparql.svg")}/
