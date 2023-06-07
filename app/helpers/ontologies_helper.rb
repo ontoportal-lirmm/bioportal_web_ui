@@ -350,6 +350,12 @@ module OntologiesHelper
     "<a href='#{ont_url}/?p=#{page_name}'>#{link_name}</a>"
   end
 
+  def show_category_name(domain)
+    acronym = domain.split('/').last.upcase
+    category = LinkedData::Client::Models::Category.find_by_acronym(acronym).first
+    category ? category.name : acronym
+  end
+
   def visits_data(ontology = nil)
     ontology ||= @ontology
 

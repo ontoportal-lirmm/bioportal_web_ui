@@ -41,7 +41,9 @@
               .categories_section
                 %p
                   - @ontology.hasDomain.each do |domain|
-                    %span.non_clickable_text.keywords_container= domain
+                    %span.non_clickable_text.keywords_container
+                      = show_category_name(domain)
+                      
 
             .icons_container
               %a{href: "#{@submission_latest.download}", style: "text-decoration: none;"}
