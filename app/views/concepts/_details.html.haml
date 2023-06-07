@@ -11,23 +11,22 @@
               top_keys: %w[description comment],
               bottom_keys: %w[disjoint subclass is_a has_part],
               exclude_keys: schemes_keys + label_xl_set + ['inScheme']) do |c|
-    
+             
     - c.header do
       %tr
         %td{nowrap: ""}= t('ontology_details.concept.id')
         %td
-          %p= @concept.id
+          = @concept.id
       %tr
         %td{nowrap: ""}= t('ontology_details.concept.preferred_name')
         %td
-          %p= @concept.prefLabel({:use_html => true}).html_safe
-
+          = @concept.prefLabel({:use_html => true}).html_safe
       - unless @concept.synonym.nil? || @concept.synonym.empty?
         %tr
           %td{nowrap: ""}= t('ontology_details.concept.synonyms')
           %td
             - for synonym in @concept.synonym
-              %p= synonym
+              = synonym
           %td
             %div.synonym-change-request
               = add_synonym_button
@@ -38,14 +37,12 @@
         %tr
           %td{nowrap: ""}= t('ontology_details.concept.definitions')
           %td
-            %p= @concept.definition.join(" ")
-     
-      
+            = @concept.definition.join(" ")
       - if @concept.obsolete?
         %tr
           %td{nowrap: ""}= t('ontology_details.concept.obsolete')
           %td
-            %p true
+            true
       - if skos?
         - unless @concept.memberOf.nil?  || @concept.memberOf.empty?
           %tr
@@ -64,7 +61,7 @@
       %tr
         %td{nowrap: ""}= t('ontology_details.concept.type')
         %td
-          %p= @concept.type
+          = @concept.type
 
     - scheme_set = c.properties_set_by_keys(schemes_keys, c.concept_properties)
     - label_xl_set = c.properties_set_by_keys(label_xl_set, c.concept_properties)
