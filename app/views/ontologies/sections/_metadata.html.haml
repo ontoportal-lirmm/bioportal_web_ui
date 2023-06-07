@@ -55,7 +55,7 @@
               %a{href: "#{@submission_latest.endpoint}", style: "text-decoration: none;"}
                 %img{src: asset_path("summary/sparql.svg")}/
           %div.card.p-1.my-2.text-center
-            = link_to_modal('See all metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "Additional Metadata", show_modal_size_value: 'modal-xl' })
+            = link_to_modal('See all metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "All metadata properties", show_modal_size_value: 'modal-xl' })
           - if fairness_service_enabled? && @ontology.acronym != 'AGROVOC'
             %h2.card_title FAIR score
             %hr#section_focused_line_fairScore
