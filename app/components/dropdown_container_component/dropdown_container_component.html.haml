@@ -1,0 +1,12 @@
+.right_metadata
+  .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#persons_orgs_metadata_section"}
+    %p.fix-margin-buttom
+      = @title
+    %img{alt: "", src: asset_path("summary/arrow-down.svg")}
+  #persons_orgs_metadata_section.collapse.right-metadata-conetent
+    - @properties.each do |key, value|
+      .creation_info
+        %p.description_text
+          = key.to_s.humanize
+      %p.normal_text
+        = value
