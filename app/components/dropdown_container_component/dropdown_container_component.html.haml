@@ -1,0 +1,7 @@
+.dropdown-container
+  .dropdown-title-bar{"data-toggle" => "collapse", "data-target" => "##{@id}"}
+    %p.mb-0
+      = @title
+    %img{alt: "", src: asset_path("summary/arrow-down.svg")}
+  .collapse{id: @id}
+    = content
