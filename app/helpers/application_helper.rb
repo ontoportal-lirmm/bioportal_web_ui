@@ -604,15 +604,23 @@ module ApplicationHelper
     submission = @submission || @submission_latest
     submission&.hasOntologyLanguage === 'SKOS'
   end
+  
+  def current_page?(path)
+    request.path.eql?(path)
+  end   
 
   def request_lang
     lang = params[:language] || params[:lang]
     lang = 'EN' unless lang
     lang.upcase
   end
-end
 
-def portal_name
-    name = $UI_THEME.to_s.capitalize
-    name.sub! 'portal' , 'Portal'
+  def portal_name
+    $SITE
+  end
+
+  def navitems
+    items = [["/ontologies", "Browse"],["/mappings", "Mappings"],["/recommender", "Recommender"],["/annotator", "Annotator"], ["/landscape", "Landscape"]]
+  end
+
 end

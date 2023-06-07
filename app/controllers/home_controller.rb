@@ -8,10 +8,6 @@ class HomeController < ApplicationController
 
   def index
     @analytics = LinkedData::Client::Analytics.last_month
-
-    @ontologies_views = LinkedData::Client::Models::Ontology.all(include_views: true)
-    @ontologies = @ontologies_views.select {|o| !o.viewOf}
-    @ontology_names = @ontologies.map { |ont| ["#{ont.name} (#{ont.acronym})", ont.acronym] }
     # Calculate BioPortal summary statistics
     @ont_count = @analytics.onts.size
     metrics = LinkedData::Client::Models::Metrics.all

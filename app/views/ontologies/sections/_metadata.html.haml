@@ -59,18 +59,18 @@
                 %img{src: asset_path("summary/sparql.svg")}/
           %div.card.p-1.my-2.text-center
             = link_to_modal('See all metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "Additional Metadata", show_modal_size_value: 'modal-xl' })
-          %h2.card_title FAIR score
-          %hr#section_focused_line_fairScore
-          .Summary-page-card
-            .summary-page-card-container
-            - if fairness_service_enabled? && @ontology.acronym != 'AGROVOC'
-              %section.ont-metadata-card.ont-fair-score-card#fair-summary
-                %div.ont-section-toolbar
-                  %header.pb-2.font-weight-bold
-                    = render partial: "fair_score/fair_service_header"
-              %div#fair-score-charts-container
-                = render partial: "fairs_score"
-              .account-page-card-sub-container
+          - if fairness_service_enabled? && @ontology.acronym != 'AGROVOC'
+            %h2.card_title FAIR score
+            %hr#section_focused_line_fairScore
+            .Summary-page-card
+              .summary-page-card-container
+                %section.ont-metadata-card.ont-fair-score-card#fair-summary
+                  %div.ont-section-toolbar
+                    %header.pb-2.font-weight-bold
+                      = render partial: "fair_score/fair_service_header"
+                %div#fair-score-charts-container
+                  = render partial: "fairs_score"
+                .account-page-card-sub-container
           - unless @landscape_data.empty?
             %h2.card_title Ontology relations network
             %hr#section_focused_line_networkRelation/

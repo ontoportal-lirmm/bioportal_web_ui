@@ -1,61 +1,74 @@
-%nav.navbar.navbar-expand-lg.navbar-dark.navbar-custom
-  = link_to(image_tag("logos/ontoportal-logo.png") + content_tag(:span, $SITE, class: 'site-name'), root_path(), class: "navbar-brand")
-  = button_tag(type: "button", class: "navbar-toggler", data: {toggle: "collapse", target: "#topNavigationToggler"}, aria: {controls: "topNavigationToggler", expanded: "false", label: "Toggle navigation"}) do
-    %span.navbar-toggler-icon
+.nav-container.text-white{data: {controller:"topnav-responsiveness"}}
+  %nav.top-nav
+    .nav-responsiveness-container
+      %a.nav-logo{href: "/"}
+        %img{:src => asset_path("logo-white.svg")}/
+        %p
+          = portal_name
+      %input#nav-menu{:type => "checkbox", 'data-topnav-responsiveness-target': 'navMenu'}
+      %label.menu-btn{:for => "nav-menu"}
+        %i.fas.fa-bars
+    .nav-items
+      %ul.top-nav-ul
+        - navitems.each do |navItem|
+          %li.nav-ul-li
+            %a{href: navItem[0], class: ("active" if current_page?(navItem[0]))} #{navItem[1]}
+      %div.d-flex.align-items-center.justify-content-between{style:'min-width: 40%'}
+        - if current_page?('/')
+          .nav-search-container{style:'visibility: hidden'}
+            %input
+        - else
+          .nav-search-container{'data-controller': "home-search"}
+            %input.nav-input{:placeholder => "Search in "+portal_name+" ...", :type => "text", :name => "search", 'data-home-search-target': 'input', 'data-action': 'input->home-search#search blur->home-search#blur'}
+            #home-search-drop-down.nav-search-drop-down{'data-home-search-target': 'dropDown', 'data-action': 'mousedown->home-search#prevent'}
+              %a.home-search-ontology-content#home-search-ontology-content{href: "#", 'data-home-search-target': 'searchOntologyContent'}
+                %p#seached-ontology{'data-home-search-target': 'ontology'}
+                %div
+                  %img{src: asset_path("loop.svg")}/
+                  %p Search ontology content
+              %a.home-search-ontology-content#home-search-ontologies{href: "#", 'data-home-search-target': 'homeSearchOntologies'}
+                %p#seached-ontologies{'data-home-search-target': 'searchedOntologies'}
+                %div
+                  %img{src: asset_path("loop.svg")}/
+                  %p See all ontologies
 
-  %div#topNavigationToggler.navbar-collapse.collapse.justify-content-between
-    %ul.navbar-nav
-      %li.nav-item
-        = link_to(t('layout.header.browse'), ontologies_path(), class: "nav-link")
-      %li.nav-item
-        = link_to(t('layout.header.search'), "/search", class: "nav-link")
-      %li.nav-item
-        = link_to(t('layout.header.mappings'), mappings_path(), class: "nav-link")
-      %li.nav-item
-        = link_to(t('layout.header.recommender'), recommender_index_path, class: "nav-link")
-      %li.nav-item
-        = link_to(t('layout.header.annotator'), annotator_index_path(), class: "nav-link")
-      - if $NCBO_ANNOTATORPLUS_ENABLED == true
-        %li.nav-item
-          = link_to(t('layout.header.ncbo_annotator_plus'), '/ncbo_annotatorplus', class: "nav-link")
-      %li.nav-item
-        = link_to(t('layout.header.projects'), projects_path(), class: "nav-link")
-      %li.nav-item
-        = link_to(t('layout.header.landscape'), '/landscape', class: "nav-link")
-      -if (!session[:user].nil? && session[:user].admin?)
-        %li.nav-item
-          = link_to(t('layout.header.admin'), admin_index_path, class: "nav-link")
-    %ul.navbar-nav
-      %li.nav-item{ style: "margin-right: 10px;" }
-        %select#language-select.form-control{ data: { controller: "platform-language", action: "change->platform-language#handleLangChanged" } }
-          %option{ value: "en" } English 
-          %option{ value: "fr" } Français
-   
-      - if session[:user].nil?
-        %li.nav-item
-          = link_to(t(:_login), login_index_path(redirect: request.original_url), class: "btn btn-bp-login mr-md-2")
-      - else
-        -# Account menu
-        %li.nav-item.dropdown
-          = link_to("#", id: "accountMenuDropdownLink", class: "nav-link dropdown-toggle", role: "button", data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}) do
-            = session[:user].username
-          %div.dropdown-menu.dropdown-menu-right{aria: {labelledby: "accountMenuDropdownLink"}}
-            = link_to(t(:_account_setting), "/account", class: "dropdown-item")
-            - unless session[:ontologies].nil?
-              %div.dropdown-divider
-              %h6.dropdown-header Recently Viewed
+        - if session[:user].nil?
+          %a.nav-a{:href => "/login"} Login
+        - else
+          = render DropdownButtonComponent.new do |d|
+            - d.header do
+              = session[:user].username
+            - d.with_section(divide: false) do |s|
+              - s.item do
+                = link_to(t(:_account_setting), "/account")
+            - d.with_section do |s|
+              - s.header do
+                Recently Viewed
               - for ont in session[:ontologies]
-                = link_to(ont.ontology_name, "/ontologies/#{ont.ontology_acronym}/?p=classes&conceptid=#{CGI.escape(ont.concept)}", class: "dropdown-item")
-              %div.dropdown-divider
-            = link_to("Logout", logout_path, class: "dropdown-item")
-      -# Support menu
-      %li.nav-item.dropdown
-        = link_to("#", id: "supportMenuDropdownLink", class: "nav-link dropdown-toggle", role: "button", data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}) do
-          Support
-        %div.dropdown-menu.dropdown-menu-right{aria: {labelledby: "supportMenuDropdownLink"}}
-          = link_to(t(:submit_feedback), feedback_path(location: encode_param(request.url)), id: "submitFeedbackMenuItem", class: "dropdown-item pop_window")
-          %div.dropdown-divider
-          %h6.dropdown-header Documentation
-          = link_to(t(:_help), "#{$WIKI_HELP_PAGE}", target: "_blank", class: "dropdown-item")
-          = link_to(t(:_release_notes), "#{$RELEASE_NOTES}", target: "_blank", class: "dropdown-item")
-          = link_to(t(:_publications), $PUBLICATIONS_URL, target: "_blank", class: "dropdown-item")
+                - s.item do
+                  = link_to(ont.ontology_name, "/ontologies/#{ont.ontology_acronym}/?p=classes&conceptid=#{CGI.escape(ont.concept)}")
+            - d.with_section do |s|
+              - s.item do
+                = link_to("Logout", logout_path)
+
+        = select_tag('language', options_for_select([['EN','en'],['FR','fr']]), id: 'language-select', class: 'nav-language',
+              data: { controller: "platform-language", action: "change->platform-language#handleLangChanged" })
+
+        = render DropdownButtonComponent.new do |d|
+          - d.header do
+            = link_to("#", id: "supportMenuDropdownLink", class: "nav-link top-nav-nav-link supportMenuDropdownLink", role: "button") do
+              Support
+          - d.with_section(divide: false) do |s|
+            - s.item do
+              = link_to(t(:submit_feedback), feedback_path(location: encode_param(request.url)), id: "submitFeedbackMenuItem", class: "pop_window")
+          - d.with_section do |s|
+            - s.header do
+              Documentation
+            - s.item do
+              = link_to(t(:_help), "#{$WIKI_HELP_PAGE}", target: "_blank")
+            - s.item do
+              = link_to(t(:_release_notes), "#{$RELEASE_NOTES}", target: "_blank")
+            - s.item do
+              = link_to(t(:_publications), $PUBLICATIONS_URL, target: "_blank")
+
+

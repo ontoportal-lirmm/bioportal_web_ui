@@ -475,6 +475,12 @@ class OntologiesController < ApplicationController
     @submission_latest = @ontology.explore.latest_submission(include: @dates.join(","))
     render partial: 'ontologies/sections/dates'
   end
+  def ajax_ontologies
+   
+    
+    render json: LinkedData::Client::Models::Ontology.all(include_views: true,
+       display: 'acronym,name', display_links: false, display_context: false)
+  end
   private
 
 
