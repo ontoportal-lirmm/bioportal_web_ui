@@ -12,7 +12,8 @@
     "stimulus-rails-nested-form": "^4.0.0",
     "vis-data": "^7.1.6",
     "vis-network": "^9.1.6",
-    "vis-util": "^5.0.3"
+    "vis-util": "^5.0.3",
+    "stimulus-read-more": "^4.1.0"
   },
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds"
