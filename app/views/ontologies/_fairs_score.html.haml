@@ -9,9 +9,6 @@
   %div.align-items-start
     .btn.btn-outline-primary.rounded-pill.center-button
       .span Total score : #{@fair_scores_data[:score]} ( #{@fair_scores_data[:normalizedScore]}% )
-                class: "btn btn-primary w-100",
-                data: { show_modal_title_value: "FAIRness assessment questions", show_modal_size_value: 'modal-xl' },
-                )
   %div.statistics_container.d-flex
     %div.w-50
       = render partial: "shared/fair_score_radar" , locals: {data: @fair_scores_data}
