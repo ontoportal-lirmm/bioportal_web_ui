@@ -1,0 +1,20 @@
+= render SummarySectionComponent.new(title: "Metrics" , link: Rails.configuration.settings.links[:metrics], link_title: "View individual metrics definitions", show_card: false) do
+  .metrics-container.metrics
+    .metrics-item
+      %hr/
+      %div
+        %h4
+          = @metrics&.classes
+        %p Classes
+    .metrics-item
+      %hr/
+      %div
+        %h4
+          = @metrics&.individuals
+        %p Individuals
+    .metrics-item
+      %hr/
+      %div
+        %h4
+          = @metrics&.properties
+        %p Properties

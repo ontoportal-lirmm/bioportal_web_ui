@@ -1,0 +1,10 @@
+- if fairness_service_enabled? && @ontology.acronym != 'AGROVOC'
+  = render SummarySectionComponent.new(title: 'FAIR score') do
+    .summary-page-card-container
+      %section.ont-metadata-card.ont-fair-score-card#fair-summary
+        %div.ont-section-toolbar
+          %header.pb-2.font-weight-bold
+            = render partial: "fair_score/fair_service_header"
+      %div#fair-score-charts-container
+        = render partial: "fairs_score"
+      .account-page-card-sub-container

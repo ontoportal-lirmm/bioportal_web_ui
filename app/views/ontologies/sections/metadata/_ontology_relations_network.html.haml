@@ -1,14 +1,16 @@
-%div.d-flex.flex-column.justify-content-center{data: {controller: "ontology-relations-network", "ontology-relations-network-data-value": @landscape_data.to_json.html_safe }}
-  %button.btn.btn-link.m-2{'data-toggle': "collapse",'data-target': "#ontologyRelations"}
-    %span= t("landscape.filter_network")
-    %i.fas.fa-chevron-down
-  %div#ontologyRelations.collapse.card.flex-row.flex-wrap.px-2.my-1
-    - @relations_array.each do |relation|
-      %div.m-1.pr-1{style:'width: 45%'}
-        = check_box_tag "selectedRelations[]", relation, true, :id => relation, "data-ontology-relations-network-target": "relationCheck", 'data-action': "ontology-relations-network#build"
-        = label_tag relation, relation
+- unless @landscape_data.empty?
+  = render SummarySectionComponent.new(title: 'Ontology relations network') do
+    %div.d-flex.flex-column.justify-content-center{data: {controller: "ontology-relations-network", "ontology-relations-network-data-value": @landscape_data.to_json.html_safe }}
+      %button.btn.btn-link.m-2{'data-toggle': "collapse",'data-target': "#ontologyRelations"}
+        %span= t("landscape.filter_network")
+        %i.fas.fa-chevron-down
+      %div#ontologyRelations.collapse.card.flex-row.flex-wrap.px-2.my-1
+        - @relations_array.each do |relation|
+          %div.m-1.pr-1{style:'width: 45%'}
+            = check_box_tag "selectedRelations[]", relation, true, :id => relation, "data-ontology-relations-network-target": "relationCheck", 'data-action': "ontology-relations-network#build"
+            = label_tag relation, relation
 
 
-  %div{:style => "width: 100%;"}
-    %div#networkContainer{:style => "height: 80vh; width: 100%;", "data-ontology-relations-network-target": "container" }
-      %div#ontologyNetwork
+      %div{:style => "width: 100%;"}
+        %div#networkContainer{:style => "height: 80vh; width: 100%;", "data-ontology-relations-network-target": "container" }
+          %div#ontologyNetwork
