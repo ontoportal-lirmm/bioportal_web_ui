@@ -4,7 +4,6 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
 
   dispatchLangChangeEvent() {
-
     this.element.dispatchEvent(new CustomEvent('lang_changed', {
       bubbles: true,
       cancelable: true,

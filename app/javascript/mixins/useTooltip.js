@@ -1,3 +1,3 @@
-export default function useTooltip(elem){
-    $(elem).tooltipster({theme: 'tooltipster-shadow', contentAsHTML: true})
+export default function useTooltip(elem, position){
+    $(elem).tooltipster({theme: 'tooltipster-shadow', contentAsHTML: true, position: position});
 }

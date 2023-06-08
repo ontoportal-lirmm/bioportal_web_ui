@@ -5,7 +5,7 @@
   - if @concept.prefLabel.nil?
     %div.py-3.px-2
       = render(AlertMessageComponent.new(message: t('ontology_details.concept.no_preferred_name_for_selected_language'),  type: "warning", closeable: true))
- 
+
   = render ConceptDetailsComponent.new(id:'concept-details', acronym: @ontology.acronym,
               properties: @concept.properties,
               top_keys: %w[description comment],
@@ -20,13 +20,16 @@
       %tr
         %td{nowrap: ""}= t('ontology_details.concept.preferred_name')
         %td
-          = @concept.prefLabel({:use_html => true}).html_safe
+          - unless @concept.prefLabel.nil? 
+            - prefLabel = language_hash(@concept.prefLabel)
+            = display_in_multiple_languages(prefLabel)
+
       - unless @concept.synonym.nil? || @concept.synonym.empty?
         %tr
           %td{nowrap: ""}= t('ontology_details.concept.synonyms')
           %td
-            - for synonym in @concept.synonym
-              = synonym
+            - synonym = language_hash(@concept.synonym)
+            = display_in_multiple_languages(synonym)
           %td
             %div.synonym-change-request
               = add_synonym_button
@@ -37,7 +40,10 @@
         %tr
           %td{nowrap: ""}= t('ontology_details.concept.definitions')
           %td
-            = @concept.definition.join(" ")
+            - definition = language_hash(@concept.definition)
+            = display_in_multiple_languages(definition)
+     
+      
       - if @concept.obsolete?
         %tr
           %td{nowrap: ""}= t('ontology_details.concept.obsolete')

@@ -58,7 +58,8 @@ module MappingsHelper
     else
       target = " target='#{target}' "
     end
-    if cls_id.start_with? 'http://'
+    
+    if cls_id.to_s.start_with? 'http://'
       href_cls = " href='#{bp_class_link(cls_id, ont_acronym)}' "
       data_cls = " data-cls='#{cls_id}' "
       data_ont = " data-ont='#{ont_acronym}' "

@@ -13,8 +13,8 @@
             = collection["@id"]
       %tr
         %td{nowrap: ""} Preferred Name
-        %td
-          %p= get_collection_label(collection)
+        %td  
+          = display_in_multiple_languages(language_hash(get_collection_label(collection)))
       %tr
         %td{nowrap: ""} Members count
         %td
