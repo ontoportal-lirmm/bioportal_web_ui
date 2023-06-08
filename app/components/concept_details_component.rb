@@ -21,6 +21,7 @@ class ConceptDetailsComponent < ViewComponent::Base
 
   def render_properties(properties_set, ontology_acronym, &block)
     out = ''
+ 
     properties_set&.each do |key, data|
       next if exclude_relation?(key) || !data[:values]
 
@@ -31,9 +32,14 @@ class ConceptDetailsComponent < ViewComponent::Base
         if block_given?
           block.call(v)
         else
-          get_link_for_cls_ajax(v, ontology_acronym, '_blank')
+          if v.is_a?(String)
+            get_link_for_cls_ajax(v, ontology_acronym, '_blank')
+          else
+            display_in_multiple_languges([v].to_h)
+          end
         end
       end
+
 
       line = <<-EOS
               <tr>
@@ -95,6 +101,9 @@ class ConceptDetailsComponent < ViewComponent::Base
     properties_data = {}
     keys = properties.members # keys is an array of symbols
     keys.each do |key|
+      
+      # binding.pry if key === :"http://www.w3.org/2004/02/skos/core#prefLabel"
+      
       next if properties[key].nil? # ignore :context and :links when nil.
 
       # Shorten the key into a simple label
@@ -112,7 +121,11 @@ class ConceptDetailsComponent < ViewComponent::Base
       end
       begin
         # Try to simplify the property values, when they are a struct.
-        values = properties[key].map { |v| v.string }
+        if properties[key].is_a?(OpenStruct)
+          values = langauge_hash(properties[key])
+        else
+          values = properties[key].map { |v| v.string }
+        end
       rescue
         # Each value is probably a simple datatype already.
         values = properties[key]
