@@ -34,7 +34,6 @@ module SchemesHelper
     end
 
     schemes_labels.sort_by! do |s|
-      prefLabel = langauge_hash(s['prefLabel'])
       prefLabel = language_hash(s['prefLabel'])
       
       if prefLabel.is_a? String
@@ -94,7 +93,6 @@ module SchemesHelper
     out = ''
    
     schemes_labels.sort_by { |s|
-      prefLabel = langauge_hash(s['prefLabel'])
       prefLabel = language_hash(s['prefLabel'])
       
       if prefLabel.is_a? String
@@ -104,13 +102,14 @@ module SchemesHelper
       end
     }.each do |s|
       next unless main_scheme_label.nil? || s['prefLabel'] != main_scheme_label['prefLabel']
-
+      prefLabelLang, prefLabelHTML = get_concept_label(language_hash(get_scheme_label(s))) 
       li = <<-EOS
         <li class="doc">
           <a id="#{s['@id']}" href="#{scheme_path(s['@id'])}" 
             data-turbo="true" data-turbo-frame="scheme" data-schemeid="#{s['@id']}"
+            data-controller='tooltip' data-tooltip-position-value='right' title='#{prefLabelLang.upcase}'
             class="#{selected_scheme_id.eql?(s['@id']) ? 'active' : nil}">
-              #{get_scheme_label(s)}
+              #{prefLabelHTML}
           </a>
         </li>
       EOS
