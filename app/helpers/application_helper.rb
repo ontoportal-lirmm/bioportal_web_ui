@@ -6,6 +6,8 @@ require 'digest/sha1'
 require 'pry' # used in a rescue
 
 module ApplicationHelper
+  REST_URI = $REST_URL
+  API_KEY = $API_KEY
 
   def get_apikey
     unless session[:user].nil?
@@ -13,6 +15,10 @@ module ApplicationHelper
     else
       return LinkedData::Client.settings.apikey
     end
+  end
+
+  def submission_metadata
+    @metadata ||= JSON.parse(Net::HTTP.get(URI.parse("#{REST_URI}/submission_metadata?apikey=#{API_KEY}")))
   end
 
   def isOwner?(id)
