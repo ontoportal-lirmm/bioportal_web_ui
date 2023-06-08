@@ -574,6 +574,7 @@ module ApplicationHelper
 
   def concept_title_value(concept_label)
     concept = process_concept(concept_label)
+    concept = langauge_hash(concept_label)
 
     if concept.is_a?(String)
       return {"@none" => concept}
@@ -584,6 +585,7 @@ module ApplicationHelper
   end
 
   def process_concept(concept_label) 
+  def langauge_hash(concept_label) 
     
     if concept_label.is_a?(String) 
       return concept_label  
