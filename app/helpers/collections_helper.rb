@@ -65,6 +65,25 @@ module CollectionsHelper
     params[:id] || params[:collection_id] || params[:concept_collection]
   end
 
+  def sort_collections_label(collections_labels)
+    collections_labels.sort_by do |s|
+      s['prefLabel'].is_a?(String) ? s['prefLabel'] : s['prefLabel'].last
+    end
+  end
+
+  def link_to_collection(collection, selected_collection_id)
+    pref_label_lang, pref_label_html = get_collection_label(collection)
+    tooltip  = pref_label_lang.to_s.eql?('@none') ? '' :  "data-controller='tooltip' data-tooltip-position-value='right' title='#{pref_label_lang.upcase}'"
+    <<-EOS
+          <a id="#{collection['@id']}" href="#{collection_path(collection['@id'], request_lang)}" 
+            data-turbo="true" data-turbo-frame="collection" data-collectionid="#{collection['@id']}"
+           #{tooltip}
+            class="#{selected_collection_id.eql?(collection['@id']) ? 'active' : nil}">
+              #{pref_label_html}
+          </a>
+    EOS
+  end
+
   private
 
   def generate_collections_colors(collections)

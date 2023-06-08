@@ -8,20 +8,6 @@
     %ul.simpleTree{data:{controller: 'simple-tree', 'simple-tree': { 'auto-click-value': "true" }, action: 'clicked->history#updateURL'}}
       %li.root
         %ul
-
-          - collections_labels.sort_by{|s| 
-            - prefLabel = language_hash(s['prefLabel'])
-            - if prefLabel.is_a? String
-              - prefLabel
-            -else
-              - prefLabel.values.first
-            -end }.each do  |s|
-            - prefLabelLang, prefLabelHTML = get_concept_label(language_hash(get_collection_label(s)))  
+          - sort_collections_label(collections_labels).each do  |c|
             %li.doc
-              %a{id: s["@id"], href: collection_path(s["@id"]),
-                    data: { turbo: "true", 'turbo-frame': 'collection', 'collectionid': s["@id"],
-                     controller:'tooltip', 'tooltip-position-value':'right'
-                    },
-                    title: prefLabelLang != '@none' ? prefLabelLang : nil,
-                    class: selected_collection_id.eql?(s["@id"]) ? "active" : nil }
-                = prefLabelHTML
+              = raw link_to_collection(c, selected_collection_id)
