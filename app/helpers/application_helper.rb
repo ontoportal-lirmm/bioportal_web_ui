@@ -186,13 +186,13 @@ module ApplicationHelper
     icons = child.relation_icon(node)
     muted_style = child.isInActiveScheme&.empty? ? 'text-muted' : ''
     href = ontology_acronym.blank? ? '#' : "/ontologies/#{child.explore.ontology.acronym}/concepts/?id=#{CGI.escape(child.id)}&language=#{language}"
-
-    prefLabel = get_concept_label(child.prefLabel)
-    prefLabelLang = prefLabel[0]
-    prefLabelHTML =  child.prefLabel ? prefLabel[1] : child.id.split('/').last
-
-    tooltip = prefLabelLang.eql?("@none") ? "" : "data-controller='tooltip' data-tooltip-position-value='right' title='#{prefLabelLang}'";    
-
+    
+    if child.prefLabel.nil?
+      prefLabelHTML =  child.id.split('/').last
+    else
+      prefLabelLang, prefLabelHTML = get_concept_label(child.prefLabel)  
+      tooltip = prefLabelLang.eql?("@none") ? "" : "data-controller='tooltip' data-tooltip-position-value='right' title='#{prefLabelLang.upcase}'";      
+    end
 
     link = <<-EOS
         <a id='#{child.id}' 
@@ -566,7 +566,7 @@ module ApplicationHelper
   end
 
   def concept_title_value(concept_label)
-    concept = langauge_hash(concept_label)
+    concept = language_hash(concept_label)
 
     if concept.is_a?(String)
       return {"@none" => concept}
@@ -576,7 +576,7 @@ module ApplicationHelper
 
   end
 
-  def langauge_hash(concept_label) 
+  def language_hash(concept_label) 
     
     if concept_label.is_a?(String) 
       return concept_label  
