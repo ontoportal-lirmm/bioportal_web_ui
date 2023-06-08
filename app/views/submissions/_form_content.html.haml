@@ -2,7 +2,7 @@
   = hidden_field object_name, :ontology, value: acronym
   = hidden_field object_name, :id, value: submissionId
   %div#general-card.mt-4
-    = metadata_section('general', 'General', collapsed: false) do
+    = metadata_section('general', 'General', collapsed: false) do |c| 
       = attribute_container('format', required: true) do
         = turbo_frame_tag  "#{object_name(acronym, submissionId)}Format_from_group_input" do
           = render partial: 'submissions/submission_format_form'
