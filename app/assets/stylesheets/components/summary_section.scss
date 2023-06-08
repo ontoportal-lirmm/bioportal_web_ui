@@ -1,0 +1,12 @@
+.card_title {
+  font-size: 18px;
+  margin-top: 40px;
+  margin-bottom: 20px;
+
+  span:nth-child(1){
+    text-decoration: underline;
+    text-underline-offset: 12px;
+    text-decoration-color: var(--primary-color);
+    text-decoration-thickness: 1px;
+  }
+}
