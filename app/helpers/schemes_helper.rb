@@ -24,9 +24,9 @@ module SchemesHelper
     schemes_labels = []
     schemes.each do  |x|
       id = x['@id']
-      label = get_scheme_label(x)
+      label = get_concept_label(get_scheme_label(x))
       if id.eql? main_uri
-        label = "#{label} (main)" unless label.empty?
+        label[1] = "#{label[1]} (main)" unless label[0].empty?
         selected_label = { 'prefLabel' => label, '@id' => id }
       else
         schemes_labels.append( { 'prefLabel' => label, '@id' => id })
@@ -34,12 +34,12 @@ module SchemesHelper
     end
 
     schemes_labels.sort_by! do |s|
-      prefLabel = language_hash(s['prefLabel'])
+      pref_label = s['prefLabel']
       
-      if prefLabel.is_a? String
-        prefLabel
+      if pref_label.is_a? String
+        pref_label
       else
-        prefLabel.values.first
+        pref_label.last
       end
     end
 
@@ -93,12 +93,12 @@ module SchemesHelper
     out = ''
    
     schemes_labels.sort_by { |s|
-      prefLabel = language_hash(s['prefLabel'])
+      pref_label = s['prefLabel']
       
-      if prefLabel.is_a? String
-        prefLabel
+      if pref_label.is_a? String
+        pref_label
       else
-        prefLabel.values.first
+        pref_label.last
       end
     }.each do |s|
       next unless main_scheme_label.nil? || s['prefLabel'] != main_scheme_label['prefLabel']

@@ -25,21 +25,21 @@ module CollectionsHelper
     collections_labels = []
     collections.each do  |x|
       id = x['@id']
-      label = get_collection_label(x)
+      label = get_concept_label(get_collection_label(x))
       if id.eql? main_uri
         selected_label = { 'prefLabel' => label, '@id' => id }
       else
         collections_labels.append( { 'prefLabel' => label, '@id' => id , 'color' => x['color'] })
       end
     end
-        
+
     collections_labels.sort_by! do |s|
-      prefLabel = language_hash(s['prefLabel'])
-      
-      if prefLabel.is_a? String
-        prefLabel
+      pref_label = s['prefLabel']
+
+      if pref_label.is_a? String
+        pref_label
       else
-        prefLabel.values.first
+        pref_label.last
       end
     end
 
