@@ -34,7 +34,7 @@ module CollectionsHelper
     end
         
     collections_labels.sort_by! do |s|
-      prefLabel = process_concept(s['prefLabel'])
+      prefLabel = langauge_hash(s['prefLabel'])
       
       if prefLabel.is_a? String
         prefLabel
