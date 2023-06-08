@@ -614,6 +614,26 @@ module ApplicationHelper
     hash.reject { |key, _| fields_to_remove.include?(key) }
   end
 
+
+  def display_in_multiple_languges(label)
+
+    if label.is_a?(String)
+      return content_tag(:p, label)
+    end
+    
+    labelHTML = label.map do |key, value|
+      content_tag(:div, class: 'd-flex gap-12 align-items-center') do
+        content_tag(:p, Array(value).join(', ')) +
+        content_tag(:span, key.upcase, class: 'badge badge-light')
+      end
+    end
+
+    # trasform array of html tags to a single string
+
+    raw labelHTML.join
+    
+  end
+
   def link_to_modal(name, options = nil, html_options = nil, &block)
 
     new_data = {
