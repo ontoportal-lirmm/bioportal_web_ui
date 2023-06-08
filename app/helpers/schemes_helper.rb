@@ -102,20 +102,25 @@ module SchemesHelper
       end
     }.each do |s|
       next unless main_scheme_label.nil? || s['prefLabel'] != main_scheme_label['prefLabel']
-      prefLabelLang, prefLabelHTML = get_concept_label(language_hash(get_scheme_label(s))) 
-      li = <<-EOS
-        <li class="doc">
-          <a id="#{s['@id']}" href="#{scheme_path(s['@id'])}" 
-            data-turbo="true" data-turbo-frame="scheme" data-schemeid="#{s['@id']}"
-            data-controller='tooltip' data-tooltip-position-value='right' title='#{prefLabelLang.upcase}'
-            class="#{selected_scheme_id.eql?(s['@id']) ? 'active' : nil}">
-              #{prefLabelHTML}
-          </a>
-        </li>
-      EOS
-      out << li
+      out  << <<-EOS
+            <li class="doc">
+              #{link_to_scheme(s, selected_scheme_id)}
+            </li>
+          EOS
     end
     out
+  end
+  def link_to_scheme(scheme, selected_scheme_id)
+    pref_label_lang, pref_label_html = get_scheme_label(scheme)
+    tooltip  = pref_label_lang.to_s.eql?('@none') ? '' :  "data-controller='tooltip' data-tooltip-position-value='right' title='#{pref_label_lang.upcase}'"
+    <<-EOS
+          <a id="#{scheme['@id']}" href="#{scheme_path(scheme['@id'], request_lang)}" 
+            data-turbo="true" data-turbo-frame="scheme" data-schemeid="#{scheme['@id']}"
+           #{tooltip}
+            class="#{selected_scheme_id.eql?(scheme['@id']) ? 'active' : nil}">
+              #{pref_label_html}
+          </a>
+    EOS
   end
 end
 
