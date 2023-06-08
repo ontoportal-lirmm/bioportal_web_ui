@@ -59,8 +59,8 @@ module SchemesHelper
     t("ontology_details.sections.#{section}")
   end
 
-  def scheme_path(scheme_id = '')
-    "/ontologies/#{@ontology.acronym}/schemes/show_scheme?id=#{escape(scheme_id)}"
+  def scheme_path(scheme_id = '', language = '')
+    "/ontologies/#{@ontology.acronym}/schemes/show_scheme?id=#{escape(scheme_id)}&lang=#{language}"
   end
 
   def no_main_scheme?

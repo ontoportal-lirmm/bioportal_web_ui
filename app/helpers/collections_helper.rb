@@ -57,8 +57,8 @@ module CollectionsHelper
     end
   end
 
-  def collection_path(collection_id = '')
-    "/ontologies/#{@ontology.acronym}/collections/show?id=#{escape(collection_id)}"
+  def collection_path(collection_id = '', language = '')
+    "/ontologies/#{@ontology.acronym}/collections/show?id=#{escape(collection_id)}&language=#{language}"
   end
 
   def request_collection_id
