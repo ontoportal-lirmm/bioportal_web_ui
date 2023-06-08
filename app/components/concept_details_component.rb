@@ -35,7 +35,7 @@ class ConceptDetailsComponent < ViewComponent::Base
           if v.is_a?(String)
             get_link_for_cls_ajax(v, ontology_acronym, '_blank')
           else
-            display_in_multiple_languges([v].to_h)
+            display_in_multiple_languages([v].to_h)
           end
         end
       end

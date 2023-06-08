@@ -606,7 +606,7 @@ module ApplicationHelper
   end
 
 
-  def display_in_multiple_languges(label)
+  def display_in_multiple_languages(label)
 
     if label.is_a?(String)
       return content_tag(:p, label)
