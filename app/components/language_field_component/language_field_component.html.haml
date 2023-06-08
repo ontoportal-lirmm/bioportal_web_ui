@@ -1,0 +1,5 @@
+- if @lang_code.length == 2
+  %div.f32
+    %span.flag{:class => " #{@lang_code}", :style => "margin-right: 0.5em;"}
+- else
+  = render ChipButtonComponent.new(text: @lang_code)
