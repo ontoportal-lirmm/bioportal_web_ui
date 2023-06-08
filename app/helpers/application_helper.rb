@@ -192,15 +192,25 @@ module ApplicationHelper
     prefLabelHTML =  child.prefLabel ? prefLabel[1] : child.id.split('/').last
     
 
+    tooltip = prefLabelLang.eql?("@none") ? "" : "data-controller='tooltip' data-tooltip-position-value='right' title='#{prefLabelLang}'";    
+
 
     link = <<-EOS
         <a id='#{child.id}' data-conceptid='#{child.id}'
         data-toggle="tooltip" data-placement="top" title="#{prefLabelLang}"   
+        <a id='#{child.id}' 
+        data-conceptid='#{child.id}'
         data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
            data-collections-value='#{child.memberOf || []}'
            data-active-collections-value='#{child.isInActiveCollection || []}'
            data-skos-collection-colors-target='collection'
             class='#{muted_style} #{active_style}'>
+        data-collections-value='#{child.memberOf || []}'
+        data-active-collections-value='#{child.isInActiveCollection || []}'
+        data-skos-collection-colors-target='collection'
+        class='#{muted_style} #{active_style}'
+        #{tooltip}
+          >
             #{ prefLabelHTML }
             
         </a>
