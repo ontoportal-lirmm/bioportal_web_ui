@@ -3,7 +3,13 @@ import useTooltip from "../mixins/useTooltip";
 
 // Connects to data-controller="tooltip"
 export default class extends Controller {
-  connect() {
-    useTooltip(this.element)
+
+  static values = {
+    position: String
   }
+
+  connect() {
+    useTooltip(this.element, this.positionValue)
+  }
+
 }
