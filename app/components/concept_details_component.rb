@@ -122,7 +122,7 @@ class ConceptDetailsComponent < ViewComponent::Base
       begin
         # Try to simplify the property values, when they are a struct.
         if properties[key].is_a?(OpenStruct)
-          values = langauge_hash(properties[key])
+          values = language_hash(properties[key])
         else
           values = properties[key].map { |v| v.string }
         end

@@ -35,6 +35,7 @@ module SchemesHelper
 
     schemes_labels.sort_by! do |s|
       prefLabel = langauge_hash(s['prefLabel'])
+      prefLabel = language_hash(s['prefLabel'])
       
       if prefLabel.is_a? String
         prefLabel
@@ -94,6 +95,7 @@ module SchemesHelper
    
     schemes_labels.sort_by { |s|
       prefLabel = langauge_hash(s['prefLabel'])
+      prefLabel = language_hash(s['prefLabel'])
       
       if prefLabel.is_a? String
         prefLabel

@@ -21,14 +21,14 @@
         %td{nowrap: ""}= t('ontology_details.concept.preferred_name')
         %td
           - unless @concept.prefLabel.nil? 
-            - prefLabel = langauge_hash(@concept.prefLabel)
+            - prefLabel = language_hash(@concept.prefLabel)
             = display_in_multiple_languges(prefLabel)
 
       - unless @concept.synonym.nil? || @concept.synonym.empty?
         %tr
           %td{nowrap: ""}= t('ontology_details.concept.synonyms')
           %td
-            - synonym = langauge_hash(@concept.synonym)
+            - synonym = language_hash(@concept.synonym)
             = display_in_multiple_languges(synonym)
           %td
             %div.synonym-change-request
@@ -40,7 +40,7 @@
         %tr
           %td{nowrap: ""}= t('ontology_details.concept.definitions')
           %td
-            - definition = langauge_hash(@concept.definition)
+            - definition = language_hash(@concept.definition)
             = display_in_multiple_languges(definition)
      
       
