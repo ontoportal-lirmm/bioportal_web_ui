@@ -20,7 +20,13 @@ class Admin::CategoriesController < ApplicationController
   end
 
   def edit
-    @category = LinkedData::Client::Models::Category.find_by_acronym(params[:id]).first
+    @category = LinkedData::Client::Models::Category.find_by_acronym(params[:id], include:'name,acronym,created,description,parentCategory,ontologies' ).first
+    @ontologies_category = LinkedData::Client::Models::Ontology.all.map {|o|[o.acronym, o.id] }
+    @id = "category_ontologies"
+    @name = "category[ontologies]"
+    @values = @ontologies_category
+    @selected = @category.ontologies
+    @multiple = true
 
     respond_to do |format|
       format.html { render "edit", :layout => false }
@@ -49,10 +55,11 @@ class Admin::CategoriesController < ApplicationController
     response = { errors: '', success: ''}
     start = Time.now
     begin
-      category = LinkedData::Client::Models::Category.find_by_acronym(params[:id]).first
+      category = LinkedData::Client::Models::Category.find_by_acronym(params[:id], include:'name,acronym,created,description,parentCategory,ontologies' ).first
+      add_ontologies_to_category(category_params[:ontologies],category)
+      delete_ontologies_from_category(category_params[:ontologies],category.ontologies,category)
       category.update_from_params(category_params)
       category_update = category.update
-
       if response_error?(category_update)
         response[:errors] = response_errors(category_update)
       else
@@ -89,7 +96,7 @@ class Admin::CategoriesController < ApplicationController
   end
 
   def category_params
-    params.require(:category).permit(:acronym, :name, :description, :parentCategory).to_h
+    params.require(:category).permit(:acronym, :name, :description, :parentCategory, {ontologies:[]}).to_h
   end
 
   def _categories
@@ -104,5 +111,24 @@ class Admin::CategoriesController < ApplicationController
       response[:errors] = "Problem retrieving categories  - #{e.message}"
     end
     response
+  end
+
+  def add_ontologies_to_category(ontologies,hasDomain)
+    ontologies.each do |ont|
+      unless hasDomain.ontologies.include?(ont)
+        ontology = LinkedData::Client::Models::Ontology.find(ont)
+        ontology.hasDomain.push(hasDomain.id)
+        ontology.update
+      end
+    end
+  end
+
+  def delete_ontologies_from_category(new_ontologies,old_ontologies,hasDomain)
+    ontologies = old_ontologies - new_ontologies  
+    ontologies.each do |ont|
+      ontology = LinkedData::Client::Models::Ontology.find(ont)
+      ontology.hasDomain.delete(hasDomain.id)
+      ontology.update
+    end
   end
 end
