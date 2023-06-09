@@ -6,9 +6,6 @@
   })
 
 - if @fair_scores_data
-  %div.align-items-start
-    .btn.btn-primary.rounded-pill.right-button
-      .span Total score : #{@fair_scores_data[:score]} ( #{@fair_scores_data[:normalizedScore]}% )
   %div.statistics_container.d-flex
     %div.w-50
       = render partial: "shared/fair_score_radar" , locals: {data: @fair_scores_data}
