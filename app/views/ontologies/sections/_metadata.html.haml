@@ -60,7 +60,9 @@
           - properties = {creators: @submission_latest.accrualMethod, contributors: 'Monthly', curators: 'https://www.fao.org/agrovoc/maintenance',
           translator: 'knowledge graph',publisher: 'Follow the OBO Principle, used Protégé and the Ontology Development Kit.',  funded_By: 'http://protege.stanford.edu/',
           endorsed_By: 'Quels sont les noms vernaculaires dune plante cultivée sur le territoire français?', copyright_Holder: @submission_latest.copyrightHolder}
-          = render DropdownContainerComponent.new(title: 'Persons and organizations', properties: properties)
+          = render DropdownContainerComponent.new(title: 'Persons and organizations', id: 'person_and_organization') do
+            - properties.each do |k, v|
+              = render FieldContainerComponent.new(label: k.to_s, value: v)
           .right_metadata
             .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#link_metadata_section"}
               %p.fix-margin-buttom
