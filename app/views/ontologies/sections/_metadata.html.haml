@@ -1,16 +1,12 @@
 = turbo_frame_tag 'summary', target:"_top" do
-  .summary-page-center
+  .summary-page-center.flex-column
     .summary-page-container
       .summary-page-sub-container
         .summary-page-first-row
           = render partial: 'ontologies/sections/metadata/ontology_description_section'
           %div.card.p-1.my-2.text-center
             = link_to_modal('See all metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "All metadata properties", show_modal_size_value: 'modal-xl' })
-          = render partial: 'ontologies/sections/metadata/ontology_fairness_section'
           = render partial: 'ontologies/sections/metadata/ontology_relations_network'
-          = render partial: 'ontologies/sections/metadata/ontology_submissions_section'
-          = render partial: 'ontologies/sections/metadata/ontology_metrics_section'
-
         .summary-page-second-row
           - depiction_url = @submission_latest.depiction
           - unless depiction_url.nil?
@@ -227,4 +223,7 @@
                     - @view_decorators.each do |view_decorator|
                       %dt= view_decorator.linked_name
                       %dd= view_decorator.description
-          
+        .summary-page-third-row
+          = render partial: 'ontologies/sections/metadata/ontology_fairness_section'
+          = render partial: 'ontologies/sections/metadata/ontology_submissions_section'
+          = render partial: 'ontologies/sections/metadata/ontology_metrics_section'
