@@ -115,8 +115,8 @@
                 %div.description_text
                   Projects using
                   = @ontology.acronym
-                = link_to(new_project_path(),  "aria-label": "Create new project", title: "Create new project", class: "mx-1 mt-1") do
-                  %img{src: asset_path("summary/plus.svg")}
+                = link_to(new_project_path(),  "aria-label": "Create new project", title: "Create new project", class: "mx-1 mt-1 projects-add-new") do
+                  = inline_svg_tag("summary/plus.svg")
               .projects_container
                 - if @projects.empty?
                   %p.font-italic= "No projects using #{@ontology.acronym}"

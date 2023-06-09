@@ -126,6 +126,16 @@
   justify-content: space-evenly;
   display: flex;
   padding: 0 20px;
+
+  svg path {
+    fill: var(--primary-color);
+  }
+}
+
+.projects-add-new{
+  svg path {
+    fill: var(--primary-color);
+  }
 }
 
 .text_link_line {
