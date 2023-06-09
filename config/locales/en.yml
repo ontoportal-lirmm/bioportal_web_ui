@@ -72,7 +72,7 @@ en:
     footer:
       copyright_html: Copyright &copy; 2005‑2022, The Board of Trustees of Leland Stanford Junior University. All rights reserved.
       grant_html: >
-        <strong>%{site}</strong> is currently being developed within French <a href="http://www.d2kab.org">ANR D2KAB project</a>  (<a href="http://www.agence-nationale-recherche.fr/Projet-ANR-18-CE23-0017">ANR-18-CE23-0017</a>). It also receives or received support from <a href="http://www.lirmm.fr/sifr">ANR SIFR project</a> (<a href="https://anr.fr/Projet-ANR-12-JS02-0010">ANR-12-JS02-0010</a>), European Union <a href="http://www.lirmm.fr/sifr">H2020-MSCA SIFRm project</a> (<a href="https://cordis.europa.eu/project/id/701771">No 701771</a>), the <a href="https://www.lirmm.fr/numev/">NUMEV Labex</a> (ANR-10-LABX-20), the <ahref="http://www.ibc-montpellier.fr/">IBC of Montpellier project</a> (ANR-11-BINF0002), the <a href="https://www.agropolis-fondation.fr/The-LabEx-AGRO?lang=en">Agro Labex</a> (ANR-10-LABX-0001) as well as from University of Montpellier and the CNRS.
+        <strong>%{site}</strong> is currently being developed within the european <a href="https://fair-impact.eu/">FAIR-IMPACT project</a>. It is maintained by the french research institute <a href="https://www.google.com/search?client=firefox-b-d&q=data+terra">Data Terra</a> and supported by the CNRS.
     notices:
       license_contact: >
         For more information, email <a href="mailto:support@ontoportal.org">support@ontoportal.org</a> or 
@@ -92,17 +92,17 @@ en:
   home:
     index:
       find_ontology_placeholder: Start typing ontology name, then choose from list
-      query_placeholder: Enter a class, e.g. Melanoma
-      tagline: the world's most comprehensive repository of biomedical ontologies
+      query_placeholder: Enter a class
+      tagline: the repository dedicated to Earth systems
       title: Welcome to the %{organization} 
       welcome: Welcome to %{site},
     help:
-      welcome: Welcome to the National Center for Biomedical Ontology’s %{site}. %{site} is a web-based application for accessing and sharing biomedical ontologies.
+      welcome: Welcome to Data Terra's %{site}. %{site} is a web-based application for accessing and sharing Earth and Environment systems semantic artefacts.
       getting_started: >
-        %{site} allows users to browse, upload, download, search, comment on, and create mappings for ontologies.
+        %{site} allows users to browse, upload, download, search, comment on, and create mappings for semantic artefacts.
       browse: >
-        Users can browse and explore individual ontologies by navigating either a tree structure or an animated graphical view. Users can also view mappings and 
-        ontology metadata, and download ontologies. Additionally, users who are signed in may submit a new ontology to the library.
+        Users can browse and explore individual semantic artefacts by navigating either a tree structure or an animated graphical view. Users can also view mappings and 
+        semantic artefacts metadata, and download semantic artefacs. Additionally, users who are signed in may submit a new ontology to the library.
       rest_examples_html: View documentation and examples of the <a href="http://data.bioontology.org/documentation" target="_blank">%{site} REST API</a>.
       announce_list_html: >
         To receive notices of new releases or site outages, please subscribe to the 
@@ -133,7 +133,7 @@ en:
   search:
     index:
       intro: Search for a class in multiple ontologies
-      search_keywords_placeholder: Enter a class, e.g. Melanoma
+      search_keywords_placeholder: Enter a class
       categories_placeholder: Start typing to select categories or leave blank to use all
       property_definition: Named association between two entities. Examples are "definition" (a relation between a class and some text) and "part-of" (a relation between two classes).
       obsolete_definition: >
