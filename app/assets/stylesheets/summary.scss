@@ -576,3 +576,8 @@ input:checked + .slider:before {
     width: 100%;
   }
 }
+
+
+.vis-up, .vis-down, .vis-left, .vis-right {
+  display: none !important;
+}
