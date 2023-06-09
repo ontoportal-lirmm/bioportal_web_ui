@@ -38,6 +38,11 @@
           Created:
         %td.top
           = f.text_field :created, readonly: true, class: "form-control"
+      %tr
+        %th
+          Ontologies:
+        %td.top
+          = render SelectInputComponent.new(id: @id, name: @name, values: @values , selected: @selected , multiple: @multiple, hide: true)
   %div.mt-2
     = f.submit button_text, class: "btn btn-primary mr-sm-2 group-form-accept"
     = link_to "Cancel", "javascript:;", class: "btn btn-primary dismiss-dialog"
