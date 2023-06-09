@@ -40,15 +40,18 @@
         %p.m-1
           = render ChipButtonComponent.new(text: show_category_name(domain), type: "static")
 
-
+  %hr.w-100.my-3
   .icons_container
     %a{href: "#{@submission_latest.download}", style: "text-decoration: none;"}
-      %img{src: asset_path("summary/download.svg")}/
+      %img{src: asset_path("summary/download.svg")}
     %a{href: "#{@submission_latest.homepage}", style: "text-decoration: none;"}
-      %img{src: asset_path("summary/homepage.svg")}/
+      %img{src: asset_path("summary/homepage.svg")}
     %a{href: "#{@submission_latest.documentation}", style: "text-decoration: none;"}
-      %img{src: asset_path("summary/documentation.svg")}/
+      %img{src: asset_path("summary/documentation.svg")}
     %a{href: "#{@submission_latest.repository}", style: "text-decoration: none;"}
-      %img{src: asset_path("summary/github.svg")}/
+      %img{src: asset_path("summary/github.svg")}
     %a{href: "#{@submission_latest.endpoint}", style: "text-decoration: none;"}
-      %img{src: asset_path("summary/sparql.svg")}/
+      %img{src: asset_path("summary/sparql.svg")}
+  %hr.w-100.my-3
+  %div.text-center
+    = link_to_modal('See all metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "All metadata properties", show_modal_size_value: 'modal-xl' })

@@ -4,8 +4,6 @@
       .summary-page-sub-container
         .summary-page-first-row
           = render partial: 'ontologies/sections/metadata/ontology_description_section'
-          %div.card.p-1.my-2.text-center
-            = link_to_modal('See all metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "All metadata properties", show_modal_size_value: 'modal-xl' })
           = render partial: 'ontologies/sections/metadata/ontology_relations_network'
         .summary-page-second-row
           - depiction_url = @submission_latest.depiction
