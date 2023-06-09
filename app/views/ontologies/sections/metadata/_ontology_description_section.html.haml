@@ -11,6 +11,14 @@
     %p.creation_text if you want more information contact
     %p.creator_text
       = @submission_latest.contact.map {|c| [c.name, c.email].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
+
+  - unless @submission_latest.naturalLanguage.nil? || @submission_latest.naturalLanguage.empty?
+    %p.description_text
+      Natural language
+    .categories_section
+      - @submission_latest.naturalLanguage.each do |lang|
+        %p.m-1
+          = render LanguageFieldComponent.new(value: lang)
   - if @ontology.admin?(session[:user]) && @submission_latest.pullLocation
     %p.description_text
       Pull URL
