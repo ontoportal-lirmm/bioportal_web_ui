@@ -778,9 +778,8 @@ class ApplicationController < ActionController::Base
   
   # Get the submission metadata from the REST API.
   def submission_metadata
-    @metadata ||= JSON.parse(Net::HTTP.get(URI.parse("#{REST_URI}/submission_metadata?apikey=#{API_KEY}")))
+    helpers.submission_metadata
   end
-  helper_method :submission_metadata
 
 
   def request_lang

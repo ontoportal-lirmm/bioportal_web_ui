@@ -266,7 +266,7 @@ module SubmissionsHelper
 
 
   def attribute_infos(attr_label)
-    @metadata.select{ |attr_hash| attr_hash["attribute"].to_s.eql?(attr_label) }.first
+    submission_metadata.select{ |attr_hash| attr_hash["attribute"].to_s.eql?(attr_label) }.first
   end
 
   def attribute_help_text(attr)

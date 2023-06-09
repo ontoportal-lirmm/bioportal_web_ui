@@ -2,9 +2,9 @@
 
 class DropdownContainerComponent < ViewComponent::Base
 
-  def initialize(title:, properties:)
+  def initialize(title:, id:)
     super
     @title = title
-    @properties = properties
+    @id = id
   end
 end
