@@ -41,7 +41,7 @@
   = render partial: 'kgcl_dialogs'
 
   %div.row.pt-md-3.pb-md-2
-    %div.col
+    %div.d-flex.w-100.justify-content-center
       = render partial: 'layouts/ontology_viewer/header'
 
   %div.row.pb-4{data: {controller: 'ontology-viewer-tabs', 'ontology-viewer-tabs-language-sections-value': ontology_data_sections }}
@@ -49,7 +49,7 @@
       - sections = sections_to_show
       %div
         %div.ontology-details-tabs
-          %div{style: "display: flex; justify-content: space-between;"}
+          %div
             %div.nav.nav-tabs.card-header-tabs.tab-items{id: "navbar-ontology", role: "tablist"}
               - sections.each do |section_title|
                 %div{class: selected_section?(section_title) ? 'active show' : '', data: { action: 'click->ontology-viewer-tabs#selectTab',

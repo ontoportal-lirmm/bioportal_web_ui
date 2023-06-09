@@ -1,6 +1,13 @@
-.ontology-details-tabs{
+.ontology-details-tabs {
     margin: 40px 0;
     border-bottom: 1px solid #DFDFDF;
+    display: flex;
+    justify-content: center;
+    & > div {
+        display: flex;
+        justify-content: space-between;
+        width: 65%;
+    }
 }
 
 .ontology-details-tabs hr{
@@ -43,4 +50,14 @@
     display: block;
     border: 1px solid var(--primary-color);
     opacity: 100%;
+}
+
+@media (max-width: 1900px){
+    .ontology-details-tabs {
+        & > div {
+            width: 100%;
+        }
+    }
+
+
 }
