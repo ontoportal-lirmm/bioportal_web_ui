@@ -31,7 +31,7 @@
           - else
             = render ChipButtonComponent.new(text: key_class, type: "static")
 
-  - unless @submission_latest.hasDomain.nil?
+  - unless @submission_latest.hasDomain.nil? || @submission_latest.hasDomain.empty?
     %p.description_text Categories and subjects
     .categories_section
       - @ontology.hasDomain.each do |domain|
