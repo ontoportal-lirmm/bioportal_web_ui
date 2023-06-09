@@ -45,6 +45,10 @@ module ApplicationHelper
     end
   end
 
+  def link?(string)
+    string.to_s.start_with?('http://') || string.to_s.start_with?('https://')
+  end
+
   def encode_param(string)
     CGI.escape(string)
   end

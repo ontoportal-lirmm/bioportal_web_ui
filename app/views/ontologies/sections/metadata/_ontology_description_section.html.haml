@@ -19,15 +19,17 @@
   - unless @submission_latest.keywords.nil?
     %p.description_text Keywords and Key classes
     .keywords_keyclasses_section
-      - @submission_latest.keywords.split(',').each do |keyword|
+      - keywords = @submission_latest.keywords || ''
+      - keywords.split(',').each do |keyword|
         %div.m-1
           = render ChipButtonComponent.new(text: keyword, type: "static")
-      - @submission_latest.keyClasses&.split(',').each do |keyclass|
+      - key_classes = @submission_latest.keyClasses || ''
+      - key_classes.split(',').each do |key_class|
         %div.m-1
-          - if link?(keyclass)
-            = render ChipButtonComponent.new(url: '', text: keyclass, type: "clickable")
+          - if link?(key_class)
+            = render ChipButtonComponent.new(url: '', text: key_class, type: "clickable")
           - else
-            = render ChipButtonComponent.new(text: keyclass, type: "static")
+            = render ChipButtonComponent.new(text: key_class, type: "static")
 
   - unless @submission_latest.hasDomain.nil?
     %p.description_text Categories and subjects
