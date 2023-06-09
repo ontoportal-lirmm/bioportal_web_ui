@@ -16,6 +16,7 @@
 }
 .description_text {
   overflow: hidden;
+  margin-bottom: 0px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: var(--read-more-line-clamp, 5);
@@ -61,15 +62,15 @@
 }
 
 .creation_info {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .projects_info {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
 }
 
 .date_creation_text {
@@ -125,6 +126,16 @@
   justify-content: space-evenly;
   display: flex;
   padding: 0 20px;
+
+  svg path {
+    fill: var(--primary-color);
+  }
+}
+
+.projects-add-new{
+  svg path {
+    fill: var(--primary-color);
+  }
 }
 
 .text_link_line {
@@ -318,6 +329,7 @@ svg path {
 .normal_text {
   font-size: 15;
   color: black;
+  word-wrap: break-word;
 }
 
 .openUp .depiction {
