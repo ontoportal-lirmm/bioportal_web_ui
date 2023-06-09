@@ -21,7 +21,13 @@ class Admin::GroupsController < ApplicationController
 
   def edit
     @group = LinkedData::Client::Models::Group.find_by_acronym(params[:id]).first
-
+    @acronyms = @group.ontologies.map { |url| url.match(/\/([^\/]+)$/)[1] }
+    @ontologies_group = LinkedData::Client::Models::Ontology.all.map {|o|[o.acronym, o.id] }
+    @id = "group_ontologies"
+    @name = "group[ontologies]"
+    @values = @ontologies_group
+    @selected = @group.ontologies
+    @multiple = true
     respond_to do |format|
       format.html { render "edit", :layout => false }
     end
@@ -50,6 +56,8 @@ class Admin::GroupsController < ApplicationController
     start = Time.now
     begin
       group = LinkedData::Client::Models::Group.find_by_acronym(params[:id]).first
+      add_ontologies_to_group(group_params[:ontologies],group)
+      delete_ontologies_from_group(group_params[:ontologies],group.ontologies,group)
       group.update_from_params(group_params)
       group_updated = group.update
       if response_error?(group_updated)
@@ -88,7 +96,7 @@ class Admin::GroupsController < ApplicationController
   end
 
   def group_params
-    params.require(:group).permit(:acronym, :name, :description).to_h()
+    params.require(:group).permit(:acronym, :name, :description, {ontologies:[]}).to_h()
   end
 
   def _groups
@@ -103,5 +111,24 @@ class Admin::GroupsController < ApplicationController
       response[:errors] = "Problem retrieving groups  - #{e.message}"
     end
     response
+  end
+
+  def add_ontologies_to_group(ontologies,group)
+    ontologies.each do |ont|
+      unless group.ontologies.include?(ont)
+        ontology = LinkedData::Client::Models::Ontology.find(ont)
+        ontology.group.push(group.id)
+        ontology.update
+      end
+    end
+  end
+
+  def delete_ontologies_from_group(new_ontologies,old_ontologies,group)
+    ontologies = old_ontologies - new_ontologies  
+    ontologies.each do |ont|
+      ontology = LinkedData::Client::Models::Ontology.find(ont)
+      ontology.group.delete(group.id)
+      ontology.update
+    end
   end
 end
