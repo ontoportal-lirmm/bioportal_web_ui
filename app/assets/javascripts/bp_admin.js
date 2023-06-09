@@ -1310,7 +1310,7 @@ function displayGroups(data, group) {
                   "searchable": false,
                   "orderable": false,
                   "title": "Actions",
-                  "width": "250px"
+                  "width": "200px"
                 }
             ],
             "autoWidth": false,
