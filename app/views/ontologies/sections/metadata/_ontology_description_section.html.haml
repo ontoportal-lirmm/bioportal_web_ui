@@ -1,0 +1,55 @@
+.Summary-page-card
+  %h4.summary-page-card-title General information
+  .account-page-info-column.align-items-center.description_text
+    = render TextAreaFieldComponent.new(value: @submission_latest.description)
+    - unless @submission_latest.logo.nil?
+      %img{height: "85", src: @submission_latest.logo, width: "189"}/
+  .creation_info
+    %p.creation_text Originally released on
+    %p.date_creation_text
+      = l(Date.parse(@submission_latest.released), format: :monthfull_day_year)
+    %p.creation_text if you want more information contact
+    %p.creator_text
+      = @submission_latest.contact.map {|c| [c.name, c.email].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
+  - if @ontology.admin?(session[:user]) && @submission_latest.pullLocation
+    %p.description_text
+      Pull URL
+    %span
+      = link_to @submission_latest.pullLocation, @submission_latest.pullLocation
+  - unless @submission_latest.keywords.nil?
+    %p.description_text Keywords and Key classes
+    .keywords_keyclasses_section
+      - keywords = @submission_latest.keywords || ''
+      - keywords.split(',').each do |keyword|
+        %div.m-1
+          = render ChipButtonComponent.new(text: keyword, type: "static")
+      - key_classes = @submission_latest.keyClasses || ''
+      - key_classes.split(',').each do |key_class|
+        %div.m-1
+          - if link?(key_class)
+            = render ChipButtonComponent.new(url: '', text: key_class, type: "clickable")
+          - else
+            = render ChipButtonComponent.new(text: key_class, type: "static")
+
+  - unless @submission_latest.hasDomain.nil? || @submission_latest.hasDomain.empty?
+    %p.description_text Categories and subjects
+    .categories_section
+      - @ontology.hasDomain.each do |domain|
+        %p.m-1
+          = render ChipButtonComponent.new(text: show_category_name(domain), type: "static")
+
+  %hr.w-100.my-3
+  .icons_container
+    %a{href: "#{@submission_latest.download}", style: "text-decoration: none;"}
+      %img{src: asset_path("summary/download.svg")}
+    %a{href: "#{@submission_latest.homepage}", style: "text-decoration: none;"}
+      %img{src: asset_path("summary/homepage.svg")}
+    %a{href: "#{@submission_latest.documentation}", style: "text-decoration: none;"}
+      %img{src: asset_path("summary/documentation.svg")}
+    %a{href: "#{@submission_latest.repository}", style: "text-decoration: none;"}
+      %img{src: asset_path("summary/github.svg")}
+    %a{href: "#{@submission_latest.endpoint}", style: "text-decoration: none;"}
+      %img{src: asset_path("summary/sparql.svg")}
+  %hr.w-100.my-3
+  %div.text-center
+    = link_to_modal('See all metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "All metadata properties", show_modal_size_value: 'modal-xl' })

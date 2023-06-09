@@ -1,7 +1,22 @@
-- @values.each do |attr, val|
-  .creation_info
-    %p.description_text
-      = attr
-  %p.normal_text
-    = Array(val).join(',')
-
+%table.concepts-content
+  - @metadata_list.each do |metadata, label|
+    - unless @metadata_not_displayed.include?(metadata)
+      %tr
+        %td
+          = label || metadata.underscore.humanize
+        %td.d-flex.flex-wrap.align-items-center
+          - Array(@submission.send(metadata)).each do |value|
+            %div.m-1.f32
+              - if metadata.eql?("naturalLanguage")
+                = render LanguageFieldComponent.new(value: value)
+              - elsif metadata.to_s.eql?("hasLicense")
+                = render LicenseFieldComponent.new(value: value)
+              - elsif metadata.to_s.eql?("endpoint") && (value.start_with?("http://sparql.") || value.start_with?("https://sparql."))
+                %a{:href => value, :title => value, :target => "_blank", :style => "border-width:0;"}
+                  = image_tag('logos/sparql_logo.png', :title => value, :class => 'logo')
+              - elsif date_time?(metadata)
+                = render DateTimeFieldComponent.new(value: value)
+              - elsif attr_uri?(metadata)
+                = render LinkFieldComponent.new(value: value)
+              - else
+                = render TextAreaFieldComponent.new(value:  value.to_s)

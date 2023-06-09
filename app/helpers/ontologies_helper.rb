@@ -109,180 +109,7 @@ module OntologiesHelper
     return logo_html
   end
 
-  # Add additional metadata as html for a submission
-  def additional_metadata(sub)
-    # Get the list of metadata attribute from the REST API
-    json_metadata = submission_metadata
-    metadata_list = {}
-    # Get extracted metadata and put them in a hash with their label, if one, as value
-    json_metadata.each do |metadata|
-      if metadata["extracted"] == true
-        metadata_list[metadata["attribute"]] = metadata["label"]
-      end
-    end
-    metadata_list = metadata_list.sort
 
-    html = []
-
-    metadata_not_displayed = ["status", "description", "documentation", "publication", "homepage", "openSearchDescription", "dataDump", "includedInDataCatalog", "logo", "depiction"]
-
-    begin
-
-      metadata_list.each do |metadata, label|
-        # Don't display documentation, publication, homepage, status and description, they are already in main details
-        if !metadata_not_displayed.include?(metadata)
-          # different html build if list or single value
-
-          # METADATA ARRAY
-          if sub.send(metadata).kind_of?(Array)
-            if sub.send(metadata).any?
-              if metadata.eql?("naturalLanguage")
-                # Special treatment for naturalLanguage: we want the flags in a bootstrap box
-                # UK is gb: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
-                lang_codes = []
-
-                sub.send(metadata).each do |lang|
-                  if (lang.to_s.eql?("en") || lang.to_s.eql?("eng") || lang.to_s.eql?("http://lexvo.org/id/iso639-3/eng"))
-                    # We consider en and eng as english
-                    lang_codes << "gb"
-                  elsif lang.to_s.start_with?("http://lexvo.org")
-                    lang_codes << $LEXVO_TO_FLAG[lang]
-                  else
-                    lang_codes << lang
-                  end
-                end
-
-                html << content_tag(:tr) do
-                  concat(content_tag(:td, "Natural Language", " "))
-                  # Display naturalLanguage as flag
-                  concat(content_tag(:td) do
-                    concat(content_tag(:ul, { :class => "f32" }) do
-                      lang_codes.each do |lang_code|
-                        if lang_code.length == 2
-                          concat(content_tag(:li, "", { :class => "flag #{lang_code}", :style => "margin-right: 0.5em;" }))
-                        else
-                          concat(content_tag(:li, lang_code))
-                        end
-                      end
-                    end)
-                  end)
-                end
-
-              else
-                html << content_tag(:tr) do
-                  if label.nil?
-                    concat(content_tag(:td, metadata.gsub(/(?=[A-Z])/, " ")))
-                  else
-                    concat(content_tag(:td, label))
-                  end
-
-                  metadata_array = []
-                  sub.send(metadata).each do |metadata_value|
-                    if metadata_value.to_s.start_with?("#{$REST_URL}/ontologies/")
-                      # For URI that links to our ontologies we display a button with only the acronym. And redirect to the UI
-                      # Warning! Redirection is done by removing "data." from the REST_URL. So might not work perfectly everywhere
-                      if metadata_value.to_s.split("/").length < 6
-                        # for ontologies/ACRONYM we redirect to the UI url
-                        metadata_array.push("<a href=\"#{metadata_value.to_s.sub("data.", "")}\" class=\"btn btn-primary\" target=\"_blank\">#{metadata_value.to_s.split("/")[4..-1].join("/")}</a>")
-                      else
-                        metadata_array.push("<a href=\"#{metadata_value.to_s}\" class=\"btn btn-primary\" target=\"_blank\">#{metadata_value.to_s.split("/")[4..-1].join("/")}</a>")
-                      end
-
-                    elsif metadata_value.to_s =~ /\A#{URI::regexp(['http', 'https'])}\z/
-                      # Don't create a link if it not an URI
-                      metadata_array.push("<a href=\"#{metadata_value.to_s}\" target=\"_blank\">#{metadata_value.to_s}</a>")
-                    else
-                      metadata_array.push(metadata_value)
-                    end
-                  end
-                  concat(content_tag(:td, raw(metadata_array.join(", "))))
-                end
-              end
-            end
-          else
-
-            # SINGLE METADATA
-            if !sub.send(metadata).nil?
-              html << content_tag(:tr) do
-                if label.nil?
-                  concat(content_tag(:td, metadata.gsub(/(?=[A-Z])/, " ")))
-                else
-                  concat(content_tag(:td, label))
-                end
-                if (metadata.to_s.eql?("hasLicense"))
-                  if (sub.send(metadata).to_s.start_with?("http://creativecommons.org/licenses") || sub.send(metadata).start_with?("https://creativecommons.org/licenses"))
-                    concat(content_tag(:td) do
-                      concat(content_tag(:a, { :rel => "license", :alt => "Creative Commons License",
-                                               :href => sub.send(metadata), :target => "_blank", :style => "border-width:0", :title => sub.send(metadata),
-                                               :src => "https://i.creativecommons.org/l/by/4.0/88x31.png" }) do
-
-                        concat(content_tag(:img, "", { :rel => "license", :alt => "Creative Commons License", :title => sub.send(metadata),
-                                                       :style => "border-width:0", :src => "https://i.creativecommons.org/l/by/4.0/88x31.png" }))
-                      end)
-                    end)
-
-                  elsif (sub.send(metadata).to_s.start_with?("http://opensource.org/licenses") || sub.send(metadata).start_with?("https://opensource.org/licenses"))
-                    concat(content_tag(:td) do
-                      concat(content_tag(:a, { :rel => "license", :alt => "Open Source License",
-                                               :href => sub.send(metadata), :title => sub.send(metadata), :target => "_blank", :style => "border-width:0;",
-                                               :src => "https://opensource.org/files/osi_logo_bold_100X133_90ppi.png" }) do
-
-                        concat(content_tag(:img, "", { :rel => "license", :alt => "Open Source License", :title => sub.send(metadata),
-                                                       :style => "height: 80px; border-width:0;", :src => "https://opensource.org/files/osi_logo_bold_100X133_90ppi.png" }))
-                      end)
-                    end)
-
-                  else
-                    concat(content_tag(:td) do
-                      concat(content_tag(:a, sub.send(metadata), { :rel => "license", :href => sub.send(metadata), :target => "_blank" }))
-                    end)
-                  end
-
-                elsif (metadata.to_s.eql?("endpoint") && (sub.send(metadata).start_with?("http://sparql.") || sub.send(metadata).start_with?("https://sparql.")))
-                  concat(content_tag(:td) do
-                    concat(content_tag(:a, { :href => sub.send(metadata), :title => sub.send(metadata),
-                                             :target => "_blank", :style => "border-width:0;" }) do
-
-                      concat(image_tag('logos/sparql_logo.png', title: sub.send(metadata), class: 'logo'))
-                    end)
-                  end)
-
-                elsif sub.send(metadata).to_s.start_with?("#{$REST_URL}/ontologies/")
-                  # For URI that links to our ontologies we display a button with only the acronym. And redirect to the UI
-                  # Warning! Redirection is done by removing "data." from the REST_URL. So might not work perfectly everywhere
-                  if sub.send(metadata).to_s.split("/").length < 6
-                    # for ontologies/ACRONYM we redirect to the UI url
-                    concat(content_tag(:td) do
-                      concat(content_tag(:a, sub.send(metadata).to_s.split("/")[4..-1].join("/"), { :class => "btn btn-primary",
-                                                                                                    :href => sub.send(metadata).sub("data.", ""), :target => "_blank", :title => sub.send(metadata) }))
-                    end)
-                  else
-                    concat(content_tag(:td) do
-                      concat(content_tag(:a, sub.send(metadata).to_s.split("/")[4..-1].join("/"), { :class => "btn btn-primary",
-                                                                                                    :href => sub.send(metadata), :target => "_blank", :title => sub.send(metadata) }))
-                    end)
-                  end
-
-                else
-                  if sub.send(metadata).to_s =~ /\A#{URI::regexp(['http', 'https'])}\z/
-                    # Don't create a link if it not an URI
-                    concat(content_tag(:td, raw("<a href=\"#{sub.send(metadata).to_s}\" target=\"_blank\">#{sub.send(metadata).to_s}</a>")))
-                  else
-                    concat(content_tag(:td, raw(sub.send(metadata).to_s)))
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    rescue => e
-      LOG.add :debug, "Unable to retrieve additional ontology metadata"
-      LOG.add :debug, "error: #{e}"
-      LOG.add :debug, "error message: #{e.message}"
-    end
-    html.join("")
-  end
 
   def count_links(ont_acronym, page_name = 'summary', count = 0)
     ont_url = "/ontologies/#{ont_acronym}"
@@ -326,6 +153,10 @@ module OntologiesHelper
       end
     end
     links
+  end
+
+  def link?(string)
+    string.start_with?('http://') || string.start_with?('https://')
   end
 
   def mappings_link(ontology, count)
@@ -388,6 +219,12 @@ module OntologiesHelper
       link_name = 'Licensed'
     end
     "<a href='#{ont_url}/?p=#{page_name}'>#{link_name}</a>"
+  end
+
+  def show_category_name(domain)
+    acronym = domain.split('/').last.upcase
+    category = LinkedData::Client::Models::Category.find_by_acronym(acronym).first
+    category ? category.name : acronym
   end
 
   def visits_data(ontology = nil)

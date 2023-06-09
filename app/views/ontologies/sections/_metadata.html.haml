@@ -1,117 +1,10 @@
 = turbo_frame_tag 'summary', target:"_top" do
-  .summary-page-center
+  .summary-page-center.flex-column
     .summary-page-container
       .summary-page-sub-container
         .summary-page-first-row
-          .Summary-page-card
-            %h4.summary-page-card-title General information
-            .account-page-info-column
-              %div{data:{controller:"text-truncate", 'text-truncate-more-text-value': 'See more...' , 'text-truncate-less-text-value': 'See less...'}}
-                %p.description_text{'data-text-truncate-target': 'content'}
-                  = "Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme Thésaurus ouvert et partagé couvrant les domaines de recherche d’INRAE. Il sert de référentiel au sein de l’institut pour indexer et annoter des documents, pages web, descriptions d’activités, jeux de données, à des fins de recherche ou d’analyse de l’information. Il nous aide dans AgroPortal. Suppression de la relation Concept / topConcept / Scheme"
-                %p.see_more_text{data:{'text-truncate-target': 'button', 'action':"click->text-truncate#toggle"}}
-                  see more...
-            .creation_info
-              %p.creation_text Originally released on
-              %p.date_creation_text
-                = l(Date.parse(@submission_latest.released), format: :monthfull_day_year)
-              %p.creation_text if you want more information contact 
-              %p.creator_text
-                = @submission_latest.contact.map {|c| [c.name, c.email].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
-            - unless @submission_latest.logo.nil?
-              %img{height: "85", src: @submission_latest.logo, width: "189"}/
-            %div
-              %p.summary-page-card-title
-                = @submission_latest.contact.map {|c| [c.name, c.email].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
-            - if @ontology.admin?(session[:user]) && @submission_latest.pullLocation
-              %p.description_text
-                Pull URL
-              %span
-                = link_to @submission_latest.pullLocation, @submission_latest.pullLocation
-            - unless @submission_latest.keywords.nil?
-              %p.description_text Keywords and Key classes
-              .keywords_keyclasses_section
-                - @submission_latest.keywords.split(',').each do |keyword|
-                  %span.non_clickable_text.keywords_container= keyword
-                - if @submission_latest.keyClasses.is_a? String
-                  - @submission_latest.keyClasses&.split(',').each do |keyclass|
-                    %span.clickable_text.keywords_container= keyclass
-                - else
-                  - @submission_latest.keyClasses&.each do |keyclass|
-                    %span.clickable_text.keyclasses_container
-            - unless @submission_latest.hasDomain.nil?
-              %p.description_text Categories and subjects
-              .categories_section
-                %p
-                  - @ontology.hasDomain.each do |domain|
-                    %span.non_clickable_text.keywords_container= domain
-
-            .icons_container
-              %a{href: "#{@submission_latest.download}", style: "text-decoration: none;"}
-                %img{src: asset_path("summary/download.svg")}/
-              %a{href: "#{@submission_latest.homepage}", style: "text-decoration: none;"}
-                %img{src: asset_path("summary/homepage.svg")}/
-              %a{href: "#{@submission_latest.documentation}", style: "text-decoration: none;"}
-                %img{src: asset_path("summary/documentation.svg")}/
-              %a{href: "#{@submission_latest.repository}", style: "text-decoration: none;"}
-                %img{src: asset_path("summary/github.svg")}/
-              %a{href: "#{@submission_latest.endpoint}", style: "text-decoration: none;"}
-                %img{src: asset_path("summary/sparql.svg")}/
-          %div.card.p-1.my-2.text-center
-            = link_to_modal('See all metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "Additional Metadata", show_modal_size_value: 'modal-xl' })
-          - if fairness_service_enabled? && @ontology.acronym != 'AGROVOC'
-            %h2.card_title FAIR score
-            %hr#section_focused_line_fairScore
-            .Summary-page-card
-              .summary-page-card-container.flex-column
-                %section.ont-metadata-card.ont-fair-score-card#fair-summary
-                  %div.ont-section-toolbar
-                    %header.pb-2.font-weight-bold
-                      = render partial: "fair_score/fair_service_header"
-                %div#fair-score-charts-container.w-100
-                  = render partial: "fairs_score"
-                .account-page-card-sub-container
-          - unless @landscape_data.empty?
-            %h2.card_title Ontology relations network
-            %hr#section_focused_line_networkRelation/
-            .Summary-page-card
-              = render partial: 'ontologies/sections/metadata/ontology_relations_network'
-          %h2.card_title Submissions
-          %hr#section_focused_line_fairScore/
-          .Summary-page-card
-            - if @ontology.admin?(session[:user])
-              = link_to(new_ontology_submission_path(@ontology.acronym), "aria-label": "Add submission", title: "Add submission") do
-                %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.75rem;"}
-              - unless (@submission_latest.nil? || (@submission_latest.respond_to?(:status) && @submission_latest.status == 404))
-                = link_to(edit_ontology_submission_path(@ontology.acronym, @submission_latest.submissionId), "aria-label": "Edit latest submission", title: "Edit latest submission") do
-                  %i.fas.fa-user-edit{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
-            = render TurboFrameComponent.new(id: 'ontology_submissions', src: ontology_submissions_path(@ontology.acronym))
-          %h2.card_title.d-flex.align-items-center
-            %span.mr-2
-              Metrics
-            %span
-              = link_to(Rails.configuration.settings.links[:metrics], target: "_blank", "aria-label": "View individual metrics definitions", title: "View individual metrics definitions") do
-                %i.fas.fa-lg.fa-question-circle{style: "color: var(--primary-color)"}
-          %hr#section_focused_line_metrics/
-          .metrics-container.metrics
-            .metrics-item
-              %hr/
-              %div
-                %h4
-                  = @metrics&.classes
-                %p Classes
-            .metrics-item
-              %hr/
-              %div
-                %h4
-                  = @metrics&.individuals
-                %p Individuals
-            .metrics-item
-              %hr/
-              %div
-                %h4
-                  = @metrics&.properties
-                %p Properties
+          = render partial: 'ontologies/sections/metadata/ontology_description_section'
+          = render partial: 'ontologies/sections/metadata/ontology_relations_network'
         .summary-page-second-row
           - depiction_url = @submission_latest.depiction
           - unless depiction_url.nil?
@@ -164,52 +57,12 @@
                   Validity date
               %p.normal_text
                 = @submission_latest.valid
-          .right_metadata
-            .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#persons_orgs_metadata_section"}
-              %p.fix-margin-buttom
-                Persons and organizations
-              %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
-            #persons_orgs_metadata_section.collapse.right-metadata-conetent
-              .creation_info
-                %p.description_text
-                  Creators
-              %p.normal_text
-                = @submission_latest.accrualMethod
-              .creation_info
-                %p.description_text
-                  Contributors
-              %p.normal_text
-                Monthly
-              .creation_info
-                %p.description_text
-                  Curators
-              %p.normal_text
-                https://www.fao.org/agrovoc/maintenance
-              .creation_info
-                %p.description_text
-                  Translator
-              %p.normal_text
-                knowledge graph
-              .creation_info
-                %p.description_text
-                  Publisher
-              %p.normal_text
-                Follow the OBO Principle, used Protégé and the Ontology Development Kit.
-              .creation_info
-                %p.description_text
-                  Funded By
-              %p.normal_text
-                http://protege.stanford.edu/
-              .creation_info
-                %p.description_text
-                  Endorsed By
-              %p.normal_text
-                Quels sont les noms vernaculaires dune plante cultivée sur le territoire français?
-              .creation_info
-                %p.description_text
-                  CopyRight Holder
-              %p.normal_text
-                = @submission_latest.copyrightHolder
+          - properties = {creators: @submission_latest.accrualMethod, contributors: 'Monthly', curators: 'https://www.fao.org/agrovoc/maintenance',
+          translator: 'knowledge graph',publisher: 'Follow the OBO Principle, used Protégé and the Ontology Development Kit.',  funded_By: 'http://protege.stanford.edu/',
+          endorsed_By: 'Quels sont les noms vernaculaires dune plante cultivée sur le territoire français?', copyright_Holder: @submission_latest.copyrightHolder}
+          = render DropdownContainerComponent.new(title: 'Persons and organizations', id: 'person_and_organization') do
+            - properties.each do |k, v|
+              = render FieldContainerComponent.new(label: k.to_s, value: v)
           .right_metadata
             .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#link_metadata_section"}
               %p.fix-margin-buttom
@@ -343,9 +196,7 @@
                   = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", "aria-label": "Download as CSV", title: "Download as CSV") do
                     %img{alt: "", src: asset_path("summary/arrow_down.svg")}
               = render partial: "visits"
-          %h2.card_title_2 Get my metadata back
-          %hr#section_focused_line_fairScore/       
-          .Summary-page-card_back
+          = render SummarySectionComponent.new(title: 'Get my metadata back')  do
             - unless @submission_latest.nil?
               %div{data:{controller: 'metadata-downloader'}}
                 =javascript_include_tag "jsonld"
@@ -372,4 +223,7 @@
                     - @view_decorators.each do |view_decorator|
                       %dt= view_decorator.linked_name
                       %dd= view_decorator.description
-          
+        .summary-page-third-row
+          = render partial: 'ontologies/sections/metadata/ontology_fairness_section'
+          = render partial: 'ontologies/sections/metadata/ontology_submissions_section'
+          = render partial: 'ontologies/sections/metadata/ontology_metrics_section'

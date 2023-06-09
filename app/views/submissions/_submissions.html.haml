@@ -6,7 +6,7 @@
 
   %div.click_versions_collapse
     = render_alerts_container(AdminController)
-    %table#ontology_versions.table.table-hover-group-divider
+    %table#ontology_versions.table.table-borderless
       %thead
         %tr
           - if @ontology.admin?(session[:user])

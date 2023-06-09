@@ -155,15 +155,11 @@ export default class extends Controller {
                     nodeDistance: 170
                 },
                 solver: 'barnesHut'
+            },
+            interaction: {
+                zoomView: false,
+                navigationButtons: true
             }
-            /*configure: {
-              enabled: true,
-              showButton: true
-            }
-            interaction:{
-              zoomView:false,
-              dragView: false
-            }*/
         };
 
         // initialize your network!
