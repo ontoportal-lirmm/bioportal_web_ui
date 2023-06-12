@@ -14,7 +14,7 @@
       %col{style: "width: 100%"}
     %tr
       %th
-        Acronym:
+        Acronym
         %span.asterik *
       %td.top
         - if new_record
@@ -23,24 +23,24 @@
           = f.text_field :acronym, class: "form-control", readonly: true
     %tr
       %th
-        Name:
+        Name
         %span.asterik *
       %td.top
         = f.text_field :name, class: "form-control"
     %tr
       %th
-        Description:
+        Description
       %td.top
         = f.text_area :description, class: "form-control"
     - unless new_record
       %tr
         %th
-          Created:
+          Created
         %td.top
           = f.text_field :created, readonly: true, class: "form-control"
       %tr
         %th
-          Ontologies:
+          Ontologies
         %td.top
           = render SelectInputComponent.new(id: @id, name: @name, values: @values , selected: @selected , multiple: @multiple, hide: true)
   %div.mt-2

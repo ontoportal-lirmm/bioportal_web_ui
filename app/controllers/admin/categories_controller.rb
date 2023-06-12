@@ -56,7 +56,7 @@ class Admin::CategoriesController < ApplicationController
     start = Time.now
     begin
       category = LinkedData::Client::Models::Category.find_by_acronym(params[:id], include:'name,acronym,created,description,parentCategory,ontologies' ).first
-      add_ontologies_to_category(category_params[:ontologies],category)
+      add_ontologies_to_category(category_params[:ontologies],category) if category_params[:ontologies].size > 1
       delete_ontologies_from_category(category_params[:ontologies],category.ontologies,category)
       category.update_from_params(category_params)
       category_update = category.update

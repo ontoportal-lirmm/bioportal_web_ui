@@ -56,7 +56,7 @@ class Admin::GroupsController < ApplicationController
     start = Time.now
     begin
       group = LinkedData::Client::Models::Group.find_by_acronym(params[:id]).first
-      add_ontologies_to_group(group_params[:ontologies],group)
+      add_ontologies_to_group(group_params[:ontologies],group) if group_params[:ontologies].size > 1
       delete_ontologies_from_group(group_params[:ontologies],group.ontologies,group)
       group.update_from_params(group_params)
       group_updated = group.update
