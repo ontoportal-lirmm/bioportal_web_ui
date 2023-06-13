@@ -616,7 +616,7 @@ module ApplicationHelper
   end
 
   def portal_name
-    $SITE
+    "StagePrtal"
   end
 
   def navitems
