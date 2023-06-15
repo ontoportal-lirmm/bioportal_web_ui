@@ -109,16 +109,6 @@ class Admin::CategoriesController < ApplicationController
     response
   end
 
-  def add_ontologies_to_category(ontologies,hasDomain)
-    ontologies.each do |ont|
-      unless hasDomain.ontologies.include?(ont)
-        ontology = LinkedData::Client::Models::Ontology.find(ont)
-        ontology.hasDomain.push(hasDomain.id)
-        ontology.update
-      end
-    end
-  end
-
   def delete_ontologies_from_category(new_ontologies,old_ontologies,hasDomain)
     ontologies = old_ontologies - new_ontologies  
     ontologies.each do |ont|

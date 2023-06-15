@@ -109,16 +109,6 @@ class Admin::GroupsController < ApplicationController
     response
   end
 
-  def add_ontologies_to_group(ontologies,group)
-    ontologies.each do |ont|
-      unless group.ontologies.include?(ont)
-        ontology = LinkedData::Client::Models::Ontology.find(ont)
-        ontology.group.push(group.id)
-        ontology.update
-      end
-    end
-  end
-
   def delete_ontologies_from_group(new_ontologies,old_ontologies,group)
     ontologies = old_ontologies - new_ontologies  
     ontologies.each do |ont|
