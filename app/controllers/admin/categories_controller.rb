@@ -53,7 +53,7 @@ class Admin::CategoriesController < ApplicationController
     begin
       category = LinkedData::Client::Models::Category.find_by_acronym(params[:id], include: ATTRIBUTE_TO_INCLUDE ).first
       add_ontologies_to_object(category_params[:ontologies],category) if (category_params[:ontologies].size > 0 && category_params[:ontologies].first != '')
-      delete_ontologies_from_category(category_params[:ontologies],category.ontologies,category) 
+      delete_ontologies_from_object(category_params[:ontologies],category.ontologies,category) 
       category.update_from_params(category_params)
       category_update = category.update
       if response_error?(category_update)
@@ -107,14 +107,5 @@ class Admin::CategoriesController < ApplicationController
       response[:errors] = "Problem retrieving categories  - #{e.message}"
     end
     response
-  end
-
-  def delete_ontologies_from_category(new_ontologies,old_ontologies,hasDomain)
-    ontologies = old_ontologies - new_ontologies  
-    ontologies.each do |ont|
-      ontology = LinkedData::Client::Models::Ontology.find(ont)
-      ontology.hasDomain.delete(hasDomain.id)
-      ontology.update
-    end
   end
 end

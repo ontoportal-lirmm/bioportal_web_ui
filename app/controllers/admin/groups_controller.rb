@@ -53,7 +53,7 @@ class Admin::GroupsController < ApplicationController
     begin
       group = LinkedData::Client::Models::Group.find_by_acronym(params[:id]).first
       add_ontologies_to_object(group_params[:ontologies],group) if (group_params[:ontologies].size > 0 && group_params[:ontologies].first != '')
-      delete_ontologies_from_group(group_params[:ontologies],group.ontologies,group)
+      delete_ontologies_from_object(group_params[:ontologies],group.ontologies,group)
       group.update_from_params(group_params)
       group_updated = group.update
       if response_error?(group_updated)
@@ -107,14 +107,5 @@ class Admin::GroupsController < ApplicationController
       response[:errors] = "Problem retrieving groups  - #{e.message}"
     end
     response
-  end
-
-  def delete_ontologies_from_group(new_ontologies,old_ontologies,group)
-    ontologies = old_ontologies - new_ontologies  
-    ontologies.each do |ont|
-      ontology = LinkedData::Client::Models::Ontology.find(ont)
-      ontology.group.delete(group.id)
-      ontology.update
-    end
   end
 end

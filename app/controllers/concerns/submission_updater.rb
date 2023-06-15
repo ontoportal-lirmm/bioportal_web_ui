@@ -28,8 +28,25 @@ module SubmissionUpdater
     ontologies.each do |ont|
       next if object.ontologies.include?(ont)
         ontology = LinkedData::Client::Models::Ontology.find(ont)
-        ontology.group.push(object.id)
+        if object.type.match(/\/([^\/]+)$/)[1] == 'Group'
+          ontology.group.push(object.id)
+        else 
+          ontology.hasDomain.push(object.id)
+        end
         ontology.update
+    end
+  end
+
+  def delete_ontologies_from_object(new_ontologies,old_ontologies,object)
+    ontologies = old_ontologies - new_ontologies  
+    ontologies.each do |ont|
+      ontology = LinkedData::Client::Models::Ontology.find(ont)
+      if object.type.match(/\/([^\/]+)$/)[1] == 'Group'
+        ontology.group.delete(object.id)
+      else 
+        ontology.hasDomain.delete(object.id)
+      end
+      ontology.update
     end
   end
 
