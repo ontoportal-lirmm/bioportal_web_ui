@@ -1,4 +1,5 @@
 class Admin::GroupsController < ApplicationController
+  include SubmissionUpdater
 
   layout :determine_layout
   before_action :unescape_id, only: [:edit, :show, :update, :destroy]
@@ -22,12 +23,7 @@ class Admin::GroupsController < ApplicationController
   def edit
     @group = LinkedData::Client::Models::Group.find_by_acronym(params[:id]).first
     @acronyms = @group.ontologies.map { |url| url.match(/\/([^\/]+)$/)[1] }
-    @ontologies_group = LinkedData::Client::Models::Ontology.all.map {|o|[o.acronym, o.id] }
-    @id = "group_ontologies"
-    @name = "group[ontologies]"
-    @values = @ontologies_group
-    @selected = @group.ontologies
-    @multiple = true
+    @ontologies_group = LinkedData::Client::Models::Ontology.all(include: 'acronym').map {|o|[o.acronym, o.id] }
     respond_to do |format|
       format.html { render "edit", :layout => false }
     end
@@ -56,7 +52,7 @@ class Admin::GroupsController < ApplicationController
     start = Time.now
     begin
       group = LinkedData::Client::Models::Group.find_by_acronym(params[:id]).first
-      add_ontologies_to_group(group_params[:ontologies],group) if group_params[:ontologies].size > 1
+      add_ontologies_to_object(group_params[:ontologies],group) if (group_params[:ontologies].size > 0 && group_params[:ontologies].first != '')
       delete_ontologies_from_group(group_params[:ontologies],group.ontologies,group)
       group.update_from_params(group_params)
       group_updated = group.update
@@ -111,16 +107,6 @@ class Admin::GroupsController < ApplicationController
       response[:errors] = "Problem retrieving groups  - #{e.message}"
     end
     response
-  end
-
-  def add_ontologies_to_group(ontologies,group)
-    ontologies.each do |ont|
-      unless group.ontologies.include?(ont)
-        ontology = LinkedData::Client::Models::Ontology.find(ont)
-        ontology.group.push(group.id)
-        ontology.update
-      end
-    end
   end
 
   def delete_ontologies_from_group(new_ontologies,old_ontologies,group)

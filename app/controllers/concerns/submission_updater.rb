@@ -24,6 +24,15 @@ module SubmissionUpdater
     @submission.update(cache_refresh_all: false)
   end
 
+  def add_ontologies_to_object(ontologies,object)
+    ontologies.each do |ont|
+      next if object.ontologies.include?(ont)
+        ontology = LinkedData::Client::Models::Ontology.find(ont)
+        ontology.group.push(object.id)
+        ontology.update
+    end
+  end
+
   private
 
   def update_ontology_summary_only
