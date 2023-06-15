@@ -108,13 +108,4 @@ class Admin::GroupsController < ApplicationController
     end
     response
   end
-
-  def delete_ontologies_from_group(new_ontologies,old_ontologies,group)
-    ontologies = old_ontologies - new_ontologies  
-    ontologies.each do |ont|
-      ontology = LinkedData::Client::Models::Ontology.find(ont)
-      ontology.group.delete(group.id)
-      ontology.update
-    end
-  end
 end

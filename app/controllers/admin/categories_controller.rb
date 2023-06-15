@@ -108,13 +108,4 @@ class Admin::CategoriesController < ApplicationController
     end
     response
   end
-
-  def delete_ontologies_from_category(new_ontologies,old_ontologies,hasDomain)
-    ontologies = old_ontologies - new_ontologies  
-    ontologies.each do |ont|
-      ontology = LinkedData::Client::Models::Ontology.find(ont)
-      ontology.hasDomain.delete(hasDomain.id)
-      ontology.update
-    end
-  end
 end
