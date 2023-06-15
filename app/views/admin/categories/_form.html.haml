@@ -42,7 +42,7 @@
         %th
           Ontologies
         %td.top
-          = render SelectInputComponent.new(id: "category_ontologies", name: "category[ontologies]", values: @ontologies_category, selected: @category.ontologies, multiple: true, hide: true)
+          = render SelectInputComponent.new(id: "category_ontologies", name: "category[ontologies]", values: @ontologies_category, selected: @category.ontologies, multiple: true, open_to_add_values: true)
           %div.d-flex.mt-1{:style => "display: none;"}
   %div.mt-2
     = f.submit button_text, class: "btn btn-primary mr-sm-2 group-form-accept"

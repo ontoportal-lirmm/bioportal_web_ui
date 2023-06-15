@@ -42,7 +42,7 @@
         %th
           Ontologies
         %td.top
-          = render SelectInputComponent.new(id: "group_ontologies", name: "group[ontologies]", values: @ontologies_group , selected: @group.ontologies , multiple: true, hide: true)
+          = render SelectInputComponent.new(id: "group_ontologies", name: "group[ontologies]", values: @ontologies_group , selected: @group.ontologies , multiple: true, open_to_add_values: true)
   %div.mt-2
     = f.submit button_text, class: "btn btn-primary mr-sm-2 group-form-accept"
     = link_to "Cancel", "javascript:;", class: "btn btn-primary dismiss-dialog"
