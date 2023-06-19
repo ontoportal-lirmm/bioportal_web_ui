@@ -1,0 +1,21 @@
+.text-area-component {
+    margin-top: 5px;
+    margin-bottom: 23px;
+    width: 100%;
+    font-size: 13px;
+    padding: 10px;
+    border: 1px solid #BDBDBD;
+    border-radius: 5px;
+    outline: none;
+    resize: none;
+    background-color: white;
+}
+
+.text-area-component:focus {
+    border: 1px solid var(--primary-color);
+}
+
+.text-area-label {
+    font-size: 12px;
+    color: #666666;
+}
