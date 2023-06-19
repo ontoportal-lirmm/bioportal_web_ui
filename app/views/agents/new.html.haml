@@ -1,0 +1,3 @@
+= turbo_frame_tag 'application_modal_content' do
+  = form_with  url: agents_path, method: 'post', data:{turbo: true} do
+    = render partial: 'form', locals: {agent: @agent, name_prefix: '', new_agent: true}

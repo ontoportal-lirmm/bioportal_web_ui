@@ -1,0 +1,81 @@
+= render_alerts_container
+%table.form.w-100
+  %colgroup
+    %col
+    %col{style: "width: 100%"}
+  - if agent.id
+    = hidden_field_tag agent_field_name(:id, name_prefix), agent.id
+  -  if affiliation?(agent)
+    = hidden_field_tag agent_field_name(:agentType, name_prefix), agent.agentType
+  - else
+    %tr
+      %th
+        Type
+        %span.asterik *
+      %td.top
+        %div.d-flex
+          %div.custom-control.custom-radio.mx-1
+            = radio_button_tag agent_field_name(:agentType, name_prefix), :person, agent.agentType.eql?('person'), class: 'custom-control-input'
+            = label_tag :agentType_person, "Person",  class: 'custom-control-label'
+          %div.custom-control.custom-radio.mx-1
+            = radio_button_tag agent_field_name(:agentType, name_prefix), :organization,!agent.agentType.eql?('person'), class: 'custom-control-input'
+            = label_tag :agentType_organization, "Organization",  class: 'custom-control-label'
+  %tr
+    %th
+      Name
+      %span.asterik *
+    %td.top
+      = text_field_tag agent_field_name(:name, name_prefix), agent.name, class: "form-control"
+  %tr
+    %th
+      Acronym
+      %span.asterik
+    %td.top
+      = text_field_tag agent_field_name(:acronym, name_prefix), agent.acronym,class: "form-control"
+  %tr
+    %th
+      Homepage
+    %td.top
+      = url_field_tag agent_field_name(:homepage, name_prefix), agent.homepage, class: "form-control"
+  %tr.d-none
+    %th
+      Creator
+    %td.top
+      = text_field_tag  agent_field_name(:creator, name_prefix), agent.creator,  class: "form-control"
+  %tr
+    %th
+      Identifiers
+    %td.top
+      %div
+        = render NestedFormInputsComponent.new do |c|
+          - c.template do
+            %div.d-flex{id: 'NEW_RECORD'}
+              = hidden_field_tag agent_identifier_name('NEW_RECORD' , :creator, name_prefix), session[:user].id
+              = text_field_tag agent_identifier_name('NEW_RECORD' , :notation, name_prefix), '', class: "form-control"
+              - values = %w[ORCID ROR ISNI GRID]
+              = render SelectInputComponent.new(id: "agent_identifiers_schemaAgency_NEW_RECORD", name: agent_identifier_name('NEW_RECORD', :schemaAgency, name_prefix), values: values, selected: 'ORCID')
+
+          - Array(agent.identifiers).each_with_index do |identifier, i|
+            - c.row do
+              %div.d-flex{id: identifier.id}
+                = hidden_field_tag agent_identifier_name(i.to_s.upcase, :creator, name_prefix), session[:user].id
+                = text_field_tag agent_identifier_name(i.to_s.upcase, :notation, name_prefix), identifier.notation, class: "form-control"
+                - values = %w[ORCID ROR ISNI GRID]
+                = render SelectInputComponent.new(id: "#{name_prefix}_identifiers_schemaAgency_#{i.to_s.upcase}", name: agent_identifier_name(i.to_s.upcase, :schemaAgency, name_prefix), values: values, selected: identifier.schemaAgency)
+  - if new_agent
+    %tr
+      %th
+        Affiliations
+      %td.top
+        %div
+          = render NestedFormInputsComponent.new do |c|
+            - c.template do
+              %div.d-flex{id: 'NEW_RECORD'}
+                = render partial: 'agents/form', locals: {agent: new_affiliation_obj, name_prefix: "[affiliations][NEW_RECORD]", new_agent: false}
+            - Array(agent.affiliations).each_with_index do |affiliation, i|
+              - c.row do
+                %div.d-flex{id: affiliation.id}
+                  = render partial: 'agents/form', locals: {agent: affiliation, name_prefix: "[affiliations][#{i}]", new_agent: false}
+- if new_agent
+  %div.mt-2
+    = submit_tag 'Save', class: "btn btn-primary mr-sm-2 group-form-accept"
