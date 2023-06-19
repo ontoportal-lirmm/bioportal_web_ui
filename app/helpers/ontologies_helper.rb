@@ -481,9 +481,9 @@ module OntologiesHelper
     html = ""
     definitions.each do |definition|
       if definition.is_a?(String)
-        html+= "<p>" + definition + "</p>"
+        html += '<p class="prefLabel">' + definition + '</p>'
       elsif definition.respond_to?(:uri) && definition.uri
-        html+= "<p>" + definition.uri + "</p>"
+        html+= '<a class="btn btn-sm btn-light ajax-modified-cls" href="' + definition.uri + '">' + definition.uri + '</a>'
       end
     end
     return html.html_safe
