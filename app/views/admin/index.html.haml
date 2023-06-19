@@ -28,6 +28,8 @@
         =link_to("Groups", "#groups", id: "groups-admin-tab", class: "nav-link #{selected_admin_section?('groups') ? 'active': ''}", role: "tab", data: { toggle: "tab", href: "groups" }, aria: { controls: "groups", selected: "false" })
       %li.nav-item
         =link_to("Categories", "#categories", id: "categories-admin-tab", class: "nav-link #{selected_admin_section?('categories') ? 'active': ''}", role: "tab", data: { toggle: "tab", href: "categories" }, aria: { controls: "categories", selected: "false" })
+      %li.nav-item
+        =link_to("Persons & Organizations", "#agents", id: "agents-admin-tab", class: "nav-link #{selected_admin_section?('agents') ? 'active': ''}", role: "tab", data: { toggle: "tab", href: "agents" }, aria: { controls: "agents", selected: "false" })
     %div#adminTabContent.tab-content
 
       -# Site Administration tab
@@ -116,6 +118,11 @@
       %div.tab-pane.fade{id: "categories", role: "tabpanel", aria: { labelledby: "categories-admin-tab" }, class: selected_admin_section?('categories') ? 'show active': ''}
         %div.ontologies_list_container.mt-3
           %table#adminCategories.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
+
+      -# Agents  tab
+      %div.tab-pane.fade{id: "agents", role: "tabpanel", aria: { labelledby: "agents-admin-tab" }, class: selected_admin_section?('agents') ? 'show active': ''}
+        %div.ontologies_list_container.mt-3
+          = render TurboFrameComponent.new(id: 'agents-list', src: '/agents', loading: 'lazy')
 
 
 
