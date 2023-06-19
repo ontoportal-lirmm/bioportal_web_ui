@@ -1,0 +1,19 @@
+.input-field-component{
+    margin-top: 5px;
+    width: 100%;
+    font-size: 13px;
+    padding: 10px;
+    border: 1px solid #BDBDBD;
+    border-radius: 5px;
+    outline: none;
+    resize: none;
+}
+
+.input-field-component:focus{
+    border: 1px solid var(--primary-color);
+}
+
+.text-input-label{
+    font-size: 12px;
+    color: #666666;
+}
