@@ -32,7 +32,7 @@
         %div.m-1
           = render ChipButtonComponent.new(text: keyword, type: "static")
       - key_classes = @submission_latest.keyClasses || ''
-      - key_classes.split(',').each do |key_class|
+      - key_classes.each do |key_class|
         %div.m-1
           - if link?(key_class)
             = render ChipButtonComponent.new(url: '', text: key_class, type: "clickable")
