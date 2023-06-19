@@ -15,23 +15,23 @@
   %div.col
     %ul.nav.nav-tabs{id: "admin-tabs", role: "tablist"}
       %li.nav-item
-        =link_to("Site Administration", "#site-admin", id: "site-admin-tab", class: "nav-link active", role: "tab", data: { toggle: "tab" }, aria: { controls: "site-admin", selected: "true" })
+        =link_to("Site Administration", "#site-admin", id: "site-admin-tab", class: "nav-link #{selected_admin_section?('site') ? 'active': ''}", role: "tab", data: { toggle: "tab" }, aria: { controls: "site-admin", selected: "true" })
       %li.nav-item
-        =link_to("Ontology Administration", "#ontology-admin", id: "ontology-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab" }, aria: { controls: "ontology-admin", selected: "false" })
+        =link_to("Ontology Administration", "#ontology-admin", id: "ontology-admin-tab", class: "nav-link #{selected_admin_section?('ontology') ? 'active': ''}", role: "tab", data: { toggle: "tab" }, aria: { controls: "ontology-admin", selected: "false" })
       %li.nav-item
-        =link_to("Licensing", "#licensing", id: "licensing-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: admin_licenses_path() }, aria: { controls: "licensing", selected: "false" })
+        =link_to("Licensing", "#licensing", id: "licensing-admin-tab", class: "nav-link #{selected_admin_section?('licensing') ? 'active': ''}", role: "tab", data: { toggle: "tab", href: admin_licenses_path() }, aria: { controls: "licensing", selected: "false" })
       %li.nav-item
-        =link_to("Users", "#users", id: "users-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: users_path() }, aria: { controls: "users", selected: "false" })
+        =link_to("Users", "#users", id: "users-admin-tab", class: "nav-link  #{selected_admin_section?('users') ? 'active': ''}", role: "tab", data: { toggle: "tab", href: users_path() }, aria: { controls: "users", selected: "false" })
       %li.nav-item
-        =link_to("Metadata Administration", "#ontologies_metadata_curator", id: "ontologies_metadata_curator-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab"}, aria: { controls: "ontologies_metadata_curator", selected: "false" })   
+        =link_to("Metadata Administration", "#ontologies_metadata_curator", id: "ontologies_metadata_curator-admin-tab", class: "nav-link  #{selected_admin_section?('metadata') ? 'active': ''}", role: "tab", data: { toggle: "tab"}, aria: { controls: "ontologies_metadata_curator", selected: "false" })
       %li.nav-item
-        =link_to("Groups", "#groups", id: "groups-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: "groups" }, aria: { controls: "groups", selected: "false" })
+        =link_to("Groups", "#groups", id: "groups-admin-tab", class: "nav-link #{selected_admin_section?('groups') ? 'active': ''}", role: "tab", data: { toggle: "tab", href: "groups" }, aria: { controls: "groups", selected: "false" })
       %li.nav-item
-        =link_to("Categories", "#categories", id: "categories-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: "categories" }, aria: { controls: "categories", selected: "false" })
+        =link_to("Categories", "#categories", id: "categories-admin-tab", class: "nav-link #{selected_admin_section?('categories') ? 'active': ''}", role: "tab", data: { toggle: "tab", href: "categories" }, aria: { controls: "categories", selected: "false" })
     %div#adminTabContent.tab-content
 
       -# Site Administration tab
-      %div.tab-pane.active.show.fade{id: "site-admin", role: "tabpanel", aria: { labelledby: "site-admin-tab" }}
+      %div.tab-pane.fade{id: "site-admin", role: "tabpanel", aria: { labelledby: "site-admin-tab" }, class: selected_admin_section?('site') ? 'show active': ''}
         
         -# Clear caches
         %div#site-admin-clear-caches.my-5
@@ -68,7 +68,7 @@
           
 
       -# Ontology Administration tab
-      %div.tab-pane.fade{id: "ontology-admin", role: "tabpanel", aria: { labelledby: "ontology-admin-tab" }}
+      %div.tab-pane.fade{id: "ontology-admin", role: "tabpanel", aria: { labelledby: "ontology-admin-tab" }, class: selected_admin_section?('ontology') ? 'show active': ''}
         %div.ontologies_list_container.mt-3
           %table{:style => "float:left;"}
             %tr
@@ -81,7 +81,7 @@
           %table#adminOntologies.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
 
       -# Licensing tab
-      %div.tab-pane.fade{id: "licensing", role: "tabpanel", aria: { labelledby: "licensing-admin-tab" }}
+      %div.tab-pane.fade{id: "licensing", role: "tabpanel", aria: { labelledby: "licensing-admin-tab" }, class: selected_admin_section?('licensing') ? 'show active': ''}
         %div#renew-license-notice
 
         %table.table.table-sm.table-bordered.mt-5#license-table
@@ -99,21 +99,21 @@
         %div.mb-5#renew-license-form
 
       -# Users tab
-      %div.tab-pane.fade{id: "users", role: "tabpanel", aria: { labelledby: "users-admin-tab" }}
+      %div.tab-pane.fade{id: "users", role: "tabpanel", aria: { labelledby: "users-admin-tab" }, class: selected_admin_section?('users') ? 'show active': ''}
         %div.ontologies_list_container.mt-3
           %table#adminUsers.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
       
       -# metadata tab
-      %div.tab-pane.fade{id: "ontologies_metadata_curator", role: "tabpanel", aria: { labelledby: "ontologies_metadata_curator-admin-tab" }}
+      %div.tab-pane.fade{id: "ontologies_metadata_curator", role: "tabpanel", aria: { labelledby: "ontologies_metadata_curator-admin-tab" }, class: selected_admin_section?('metadata') ? 'show active': ''}
         = render partial: 'ontologies_metadata_curator/metadata_tab'
 
       -# Groups tab
-      %div.tab-pane.fade{id: "groups", role: "tabpanel", aria: { labelledby: "groups-admin-tab" }}
+      %div.tab-pane.fade{id: "groups", role: "tabpanel", aria: { labelledby: "groups-admin-tab" }, class: selected_admin_section?('groups') ? 'show active': ''}
         %div.ontologies_list_container.mt-3
           %table#adminGroups.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
 
       -# Categories tab
-      %div.tab-pane.fade{id: "categories", role: "tabpanel", aria: { labelledby: "categories-admin-tab" }}
+      %div.tab-pane.fade{id: "categories", role: "tabpanel", aria: { labelledby: "categories-admin-tab" }, class: selected_admin_section?('categories') ? 'show active': ''}
         %div.ontologies_list_container.mt-3
           %table#adminCategories.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
 
