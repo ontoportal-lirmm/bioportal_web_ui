@@ -25,20 +25,20 @@
                   %p Identifiers
                   %img{src: asset_path("summary/info.svg")}/
               .creation_info
-                %p.description_text
+                %p.description_text_identifers 
                   URI
               %p.normal_text
-                = @submission_latest.URI
+                = render LinkFieldComponent.new(value: @submission_latest.URI)
               .creation_info
-                %p.description_text
+                %p.description_text_identifers 
                   VersionIRI
               %p.normal_text
-                = @submission_latest.versionIRI
+                = render LinkFieldComponent.new(value: @submission_latest.versionIRI)
               .creation_info
-                %p.description_text
+                %p.description_text_identifers 
                   Identifier
               %p.normal_text
-                = @submission_latest.identifier
+                = render LinkFieldComponent.new(value: @submission_latest.identifier)
           .right_metadata
             .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#dates_section"}
               %p.fix-margin-buttom
