@@ -22,6 +22,14 @@
   -webkit-line-clamp: var(--read-more-line-clamp, 5);
 }
 
+.description_text_identifers {
+  overflow: hidden;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--read-more-line-clamp, 5);
+}
+
 .projects_using_onto_text {
   color: #888888;
   font-size: 15px;
