@@ -37,7 +37,7 @@
         %tr
           %td{nowrap: ""}= t('ontology_details.concept.definitions')
           %td
-            = @concept.definition.join(" ")
+            = dispaly_complex_text(@concept.definition)
       - if @concept.obsolete?
         %tr
           %td{nowrap: ""}= t('ontology_details.concept.obsolete')
