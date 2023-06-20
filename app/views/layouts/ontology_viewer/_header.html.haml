@@ -17,10 +17,12 @@
           = @ontology.name
           %span
             = "("+ @ontology.acronym+")"
-        .ontology-details-licence
-          %div
-            = attribute_enforced_values('hasLicense')[sub.hasLicense] || sub.hasLicense
-          = inline_svg_tag "open-popup.svg"
+        - unless sub.hasLicense.nil?
+          .ontology-details-licence
+            %div
+              - value = attribute_enforced_values('hasLicense')[sub.hasLicense] || sub.hasLicense
+              = link_to_modal(value, "/ajax/submission/show_licenses/#{@ontology.acronym}",data: { show_modal_title_value: "More licenses", show_modal_size_value: 'modal-xl' })
+            = inline_svg_tag "open-popup.svg"
       - if (details_available && !sub.released.nil?)
         .ontology-details-last-update
           %img{src: asset_path("update.svg")}/
