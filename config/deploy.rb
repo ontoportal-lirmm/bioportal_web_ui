@@ -1,5 +1,5 @@
-set :author, "ontoportal-lirmm"
-set :application, "bioportal_web_ui"
+set :author, "EarthPortal"
+set :application, "ontoportal_web_ui"
 
 set :repo_url, "https://github.com/#{fetch(:author)}/#{fetch(:application)}.git"
 
