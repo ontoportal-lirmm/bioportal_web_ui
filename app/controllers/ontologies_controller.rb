@@ -398,13 +398,13 @@ class OntologiesController < ApplicationController
     render partial: 'ontologies/sections/additional_metadata'
   end
   
-  def show_dates
+  def show_licenses
     
     @metadata = submission_metadata
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    @dates= ["released"]
-    @submission_latest = @ontology.explore.latest_submission(include: @dates.join(","))
-    render partial: 'ontologies/sections/dates'
+    @licenses= ["hasLicense","morePermissions","copyrightHolder"]
+    @submission_latest = @ontology.explore.latest_submission(include: @licenses.join(","))
+    render partial: 'ontologies/sections/licenses'
   end
   def ajax_ontologies
    
