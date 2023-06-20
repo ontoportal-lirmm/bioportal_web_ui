@@ -89,7 +89,7 @@ i.fa.fa-caret-square-o-down {
 .home-header-title{
   position: absolute;
   z-index: 4;
-  width: 481px;
+  width: 500px;
   margin-right: 664px;
   margin-top: 123px;
   opacity: 0;
@@ -97,7 +97,7 @@ i.fa.fa-caret-square-o-down {
   animation: slide-and-fade 1s ease forwards;
 }
 .home-header-title h4{
-  font-size: 40px;
+  font-size: 38px;
   font-weight: 800;
   color: white;
 }
@@ -130,8 +130,9 @@ i.fa.fa-caret-square-o-down {
   align-items: center;
 }
 .home-section{
+  padding: 0 50px;
   margin-top: 70px;
-  width: 1138px;
+  width: 1248px;
 }
 .home-section > h4{
   font-size: 20px;
@@ -315,10 +316,10 @@ i.fa.fa-caret-square-o-down {
   justify-content: space-between;
 }
 .home-sub-section-left{
-  width: 533px;
+  width: 550px;
 }
 .home-sub-section-right{
-  width: 533px;
+  width: 550px;
 }
 .home-sub-section-left h4, .home-sub-section-right h4{
   font-size: 20px;
