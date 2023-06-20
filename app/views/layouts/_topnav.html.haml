@@ -13,7 +13,10 @@
         - navitems.each do |navItem|
           %li.nav-ul-li
             %a{href: navItem[0], class: ("active" if current_page?(navItem[0]))} #{navItem[1]}
-      %div.d-flex.align-items-center.justify-content-between{style:'min-width: 40%'}
+        - if !session[:user].nil? && session[:user].admin?
+          %li.nav-ul-li
+            %a{href: "/admin", class: ("active" if current_page?("/admin"))} Admin
+      .right-nav-items
         - if current_page?('/')
           .nav-search-container{style:'visibility: hidden'}
             %input
