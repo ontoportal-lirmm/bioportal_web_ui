@@ -533,24 +533,23 @@ module ApplicationHelper
   end
 
   def label_ajax_data(cls_id, ont_acronym, ajax_uri, cls_url)
-    tag.attributes label_ajax_data_h(cls_id, ont_acronym, ajax_uri, cls_url)
+    label_ajax_data_h(cls_id, ont_acronym, ajax_uri, cls_url)
   end
 
-  def label_ajax_link(link, cls_id, ont_acronym, ajax_uri, cls_url, target = '')
-    href_cls = " href='#{link}'"
+  def label_ajax_link(link, cls_id, ont_acronym, ajax_uri, cls_url, target = nil)
     data = label_ajax_data(cls_id, ont_acronym, ajax_uri, cls_url)
-    style = 'btn btn-sm btn-light'
-    "<a data-controller='label-ajax' class='#{style}' #{data} #{href_cls} #{target}>#{cls_id}</a>"
+    options = {  'data-controller': 'label-ajax' }.merge(data)
+    options = options.merge({ target: target }) if target
+
+    render ChipButtonComponent.new(url: link, text: cls_id, type: 'clickable', **options)
   end
 
   def get_link_for_cls_ajax(cls_id, ont_acronym, target = nil)
-    target = target.nil? ? '' : " target='#{target}' "
-
     if cls_id.start_with?('http://') || cls_id.start_with?('https://')
       link = bp_class_link(cls_id, ont_acronym)
       ajax_url = "/ajax/classes/label?language=#{request_lang}"
       cls_url = "?p=classes&conceptid=#{CGI.escape(cls_id)}&language=#{request_lang}"
-      label_ajax_link(link, cls_id, ont_acronym, ajax_url , cls_url ,target)
+      label_ajax_link(link, cls_id, ont_acronym, ajax_url, cls_url, target)
     else
       auto_link(cls_id, :all, target: '_blank')
     end
@@ -745,6 +744,9 @@ module ApplicationHelper
     items = [["/ontologies", "Browse"],["/mappings", "Mappings"],["/recommender", "Recommender"],["/annotator", "Annotator"], ["/landscape", "Landscape"]]
   end
 
+  def concept_link(ontology_id, concept_id)
+    "#{ontology_id}/classes/#{escape(concept_id)}?display=all&apikey=#{get_apikey}"
+  end
 
   def attribute_enforced_values(attr)
     submission_metadata.select {|x| x['@id'][attr]}.first['enforcedValues']

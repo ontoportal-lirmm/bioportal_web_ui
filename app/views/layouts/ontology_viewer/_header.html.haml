@@ -28,7 +28,9 @@
             = t('ontology_details.header.last_uploaded')
             = l(Date.parse(sub.creationDate), format: :monthfull_day_year)
     .ontology-details-header-right-container.justify-content-end{style: 'min-width: 20%;'}
+      %a.mx-1.ontology-details-edit-button{href: "#{(@submission_latest || @ontology).id}?display=all", :target => '_blank'}
+        = inline_svg_tag "json.svg"
       - if @ontology.admin?(session[:user])
-        %a.ontology-details-edit-button{href: edit_ontology_path(@ontology.acronym)}
+        %a.mx-1.ontology-details-edit-button{href: edit_ontology_path(@ontology.acronym)}
           = inline_svg_tag "edit.svg"
       = subscribe_button(@ontology.id)

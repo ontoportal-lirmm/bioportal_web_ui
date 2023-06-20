@@ -1,5 +1,5 @@
 - if @type == "static"
-    %span.chip_button_container
+    %span.chip_button_container{@html_options}
         = @text
 - else
-    %a.chip_button_container_clickable{href: @url}= @text
+    %a.chip_button_container_clickable{@html_options}= @text
