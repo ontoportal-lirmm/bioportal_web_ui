@@ -17,7 +17,7 @@
       Natural language
     .categories_section
       - @submission_latest.naturalLanguage.each do |lang|
-        %p.m-1
+        %p.m-1.mx-1.my-2
           = render LanguageFieldComponent.new(value: lang)
   - if @ontology.admin?(session[:user]) && @submission_latest.pullLocation
     %p.description_text
@@ -27,17 +27,17 @@
   - unless @submission_latest.keywords.nil?
     %p.description_text Keywords and Key classes
     .keywords_keyclasses_section
-      - keywords = @submission_latest.keywords || ''
-      - keywords.split(',').each do |keyword|
-        %div.m-1
-          = render ChipButtonComponent.new(text: keyword, type: "static")
-      - key_classes = @submission_latest.keyClasses || ''
-      - key_classes.each do |key_class|
-        %div.m-1
-          - if link?(key_class)
-            = render ChipButtonComponent.new(url: '', text: key_class, type: "clickable")
-          - else
-            = render ChipButtonComponent.new(text: key_class, type: "static")
+      - Array(@submission_latest.keywords).each do |keyword|
+        - keyword.split(',').each do |k|
+          %div.m-1.mx-1.my-2
+            = render ChipButtonComponent.new(text: k, type: "static")
+      - Array(@submission_latest.keyClasses).each do |key_class|
+        - key_class.split(',').each do |k|
+          %div.mx-1.my-2
+            - if link?(k)
+              = raw get_link_for_cls_ajax(k, @ontology.acronym, '_blank')
+            - else
+              = render ChipButtonComponent.new(text: k, type: "static")
 
   - unless @ontology.hasDomain.nil? || @ontology.hasDomain.empty?
     %p.description_text Categories and subjects
