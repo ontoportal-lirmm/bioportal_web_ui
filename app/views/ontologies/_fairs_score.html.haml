@@ -6,7 +6,7 @@
   })
 
 - if @fair_scores_data
-  %div.statistics_container.d-flex
+  %div.statistics_container.d-flex{data:{controller:"fair-score-summary"}}
     %div.w-50
       = render partial: "shared/fair_score_radar" , locals: {data: @fair_scores_data}
     %div.w-50
