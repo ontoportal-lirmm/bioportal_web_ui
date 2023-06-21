@@ -9,7 +9,7 @@ class DateTimeFieldComponent < ViewComponent::Base
   end
 
   def call
-    l(Date.parse(@value), format: @format.to_sym)
+    l(Date.parse(@value), format: @format.to_sym) if @value
   end
 
 end
