@@ -59,59 +59,33 @@
             Source: @submission_latest.source, Was_generated_by: @submission_latest.wasGeneratedBy, Was_invalidated_by: @submission_latest.wasInvalidatedBy }
           = render DropdownContainerComponent.new(title: 'Links', id: 'link') do
             - properties.each do |k, v|
-              = render FieldContainerComponent.new(label: k.to_s, value: v)
-          .right_metadata
-            .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#projects_section"}
-              %p.fix-margin-buttom
-                Projects and usage information
-              %img{alt: "", src: asset_path("summary/arrow-down.svg")}
-            #projects_section.collapse.right-metadata-content
-              .creation_info
-                %div.description_text
-                  Projects using
-                  = @ontology.acronym
-                = link_to(new_project_path(),  "aria-label": "Create new project", title: "Create new project", class: "mx-1 mt-1 projects-add-new") do
-                  = inline_svg_tag("summary/plus.svg")
-              .projects_container
-                - if @projects.empty?
-                  %p.font-italic= "No projects using #{@ontology.acronym}"
-                - else
-                  - for project in @projects
-                    = link_to(project_path(project.acronym)) do
-                      %p.clickable_text= project.name
+              = render FieldContainerComponent.new(label: k.to_s, value: Array(v).join(','))
 
-              %p.normal_text
-                = @submission_latest.isFormatOf
-              .creation_info
-                %p.description_text
-                  known Usage
-              %p.normal_text
-                = @submission_latest.knownUsage
-              .creation_info
-                %p.description_text
-                  designed For Ontology Task
-              %p.normal_text
-                = @submission_latest.designedForOntologyTask
-              .creation_info
-                %p.description_text
-                  example
-              %p.normal_text
-                = @submission_latest.example
-              .creation_info
-                %p.description_text
-                  Coverage
-              %p.normal_text
-                = @submission_latest.coverage
-              .creation_info
-                %p.description_text
-                  Included In Data Catalog
-              %p.normal_text
-                = @submission_latest.includedInDataCatalog
-              .creation_info
-                %p.description_text
-                  Target audience
-              %p.normal_text
-                = @submission_latest.audience
+          - properties = {known_Usage: @submission_latest.knownUsage, designed_For_Ontology_Task:@submission_latest.designedForOntologyTask,
+            example: @submission_latest.example, coverage: @submission_latest.coverage,
+            Target_audience: @submission_latest.audience}
+          = render DropdownContainerComponent.new(title: 'Projects and usage information', id: 'projects_usage_information') do
+            .creation_info
+              %div.description_text
+                Projects using
+                = @ontology.acronym
+              = link_to(new_project_path(),  "aria-label": "Create new project", title: "Create new project", class: "mx-1 mt-1 projects-add-new") do
+                = inline_svg_tag("summary/plus.svg")
+            .projects_container
+              - if @projects.empty?
+                %p.font-italic= "No projects using #{@ontology.acronym}"
+              - else
+                - for project in @projects
+                  = link_to(project_path(project.acronym)) do
+                    %p.clickable_text= project.name
+            - properties.each do |k, v|
+              = render FieldContainerComponent.new(label: k.to_s, value: Array(v).join(','))
+            = render FieldContainerComponent.new(label: 'includedInDataCatalog') do
+              - Array(@submission_latest.includedInDataCatalog).each do |catalog|
+                - data_catalog = $DATA_CATALOG_VALUES.select{ |cat_uri, cat_label|  catalog[cat_uri] }.first || [catalog, catalog]
+                %div.m-1.my-3
+                  = render ChipButtonComponent.new(text: data_catalog[1], url: catalog, type: "clickable")
+
           - properties = {Accrual_method: @submission_latest.accrualMethod, Accrual_periodicity: @submission_latest.accrualPeriodicity, Accrual_policy: @submission_latest.accrualPolicy,
           Knowledge_representation_paradigm: @submission_latest.conformsToKnowledgeRepresentationParadigm, Engineering_methodology: @submission_latest.usedOntologyEngineeringMethodology,  Created_With: @submission_latest.usedOntologyEngineeringTool,
           Competency_question: @submission_latest.competencyQuestion}
