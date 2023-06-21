@@ -29,7 +29,7 @@
           %span#mapping_count= 'loading'
           )
 
-      %a.concepts-json{:href => "#{@ontology.id}/classes/#{escape(@concept.id)}?display=all&apikey=#{get_apikey}", target: '_blank'}
+      %a.concepts-json{:href => concept_link(@ontology.id, @concept.id), target: '_blank'}
         = inline_svg_tag "json.svg"
 
       - if @enable_ontolobridge

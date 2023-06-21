@@ -2,7 +2,7 @@
 
 class FieldContainerComponent < ViewComponent::Base
 
-  def initialize(label:, value:)
+  def initialize(label:, value: nil)
     super
     @label = label
     @value = value

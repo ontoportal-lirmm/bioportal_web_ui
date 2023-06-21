@@ -16,8 +16,7 @@
                 %img{src: depiction_url}
                 .loop_icon
                   - img = "<img src='#{asset_path("summary/loop.svg")}'/>"
-                  = link_to_modal(img.html_safe, "/ajax/submission/show_depiction?depiction_url=#{depiction_url}",data: { show_modal_title_value: "Depiction", show_modal_size_value: 'modal-xl' })
-
+                  = link_to_modal(img.html_safe, "/ajax/submission/show_depiction?depiction_url=#{depiction_url}",data: { show_modal_title_value: "Depiction", show_modal_size_value: 'modal-xl' })          
           .right_metadata
             .depiction
               .caintainer_vertical
@@ -25,172 +24,74 @@
                   %p Identifiers
                   %img{src: asset_path("summary/info.svg")}/
               .creation_info
-                %p.description_text
+                %p.description_text_identifers
                   URI
               %p.normal_text
-                = @submission_latest.URI
+                = render LinkFieldComponent.new(value: @submission_latest.URI)
               .creation_info
-                %p.description_text
+                %p.description_text_identifers
                   VersionIRI
               %p.normal_text
-                = @submission_latest.versionIRI
+                = render LinkFieldComponent.new(value: @submission_latest.versionIRI)
               .creation_info
-                %p.description_text
+                %p.description_text_identifers
                   Identifier
               %p.normal_text
-                = @submission_latest.identifier
-          .right_metadata
-            .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#dates_section"}
-              %p.fix-margin-buttom
-                Dates
-              %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
-            #dates_section.collapse.right-metadata-conetent
-              .creation_info
-                %p.description_text
-                  Creation date
-              %p.normal_text
-                = @submission_latest.creationDate
-              .creation_info
-                %p.description_text
-                  Modification date
-              %p.normal_text
-                = @submission_latest.modificationDate
-              .creation_info
-                %p.description_text
-                  Validity date
-              %p.normal_text
-                = @submission_latest.valid
+                = render LinkFieldComponent.new(value: @submission_latest.identifier)
+          - properties = {Creation_date: @submission_latest.creationDate, Modification_date: @submission_latest.modificationDate}
+          = render DropdownContainerComponent.new(title: 'Dates', id: 'dates') do
+            - properties.each do |k, v|
+              = render FieldContainerComponent.new(label: k.to_s) do
+                = render DateTimeFieldComponent.new(value: v) 
           - properties = {creators: @submission_latest.hasCreator, contributors: @submission_latest.hasContributor, curators: @submission_latest.curatedBy,
           translator: @submission_latest.translator, publisher: @submission_latest.publisher,  funded_By: @submission_latest.fundedBy,
           endorsed_By: @submission_latest.endorsedBy, copyright_Holder: @submission_latest.copyrightHolder}
           = render DropdownContainerComponent.new(title: 'Persons and organizations', id: 'person_and_organization') do
+            - properties.each do |k, values|
+              = render FieldContainerComponent.new(label: k.to_s) do
+                %div.d-flex.flex-wrap
+                  - Array(values).each do |val_str|
+                    - val_str.split(',').each do |v|
+                      - if v
+                        %div.m-1
+                          = render ChipButtonComponent.new(text: v, type: "static",'data-controller':' tooltip', title: v, class:'text-truncate', style: 'max-width: 200px; display: block')
+          - properties = {Is_Format_Of: @submission_latest.isFormatOf, Has_Format: @submission_latest.hasFormat,
+            Source: @submission_latest.source, Was_generated_by: @submission_latest.wasGeneratedBy, Was_invalidated_by: @submission_latest.wasInvalidatedBy }
+          = render DropdownContainerComponent.new(title: 'Links', id: 'link') do
             - properties.each do |k, v|
-              = render FieldContainerComponent.new(label: k.to_s, value: v)
-          .right_metadata
-            .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#link_metadata_section"}
-              %p.fix-margin-buttom
-                Links
-              %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
-            #link_metadata_section.collapse.right-metadata-content
-              %section.ont-metadata-card.ont-links-card
-                %div.ont-section-toolbar.justify-content-center.mt-4
-                  %a{:href => "#{(@submission_latest || @ontology).id}?display=all", :target => '_blank', :class => "btn btn-primary"} Go to the REST API JSON entry
-              .creation_info
-                %p.description_text
-                  Is Format Of
-              %p.normal_text
-                = @submission_latest.isFormatOf
-              .creation_info
-                %p.description_text
-                  Has Format
-              %p.normal_text
-                = @submission_latest.hasFormat
-              .creation_info
-                %p.description_text
-                  Accesss URL
-              %p.normal_text
-                = @submission_latest.pullLocation
-              .creation_info
-                %p.description_text
-                  Source
-              %p.normal_text
-                = @submission_latest.source
-              .creation_info
-                %p.description_text
-                  Was generated by
-              %p.normal_text
-                = @submission_latest.wasGeneratedBy
-              .creation_info
-                %p.description_text
-                  Was invalidated by
-              %p.normal_text
-                = @submission_latest.wasInvalidatedBy
-          .right_metadata
-            .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#projects_section"}
-              %p.fix-margin-buttom
-                Projects and usage information
-              %img{alt: "", src: asset_path("summary/arrow-down.svg")}
-            #projects_section.collapse.right-metadata-content
-              .creation_info
-                %div.description_text
-                  Projects using
-                  = @ontology.acronym
-                = link_to(new_project_path(),  "aria-label": "Create new project", title: "Create new project", class: "mx-1 mt-1 projects-add-new") do
-                  = inline_svg_tag("summary/plus.svg")
-              .projects_container
-                - if @projects.empty?
-                  %p.font-italic= "No projects using #{@ontology.acronym}"
-                - else
-                  - for project in @projects
-                    = link_to(project_path(project.acronym)) do
-                      %p.clickable_text= project.name
+              = render FieldContainerComponent.new(label: k.to_s, value: Array(v).join(','))
 
-              %p.normal_text
-                = @submission_latest.isFormatOf
-              .creation_info
-                %p.description_text
-                  known Usage
-              %p.normal_text
-                = @submission_latest.knownUsage
-              .creation_info
-                %p.description_text
-                  designed For Ontology Task
-              %p.normal_text
-                = @submission_latest.designedForOntologyTask
-              .creation_info
-                %p.description_text
-                  example
-              %p.normal_text
-                = @submission_latest.example
-              .creation_info
-                %p.description_text
-                  Coverage
-              %p.normal_text
-                = @submission_latest.coverage
-              .creation_info
-                %p.description_text
-                  Included In Data Catalog
-              %p.normal_text
-                = @submission_latest.includedInDataCatalog
-              .creation_info
-                %p.description_text
-                  Target audience
-              %p.normal_text
-                = @submission_latest.audience
-          .right_metadata
-            .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#methodology"}
-              %p.fix-margin-buttom
-                Methodology
-              %img{alt: "", src: asset_path("summary/arrow-down.svg")}/
-            #methodology.collapse.right-metadata-conetent
-              .creation_info
-                %p.description_text Accrual method
-              %p.normal_text
-                = @submission_latest.accrualMethod
-              .creation_info
-                %p.description_text Accrual periodicity
-              %p.normal_text
-                = @submission_latest.accrualPeriodicity
-              .creation_info
-                %p.description_text Accrual policy
-              %p.normal_text
-                = @submission_latest.accrualPolicy
-              .creation_info
-                %p.description_text Knowledge representation paradigm
-              %p.normal_text
-                = @submission_latest.conformsToKnowledgeRepresentationParadigm
-              .creation_info
-                %p.description_text Engineering methodology
-              %p.normal_text
-                = @submission_latest.usedOntologyEngineeringMethodology
-              .creation_info
-                %p.description_text Created With
-              %p.normal_text
-                = @submission_latest.usedOntologyEngineeringTool
-              .creation_info
-                %p.description_text Competency question
-              %p.normal_text
-                = @submission_latest.competencyQuestion
+          - properties = {known_Usage: @submission_latest.knownUsage, designed_For_Ontology_Task:@submission_latest.designedForOntologyTask,
+            example: @submission_latest.example, coverage: @submission_latest.coverage,
+            Target_audience: @submission_latest.audience}
+          = render DropdownContainerComponent.new(title: 'Projects and usage information', id: 'projects_usage_information') do
+            .creation_info
+              %div.description_text
+                Projects using
+                = @ontology.acronym
+              = link_to(new_project_path(),  "aria-label": "Create new project", title: "Create new project", class: "mx-1 mt-1 projects-add-new") do
+                = inline_svg_tag("summary/plus.svg")
+            .projects_container
+              - if @projects.empty?
+                %p.font-italic= "No projects using #{@ontology.acronym}"
+              - else
+                - for project in @projects
+                  = link_to(project_path(project.acronym)) do
+                    %p.clickable_text= project.name
+            - properties.each do |k, v|
+              = render FieldContainerComponent.new(label: k.to_s, value: Array(v).join(','))
+            = render FieldContainerComponent.new(label: 'includedInDataCatalog') do
+              - Array(@submission_latest.includedInDataCatalog).each do |catalog|
+                - data_catalog = $DATA_CATALOG_VALUES.select{ |cat_uri, cat_label|  catalog[cat_uri] }.first || [catalog, catalog]
+                %div.m-1.my-3
+                  = render ChipButtonComponent.new(text: data_catalog[1], url: catalog, type: "clickable")
+
+          - properties = {Accrual_method: @submission_latest.accrualMethod, Accrual_periodicity: @submission_latest.accrualPeriodicity, Accrual_policy: @submission_latest.accrualPolicy,
+          Knowledge_representation_paradigm: @submission_latest.conformsToKnowledgeRepresentationParadigm, Engineering_methodology: @submission_latest.usedOntologyEngineeringMethodology,  Created_With: @submission_latest.usedOntologyEngineeringTool,
+          Competency_question: @submission_latest.competencyQuestion}
+          = render DropdownContainerComponent.new(title: 'Methodology', id: 'methodology') do
+            - properties.each do |k, v|
+              = render FieldContainerComponent.new(label: k.to_s, value: Array(v).join(',')) 
           .right_metadata
             .depiction
               .vists_image

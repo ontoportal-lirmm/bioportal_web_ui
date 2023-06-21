@@ -399,7 +399,7 @@ module SubmissionsHelper
     input_html = ''.html_safe
 
     # Get the attribute hash corresponding to the given attribute
-    attr = @metadata.select { |attr_hash| attr_hash["attribute"].to_s.eql?(attr_label) }.first
+    attr = submission_metadata.select { |attr_hash| attr_hash["attribute"].to_s.eql?(attr_label) }.first
 
     object_name, name = attribute_input_name(attr["attribute"])
 

@@ -17,10 +17,12 @@
           = @ontology.name
           %span
             = "("+ @ontology.acronym+")"
-        .ontology-details-licence
-          %div
-            = attribute_enforced_values('hasLicense')[sub.hasLicense] || sub.hasLicense
-          = inline_svg_tag "open-popup.svg"
+        - unless sub.hasLicense.nil?
+          .ontology-details-licence
+            %div
+              - value = attribute_enforced_values('hasLicense')[sub.hasLicense] || sub.hasLicense
+              = link_to_modal(value, "/ajax/submission/show_licenses/#{@ontology.acronym}",data: { show_modal_title_value: "More licenses", show_modal_size_value: 'modal-xl' })
+            = inline_svg_tag "open-popup.svg"
       - if (details_available && !sub.released.nil?)
         .ontology-details-last-update
           %img{src: asset_path("update.svg")}/
@@ -28,7 +30,9 @@
             = t('ontology_details.header.last_uploaded')
             = l(Date.parse(sub.creationDate), format: :monthfull_day_year)
     .ontology-details-header-right-container.justify-content-end{style: 'min-width: 20%;'}
+      %a.mx-1.ontology-details-edit-button{href: "#{(@submission_latest || @ontology).id}?display=all", :target => '_blank'}
+        = inline_svg_tag "json.svg"
       - if @ontology.admin?(session[:user])
-        %a.ontology-details-edit-button{href: edit_ontology_path(@ontology.acronym)}
+        %a.mx-1.ontology-details-edit-button{href: edit_ontology_path(@ontology.acronym)}
           = inline_svg_tag "edit.svg"
       = subscribe_button(@ontology.id)
