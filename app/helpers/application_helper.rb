@@ -175,8 +175,8 @@ module ApplicationHelper
   def build_tree(node, string, id, concept_schemes: [])
 
     return string if node.children.nil? || node.children.empty?
-
-    node.children.sort! { |a, b| (a.prefLabel || a.id).downcase <=> (b.prefLabel || b.id).downcase }
+    
+    node.children.sort! { |a, b| (get_concept_label(a.prefLabel).last || a.id).downcase <=> (get_concept_label(b.prefLabel).last || b.id).downcase }
     node.children.each do |child|
       active_style = child.id.eql?(id) ? "active" : ''
 
@@ -213,7 +213,8 @@ module ApplicationHelper
       prefLabelHTML =  child.id.split('/').last
     else
       prefLabelLang, prefLabelHTML = get_concept_label(child.prefLabel)
-      tooltip = prefLabelLang.eql?("@none") ? "" : "data-controller='tooltip' data-tooltip-position-value='right' title='#{prefLabelLang.upcase}'";
+      prefLabelLang = prefLabelLang.to_s.upcase
+      tooltip = prefLabelLang.eql?("@NONE") ? "" : "data-controller='tooltip' data-tooltip-position-value='right' title='#{prefLabelLang}'";
     end
 
     link = <<-EOS
@@ -604,10 +605,13 @@ module ApplicationHelper
   end
 
   def language_hash(concept_label)
-    return concept_label if concept_label.is_a?(String)
+ 
+    return concept_label.first if concept_label.is_a?(Array)
+    return remove_fields(concept_label.to_h, [:links, :context]) if concept_label.is_a?(OpenStruct)
 
-    remove_fields(concept_label.to_h, [:links, :context])
-  end
+    return concept_label
+
+  end 
 
   def get_concept_label(concept_label)
     platform_languages = [:en, :fr]
@@ -638,7 +642,10 @@ module ApplicationHelper
     labelHTML = label.map do |key, value|
       content_tag(:div, class: 'd-flex align-items-center') do
         concat content_tag(:p, Array(value).join(', '), class:'m-0')
-        concat content_tag(:span, key.upcase, class: 'badge badge-secondary ml-1') unless key.to_s.upcase.eql?('NONE')
+        
+        unless key.to_s.upcase.eql?('NONE') || key.to_s.upcase.eql?('@NONE')
+          concat content_tag(:span, key.upcase, class: 'badge badge-secondary ml-1')
+        end
       end
     end
 
