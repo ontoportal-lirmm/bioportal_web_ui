@@ -597,7 +597,9 @@ input:checked + .slider:before {
   }
 }
 
-
-.vis-up, .vis-down, .vis-left, .vis-right {
+.vis-up,
+.vis-down,
+.vis-left,
+.vis-right {
   display: none !important;
 }
