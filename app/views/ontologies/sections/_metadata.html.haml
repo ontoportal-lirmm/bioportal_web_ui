@@ -25,17 +25,17 @@
                   %p Identifiers
                   %img{src: asset_path("summary/info.svg")}/
               .creation_info
-                %p.description_text_identifers 
+                %p.description_text_identifers
                   URI
               %p.normal_text
                 = render LinkFieldComponent.new(value: @submission_latest.URI)
               .creation_info
-                %p.description_text_identifers 
+                %p.description_text_identifers
                   VersionIRI
               %p.normal_text
                 = render LinkFieldComponent.new(value: @submission_latest.versionIRI)
               .creation_info
-                %p.description_text_identifers 
+                %p.description_text_identifers
                   Identifier
               %p.normal_text
                 = render LinkFieldComponent.new(value: @submission_latest.identifier)
@@ -64,8 +64,14 @@
           translator: @submission_latest.translator, publisher: @submission_latest.publisher,  funded_By: @submission_latest.fundedBy,
           endorsed_By: @submission_latest.endorsedBy, copyright_Holder: @submission_latest.copyrightHolder}
           = render DropdownContainerComponent.new(title: 'Persons and organizations', id: 'person_and_organization') do
-            - properties.each do |k, v|
-              = render FieldContainerComponent.new(label: k.to_s, value: v)
+            - properties.each do |k, values|
+              = render FieldContainerComponent.new(label: k.to_s) do
+                %div.d-flex.flex-wrap
+                  - Array(values).each do |val_str|
+                    - val_str.split(',').each do |v|
+                      - if v
+                        %div.my-2.mx-1
+                          = render ChipButtonComponent.new(text: v, type: "static",'data-controller':' tooltip', title: v, class:'text-truncate', style: 'width: 200px; display: block')
           .right_metadata
             .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#link_metadata_section"}
               %p.fix-margin-buttom
