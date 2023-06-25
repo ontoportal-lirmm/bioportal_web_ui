@@ -55,7 +55,7 @@
 
       .browse-sub-container
         .browse-first-row{data:{controller: "browse-filters", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL"}}
-          %div{style:'position: sticky; top: 10px'}
+          %div
             %p.browse-filters-title Filters
             %hr#browse-sub-title-line
             - if session[:user]&.admin?
