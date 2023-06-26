@@ -3,7 +3,7 @@
   = button_tag(type: "button", class: "navbar-toggler", data: {toggle: "collapse", target: "#topNavigationToggler"}, aria: {controls: "topNavigationToggler", expanded: "false", label: "Toggle navigation"}) do
     %span.navbar-toggler-icon
 
-  %div#topNavigationToggler.navbar-collapse.collapse.justify-content-between
+  %div#topNavigationToggler.navbar-collapse.collapse.justify-content-end
     %ul.navbar-nav
       %li.nav-item
         = link_to("Browse", ontologies_path(), class: "nav-link")
@@ -27,10 +27,10 @@
           = link_to("Admin", admin_index_path, class: "nav-link")
 
     %ul.navbar-nav
-      = link_to("VocBench", "http://vocbench.lifewatchitaly.eu", target: "_blank", class: "btn btn-outline-secondary text-white mx-1")
+      = link_to("VocBench", "http://vocbench.lifewatchitaly.eu", target: "_blank", class: "nav-link")
       - if session[:user].nil?
         %li.nav-item
-          = link_to("Login", login_index_path(redirect: request.original_url), class: "btn btn-bp-login mr-md-2")
+          = link_to("Login", login_index_path(redirect: request.original_url), class: "nav-link")
       - else
         -# Account menu
         %li.nav-item.dropdown

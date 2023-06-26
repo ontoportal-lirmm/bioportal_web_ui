@@ -43,10 +43,12 @@ h4 {
 }
 
 .btn, input.link_button, a.link_button {
-  border: none;
   border-radius: 0;
 }
 
+a:focus {
+  outline: unset !important;
+}
 
 .team-card-content{
 
