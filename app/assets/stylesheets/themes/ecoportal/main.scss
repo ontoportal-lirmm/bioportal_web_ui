@@ -13,6 +13,43 @@ body {
   font-size: 16px !important;
 }
 
+
+h1 {
+  color: $color-primary;
+  display: block;
+  font-family: "Titillium Web", sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+}
+
+h2 {
+  font-family: "Titillium Web", sans-serif;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+h4 {
+  color: $color-primary;
+  font-family: "Titillium Web", sans-serif;
+  font-size: 18.2px;
+  font-weight: 500;
+}
+
+.ontology {
+  border: thin #f2f2f2 solid;
+  border-radius: 5px;
+  padding: 0.5em 1em 0.5em;
+}
+
+.btn, input.link_button, a.link_button {
+  border: none;
+  border-radius: 0;
+}
+
+.card-header{
+  color: $color-primary
+}
+
 .minimal {
   font-family: "Titillium Web", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
