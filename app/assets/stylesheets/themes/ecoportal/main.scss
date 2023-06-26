@@ -11,6 +11,7 @@ $color-warning: #ffc107;
 body {
   font-family: "Titillium Web", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: 16px !important;
+  color: #212529 !important;
 }
 
 
@@ -46,6 +47,17 @@ h4 {
   border-radius: 0;
 }
 
+
+.team-card-content{
+
+  h4{
+    font-size: 24px;
+  }
+  p {
+    color: black;
+    font-size: 14px;
+  }
+}
 .card-header{
   color: $color-primary
 }
@@ -185,15 +197,16 @@ h3.separator-title {
 }
 
 .abstract {
-  border: 1px solid #d6d6d6;
-  margin-top:10px;
   margin-bottom:10px;
-  padding-top: 20px;
   padding-bottom: 20px;
 }
 
 .abstract p {
   padding-top: 10px;
+}
+
+.abstract h2{
+  color: $color-primary;
 }
 
 
@@ -240,10 +253,6 @@ html {
 }
 
 
-
-body {
-  color:#666666 !important;
-}
 
 
 .eco-navbar-font,
@@ -434,7 +443,11 @@ body {
 
 .team-card-image {
   box-sizing: border-box;
-  width: 220px;
+  flex-basis: 220px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  padding-right: 20px;
+  text-align: center;
 }
 
 .team-card-image img {
