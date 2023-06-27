@@ -1,7 +1,7 @@
 %div{'data-controller': 'search-input',
-  'data-search-input-ajax-url-value': '/ajax/ontologies',
-  'data-search-input-item-link-base-value': '/ontologies/',
-  'data-search-input-id-key-value': 'acronym',
+  'data-search-input-ajax-url-value': @ajax_url,
+  'data-search-input-item-link-base-value': @item_base_url,
+  'data-search-input-id-key-value': @id_key,
   'data-search-input-cache-value': @use_cache.to_s,
   'data-search-input-scroll-down-value': @scroll_down.to_s}
   %input#home-search{:name => @name, :placeholder => @placeholder,
