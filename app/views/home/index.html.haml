@@ -43,18 +43,8 @@
         = t('.welcome', site: $SITE)
       %p
         = t('.tagline')
-      %input#home-search{:name => "search", :placeholder => "Search for an ontology or concept (Ex: Agrovoc ...)", :type => "text", 'data-home-search-target': 'input', 'data-action': 'input->home-search#search blur->home-search#blur'}
-      #home-search-drop-down{'data-home-search-target': 'dropDown', 'data-action': 'mousedown->home-search#prevent'}
-        %a.home-search-ontology-content#home-search-ontology-content{href: "#", 'data-home-search-target': 'searchOntologyContent'}
-          %p#seached-ontology{'data-home-search-target': 'ontology'}
-          %div
-            %img{src: asset_path("loop.svg")}/
-            %p Search ontology content
-        %a.home-search-ontology-content#home-search-ontologies{href: "#", 'data-home-search-target': 'homeSearchOntologies'}
-          %p#seached-ontologies{'data-home-search-target': 'searchedOntologies'}
-          %div
-            %img{src: asset_path("loop.svg")}/
-            %p See all ontologies
+      = render OntologySearchInputComponent.new
+ 
 .home-body-container
   .home-section
     %h4 Wanna upload an ontology?
