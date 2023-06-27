@@ -1,10 +1,12 @@
 class Admin::CategoriesController < ApplicationController
+  include SubmissionUpdater
 
   layout :determine_layout
   before_action :unescape_id, only: [:edit, :show, :update, :destroy]
   before_action :authorize_admin
 
   CATEGORIES_URL = "#{LinkedData::Client.settings.rest_url}/categories"
+  ATTRIBUTE_TO_INCLUDE = 'name,acronym,created,description,parentCategory,ontologies'
 
   def index
     response = _categories
@@ -20,8 +22,8 @@ class Admin::CategoriesController < ApplicationController
   end
 
   def edit
-    @category = LinkedData::Client::Models::Category.find_by_acronym(params[:id]).first
-
+    @category = LinkedData::Client::Models::Category.find_by_acronym(params[:id], include:'name,acronym,created,description,parentCategory,ontologies' ).first
+    @ontologies_category = LinkedData::Client::Models::Ontology.all(include: 'acronym').map {|o|[o.acronym, o.id] }
     respond_to do |format|
       format.html { render "edit", :layout => false }
     end
@@ -49,10 +51,11 @@ class Admin::CategoriesController < ApplicationController
     response = { errors: '', success: ''}
     start = Time.now
     begin
-      category = LinkedData::Client::Models::Category.find_by_acronym(params[:id]).first
+      category = LinkedData::Client::Models::Category.find_by_acronym(params[:id], include: ATTRIBUTE_TO_INCLUDE ).first
+      add_ontologies_to_object(category_params[:ontologies],category) if (category_params[:ontologies].size > 0 && category_params[:ontologies].first != '')
+      delete_ontologies_from_object(category_params[:ontologies],category.ontologies,category) 
       category.update_from_params(category_params)
       category_update = category.update
-
       if response_error?(category_update)
         response[:errors] = response_errors(category_update)
       else
@@ -89,14 +92,14 @@ class Admin::CategoriesController < ApplicationController
   end
 
   def category_params
-    params.require(:category).permit(:acronym, :name, :description, :parentCategory).to_h
+    params.require(:category).permit(:acronym, :name, :description, :parentCategory, {ontologies:[]}).to_h
   end
 
   def _categories
     response = { categories: Hash.new, errors: '', success: '' }
     start = Time.now
     begin
-      response[:categories] = JSON.parse(LinkedData::Client::HTTP.get(CATEGORIES_URL, { include: 'all' }, raw: true))
+      response[:categories] = JSON.parse(LinkedData::Client::HTTP.get(CATEGORIES_URL, { include: ATTRIBUTE_TO_INCLUDE }, raw: true))
 
       response[:success] = "categories successfully retrieved in  #{Time.now - start}s"
       LOG.add :debug, "Categories - retrieved #{response[:categories].length} groups in #{Time.now - start}s"
