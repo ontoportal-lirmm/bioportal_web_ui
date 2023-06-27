@@ -14,7 +14,7 @@ set :deploy_via, :remote_cache
 set :branch, ENV.include?('BRANCH') ? ENV['BRANCH'] : 'master'
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, "/srv/ontoportal/bioportal_web_ui"
+set :deploy_to, "/srv/ontoportal/#{fetch(:application)}"
 
 # Default value for :scm is :git
 # set :scm, :git
