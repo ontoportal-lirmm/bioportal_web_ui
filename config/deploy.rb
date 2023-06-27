@@ -14,7 +14,7 @@ set :deploy_via, :remote_cache
 set :branch, ENV.include?('BRANCH') ? ENV['BRANCH'] : 'master'
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, "/srv/ontoportal/#{fetch(:application)}"
+set :deploy_to, "/srv/ontoportal/bioportal_web_ui"
 
 # Default value for :scm is :git
 # set :scm, :git
@@ -50,6 +50,12 @@ set :keep_assets, 3
 # If you want to restart using `touch tmp/restart.txt`, add this to your config/deploy.rb:
 
 set :passenger_restart_with_touch, true
+
+# set :user, 'ontoportal'
+
+append :linked_files, 'config/database.yml', 'config/bioportal_config_appliance.rb'
+append :linked_dirs, 'log', 'tmp', '.bundle', 'config/locales'
+append :linked_files, 'config/secrets.yml', 'config/site_config.rb', 'config/newrelic.yml','config/credentials/appliance.key', 'config/credentials/appliance.yml.enc'
 # If you want to restart using `passenger-config restart-app`, add this to your config/deploy.rb:
 # set :passenger_restart_with_touch, false # Note that `nil` is NOT the same as `false` here
 # If you don't set `:passenger_restart_with_touch`, capistrano-passenger will check what version of passenger you are running
