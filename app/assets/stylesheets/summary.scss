@@ -567,5 +567,17 @@ input:checked + .slider:before {
 .fix-margin-buttom {
   margin-bottom: 0 !important;
 }
-
+@media (max-width: 1288px) {
+  .summary-page-first-row{
+    width: 100%;
+    margin: 0;
+    padding: 0 20px;
+  }
+  .summary-page-second-row {
+    width: 100%;
+    margin: 0;
+    padding: 0 20px;
+  }
+        
+}
 
