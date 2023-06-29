@@ -1,6 +1,6 @@
 .ontology-details-header-container{
-    margin: 40px;
-    width: 60%;
+    margin: 50px;
+    width: 1248px;
 }
 
 .ontology-details-path{
@@ -105,9 +105,3 @@
 }
 
 
-@media (max-width: 1900px){
-    .ontology-details-header-container{
-        width: 92%;
-        justify-content: space-between;
-    }
-}
