@@ -330,7 +330,7 @@ module SubmissionsHelper
     number_field object_name, attr["attribute"].to_s.to_sym, value: @submission.send(attr["attribute"]), class: 'metadataInput form-control'
   end
 
-  def generate_date_input(attr)
+  def generate_date_input(attr) 
     field_id = [:submission, attr["attribute"].to_s, @ontology.acronym].join('_')
     date_value = @submission.send(attr["attribute"]).presence
     data_flat_picker = { controller: "flatpickr", flatpickr_date_format: "Y-m-d", flatpickr_alt_input: "true", flatpickr_alt_format: "F j, Y" }
