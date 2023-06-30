@@ -104,8 +104,7 @@
 
     .upload-ontology-dates-and-contacts-step.hide{"data-form": "3"}
       .upload-ontology-field-container
-        %div Date of original creation (dd/mm/yy)
-        %input.text-input{:name => "acronym", :type => "text"}/
+        = render InputFieldComponent.new(label: "Date of original creation (dd/mm/yy)", name: "name", margin_bottom: "23px", type: "date")
       .upload-ontology-contact
         .titles
           %div Contact name
