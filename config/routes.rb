@@ -44,6 +44,7 @@ Rails.application.routes.draw do
     get 'instances/:instance_id', to: 'instances#show', constraints: { instance_id: /[^\/?]+/ }
     get 'schemes/show_scheme', to: 'schemes#show'
     get 'collections/show'
+    get 'metrics_evolution'
   end
 
   resources :login

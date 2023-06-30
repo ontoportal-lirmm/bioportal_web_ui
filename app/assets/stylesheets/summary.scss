@@ -495,7 +495,7 @@ input:checked + .slider:before {
   line-height: 1.2;
 }
 
-.metrics-item p {
+.metrics-item p , .metrics-item a {
   font-size: 18px;
   font-weight: 400;
 }
