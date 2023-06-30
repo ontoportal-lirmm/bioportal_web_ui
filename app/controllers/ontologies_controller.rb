@@ -412,6 +412,25 @@ class OntologiesController < ApplicationController
     render json: LinkedData::Client::Models::Ontology.all(include_views: true,
        display: 'acronym,name', display_links: false, display_context: false)
   end
+
+  def metrics_evolution
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
+    key = params[:metrics_key]
+    ontology_not_found(params[:ontology_id]) if @ontology.nil?
+
+    # Retrieve submissions in descending submissionId order (should be reverse chronological order)
+    @submissions = @ontology.explore.submissions({ include: "metrics" })
+                            .sort { |a, b| b.submissionId.to_i <=> a.submissionId.to_i } || []
+
+    metrics = @submissions.map { |s| s.metrics }
+
+    data = {
+      key => metrics.map { |m| m[key] }
+    }
+
+    render partial: 'ontologies/sections/metadata/metrics_evolution_graph', locals: { data: data }
+  end
+
   private
 
   def ontology_params

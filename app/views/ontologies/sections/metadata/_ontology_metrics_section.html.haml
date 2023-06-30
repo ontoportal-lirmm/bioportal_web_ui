@@ -5,16 +5,24 @@
       %div
         %h4
           = @metrics&.classes
-        %p Classes
+        %p
+          = link_to_modal "Classes", ontology_path(@ontology.acronym) + '/metrics_evolution?metrics_key=classes',
+                    class: "", data: { show_modal_title_value: "Metrics evolution of #{@ontology.acronym}"}
     .metrics-item
       %hr/
       %div
         %h4
           = @metrics&.individuals
-        %p Individuals
+        %p
+          = link_to_modal "Individuals", ontology_path(@ontology.acronym) + '/metrics_evolution?metrics_key=individuals',
+                    class: "", data: { show_modal_title_value: "Metrics evolution of #{@ontology.acronym}"}
+
     .metrics-item
       %hr/
       %div
         %h4
           = @metrics&.properties
-        %p Properties
+        %p
+          = link_to_modal "Properties", ontology_path(@ontology.acronym) + '/metrics_evolution?metrics_key=properties',
+                    class: "", data: { show_modal_title_value: "Metrics evolution of #{@ontology.acronym}"}
+
