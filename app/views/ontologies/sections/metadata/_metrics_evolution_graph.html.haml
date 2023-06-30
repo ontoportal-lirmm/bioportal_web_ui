@@ -1,0 +1,26 @@
+= turbo_frame_tag 'application_modal_content' do
+  %canvas#metrics_evolution_chart
+  :javascript
+
+      var metrics = #{raw data.to_json};
+      var key = Object.entries(metrics)[0][0]
+      var numbers = Object.entries(metrics)[0][1]
+
+      // Create a line chart
+      var ctx = document.getElementById('metrics_evolution_chart').getContext('2d');
+      console.log(key, numbers)
+      var metricsChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: numbers.map((_, index) => `Submission  ${index + 1}`),
+          datasets:  [
+            {
+              label: key,
+              data: numbers,
+              borderColor: 'rgba(75, 192, 192, 1)',
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            }
+          ]
+        },
+        options: {}
+      })
