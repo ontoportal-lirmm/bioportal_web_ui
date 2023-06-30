@@ -48,6 +48,7 @@
           endorsed_By: @submission_latest.endorsedBy, copyright_Holder: @submission_latest.copyrightHolder}
           = render DropdownContainerComponent.new(title: 'Persons and organizations', id: 'person_and_organization') do
             - properties.each do |k, values|
+              %p.field-normal_text
               = render FieldContainerComponent.new(label: k.to_s) do
                 %div.d-flex.flex-wrap
                   - Array(values).each do |val_str|
@@ -55,6 +56,8 @@
                       - if v
                         %div.m-1
                           = render ChipButtonComponent.new(text: v, type: "static",'data-controller':' tooltip', title: v, class:'text-truncate', style: 'max-width: 200px; display: block')
+
+
           - properties = {Is_Format_Of: @submission_latest.isFormatOf, Has_Format: @submission_latest.hasFormat,
             Source: @submission_latest.source, Was_generated_by: @submission_latest.wasGeneratedBy, Was_invalidated_by: @submission_latest.wasInvalidatedBy }
           = render DropdownContainerComponent.new(title: 'Links', id: 'link') do
