@@ -103,7 +103,19 @@
 
 
     .upload-ontology-dates-and-contacts-step.hide{"data-form": "3"}
-      third step
+      .upload-ontology-field-container
+        = render InputFieldComponent.new(label: "Date of original creation (dd/mm/yy)", name: "name", margin_bottom: "23px", type: "date")
+      .upload-ontology-contact
+        .titles
+          %div Contact name
+          %div Contact email
+        .contact-fields
+          .fields-line.first
+            %input{:type => "text"}/
+            %input{:type => "text"}/
+        .add-another-contact{:onclick => "addAnotherContact()"}
+          %img{:alt => "", :src => asset_path("plus.svg")}/
+          %div Add anouther contact
 
 
 
