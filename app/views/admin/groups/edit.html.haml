@@ -3,4 +3,4 @@
 %div
   = form_for :group, url: admin_groups_path + "/" + escape(@group.acronym), method: "PATCH", remote: true, data: { collection: "groups"}, html: {class: "admin-collection-form" } do |f|
     = render partial: "form", locals: {f: f, title_text: "Edit group",
-                                             button_text: "Edit group", button_class: "edit-group"}
+                                             button_text: "Save", button_class: "edit-group"}
