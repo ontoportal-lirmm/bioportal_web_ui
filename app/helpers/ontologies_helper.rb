@@ -5,45 +5,6 @@ module OntologiesHelper
   LANGUAGE_FILTERABLE_SECTIONS  = %w[classes schemes collections instances]
 
 
-  def browse_filter_section_label(key)
-    labels = {
-      hasFormalityLevel: 'Formality levels',
-      isOfType: 'Generic Types',
-      naturalLanguage: 'Natural languages'
-    }
-
-    labels[key] || key.to_s.underscore.humanize.capitalize
-  end
-  
-  def browser_counter_loader
-    content_tag(:div, class: "browse-desc-text", style: "margin-bottom: 15px;") do
-      content_tag(:div, class: "d-flex align-items-center") do
-        str = content_tag(:span, "Showing")
-        str += content_tag(:span, "", class: "p-1 p-2", style: "color: #a7a7a7;") do
-          render LoaderComponent.new(small: true)
-        end
-        str
-      end
-    end
-  end
-
-  def ontologies_browse_skeleton(pagesize = 5)
-    pagesize.times do
-      concat render OntologyBrowseCardComponent.new
-    end
-  end
-
-  def ontologies_filter_url(filters, page: 1, count: false)
-    url = 'ontologies_filter?'
-    url += "page=#{page}" if page
-    url += "count=#{page}" if count
-    if filters
-      filters_str = filters.reject { |k, v| v.nil? || (k.eql?(:sort_by) && count) }
-                           .map { |k, v| "#{k}=#{v}" }.join('&')
-      url += "&#{filters_str}"
-    end
-    url
-  end
 
   def additional_details
     return "" if $ADDITIONAL_ONTOLOGY_DETAILS.nil? || $ADDITIONAL_ONTOLOGY_DETAILS[@ontology.acronym].nil?
@@ -168,7 +129,6 @@ module OntologiesHelper
   end
 
   def submission_status2string(sub)
-    return '' if sub.submissionStatus.nil?
     # Massage the submission status into a UI string
     # submission status values, from:
     # https://github.com/ncbo/ontologies_linked_data/blob/master/lib/ontologies_linked_data/models/submission_status.rb

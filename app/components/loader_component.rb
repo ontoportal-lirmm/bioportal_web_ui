@@ -3,13 +3,9 @@
 class LoaderComponent < ViewComponent::Base
   include ActionView::Helpers::TagHelper
 
-  def initialize(small: false)
-    super
-    @small = small
-  end
   def call
     content_tag(:div, class: 'd-flex align-items-center flex-column') do
-      content_tag(:div, class:"spinner-border #{small? ? small_class : ''}") do
+      content_tag(:div, class:'spinner-border') do
         content_tag(:span) do
           'Loading'
         end
@@ -18,13 +14,6 @@ class LoaderComponent < ViewComponent::Base
         end
       end
     end
-  end
-
-  def small?
-    @small
-  end
-  def small_class
-    "spinner-border-sm"
   end
 
 end
