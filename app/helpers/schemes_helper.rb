@@ -24,7 +24,7 @@ module SchemesHelper
     schemes_labels = []
     schemes.each do  |x|
       id = x['@id']
-      label = get_concept_label(get_scheme_label(x))
+      label = select_language_label(get_scheme_label(x))
       if id.eql? main_uri
         label[1] = "#{label[1]} (main)" unless label[0].empty?
         selected_label = { 'prefLabel' => label, '@id' => id }

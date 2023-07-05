@@ -25,7 +25,7 @@ module CollectionsHelper
     collections_labels = []
     collections.each do  |x|
       id = x['@id']
-      label = get_concept_label(get_collection_label(x))
+      label = select_language_label(get_collection_label(x))
       if id.eql? main_uri
         selected_label = { 'prefLabel' => label, '@id' => id }
       else
