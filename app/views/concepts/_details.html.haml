@@ -20,29 +20,24 @@
       %tr
         %td{nowrap: ""}= t('ontology_details.concept.preferred_name')
         %td
-          - unless @concept.prefLabel.nil? 
-            - prefLabel = language_hash(@concept.prefLabel)
-            = display_in_multiple_languages(prefLabel)
+          - unless @concept.prefLabel.nil?
+            = display_in_multiple_languages(@concept.prefLabel)
 
       - unless @concept.synonym.nil? || @concept.synonym.empty?
         %tr
           %td{nowrap: ""}= t('ontology_details.concept.synonyms')
           %td
-            - synonym = language_hash(@concept.synonym)
-            = display_in_multiple_languages(synonym)
+            = display_in_multiple_languages(@concept.synonym)
           %td
             %div.synonym-change-request
               = add_synonym_button
               = remove_synonym_button
       
-      
       - unless @concept.definition.nil? || @concept.definition.empty?
         %tr
           %td{nowrap: ""}= t('ontology_details.concept.definitions')
           %td
-            - definition = language_hash(@concept.definition)
-            = display_in_multiple_languages(definition)
-     
+            = display_in_multiple_languages(@concept.definition)
       
       - if @concept.obsolete?
         %tr
