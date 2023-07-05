@@ -7,6 +7,8 @@ require 'pry' # used in a rescue
 
 module ApplicationHelper
 
+  helper MultiLanguagesHelper
+  
   def get_apikey
     unless session[:user].nil?
       return session[:user].apikey
@@ -563,69 +565,7 @@ module ApplicationHelper
 
   ###END ruby equivalent of JS code in bp_ajax_controller.
   def ontology_viewer_page_name(ontology_name, concept_label, page)
-    return ontology_name + " | " +  get_concept_label(concept_label)[1] + " - #{page.capitalize}"
-  end
-
-  def concept_title_value(concept_label)
-    concept = language_hash(concept_label)
-
-    if concept.is_a?(String)
-      return {"@none" => concept}
-    end
-
-    return concept.to_h
-
-  end
-
-  def language_hash(concept_label)
- 
-    return concept_label.first if concept_label.is_a?(Array)
-    return remove_fields(concept_label.to_h, [:links, :context]) if concept_label.is_a?(OpenStruct)
-
-    return concept_label
-
-  end 
-
-  def get_concept_label(concept_label)
-    platform_languages = [:en, :fr]
-    concept_value = nil
-    concept = concept_title_value(concept_label)
-
-    platform_languages.each do |lang|
-      if concept[lang]
-        concept_value =  [lang, concept[lang]]
-        break
-      end
-    end
-
-    concept_value || concept.to_a.first
-  end
-
-  def remove_fields(hash, fields_to_remove )
-    hash.reject { |key, _| fields_to_remove.include?(key) }
-  end
-
-
-  def display_in_multiple_languages(label)
-
-    if label.is_a?(String)
-      return content_tag(:p, label)
-    end
-
-    labelHTML = label.map do |key, value|
-      content_tag(:div, class: 'd-flex align-items-center') do
-        concat content_tag(:p, Array(value).join(', '), class:'m-0')
-        
-        unless key.to_s.upcase.eql?('NONE') || key.to_s.upcase.eql?('@NONE')
-          concat content_tag(:span, key.upcase, class: 'badge badge-secondary ml-1')
-        end
-      end
-    end
-
-    # trasform array of html tags to a single string
-
-    raw labelHTML.join
-
+    return ontology_name + " | " + select_language_label(concept_label)[1] + " - #{page.capitalize}"
   end
 
   def link_to_modal(name, options = nil, html_options = nil, &block)

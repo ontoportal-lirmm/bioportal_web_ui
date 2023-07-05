@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ConceptDetailsComponent < ViewComponent::Base
-  include ApplicationHelper
+  include ApplicationHelper, MultiLanguagesHelper
 
   renders_one :header
   renders_many :sections

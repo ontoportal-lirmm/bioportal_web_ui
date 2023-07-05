@@ -1,5 +1,5 @@
 class CollectionsController < ApplicationController
-  include CollectionsHelper
+  include CollectionsHelper, MultiLanguagesHelper
   def show
     @collection = get_request_collection
   end

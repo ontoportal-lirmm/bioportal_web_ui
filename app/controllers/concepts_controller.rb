@@ -3,6 +3,7 @@ require 'cgi'
 class ConceptsController < ApplicationController
   include MappingsHelper
   include ConceptsHelper
+  include MultiLanguagesHelper
   layout 'ontology'
 
   def show_concept

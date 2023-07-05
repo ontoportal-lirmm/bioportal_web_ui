@@ -1,5 +1,5 @@
 class SchemesController < ApplicationController
-  include SchemesHelper
+  include SchemesHelper, MultiLanguagesHelper
 
   def show
     @scheme = get_request_scheme
