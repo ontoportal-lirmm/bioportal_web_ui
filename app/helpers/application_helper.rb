@@ -208,26 +208,14 @@ module ApplicationHelper
     icons = child.relation_icon(node)
     muted_style = child.isInActiveScheme&.empty? ? 'text-muted' : ''
     href = ontology_acronym.blank? ? '#' : "/ontologies/#{child.explore.ontology.acronym}/concepts/?id=#{CGI.escape(child.id)}&language=#{language}"
-
-    if child.prefLabel.nil?
-      prefLabelHTML =  child.id.split('/').last
-    else
-      prefLabelLang, prefLabelHTML = get_concept_label(child.prefLabel)
-      tooltip = prefLabelLang.eql?("@none") ? "" : "data-controller='tooltip' data-tooltip-position-value='right' title='#{prefLabelLang.upcase}'";
-    end
-
     link = <<-EOS
-        <a id='#{child.id}' 
-        data-conceptid='#{child.id}'
-        data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
-        data-collections-value='#{child.memberOf || []}'
-        data-active-collections-value='#{child.isInActiveCollection || []}'
-        data-skos-collection-colors-target='collection'
-        class='#{muted_style} #{active_style}'
-        #{tooltip}
-          >
-            #{ prefLabelHTML }
-            
+        <a id='#{child.id}' data-conceptid='#{child.id}'
+           data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
+           data-collections-value='#{child.memberOf || []}'
+           data-active-collections-value='#{child.isInActiveCollection || []}'
+           data-skos-collection-colors-target='collection'
+            class='#{muted_style} #{active_style}'>
+            #{child.prefLabel ? child.prefLabel({ use_html: true }) : child.id.split('/').last}
         </a>
     EOS
 
@@ -371,14 +359,14 @@ module ApplicationHelper
   def metadata_for_select
     get_metadata
     return @metadata_for_select
-  end
+  end 
 
   def get_metadata
     @metadata_for_select = []
     submission_metadata.each do |data|
       @metadata_for_select << data["attribute"]
     end
-  end
+  end    
 
 
   def ontologies_to_acronyms(ontologyIDs)
@@ -430,7 +418,7 @@ module ApplicationHelper
                     class: "add_proposal btn btn-primary", data: { show_modal_title_value: "Add a new proposal"}
     end
   end
-
+ 
   def subscribe_button(ontology_id)
     ontology_acronym = ontology_id.split('/').last
 
@@ -588,64 +576,8 @@ module ApplicationHelper
   end
 
   ###END ruby equivalent of JS code in bp_ajax_controller.
-  def ontology_viewer_page_name(ontology_name, concept_label, page)
-    return ontology_name + " | " +  get_concept_label(concept_label)[1] + " - #{page.capitalize}"
-  end
-
-  def concept_title_value(concept_label)
-    concept = language_hash(concept_label)
-
-    if concept.is_a?(String)
-      return {"@none" => concept}
-    end
-
-    return concept.to_h
-
-  end
-
-  def language_hash(concept_label)
-    return concept_label if concept_label.is_a?(String)
-
-    remove_fields(concept_label.to_h, [:links, :context])
-  end
-
-  def get_concept_label(concept_label)
-    platform_languages = [:en, :fr]
-    concept_value = nil
-    concept = concept_title_value(concept_label)
-
-    platform_languages.each do |lang|
-      if concept[lang]
-        concept_value =  [lang, concept[lang]]
-        break
-      end
-    end
-
-    concept_value || concept.to_a.first
-  end
-
-  def remove_fields(hash, fields_to_remove )
-    hash.reject { |key, _| fields_to_remove.include?(key) }
-  end
-
-
-  def display_in_multiple_languages(label)
-
-    if label.is_a?(String)
-      return content_tag(:p, label)
-    end
-
-    labelHTML = label.map do |key, value|
-      content_tag(:div, class: 'd-flex align-items-center') do
-        concat content_tag(:p, Array(value).join(', '), class:'m-0')
-        concat content_tag(:span, key.upcase, class: 'badge badge-secondary ml-1') unless key.to_s.upcase.eql?('NONE')
-      end
-    end
-
-    # trasform array of html tags to a single string
-
-    raw labelHTML.join
-
+  def ontology_viewer_page_name(ontology_name, concept_name_title , page)
+    ontology_name + " | " +concept_name_title + " - #{page.capitalize}"
   end
 
   def link_to_modal(name, options = nil, html_options = nil, &block)
@@ -699,10 +631,10 @@ module ApplicationHelper
     submission = @submission || @submission_latest
     submission&.hasOntologyLanguage === 'SKOS'
   end
-
+  
   def current_page?(path)
     request.path.eql?(path)
-  end
+  end   
 
   def request_lang
     lang = params[:language] || params[:lang]

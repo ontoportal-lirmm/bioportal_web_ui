@@ -290,17 +290,13 @@ module OntologiesHelper
   end
 
   def languages_options(submission =  @submission || @submission_latest)
-    current_lang = request_lang.downcase
+    current_lang = request_lang
     submission_lang = submission_languages(submission)
     # Transform each language into a select option
     submission_lang = submission_lang.map do |lang|
       lang = lang.split('/').last.upcase
       [lang, lang, { selected: lang.eql?(current_lang) }]
     end
-
-    # Add the option to select all language
-    submission_lang.push(['All', 'all', { selected: current_lang.eql?('all') }])
-
     options_for_select(submission_lang)
   end
 

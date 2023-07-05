@@ -25,24 +25,14 @@ module CollectionsHelper
     collections_labels = []
     collections.each do  |x|
       id = x['@id']
-      label = get_concept_label(get_collection_label(x))
+      label = get_collection_label(x)
       if id.eql? main_uri
         selected_label = { 'prefLabel' => label, '@id' => id }
       else
         collections_labels.append( { 'prefLabel' => label, '@id' => id , 'color' => x['color'] })
       end
     end
-
-    collections_labels.sort_by! do |s|
-      pref_label = s['prefLabel']
-
-      if pref_label.is_a? String
-        pref_label
-      else
-        pref_label.last
-      end
-    end
-
+    collections_labels.sort_by! { |s|  s['prefLabel']}
     collections_labels.unshift selected_label if selected_label
     [collections_labels, selected_label]
   end
@@ -57,31 +47,12 @@ module CollectionsHelper
     end
   end
 
-  def collection_path(collection_id = '', language = '')
-    "/ontologies/#{@ontology.acronym}/collections/show?id=#{escape(collection_id)}&language=#{language}"
+  def collection_path(collection_id = '')
+    "/ontologies/#{@ontology.acronym}/collections/show?id=#{escape(collection_id)}"
   end
 
   def request_collection_id
     params[:id] || params[:collection_id] || params[:concept_collection]
-  end
-
-  def sort_collections_label(collections_labels)
-    collections_labels.sort_by do |s|
-      s['prefLabel'].is_a?(String) ? s['prefLabel'] : s['prefLabel'].last
-    end
-  end
-
-  def link_to_collection(collection, selected_collection_id)
-    pref_label_lang, pref_label_html = get_collection_label(collection)
-    tooltip  = pref_label_lang.to_s.eql?('@none') ? '' :  "data-controller='tooltip' data-tooltip-position-value='right' title='#{pref_label_lang.upcase}'"
-    <<-EOS
-          <a id="#{collection['@id']}" href="#{collection_path(collection['@id'], request_lang)}" 
-            data-turbo="true" data-turbo-frame="collection" data-collectionid="#{collection['@id']}"
-           #{tooltip}
-            class="#{selected_collection_id.eql?(collection['@id']) ? 'active' : nil}">
-              #{pref_label_html}
-          </a>
-    EOS
   end
 
   private
