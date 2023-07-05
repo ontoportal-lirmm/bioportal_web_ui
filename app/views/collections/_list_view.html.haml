@@ -8,6 +8,9 @@
     %ul.simpleTree{data:{controller: 'simple-tree', 'simple-tree': { 'auto-click-value': "true" }, action: 'clicked->history#updateURL'}}
       %li.root
         %ul
-          - sort_collections_label(collections_labels).each do  |c|
+          - collections_labels.sort_by{|s| [s["prefLabel"]]}.each do  |s|
             %li.doc
-              = raw link_to_collection(c, selected_collection_id)
+              %a{id: s["@id"], href: collection_path(s["@id"]),
+                    data: { turbo: "true", 'turbo-frame': 'collection', 'collectionid': s["@id"]},
+                    class: selected_collection_id.eql?(s["@id"]) ? "active" : nil }
+                = get_collection_label(s)
