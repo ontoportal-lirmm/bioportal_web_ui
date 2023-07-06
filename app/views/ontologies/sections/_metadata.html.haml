@@ -10,27 +10,7 @@
           = render partial: 'ontologies/sections/metadata/ontology_metrics_section'
         .summary-page-second-row
           = render partial: 'ontologies/sections/metadata/ontology_depiction_section'
-          .right_metadata
-            .depiction
-              .caintainer_vertical
-                .projects_card
-                  %p Identifiers
-                  %img{src: asset_path("summary/info.svg")}/
-              .creation_info
-                %p.description_text_identifers 
-                  URI
-              %p.normal_text
-                = render LinkFieldComponent.new(value: @submission_latest.URI)
-              .creation_info
-                %p.description_text_identifers 
-                  VersionIRI
-              %p.normal_text
-                = render LinkFieldComponent.new(value: @submission_latest.versionIRI)
-              .creation_info
-                %p.description_text_identifers 
-                  Identifier
-              %p.normal_text
-                = render LinkFieldComponent.new(value: @submission_latest.identifier)
+          = render partial: 'ontologies/sections/metadata/ontology_identifiers_section'
           - properties = {Creation_date: @submission_latest.creationDate, Modification_date: @submission_latest.modificationDate}
           = render DropdownContainerComponent.new(title: 'Dates', id: 'dates') do
             - properties.each do |k, v|

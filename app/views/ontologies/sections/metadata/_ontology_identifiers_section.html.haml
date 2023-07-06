@@ -1,0 +1,21 @@
+.right_metadata
+    .depiction
+        .caintainer_vertical
+            .projects_card
+                %p Identifiers
+                %img{src: asset_path("summary/info.svg")}/
+        .creation_info
+            %p.description_text_identifers 
+                URI
+        %p.normal_text
+            = render LinkFieldComponent.new(value: @submission_latest.URI)
+            .creation_info
+        %p.description_text_identifers 
+            VersionIRI
+        %p.normal_text
+            = render LinkFieldComponent.new(value: @submission_latest.versionIRI)
+            .creation_info
+        %p.description_text_identifers 
+            Identifier
+        %p.normal_text
+            = render LinkFieldComponent.new(value: @submission_latest.identifier)
