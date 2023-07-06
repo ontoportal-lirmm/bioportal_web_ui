@@ -53,8 +53,6 @@ docker-sync.yml
 /config/master.key
 /config/credentials/development.key
 /config/credentials/test.key
-/config/credentials/staging.key
-/config/credentials/appliance.key
 
 
 app/views/ontologies/sections/metadata/_ontology_general_information.html.haml
