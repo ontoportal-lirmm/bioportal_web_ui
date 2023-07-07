@@ -1,0 +1,55 @@
+=> [32m#<Faraday::Response:0x00007f22e3b06d48[0m
+ @env[32m=[0m
+  [32m#<struct Faraday::Env[0m
+   method[32m=[0m[33m:patch[0m,
+   request_body[32m=[0m[31m[1;31m"[0m[31m{[1;35m\"[0m[31misView[1;35m\"[0m[31m:[1;35m\"[0m[31m0[1;35m\"[0m[31m,[1;35m\"[0m[31msubscribe_notifications[1;35m\"[0m[31m:[1;35m\"[0m[31m0[1;35m\"[0m[31m}[1;31m"[0m[31m[0m,
+   url[32m=[0m[32m#<URI::HTTPS https://data.stageportal.lirmm.fr/ontologies/ONTO2>[0m,
+   request[32m=[0m
+    [32m#<struct Faraday::RequestOptions[0m
+     params_encoder[32m=[0m[1;36mnil[0m,
+     proxy[32m=[0m[1;36mnil[0m,
+     bind[32m=[0m[1;36mnil[0m,
+     timeout[32m=[0m[1;36mnil[0m,
+     open_timeout[32m=[0m[1;36mnil[0m,
+     read_timeout[32m=[0m[1;36mnil[0m,
+     write_timeout[32m=[0m[1;36mnil[0m,
+     boundary[32m=[0m[1;36mnil[0m,
+     oauth[32m=[0m[1;36mnil[0m,
+     context[32m=[0m[1;36mnil[0m,
+     on_data[32m=[0m[1;36mnil[0m[32m>[0m,
+   request_headers[32m=[0m
+    {[31m[1;31m"[0m[31mAccept[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31mapplication/json[1;31m"[0m[31m[0m,
+     [31m[1;31m"[0m[31mAuthorization[1;31m"[0m[31m[0m=>
+      [31m[1;31m"[0m[31mapikey token=72c72cba-ad45-4785-b94e-483fa55cdddb&userapikey=9f48453e-dc14-4276-bd65-c209c0b29426[1;31m"[0m[31m[0m,
+     [31m[1;31m"[0m[31mUser-Agent[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31mNCBO API Ruby Client v0.1.0[1;31m"[0m[31m[0m,
+     [31m[1;31m"[0m[31mContent-Type[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31mapplication/json[1;31m"[0m[31m[0m,
+     [31m[1;31m"[0m[31mNCBO-Cache[1;31m"[0m[31m[0m=>[1;35m1688722894.7553995[0m},
+   ssl[32m=[0m
+    [32m#<struct Faraday::SSLOptions[0m
+     verify[32m=[0m[1;36mtrue[0m,
+     ca_file[32m=[0m[1;36mnil[0m,
+     ca_path[32m=[0m[1;36mnil[0m,
+     verify_mode[32m=[0m[1;36mnil[0m,
+     cert_store[32m=[0m[1;36mnil[0m,
+     client_cert[32m=[0m[1;36mnil[0m,
+     client_key[32m=[0m[1;36mnil[0m,
+     certificate[32m=[0m[1;36mnil[0m,
+     private_key[32m=[0m[1;36mnil[0m,
+     verify_depth[32m=[0m[1;36mnil[0m,
+     version[32m=[0m[1;36mnil[0m,
+     min_version[32m=[0m[1;36mnil[0m,
+     max_version[32m=[0m[1;36mnil[0m[32m>[0m,
+   parallel_manager[32m=[0m[1;36mnil[0m,
+   params[32m=[0m[1;36mnil[0m,
+   response[32m=[0m[32m#<Faraday::Response:0x00007f22e3b06d48[0m ...[32m>[0m,
+   response_headers[32m=[0m
+    {[31m[1;31m"[0m[31mDate[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31mFri, 07 Jul 2023 09:42:17 GMT[1;31m"[0m[31m[0m,
+     [31m[1;31m"[0m[31mServer[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31mnginx/1.20.1[1;31m"[0m[31m[0m,
+     [31m[1;31m"[0m[31mX-Rack-Cache[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31minvalidate, pass[1;31m"[0m[31m[0m,
+     [31m[1;31m"[0m[31mVary[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31mOrigin[1;31m"[0m[31m[0m,
+     [31m[1;31m"[0m[31mX-Content-Type-Options[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31mnosniff[1;31m"[0m[31m[0m,
+     [31m[1;31m"[0m[31mVia[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31m1.1 data.stageportal.lirmm.fr[1;31m"[0m[31m[0m},
+   status[32m=[0m[1;34m204[0m,
+   reason_phrase[32m=[0m[31m[1;31m"[0m[31mNo Content[1;31m"[0m[31m[0m,
+   response_body[32m=[0m[31m[1;31m"[0m[31m[1;31m"[0m[31m[0m[32m>[0m,
+ @on_complete_callbacks[32m=[0m[][32m>[0m
