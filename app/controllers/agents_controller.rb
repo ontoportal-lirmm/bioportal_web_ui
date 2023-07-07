@@ -51,7 +51,7 @@ class AgentsController < ApplicationController
 
   def update
     agent_update, agent = update_agent(params[:id].split('/').last, agent_params)
-    binding.pry
+
     if response_error?(agent_update)
       render_turbo_stream(alert_error { JSON.pretty_generate(response_errors(agent_update)) })
     else
@@ -106,29 +106,17 @@ class AgentsController < ApplicationController
   def update_agent(id = params[:id], params)
     agent = LinkedData::Client::Models::Agent.find("#{REST_URI}/Agents/#{id}")
 
-    affiliations = params.delete(:affiliations)
-    params[:affiliations] = []
-    params[:creator] = session[:user].id if (agent.creator.nil? || agent.creator.empty?) && (params[:creator]|| '').empty?
+    params[:creator] = session[:user].id if (agent.creator.nil? || agent.creator.empty?) && (params[:creator] || '').empty?
 
-
-    Array(affiliations).each do |aff|
-      if aff[:id]
-        id = aff.delete :id
-        res, aff = update_agent(id.split('/').last, aff)
-      else
-        aff = save_agent(aff)
-      end
-      params[:affiliations] << {'id' => aff.id}.merge(aff.to_hash.stringify_keys)
-    end
-
-    [agent.update(values: params) , agent.update_from_params(params)]
+    res = agent.update(values: params)
+    [res, agent.update_from_params(params)]
   end
 
   def agent_params
     p = params.permit(:agentType, :name, :acronym, :homepage,
                       :creator,
                       { identifiers: [:notation, :schemaAgency, :creator] },
-                      { affiliations: [:id, :agentType, :name, :homepage, :acronym,:creator, { identifiers: [:notation, :schemaAgency, :creator] }] }
+                      { affiliations: [:id, :agentType, :name, :homepage, :acronym, :creator, { identifiers: [:notation, :schemaAgency, :creator] }] }
     )
     p = p.to_h
     p.transform_values do |v|
@@ -143,7 +131,7 @@ class AgentsController < ApplicationController
     p[:identifiers] = (p[:identifiers] || {}).values
     p[:affiliations] = (p[:affiliations] || {}).values
     p[:affiliations].each do |affiliation|
-      affiliation[:identifiers] = (affiliation[:identifiers] || {}).values
+      affiliation[:identifiers] = affiliation[:identifiers].values if affiliation.is_a?(Hash) && affiliation[:identifiers]
     end
     p
   end
