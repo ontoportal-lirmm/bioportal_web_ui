@@ -1,0 +1,19 @@
+.Summary-page-card
+    - unless @ontology.view?
+        %div.ont-section-toolbar
+            %header.pb-2.font-weight-bold= "Views of #{@ontology.acronym}"
+            - ont_id_esc = CGI.escape(@ontology.id)
+            - if session[:user].nil?
+                %a{href: "/login?redirect=#{escape("/ontologies/new?ontology[viewOf]=#{ont_id_esc}")}", "aria-label": "Create new view", title: "Create new view"}
+                    %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
+            - else
+                %a{href: "/ontologies/new?ontology[viewOf]=#{ont_id_esc}"}
+                    %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
+        - if @views.empty?
+            %p.font-italic= "No views of #{@ontology.acronym} available"
+        - else
+            %div.border-top
+                %dl
+                    - @view_decorators.each do |view_decorator|
+                        %dt= view_decorator.linked_name
+                        %dd= view_decorator.description
