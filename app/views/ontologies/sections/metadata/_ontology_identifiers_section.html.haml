@@ -10,11 +10,12 @@
         %p.normal_text
             = render LinkFieldComponent.new(value: @submission_latest.URI)
             .creation_info
-        %p.description_text_identifers 
-            VersionIRI
-        %p.normal_text
-            = render LinkFieldComponent.new(value: @submission_latest.versionIRI)
-            .creation_info
+        - unless @submission_latest.versionIRI.nil? || @submission_latest.versionIRI.empty?
+            %p.description_text_identifers 
+                VersionIRI
+            %p.normal_text
+                = render LinkFieldComponent.new(value: @submission_latest.versionIRI)
+                .creation_info
         %p.description_text_identifers 
             Identifier
         %p.normal_text
