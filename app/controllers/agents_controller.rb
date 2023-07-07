@@ -29,7 +29,9 @@ class AgentsController < ApplicationController
   def new
     @agent = LinkedData::Client::Models::Agent.new
     @agent.creator = session[:user].id
-    @agent.agentType = 'person'
+    @agent.agentType = params[:type] || 'person'
+    @agent.name = params[:name]
+    @new_agent = params[:new_agent].nil? || params[:new_agent].eql?('true')
   end
 
   def create
