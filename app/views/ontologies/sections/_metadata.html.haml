@@ -11,88 +11,22 @@
         .summary-page-second-row
           = render partial: 'ontologies/sections/metadata/ontology_depiction_section'
           = render partial: 'ontologies/sections/metadata/ontology_identifiers_section'
-          - properties = {Creation_date: @submission_latest.creationDate, Modification_date: @submission_latest.modificationDate}
           = render DropdownContainerComponent.new(title: 'Dates', id: 'dates') do
-            - properties.each do |k, v|
+            - @dates_properties.each do |k, v|
               = render FieldContainerComponent.new(label: k.to_s) do
                 = render DateTimeFieldComponent.new(value: v) 
-          - properties = {creators: @submission_latest.hasCreator, contributors: @submission_latest.hasContributor, curators: @submission_latest.curatedBy,
-          translator: @submission_latest.translator, publisher: @submission_latest.publisher,  funded_By: @submission_latest.fundedBy,
-          endorsed_By: @submission_latest.endorsedBy, copyright_Holder: @submission_latest.copyrightHolder}
           = render DropdownContainerComponent.new(title: 'Persons and organizations', id: 'person_and_organization') do
-            - properties.each do |k, v|
-              = render FieldContainerComponent.new(label: k.to_s, value: v)
-          - properties = {Is_Format_Of: @submission_latest.isFormatOf, Has_Format: @submission_latest.hasFormat,
-            Source: @submission_latest.source, Was_generated_by: @submission_latest.wasGeneratedBy, Was_invalidated_by: @submission_latest.wasInvalidatedBy }
+            - @persons_organizations_properties.each do |k, v|
+              = render FieldContainerComponent.new(label: k.to_s, value: v) 
           = render DropdownContainerComponent.new(title: 'Links', id: 'link') do
-            - properties.each do |k, v|
+            - @links_properties.each do |k, v|
               = render FieldContainerComponent.new(label: k.to_s, value: v)
-          .right_metadata
-            .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#projects_section"}
-              %p.fix-margin-buttom
-                Projects and usage information
-              %img{alt: "", src: asset_path("summary/arrow-down.svg")}
-            #projects_section.collapse.right-metadata-content
-              .creation_info
-                %div.description_text
-                  Projects using
-                  = @ontology.acronym
-                = link_to(new_project_path(),  "aria-label": "Create new project", title: "Create new project", class: "mx-1 mt-1 projects-add-new") do
-                  = inline_svg_tag("summary/plus.svg")
-              .projects_container
-                - if @projects.empty?
-                  %p.font-italic= "No projects using #{@ontology.acronym}"
-                - else
-                  - for project in @projects
-                    = link_to(project_path(project.acronym)) do
-                      %p.clickable_text= project.name
-
-              %p.normal_text
-                = @submission_latest.isFormatOf
-              .creation_info
-                %p.description_text
-                  known Usage
-              %p.normal_text
-                = @submission_latest.knownUsage
-              .creation_info
-                %p.description_text
-                  designed For Ontology Task
-              %p.normal_text
-                = @submission_latest.designedForOntologyTask
-              .creation_info
-                %p.description_text
-                  example
-              %p.normal_text
-                = @submission_latest.example
-              .creation_info
-                %p.description_text
-                  Coverage
-              %p.normal_text
-                = @submission_latest.coverage
-              .creation_info
-                %p.description_text
-                  Included In Data Catalog
-              %p.normal_text
-                = @submission_latest.includedInDataCatalog
-              .creation_info
-                %p.description_text
-                  Target audience
-              %p.normal_text
-                = @submission_latest.audience
-          - properties = {Accrual_method: @submission_latest.accrualMethod, Accrual_periodicity: @submission_latest.accrualPeriodicity, Accrual_policy: @submission_latest.accrualPolicy,
-          Knowledge_representation_paradigm: @submission_latest.conformsToKnowledgeRepresentationParadigm, Engineering_methodology: @submission_latest.usedOntologyEngineeringMethodology,  Created_With: @submission_latest.usedOntologyEngineeringTool,
-          Competency_question: @submission_latest.competencyQuestion}
+          = render partial: 'ontologies/sections/metadata/ontology_all_projects_section'
+              
           = render DropdownContainerComponent.new(title: 'Methodology', id: 'methodology') do
-            - properties.each do |k, v|
+            - @methodology_properties.each do |k, v|
               = render FieldContainerComponent.new(label: k.to_s, value: Array(v).join(',')) 
-          .right_metadata
-            .depiction
-              .vists_image
-                %p Visits
-                - if visits_data(@ontology)
-                  = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", "aria-label": "Download as CSV", title: "Download as CSV") do
-                    %img{alt: "", src: asset_path("summary/arrow_down.svg")}
-              = render partial: "visits"
+          = render partial: 'ontologies/sections/metadata/ontology_visits_section'
           = render SummarySectionComponent.new(title: 'Get my metadata back')  do
             - unless @submission_latest.nil?
               %div{data:{controller: 'metadata-downloader'}}
@@ -100,23 +34,4 @@
                 %button{:id => "getMetadataBackNquadsBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadNQuads'} N-Triple
                 %button{:id => "getMetadataBackJsonldBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadJsonLd'} Json-LD
                 %button{:id => "getMetadataBackXmlBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadXML'} RDF/XML
-          .Summary-page-card
-            - unless @ontology.view?
-              %div.ont-section-toolbar
-                %header.pb-2.font-weight-bold= "Views of #{@ontology.acronym}"
-                - ont_id_esc = CGI.escape(@ontology.id)
-                -# TODO: I don't think we should have brackets in the URL parameters.
-                - if session[:user].nil?
-                  %a{href: "/login?redirect=#{escape("/ontologies/new?ontology[viewOf]=#{ont_id_esc}")}", "aria-label": "Create new view", title: "Create new view"}
-                    %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
-                - else
-                  %a{href: "/ontologies/new?ontology[viewOf]=#{ont_id_esc}"}
-                    %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
-              - if @views.empty?
-                %p.font-italic= "No views of #{@ontology.acronym} available"
-              - else
-                %div.border-top
-                  %dl
-                    - @view_decorators.each do |view_decorator|
-                      %dt= view_decorator.linked_name
-                      %dd= view_decorator.description
+          = render partial: 'ontologies/sections/metadata/ontology_views_section'
