@@ -113,6 +113,10 @@
               - @admin_ontologies.each do |ont|
                 .account-page-submitted-ontology{data: {controller: 'tooltip'}, title: ont.name}
                   %a{href: "/ontologies/#{ont.acronym}"}= ont.acronym
+                - unless ont.views.nil? || ont.views.empty?
+                  - ont.views.each do |view|
+                    .account-page-submitted-ontology{data: {controller: 'tooltip'}, title: ont.name}
+                      %a{href: "/ontologies/#{view.match(/\/([^\/]+)$/)[1]}"}= view.match(/\/([^\/]+)$/)[1]
         - unless @user_projects.nil? || @user_projects.empty?
           - no_ontologies = false
           .account-page-card
