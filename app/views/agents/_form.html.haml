@@ -66,16 +66,20 @@
     %tr
       %th
         Affiliations
-      %td.top
+      %td.top.agents-affiliations
         %div
           = render NestedFormInputsComponent.new do |c|
             - c.template do
-              %div.d-flex{id: 'NEW_RECORD'}
-                = render partial: 'agents/form', locals: {agent: new_affiliation_obj, name_prefix: "[affiliations][NEW_RECORD]", new_agent: false}
+              = turbo_frame_tag 'NEW_RECORD' do
+                = render AgentSearchInputComponent.new(id: 'NEW_RECORD', organization_only: true)
             - Array(agent.affiliations).each_with_index do |affiliation, i|
               - c.row do
-                %div.d-flex{id: affiliation.id}
-                  = render partial: 'agents/form', locals: {agent: affiliation, name_prefix: "[affiliations][#{i}]", new_agent: false}
+                - if current_user_admin? || affiliation.creator.eql?(current_user&.id.to_s)
+                  %div{id: affiliation.id}
+                    = render partial: 'agents/form', locals: {agent: affiliation, name_prefix: "[affiliations][#{i}]", new_agent: false}
+                - else
+                  %div
+                    = render partial: 'agents/agent_show', locals: {agent: affiliation, name_prefix: "[affiliations][#{i}]"}
 - if new_agent
   %div.mt-2
     = submit_tag 'Save', class: "btn btn-primary mr-sm-2 group-form-accept"
