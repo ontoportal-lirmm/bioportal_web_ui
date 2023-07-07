@@ -9,7 +9,8 @@
     'data-search-input-target': 'input'}
   #home-search-drop-down{'data-search-input-target': 'dropDown', 'data-action': 'mousedown->search-input#prevent'}
     - @actions_links.each do |key, value|
-      %a.home-search-ontology-content#home-search-ontology-content{href:  value, 'data-turbo-frame': '_top', 'data-search-input-target': 'actionLink'}
+      - link, target = action_link_info(value)
+      %a.home-search-ontology-content#home-search-ontology-content{href:  link, 'data-turbo-frame': target, 'data-search-input-target': 'actionLink'}
         %p.mb-0
         %div
           %img{src: asset_path("loop.svg")}/
