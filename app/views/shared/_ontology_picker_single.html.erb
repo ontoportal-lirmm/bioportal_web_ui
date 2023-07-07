@@ -10,8 +10,17 @@
 <%disabled ||= nil%>
 
 <script type="text/javascript">
-  jQuery(document).ready(function(){
-    jQuery("#<%=picker_id%>").chosen({search_contains: true});
+  jQuery(document).ready(function() {
+    jQuery("#<%= picker_id %>").chosen({ search_contains: true });
+
+    jQuery("#ontology_isView").change(function() {
+      if (this.checked) {
+        jQuery("#ontology_viewOf").prop("disabled", false).trigger("chosen:updated");
+      } else {
+        jQuery("#ontology_viewOf").val('').trigger("chosen:updated");
+        jQuery("#ontology_viewOf").prop("disabled", true).trigger("chosen:updated");
+      }
+    });
   });
 </script>
 
