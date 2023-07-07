@@ -6,6 +6,11 @@ class AgentsController < ApplicationController
     @agents = LinkedData::Client::Models::Agent.all
   end
 
+  def show
+    id = params[:id]&.eql?('fake_id') ? params[:name] : params[:id]
+    @agent = LinkedData::Client::Models::Agent.all(name: id).find { |x| x.name.eql?(id) }
+    @name_prefix = params[:parent_id] ? "[affiliations][#{params[:parent_id]}]" : ''
+  end
 
   def ajax_agents
     @agents = LinkedData::Client::Models::Agent.all(name: params[:name], agentType: params[:organization_only]&.eql?('true') ? 'organization' : '')
