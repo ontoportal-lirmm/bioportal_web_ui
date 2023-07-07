@@ -1,0 +1,3 @@
+- if agent.id
+  = hidden_field_tag agent_field_name(:id, name_prefix), agent.id
+= text_field_tag '', agent.name + '(' + agent.identifiers.map {|i| i.schemaAgency+':'+i.notation}.join(', ') + ')', class: "form-control", disabled: true
