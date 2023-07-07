@@ -1,0 +1,32 @@
+%p.normal_text
+    = @submission_latest.isFormatOf
+.creation_info
+    %p.description_text
+        known Usage
+    %p.normal_text
+        = @submission_latest.knownUsage
+.creation_info
+    %p.description_text
+        designed For Ontology Task
+    %p.normal_text
+        = @submission_latest.designedForOntologyTask
+.creation_info
+    %p.description_text
+        example
+    %p.normal_text
+        = @submission_latest.example
+.creation_info
+    %p.description_text
+        Coverage
+    %p.normal_text
+        = @submission_latest.coverage
+.creation_info
+    %p.description_text
+        Included In Data Catalog
+    %p.normal_text
+        = @submission_latest.includedInDataCatalog
+.creation_info
+    %p.description_text
+        Target audience
+    %p.normal_text
+        = @submission_latest.audience
