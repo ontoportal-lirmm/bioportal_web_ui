@@ -1,4 +1,15 @@
 = render TurboFrameComponent.new(id:id) do
+  - unless @errors.nil?
+    %div
+      %div.enable-lists{style: "color:red;"}
+        %strong Errors On Form
+        %ul
+          - Array(@errors).each do  |error|
+            - error = error[:error] if error[:error]
+            - error.each do |key, value|
+              %li
+                #{key}: #{value.values.join(', ')}
+
   = hidden_field object_name, :ontology, value: acronym
   = hidden_field object_name, :id, value: submissionId
   %div#general-card.mt-4
