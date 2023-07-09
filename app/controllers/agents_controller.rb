@@ -6,6 +6,21 @@ class AgentsController < ApplicationController
     @agents = LinkedData::Client::Models::Agent.all
   end
 
+
+  def ajax_agents
+    @agents = LinkedData::Client::Models::Agent.all(name: params[:name], agentType: params[:organization_only]&.eql?('true') ? 'organization' : '')
+    agents_json = @agents.map do |x|
+      {
+        id: x.id,
+        name: x.name,
+        type: x.agentType,
+        identifiers: x.identifiers.map { |i| i.schemaAgency + ':' + i.notation }.join(', ')
+      }
+    end
+
+    render json: agents_json
+  end
+
   def new
     @agent = LinkedData::Client::Models::Agent.new
     @agent.creator = session[:user].id
