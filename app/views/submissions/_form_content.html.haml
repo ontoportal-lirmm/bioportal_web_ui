@@ -29,7 +29,10 @@
 
     %div#key-properties-card.mt-4
       = metadata_section('key-properties', 'Key properties', collapsed: false) do
-        = form_group_attribute("URI")
+        = form_group_attribute("URI", required: true)
+        = form_group_attribute("identifier", required: true)
+        = form_group_attribute("hasCreator", required: true)
+        = form_group_attribute("publisher", required: true)
         = form_group_attribute("deprecated")
         = form_group_attribute("hasOntologySyntax") do
           %p
@@ -66,8 +69,10 @@
           - c.help do
             Enter a URL for a page that provides ontology documentation.
 
+        = form_group_attribute('alternative', required: true)
+
         -# Publications page
-        = attribute_text_field_container('publication') do |c|
+        = attribute_text_field_container('publication', required: true) do |c|
           - c.help do
             Enter a URL for a page that lists publications about your ontology.
 
@@ -75,7 +80,7 @@
         = form_group_attribute("usedOntologyEngineeringTool")
 
       = metadata_section('more-description-details', 'More description details', parent_id: "description-card") do
-        - for attr_name in %w[abstract notes keywords alternative identifier]
+        - for attr_name in %w[abstract notes keywords]
           = form_group_attribute(attr_name)
 
       - data = sections
@@ -105,8 +110,8 @@
             to choose your license
 
       = metadata_section('more-licensing-info', 'More licensing information', parent_id: "licenses-card") do
-        - for attr in @metadata.select { |m| m['display'] == 'license' }
-          = form_group_attribute(attr["attribute"])
+        = form_group_attribute("morePermissions")
+        = form_group_attribute("copyrightHolder")
 
     %div#community.mt-4
       = metadata_section('contacts-panel', 'Contacts', parent_id: "community", collapsed: !@required_only  || !@submission.id.nil?) do
@@ -121,7 +126,6 @@
                 = render partial: "submissions/submission_contact_form", locals: {contact: contact, index: i}
 
         = form_group_attribute("hasContributor")
-        = form_group_attribute("hasCreator")
 
       = metadata_section('more-community-info', 'More community information', parent_id: "community") do
         - for attr in @metadata.select { |m| m['category'] == 'community' }
