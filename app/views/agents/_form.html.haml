@@ -28,6 +28,12 @@
       = text_field_tag agent_field_name(:name, name_prefix), agent.name, class: "form-control"
   %tr
     %th
+      Email
+      %span.asterik *
+    %td.top
+      = email_field_tag agent_field_name(:email, name_prefix), agent.name, class: "form-control"
+  %tr
+    %th
       Acronym
       %span.asterik
     %td.top

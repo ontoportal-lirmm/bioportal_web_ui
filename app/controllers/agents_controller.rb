@@ -113,7 +113,7 @@ class AgentsController < ApplicationController
   end
 
   def agent_params
-    p = params.permit(:agentType, :name, :acronym, :homepage,
+    p = params.permit(:agentType, :name, :email, :acronym, :homepage,
                       :creator,
                       { identifiers: [:notation, :schemaAgency, :creator] },
                       { affiliations: [:id, :agentType, :name, :homepage, :acronym, :creator, { identifiers: [:notation, :schemaAgency, :creator] }] }
