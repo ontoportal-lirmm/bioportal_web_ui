@@ -82,7 +82,7 @@
 
       - data.each do |d|
         = metadata_section(d[0], d[1], parent_id: "description-card") do
-          - for attr in @metadata.select { |m| m['display'] == d[2] }
+          - for attr in @metadata.select { |m| m['category'] == d[2] }
             = form_group_attribute(attr["attribute"])
 
     %div#ontology-dates-card.mt-4
@@ -90,7 +90,7 @@
         = form_group_attribute("released", default: Date.today, required: true)
         = form_group_attribute("modificationDate")
       = metadata_section('more-dates', 'More dates', parent_id: "ontology-dates-card") do
-        - for attr in @metadata.select { |m| m['display'] == 'dates' }
+        - for attr in @metadata.select { |m| m['category'] == 'dates' }
           = form_group_attribute(attr["attribute"])
 
     %div#licenses-card.mt-4
@@ -124,11 +124,11 @@
         = form_group_attribute("hasCreator")
 
       = metadata_section('more-community-info', 'More community information', parent_id: "community") do
-        - for attr in @metadata.select { |m| m['display'] == 'community' }
+        - for attr in @metadata.select { |m| m['category'] == 'community' }
           = form_group_attribute(attr["attribute"])
 
       = metadata_section('more-people-info', 'More people information', parent_id: "community") do
-        - for attr in @metadata.select { |m| m['display'] == 'people' }
+        - for attr in @metadata.select { |m| m['category'] == 'people' }
           = form_group_attribute(attr["attribute"])
 
     %div#ontology-relations-more.mt-4
@@ -140,7 +140,7 @@
 
       = metadata_section('more-relations', 'More relations', parent_id: "ontology-relations-more") do
         - for attr in @metadata
-          - if attr["display"].eql?("relations")
+          - if attr["category"].eql?("relations")
             = form_group_attribute(attr["attribute"])
 
     %div#ontology-content-metrics.mt-4
@@ -149,9 +149,9 @@
         = form_group_attribute("preferredNamespaceUri")
 
       = metadata_section('more-informations', 'More content informations', parent_id: "ontology-content-metrics") do
-        - for attr in @metadata.select { |m| m['display'] == 'content' }
+        - for attr in @metadata.select { |m| m['category'] == 'content' }
           = form_group_attribute(attr["attribute"])
 
       = metadata_section('more-metrics-informations', 'More metrics informations', parent_id: "ontology-content-metrics") do
-        - for attr in @metadata.select { |m| m['display'] == 'metrics' }
+        - for attr in @metadata.select { |m| m['category'] == 'metrics' }
           = form_group_attribute(attr["attribute"])
