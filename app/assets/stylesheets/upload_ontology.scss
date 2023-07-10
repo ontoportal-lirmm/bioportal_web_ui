@@ -146,12 +146,7 @@
     margin-left: 7px;
 }
 
-.upload-ontology-field-container div {
-    font-size: 12px;
-    color: #666666;
-}
-
-#ontology_administeredBy_chosen {
+#ontology_administeredBy_chosen{
     margin-top: 5px;
     margin-bottom: 23px;
     width: 100%;
@@ -162,26 +157,7 @@
     outline: none;
 }
 
-.upload-ontology-field-container .text-input,
-.upload-ontology-field-container textarea {
-    margin-top: 5px;
-    margin-bottom: 23px;
-    width: 100%;
-    font-size: 13px;
-    padding: 10px;
-    border: 1px solid #BDBDBD;
-    border-radius: 5px;
-    outline: none;
-    resize: none;
-    background-color: white;
-}
-
-.upload-ontology-field-container .text-input:focus,
-.upload-ontology-field-container textarea:focus {
-    border: 1px solid var(--primary-color);
-}
-
-.upload-ontology-chips-container {
+.upload-ontology-chips-container{
     display: flex;
     flex-wrap: wrap;
 }
@@ -263,7 +239,89 @@
     text-decoration: none;
     color: var(--primary-color);
 }
-
-.upload-ontology-desc a svg {
+.upload-ontology-desc a svg{
     transform: scale(1.2);
 }
+
+.upload-ontology-contact .titles {
+    display: flex;
+    font-size: 11px;
+    color: #666666;
+    margin-bottom: 5px;
+}
+
+.upload-ontology-contact .titles div:first-child {
+    width: 262px;
+}
+
+.upload-ontology-contact.multiple .titles div:first-child {
+    width: 233px;
+}
+
+.upload-ontology-contact .fields-line {
+    display: flex;
+}
+
+.upload-ontology-contact .fields-line input:focus {
+    border: 1px solid var(--primary-color) !important;
+}
+
+.upload-ontology-contact .fields-line input {
+    font-size: 13px;
+    padding: 10px;
+    border: 1px solid #BDBDBD;
+    border-radius: 5px;
+    outline: none;
+    width: 247px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+
+.upload-ontology-contact.multiple .fields-line input {
+    width: 218px;
+}
+
+
+
+
+.upload-ontology-contact .delete {
+    display: flex;
+    border: 1px dashed #BDBDBD;
+    justify-content: center;
+    align-items: center;
+    height: 43px;
+    width: 43px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.upload-ontology-contact .add-another-contact {
+    border: 1px dashed #BDBDBD;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    cursor: pointer;
+
+}
+
+.upload-ontology-contact .add-another-contact div {
+    font-size: 11px;
+    color: #DADADA;
+    margin-left: 10px;
+
+}
+
+.upload-ontology-field-container .location-choice{
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+}
+
+.upload-ontology-field-container .location-choice .title{
+    font-size: 13px;
+    color: black;
+    margin-left: 13px;
+    margin-bottom: 0;
+}
+

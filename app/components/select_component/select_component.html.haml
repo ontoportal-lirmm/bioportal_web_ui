@@ -1,0 +1,5 @@
+.select-label 
+    = @label
+%select.select-component{style: "margin-bottom: #{@margin_bottom}; width: #{@width};", name: @name}
+    - @choices.each do |choice|
+        %option{:value => choice}= choice
