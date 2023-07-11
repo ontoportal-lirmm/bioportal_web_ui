@@ -1,7 +1,7 @@
 %div{:data => { controller: "select-input", 'select-input': {'multiple-value': @multiple.to_s}}}
   = select_tag(@name, options_values, { multiple: @multiple, class: "form-control", id: "select_#{@id}", data: { action: "select-input#toggleOtherValue", "select-input-target": "selectedValues" } })
 
-  %div.d-flex.mt-1
+  %div.d-flex.mt-1{style: "display:#{@open_to_add_values ? 'none !important;' : 'block;'}"}
     = text_field_tag("add_#{@id}", nil, :style => "margin-right: 1em;width: 16em;display: none;", :placeholder => "Or provide the value",
     data: {action: "keydown.enter->select-input#addValue",  "select-input-target": "inputValueField"}, class: 'metadataInput form-control form-control-sm')
 

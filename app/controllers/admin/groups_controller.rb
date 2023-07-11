@@ -1,4 +1,5 @@
 class Admin::GroupsController < ApplicationController
+  include SubmissionUpdater
 
   layout :determine_layout
   before_action :unescape_id, only: [:edit, :show, :update, :destroy]
@@ -21,7 +22,8 @@ class Admin::GroupsController < ApplicationController
 
   def edit
     @group = LinkedData::Client::Models::Group.find_by_acronym(params[:id]).first
-
+    @acronyms = @group.ontologies.map { |url| url.match(/\/([^\/]+)$/)[1] }
+    @ontologies_group = LinkedData::Client::Models::Ontology.all(include: 'acronym').map {|o|[o.acronym, o.id] }
     respond_to do |format|
       format.html { render "edit", :layout => false }
     end
@@ -50,6 +52,8 @@ class Admin::GroupsController < ApplicationController
     start = Time.now
     begin
       group = LinkedData::Client::Models::Group.find_by_acronym(params[:id]).first
+      add_ontologies_to_object(group_params[:ontologies],group) if (group_params[:ontologies].size > 0 && group_params[:ontologies].first != '')
+      delete_ontologies_from_object(group_params[:ontologies],group.ontologies,group)
       group.update_from_params(group_params)
       group_updated = group.update
       if response_error?(group_updated)
@@ -88,7 +92,7 @@ class Admin::GroupsController < ApplicationController
   end
 
   def group_params
-    params.require(:group).permit(:acronym, :name, :description).to_h()
+    params.require(:group).permit(:acronym, :name, :description, {ontologies:[]}).to_h()
   end
 
   def _groups

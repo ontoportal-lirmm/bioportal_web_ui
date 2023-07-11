@@ -14,7 +14,7 @@
       %col{style: "width: 100%"}
     %tr
       %th
-        Acronym:
+        Acronym
         %span.asterik *
       %td.top
         - if new_record
@@ -23,21 +23,27 @@
           = f.text_field :acronym, class: "form-control", readonly: true
     %tr
       %th
-        Name:
+        Name
         %span.asterik *
       %td.top
         = f.text_field :name, class: "form-control"
     %tr
       %th
-        Description:
+        Description
       %td.top
         = f.text_area :description, class: "form-control"
     - unless new_record
       %tr
         %th
-          Created:
+          Created
         %td.top
           = f.text_field :created, readonly: true, class: "form-control"
+      %tr
+        %th
+          Ontologies
+        %td.top
+          = render SelectInputComponent.new(id: "category_ontologies", name: "category[ontologies]", values: @ontologies_category, selected: @category.ontologies, multiple: true, open_to_add_values: true)
+          %div.d-flex.mt-1{:style => "display: none;"}
   %div.mt-2
     = f.submit button_text, class: "btn btn-primary mr-sm-2 group-form-accept"
     = link_to "Cancel", "javascript:;", class: "btn btn-primary dismiss-dialog"
