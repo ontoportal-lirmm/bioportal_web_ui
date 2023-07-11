@@ -1,0 +1,5 @@
+%div{data:{controller:"text-truncate", 'text-truncate-more-text-value': @see_more_text , 'text-truncate-less-text-value': @see_less_text}}
+  %p.text-content{'data-text-truncate-target': 'content'}
+    = @value
+  %p.see_more_text{data:{'text-truncate-target': 'button', 'action':"click->text-truncate#toggle"}}
+    = @see_more_text
