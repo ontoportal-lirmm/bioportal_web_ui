@@ -1,13 +1,14 @@
 %div
-    .text-input-label
-        = @label
+    - unless @label == ""
+        .text-input-label
+            = @label
 
     - if @type == "select" 
         %select.input-field-component{name: @name}
             - @choices.each do |choice|
                 %option{:value => choice}= choice
     - else
-        %input.input-field-component.text-input{name: @name, type: @type}
+        %input.input-field-component.text-input{name: @name, type: @type, placeholder: @hint}
 
 
     
