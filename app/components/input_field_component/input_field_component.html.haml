@@ -5,11 +5,20 @@
 
     - has_error = @error_message != ""
 
-    - if @type == "select" 
-
+    - case @type
+    - when "select"
         %select.input-field-component{name: @name, style: "#{"border-color: var(--error-color);" if has_error}"}
             - @choices.each do |choice|
                 %option{:value => choice}= choice
+        - if has_error
+            .text-input-error-text
+                = @error_message
+        - unless @helper_text == ""
+            .text-input-helper-text
+                = @helper_text
+
+    - when "textarea" 
+        %textarea.input-field-component{name: @name, rows: "5", placeholder: @hint, style: "#{"border-color: var(--error-color);" if has_error}"}
         - if has_error
             .text-input-error-text
                 = @error_message
@@ -25,6 +34,12 @@
         - unless @helper_text == ""
             .text-input-helper-text
                 = @helper_text
+
+
+
+    
+
+    
 
 
     
