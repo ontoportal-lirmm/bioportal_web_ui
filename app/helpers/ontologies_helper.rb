@@ -477,6 +477,18 @@ module OntologiesHelper
     options_for_select(submission_lang)
   end
 
+  def dispaly_complex_text(definitions)
+    html = ""
+    definitions.each do |definition|
+      if definition.is_a?(String)
+        html+= "<p>" + definition + "</p>"
+      elsif definition.respond_to?(:uri) && definition.uri
+        html+= "<p>" + definition.uri + "</p>"
+      end
+    end
+    return html.html_safe
+  end
+
   private
 
   def submission_languages(submission = @submission)
