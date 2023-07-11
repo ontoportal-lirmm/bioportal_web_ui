@@ -18,7 +18,13 @@
     color: #666666;
 }
 
-.error-text{
+.text-input-error-text{
     font-size: 12px;
     color: var(--error-color)
+}
+
+.text-input-helper-text{
+    font-size: 12px;
+    color: #666666;
+    margin-top: 5px;
 }
