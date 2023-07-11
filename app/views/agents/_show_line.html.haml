@@ -1,4 +1,4 @@
-%tr.human{:id => (agent.id || '').split('/').last}
+%tr.human{:id => agent_table_line_id(agent_id(agent))}
   %td
     = agent.name
   %td
@@ -10,5 +10,5 @@
   %td{:class => 'delete_mappings_column'}
     - if agent.id && !agent.id.empty? && session[:user] && session[:user].admin?
       %div.d-flex
-        = link_to_modal("Edit", edit_agent_path(agent.id.split('/').last), class: "btn btn-link", data: { show_modal_title_value: "Edit agent #{agent.id}"})
+        = link_to_agent_edit_modal(agent)
         = button_to "Delete", CGI.unescape(agent_path(agent.id.split('/').last)), method: :delete, class:'btn btn-link',  form: {data: { turbo: true, turbo_confirm: "Are you sure?", turbo_frame: '_top'}}

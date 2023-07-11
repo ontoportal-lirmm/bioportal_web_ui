@@ -1,10 +1,17 @@
-= render_alerts_container
+= agent_alert_container(@agent, params[:parent_id])
 %table.form.w-100
   %colgroup
     %col
     %col{style: "width: 100%"}
+  - if params[:parent_id]
+    = hidden_field_tag :parent_id, params[:parent_id]
+
+  - if params[:name_prefix]
+    = hidden_field_tag :name_prefix, params[:name_prefix]
+
   - if agent.id
     = hidden_field_tag agent_field_name(:id, name_prefix), agent.id
+
   -  if affiliation?(agent)
     = hidden_field_tag agent_field_name(:agentType, name_prefix), agent.agentType
   - else
@@ -31,7 +38,7 @@
       Email
       %span.asterik *
     %td.top
-      = email_field_tag agent_field_name(:email, name_prefix), agent.name, class: "form-control"
+      = email_field_tag agent_field_name(:email, name_prefix), agent.email, class: "form-control"
   %tr
     %th
       Acronym
@@ -68,24 +75,12 @@
                 = text_field_tag agent_identifier_name(i.to_s.upcase, :notation, name_prefix), identifier.notation, class: "form-control"
                 - values = %w[ORCID ROR ISNI GRID]
                 = render SelectInputComponent.new(id: "#{name_prefix}_identifiers_schemaAgency_#{i.to_s.upcase}", name: agent_identifier_name(i.to_s.upcase, :schemaAgency, name_prefix), values: values, selected: identifier.schemaAgency)
-  - if new_agent
+  - if show_affiliations
     %tr
       %th
         Affiliations
       %td.top.agents-affiliations.agents-inputs
-        %div
-          = render NestedFormInputsComponent.new do |c|
-            - c.template do
-              = turbo_frame_tag 'NEW_RECORD' do
-                = render AgentSearchInputComponent.new(id: 'NEW_RECORD', organization_only: true)
-            - Array(agent.affiliations).each_with_index do |affiliation, i|
-              - c.row do
-                - if current_user_admin? || affiliation.creator.eql?(current_user&.id.to_s)
-                  %div{id: affiliation.id}
-                    = render partial: 'agents/form', locals: {agent: affiliation, name_prefix: "[affiliations][#{i}]", new_agent: false}
-                - else
-                  %div
-                    = render partial: 'agents/agent_show', locals: {agent: affiliation, name_prefix: "[affiliations][#{i}]"}
-- if new_agent
-  %div.mt-2
-    = submit_tag 'Save', class: "btn btn-primary mr-sm-2 group-form-accept"
+        = render NestedAgentSearchInputComponent.new(agents: agent.affiliations, agent_type: 'organization',
+                                                     name_prefix: '[affiliations]', parent_id:  agent_id(agent))
+%div.mt-2
+  = submit_tag 'Save', class: "btn btn-primary mr-sm-2 group-form-accept"
