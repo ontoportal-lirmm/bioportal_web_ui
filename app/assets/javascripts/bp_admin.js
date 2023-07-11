@@ -3,8 +3,14 @@
  * Updated by Syphax.Bouazzouni on 28/04/21 , users admin part
  */
 
+const handlerType = {
+  ONTOLOGY: 'ONTOLOGY',
+  DOI_REQUEST: 'DOI_REQUEST'
+}
 
 var DUMMY_ONTOLOGY = "DUMMY_ONT";
+var DUMMY_DOI_REQUEST = "DUMMY_DOI_REQUEST"
+
 if (window.BP_CONFIG === undefined) {
   window.BP_CONFIG = jQuery(document).data().bp.config;
 }
@@ -25,6 +31,7 @@ function parseReportDate(dateStr) {
   if (dateStr.trim() === "") return "";
   var reggie = /^(((0[13578]|1[02])[\/\.-](0[1-9]|[12]\d|3[01])[\/\.-]((19|[2-9]\d)\d{2}),\s(0[0-9]|1[0-2]):(0[0-9]|[1-59]\d)\s(AM|am|PM|pm))|((0[13456789]|1[012])[\/\.-](0[1-9]|[12]\d|30)[\/\.-]((19|[2-9]\d)\d{2}),\s(0[0-9]|1[0-2]):(0[0-9]|[1-59]\d)\s(AM|am|PM|pm))|((02)[\/\.-](0[1-9]|1\d|2[0-8])[\/\.-]((19|[2-9]\d)\d{2}),\s(0[0-9]|1[0-2]):(0[0-9]|[1-59]\d)\s(AM|am|PM|pm))|((02)[\/\.-](29)[\/\.-]((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)),\s(0[0-9]|1[0-2]):(0[0-9]|[1-59]\d)\s(AM|am|PM|pm)))$/g;
   var dateArr = reggie.exec(dateStr);
+  if (dateArr !== null) {
   dateArr = dateArr.filter(function(e){return e});
   var hours = Number(dateArr[7]);
   var ampm = dateArr[9].toUpperCase();
@@ -33,22 +40,36 @@ function parseReportDate(dateStr) {
   var strHours = hours.toString();
   var strMonth = (Number(dateArr[3]) - 1).toString();
   var dateObj = new Date(dateArr[5], strMonth, dateArr[4], strHours, dateArr[8], "00", "00");
+  } else {
+    dateObj = new Date(dateStr);    
+  }
   return dateObj.toLocaleString([], {month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute:'2-digit'});
 }
 
-var AjaxAction = function(httpMethod, operation, path, isLongOperation, params) {
+var AjaxAction = function(httpMethod, operation, path, isLongOperation, params, _handlerType = handlerType.ONTOLOGY) {
   params = params || {};
   this.httpMethod = httpMethod;
   this.operation = operation;
   this.path = path;
   this.isLongOperation = isLongOperation;
-  this.ontologies = [DUMMY_ONTOLOGY];
-  this.isProgressMessageEnabled = true;
 
+  this.handlerType = _handlerType;
+  if (this.handlerType === handlerType.DOI_REQUEST) {
+    this.doi_requests = [DUMMY_DOI_REQUEST];    
+    if (params["doi_requests"]) {
+      this.doi_requests = params["doi_requests"].split(",");
+      delete params["doi_requests"];
+    }
+  } else {
+  this.ontologies = [DUMMY_ONTOLOGY];
   if (params["ontologies"]) {
     this.ontologies = params["ontologies"].split(",");
     delete params["ontologies"];
   }
+  }
+  
+  this.isProgressMessageEnabled = true;
+
   this.params = params;
   this.confirmMsg = "Are you sure?";
 };
@@ -76,8 +97,14 @@ AjaxAction.prototype.showProgressMessage = function() {
   this.clearStatusMessages();
   var msg = "Performing " + this.operation;
 
+  if (this.handlerType === handlerType.DOI_REQUEST) {
+    if (this.doi_requests[0] !== DUMMY_ONTOLOGY) {
+      msg += " for " + this.doi_requests.join(", ");
+    }
+  } else {
   if (this.ontologies[0] !== DUMMY_ONTOLOGY) {
     msg += " for " + this.ontologies.join(", ");
+  }
   }
   jQuery("#progress_message").text(msg).html();
   jQuery("#progress_message").show();
@@ -87,13 +114,21 @@ AjaxAction.prototype.showStatusMessages = function(success, errors, notices, isA
   _showStatusMessages(success, errors, notices, isAppendMode);
 };
 
-AjaxAction.prototype.getSelectedOntologiesForDisplay = function() {
+AjaxAction.prototype.getSelectedItemsForDisplay = function() {
   var msg = '';
 
+  if (this.handlerType === handlerType.DOI_REQUEST) {
+    if (this.doi_requests.length > 0) {
+      var ontMsg = this.doi_requests.join(", ");
+      msg = "<br style='margin-bottom:5px;'/><span style='color:red;font-weight:bold;'>" + ontMsg + "</span><br/>";
+    }
+  } else {
   if (this.ontologies.length > 0) {
     var ontMsg = this.ontologies.join(", ");
     msg = "<br style='margin-bottom:5px;'/><span style='color:red;font-weight:bold;'>" + ontMsg + "</span><br/>";
   }
+  }
+  
   return msg;
 };
 
@@ -110,9 +145,24 @@ AjaxAction.prototype._ajaxCall = function() {
   }
 
   // using javascript closure for passing index to asynchronous calls
-  jQuery.each(self.ontologies, function(index, ontology) {
-    if (ontology != DUMMY_ONTOLOGY) {
-      params["ontologies"] = ontology;
+  var refresh_on_complete = false //if true, then the item list is refreshed after the processing is finished
+  var items = [];
+  if (this.handlerType === handlerType.DOI_REQUEST) {
+    items = self.doi_requests;
+    refresh_on_complete = true;
+  } else {
+    items = self.ontologies;
+    }
+
+  jQuery.each(items, function(index, item) {
+    if (self.handlerType === handlerType.DOI_REQUEST) {
+      if (item != DUMMY_DOI_REQUEST) {
+        params["doi_requests"] = item;
+      }
+    } else {
+      if (item != DUMMY_ONTOLOGY) {
+        params["ontologies"] = item;
+      }
     }
     var deferredObj = jQuery.Deferred();
     if (!self.isLongOperation) {
@@ -141,7 +191,7 @@ AjaxAction.prototype._ajaxCall = function() {
         }
 
         if (data.success) {
-          self.onSuccessAction(data, ontology, deferredObj);
+          self.onSuccessAction(data, item, deferredObj);
 
           if (data.success) {
             var suc = data.success.replace(reg, ',');
@@ -163,7 +213,7 @@ AjaxAction.prototype._ajaxCall = function() {
       },
       complete: function(request, textStatus) {
         if (errorState || !self.isLongOperation) {
-          self.removeSelectedRow(ontology);
+          self.removeSelectedRow(item);
         }
       }
     });
@@ -174,22 +224,50 @@ AjaxAction.prototype._ajaxCall = function() {
   jQuery.when.apply(null, promises).always(function() {
     jQuery("#progress_message").hide();
     jQuery("#progress_message").html("");
+
+    //if enabled, refresh the items list
+    if(refresh_on_complete) {
+      console.log("refresh_on_complete - this.handlerType:", self.handlerType)
+      if (self.handlerType === handlerType.DOI_REQUEST) {
+        let doiReqDataTable = jQuery('#adminDOIReq').DataTable();
+        console.log("refresh_on_complete: doiReqDataTable = ", doiReqDataTable)
+        if(doiReqDataTable){
+          console.log("refresh_on_complete: doiReqTable.ajax.reload()")
+          //displayDOIRequest({}, DUMMY_DOI_REQUEST);
+          doiReqDataTable.ajax.reload();
+        }
+      }
+    }
   });
 };
 
-AjaxAction.prototype.removeSelectedRow = function(ontology) {
-  if (ontology != DUMMY_ONTOLOGY) {
-    var jQueryRow = jQuery("#tr_" + ontology);
+AjaxAction.prototype.removeSelectedRow = function(item) {
+  if (this.handlerType === handlerType.DOI_REQUEST) {    
+    if (item != DUMMY_DOI_REQUEST) {
+      var jQueryRow = jQuery("#tr_" + item);
     jQueryRow.removeClass('selected');
   }
+  } else {
+    if (item != DUMMY_ONTOLOGY) {
+      var jQueryRow = jQuery("#tr_" + item);
+      jQueryRow.removeClass('selected');
+    }
+  } 
 };
 
 AjaxAction.prototype.ajaxCall = function() {
   var self = this;
 
+  if (this.handlerType === handlerType.DOI_REQUEST) {    
+    if (self.doi_requests.length === 0) {
+      alertify.alert("Please select at least one request from the table to perform action on.<br/>To select/de-select requests, simply click anywhere in the request row.");
+      return;
+    }
+  } else {
   if (self.ontologies.length === 0) {
     alertify.alert("Please select at least one ontology from the table to perform action on.<br/>To select/de-select ontologies, simply click anywhere in the ontology row.");
     return;
+  }
   }
 
   if (self.confirmMsg) {
@@ -367,7 +445,7 @@ function RefreshReport() {
   this.setSelectedOntologies();
 
   if (this.ontologies.length > 0) {
-    msg = "Ready to refresh report for ontologies:" + this.getSelectedOntologiesForDisplay() + "Proceed?";
+    msg = "Ready to refresh report for ontologies:" + this.getSelectedItemsForDisplay() + "Proceed?";
   } else {
     this.ontologies = [DUMMY_ONTOLOGY];
   }
@@ -388,7 +466,7 @@ RefreshReport.act = function() {
 function DeleteOntologies() {
   AjaxAction.call(this, "DELETE", "ONTOLOGY DELETION", "ontologies", false);
   this.setSelectedOntologies();
-  this.setConfirmMsg("You are about to delete the following ontologies:" + this.getSelectedOntologiesForDisplay() + "<b>This action CAN NOT be undone!!! Are you sure?</b>");
+  this.setConfirmMsg("You are about to delete the following ontologies:" + this.getSelectedItemsForDisplay() + "<b>This action CAN NOT be undone!!! Are you sure?</b>");
 }
 
 DeleteOntologies.prototype = Object.create(AjaxAction.prototype);
@@ -413,7 +491,7 @@ function ProcessOntologies(action) {
   };
   AjaxAction.call(this, "PUT", actions[action], "ontologies", false, {actions: action});
   this.setSelectedOntologies();
-  this.setConfirmMsg("You are about to perform " + actions[action] + " on the following ontologies:" + this.getSelectedOntologiesForDisplay() + "The ontologies will be added to the queue and processed on the next cron job execution.<br style='margin:10px 0;'/><b>Should I proceed?</b>");
+  this.setConfirmMsg("You are about to perform " + actions[action] + " on the following ontologies:" + this.getSelectedItemsForDisplay() + "The ontologies will be added to the queue and processed on the next cron job execution.<br style='margin:10px 0;'/><b>Should I proceed?</b>");
 }
 
 ProcessOntologies.prototype = Object.create(AjaxAction.prototype);
@@ -1079,8 +1157,92 @@ jQuery(".admin.index").ready(function() {
       errorListNode.parents(".alert-box").show();
     }
   }
-});
 
+  //==============================================================
+  //      DOI REQUEST MANAGEMENT
+  //==============================================================
+  displayDOIRequest({}, DUMMY_DOI_REQUEST);
+    
+  // allow selecting of rows, except on link clicks
+  jQuery('#adminDOIReq tbody').on('click', 'tr', function(event) {
+    if (event.target.tagName.toLowerCase() != 'a') {
+      jQuery(this).toggleClass('selected');
+    }
+  });
+
+  var doi_req_nav_html = `
+    <span style="padding-left:30px;">Apply to Selected Rows:&nbsp;&nbsp;&nbsp;&nbsp;
+      <select id="doi_req_action" name="doi_req_action">
+        <option value="">Please Select</option>        
+        <option value="process">Process</option>
+        <option value="reject">Reject</option>       
+      </select>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <a class="link_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" href="javascript:;" id="doi_req_action_submit">
+        <span class="ui-button-text">Go</span>
+      </a>
+    </span>`
+  jQuery("div.doi_req_nav").html(doi_req_nav_html);
+  
+  // DOI REQUESTS ADMIN - BUTTON onclick actions ---------------------------------------
+
+  // onclick action for "Go" button for performing an action on a set of DOI REQUESTS
+  jQuery("#doi_req_action_submit").click(function() {
+    performActionOnDoiRequests();
+  });
+
+
+  //==============================================================
+  //      MANAGEMENT COMMONS
+  //==============================================================
+
+  jQuery(document).on("click", "#facebox a.dismiss-dialog", function (event) {
+    jQuery(document).trigger('close.facebox');
+  });
+
+  jQuery(document).on('ajax:error', "#facebox form.admin-collection-form", (event, xhr, status, error) => {
+    if (xhr.responseJSON) {
+      displayDialogErrorMessages(xhr.responseJSON)
+    } else {
+      displayDialogErrorMessages(status);
+    }
+  });
+
+
+  function displayDialogErrorMessages(data, settings) {
+    settings ||= {}
+
+    let append = settings.append || false;
+
+    let errorListNode = jQuery("#facebox .alert-box ul");
+
+    if (!append) {
+      errorListNode.empty();
+    }
+
+    let messages = [];
+    if (typeof data == "string" || data instanceof String) {
+      messages.push(data)
+    }
+    if (typeof data == "object" && data.errors) {
+      messages.push.apply(messages, Object.values(data.errors));
+    }
+    if (typeof data == "object" && data.status && data.status / 200 != 1) {
+      messages.push("Request error: " + data.statusText);
+    }
+
+    for (let msg of messages) {
+      errorListNode.append(jQuery("<li></li>").text(msg))
+    }
+
+    if (messages.length == 0) {
+      errorListNode.parents(".alert-box").hide();
+    } else {
+      errorListNode.parents(".alert-box").show();
+    }
+  }
+
+});
 
 /* users part */
 function populateUserRows(data) {
@@ -1570,4 +1732,192 @@ function _clearStatusMessages() {
   jQuery("#success_message").html("");
   jQuery("#error_message").html("");
   jQuery("#info_message").html("");
+}
+
+function displayDOIRequest(data, id_doiRequest) {
+  var doiReqTable = null;
+
+  if (jQuery.fn.dataTable.isDataTable('#adminDOIReq')) {
+    doiReqTable = jQuery('#adminDOIReq').DataTable();
+
+    if (id_doiRequest === DUMMY_DOI_REQUEST) {
+      // refreshing entire table
+      allRows = populateDoiRequestRows(data);
+      doiReqTable.clear();
+      doiReqTable.rows.add(allRows);
+      doiReqTable.draw();
+      setDateGenerated(data);
+    } else {
+      // refreshing individual row
+      var jQueryRow = jQuery("#tr_" + id_doiRequest);
+      var row = doiReqTable.row(jQueryRow);
+      var rowData = {requests: {}};
+      rowData["doi_requests"][id_doiRequest] = data["doi_requests"][id_doiRequest];
+      allRows = populateDoiRequestRows(rowData);
+      row.data(allRows[0]);
+      row.invalidate().draw();
+      jQueryRow.removeClass('selected');
+    }
+  } else {
+    doiReqTable = jQuery("#adminDOIReq").DataTable({
+      "ajax": {
+        "url": "/admin/doi_requests_list",
+        "contentType": "application/json",
+        "dataSrc": function (json) {
+          return populateDoiRequestRows(json);
+        }
+      },
+      "rowCallback": function(row, data, index) {
+        var acronym = jQuery('td:first', row).text();
+        jQuery(row).attr("id", "tr_" + acronym);
+
+        if (data[data.length - 1] === true) {
+          jQuery(row).addClass("problem");
+        }
+      },
+      "initComplete": function(settings, json) {
+        // if (json.errors && isDateGeneratedSet(data)) {
+        //   _showStatusMessages([], [json.errors], [], false);
+        // }
+        // setDateGenerated(json);
+        // // Keep header at top of table even when scrolling
+        // // new jQuery.fn.dataTable.FixedHeader(doiReqTable);
+      },
+      "columnDefs": [
+        {
+          "targets": 0,
+          "searchable": true,
+          "orderable": true,
+          "title": "Request ID",
+          "width": "100px"
+        },        
+        {
+          "targets": 1,
+          "searchable": true,
+          "title": "User",
+          "width": "160px"
+        },
+        {
+          "targets": 2,
+          "searchable": true,
+          "title": "Ontology",
+          "width": "160px"
+        },
+        {
+          "targets": 3,
+          "searchable": true,
+          "title": "Submission",
+          "width": "100px"
+        },
+        {
+          "targets": 4,
+          "searchable": true,
+          "orderable": true,
+          "title": "Date Created",
+          "type": "date",
+          "width": "170px"
+        },
+        {
+          "targets": 5,
+          "searchable": true,
+          "orderable": true,
+          "title": "Type",          
+          "width": "80px"
+        },
+        {
+          "targets": 6,
+          "searchable": true,
+          "orderable": true,
+          "title": "Status",
+          "width": "140px"
+        } 
+      ],
+      "autoWidth": false,
+      "lengthChange": false,
+      "searching": true,
+      "language": {
+        "search": "Filter: ",
+        "emptyTable": "No DOI Requests available"
+      },
+      "info": true,
+      "paging": true,
+      "pageLength": 100,
+      "ordering": true,
+      "stripeClasses": ["", "alt"],
+      "dom": '<"doi_req_nav"><"top"fi>rtip' //,
+      //"customAllowOntologiesFilter": true
+    });
+  }
+  return doiReqTable;
+}
+
+
+function populateDoiRequestRows(data) {
+  var doi_requests = data.doi_requests;
+  var allRows = [];
+  var hideFields = ["format", "administeredBy", "date_created", "report_date_updated", "errErrorStatus", "errMissingStatus", "problem", "logFilePath"];
+
+  for (var index in doi_requests) {
+    doi_request = doi_requests[index]
+    var _acronym = doi_request.ontology;
+
+    var errorMessages = [];
+    var requestId = doi_request.requestId;    
+    var ontLink = "<a href='" + "/ontologies/" + _acronym + "' target='_blank' >" + _acronym + "</a>";
+    var submissionId = doi_request.submissionId;
+    var requestedBy = doi_request.requestedBy.username + "( " + doi_request.requestedBy.email + " )";
+    var requestDate = parseReportDate(doi_request.requestDate);
+    var requestType = doi_request.requestType;
+    var status = doi_request.status;
+
+    var row = [requestId, requestedBy, ontLink, submissionId, requestDate, requestType, status];
+    allRows.push(row);
+  }
+  return allRows;
+}
+
+AjaxAction.prototype.setSelectedDoiRequests = function() {
+  var id_doiRequests = '';
+  var ontTable = jQuery('#adminDOIReq').DataTable();
+  ontTable.rows('.selected').every(function() {
+    var trId = this.node().id;
+    id_doiRequests += trId.substring("tr_".length) + ",";
+  });
+
+  if (id_doiRequests.length) {
+    this.doi_requests = id_doiRequests.slice(0, -1).split(",");
+  } else {
+    this.doi_requests = [];
+  }
+};
+
+//Constructor for object that process doi request
+function ProcessDoiRequests(action) {
+  var actions = {
+    process: "PROCESSING THE REQUEST (DOI CREATION OR UPDATING)",
+    reject: "REJECTION OF THE REQUEST"   
+  };
+  AjaxAction.call(this, "PUT", actions[action], "doi_requests", false, {actions: action},handlerType.DOI_REQUEST);
+  this.setSelectedDoiRequests();
+  this.setConfirmMsg("You are about to perform " + actions[action] + " on the following requests:" + this.getSelectedItemsForDisplay() + ".<br style='margin:10px 0;'/><b>Should I proceed?</b>");
+}
+
+//Definition of object type (based on AjaxAction.prototype) that handle the doi requests
+ProcessDoiRequests.prototype = Object.create(AjaxAction.prototype);
+ProcessDoiRequests.prototype.constructor = ProcessDoiRequests;
+
+ProcessDoiRequests.act = function(action) {
+  new ProcessDoiRequests(action).ajaxCall();
+};
+
+
+function performActionOnDoiRequests() {
+  var action = jQuery('#doi_req_action').val();
+
+  if (!action) {
+    alertify.alert("Please choose an action to perform on the selected requests.");
+    return;
+  }
+
+  ProcessDoiRequests.act(action);  
 }
