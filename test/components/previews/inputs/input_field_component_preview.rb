@@ -1,4 +1,4 @@
-class InputFieldComponentPreview < ViewComponent::Preview
+class Inputs::InputFieldComponentPreview < ViewComponent::Preview
 
 
     
