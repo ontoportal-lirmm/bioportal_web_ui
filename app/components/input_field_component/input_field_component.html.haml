@@ -3,12 +3,22 @@
         .text-input-label
             = @label
 
+    - has_error = @error_message != ""
+
     - if @type == "select" 
-        %select.input-field-component{name: @name}
+
+        %select.input-field-component{name: @name, style: "#{"border-color: var(--error-color);" if has_error}"}
             - @choices.each do |choice|
                 %option{:value => choice}= choice
+        - if has_error
+            .error-text
+                = @error_message
+                
     - else
-        %input.input-field-component.text-input{name: @name, type: @type, placeholder: @hint}
+        %input.input-field-component.text-input{name: @name, type: @type, placeholder: @hint, style: "#{"border-color: var(--error-color);" if has_error}"}
+        - if has_error
+            .error-text
+                = @error_message
 
 
     
