@@ -1,7 +1,7 @@
 $(document).ready(function(){
-  updateIdentifierType();
+  // updateIdentifierType();
   $("#submission_identifierType").change(function(e){
-    updateIdentifierType();
+    // updateIdentifierType();
   });
 
   let btn_cancel_request = $(".btn_cancel_request")
