@@ -1,7 +1,7 @@
-= render SearchInputComponent.new(name:'agent' + @id, ajax_url: "/ajax/agents?organization_only=#{@organization_only}&name=",
-     item_base_url:"/agents/fake_id?parent_id=#{@id}&name=", id_key: 'name',
+= render SearchInputComponent.new(name:'agent' + @id, ajax_url: "/ajax/agents?agent_type=#{@agent_type}&name=",
+     item_base_url:"/agents/#{@id}?parent_id=#{@parent_id}&edit_on_modal=#{@edit_on_modal}&name_prefix=#{@name_prefix}&name=", id_key: 'name',
      use_cache: false,
-     actions_links: {create_new_agent: {link: "/agents/new?name=&parent_id=#{@id}&new_agent=false&type=organization", target:'_self'}}) do |s|
+     actions_links: {create_new_agent: {link: "/agents/new?name=&id=#{@id}&parent_id=#{@parent_id}&new_agent=false&type=#{@agent_type}&show_affiliations=false&edit_on_modal=#{@edit_on_modal}&name_prefix=#{@name_prefix}[#{@id}]", target:'_self'}}) do |s|
   - s.template do
     %a{href: "LINK", class: "home-search-ontology-content", 'data-turbo-frame': '_self'}
       %p#seached-ontology.home-searched-ontology
