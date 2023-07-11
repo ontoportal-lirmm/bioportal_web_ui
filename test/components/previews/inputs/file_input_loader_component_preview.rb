@@ -1,4 +1,4 @@
-class FileInputLoaderComponentPreview < ViewComponent::Preview
+class Inputs::FileInputLoaderComponentPreview < ViewComponent::Preview
 
     
     def default
