@@ -1,41 +1,18 @@
+= form_group_attribute("identifier", required: true) do |c|
+  Insert the Persistent Identifier - DOI or other - of your semantic asset
 %div.form-group.row
-  %label.col-sm-2.col-form-label{for: "submission_publisher"}
-    Identifier
-    %span.asterik<> *
-  %div.col-sm-10.field-value-col{id: "identifier_fields_col"}
-    - doi_already_assigned = false
-    - if !@identifier_request.nil?
-      - if @identifier_request.status == "PENDING"
-        .row
-          .col-sm-8.sub-label
-            %p
-              You have a new DOI pending request for this semantic resource. You can cancel this request before it is processed.
-          .col-sm-4.sub-label
-            %button.btn.btn-primary.btn-sm.btn_cancel_request{id: "btn_cancel_request-#{@identifier_request.requestId}", access: "false", type: "button"}
-              Cancel Request
-      - elsif @identifier_request.status == "PROCESSED" && (@identifier_request.requestType == "DOI_CREATE" || @identifier_request.requestType == "DOI_UPDATE")
-        - doi_already_assigned = true
+  %div.col-sm-8.field-value-col.offset-4{id: "identifier_fields_col"}
+    - if @identifier_request && @identifier_request.status == "PENDING"
+      .d-flex
+        .col-sm-8.sub-label
+          %p
+            You have a new DOI pending request for this semantic resource. You can cancel this request before it is processed.
+        .col-sm-4.sub-label
+          %button.btn.btn-primary.btn-sm.btn_cancel_request{id: "btn_cancel_request-#{@identifier_request.requestId}", access: "false", type: "button"}
+            Cancel Request
     - else
-      / Manually insert Identifier
-      %div.d-flex.align-items-top
-        %label.float-right{for: "submission_identifierType"}
-          Type:
-          %span.asterik<> *
-        %div.formControlErrorContainer
-          - selected_identifierType = @submission.identifierType ? @submission.identifierType : "None"
-          %select#submission_identifierType.form-control.input-sm.w100perc{name: "submission[identifierType]"}
-            %option{value: "None", selected: selected_identifierType == "None"}= "None"
-            %option{value: "DOI", selected: selected_identifierType == "DOI"}= "DOI"
-            %option{value: "Other", selected: selected_identifierType == "Other"}= "Other"
-        %label{for: "submission_identifier"}
-          Identifier:
-          %span.asterik<> *
-        %div.formControlErrorContainer
-          %input#submission_identifier.form-control.input-sm.w100perc{name: "submission[identifier]", type: "text", value: @submission.identifier, required: "true"}/
-      %div
-        %small.form-text.text-muted Insert the Persistent Identifier - DOI or other - of your semantic asset
-      - if !doi_already_assigned
-        .div.margin-top-10px
-          #div-cb-require-doi
-            %input#doi_request{name: "submission[is_doi_requested]", type: "checkbox", checked: @submission.is_doi_requested}/
-            %label{for: "doi_request"} Check this box if your asset has no PID and you want to request a DOI
+      #div-cb-require-doi.form-check
+        %input#doi_request.form-check-input{name: "submission[is_doi_requested]", type: "checkbox", checked: @submission.is_doi_requested}/
+        %label.form-check-label{for: "doi_request"} Check this box if your asset has no PID and you want to request a DOI
+
+

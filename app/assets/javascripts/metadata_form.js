@@ -58,27 +58,6 @@ function cancelDoiRequest(){
         success: function(data) {
           alert("The request was canceled!");
           let html_identifier = `
-                  <!-- Manually insert Identifier -->
-                  <div class="d-flex align-items-top">
-                    <label class="float-right" for="submission_identifierType">Type<span class="asterik">*</span></label>
-                    <div class="formControlErrorContainer">
-                      <select class="form-control input-sm w100perc" id="submission_identifierType" name="submission[identifierType]">
-                        <option selected="selected" value="None">None</option>
-                        <option value="DOI">DOI</option>
-                        <option value="Other">Other</option>
-                      </select>
-                      <!-- <input class="w100perc" value="DOI" type="text" name="submission[identifierType]" id="submission_identifierType"/> -->
-                    </div>
-                    <label class="float-right" for="submission_identifier">Identifier<span class="asterik">*</span></label>
-                    <div class="formControlErrorContainer">
-                      <input class="form-control input-sm w100perc" id="submission_identifier" name="submission[identifier]" type="text" disabled="">
-                    </div>
-                  </div>
-                  <div>
-                    <small class="form-text text-muted">
-                        Insert the Persistent Identifier - DOI or other - of your semantic asset
-                    </small>
-                  </div>
                   <div class="margin-top-10px">
                       <div id="div-cb-require-doi">
                         <input id="doi_request" name="submission[is_doi_requested]" type="checkbox">
