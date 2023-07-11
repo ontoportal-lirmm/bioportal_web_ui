@@ -71,7 +71,8 @@ gem 'thin'
 gem 'view_component', '~> 2.72'
 gem 'turnout'
 gem 'will_paginate', '~> 3.0'
-
+gem 'inline_svg'
+gem "lookbook", '~> 1.5.5'
 gem 'ontologies_api_client', git: 'https://github.com/lifewatch-eric/ontologies_api_ruby_client.git', branch: 'ecoportal-ontoportal-reset'
 
 
@@ -104,6 +105,7 @@ group :development do
 
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
+
 end
 
 group :test, :development do
@@ -120,3 +122,4 @@ end
 
 gem "net-ftp", "~> 0.2.0", require: false
 gem "net-http"
+

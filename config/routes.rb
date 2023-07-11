@@ -7,7 +7,8 @@ Rails.application.routes.draw do
   get '/notes/new_reply', to: 'notes#new_reply'
   delete '/notes', to: 'notes#destroy'
   resources :notes, constraints: { id: /.+/ }
-
+  resources :agents, constraints: { id: /.+/ }
+  post 'agents/:id', to: 'agents#update', constraints: { id: /.+/ }
   resources :ontolobridge do
     post :save_new_term_instructions, on: :collection
   end
@@ -152,6 +153,8 @@ Rails.application.routes.draw do
   get '/ajax/fair_score/json' => 'fair_score#details_json'
   get '/ajax/:ontology/instances' => 'instances#index_by_ontology'
   get '/ajax/:ontology/classes/:conceptid/instances' => 'instances#index_by_class', :constraints => { conceptid: /[^\/?]+/ }
+  get '/ajax/ontologies' , to:"ontologies#ajax_ontologies"
+  get '/ajax/agents' , to:"agents#ajax_agents"
 
   # User
   get '/logout' => 'login#destroy', :as => :logout

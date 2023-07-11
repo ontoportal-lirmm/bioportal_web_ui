@@ -77,7 +77,9 @@ class SubmissionsController < ApplicationController
       @errors = error_responses.map { |error_response| response_errors(error_response) }
     end
 
-    if params[:attribute]
+    if @errors
+      render 'edit'
+    elsif params[:attribute]
       render_submission_attribute(params[:attribute])
     else
       submit_new_doi_request if doi_requested?

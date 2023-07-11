@@ -1,0 +1,9 @@
+= turbo_frame_tag 'agents-list' do
+  = link_to_modal("Create New Agent",
+                new_agent_path,
+                id: "new_agent_btn",
+                role: "button",
+                class: "btn btn-default mb-3",
+                data: { show_modal_title_value: "Create a new agent", show_modal_size_value: 'modal-xl' },
+                )
+  = render partial: 'table_list', locals: {agents: @agents}

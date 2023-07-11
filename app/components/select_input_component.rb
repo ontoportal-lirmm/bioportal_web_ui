@@ -2,13 +2,14 @@
 
 class SelectInputComponent < ViewComponent::Base
 
-  def initialize(id:, name:, values:, selected:, multiple: false)
+  def initialize(id:, name:, values:, selected:, multiple: false, open_to_add_values: false)
     super
     @id = id
     @name = name
     @values = values
     @selected = selected
     @multiple = multiple
+    @open_to_add_values = open_to_add_values
   end
 
   def options_values

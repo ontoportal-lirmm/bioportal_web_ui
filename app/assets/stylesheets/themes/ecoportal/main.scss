@@ -11,6 +11,57 @@ $color-warning: #ffc107;
 body {
   font-family: "Titillium Web", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: 16px !important;
+  color: #212529 !important;
+}
+
+
+h1 {
+  color: $color-primary;
+  display: block;
+  font-family: "Titillium Web", sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+}
+
+h2 {
+  font-family: "Titillium Web", sans-serif;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+h4 {
+  color: $color-primary;
+  font-family: "Titillium Web", sans-serif;
+  font-size: 18.2px;
+  font-weight: 500;
+}
+
+.ontology {
+  border: thin #f2f2f2 solid;
+  border-radius: 5px;
+  padding: 0.5em 1em 0.5em;
+}
+
+.btn, input.link_button, a.link_button {
+  border-radius: 0;
+}
+
+a:focus {
+  outline: unset !important;
+}
+
+.team-card-content{
+
+  h4{
+    font-size: 24px;
+  }
+  p {
+    color: black;
+    font-size: 14px;
+  }
+}
+.card-header{
+  color: $color-primary
 }
 
 .minimal {
@@ -148,15 +199,16 @@ h3.separator-title {
 }
 
 .abstract {
-  border: 1px solid #d6d6d6;
-  margin-top:10px;
   margin-bottom:10px;
-  padding-top: 20px;
   padding-bottom: 20px;
 }
 
 .abstract p {
   padding-top: 10px;
+}
+
+.abstract h2{
+  color: $color-primary;
 }
 
 
@@ -203,10 +255,6 @@ html {
 }
 
 
-
-body {
-  color:#666666 !important;
-}
 
 
 .eco-navbar-font,
@@ -397,7 +445,11 @@ body {
 
 .team-card-image {
   box-sizing: border-box;
-  width: 220px;
+  flex-basis: 220px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  padding-right: 20px;
+  text-align: center;
 }
 
 .team-card-image img {

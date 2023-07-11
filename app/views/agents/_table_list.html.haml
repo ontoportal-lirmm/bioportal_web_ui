@@ -1,0 +1,14 @@
+= render_alerts_container(AgentsController)
+%table#adminAgents.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
+  %thead
+    %tr
+      %th Name
+      %th Identifiers
+      %th Affiliations
+      %th Type
+      %th{:class => 'delete_mappings_column'} Actions
+  %tbody#agents_table_content
+    - agents.each do |agent|
+      = render partial: 'agents/show_line' , locals: {agent: agent}
+    %tr.empty-state
+      %td.text-center{:colspan => "6"} There are currently no  agents.
