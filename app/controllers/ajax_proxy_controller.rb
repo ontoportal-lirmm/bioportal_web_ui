@@ -60,11 +60,9 @@ class AjaxProxyController < ApplicationController
     request_id = params["requestId"]
     render_json '{ "error": "You must provide the request id!" }', {status: 400} if request_id.nil?
     doi_request = LinkedData::Client::Models::IdentifierRequest.find_by_requestId(request_id).first
-    doi_request.status = 'CANCELED'
-    doi_request.processedBy = session[:user].username
-    doi_request.processingDate = DateTime.now.to_s
-    error_doi_request = doi_request.update
-    if !error_doi_request.nil?
+
+    error_doi_request = doi_request.update(values: {status: 'CANCELED', processedBy: session[:user].id, processingDate: DateTime.now.to_s })
+    if response_error?(error_doi_request)
       render_json '{ "error": "Some errors has occurred!" }', {status: 500}
     else
       render_json '{ "success": "The request has been canceled" }', {status: 200}

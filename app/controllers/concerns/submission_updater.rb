@@ -77,8 +77,9 @@ module SubmissionUpdater
       { contact: [:name, :email] },
       :homepage,
       :documentation,
-      :publication
-      :identifier, :identifierType, :is_doi_requested,
+      :publication,
+      :identifier,
+      :is_doi_requested,
     ]
 
     @metadata.each do |m|

@@ -365,9 +365,9 @@ class AdminController < ApplicationController
       requestId: req[:requestId],
       requestType: req[:requestType],
       status: req[:status],
-      requestedBy: req[:requestedBy].nil? ? nil : req[:requestedBy].except(:id, :type, :links, :context, :created, :@id, :@type, :@links, :@context, :@created),
+      requestedBy: req[:requestedBy],
       requestDate: req[:requestDate],
-      processedBy: req[:processedBy].nil? ? nil : req[:processedBy].except(:id, :type, :links, :context, :created, :@id, :@type, :@links, :@context, :@created),
+      processedBy: req[:processedBy],
       processingDate: req[:processingDate],
       message: req[:message],
       ontology: req[:submission].nil? || req[:submission][:ontology].nil? ? nil : req[:submission][:ontology][:acronym],
@@ -398,11 +398,10 @@ class AdminController < ApplicationController
               ontology_acronym = doi_req_submission.ontology.acronym
               ontology_id = doi_req_submission.ontology.id
 
-              sub_metadata_url = SUB_DATACITE_METADATA_JSON_URL.call(ontology_acronym, ont_submission_id)
-              open_struct_metadata = LinkedData::Client::HTTP.get(sub_metadata_url, {})
+              #sub_metadata_url = SUB_DATACITE_METADATA_JSON_URL.call(ontology_acronym, ont_submission_id)
+              #open_struct_metadata = LinkedData::Client::HTTP.get(sub_metadata_url, {})
 
-              hash_metadata = Ecoportal::Utils.recursive_symbolize_keys(open_struct_metadata, true, true)
-
+              #hash_metadata = Ecoportal::Utils.recursive_symbolize_keys(open_struct_metadata, true, true)
               error_response = nil
               case action
               when 'process'
@@ -525,10 +524,10 @@ class AdminController < ApplicationController
   end
 
   def _change_request_status(doi_request, new_status)
-    doi_request.status = new_status
-    doi_request.processedBy = session[:user].username
-    doi_request.processingDate = DateTime.now.to_s
-    doi_request.update
+    doi_request.update(values: {status: new_status ,
+                                processedBy: session[:user].id,
+                                processingDate: DateTime.now.to_s
+    })
   end
 
 end

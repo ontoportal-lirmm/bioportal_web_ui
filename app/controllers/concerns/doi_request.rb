@@ -19,7 +19,7 @@ module DoiRequest
   end
 
   def doi_requested?
-    (params[:submission][:identifierType] == 'None') && params[:submission][:is_doi_requested]
+    params[:submission][:is_doi_requested]
   end
 
   def submit_new_doi_request
