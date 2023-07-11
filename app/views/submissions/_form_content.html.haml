@@ -1,4 +1,15 @@
 = render TurboFrameComponent.new(id:id) do
+  - unless @errors.nil?
+    %div
+      %div.enable-lists{style: "color:red;"}
+        %strong Errors On Form
+        %ul
+          - Array(@errors).each do  |error|
+            - error = error[:error] if error[:error]
+            - error.each do |key, value|
+              %li
+                #{key}: #{value.values.join(', ')}
+
   = hidden_field object_name, :ontology, value: acronym
   = hidden_field object_name, :id, value: submissionId
   %div#general-card.mt-4
@@ -16,9 +27,17 @@
       = attribute_form_group_container('location', required: true) do
         = render partial: 'submissions/submission_location_form'
 
-    %div#key-properties-card.mt-4
+    %div#key-properties-card.mt-4.agents-inputs
       = metadata_section('key-properties', 'Key properties', collapsed: false) do
-        = form_group_attribute("URI")
+        = form_group_attribute("URI", required: true)
+        = form_group_attribute("identifier", required: true)
+        = attribute_form_group_container("hasCreator", required: true) do
+          = render NestedAgentSearchInputComponent.new(agents: @submission.hasCreator , agent_type: 'person', name_prefix: object_name+'[hasCreator]',
+                                                       parent_id: '')
+        = attribute_form_group_container("publisher", required: true) do
+          = render NestedAgentSearchInputComponent.new(agents: @submission.publisher , agent_type: '', name_prefix: object_name+'[publisher]',
+                                                       parent_id: '')
+
         = form_group_attribute("deprecated")
         = form_group_attribute("hasOntologySyntax") do
           %p
@@ -55,8 +74,10 @@
           - c.help do
             Enter a URL for a page that provides ontology documentation.
 
+        = form_group_attribute('alternative', required: true)
+
         -# Publications page
-        = attribute_text_field_container('publication') do |c|
+        = attribute_text_field_container('publication', required: true) do |c|
           - c.help do
             Enter a URL for a page that lists publications about your ontology.
 
@@ -64,14 +85,14 @@
         = form_group_attribute("usedOntologyEngineeringTool")
 
       = metadata_section('more-description-details', 'More description details', parent_id: "description-card") do
-        - for attr_name in %w[abstract notes keywords alternative identifier]
+        - for attr_name in %w[abstract notes keywords]
           = form_group_attribute(attr_name)
 
       - data = sections
 
       - data.each do |d|
         = metadata_section(d[0], d[1], parent_id: "description-card") do
-          - for attr in @metadata.select { |m| m['display'] == d[2] }
+          - for attr in @metadata.select { |m| m['category'] == d[2] }
             = form_group_attribute(attr["attribute"])
 
     %div#ontology-dates-card.mt-4
@@ -79,7 +100,7 @@
         = form_group_attribute("released", default: Date.today, required: true)
         = form_group_attribute("modificationDate")
       = metadata_section('more-dates', 'More dates', parent_id: "ontology-dates-card") do
-        - for attr in @metadata.select { |m| m['display'] == 'dates' }
+        - for attr in @metadata.select { |m| m['category'] == 'dates' }
           = form_group_attribute(attr["attribute"])
 
     %div#licenses-card.mt-4
@@ -94,8 +115,8 @@
             to choose your license
 
       = metadata_section('more-licensing-info', 'More licensing information', parent_id: "licenses-card") do
-        - for attr in @metadata.select { |m| m['display'] == 'license' }
-          = form_group_attribute(attr["attribute"])
+        = form_group_attribute("morePermissions")
+        = form_group_attribute("copyrightHolder")
 
     %div#community.mt-4
       = metadata_section('contacts-panel', 'Contacts', parent_id: "community", collapsed: !@required_only  || !@submission.id.nil?) do
@@ -110,14 +131,13 @@
                 = render partial: "submissions/submission_contact_form", locals: {contact: contact, index: i}
 
         = form_group_attribute("hasContributor")
-        = form_group_attribute("hasCreator")
 
       = metadata_section('more-community-info', 'More community information', parent_id: "community") do
-        - for attr in @metadata.select { |m| m['display'] == 'community' }
+        - for attr in @metadata.select { |m| m['category'] == 'community' }
           = form_group_attribute(attr["attribute"])
 
       = metadata_section('more-people-info', 'More people information', parent_id: "community") do
-        - for attr in @metadata.select { |m| m['display'] == 'people' }
+        - for attr in @metadata.select { |m| m['category'] == 'people' }
           = form_group_attribute(attr["attribute"])
 
     %div#ontology-relations-more.mt-4
@@ -129,7 +149,7 @@
 
       = metadata_section('more-relations', 'More relations', parent_id: "ontology-relations-more") do
         - for attr in @metadata
-          - if attr["display"].eql?("relations")
+          - if attr["category"].eql?("relations")
             = form_group_attribute(attr["attribute"])
 
     %div#ontology-content-metrics.mt-4
@@ -138,9 +158,9 @@
         = form_group_attribute("preferredNamespaceUri")
 
       = metadata_section('more-informations', 'More content informations', parent_id: "ontology-content-metrics") do
-        - for attr in @metadata.select { |m| m['display'] == 'content' }
+        - for attr in @metadata.select { |m| m['category'] == 'content' }
           = form_group_attribute(attr["attribute"])
 
       = metadata_section('more-metrics-informations', 'More metrics informations', parent_id: "ontology-content-metrics") do
-        - for attr in @metadata.select { |m| m['display'] == 'metrics' }
+        - for attr in @metadata.select { |m| m['category'] == 'metrics' }
           = form_group_attribute(attr["attribute"])

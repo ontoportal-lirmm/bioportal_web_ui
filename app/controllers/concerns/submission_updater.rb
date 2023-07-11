@@ -91,7 +91,7 @@ module SubmissionUpdater
                     end
     end
     p = params.permit(attributes.uniq)
-    p.to_h.transform_values do |v|
+    p = p.to_h.transform_values do |v|
       if v.is_a? Hash
         v.values.reject(&:empty?)
       elsif v.is_a? Array
@@ -100,5 +100,9 @@ module SubmissionUpdater
         v
       end
     end
+
+    p[:hasCreator] = p[:hasCreator].map(&:values).flatten.uniq if p[:hasCreator]
+    p[:publisher] = p[:publisher].map(&:values).flatten.uniq if p[:publisher]
+    p
   end
 end

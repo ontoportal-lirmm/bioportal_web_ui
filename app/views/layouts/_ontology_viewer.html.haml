@@ -93,8 +93,8 @@
             - unless sub.documentation.nil?
               = link_to(sub.documentation, "aria-label": "Semantic resource documentation", title: "Semantic resource documentation", target: "_blank") do
                 %i.fas.fa-lg.fa-book-reader{"aria-hidden": true}
-            - unless sub.publication.nil?
-              = link_to(sub.publication, "aria-label": "Semantic resource publications", title: "Semantic resource publications", target: "_blank") do
+            - Array(sub.publication).each do |pub|
+              = link_to(pub, "aria-label": "Semantic resource publications", title: "Semantic resource publications", target: "_blank") do
                 %i.fas.fa-lg.fa-book{"aria-hidden": true}
           - if @ontology.admin?(session[:user])
             = link_to(edit_ontology_path(@ontology.acronym), "aria-label": "Edit semantic resource details", title: "Edit semantic resource details") do
