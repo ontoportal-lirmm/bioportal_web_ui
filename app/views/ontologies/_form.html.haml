@@ -106,16 +106,17 @@
       .upload-ontology-field-container
         = render InputFieldComponent.new(label: "Date of original creation (dd/mm/yy)", name: "name", margin_bottom: "23px", type: "date")
       .upload-ontology-contact
-        .titles
-          %div Contact name
-          %div Contact email
-        .contact-fields
-          .fields-line.first
-            %input{:type => "text"}/
-            %input{:type => "text"}/
-        .add-another-contact{:onclick => "addAnotherContact()"}
-          %img{:alt => "", :src => asset_path("plus.svg")}/
-          %div Add anouther contact
+        = render NestedFormInputsComponent.new(object_name: "Contact") do |c|
+          - c.header do
+            - content_tag(:div, 'Contact name', class: 'w-50') + content_tag(:div, 'Contact email', class: 'w-50')
+          - c.template do
+            = content_tag(:div, class:"d-flex my-1" ) do
+              .w-50.mr-1
+                = render InputFieldComponent.new(label: "", name: "name", type: "text", width: "100%", margin_bottom: "0")
+              .w-50.mr-1
+                = render InputFieldComponent.new(label: "", name: "name", type: "text", width: "100%", margin_bottom: "0")
+            
+
 
 
 
@@ -220,42 +221,4 @@
           line[index]?.classList.toggle("active", isPassedSection);
       });
   };
-
-   // ------------ add another contact js -------------------------------
-  let deleteSrc = "#{js_asset_path}";
-  const deleteLine = () => {
-      const target = event.target;
-      const parentElement = target.parentElement;
-      const grandparentElement = parentElement.parentElement;
-
-      if (target.tagName.toLowerCase() === 'div') {
-          parentElement.remove();
-      } else {
-          grandparentElement.remove();
-      }
-  }
-  
-  const contactForm = document.getElementsByClassName("upload-ontology-contact")[0]
-  const firstLine = document.querySelector(".upload-ontology-contact .first")
-  const contactFields = document.querySelector(".upload-ontology-contact .contact-fields")
-  
-
-
-  const addAnotherContact = () => {
-      if(contactForm.childElementCount === 3 ){
-          contactForm.classList.add("multiple")
-          const deleteButton = document.createElement('div');
-          deleteButton.className = 'delete';
-          deleteButton.innerHTML = '<img src= '+deleteSrc+' onclick="deleteLine()">'; 
-          firstLine.appendChild(deleteButton)
-      } 
-
-      const contact_fields = document.createElement('div');
-      contact_fields.className = 'fields-line first';
-      contact_fields.innerHTML = '<input type="text"><input type="text"><div class="delete"><img onclick="deleteLine()" src= "'+ deleteSrc +'" ></div>';
-      contactFields.appendChild(contact_fields)
-
-
-  }
-
 
