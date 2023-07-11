@@ -3,11 +3,11 @@
         = @label
 
     - if @type == "select" 
-        %select.select-component{style: "margin-bottom: #{@margin_bottom}; width: #{@width};", name: @name}
+        %select.input-field-component{name: @name}
             - @choices.each do |choice|
                 %option{:value => choice}= choice
     - else
-        %input.input-field-component.text-input{name: @name, type: @type, style: "margin-bottom: #{@margin_bottom}; width: #{@width};"}
+        %input.input-field-component.text-input{name: @name, type: @type}
 
 
     
