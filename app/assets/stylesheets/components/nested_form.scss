@@ -8,7 +8,7 @@
 
 
 .nested-form-input-container  input:focus{
-  border: 1px solid #31B404 !important;
+  border: 1px solid var(--primary-color) !important;
 }
 
 .nested-form-input-container .delete{
