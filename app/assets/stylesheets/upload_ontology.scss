@@ -1,5 +1,3 @@
-
-
 .upload-ontology-container {
     display: flex;
     justify-content: center;
@@ -47,7 +45,8 @@
 }
 
 .upload-ontology-progress hr.active {
-    border: 1px solid var(--primary-color);;
+    border: 1px solid var(--primary-color);
+    ;
 }
 
 .upload-ontology-progress .progress-item {
@@ -65,8 +64,9 @@
     top: 33px;
     white-space: nowrap;
     color: var(--primary-color);
- 
+
 }
+
 .upload-ontology-progress .General-metadata .active:nth-child(2) {
     color: var(--primary-color);
     font-weight: 600;
@@ -79,7 +79,7 @@
     top: 33px;
     white-space: nowrap;
     color: #A9A9A9;
- 
+
 }
 
 .upload-ontology-progress .Dates-and-contacts .active:nth-child(2) {
@@ -94,7 +94,7 @@
     font-size: 12px;
     white-space: nowrap;
     color: #A9A9A9;
-  
+
 }
 
 .outlined-checked-circle {
@@ -161,6 +161,7 @@
     display: flex;
     flex-wrap: wrap;
 }
+
 .upload-ontology-actions {
     display: flex;
     justify-content: flex-end;
@@ -226,4 +227,110 @@
 
 .show {
     display: block;
+}
+
+.upload-ontology-desc {
+    font-size: 12px;
+    color: #777777;
+    margin-bottom: 23px;
+}
+
+.upload-ontology-desc a {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+.upload-ontology-desc a svg{
+    transform: scale(1.2);
+}
+
+.upload-ontology-contact .titles {
+    display: flex;
+    font-size: 11px;
+    color: #666666;
+    margin-bottom: 5px;
+}
+
+.upload-ontology-contact .titles div:first-child {
+    width: 262px;
+}
+
+.upload-ontology-contact.multiple .titles div:first-child {
+    width: 233px;
+}
+
+.upload-ontology-contact .fields-line {
+    display: flex;
+}
+
+.upload-ontology-contact .fields-line input:focus {
+    border: 1px solid var(--primary-color) !important;
+}
+
+.upload-ontology-contact .fields-line input {
+    font-size: 13px;
+    padding: 10px;
+    border: 1px solid #BDBDBD;
+    border-radius: 5px;
+    outline: none;
+    width: 247px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+
+.upload-ontology-contact.multiple .fields-line input {
+    width: 218px;
+}
+
+
+
+
+.upload-ontology-contact .delete {
+    display: flex;
+    border: 1px dashed #BDBDBD;
+    justify-content: center;
+    align-items: center;
+    height: 43px;
+    width: 43px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.upload-ontology-contact .add-another-contact {
+    border: 1px dashed #BDBDBD;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    cursor: pointer;
+
+}
+
+.upload-ontology-contact .add-another-contact div {
+    font-size: 11px;
+    color: #DADADA;
+    margin-left: 10px;
+
+}
+
+.upload-ontology-field-container .location-choice{
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+}
+
+.upload-ontology-field-container .location-choice .title{
+    font-size: 13px;
+    color: black;
+    margin-left: 13px;
+    margin-bottom: 0;
+}
+
+.upload-ontology-field-container div{
+    font-size: 12px;
+    color: #666666;
+}
+
+
+.upload-ontology-input-field-container{
+    margin-bottom: 23px;
 }
