@@ -185,10 +185,12 @@
     background-color: var(--hover-color);
 }
 
-.upload-ontology-next-button div {
+.upload-ontology-next-button div,  .upload-ontology-next-button > input{
     margin-right: 5px;
     color: white;
     font-size: 16px;
+    border: none;
+    background: none;
 }
 
 .upload-ontology-back-button {
