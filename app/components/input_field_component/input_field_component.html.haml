@@ -4,36 +4,24 @@
             = @label
 
     - has_error = @error_message != ""
+    - border_style = "#{"border-color: var(--error-color);" if has_error}"
 
     - case @type
     - when "select"
-        %select.input-field-component{name: @name, style: "#{"border-color: var(--error-color);" if has_error}"}
+        %select.input-field-component{name: @name, style: border_style}
             - @choices.each do |choice|
                 %option{:value => choice}= choice
-        - if has_error
-            .text-input-error-text
-                = @error_message
-        - unless @helper_text == ""
-            .text-input-helper-text
-                = @helper_text
-
     - when "textarea" 
-        %textarea.input-field-component{name: @name, rows: "5", placeholder: @hint, style: "#{"border-color: var(--error-color);" if has_error}"}
-        - if has_error
-            .text-input-error-text
-                = @error_message
-        - unless @helper_text == ""
-            .text-input-helper-text
-                = @helper_text
-                
+        %textarea.input-field-component{name: @name, rows: "5", placeholder: @hint, style: border_style}
     - else
-        %input.input-field-component.text-input{name: @name, type: @type, placeholder: @hint, style: "#{"border-color: var(--error-color);" if has_error}"}
-        - if has_error
-            .text-input-error-text
-                = @error_message
-        - unless @helper_text == ""
-            .text-input-helper-text
-                = @helper_text
+        %input.input-field-component.text-input{name: @name, type: @type, placeholder: @hint, style: border_style}
+    - if has_error
+        .text-input-error-text
+            = @error_message
+    - unless @helper_text == ""
+        .text-input-helper-text
+            = @helper_text
+
 
 
 
