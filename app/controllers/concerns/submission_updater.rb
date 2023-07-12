@@ -64,7 +64,7 @@ module SubmissionUpdater
     end
 
     # Convert metadata that needs to be integer to int
-    @metadata.map do |hash|
+    submission_metadata.map do |hash|
       if hash["enforce"].include?("integer")
         if !new_submission_hash[hash["attribute"]].nil? && !new_submission_hash[hash["attribute"]].eql?("")
           new_submission_hash[hash["attribute"].to_s.to_sym] = Integer(new_submission_hash[hash["attribute"].to_s.to_sym])
@@ -106,7 +106,7 @@ module SubmissionUpdater
       :publication
     ]
 
-    @metadata.each do |m|
+    submission_metadata.each do |m|
 
       m_attr = m["attribute"].to_sym
 

@@ -144,7 +144,7 @@ class OntologiesMetadataCuratorController < ApplicationController
       :publication
     ]
 
-    @metadata.each do |m|
+    submission_metadata.each do |m|
 
       m_attr = m["attribute"].to_sym
 

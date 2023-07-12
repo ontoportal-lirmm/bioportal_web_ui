@@ -20,25 +20,11 @@ module OntologiesHelper
   end
 
   # Display data catalog metadata under visits (in _metadata.html.haml)
-  def display_data_catalog(sub)
-    if !sub.send("includedInDataCatalog").nil? && sub.send("includedInDataCatalog").any?
+  def display_data_catalog(value)
+    if !value.nil? && value.any?
       # Buttons for data catalogs
-      return content_tag(:section, { :class => "ont-metadata-card ont-included-in-data-catalog-card" }) do
-        concat(content_tag(:div, { :class => "ont-section-toolbar" }) do
-          concat(content_tag(:header, "includedInDataCatalog", { :class => "pb-2 font-weight-bold" }))
-        end)
-        concat(content_tag(:div, { :class => "" }) do
-          sub.send("includedInDataCatalog").each do |catalog|
-            catalog_btn_label = catalog
-            $DATA_CATALOG_VALUES.each do |cat_uri, cat_label|
-              if catalog[cat_uri]
-                catalog_btn_label = cat_label
-                break
-              end
-            end
-            concat(content_tag(:a, catalog_btn_label, { :class => "btn btn-primary", :href => catalog, :target => "_blank" }))
-          end
-        end)
+      content_tag(:div, { :class => "" }) do
+
       end
     else
        ""
