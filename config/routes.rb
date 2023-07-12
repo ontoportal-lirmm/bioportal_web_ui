@@ -214,8 +214,6 @@ Rails.application.routes.draw do
 
   get '/exhibit/:ontology/:id' => 'concepts#exhibit'
 
-  if Rails.env.development?
-    mount Lookbook::Engine, at: "/lookbook"
-  end
+  mount Lookbook::Engine, at: "/lookbook"
 
 end

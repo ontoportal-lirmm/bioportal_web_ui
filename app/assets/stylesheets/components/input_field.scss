@@ -1,0 +1,30 @@
+.input-field-component{
+    width: 100%;
+    font-size: 13px;
+    padding: 10px;
+    border: 1px solid #BDBDBD;
+    border-radius: 5px;
+    outline: none;
+    resize: none;
+}
+
+.input-field-component:focus{
+    border: 1px solid var(--primary-color);
+}
+
+.text-input-label{
+    font-size: 12px;
+    color: #666666;
+    margin-bottom: 5px;
+}
+
+.text-input-error-text{
+    font-size: 12px;
+    color: var(--error-color)
+}
+
+.text-input-helper-text{
+    font-size: 12px;
+    color: #666666;
+    margin-top: 5px;
+}
