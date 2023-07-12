@@ -7,6 +7,7 @@ class OntologiesController < ApplicationController
   include SchemesHelper, ConceptsHelper
   include CollectionsHelper
   include MappingStatistics
+  include SubmissionUpdater
 
   require 'multi_json'
   require 'cgi'
@@ -190,27 +191,18 @@ class OntologiesController < ApplicationController
   end
 
   def create
-    if params[:commit].eql? 'Cancel'
-      redirect_to ontologies_path and return
-    end
 
-    @ontology = LinkedData::Client::Models::Ontology.new(values: ontology_params)
-    @ontology_saved = @ontology.save
-    if response_error?(@ontology_saved)
-      @categories = LinkedData::Client::Models::Category.all
-      @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
-      @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
-      @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
-      @errors = response_errors(@ontology_saved)
-      render 'new'
-    else
-      if @ontology_saved.summaryOnly
-        redirect_to "/ontologies/success/#{@ontology.acronym}"
-      else
-        redirect_to new_ontology_submission_path(@ontology.acronym)
+    # redirect_to ontologies_path and return if params[:commit].eql? 'Cancel'
+
+    @ontology = save_new_ontology(ontology_params)
+    show_new_errors if response_error?(@ontology)
+
+    @submission = save_new_submission(submission_params, @ontology)
+    show_new_errors if response_error?(@submission)
+
+    redirect_to "/ontologies/success/#{@ontology.acronym}"
+
       end
-    end
-  end
 
   def edit
     # Note: find_by_acronym includes ontology views
@@ -460,18 +452,43 @@ class OntologiesController < ApplicationController
   end
   private
 
+  def save_new_ontology(ontology_hash)
+    ontology = LinkedData::Client::Models::Ontology.new(values: ontology_hash)
+    ontology.save
+  end
 
+  def save_new_submission(submission_hash, ontology)
+    new_submission_params = submission_hash
+    new_submission_params[:ontology] = ontology.id
+    save_submission(new_submission_params)
+  end
 
-
+  def show_new_errors
+    # TODO
+    @categories = LinkedData::Client::Models::Category.all
+    @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
+    @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
+    @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
+    @errors = response_errors(@ontology_saved)
+    render 'new'
+  end
 
   def ontology_params
-    p = params.require(:ontology).permit(:name, :acronym, { administeredBy:[] }, :viewingRestriction, { acl:[] },
-                                         { hasDomain:[] }, :isView, :viewOf, :subscribe_notifications, {group:[]})
+    p = params.require(:ontology).permit(:name, :acronym, { administeredBy: [] }, :viewingRestriction, { acl: [] },
+                                         { hasDomain: [] }, :viewOf, :subscribe_notifications, { group: [] })
 
     p[:administeredBy].reject!(&:blank?)
-    p[:acl].reject!(&:blank?)
+    # p[:acl].reject!(&:blank?)
     p[:hasDomain].reject!(&:blank?)
     p[:group].reject!(&:blank?)
+    p.to_h
+  end
+
+  def submission_params
+    p = params.require(:submission).permit(:description, :format, :status, :released, { contact: {} },
+                                           :isRemote, :pullLocation, :filePath)
+
+    p[:contact] = p[:contact].values if p[:contact]
     p.to_h
   end
 
