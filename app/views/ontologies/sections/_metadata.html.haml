@@ -16,8 +16,15 @@
               = render FieldContainerComponent.new(label: k.to_s) do
                 = render DateTimeFieldComponent.new(value: v) 
           = render DropdownContainerComponent.new(title: 'Persons and organizations', id: 'person_and_organization') do
-            - @persons_organizations_properties.each do |k, v|
-              = render FieldContainerComponent.new(label: k.to_s, value: v) 
+            - @persons_organizations_properties.each do |k, values|
+              %p.field-normal_text
+              = render FieldContainerComponent.new(label: k.to_s) do
+                %div.d-flex.flex-wrap
+                  - Array(values).each do |val_str|
+                    - val_str.split(',').each do |v|
+                      - if v
+                        %div.m-1
+                          = render ChipButtonComponent.new(text: v, type: "static",'data-controller':' tooltip', title: v, class:'text-truncate', style: 'max-width: 200px; display: block')
           = render DropdownContainerComponent.new(title: 'Links', id: 'link') do
             - @links_properties.each do |k, v|
               = render FieldContainerComponent.new(label: k.to_s, value: v)
