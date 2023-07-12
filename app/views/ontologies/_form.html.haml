@@ -1,14 +1,3 @@
-
-
-
-
-
-:css
-  div.ontologyFormError {
-  color: red;
-  padding-top: 3px;
-  }
-
 - unless @errors.nil?
   .enable-lists{:style => "color:red;"}
     %strong Errors On Form
@@ -30,7 +19,6 @@
             - else
               = errors_field
       - else
-        -# A generic fallback
         = @errors.to_json
 
 .upload-ontology-container
@@ -66,7 +54,6 @@
         = render Form::TextInputComponent.new(label: "Acronym", name: "ontology[acronym]")
       .upload-ontology-field-container
         = render Form::SelectComponent.new(label: "Administrator", name: "ontology[administeredBy]", value: @user_select_list, selected: @ontology.administeredBy || session[:user].id, multiple: true, helper_text: "You should select one admin at least")
-        = f.select(:administeredBy, @user_select_list ,{selected: @ontology.administeredBy || session[:user].id}, {multiple: true, :"data-placeholder" => "You should select one admin at least", class:"form-control"})
       .upload-ontology-input-field-container
         = render InputFieldComponent.new(label: "This ontology is a view of", name: "ontology[viewOf]") do
           - single_picker_locals = {:picker_id => "ontology_viewOf", placeholder: "Select an ontology to create a view on", field_name: "viewOf", disabled: false, selected: @ontology.viewOf}
