@@ -1,120 +1,3 @@
-- button_text ||= "Create ontology"
-- title_text ||= "Submit New Ontology"
-
-:javascript
-  function hideAllRestrictions() {
-    jQuery(".viewing_restriction_disabled").attr("disabled", true);
-    jQuery("div.viewing_restriction_types").addClass("hidden");
-  }
-
-  function showRestrictionPrivate() {
-    jQuery("#ontology_acl").removeAttr("disabled");
-    jQuery("#viewingRestrictionsPrivate").removeClass("hidden");
-  }
-
-  function showRestrictionLicensed() {
-    jQuery("#ontology_licenseInformation").removeAttr("disabled");
-    jQuery("#viewingRestrictionsLicensed").removeClass("hidden");
-  }
-
-  jQuery(document).data().bp.acronyms = #{raw LinkedData::Client::Models::Ontology.all.map {|o| o.acronym}.to_json};
-
-  jQuery(document).ready(function(){
-    // Wire up options for restriction how an ontology is viewed
-    jQuery("#ontology_viewingRestriction").change(function(){
-      var select = jQuery(this);
-      if (select.val() == "private") {
-        hideAllRestrictions()
-        showRestrictionPrivate();
-      } else if (select.val() == "licensed") {
-        hideAllRestrictions();
-        showRestrictionLicensed();
-      } else if (select.val() == "public") {
-        hideAllRestrictions();
-      }
-    });
-
-    // Make sure you can see the account select if the select list has private selected
-    if (jQuery("#ontology_viewingRestriction").val() == "private") {
-      showRestrictionPrivate();
-    } else if (jQuery("#ontology_viewingRestriction").val() == "licensed") {
-      showRestrictionLicensed();
-    }
-
-    jQuery("#ontology_isView").live("click", function(){
-      console.log(jQuery("#ontology_isView").is(":checked"))
-      if (jQuery("#ontology_isView").is(":checked")) {
-        jQuery("#ontology_viewOf").removeAttr('disabled').trigger("liszt:updated");
-      } else {
-        jQuery("#ontology_viewOf").attr('disabled', true).trigger("liszt:updated");
-      }
-    });
-
-    // Wire up chosen selectors
-    jQuery("#ontology_administeredBy").chosen();
-    jQuery("#ontology_acl").chosen();
-    jQuery("#ontology_hasDomain").chosen();
-    jQuery("#ontology_group").chosen();
-
-    // Make acronym upcase as you type
-    jQuery("#ontology_acronym").on('input', function(e) {
-      var input = $(this);
-      var start = input[0].selectionStart;
-      $(this).val(function (_, val) {
-        return val.toUpperCase();
-      });
-      input[0].selectionStart = input[0].selectionEnd = start;
-    });
-
-    // Check acronym as you type
-    jQuery("#ontology_acronym").on('input', function(e) {
-      var $this = $(this);
-      var errors = [];
-      var errorHTML = "";
-
-      if ($this.val().match("^[^a-z^A-Z]{1}")) {
-        errors.push("Acronym must start with a letter");
-      }
-
-      if ($this.val().match("[^-_0-9a-zA-Z]")) {
-        errors.push("Acronym must only contain the folowing characters: -, _, letters, and numbers");
-      }
-
-      if ($this.val().match(".{17,}")) {
-        errors.push("Acronym must be sixteen characters or less");
-      }
-
-      if (jQuery(document).data().bp.acronyms.indexOf($this.val()) !== -1) {
-        errors.push("Acronym already in use");
-      }
-
-      if (errors.length > 0) {
-        errorHTML = "<li>" + errors.join("</li><li>") + "</li>";
-      }
-
-      jQuery("#acronym_errors").html(errorHTML);
-    });
-
-    jQuery("#ontologyForm").validate({
-      errorClass: "ontologyFormError",
-      errorElement: "div",
-      rules: {
-        "ontology[name]": "required",
-        "ontology[acronym]": "required",
-      },
-      messages: {
-        "ontology[name]": "Please enter a name",
-        "ontology[acronym]": "Please enter an acronym",
-      },
-    });
-  });
-
-:css
-  div.ontologyFormError {
-    color: red;
-    padding-top: 3px;
-  }
-
 - unless @errors.nil?
   .enable-lists{:style => "color:red;"}
     %strong Errors On Form
@@ -136,7 +19,6 @@
             - else
               = errors_field
       - else
-        -# A generic fallback
         = @errors.to_json
 
 .upload-ontology-container
@@ -172,7 +54,6 @@
         = render Form::TextInputComponent.new(label: "Acronym", name: "ontology[acronym]")
       .upload-ontology-field-container
         = render Form::SelectComponent.new(label: "Administrator", name: "ontology[administeredBy]", value: @user_select_list, selected: @ontology.administeredBy || session[:user].id, multiple: true, helper_text: "You should select one admin at least")
-        = f.select(:administeredBy, @user_select_list ,{selected: @ontology.administeredBy || session[:user].id}, {multiple: true, :"data-placeholder" => "You should select one admin at least", class:"form-control"})
       .upload-ontology-input-field-container
         = render InputFieldComponent.new(label: "This ontology is a view of", name: "ontology[viewOf]") do
           - single_picker_locals = {:picker_id => "ontology_viewOf", placeholder: "Select an ontology to create a view on", field_name: "viewOf", disabled: false, selected: @ontology.viewOf}
