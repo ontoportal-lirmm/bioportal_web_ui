@@ -5,6 +5,7 @@
                 %p Identifiers
                 %img{src: asset_path("summary/info.svg")}/
         .creation_info
+        - unless @submission_latest.URI.nil? || @submission_latest.URI.empty?
             %p.description_text_identifers 
                 URI
         %p.normal_text
@@ -17,6 +18,7 @@
                 = render LinkFieldComponent.new(value: @submission_latest.versionIRI)
                 .creation_info
         %p.description_text_identifers 
+        - unless @submission_latest.identifier.nil? || @submission_latest.identifier.empty?
             Identifier
         %p.normal_text
             = render LinkFieldComponent.new(value: @submission_latest.identifier)
