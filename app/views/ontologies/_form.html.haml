@@ -311,8 +311,8 @@
       #nextBtn.upload-ontology-next-button{:onclick => "navigateForm('next')"}
         %div Next
         %img{:alt => "", :src => asset_path("arrow-right.svg")}/
-      #finishBtn.upload-ontology-finish-button.upload-ontology-next-button.hide{:onclick => "finish()"}
-        %div Finish
+      #finishBtn.upload-ontology-finish-button.upload-ontology-next-button.hide
+        = submit_tag "Finish"
         %img{:alt => "", :src => asset_path("white-check.svg")}/
 
 
