@@ -1,5 +1,5 @@
 .location-choice
-  %input{type: "radio", name: "location", value: "metadata_only", onchange: "displayMetadataOnlyForm()"}
+  %input{type: "radio", name: "submission[isRemote]", value: "3", onchange: "displayMetadataOnlyForm()"}
   %label.title{for: "metadata_only"}
     Metadata only
 .upload-ontology-desc.mb-2
@@ -8,21 +8,21 @@
 
 
 .location-choice
-  %input{type: "radio", name: "location", value: "load_from_url", onchange: "displayUrlForm()"}
+  %input{type: "radio", name: "submission[isRemote]", value: "1", onchange: "displayUrlForm()"}
   %label.title{for: "load_from_url"}
     Load from URL
 .upload-ontology-desc.mb-1
   New versions loaded on a nightly basis.
 #url-form.d-none
-  = render Form::TextInputComponent.new(label: "", name: "name")
+  = render Form::TextInputComponent.new(label: "", name: "submission[pullLocation]")
 
 
 .location-choice.mb-3.mt-3
-  %input{type: "radio", name: "location", value: "upload_local_file", checked: true, onchange: "displayLocalFileForm()"}
+  %input{type: "radio", name: "submission[isRemote]", value: "0", checked: true, onchange: "displayLocalFileForm()"}
   %label.title{for: "upload_local_file"}
     Upload local file
 #local-file-form
-  = render Form::FileInputComponent.new(name: "file")
+  = render Form::FileInputComponent.new(name: "submission[filePath]")
 
 
 :javascript
