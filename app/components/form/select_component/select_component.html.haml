@@ -1,1 +1,2 @@
-= render SelectInputComponent.new(id: @id, name: @name, values: @values , selected: @selected , multiple: @multiple, open_to_add_values: @open_to_add_values )
+= render InputFieldComponent.new(name: @name, error_message: @error_message, helper_text: @helper_text) do
+  = render SelectInputComponent.new(id: @id, name: @name, values: @values , selected: @selected , multiple: @multiple, open_to_add_values: @open_to_add_values )
