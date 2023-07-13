@@ -195,12 +195,22 @@ class OntologiesController < ApplicationController
     # redirect_to ontologies_path and return if params[:commit].eql? 'Cancel'
 
     @ontology = save_new_ontology(ontology_params)
-    show_new_errors if response_error?(@ontology)
 
-    @submission = save_new_submission(submission_params, @ontology)
-    show_new_errors if response_error?(@submission)
+    if response_error?(@ontology)
+      show_new_errors(@ontology)
+      return
+    end
 
-    redirect_to "/ontologies/success/#{@ontology.acronym}"
+
+    @submission = save_new_submission(params[:submission], @ontology)
+
+    if response_error?(@submission)
+      @ontology.delete
+      show_new_errors(@submission)
+    else
+      redirect_to "/ontologies/success/#{@ontology.acronym}"
+    end
+
 
       end
 
@@ -459,17 +469,19 @@ class OntologiesController < ApplicationController
 
   def save_new_submission(submission_hash, ontology)
     new_submission_params = submission_hash
-    new_submission_params[:ontology] = ontology.id
+    new_submission_params[:ontology] = ontology.acronym
     save_submission(new_submission_params)
   end
 
-  def show_new_errors
+  def show_new_errors(object)
     # TODO
+    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym', include_views: true, display_links: false, display_context: false)
     @categories = LinkedData::Client::Models::Category.all
     @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
     @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
     @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
-    @errors = response_errors(@ontology_saved)
+    @errors = response_errors(object)
+    @submission  =  submission_from_params(params[:submission])
     render 'new'
   end
 
@@ -479,18 +491,11 @@ class OntologiesController < ApplicationController
 
     p[:administeredBy].reject!(&:blank?)
     # p[:acl].reject!(&:blank?)
-    p[:hasDomain].reject!(&:blank?)
-    p[:group].reject!(&:blank?)
+    p[:hasDomain].reject!(&:blank?) if p[:hasDomain]
+    p[:group].reject!(&:blank?)  if p[:group]
     p.to_h
   end
 
-  def submission_params
-    p = params.require(:submission).permit(:description, :format, :status, :released, { contact: {} },
-                                           :isRemote, :pullLocation, :filePath)
-
-    p[:contact] = p[:contact].values if p[:contact]
-    p.to_h
-  end
 
   def determine_layout
     case action_name
