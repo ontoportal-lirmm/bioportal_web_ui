@@ -1,5 +1,4 @@
-require_relative '../utils/utils'
-require_relative '../utils/datacite_srv'
+
 class AdminController < ApplicationController
   include TurboHelper
   layout :determine_layout
