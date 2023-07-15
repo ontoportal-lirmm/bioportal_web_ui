@@ -1,4 +1,3 @@
-
 class AdminController < ApplicationController
   include TurboHelper
   layout :determine_layout
@@ -332,7 +331,5 @@ class AdminController < ApplicationController
     end
     response
   end
-
-
 
 end
