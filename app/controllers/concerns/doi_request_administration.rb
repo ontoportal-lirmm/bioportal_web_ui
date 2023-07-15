@@ -141,11 +141,11 @@ module DoiRequestAdministration
     dc_response = DataCiteCreatorService.new(hash_metadata).call
 
     # If there is an error, returns it
-    return dc_response['errors'] if dc_response['errors'] && !dc_response['errors'].empty?
+    return OpenStruct.new(errors: dc_response['errors']) if dc_response['errors'] && !dc_response['errors'].empty?
 
     # If the DOI isn't into the response, returns an error
     error = "The new DOI doesn't exist in the Datacite response: check the response: dc_response"
-    return error unless dc_response['data']['id'] && !dc_response['data']['id'].empty?
+    return OpenStruct.new(errors: [error]) unless dc_response['data']['id'] && !dc_response['data']['id'].empty?
 
     # UPDATE SUBMISSION WITH NEW DOI
     new_doi = dc_response['data']['id']
