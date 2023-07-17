@@ -148,6 +148,7 @@ Rails.application.routes.draw do
   get 'ajax/label_xl/label', to: "label_xl#show_label"
   get 'ajax/label_xl', to: "label_xl#show"
   get '/ajax/biomixer' => 'concepts#biomixer'
+  match '/ajax/cancelIdentifierRequest' => 'ajax_proxy#cancelIdentifierRequest', via: :post
   get '/ajax/fair_score/html' => 'fair_score#details_html'
   get '/ajax/fair_score/json' => 'fair_score#details_json'
   get '/ajax/:ontology/instances' => 'instances#index_by_ontology'
@@ -185,7 +186,8 @@ Rails.application.routes.draw do
   match '/admin/update_info' => 'admin#update_info', via: [:get]
   match '/admin/update_check_enabled' => 'admin#update_check_enabled', via: [:get]
   match '/admin/users' => 'admin#users', via: [:get]
-
+  match '/admin/doi_requests_list' => 'admin#doi_requests_list', via: [:get]
+  match '/admin/doi_requests' => 'admin#process_doi_requests', via: [:put]
   # Ontolobridge
   # post '/ontolobridge/:save_new_term_instructions' => 'ontolobridge#save_new_term_instructions'
 

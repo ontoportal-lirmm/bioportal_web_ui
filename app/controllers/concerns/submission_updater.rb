@@ -88,11 +88,8 @@ module SubmissionUpdater
       :homepage,
       :documentation,
       :publication,
-      { creators: [:nameType, :givenName, :familyName, :creatorName,
-                   { creatorIdentifiers: %i[nameIdentifierScheme schemeURI nameIdentifier] },
-                   { affiliations: %i[affiliationIdentifierScheme affiliationIdentifier affiliation] }] },
-      { titles: %i[title lang titleType]},
-      :publisher, :publicationYear, :resourceType, :resourceTypeGeneral
+      :identifier,
+      :is_doi_requested,
     ]
 
     @metadata.each do |m|

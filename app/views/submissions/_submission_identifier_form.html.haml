@@ -1,0 +1,18 @@
+= form_group_attribute("identifier", required: true) do |c|
+  Insert the Persistent Identifier - DOI or other - of your semantic asset
+%div.form-group.row
+  %div.col-sm-8.field-value-col.offset-4{id: "identifier_fields_col"}
+    - if @identifier_request && @identifier_request.status == "PENDING"
+      .d-flex
+        .col-sm-8.sub-label
+          %p
+            You have a new DOI pending request for this semantic resource. You can cancel this request before it is processed.
+        .col-sm-4.sub-label
+          %button.btn.btn-primary.btn-sm.btn_cancel_request{id: "btn_cancel_request-#{@identifier_request.requestId}", access: "false", type: "button"}
+            Cancel Request
+    - else
+      #div-cb-require-doi.form-check
+        %input#doi_request.form-check-input{name: "submission[is_doi_requested]", type: "checkbox", checked: @submission.is_doi_requested}/
+        %label.form-check-label{for: "doi_request"} Check this box if your asset has no PID and you want to request a DOI
+
+
