@@ -118,14 +118,13 @@
           - unless @submission_latest.nil?
             %div{data:{controller: 'metadata-downloader'}}
               =javascript_include_tag "jsonld"
+              %button.btn.btn-primary.my-1{'data-action': 'metadata-downloader#downloadDataCiteJSON'} JSON DATACITE
+              %button.btn.btn-primary{'data-action': 'metadata-downloader#downloadEcoPortalJSON'} JSON ECOPORTAL
+              %br
               %button{:id => "getMetadataBackNquadsBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadNQuads'} N-Triple
               %button{:id => "getMetadataBackJsonldBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadJsonLd'} Json-LD
               %button{:id => "getMetadataBackXmlBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadXML'} RDF/XML
-            -# Listener in bp_ontology_viewer.js.erb
 
-            %div
-              %button.btn.btn-primary#getMetadataDataciteJsonBtn{style: "margin-bottom: 1em; margin-left: 1em;"} JSON DATACITE
-              %button.btn.btn-primary#getMetadataEcoportalJsonBtn{style: "margin-bottom: 1em; margin-left: 1em;"} JSON ECOPORTAL
 
       -# Fair score pane
       -# TODO temporary hide  fairness_service for AGROVOC after there demand
