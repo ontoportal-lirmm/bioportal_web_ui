@@ -1,5 +1,6 @@
 class SubmissionsController < ApplicationController
   include SubmissionsHelper, SubmissionUpdater
+  include DoiRequest
   layout :determine_layout
   before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
   before_action :submission_metadata, only: [:create, :edit, :new, :update, :index]
@@ -26,6 +27,7 @@ class SubmissionsController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.get(CGI.unescape(params[:ontology_id])) rescue nil
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first unless @ontology
     @submission = @ontology.explore.latest_submission
+    @identifier_request = first_pending_doi_request
     @submission ||= LinkedData::Client::Models::OntologySubmission.new
     @submission.id = nil
   end
@@ -47,6 +49,8 @@ class SubmissionsController < ApplicationController
 
       render "new"
     else
+      cancel_pending_doi_requests
+      submit_new_doi_request if doi_requested?
       redirect_to "/ontologies/success/#{@ontology.acronym}"
     end
   end
@@ -57,6 +61,7 @@ class SubmissionsController < ApplicationController
                                   required: params[:required]&.eql?('true'),
                                   show_sections: params[:show_sections].nil? || params[:show_sections].eql?('true'),
                                   inline_save: params[:inline_save]&.eql?('true')
+    @identifier_request = first_pending_doi_request
   end
 
   # When editing a submission (called when submit "Edit submission information" form)
@@ -72,9 +77,12 @@ class SubmissionsController < ApplicationController
       @errors = error_responses.map { |error_response| response_errors(error_response) }
     end
 
-    if params[:attribute]
+    if @errors
+      render 'edit'
+    elsif params[:attribute]
       render_submission_attribute(params[:attribute])
     else
+      submit_new_doi_request if doi_requested?
       redirect_to "/ontologies/#{@ontology.acronym}"
     end
 

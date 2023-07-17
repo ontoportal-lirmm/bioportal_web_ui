@@ -31,6 +31,7 @@
 //= require_tree ./components
 //= require ontologies
 //= require projects
+//= require metadata_form
 //= require tooltipster.bundle.min
 //= require application_esbuild
 customElements.define('data-table-loader', DataTableLoader );

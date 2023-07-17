@@ -1,0 +1,8 @@
+= render NestedFormInputsComponent.new do |c|
+  - c.template do
+    = render TurboFrameComponent.new(id: agent_id_frame_id('NEW_RECORD', @parent_id)) do
+      = render AgentSearchInputComponent.new(id: 'NEW_RECORD', agent_type: @agent_type, name_prefix: @name_prefix,
+                                             parent_id: @parent_id, edit_on_modal: @edit_on_modal)
+  - Array(@agents).each_with_index do |agent, i|
+    - c.row do
+      = render partial: 'agents/agent_show', locals: {agent: agent, name_prefix: @name_prefix+"[#{i}]", edit_on_modal: @edit_on_modal, parent_id: @parent_id}
