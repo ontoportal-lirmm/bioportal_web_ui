@@ -8,7 +8,7 @@ module SubmissionUpdater
     @submission = LinkedData::Client::Models::OntologySubmission.new(values: submission_params(new_submission_hash))
 
     update_ontology_summary_only
-    @submission.save
+    @submission.save(cache_refresh_all: false)
   end
 
   def update_submission(new_submission_hash)
@@ -106,7 +106,7 @@ module SubmissionUpdater
                     end
     end
     p = params.permit(attributes.uniq)
-    p.to_h.transform_values do |v|
+    p = p.to_h.transform_values do |v|
       if v.is_a? Hash
         v.values.reject(&:empty?)
       elsif v.is_a? Array
@@ -115,5 +115,9 @@ module SubmissionUpdater
         v
       end
     end
+
+    p[:hasCreator] = p[:hasCreator].map(&:values).flatten.uniq if p[:hasCreator]
+    p[:publisher] = p[:publisher].map(&:values).flatten.uniq if p[:publisher]
+    p
   end
 end

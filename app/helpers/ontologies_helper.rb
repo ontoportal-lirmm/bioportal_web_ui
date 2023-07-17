@@ -74,16 +74,15 @@ module OntologiesHelper
     metadata_list = {}
     # Get extracted metadata and put them in a hash with their label, if one, as value
     json_metadata.each do |metadata|
-      if metadata["extracted"] == true
-        metadata_list[metadata["attribute"]] = metadata["label"]
-      end
+      metadata_list[metadata["attribute"]] = metadata["label"]
     end
     metadata_list = metadata_list.sort
 
     html = []
 
-    metadata_not_displayed = ["status", "description", "documentation", "publication", "homepage", "openSearchDescription", "dataDump", "includedInDataCatalog", "logo", "depiction"]
-
+    metadata_not_displayed = ["status", "description", "documentation", "publication", "homepage",
+                              "openSearchDescription", "dataDump", "includedInDataCatalog", "logo",
+                              "depiction", "submissionId", "submissionStatus", 'ontology', 'contact']
     begin
 
       metadata_list.each do |metadata, label|
@@ -126,6 +125,22 @@ module OntologiesHelper
                   end)
                 end
 
+              elsif metadata.eql?("hasCreator") || metadata.eql?("publisher")
+                html << content_tag(:tr) do
+                  if label.nil?
+                    concat(content_tag(:td, metadata.gsub(/(?=[A-Z])/, " ")))
+                  else
+                    concat(content_tag(:td, label))
+                  end
+
+                  metadata_array = []
+
+                  sub.send(metadata).each do |metadata_value|
+                    metadata_array << display_agent(metadata_value)
+                  end
+
+                  concat(content_tag(:td, raw(metadata_array.join(", "))))
+                end
               else
                 html << content_tag(:tr) do
                   if label.nil?
@@ -260,6 +275,21 @@ module OntologiesHelper
       LOG.add :debug, "error message: #{e.message}"
     end
     html.join("")
+  end
+
+  def social_share_link(ont, sharer)
+    return <<-HTML
+      <a href='javascript:;' 
+        aria-label='Share on #{sharer}'
+        title='Share on #{sharer}'
+        style='margin-left: 0.5rem'
+        data-sharer='#{sharer.downcase}'
+        data-title='#{ont.name}'
+        data-url='#{CGI::escapeHTML($UI_URL + ontology_path(ont.acronym))}'>
+        <i class="fab fa-lg fa-#{sharer.downcase}"></i>
+      </a>
+    HTML
+             .html_safe
   end
 
   def count_links(ont_acronym, page_name = 'summary', count = 0)

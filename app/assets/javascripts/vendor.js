@@ -36,4 +36,5 @@
 //= require select2 
 //= require jquery.readyselector
 //= require trumbowyg
+//= require sharer.min
 

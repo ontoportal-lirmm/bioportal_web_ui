@@ -48,7 +48,9 @@
 @import "feedback";
 @import "login";
 @import "components/index";
-@import "metadata_form";
+@import "account";
+@import "agents";
+
 
 /* Bootstrap and Font Awesome */
 @import "bootstrap";
@@ -57,3 +59,4 @@
 <% if (ui_theme = $UI_THEME.to_s.parameterize).present? && File.exists?(Rails.root.join('app', 'assets', 'stylesheets', 'themes', ui_theme)) %>
   @import "themes/<%= ui_theme %>/main";
 <% end %>
+

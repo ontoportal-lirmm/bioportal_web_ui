@@ -75,7 +75,7 @@ export default class extends Controller {
                     }
                     // Keep only metadata that have been extracted, are metrics or are in the metadata array below
                     var metadata_in_rdf = ["acronym", "name", "hasOntologyLanguage", "creationDate", "released", "group", "viewOf"]
-                    if (subMetadataHash[attr] != undefined && subMetadataHash[attr]["extracted"] !== true && subMetadataHash[attr]["display"] !== "metrics"
+                    if (subMetadataHash[attr] != undefined && subMetadataHash[attr]["extracted"] !== true && subMetadataHash[attr]["category"] !== "metrics"
                         && !metadata_in_rdf.indexOf(attr)) {
 
                         continue;

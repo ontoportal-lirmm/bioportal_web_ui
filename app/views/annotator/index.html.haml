@@ -3,14 +3,15 @@
 %head
   = javascript_include_tag "bp_annotator"
 
-%div.container-fluid
+%div.container-fluid.flex-grow-1
   %div.row
     %div.col
       %h2.mt-3 Annotator
       %p
         = t('annotator.index.intro', site: $SITE).html_safe
-        = link_to(help_path(anchor: "Annotator_Tab"), id: "annotator-help", target: "_blank") do
-          %i.fa.fa-question-circle.fa-lg{"aria-hidden": "true"}
+        = link_to(Rails.configuration.settings.links[:help_annotator], target: '_blank') do
+          %i.fas.fa-question-circle.fa-lg
+
 
   %div.row
     %div.col

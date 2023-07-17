@@ -59,6 +59,10 @@ module ApplicationHelper
     username
   end
 
+  def current_user
+    session[:user]
+  end
+
   def current_user_admin?
     session[:user] && session[:user].admin?
   end

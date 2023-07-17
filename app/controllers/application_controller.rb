@@ -233,7 +233,7 @@ class ApplicationController < ActionController::Base
   end
 
   def response_success?(response)
-    return false if response.nil?
+    return true if response.nil?
 
     if response.respond_to?(:status) && response.status
         response.status.to_i < 400

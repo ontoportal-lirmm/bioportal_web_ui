@@ -3,7 +3,7 @@
     %h2.mb-0
       %button.btn.btn-link.btn-block.text-left{"data-target" => "#collapseOne", "data-toggle" => "collapse", :type => "button"}
         = t('mappings.intro').html_safe
-        = link_to(Rails.configuration.settings.links[:mappings], id: "mappings-help", "aria-label": "View mappings help") do
+        = link_to(Rails.configuration.settings.links[:help_mappings], target: '_blank') do
           %i.fas.fa-question-circle.fa-lg{"aria-hidden": "true"}
   #collapseOne.collapse{"data-parent" => "#accordionExample"}
     .card-body

@@ -7,7 +7,8 @@ Rails.application.routes.draw do
   get '/notes/new_reply', to: 'notes#new_reply'
   delete '/notes', to: 'notes#destroy'
   resources :notes, constraints: { id: /.+/ }
-
+  resources :agents, constraints: { id: /.+/ }
+  post 'agents/:id', to: 'agents#update', constraints: { id: /.+/ }
   resources :ontolobridge do
     post :save_new_term_instructions, on: :collection
   end
@@ -50,6 +51,8 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :licenses, only: [:index, :create, :new]
+    resources :groups, only: [:index, :create, :new, :edit, :update, :destroy]
+    resources :categories, only: [:index, :create, :new, :edit, :update, :destroy]
   end
 
   resources :subscriptions
@@ -82,7 +85,9 @@ Rails.application.routes.draw do
   match '/feedback', to: 'home#feedback', via: [:get, :post]
   get '/account' => 'home#account'
   get '/help' => 'home#help'
-  get '/about' => 'home#about'
+  get '/about' => 'static_pages#aboutus'
+  get '/team' => 'static_pages#team'
+  get '/citeus' => 'static_pages#citeus'
   get '/site_config' => 'home#site_config'
   get '/validate_ontology_file' => 'home#validate_ontology_file_show'
   match '/validate_ontology_file' => 'home#validate_ontology_file', via: [:get, :post]
@@ -147,6 +152,8 @@ Rails.application.routes.draw do
   get '/ajax/fair_score/json' => 'fair_score#details_json'
   get '/ajax/:ontology/instances' => 'instances#index_by_ontology'
   get '/ajax/:ontology/classes/:conceptid/instances' => 'instances#index_by_class', :constraints => { conceptid: /[^\/?]+/ }
+  get '/ajax/ontologies' , to:"ontologies#ajax_ontologies"
+  get '/ajax/agents' , to:"agents#ajax_agents"
 
   # User
   get '/logout' => 'login#destroy', :as => :logout

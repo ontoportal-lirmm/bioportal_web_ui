@@ -1,0 +1,3 @@
+= render TurboFrameComponent.new(id: agent_frame_id(@agent, params[:parent_id])) do
+  = form_with url: agent_path(agent_id(@agent)), method: 'post', data:{turbo: true} do
+    = render partial: 'form', locals: {agent: @agent, name_prefix: '', show_affiliations: @show_affiliations}
