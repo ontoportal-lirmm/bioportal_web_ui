@@ -58,8 +58,8 @@ application.register("skos-collection-colors", SkosCollectionColorsController)
 import TextTruncateController from "./text_truncate_controller"
 application.register("text-truncate", TextTruncateController)
 
-import Ontology_viewer_tabs_controller from "./ontology_viewer_tabs_controller"
-application.register("ontology-viewer-tabs", Ontology_viewer_tabs_controller)
+import TomSelectController from "./tom_select_controller"
+application.register("tom-select", TomSelectController)
 
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)

@@ -1,3 +1,5 @@
+
+
 - unless @errors.nil?
   .enable-lists{:style => "color:red;"}
     %strong Errors On Form
@@ -50,8 +52,18 @@
       .upload-ontology-input-field-container
         = render Form::TextInputComponent.new(label: "Name", name: "ontology[name]", value: @ontology.name)
 
-      .upload-ontology-input-field-container
-        = render Form::TextInputComponent.new(label: "Acronym", name: "ontology[acronym]", value: @ontology.acronym)
+      .upload-ontology-double-field
+        .first
+          = render Form::TextInputComponent.new(label: "Acronym", name: "ontology[acronym]", value: @ontology.acronym)
+        .seconde
+          %label
+            visibility
+          %select#upload-ontology-visibility{autocomplete:"off", multiple:true ,data: {controller: "tom-select"}}
+            %option{value:"public"}
+              Public
+            %option{value:"private"}
+              Private
+
       .upload-ontology-field-container
         = render Form::SelectComponent.new(label: "Administrator", name: "ontology[administeredBy]", value: @user_select_list, selected: @ontology.administeredBy || session[:user].id, multiple: true, helper_text: "You should select one admin at least")
       .upload-ontology-input-field-container

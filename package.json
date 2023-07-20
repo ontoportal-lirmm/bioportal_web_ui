@@ -9,7 +9,8 @@
     "split.js": "^1.6.5",
     "stimulus-flatpickr": "^3.0.0-0",
     "stimulus-rails-nested-form": "^4.0.0",
-    "stimulus-read-more": "^4.1.0"
+    "stimulus-read-more": "^4.1.0",
+    "tom-select": "^2.2.2"
   },
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds"
