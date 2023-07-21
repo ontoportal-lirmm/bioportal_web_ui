@@ -1,4 +1,4 @@
-class NestedFormInputComponentPreview < ViewComponent::Preview
+class Input::NestedFormInputComponentPreview < ViewComponent::Preview
 
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::FormTagHelper

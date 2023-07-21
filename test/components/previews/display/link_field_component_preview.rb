@@ -1,4 +1,4 @@
-class LinkFieldComponentPreview < ViewComponent::Preview
+class Display::LinkFieldComponentPreview < ViewComponent::Preview
 
   # @param text text
   def default(text: "https://agroportal.lirmm.fr/")

@@ -1,4 +1,4 @@
-class SummarySectionComponentPreview < ViewComponent::Preview
+class Layout::SummarySectionComponentPreview < ViewComponent::Preview
   layout 'component_preview_not_centred'
   # @param title text
   # @param content textarea

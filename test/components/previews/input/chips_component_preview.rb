@@ -1,4 +1,4 @@
-class ChipsComponentPreview < ViewComponent::Preview
+class Input::ChipsComponentPreview < ViewComponent::Preview
 
     # @param name text
     # @param value text

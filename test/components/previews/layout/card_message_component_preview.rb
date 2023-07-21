@@ -1,4 +1,4 @@
-class CardMessageComponentPreview < ViewComponent::Preview
+class Layout::CardMessageComponentPreview < ViewComponent::Preview
 
     # @param message text
     # @param button_text text
