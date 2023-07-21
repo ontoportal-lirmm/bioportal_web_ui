@@ -1,11 +1,26 @@
+:javascript
+
+
+
+  function onMetadataChange(){
+    let frame = document.getElementById('metadata_by_ontology')
+    let properties = document.getElementById('search_metadata')
+
+    let selectedProperties = "all"
+    if(properties){
+       selectedProperties = Array.from(properties.selectedOptions).map(({ value }) => value).join(',')
+    }
+    frame.src = "./edit?properties=" + selectedProperties + "&show_sections=false"
+  }
+
 .center
   .edit-ontology-container
     .edit-ontology-title
       %div Edit ontology
       %hr/
     .edit-ontology-sub-container
-      .edit-ontology-left-column{:role => "tablist"}
-        %input{:name => "search", :placeholder => "Filter Properties to show", :type => "text"}/
+      .edit-ontology-left-column{:role => "tablist",onchange:"onMetadataChange()"}
+        = render MetadataSelectorComponent.new(label: 'Filter properties to show', values: submission_editable_properties , selected:  nil, inline: true)
         .edit-ontology-tab-item.active{"aria-controls" => "ontology-details-tab", "aria-selected" => "true", "data-bs-target" => "#ontology-details", "data-bs-toggle" => "tab", :role => "tab"}
           Ontology Details
         .edit-ontology-tab-item{"aria-controls" => "general-metadata-tab", "aria-selected" => "true", "data-bs-target" => "#general-metadata", "data-bs-toggle" => "tab", :role => "tab"}
@@ -26,42 +41,43 @@
           Ontology relations
         .edit-ontology-tab-item{"aria-controls" => "ontology-content-tab", "aria-selected" => "true", "data-bs-target" => "#ontology-content", "data-bs-toggle" => "tab", :role => "tab"}
           Ontology content
-      #myTabContent.edit-ontology-right-column.tab-content
-        #ontology-details.edit-ontology-tab.tab-pane.fade.show.active{"aria-labelledby" => "ontology-details-tab", :role => "tabpanel"}
-          .edit-ontology-field
-            %div
-              Name
-            %input{:name => "name", :type => "text"}/
-          .edit-ontology-field
-            %div
-              Acronym
-            %input{:name => "name", :type => "text"}/
-          .edit-ontology-field
-            %div
-              Administrator
-            %input{:name => "name", :type => "text"}/
-          .edit-ontology-field
-            %div
-              Bla bla blabla
-            %input{:name => "name", :type => "text"}/
-        #general-metadata.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "general-metadata-tab", :role => "tabpanel"}
-          2
-        #key-properties.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "key-properties-tab", :role => "tabpanel"}
-          3
-        #description.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "description-tab", :role => "tabpanel"}
-          4
-        #more-description-details.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "more-description-details-tab", :role => "tabpanel"}
-          5
-        #dates.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "dates-tab", :role => "tabpanel"}
-          6
-        #licenses.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "licenses-tab", :role => "tabpanel"}
-          7
-        #contacts.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "contacts-tab", :role => "tabpanel"}
-          8
-        #ontology-relations.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "ontology-relations", :role => "tabpanel"}
-          9
-        #ontology-content.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "ontology-content", :role => "tabpanel"}
-          10
+      = render TurboFrameComponent.new(id:"metadata_by_ontology") do
+        #myTabContent.edit-ontology-right-column.tab-content
+          #ontology-details.edit-ontology-tab.tab-pane.fade.show.active{"aria-labelledby" => "ontology-details-tab", :role => "tabpanel"}
+            .edit-ontology-field
+              %div
+                Name
+              %input{:name => "name", :type => "text"}/
+            .edit-ontology-field
+              %div
+                Acronym
+              %input{:name => "name", :type => "text"}/
+            .edit-ontology-field
+              %div
+                Administrator
+              %input{:name => "name", :type => "text"}/
+            .edit-ontology-field
+              %div
+                Bla bla blabla
+              %input{:name => "name", :type => "text"}/
+          #general-metadata.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "general-metadata-tab", :role => "tabpanel"}
+            2
+          #key-properties.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "key-properties-tab", :role => "tabpanel"}
+            3
+          #description.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "description-tab", :role => "tabpanel"}
+            4
+          #more-description-details.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "more-description-details-tab", :role => "tabpanel"}
+            5
+          #dates.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "dates-tab", :role => "tabpanel"}
+            6
+          #licenses.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "licenses-tab", :role => "tabpanel"}
+            = render TurboFrameComponent.new(id: "ontology-content-11", loading:"lazy", src: "edit?properties=hasLicense&show_sections=false")
+          #contacts.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "contacts-tab", :role => "tabpanel"}
+            = render TurboFrameComponent.new(id: "ontology-content-9", src: "edit?properties=URI,hasFormalityLevel,versionIRI&show_sections=false")
+          #ontology-relations.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "ontology-relations", :role => "tabpanel"}
+            = render TurboFrameComponent.new(id: "ontology-content-11", loading:"lazy", src: "edit?properties=URI,hasFormalityLevel,versionIRI&show_sections=false")
+          #ontology-content.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "ontology-content", :role => "tabpanel"}
+            = render TurboFrameComponent.new(id: "ontology-content-11", loading:"lazy", src: "edit?properties=URI,deprecated,hasOntologySyntax,keywords&show_sections=false")
     %hr#edit-ontology-actions-devider
     .edit-ontology-actions
       .reset-all-button

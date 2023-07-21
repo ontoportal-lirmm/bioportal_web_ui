@@ -1,81 +1,146 @@
-.center
-  .edit-ontology-container
-    .edit-ontology-title
-      %div Edit ontology
-      %hr/
-    .edit-ontology-sub-container
-      .edit-ontology-left-column{:role => "tablist"}
-        %input{:name => "search", :placeholder => "Filter Properties to show", :type => "text"}/
-        .edit-ontology-tab-item.active{"aria-controls" => "ontology-details-tab", "aria-selected" => "true", "data-bs-target" => "#ontology-details", "data-bs-toggle" => "tab", :role => "tab"}
-          Ontology Details
-        .edit-ontology-tab-item{"aria-controls" => "general-metadata-tab", "aria-selected" => "true", "data-bs-target" => "#general-metadata", "data-bs-toggle" => "tab", :role => "tab"}
-          General MetaData
-        .edit-ontology-tab-item{"aria-controls" => "key-properties-tab", "aria-selected" => "true", "data-bs-target" => "#key-properties", "data-bs-toggle" => "tab", :role => "tab"}
-          Key properties
-        .edit-ontology-tab-item{"aria-controls" => "description-tab", "aria-selected" => "true", "data-bs-target" => "#description", "data-bs-toggle" => "tab", :role => "tab"}
-          Description
-        .edit-ontology-tab-item{"aria-controls" => "more-description-details-tab", "aria-selected" => "true", "data-bs-target" => "#more-description-details", "data-bs-toggle" => "tab", :role => "tab"}
-          More description details
-        .edit-ontology-tab-item{"aria-controls" => "dates-tab", "aria-selected" => "true", "data-bs-target" => "#dates", "data-bs-toggle" => "tab", :role => "tab"}
-          Dates
-        .edit-ontology-tab-item{"aria-controls" => "licenses-tab", "aria-selected" => "true", "data-bs-target" => "#licenses", "data-bs-toggle" => "tab", :role => "tab"}
-          Licenses
-        .edit-ontology-tab-item{"aria-controls" => "contacts-tab", "aria-selected" => "true", "data-bs-target" => "#contacts", "data-bs-toggle" => "tab", :role => "tab"}
-          Contacts
-        .edit-ontology-tab-item{"aria-controls" => "ontology-relations-tab", "aria-selected" => "true", "data-bs-target" => "#ontology-relations", "data-bs-toggle" => "tab", :role => "tab"}
-          Ontology relations
-        .edit-ontology-tab-item{"aria-controls" => "ontology-content-tab", "aria-selected" => "true", "data-bs-target" => "#ontology-content", "data-bs-toggle" => "tab", :role => "tab"}
-          Ontology content
-      #myTabContent.edit-ontology-right-column.tab-content
-        #ontology-details.edit-ontology-tab.tab-pane.fade.show.active{"aria-labelledby" => "ontology-details-tab", :role => "tabpanel"}
-          .edit-ontology-field
-            %div
-              Name
-            %input{:name => "name", :type => "text"}/
-          .edit-ontology-field
-            %div
-              Acronym
-            %input{:name => "name", :type => "text"}/
-          .edit-ontology-field
-            %div
-              Administrator
-            %input{:name => "name", :type => "text"}/
-          .edit-ontology-field
-            %div
-              Bla bla blabla
-            %input{:name => "name", :type => "text"}/
-        #general-metadata.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "general-metadata-tab", :role => "tabpanel"}
-          2
-        #key-properties.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "key-properties-tab", :role => "tabpanel"}
-          3
-        #description.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "description-tab", :role => "tabpanel"}
-          4
-        #more-description-details.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "more-description-details-tab", :role => "tabpanel"}
-          5
-        #dates.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "dates-tab", :role => "tabpanel"}
-          6
-        #licenses.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "licenses-tab", :role => "tabpanel"}
-          7
-        #contacts.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "contacts-tab", :role => "tabpanel"}
-          8
-        #ontology-relations.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "ontology-relations", :role => "tabpanel"}
-          9
-        #ontology-content.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "ontology-content", :role => "tabpanel"}
-          10
-    %hr#edit-ontology-actions-devider
-    .edit-ontology-actions
-      .reset-all-button
-        %svg{:fill => "none", :height => "11", :viewbox => "0 0 11 11", :width => "11", :xmlns => "http://www.w3.org/2000/svg"}
-          %g{"clip-path" => "url(#clip0_1818_661)"}
-            %path{:d => "M10.84 5.0201L9.19761 6.98521C9.06164 7.14789 8.86639 7.23183 8.66972 7.23183C8.50863 7.23197 8.35265 7.17532 8.2292 7.07184L6.26409 5.42942C5.97274 5.18592 5.93396 4.75234 6.17747 4.46101C6.42097 4.16968 6.85455 4.13088 7.14588 4.37439L7.95167 5.04786C7.73094 3.43887 6.34747 2.19529 4.6788 2.19529C2.85708 2.19531 1.375 3.67739 1.375 5.49912C1.375 7.32084 2.85708 8.80292 4.6788 8.80292C5.0585 8.80292 5.3663 9.11072 5.3663 9.49042C5.3663 9.87011 5.0585 10.1779 4.6788 10.1779C3.42906 10.1779 2.2541 9.69123 1.3704 8.80754C0.486686 7.92382 0 6.74886 0 5.49912C0 4.24937 0.486686 3.07441 1.3704 2.19069C2.2541 1.307 3.42906 0.820312 4.6788 0.820312C5.92855 0.820312 7.10351 1.307 7.98722 2.19069C8.68583 2.88928 9.13602 3.76997 9.2941 4.72566L9.78499 4.1383C10.0285 3.84697 10.4621 3.80821 10.7534 4.05167C11.0447 4.2952 11.0835 4.72877 10.84 5.0201Z", :fill => "#31B404"}
-          %defs
-            %clippath#clip0_1818_661
-              %rect{:fill => "white", :height => "11", :width => "11"}
-        %div Reset all fields
-      .save-button
-        %div Save
-        %svg{:fill => "none", :height => "8", :viewbox => "0 0 10 8", :width => "10", :xmlns => "http://www.w3.org/2000/svg"}
-          %path{:d => "M9.76764 0.232287C9.45824 -0.0775267 8.95582 -0.0773314 8.646 0.232287L3.59787 5.28062L1.35419 3.03696C1.04438 2.72715 0.542174 2.72715 0.23236 3.03696C-0.0774534 3.34677 -0.0774534 3.84898 0.23236 4.15879L3.03684 6.96327C3.19165 7.11807 3.39464 7.19568 3.59765 7.19568C3.80067 7.19568 4.00386 7.11827 4.15867 6.96327L9.76764 1.3541C10.0775 1.0445 10.0775 0.542081 9.76764 0.232287Z", :fill => "white"}
+= render TurboFrameComponent.new(id:id) do
+  = hidden_field object_name, :ontology, value: acronym
+  = hidden_field object_name, :id, value: submissionId
+  %div#general-card.mt-4
+    = metadata_section('general', 'General', collapsed: false) do
+      = attribute_container('format', required: true) do
+        = turbo_frame_tag  "#{object_name(acronym, submissionId)}Format_from_group_input" do
+          = render partial: 'submissions/submission_format_form'
+      = attribute_text_field_container('version')
 
-  %script{crossorigin: "anonymous", integrity: "sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz", src: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"}
+      = attribute_form_group_container('status', required: true) do |c|
+        - selected_status = c.value ? c.value : "alpha"
+        - status_options = %w[alpha beta production retired]
+        = select c.name,  c.method_name, status_options, {selected: selected_status, required: true}, class: "form-control"
 
+      = attribute_form_group_container('location', required: true) do
+        = render partial: 'submissions/submission_location_form'
+
+    %div#key-properties-card.mt-4
+      = metadata_section('key-properties', 'Key properties', collapsed: false) do
+        = form_group_attribute("URI")
+        = form_group_attribute("deprecated")
+        = form_group_attribute("hasOntologySyntax") do
+          %p
+            Properties taken from
+            = link_to "W3C URIs for file format", "https://www.w3.org/ns/formats/", target: "_blank"
+
+        = form_group_attribute("hasFormalityLevel") do
+          %p
+            Properties taken from
+            = link_to "DCMI KOS type vocabularies", "http://wiki.dublincore.org/index.php/NKOS_Vocabularies#KOS_Types_Vocabulary", target: "_blank"
+
+        = form_group_attribute("isOfType")
+        = form_group_attribute("naturalLanguage") do
+          %p
+            Consider using a
+            = link_to "Lexvo URI", "http://www.lexvo.org", target: "_blank"
+            with ISO639-3 code
+            %br
+            e.g.: http://lexvo.org/id/iso639-3/eng
+
+    %div#description-card.mt-4
+      = metadata_section('description', 'Description', collapsed: !@required_only || !@submission.id.nil?) do
+        -# Description
+        = attribute_form_group_container('description', required: true) do |c|
+          = text_area c.name, c.method_name, rows: 5, value: @submission.description, required: true, class: "form-control"
+
+        -# Home page
+        = attribute_text_field_container('homepage') do |c|
+          - c.help do
+            Enter a URL for the main page of your ontology.
+
+        -# Documentation page
+        = attribute_text_field_container('documentation') do |c|
+          - c.help do
+            Enter a URL for a page that provides ontology documentation.
+
+        -# Publications page
+        = attribute_text_field_container('publication') do |c|
+          - c.help do
+            Enter a URL for a page that lists publications about your ontology.
+
+        -# Used ontology engineering tool
+        = form_group_attribute("usedOntologyEngineeringTool")
+
+      = metadata_section('more-description-details', 'More description details', parent_id: "description-card") do
+        - for attr_name in %w[abstract notes keywords alternative identifier]
+          = form_group_attribute(attr_name)
+
+      - data = sections
+
+      - data.each do |d|
+        = metadata_section(d[0], d[1], parent_id: "description-card") do
+          - for attr in @metadata.select { |m| m['display'] == d[2] }
+            = form_group_attribute(attr["attribute"])
+
+    %div#ontology-dates-card.mt-4
+      = metadata_section('ontology-dates', 'Dates', collapsed: !@required_only  || !@submission.id.nil?) do
+        = form_group_attribute("released", default: Date.today, required: true)
+        = form_group_attribute("modificationDate")
+      = metadata_section('more-dates', 'More dates', parent_id: "ontology-dates-card") do
+        - for attr in @metadata.select { |m| m['display'] == 'dates' }
+          = form_group_attribute(attr["attribute"])
+
+    %div#licenses-card.mt-4
+      = metadata_section('licenses', 'Licenses') do
+        = form_group_attribute("hasLicense") do
+          %p
+            Consider using a
+            = link_to "URI to describe your License", "http://rdflicense.appspot.com", target: "_blank"
+          %p
+            Consider using
+            = link_to "INRIA licentia", "http://licentia.inria.fr/", target: "_blank"
+            to choose your license
+
+      = metadata_section('more-licensing-info', 'More licensing information', parent_id: "licenses-card") do
+        - for attr in @metadata.select { |m| m['display'] == 'license' }
+          = form_group_attribute(attr["attribute"])
+
+    %div#community.mt-4
+      = metadata_section('contacts-panel', 'Contacts', parent_id: "community", collapsed: !@required_only  || !@submission.id.nil?) do
+        -# Contact(s)
+        = attribute_form_group_container('contact' ,required: true) do |c|
+          - @submission.contact = [] unless @submission.contact && @submission.contact.size > 0
+          = render NestedFormInputsComponent.new do |c|
+            - c.template do
+              = render partial: "submissions/submission_contact_form", locals: {contact: nil, index: 'NEW_RECORD'}
+            - @submission.contact.each_with_index do |contact, i|
+              - c.row do
+                = render partial: "submissions/submission_contact_form", locals: {contact: contact, index: i}
+
+        = form_group_attribute("hasContributor")
+        = form_group_attribute("hasCreator")
+
+      = metadata_section('more-community-info', 'More community information', parent_id: "community") do
+        - for attr in @metadata.select { |m| m['display'] == 'community' }
+          = form_group_attribute(attr["attribute"])
+
+      = metadata_section('more-people-info', 'More people information', parent_id: "community") do
+        - for attr in @metadata.select { |m| m['display'] == 'people' }
+          = form_group_attribute(attr["attribute"])
+
+    %div#ontology-relations-more.mt-4
+      = metadata_section('ontology-relations', 'Ontology relations', parent_id: "ontology-relations-more") do
+        = form_group_attribute("useImports")
+        = form_group_attribute("hasPriorVersion")
+        = form_group_attribute("isAlignedTo")
+        = form_group_attribute("ontologyRelatedTo")
+
+      = metadata_section('more-relations', 'More relations', parent_id: "ontology-relations-more") do
+        - for attr in @metadata
+          - if attr["display"].eql?("relations")
+            = form_group_attribute(attr["attribute"])
+
+    %div#ontology-content-metrics.mt-4
+      = metadata_section('ontology-content', 'Ontology content', parent_id: "ontology-content-metrics") do
+        = form_group_attribute("preferredNamespacePrefix")
+        = form_group_attribute("preferredNamespaceUri")
+
+      = metadata_section('more-informations', 'More content informations', parent_id: "ontology-content-metrics") do
+        - for attr in @metadata.select { |m| m['display'] == 'content' }
+          = form_group_attribute(attr["attribute"])
+
+      = metadata_section('more-metrics-informations', 'More metrics informations', parent_id: "ontology-content-metrics") do
+        - for attr in @metadata.select { |m| m['display'] == 'metrics' }
+          = form_group_attribute(attr["attribute"])
