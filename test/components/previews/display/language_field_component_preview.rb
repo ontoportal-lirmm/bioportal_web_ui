@@ -1,4 +1,4 @@
-class LanguageFieldComponentPreview < ViewComponent::Preview
+class Display::LanguageFieldComponentPreview < ViewComponent::Preview
 
   # @param value text
   def default(value: 'fr')
