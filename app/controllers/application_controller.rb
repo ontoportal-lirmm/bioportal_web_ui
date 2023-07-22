@@ -423,10 +423,7 @@ class ApplicationController < ActionController::Base
 
     if @ontology.flat?
 
-      ignore_concept_param = params[:conceptid].nil? ||
-          params[:conceptid].empty? ||
-          params[:conceptid].eql?("root") ||
-          params[:conceptid].eql?("bp_fake_root")
+      ignore_concept_param = ignore_concept_param?(params)
       if ignore_concept_param
         # Don't display any classes in the tree
         @concept = LinkedData::Client::Models::Class.new
@@ -757,6 +754,14 @@ class ApplicationController < ActionController::Base
   helper_method :submission_metadata
 
   private
+
+  def ignore_concept_param?(params)
+    params[:conceptid].nil? ||
+      params[:conceptid].empty? ||
+      params[:conceptid].eql?("root") ||
+      params[:conceptid].eql?("bp_fake_root")
+  end
+
   def not_found_record(exception)
     @error_message = exception.message
     render 'errors/not_found', status: 404
