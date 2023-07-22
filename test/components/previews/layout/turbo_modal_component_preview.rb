@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TurboModalComponentPreview < ViewComponent::Preview
+class Layout::TurboModalComponentPreview < ViewComponent::Preview
   layout 'component_preview_not_centred'
 
   include ActionView::Helpers::TagHelper
