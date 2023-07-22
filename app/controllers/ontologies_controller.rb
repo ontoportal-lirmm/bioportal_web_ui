@@ -150,7 +150,13 @@ display_context: false, include: browse_attributes)
 
   def classes
     @submission = get_ontology_submission_ready(@ontology)
-    get_class(params)
+
+    if ignore_concept_param?(params)
+      @concept = @ontology.explore.roots.min { |x, y| x.prefLabel&.downcase <=> y.prefLabel&.downcase }
+      @concept ||= @ontology.explore.classes.collection.first
+    else
+      @concept = @ontology.explore.classes({full: true, lang: request_lang}, params[:conceptid])
+    end
 
     if @submission.hasOntologyLanguage == 'SKOS'
       @schemes =  get_schemes(@ontology)
