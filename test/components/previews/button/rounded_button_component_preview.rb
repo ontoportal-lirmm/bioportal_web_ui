@@ -1,4 +1,4 @@
-class RoundedButtonComponentPreview < ViewComponent::Preview
+class Button::RoundedButtonComponentPreview < ViewComponent::Preview
 
     # @param icon text
     # @param link text
