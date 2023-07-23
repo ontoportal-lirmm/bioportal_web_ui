@@ -2,12 +2,13 @@
 
 class LinkTextComponent < ViewComponent::Base
 
-  def initialize(text:, icon: 'open-popup')
+  def initialize(text:, icon: nil)
     @text = text
     @icon = icon
   end
 
   def call
-    "#{@text}<span class='mx-1'>#{inline_svg(@icon)}<span>".html_safe
+    svg_icon = !@icon&.empty? ? inline_svg(@icon) : ''
+    "#{@text}<span class='mx-1'>#{svg_icon}<span>".html_safe
   end
 end
