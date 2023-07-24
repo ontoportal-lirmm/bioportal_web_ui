@@ -33,8 +33,8 @@ module AgentHelper
   end
 
   def agent_id(agent)
-    agent_id = agent.id
-    agent_id ? agent.id.split('/').last : ''
+    agent_id = agent.is_a?(String) ? agent : agent.id
+    agent_id ? agent_id.split('/').last : ''
   end
 
   def link_to_agent_edit_modal(agent, parent_id = nil)
@@ -54,13 +54,24 @@ module AgentHelper
     agent.agentType.eql?('organization')
   end
 
-  def display_identifiers(identifiers)
-    Array(identifiers).map { |i| "#{i["schemaAgency"]}:#{i["notation"]}" }.join(', ')
+  def identifier_link(link, link_to: true)
+    if link_to
+      link_to(link, link, target: '_blank')
+    else
+      link
+    end
+
   end
 
-  def display_agent(agent)
-    agent.name + '(' + display_identifiers(agent.identifiers) + ')'
+  def display_identifiers(identifiers, link: true)
+    schemes_urls = { ORCID: 'https://orcid.org/', ISNI: 'https://isni.org/', ROR: 'https://ror.org/', GRID: 'https://www.grid.ac/' }
+    Array(identifiers).map { |i| identifier_link("#{schemes_urls[i["schemaAgency"].to_sym]}#{i["notation"]}", link_to:  link) }.join(', ')
   end
+
+  def display_agent(agent, link: true)
+    agent.name.to_s.humanize + ' (' + display_identifiers(agent.identifiers, link: link) + ')'
+  end
+
   def agent_field_name(name, name_prefix = '')
     name_prefix&.empty? ? name : "#{name_prefix}[#{name}]"
   end
