@@ -7,8 +7,8 @@
         .col-sm-8.sub-label
           %p
             You have a new DOI pending request for this semantic resource. You can cancel this request before it is processed.
-        .col-sm-4.sub-label
-          %button.btn.btn-primary.btn-sm.btn_cancel_request{id: "btn_cancel_request-#{@identifier_request.requestId}", access: "false", type: "button"}
+        .col-sm-4.sub-label{data:{controller: 'doi-request'}}
+          %button.btn.btn-primary.btn-sm.btn_cancel_request{id: "btn_cancel_request-#{@identifier_request.requestId}", access: "false", type: "button", 'data-action': 'doi-request#cancel'}
             Cancel Request
     - else
       #div-cb-require-doi.form-check
