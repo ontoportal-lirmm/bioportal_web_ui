@@ -87,7 +87,8 @@ module OntologiesHelper
 
     metadata_not_displayed = ["status", "description", "documentation", "homepage",
                               "openSearchDescription", "dataDump", "includedInDataCatalog", "logo",
-                              "depiction", "submissionId", "submissionStatus", 'ontology', 'contact', "uploadFilePath"]
+                              "depiction", "submissionId", "submissionStatus", 'ontology', 'contact',
+                              "metrics", "uploadFilePath"]
     begin
 
       metadata_list.each do |metadata, label|

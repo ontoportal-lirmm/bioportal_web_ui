@@ -36,6 +36,10 @@ h4 {
   font-weight: 500;
 }
 
+button, input[type='submit']{
+  border-radius: 0 !important;
+}
+
 .ontology {
   border: thin #f2f2f2 solid;
   border-radius: 5px;
