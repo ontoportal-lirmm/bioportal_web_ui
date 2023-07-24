@@ -156,27 +156,7 @@ module OntologiesHelper
 
                   metadata_array = []
                   sub.send(metadata).each do |metadata_value|
-                    if metadata.eql?("creators")
-                      html_creators = sub.send(metadata).map do |c|
-                        html_creator = content_tag(:b,  raw(c.creatorName))
-                        html_id =c.creatorIdentifiers.map{|ci| [ci.schemeURI, ci.nameIdentifier].join("/").sub("//", "/")}.join(", ")
-                        html_aff = c.affiliations.map{|a| a.affiliationIdentifier}.join(", ")
-                        html_id = (html_id.nil? || html_id.empty?) ? "" : content_tag(:i,  raw("identifiers: ")) + raw(html_id)
-                        html_aff = (html_aff.nil? || html_aff.empty?) ? "" : content_tag(:i, raw("affiliations: ")) + raw(html_aff)
-                        html_creator += raw(" (" + [html_id, html_aff].join(", ") + ")")
-                        html_creator.sub("(, )", "").sub(", )", ")").sub("(,", "(")
-                      end.join(";<br/>")
-
-                      concat(content_tag(:td, raw(html_creators)))
-                    elsif metadata.eql?("titles")
-
-                      html_titles = sub.send(metadata).map do |t|
-                        html_title = content_tag(:b, raw(t.title))
-                        html_title += " (type: " +raw(t.titleType) + ")" if (!t.titleType.nil? && !t.titleType.empty?)
-                        html_title
-                      end.join(",<br/>")
-                      concat(content_tag(:td, raw(html_titles)))
-                    elsif metadata_value.to_s.start_with?("#{$REST_URL}/ontologies/")
+                    if metadata_value.to_s.start_with?("#{$REST_URL}/ontologies/")
                       # For URI that links to our ontologies we display a button with only the acronym. And redirect to the UI
                       # Warning! Redirection is done by removing "data." from the REST_URL. So might not work perfectly everywhere
                       if metadata_value.to_s.split("/").length < 6
