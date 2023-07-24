@@ -5,7 +5,7 @@ class TableComponent < ViewComponent::Base
   renders_one :header, TableRowComponent
   renders_many :rows, TableRowComponent
 
-  def initialize(id: '', stripped: false)
+  def initialize(id: '', stripped: true)
     super
     @id = id
     @stripped = stripped

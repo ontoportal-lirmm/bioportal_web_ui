@@ -4,6 +4,11 @@ class TableRowComponent < ViewComponent::Base
 
   renders_many :cells, TableCellComponent
 
+  def initialize(id: '')
+    super
+    @id = id
+  end
+
   def create(*array, &block)
     array.each do |key_value|
       key, value = key_value.to_a.first
@@ -12,11 +17,11 @@ class TableRowComponent < ViewComponent::Base
     block.call(self) if block_given?
   end
 
-  def th(width: nil, &block)
-    self.cell(type: 'th', width: width, &block)
+  def th(width: nil, colspan: nil, &block)
+    self.cell(type: 'th', width: width, colspan: colspan, &block)
   end
 
-  def td(width: nil, &block)
-    self.cell(type: 'td', width: width, &block)
+  def td(width: nil, colspan: nil, &block)
+    self.cell(type: 'td', width: width, colspan: colspan, &block)
   end
 end
