@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DataCiteCreatorService < ApplicationService
+class DataciteCreatorService < ApplicationService
 
   def initialize(data_cite_metadata_hash)
     @data_cite_metadata_hash = data_cite_metadata_hash

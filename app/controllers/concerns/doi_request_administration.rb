@@ -138,7 +138,7 @@ module DoiRequestAdministration
     return OpenStruct.new({ errors: ['Ontology submission not found'] }) if submission.nil?
 
 
-    dc_response = DataCiteCreatorService.new(hash_metadata).call
+    dc_response = DataciteCreatorService.new(hash_metadata).call
 
     # If there is an error, returns it
     return OpenStruct.new(errors: dc_response['errors']) if dc_response['errors'] && !dc_response['errors'].empty?
