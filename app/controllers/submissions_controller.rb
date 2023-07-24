@@ -47,7 +47,8 @@ class SubmissionsController < ApplicationController
         @errors = ["Please enter a contact"]
       end
 
-      render "new"
+      reset_agent_attributes
+      render 'new', status: 422
     else
       cancel_pending_doi_requests
       submit_new_doi_request if doi_requested?
@@ -70,7 +71,7 @@ class SubmissionsController < ApplicationController
     _, submission_params = params[:submission].each.first
     @required_only = !params['required-only'].nil?
     @filters_disabled = true
-    
+
     error_responses << update_submission(submission_params)
 
     if error_responses.compact.any? { |x| x.status != 204 }
@@ -78,7 +79,8 @@ class SubmissionsController < ApplicationController
     end
 
     if @errors
-      render 'edit'
+      reset_agent_attributes
+      render 'edit', status: 422
     elsif params[:attribute]
       render_submission_attribute(params[:attribute])
     else
@@ -86,6 +88,19 @@ class SubmissionsController < ApplicationController
       redirect_to "/ontologies/#{@ontology.acronym}"
     end
 
+  end
+
+  private
+
+  def reset_agent_attributes
+    helpers.agent_attributes.each do |attr|
+      current_val = @submission.send(attr)
+      new_values = Array(current_val).map { |x| LinkedData::Client::Models::Agent.find(x) }
+
+      new_values = new_values.first unless current_val.is_a?(Array)
+
+      @submission.send("#{attr}=", new_values)
+    end
   end
 
 end

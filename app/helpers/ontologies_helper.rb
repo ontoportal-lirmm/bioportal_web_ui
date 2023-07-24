@@ -42,6 +42,11 @@ module OntologiesHelper
     end
   end
 
+  def agent?(sub_metadata, attr)
+    metadata = sub_metadata.select{ |x| x['@id'][attr] }.first
+    metadata && Array(metadata['enforce']).include?('Agent')
+  end
+
   # Display data catalog metadata under visits (in _metadata.html.haml)
   def display_logo(sub)
     logo_attributes = ["logo", "depiction"]
@@ -74,15 +79,15 @@ module OntologiesHelper
     metadata_list = {}
     # Get extracted metadata and put them in a hash with their label, if one, as value
     json_metadata.each do |metadata|
-      metadata_list[metadata["attribute"]] = metadata["label"]
+      metadata_list[metadata['attribute']] = metadata['label']
     end
     metadata_list = metadata_list.sort
 
     html = []
 
-    metadata_not_displayed = ["status", "description", "documentation", "publication", "homepage",
+    metadata_not_displayed = ["status", "description", "documentation", "homepage",
                               "openSearchDescription", "dataDump", "includedInDataCatalog", "logo",
-                              "depiction", "submissionId", "submissionStatus", 'ontology', 'contact']
+                              "depiction", "submissionId", "submissionStatus", 'ontology', 'contact', "uploadFilePath"]
     begin
 
       metadata_list.each do |metadata, label|
@@ -125,7 +130,7 @@ module OntologiesHelper
                   end)
                 end
 
-              elsif metadata.eql?("hasCreator") || metadata.eql?("publisher")
+              elsif agent?(json_metadata, metadata)
                 html << content_tag(:tr) do
                   if label.nil?
                     concat(content_tag(:td, metadata.gsub(/(?=[A-Z])/, " ")))
@@ -136,10 +141,10 @@ module OntologiesHelper
                   metadata_array = []
 
                   sub.send(metadata).each do |metadata_value|
-                    metadata_array << display_agent(metadata_value)
+                    metadata_array << "<div> #{display_agent(metadata_value)} </div>"
                   end
 
-                  concat(content_tag(:td, raw(metadata_array.join(", "))))
+                  concat(content_tag(:td, raw(metadata_array.join(""))))
                 end
               else
                 html << content_tag(:tr) do

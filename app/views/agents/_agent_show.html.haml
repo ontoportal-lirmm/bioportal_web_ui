@@ -3,7 +3,7 @@
     - if agent.id
       = hidden_field_tag agent_field_name(:id, name_prefix), agent.id
 
-    = text_field_tag '', display_agent(agent), class: "form-control", disabled: true
+    = text_field_tag '', display_agent(agent, link: false), class: "form-control", disabled: true
 
     - if current_user_admin? || agent.creator.eql?(current_user&.id.to_s)
       - if edit_on_modal

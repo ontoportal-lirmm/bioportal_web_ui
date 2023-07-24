@@ -36,6 +36,7 @@ module SubmissionUpdater
       new_submission_hash[:contact] = new_submission_hash[:contact].values
       new_submission_hash[:contact].delete_if { |c| c[:name].empty? || c[:email].empty? }
     end
+    
 
     # Convert metadata that needs to be integer to int
     @metadata.map do |hash|
@@ -74,7 +75,7 @@ module SubmissionUpdater
       :isRemote,
       :pullLocation,
       :filePath,
-      { contact: [:name, :email] },
+      { contact: %i[name email] },
       :homepage,
       :documentation,
       :publication,
@@ -103,8 +104,14 @@ module SubmissionUpdater
       end
     end
 
-    p[:hasCreator] = p[:hasCreator].map(&:values).flatten.uniq if p[:hasCreator]
-    p[:publisher] = p[:publisher].map(&:values).flatten.uniq if p[:publisher]
+    @metadata.each do |m|
+      m_attr = m['attribute'].to_sym
+      if p[m_attr] && m['enforce'].include?('list')
+        p[m_attr] = Array(p[m_attr]) unless p[m_attr].is_a?(Array)
+        p[m_attr] = p[m_attr].map { |x| x.is_a?(Hash) ? x.values : x }.flatten.uniq if m['enforce'].include?('Agent')
+      end
+    end
+
     p
   end
 end
