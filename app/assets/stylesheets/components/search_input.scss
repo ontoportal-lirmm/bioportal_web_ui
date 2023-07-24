@@ -40,3 +40,7 @@
 #seached-ontologies{
   margin-bottom: 0;
 }
+
+.search-inputs input {
+  @extend .form-control !optional;
+}
