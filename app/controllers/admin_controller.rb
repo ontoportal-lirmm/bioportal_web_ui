@@ -1,8 +1,8 @@
-require_relative '../utils/utils'
 class AdminController < ApplicationController
   include TurboHelper
   layout :determine_layout
   before_action :cache_setup
+
 
   ADMIN_URL = "#{LinkedData::Client.settings.rest_url}/admin/"
   ONTOLOGIES_URL = "#{ADMIN_URL}ontologies_report"
@@ -11,8 +11,8 @@ class AdminController < ApplicationController
   PARSE_LOG_URL = lambda { |acronym| "#{ONTOLOGY_URL.call(acronym)}/log" }
   REPORT_NEVER_GENERATED = "NEVER GENERATED"
   ONTOLOGIES_LIST_URL = "#{LinkedData::Client.settings.rest_url}/ontologies/"
-  DOI_REQUESTS_URL = "#{ADMIN_URL}doi_requests_list"
-  SUB_DATACITE_METADATA_JSON_URL = lambda { |acronym, subId| "#{ONTOLOGIES_LIST_URL}#{acronym}/submissions/#{subId}/datacite_metadata_json" }
+
+  include DoiRequestAdministration
 
   def index
     @users = LinkedData::Client::Models::User.all
@@ -218,10 +218,9 @@ class AdminController < ApplicationController
     response = _users
     render :json => response
   end
-  
+
   def doi_requests_list
-    response = _doi_requests_list
-    render :json => response
+    render json: doi_requests
   end
 
   def process_doi_requests
@@ -230,7 +229,7 @@ class AdminController < ApplicationController
       response[:errors] = "No operation 'actions' was specified in params for request processing"
       render :json => response
     else
-      _process_doi_requests('processed', 'processing', params['actions'])
+      process_identifier_requests('processed', 'processing', params['actions'])
     end
   end
 
@@ -331,240 +330,6 @@ class AdminController < ApplicationController
       response[:errors] = "Problem retrieving users  - #{e.message}"
     end
     response
-  end
-
-  # DOI REQUESTES
-  def _doi_requests_list
-    response = { doi_requests: Hash.new, errors: '', success: '' }
-    start = Time.now
-
-    begin
-      doi_requests_data = LinkedData::Client::HTTP.get(DOI_REQUESTS_URL, {}, raw: true)
-
-      doi_requests_data_parsed = JSON.parse(doi_requests_data, symbolize_names: true)
-
-      doi_requests_result = []
-      doi_requests_data_parsed.each do |req|
-        req_result = _create_doi_request_row_hash(req)
-        doi_requests_result << req_result
-      end
-
-      response[:doi_requests] = doi_requests_result
-      response[:success] = 'DOI requests list generated'
-      LOG.add :debug, "DOI Requests List - retrieved #{response[:doi_requests].length} requests in #{Time.now - start}s"
-    rescue StandardError => e
-      response[:errors] = "Problem retrieving DOI Requests - #{e.message}"
-    end
-    response
-  end
-
-  #Create a Hash object of DOI Request that is compliant with admin panel
-  def _create_doi_request_row_hash(req)
-    req_result = {
-      requestId: req[:requestId],
-      requestType: req[:requestType],
-      status: req[:status],
-      requestedBy: req[:requestedBy],
-      requestDate: req[:requestDate],
-      processedBy: req[:processedBy],
-      processingDate: req[:processingDate],
-      message: req[:message],
-      ontology: req[:submission].nil? || req[:submission][:ontology].nil? ? nil : req[:submission][:ontology][:acronym],
-      submissionId: req[:submission].nil? ? nil : req[:submission][:submissionId],
-      identifier: req[:submission].nil? ? nil : req[:submission][:identifier],
-      identifierType: req[:submission].nil? ? nil : req[:submission][:identifierType],
-      submissions_with_identifier: []
-    }
-    req_result
-  end
-
-  def _process_doi_requests(success_keyword, error_keyword, action)
-
-    response = { errors: '', success: '' }
-
-    if params['doi_requests'].nil? || params['doi_requests'].empty?
-      response[:errors] = 'No doi_requests parameter passed. Syntax: ?doi_requests=req1,req2,...,reqN'
-    else
-      doi_requests = params['doi_requests'].split(',').map { |o| o.strip }
-      doi_requests.each do |request_id|
-        begin
-          doi_request = LinkedData::Client::Models::IdentifierRequest.find_by_requestId(request_id).first
-          if doi_request
-            if doi_request.status.upcase == 'PENDING'
-              #Get ontology submission information
-              doi_req_submission = doi_request.explore.submission
-              ont_submission_id = doi_req_submission.submissionId
-              ontology_acronym = doi_req_submission.ontology.acronym
-              ontology_id = doi_req_submission.ontology.id
-
-              #sub_metadata_url = SUB_DATACITE_METADATA_JSON_URL.call(ontology_acronym, ont_submission_id)
-              #open_struct_metadata = LinkedData::Client::HTTP.get(sub_metadata_url, {})
-
-              #hash_metadata = Ecoportal::Utils.recursive_symbolize_keys(open_struct_metadata, true, true)
-              error_response = nil
-              case action
-              when 'process'
-                if doi_request.requestType == 'DOI_CREATE'
-                  submission = _ontology_submission(ontology_id, ont_submission_id)
-                  if submission
-                    error_response = _satisfy_doi_creation_request(doi_request, hash_metadata, submission)
-                  else
-                    error_response = 'Ontology submission not found'
-                  end
-
-                elsif doi_request.requestType == 'DOI_UPDATE'
-                  error_response = _satisfy_doi_update_request(doi_request, hash_metadata)
-                end
-              when 'reject'
-                error_response = _change_request_status(doi_request, 'REJECTED') unless error_response
-              else
-                error_response = "action is different or nil: #{action}"
-              end
-
-              if error_response
-                response[:errors] << "ERROR occurred in request #{request_id}:"
-                errors = _datacite_response_errors(error_response)
-                _process_errors(errors, response, false)
-              else
-                response[:success] << "Request #{request_id} #{success_keyword} successfully, "
-              end
-            else
-              response[:errors] << "The request #{request_id} cannot be processed (STATUS = #{doi_request.status.upcase}), "
-            end
-          else
-            response[:errors] << "Request #{request_id} was not found in the system, "
-          end
-        rescue Exception => e
-          response[:errors] << "Problem #{error_keyword} Request #{request_id} - #{e.class}: #{e.message}, "
-        end
-      end
-      response[:success] = response[:success][0...-2] unless response[:success].empty?
-      response[:errors] = response[:errors][0...-2] unless response[:errors].empty?
-    end
-    render :json => response
-  end
-
-  def _datacite_response_errors(error_hash)
-    errors = { error: 'There was an error, please try again' }
-    return errors unless error_hash && error_hash.length > 0
-
-    errors = {}
-    error_hash.each do |error|
-      p error
-      p error.is_a?(Hash)
-      p error.key?('title')
-      if error.is_a?(Hash) && error.key?('title')
-        errors[:error] = error['title']
-      end
-    end
-    errors
-  end
-
-  def _ontology_submission(ontology_id, ont_submission_id)
-
-    ontology = LinkedData::Client::Models::Ontology.get(ontology_id)
-    submission = nil
-    if ontology
-      submissions = ontology.explore.submissions
-      submission = submissions.select { |o| o.submissionId == ont_submission_id.to_i }.first
-    end
-    submission
-  end
-
-  def _satisfy_doi_creation_request(doi_request, hash_metadata, submission)
-    hash_metadata[:prefix] = $DATACITE_DOI_PREFIX ### configured in bioportal_config_appliance.rb
-    hash_metadata[:event] = 'publish' #"draft"
-
-    datacite_hash = {
-      data: {
-        prefix: $DATACITE_DOI_PREFIX, ### configured in bioportal_config_appliance.rb
-        type: 'dois',
-        attributes: hash_metadata
-      }
-    }
-
-    datacite_json = datacite_hash.to_json
-    dc_response = create_new_doi_from_datacite(datacite_json)
-
-    #If there is an error, returns it
-    return dc_response['errors'] if dc_response['errors'] && !dc_response['errors'].empty?
-
-    #If the DOI isn't into the response, returns an error
-    error = "The new DOI doesn't exist in the Datacite response: check the response: dc_response"
-    return error unless dc_response['data']['id'] && !dc_response['data']['id'].empty?
-
-    #UPDATE SUBMISSION WITH NEW DOI
-    new_doi = dc_response['data']['id']
-    new_values = {
-      ontology: submission.ontology.id,
-      identifier: new_doi,
-      identifierType: 'DOI'
-    }
-
-    #retreive submission
-    submission.update_from_params(new_values)
-
-    error_submission = submission.update
-
-    return error_submission unless error_submission.nil?
-
-    #UPDATE THE STATUS OF DOI REQUEST TO "SATISFIED"
-    doi_request.status = 'SATISFIED'
-    doi_request.processedBy = session[:user].username
-    doi_request.processingDate = DateTime.now.to_s
-    error_doi_request = doi_request.update
-    return error_doi_request unless error_doi_request.nil?
-
-    nil
-  end
-
-  def _satisfy_doi_update_request(doi_request, hash_metadata)
-    update_doi_information_to_datacite(hash_metadata.to_json)
-  end
-
-  def _change_request_status(doi_request, new_status)
-    doi_request.update(values: {status: new_status ,
-                                processedBy: session[:user].id,
-                                processingDate: DateTime.now.to_s
-    })
-  end
-
-  def create_new_doi_from_datacite(json_metadata)
-
-    url = URI($DATACITE_API_URL)
-    http = Net::HTTP.new(url.host, url.port)
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-    request = Net::HTTP::Post.new(url)
-    request['content-type'] = 'application/vnd.api+json'
-    request['authorization'] = "Basic #{Base64.encode64("#{$DATACITE_USERNAME}:#{$DATACITE_PASSWORD}").gsub("\n", '')}"
-    request.body = json_metadata
-
-    response = http.request(request)
-    json_response = response.read_body
-
-    # convert response as json if response is a string containing a json
-    json_response = JSON.parse(json_response) if json_response.is_a?(String) && json_response.start_with?('{')
-    json_response
-  end
-
-  def update_doi_information_to_datacite(json_metadata)
-    url = URI('https://api.test.datacite.org/dois/id')
-
-    http = Net::HTTP.new(url.host, url.port)
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-    request = Net::HTTP::Put.new(url)
-    request['content-type'] = 'application/vnd.api+json'
-    request['authorization'] = 'Basic TElGRVcuQ0xBOkxXRWNvcG9ydGFs'
-
-    request.body = '{"data":{"type":"dois","attributes":{"prefix":"10.80260"}}}'
-
-    response = http.request(request)
-
-    response.read_body
   end
 
 end
