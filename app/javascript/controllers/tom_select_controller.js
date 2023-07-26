@@ -5,8 +5,9 @@ export default class extends Controller {
 
   connect() {
     new TomSelect(this.element, {
-      create: true,
-      plugins: ['remove_button']
+      
+
+      //plugins: ['remove_button']
     });
   }
 }

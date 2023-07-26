@@ -28,3 +28,24 @@
     color: #666666;
     margin-top: 5px;
 }
+
+.ts-control{
+    padding: 12px;
+    border-radius: 5px;
+    border-color: #BDBDBD;
+}
+.ts-dropdown-content .option{
+    padding: 12px;
+}
+.ts-dropdown .active{
+    background-color: #f8f8f8;
+
+}
+.ts-dropdown{
+    margin: 0;
+    color: #666666;
+}
+.chosen-container{
+    padding: 0;
+    border-radius: 5px;
+}
