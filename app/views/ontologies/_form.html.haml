@@ -56,13 +56,7 @@
         = render Form::TextInputComponent.new(label: "Acronym", name: "ontology[acronym]", value: @ontology.acronym)
 
       .upload-ontology-input-field-container 
-        %label.text-input-label
-          visibility
-        %select#upload-ontology-visibility{autocomplete:"off" ,data: {controller: "tom-select"}}
-          %option{value:"public"}
-            Public
-          %option{value:"private"}
-            Private
+        = render Form::SelectComponent.new(label: "Visibility",id: "visibility", name: "visibility", value: ["public","private"], selected: "public", multiple: "", open_to_add_values: "")
 
       .upload-ontology-field-container
         = render Form::SelectComponent.new(label: "Administrator", name: "ontology[administeredBy]", value: @user_select_list, selected: @ontology.administeredBy || session[:user].id, multiple: true, helper_text: "You should select one admin at least")
