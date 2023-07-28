@@ -18,16 +18,21 @@ module SubmissionUpdater
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(new_submission_hash[:ontology]).first
     @submission = @ontology.explore.submissions({ display: 'all' }, new_submission_hash[:id])
 
-    @submission.update_from_params(submission_params(new_submission_hash))
+    new_values = submission_params(new_submission_hash)
+    new_values.each do |key, values|
+      @submission.send("#{key}=", values)
+    rescue StandardError
+      next
+    end
 
     update_ontology_summary_only
-    @submission.update(cache_refresh_all: false)
+    @submission.update(values: new_values, cache_refresh_all: false)
   end
 
   private
 
-  def update_ontology_summary_only
-    @ontology.summaryOnly = @submission.isRemote.eql?('3')
+  def update_ontology_summary_only(is_remote = @submission.isRemote)
+    @ontology.summaryOnly = is_remote&.eql?('3')
     @ontology.update
   end
 
@@ -108,7 +113,7 @@ module SubmissionUpdater
       m_attr = m['attribute'].to_sym
       if p[m_attr] && m['enforce'].include?('list')
         p[m_attr] = Array(p[m_attr]) unless p[m_attr].is_a?(Array)
-        p[m_attr] = p[m_attr].map { |x| x.is_a?(Hash) ? x.values : x }.flatten.uniq if m['enforce'].include?('Agent')
+        p[m_attr] = p[m_attr].map { |x| x.is_a?(Hash) ? x.values.reject(&:empty?) : x.reject(&:empty?) }.flatten.uniq if m['enforce'].include?('Agent')
       end
     end
 
