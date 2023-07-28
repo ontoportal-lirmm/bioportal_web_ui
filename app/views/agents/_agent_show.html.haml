@@ -1,5 +1,6 @@
 = render TurboFrameComponent.new(id: agent_frame_id(agent, parent_id)) do
   %div.d-flex
+    - return agent if agent.is_a? String
     - if agent.id
       = hidden_field_tag agent_field_name(:id, name_prefix), agent.id
 

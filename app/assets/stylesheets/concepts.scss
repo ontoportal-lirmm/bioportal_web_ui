@@ -97,32 +97,7 @@ div.synonym-change-request button {
 .concepts-json:hover svg path{
   fill: white;
 }
-.concepts-content{
-  border-collapse: collapse;
-  width: 100%;
-  border-spacing: 0;
-  
-}
-.concepts-content td{
-  padding: 12px 24px;
-  vertical-align: top;
-}
-.concepts-content tr:nth-child(odd) {
-  background-color: #FAFAFA;
-}
 
-.concepts-content td:first-child {
-  color: #888888;
-  width: 220px;
-}
-.concepts-content td:first-child {
-  color: #888888;
-  width: 220px;
-}
-.concepts-content a{
-  text-decoration: underline;
-  color: #888888;
-}
 .concepts-content div{
   margin-bottom: 5px;
 }

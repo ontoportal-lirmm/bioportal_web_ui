@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class FieldContainerComponentPreview < ViewComponent::Preview
+class Display::FieldContainerComponentPreview < ViewComponent::Preview
 
   # @param label text
   # @param value text

@@ -37,7 +37,7 @@
     %a.home-bubble.home-bubble-four{:href => "/visits"}
       %h5 ...
 
-  .home-header-title-container{'data-controller': "home-search"}
+  .home-header-title-container
     .home-header-title
       %h4
         = t('.welcome', site: $SITE)
@@ -84,12 +84,12 @@
               %img{:src => asset_path("play-white.svg")}/
   .home-section
     .home-section-sub-sections-container
-      .home-sub-section-left{data:{controller:"fair-score-home"}}
-        - if fairness_service_enabled?
-          %h4 FAIR scores
-          %hr.home-section-line/
-          .home-card.home-fair-scores
-            %div#fair-home
+      .home-sub-section-left
+        %h4 FAIR scores
+        %hr.home-section-line/
+        .home-card.home-fair-scores
+          - if fairness_service_enabled?
+            %div#fair-home{data:{controller:"fair-score-home"}}
               = render partial: "shared/fair_score_bars", locals: {data: nil}
             %a{:href => "#fairDetails"}
               %div.home-fair-details

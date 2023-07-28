@@ -132,7 +132,7 @@ module SubmissionUpdater
       end
     end
 
-    @metadata.each do |m|
+    submission_metadata.each do |m|
       m_attr = m['attribute'].to_sym
       if p[m_attr] && m['enforce'].include?('list')
         p[m_attr] = Array(p[m_attr]) unless p[m_attr].is_a?(Array)

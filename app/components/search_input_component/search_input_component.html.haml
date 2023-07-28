@@ -7,10 +7,10 @@
   %input#home-search{:name => @name, :placeholder => @placeholder,
     :type => "text", 'data-action': 'input->search-input#search blur->search-input#blur',
     'data-search-input-target': 'input'}
-  #home-search-drop-down{'data-search-input-target': 'dropDown', 'data-action': 'mousedown->search-input#prevent'}
+  .search-container{'data-search-input-target': 'dropDown', 'data-action': 'mousedown->search-input#prevent'}
     - @actions_links.each do |key, value|
       - link, target = action_link_info(value)
-      %a.home-search-ontology-content#home-search-ontology-content{href:  link, 'data-turbo-frame': target, 'data-search-input-target': 'actionLink'}
+      %a.search-content#search-content{href:  link, 'data-turbo-frame': target, 'data-search-input-target': 'actionLink'}
         %p.mb-0
         %div
           %img{src: asset_path("loop.svg")}/

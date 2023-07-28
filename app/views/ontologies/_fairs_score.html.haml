@@ -6,8 +6,14 @@
   })
 
 - if @fair_scores_data
-  %div.statistics_container.d-flex{data:{controller:"fair-score-summary"}}
-    %div.w-50
+  - text = "<span>Total score : #{@fair_scores_data[:score]} ( #{@fair_scores_data[:normalizedScore]}% )</span> <span class='badge badge-light'>details</span>"
+  = link_to_modal(text.html_safe,
+                "/ajax/fair_score/html/?ontologies=#{@ontology.acronym}",
+                class: "btn btn-primary w-100",
+                data: { show_modal_title_value: "FAIRness assessment questions", show_modal_size_value: 'modal-xl' },
+                )
+  %div.statistics_container{data:{controller:"fair-score-summary"}}
+    %div
       = render partial: "shared/fair_score_radar" , locals: {data: @fair_scores_data}
     %div.w-50
       = render partial: "shared/fair_score_bars" , locals: {data: @fair_scores_data}
