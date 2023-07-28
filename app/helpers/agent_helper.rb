@@ -33,6 +33,8 @@ module AgentHelper
   end
 
   def agent_id(agent)
+    return  if agent.nil?
+
     agent_id = agent.is_a?(String) ? agent : agent.id
     agent_id ? agent_id.split('/').last : ''
   end
@@ -65,11 +67,24 @@ module AgentHelper
 
   def display_identifiers(identifiers, link: true)
     schemes_urls = { ORCID: 'https://orcid.org/', ISNI: 'https://isni.org/', ROR: 'https://ror.org/', GRID: 'https://www.grid.ac/' }
-    Array(identifiers).map { |i| identifier_link("#{schemes_urls[i["schemaAgency"].to_sym]}#{i["notation"]}", link_to:  link) }.join(', ')
+    Array(identifiers).map do |i|
+      if i["schemaAgency"]
+        schema_agency, notation = [i["schemaAgency"], i["notation"]]
+      else
+        schema_agency, notation = (i["id"] || i["@id"]).split('Identifiers/').last.delete(' ').split(':')
+      end
+      value = "#{schemes_urls[schema_agency.to_sym]}#{notation}"
+      identifier_link(value, link_to: link)
+    end.join(', ')
   end
 
   def display_agent(agent, link: true)
-    agent.name.to_s.humanize + ' (' + display_identifiers(agent.identifiers, link: link) + ')'
+    out = agent.name.to_s.humanize
+    identifiers = display_identifiers(agent.identifiers, link: link)
+    out = "#{out} (#{identifiers})" unless identifiers.empty?
+    affiliations = agent.affiliations.map { |a| display_agent(a, link: link) }.join(', ')
+    out = "#{out} (affiliations: #{affiliations})" unless affiliations.empty?
+    out
   end
 
   def agent_field_name(name, name_prefix = '')
