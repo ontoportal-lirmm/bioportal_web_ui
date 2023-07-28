@@ -7,7 +7,9 @@ class AgentsController < ApplicationController
   end
 
   def show
-    @agent = LinkedData::Client::Models::Agent.all(name: params[:name]).find { |x| x.name.eql?(params[:name]) }
+    @agent = LinkedData::Client::Models::Agent.find(params[:agent_id])
+    not_found("Agent with id #{@agent.id}") if @agent.nil?
+
     @agent_id = params[:id] || agent_id(@agent)
     @name_prefix = params[:name_prefix] ? "#{params[:name_prefix]}[#{params[:id]}]" : ''
     @edit_on_modal = params[:edit_on_modal]&.eql?('true')
