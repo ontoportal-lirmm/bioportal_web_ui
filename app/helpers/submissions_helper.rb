@@ -49,10 +49,10 @@ module SubmissionsHelper
 
   def attribute_container(attr, required: false, &block)
     if show_attribute?(attr, required)
-      content_tag(:div) do
-        capture(&block)
-      end
+    content_tag(:div) do
+      capture(&block)
     end
+  end
   end
 
   def inline_save?
@@ -355,6 +355,11 @@ module SubmissionsHelper
       c.template do
         method(field_func).call("#{name}[NEW_RECORD]", '', :id => attr["attribute"].to_s + "_" + @ontology.acronym, class: "metadataInput form-control my-1")
       end
+
+      c.empty_state do
+        hidden_field_tag "#{name}[#{values.size}]"
+      end
+
       values.each_with_index do |metadata_val, i|
         c.row do
           method(field_func).call("#{name}[#{i}]", metadata_val, :id => "submission_#{attr["attribute"].to_s}" + "_" + @ontology.acronym, class: "metadataInput my-1 form-control")

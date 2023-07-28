@@ -105,6 +105,8 @@
           = render NestedFormInputsComponent.new do |c|
             - c.template do
               = render partial: "submissions/submission_contact_form", locals: {contact: nil, index: 'NEW_RECORD'}
+            - c.empty_state do
+              = hidden_field_tag object_name+"[contact][#{index.to_s.upcase}][email]"
             - @submission.contact.each_with_index do |contact, i|
               - c.row do
                 = render partial: "submissions/submission_contact_form", locals: {contact: contact, index: i}
