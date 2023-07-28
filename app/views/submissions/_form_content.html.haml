@@ -43,8 +43,8 @@
         = form_group_attribute('alternative', required: true)
 
         -# Publications page
-        = attribute_text_field_container('publication', required: true) do |c|
-          - c.help do
+        = form_group_attribute('publication', required: true) do
+          %p
             Enter a URL for a page that lists publications about your ontology.
 
         = form_group_attribute("released", default: Date.today, required: true)
@@ -72,14 +72,12 @@
             e.g.: http://lexvo.org/id/iso639-3/eng
 
         -# Home page
-        = attribute_text_field_container('homepage') do |c|
-          - c.help do
-            Enter a URL for the main page of your ontology.
+        = form_group_attribute('homepage') do
+          Enter a URL for the main page of your ontology.
 
         -# Documentation page
-        = attribute_text_field_container('documentation') do |c|
-          - c.help do
-            Enter a URL for a page that provides ontology documentation.
+        = form_group_attribute('documentation') do
+          Enter a URL for a page that provides ontology documentation.
 
 
         -# Used ontology engineering tool
@@ -124,6 +122,9 @@
           = render NestedFormInputsComponent.new do |c|
             - c.template do
               = render partial: "submissions/submission_contact_form", locals: {contact: nil, index: 'NEW_RECORD'}
+            - c.empty_state do
+              = hidden_field_tag object_name+"[contact][#{@submission.contact.size}][email]"
+              = hidden_field_tag object_name+"[contact][#{@submission.contact.size}][name]"
             - @submission.contact.each_with_index do |contact, i|
               - c.row do
                 = render partial: "submissions/submission_contact_form", locals: {contact: contact, index: i}

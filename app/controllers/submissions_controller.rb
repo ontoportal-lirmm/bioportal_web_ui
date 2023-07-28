@@ -69,8 +69,6 @@ class SubmissionsController < ApplicationController
   def update
     error_responses = []
     _, submission_params = params[:submission].each.first
-    @required_only = !params['required-only'].nil?
-    @filters_disabled = true
 
     error_responses << update_submission(submission_params)
 
@@ -78,10 +76,13 @@ class SubmissionsController < ApplicationController
       @errors = error_responses.map { |error_response| response_errors(error_response) }
     end
 
-    if @errors
+    if @errors && !params[:attribute]
+      @required_only = !params['required-only'].nil?
+      @filters_disabled = true
       reset_agent_attributes
       render 'edit', status: 422
     elsif params[:attribute]
+      reset_agent_attributes
       render_submission_attribute(params[:attribute])
     else
       submit_new_doi_request if doi_requested?
