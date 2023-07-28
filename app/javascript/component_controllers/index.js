@@ -2,7 +2,7 @@ import {application} from "../controllers/application";
 
 import TurboModalController from "../../components/turbo_modal_component/turbo_modal_component_controller"
 import FileInputLoaderController
-    from "../../components/form/file_input_component/file_input_loader_component_controller";
+    from "../../components/input/file_input_component/file_input_loader_component_controller";
 
 import Select_input_component_controller
     from "../../components/select_input_component/select_input_component_controller";

@@ -293,6 +293,8 @@ function currentSearchParams() {
     params.require_definition = jQuery("#search_require_definition").is(":checked");
     params.exact_match = jQuery("#search_exact_match").is(":checked");
     params.categories = jQuery("#search_categories").val() || "";
+    params.lang = jQuery("#search_language").val() || "";
+
     return params;
 }
 
