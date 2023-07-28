@@ -180,7 +180,18 @@ module OntologiesHelper
           else
 
             # SINGLE METADATA
-            if !sub.send(metadata).nil?
+            if agent?(json_metadata, metadata)
+              next if sub.send(metadata).nil?
+
+              html << content_tag(:tr) do
+                if label.nil?
+                  concat(content_tag(:td, metadata.gsub(/(?=[A-Z])/, " ")))
+                else
+                  concat(content_tag(:td, label))
+                end
+                concat(content_tag(:td, raw("<div> #{display_agent(sub.send(metadata))} </div>")))
+              end
+            elsif !sub.send(metadata).nil?
               html << content_tag(:tr) do
                 if label.nil?
                   concat(content_tag(:td, metadata.gsub(/(?=[A-Z])/, " ")))
