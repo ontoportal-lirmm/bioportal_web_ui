@@ -43,8 +43,8 @@
         = form_group_attribute('alternative', required: true)
 
         -# Publications page
-        = attribute_text_field_container('publication', required: true) do |c|
-          - c.help do
+        = form_group_attribute('publication', required: true) do
+          %p
             Enter a URL for a page that lists publications about your ontology.
 
         = form_group_attribute("released", default: Date.today, required: true)
