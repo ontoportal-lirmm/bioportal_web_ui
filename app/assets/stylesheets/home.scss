@@ -89,7 +89,7 @@ i.fa.fa-caret-square-o-down {
 .home-header-title{
   position: absolute;
   z-index: 4;
-  width: 481px;
+  width: 500px;
   margin-right: 664px;
   margin-top: 123px;
   opacity: 0;
@@ -97,7 +97,7 @@ i.fa.fa-caret-square-o-down {
   animation: slide-and-fade 1s ease forwards;
 }
 .home-header-title h4{
-  font-size: 40px;
+  font-size: 38px;
   font-weight: 800;
   color: white;
 }
@@ -130,8 +130,9 @@ i.fa.fa-caret-square-o-down {
   align-items: center;
 }
 .home-section{
+  padding: 0 50px;
   margin-top: 70px;
-  width: 1138px;
+  width: 1248px;
 }
 .home-section > h4{
   font-size: 20px;
@@ -148,7 +149,6 @@ i.fa.fa-caret-square-o-down {
 }
 .home-statistics{
   display: flex;
-  justify-content: space-between;
 }
 .home-statistics-container{
   border-radius: 8px;
@@ -159,7 +159,7 @@ i.fa.fa-caret-square-o-down {
 .home-statistics-container > div {
   display: flex;
   align-items: center;
-
+  flex-wrap: wrap;
 }
 .home-agroportal-figures{
   margin-bottom: 20px;
@@ -174,7 +174,10 @@ i.fa.fa-caret-square-o-down {
 .home-statistics-item{
   display: flex;
   align-items: center;
- 
+  
+}
+.home-statistics> :not(:last-child){
+  margin-right: 49px;
 }
 .home-statistics-item hr{
   height: 83px;
@@ -315,10 +318,10 @@ i.fa.fa-caret-square-o-down {
   justify-content: space-between;
 }
 .home-sub-section-left{
-  width: 533px;
+  width: 550px;
 }
 .home-sub-section-right{
-  width: 533px;
+  width: 550px;
 }
 .home-sub-section-left h4, .home-sub-section-right h4{
   font-size: 20px;
@@ -413,6 +416,44 @@ i.fa.fa-caret-square-o-down {
 @keyframes slide-and-fade {
   from { opacity: 0; transform: translateY(-100%); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1300px) {
+  .home-section{
+    width: 100%;
+  }
+  .home-section-sub-sections-container{
+    flex-direction: column;
+  }
+  .home-random-bubbles{
+    display: none;
+  }
+  .home-header-title{
+
+        margin:128px 50px;
+        width: 500px;
+
+        opacity: 0;
+        transform: translateY(-100%);
+        animation: slide-and-fade 1s ease forwards;
+  }
+  .home-header-title-container{
+    justify-content: start;
+  }
+    .home-sub-section-left {
+      width: 100%;
+    }
+  
+    .home-sub-section-right {
+      width: 100%;
+      margin-top: 50px;
+    }
+    .home-fair-scores div{
+      padding: 0 10%;
+    }
+        .home-fair-scores{
+          height: unset;
+        }
 }
 
 
