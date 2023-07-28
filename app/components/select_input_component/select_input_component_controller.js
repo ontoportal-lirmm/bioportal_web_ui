@@ -2,14 +2,15 @@ import { Controller } from "@hotwired/stimulus"
 import TomSelect from "tom-select"
 
 export default class extends Controller {
-    
     connect() {
-        // console.log(this.data.get("multipleValue"))
-        new TomSelect(this.element, {
-
-
-            //plugins: ['remove_button']
-        });
+        let myOptions = {}
+        if (this.data.get("multipleValue")) {
+            myOptions['plugins'] = ['remove_button'];
+        }
+        if (this.data.get("openAddValue")) {
+            myOptions['create'] = true;
+        }
+        new TomSelect(this.element, myOptions);
     }
 
 }

@@ -56,7 +56,7 @@
         = render Form::TextInputComponent.new(label: "Acronym", name: "ontology[acronym]", value: @ontology.acronym)
 
       .upload-ontology-input-field-container 
-        = render Form::SelectComponent.new(label: "Visibility",id: "visibility", name: "visibility", value: ["public","private"], selected: "public", multiple: "", open_to_add_values: "")
+        = render Form::SelectComponent.new(label: "Visibility",id: "visibility", name: "visibility", value: ["public","private"])
 
       .upload-ontology-field-container
         = render Form::SelectComponent.new(label: "Administrator", name: "ontology[administeredBy]", value: @user_select_list, selected: @ontology.administeredBy || session[:user].id, multiple: true, helper_text: "You should select one admin at least")
