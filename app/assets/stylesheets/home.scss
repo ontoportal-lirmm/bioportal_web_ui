@@ -108,17 +108,18 @@ i.fa.fa-caret-square-o-down {
   color: white;
 }
 
-.home-header-title input{
+.home-header-title .search-inputs input{
   font-size: 16px;
   outline: none;
   padding: 20px;
   width: 100%;
+  height: 100%;
   margin-top: 20px;
   border-radius: 14px;
   border: none;
   box-shadow: 2px 30px 60px rgba(0, 0, 0, 0.1);
 }
-.home-header-title input:focus{
+.home-header-title .search-inputs input:focus{
   box-shadow: 2px 30px 60px rgba(0, 0, 0, 0.15);
 }
 
