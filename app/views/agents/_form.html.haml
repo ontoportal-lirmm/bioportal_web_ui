@@ -67,7 +67,8 @@
               = text_field_tag agent_identifier_name('NEW_RECORD' , :notation, name_prefix), '', class: "form-control"
               - values = %w[ORCID ROR ISNI GRID]
               = render SelectInputComponent.new(id: "agent_identifiers_schemaAgency_NEW_RECORD", name: agent_identifier_name('NEW_RECORD', :schemaAgency, name_prefix), values: values, selected: 'ORCID')
-
+          - c.empty_state do
+            = hidden_field_tag agent_field_name('',  name_prefix+"[#{Array(agent.identifiers).size}]")
           - Array(agent.identifiers).each_with_index do |identifier, i|
             - c.row do
               %div.d-flex{id: identifier.id}
