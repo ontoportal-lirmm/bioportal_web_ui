@@ -1,7 +1,7 @@
-= form_group_attribute("identifier", required: true) do |c|
-  Insert the Persistent Identifier - DOI or other - of your semantic asset
-%div.form-group.row
-  %div.col-sm-8.field-value-col.offset-4{id: "identifier_fields_col"}
+= form_group_attribute("identifier", required: true) do
+  %div
+    Insert the Persistent Identifier - DOI or other - of your semantic asset
+  %div.mt-4{id: "identifier_fields_col"}
     - if @identifier_request && @identifier_request.status == "PENDING"
       .d-flex
         .col-sm-8.sub-label
