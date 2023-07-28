@@ -8,6 +8,8 @@
           = inline_svg 'icons/delete.svg'
   %div.titles
     = header
+  %div.d-none
+    = empty_state
   - rows.each_with_index  do |row , index|
     %div.d-flex.align-items-center.nested-form-wrapper.my-1{'data-new-record': 'true'}
       %div{style: 'width: 90%'}

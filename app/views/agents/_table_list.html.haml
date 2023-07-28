@@ -12,3 +12,7 @@
       = render partial: 'agents/show_line' , locals: {agent: agent}
     %tr.empty-state
       %td.text-center{:colspan => "6"} There are currently no  agents.
+:javascript
+  $.fn.dataTable.ext.errMode = 'none';
+
+  $("#adminAgents").dataTable()
