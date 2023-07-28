@@ -4,8 +4,8 @@
           actions_links: {search_ontology_content: "/search?query=o",  see_all_ontologies: "/ontologies?search=o"}) do |s|
 
   - s.template do
-    %a{href: "LINK", class: "home-search-ontology-content", 'data-turbo-frame': '_top'}
-      %p#seached-ontology.home-searched-ontology
+    %a{href: "LINK", class: "search-content", 'data-turbo-frame': '_top'}
+      %p.search-element.home-searched-ontology
         NAME(ACRONYM)
       %p.home-result-type
         TYPE

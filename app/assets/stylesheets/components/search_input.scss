@@ -1,4 +1,4 @@
-#home-search-drop-down{
+.search-container{
   display: none;
   font-size: 16px;
   background: white;
@@ -8,7 +8,7 @@
   box-shadow: 2px 30px 60px rgba(0, 0, 0, 0.1);
 }
 
-.home-search-ontology-content{
+.search-content{
   display: flex;
   color: #777777 !important;
   justify-content: space-between;
@@ -16,28 +16,30 @@
   cursor: pointer;
   border-top: 1px solid #f7f7f7
 }
-.home-search-ontology-content:hover{
+.search-content:hover{
   background-color: rgba(0, 0, 0, 0.01);
 }
-.home-search-ontology-content div{
+.search-content div{
   display: flex;
 }
-.home-search-ontology-content div img{
+.search-content div img{
   width: 12px;
 }
-.home-search-ontology-content div p{
+.search-content div p{
   font-weight: 300;
   margin-left: 10px;
   margin-bottom: 0;
 }
 
-.home-dropdown-active{
+.search-dropdown-active{
   box-shadow: none !important;
 }
-#seached-ontology{
+
+.search-element{
   margin-bottom: 0;
 }
-#seached-ontologies{
+
+.searched-elements{
   margin-bottom: 0;
 }
 
