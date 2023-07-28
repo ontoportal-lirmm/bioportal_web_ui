@@ -46,19 +46,16 @@
           = text_area c.name, c.method_name, rows: 5, value: @submission.description, required: true, class: "form-control"
 
         -# Home page
-        = attribute_text_field_container('homepage') do |c|
-          - c.help do
-            Enter a URL for the main page of your ontology.
+        = form_group_attribute('homepage') do
+          Enter a URL for the main page of your ontology.
 
         -# Documentation page
-        = attribute_text_field_container('documentation') do |c|
-          - c.help do
-            Enter a URL for a page that provides ontology documentation.
+        = form_group_attribute('documentation') do
+          Enter a URL for a page that provides ontology documentation.
 
         -# Publications page
-        = attribute_text_field_container('publication') do |c|
-          - c.help do
-            Enter a URL for a page that lists publications about your ontology.
+        = form_group_attribute('publication') do
+          Enter a URL for a page that lists publications about your ontology.
 
         -# Used ontology engineering tool
         = form_group_attribute("usedOntologyEngineeringTool")
@@ -106,7 +103,8 @@
             - c.template do
               = render partial: "submissions/submission_contact_form", locals: {contact: nil, index: 'NEW_RECORD'}
             - c.empty_state do
-              = hidden_field_tag object_name+"[contact][#{index.to_s.upcase}][email]"
+              = hidden_field_tag object_name+"[contact][#{@submission.contact.size}][email]"
+              = hidden_field_tag object_name+"[contact][#{@submission.contact.size}][name]"
             - @submission.contact.each_with_index do |contact, i|
               - c.row do
                 = render partial: "submissions/submission_contact_form", locals: {contact: contact, index: i}
