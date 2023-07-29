@@ -1,0 +1,46 @@
+#home-search-drop-down{
+  display: none;
+  font-size: 16px;
+  background: white;
+  width: 100%;
+  border-radius: 0 0 14px 14px;
+  border: none;
+  box-shadow: 2px 30px 60px rgba(0, 0, 0, 0.1);
+}
+
+.home-search-ontology-content{
+  display: flex;
+  color: #777777 !important;
+  justify-content: space-between;
+  padding: 20px 20px;
+  cursor: pointer;
+  border-top: 1px solid #f7f7f7
+}
+.home-search-ontology-content:hover{
+  background-color: rgba(0, 0, 0, 0.01);
+}
+.home-search-ontology-content div{
+  display: flex;
+}
+.home-search-ontology-content div img{
+  width: 12px;
+}
+.home-search-ontology-content div p{
+  font-weight: 300;
+  margin-left: 10px;
+  margin-bottom: 0;
+}
+
+.home-dropdown-active{
+  box-shadow: none !important;
+}
+#seached-ontology{
+  margin-bottom: 0;
+}
+#seached-ontologies{
+  margin-bottom: 0;
+}
+
+.search-inputs input {
+  @extend .form-control !optional;
+}

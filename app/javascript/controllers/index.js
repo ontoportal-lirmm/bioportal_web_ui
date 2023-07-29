@@ -13,6 +13,9 @@ application.register("class-search-auto-complete", ClassSearchAutoCompleteContro
 import ContainerSplitterController from "./container_splitter_controller"
 application.register("container-splitter", ContainerSplitterController)
 
+import DoiRequestController from "./doi_request_controller"
+application.register("doi-request", DoiRequestController)
+
 import FormAutoCompleteController from "./form_auto_complete_controller"
 application.register("form-auto-complete", FormAutoCompleteController)
 

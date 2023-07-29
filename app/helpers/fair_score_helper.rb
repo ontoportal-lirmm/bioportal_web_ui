@@ -12,7 +12,12 @@ module FairScoreHelper
     "#{$FAIRNESS_URL}?portal=#{$HOSTNAME.split('.')[0]}#{apikey.nil? || apikey.empty? ? '' : "&apikey=#{apikey}"}"
   end
   def get_fairness_json(ontologies_acronyms, apikey = user_apikey)
-    MultiJson.load(Faraday.get(get_fairness_service_url(apikey) + "&ontologies=#{ontologies_acronyms}&combined").body.force_encoding('ISO-8859-1').encode('UTF-8'))
+    begin
+      MultiJson.load(Faraday.get(get_fairness_service_url(apikey) + "&ontologies=#{ontologies_acronyms}&combined").body.force_encoding('ISO-8859-1').encode('UTF-8'))
+    rescue
+      Rails.logger.warn "FAIRness service issue unreachable"
+      {}
+    end
   end
 
   def get_fair_score(ontologies_acronyms, apikey = user_apikey)

@@ -17,6 +17,22 @@ export default class extends Controller {
         this.#downloadMetadata("xml");
     }
 
+    downloadDataCiteJSON() {
+        let URL = jQuery(document).data().bp.config.rest_url + "/ontologies/" + jQuery(document).data().bp.ontology.acronym + "/latest_submission/datacite_metadata_json?apikey=" + jQuery(document).data().bp.config.apikey;
+        jQuery.get(URL,
+            (json) => {
+                this.#generateDownloadFile(json, "json");
+            });
+    }
+
+    downloadEcoPortalJSON() {
+        let URL = jQuery(document).data().bp.config.rest_url + "/ontologies/" + jQuery(document).data().bp.ontology.acronym + "/latest_submission/ecoportal_metadata_json?apikey=" + jQuery(document).data().bp.config.apikey;
+        jQuery.get(URL,
+            (json) => {
+                this.#generateDownloadFile(json, "json");
+            });
+    }
+
     /**
      * Format submission metadata to be downloaded
      * @param format
@@ -57,7 +73,7 @@ export default class extends Controller {
                 if (subJson["hasDomain"] == null) {
                     subJson["hasDomain"] = ontJson["hasDomain"];
                 } else {
-                    subJson["hasDomain"] = subJson["hasDomain"].split(", ").concat(ontJson["hasDomain"]);
+                    subJson["hasDomain"] = subJson["hasDomain"].concat(ontJson["hasDomain"]);
                     /* make the array unique:
                      var unique = arr.filter(function(elem, index, self) {
                      return index == self.indexOf(elem);
@@ -75,7 +91,7 @@ export default class extends Controller {
                     }
                     // Keep only metadata that have been extracted, are metrics or are in the metadata array below
                     var metadata_in_rdf = ["acronym", "name", "hasOntologyLanguage", "creationDate", "released", "group", "viewOf"]
-                    if (subMetadataHash[attr] != undefined && subMetadataHash[attr]["extracted"] !== true && subMetadataHash[attr]["display"] !== "metrics"
+                    if (subMetadataHash[attr] != undefined && subMetadataHash[attr]["extracted"] !== true && subMetadataHash[attr]["category"] !== "metrics"
                         && !metadata_in_rdf.indexOf(attr)) {
 
                         continue;
@@ -112,12 +128,12 @@ export default class extends Controller {
 
                 let responseString = "Error while generating the RDF"
                 if (format === "nquads") {
-                    jsonld.toRDF(jsonldObject, {format: 'application/nquads'},  (err, nquads) => {
+                    jsonld.toRDF(jsonldObject, {format: 'application/nquads'}, (err, nquads) => {
                         this.#generateDownloadFile(nquads, "nt")
                     });
                 } else if (format === "jsonld") {
                     // Generate proper jsonld
-                    jsonld.compact(jsonldObject, context,  (err, compacted) => {
+                    jsonld.compact(jsonldObject, context, (err, compacted) => {
                         this.#generateDownloadFile(JSON.stringify(compacted, null, 2), "json");
                     });
                 } else if (format === "xml") {

@@ -1,6 +1,6 @@
-set :author, "ontoportal-lirmm"
-set :application, "bioportal_web_ui"
-
+set :author, "lifewatch-eric"
+set :application, "ecoportal_web_ui"
+set :rails_env, "appliance"
 set :repo_url, "https://github.com/#{fetch(:author)}/#{fetch(:application)}.git"
 
 set :deploy_via, :remote_cache
@@ -11,10 +11,9 @@ set :deploy_via, :remote_cache
 # default deployment branch is master which can be overwritten with BRANCH env var
 # BRANCH env var can be set to specific branch of tag, i.e 'v6.8.1'
 
-set :branch, ENV.include?('BRANCH') ? ENV['BRANCH'] : 'master'
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, "/srv/ontoportal/#{fetch(:application)}"
+set :deploy_to, "/srv/ontoportal/bioportal_web_ui"
 
 # Default value for :scm is :git
 # set :scm, :git
@@ -34,6 +33,9 @@ set :log_level, :error
 # Default value for linked_dirs is []
 # set :linked_dirs, %w{bin log tmp/pids tmp/cache public/system public/assets config/locales}
 set :linked_dirs, %w{log tmp/pids tmp/cache public/system public/assets}
+append :linked_files, 'config/database.yml', 'config/bioportal_config_appliance.rb'
+append :linked_dirs, 'log', 'tmp', '.bundle', 'config/locales'
+append :linked_files, 'config/secrets.yml', 'config/site_config.rb', 'config/newrelic.yml','config/credentials/appliance.key', 'config/credentials/appliance.yml.enc'
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }

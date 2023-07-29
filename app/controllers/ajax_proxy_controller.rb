@@ -55,7 +55,19 @@ class AjaxProxyController < ApplicationController
 
     render_json @concept.to_json
   end
+  
+  def cancelIdentifierRequest
+    request_id = params["requestId"]
+    render_json '{ "error": "You must provide the request id!" }', {status: 400} if request_id.nil?
+    doi_request = LinkedData::Client::Models::IdentifierRequest.find_by_requestId(request_id).first
 
+    error_doi_request = doi_request.update(values: {status: 'CANCELED', processedBy: session[:user].id, processingDate: DateTime.now.to_s })
+    if response_error?(error_doi_request)
+      render_json '{ "error": "Some errors has occurred!" }', {status: 500}
+    else
+      render_json '{ "success": "The request has been canceled" }', {status: 200}
+    end
+  end
 
   def json_ontology
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
