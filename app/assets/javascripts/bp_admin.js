@@ -1249,22 +1249,21 @@ jQuery(".admin.index").ready(function() {
   //      PROCESS SCHEDULING
   //==============================================================
 
-  jQuery("#process-scheduling .job-schedule").each(function() { renderSchedule(this) });
+jQuery("#process-scheduling .job-schedule").each(function () {
+    renderSchedule(this)
+});
 
-  jQuery(".show-scheduler-log").on("click", function(event) {
+jQuery(".show-scheduler-log").on("click", function (event) {
     let jobName = event.target.dataset.jobName;
-
     if (jobName) {
-      window.open(
-          BP_CONFIG.rest_url + "/admin/scheduled_jobs/" + encodeURIComponent(jobName) + "/log?apikey=" + BP_CONFIG.apikey + "&userapikey=" + BP_CONFIG.userapikey,
-          "_blank");
+        window.open(
+            BP_CONFIG.rest_url + "/admin/scheduled_jobs/" + encodeURIComponent(jobName) + "/log?apikey=" + BP_CONFIG.apikey + "&userapikey=" + BP_CONFIG.userapikey,
+            "_blank");
     } else {
-      window.open(
-          BP_CONFIG.rest_url + "/admin/scheduled_jobs/log?apikey=" + BP_CONFIG.apikey + "&userapikey=" + BP_CONFIG.userapikey,
-          "_blank");
+        window.open(
+            BP_CONFIG.rest_url + "/admin/scheduled_jobs/log?apikey=" + BP_CONFIG.apikey + "&userapikey=" + BP_CONFIG.userapikey,
+            "_blank");
     }
-  })
-
 });
 
 function renderSchedule(scheduleElement) {
