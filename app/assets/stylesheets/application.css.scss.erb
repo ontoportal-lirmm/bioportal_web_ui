@@ -44,6 +44,20 @@
 @import "register";
 @import "lostpassword";
 @import "flatpickr/dist/themes/light";
+.ts-wrapper.single .ts-control:after {
+    border-color: #343a40 transparent transparent;
+    border-style: solid;
+    border-width: 5px 5px 0;
+    content: " ";
+    display: block;
+    height: 0;
+    margin-top: -3px;
+    position: absolute;
+    right: calc(0.75rem + 5px);
+    top: 50%;
+    width: 0;
+}
+@import "tom-select/dist/scss/tom-select";
 @import "feedback";
 @import "login";
 @import "components/index";

@@ -7,6 +7,7 @@ class OntologiesController < ApplicationController
   include SchemesHelper
   include CollectionsHelper
   include MappingStatistics
+  include SubmissionUpdater
 
   require 'multi_json'
   require 'cgi'
@@ -190,27 +191,28 @@ class OntologiesController < ApplicationController
   end
 
   def create
-    if params[:commit].eql? 'Cancel'
-      redirect_to ontologies_path and return
+
+    # redirect_to ontologies_path and return if params[:commit].eql? 'Cancel'
+
+    @ontology = save_new_ontology(ontology_params)
+
+    if response_error?(@ontology)
+      show_new_errors(@ontology)
+      return
     end
 
-    @ontology = LinkedData::Client::Models::Ontology.new(values: ontology_params)
-    @ontology_saved = @ontology.save
-    if response_error?(@ontology_saved)
-      @categories = LinkedData::Client::Models::Category.all
-      @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
-      @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
-      @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
-      @errors = response_errors(@ontology_saved)
-      render 'new'
+
+    @submission = save_new_submission(params[:submission], @ontology)
+
+    if response_error?(@submission)
+      @ontology.delete
+      show_new_errors(@submission)
     else
-      if @ontology_saved.summaryOnly
-        redirect_to "/ontologies/success/#{@ontology.acronym}"
-      else
-        redirect_to new_ontology_submission_path(@ontology.acronym)
-      end
+      redirect_to "/ontologies/success/#{@ontology.acronym}"
     end
-  end
+
+
+      end
 
   def edit
     # Note: find_by_acronym includes ontology views
@@ -234,7 +236,8 @@ class OntologiesController < ApplicationController
 
   def new
     @ontology = LinkedData::Client::Models::Ontology.new
-    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym', include_views: true,display_links: false, display_context: false)
+    @submission = LinkedData::Client::Models::OntologySubmission.new
+    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym', include_views: true, display_links: false, display_context: false)
     @categories = LinkedData::Client::Models::Category.all
     @groups = LinkedData::Client::Models::Group.all
     @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
@@ -418,6 +421,7 @@ class OntologiesController < ApplicationController
     # Note: find_by_acronym includes ontology views
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology][:acronym] || params[:id]).first
     @ontology.update_from_params(ontology_params)
+    @ontology.viewOf = nil if @ontology.isView.eql? "0"
     error_response = @ontology.update
     if response_error?(error_response)
       @categories = LinkedData::Client::Models::Category.all
@@ -459,20 +463,40 @@ class OntologiesController < ApplicationController
   end
   private
 
+  def save_new_ontology(ontology_hash)
+    ontology = LinkedData::Client::Models::Ontology.new(values: ontology_hash)
+    ontology.save
+  end
 
+  def save_new_submission(submission_hash, ontology)
+    new_submission_params = submission_hash
+    new_submission_params[:ontology] = ontology.acronym
+    save_submission(new_submission_params)
+  end
 
-
+  def show_new_errors(object)
+    # TODO
+    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym', include_views: true, display_links: false, display_context: false)
+    @categories = LinkedData::Client::Models::Category.all
+    @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
+    @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
+    @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
+    @errors = response_errors(object)
+    @submission  =  submission_from_params(params[:submission])
+    render 'new'
+  end
 
   def ontology_params
-    p = params.require(:ontology).permit(:name, :acronym, { administeredBy:[] }, :viewingRestriction, { acl:[] },
-                                         { hasDomain:[] }, :isView, :viewOf, :subscribe_notifications, {group:[]})
+    p = params.require(:ontology).permit(:name, :acronym, { administeredBy: [] }, :viewingRestriction, { acl: [] },
+                                         { hasDomain: [] }, :viewOf, :subscribe_notifications, { group: [] })
 
     p[:administeredBy].reject!(&:blank?)
-    p[:acl].reject!(&:blank?)
-    p[:hasDomain].reject!(&:blank?)
-    p[:group].reject!(&:blank?)
+    # p[:acl].reject!(&:blank?)
+    p[:hasDomain].reject!(&:blank?) if p[:hasDomain]
+    p[:group].reject!(&:blank?)  if p[:group]
     p.to_h
   end
+
 
   def determine_layout
     case action_name

@@ -185,10 +185,12 @@
     background-color: var(--hover-color);
 }
 
-.upload-ontology-next-button div {
+.upload-ontology-next-button div,  .upload-ontology-next-button > input{
     margin-right: 5px;
     color: white;
     font-size: 16px;
+    border: none;
+    background: none;
 }
 
 .upload-ontology-back-button {
@@ -325,3 +327,24 @@
     margin-bottom: 0;
 }
 
+.upload-ontology-field-container div{
+    font-size: 12px;
+    color: #666666;
+}
+
+
+.upload-ontology-input-field-container{
+    margin-bottom: 23px;
+}
+
+.upload-ontology-double-field{
+    display: block;
+    margin-bottom: 23px;
+}
+.upload-ontology-double-field .first{
+    width: 80%;
+}
+
+.upload-ontology-double-field .seconde {
+    width: 100%;
+}

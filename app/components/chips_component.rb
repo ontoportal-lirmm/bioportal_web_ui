@@ -1,5 +1,6 @@
 class ChipsComponent < ViewComponent::Base
-    def initialize(name:, value:)
+    def initialize(id: '',name:, value:)
+        @id = id || name
         @name = name
         @value = value
     end
