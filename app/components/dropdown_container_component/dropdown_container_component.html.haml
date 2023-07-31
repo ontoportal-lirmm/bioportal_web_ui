@@ -2,6 +2,8 @@
   .dropdown-title-bar{"data-toggle" => "collapse", "data-target" => "##{@id}"}
     %p.mb-0
       = @title
+      - if @tooltip
+        = info_tooltip(@tooltip)
     %img{alt: "", src: asset_path("summary/arrow-down.svg")}
   .collapse{id: @id}
     = content
