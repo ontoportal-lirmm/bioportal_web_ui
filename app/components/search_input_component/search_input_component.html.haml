@@ -1,0 +1,20 @@
+%div.search-inputs{'data-controller': 'search-input',
+  'data-search-input-ajax-url-value': @ajax_url,
+  'data-search-input-item-link-base-value': @item_base_url,
+  'data-search-input-id-key-value': @id_key,
+  'data-search-input-cache-value': @use_cache.to_s,
+  'data-search-input-scroll-down-value': @scroll_down.to_s}
+  %input#home-search{:name => @name, :placeholder => @placeholder,
+    :type => "text", 'data-action': 'input->search-input#search blur->search-input#blur',
+    'data-search-input-target': 'input'}
+  .search-container{'data-search-input-target': 'dropDown', 'data-action': 'mousedown->search-input#prevent'}
+    - @actions_links.each do |key, value|
+      - link, target = action_link_info(value)
+      %a.search-content#search-content{href:  link, 'data-turbo-frame': target, 'data-search-input-target': 'actionLink'}
+        %p.mb-0
+        %div
+          %img{src: asset_path("loop.svg")}/
+          %p
+            =key.to_s.humanize
+  %template{'data-search-input-target': 'template'}
+    = template

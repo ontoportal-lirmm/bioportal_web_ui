@@ -8,7 +8,7 @@
   <%= javascript_include_tag "application"%>
 </head>
 <body class="<%= controller_name %> <%= action_name %>">
-<%= render TurboModalComponent.new(id: 'application_modal') %>
+<%= modal_frame_container %>
 <%= yield %>
 
 </body>

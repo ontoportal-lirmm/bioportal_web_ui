@@ -1,4 +1,4 @@
-%div.modal{id: @id, 'data-controller':"turbo-modal"}
+%div.modal{id: @id, 'data-controller':"turbo-modal", 'data-turbo-modal-show-value': @show.to_s}
   %div.modal-dialog{class: @size}
     %div.modal-content
       %div.modal-header

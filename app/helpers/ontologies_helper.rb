@@ -31,6 +31,11 @@ module OntologiesHelper
     end
   end
 
+  def agent?(sub_metadata, attr)
+    metadata = sub_metadata.select{ |x| x['@id'][attr] }.first
+    metadata && Array(metadata['enforce']).include?('Agent')
+  end
+
   # Display data catalog metadata under visits (in _metadata.html.haml)
   def display_logo(sub)
     logo_attributes = ["logo", "depiction"]
@@ -280,7 +285,7 @@ module OntologiesHelper
         end
       end
     else
-      select_tag name, languages_options, class: 'custom-select', disabled: !ontology_data_section?, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'}; margin-bottom: -10px;", data: {'ontology-viewer-tabs-target': 'languageSelector'}
+      select_tag name, languages_options, class: '', disabled: !ontology_data_section?, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'}; border: none; outline: none;", data: {'ontology-viewer-tabs-target': 'languageSelector'}
     end
   end
 
@@ -304,9 +309,9 @@ module OntologiesHelper
     html = ""
     definitions.each do |definition|
       if definition.is_a?(String)
-        html+= "<p>" + definition + "</p>"
+        html += '<p class="prefLabel">' + definition + '</p>'
       elsif definition.respond_to?(:uri) && definition.uri
-        html+= "<p>" + definition.uri + "</p>"
+        html += render LinkFieldComponent.new(value: definition.uri)
       end
     end
     return html.html_safe

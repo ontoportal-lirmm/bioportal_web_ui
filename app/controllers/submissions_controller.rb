@@ -45,7 +45,8 @@ class SubmissionsController < ApplicationController
         @errors = ["Please enter a contact"]
       end
 
-      render "new"
+      reset_agent_attributes
+      render 'new', status: 422
     else
       redirect_to "/ontologies/success/#{@ontology.acronym}"
     end
@@ -63,21 +64,38 @@ class SubmissionsController < ApplicationController
   def update
     error_responses = []
     _, submission_params = params[:submission].each.first
-    @required_only = !params['required-only'].nil?
-    @filters_disabled = true
-    
+
     error_responses << update_submission(submission_params)
 
     if error_responses.compact.any? { |x| x.status != 204 }
       @errors = error_responses.map { |error_response| response_errors(error_response) }
     end
 
-    if params[:attribute]
+    if @errors && !params[:attribute]
+      @required_only = !params['required-only'].nil?
+      @filters_disabled = true
+      reset_agent_attributes
+      render 'edit', status: 422
+    elsif params[:attribute]
+      reset_agent_attributes
       render_submission_attribute(params[:attribute])
     else
       redirect_to "/ontologies/#{@ontology.acronym}"
     end
 
+  end
+
+  private
+
+  def reset_agent_attributes
+    helpers.agent_attributes.each do |attr|
+      current_val = @submission.send(attr)
+      new_values = Array(current_val).map { |x| LinkedData::Client::Models::Agent.find(x) }
+
+      new_values = new_values.first unless current_val.is_a?(Array)
+
+      @submission.send("#{attr}=", new_values)
+    end
   end
 
 end

@@ -4,24 +4,11 @@
                 top_keys: %w[created modified comment note],
                 bottom_keys: [],
                 exclude_keys: %w[member]) do |c|
-    = c.header do
-      %tr
-        %td.label
-          ID
-        %td
-          %p
-            = collection["@id"]
-      %tr
-        %td{nowrap: ""} Preferred Name
-        %td
-          %p= get_collection_label(collection)
-      %tr
-        %td{nowrap: ""} Members count
-        %td
-          %p= collection["memberCount"]
-      %tr
-        %td.label
-          Type
-        %td
-          %p
-            = collection["@type"]
+    - c.header(stripped: true) do |t|
+      - t.add_row({th: 'ID'}, {td: collection["@id"]})
+      - t.add_row({th: 'Preferred Name'}, {td: get_collection_label(collection)})
+      - t.add_row({th: 'Members count'}) do |r|
+        - r.td do
+          = link_to collection["memberCount"],  "/ontologies/" + @ontology.acronym + "/?p=classes&sub_menu=list&concept_collections=" + collection["@id"], 'data-turbo-frame':'_top'
+      - t.add_row({th: 'Type'}, {td: collection["@type"]})
+

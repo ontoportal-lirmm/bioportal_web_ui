@@ -1,13 +1,14 @@
-%span{@controller_params}
-  %a.ontology-details-watch-button{href: @link}
-    = inline_svg_tag "eye.svg"
-    %div
-      %span{'data-subscribe-notes-target': 'text'}
-        #{@sub_text}
-      (
-      %span{'data-subscribe-notes-target': 'count'}
-        #{@count}
-      )
-    %span{style:"display: none;", 'data-subscribe-notes-target': 'loader'}
-      = image_tag("spinners/spinner_000000_16px.gif", style: "vertical-align: text-bottom; background: transparent")
+%div{@controller_params}
+  = render PillButtonComponent.new do
+    %a.d-flex.align-items-center{href: @link}
+      = inline_svg_tag "eye.svg"
+      %div
+        %span{'data-subscribe-notes-target': 'text'}
+          #{@sub_text}
+        (
+        %span{'data-subscribe-notes-target': 'count'}
+          #{@count}
+        )
+    %span{style:"display: none;", class: 'px-1', 'data-subscribe-notes-target': 'loader'}
+      = render LoaderComponent.new(small: true)
   %span.notes_sub_error{style:'color: red; display: none', 'data-subscribe-notes-target': 'error'}

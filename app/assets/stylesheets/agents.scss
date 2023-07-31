@@ -1,0 +1,4 @@
+.agents-inputs input {
+  @extend .form-control !optional;
+  height: 100% !important;
+}

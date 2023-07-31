@@ -11,10 +11,11 @@
     "stimulus-flatpickr": "^3.0.0-0",
     "stimulus-read-more": "^4.1.0",
     "stimulus-rails-nested-form": "^4.0.0",
+    "stimulus-timeago": "^4.1.0",
     "vis-data": "^7.1.6",
     "vis-network": "^9.1.6",
     "vis-util": "^5.0.3",
-    "stimulus-timeago": "^4.1.0"
+    "tom-select": "^2.2.2"
   },
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds"

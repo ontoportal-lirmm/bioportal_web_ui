@@ -1,4 +1,4 @@
-- if fairness_service_enabled? && @ontology.acronym != 'AGROVOC'
+- if fairness_service_enabled? && @ontology.acronym != 'AGROVOC' && @fair_scores_data
   = render SummarySectionComponent.new(title: 'FAIR score') do
     .div
       %section.ont-metadata-card.ont-fair-score-card#fair-summary

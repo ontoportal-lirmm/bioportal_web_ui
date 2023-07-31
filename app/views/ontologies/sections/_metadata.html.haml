@@ -21,7 +21,7 @@
               = render FieldContainerComponent.new(label: k.to_s) do
                 %div.d-flex.flex-wrap
                   - Array(values).each do |val_str|
-                    - val_str.split(',').each do |v|
+                    - Array(val_str.split(',')).each do |v|
                       - if v
                         %div.m-1
                           = render ChipButtonComponent.new(text: v, type: "static",'data-controller':' tooltip', title: v, class:'text-truncate', style: 'max-width: 200px; display: block')

@@ -37,24 +37,14 @@
     %a.home-bubble.home-bubble-four{:href => "/visits"}
       %h5 ...
 
-  .home-header-title-container{'data-controller': "home-search"}
+  .home-header-title-container
     .home-header-title
       %h4
         = t('.welcome', site: $SITE)
       %p
         = t('.tagline')
-      %input#home-search{:name => "search", :placeholder => "Search for an ontology or concept (Ex: Agrovoc ...)", :type => "text", 'data-home-search-target': 'input', 'data-action': 'input->home-search#search blur->home-search#blur'}
-      #home-search-drop-down{'data-home-search-target': 'dropDown', 'data-action': 'mousedown->home-search#prevent'}
-        %a.home-search-ontology-content#home-search-ontology-content{href: "#", 'data-home-search-target': 'searchOntologyContent'}
-          %p#seached-ontology{'data-home-search-target': 'ontology'}
-          %div
-            %img{src: asset_path("loop.svg")}/
-            %p Search ontology content
-        %a.home-search-ontology-content#home-search-ontologies{href: "#", 'data-home-search-target': 'homeSearchOntologies'}
-          %p#seached-ontologies{'data-home-search-target': 'searchedOntologies'}
-          %div
-            %img{src: asset_path("loop.svg")}/
-            %p See all ontologies
+      = render OntologySearchInputComponent.new
+ 
 .home-body-container
   .home-section
     %h4 Wanna upload an ontology?
@@ -77,7 +67,7 @@
         Upload ontology
   .home-section
     %h4
-      = portal_name+" services"
+      Recommender and annotator
     %hr.home-section-line/
     .home-card
       %form{action: "/annotator_recommender_form", method: "post"}
@@ -94,12 +84,12 @@
               %img{:src => asset_path("play-white.svg")}/
   .home-section
     .home-section-sub-sections-container
-      .home-sub-section-left{data:{controller:"fair-score-home"}}
-        - if fairness_service_enabled?
-          %h4 FAIR scores
-          %hr.home-section-line/
-          .home-card.home-fair-scores
-            %div#fair-home
+      .home-sub-section-left
+        %h4 FAIR scores
+        %hr.home-section-line/
+        .home-card.home-fair-scores
+          - if fairness_service_enabled?
+            %div#fair-home{data:{controller:"fair-score-home"}}
               = render partial: "shared/fair_score_bars", locals: {data: nil}
             %a{:href => "#fairDetails"}
               %div.home-fair-details
@@ -109,7 +99,7 @@
         %h4 News
         %hr.home-section-line
         .home-card.home-twitter-news
-          %a.twitter-timeline{"data-height" => "349", "data-width" => "533", :href => "https://twitter.com/lagroportal?ref_src=twsrc%5Etfw"} Tweets by lagroportal
+          %a.twitter-timeline{"data-height" => "349", :href => "https://twitter.com/lagroportal?ref_src=twsrc%5Etfw"} Tweets by lagroportal
           %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
 
   .home-section

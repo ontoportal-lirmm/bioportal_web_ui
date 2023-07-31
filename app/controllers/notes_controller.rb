@@ -103,7 +103,7 @@ class NotesController < ApplicationController
       success_message = 'New comment added successfully'
       locals =  { note: new_note, ontology_acronym: ontology_acronym, parent_type: parent_type }
       partial = 'notes/note_line'
-      container_id = "#{parent_type}_notes_table_content"
+      container_id = "#{parent_type}_notes_table_body"
       alerts_container_id = nil
     end
 

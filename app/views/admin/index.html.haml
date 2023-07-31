@@ -13,27 +13,14 @@
 
 %div.row
   %div.col
-    %ul.nav.nav-tabs{id: "admin-tabs", role: "tablist"}
-      %li.nav-item
-        =link_to("Site Administration", "#site-admin", id: "site-admin-tab", class: "nav-link active", role: "tab", data: { toggle: "tab" }, aria: { controls: "site-admin", selected: "true" })
-      %li.nav-item
-        =link_to("Ontology Administration", "#ontology-admin", id: "ontology-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab" }, aria: { controls: "ontology-admin", selected: "false" })
-      %li.nav-item
-        =link_to("Licensing", "#licensing", id: "licensing-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: admin_licenses_path() }, aria: { controls: "licensing", selected: "false" })
-      %li.nav-item
-        =link_to("Users", "#users", id: "users-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: users_path() }, aria: { controls: "users", selected: "false" })
-      %li.nav-item
-        =link_to("Metadata Administration", "#ontologies_metadata_curator", id: "ontologies_metadata_curator-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab"}, aria: { controls: "ontologies_metadata_curator", selected: "false" })   
-      %li.nav-item
-        =link_to("Groups", "#groups", id: "groups-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: "groups" }, aria: { controls: "groups", selected: "false" })
-      %li.nav-item
-        =link_to("Categories", "#categories", id: "categories-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: "categories" }, aria: { controls: "categories", selected: "false" })
-    %div#adminTabContent.tab-content
-
-      -# Site Administration tab
-      %div.tab-pane.active.show.fade{id: "site-admin", role: "tabpanel", aria: { labelledby: "site-admin-tab" }}
-        
-        -# Clear caches
+    - sections = ['Site Administration','Ontology Administration',  'Licensing', 'Users', 'Metadata Administration', 'Groups', 'Categories', 'Persons & Organizations']
+    = render TabsContainerComponent.new do |t|
+      - sections.each do |section_title|
+        - t.item(title: section_title,
+                     path: '',
+                     selected: section_title.eql?(sections.first),
+                     page_name: '')
+      - t.item_content do
         %div#site-admin-clear-caches.my-5
           %div.site-admin-page-header
             CACHE MANAGEMENT
@@ -42,33 +29,27 @@
             = link_to("Reset UI cache connection", "#", id: "reset_memcache_connection_action", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
             = link_to("Flush GOO cache", "#", id: "flush_goo_cache_action", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
             = link_to("Flush HTTP cache", "#", id: "flush_http_cache_action", class: "btn btn-outline-secondary btn-sm",  role: "button")
-        
-        -# Check for updates
+
         %div#site-admin-update-check.mb-5
           %div.site-admin-page-header
             VERSION MANAGEMENT
           %dive.site-admin-page-section
             = link_to("Check for updates", "#", id: "update_check_action", class: "btn btn-outline-secondary btn-sm",  role: "button")
 
-        -# View appliance ID
         %div#site-admin-appliance-id.mb-5
           %div.site-admin-page-header
             APPLIANCE ID
           %dive.site-admin-page-section
             %div#appliance-id
               %span
-        
-        -# Clear caches
+
         %div#site-admin-clear-caches.my-5
           %div.site-admin-page-header
             MONITORING LINKS
           %dive.site-admin-page-section
             = link_to("Newrelic", "https://login.newrelic.com/login", target: '_blank', id: "newrelic_link", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
             = link_to("StatusCake", "https://app.statuscake.com/Login", target: '_blank', id: "statuscake_link", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
-          
-
-      -# Ontology Administration tab
-      %div.tab-pane.fade{id: "ontology-admin", role: "tabpanel", aria: { labelledby: "ontology-admin-tab" }}
+      - t.item_content do
         %div.ontologies_list_container.mt-3
           %table{:style => "float:left;"}
             %tr
@@ -79,9 +60,8 @@
                   %span.ui-button-text{:class => "report_date_generated_button"}
           %p.tab_description{:style => "clear:both;"}
           %table#adminOntologies.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
+      - t.item_content do
 
-      -# Licensing tab
-      %div.tab-pane.fade{id: "licensing", role: "tabpanel", aria: { labelledby: "licensing-admin-tab" }}
         %div#renew-license-notice
 
         %table.table.table-sm.table-bordered.mt-5#license-table
@@ -89,35 +69,26 @@
             %tr
               %th{scope: "col"} Licensed to
               %th{scope: "col"} Appliance ID
-              %th{scope: "col"} Valid till  
+              %th{scope: "col"} Valid till
               %th{scope: "col"} Days remaining
           %tbody
 
         %div.mb-5#renew-license-button
-          = link_to("Renew license", new_admin_license_path(), class: "btn btn-primary", role: "button", remote: "true")
+          = link_to("Renew license", new_admin_license_path, class: "btn btn-primary", role: "button", remote: "true")
 
         %div.mb-5#renew-license-form
-
-      -# Users tab
-      %div.tab-pane.fade{id: "users", role: "tabpanel", aria: { labelledby: "users-admin-tab" }}
+      - t.item_content do
         %div.ontologies_list_container.mt-3
           %table#adminUsers.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
-      
-      -# metadata tab
-      %div.tab-pane.fade{id: "ontologies_metadata_curator", role: "tabpanel", aria: { labelledby: "ontologies_metadata_curator-admin-tab" }}
+      - t.item_content do
         = render partial: 'ontologies_metadata_curator/metadata_tab'
-
-      -# Groups tab
-      %div.tab-pane.fade{id: "groups", role: "tabpanel", aria: { labelledby: "groups-admin-tab" }}
+      - t.item_content do
         %div.ontologies_list_container.mt-3
           %table#adminGroups.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
-
-      -# Categories tab
-      %div.tab-pane.fade{id: "categories", role: "tabpanel", aria: { labelledby: "categories-admin-tab" }}
+      - t.item_content do
         %div.ontologies_list_container.mt-3
           %table#adminCategories.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
+      - t.item_content do
+        %div.ontologies_list_container.mt-3
+          = render TurboFrameComponent.new(id: 'agents-list', src: '/agents', loading: 'lazy')
 
-
-
-
-  

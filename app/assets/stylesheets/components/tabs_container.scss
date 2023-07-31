@@ -1,54 +1,56 @@
-.ontology-details-tabs {
-
-    border-bottom: 1px solid #DFDFDF;
+.tabs-container {
+  border-bottom: 1px solid #DFDFDF;
+  display: flex;
+  justify-content: space-between;
+  & > div {
     display: flex;
-    justify-content: center;
-    & > div {
-        display: flex;
-        justify-content: space-between;
-        width: 1248px;
-        padding: 0 50px
-    }
+    justify-content: space-between;
+  }
 }
 
-.ontology-details-tabs hr{
-    border: 1px solid #f3f3f3;
-    width: 100%;
-    margin: 0;
-}
-.ontology-details-tabs .tab-items{
-    display: flex;
-    margin: 0;
-}
-.ontology-details-tabs .tab-items div{
-    font-size: 16px;
-    font-weight: 400;
-    color: #5e5e5e;
-    margin-right: 50px;
-    cursor: pointer;
-    opacity: 60%;
-    transition: opacity 0.3s ease;
-    a {
-        color: #5e5e5e !important;
-    }
+.tabs-container hr {
+  border: 1px solid #f3f3f3;
+  width: 100%;
+  margin: 0;
 }
 
-.ontology-details-tabs .tab-items div:hover{
-
-    opacity: 100%;
+.tabs-container .tab-items {
+  display: flex;
+  margin: 0;
+  position: relative;
 }
 
-.ontology-details-tabs .tab-items div hr{
-    display: none;
-    margin-top: 10px;
+.tabs-container .tab-items div {
+  font-size: 16px;
+  font-weight: 400;
+  color: #5e5e5e;
+  margin-right: 50px;
+  cursor: pointer;
+  opacity: 60%;
+  transition: opacity 0.3s ease;
+
+  a {
+    color: #5e5e5e !important;
+  }
 }
-.ontology-details-tabs .tab-items .active{
-    font-weight: 500;
-    color: black;
-    opacity: 100%;
+
+.tabs-container .tab-items div:hover {
+
+  opacity: 100%;
 }
-.ontology-details-tabs .tab-items .active hr{
-    display: block;
-    border: 1px solid var(--primary-color);
-    opacity: 100%;
+
+.tabs-container .tab-items div hr {
+  display: none;
+  margin-top: 10px;
+}
+
+.tabs-container .tab-items .active {
+  font-weight: 500;
+  opacity: 100%;
+}
+
+.tabs-container .tab-items .active hr {
+  display: block;
+  border: 1px solid var(--primary-color);
+  opacity: 100%;
 }

@@ -26,7 +26,6 @@
 //= require bp_property_tree
 //= require concepts
 //= require home
-//= require fair_score
 //= require_tree ./helpers
 //= require_tree ./components
 //= require ontologies
