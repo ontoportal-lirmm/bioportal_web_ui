@@ -3,7 +3,7 @@
         .caintainer_vertical
             .projects_card
                 %p Identifiers
-                %img{src: asset_path("summary/info.svg")}/
+                = info_tooltip('text to describe identifiers section')
         .creation_info
         - unless @submission_latest.URI.nil? || @submission_latest.URI.empty?
             %p.description_text_identifers 
