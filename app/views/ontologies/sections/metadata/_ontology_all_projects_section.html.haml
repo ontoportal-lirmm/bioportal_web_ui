@@ -2,6 +2,7 @@
     .right_metadata-title-bar{"data-toggle" => "collapse", "data-target" => "#projects_section"}
         %p.fix-margin-buttom
             Projects and usage information
+            = info_tooltip('projects')
         %img{alt: "", src: asset_path("summary/arrow-down.svg")}
     #projects_section.collapse.right-metadata-content
         .creation_info
