@@ -1,4 +1,4 @@
-%select#upload-ontology-visibility{autocomplete:"off", multiple: @multiple ,data: {controller: "select-input", 'select-input':{'multiple-value':@multiple, 'open-add-value':@open_to_add_values}}}
+%select{autocomplete:"off", multiple: @multiple ,data: {controller: "select-input", 'select-input':{'multiple-value':@multiple, 'open-add-value':@open_to_add_values}}}
   - @values.each do |value|
     - is_selected_value = value == @selected
     %option{value:@value, selected:is_selected_value}
