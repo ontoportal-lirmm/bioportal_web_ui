@@ -490,6 +490,8 @@ class OntologiesController < ApplicationController
        display: 'acronym,name', display_links: false, display_context: false)
   end
 
+ 
+
   def metrics_evolution
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
     key = params[:metrics_key]
