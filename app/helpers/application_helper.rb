@@ -268,6 +268,11 @@ module ApplicationHelper
     BLOCK
   end
 
+  def info_tooltip(text)
+    image_tag("summary/info.svg", data:{controller:'tooltip'},title:text) 
+  end 
+
+
   def anonymous_user
     #
     # TODO: Fix and failures from removing 'DataAccess' call here.
