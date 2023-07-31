@@ -38,3 +38,4 @@
 //= require trumbowyg
 //= require sharer.min
 
+//= require cronstrue.min

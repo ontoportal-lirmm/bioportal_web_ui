@@ -16,9 +16,12 @@ class AdminController < ApplicationController
 
   def index
     @users = LinkedData::Client::Models::User.all
+
     if session[:user].nil? || !session[:user].admin?
       redirect_to :controller => 'login', :action => 'index', :redirect => '/admin'
     else
+      json = LinkedData::Client::HTTP.get("#{ADMIN_URL}scheduled_jobs", raw: true)
+      @scheduledJobs = JSON.parse(json, :symbolize_names => true)
       render action: "index"
     end
   end

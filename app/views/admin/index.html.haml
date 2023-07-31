@@ -31,7 +31,12 @@
       %li.nav-item
         =link_to("Categories", "#categories", id: "categories-admin-tab", class: "nav-link #{selected_admin_section?('categories') ? 'active': ''}", role: "tab", data: { toggle: "tab", href: "categories" }, aria: { controls: "categories", selected: "false" })
       %li.nav-item
+        =link_to("Metadata Administration", "#ontologies_metadata_curator", id: "ontologies_metadata_curator-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab"}, aria: { controls: "ontologies_metadata_curator", selected: "false" })   
+      %li.nav-item
+        =link_to("Process Scheduling", "#process-scheduling", id: "process-scheduling-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: "process-scheduling" }, aria: { controls: "process-scheduling", selected: "false" })
+      %li.nav-item
         =link_to("Persons & Organizations", "#agents", id: "agents-admin-tab", class: "nav-link #{selected_admin_section?('agents') ? 'active': ''}", role: "tab", data: { toggle: "tab", href: "agents" }, aria: { controls: "agents", selected: "false" })
+
     %div#adminTabContent.tab-content
 
       -# Site Administration tab
@@ -134,3 +139,29 @@
 
 
   
+      -# Process Scheduling tab
+      %div.tab-pane.fade{id: "process-scheduling", role: "tabpanel", aria: { labelledby: "process-scheduling-tab" }}
+        %div.my-5
+          %div.mb-2
+            The schedule is to be changed by altering the configuration of the module <em>ncbo_cron</em>. This module
+            must be restarted for the changes to take effect.
+          %div.mb-5
+            %a.btn.btn-outline-secondary.btn-sm.show-scheduler-log
+              Show log
+
+          - @scheduledJobs.each do |job_key, job_descr|
+            %div.site-admin-page-header
+              %div.job-title
+                = job_descr[:title]
+              - if job_descr[:enabled]
+                - title = job_descr[:scheduler_type] + ": " + job_descr[:schedule]
+                %div.job-schedule{title: title, data: {enabled: "true", scheduler_type: job_descr[:scheduler_type], schedule: job_descr[:schedule]}}
+                  = title
+              - else
+                %div.job-schedule{data: {enabled: "false"}}
+                  Disabled
+
+
+            %div.site-admin-page-section
+              %a.btn.btn-outline-secondary.btn-sm.show-scheduler-log{data: {job_name: job_key}}
+                Show log
