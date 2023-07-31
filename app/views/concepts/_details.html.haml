@@ -1,73 +1,62 @@
 = turbo_frame_tag 'concept_details' do
   - schemes_keys = %w[hasTopConcept topConceptOf]
   - label_xl_set = %w[skos-xl#prefLabel skos-xl#altLabel skos-xl#hiddenLabel]
-
   - if @concept.prefLabel.nil?
     %div.py-3.px-2
       = render(AlertMessageComponent.new(message: t('ontology_details.concept.no_preferred_name_for_selected_language'),  type: "warning", closeable: true))
- 
+
   = render ConceptDetailsComponent.new(id:'concept-details', acronym: @ontology.acronym,
               properties: @concept.properties,
               top_keys: %w[description comment],
               bottom_keys: %w[disjoint subclass is_a has_part],
               exclude_keys: schemes_keys + label_xl_set + ['inScheme']) do |c|
-             
-    - c.header do
-      %tr
-        %td{nowrap: ""}= t('ontology_details.concept.id')
-        %td
-          = @concept.id
-      %tr
-        %td{nowrap: ""}= t('ontology_details.concept.preferred_name')
-        %td
-          = @concept.prefLabel({:use_html => true}).html_safe
+
+    - c.header(stripped: true) do |t|
+      - t.add_row({th: t('ontology_details.concept.id')}, {td:@concept.id})
+      - t.add_row({th: t('ontology_details.concept.preferred_name')}, {td:@concept.prefLabel({:use_html => true}).html_safe})
+
       - unless @concept.synonym.nil? || @concept.synonym.empty?
-        %tr
-          %td{nowrap: ""}= t('ontology_details.concept.synonyms')
-          %td
-            - for synonym in @concept.synonym
-              = synonym
-          %td
-            %div.synonym-change-request
-              = add_synonym_button
-              = remove_synonym_button
-      
-      
+        - t.add_row({th: t('ontology_details.concept.synonyms')}) do |h|
+          - h.td do
+            %div.d-flex
+              %div
+              - for synonym in @concept.synonym
+                = synonym
+              %div.synonym-change-request
+                = add_synonym_button
+                = remove_synonym_button
+
+
       - unless @concept.definition.nil? || @concept.definition.empty?
-        %tr
-          %td{nowrap: ""}= t('ontology_details.concept.definitions')
-          %td
-            = dispaly_complex_text(@concept.definition)
+        - t.add_row({th: t('ontology_details.concept.definitions')}, {td:dispaly_complex_text(@concept.definition)})
+
       - if @concept.obsolete?
-        %tr
-          %td{nowrap: ""}= t('ontology_details.concept.obsolete')
-          %td
-            true
+        - t.add_row({th: t('ontology_details.concept.obsolete')}, {td: 'true'})
+
       - if skos?
         - unless @concept.memberOf.nil?  || @concept.memberOf.empty?
-          %tr
-            %td{nowrap: ""}= t('ontology_details.concept.member_of')
-            %td
+          - t.add_row({th: t('ontology_details.concept.member_of')}) do |h|
+            - h.td do
               %div.my-1
                 - @concept.memberOf.each do |v|
                   = raw get_link_for_collection_ajax(v, @ontology.acronym, '_blank')
+
         - unless @concept.inScheme.nil?  || @concept.inScheme.empty?
-          %tr
-            %td{nowrap: ""}= t('ontology_details.concept.in_schemes')
-            %td
+          - t.add_row({th: t('ontology_details.concept.in_schemes')}) do |h|
+            - h.td do
               %div.my-1
                 - @concept.inScheme.each do |v|
                   = raw get_link_for_scheme_ajax(v, @ontology.acronym, '_blank')
-      %tr
-        %td{nowrap: ""}= t('ontology_details.concept.type')
-        %td
-          = @concept.type
 
-    - scheme_set = c.properties_set_by_keys(schemes_keys, c.concept_properties)
-    - label_xl_set = c.properties_set_by_keys(label_xl_set, c.concept_properties)
-    - c.section do
-      = c.render_properties(scheme_set, c.concept_properties) do |v|
-        - get_link_for_scheme_ajax(v, @ontology.acronym, '_blank')
-    - c.section do
-      = c.render_properties(label_xl_set, c.concept_properties) do |v|
-        - get_link_for_label_xl_ajax(v, @ontology.acronym, @concept.id)
+        - t.add_row({th: t('ontology_details.concept.type')} , {td: @concept.type})
+
+
+    - c.add_sections(schemes_keys) do |v|
+      - get_link_for_scheme_ajax(v, @ontology.acronym, '_blank')
+
+    - c.add_sections(label_xl_set) do |v|
+      - get_link_for_label_xl_ajax(v, @ontology.acronym, @concept.id)
+
+
+
+

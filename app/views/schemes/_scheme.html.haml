@@ -5,19 +5,8 @@
                 top_keys: %w[description comment],
                 bottom_keys: %w[disjoint subclass is_a has_part],
                 exclude_keys: []) do |c|
-      = c.header do
-        %tr
-          %td.label
-            ID
-          %td
-            %p= scheme["@id"]
-        %tr
-          %td{nowrap: ""} Preferred Name
-          %td
-            %p= get_scheme_label(scheme)
-        %tr
-          %td.label
-            Type
-          %td
-            %p= scheme["@type"]
+      - c.header(stripped: true) do |t|
+        - t.add_row({th: 'ID'} , {td: scheme["@id"]})
+        - t.add_row({th: 'Preferred Name'} , {td: get_scheme_label(scheme)})
+        - t.add_row({th: 'Type'} , {td: scheme["@type"]})
 
