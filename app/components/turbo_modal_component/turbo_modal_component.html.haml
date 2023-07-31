@@ -1,11 +1,11 @@
-%div.modal{id: @id, 'data-controller':"turbo-modal"}
+%div.modal{id: @id, 'data-controller':"turbo-modal", 'data-turbo-modal-show-value': @show.to_s}
   %div.modal-dialog{class: @size}
     %div.modal-content
       %div.modal-header
         %h5.modal-title
           = @title
         %button.close{type:'button', data: { action: "turbo-modal#hide" }}
-          %span &times;
+          %span.shape.btn.btn-primary.p-1 &times;
       %div.modal-body
         = render TurboFrameComponent.new(id: 'application_modal_content', data: { 'turbo-modal-target': 'content'}) do
           = content

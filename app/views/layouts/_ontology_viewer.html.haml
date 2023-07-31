@@ -51,7 +51,7 @@
 
 
 
-  = render TurboModalComponent.new(id: 'application_modal')
+  = modal_frame_container
 
   -# Modal dialog for getting a permanent link to a class (must reside in a top-level position in the document to display properly).
   %div#classPermalinkModal{class: "modal fade", tabindex: "-1", role: "dialog", aria: {labelledby: "classPermalinkLabel", hidden: "true"}}
