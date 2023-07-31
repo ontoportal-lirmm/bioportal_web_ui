@@ -25,12 +25,12 @@
                       - if v
                         %div.m-1
                           = render ChipButtonComponent.new(text: v, type: "static",'data-controller':' tooltip', title: v, class:'text-truncate', style: 'max-width: 200px; display: block')
-          = render DropdownContainerComponent.new(title: 'Links', id: 'link') do
+          = render DropdownContainerComponent.new(title: 'Links', id: 'link', tooltip:'hiba') do
             - @links_properties.each do |k, v|
               = render FieldContainerComponent.new(label: k.to_s, value: v)
           = render partial: 'ontologies/sections/metadata/ontology_all_projects_section'
               
-          = render DropdownContainerComponent.new(title: 'Methodology', id: 'methodology') do
+          = render DropdownContainerComponent.new(title: 'Methodology', id: 'methodology',  tooltip:'syphax') do
             - @methodology_properties.each do |k, v|
               = render FieldContainerComponent.new(label: k.to_s, value: Array(v).join(',')) 
           = render partial: 'ontologies/sections/metadata/ontology_visits_section'
