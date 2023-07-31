@@ -7,4 +7,8 @@ class FieldContainerComponent < ViewComponent::Base
     @label = label
     @value = value
   end
+
+  def show?
+    content && !content.empty? || (!@value.nil? && !@value.empty?)
+  end
 end
