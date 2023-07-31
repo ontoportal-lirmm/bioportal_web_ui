@@ -1,8 +1,9 @@
 .right_metadata
     .depiction
         .vists_image
-        %p Visits
-        - if visits_data(@ontology)
-            = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", "aria-label": "Download as CSV", title: "Download as CSV") do
-                %img{alt: "", src: asset_path("summary/arrow_down.svg")}
-            = render partial: "visits"
+        %p 
+            Visits
+            - if visits_data(@ontology)
+                = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", title: "Download as CSV") do
+                    = inline_svg("summary/arrow_down.svg")
+    = render partial: "visits"
