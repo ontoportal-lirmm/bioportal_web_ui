@@ -13,14 +13,20 @@ application.register("class-search-auto-complete", ClassSearchAutoCompleteContro
 import ContainerSplitterController from "./container_splitter_controller"
 application.register("container-splitter", ContainerSplitterController)
 
+import FairScoreHomeController from "./fair_score_home_controller"
+application.register("fair-score-home", FairScoreHomeController)
+
+import FairScoreLandscapeController from "./fair_score_landscape_controller"
+application.register("fair-score-landscape", FairScoreLandscapeController)
+
+import FairScoreSummaryController from "./fair_score_summary_controller"
+application.register("fair-score-summary", FairScoreSummaryController)
+
 import FormAutoCompleteController from "./form_auto_complete_controller"
 application.register("form-auto-complete", FormAutoCompleteController)
 
 import HistoryController from "./history_controller"
 application.register("history", HistoryController)
-
-import HomeSearchController from "./home_search_controller"
-application.register("home-search", HomeSearchController)
 
 import LabelAjaxController from "./label_ajax_controller"
 application.register("label-ajax", LabelAjaxController)

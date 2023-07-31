@@ -7,6 +7,8 @@ require 'pry' # used in a rescue
 
 module ApplicationHelper
 
+  include ModalHelper
+
   RESOLVE_NAMESPACE = {:omv => "http://omv.ontoware.org/2005/05/ontology#", :skos => "http://www.w3.org/2004/02/skos/core#", :owl => "http://www.w3.org/2002/07/owl#",
                        :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#", :rdfs => "http://www.w3.org/2000/01/rdf-schema#", :metadata => "http://data.bioontology.org/metadata/",
                        :metadata_def => "http://data.bioontology.org/metadata/def/", :dc => "http://purl.org/dc/elements/1.1/", :xsd => "http://www.w3.org/2001/XMLSchema#",
@@ -565,36 +567,7 @@ module ApplicationHelper
     ontology_name + " | " +concept_name_title + " - #{page.capitalize}"
   end
 
-  def link_to_modal(name, options = nil, html_options = nil, &block)
 
-    new_data = {
-      controller: 'show-modal', turbo: true,
-      turbo_frame: 'application_modal_content',
-      action: 'click->show-modal#show'
-    }
-
-    html_options[:data].merge!(new_data) do |_, old, new|
-      "#{old} #{new}"
-    end
-    if name.nil?
-      link_to(options, html_options, &block)
-    else
-      link_to(name, options, html_options)
-    end
-  end
-  def submit_to_modal(name, html_options = nil, &block)
-    new_data = {
-      controller: 'show-modal', turbo: true,
-      turbo_frame: 'application_modal_content',
-      action: 'click->show-modal#show'
-    }
-
-    html_options[:data].merge!(new_data) do |_, old, new|
-      "#{old} #{new}"
-    end
-
-    submit_tag(name || "save", html_options)
-  end
 
   def uri?(url)
     url =~ /\A#{URI::DEFAULT_PARSER.make_regexp(%w[http https])}\z/

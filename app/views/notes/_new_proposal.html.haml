@@ -1,4 +1,4 @@
-= render TurboFrameComponent.new(id: 'application_modal_content') do
+= render_in_modal do
   :javascript
     function updateProposalForm(event){
       let frame = document.getElementById('application_modal_content')
