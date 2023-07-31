@@ -47,16 +47,17 @@
           = render ChipButtonComponent.new(text: show_category_name(domain), type: "static")
 
   %hr.w-100.my-3
+
   .icons_container
-    %a{href: "#{@submission_latest.download}", style: "text-decoration: none;"}
+    %a{href: "#{@submission_latest.dataDump}", style: "text-decoration: none;", class:@submission_latest.dataDump.nil? ? 'disabled-icon': ''}
       = inline_svg_tag("summary/download.svg")
-    %a{href: "#{@submission_latest.homepage}", style: "text-decoration: none;"}
+    %a{href: "#{@submission_latest.homepage}", style: "text-decoration: none;", class:@submission_latest.homepage.nil? ? 'disabled-icon': ''}
       = inline_svg_tag("summary/homepage.svg")
-    %a{href: "#{@submission_latest.documentation}", style: "text-decoration: none;"}
+    %a{href: "#{@submission_latest.documentation}", style: "text-decoration: none;", class:@submission_latest.documentation.nil? ? 'disabled-icon': ''}
       = inline_svg_tag("summary/documentation.svg")
-    %a{href: "#{@submission_latest.repository}", style: "text-decoration: none;"}
+    %a{href: "#{@submission_latest.repository}", style: "text-decoration: none;", class:@submission_latest.repository.nil? ? 'disabled-icon': ''}
       = inline_svg_tag("summary/github.svg")
-    %a{href: "#{@submission_latest.endpoint}", style: "text-decoration: none;"}
+    %a{href: "#{@submission_latest.endpoint}", style: "text-decoration: none;" ,class:@submission_latest.endpoint.nil? ? 'disabled-icon': ''}
       = inline_svg_tag("summary/sparql.svg")
   %hr.w-100.my-3
   %div.text-center
