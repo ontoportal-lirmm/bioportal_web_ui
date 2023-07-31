@@ -1,8 +1,8 @@
-%p.normal_text
-    = @submission_latest.isFormatOf
-.creation_info
-    %p.description_text
-        known Usage
+- array = [:isFormatOf, :knownUsage, :designedForOntologyTask, :example, :coverage, :includedInDataCatalog, :audience]
+- array.each do |key| 
+    = render FieldContainerComponent.new(label: key.to_s, value: Array(@submission_latest.send(key.to_s)).join(',')) 
+
+
     %p.normal_text
         = @submission_latest.knownUsage
 .creation_info
