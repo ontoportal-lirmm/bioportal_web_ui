@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class DropdownContainerComponent < ViewComponent::Base
-
-  def initialize(title:, id:)
+  include ApplicationHelper
+  def initialize(title:, id:, tooltip:nil)
     super
     @title = title
     @id = id
+    @tooltip = tooltip
   end
 end
