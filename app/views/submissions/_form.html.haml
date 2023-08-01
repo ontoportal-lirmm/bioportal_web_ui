@@ -1,7 +1,4 @@
 :javascript
-
-
-
   function onMetadataChange(){
     let frame = document.getElementById('metadata_by_ontology')
     let properties = document.getElementById('search_metadata')
@@ -17,67 +14,25 @@
   .edit-ontology-container
     .edit-ontology-title
       %div Edit ontology
-      %hr/
+      %hr
     .edit-ontology-sub-container
+      - category_attributes = submission_metadata.group_by{|x| x['category']}.transform_values{|x| x.map{|attr| attr['attribute']} }
+      - category_attributes = category_attributes.reject{|key| ['no', 'Object description properties'].include?(key.to_s)}
       .edit-ontology-left-column{:role => "tablist",onchange:"onMetadataChange()"}
         = render MetadataSelectorComponent.new(label: 'Filter properties to show', values: submission_editable_properties , selected:  nil, inline: true)
-        .edit-ontology-tab-item.active{"aria-controls" => "ontology-details-tab", "aria-selected" => "true", "data-bs-target" => "#ontology-details", "data-bs-toggle" => "tab", :role => "tab"}
-          Ontology Details
-        .edit-ontology-tab-item{"aria-controls" => "general-metadata-tab", "aria-selected" => "true", "data-bs-target" => "#general-metadata", "data-bs-toggle" => "tab", :role => "tab"}
-          General MetaData
-        .edit-ontology-tab-item{"aria-controls" => "key-properties-tab", "aria-selected" => "true", "data-bs-target" => "#key-properties", "data-bs-toggle" => "tab", :role => "tab"}
-          Key properties
-        .edit-ontology-tab-item{"aria-controls" => "description-tab", "aria-selected" => "true", "data-bs-target" => "#description", "data-bs-toggle" => "tab", :role => "tab"}
-          Description
-        .edit-ontology-tab-item{"aria-controls" => "more-description-details-tab", "aria-selected" => "true", "data-bs-target" => "#more-description-details", "data-bs-toggle" => "tab", :role => "tab"}
-          More description details
-        .edit-ontology-tab-item{"aria-controls" => "dates-tab", "aria-selected" => "true", "data-bs-target" => "#dates", "data-bs-toggle" => "tab", :role => "tab"}
-          Dates
-        .edit-ontology-tab-item{"aria-controls" => "licenses-tab", "aria-selected" => "true", "data-bs-target" => "#licenses", "data-bs-toggle" => "tab", :role => "tab"}
-          Licenses
-        .edit-ontology-tab-item{"aria-controls" => "contacts-tab", "aria-selected" => "true", "data-bs-target" => "#contacts", "data-bs-toggle" => "tab", :role => "tab"}
-          Contacts
-        .edit-ontology-tab-item{"aria-controls" => "ontology-relations-tab", "aria-selected" => "true", "data-bs-target" => "#ontology-relations", "data-bs-toggle" => "tab", :role => "tab"}
-          Ontology relations
-        .edit-ontology-tab-item{"aria-controls" => "ontology-content-tab", "aria-selected" => "true", "data-bs-target" => "#ontology-content", "data-bs-toggle" => "tab", :role => "tab"}
-          Ontology content
-      = render TurboFrameComponent.new(id:"metadata_by_ontology") do
-        #myTabContent.edit-ontology-right-column.tab-content
-          #ontology-details.edit-ontology-tab.tab-pane.fade.show.active{"aria-labelledby" => "ontology-details-tab", :role => "tabpanel"}
-            .edit-ontology-field
-              %div
-                Name
-              %input{:name => "name", :type => "text"}/
-            .edit-ontology-field
-              %div
-                Acronym
-              %input{:name => "name", :type => "text"}/
-            .edit-ontology-field
-              %div
-                Administrator
-              %input{:name => "name", :type => "text"}/
-            .edit-ontology-field
-              %div
-                Bla bla blabla
-              %input{:name => "name", :type => "text"}/
-          #general-metadata.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "general-metadata-tab", :role => "tabpanel"}
-            2
-          #key-properties.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "key-properties-tab", :role => "tabpanel"}
-            3
-          #description.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "description-tab", :role => "tabpanel"}
-            4
-          #more-description-details.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "more-description-details-tab", :role => "tabpanel"}
-            5
-          #dates.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "dates-tab", :role => "tabpanel"}
-            6
-          #licenses.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "licenses-tab", :role => "tabpanel"}
-            = render TurboFrameComponent.new(id: "ontology-content-11", loading:"lazy", src: "edit?properties=hasLicense&show_sections=false")
-          #contacts.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "contacts-tab", :role => "tabpanel"}
-            = render TurboFrameComponent.new(id: "ontology-content-9", src: "edit?properties=URI,hasFormalityLevel,versionIRI&show_sections=false")
-          #ontology-relations.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "ontology-relations", :role => "tabpanel"}
-            = render TurboFrameComponent.new(id: "ontology-content-11", loading:"lazy", src: "edit?properties=URI,hasFormalityLevel,versionIRI&show_sections=false")
-          #ontology-content.edit-ontology-tab.tab-pane.fade{"aria-labelledby" => "ontology-content", :role => "tabpanel"}
-            = render TurboFrameComponent.new(id: "ontology-content-11", loading:"lazy", src: "edit?properties=URI,deprecated,hasOntologySyntax,keywords&show_sections=false")
+        %div.nav.nav-pills.flex-column
+          - category_attributes.keys.each_with_index do |key, index|
+            %a.edit-ontology-tab-item.d-block{href: "##{key.parameterize}", "data-toggle" => "pill", class: index.zero? ?  'active show': ''}
+              = key.humanize
+
+      #myTabContent.edit-ontology-right-column.w-100
+        = render TurboFrameComponent.new(id:"") do
+          %div.tab-content
+            - category_attributes.each_with_index  do |key_properties, index|
+              - key, properties = key_properties
+              .edit-ontology-tab.tab-pane.fade{id: key.parameterize, class: index.zero? ? 'active show' :''}
+                = render TurboFrameComponent.new(id: "ontology-content-#{index}", loading:"lazy", src: "edit?properties=#{properties.join(',')}&show_sections=false&container_id=ontology-content-#{index}")
+
     %hr#edit-ontology-actions-devider
     .edit-ontology-actions
       .reset-all-button
@@ -93,5 +48,4 @@
         %svg{:fill => "none", :height => "8", :viewbox => "0 0 10 8", :width => "10", :xmlns => "http://www.w3.org/2000/svg"}
           %path{:d => "M9.76764 0.232287C9.45824 -0.0775267 8.95582 -0.0773314 8.646 0.232287L3.59787 5.28062L1.35419 3.03696C1.04438 2.72715 0.542174 2.72715 0.23236 3.03696C-0.0774534 3.34677 -0.0774534 3.84898 0.23236 4.15879L3.03684 6.96327C3.19165 7.11807 3.39464 7.19568 3.59765 7.19568C3.80067 7.19568 4.00386 7.11827 4.15867 6.96327L9.76764 1.3541C10.0775 1.0445 10.0775 0.542081 9.76764 0.232287Z", :fill => "white"}
 
-  %script{crossorigin: "anonymous", integrity: "sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz", src: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"}
 
