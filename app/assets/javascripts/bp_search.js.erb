@@ -328,6 +328,7 @@ function performSearch() {
         includeOnlyDefinitions = jQuery("#search_require_definition").is(":checked"),
         exactMatch = jQuery("#search_exact_match").is(":checked"),
         categories = jQuery("#search_categories").val() || "";
+        language = jQuery("#search_language").val() || "";
 
     // Set the list of search words to be blacklisted for the ontology ownership algorithm
     blacklistSearchWordsArr = query.split(/\s+/);
@@ -338,6 +339,7 @@ function performSearch() {
         url: determineHTTPS(jQuery(document).data().bp.config.rest_url) + "/search",
         data: {
             q: query,
+            lang: language,
             include_properties: includeProps,
             include_views: includeViews,
             obsolete: includeObsolete,
