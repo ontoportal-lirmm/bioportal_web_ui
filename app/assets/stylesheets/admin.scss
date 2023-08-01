@@ -141,7 +141,28 @@ table.dataTable tbody tr.selected {
   }
 }
 
+#process-scheduling {
+
+  .site-admin-page-header {
+    justify-content: space-between;
+
+    .job-title {
+      text-transform: uppercase;
+    }
+  }
+
+  .site-admin-page-section {
+    margin-bottom: 3rem
+  }
+
+  .job-schedule {
+    font-style: italic;
+    cursor: help;
+  }
+}
+
 div.groupFormError {
   color: red;
   padding-top: 3px;
 }
+
