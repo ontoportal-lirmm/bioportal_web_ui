@@ -12,13 +12,13 @@
 .upload-ontology-desc.mb-1
   New versions loaded on a nightly basis.
 #url-form.d-none
-  = render Form::TextInputComponent.new(label: "", name: "submission[pullLocation]")
+  = render Input::TextInputComponent.new(label: "", name: "submission[pullLocation]")
 .location-choice.mb-3.mt-3
   %input{type: "radio", name: "submission[isRemote]", value: "0", checked: true, onchange: "displayLocalFileForm()"}
   %label.title{for: "upload_local_file"}
     Upload local file
 #local-file-form
-  = render Form::FileInputComponent.new(name: "submission[filePath]")
+  = render Input::FileInputComponent.new(name: "submission[filePath]")
 
 
 :javascript
