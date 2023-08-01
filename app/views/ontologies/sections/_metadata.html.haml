@@ -52,6 +52,7 @@
               = render FieldContainerComponent.new(label: k.to_s) do
                 %div.d-flex.flex-wrap
                   - Array(values).each do |val_str|
+                    - val_str = val_str.name if val_str.is_a?(LinkedData::Client::Models::Agent)
                     - val_str.split(',').each do |v|
                       - if v
                         %div.m-1
