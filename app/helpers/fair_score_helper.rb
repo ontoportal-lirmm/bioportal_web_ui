@@ -9,7 +9,7 @@ module FairScoreHelper
   end
 
   def get_fairness_service_url(apikey = user_apikey)
-    "#{$FAIRNESS_URL}?portal=#{$HOSTNAME.split('.')[0]}#{apikey.nil? || apikey.empty? ? '' : "&apikey=#{apikey}"}"
+    "#{$FAIRNESS_URL}?portal=ecoportal#{apikey.nil? || apikey.empty? ? '' : "&apikey=#{apikey}"}"
   end
   def get_fairness_json(ontologies_acronyms, apikey = user_apikey)
     begin
