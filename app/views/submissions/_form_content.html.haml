@@ -6,10 +6,13 @@
         %ul
           - Array(@errors).each do  |error|
             - error = error[:error] if error.is_a?(Hash) && error[:error]
-            - error.each do |key, value|
-              %li
-                - value = value.values if value.is_a?(Hash)
-                #{key}: #{Array(value).join(', ')}
+            - if error.is_a?(String)
+              = error
+            - else
+              - error.each do |key, value|
+                %li
+                  - value = value.values if value.is_a?(Hash)
+                  #{key}: #{Array(value).join(', ')}
 
   = hidden_field object_name, :ontology, value: acronym
   = hidden_field object_name, :id, value: submissionId
