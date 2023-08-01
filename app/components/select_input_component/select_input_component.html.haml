@@ -1,5 +1,0 @@
-%select{id: "select_#{@id}", autocomplete:"off", multiple: @multiple ,data: {controller: "select-input", 'select-input':{'multiple-value':@multiple, 'open-add-value':@open_to_add_values}}}
-  - @values.each do |value|
-    %option{value:@value, selected:  value.eql?(@selected)}
-      = value
-  
