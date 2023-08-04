@@ -1,4 +1,4 @@
-= turbo_frame_tag 'application_modal_content' do
+= render_in_modal do
   %div.d-flex.flex-column{:style => "overflow: auto; max-height: 600px;"}
     = render TurboFrameComponent.new(id: 'file_loader_result') do
       %div.my-2
