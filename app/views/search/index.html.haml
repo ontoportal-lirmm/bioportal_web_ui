@@ -17,6 +17,13 @@
     -# Advanced search options
     %div#search_options{style: "display: none;"}
       %div.form-group.row
+        %div.col-sm-2.mb-4 Search language
+        %div.col-sm-10
+          %select{name: "search_language", id: "search_language"}
+            %option{value: "all"} All
+            %option{value: "en"} English
+            %option{value: "fr"} Français
+
         %div.col-sm-2= t("search.include_in_search") + ":"
         %div.col-sm-10
           %div.form-check
@@ -28,7 +35,11 @@
           %div.form-check
             = check_box(:search, :include_views, class: "form-check-input")
             = label(:search, :include_views, t('search.ontology_views'), class: "form-check-label")
-      %div.form-group.row
+        
+        
+
+        
+
         %div.col-sm-2= t("search.narrow_search_to") + ":"
         %div.col-sm-10
           %div.form-check

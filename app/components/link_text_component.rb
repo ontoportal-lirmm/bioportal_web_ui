@@ -7,8 +7,15 @@ class LinkTextComponent < ViewComponent::Base
     @icon = icon
   end
 
+  def icon
+     @icon&.end_with?('.svg') ? @icon : "#{@icon}.svg"
+  end
+  def icon?
+    !@icon&.empty?
+  end
+
   def call
-    svg_icon = !@icon&.empty? ? inline_svg(@icon) : ''
+    svg_icon =  icon? ? inline_svg(icon) : ''
     "#{@text}<span class='mx-1'>#{svg_icon}<span>".html_safe
   end
 end
