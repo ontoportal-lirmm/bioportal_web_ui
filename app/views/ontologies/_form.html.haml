@@ -25,8 +25,12 @@
   .upload-ontology-card
     .upload-ontology-center
       .Upload-ontology-title
-        %div Upload ontology
-        %hr
+        - if @is_update_ontology
+          %div Upload new update
+          %hr
+        - else
+          %div Upload ontology
+          %hr
     .upload-ontology-progress
       .details.progress-item
         .outlined-circle.outlined-active-circle
@@ -56,7 +60,7 @@
       .upload-ontology-input-field-container#handlechangetest
         = render Input::SelectComponent.new(label: "Visibility",id: "visibility", name: "visibility", value: ["public","private"])
       .upload-ontology-input-field-container#visibility-group.hide
-        = render Input::SelectComponent.new(label: "Add or remove accounts that are allowed to view classes in this ontology using the account name", name: "ontology[visibility_group]", value: @user_select_list, multiple: true)
+        = render Input::SelectComponent.new(label: "Add or remove accounts that are allowed to view classes in this ontology using the account name", name: "ontology[status]", value: @user_select_list, multiple: true)
 
       .upload-ontology-field-container
         = render Input::SelectComponent.new(label: "Administrator", name: "ontology[administeredBy]", value: @user_select_list, selected: @ontology.administeredBy || session[:user].id, multiple: true, helper_text: "You should select one admin at least")
@@ -86,6 +90,9 @@
         = render Input::UrlComponent.new(label: "URI", name: "ontology[URI]", value: @ontology.URI)
       .upload-ontology-input-field-container
         = render Input::TextAreaComponent.new(label: "Description", name: "submission[description]", value: @submission.description)
+      - if @is_update_ontology
+        .upload-ontology-input-field-container
+          = render Input::TextAreaComponent.new(label: "Changes comment", name: "submission[changes_comment]")
       .upload-ontology-field-container
         = render Input::SelectComponent.new(label: "Format", name: "submission[hasOntologyLanguage]", value: ["OBO", "OWL", "SKOS", "UMLS"], selected: @submission.hasOntologyLanguage)
         .upload-ontology-desc.hide
@@ -106,7 +113,10 @@
 
     .upload-ontology-dates-and-contacts-step.hide{"data-form": "3"}
       .upload-ontology-input-field-container
-        = render Input::DateComponent.new(label: "Date of original creation (dd/mm/yy)", name: "submission[released]", value: @submission.released || Date.today)
+        - if @is_update_ontology
+          = render Input::DateComponent.new(label: "Modification date (dd/mm/yy)", name: "submission[released]", value: @submission.released || Date.today)
+        - else
+          = render Input::DateComponent.new(label: "Date of original creation (dd/mm/yy)", name: "submission[released]", value: @submission.released || Date.today)
       .upload-ontology-contact
         = render NestedFormInputsComponent.new(object_name: "Contact") do |c|
           - c.header do
