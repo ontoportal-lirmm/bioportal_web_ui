@@ -25,12 +25,10 @@
   .upload-ontology-card
     .upload-ontology-center
       .Upload-ontology-title
-        - if @is_update_ontology
-          %div Upload new update
-          %hr
-        - else
-          %div Upload ontology
-          %hr
+        %div 
+          = @is_update_ontology ? "Upload new update" : "Upload ontology"
+        %hr
+
     .upload-ontology-progress
       .details.progress-item
         .outlined-circle.outlined-active-circle
@@ -53,12 +51,9 @@
     .upload-ontology-details-step{"data-form": "1"}
       .upload-ontology-input-field-container
         = render Input::TextInputComponent.new(label: "Name", name: "ontology[name]", value: @ontology.name)
-
       .upload-ontology-input-field-container
-        - if @is_update_ontology
-          = render Input::TextInputComponent.new(label: "Acronym", name: "ontology[acronym]", value: @ontology.acronym, disabled: true)
-        - else
-          = render Input::TextInputComponent.new(label: "Acronym", name: "ontology[acronym]", value: @ontology.acronym)
+        = render Input::TextInputComponent.new(label: "Acronym", name: "ontology[acronym]", value: @ontology.acronym, disabled: @is_update_ontology)
+       
       .upload-ontology-input-field-container#handlechangetest
         = render Input::SelectComponent.new(label: "Visibility", name: "ontology[viewingRestriction]", value: ["public","private"], selected: @ontology.viewingRestriction)
       .upload-ontology-input-field-container#visibility-group.hide
@@ -70,12 +65,12 @@
         %div.mb-2 Categories
         %div.upload-ontology-chips-container
           - @categories.each do |category|
-            = render ChipsComponent.new(name: "ontology[hasDomain][]", id: category[:acronym] , value: category[:acronym])
+            = render ChipsComponent.new(name: "ontology[hasDomain][]", id: category[:acronym] , value: category[:acronym], checked: @ontology.hasDomain.any?{|x| x.eql?(category[:id])})
       .upload-ontology-field-container
         %div.mb-2 Groups
         %div.upload-ontology-chips-container
           - @groups.each do |group|
-            = render ChipsComponent.new(name: "ontology[group][]", id: group[:acronym] , value: group[:acronym])
+            = render ChipsComponent.new(name: "ontology[group][]", id: group[:acronym] , value: group[:acronym], checked: @ontology.group.any?{|x| x.eql?(group[:id])})
 
       .upload-ontology-input-field-container.mt-2
         %span.d-flex
@@ -96,7 +91,8 @@
         = render Input::TextAreaComponent.new(label: "Description", name: "submission[description]", value: @submission.description)
       - if @is_update_ontology
         .upload-ontology-input-field-container
-          = render Input::TextAreaComponent.new(label: "Changes comment", name: "submission[changes_comment]")
+          = generate_list_text_input("notes", "submission[notes]", Array(@submission.notes), label: "Change notes")
+          -#= render Input::TextAreaComponent.new(label: "Changes comment", name: "submission[notes]", value: @submission.notes.to_s)
       .upload-ontology-field-container
         = render Input::SelectComponent.new(label: "Format", name: "submission[hasOntologyLanguage]", value: ["OBO", "OWL", "SKOS", "UMLS"], selected: @submission.hasOntologyLanguage)
         .upload-ontology-desc.hide
@@ -118,7 +114,8 @@
     .upload-ontology-dates-and-contacts-step.hide{"data-form": "3"}
       .upload-ontology-input-field-container
         - if @is_update_ontology
-          = render Input::DateComponent.new(label: "Modification date (dd/mm/yy)", name: "submission[released]", value: @submission.released || Date.today)
+          = generate_attribute_input("modificationDate")
+          -#= render Input::DateComponent.new(label: "Modification date (dd/mm/yy)", name: "submission[modificationDate]", value: @submission.modificationDate || Date.today)
         - else
           = render Input::DateComponent.new(label: "Date of original creation (dd/mm/yy)", name: "submission[released]", value: @submission.released || Date.today)
       .upload-ontology-contact
@@ -139,9 +136,6 @@
                 .w-50
                   = render Input::TextInputComponent.new(label: "", name: "submission[contact][#{i}][email]", value: contact["email"])
             
-
-
-
 
 
 
