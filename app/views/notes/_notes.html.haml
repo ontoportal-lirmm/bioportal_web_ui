@@ -17,35 +17,21 @@
   = render_alerts_container("notes_#{parent_type}_list_table_alerts")
 
   .ont_notes_table_container
-    %table.zebra.notes_ont_list_table{:id => "#{notes_table_id}", :style => "width: 100%;", :width => "100%"}
-      %thead
-        %tr
-          %th
-            Delete
-          %th
-            Subject
-          %th.d-none
-            Subject Sort
-          %th.d-none
-            Archive Sort
-          %th
-            Author
-          %th
-            Type
-          - if parent_type.eql?('ontology')
-            %th
-              Class
-          %th
-            Created
-      %tbody{id: "#{parent_type}_notes_table_content"}
-        - if @notes.nil? || @notes.empty?
-          %tr#ont_no_notes
-            %td{colspan: colspan} No notes to display
-            - (colspan-1).times.each do
-              %td
-        - else
-          - @notes.each do |note|
-            = render partial: 'notes/note_line', locals: {note: note, ontology_acronym: @ontology.acronym, parent_type: parent_type}
+    - cols = ['Action', 'Subject', 'Author', 'Type', (parent_type.eql?('ontology') ? 'Class' : nil),'Created'].compact
+    = render TableComponent.new(id:"#{parent_type}_notes") do |t|
+      - t.header do |row|
+        - row.create(*cols.map{|col| {th: col}})
+
+      - if @notes.nil? || @notes.empty?
+        - t.row do |row|
+          - row.td(colspan: colspan) do
+            %div.text-center
+              No notes to display
+
+      - else
+        - @notes.each do |note|
+          = render partial: 'notes/note_line', locals: {note: note, ontology_acronym: @ontology.acronym, parent_type: parent_type}
+
 :javascript
   jQuery(".ontologies.show").ready(function(){
     jQuery("#hide_archived_ont").click(function(){

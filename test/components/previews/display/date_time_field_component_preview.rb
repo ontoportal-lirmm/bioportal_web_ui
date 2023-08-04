@@ -1,4 +1,4 @@
-class DateTimeFieldComponentPreview < ViewComponent::Preview
+class Display::DateTimeFieldComponentPreview < ViewComponent::Preview
 
   # @param text text
   # @param format select [year_month_day_concise, month_day_year, monthfull_day_year]

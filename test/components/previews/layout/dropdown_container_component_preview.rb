@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DropdownContainerComponentPreview < ViewComponent::Preview
+class Layout::DropdownContainerComponentPreview < ViewComponent::Preview
   layout 'component_preview_not_centred'
 
   # @param title text

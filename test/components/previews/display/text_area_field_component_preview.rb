@@ -1,4 +1,4 @@
-class TextAreaFieldComponentPreview < ViewComponent::Preview
+class Display::TextAreaFieldComponentPreview < ViewComponent::Preview
 
 
   # @param value textarea

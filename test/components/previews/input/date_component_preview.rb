@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Form::DateComponentPreview < ViewComponent::Preview
+class Input::DateComponentPreview < ViewComponent::Preview
   def default
     # This is a date input field:
     # - To use it without a label: don't give a value to the param label or leave it empty.
@@ -11,7 +11,7 @@ class Form::DateComponentPreview < ViewComponent::Preview
     # @param helper_text text
 
     def default(label: "Label", placeholder: "", error_message: "", helper_text: "")
-      render Form::DateComponent.new(label: label, name: "name", placeholder: placeholder, error_message: error_message, helper_text: helper_text)
+      render Input::DateComponent.new(label: label, name: "name", placeholder: placeholder, error_message: error_message, helper_text: helper_text)
     end
   end
 end

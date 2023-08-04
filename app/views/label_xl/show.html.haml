@@ -5,18 +5,7 @@
                 top_keys: %w[description comment],
                 bottom_keys: %w[disjoint subclass is_a has_part],
                 exclude_keys: []) do |c|
-      - c.header do
-        %tr
-          %td.label
-            ID
-          %td
-            %p
-              = @label_xl["@id"]
-        %tr
-          %td{nowrap: ""} Preferred Name
-          %td
-            %p= get_label_xl_label(@label_xl)
-        %tr
-          %td{nowrap: ""} Type
-          %td
-            %p= @label_xl["@type"]
+      - c.header(stripped: true) do |t|
+        - t.add_row({th: 'ID'}, {td: @label_xl["@id"]})
+        - t.add_row({th: 'Preferred Name'}, {td: get_label_xl_label(@label_xl)})
+        - t.add_row({th: 'Type'}, {td: @label_xl["@type"]})
