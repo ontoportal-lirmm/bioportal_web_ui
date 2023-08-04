@@ -55,8 +55,10 @@
         = render Input::TextInputComponent.new(label: "Name", name: "ontology[name]", value: @ontology.name)
 
       .upload-ontology-input-field-container
-        = render Input::TextInputComponent.new(label: "Acronym", name: "ontology[acronym]", value: @ontology.acronym)
-
+        - if @is_update_ontology
+          = render Input::TextInputComponent.new(label: "Acronym", name: "ontology[acronym]", value: @ontology.acronym, disabled: true)
+        - else
+          = render Input::TextInputComponent.new(label: "Acronym", name: "ontology[acronym]", value: @ontology.acronym)
       .upload-ontology-input-field-container#handlechangetest
         = render Input::SelectComponent.new(label: "Visibility",id: "visibility", name: "visibility", value: ["public","private"])
       .upload-ontology-input-field-container#visibility-group.hide
