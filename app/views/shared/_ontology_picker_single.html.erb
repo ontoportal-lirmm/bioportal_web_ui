@@ -25,6 +25,6 @@
 </script>
 
 <div id="<%=picker_id%>_container" class="ontology_picker_single_container">
-  <%= select object_name, field_name, @onts_for_select, { :include_blank => true, :selected => selected }, :id => picker_id, :class => "ontology_picker_single form-control", "data-placeholder".to_sym => placeholder, disabled: disabled %>
+  <%= render Input::SelectComponent.new(label: placeholder, name: "#{object_name}[#{field_name}]", value: @onts_for_select, selected: selected) %>
 </div>
 
