@@ -54,9 +54,9 @@
         = render Input::TextInputComponent.new(label: "Acronym", name: "ontology[acronym]", value: @ontology.acronym)
 
       .upload-ontology-input-field-container#handlechangetest
-        = render Input::SelectComponent.new(label: "Visibility",id: "visibility", name: "visibility", value: ["public","private"])
+        = render Input::SelectComponent.new(label: "Visibility", name: "ontology[viewingRestriction]", value: ["public","private"], selected: @ontology.viewingRestriction)
       .upload-ontology-input-field-container#visibility-group.hide
-        = render Input::SelectComponent.new(label: "Add or remove accounts that are allowed to view classes in this ontology using the account name", name: "ontology[visibility_group]", value: @user_select_list, multiple: true)
+        = render Input::SelectComponent.new(label: "Add or remove accounts that are allowed to view classes in this ontology using the account name", name: "ontology[acl]", value: @user_select_list, multiple: true, selected: @ontology.acl)
 
       .upload-ontology-field-container
         = render Input::SelectComponent.new(label: "Administrator", name: "ontology[administeredBy]", value: @user_select_list, selected: @ontology.administeredBy || session[:user].id, multiple: true, helper_text: "You should select one admin at least")
