@@ -1,0 +1,33 @@
+.pill-button {
+    color: var(--primary-color);
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--primary-color);
+    border-radius: 32px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color ease 0.3s;
+    white-space: nowrap;
+    background-color: transparent;
+    &:focus{
+        outline: none;
+    }
+}
+
+.pill-button:hover {
+    background-color: var(--primary-color);
+    color: white !important;
+    a {
+        color: white !important;
+    }
+}
+
+.pill-button:hover svg path {
+    fill: white;
+}
+
+.pill-button svg {
+    margin-right: 10px;
+}

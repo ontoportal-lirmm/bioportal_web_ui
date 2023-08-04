@@ -1,4 +1,4 @@
-= turbo_frame_tag 'application_modal_content' do
+= render_in_modal do
   - if @label_xl && !@label_xl.empty?
     = render ConceptDetailsComponent.new(id:'skos-xl-label', acronym: @ontology_acronym,
                 properties: @label_xl.properties,

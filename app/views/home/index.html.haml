@@ -37,7 +37,7 @@
     %a.home-bubble.home-bubble-four{:href => "/visits"}
       %h5 ...
 
-  .home-header-title-container{'data-controller': "home-search"}
+  .home-header-title-container
     .home-header-title
       %h4 
         = t('.welcome', site: $SITE)
@@ -67,7 +67,7 @@
         Upload ontology
   .home-section
     %h4
-      = portal_name+" services"
+      Recommender and annotator
     %hr.home-section-line/
     .home-card
       %form{action: "/annotator_recommender_form", method: "post"}
@@ -89,7 +89,7 @@
         %hr.home-section-line/
         .home-card.home-fair-scores
           - if fairness_service_enabled?
-            %div#fair-home
+            %div#fair-home{data:{controller:"fair-score-home"}}
               = render partial: "shared/fair_score_bars", locals: {data: nil}
           %a{:href => "#fairDetails"}
             %div.home-fair-details
@@ -99,7 +99,7 @@
         %h4 News
         %hr.home-section-line
         .home-card.home-twitter-news
-          %a.twitter-timeline{"data-height" => "349", "data-width" => "533", :href => "https://twitter.com/lagroportal?ref_src=twsrc%5Etfw"} Tweets by lagroportal
+          %a.twitter-timeline{"data-height" => "349", :href => "https://twitter.com/lagroportal?ref_src=twsrc%5Etfw"} Tweets by lagroportal
           %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
 
   .home-section
