@@ -38,6 +38,27 @@ class LoginController < ApplicationController
     end
   end
 
+
+  def create_omniauth
+    auth_data = request.env['omniauth.auth']
+    auth_code = auth_data.credentials.token
+    binding.pry
+    logged_in_user = LinkedData::Client::HTTP.post("#{LinkedData::Client.settings.rest_url}/users/authenticate", { access_token: auth_code , token_provider: params[:provider] })
+    if logged_in_user && !logged_in_user.errors
+      login(logged_in_user)
+      redirect = "/"
+
+      if session[:redirect]
+        redirect = CGI.unescape(session[:redirect])
+      end
+
+      redirect_to redirect
+    else
+      @errors =  ["#{params[:provider]} authentication failed"]
+      render :action => 'index'
+    end
+  end
+
   # Login as the provided username (only for admin users)
   def login_as
     unless session[:user] && session[:user].admin?

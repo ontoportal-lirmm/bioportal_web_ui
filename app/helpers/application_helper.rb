@@ -31,6 +31,10 @@ module ApplicationHelper
     end
   end
 
+  def omniauth_providers_info
+    $OMNIAUTH_PROVIDERS
+  end
+
   def submission_metadata
     @metadata ||= JSON.parse(Net::HTTP.get(URI.parse("#{REST_URI}/submission_metadata?apikey=#{API_KEY}")))
   end

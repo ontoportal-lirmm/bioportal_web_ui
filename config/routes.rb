@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
 
+  get 'auth/:provider/callback', to: 'login#create_omniauth'
   get 'locale/:language', to: 'language#set_locale_language'
 
   get '/notes/new_comment', to: 'notes#new_comment'
