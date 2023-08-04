@@ -60,10 +60,6 @@
 
       .upload-ontology-field-container
         = render Input::SelectComponent.new(label: "Administrator", name: "ontology[administeredBy]", value: @user_select_list, selected: @ontology.administeredBy || session[:user].id, multiple: true, helper_text: "You should select one admin at least")
-      .upload-ontology-input-field-container
-        = render InputFieldComponent.new(label: "This ontology is a view of", name: "ontology[viewOf]") do
-          - single_picker_locals = {:picker_id => "ontology_viewOf", placeholder: "Select an ontology to create a view on", field_name: "viewOf", disabled: false, selected: @ontology.viewOf}
-          = render :partial => "shared/ontology_picker_single", :locals => single_picker_locals
       .upload-ontology-field-container
         %div.mb-2 Categories
         %div.upload-ontology-chips-container
@@ -74,6 +70,12 @@
         %div.upload-ontology-chips-container
           - @groups.each do |group|
             = render ChipsComponent.new(name: "ontology[group][]", id: group[:acronym] , value: group[:acronym])
+
+      .upload-ontology-input-field-container.mt-2
+        %span.d-flex
+          = render SwitchInputComponent.new(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is a view of another ontology?', checked: @ontology.view?)
+        %div#ontology_viewOf{style: "display: none"}
+          = render partial: "shared/ontology_picker_single", locals: {placeholder: "", field_name: "viewOf", selected: @ontology.viewOf}
     .upload-general_metadata-step.hide{"data-form": "2"}
       .upload-ontology-desc
         %div
@@ -246,4 +248,12 @@
       // If it's not "private", hide the visibility-group div
       visibilityGroupDiv.style.display = 'none';
     }
+  });
+  jQuery("#ontology_isView").live("click", function(){
+      if (jQuery("#ontology_isView").is(":checked")) {
+        jQuery("#ontology_viewOf").removeAttr('disabled');
+        jQuery("#ontology_viewOf").removeAttr('disabled').show();
+      } else {
+        jQuery("#ontology_viewOf").attr('disabled', true).hide();
+      }
   });
