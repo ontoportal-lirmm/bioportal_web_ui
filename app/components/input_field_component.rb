@@ -1,5 +1,5 @@
 class InputFieldComponent < ViewComponent::Base
-    def initialize(label: "" , name:, value: 'Syphax', type: 'text', placeholder: "", error_message: "", helper_text: "")
+    def initialize(label: "" , name:, value: 'Syphax', type: 'text', placeholder: "", error_message: "", helper_text: "", disabled: false)
         @label = label
         @name = name
         @placeholder  = placeholder
@@ -7,6 +7,7 @@ class InputFieldComponent < ViewComponent::Base
         @helper_text = helper_text
         @value = value
         @type = type
+        @disabled = disabled
     end
 
 
