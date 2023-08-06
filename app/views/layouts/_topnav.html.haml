@@ -44,7 +44,7 @@
                 = link_to("Logout", logout_path)
 
         = select_tag('language', options_for_select([['EN','en'],['FR','fr']]), id: 'language-select', class: 'nav-language',
-              data: { controller: "platform-language", action: "change->platform-language#handleLangChanged" })
+          data: { controller: "platform-language", action: "change->platform-language#handleLangChanged" })
 
         = render DropdownButtonComponent.new do |d|
           - d.header do

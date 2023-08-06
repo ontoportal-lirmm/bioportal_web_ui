@@ -1,7 +1,3 @@
-
-
-
-
 .location-choice
   %input{type: "radio", name: "submission[isRemote]", value: "3", id: "metadata_only", onchange: "displayMetadataOnlyForm()"}
   %label.title{for: "metadata_only"}
@@ -23,13 +19,6 @@
     Upload local file
 #local-file-form
   = render Input::FileInputComponent.new(name: "submission[filePath]")
-
-:javascript
-  const MetadataOnlyForm = document.getElementById("metadata-only-form");
-  const UrlForm = document.getElementById("url-form");
-  const LocalFileForm = document.getElementById("local-file-form");
-
-
 
 
 :javascript
