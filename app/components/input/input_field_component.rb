@@ -1,4 +1,4 @@
-class InputFieldComponent < ViewComponent::Base
+class Input::InputFieldComponent < ViewComponent::Base
     def initialize(label: "" , name:, value: 'Syphax', type: 'text', placeholder: "", error_message: "", helper_text: "")
         @label = label
         @name = name
