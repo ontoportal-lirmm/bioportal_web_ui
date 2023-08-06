@@ -6,6 +6,7 @@
       %div.d-flex.justify-content-end{style: 'width: 10%'}
         %div.delete{data: {action:"click->nested-form#remove"}}
           = inline_svg 'icons/delete.svg'
+
   %div.titles
     = header
   %div.d-none
@@ -14,6 +15,14 @@
     %div.d-flex.align-items-center.nested-form-wrapper.my-1{'data-new-record': 'true'}
       %div{style: 'width: 90%'}
         = row
+      %div.d-flex.justify-content-end{style: 'width: 10%'}
+        %div.delete{data: {action:"click->nested-form#remove"}}
+          = inline_svg 'icons/delete.svg'
+
+  - if rows.empty?
+    %div.d-flex.align-items-center.nested-form-wrapper.my-1{'data-new-record': 'true'}
+      %div{style: 'width: 90%'}
+        = template
       %div.d-flex.justify-content-end{style: 'width: 10%'}
         %div.delete{data: {action:"click->nested-form#remove"}}
           = inline_svg 'icons/delete.svg'
