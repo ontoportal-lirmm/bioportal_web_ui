@@ -17,12 +17,12 @@
       %hr
     .edit-ontology-sub-container
       - category_attributes = submission_metadata.group_by{|x| x['category']}.transform_values{|x| x.map{|attr| attr['attribute']} }
-      - category_attributes = category_attributes.reject{|key| ['no', 'Object description properties'].include?(key.to_s)}
+      - category_attributes = category_attributes.reject{|key| ['no', 'Object description properties', 'Content', 'Links'].include?(key.to_s)}
       .edit-ontology-left-column{:role => "tablist",onchange:"onMetadataChange()"}
         = render MetadataSelectorComponent.new(label: 'Filter properties to show', values: submission_editable_properties , selected:  nil, inline: true)
         %div.nav.nav-pills.flex-column
           - category_attributes.keys.each_with_index do |key, index|
-            %a.edit-ontology-tab-item.d-block{href: "##{key.parameterize}", "data-toggle" => "pill", class: index.zero? ?  'active show': ''}
+            %a.edit-ontology-tab-item.d-block{href: "##{key.parameterize}-tab", "data-toggle" => "pill", class: index.zero? ?  'active show': ''}
               = key.humanize
 
       #myTabContent.edit-ontology-right-column.w-100
@@ -30,7 +30,7 @@
           %div.tab-content
             - category_attributes.each_with_index  do |key_properties, index|
               - key, properties = key_properties
-              .edit-ontology-tab.tab-pane.fade{id: key.parameterize, class: index.zero? ? 'active show' :''}
+              .edit-ontology-tab.tab-pane.fade{id: key.parameterize+'-tab', class: index.zero? ? 'active show' :''}
                 = render TurboFrameComponent.new(id: "ontology-content-#{index}", loading:"lazy", src: "edit?properties=#{properties.join(',')}&show_sections=false&container_id=ontology-content-#{index}")
 
     %hr#edit-ontology-actions-devider

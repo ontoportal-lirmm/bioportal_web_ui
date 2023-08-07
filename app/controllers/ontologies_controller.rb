@@ -4,7 +4,7 @@ class OntologiesController < ApplicationController
   include InstancesHelper
   include ActionView::Helpers::NumberHelper
   include OntologiesHelper
-  include SchemesHelper
+  include SchemesHelper, ConceptsHelper
   include CollectionsHelper
   include MappingStatistics
 

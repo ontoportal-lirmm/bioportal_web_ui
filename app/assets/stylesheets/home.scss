@@ -89,7 +89,7 @@ i.fa.fa-caret-square-o-down {
 .home-header-title{
   position: absolute;
   z-index: 4;
-  width: 481px;
+  width: 500px;
   margin-right: 664px;
   margin-top: 123px;
   opacity: 0;
@@ -97,7 +97,7 @@ i.fa.fa-caret-square-o-down {
   animation: slide-and-fade 1s ease forwards;
 }
 .home-header-title h4{
-  font-size: 40px;
+  font-size: 38px;
   font-weight: 800;
   color: white;
 }
@@ -108,17 +108,18 @@ i.fa.fa-caret-square-o-down {
   color: white;
 }
 
-.home-header-title input{
+.home-header-title .search-inputs input{
   font-size: 16px;
   outline: none;
   padding: 20px;
   width: 100%;
+  height: 100%;
   margin-top: 20px;
   border-radius: 14px;
   border: none;
   box-shadow: 2px 30px 60px rgba(0, 0, 0, 0.1);
 }
-.home-header-title input:focus{
+.home-header-title .search-inputs input:focus{
   box-shadow: 2px 30px 60px rgba(0, 0, 0, 0.15);
 }
 
@@ -129,8 +130,9 @@ i.fa.fa-caret-square-o-down {
   align-items: center;
 }
 .home-section{
+  padding: 0 50px;
   margin-top: 70px;
-  width: 1138px;
+  width: 1248px;
 }
 .home-section > h4{
   font-size: 20px;
@@ -147,7 +149,6 @@ i.fa.fa-caret-square-o-down {
 }
 .home-statistics{
   display: flex;
-  justify-content: space-between;
 }
 .home-statistics-container{
   border-radius: 8px;
@@ -158,7 +159,7 @@ i.fa.fa-caret-square-o-down {
 .home-statistics-container > div {
   display: flex;
   align-items: center;
-
+  flex-wrap: wrap;
 }
 .home-agroportal-figures{
   margin-bottom: 20px;
@@ -173,7 +174,10 @@ i.fa.fa-caret-square-o-down {
 .home-statistics-item{
   display: flex;
   align-items: center;
- 
+  
+}
+.home-statistics> :not(:last-child){
+  margin-right: 49px;
 }
 .home-statistics-item hr{
   height: 83px;
@@ -314,10 +318,10 @@ i.fa.fa-caret-square-o-down {
   justify-content: space-between;
 }
 .home-sub-section-left{
-  width: 533px;
+  width: 550px;
 }
 .home-sub-section-right{
-  width: 533px;
+  width: 550px;
 }
 .home-sub-section-left h4, .home-sub-section-right h4{
   font-size: 20px;
@@ -362,49 +366,6 @@ i.fa.fa-caret-square-o-down {
   margin-left: 60px;
 }
 
-#home-search-drop-down{
-  display: none;
-  font-size: 16px;
-  background: white;
-  width: 100%; 
-  border-radius: 0 0 14px 14px;
-  border: none;
-  box-shadow: 2px 30px 60px rgba(0, 0, 0, 0.1);
-}
-
-.home-search-ontology-content{
-  display: flex;
-  color: #777777 !important;
-  justify-content: space-between;
-  padding: 20px 20px;
-  cursor: pointer;
-  border-top: 1px solid #f7f7f7
-}
-.home-search-ontology-content:hover{
-  background-color: rgba(0, 0, 0, 0.01);
-}
-.home-search-ontology-content div{
-  display: flex;
-  margin-left: 20px;
-}
-.home-search-ontology-content div img{
-  width: 12px;
-}
-.home-search-ontology-content div p{
-  font-weight: 300;
-  margin-left: 10px;
-  margin-bottom: 0;
-}
-
-.home-dropdown-active{
-  box-shadow: none !important;
-}
-#seached-ontology{
-  margin-bottom: 0;
-}
-#seached-ontologies{
-  margin-bottom: 0;
-}
 
 .home-support-title{
   display: flex;
@@ -455,6 +416,44 @@ i.fa.fa-caret-square-o-down {
 @keyframes slide-and-fade {
   from { opacity: 0; transform: translateY(-100%); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1300px) {
+  .home-section{
+    width: 100%;
+  }
+  .home-section-sub-sections-container{
+    flex-direction: column;
+  }
+  .home-random-bubbles{
+    display: none;
+  }
+  .home-header-title{
+
+        margin:128px 50px;
+        width: 500px;
+
+        opacity: 0;
+        transform: translateY(-100%);
+        animation: slide-and-fade 1s ease forwards;
+  }
+  .home-header-title-container{
+    justify-content: start;
+  }
+    .home-sub-section-left {
+      width: 100%;
+    }
+  
+    .home-sub-section-right {
+      width: 100%;
+      margin-top: 50px;
+    }
+    .home-fair-scores div{
+      padding: 0 10%;
+    }
+        .home-fair-scores{
+          height: unset;
+        }
 }
 
 

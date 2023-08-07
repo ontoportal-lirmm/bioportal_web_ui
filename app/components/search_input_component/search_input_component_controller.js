@@ -75,7 +75,7 @@ export default class extends Controller {
         } else {
             useAjax({
                 type: "GET",
-                url: this.ajaxUrlValue + '?search=' + this.#inputValue(),
+                url: this.ajaxUrlValue + this.#inputValue(),
                 dataType: "json",
                 success: (data) => {
                     this.items = data.map(x => { return {...x, link: (this.itemLinkBaseValue + x[this.idKeyValue])}} )
@@ -151,7 +151,8 @@ export default class extends Controller {
             if (key === 'TYPE'){
                 value  = value.toString().split('/').slice(-1)
             }
-            string =  string.replace(key, value.toString())
+            const regex = new RegExp('\\b' + key + '\\b', 'gi');
+            string =  string.replace(regex, value.toString())
         })
 
         return new DOMParser().parseFromString(string, "text/html").body.firstElementChild

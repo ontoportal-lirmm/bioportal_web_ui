@@ -1,4 +1,4 @@
-= turbo_frame_tag 'application_modal_content' do
+= render_in_modal do
   %div.d-flex.flex-column{:style => "overflow: auto; max-height: 600px;"}
     = render TurboFrameComponent.new(id: 'file_loader_result') do
       %div.my-2
@@ -14,6 +14,6 @@
                   = JSON.pretty_generate @example_code
         = form_with url: '/mappings/loader', method: :post, multipart: true, data: { turbo: true} do
           %div
-            = render Form::FileInputComponent.new(name: :file)
+            = render Input::FileInputComponent.new(name: :file)
           %button.btn.btn-secondary.btn-block.mt-2{type:'submit'}
             Save

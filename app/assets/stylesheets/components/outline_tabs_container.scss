@@ -1,0 +1,27 @@
+
+.outline-tabs{
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem 0.25rem 0 0;
+  padding-top: 1rem;
+}
+.outline-tabs .tab-items .nav-item{
+  margin-right: 0;
+
+}
+
+.outline-tabs .tab-items .nav-item.active a{
+    color: var(--primary-color) !important;
+}
+
+.outline-tabs .nav-item  .tab-link{
+  display: block;
+  padding: 0 1rem 0.2rem 1rem;
+}
+
+.outline-tabs + .tab-content {
+  .tab-pane{
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-top: none ;
+    border-radius: 0 0 0.25rem 0.25rem;
+  }
+}

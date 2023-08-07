@@ -457,7 +457,7 @@ module OntologiesHelper
         end
       end
     else
-      select_tag name, languages_options, class: 'custom-select', disabled: !ontology_data_section?, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'}; margin-bottom: -10px;", data: {'ontology-viewer-tabs-target': 'languageSelector'}
+      select_tag name, languages_options, class: '', disabled: !ontology_data_section?, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'}; border: none; outline: none;", data: {'ontology-viewer-tabs-target': 'languageSelector'}
     end
   end
 
