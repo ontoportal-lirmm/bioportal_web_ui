@@ -601,14 +601,6 @@ module ApplicationHelper
     lang.upcase
   end
 
-  def portal_name
-    "StagePrtal"
-  end
-
-  def navitems
-    items = [["/ontologies", "Browse"],["/mappings", "Mappings"],["/recommender", "Recommender"],["/annotator", "Annotator"], ["/landscape", "Landscape"]]
-  end
-
   def bp_config_json
     # For config settings, see
     # config/bioportal_config.rb
