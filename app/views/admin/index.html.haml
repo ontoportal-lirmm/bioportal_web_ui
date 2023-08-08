@@ -13,7 +13,7 @@
 
 %div.row
   %div.col
-    - sections = ['Site Administration','Ontology Administration',  'Licensing', 'Users', 'Metadata Administration', 'Groups', 'Categories']
+    - sections = ['Site Administration','Ontology Administration',  'Licensing', 'Users', 'Metadata Administration', 'Groups', 'Categories', 'Persons & Organizations']
     = render TabsContainerComponent.new do |t|
       - sections.each do |section_title|
         - t.item(title: section_title,
@@ -88,7 +88,7 @@
       - t.item_content do
         %div.ontologies_list_container.mt-3
           %table#adminCategories.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
-
-
-
+      - t.item_content do
+        %div.ontologies_list_container.mt-3
+          = render TurboFrameComponent.new(id: 'agents-list', src: '/agents', loading: 'lazy')
 

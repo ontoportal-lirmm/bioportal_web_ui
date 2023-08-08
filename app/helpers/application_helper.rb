@@ -29,6 +29,18 @@ module ApplicationHelper
     end
   end
 
+  def omniauth_providers_info
+    $OMNIAUTH_PROVIDERS
+  end
+
+  def omniauth_provider_info(strategy)
+    omniauth_providers_info.select {|k,v| v[:strategy].eql?(strategy.to_sym)}
+  end
+
+  def omniauth_token_provider(strategy)
+    omniauth_provider_info(strategy).keys.first
+  end
+
   def isOwner?(id)
     unless session[:user].nil?
       if session[:user].admin?
@@ -71,6 +83,10 @@ module ApplicationHelper
     user = LinkedData::Client::Models::User.find(user_id)
     username = user.nil? ? user_id : user.username
     username
+  end
+
+  def current_user
+    session[:user]
   end
 
   def current_user_admin?

@@ -1,4 +1,19 @@
 = render TurboFrameComponent.new(id:id) do
+  - unless @errors.nil?
+    %div
+      %div.enable-lists{style: "color:red;"}
+        %strong Errors On Form
+        %ul
+          - Array(@errors).each do  |error|
+            - error = error[:error] if error.is_a?(Hash) && error[:error]
+            - if error.is_a?(String)
+              = error
+            - else
+              - error.each do |key, value|
+                %li
+                  - value = value.values if value.is_a?(Hash)
+                  #{key}: #{Array(value).join(', ')}
+
   = hidden_field object_name, :ontology, value: acronym
   = hidden_field object_name, :id, value: submissionId
   %div#general-card.mt-4
@@ -16,28 +31,28 @@
       = attribute_form_group_container('location', required: true) do
         = render partial: 'submissions/submission_location_form'
 
-  %div#key-properties-card.mt-4
-    = metadata_section('key-properties', 'Key properties', collapsed: false) do
-      = form_group_attribute("URI")
-      = form_group_attribute("deprecated")
-      = form_group_attribute("hasOntologySyntax") do
-        %p
-          Properties taken from
-          = link_to "W3C URIs for file format", "https://www.w3.org/ns/formats/", target: "_blank"
+    %div#key-properties-card.mt-4
+      = metadata_section('key-properties', 'Key properties', collapsed: false) do
+        = form_group_attribute("URI", required: true)
+        = form_group_attribute("deprecated")
+        = form_group_attribute("hasOntologySyntax") do
+          %p
+            Properties taken from
+            = link_to "W3C URIs for file format", "https://www.w3.org/ns/formats/", target: "_blank"
 
-      = form_group_attribute("hasFormalityLevel") do
-        %p
-          Properties taken from
-          = link_to "DCMI KOS type vocabularies", "http://wiki.dublincore.org/index.php/NKOS_Vocabularies#KOS_Types_Vocabulary", target: "_blank"
+        = form_group_attribute("hasFormalityLevel") do
+          %p
+            Properties taken from
+            = link_to "DCMI KOS type vocabularies", "http://wiki.dublincore.org/index.php/NKOS_Vocabularies#KOS_Types_Vocabulary", target: "_blank"
 
-      = form_group_attribute("isOfType")
-      = form_group_attribute("naturalLanguage") do
-        %p
-          Consider using a
-          = link_to "Lexvo URI", "http://www.lexvo.org", target: "_blank"
-          with ISO639-3 code
-          %br
-          e.g.: http://lexvo.org/id/iso639-3/eng
+        = form_group_attribute("isOfType")
+        = form_group_attribute("naturalLanguage") do
+          %p
+            Consider using a
+            = link_to "Lexvo URI", "http://www.lexvo.org", target: "_blank"
+            with ISO639-3 code
+            %br
+            e.g.: http://lexvo.org/id/iso639-3/eng
 
   %div#description-card.mt-4
     = metadata_section('description', 'Description', collapsed: !@required_only || !@submission.id.nil?) do

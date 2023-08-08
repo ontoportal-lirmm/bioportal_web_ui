@@ -1,4 +1,4 @@
-= render FormGroupComponent.new(object: @object, name: @name, method: @method_name, label: @label_text, inline: @inline) do |c|
+= render FormGroupComponent.new(object: @object, name: @name, method: @method_name, label: @label_text, inline: @inline, required: @required) do |c|
   = text_field c.name, c.method_name , value: c.value, class: "form-control"
   - c.help do
     = help

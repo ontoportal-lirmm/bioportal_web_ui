@@ -21,7 +21,6 @@ class SearchInputComponent < ViewComponent::Base
     @id_key = id_key
     @links_target = links_target
   end
-
   def action_link_info(value)
     if value.is_a?(Hash)
        [value[:link] , value[:target]]

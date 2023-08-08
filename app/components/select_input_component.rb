@@ -2,7 +2,7 @@
 
 class SelectInputComponent < ViewComponent::Base
 
-  def initialize(id:, name:, values:, selected:, multiple: false, open_to_add_values: true)
+  def initialize(id:, name:, values:, selected:, multiple: false, open_to_add_values: false)
     super
     @id = id || ""
     @name = name
