@@ -26,7 +26,7 @@
               = key.humanize
 
       #myTabContent.edit-ontology-right-column.w-100
-        = render TurboFrameComponent.new(id:"") do
+        = render TurboFrameComponent.new(id:"metadata_by_ontology") do
           %div.tab-content
             - category_attributes.each_with_index  do |key_properties, index|
               - key, properties = key_properties
