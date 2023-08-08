@@ -216,9 +216,10 @@ module OntologiesHelper
 
   def link_to_section(section_title)
     link_to(section_name(section_title) , ontology_path(@ontology.acronym, p: section_title),
-            id: "ont-#{section_title}-tab",
-            class: "#{selected_section?(section_title) ? 'active show' : ''}")
-
+            id: "ont-#{section_title}-tab", class: "nav-link #{selected_section?(section_title) ? 'active show' : ''}",
+            data: { action: 'click->ontology-viewer-tabs#selectTab',
+                    toggle: "tab", target: "#ont_#{section_title}_content", 'bp-ont-page': section_title ,
+                    'bp-ont-page-name': ontology_viewer_page_name(@ontology.name, @concept&.prefLabel || '', section_title) })
   end
 
   def selected_section?(section_title)
@@ -321,6 +322,15 @@ module OntologiesHelper
   def count_subscriptions(ontology_id)
     users = LinkedData::Client::Models::User.all(include: 'subscription', display_context: false, display_links: false )
     users.select{ |u| u.subscription.find{ |s| s.ontology.eql?(ontology_id)} }.count
+  end
+
+  def ontology_edit_button
+    return unless  @ontology.admin?(session[:user])
+    render RoundedButtonComponent.new(link:   edit_ontology_path(@ontology.acronym), icon: 'edit.svg', size: 'medium')
+  end
+
+  def submission_json_button
+    render RoundedButtonComponent.new(link:  "#{(@submission_latest || @ontology).id}?display=all", target: '_blank', size: 'medium')
   end
   private
 
