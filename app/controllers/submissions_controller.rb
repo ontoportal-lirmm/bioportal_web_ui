@@ -28,6 +28,11 @@ class SubmissionsController < ApplicationController
     @submission = @ontology.explore.latest_submission
     @submission ||= LinkedData::Client::Models::OntologySubmission.new
     @submission.id = nil
+    @categories = LinkedData::Client::Models::Category.all
+    @groups = LinkedData::Client::Models::Group.all
+    @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
+    @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
+    @is_update_ontology = true
   end
 
   # Called when form to "Add submission" is submitted
