@@ -65,12 +65,12 @@
         %div.mb-2 Categories
         %div.upload-ontology-chips-container
           - @categories.each do |category|
-            = render ChipsComponent.new(name: "ontology[hasDomain][]", id: category[:acronym] , value: category[:acronym], checked: @ontology.hasDomain.any?{|x| x.eql?(category[:id])})
+            = render ChipsComponent.new(name: "ontology[hasDomain][]", id: category[:acronym] , value: category[:acronym], checked: @ontology.hasDomain&.any?{|x| x.eql?(category[:id])})
       .upload-ontology-field-container
         %div.mb-2 Groups
         %div.upload-ontology-chips-container
           - @groups.each do |group|
-            = render ChipsComponent.new(name: "ontology[group][]", id: group[:acronym] , value: group[:acronym], checked: @ontology.group.any?{|x| x.eql?(group[:id])})
+            = render ChipsComponent.new(name: "ontology[group][]", id: group[:acronym] , value: group[:acronym], checked: @ontology.group&.any?{|x| x.eql?(group[:id])})
 
       .upload-ontology-input-field-container.mt-2
         %span.d-flex
