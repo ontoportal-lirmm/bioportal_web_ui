@@ -75,7 +75,6 @@ gem 'will_paginate', '~> 3.0'
 gem 'inline_svg'
 gem "lookbook", '~> 1.5.5'
 gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'development'
-gem "lookbook", '~> 1.5.5'
 
 # Multi-Provider Authentication
 gem 'omniauth'
