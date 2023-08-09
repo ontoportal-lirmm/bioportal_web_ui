@@ -1,6 +1,2 @@
-%div.py-4.py-md-5.flex-column.w-100
-  %h3.text-center.mb-4
-    Edit submission information
-    %small.text-muted for #{@ontology.acronym}
-  = form_for :submission, url: ontology_submission_path(@ontology.acronym, @submission.submissionId), html: { id: "ontology_submission_form", method: :put, multipart: true, 'data-turbo': true } do |f|
-    = render partial: "form", locals: {f: f, button_text: "Save submission"}
+= form_for :submission, url: ontology_submission_path(@ontology.acronym, @submission.submissionId), html: { id: "ontology_submission_form", method: :put, multipart: true } do |f|
+  = render partial: "form_content", locals: {id:  params[:container_id] || 'metadata_by_ontology', acronym: @ontology.acronym, submissionId: @submission.submissionId}
