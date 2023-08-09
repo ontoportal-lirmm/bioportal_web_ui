@@ -1,0 +1,31 @@
+.button-container
+    - if @type == "link"
+        %a.regular-button{:name => @name, onclick: "displayAnimation()", id: "button-animation-id", class: "#{@variant}-button", href: @href}
+            - if @icon != "" && @icon_type == "left"
+                = inline_svg_tag @icon, class: "#{@variant}-button-icon left-button-icon"
+            = @value
+            - if @icon != "" && @icon_type == "right"
+                = inline_svg_tag @icon, class: "#{@variant}-button-icon right-button-icon"
+    - else
+        %button.regular-button{:name => @name, onclick: "displayAnimation()", id: "button-animation-id", class: "#{@variant}-button", type: "#{"submit" if @type == "submit"}"}
+            - if @icon != "" && @icon_type == "left"
+                = inline_svg_tag @icon, class: "#{@variant}-button-icon left-button-icon"
+            = @value
+            - if @icon != "" && @icon_type == "right"
+                = inline_svg_tag @icon, class: "#{@variant}-button-icon right-button-icon"
+
+.animation-container#loading-animation
+    .lds-ellipsis
+        %div
+        %div
+        %div
+        %div
+
+:javascript
+    const button = document.getElementById("button-animation-id")
+    const loading = document.getElementById("loading-animation")
+    function displayAnimation(){
+        console.log("working")
+        button.style.display = 'none';
+        loading.style.display = 'flex';
+    }
