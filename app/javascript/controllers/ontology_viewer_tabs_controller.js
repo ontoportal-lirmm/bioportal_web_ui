@@ -26,15 +26,9 @@ export default class extends Controller {
     this.changeEvent.removeEventListener()
   }
 
-  selectTab(event) {
-    this.#updateURL(event)
-  }
-
-  #updateURL(event){
-    const page = event.currentTarget.getAttribute("data-bp-ont-page");
-    const page_name = event.currentTarget.getAttribute("data-bp-ont-page-name");
-    (new HistoryService()).pushState({p: page}, page_name + " | " + jQuery(document).data().bp.ont_viewer.org_site, "?p=" + page);
-
+  updateLanguageSelector(event) {
+    console.log('language selector update')
+    let page = event.detail.data.selectedTab
     this.#disableLanguageSelector(page)
   }
 

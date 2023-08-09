@@ -1,63 +1,56 @@
-.Summary-page-card
-  %h4.summary-page-card-title General information
-  .account-page-info-column.align-items-center.description_text
-    = render TextAreaFieldComponent.new(value: @submission_latest.description)
-    - unless @submission_latest.logo.nil?
-      %img{height: "85", src: @submission_latest.logo, width: "189"}/
-  .creation_info
-    %p.creation_text Originally released on
-    %p.date_creation_text
-      = l(Date.parse(@submission_latest.released), format: :monthfull_day_year)
-    %p.creation_text if you want more information contact
-    %p.creator_text
-      = @submission_latest.contact.map {|c| [c.name, c.email].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
+= render Layout::CardComponent.new do |c|
+  - c.header(text: 'General information')
+  = render Layout::ListComponent.new do |l|
+    - l.row do
+      .d-flex.align-items-center
+        .description_text
+          = render TextAreaFieldComponent.new(value: @submission_latest.description)
+        - unless @submission_latest.logo.nil?
+          = image_tag(@submission_latest.logo, class: 'description_img')
+    - l.row do
+      %span.creation_text Originally released on
+      %span.date_creation_text
+        = l(Date.parse(@submission_latest.released), format: :monthfull_day_year)
+      %span.creation_text if you want more information contact
+      %span.creator_text
+        = @submission_latest.contact.map {|c| [c.name, c.email].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
 
-  - unless @submission_latest.naturalLanguage.nil? || @submission_latest.naturalLanguage.empty?
-    %p.description_text
-      Natural language
-    .categories_section
-      - @submission_latest.naturalLanguage.each do |lang|
-        %p.m-1.mx-1.my-2
-          = render LanguageFieldComponent.new(value: lang)
-  - if @ontology.admin?(session[:user]) && @submission_latest.pullLocation
-    %p.description_text
-      Pull URL
-    %span
-      = link_to @submission_latest.pullLocation, @submission_latest.pullLocation
-  - unless @submission_latest.keywords.nil?
-    %p.description_text Keywords and Key classes
-    .keywords_keyclasses_section
-      - Array(@submission_latest.keywords).each do |keyword|
-        - keyword.split(',').each do |k|
-          %div.m-1.mx-1.my-2
-            = render ChipButtonComponent.new(text: k, type: "static")
-      - Array(@submission_latest.keyClasses).each do |key_class|
-        - key_class.split(',').each do |k|
-          %div.mx-1.my-2
-            - if link?(k)
-              = raw get_link_for_cls_ajax(k, @ontology.acronym, '_blank')
+    - unless Array(@submission_latest.naturalLanguage).empty?
+      - l.row do
+        = render FieldContainerComponent.new(label: 'Languages') do
+          = horizontal_list_container(Array(@submission_latest.naturalLanguage)) do |v|
+            = render LanguageFieldComponent.new(value: v)
+
+    - if @ontology.admin?(session[:user]) && @submission_latest.pullLocation
+      - l.row do
+        = render FieldContainerComponent.new(label: 'Pull location') do
+          = horizontal_list_container([@submission_latest.pullLocation]) do |v|
+            = render LinkFieldComponent.new(value: v)
+    - unless  Array(@submission_latest.keywords).empty? && Array(@submission_latest.keyClasses).empty?
+      - l.row do
+        = render FieldContainerComponent.new(label: 'Keywords and classes') do
+          - values = (Array(@submission_latest.keywords) + Array(@submission_latest.keyClasses))
+          - values =  values.map{|x| x.split(',')}.flatten
+          = horizontal_list_container(values) do |v|
+            - if link?(v)
+              = raw get_link_for_cls_ajax(v, @ontology.acronym, '_blank')
             - else
-              = render ChipButtonComponent.new(text: k, type: "static")
+              = render ChipButtonComponent.new(text: v, type: "static")
 
-  - unless @ontology.hasDomain.nil? || @ontology.hasDomain.empty?
-    %p.description_text Categories and subjects
-    .categories_section
-      - @ontology.hasDomain.each do |domain|
-        %p.m-1
-          = render ChipButtonComponent.new(text: show_category_name(domain), type: "static")
+    - unless Array(@ontology.hasDomain).empty?
+      - l.row do
+        = render FieldContainerComponent.new(label: 'Categories and subjects') do
+          = horizontal_list_container(@ontology.hasDomain) do |v|
+            = render ChipButtonComponent.new(text: show_category_name(v), type: "static")
 
   %hr.w-100.my-3
+
   .icons_container
-    %a{href: "#{@submission_latest.download}", style: "text-decoration: none;"}
-      = inline_svg_tag("summary/download.svg")
-    %a{href: "#{@submission_latest.homepage}", style: "text-decoration: none;"}
-      = inline_svg_tag("summary/homepage.svg")
-    %a{href: "#{@submission_latest.documentation}", style: "text-decoration: none;"}
-      = inline_svg_tag("summary/documentation.svg")
-    %a{href: "#{@submission_latest.repository}", style: "text-decoration: none;"}
-      = inline_svg_tag("summary/github.svg")
-    %a{href: "#{@submission_latest.endpoint}", style: "text-decoration: none;"}
-      = inline_svg_tag("summary/sparql.svg")
+    - links = [%w[summary/download dataDump], %w[summary/homepage homepage], %w[summary/documentation documentation], %w[icons/github repository], %w[summary/sparql endpoint]]
+    - links.each do |icon , attr|
+      - value =  @submission_latest.send(attr)
+      %a{href: value , style: "text-decoration: none; width: 30px; height: 30xp", class: value.nil? ? 'disabled-icon': ''}
+        = inline_svg_tag("#{icon}.svg")
   %hr.w-100.my-3
-  %div.text-center
+  %div.text-center.pb-3
     = link_to_modal('See all metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "All metadata properties", show_modal_size_value: 'modal-xl' })

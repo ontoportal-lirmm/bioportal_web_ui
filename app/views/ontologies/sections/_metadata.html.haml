@@ -9,125 +9,65 @@
           = render partial: 'ontologies/sections/metadata/ontology_submissions_section'
           = render partial: 'ontologies/sections/metadata/ontology_metrics_section'
         .summary-page-second-row
-          - depiction_url = @submission_latest.depiction
-          - unless depiction_url.nil?
-            .right_metadata
-              .depiction
-                %img{src: depiction_url}
-                .loop_icon
-                  - img = "<img src='#{asset_path("summary/loop.svg")}'/>"
-                  = link_to_modal(img.html_safe, "/ajax/submission/show_depiction?depiction_url=#{depiction_url}",data: { show_modal_title_value: "Depiction", show_modal_size_value: 'modal-xl' })          
-          .right_metadata
-            .depiction
-              .caintainer_vertical
-                .projects_card
-                  %p Identifiers
-                  %img{src: asset_path("summary/info.svg")}/
-              .creation_info
-                %p.description_text_identifers
-                  URI
-              %p.normal_text
-                = render LinkFieldComponent.new(value: @submission_latest.URI)
-              .creation_info
-                %p.description_text_identifers
-                  VersionIRI
-              %p.normal_text
-                = render LinkFieldComponent.new(value: @submission_latest.versionIRI)
-              .creation_info
-                %p.description_text_identifers
-                  Identifier
-              %p.normal_text
-                = render LinkFieldComponent.new(value: @submission_latest.identifier)
-          - properties = {Creation_date: @submission_latest.creationDate, Modification_date: @submission_latest.modificationDate}
-          = render DropdownContainerComponent.new(title: 'Dates', id: 'dates') do
-            - properties.each do |k, v|
-              = render FieldContainerComponent.new(label: k.to_s) do
-                = render DateTimeFieldComponent.new(value: v) 
-          - properties = {creators: @submission_latest.hasCreator, contributors: @submission_latest.hasContributor, curators: @submission_latest.curatedBy,
-          translator: @submission_latest.translator, publisher: @submission_latest.publisher,  funded_By: @submission_latest.fundedBy,
-          endorsed_By: @submission_latest.endorsedBy, copyright_Holder: @submission_latest.copyrightHolder}
-          = render DropdownContainerComponent.new(title: 'Persons and organizations', id: 'person_and_organization') do
-            - properties.each do |k, values|
-              %p.field-normal_text
-              = render FieldContainerComponent.new(label: k.to_s) do
-                %div.d-flex.flex-wrap
-                  - Array(values).each do |val_str|
-                    - val_str = val_str.name if val_str.is_a?(LinkedData::Client::Models::Agent)
-                    - val_str.split(',').each do |v|
-                      - if v
-                        %div.m-1
-                          = render ChipButtonComponent.new(text: v, type: "static",'data-controller':' tooltip', title: v, class:'text-truncate', style: 'max-width: 200px; display: block')
+          - unless Array(@submission_latest.depiction).empty?
+            = render Layout::CardComponent.new do
+              = list_container(@submission_latest.depiction) do |depiction_url|
+                = render Display::ImageComponent.new(src: depiction_url)
+          = properties_card('Identifiers','text to describe identifiers section', @identifiers) do |values|
+            = horizontal_list_container(values) do |v|
+              = render LinkFieldComponent.new(value: v)
 
+          = properties_dropdown('dates','Dates','', @dates_properties) do |value|
+            = render DateTimeFieldComponent.new(value: value)
 
-          - properties = {Is_Format_Of: @submission_latest.isFormatOf, Has_Format: @submission_latest.hasFormat,
-            Source: @submission_latest.source, Was_generated_by: @submission_latest.wasGeneratedBy, Was_invalidated_by: @submission_latest.wasInvalidatedBy }
-          = render DropdownContainerComponent.new(title: 'Links', id: 'link') do
-            - properties.each do |k, v|
-              = render FieldContainerComponent.new(label: k.to_s, value: Array(v).join(','))
+          = properties_dropdown('person_and_organization','Persons and organizations','', @agents_properties) do |values|
+            - unless Array(values).empty?
+              = horizontal_list_container(values) do |v|
+                = render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: '', class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do
+                  = display_agent(v, link: false)
 
-          - properties = {known_Usage: @submission_latest.knownUsage, designed_For_Ontology_Task:@submission_latest.designedForOntologyTask,
-            example: @submission_latest.example, coverage: @submission_latest.coverage,
-            Target_audience: @submission_latest.audience}
-          = render DropdownContainerComponent.new(title: 'Projects and usage information', id: 'projects_usage_information') do
-            .creation_info
-              %div.description_text
-                Projects using
-                = @ontology.acronym
-              = link_to(new_project_path(),  "aria-label": "Create new project", title: "Create new project", class: "mx-1 mt-1 projects-add-new") do
-                = inline_svg_tag("summary/plus.svg")
-            .projects_container
-              - if @projects.empty?
-                %p.font-italic= "No projects using #{@ontology.acronym}"
-              - else
-                - for project in @projects
-                  = link_to(project_path(project.acronym)) do
-                    %p.clickable_text= project.name
-            - properties.each do |k, v|
-              = render FieldContainerComponent.new(label: k.to_s, value: Array(v).join(','))
-            = render FieldContainerComponent.new(label: 'includedInDataCatalog') do
-              - Array(@submission_latest.includedInDataCatalog).each do |catalog|
-                - data_catalog = $DATA_CATALOG_VALUES.select{ |cat_uri, cat_label|  catalog[cat_uri] }.first || [catalog, catalog]
-                %div.m-1.my-3
-                  = render ChipButtonComponent.new(text: data_catalog[1], url: catalog, type: "clickable")
+          = properties_dropdown('link','Links','hiba', @links_properties)
 
-          - properties = {Accrual_method: @submission_latest.accrualMethod, Accrual_periodicity: @submission_latest.accrualPeriodicity, Accrual_policy: @submission_latest.accrualPolicy,
-          Knowledge_representation_paradigm: @submission_latest.conformsToKnowledgeRepresentationParadigm, Engineering_methodology: @submission_latest.usedOntologyEngineeringMethodology,  Created_With: @submission_latest.usedOntologyEngineeringTool,
-          Competency_question: @submission_latest.competencyQuestion}
-          = render DropdownContainerComponent.new(title: 'Methodology', id: 'methodology') do
-            - properties.each do |k, v|
-              = render FieldContainerComponent.new(label: k.to_s, value: Array(v).join(',')) 
-          .right_metadata
-            .depiction
-              .vists_image
-                %p Visits
-                - if visits_data(@ontology)
-                  = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", "aria-label": "Download as CSV", title: "Download as CSV") do
-                    %img{alt: "", src: asset_path("summary/arrow_down.svg")}
-              = render partial: "visits"
-          = render SummarySectionComponent.new(title: 'Get my metadata back')  do
-            - unless @submission_latest.nil?
-              %div{data:{controller: 'metadata-downloader'}}
-                =javascript_include_tag "jsonld"
-                %button{:id => "getMetadataBackNquadsBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadNQuads'} N-Triple
-                %button{:id => "getMetadataBackJsonldBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadJsonLd'} Json-LD
-                %button{:id => "getMetadataBackXmlBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadXML'} RDF/XML
-          .Summary-page-card
-            - unless @ontology.view?
-              %div.ont-section-toolbar
-                %header.pb-2.font-weight-bold= "Views of #{@ontology.acronym}"
-                - ont_id_esc = CGI.escape(@ontology.id)
-                -# TODO: I don't think we should have brackets in the URL parameters.
-                - if session[:user].nil?
-                  %a{href: "/login?redirect=#{escape("/ontologies/new?ontology[viewOf]=#{ont_id_esc}")}", "aria-label": "Create new view", title: "Create new view"}
-                    %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
+          = properties_dropdown('projects_section','Projects and usage information','hiba', nil) do |c|
+            - c.row do
+              = render FieldContainerComponent.new do |f|
+                - f.label do
+                  Projects using #{@ontology.acronym}
+                  = new_element_link('Create new project', new_project_path)
+
+                - if @projects.empty?
+                  %p.font-italic= "No projects using #{@ontology.acronym}"
                 - else
-                  %a{href: "/ontologies/new?ontology[viewOf]=#{ont_id_esc}"}
-                    %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
-              - if @views.empty?
-                %p.font-italic= "No views of #{@ontology.acronym} available"
-              - else
-                %div.border-top
-                  %dl
-                    - @view_decorators.each do |view_decorator|
-                      %dt= view_decorator.linked_name
-                      %dd= view_decorator.description
+                  = horizontal_list_container(@projects) do |project|
+                    = render ChipButtonComponent.new(url: project_path(project.acronym), text: project.name, type: "clickable")
+            - properties_list_component(c, @projects_properties)
+
+          = properties_dropdown('methodology','Methodology', 'Methodology help', @methodology_properties)
+
+          = render Layout::CardComponent.new do |c|
+            - c.header do  |h|
+              - h.text do
+                Visits
+                - if visits_data(@ontology)
+                  = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", title: "Download as CSV") do
+                    = inline_svg("summary/download.svg", width: '30px', height: '20px')
+            = render Layout::ListComponent.new do |l|
+              - l.row do
+                = render partial: "visits"
+
+          - unless @ontology.view?
+            = render Layout::CardComponent.new do |d|
+              - d.header do |h|
+                - h.text do
+                  Views of #{@ontology.acronym}
+                  = new_element_link('Create new view', new_view_path(@ontology.id))
+              = render Layout::ListComponent.new do |l|
+                - l.row do
+                  = render partial: 'ontology_views'
+
+          - unless @submission_latest.nil?
+            = render SummarySectionComponent.new(title: 'Get my metadata back', show_card: false)  do
+              %div{data:{controller: 'metadata-downloader'}}
+                = javascript_include_tag "jsonld"
+                - [%w[NQuads N-Triple], %w[JsonLd Json-LD], %w[XML RDF/XML]].each do |format, label|
+                  %button.btn.btn-primary{'data-action': "metadata-downloader#download#{format}"}=label

@@ -4,9 +4,6 @@
 
 import { application } from "./application"
 
-import BrowseFiltersController from "./browse_filters_controller"
-application.register("browse-filters", BrowseFiltersController)
-
 import ChosenController from "./chosen_controller"
 application.register("chosen", ChosenController)
 
@@ -55,8 +52,6 @@ application.register("ontology-viewer-tabs", OntologyViewerTabsController)
 import OntoportalAutocompleteController from "./ontoportal_autocomplete_controller"
 application.register("ontoportal-autocomplete", OntoportalAutocompleteController)
 
-import ShowFilterCountController from "./show_filter_count_controller"
-application.register("show-filter-count", ShowFilterCountController)
 
 import PlatformLanguageController from "./platform_language_controller"
 application.register("platform-language", PlatformLanguageController)

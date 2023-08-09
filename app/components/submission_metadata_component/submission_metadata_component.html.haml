@@ -7,7 +7,8 @@
         %td.d-flex.flex-wrap.align-items-center
           - Array(@submission.send(metadata)).each do |value|
             %div.m-1.f32
-              - if metadata.eql?("naturalLanguage")
+              - if agent?(@json_metadata, metadata)
+              - elsif metadata.eql?("naturalLanguage")
                 = render LanguageFieldComponent.new(value: value)
               - elsif metadata.to_s.eql?("hasLicense")
                 = render LicenseFieldComponent.new(value: value)

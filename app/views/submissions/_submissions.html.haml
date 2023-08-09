@@ -13,9 +13,9 @@
             %th.align-middle ID
           %th.align-middle Version
           %th
-            = generate_attribute_text("modificationDate", "Modified")
+            = generate_attribute_text("modificationDate", "Modified", tooltip: false)
           %th
-            = generate_attribute_text("creationDate", "Uploaded")
+            = generate_attribute_text("creationDate", "Uploaded", tooltip: false)
           - unless @ont_restricted
             %th.align-middle Downloads     
           - if @ontology.admin?(session[:user])

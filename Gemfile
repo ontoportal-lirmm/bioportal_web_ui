@@ -73,8 +73,8 @@ gem 'view_component', '~> 2.72'
 gem 'turnout'
 gem 'will_paginate', '~> 3.0'
 gem 'inline_svg'
-gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'development'
 gem "lookbook", '~> 1.5.5'
+gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'development'
 
 # Multi-Provider Authentication
 gem 'omniauth'
@@ -113,6 +113,7 @@ group :development do
 
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
+
 end
 
 group :test, :development do

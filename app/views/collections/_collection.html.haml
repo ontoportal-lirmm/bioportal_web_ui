@@ -4,7 +4,6 @@
                 top_keys: %w[created modified comment note],
                 bottom_keys: [],
                 exclude_keys: %w[member]) do |c|
-
     - c.header(stripped: true) do |t|
       - t.add_row({th: 'ID'}, {td: collection["@id"]})
       - t.add_row({th: 'Preferred Name'}, {td: get_collection_label(collection)})

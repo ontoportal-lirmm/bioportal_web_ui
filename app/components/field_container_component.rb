@@ -2,9 +2,14 @@
 
 class FieldContainerComponent < ViewComponent::Base
 
-  def initialize(label:, value: nil)
+  renders_one :label
+  def initialize(label: nil, value: nil)
     super
     @label = label
     @value = value
+  end
+
+  def show?
+    content && !content.empty? || (!@value.nil? && !@value.empty?)
   end
 end

@@ -42,8 +42,9 @@ class LoginController < ApplicationController
   def create_omniauth
     auth_data = request.env['omniauth.auth']
     auth_code = auth_data.credentials.token
-    binding.pry
-    logged_in_user = LinkedData::Client::HTTP.post("#{LinkedData::Client.settings.rest_url}/users/authenticate", { access_token: auth_code , token_provider: params[:provider] })
+    token_provider = helpers.omniauth_token_provider(params[:provider])
+
+    logged_in_user = LinkedData::Client::HTTP.post("#{LinkedData::Client.settings.rest_url}/users/authenticate", { access_token: auth_code , token_provider: token_provider})
     if logged_in_user && !logged_in_user.errors
       login(logged_in_user)
       redirect = "/"

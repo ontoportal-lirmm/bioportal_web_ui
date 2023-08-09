@@ -63,19 +63,23 @@
         = render NestedFormInputsComponent.new do |c|
           - c.template do
             %div.d-flex{id: 'NEW_RECORD'}
-              = hidden_field_tag agent_identifier_name('NEW_RECORD' , :creator, name_prefix), session[:user].id
-              = text_field_tag agent_identifier_name('NEW_RECORD' , :notation, name_prefix), '', class: "form-control"
-              - values = %w[ORCID ROR ISNI GRID]
-              = render SelectInputComponent.new(id: "agent_identifiers_schemaAgency_NEW_RECORD", name: agent_identifier_name('NEW_RECORD', :schemaAgency, name_prefix), values: values, selected: 'ORCID')
+              %div.w-100
+                = hidden_field_tag agent_identifier_name('NEW_RECORD' , :creator, name_prefix), session[:user].id
+                = text_field_tag agent_identifier_name('NEW_RECORD' , :notation, name_prefix), '', class: "form-control"
+              %div{style:'width: 15%'}
+                - values = %w[ORCID ROR ISNI GRID]
+                = render SelectInputComponent.new(id: "agent_identifiers_schemaAgency_NEW_RECORD", name: agent_identifier_name('NEW_RECORD', :schemaAgency, name_prefix), values: values, selected: 'ORCID')
           - c.empty_state do
             = hidden_field_tag agent_field_name('',  name_prefix+"[#{Array(agent.identifiers).size}]")
           - Array(agent.identifiers).each_with_index do |identifier, i|
             - c.row do
               %div.d-flex{id: identifier.id}
-                = hidden_field_tag agent_identifier_name(i.to_s.upcase, :creator, name_prefix), session[:user].id
-                = text_field_tag agent_identifier_name(i.to_s.upcase, :notation, name_prefix), identifier.notation, class: "form-control"
-                - values = %w[ORCID ROR ISNI GRID]
-                = render SelectInputComponent.new(id: "#{name_prefix}_identifiers_schemaAgency_#{i.to_s.upcase}", name: agent_identifier_name(i.to_s.upcase, :schemaAgency, name_prefix), values: values, selected: identifier.schemaAgency)
+                %div.w-100
+                  = hidden_field_tag agent_identifier_name(i.to_s.upcase, :creator, name_prefix), session[:user].id
+                  = text_field_tag agent_identifier_name(i.to_s.upcase, :notation, name_prefix), identifier.notation, class: "form-control"
+                %div{style:'width: 15%'}
+                  - values = %w[ORCID ROR ISNI GRID]
+                  = render SelectInputComponent.new(id: "#{name_prefix}_identifiers_schemaAgency_#{i.to_s.upcase}", name: agent_identifier_name(i.to_s.upcase, :schemaAgency, name_prefix), values: values, selected: identifier.schemaAgency)
   - if show_affiliations
     %tr
       %th
