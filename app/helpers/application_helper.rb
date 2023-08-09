@@ -386,14 +386,14 @@ module ApplicationHelper
   def metadata_for_select
     get_metadata
     return @metadata_for_select
-  end 
+  end
 
   def get_metadata
     @metadata_for_select = []
     submission_metadata.each do |data|
       @metadata_for_select << data["attribute"]
     end
-  end    
+  end
 
 
   def ontologies_to_acronyms(ontologyIDs)
@@ -445,23 +445,20 @@ module ApplicationHelper
                     class: "add_proposal btn btn-primary", data: { show_modal_title_value: "Add a new proposal"}
     end
   end
- 
+
   def subscribe_button(ontology_id)
     ontology_acronym = ontology_id.split('/').last
 
     if session[:user].nil?
-      link = "/login?redirect=#{request.url}"
-      subscribed = false
-      user_id = nil
-    else
-      user = LinkedData::Client::Models::User.find(session[:user].id)
-      subscribed = subscribed_to_ontology?(ontology_acronym, user)
-      link = "javascript:void(0);"
-      user_id = user.id
+      return link_to 'Subscribe to notes emails', "/login?redirect=#{request.url}", {style:'font-size: .9em;', class: 'link_button'}
     end
 
-    count = count_subscriptions(ontology_id)
-    render OntologySubscribeButtonComponent.new(ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: link)
+    user = LinkedData::Client::Models::User.find(session[:user].id)
+    ontology_acronym = ontology_id.split('/').last
+    subscribed = subscribed_to_ontology?(ontology_acronym, user)
+
+    render OntologySubscribeButtonComponent.new(ontology_id: ontology_id, subscribed: subscribed, user_id: user.id)
+
   end
 
   def subscribed_to_ontology?(ontology_acronym, user)
@@ -629,10 +626,10 @@ module ApplicationHelper
     submission = @submission || @submission_latest
     submission&.hasOntologyLanguage === 'SKOS'
   end
-  
+
   def current_page?(path)
     request.path.eql?(path)
-  end   
+  end
 
   def request_lang
     lang = params[:language] || params[:lang]
@@ -664,12 +661,9 @@ module ApplicationHelper
     config[:ncbo_slice] = @subdomain_filter[:acronym] if (@subdomain_filter[:active] && !@subdomain_filter[:acronym].empty?)
     config.to_json
   end
-
-
   def portal_name
     $SITE
-  end
-
+    end
   def navitems
     items = [["/ontologies", "Browse"],["/mappings", "Mappings"],["/recommender", "Recommender"],["/annotator", "Annotator"], ["/landscape", "Landscape"]]
   end
