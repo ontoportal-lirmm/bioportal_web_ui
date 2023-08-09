@@ -17,50 +17,16 @@
 .description_text a {
   color: #888888 !important;
   font-size: 15px;
-  margin-top: 10px;
-}
-.description_text {
   overflow: hidden;
-  margin-bottom: 0px;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: var(--read-more-line-clamp, 5);
+  margin-bottom: 0;
+  flex: 1;
+  min-width: 500px;
 }
 
-.description_text_identifers {
-  overflow: hidden;
-  margin-bottom: 10px;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: var(--read-more-line-clamp, 5);
-}
-
-.projects_using_onto_text {
-  color: #888888;
-  font-size: 15px;
-  margin-left: 5px;
-  margin-top: 10px;
-  margin-right: 8px;
-}
-
-.see_more_text {
-  color: var(--primary-color);
-  font-size: 15px;
-  margin-top: 10px;
-}
-
-.Summary-page-title-Ontology {
-  color: #888888;
-  font-size: 15px;
-}
-
-.clickable_text {
-  color: var(--primary-color);
-  font-size: 15px;
-  font-weight: 550;
-  margin-left: 10px;
-  margin-top: 5px;
-  margin-right: 10px;
+.description_img {
+  width: 200px;
+  height: 100px;
+  object-fit: cover;
 }
 
 .keywords_keyclasses_section {
@@ -280,20 +246,8 @@
 .disabled-icon svg path {
   fill: rgba(0, 0, 0, 0.1);
 }
-.loop_icon {
-  position: absolute;
-  width: 50px;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50px;
-  position: absolute;
-  bottom: 0px;
-  right: 0;
-}
+
+
 
 .openup_icon_projects {
   margin-top: -7px;

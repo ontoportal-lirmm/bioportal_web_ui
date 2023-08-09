@@ -1,8 +1,0 @@
-.right_metadata
-  .depiction
-    %p
-      Visits
-      - if visits_data(@ontology)
-        = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", title: "Download as CSV") do
-          = inline_svg("summary/download.svg", width: '30px', height: '20px')
-  = render partial: "visits"

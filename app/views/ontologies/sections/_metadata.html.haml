@@ -9,36 +9,65 @@
           = render partial: 'ontologies/sections/metadata/ontology_submissions_section'
           = render partial: 'ontologies/sections/metadata/ontology_metrics_section'
         .summary-page-second-row
-          = render partial: 'ontologies/sections/metadata/ontology_depiction_section'
-          = render partial: 'ontologies/sections/metadata/ontology_identifiers_section'
-          = render DropdownContainerComponent.new(title: 'Dates', id: 'dates') do
-            - @dates_properties.each do |k, v|
-              = render FieldContainerComponent.new(label: k.to_s) do
-                = render DateTimeFieldComponent.new(value: v) 
-          = render DropdownContainerComponent.new(title: 'Persons and organizations', id: 'person_and_organization') do
-            - @persons_organizations_properties.each do |k, values|
-              %p.field-normal_text
-              = render FieldContainerComponent.new(label: k.to_s) do
-                %div.d-flex.flex-wrap
-                  - Array(values).each do |val_str|
-                    - Array(val_str.split(',')).each do |v|
-                      - if v
-                        %div.m-1
-                          = render ChipButtonComponent.new(text: v, type: "static",'data-controller':' tooltip', title: v, class:'text-truncate', style: 'max-width: 200px; display: block')
-          = render DropdownContainerComponent.new(title: 'Links', id: 'link', tooltip:'hiba') do
-            - @links_properties.each do |k, v|
-              = render FieldContainerComponent.new(label: k.to_s, value: v)
-          = render partial: 'ontologies/sections/metadata/ontology_all_projects_section'
-              
-          = render DropdownContainerComponent.new(title: 'Methodology', id: 'methodology',  tooltip:'syphax') do
-            - @methodology_properties.each do |k, v|
-              = render FieldContainerComponent.new(label: k.to_s, value: Array(v).join(',')) 
-          = render partial: 'ontologies/sections/metadata/ontology_visits_section'
-          = render SummarySectionComponent.new(title: 'Get my metadata back')  do
-            - unless @submission_latest.nil?
+          - unless Array(@submission_latest.depiction).empty?
+            = render Layout::CardComponent.new do
+              = list_container(@submission_latest.depiction) do |depiction_url|
+                = render Display::ImageComponent.new(src: depiction_url)
+          = properties_card('Identifiers','text to describe identifiers section', @identifiers) do |values|
+            = horizontal_list_container(values) do |v|
+              = render LinkFieldComponent.new(value: v)
+
+          = properties_dropdown('dates','Dates','', @dates_properties) do |value|
+            = render DateTimeFieldComponent.new(value: value)
+
+          = properties_dropdown('person_and_organization','Persons and organizations','', @agents_properties) do |values|
+            - unless Array(values).empty?
+              = horizontal_list_container(values) do |v|
+                = render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: '', class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do
+                  = display_agent(v, link: false)
+
+          = properties_dropdown('link','Links','hiba', @links_properties)
+
+          = properties_dropdown('projects_section','Projects and usage information','hiba', nil) do |c|
+            - c.row do
+              = render FieldContainerComponent.new do |f|
+                - f.label do
+                  Projects using #{@ontology.acronym}
+                  = new_element_link('Create new project', new_project_path)
+
+                - if @projects.empty?
+                  %p.font-italic= "No projects using #{@ontology.acronym}"
+                - else
+                  = horizontal_list_container(@projects) do |project|
+                    = render ChipButtonComponent.new(url: project_path(project.acronym), text: project.name, type: "clickable")
+            - properties_list_component(c, @projects_properties)
+
+          = properties_dropdown('methodology','Methodology', 'Methodology help', @methodology_properties)
+
+          = render Layout::CardComponent.new do |c|
+            - c.header do  |h|
+              - h.text do
+                Visits
+                - if visits_data(@ontology)
+                  = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", title: "Download as CSV") do
+                    = inline_svg("summary/download.svg", width: '30px', height: '20px')
+            = render Layout::ListComponent.new do |l|
+              - l.row do
+                = render partial: "visits"
+
+          - unless @ontology.view?
+            = render Layout::CardComponent.new do |d|
+              - d.header do |h|
+                - h.text do
+                  Views of #{@ontology.acronym}
+                  = new_element_link('Create new view', new_view_path(@ontology.id))
+              = render Layout::ListComponent.new do |l|
+                - l.row do
+                  = render partial: 'ontology_views'
+
+          - unless @submission_latest.nil?
+            = render SummarySectionComponent.new(title: 'Get my metadata back', show_card: false)  do
               %div{data:{controller: 'metadata-downloader'}}
-                =javascript_include_tag "jsonld"
-                %button{:id => "getMetadataBackNquadsBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadNQuads'} N-Triple
-                %button{:id => "getMetadataBackJsonldBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadJsonLd'} Json-LD
-                %button{:id => "getMetadataBackXmlBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadXML'} RDF/XML
-          = render partial: 'ontologies/sections/metadata/ontology_views_section'
+                = javascript_include_tag "jsonld"
+                - [%w[NQuads N-Triple], %w[JsonLd Json-LD], %w[XML RDF/XML]].each do |format, label|
+                  %button.btn.btn-primary{'data-action': "metadata-downloader#download#{format}"}=label

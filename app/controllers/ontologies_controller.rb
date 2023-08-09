@@ -406,15 +406,21 @@ class OntologiesController < ApplicationController
     @view_decorators = @views.map{ |view| ViewDecorator.new(view, view_context) }
     @landscape_data = landscape_data
 
-    @methodology_properties = {Accrual_method: @submission_latest.accrualMethod, Accrual_periodicity: @submission_latest.accrualPeriodicity, Accrual_policy: @submission_latest.accrualPolicy,
-          Knowledge_representation_paradigm: @submission_latest.conformsToKnowledgeRepresentationParadigm, Engineering_methodology: @submission_latest.usedOntologyEngineeringMethodology,  Created_With: @submission_latest.usedOntologyEngineeringTool,
-          Competency_question: @submission_latest.competencyQuestion}
-    @persons_organizations_properties = {creators: @submission_latest.hasCreator, contributors: @submission_latest.hasContributor, curators: @submission_latest.curatedBy,
-          translator: @submission_latest.translator, publisher: @submission_latest.publisher,  funded_By: @submission_latest.fundedBy,
-          endorsed_By: @submission_latest.endorsedBy, copyright_Holder: @submission_latest.copyrightHolder}
-    @dates_properties = {Creation_date: @submission_latest.creationDate, Modification_date: @submission_latest.modificationDate}
-    @links_properties = {Is_Format_Of: @submission_latest.isFormatOf, Has_Format: @submission_latest.hasFormat,
-    Source: @submission_latest.source, Was_generated_by: @submission_latest.wasGeneratedBy, Was_invalidated_by: @submission_latest.wasInvalidatedBy }
+    data = {
+      methodology: [:accrualMethod, :accrualPeriodicity, :accrualPolicy, :conformsToKnowledgeRepresentationParadigm, :usedOntologyEngineeringMethodology,  :usedOntologyEngineeringTool, :competencyQuestion],
+      persons_organizations: [:hasCreator, :hasContributor, :curatedBy, :translator, :publisher, :fundedBy, :endorsedBy, :copyrightHolder ],
+      dates: [:creationDate, :modificationDate],
+      links: [:isFormatOf, :hasFormat, :source, :wasGeneratedBy, :wasInvalidatedBy],
+      identifiers: [:URI, :versionIRI, :identifier],
+      project: [:knownUsage, :designedForOntologyTask, :example, :coverage, :includedInDataCatalog, :audience]
+    }
+    @methodology_properties = data[:methodology].map{|x| [x.to_s.humanize , @submission_latest.send(x.to_s)] }.to_h
+    @agents_properties = data[:persons_organizations].map{|x| [x.to_s.humanize , @submission_latest.send(x.to_s)] }.to_h
+    @dates_properties = data[:dates].map{|x| [x.to_s.humanize , @submission_latest.send(x.to_s)] }.to_h
+    @links_properties = data[:links].map{|x| [x.to_s.humanize , @submission_latest.send(x.to_s)] }.to_h
+    @identifiers =  data[:identifiers].map{|x| [x.to_s.humanize , @submission_latest.send(x.to_s)] }.to_h
+    @projects_properties = data[:project].map{|x| [x.to_s.humanize , @submission_latest.send(x.to_s)] }.to_h
+
     if request.xhr?
       render partial: 'ontologies/sections/metadata', layout: false
     else

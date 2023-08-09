@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SubmissionMetadataComponent < ViewComponent::Base
-  include ApplicationHelper, MetadataHelper, AgentHelper
+  include ApplicationHelper, MetadataHelper, AgentHelper, OntologiesHelper
 
   def initialize(submission: )
     super
