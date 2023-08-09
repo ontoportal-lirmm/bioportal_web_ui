@@ -184,7 +184,11 @@
 .upload-ontology-next-button:hover {
     background-color: var(--hover-color);
 }
-
+.upload-ontology-finish-button{
+    height: 42px;
+    width: 100px;
+    margin-left: 20px;
+}
 .upload-ontology-next-button div,  .upload-ontology-next-button > input{
     margin-right: 5px;
     color: white;
