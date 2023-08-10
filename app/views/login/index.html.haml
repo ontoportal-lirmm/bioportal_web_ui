@@ -1,13 +1,13 @@
 - @title = "Login"
-= form_for(:user, :url => {:controller => 'login',:action=>'create'}) do |f|
-  - unless @errors.nil?
-    %div{:style => "color:red;"}
-      Errors On Form
-      %ul
-        - for error in @errors
-          %li= error
-  .d-flex.justify-content-center
-    .login-form
+- unless @errors.nil?
+  %div{:style => "color:red;"}
+    Errors On Form
+    %ul
+      - for error in @errors
+        %li= error
+.d-flex.justify-content-center
+  .login-form
+    = form_for(:user, :url => {:controller => 'login',:action=>'create'}) do |f|
       %p.login-input-title Username or Email
       = text_field 'user', 'username', class: "login-input email-input", placeholder: "Enter your email"
       %p.login-input-title Password
@@ -18,3 +18,12 @@
       %p.dont-have-account
         Don't have an account?
         %a.text-decoration-none{:href => new_user_path} Register
+    %hr.divider.w-100
+    %div.d-flex.justify-content-center.flew-wrap
+      - omniauth_providers_info.each do |provider, config|
+        = button_to  "/auth/#{config[:name] || config[:strategy] || provider}",
+                    class: 'btn btn-lg', style:'width: 70px', title: "Login with #{provider.to_s.humanize}", 'data-turbo': false do
+          - if config[:icon]
+            = inline_svg config[:icon]
+          - else
+            = provider.to_s.humanize

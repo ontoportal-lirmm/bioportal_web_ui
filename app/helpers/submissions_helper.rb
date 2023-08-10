@@ -40,7 +40,7 @@ module SubmissionsHelper
         capture(&block)
       end
     else
-      collapsed = false unless @selected_attributes.nil?
+      collapsed = false if !@selected_attributes.nil? || !@errors.nil?
       render CollapsableBlockComponent.new(id: id, parent_id: (parent_id || "#{id}-card"), title: label, collapsed: collapsed) do
         capture(&block)
       end
@@ -297,10 +297,11 @@ module SubmissionsHelper
     attr = attribute_infos(attr_label)
 
     return attr_label if attr.nil?
+    label_html = ''.html_safe
+    # label_html = if !attr["extracted"].nil? && attr["extracted"] == true
+    #               extractable_metadatum_tooltip({ content: 'Extractable metadatum' })
+    #             end.to_s.html_safe
 
-    label_html = if !attr["extracted"].nil? && attr["extracted"] == true
-                   extractable_metadatum_tooltip({ content: 'Extractable metadatum' })
-                 end.to_s.html_safe
 
     label = attr["label"].nil? ? attr_label.underscore.humanize : attr["label"]
 
@@ -328,6 +329,10 @@ module SubmissionsHelper
 
   def generate_integer_input(attr)
     number_field object_name, attr["attribute"].to_s.to_sym, value: @submission.send(attr["attribute"]), class: 'metadataInput form-control'
+  end
+
+  def generate_agent_input(attr, type: 'person')
+    render NestedAgentSearchInputComponent.new(agents: @submission.send(attr["attribute"]), agent_type: type, name_prefix: object_name + "[#{attr['attribute']}]", parent_id: '')
   end
 
   def generate_date_input(attr)
@@ -377,7 +382,7 @@ module SubmissionsHelper
   end
 
   def generate_boolean_input(attr, name)
-      value = attribute_values(attr)
+    value = attribute_values(attr)
     value = value.to_s unless value.nil?
 
     render SwitchInputComponent.new(id: name, name:  name, label: "", checked: value.eql?('true') , value: value, boolean_switch: true)
@@ -399,6 +404,9 @@ module SubmissionsHelper
     end
   end
 
+  def agent_attributes
+    submission_metadata.select{|x| x["enforce"].include?('Agent')}.map{|x| x["attribute"]}
+  end
   # Generate the HTML input for every attributes.
   def generate_attribute_input(attr_label, options = {})
     input_html = ''.html_safe
@@ -408,11 +416,20 @@ module SubmissionsHelper
 
     object_name, name = attribute_input_name(attr["attribute"])
 
-    if input_type?(attr, 'integer')
+    if input_type?(attr, 'Agent')
+      type = if input_type?(attr, 'is_person')
+               'person'
+             elsif input_type?(attr, 'is_organization')
+               'organization'
+             else
+               ''
+             end
+      generate_agent_input(attr, type: type)
+    elsif input_type?(attr, 'integer')
       generate_integer_input(attr)
     elsif input_type?(attr, 'date_time')
       generate_date_input(attr)
-    elsif input_type?(attr, 'textarea')
+    elsif input_type?(attr, 'textaclrea')
       generate_textarea_input(attr)
     elsif enforce_values?(attr)
       metadata_values, select_values = selected_values(attr, enforced_values(attr))

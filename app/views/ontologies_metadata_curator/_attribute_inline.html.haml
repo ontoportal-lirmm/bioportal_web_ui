@@ -21,7 +21,13 @@
   - elsif attribute == "ontology"
     = acronym
   - else
-    - if submission.instance_values[attribute.to_s].class == String && submission.instance_values[attribute.to_s][0..3] == "http"
+    - if submission.instance_values[attribute.to_s].is_a?(String) && %w[http https].include?(submission.instance_values[attribute.to_s][0..3])
       %a{:href=> ""+ submission.instance_values[attribute.to_s] +""}= submission.instance_values[attribute.to_s]
     - else
-      = submission.instance_values[attribute.to_s]
+      - Array(submission.instance_values[attribute.to_s]).each do |value|
+        - if value.is_a?(LinkedData::Client::Models::Agent)
+          %div
+            = display_agent(value, link: false)
+        - else
+          %p
+            = value

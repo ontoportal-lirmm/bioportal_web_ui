@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
 
+  get 'auth/:provider/callback', to: 'login#create_omniauth'
   get 'locale/:language', to: 'language#set_locale_language'
 
   get '/notes/new_comment', to: 'notes#new_comment'
@@ -9,7 +10,8 @@ Rails.application.routes.draw do
   get '/notes/new_reply', to: 'notes#new_reply'
   delete '/notes', to: 'notes#destroy'
   resources :notes, constraints: { id: /.+/ }
-
+  resources :agents, constraints: { id: /.+/ }
+  post 'agents/:id', to: 'agents#update', constraints: { id: /.+/ }
   resources :ontolobridge do
     post :save_new_term_instructions, on: :collection
   end
@@ -149,10 +151,12 @@ Rails.application.routes.draw do
   get 'ajax/label_xl', to: "label_xl#show"
   get '/ajax/biomixer' => 'concepts#biomixer'
   get '/ajax/fair_score/html' => 'fair_score#details_html'
+  get '/ajax/submission/show_licenses/:id' => 'ontologies#show_licenses'
   get '/ajax/fair_score/json' => 'fair_score#details_json'
   get '/ajax/:ontology/instances' => 'instances#index_by_ontology'
   get '/ajax/:ontology/classes/:conceptid/instances' => 'instances#index_by_class', :constraints => { conceptid: /[^\/?]+/ }
   get '/ajax/ontologies' , to:"ontologies#ajax_ontologies"
+  get '/ajax/agents' , to:"agents#ajax_agents"
 
   # User
   get '/logout' => 'login#destroy', :as => :logout
