@@ -1,4 +1,4 @@
-%table.table-content{id: @id, class: stripped_class}
+%table.table-content{id: @id, class: stripped_class + ' ' + borderless_class + ' ' + layout_fixed_class}
   %thead
     = header
   %tbody{id: "#{@id}_table_body"}

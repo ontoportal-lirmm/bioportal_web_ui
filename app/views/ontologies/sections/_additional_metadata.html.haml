@@ -11,7 +11,7 @@
           %div.mx-1
             of the  metadata attributes were filled
     %section.px-4{style:'height: 70vh; overflow-y: scroll'}
-      = render SubmissionMetadataComponent.new(submission: @submission_latest) unless @submission_latest.nil?
+      = render SubmissionMetadataComponent.new(submission: @submission_latest, submission_metadata: submission_metadata) unless @submission_latest.nil?
     %div.scroll-message.text-center.py-3.bg-light.text-primary
       %p.scroll-text.mb-0
         Scroll down to see more
