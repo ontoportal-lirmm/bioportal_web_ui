@@ -1,21 +1,25 @@
 - style = @size == "slim" ? "height: 42px;" : "height: 60px;"
+- danger_class = @color == "danger" ? "danger-button " : " "
+- warning_class = @color == "warning" ? "warning-button " : " "
+- #danger color: #F24C3D
+- #warning color: #F2BE22
 .button-container
     - if @type == "link"
-        %a.regular-button{:name => @name, onclick: "displayAnimation()", id: "button-animation-id", class: "#{@variant}-button", href: @href, style: style}
+        %a.regular-button{:name => @name, onclick: "displayAnimation()", id: "button-animation-id", class: "#{@variant}-button "+danger_class+warning_class, href: @href, style: style}
             - if @icon != "" && @icon_type == "left"
                 = inline_svg_tag @icon, class: "#{@variant}-button-icon left-button-icon"
             = @value
             - if @icon != "" && @icon_type == "right"
                 = inline_svg_tag @icon, class: "#{@variant}-button-icon right-button-icon"
     - else
-        %button.regular-button{:name => @name, onclick: "displayAnimation()", id: "button-animation-id", class: "#{@variant}-button", type: "#{"submit" if @type == "submit"}", style: style}
+        %button.regular-button{:name => @name, onclick: "displayAnimation()", id: "button-animation-id", class: "#{@variant}-button "+danger_class+warning_class, type: "#{"submit" if @type == "submit"}", style: style}
             - if @icon != "" && @icon_type == "left"
                 = inline_svg_tag @icon, class: "#{@variant}-button-icon left-button-icon"
             = @value
             - if @icon != "" && @icon_type == "right"
                 = inline_svg_tag @icon, class: "#{@variant}-button-icon right-button-icon"
 
-.animation-container#loading-animation
+.animation-container#loading-animation{style: style, class: danger_class+warning_class}
     .lds-ellipsis
         %div
         %div

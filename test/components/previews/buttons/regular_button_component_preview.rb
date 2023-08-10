@@ -22,6 +22,18 @@ class Buttons::RegularButtonComponentPreview < ViewComponent::Preview
     end
   end
 
+  def danger
+    def danger()
+      render Buttons::RegularButtonComponent.new(value: "Login", name: "login", type: "regular", variant: "primary", color: "danger")
+    end
+  end
+
+  def warning
+    def warning()
+      render Buttons::RegularButtonComponent.new(value: "Login", name: "login", type: "regular", variant: "primary", color: "warning")
+    end
+  end
+
   def icon_left
     def icon_left()
       render Buttons::RegularButtonComponent.new(value: "Login", name: "login", type: "regular", variant: "primary", icon: "check.svg")
