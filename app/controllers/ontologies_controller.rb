@@ -474,7 +474,7 @@ class OntologiesController < ApplicationController
 
   def show_depiction
     url = params[:depiction_url]
-    render turbo_stream: prepend('application_modal_content') { "<img src='#{url}'/>".html_safe }
+    render turbo_stream: prepend('application_modal_content') { "<img src='#{url}' style= 'width: 100%;'/>".html_safe }
   end
 
   def show_additional_metadata
