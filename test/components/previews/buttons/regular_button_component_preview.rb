@@ -16,6 +16,12 @@ class Buttons::RegularButtonComponentPreview < ViewComponent::Preview
     end
   end
 
+  def slim
+    def slim()
+      render Buttons::RegularButtonComponent.new(value: "Login", name: "login", type: "regular", variant: "primary", size: "slim")
+    end
+  end
+
   def icon_left
     def icon_left()
       render Buttons::RegularButtonComponent.new(value: "Login", name: "login", type: "regular", variant: "primary", icon: "check.svg")
