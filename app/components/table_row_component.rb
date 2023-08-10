@@ -4,9 +4,10 @@ class TableRowComponent < ViewComponent::Base
 
   renders_many :cells, TableCellComponent
 
-  def initialize(id: '')
+  def initialize(id: '', class_css: '')
     super
     @id = id
+    @class_css = class_css
   end
 
   def create(*array, &block)

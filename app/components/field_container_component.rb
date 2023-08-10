@@ -10,6 +10,6 @@ class FieldContainerComponent < ViewComponent::Base
   end
 
   def show?
-    content && !content.empty? || (!@value.nil? && !@value.empty?)
+    content && !content.strip.empty? || (!@value.nil? && !@value.strip.empty?)
   end
 end

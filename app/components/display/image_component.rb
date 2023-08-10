@@ -20,6 +20,8 @@ class Display::ImageComponent < ViewComponent::Base
     modal_url = "/ajax/submission/show_depiction?depiction_url=#{depiction_url}"
     modal_options = { data: { show_modal_title_value: 'Depiction', show_modal_size_value: 'modal-xl' } }
 
-    link_to_modal(loop_icon_tag + img_tag, modal_url, modal_options)
+    link_to_modal(nil, modal_url, modal_options) do
+      loop_icon_tag + img_tag
+    end
   end
 end

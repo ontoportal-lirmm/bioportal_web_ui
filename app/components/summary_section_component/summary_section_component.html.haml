@@ -5,6 +5,12 @@
     %span
       = link_to(@link, target: "_blank") do
         = info_tooltip(@link_title)
+
+  - if action_links?
+    %span
+      = render Layout::HorizontalListComponent.new do |l|
+        - action_links.each { |link| l.element { raw link }}
+
 - if show_card?
   = render Layout::CardComponent.new do
     = content

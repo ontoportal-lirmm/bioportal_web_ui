@@ -10,6 +10,7 @@ class Layout::ListComponent < ViewComponent::Base
     content_tag(:div, style: 'padding: 0px 20px 20px 20px;') do
       out = ""
       rows.each do |row|
+        next if row.nil? || row.to_s.empty?
         out = out + content_tag(:div, row.to_s, class: 'mb-1')
       end
       out.html_safe

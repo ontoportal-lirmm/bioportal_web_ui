@@ -9,10 +9,7 @@
           = render partial: 'ontologies/sections/metadata/ontology_submissions_section'
           = render partial: 'ontologies/sections/metadata/ontology_metrics_section'
         .summary-page-second-row
-          - unless Array(@submission_latest.depiction).empty?
-            = render Layout::CardComponent.new do
-              = list_container(@submission_latest.depiction) do |depiction_url|
-                = render Display::ImageComponent.new(src: depiction_url)
+          = ontology_depiction_card
           = properties_card('Identifiers','text to describe identifiers section', @identifiers) do |values|
             = horizontal_list_container(values) do |v|
               = render LinkFieldComponent.new(value: v)
@@ -21,10 +18,9 @@
             = render DateTimeFieldComponent.new(value: value)
 
           = properties_dropdown('person_and_organization','Persons and organizations','', @agents_properties) do |values|
-            - unless Array(values).empty?
-              = horizontal_list_container(values) do |v|
-                = render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: '', class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do
-                  = display_agent(v, link: false)
+            = horizontal_list_container(values) do |v|
+              = render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: '', class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do
+                = display_agent(v, link: false)
 
           = properties_dropdown('link','Links','hiba', @links_properties)
 
@@ -36,7 +32,7 @@
                   = new_element_link('Create new project', new_project_path)
 
                 - if @projects.empty?
-                  %p.font-italic= "No projects using #{@ontology.acronym}"
+                  = empty_state_message("No projects using #{@ontology.acronym}")
                 - else
                   = horizontal_list_container(@projects) do |project|
                     = render ChipButtonComponent.new(url: project_path(project.acronym), text: project.name, type: "clickable")
@@ -51,6 +47,7 @@
                 - if visits_data(@ontology)
                   = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", title: "Download as CSV") do
                     = inline_svg("summary/download.svg", width: '30px', height: '20px')
+
             = render Layout::ListComponent.new do |l|
               - l.row do
                 = render partial: "visits"
@@ -66,8 +63,5 @@
                   = render partial: 'ontology_views'
 
           - unless @submission_latest.nil?
-            = render SummarySectionComponent.new(title: 'Get my metadata back', show_card: false)  do
-              %div{data:{controller: 'metadata-downloader'}}
-                = javascript_include_tag "jsonld"
-                - [%w[NQuads N-Triple], %w[JsonLd Json-LD], %w[XML RDF/XML]].each do |format, label|
-                  %button.btn.btn-primary{'data-action': "metadata-downloader#download#{format}"}=label
+            = javascript_include_tag("jsonld")
+            = metadata_formats_buttons

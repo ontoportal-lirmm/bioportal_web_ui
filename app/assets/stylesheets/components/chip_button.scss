@@ -12,6 +12,7 @@
 .chip_button_small{
   font-size: 10px;
   padding: 5px;
+  line-height: unset;
 }
 
 .chip_button_container_clickable {
@@ -22,4 +23,5 @@
   color: var(--primary-color);
   font-weight: 500;
   font-size: 15px;
+  cursor: grab;
 }

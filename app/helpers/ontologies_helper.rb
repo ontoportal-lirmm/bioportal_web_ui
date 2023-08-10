@@ -34,6 +34,10 @@ module OntologiesHelper
     metadata && Array(metadata['enforce']).include?('Agent')
   end
 
+  def display_contact(contacts)
+    contacts.map {|c| "#{c.name.humanize} at #{c.email}" if c.member?(:name) && c.member?(:email)}.join(", ")
+  end
+
   # Display data catalog metadata under visits (in _metadata.html.haml)
   def display_logo(sub)
     logo_attributes = ["logo", "depiction"]
@@ -315,7 +319,7 @@ module OntologiesHelper
   end
 
   def empty_state_message(message)
-    content_tag(:p, message, class: 'font-italic field-description_text')
+    content_tag(:p, message.html_safe, class: 'font-italic field-description_text')
   end
   def new_view_path(ont_id)
     ont_id_esc = CGI.escape(ont_id)
@@ -340,7 +344,7 @@ module OntologiesHelper
                   else
                     v
                   end
-        render FieldContainerComponent.new(label: k) do
+        render FieldContainerComponent.new(label: attr_label(k)) do
           content
         end
       end
@@ -348,7 +352,10 @@ module OntologiesHelper
 
   end
 
+
   def horizontal_list_container(values, &block)
+    return if Array(values).empty?
+
     render Layout::HorizontalListComponent.new do |l|
       Array(values).each do |v|
         l.element do
@@ -359,6 +366,8 @@ module OntologiesHelper
   end
 
   def list_container(values, &block)
+    return if Array(values).empty?
+
     render Layout::ListComponent.new do |l|
       Array(values).each do |v|
         l.row do
@@ -384,7 +393,7 @@ module OntologiesHelper
   def properties_dropdown(id, title, tooltip, properties, &block)
     render DropdownContainerComponent.new(title: title, id: id, tooltip: tooltip) do |d|
       d.empty_state do
-        properties_string = properties.keys[0..4].join(', ') +'... ' if properties
+        properties_string = properties.keys[0..4].map{|key| "<b>#{attr_label(key)}</b>" }.join(', ')+'... ' if properties
         empty_state_message "The fields #{properties_string} are empty"
       end
 
@@ -398,6 +407,43 @@ module OntologiesHelper
     end
   end
 
+  def ontology_icon_links(links, submission_latest)
+    links.map do |icon, attr|
+      value = submission_latest.send(attr)
+      link_options = { style: "text-decoration: none; width: 30px; height: 30px" }
+      link_options[:class] = 'disabled-icon' if value.nil?
+
+      link_to(inline_svg("#{icon}.svg"), Array(value).first || '', link_options)
+    end.join.html_safe
+  end
+
+  def ontology_depiction_card
+    return  if Array(@submission_latest.depiction).empty?
+
+    render Layout::CardComponent.new do
+      list_container(@submission_latest.depiction) do |depiction_url|
+        render Display::ImageComponent.new(src: depiction_url)
+      end
+    end
+  end
+
+  def metadata_formats_buttons
+    render SummarySectionComponent.new(title: 'Get my metadata back', show_card: false)  do
+      content_tag :div, data: { controller: 'metadata-downloader' } do
+        horizontal_list_container([
+                                           ['NQuads', 'N-Triple'],
+                                           ['JsonLd', 'Json-LD'],
+                                           ['XML', 'RDF/XML']
+                                         ]) do |format, label|
+          render ChipButtonComponent.new(type: 'clickable', 'data-action': "metadata-downloader#download#{format}") do
+              concat content_tag(:span, label)
+              concat content_tag(:span, inline_svg("summary/download.svg", width: '15px', height: '15px'))
+            end
+        end
+      end
+    end
+
+  end
   def count_subscriptions(ontology_id)
     users = LinkedData::Client::Models::User.all(include: 'subscription', display_context: false, display_links: false)
     users.select { |u| u.subscription.find { |s| s.ontology.eql?(ontology_id) } }.count

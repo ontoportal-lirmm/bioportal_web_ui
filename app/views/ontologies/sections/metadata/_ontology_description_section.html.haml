@@ -8,12 +8,12 @@
         - unless @submission_latest.logo.nil?
           = image_tag(@submission_latest.logo, class: 'description_img')
     - l.row do
-      %span.creation_text Originally released on
-      %span.date_creation_text
-        = l(Date.parse(@submission_latest.released), format: :monthfull_day_year)
-      %span.creation_text if you want more information contact
-      %span.creator_text
-        = @submission_latest.contact.map {|c| [c.name, c.email].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
+      %span.creation_text
+        Initial release occurred on
+        %span.date_creation_text= l(Date.parse(@submission_latest.released), format: :monthfull_day_year) + '.'
+        For additional information, reach out
+        %span.creator_text
+          = display_contact(@submission_latest.contact)
 
     - unless Array(@submission_latest.naturalLanguage).empty?
       - l.row do
@@ -44,13 +44,8 @@
             = render ChipButtonComponent.new(text: show_category_name(v), type: "static")
 
   %hr.w-100.my-3
-
   .icons_container
-    - links = [%w[summary/download dataDump], %w[summary/homepage homepage], %w[summary/documentation documentation], %w[icons/github repository], %w[summary/sparql endpoint]]
-    - links.each do |icon , attr|
-      - value =  @submission_latest.send(attr)
-      %a{href: value , style: "text-decoration: none; width: 30px; height: 30xp", class: value.nil? ? 'disabled-icon': ''}
-        = inline_svg_tag("#{icon}.svg")
+    = ontology_icon_links(@ontology_icon_links, @submission_latest)
   %hr.w-100.my-3
   %div.text-center.pb-3
     = link_to_modal('See all metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "All metadata properties", show_modal_size_value: 'modal-xl' })

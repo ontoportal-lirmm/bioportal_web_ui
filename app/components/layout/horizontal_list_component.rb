@@ -4,6 +4,8 @@ class Layout::HorizontalListComponent < ViewComponent::Base
   renders_many :elements
 
   def call
+    return if elements.empty?
+
     content_tag(:div, class: 'd-flex flex-wrap') do
       out = ''
       elements.each do |element|
