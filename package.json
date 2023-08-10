@@ -4,7 +4,6 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.0.1",
     "@hotwired/turbo-rails": "^7.1.1",
-    "bootstrap-select": "^1.13.18",
     "esbuild": "^0.14.41",
     "flag-icons": "^6.9.3",
     "flatpickr": "^4.6.13",
