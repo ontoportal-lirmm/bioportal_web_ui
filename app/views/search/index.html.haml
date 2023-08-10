@@ -15,25 +15,23 @@
       = link_to(t('search.show_advanced_options'), "javascript:void(0)", id: "advanced_options", data: {text_swap: t('search.hide_advanced_options')}, class: "form-text")
 
     -# Advanced search options
-    %div#search_options{style: "display: none;"}
+    %div#search_options
       %div.form-group.row
         %div.col-sm-2.mb-4 Search language
         %div.col-sm-10
-          %select#select-links{multiple: "multiple", placeholder: "Pick some links..."}
-         
-          -# %select.selectpicker.mb-4{style: "width: auto", name: "search[language]", id: "search_language"}
-          -#   %option{selected: "selected"} All
-          -#   %option{value: "en",  'data-content': '<span class="fi fi-us fis"></span> English'}
-          -#   %option{value: "zh",  'data-content': '<span class="fi fi-cn fis"></span> Chinese'}
-          -#   %option{value: "hi", 'data-content': '<span class="fi fi-in fis"></span> Hindi'}
-          -#   %option{value: "es", 'data-content': '<span class="fi fi-es fis"></span> Spanish'}
-          -#   %option{value: "fr", 'data-content': '<span class="fi fi-fr fis"></span> French'}
-          -#   %option{value: "ar", 'data-content': '<span class="fi fi-dz fis"></span> Arabic'}
-          -#   %option{value: "bn", 'data-content': '<span class="fi fi-bd fis"></span> Bengali'}
-          -#   %option{value: "ru", 'data-content': '<span class="fi fi-ru fis"></span> Russian'}
-          -#   %option{value: "pt", 'data-content': '<span class="fi fi-br fis"></span> Portuguese'}
-          -#   %option{value: "id", 'data-content': '<span class="fi fi-id fis"></span> Indonesian'}
-          
+          %select#search_language.mb-4.w-25{autocomplete: "off", 
+          placeholder: "Choose language",
+          "data-controller" => "select-input", 
+          "data-select-input-with-icon-value" => "true", 
+          "data-select-input-open-add-value" => "true", 
+          "data-select-input-options-value" => 
+                  '[
+                    {"id": "fr", "title": "French", "icon": "fi fi-fr fis"},
+                    {"id": "en", "title": "English", "icon": "fi fi-us fis"},
+                    {"id": "es", "title": "Spanish", "icon": "fi fi-es fis"},
+                    {"id": "ar", "title": "Arabic", "icon": "fi fi-dz fis"}
+                  ]' 
+          }
 
         %div.col-sm-2= t("search.include_in_search") + ":"
         %div.col-sm-10
