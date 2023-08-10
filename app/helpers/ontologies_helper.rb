@@ -35,7 +35,7 @@ module OntologiesHelper
   end
 
   def display_contact(contacts)
-    contacts.map {|c| "#{c.name.humanize} at #{c.email}" if c.member?(:name) && c.member?(:email)}.join(", ")
+    contacts.map {|c| "#{c.name.humanize} at #{c.email}" if c.member?(:name) && c.member?(:email)}&.join(", ")
   end
 
   # Display data catalog metadata under visits (in _metadata.html.haml)

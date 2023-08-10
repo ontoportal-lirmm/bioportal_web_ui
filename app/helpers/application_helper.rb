@@ -450,15 +450,18 @@ module ApplicationHelper
     ontology_acronym = ontology_id.split('/').last
 
     if session[:user].nil?
-      return link_to 'Subscribe to notes emails', "/login?redirect=#{request.url}", {style:'font-size: .9em;', class: 'link_button'}
+      link = "/login?redirect=#{request.url}"
+      subscribed = false
+      user_id = nil
+    else
+      user = LinkedData::Client::Models::User.find(session[:user].id)
+      subscribed = subscribed_to_ontology?(ontology_acronym, user)
+      link = "javascript:void(0);"
+      user_id = user.id
     end
 
-    user = LinkedData::Client::Models::User.find(session[:user].id)
-    ontology_acronym = ontology_id.split('/').last
-    subscribed = subscribed_to_ontology?(ontology_acronym, user)
-
-    render OntologySubscribeButtonComponent.new(ontology_id: ontology_id, subscribed: subscribed, user_id: user.id)
-
+    count = count_subscriptions(ontology_id)
+    render OntologySubscribeButtonComponent.new(ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: link)
   end
 
   def subscribed_to_ontology?(ontology_acronym, user)
@@ -603,6 +606,66 @@ module ApplicationHelper
   def ontology_viewer_page_name(ontology_name, concept_name_title , page)
     ontology_name + " | " +concept_name_title + " - #{page.capitalize}"
   end
+
+  def concept_title_value(concept_label)
+    concept = language_hash(concept_label)
+
+    if concept.is_a?(String)
+      return {"@none" => concept}
+    end
+
+    return concept.to_h
+
+  end
+
+  def language_hash(concept_label)
+
+    return concept_label.first if concept_label.is_a?(Array)
+    return remove_fields(concept_label.to_h, [:links, :context]) if concept_label.is_a?(OpenStruct)
+
+    return concept_label
+
+  end
+
+  def get_concept_label(concept_label)
+    platform_languages = [:en, :fr]
+    concept_value = nil
+    concept = concept_title_value(concept_label)
+
+    platform_languages.each do |lang|
+      if concept[lang]
+        concept_value =  [lang, concept[lang]]
+        break
+      end
+    end
+
+    concept_value || concept.to_a.first
+  end
+
+  def remove_fields(hash, fields_to_remove )
+    hash.reject { |key, _| fields_to_remove.include?(key) }
+  end
+
+
+  def display_in_multiple_languages(label)
+
+    if label.is_a?(String)
+      return content_tag(:p, label)
+    end
+
+    labelHTML = label.map do |key, value|
+      content_tag(:div, class: 'd-flex align-items-center') do
+        concat content_tag(:p, Array(value).join(', '), class: 'm-0')
+
+        unless key.to_s.upcase.eql?('NONE') || key.to_s.upcase.eql?('@NONE')
+          concat content_tag(:span, key.upcase, class: 'badge badge-secondary ml-1')
+        end
+      end
+    end
+
+    raw labelHTML.join
+  end
+
 
 
 
