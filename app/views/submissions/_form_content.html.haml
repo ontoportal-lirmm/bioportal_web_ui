@@ -1,4 +1,19 @@
 = render TurboFrameComponent.new(id:id) do
+  - unless @errors.nil?
+    %div
+      %div.enable-lists{style: "color:red;"}
+        %strong Errors On Form
+        %ul
+          - Array(@errors).each do  |error|
+            - error = error[:error] if error.is_a?(Hash) && error[:error]
+            - if error.is_a?(String)
+              = error
+            - else
+              - error.each do |key, value|
+                %li
+                  - value = value.values if value.is_a?(Hash)
+                  #{key}: #{Array(value).join(', ')}
+
   = hidden_field object_name, :ontology, value: acronym
   = hidden_field object_name, :id, value: submissionId
   %div#general-card.mt-4
@@ -16,39 +31,43 @@
       = attribute_form_group_container('location', required: true) do
         = render partial: 'submissions/submission_location_form'
 
-  %div#key-properties-card.mt-4
-    = metadata_section('key-properties', 'Key properties', collapsed: false) do
-      = form_group_attribute("URI")
-      = form_group_attribute("deprecated")
-      = form_group_attribute("hasOntologySyntax") do
-        %p
-          Properties taken from
-          = link_to "W3C URIs for file format", "https://www.w3.org/ns/formats/", target: "_blank"
+    %div#key-properties-card.mt-4
+      = metadata_section('key-properties', 'Key properties', collapsed: false) do
+        = form_group_attribute("URI", required: true)
+        = form_group_attribute("deprecated")
+        = form_group_attribute("hasOntologySyntax") do
+          %p
+            Properties taken from
+            = link_to "W3C URIs for file format", "https://www.w3.org/ns/formats/", target: "_blank"
 
-      = form_group_attribute("hasFormalityLevel") do
-        %p
-          Properties taken from
-          = link_to "DCMI KOS type vocabularies", "http://wiki.dublincore.org/index.php/NKOS_Vocabularies#KOS_Types_Vocabulary", target: "_blank"
+        = form_group_attribute("hasFormalityLevel") do
+          %p
+            Properties taken from
+            = link_to "DCMI KOS type vocabularies", "http://wiki.dublincore.org/index.php/NKOS_Vocabularies#KOS_Types_Vocabulary", target: "_blank"
 
-      = form_group_attribute("isOfType")
-      = form_group_attribute("naturalLanguage") do
-        %p
-          Consider using a
-          = link_to "Lexvo URI", "http://www.lexvo.org", target: "_blank"
-          with ISO639-3 code
-          %br
-          e.g.: http://lexvo.org/id/iso639-3/eng
+        = form_group_attribute("isOfType")
+        = form_group_attribute("naturalLanguage") do
+          %p
+            Consider using a
+            = link_to "Lexvo URI", "http://www.lexvo.org", target: "_blank"
+            with ISO639-3 code
+            %br
+            e.g.: http://lexvo.org/id/iso639-3/eng
 
   %div#description-card.mt-4
     = metadata_section('description', 'Description', collapsed: !@required_only || !@submission.id.nil?) do
 
-      = attribute_form_group_container('description', required: true) do |c|
-        = text_area c.name, c.method_name, rows: 5, value: @submission.description, required: true, class: "form-control"
+
+      = form_group_attribute('homepage') do
+        Enter a URL for the main page of your ontology.
 
 
-      = attribute_text_field_container('homepage') do |c|
-        - c.help do
-          Enter a URL for the main page of your ontology.
+      = form_group_attribute('documentation') do
+        Enter a URL for a page that provides ontology documentation.
+
+
+      = form_group_attribute('publication') do
+        Enter a URL for a page that lists publications about your ontology.
 
       = attribute_text_field_container('documentation') do |c|
         - c.help do
@@ -71,13 +90,20 @@
         - for attr in @metadata.select { |m| m['category'] == d[2] }
           = form_group_attribute(attr["attribute"])
 
-  %div#ontology-dates-card.mt-4
-    = metadata_section('ontology-dates', 'Dates', collapsed: !@required_only  || !@submission.id.nil?) do
-      = form_group_attribute("released", default: Date.today, required: true)
-      = form_group_attribute("modificationDate")
-    = metadata_section('more-dates', 'More dates', parent_id: "ontology-dates-card") do
-      - for attr in @metadata.select { |m| m['category'] == 'dates' }
-        = form_group_attribute(attr["attribute"])
+    %div#community.mt-4
+      = metadata_section('contacts-panel', 'Contacts', parent_id: "community", collapsed: !@required_only  || !@submission.id.nil?) do
+        -# Contact(s)
+        = attribute_form_group_container('contact' ,required: true) do |c|
+          - @submission.contact = [] unless @submission.contact && @submission.contact.size > 0
+          = render NestedFormInputsComponent.new do |c|
+            - c.template do
+              = render partial: "submissions/submission_contact_form", locals: {contact: nil, index: 'NEW_RECORD'}
+            - c.empty_state do
+              = hidden_field_tag object_name+"[contact][#{@submission.contact.size}][email]"
+              = hidden_field_tag object_name+"[contact][#{@submission.contact.size}][name]"
+            - @submission.contact.each_with_index do |contact, i|
+              - c.row do
+                = render partial: "submissions/submission_contact_form", locals: {contact: contact, index: i}
 
   %div#licenses-card.mt-4
     = metadata_section('licenses', 'Licenses') do

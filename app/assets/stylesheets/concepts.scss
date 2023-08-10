@@ -14,7 +14,7 @@
   }
 
   a.btn.btn-link {
-    padding: 0;  
+    padding: 0;
   }
 }
 
@@ -55,7 +55,7 @@ div.synonym-change-request button {
   justify-content: space-between;
   align-items: center;
 }
-.concepts-tabs{ 
+.concepts-tabs{
   display: flex;
   justify-content: space-between;
   width: 589px;
@@ -105,7 +105,7 @@ div.synonym-change-request button {
   margin-top: 20px;
   border-radius: 5px;
   border: 1px solid #DFDFDF;
-  
+
 }
 .concepts-raw-title{
   display: flex;
@@ -119,6 +119,34 @@ div.synonym-change-request button {
 .concepts-raw-title div{
   padding: 10px 0px;
 }
+
 #details_content{
-  margin-top: 15px;
+  border: none !important;
+}
+
+#details_content .card{
+  border-top: none !important;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+#concept_browser{
+  .outline-tabs .tab-items{
+    width: 100%;
+  }
+  .outline-tabs .tab-items .nav-item {
+    flex: 1;
+  }
+  .outline-tabs .tab-items .nav-item a {
+    display: flex;
+    justify-content: center;
+    svg path {
+      fill: #5e5e5e !important;
+    }
+  }
+  .outline-tabs .tab-items .nav-item.active a {
+    svg path {
+      fill: var(--primary-color) !important;
+    }
+  }
 }
