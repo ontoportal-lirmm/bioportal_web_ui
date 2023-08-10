@@ -22,6 +22,15 @@
     background-color: var(--hover-color);
     cursor: pointer;
 }
+
+.primary-button.disabled-button{
+    background-color: #a3a3a3;
+}
+.primary-button.disabled-button:hover {
+    background-color: #a3a3a3;
+    cursor:default;
+}
+
 .danger-button.primary-button {
     background-color: #F24C3D !important;
 }
@@ -56,6 +65,17 @@
     .secondary-button-icon path {
         fill: white;
     }
+}
+
+.secondary-button.disabled-button {
+    border: 1px solid #a3a3a3;
+    color: #a3a3a3 !important;
+}
+
+.secondary-button.disabled-button:hover {
+    background-color: rgba(0, 0, 0, 0) !important;
+    cursor: default;
+    color: #a3a3a3 !important;
 }
 
 .secondary-button.danger-button {

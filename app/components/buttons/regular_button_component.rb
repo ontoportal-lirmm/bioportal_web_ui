@@ -1,5 +1,5 @@
 class Buttons::RegularButtonComponent < ViewComponent::Base
-    def initialize(name: "", value: ,variant: "primary", type: "regular", style: "regular", color: "normal", icon: "", icon_type:"left", href: "#", size: "normal")
+    def initialize(name: "", value: ,variant: "primary", type: "regular", style: "regular", color: "normal", icon: "", icon_type:"left", href: "#", size: "normal", state: "animate")
         @name = name
         @value = value
         @variant = variant
@@ -10,5 +10,6 @@ class Buttons::RegularButtonComponent < ViewComponent::Base
         @icon_type = icon_type
         @href = href
         @size = size
+        @state = state
     end
 end

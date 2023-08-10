@@ -34,6 +34,18 @@ class Buttons::RegularButtonComponentPreview < ViewComponent::Preview
     end
   end
 
+  def disabled
+    def disabled()
+      render Buttons::RegularButtonComponent.new(value: "Login", name: "login", type: "regular", variant: "primary", state: "disabled")
+    end
+  end
+
+  def no_animation
+    def no_animation()
+      render Buttons::RegularButtonComponent.new(value: "Login", name: "login", type: "regular", variant: "primary", state: "regular")
+    end
+  end
+
   def icon_left
     def icon_left()
       render Buttons::RegularButtonComponent.new(value: "Login", name: "login", type: "regular", variant: "primary", icon: "check.svg")
