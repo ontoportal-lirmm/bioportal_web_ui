@@ -60,7 +60,7 @@ export default class extends Controller {
                 sourceNodeNumber = propertyCount;
                 // If the node is the source it means it is from the Portal, so we colorate it in green
                 nodes.add([
-                    {id: sourceNodeNumber, label: relation["source"], color: "#5cb85c"}
+                    {id: sourceNodeNumber, label: relation["source"], color: "#3CB371"}
                 ]);
                 nodeIds[relation["source"]] = propertyCount;
                 propertyCount++;
@@ -74,11 +74,11 @@ export default class extends Controller {
                 // If target node is an ontology from the portal then node in green
                 if (relation["targetInPortal"]) {
                     nodes.add([
-                        {id: targetNodeNumber, label: relation["target"], color: "#5cb85c"}
+                        {id: targetNodeNumber, label: relation["target"], color: "#3CB371"}
                     ]);
                 } else {
                     nodes.add([
-                        {id: targetNodeNumber, label: relation["target"]}
+                        {id: targetNodeNumber, label: relation["target"], color: "#6DA9E4"}
                     ]);
                 }
                 nodeIds[relation["target"]] = propertyCount;
