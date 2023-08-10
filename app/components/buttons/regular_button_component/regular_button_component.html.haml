@@ -1,17 +1,17 @@
-- style = @size == "slim" ? "height: 42px;" : "height: 60px;"
+- slim_class = @size == "slim" ? "slim " : " "
 - danger_class = @color == "danger" ? "danger-button " : " "
 - warning_class = @color == "warning" ? "warning-button " : " "
 - disabled_class = @state == "disabled" ? "disabled-button " : " "
 .button-container
     - if @type == "link"
-        %a.regular-button{:name => @name, onclick: "displayAnimation()", id: "button-animation-id", class: "#{@variant}-button "+danger_class+warning_class+disabled_class, href: @href, style: style}
+        %a.regular-button{:name => @name, onclick: "displayAnimation()", id: "button-animation-id", class: "#{@variant}-button "+danger_class+warning_class+disabled_class+slim_class, href: @href}
             - if @icon != "" && @icon_type == "left"
                 = inline_svg_tag @icon, class: "#{@variant}-button-icon left-button-icon"
             = @value
             - if @icon != "" && @icon_type == "right"
                 = inline_svg_tag @icon, class: "#{@variant}-button-icon right-button-icon"
     - else
-        %button.regular-button{:name => @name, onclick: "displayAnimation()", id: "button-animation-id", class: "#{@variant}-button "+danger_class+warning_class+disabled_class, type: "#{"submit" if @type == "submit"}", style: style}
+        %button.regular-button{:name => @name, onclick: "displayAnimation()", id: "button-animation-id", class: "#{@variant}-button "+danger_class+warning_class+disabled_class+slim_class, type: "#{@type == "submit" ? "submit" : "button"}"}
             - if @icon != "" && @icon_type == "left"
                 = inline_svg_tag @icon, class: "#{@variant}-button-icon left-button-icon"
             = @value
@@ -19,7 +19,7 @@
                 = inline_svg_tag @icon, class: "#{@variant}-button-icon right-button-icon"
 
 - if @state == "animate"
-    .animation-container#loading-animation{style: style, class: danger_class+warning_class}
+    .animation-container#loading-animation{class: danger_class+warning_class+slim_class}
         .lds-ellipsis
             %div
             %div
