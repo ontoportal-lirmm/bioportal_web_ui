@@ -19,12 +19,8 @@
       %div.form-group.row
         %div.col-sm-2.mb-4 Search language
         %div.col-sm-10
-          %select#select-beast(autocomplete="off" placeholder="Select a person...")
-            %option(value="") Select a person...
-            %option(value="4") Thomas Edison
-            %option(value="1") Nikola
-            %option(value="3") Nikola Tesla
-            %option(value="5") Arnold Schwarzenegger
+          %select#select-links{multiple: "multiple", placeholder: "Pick some links..."}
+         
           -# %select.selectpicker.mb-4{style: "width: auto", name: "search[language]", id: "search_language"}
           -#   %option{selected: "selected"} All
           -#   %option{value: "en",  'data-content': '<span class="fi fi-us fis"></span> English'}
@@ -94,12 +90,6 @@
     }
   });
 
-  new TomSelect("#select-beast",{
-    create: true,
-    sortField: {
-      field: "text",
-      direction: "asc"
-    }
-  });
+  
 
 
