@@ -33,13 +33,13 @@ class FormGroupComponent < ViewComponent::Base
   end
 
   def label_class
-    inline_label? ? 'col-sm-4' : ''
+    inline_label? ? '' : ''
   end
   def content_class
-    inline_label? ? 'col-sm-8' : ''
+    inline_label? ? '' : ''
   end
   def container_class
-    inline_label? ? 'row' : ''
+    inline_label? ? 'w-100' : ''
   end
   def container_id
     "#{@name}#{@method_name.capitalize}"
