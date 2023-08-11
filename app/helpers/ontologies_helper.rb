@@ -27,7 +27,7 @@ module OntologiesHelper
 
       end
     else
-       ""
+      ""
     end
   end
 
@@ -36,33 +36,10 @@ module OntologiesHelper
     metadata && Array(metadata['enforce']).include?('Agent')
   end
 
-  # Display data catalog metadata under visits (in _metadata.html.haml)
-  def display_logo(sub)
-    logo_attributes = ["logo", "depiction"]
-    logo_html = ""
-    logo_attributes.each do |metadata|
-      if !sub.send(metadata).nil?
-        puts sub.send(metadata)
-        logo_html.concat(content_tag(:section, { :class => "ont-metadata-card ont-logo-depiction-card" }) do
-          concat(content_tag(:div, { :class => "ont-section-toolbar" }) do
-            concat(content_tag(:header, metadata.capitalize, { :class => "pb-2 font-weight-bold" }))
-          end)
-          concat(content_tag(:div, { :class => "" }) do
-            concat(content_tag(:a, { :href => sub.send(metadata), :title => sub.send(metadata),
-                                     :target => "_blank", :style => "border-width:0;" }) do
-
-              concat(content_tag(:img, "", { :title => sub.send(metadata),
-                                             :style => "border-width:0;max-width: 100%;", :src => sub.send(metadata).to_s }))
-            end)
-          end)
-        end)
-      end
-    end
-    return logo_html
+  def display_contact(contacts)
+    contacts.map {|c| "#{c.name.humanize} at #{c.email}" if c.member?(:name) && c.member?(:email)}&.join(", ")
   end
-
-
-
+  
   def count_links(ont_acronym, page_name = 'summary', count = 0)
     ont_url = "/ontologies/#{ont_acronym}"
     if count.nil? || count.zero?
@@ -317,7 +294,54 @@ module OntologiesHelper
     end
     return html.html_safe
   end
+  def new_view_path(ont_id)
+    ont_id_esc = CGI.escape(ont_id)
+    if session[:user].nil?
+      "/login?redirect=#{escape("/ontologies/new?ontology[viewOf]=#{ont_id_esc}")}"
+    else
+      "/ontologies/new?ontology[viewOf]=#{ont_id_esc}"
+    end
+  end
+  def new_element_link(title, link)
+    link_to(link, title: title, class: "mx-1") do
+      inline_svg_tag("summary/plus.svg")
+    end
+  end
+  def ontology_icon_links(links, submission_latest)
+    links.map do |icon, attr|
+      value = submission_latest.send(attr)
+      link_options = { style: "text-decoration: none; width: 30px; height: 30px" }
+      link_options[:class] = 'disabled-icon' if value.nil?
 
+      link_to(inline_svg("#{icon}.svg"), Array(value).first || '', link_options)
+    end.join.html_safe
+  end
+  def ontology_depiction_card
+    return  if Array(@submission_latest.depiction).empty?
+
+    render Layout::CardComponent.new do
+      list_container(@submission_latest.depiction) do |depiction_url|
+        render Display::ImageComponent.new(src: depiction_url)
+      end
+    end
+  end
+  def metadata_formats_buttons
+    render SummarySectionComponent.new(title: 'Get my metadata back', show_card: false)  do
+      content_tag :div, data: { controller: 'metadata-downloader' } do
+        horizontal_list_container([
+                                           ['NQuads', 'N-Triple'],
+                                           ['JsonLd', 'Json-LD'],
+                                           ['XML', 'RDF/XML']
+                                         ]) do |format, label|
+          render ChipButtonComponent.new(type: 'clickable', 'data-action': "metadata-downloader#download#{format}") do
+              concat content_tag(:span, label)
+              concat content_tag(:span, inline_svg("summary/download.svg", width: '15px', height: '15px'))
+            end
+        end
+      end
+    end
+
+  end
 
   def count_subscriptions(ontology_id)
     users = LinkedData::Client::Models::User.all(include: 'subscription', display_context: false, display_links: false )
