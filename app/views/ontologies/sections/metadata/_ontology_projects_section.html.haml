@@ -1,4 +1,0 @@
-- array = [:isFormatOf, :knownUsage, :designedForOntologyTask, :example, :coverage, :includedInDataCatalog, :audience]
-- array.each do |key| 
-    = render FieldContainerComponent.new(label: key.to_s, value: Array(@submission_latest.send(key.to_s)).join(',')) 
-
