@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class SummarySectionComponent < ViewComponent::Base
-  include ApplicationHelper 
+  renders_many :action_links
+
   def initialize(title: , link: nil, link_title: nil, show_card:  true)
     super
     @title = title
