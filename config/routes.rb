@@ -152,7 +152,6 @@ Rails.application.routes.draw do
   get 'ajax/label_xl', to: "label_xl#show"
   get '/ajax/biomixer' => 'concepts#biomixer'
   get '/ajax/fair_score/html' => 'fair_score#details_html'
-  get '/ajax/submission/show_depiction' => 'ontologies#show_depiction'
   get '/ajax/submission/show_additional_metadata/:id' => 'ontologies#show_additional_metadata'
   get '/ajax/submission/show_licenses/:id' => 'ontologies#show_licenses'
   get '/ajax/fair_score/json' => 'fair_score#details_json'

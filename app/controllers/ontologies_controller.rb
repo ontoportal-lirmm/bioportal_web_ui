@@ -466,10 +466,6 @@ class OntologiesController < ApplicationController
     end
   end
 
-  def show_depiction
-    url = params[:depiction_url]
-    render turbo_stream: replace('application_modal_content') { "<img src='#{url}'/>".html_safe }
-  end
 
   def show_additional_metadata
     @metadata = submission_metadata
