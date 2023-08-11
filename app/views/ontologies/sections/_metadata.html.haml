@@ -12,8 +12,9 @@
         = horizontal_list_container(values) do |v|
           = render LinkFieldComponent.new(value: v)
 
-      = properties_dropdown('dates','Dates','', @dates_properties) do |value|
-        = render DateTimeFieldComponent.new(value: value)
+      = properties_dropdown('dates','Dates','', @dates_properties) do |values|
+        = horizontal_list_container(values) do |v|
+          = render DateTimeFieldComponent.new(value: v)
 
       = properties_dropdown('person_and_organization','Persons and organizations','', @agents_properties) do |values|
         = horizontal_list_container(values) do |v|

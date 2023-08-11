@@ -396,23 +396,23 @@ class OntologiesController < ApplicationController
     @projects = @ontology.explore.projects.sort {|a,b| a.name.downcase <=> b.name.downcase } || []
     @analytics = LinkedData::Client::HTTP.get(@ontology.links['analytics'])
 
-    #Call to fairness assessment service
+    # Call to fairness assessment service
     tmp = fairness_service_enabled? ? get_fair_score(@ontology.acronym) : nil
     @fair_scores_data = create_fair_scores_data(tmp.values.first) unless tmp.nil?
 
     @views = get_views(@ontology)
-    @view_decorators = @views.map{ |view| ViewDecorator.new(view, view_context) }
-    @landscape_data = landscape_data
+    @view_decorators = @views.map { |view| ViewDecorator.new(view, view_context) }
+    @ontology_relations_data = ontology_relations_data
 
-    @methodology_properties = {Accrual_method: @submission_latest.accrualMethod, Accrual_periodicity: @submission_latest.accrualPeriodicity, Accrual_policy: @submission_latest.accrualPolicy,
-          Knowledge_representation_paradigm: @submission_latest.conformsToKnowledgeRepresentationParadigm, Engineering_methodology: @submission_latest.usedOntologyEngineeringMethodology,  Created_With: @submission_latest.usedOntologyEngineeringTool,
-          Competency_question: @submission_latest.competencyQuestion}
-    @persons_organizations_properties = {creators: @submission_latest.hasCreator, contributors: @submission_latest.hasContributor, curators: @submission_latest.curatedBy,
-          translator: @submission_latest.translator, publisher: @submission_latest.publisher,  funded_By: @submission_latest.fundedBy,
-          endorsed_By: @submission_latest.endorsedBy, copyright_Holder: @submission_latest.copyrightHolder}
-    @dates_properties = {Creation_date: @submission_latest.creationDate, Modification_date: @submission_latest.modificationDate}
-    @links_properties = {Is_Format_Of: @submission_latest.isFormatOf, Has_Format: @submission_latest.hasFormat,
-    Source: @submission_latest.source, Was_generated_by: @submission_latest.wasGeneratedBy, Was_invalidated_by: @submission_latest.wasInvalidatedBy }
+    category_attributes = submission_metadata.group_by{|x| x['category']}.transform_values{|x| x.map{|attr| attr['attribute']} }
+
+    @methodology_properties = properties_hash_values(category_attributes["methodology"])
+    @agents_properties = properties_hash_values(category_attributes["people"].without('wasGeneratedBy', 'wasInvalidatedBy') + [:hasCreator, :hasContributor, :translator, :publisher, :copyrightHolder])
+    @dates_properties = properties_hash_values(category_attributes["dates"] + [:creationDate, :modificationDate, :released])
+    @links_properties = properties_hash_values(category_attributes["links"].without('includedInDataCatalog') +[:wasGeneratedBy, :wasInvalidatedBy] )
+    @identifiers = properties_hash_values( [:URI, :versionIRI, :identifier])
+    @projects_properties = properties_hash_values(category_attributes["usage"].without('hasDomain') + [:audience, :includedInDataCatalog])
+    @ontology_icon_links = [%w[summary/download dataDump], %w[summary/homepage homepage], %w[summary/documentation documentation], %w[icons/github repository], %w[summary/sparql endpoint]]
     if request.xhr?
       render partial: 'ontologies/sections/metadata', layout: false
     else
@@ -463,7 +463,7 @@ class OntologiesController < ApplicationController
       render partial: 'ontologies/sections/widgets', layout: 'ontology_viewer'
     end
   end
-
+  
 
   def show_additional_metadata
     @metadata = submission_metadata
@@ -471,7 +471,7 @@ class OntologiesController < ApplicationController
     @submission_latest = @ontology.explore.latest_submission(include: 'all', display_context: false, display_links: false)
     render partial: 'ontologies/sections/additional_metadata'
   end
-  
+
   def show_licenses
     
     @metadata = submission_metadata
@@ -481,10 +481,10 @@ class OntologiesController < ApplicationController
     render partial: 'ontologies/sections/licenses'
   end
   def ajax_ontologies
-   
+
     
     render json: LinkedData::Client::Models::Ontology.all(include_views: true,
-       display: 'acronym,name', display_links: false, display_context: false)
+                                                          display: 'acronym,name', display_links: false, display_context: false)
   end
 
  
@@ -519,7 +519,7 @@ class OntologiesController < ApplicationController
     p[:group].reject!(&:blank?)
     p.to_h
   end
-  
+
   def get_views(ontology)
     views = ontology.explore.views || []
     views.select!{ |view| view.access?(session[:user]) }
@@ -531,33 +531,36 @@ class OntologiesController < ApplicationController
     @relations_array = ["omv:useImports", "door:isAlignedTo", "door:ontologyRelatedTo", "omv:isBackwardCompatibleWith", "omv:isIncompatibleWith", "door:comesFromTheSameDomain", "door:similarTo",
                         "door:explanationEvolution", "voaf:generalizes", "door:hasDisparateModelling", "dct:hasPart", "voaf:usedBy", "schema:workTranslation", "schema:translationOfWork"]
 
-      ont = sub.ontology
-      # Get ontology relations between each other (ex: STY isAlignedTo GO)
-      @relations_array.each do |relation_attr|
-        relation_values = sub.send(relation_attr.to_s.split(':')[1])
-        next if relation_values.nil? || relation_values.empty?
+    ont = sub.ontology
+    # Get ontology relations between each other (ex: STY isAlignedTo GO)
+    @relations_array.each do |relation_attr|
+      relation_values = sub.send(relation_attr.to_s.split(':')[1])
+      next if relation_values.nil? || relation_values.empty?
 
-        relation_values = [relation_values] unless relation_values.kind_of?(Array)
+      relation_values = [relation_values] unless relation_values.kind_of?(Array)
 
-        relation_values.each do |relation_value|
-          next if relation_value.eql?(ont.acronym)
+      relation_values.each do |relation_value|
+        next if relation_value.eql?(ont.acronym)
 
-          target_id = relation_value
-          target_in_portal = false
-          # if we find our portal URL in the ontology URL, then we just keep the ACRONYM to try to get the ontology.
+        target_id = relation_value
+        target_in_portal = false
+        # if we find our portal URL in the ontology URL, then we just keep the ACRONYM to try to get the ontology.
           relation_value = relation_value.split('/').last if relation_value.include?($UI_URL)
 
-          # Use acronym to get ontology from the portal
-          target_ont = LinkedData::Client::Models::Ontology.find_by_acronym(relation_value).first
-          if target_ont
-            target_id = target_ont.acronym
-            target_in_portal = true
-          end
+        # Use acronym to get ontology from the portal
+        target_ont = LinkedData::Client::Models::Ontology.find_by_acronym(relation_value).first
+        if target_ont
+          target_id = target_ont.acronym
+          target_in_portal = true
+        end
 
-          ontology_relations_array.push({ source: ont.acronym, target: target_id, relation: relation_attr.to_s, targetInPortal: target_in_portal })
+        ontology_relations_array.push({ source: ont.acronym, target: target_id, relation: relation_attr.to_s, targetInPortal: target_in_portal })
       end
     end
 
     ontology_relations_array
+  end
+  def properties_hash_values(properties, sub = @submission_latest)
+    properties.map { |x| [x.to_s, sub.send(x.to_s)] }.to_h
   end
 end

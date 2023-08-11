@@ -1,6 +1,0 @@
--# Additional Metadata pane
-%section.ont-metadata-card.ont-additional-metadata-card
-  %header.pb-2.font-weight-bold
-    = t('ontology_details.metadata.dates')
-  %table.table.table-sm
-    = raw dates(@submission_latest) unless @submission_latest.nil?

@@ -58,10 +58,7 @@ module ApplicationHelper
       end
     end
   end
-
-  def link?(string)
-    string.to_s.start_with?('http://') || string.to_s.start_with?('https://')
-  end
+  
 
   def encode_param(string)
     CGI.escape(string)
@@ -665,10 +662,6 @@ module ApplicationHelper
 
   def navitems
     items = [["/ontologies", "Browse"],["/mappings", "Mappings"],["/recommender", "Recommender"],["/annotator", "Annotator"], ["/landscape", "Landscape"]]
-  end
-
-  def concept_link(ontology_id, concept_id)
-    "#{ontology_id}/classes/#{escape(concept_id)}?display=all&apikey=#{get_apikey}"
   end
 
   def attribute_enforced_values(attr)
