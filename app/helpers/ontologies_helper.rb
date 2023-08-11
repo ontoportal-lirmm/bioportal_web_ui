@@ -304,7 +304,7 @@ module OntologiesHelper
   end
   def new_element_link(title, link)
     link_to(link, title: title, class: "mx-1") do
-      inline_svg_tag("summary/plus.svg")
+      inline_svg_tag("icons/plus.svg")
     end
   end
   def ontology_icon_links(links, submission_latest)
