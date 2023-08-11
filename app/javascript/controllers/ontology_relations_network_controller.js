@@ -7,10 +7,10 @@ export default class extends Controller {
         data: Array
     }
 
-    static targets = ["relationCheck", "container"]
+    static targets = ["container"]
 
     connect() {
-       this.build()
+        this.build()
     }
 
 
@@ -37,9 +37,9 @@ export default class extends Controller {
         }*/
 
         let selected_relations = [];
-
+        this.relationCheckTargets = Array.from(this.element.querySelectorAll('option'))
         this.relationCheckTargets.forEach((elem) => {
-            if (elem.checked) {
+            if (elem.selected) {
                 selected_relations.push(elem.value);
             }
         })
