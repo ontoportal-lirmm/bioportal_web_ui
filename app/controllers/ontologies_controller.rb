@@ -385,8 +385,6 @@ class OntologiesController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first if @ontology.nil?
     ontology_not_found(params[:id]) if @ontology.nil?
     # Check to see if user is requesting json-ld, return the file from REST service if so
-    @relations_array = ["omv:useImports", "door:isAlignedTo", "door:ontologyRelatedTo", "omv:isBackwardCompatibleWith", "omv:isIncompatibleWith", "door:comesFromTheSameDomain", "door:similarTo",
-                        "door:explanationEvolution", "voaf:generalizes", "door:hasDisparateModelling", "dct:hasPart", "voaf:usedBy", "schema:workTranslation", "schema:translationOfWork"]
     if request.accept.to_s.eql?('application/ld+json') || request.accept.to_s.eql?('application/json')
       headers['Content-Type'] = request.accept.to_s
       render plain: @ontology.to_jsonld
@@ -528,14 +526,11 @@ class OntologiesController < ApplicationController
     views.sort{ |a,b| a.acronym.downcase <=> b.acronym.downcase }
   end
 
-  def landscape_data
+  def ontology_relations_data(sub = @submission_latest)
     ontology_relations_array = []
     @relations_array = ["omv:useImports", "door:isAlignedTo", "door:ontologyRelatedTo", "omv:isBackwardCompatibleWith", "omv:isIncompatibleWith", "door:comesFromTheSameDomain", "door:similarTo",
                         "door:explanationEvolution", "voaf:generalizes", "door:hasDisparateModelling", "dct:hasPart", "voaf:usedBy", "schema:workTranslation", "schema:translationOfWork"]
 
-    submissions = [@submission_latest]
-    # Iterate ontologies to get the submissions with all metadata
-    submissions.each do |sub|
       ont = sub.ontology
       # Get ontology relations between each other (ex: STY isAlignedTo GO)
       @relations_array.each do |relation_attr|
@@ -560,7 +555,6 @@ class OntologiesController < ApplicationController
           end
 
           ontology_relations_array.push({ source: ont.acronym, target: target_id, relation: relation_attr.to_s, targetInPortal: target_in_portal })
-        end
       end
     end
 
