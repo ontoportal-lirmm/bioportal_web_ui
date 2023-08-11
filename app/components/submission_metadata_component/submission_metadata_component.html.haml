@@ -1,23 +1,18 @@
-%table.concepts-content
+= render TableComponent.new(id: 'submission_metadata_table', borderless: true, layout_fixed: true) do |t|
+  - t.header do |h|
+    - h.th(width:'15%') {"Label"}
+    - h.th(width:'50%') {"Value"}
+    - h.th(width:'35%') {"Metadata"}
+
   - @metadata_list.each do |metadata, label|
-    - unless @metadata_not_displayed.include?(metadata)
-      %tr
-        %td
-          = label || metadata.underscore.humanize
-        %td.d-flex.flex-wrap.align-items-center
-          - Array(@submission.send(metadata)).each do |value|
-            %div.m-1.f32
-              - if agent?(@json_metadata, metadata)
-              - elsif metadata.eql?("naturalLanguage")
-                = render LanguageFieldComponent.new(value: value)
-              - elsif metadata.to_s.eql?("hasLicense")
-                = render LicenseFieldComponent.new(value: value)
-              - elsif metadata.to_s.eql?("endpoint") && (value.start_with?("http://sparql.") || value.start_with?("https://sparql."))
-                %a{:href => value, :title => value, :target => "_blank", :style => "border-width:0;"}
-                  = image_tag('logos/sparql_logo.png', :title => value, :class => 'logo')
-              - elsif date_time?(metadata)
-                = render DateTimeFieldComponent.new(value: value)
-              - elsif attr_uri?(metadata)
-                = render LinkFieldComponent.new(value: value)
-              - else
-                = render TextAreaFieldComponent.new(value:  value.to_s)
+    - t.row do |r|
+      - r.td do
+        = label || metadata.underscore.humanize
+      - r.td do
+        .d-flex.flex-wrap.align-items-center
+          = display_attributes(metadata)
+      - r.td {attribute_help_text(attr_metadata(metadata))}
+:javascript
+   $("#submission_metadata_table").dataTable({ paging: false, autoWidth: false })
+
+
