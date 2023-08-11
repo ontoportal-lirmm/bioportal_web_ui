@@ -496,7 +496,7 @@ class OntologiesController < ApplicationController
 
     # Retrieve submissions in descending submissionId order (should be reverse chronological order)
     @submissions = @ontology.explore.submissions({ include: "metrics" })
-                            .sort { |a, b| b.submissionId.to_i <=> a.submissionId.to_i } || []
+                            .sort { |a, b| a.submissionId.to_i <=> b.submissionId.to_i  }.reverse || []
 
     metrics = @submissions.map { |s| s.metrics }
 
