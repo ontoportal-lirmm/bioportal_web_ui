@@ -85,6 +85,10 @@ class ApplicationController < ActionController::Base
   before_action :set_global_thread_values, :domain_ontology_set, :authorize_miniprofiler, :clean_empty_strings_from_params_arrays, :init_trial_license
 
 
+  def show_image_modal
+    url = params[:url]
+    render turbo_stream: helpers.prepend('application_modal_content') { helpers.image_tag(url, style:'width: 100%') }
+  end
 
   def set_global_thread_values
     Thread.current[:session] = session

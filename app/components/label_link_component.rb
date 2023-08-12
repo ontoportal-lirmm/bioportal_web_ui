@@ -2,7 +2,7 @@
 
 class LabelLinkComponent < ViewComponent::Base
 
-  def initialize(id:, text:, icon: 'open-popup')
+  def initialize(id:, text:, icon: 'popup-link')
     @id = id
     @text = text
     @icon = icon

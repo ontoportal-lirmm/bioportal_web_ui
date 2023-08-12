@@ -1,0 +1,10 @@
+= turbo_frame_tag 'application_modal_content' do
+  - @licenses.each do |attribute|
+    - attr = attribute_infos(attribute)
+    - value = Array(@submission_latest.send(attribute))
+    .creation_info
+      %p.description_text 
+        = attr["label"] || attribute
+    %p.normal_text 
+      = value.join(", ")
+        

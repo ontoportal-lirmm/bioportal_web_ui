@@ -61,6 +61,34 @@ $ANNOUNCE_LIST||= "users-list@test"
 # Where "ncbo" is the namespace used as key in the interportal_hash
 $INTERPORTAL_HASH = {}
 
+# OAuth2 authentication
+$OMNIAUTH_PROVIDERS = {
+  github: {
+    client_id: 'CLIENT_ID',
+    client_secret: 'CLIENT_SECRET',
+    icon: 'icons/github.svg',
+  },
+  google: {
+    strategy: :google_oauth2,
+    client_id: 'CLIENT_ID',
+    client_secret: 'CLIENT_SECRET',
+    icon: 'icons/google.svg',
+  },
+  orcid: {
+    client_id: 'CLIENT_SECRET',
+    client_secret: 'CLIENT_SECRET',
+    icon: 'icons/orcid.svg'
+  },
+  keycloak: {
+    strategy: :keycloak_openid,
+    client_id: 'YOUR_KEYCLOAK_CLIENT_ID',
+    client_secret: 'YOUR_KEYCLOAK_CLIENT_SECRET',
+    client_options: { site: 'KEYCLOAK_SITE', realm: 'KEYCLOAK_REALM' },
+    name: 'keycloak',
+    icon: 'icons/keycloak.svg'
+  }
+}.freeze
+
 # Don't load and don't display recent mappings if false, in case of too many mappings (take longer to load homepage)
 $DISPLAY_RECENT = false
 
