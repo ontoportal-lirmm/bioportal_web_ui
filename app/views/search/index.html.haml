@@ -19,7 +19,8 @@
       %div.form-group.row
         %div.col-sm-2.mb-4 Search language
         %div.col-sm-10.mb-4
-          = render SelectInputComponent.new(id: "", name: "", values: [{id: "fr", title: "French", icon: "fi fi-fr fis"}, {id: "en", title: "English", icon: "fi fi-us fis"}], withIcon: true, placeholder: "Choose language")
+          %div.w-25
+            = render SelectInputComponent.new(id: "search_language", name: "search_language", values: [{id: "fr", title: "French", icon: "fi fi-fr fis"}, {id: "en", title: "English", icon: "fi fi-us fis"}], withIcon: true, placeholder: "Choose language")
         %div.col-sm-2= t("search.include_in_search") + ":"
         %div.col-sm-10
           %div.form-check
