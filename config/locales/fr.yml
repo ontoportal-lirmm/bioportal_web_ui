@@ -175,14 +175,33 @@ fr:
     size: Taille
 
   home:
+    ontology_upload: "Veux-tu télécharger une ontologie ?"
+    ontology_upload_desc: "Télécharger une ontologie est un moyen de partager vos connaissances du domaine avec les autres."
+    ontology_upload_benefits: "En téléchargeant votre ontologie sur %{site}, vous pouvez :"
     find_ontology: "Trouver une ontologie"
+    ontology_upload_button: "Télécharger une ontologie"
+    recommender_annotator: "Recommandateur et annotateur"
+    get_recommendations: "Obtenir des recommandations"
+    get_annotations: "Obtenir des annotations"
+    fair_details: "Voir les détails"
+    twitter_news: "Actualités twitter"
+    paste_text_prompt: "Collez un paragraphe de texte ou quelques mots-clés.."
+    agroportal_figures: "%{site} en chiffres:"
+    supported_by: "Soutenu par"
+    with_collaboration: "Avec la collaboration de"
+    benefit1: "Découvrez de nouvelles perspectives et connexions en explorant d'autres ontologies dans le référentiel."
+    benefit2: "Contribuez à la croissance et au développement de votre domaine en ajoutant de nouveaux concepts et catégories."
+    benefit3: "Utilisez le contrôle de version pour gérer les modifications apportées à votre ontologie au fil du temps et collaborer avec d'autres utilisateurs."
+    benefit4: "Obtenez des commentaires et des suggestions d'autres utilisateurs qui peuvent examiner et commenter votre ontologie."
+    benefit5: "Obtenez le score et les mesures FAIR pour votre ontologie."
+
     search_class: "Rechercher une classe"
     browse_by_group: "Parcourir par groupe"
     browse_ontologies: "Parcourir les ontologies"
     comprehensive_repository: "le référentiel d'ontologies biomédicales le plus complet au monde"
     advanced_search: "Recherche avancée"
     ontology_visits: "Visites d'ontologie"
-    fair_scores: "Scores FAIR"
+    fairness: "Scores FAIR"
     clear_selection: "Effacer la sélection"
     latest_notes: "Dernières notes"
     ontologies: "Ontologies"
@@ -358,8 +377,26 @@ fr:
       release_notes: "Notes de version"
       publications: "Publications"
     footer:
-      products: "Produits"
-      copyright_html: Droit d'auteur &copie; 2005‑2022, Conseil d'administration de l'Université Leland Stanford Junior. Tous les droits sont réservés.
+      products: Produits
+      ontoportal: OntoPortal
+      release_notes: Notes de version
+      api: API
+      sparql: SPARQL
+      support: Assistance
+      contact_us: Nous contacter
+      wiki: Wiki
+      documentation: Documentation
+      agreements: Accords
+      terms: Conditions
+      privacy_policy: Politique de confidentialité
+      cite_us: Citez-nous
+      acknowledgments: Remerciements
+      about: À propos
+      about_us: À propos de nous
+      projects: Projets
+      team: Équipe
+      copyright_html: Copyright &copy; 2005-2022, Conseil d'administration de Leland Stanford Junior University. Tous droits réservés.
+         
       grant_html: >
         <strong>%{site}</strong> est actuellement développé dans le cadre du <a href="http://www.d2kab.org">projet ANR D2KAB</a> (<a href="http:// www.agence-nationale-recherche.fr/Projet-ANR-18-CE23-0017">ANR-18-CE23-0017</a>). Il reçoit ou a également reçu le soutien du <a href="http://www.lirmm.fr/sifr">projet ANR SIFR</a> (<a href="https://anr.fr/Projet-ANR- 12-JS02-0010">ANR-12-JS02-0010</a>), Union Européenne <a href="http://www.lirmm.fr/sifr">Projet H2020-MSCA SIFRm</a> ( <a href="https://cordis.europa.eu/project/id/701771">N° 701771</a>), le <a href="https://www.lirmm.fr/numev/"> Labex NUMEV</a> (ANR-10-LABX-20), le <ahref="http://www.ibc-montpellier.fr/">projet IBC de Montpellier</a> (ANR-11-BINF0002) , l'<a href="https://www.agropolis-fondation.fr/The-LabEx-AGRO?lang=fr">Agro Labex</a> (ANR-10-LABX-0001) ainsi que de l'Université de Montpellier et du CNRS.
     notices:
@@ -471,6 +508,8 @@ fr:
           </blockquote>
 
   # Generale
+
+  visits: "Visites"
   showing: Affichage
   of: de
   sort: Trier
