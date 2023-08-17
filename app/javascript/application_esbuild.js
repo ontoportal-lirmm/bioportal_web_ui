@@ -1,10 +1,9 @@
 // Entry point for the build script in your package.json
 
 
-import { Turbo } from "@hotwired/turbo-rails"
-import "./controllers"
-import "./component_controllers"
-import "flag-icons/css/flag-icons.min.css";
+import { Turbo } from "@hotwired/turbo-rails";
+import "./controllers";
+import "./component_controllers";
 
 Turbo.session.drive = false;
 Turbo.setConfirmMethod((message) => {
