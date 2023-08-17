@@ -2,11 +2,11 @@
 
 
 import { Turbo } from "@hotwired/turbo-rails"
-Turbo.session.drive = false
 import "./controllers"
 import "./component_controllers"
+import "flag-icons/css/flag-icons.min.css";
 
-
+Turbo.session.drive = false;
 Turbo.setConfirmMethod((message) => {
     return new Promise((resolve, reject) => {
         alertify.confirm(message, (e) => {

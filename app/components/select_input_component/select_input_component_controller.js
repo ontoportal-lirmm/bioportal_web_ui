@@ -4,8 +4,8 @@ import TomSelect from "tom-select"
 export default class extends Controller {
     static values = {
         multiple: { type: Boolean, default: false },
-        openAdd : { type: Boolean, default: false },
-        withIcon : { type: Boolean, default: false },
+        openAdd: { type: Boolean, default: false },
+        withIcon: { type: Boolean, default: false },
         valueField: { type: String, default: 'id' },
         searchField: { type: String, default: 'title' },
         options: { type: Array, default: [] }
@@ -15,7 +15,6 @@ export default class extends Controller {
     connect() {
         let myOptions = {}
 
-        
         if (this.withIconValue) {
             myOptions = {
                 valueField: this.valueFieldValue,
@@ -38,19 +37,16 @@ export default class extends Controller {
             }
 
 
-        } else {
-            if (this.multipleValue) {
-                myOptions['plugins'] = ['remove_button'];
-            }
-            if (this.openAddValue) {
-                myOptions['create'] = true;
-            }
         }
-        
-        
-        
-        
-       
+
+        if (this.multipleValue) {
+            myOptions['plugins'] = ['remove_button'];
+        }
+
+        if (this.openAddValue) {
+            myOptions['create'] = true;
+        }
+
         new TomSelect(this.element, myOptions);
     }
 

@@ -2,12 +2,13 @@
 
 class Input::SelectComponent < Input::InputFieldComponent
 
-  def initialize(id: nil, label: '', name:, value: [], selected: '', placeholder: '', error_message: '', helper_text: '', multiple: false, open_to_add_values: false)
+  def initialize(id: nil, label: '', name:, value: [], selected: '', placeholder: '', error_message: '', helper_text: '', multiple: false, open_to_add_values: false, withIcon: false)
     super(label: label, name: name, value: value,  placeholder: placeholder, error_message: error_message, helper_text: helper_text)
     @values = value
     @selected = selected
     @open_to_add_values = open_to_add_values
     @multiple = multiple
+    @withIcon = withIcon
     @id = id
   end
 end

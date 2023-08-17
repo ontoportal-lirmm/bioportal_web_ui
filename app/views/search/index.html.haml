@@ -13,26 +13,13 @@
                   aria: {label: t('search.view_search_documentation')}, class: "float-right")
     %div.form-group
       = link_to(t('search.show_advanced_options'), "javascript:void(0)", id: "advanced_options", data: {text_swap: t('search.hide_advanced_options')}, class: "form-text")
-
+  
     -# Advanced search options
     %div#search_options
       %div.form-group.row
         %div.col-sm-2.mb-4 Search language
-        %div.col-sm-10
-          %select#search_language.mb-4.w-25{autocomplete: "off", 
-          placeholder: "Choose language",
-          "data-controller" => "select-input", 
-          "data-select-input-with-icon-value" => "true", 
-          "data-select-input-open-add-value" => "true", 
-          "data-select-input-options-value" => 
-                  '[
-                    {"id": "fr", "title": "French", "icon": "fi fi-fr fis"},
-                    {"id": "en", "title": "English", "icon": "fi fi-us fis"},
-                    {"id": "es", "title": "Spanish", "icon": "fi fi-es fis"},
-                    {"id": "ar", "title": "Arabic", "icon": "fi fi-dz fis"}
-                  ]' 
-          }
-
+        %div.col-sm-10.mb-4
+          = render SelectInputComponent.new(id: "", name: "", values: [{id: "fr", title: "French", icon: "fi fi-fr fis"}, {id: "en", title: "English", icon: "fi fi-us fis"}], withIcon: true, placeholder: "Choose language")
         %div.col-sm-2= t("search.include_in_search") + ":"
         %div.col-sm-10
           %div.form-check
