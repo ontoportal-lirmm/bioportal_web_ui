@@ -1,4 +1,29 @@
 fr:
+  register:
+    title: S'inscrire
+    create_account: "Créer un nouveau compte"
+    first_name: "Prénom"
+    last_name: "Nom"
+    username: "Nom d'utilisateur"
+    orcid_id: "Identifiant ORCID (facultatif)"
+    github_id: "Identifiant Github (facultatif)"
+    email: "Email"
+    password: "Mot de passe"
+    confirm_password: "Confirmer le mot de passe"
+    mailing_list: "S'inscrire à la liste de diffusion d'AgroPortal"
+    account_errors: "Erreurs lors de la création de votre compte :"
+    optional: "(Facultatif)"
+
+  login:
+    title: Connexion
+    username_or_email: "Nom d'utilisateur ou Email" 
+    enter_email: "Saisissez votre email"
+    enter_password: "Saisissez votre mot de passe"
+    no_account: "Vous n'avez pas de compte ?"
+    register: "S'inscrire"
+    forgot_password: "Mot de passe oublié ?"
+    invalid_login: "Erreurs sur le formulaire"
+    password: "Mot de passe"
 
   nbco_annotatosplus:
     score_help: "Annotations de score suivant la mesure NCBO 2009 précédente (ancienne) ou Annotations de score suivant la mesure C-Value (cvalue) ou Annotations de score suivant la mesure C-Value avec expansion de la hiérarchie (cvalueh)"

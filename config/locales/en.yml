@@ -1,4 +1,32 @@
 en:
+  register:
+    title: Register
+    create_account: "Create new account"
+    first_name: "First name"
+    last_name: "Last name"
+    username: "Username"
+    orcid_id: "ORCID ID (optional)"
+    github_id: "Github ID (optional)"
+    email: "Email"
+    password: "Password"
+    confirm_password: "Confirm password"
+    mailing_list: "Register for the AgroPortal's mailing list"
+    account_errors: "Errors creating your account:"
+    optional: "(Optional)"
+
+
+
+  login:
+    title: "Login"
+    username_or_email: "Username or Email"
+    enter_email: "Enter your email"
+    enter_password: "Enter your password"
+    no_account: "Don't have an account?"
+    register: "Register"
+    forgot_password: "Forgot password?"
+    invalid_login: "Errors On Form"
+    password: "Password"
+
   nbco_annotatosplus:
     score_help: "Score annotations following previous NCBO 2009 measure (old) or Score annotations following C-Value measure (cvalue) or Score annotations following C-Value measure with hierarchy expansion (cvalueh)"
     start_typing_to_select: "Start typing to select %{type} or leave blank to use all"
