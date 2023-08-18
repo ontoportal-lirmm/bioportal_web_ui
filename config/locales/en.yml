@@ -356,11 +356,14 @@ en:
       projects: "Projects"
       landscape: "Landscape"
       login: "Login"
+      logout: "logout"
       account_setting: "Account Settings"
       submit_feedback: "Send Feedback"
       help: "Help"
       release_notes: "Release Notes"
       publications: "Publications"
+      documentation: "Documentation"
+      search_prompt: "Search in %{portal_name} ..."
     footer:
       products: Products
       ontoportal: OntoPortal
@@ -458,6 +461,7 @@ en:
       monthfull_day_year: "%B %-d, %Y" # March 1, 2017
 
   ontologies:
+    ontology_search_prompt: "Search for an ontology or concept (Ex: Agrovoc ...)"
     self: "Ontologies"
     loading: Loading ontologies
     intro: Browse the Ontology Library

@@ -370,12 +370,15 @@ fr:
       ncbo_annotator_plus: "NCBO Annotator+"
       projects: "Projets"
       landscape: "Paysage"
-      login: "Se connecter"
+      login: "Connexion"
+      logout: "Déconnecter"
       account_setting: "Paramètres du compte"
       submit_feedback: "Envoyer un commentaire"
       help: "Aide"
       release_notes: "Notes de version"
       publications: "Publications"
+      documentation: "Documentation"
+      search_prompt: "Rechercher dans %{portal_name} ..."
     footer:
       products: Produits
       ontoportal: OntoPortal
@@ -475,6 +478,7 @@ fr:
       monthfull_day_year: "%B %-d, %Y" # March 1, 2017
   
   ontologies:
+    ontology_search_prompt: "Recherchez une ontologie ou un concept (Ex : Agrovoc...)"
     self: "Ontologies"
     loading: Chargement des ontologies
     intro: Parcourir la bibliothèque d'ontologies
