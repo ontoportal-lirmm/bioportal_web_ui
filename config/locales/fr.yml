@@ -230,8 +230,9 @@ fr:
         <a href="https://mailman.stanford.edu/mailman/listinfo/bioontology-support" target="_blank">liste de support bioontologie</a>.
 
   recommender:
-    intro: Obtenez des recommandations pour les ontologies les plus pertinentes à partir d'un extrait d'un texte biomédical ou d'une liste de mots-clés
     title: "recommandeur"
+    intro: Obtenez des recommandations pour les ontologies les plus pertinentes à partir d'un extrait d'un texte biomédical ou d'une liste de mots-clés
+    paste_text_recommendations: "Collez un paragraphe de texte ou quelques mots-clés à utiliser pour calculer les recommandations d'ontologie"
     ontology_recommender: "Recommandeur d'ontologie"
     ontology_recommendation_input: "Veuillez coller un paragraphe de texte ou quelques mots-clés pour calculer les recommandations d'ontologie."
     weight_sum_greater_than_zero: "La somme des poids doit être supérieure à zéro"
@@ -264,6 +265,7 @@ fr:
 
   annotator:
     title: "Annotateur"
+    annotate_text_prompt: "Saisissez ou collez le texte à annoter"
     get_annotator: "Obtenir les annotations"
     filters:
       match_longest_only: "Correspond le plus long uniquement"
@@ -379,6 +381,7 @@ fr:
       publications: "Publications"
       documentation: "Documentation"
       search_prompt: "Rechercher dans %{portal_name} ..."
+      support: "assistance"
     footer:
       products: Produits
       ontoportal: OntoPortal

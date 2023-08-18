@@ -217,9 +217,10 @@ en:
         To receive notices of new releases or site outages, please subscribe to
         <a href="https://mailman.stanford.edu/mailman/listinfo/bioontology-support" target="_blank">bioontology support list</a>.
 
-  recommend:
-    intro: Get recommendations for the most relevant ontologies from an excerpt of a biomedical text or a list of keywords
+  recommender:
     title: "recommender"
+    intro: Get recommendations for the most relevant ontologies from an excerpt of a biomedical text or a list of keywords
+    paste_text_recommendations: "Paste a paragraph of text or some keywords to use in calculating ontology recommendations"
     ontology_recommender: "Ontology Recommender"
     ontology_recommendation_input: "Please paste a paragraph of text or some keywords to compute ontology recommendations."
     weight_sum_greater_than_zero: "The sum of weights must be greater than zero"
@@ -252,6 +253,7 @@ en:
 
   annotator:
     title: "Annotator"
+    annotate_text_prompt: "Enter or paste text to be annotated"
     get_annotator: "Get annotations"
     filters:
       match_longest_only: "Match longest only"
@@ -364,6 +366,7 @@ en:
       publications: "Publications"
       documentation: "Documentation"
       search_prompt: "Search in %{portal_name} ..."
+      support: "support"
     footer:
       products: Products
       ontoportal: OntoPortal
