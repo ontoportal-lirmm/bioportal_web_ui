@@ -1143,6 +1143,9 @@ a.truncated_less, a.truncated_more {
 .highlighted .search_ontology_acronym {
   color: white;
 }
+.hide {
+  display: none !important;
+}
 
 .empty-state {
   display: none;
