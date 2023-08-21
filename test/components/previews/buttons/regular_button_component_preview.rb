@@ -46,7 +46,8 @@ class Buttons::RegularButtonComponentPreview < ViewComponent::Preview
   end
 
   def icon_right
-    render Buttons::RegularButtonComponent.new(id:'regular-button', value: "Login", type: "regular", variant: "primary") do |btn|
+
+    render Buttons::RegularButtonComponent.new(id:'regular-button', value: "Login", variant: "primary") do |btn|
       btn.icon_right do
         inline_svg_tag "check.svg"
       end
