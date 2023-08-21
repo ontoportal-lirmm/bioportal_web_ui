@@ -2,7 +2,7 @@ class Buttons::RegularButtonComponent < ViewComponent::Base
   renders_one :icon_left
   renders_one :icon_right
 
-  def initialize(id: "", value:, variant: "primary", color: "normal", href: "", size: "normal", state: "animate")
+  def initialize(id: "", value:, variant: "primary", color: "normal", href: "", size: "normal", state: "animate", type: 'button')
     @id = id
     @value = value
     @variant = variant
@@ -10,6 +10,7 @@ class Buttons::RegularButtonComponent < ViewComponent::Base
     @href = href
     @size = size
     @state = state
+    @type = type
   end
 
   def button_label
@@ -27,7 +28,7 @@ class Buttons::RegularButtonComponent < ViewComponent::Base
         button_label
       end
     else
-      button_tag(type: 'submit', class: class_style, onclick: "displayAnimation()", id: @id) do
+      button_tag(type: @type, class: class_style, onclick: "displayAnimation()", id: @id) do
         button_label
       end
     end

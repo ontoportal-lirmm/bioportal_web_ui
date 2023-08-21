@@ -7,7 +7,7 @@
             %div
               .outlined-circle{class: index.zero? ? 'outlined-active-circle' : ''}
                 = image_tag("icons/white-check.svg")
-              %div{class: index.zero? ? 'active' : ''}
+              %span{class: index.zero? ? 'active' : ''}
                 = key.humanize
           - if index < (@pages_title.size-1)
             %hr.line
@@ -27,6 +27,6 @@
           - btn.icon_right do
             = inline_svg "arrow-right.svg"
       .progress-pages-next-button.hide{ 'data-progress-pages-target': 'finishBtn'}
-        =  render Buttons::RegularButtonComponent.new(value: "Finish", size: 'slim') do |btn|
+        =  render Buttons::RegularButtonComponent.new(value: "Finish", size: 'slim', type: 'submit') do |btn|
           - btn.icon_right do
             = inline_svg "icons/white-check.svg"

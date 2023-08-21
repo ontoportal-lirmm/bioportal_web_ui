@@ -21,7 +21,7 @@
     & > div {
         position: absolute;
         top: -13px;
-        left: -23px;
+        left: -13px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -37,11 +37,6 @@
 .progress-pages-container .progress-item:last-of-type {
     & > div {
         align-items: end;
-        div:nth-child(2){
-            position: absolute;
-            top: 100%;
-            right: 0;
-        }
     }
 }
 
@@ -50,8 +45,8 @@
     font-weight: 600;
 }
 
-.progress-pages-container .progress-item div div:nth-child(2) {
-    //position: absolute;
+.progress-pages-container .progress-item div span:nth-child(2) {
+    position: absolute;
     font-size: 12px;
     top: 33px;
     white-space: nowrap;
