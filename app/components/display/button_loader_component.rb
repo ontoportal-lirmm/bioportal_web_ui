@@ -10,7 +10,7 @@ class Display::ButtonLoaderComponent < ViewComponent::Base
 
 
   def call
-    slim_class = @size == "slim" ? "slim " : ""
+    slim_class = @slim ? "slim " : ""
     danger_class = @color == "danger" ? "danger-button " : ""
     warning_class = @color == "warning" ? "warning-button " : ""
 
