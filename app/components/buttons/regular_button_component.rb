@@ -27,7 +27,7 @@ class Buttons::RegularButtonComponent < ViewComponent::Base
         button_label
       end
     else
-      button_tag(type: 'button', class: class_style, onclick: "displayAnimation()", id: @id) do
+      button_tag(type: 'submit', class: class_style, onclick: "displayAnimation()", id: @id) do
         button_label
       end
     end
