@@ -14,7 +14,8 @@
       = password_field 'user','password', :autocomplete => "off", class: "login-input password-input", placeholder: "Enter your password"
       %a.login-forgot-password{:href => "/lost_pass"}
         %p Forgot password?
-      %input.login-button{"data-disable-with" => "Login", :name => "commit", :type => "submit", :value => "Login"}/
+      .login-button-container
+        = render Buttons::RegularButtonComponent.new(value: "Login", name: "commit", type: "submit")
       %p.dont-have-account
         Don't have an account?
         %a.text-decoration-none{:href => new_user_path} Register
