@@ -35,9 +35,9 @@
             .upload-ontology-input-field-container
               = render Input::TextInputComponent.new(label: "Acronym", name: "ontology[acronym]", value: @ontology.acronym, disabled: @is_update_ontology)
 
-            .upload-ontology-input-field-container#handlechangetest
+            .upload-ontology-input-field-container#visibilityContainer
               = render Input::SelectComponent.new(label: "Visibility", name: "ontology[viewingRestriction]", value: ["public","private"], selected: @ontology.viewingRestriction)
-            .upload-ontology-input-field-container#visibility-group.hide
+            .upload-ontology-input-field-container#visibility-group{style: 'display: none'}
               = render Input::SelectComponent.new(label: "Add or remove accounts that are allowed to view classes in this ontology using the account name", name: "ontology[acl]", value: @user_select_list, multiple: true, selected: @ontology.acl)
 
             .upload-ontology-field-container
@@ -117,3 +117,33 @@
                       .w-50
                         = render Input::TextInputComponent.new(label: "", name: "submission[contact][#{i}][name]", value: contact["email"])
 
+:javascript
+
+  function showPrivateAclSelect() {
+    const visibilityGroupDiv = document.getElementById('visibility-group');
+    // Get the selected value from the select element
+    const selectElement = document.getElementById('select_ontology[viewingRestriction]');
+    const selectedValue = selectElement.value;
+
+
+    // Check if the selected value is "private"
+    if (selectedValue === 'private') {
+      // If it's "private", show the visibility-group div
+      visibilityGroupDiv.style.display = 'block';
+    } else {
+      // If it's not "private", hide the visibility-group div
+      visibilityGroupDiv.style.display = 'none';
+    }
+  }
+  const parentDiv = document.getElementById('visibilityContainer');
+  parentDiv.addEventListener('change', () => { showPrivateAclSelect() });
+
+
+  jQuery("#ontology_isView").live("click", function(){
+      if (jQuery("#ontology_isView").is(":checked")) {
+        jQuery("#ontology_viewOf").removeAttr('disabled');
+        jQuery("#ontology_viewOf").removeAttr('disabled').show();
+      } else {
+        jQuery("#ontology_viewOf").attr('disabled', true).hide();
+      }
+  });
