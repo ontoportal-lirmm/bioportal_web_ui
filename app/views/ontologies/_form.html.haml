@@ -74,7 +74,6 @@
               - if @is_update_ontology
                 .upload-ontology-input-field-container
                   = generate_list_text_input("notes", "submission[notes]", Array(@submission.notes), label: "Change notes")
-                  -# = render Input::TextAreaComponent.new(label: "Changes comment", name: "submission[notes]", value: @submission.notes.to_s)
             .upload-ontology-field-container
               = render Input::SelectComponent.new(label: "Format", name: "submission[hasOntologyLanguage]", value: ["OBO", "OWL", "SKOS", "UMLS"], selected: @submission.hasOntologyLanguage)
             .upload-ontology-desc.hide
@@ -96,9 +95,8 @@
             .upload-ontology-input-field-container
               - if @is_update_ontology
                 = generate_attribute_input("modificationDate")
-                -# = render Input::DateComponent.new(label: "Modification date (dd/mm/yy)", name: "submission[modificationDate]", value: @submission.modificationDate || Date.today)
               - else
-                = render Input::DateComponent.new(label: "Date of original creation (dd/mm/yy)", name: "submission[released]", value: @submission.released || Date.today)
+                = generate_attribute_input("released")
             .upload-ontology-contact
               = render NestedFormInputsComponent.new(object_name: "Contact") do |c|
                 - c.header do

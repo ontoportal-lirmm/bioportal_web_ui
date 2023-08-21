@@ -338,7 +338,7 @@ module SubmissionsHelper
   def generate_date_input(attr)
     field_id = [:submission, attr["attribute"].to_s, @ontology.acronym].join('_')
     date_value = @submission.send(attr["attribute"]).presence
-    render Input::DateComponent.new(label: attr["attribute"].to_s ,name: object_name, value: date_value, id: field_id)
+    render Input::DateComponent.new(label: (attr["label"] || attr["attribute"]).to_s ,name: object_name, value: date_value || Date.today, id: field_id)
   end
 
   def generate_textarea_input(attr)
@@ -415,7 +415,7 @@ module SubmissionsHelper
     input_html = ''.html_safe
 
     # Get the attribute hash corresponding to the given attribute
-    attr = @metadata.select { |attr_hash| attr_hash["attribute"].to_s.eql?(attr_label) }.first
+    attr = submission_metadata.select { |attr_hash| attr_hash["attribute"].to_s.eql?(attr_label) }.first
 
     object_name, name = attribute_input_name(attr["attribute"])
 

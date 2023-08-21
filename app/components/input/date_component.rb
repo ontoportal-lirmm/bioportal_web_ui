@@ -7,6 +7,6 @@ class Input::DateComponent < Input::InputFieldComponent
   end
 
   def call
-    render Input::InputFieldComponent.new(label: @label, name: @name, value: @value,  placeholder: @placeholder, error_message: @error_message, helper_text: @helper_text, type: 'date')
+    render Input::InputFieldComponent.new(label: @label, name: @name, value: @value,  placeholder: @placeholder, error_message: @error_message, helper_text: @helper_text, data: @data, type: 'date', id: @id)
   end
 end
