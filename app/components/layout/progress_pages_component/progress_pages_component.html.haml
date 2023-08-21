@@ -27,6 +27,6 @@
           - btn.icon_right do
             = inline_svg "arrow-right.svg"
       .progress-pages-next-button.hide{ 'data-progress-pages-target': 'finishBtn'}
-        =  render Buttons::RegularButtonComponent.new(value: "Finish", size: 'slim') do |btn|
+        =  render Buttons::RegularButtonComponent.new(value: "Finish", size: 'slim', type: 'submit') do |btn|
           - btn.icon_right do
             = inline_svg "icons/white-check.svg"
