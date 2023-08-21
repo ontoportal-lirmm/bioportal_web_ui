@@ -7,7 +7,7 @@
             %div
               .outlined-circle{class: index.zero? ? 'outlined-active-circle' : ''}
                 = image_tag("icons/white-check.svg")
-              %div{class: index.zero? ? 'active' : ''}
+              %span{class: index.zero? ? 'active' : ''}
                 = key.humanize
           - if index < (@pages_title.size-1)
             %hr.line
