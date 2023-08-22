@@ -14,7 +14,9 @@ class Buttons::RegularButtonComponent < ViewComponent::Base
   end
 
   def button_label
-    content_tag(:span, icon_left, class: "#{@variant}-button-icon left-button-icon") + @value + content_tag(:span, icon_right, class: "#{@variant}-button-icon right-button-icon")
+    hide_icon_left = icon_left == nil ? "hide" : " "
+    hide_icon_right = icon_right == nil ? "hide" : " "
+    content_tag(:span, icon_left, class: "#{@variant}-button-icon left-button-icon #{hide_icon_left}") + @value + content_tag(:span, icon_right, class: "#{@variant}-button-icon right-button-icon #{hide_icon_right}")
   end
 
   def button_elem
