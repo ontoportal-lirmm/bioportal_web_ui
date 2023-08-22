@@ -1,0 +1,10 @@
+.alert-container{data: {controller: "alert-component"}, class: alert_type_class}
+    .alert-icon{class: alert_type_class}
+        = inline_svg_tag alert_icon
+    .alert-message{class: alert_type_class}
+        = message
+    - if closable?
+        .alert-close{"data-action":"click->alert-component#close", class: alert_type_class}
+            = inline_svg_tag "x.svg"
+
+    
