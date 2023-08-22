@@ -1,0 +1,32 @@
+%div.w-100{'data-controller': 'progress-pages'}
+  %div
+    .d-flex.justify-content-center.flex-column
+      .progress-pages-container
+        - @pages_title.each_with_index do |key, index|
+          .progress-item{'data-progress-pages-target': 'pageItem'}
+            %div
+              .outlined-circle{class: index.zero? ? 'outlined-active-circle' : ''}
+                = image_tag("icons/white-check.svg")
+              %span{class: index.zero? ? 'active' : ''}
+                = key.humanize
+          - if index < (@pages_title.size-1)
+            %hr.line
+      %div
+        - pages.each_with_index  do |page, index|
+          %div.progress-content{{'data-progress-pages-target': 'pageContent'}, class: index.zero? ? '' : 'hide'}
+            = page
+
+
+    .progress-pages-actions
+      .progress-pages-back-button.hide{'data-action': "click->progress-pages#navigateBack", 'data-progress-pages-target': 'backBtn'}
+        =  render Buttons::RegularButtonComponent.new(id: 'progress-pages-back-button', value: "Back", variant: "secondary", size: 'slim',state: 'regular') do |btn|
+          - btn.icon_left do
+            = inline_svg "icons/arrow-left.svg"
+      .progress-pages-next-button{'data-action': "click->progress-pages#navigateNext", 'data-progress-pages-target': 'nextBtn'}
+        =  render Buttons::RegularButtonComponent.new(id: 'progress-pages-next-button', value: "Next", size: 'slim', state: 'regular') do |btn|
+          - btn.icon_right do
+            = inline_svg "arrow-right.svg"
+      .progress-pages-next-button.hide{ 'data-progress-pages-target': 'finishBtn'}
+        =  render Buttons::RegularButtonComponent.new(id: 'progress-pages-finish-button', value: "Finish", size: 'slim', type: 'submit') do |btn|
+          - btn.icon_right do
+            = inline_svg "icons/white-check.svg"
