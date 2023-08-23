@@ -1,14 +1,14 @@
 %div.w-100.h-100
   - if errors
     - errors = errors.map {|k,v| "Mapping #{k.to_s.to_i + 1} errors: #{v}"}
-    = render AlertMessageComponent.new(type:'danger') do
+    = render Display::AlertComponent.new(type:'danger') do
       - errors.each do |error|
         %p
           = error
   %div.overflow-scroll
     - if created
       = render AlertsContainerComponent.new(id: alerts_container_id) do
-        = render AlertMessageComponent.new(type: 'success') do
+        = render Display::AlertComponent.new(type: 'success') do
           #{created.size} mappings created successfully
       %table.table.table-sm.zebra{data: {controller: 'data-table'}, style:"table-layout: fixed; font-size: 12px; word-break: break-word;"}
         %thead
