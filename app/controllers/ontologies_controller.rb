@@ -7,7 +7,7 @@ class OntologiesController < ApplicationController
   include SchemesHelper, ConceptsHelper
   include CollectionsHelper
   include MappingStatistics
-  include SubmissionUpdater
+  include OntologyUpdater
 
   require 'multi_json'
   require 'cgi'
@@ -198,26 +198,8 @@ class OntologiesController < ApplicationController
   def create
 
     # redirect_to ontologies_path and return if params[:commit].eql? 'Cancel'
-
-    @ontology = save_new_ontology(ontology_params)
-
-    if response_error?(@ontology)
-      show_new_errors(@ontology)
-      return
-    end
-
-
-    @submission = save_new_submission(params[:submission], @ontology)
-
-    if response_error?(@submission)
-      @ontology.delete
-      show_new_errors(@submission)
-    else
-      redirect_to "/ontologies/success/#{@ontology.acronym}"
-    end
-
-
-      end
+    save_ontology
+  end
 
   def edit
     # Note: find_by_acronym includes ontology views
@@ -457,9 +439,9 @@ class OntologiesController < ApplicationController
       render partial: 'ontologies/sections/widgets', layout: 'ontology_viewer'
     end
   end
-  
+
   def show_licenses
-    
+
     @metadata = submission_metadata
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
     @licenses= ["hasLicense","morePermissions","copyrightHolder"]
@@ -467,47 +449,14 @@ class OntologiesController < ApplicationController
     render partial: 'ontologies/sections/licenses'
   end
   def ajax_ontologies
-   
-    
+
+
     render json: LinkedData::Client::Models::Ontology.all(include_views: true,
        display: 'acronym,name', display_links: false, display_context: false)
   end
+
+
   private
-
-  def save_new_ontology(ontology_hash)
-    ontology = LinkedData::Client::Models::Ontology.new(values: ontology_hash)
-    ontology.save
-  end
-
-  def save_new_submission(submission_hash, ontology)
-    new_submission_params = submission_hash
-    new_submission_params[:ontology] = ontology.acronym
-    save_submission(new_submission_params)
-  end
-
-  def show_new_errors(object)
-    # TODO
-    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym', include_views: true, display_links: false, display_context: false)
-    @categories = LinkedData::Client::Models::Category.all
-    @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
-    @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
-    @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
-    @errors = response_errors(object)
-    @submission  =  submission_from_params(params[:submission])
-    render 'new'
-  end
-
-  def ontology_params
-    p = params.require(:ontology).permit(:name, :acronym, { administeredBy: [] }, :viewingRestriction, { acl: [] },
-                                         { hasDomain: [] }, :viewOf, :subscribe_notifications, { group: [] })
-
-    p[:administeredBy].reject!(&:blank?)
-    # p[:acl].reject!(&:blank?)
-    p[:hasDomain].reject!(&:blank?) if p[:hasDomain]
-    p[:group].reject!(&:blank?)  if p[:group]
-    p.to_h
-  end
-  
   def get_views(ontology)
     views = ontology.explore.views || []
     views.select!{ |view| view.access?(session[:user]) }
