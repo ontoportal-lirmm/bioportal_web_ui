@@ -31,12 +31,14 @@
 .progress-pages-container .progress-item:first-of-type {
     & > div {
         align-items: start;
+        left: 0;
     }
 }
 
 .progress-pages-container .progress-item:last-of-type {
     & > div {
         align-items: end;
+        left: -23px;
     }
 }
 
@@ -69,7 +71,7 @@
 
 .outlined-checked-circle {
     border: 2px solid var(--primary-color) !important;
-    background-color: var(--primary-color);
+    background-color: var(--primary-color) !important;
     display: flex;
     align-items: center;
     justify-content: center;

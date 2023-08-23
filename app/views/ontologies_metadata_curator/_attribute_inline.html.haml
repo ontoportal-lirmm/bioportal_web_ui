@@ -1,7 +1,7 @@
 %div
   - if @errors
     %div
-      = render AlertMessageComponent.new(id:acronym+'-'+attribute+'-error', type: 'danger') do
+      = render Display::AlertComponent.new(type: 'danger') do
         = @errors.map{|e| e[:error]}.join(',')
 %div
   - if attribute == "contact"

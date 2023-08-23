@@ -2,4 +2,4 @@
 
 %div{:style => "margin:10px;"}
   = form_for :ontology, url: {action: "create"}, html: {id: "ontologyForm", multipart: true} do |f|
-    = render partial: "form", locals: {f: f}
+    = render partial: "ontologies/form", locals: {f: f}

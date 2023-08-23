@@ -1,5 +1,5 @@
 class SubmissionsController < ApplicationController
-  include SubmissionsHelper, SubmissionUpdater
+  include SubmissionsHelper, SubmissionUpdater, OntologyUpdater
   layout :determine_layout
   before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
   before_action :submission_metadata, only: [:create, :edit, :new, :update, :index]
@@ -37,24 +37,7 @@ class SubmissionsController < ApplicationController
 
   # Called when form to "Add submission" is submitted
   def create
-    # Make the contacts an array
-    _, submission_params = params[:submission].each.first
-    @required_only = !params['required-only'].nil?
-    @filters_disabled = true
-    @submission_saved = save_submission(submission_params)
-    if response_error?(@submission_saved)
-      @errors = response_errors(@submission_saved) # see application_controller::response_errors
-      if @errors && @errors[:uploadFilePath]
-        @errors = ["Please specify the location of your ontology"]
-      elsif @errors && @errors[:contact]
-        @errors = ["Please enter a contact"]
-      end
-
-      reset_agent_attributes
-      render 'new', status: 422
-    else
-      redirect_to "/ontologies/success/#{@ontology.acronym}"
-    end
+    add_ontology_submission(params[:ontology][:acronym] || params[:id])
   end
 
   # Called when form to "Edit submission" is submitted
