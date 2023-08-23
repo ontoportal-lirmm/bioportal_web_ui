@@ -81,7 +81,7 @@
                 - else
                   = date_input(label: 'Date of original creation (dd/mm/yy)', name: 'submission[released]', value: @submission.released)
               .upload-ontology-contact
-                = render Input::InputFieldComponent.new(name:'', error_message: attribute_error(:description)) do
+                = render Input::InputFieldComponent.new(name:'', error_message: attribute_error(:contact)) do
                   = render NestedFormInputsComponent.new(object_name: "Contact") do |c|
                     - c.header do
                       - content_tag(:div, 'Contact name', class: 'w-50') + content_tag(:div, 'Contact email', class: 'w-50')
