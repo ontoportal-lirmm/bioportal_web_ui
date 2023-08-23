@@ -22,7 +22,7 @@
 }
 
 .edit-ontology-sub-container {
-    margin-top: 20px;
+
     display: flex;
 }
 
@@ -36,6 +36,21 @@
 .edit-ontology-right-column {
     border-radius: 5px;
     width: 100%;
+}
+
+.edit-ontology-desc {
+    font-size: 12px;
+    color: #777777;
+    margin: 10px 0;
+}
+
+.edit-ontology-desc a {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+.edit-ontology-desc a svg {
+    transform: scale(1.2);
 }
 
 .edit-ontology-left-column input {
