@@ -1,26 +1,7 @@
-- unless @errors.nil?
-  .enable-lists{:style => "color:red;"}
-    %strong Errors On Form
-    %ul
-      - if @errors[:error].instance_of? OpenStruct
-        - errors = @errors[:error].to_h
-        - errors.delete :links
-        - errors.delete :context
-        - errors.to_h.each do |errors_field, error|
-          - next if error.nil?
-          <style>#ontology_#{errors_field} { border: thin solid red; }</style>
-          %li
-            - if error.instance_of? OpenStruct
-              - error_hash = error.to_h
-              - error_hash.delete :links
-              - error_hash.delete :context
-              - error_hash.each do |error_type, e|
-                = "#{error_type} : #{e}"
-            - else
-              = errors_field
-      - else
-        = @errors.to_json
 .upload-ontology-container
+  %div{style: 'width: 589px'}
+    - unless @errors.nil?
+      = render Display::AlertComponent.new(message: error_message, type: 'danger', closable: false)
   .upload-ontology-card
     .upload-ontology-center
       .Upload-ontology-title
