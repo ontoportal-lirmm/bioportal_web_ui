@@ -11,7 +11,7 @@ class RoundedButtonComponent < ViewComponent::Base
     when "small"
       ["32px", "1", "16px"]
     when "medium"
-      ["64px", "2", "32px"]
+      ["45px", "1", "23px"]
     when "big"
       ["100px", "2.5", "50px"]
     end

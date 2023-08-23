@@ -454,6 +454,15 @@ class OntologiesController < ApplicationController
       render partial: 'ontologies/sections/widgets', layout: 'ontology_viewer'
     end
   end
+  
+  def show_licenses
+    
+    @metadata = submission_metadata
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
+    @licenses= ["hasLicense","morePermissions","copyrightHolder"]
+    @submission_latest = @ontology.explore.latest_submission(include: @licenses.join(","))
+    render partial: 'ontologies/sections/licenses'
+  end
   def ajax_ontologies
    
     
@@ -476,16 +485,7 @@ class OntologiesController < ApplicationController
     p[:group].reject!(&:blank?)
     p.to_h
   end
-
-  def determine_layout
-    case action_name
-    when 'index'
-      'angular'
-    else
-      super
-    end
-  end
-
+  
   def get_views(ontology)
     views = ontology.explore.views || []
     views.select!{ |view| view.access?(session[:user]) }

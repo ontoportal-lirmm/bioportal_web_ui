@@ -1,6 +1,10 @@
-a{
+a {
   text-decoration: none !important;
 }
+p {
+  margin-bottom: 0;
+}
+
 .alignright {
   float:right;
 }
@@ -1154,4 +1158,8 @@ turbo-frame[busy] .hide-if-loading, .show-if-loading {
 }
 turbo-frame[busy] ~ .show-if-loading {
   display: inline-block;
+}
+
+.hide{
+  display:none;
 }

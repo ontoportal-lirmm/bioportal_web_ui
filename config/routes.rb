@@ -154,12 +154,13 @@ Rails.application.routes.draw do
   get 'ajax/label_xl', to: "label_xl#show"
   get '/ajax/biomixer' => 'concepts#biomixer'
   get '/ajax/fair_score/html' => 'fair_score#details_html'
+  get '/ajax/submission/show_licenses/:id' => 'ontologies#show_licenses'
   get '/ajax/fair_score/json' => 'fair_score#details_json'
   get '/ajax/:ontology/instances' => 'instances#index_by_ontology'
   get '/ajax/:ontology/classes/:conceptid/instances' => 'instances#index_by_class', :constraints => { conceptid: /[^\/?]+/ }
   get '/ajax/ontologies' , to:"ontologies#ajax_ontologies"
   get '/ajax/agents' , to:"agents#ajax_agents"
-
+  get '/ajax/images/show' => 'application#show_image_modal'
   # User
   get '/logout' => 'login#destroy', :as => :logout
   get '/lost_pass' => 'login#lost_password'

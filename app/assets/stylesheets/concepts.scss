@@ -131,7 +131,7 @@ div.synonym-change-request button {
 }
 
 #concept_browser{
-  .outline-tabs .tab-items{
+  .outline-tabs div, .outline-tabs .tab-items{
     width: 100%;
   }
   .outline-tabs .tab-items .nav-item {

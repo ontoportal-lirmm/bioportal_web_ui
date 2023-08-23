@@ -15,7 +15,7 @@
       %a.login-forgot-password{:href => "/lost_pass"}
         %p Forgot password?
       .login-button-container
-        = render Buttons::PrimaryButtonComponent.new(value: "Login", name: "commit", type: "submit")
+        = render Buttons::RegularButtonComponent.new(value: "Login", name: "commit", type: "submit")
       %p.dont-have-account
         Don't have an account?
         %a.text-decoration-none{:href => new_user_path} Register

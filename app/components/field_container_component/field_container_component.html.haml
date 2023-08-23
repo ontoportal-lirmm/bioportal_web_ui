@@ -1,6 +1,9 @@
-%div
-  .field-container
+- if show?
+  %div.field-container
     %p.field-description_text
-      = @label.humanize
-  %p.field-normal_text
-    = @value
+      = label || @label.humanize
+    - if content
+      = content
+    - else
+      %span.field-normal_text
+        = @value
