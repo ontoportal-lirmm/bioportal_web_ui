@@ -1,8 +1,9 @@
 class Display::AlertComponent < ViewComponent::Base
-    def initialize(message: "", closable: true, type: "info")
+    def initialize(message: "", closable: true, type: "info", auto_close_delay: nil)
         @message = message
         @closable = closable
         @type = type
+        @auto_close_delay =  auto_close_delay
     end
 
     def closable?
@@ -37,6 +38,10 @@ class Display::AlertComponent < ViewComponent::Base
         when "success"
             "success.svg"
         end
+    end
+
+    def auto_close?
+        !@auto_close_delay.nil?
     end
 
 end
