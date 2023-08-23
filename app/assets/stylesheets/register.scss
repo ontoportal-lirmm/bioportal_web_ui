@@ -83,22 +83,10 @@
     margin-top: 14px;
 }
 
-.register-button{
+.register-button-container{
     margin-top: 20px;
-   width: 363px;
-   font-size: 16px;
-   color: white;
-   padding: 17px;
-   background-color: var(--primary-color);
-   border: none;
-   border-radius: 9px;
-
 }
 
-.register-button:hover{
-    background-color: var(--hover-color);
-    cursor: pointer;
-}
 #user_register_mail_list{
     margin-top: 14px;
     accent-color: #8E8E8E;
