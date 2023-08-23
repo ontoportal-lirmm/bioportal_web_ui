@@ -23,9 +23,9 @@
               %a.nav-link{id: "pills-"+onto+sub_i+"-tab", "data-toggle": "pill", href: "#pills-"+onto+sub_i, class: index.zero? ? 'active' : ''}
                 = ontology_submission_id_label(onto, sub_i)
       %div#change_all_warning_container
-        = render AlertMessageComponent.new(id:'change_all_warning', type: 'warning') do
+        = render Display::AlertComponent.new(type: 'warning') do
           %strong Apply the change for all
-          will update the current displayed content to all the following submssions:
+          will update the current displayed content to all the following submissions:
           - @selected_ontologies.map{|x| ontology_submission_id_label(*x)}.each do |onto|
             %span.badge.badge-primary
               = onto
