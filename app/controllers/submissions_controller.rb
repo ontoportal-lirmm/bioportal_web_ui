@@ -37,6 +37,7 @@ class SubmissionsController < ApplicationController
 
   # Called when form to "Add submission" is submitted
   def create
+    @is_update_ontology = true
     add_ontology_submission(params[:ontology][:acronym] || params[:id])
   end
 
