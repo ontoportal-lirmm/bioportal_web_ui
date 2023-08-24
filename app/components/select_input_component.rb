@@ -13,7 +13,7 @@ class SelectInputComponent < ViewComponent::Base
   end
   
   def call 
-    select_input_tag(@id, @values, @selected, multiple: @multiple, open_to_add_values: @open_to_add_values)
+    select_input_tag(@name, @values, @selected, multiple: @multiple, open_to_add_values: @open_to_add_values)
   end
 
   private
@@ -32,7 +32,7 @@ class SelectInputComponent < ViewComponent::Base
         'select-input-open-add-value': open_to_add_values
       }
     }
-    #binding.pry
+
     select_tag(id, options_for_select(values, selected), select_html_options)
   end
 end

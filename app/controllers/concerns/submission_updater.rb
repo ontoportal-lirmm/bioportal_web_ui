@@ -1,11 +1,15 @@
 module SubmissionUpdater
   extend ActiveSupport::Concern
 
-  def save_submission(new_submission_hash)
+  def submission_from_params(new_submission_hash)
     convert_values_to_types(new_submission_hash)
+    LinkedData::Client::Models::OntologySubmission.new(values: submission_params(new_submission_hash))
+  end
+  def save_submission(new_submission_hash)
+
 
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(new_submission_hash[:ontology]).first
-    @submission = LinkedData::Client::Models::OntologySubmission.new(values: submission_params(new_submission_hash))
+    @submission = submission_from_params(new_submission_hash)
 
     update_ontology_summary_only
     @submission.save(cache_refresh_all: false)
@@ -64,12 +68,12 @@ module SubmissionUpdater
 
   def convert_values_to_types(new_submission_hash)
     unless new_submission_hash[:contact].nil?
-      new_submission_hash[:contact] = new_submission_hash[:contact].values
+      new_submission_hash[:contact] = new_submission_hash[:contact].values unless new_submission_hash[:contact].is_a?(Array)
       new_submission_hash[:contact].delete_if { |c| c[:name].empty? || c[:email].empty? }
     end
 
     # Convert metadata that needs to be integer to int
-    @metadata.map do |hash|
+    submission_metadata.map do |hash|
       if hash["enforce"].include?("integer")
         if !new_submission_hash[hash["attribute"]].nil? && !new_submission_hash[hash["attribute"]].eql?("")
           new_submission_hash[hash["attribute"].to_s.to_sym] = Integer(new_submission_hash[hash["attribute"].to_s.to_sym])
@@ -111,7 +115,7 @@ module SubmissionUpdater
       :publication
     ]
 
-    @metadata.each do |m|
+    submission_metadata.each do |m|
 
       m_attr = m["attribute"].to_sym
 

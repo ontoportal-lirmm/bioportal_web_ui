@@ -6,7 +6,7 @@
   - if content
     = content
   - else
-    %input.input-field-component.text-input{name: @name, type: @type, placeholder: @placeholder, style: error_style, value: @value}
+    %input.input-field-component.text-input{class: @disabled ? '' : 'not-disabled', name: @name, type: @type, placeholder: @placeholder, style: error_style, id: @id, data: @data, value: @value, disabled: @disabled}
 
 
 

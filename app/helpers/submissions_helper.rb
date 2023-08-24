@@ -338,12 +338,7 @@ module SubmissionsHelper
   def generate_date_input(attr)
     field_id = [:submission, attr["attribute"].to_s, @ontology.acronym].join('_')
     date_value = @submission.send(attr["attribute"]).presence
-    data_flat_picker = { controller: "flatpickr", flatpickr_date_format: "Y-m-d", flatpickr_alt_input: "true", flatpickr_alt_format: "F j, Y" }
-    content_tag(:div, class: 'input-group') do
-      [
-        date_field(object_name, attr["attribute"].to_s.to_sym, value: date_value, id: field_id, data: data_flat_picker, class: "not-disabled")
-      ].join.html_safe
-    end
+    render Input::DateComponent.new(label: (attr["label"] || attr["attribute"]).to_s ,name: object_name, value: date_value || Date.today, id: field_id)
   end
 
   def generate_textarea_input(attr)
@@ -355,10 +350,13 @@ module SubmissionsHelper
     render SelectInputComponent.new(id: id, name: name, values: select_values , selected: metadata_values , multiple: multiple)
   end
 
-  def generate_list_field_input(attr, name, values, field_func)
+  def generate_list_field_input(attr, name, label, values, &block)
     render NestedFormInputsComponent.new do |c|
-      c.template do
-        method(field_func).call("#{name}[NEW_RECORD]", '', :id => attr["attribute"].to_s + "_" + @ontology.acronym, class: "metadataInput form-control my-1")
+      c.header do
+        content_tag(:div, label)
+      end
+        c.template do
+        block.call('', "#{name}[NEW_RECORD]", attr["attribute"].to_s + "_" + @ontology.acronym)
       end
 
       c.empty_state do
@@ -367,19 +365,24 @@ module SubmissionsHelper
 
       values.each_with_index do |metadata_val, i|
         c.row do
-          method(field_func).call("#{name}[#{i}]", metadata_val, :id => "submission_#{attr["attribute"].to_s}" + "_" + @ontology.acronym, class: "metadataInput my-1 form-control")
+          block.call(metadata_val, "#{name}[#{i}]" ,"submission_#{attr["attribute"].to_s}" + "_" + @ontology.acronym)
         end
       end
     end
   end
 
-  def generate_url_input(attr, name, values)
-    generate_list_field_input(attr, name, values, :url_field_tag)
+  def generate_url_input(attr, name, values, label:"")
+    generate_list_field_input(attr, name, label, values) do |value, row_name, id|
+      render Input::UrlComponent.new(label: "", name: row_name, value: value, id: id)
+    end
   end
 
-  def generate_list_text_input(attr, name, values)
-    generate_list_field_input(attr, name, values, :text_field_tag)
+  def generate_list_text_input(attr, name, values, label:"")
+    generate_list_field_input(attr, name, label, values) do |value, row_name, id|
+      render Input::TextInputComponent.new(label: "", name: row_name, value: value, id: id)
+    end
   end
+
 
   def generate_boolean_input(attr, name)
     value = attribute_values(attr)
@@ -412,7 +415,7 @@ module SubmissionsHelper
     input_html = ''.html_safe
 
     # Get the attribute hash corresponding to the given attribute
-    attr = @metadata.select { |attr_hash| attr_hash["attribute"].to_s.eql?(attr_label) }.first
+    attr = submission_metadata.select { |attr_hash| attr_hash["attribute"].to_s.eql?(attr_label) }.first
 
     object_name, name = attribute_input_name(attr["attribute"])
 

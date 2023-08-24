@@ -67,3 +67,19 @@
     top: 50%;
     width: 0;
 }
+
+.ts-wrapper.multi .ts-control>div{
+    border-radius: 5px;
+    font-size: 11px;
+    padding: 2px 0 4px 6px;
+    color: #888888;
+}
+
+.ts-wrapper.plugin-remove_button:not(.rtl) .item .remove{
+    border-left: none;
+    color: #888888 !important;
+    margin-left: 0;
+}
+.ts-wrapper.plugin-remove_button .item .remove:hover{
+    background: unset;
+}
