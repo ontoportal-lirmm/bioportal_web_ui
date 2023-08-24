@@ -1,3 +1,7 @@
+.chips-container > div{
+    margin-right: 10px;
+}
+
 .chips-container svg path{
     fill: var(--primary-color);
 }
@@ -6,6 +10,7 @@
     margin-right: 6px;
     display: none;
 }
+
 
 .chips-container div label{
     cursor: pointer;
@@ -20,9 +25,9 @@
     background:white;
     border: 0.5px solid #BDBDBD;
     color: #a7a7a7;
-    padding: 3px;
+    padding: 8px;
     border-radius: 5px;
-    font-size: 12px;
+    font-size: 13px;
     user-select: none;
 
 }

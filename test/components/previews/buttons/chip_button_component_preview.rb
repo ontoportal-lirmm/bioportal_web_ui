@@ -1,4 +1,4 @@
-class Display::ChipButtonComponentPreview < ViewComponent::Preview
+class Buttons::ChipButtonComponentPreview < ViewComponent::Preview
 
     # @param url text
     # @param text text

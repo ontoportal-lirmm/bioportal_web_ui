@@ -6,4 +6,4 @@
     %div.p-3
       = render LoaderComponent.new
   %div{'data-turbo-frame-error-target': 'errorMessage', style:'display: none; width: 100%'}
-    = render AlertMessageComponent.new(id: "#{@id}_error-message", type:'danger')
+    = render Display::AlertComponent.new(type:'danger')
