@@ -1,6 +1,10 @@
-a{
+a {
   text-decoration: none !important;
 }
+p {
+  margin-bottom: 0;
+}
+
 .alignright {
   float:right;
 }
@@ -1139,6 +1143,9 @@ a.truncated_less, a.truncated_more {
 .highlighted .search_ontology_acronym {
   color: white;
 }
+.hide {
+  display: none !important;
+}
 
 .empty-state {
   display: none;
@@ -1154,4 +1161,8 @@ turbo-frame[busy] .hide-if-loading, .show-if-loading {
 }
 turbo-frame[busy] ~ .show-if-loading {
   display: inline-block;
+}
+
+.hide{
+  display:none;
 }

@@ -1,7 +1,12 @@
 .dropdown-container
   .dropdown-title-bar{"data-toggle" => "collapse", "data-target" => "##{@id}"}
-    %p.mb-0
-      = @title
-    %img{alt: "", src: asset_path("summary/arrow-down.svg")}
+    = render Display::HeaderComponent.new(text: @title, tooltip: @tooltip)
+    = image_tag("summary/arrow-down.svg", class: 'ml-2')
+
   .collapse{id: @id}
-    = content
+    - if content && !content.empty?
+      = content
+    - else
+      = render Layout::ListComponent.new do |l|
+        - l.row do  
+          = empty_state || 'no data'

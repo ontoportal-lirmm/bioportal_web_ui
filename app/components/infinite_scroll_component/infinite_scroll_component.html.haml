@@ -12,5 +12,4 @@
         Loading ...
   - elsif @current_page == 1
     %div.text-wrap
-      = render AlertMessageComponent.new(id: "#{@id}_view_alert") do
-        = error
+      = render Display::AlertComponent.new { error }

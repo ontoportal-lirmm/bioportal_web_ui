@@ -534,10 +534,26 @@ module OntologiesHelper
   def submission_json_button
     render RoundedButtonComponent.new(link:  "#{(@submission_latest || @ontology).id}?display=all", target: '_blank', size: 'medium')
   end
+
+  def attribute_error(attr)
+    return '' unless @errors && @errors[attr.to_sym]
+    errors = @errors[attr.to_sym]
+
+    errors.values.join(', ')
+  end
+
+  def error_message
+    if !@errors[:error].nil? && @errors[:error].is_a?(String)
+      @errors[:error]
+    else
+      "Errors in fields #{@errors.keys.join(', ')}"
+    end
+
+  end
   private
 
   def submission_languages(submission = @submission)
-    submission.naturalLanguage.map { |natural_language| natural_language["iso639"] && natural_language.split('/').last }.compact
+    submission&.naturalLanguage.map { |natural_language| natural_language["iso639"] && natural_language.split('/').last }.compact
   end
 end
 

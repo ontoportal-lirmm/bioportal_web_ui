@@ -7,6 +7,7 @@ class OntologiesController < ApplicationController
   include SchemesHelper, ConceptsHelper
   include CollectionsHelper
   include MappingStatistics
+  include OntologyUpdater
 
   require 'multi_json'
   require 'cgi'
@@ -195,26 +196,9 @@ class OntologiesController < ApplicationController
   end
 
   def create
-    if params[:commit].eql? 'Cancel'
-      redirect_to ontologies_path and return
-    end
 
-    @ontology = LinkedData::Client::Models::Ontology.new(values: ontology_params)
-    @ontology_saved = @ontology.save
-    if response_error?(@ontology_saved)
-      @categories = LinkedData::Client::Models::Category.all
-      @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
-      @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
-      @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
-      @errors = response_errors(@ontology_saved)
-      render 'new'
-    else
-      if @ontology_saved.summaryOnly
-        redirect_to "/ontologies/success/#{@ontology.acronym}"
-      else
-        redirect_to new_ontology_submission_path(@ontology.acronym)
-      end
-    end
+    # redirect_to ontologies_path and return if params[:commit].eql? 'Cancel'
+    save_ontology
   end
 
   def edit
@@ -239,7 +223,8 @@ class OntologiesController < ApplicationController
 
   def new
     @ontology = LinkedData::Client::Models::Ontology.new
-    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym', include_views: true,display_links: false, display_context: false)
+    @submission = LinkedData::Client::Models::OntologySubmission.new
+    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym', include_views: true, display_links: false, display_context: false)
     @categories = LinkedData::Client::Models::Category.all
     @groups = LinkedData::Client::Models::Group.all
     @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
@@ -454,9 +439,9 @@ class OntologiesController < ApplicationController
       render partial: 'ontologies/sections/widgets', layout: 'ontology_viewer'
     end
   end
-  
+
   def show_licenses
-    
+
     @metadata = submission_metadata
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
     @licenses= ["hasLicense","morePermissions","copyrightHolder"]
@@ -464,28 +449,14 @@ class OntologiesController < ApplicationController
     render partial: 'ontologies/sections/licenses'
   end
   def ajax_ontologies
-   
-    
+
+
     render json: LinkedData::Client::Models::Ontology.all(include_views: true,
        display: 'acronym,name', display_links: false, display_context: false)
   end
+
+
   private
-
-
-
-
-
-  def ontology_params
-    p = params.require(:ontology).permit(:name, :acronym, { administeredBy:[] }, :viewingRestriction, { acl:[] },
-                                         { hasDomain:[] }, :isView, :viewOf, :subscribe_notifications, {group:[]})
-
-    p[:administeredBy].reject!(&:blank?)
-    p[:acl].reject!(&:blank?)
-    p[:hasDomain].reject!(&:blank?)
-    p[:group].reject!(&:blank?)
-    p.to_h
-  end
-  
   def get_views(ontology)
     views = ontology.explore.views || []
     views.select!{ |view| view.access?(session[:user]) }

@@ -41,7 +41,11 @@ class SelectInputComponent < ViewComponent::Base
         'select-input-options-value': @values,
       }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> development
     select_tag(id, options_for_select(values, selected), select_html_options)
   end
 end

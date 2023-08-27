@@ -50,4 +50,5 @@
     .d-flex
       %input#user_register_mail_list{:checked => "checked", :name => "user[register_mail_list]", :type => "checkbox", :value => "1"}/
       %p#register-check-text Register for the AgroPortal's mailing list
-    %input.register-button{:type => "submit", :value => "Register"}/
+    .register-button-container
+      = render Buttons::PrimaryButtonComponent.new(type: "submit", value: "Register")
