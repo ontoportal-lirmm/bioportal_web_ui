@@ -1,4 +1,4 @@
-= render SummarySectionComponent.new(title: "Metrics" , link: Rails.configuration.settings.links[:metrics], link_title: "View individual metrics definitions", show_card: false) do
+= render SummarySectionComponent.new(title: "Metrics" , link: Rails.configuration.settings.links[:metrics], link_title: "Metadata properties that provide information about measurements of the ontology, such as the number of classes, individuals, etc.", show_card: false) do
   - if @metrics.nil? || (@metrics.is_a?(Array) && @metrics.empty?) || (@metrics.respond_to?(:status) && @metrics.status == 404)
     = empty_state_message("We have not yet calculated metrics for #{@ontology.acronym}")
   - else
