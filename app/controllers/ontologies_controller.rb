@@ -536,4 +536,22 @@ class OntologiesController < ApplicationController
   def properties_hash_values(properties, sub = @submission_latest)
     properties.map { |x| [x.to_s, sub.send(x.to_s)] }.to_h
   end
+
+  def get_metrics_hash
+    metrics_hash = {}
+    # TODO: Metrics do not return for views on the backend, need to enable include_views param there
+    @metrics = LinkedData::Client::Models::Metrics.all(include_views: true)
+    @metrics.each {|m| metrics_hash[m.links['ontology']] = m }
+    return metrics_hash
+  end
+
+  def determine_layout
+    case action_name
+    when 'index'
+      'angular'
+    else
+      super
+    end
+  end
+
 end
