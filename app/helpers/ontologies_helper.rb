@@ -255,7 +255,7 @@ module OntologiesHelper
   def language_selector_tag(name)
     languages = languages_options
 
-    if languages.empty?
+    if languages.empty? && @submission_latest
       content_tag(:div ,data: {'ontology-viewer-tabs-target': 'languageSelector'}, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'} ; margin-bottom: -1px;") do
         render EditSubmissionAttributeButtonComponent.new(acronym: @ontology.acronym, submission_id: @submission_latest.submissionId, attribute: :naturalLanguage) do
           concat "Enable multilingual display "
@@ -304,12 +304,13 @@ module OntologiesHelper
   end
   def new_element_link(title, link)
     link_to(link, title: title, class: "mx-1") do
-      inline_svg_tag("icons/plus.svg")
+      inline_svg_tag("icons/plus.svg", width: '15px', height: '15px')
     end
   end
   def ontology_icon_links(links, submission_latest)
     links.map do |icon, attr|
-      value = submission_latest.send(attr)
+      value = submission_latest.nil? ? nil : submission_latest.send(attr)
+
       link_options = { style: "text-decoration: none; width: 30px; height: 30px" }
       link_options[:class] = 'disabled-icon' if value.nil?
 
@@ -317,7 +318,7 @@ module OntologiesHelper
     end.join.html_safe
   end
   def ontology_depiction_card
-    return  if Array(@submission_latest.depiction).empty?
+    return  if Array(@submission_latest&.depiction).empty?
 
     render Layout::CardComponent.new do
       list_container(@submission_latest.depiction) do |depiction_url|
@@ -375,7 +376,7 @@ module OntologiesHelper
   private
 
   def submission_languages(submission = @submission)
-    submission&.naturalLanguage.map { |natural_language| natural_language["iso639"] && natural_language.split('/').last }.compact
+    Array(submission&.naturalLanguage).map { |natural_language| natural_language["iso639"] && natural_language.split('/').last }.compact
   end
 end
 

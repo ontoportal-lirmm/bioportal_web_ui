@@ -2,7 +2,7 @@
   - sub_hash = @submission_latest.to_hash.except(:context, :links, :ontology)
   %div.card.overflow-hidden{style: 'border-radius: 20px;'}
     %div
-      = render AlertMessageComponent.new(id:'additional_metadata_message', type:'light', closeable: false) do
+      = render Display::AlertComponent.new(closable: false) do
         %div.d-flex.align-items-center
           %div{style:'width: 50px; height: 50px'}
             - sub_values = sub_hash.values

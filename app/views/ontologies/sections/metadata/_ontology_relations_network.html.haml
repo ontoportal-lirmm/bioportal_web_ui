@@ -1,4 +1,4 @@
-- unless @ontology_relations_data.empty?
+- unless @ontology_relations_data.nil? || @ontology_relations_data.empty?
   = render SummarySectionComponent.new(title: 'Ontology relations network') do
     %div.d-flex.flex-column.justify-content-center{data: {controller: "ontology-relations-network", "ontology-relations-network-data-value": @ontology_relations_data.to_json.html_safe }}
       %button.btn.btn-link.m-2{'data-toggle': "collapse",'data-target': "#ontologyRelations"}

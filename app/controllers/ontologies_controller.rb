@@ -504,6 +504,8 @@ class OntologiesController < ApplicationController
     @relations_array = ["omv:useImports", "door:isAlignedTo", "door:ontologyRelatedTo", "omv:isBackwardCompatibleWith", "omv:isIncompatibleWith", "door:comesFromTheSameDomain", "door:similarTo",
                         "door:explanationEvolution", "voaf:generalizes", "door:hasDisparateModelling", "dct:hasPart", "voaf:usedBy", "schema:workTranslation", "schema:translationOfWork"]
 
+    return  if sub.nil?
+
     ont = sub.ontology
     # Get ontology relations between each other (ex: STY isAlignedTo GO)
     @relations_array.each do |relation_attr|
@@ -534,6 +536,8 @@ class OntologiesController < ApplicationController
     ontology_relations_array
   end
   def properties_hash_values(properties, sub = @submission_latest)
+    return {} if sub.nil?
+
     properties.map { |x| [x.to_s, sub.send(x.to_s)] }.to_h
   end
 
