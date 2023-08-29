@@ -25,6 +25,6 @@
 </script>
 
 <div id="<%=picker_id%>_container" class="ontology_picker_single_container">
-  <%= render Input::SelectComponent.new(label: placeholder, name: "#{object_name}[#{field_name}]", value: @onts_for_select, selected: selected) %>
+  <%= select_input(label: placeholder, name: "#{object_name}[#{field_name}]", values: @onts_for_select, selected: selected) %>
 </div>
 
