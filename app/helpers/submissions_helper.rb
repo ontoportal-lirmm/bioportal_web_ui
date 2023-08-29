@@ -3,6 +3,11 @@ module SubmissionsHelper
   def ontology_submission_id_label(acronym, submission_id)
     [acronym, submission_id].join('#')
   end
+
+  def submission_metadata_selector(id: 'search_metadata', name:  'search[metadata]', label: 'Filter properties to show' )
+    select_input(id: id, name: name, label: label, values: submission_editable_properties, multiple: true)
+  end
+  
   def ontology_and_submission_id(value)
     value.split('#')
   end

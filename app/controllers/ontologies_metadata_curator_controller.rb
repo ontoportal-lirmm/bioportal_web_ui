@@ -5,11 +5,12 @@ class OntologiesMetadataCuratorController < ApplicationController
   before_action :submission_metadata, only: [:result, :edit, :update, :show_metadata_by_ontology]
 
   def result
-    @ontologies_ids = params[:ontology][:ontologyId].drop(1)
-    @metadata_sel = params[:search][:metadata].drop(1)
+    @ontologies_ids = params[:ontology] ? params[:ontology][:ontologyId] : []
+    @metadata_sel = params[:search] ? params[:search][:metadata] : []
     @show_submissions = !params[:show_submissions].nil?
     @ontologies = []
     @submissions = []
+
     if @ontologies_ids.nil? || @ontologies_ids.empty?
       @ontologies = LinkedData::Client::Models::Ontology.all
     else
@@ -46,8 +47,7 @@ class OntologiesMetadataCuratorController < ApplicationController
     @acronym = params[:ontology]
     inline_save = params[:inline_save] && params[:inline_save].eql?('true')
     display_submission_attributes(@acronym, params[:properties]&.split(','),
-                                  submissionId: params[:submission_id],
-                                  show_sections: false, inline_save: inline_save)
+                                  submissionId: params[:submission_id], inline_save: inline_save)
     render partial: 'submissions/form_content', locals: { id: params[:form_id] || '', acronym: @acronym, submissionId: params[:submission_id] }
   end
 
