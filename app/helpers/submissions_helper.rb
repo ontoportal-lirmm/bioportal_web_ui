@@ -90,37 +90,27 @@ module SubmissionsHelper
     end
   end
 
-  def attribute_form_group_container(attr, label: '', required: false, &block)
+
+  def attribute_form_group_container(attr, required: false, &block)
     attribute_container(attr, required: required) do
-      render FormGroupComponent.new(object: @submission, name: object_name, method: attr, label: label, required: required) do |c|
-        if inline_save?
-          c.submit do
+      render(TurboFrameComponent.new(id:  "#{object_name}#{attr}}_from_group_input")) do
+       tag.div(class: 'd-flex w-100 mb-3') do
+          html = tag.div(class: 'flex-grow-1 mr-1') do
+            capture(&block)
+          end
+
+          if inline_save?
+            html += tag.div(class: 'd-flex') do
             html = ''
             html += save_button
             html += cancel_button(cancel_link(attribute: attr))
             html.html_safe
           end
         end
-
-        capture(c, &block)
+         html
       end
     end
-  end
 
-  def attribute_text_field_container(attr, label: '', required: false, inline: true, &block)
-    attribute_container(attr, required: required) do
-      render TextFieldComponent.new(object: @submission, name: object_name, label: label, method: attr, required: required, inline: inline) do |c|
-        if inline_save?
-          c.submit do
-            html = ''
-            html += save_button
-            html += cancel_button(cancel_link(attribute: attr))
-            html.html_safe
-          end
-        end
-
-        capture(c, &block) if block_given?
-      end
     end
   end
 
