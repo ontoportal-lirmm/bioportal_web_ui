@@ -4,9 +4,10 @@
   'data-search-input-id-key-value': @id_key,
   'data-search-input-cache-value': @use_cache.to_s,
   'data-search-input-scroll-down-value': @scroll_down.to_s}
-  %input#home-search{:name => @name, :placeholder => @placeholder,
-    :type => "text", 'data-action': 'input->search-input#search blur->search-input#blur',
-    'data-search-input-target': 'input'}
+
+  = render Input::InputFieldComponent.new(name: @name, placeholder: @placeholder,
+                                            data: {'action': 'input->search-input#search blur->search-input#blur',
+                                            'search-input-target': 'input'})
   .search-container{'data-search-input-target': 'dropDown', 'data-action': 'mousedown->search-input#prevent'}
     - @actions_links.each do |key, value|
       - link, target = action_link_info(value)
