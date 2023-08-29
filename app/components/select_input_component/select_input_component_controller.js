@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import TomSelect from "tom-select"
+import {useTomSelect} from "../../javascript/mixins/useTomSelect";
 
 export default class extends Controller {
     static values = {
@@ -14,7 +14,11 @@ export default class extends Controller {
         if (this.openAddValue) {
             myOptions['create'] = true;
         }
-        new TomSelect(this.element, myOptions);
+
+        useTomSelect(this.element, myOptions, this.#triggerChange.bind(this))
     }
 
+    #triggerChange() {
+        document.dispatchEvent(new Event('change', { target: this.element }))
+    }
 }
