@@ -22,11 +22,11 @@
 
 
 :javascript
-  const MetadataOnlyForm = document.getElementById("metadata-only-form");
-  const UrlForm = document.getElementById("url-form");
-  const LocalFileForm = document.getElementById("local-file-form");
+  var MetadataOnlyForm = document.getElementById("metadata-only-form");
+  var UrlForm = document.getElementById("url-form");
+  var LocalFileForm = document.getElementById("local-file-form");
 
-  const displayForm = (formElement) => {
+  var displayForm = (formElement) => {
     [MetadataOnlyForm, UrlForm, LocalFileForm].forEach((form) => {
       if (form === formElement) {
         form.classList.remove("d-none");
@@ -36,14 +36,14 @@
     });
   };
 
-  const displayMetadataOnlyForm = () => {
+  var displayMetadataOnlyForm = () => {
     displayForm(MetadataOnlyForm);
   };
 
-  const displayUrlForm = () => {
+  var displayUrlForm = () => {
     displayForm(UrlForm);
   };
 
-  const displayLocalFileForm = () => {
+  var displayLocalFileForm = () => {
     displayForm(LocalFileForm);
   };
