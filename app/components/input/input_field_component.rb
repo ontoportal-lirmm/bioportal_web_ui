@@ -1,5 +1,5 @@
 class Input::InputFieldComponent < ViewComponent::Base
-    def initialize(label: "" , name:, value: 'Syphax', type: 'text', placeholder: "", error_message: "", helper_text: "", disabled: false, data: nil, id: '')
+    def initialize(label: "" , name:, value: '', type: 'text', placeholder: "", error_message: "", helper_text: "", disabled: false, data: nil, id: '')
         @label = label
         @name = name
         @placeholder  = placeholder
@@ -18,15 +18,15 @@ class Input::InputFieldComponent < ViewComponent::Base
     end
 
     def error?
-        !@error_message.empty?
+        !@error_message&.empty?
     end
 
     def help?
-        !@helper_text.empty?
+        !@helper_text&.empty?
     end
 
     def label?
-        !@label.empty?
+        !@label&.empty?
     end
 end
 
