@@ -196,19 +196,17 @@ class OntologiesController < ApplicationController
   end
 
   def create
-
-    # redirect_to ontologies_path and return if params[:commit].eql? 'Cancel'
     save_ontology
   end
 
   def edit
-    # Note: find_by_acronym includes ontology views
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    redirect_to_home unless session[:user] && @ontology.administeredBy.include?(session[:user].id) || session[:user].admin?
-    @categories = LinkedData::Client::Models::Category.all
-    @groups = LinkedData::Client::Models::Group.all
-    @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
-    @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
+    submission = @ontology.explore.latest_submission(include: 'submissionId')
+    if submission
+      redirect_to edit_ontology_submission_path(@ontology.acronym, submission.submissionId)
+    else
+      redirect_to new_ontology_submission_path(@ontology.acronym)
+    end
   end
 
   def mappings
