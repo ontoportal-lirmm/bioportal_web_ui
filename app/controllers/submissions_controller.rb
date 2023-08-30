@@ -39,15 +39,21 @@ class SubmissionsController < ApplicationController
   end
 
   # Called when form to "Edit submission" is submitted
-  def edit
+  def edit_properties
       display_submission_attributes params[:ontology_id], params[:properties]&.split(','), submissionId: params[:id],
-      required: params[:required]&.eql?('true'),
-      show_sections: params[:show_sections].nil? || params[:show_sections].eql?('true'),
-      inline_save: params[:inline_save]&.eql?('true')
+                                                                                           inline_save: params[:inline_save]&.eql?('true')
+      render partial: 'form_content', locals: {id: params[:container_id] || 'metadata_by_ontology'}
   end
 
-  def edit_new
-    render partial:"form", layout: "ontology"
+  def edit
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
+    ontology_not_found(params[:ontology_id]) unless @ontology
+    @categories = LinkedData::Client::Models::Category.all
+    @groups = LinkedData::Client::Models::Group.all
+    @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
+    @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
+    @is_update_ontology = true
+    render partial: 'submissions/form', layout: 'ontology'
   end
 
   # When editing a submission (called when submit "Edit submission information" form)

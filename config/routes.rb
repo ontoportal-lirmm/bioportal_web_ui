@@ -43,7 +43,7 @@ Rails.application.routes.draw do
   get 'ontologies/:ontology_id/concepts', to: 'concepts#show_concept'
   resources :ontologies do
     resources :submissions do 
-      get 'edit_new'
+      get 'edit_properties'
     end 
 
     get 'instances/:instance_id', to: 'instances#show', constraints: { instance_id: /[^\/?]+/ }
