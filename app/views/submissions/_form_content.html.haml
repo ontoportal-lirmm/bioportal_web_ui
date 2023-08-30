@@ -1,168 +1,23 @@
 = render TurboFrameComponent.new(id:id) do
-  - unless @errors.nil?
-    %div
-      %div.enable-lists{style: "color:red;"}
-        %strong Errors On Form
-        %ul
-          - Array(@errors).each do  |error|
-            - error = error[:error] if error.is_a?(Hash) && error[:error]
-            - if error.is_a?(String)
-              = error
-            - else
-              - error.each do |key, value|
-                %li
-                  - value = value.values if value.is_a?(Hash)
-                  #{key}: #{Array(value).join(', ')}
+  = hidden_field object_name, :ontology, value: @submission.acronym
+  = hidden_field object_name, :id, value: @submission.submissionId
 
-  = hidden_field object_name, :ontology, value: acronym
-  = hidden_field object_name, :id, value: submissionId
-  %div#general-card.mt-4
-    = metadata_section('general', 'General', collapsed: false) do
-      = attribute_container('format', required: true) do
-        = turbo_frame_tag  "#{object_name(acronym, submissionId)}Format_from_group_input" do
-          = render partial: 'submissions/submission_format_form'
-      = attribute_text_field_container('version')
+  - if selected_attribute?('format')
+    = attribute_form_group_container('format') do
+      = turbo_frame_tag  "#{object_name}Format_from_group_input" do
+        = render partial: 'submissions/submission_format_form'
 
-      = attribute_form_group_container('status', required: true) do |c|
-        - selected_status = c.value ? c.value : "alpha"
-        - status_options = %w[alpha beta production retired]
-        = select c.name,  c.method_name, status_options, {selected: selected_status, required: true}, class: "form-control"
+  - if selected_attribute?('location')
+    = attribute_form_group_container('location') do
+      = render partial: 'ontologies/submission_location_form'
 
-      = attribute_form_group_container('location', required: true) do
-        = render partial: 'submissions/submission_location_form'
+  - if selected_attribute?('contact')
+    = attribute_form_group_container('contact') do
+      - @submission.contact = [] unless @submission.contact && @submission.contact.size > 0
+      = contact_input
 
-    %div#key-properties-card.mt-4
-      = metadata_section('key-properties', 'Key properties', collapsed: false) do
-        = form_group_attribute("URI", required: true)
-        = form_group_attribute("deprecated")
-        = form_group_attribute("hasOntologySyntax") do
-          %p
-            Properties taken from
-            = link_to "W3C URIs for file format", "https://www.w3.org/ns/formats/", target: "_blank"
+  - reject_metadata = %w[contact pullLocation prefLabelProperty definitionProperty synonymProperty authorProperty obsoleteParent obsoleteProperty hasOntologyLanguage]
+  - for attr in submission_metadata.reject{|attr| reject_metadata.include?(attr["attribute"]) || !selected_attribute?(attr['attribute'])}
+    = attribute_form_group_container(attr['attribute']) do
+      = raw attribute_input(attr['attribute'], attr_metadata: attr)
 
-        = form_group_attribute("hasFormalityLevel") do
-          %p
-            Properties taken from
-            = link_to "DCMI KOS type vocabularies", "http://wiki.dublincore.org/index.php/NKOS_Vocabularies#KOS_Types_Vocabulary", target: "_blank"
-
-        = form_group_attribute("isOfType")
-        = form_group_attribute("naturalLanguage") do
-          %p
-            Consider using a
-            = link_to "Lexvo URI", "http://www.lexvo.org", target: "_blank"
-            with ISO639-3 code
-            %br
-            e.g.: http://lexvo.org/id/iso639-3/eng
-
-  %div#description-card.mt-4
-    = metadata_section('description', 'Description', collapsed: !@required_only || !@submission.id.nil?) do
-
-
-      = form_group_attribute('homepage') do
-        Enter a URL for the main page of your ontology.
-
-
-      = form_group_attribute('documentation') do
-        Enter a URL for a page that provides ontology documentation.
-
-
-      = form_group_attribute('publication') do
-        Enter a URL for a page that lists publications about your ontology.
-
-      = attribute_text_field_container('documentation') do |c|
-        - c.help do
-          Enter a URL for a page that provides ontology documentation.
-
-      = attribute_text_field_container('publication') do |c|
-        - c.help do
-          Enter a URL for a page that lists publications about your ontology.
-
-      = form_group_attribute("usedOntologyEngineeringTool")
-
-    = metadata_section('more-description-details', 'More description details', parent_id: "description-card") do
-      - for attr_name in %w[abstract notes keywords alternative identifier]
-        = form_group_attribute(attr_name)
-
-    - data = sections
-
-    - data.each do |d|
-      = metadata_section(d[0], d[1], parent_id: "description-card") do
-        - for attr in @metadata.select { |m| m['category'] == d[2] }
-          = form_group_attribute(attr["attribute"])
-
-    %div#community.mt-4
-      = metadata_section('contacts-panel', 'Contacts', parent_id: "community", collapsed: !@required_only  || !@submission.id.nil?) do
-        -# Contact(s)
-        = attribute_form_group_container('contact' ,required: true) do |c|
-          - @submission.contact = [] unless @submission.contact && @submission.contact.size > 0
-          = render NestedFormInputsComponent.new do |c|
-            - c.template do
-              = render partial: "submissions/submission_contact_form", locals: {contact: nil, index: 'NEW_RECORD'}
-            - c.empty_state do
-              = hidden_field_tag object_name+"[contact][#{@submission.contact.size}][email]"
-              = hidden_field_tag object_name+"[contact][#{@submission.contact.size}][name]"
-            - @submission.contact.each_with_index do |contact, i|
-              - c.row do
-                = render partial: "submissions/submission_contact_form", locals: {contact: contact, index: i}
-
-  %div#licenses-card.mt-4
-    = metadata_section('licenses', 'Licenses') do
-      = form_group_attribute("hasLicense") do
-        %p
-          Consider using a
-          = link_to "URI to describe your License", "http://rdflicense.appspot.com", target: "_blank"
-        %p
-          Consider using
-          = link_to "INRIA licentia", "http://licentia.inria.fr/", target: "_blank"
-          to choose your license
-
-    = metadata_section('more-licensing-info', 'More licensing information', parent_id: "licenses-card") do
-      - for attr in @metadata.select { |m| m['category'] == 'license' }
-        = form_group_attribute(attr["attribute"])
-
-  %div#community.mt-4
-    = metadata_section('contacts-panel', 'Contacts', parent_id: "community", collapsed: !@required_only  || !@submission.id.nil?) do
-      = attribute_form_group_container('contact' ,required: true) do |c|
-        - @submission.contact = [] unless @submission.contact && @submission.contact.size > 0
-        = render NestedFormInputsComponent.new do |c|
-          - c.template do
-            = render partial: "submissions/submission_contact_form", locals: {contact: nil, index: 'NEW_RECORD'}
-          - @submission.contact.each_with_index do |contact, i|
-            - c.row do
-              = render partial: "submissions/submission_contact_form", locals: {contact: contact, index: i}
-
-      = form_group_attribute("hasContributor")
-      = form_group_attribute("hasCreator")
-
-    = metadata_section('more-community-info', 'More community information', parent_id: "community") do
-      - for attr in @metadata.select { |m| m['category'] == 'community' }
-        = form_group_attribute(attr["attribute"])
-
-    = metadata_section('more-people-info', 'More people information', parent_id: "community") do
-      - for attr in @metadata.select { |m| m['category'] == 'people' }
-        = form_group_attribute(attr["attribute"])
-
-  %div#ontology-relations-more.mt-4
-    = metadata_section('ontology-relations', 'Ontology relations', parent_id: "ontology-relations-more") do
-      = form_group_attribute("useImports")
-      = form_group_attribute("hasPriorVersion")
-      = form_group_attribute("isAlignedTo")
-      = form_group_attribute("ontologyRelatedTo")
-
-    = metadata_section('more-relations', 'More relations', parent_id: "ontology-relations-more") do
-      - for attr in @metadata
-        - if attr["category"].eql?("relations")
-          = form_group_attribute(attr["attribute"])
-
-  %div#ontology-content-metrics.mt-4
-    = metadata_section('ontology-content', 'Ontology content', parent_id: "ontology-content-metrics") do
-      = form_group_attribute("preferredNamespacePrefix")
-      = form_group_attribute("preferredNamespaceUri")
-
-    = metadata_section('more-informations', 'More content informations', parent_id: "ontology-content-metrics") do
-      - for attr in @metadata.select { |m| m['category'] == 'content' }
-        = form_group_attribute(attr["attribute"])
-
-    = metadata_section('more-metrics-informations', 'More metrics informations', parent_id: "ontology-content-metrics") do
-      - for attr in @metadata.select { |m| m['category'] == 'metrics' }
-        = form_group_attribute(attr["attribute"])
