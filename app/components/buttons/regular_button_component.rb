@@ -25,7 +25,7 @@ class Buttons::RegularButtonComponent < ViewComponent::Base
     warning_class = @color == "warning" ? "warning-button " : " "
     disabled_class = @state == "disabled" ? "disabled-button " : " "
     class_style = "#{@variant}-button regular-button " + danger_class + warning_class + disabled_class + slim_class
-    on_click_event =  load_animation? ?  "displayAnimation(this)" : ''
+    on_click_event =  load_animation? ?  "displayAnimation(this, '#{@id}-loading-animation')" : ''
 
     if link?
       link_to(@href, class: class_style, onclick: on_click_event, id: @id) do

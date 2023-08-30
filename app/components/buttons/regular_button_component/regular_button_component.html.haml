@@ -4,8 +4,8 @@
 - if load_animation?
     = render Display::ButtonLoaderComponent.new(id: @id + '-loading-animation', slim: @size.eql?('slim'), color: @color)
     :javascript
-        function displayAnimation(element){
-            const loading = document.getElementById("#{@id}-loading-animation")
+        function displayAnimation(element, loadingId){
+            const loading = document.getElementById(loadingId)
             element.style.display = 'none';
             loading.style.display = 'flex';
         }
