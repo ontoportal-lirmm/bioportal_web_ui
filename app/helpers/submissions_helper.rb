@@ -1,4 +1,14 @@
 module SubmissionsHelper
+  def metadata_help_link
+    content_tag(:div, class: 'edit-ontology-desc') do
+      html = content_tag(:span, 'To understand the ontologies metadata:')
+      html += content_tag(:span, style: 'width: 10px; height: 10px') do
+        link_to(render(ExternalLinkTextComponent.new(text: 'see the Wiki')), "https://github.com/agroportal/documentation/wiki/Ontology-metadata")
+      end
+      html.html_safe
+    end
+  end
+
 
   def ontology_submission_id_label(acronym, submission_id)
     [acronym, submission_id].join('#')
