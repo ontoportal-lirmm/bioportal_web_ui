@@ -4,8 +4,7 @@
 
   - if selected_attribute?('format')
     = attribute_form_group_container('format') do
-      = turbo_frame_tag  "#{object_name}Format_from_group_input" do
-        = render partial: 'submissions/submission_format_form'
+      = render partial: 'submissions/submission_format_form'
 
   - if selected_attribute?('location')
     = attribute_form_group_container('location') do
@@ -14,7 +13,7 @@
   - if selected_attribute?('contact')
     = attribute_form_group_container('contact') do
       - @submission.contact = [] unless @submission.contact && @submission.contact.size > 0
-      = contact_input
+      = contact_input(label: 'Contacts', name: '')
 
   - reject_metadata = %w[contact pullLocation prefLabelProperty definitionProperty synonymProperty authorProperty obsoleteParent obsoleteProperty hasOntologyLanguage]
   - for attr in submission_metadata.reject{|attr| reject_metadata.include?(attr["attribute"]) || !selected_attribute?(attr['attribute'])}

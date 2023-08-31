@@ -13,15 +13,6 @@ module MetadataHelper
     submission_metadata.select { |attr_hash| attr_hash['attribute'].to_s.eql?(attr_key) }.first
   end
 
-  # @param attr_key string
-  def attr_label(attr_key)
-
-    data = attr_metadata(attr_key.to_s)
-    return attr_key.humanize if data.nil?
-
-    data['label']
-  end
-
 
   def integer?(attr_label)
     input_type?(attr_metadata(attr_label), 'integer')

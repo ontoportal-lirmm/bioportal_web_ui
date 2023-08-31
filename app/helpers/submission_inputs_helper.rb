@@ -3,11 +3,10 @@ module SubmissionInputsHelper
   class SubmissionMetadataInput
     include MetadataHelper
 
-    def initialize(attribute_key:, submission:, attr_metadata: nil, show_help: true, label: nil)
+    def initialize(attribute_key:, submission: nil, attr_metadata: nil, label: nil)
       @attribute_key = attribute_key
       @attr_metadata = attr_metadata || attr_metadata(attribute_key)
       @submission = submission
-      @show_help = show_help
       @label = label
     end
 
@@ -22,7 +21,7 @@ module SubmissionInputsHelper
     end
 
     def help_text
-      CGI.unescape_html(@attr_metadata['helpText']) if @attr_metadata['helpText'] && show_help?
+      CGI.unescape_html(@attr_metadata['helpText']) if @attr_metadata['helpText']
     end
 
     def label
@@ -37,16 +36,11 @@ module SubmissionInputsHelper
       @attr_metadata
     end
 
-    private
-
-    def show_help?
-      @show_help
-    end
   end
 
   # @param attr_key String
-  def attribute_input(attr_key, attr_metadata: nil, show_help: true, long_text: false, label: nil)
-    attr = SubmissionMetadataInput.new(attribute_key: attr_key, show_help: false, submission: @submission, label: label, attr_metadata: attr_metadata)
+  def attribute_input(attr_key, attr_metadata: nil, long_text: false, label: nil, show_tooltip: true)
+    attr = SubmissionMetadataInput.new(attribute_key: attr_key, submission: @submission, label: label, attr_metadata: attr_metadata)
 
     if attr.type?('Agent')
       generate_agent_input(attr)
@@ -71,28 +65,29 @@ module SubmissionInputsHelper
     else
       # If input a simple text
       name = attr.name
-      label = attr.label
+      label = attr_header_label(attr, show_tooltip: show_tooltip)
       if attr.type?('list')
         generate_list_text_input(attr)
       elsif attr.metadata['attribute'].to_s.eql?('URI')
-        url_input(name: name, label: label, value: @submission.URI, help: attr.help_text)
+        url_input(name: name, label: label, value: @submission.URI)
       elsif long_text
         text_area_input(name: name, label: label,
-                        value: attr.values, help: attr.help_text)
+                        value: attr.values)
       else
         text_input(name: name, label: label,
-                   value: attr.values, help: attr.help_text)
+                   value: attr.values)
       end
     end
 
   end
 
-  def contact_input
-    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(:contact),
-                                          helper_text: attr_metadata('contact')['helpText']) do
+  def contact_input(label: '', name: 'Contact', show_help: true)
+    attr = SubmissionMetadataInput.new(attribute_key: 'contact')
+    render Input::InputFieldComponent.new(name: '', label: attr_header_label(attr, label, show_tooltip: show_help),
+                                          error_message: attribute_error(:contact)) do
       render NestedFormInputsComponent.new(object_name: 'Contact') do |c|
         c.header do
-          content_tag(:div, 'Contact name', class: 'w-50') + content_tag(:div, 'Contact email', class: 'w-50')
+          content_tag(:div, "#{name} name", class: 'w-50') + content_tag(:div, "#{name} email", class: 'w-50')
         end
 
         c.template do
@@ -122,6 +117,19 @@ module SubmissionInputsHelper
     end
   end
 
+  # @param attr_key string
+  def attr_label(attr_key, attr_metadata: nil, show_tooltip: true)
+
+    data = attr_metadata || SubmissionMetadataInput.new(attr_key.to_s)
+    return attr_key.humanize if data.nil?
+
+    if show_tooltip
+      attr_header_label(data, show_tooltip: show_tooltip)
+    else
+      data['label']
+    end
+  end
+
   private
 
   def agent_type(attr)
@@ -140,9 +148,8 @@ module SubmissionInputsHelper
   end
 
   def generate_agent_input(attr)
-    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.metadata),
-                                          helper_text: attr.help_text) do
-      render NestedAgentSearchInputComponent.new(label: attr.label,
+    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.metadata)) do
+      render NestedAgentSearchInputComponent.new(label: attr_header_label(attr),
                                                  agents: attr.values,
                                                  agent_type: agent_type(attr.metadata),
                                                  name_prefix: attr.name,
@@ -152,20 +159,18 @@ module SubmissionInputsHelper
   end
 
   def generate_date_input(attr)
-    date_input(label: attr.label, name: attr.name,
-               value: attr.values || Date.today,
-               help: attr.help_text)
+    date_input(label: attr_header_label(attr), name: attr.name,
+               value: attr.values || Date.today)
   end
 
   def generate_textarea_input(attr)
     text_input(name: attr.name,
-               value: attr.values,
-               help: attr.help_text)
+               value: attr.values)
   end
 
   def generate_select_input(attr, multiple: false)
     name = attr.name
-    label = attr.label
+    label = attr_header_label(attr)
     metadata_values, select_values = selected_values(attr, enforced_values(attr))
 
     unless multiple
@@ -174,16 +179,14 @@ module SubmissionInputsHelper
     end
 
     select_input(name: name, label: label, values: select_values,
-                 selected: metadata_values, multiple: multiple,
-                 help: attr.help_text)
+                 selected: metadata_values, multiple: multiple)
   end
 
   def generate_list_field_input(attr, name, label, values, &block)
-    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.metadata),
-                                          helper_text: attr.help_text) do
+    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.metadata)) do
       render NestedFormInputsComponent.new do |c|
         c.header do
-          content_tag(:div, label)
+          label
         end
         c.template do
           block.call('', "#{name}[NEW_RECORD]", attr.metadata['attribute'].to_s + '_' + @ontology.acronym)
@@ -195,7 +198,7 @@ module SubmissionInputsHelper
 
         values.each_with_index do |metadata_val, i|
           c.row do
-            block.call(metadata_val, "#{name}[#{i}]", "submission_#{attr.metadata["attribute"].to_s}" + '_' + @ontology.acronym)
+            block.call(metadata_val, "#{name}[#{i}]", "submission_#{attr.metadata['attribute'].to_s}" + '_' + @ontology.acronym)
           end
         end
       end
@@ -204,7 +207,7 @@ module SubmissionInputsHelper
   end
 
   def generate_url_input(attr)
-    label = attr.label
+    label = attr_header_label(attr)
     values = attr.values
     name = attr.name
     if attr.type?('list')
@@ -212,15 +215,14 @@ module SubmissionInputsHelper
         url_input(label: '', name: row_name, value: value)
       end
     else
-      url_input(label: label, name: name, value: values, help: attr.help_text)
+      url_input(label: label, name: name, value: values)
     end
   end
 
   def generate_list_text_input(attr)
-    label = attr.label
+    label = attr_header_label(attr)
     values = attr.values || ['']
     name = attr.name
-    help = attr.help_text
     generate_list_field_input(attr, name, label, values) do |value, row_name, id|
       text_input(label: '', name: row_name, value: value)
     end
@@ -231,7 +233,7 @@ module SubmissionInputsHelper
     value = value.to_s unless value.nil?
     name = attr.name
     content_tag(:div, class: 'd-flex') do
-      switch_input(id: name, name: name, label: attr.label, checked: value.eql?('true'), value: value, boolean_switch: true)
+      switch_input(id: name, name: name, label: attr_header_label(attr), checked: value.eql?('true'), value: value, boolean_switch: true)
     end
   end
 
@@ -249,9 +251,7 @@ module SubmissionInputsHelper
 
     if metadata_values.kind_of?(Array)
       metadata_values.map do |metadata|
-        unless select_values.flatten.include?(metadata)
-          select_values << metadata
-        end
+        select_values << metadata unless select_values.flatten.include?(metadata)
       end
     elsif !select_values.flatten.include?(metadata_values) && !metadata_values.to_s.empty?
       select_values << metadata_values
@@ -259,4 +259,39 @@ module SubmissionInputsHelper
     [metadata_values, select_values]
   end
 
+  private
+
+
+  def attr_header_label(attr, label = nil, show_tooltip: true)
+    content_tag(:div) do
+      tooltip_span =  render(Display::InfoTooltipComponent.new(text: attribute_help_text(attr)))
+      html = content_tag(:span, label || attr.label)
+      html += content_tag(:span, tooltip_span, class: 'ml-1') if show_tooltip
+      html
+    end
+  end
+  def attribute_help_text(attr)
+    label = attr.label
+    help = attr.help_text
+    attr = attr.metadata
+    attribute = !attr['namespace'].nil? ? "#{attr['namespace']}:#{attr['attribute']}" : "bioportal:#{attr['attribute']}"
+    render SummarySectionComponent.new(title: "#{label} (#{attribute})", show_card: false) do
+      help_text = ''
+      unless attr['metadataMappings'].nil?
+        help_text += render(FieldContainerComponent.new(label: 'Equivalents', value: attr['metadataMappings'].join(', ')))
+      end
+
+      unless attr['enforce'].nil? || attr['enforce'].empty?
+        help_text += render(FieldContainerComponent.new(label: 'Validators', value: attr['enforce'].map do  |x| 
+          content_tag(:span, x.humanize, class: 'badge badge-primary mx-1')
+        end.join.html_safe))
+      end
+
+      unless attr['helpText'].nil?
+        help_text += render(FieldContainerComponent.new(label: 'Help text ', value: help.html_safe))
+      end
+
+      help_text
+    end
+  end
 end
