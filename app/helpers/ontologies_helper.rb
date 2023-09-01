@@ -41,7 +41,7 @@ module OntologiesHelper
         end)
       end
     else
-       ""
+      ""
     end
   end
 
@@ -536,24 +536,18 @@ module OntologiesHelper
   end
 
   def submission_json_button
-    render RoundedButtonComponent.new(link:  "#{(@submission_latest || @ontology).id}?display=all", target: '_blank', size: 'medium')
+    render RoundedButtonComponent.new(link: "#{(@submission_latest || @ontology).id}?display=all", target: '_blank', size: 'medium')
   end
 
-  def attribute_error(attr)
-    return '' unless @errors && @errors[attr.to_sym]
-    errors = @errors[attr.to_sym]
 
-    errors.values.join(', ')
+  def summary_only?
+    @ontology&.summaryOnly || @submission&.isRemote&.eql?('3')
   end
 
-  def error_message
-    if !@errors[:error].nil? && @errors[:error].is_a?(String)
-      @errors[:error]
-    else
-      "Errors in fields #{@errors.keys.join(', ')}"
-    end
-
+  def ontology_pull_location?
+    !(@submission.pullLocation.nil? || @submission.pullLocation.empty?)
   end
+
   private
 
   def submission_languages(submission = @submission)

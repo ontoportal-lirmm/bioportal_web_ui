@@ -1,24 +1,26 @@
 = render Input::InputFieldComponent.new(label: 'Location', name: '') do
   .location-choice
-    %input{type: "radio", name: "submission[isRemote]", value: "3", id: "metadata_only", onchange: "displayMetadataOnlyForm()"}
+    %input{type: "radio", name: "submission[isRemote]", value: "3", checked: summary_only?, id: "metadata_only", onchange: "displayMetadataOnlyForm()"}
     %label.title{for: "metadata_only"}
       Metadata only (No file)
   .upload-ontology-desc.mb-2
     Allow users to view and search your ontology metadata, but not its classes and properties.
-  #metadata-only-form.d-none
+  #metadata-only-form
+
   .location-choice
-    %input{type: "radio", name: "submission[isRemote]", value: "1", id: "load_from_url", onchange: "displayUrlForm()"}
+    %input{type: "radio", name: "submission[isRemote]", value: "1", id: "load_from_url",  checked: ontology_pull_location?, onchange: "displayUrlForm()"}
     %label.title{for: "load_from_url"}
       Load from URL
   .upload-ontology-desc.mb-1
     New versions loaded on a nightly basis.
-  #url-form.d-none
-    = render Input::UrlComponent.new(label: "", name: "submission[pullLocation]")
+  #url-form{style: ontology_pull_location? ? "" : "display:none;"}
+    = render Input::UrlComponent.new(label: "", name: "submission[pullLocation]", value: @submission.pullLocation)
   .location-choice.mb-3.mt-3
-    %input{type: "radio", name: "submission[isRemote]", value: "0", id: "upload_local_file", checked: true, onchange: "displayLocalFileForm()"}
+    - checked = !summary_only? && !ontology_pull_location?
+    %input{type: "radio", name: "submission[isRemote]", value: "0", id: "upload_local_file", checked: checked, onchange: "displayLocalFileForm()"}
     %label.title{for: "upload_local_file"}
       Upload local file
-  #local-file-form
+  #local-file-form{style: checked ? "" :  "display:none;" }
     = render Input::FileInputComponent.new(name: "submission[filePath]")
 
 
@@ -30,9 +32,9 @@
     var displayForm = (formElement) => {
       [MetadataOnlyForm, UrlForm, LocalFileForm].forEach((form) => {
         if (form === formElement) {
-          form.classList.remove("d-none");
+          form.style.display = "block";
         } else {
-          form.classList.add("d-none");
+          form.style.display = "none";
         }
       });
     };
