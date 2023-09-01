@@ -51,6 +51,14 @@ module InputsHelper
     label || method_name(name).humanize
   end
 
+  def attribute_error(attr)
+    return '' unless @errors && @errors[attr.to_sym]
+
+    errors = @errors[attr.to_sym]
+
+    errors.values.join(', ')
+  end
+
   def input_error_message(name)
     attribute_error(method_name(name))
   end

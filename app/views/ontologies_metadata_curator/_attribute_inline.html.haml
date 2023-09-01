@@ -1,8 +1,8 @@
 %div
   - if @errors
     %div
-      = render Display::AlertComponent.new(type: 'danger') do
-        = @errors.map{|e| e[:error]}.join(',')
+              %div
+                = error_message_alert
 %div
   - if attribute == "contact"
     = raw submission.contact.map {|c| [c["name"], c["email"]].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")

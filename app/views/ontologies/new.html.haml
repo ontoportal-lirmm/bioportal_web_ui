@@ -4,9 +4,7 @@
   = form_for :ontology, url: {action: "create"}, html: {id: "ontologyForm", multipart: true} do
     .upload-ontology-container
       %div{style: 'width: 589px'}
-        - unless @errors.nil?
-          %div.mb-2
-            = render Display::AlertComponent.new(message: error_message, type: 'danger', closable: false)
+        = error_message_alert
         .upload-ontology-card
           .upload-ontology-center
             .Upload-ontology-title

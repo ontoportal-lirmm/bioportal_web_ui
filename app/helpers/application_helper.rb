@@ -276,6 +276,23 @@ module ApplicationHelper
     BLOCK
   end
 
+  def error_message_text
+    @errors = @errors[:error] if @errors && @errors[:error]
+    if @errors.is_a?(String)
+      @errors
+    else
+      "Errors in fields #{@errors.keys.join(', ')}"
+    end
+  end
+
+  def error_message_alert
+    return if @errors.nil?
+
+    content_tag(:div, class: 'my-1') do
+      render Display::AlertComponent.new(message: error_message_text, type: 'danger', closable: false)
+    end
+  end
+
   def anonymous_user
     #
     # TODO: Fix and failures from removing 'DataAccess' call here.
