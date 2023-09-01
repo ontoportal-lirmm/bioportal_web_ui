@@ -160,6 +160,15 @@ module SubmissionsHelper
     end
   end
 
+  def extractable_metadatum_tooltip(options = {})
+    help_tooltip(options[:content], {}, 'fas fa-file-export', 'extractable-metadatum', options[:text]).html_safe
+  end
+
+
+  def attribute_infos(attr_label)
+    submission_metadata.select{ |attr_hash| attr_hash["attribute"].to_s.eql?(attr_label) }.first
+  end
+
   def object_name(acronym = @ontology.acronym, submissionId = @submission.submissionId)
     # TO REMOVE or Update
     'submission'

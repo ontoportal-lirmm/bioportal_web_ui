@@ -529,13 +529,6 @@ class ApplicationController < ActionController::Base
     @concept
   end
 
-  def get_metrics_hash
-    metrics_hash = {}
-    # TODO: Metrics do not return for views on the backend, need to enable include_views param there
-    @metrics = LinkedData::Client::Models::Metrics.all(include_views: true)
-    @metrics.each {|m| metrics_hash[m.links['ontology']] = m }
-    return metrics_hash
-  end
 
   def get_ontology_submission_ready(ontology)
     # Get the latest 'ready' submission
@@ -782,9 +775,8 @@ class ApplicationController < ActionController::Base
   
   # Get the submission metadata from the REST API.
   def submission_metadata
-    @metadata ||= JSON.parse(Net::HTTP.get(URI.parse("#{REST_URI}/submission_metadata?apikey=#{API_KEY}")))
+    helpers.submission_metadata
   end
-  helper_method :submission_metadata
 
 
   def request_lang

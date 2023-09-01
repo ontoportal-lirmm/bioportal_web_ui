@@ -6,6 +6,8 @@ require 'digest/sha1'
 require 'pry' # used in a rescue
 
 module ApplicationHelper
+  REST_URI = $REST_URL
+  API_KEY = $API_KEY
 
   include ModalHelper
 
@@ -41,6 +43,10 @@ module ApplicationHelper
     omniauth_provider_info(strategy).keys.first
   end
 
+  def submission_metadata
+    @metadata ||= JSON.parse(Net::HTTP.get(URI.parse("#{REST_URI}/submission_metadata?apikey=#{API_KEY}")))
+  end
+
   def isOwner?(id)
     unless session[:user].nil?
       if session[:user].admin?
@@ -52,6 +58,7 @@ module ApplicationHelper
       end
     end
   end
+  
 
   def encode_param(string)
     CGI.escape(string)
@@ -546,24 +553,23 @@ module ApplicationHelper
   end
 
   def label_ajax_data(cls_id, ont_acronym, ajax_uri, cls_url)
-    tag.attributes label_ajax_data_h(cls_id, ont_acronym, ajax_uri, cls_url)
+    label_ajax_data_h(cls_id, ont_acronym, ajax_uri, cls_url)
   end
 
-  def label_ajax_link(link, cls_id, ont_acronym, ajax_uri, cls_url, target = '')
-    href_cls = " href='#{link}'"
+  def label_ajax_link(link, cls_id, ont_acronym, ajax_uri, cls_url, target = nil)
     data = label_ajax_data(cls_id, ont_acronym, ajax_uri, cls_url)
-    style = 'btn btn-sm btn-light'
-    "<a data-controller='label-ajax' class='#{style}' #{data} #{href_cls} #{target}>#{cls_id}</a>"
+    options = {  'data-controller': 'label-ajax' }.merge(data)
+    options = options.merge({ target: target }) if target
+
+    render ChipButtonComponent.new(url: link, text: cls_id, type: 'clickable', **options)
   end
 
   def get_link_for_cls_ajax(cls_id, ont_acronym, target = nil)
-    target = target.nil? ? '' : " target='#{target}' "
-
     if cls_id.start_with?('http://') || cls_id.start_with?('https://')
       link = bp_class_link(cls_id, ont_acronym)
       ajax_url = "/ajax/classes/label?language=#{request_lang}"
       cls_url = "?p=classes&conceptid=#{CGI.escape(cls_id)}&language=#{request_lang}"
-      label_ajax_link(link, cls_id, ont_acronym, ajax_url , cls_url ,target)
+      label_ajax_link(link, cls_id, ont_acronym, ajax_url, cls_url, target)
     else
       auto_link(cls_id, :all, target: '_blank')
     end
