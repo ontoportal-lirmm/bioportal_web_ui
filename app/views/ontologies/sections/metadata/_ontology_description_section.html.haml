@@ -1,0 +1,53 @@
+= render Layout::CardComponent.new do |c|
+  - c.header(text: 'General information')
+  = render Layout::ListComponent.new do |l|
+    - l.row do
+      .d-flex.align-items-center
+        .description_text
+          = render TextAreaFieldComponent.new(value: @submission_latest&.description)
+        - unless @submission_latest&.logo.nil?
+          = image_tag(@submission_latest&.logo, class: 'description_img')
+    - l.row do
+      %span.creation_text
+        - if @submission_latest&.released
+          Initial release occurred on
+          %span.date_creation_text= l(Date.parse(@submission_latest.released), format: :monthfull_day_year) + '.'
+        - if @submission_latest&.contact
+          For additional information, reach out
+          %span.creator_text
+            = display_contact(@submission_latest.contact)
+
+    - unless Array(@submission_latest&.naturalLanguage).empty?
+      - l.row do
+        = render FieldContainerComponent.new(label: 'Languages') do
+          = horizontal_list_container(Array(@submission_latest&.naturalLanguage)) do |v|
+            = render LanguageFieldComponent.new(value: v)
+
+    - if @ontology.admin?(session[:user]) && @submission_latest&.pullLocation
+      - l.row do
+        = render FieldContainerComponent.new(label: 'Pull location') do
+          = horizontal_list_container([@submission_latest&.pullLocation]) do |v|
+            = render LinkFieldComponent.new(value: v)
+    - unless  Array(@submission_latest&.keywords).empty? && Array(@submission_latest&.keyClasses).empty?
+      - l.row do
+        = render FieldContainerComponent.new(label: 'Keywords and classes') do
+          - values = (Array(@submission_latest&.keywords) + Array(@submission_latest&.keyClasses))
+          - values =  values.map{|x| x.split(',')}.flatten
+          = horizontal_list_container(values) do |v|
+            - if link?(v)
+              = raw get_link_for_cls_ajax(v, @ontology.acronym, '_blank')
+            - else
+              = render ChipButtonComponent.new(text: v, type: "static")
+
+    - unless Array(@ontology.hasDomain).empty?
+      - l.row do
+        = render FieldContainerComponent.new(label: 'Categories and subjects') do
+          = horizontal_list_container(@ontology.hasDomain) do |v|
+            = render ChipButtonComponent.new(text: show_category_name(v), type: "static")
+
+  %hr.w-100.my-3
+  .icons_container
+    = ontology_icon_links(@ontology_icon_links, @submission_latest)
+  %hr.w-100.my-3
+  %div.text-center.pb-3
+    = link_to_modal('See all metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "All metadata properties", show_modal_size_value: 'modal-xl' })

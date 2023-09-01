@@ -22,24 +22,24 @@
     .home-bubble.home-bubble-one
       %h5
         = @anal_ont_names[0]
-      %p 
+      %p
         = @anal_ont_numbers[0].to_s + " visits"
     .home-bubble.home-bubble-two
       %h5
         = @anal_ont_names[1]
-      %p 
+      %p
         = @anal_ont_numbers[1].to_s + " visits"
     .home-bubble.home-bubble-three
       %h5
         = @anal_ont_names[2]
-      %p 
+      %p
         = @anal_ont_numbers[2].to_s + " visits"
     %a.home-bubble.home-bubble-four{:href => "/visits"}
       %h5 ...
 
   .home-header-title-container
     .home-header-title
-      %h4 
+      %h4
         = t('.welcome', site: $SITE)
       %p
         = t('.tagline')
@@ -91,10 +91,10 @@
           - if fairness_service_enabled?
             %div#fair-home{data:{controller:"fair-score-home"}}
               = render partial: "shared/fair_score_bars", locals: {data: nil}
-          %a{:href => "#fairDetails"}
-            %div.home-fair-details
-              %p See details
-              = inline_svg_tag "arrow-right.svg"
+            %a{:href => "#fairDetails"}
+              %div.home-fair-details
+                %p See details
+                = inline_svg_tag "arrow-right.svg"
       .home-sub-section-right
         %h4 News
         %hr.home-section-line
@@ -106,13 +106,13 @@
     .home-statistics-container
       .home-agroportal-figures
         = inline_svg_tag "ontoportal-icon.svg"
-        %p 
+        %p
           = portal_name+" in figures:"
       .home-statistics
         .home-statistics-item
           %hr/
           %div
-            %h4 
+            %h4
               = number_with_delimiter(@ont_count, :delimiter => ",")
             %p Ontologies
         .home-statistics-item

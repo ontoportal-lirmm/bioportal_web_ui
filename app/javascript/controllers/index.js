@@ -43,11 +43,15 @@ application.register("load-chart", LoadChartController)
 import MetadataDownloaderController from "./metadata_downloader_controller"
 application.register("metadata-downloader", MetadataDownloaderController)
 
+import OntologyRelationsNetworkController from "./ontology_relations_network_controller"
+application.register("ontology-relations-network", OntologyRelationsNetworkController)
+
 import OntologyViewerTabsController from "./ontology_viewer_tabs_controller"
 application.register("ontology-viewer-tabs", OntologyViewerTabsController)
 
 import OntoportalAutocompleteController from "./ontoportal_autocomplete_controller"
 application.register("ontoportal-autocomplete", OntoportalAutocompleteController)
+
 
 import PlatformLanguageController from "./platform_language_controller"
 application.register("platform-language", PlatformLanguageController)
