@@ -86,7 +86,7 @@ class OntologiesMetadataCuratorController < ApplicationController
       new_data = active_submission_data
       new_data[:ontology] = onto
       new_data[:id] = sub_i
-      error_responses << update_submission(new_data) if new_data
+      error_responses << update_submission(new_data, sub_i) if new_data
       @submissions << @submission
     end
 
@@ -121,45 +121,4 @@ class OntologiesMetadataCuratorController < ApplicationController
     @submissions << sub
   end
 
-  def metadata_params
-    attributes = [
-      :ontology,
-      :description,
-      :hasOntologyLanguage,
-      :prefLabelProperty,
-      :synonymProperty,
-      :definitionProperty,
-      :authorProperty,
-      :obsoleteProperty,
-      :obsoleteParent,
-      :version,
-      :status,
-      :released,
-      :isRemote,
-      :pullLocation,
-      :filePath,
-      { contact: [:name, :email] },
-      :homepage,
-      :documentation,
-      :publication
-    ]
-
-    @metadata.each do |m|
-
-      m_attr = m["attribute"].to_sym
-
-      attributes << if m["enforce"].include?("list")
-                      { m_attr => [] }
-                    else
-                      m_attr
-                    end
-    end
-    out = []
-    params.require(:submission).permit!.tap do |x|
-      x.keys.each do |y|
-        out << x.require(y).permit(attributes.uniq)
-      end
-    end
-    out
-  end
 end

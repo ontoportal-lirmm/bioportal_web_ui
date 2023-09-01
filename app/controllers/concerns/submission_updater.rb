@@ -15,14 +15,14 @@ module SubmissionUpdater
     @submission.save(cache_refresh_all: false)
   end
 
-  def update_submission(new_submission_hash)
+  def update_submission(new_submission_hash, submission_id)
 
     convert_values_to_types(new_submission_hash)
 
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(new_submission_hash[:ontology]).first
-    @submission = @ontology.explore.submissions({ display: 'all' }, new_submission_hash[:id])
+    @submission = @ontology.explore.submissions({ display: 'all' }, submission_id)
 
-    new_values = submission_params(new_submission_hash)
+    new_values = new_submission_hash
     new_values.each do |key, values|
       @submission.send("#{key}=", values)
     rescue StandardError

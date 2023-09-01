@@ -76,25 +76,35 @@ class SubmissionsController < ApplicationController
 
   # When editing a submission (called when submit "Edit submission information" form)
   def update
-    error_responses = []
-    _, submission_params = params[:submission].each.first
-
-    error_responses << update_submission(submission_params)
-
-    if error_responses.compact.any? { |x| x.status != 204 }
-      @errors = error_responses.map { |error_response| response_errors(error_response) }
+    acronym = params[:ontology_id]
+    submission_id = params[:id]
+    if params[:ontology]
+      @ontology = update_existent_ontology(acronym)
+      if @ontology.nil? || response_error?(@ontology)
+        show_new_errors(@ontology, partial: 'submissions/form_content', locals: { id: 'test' })
+        return
+      end
     end
 
-    if @errors && !params[:attribute]
-      @required_only = !params['required-only'].nil?
-      @filters_disabled = true
-      reset_agent_attributes
-      render 'edit', status: 422
-    elsif params[:attribute]
-      reset_agent_attributes
-      render_submission_attribute(params[:attribute])
+    if params[:submission].nil?
+      return redirect_to "/ontologies/#{acronym}",
+                         notice: 'Submission updated successfully'
+    end
+
+    @submission = update_submission(update_submission_hash(acronym), submission_id)
+    #reset_agent_attributes
+    if params[:attribute].nil?
+      if response_error?(@submission)
+        show_new_errors(@submission, partial: 'submissions/form_content', locals: { id: 'test' })
+      else
+        redirect_to "/ontologies/#{acronym}",
+                    notice: 'Submission updated successfully'
+      end
     else
-      redirect_to "/ontologies/#{@ontology.acronym}"
+      @errors = response_errors(@submission) if response_error?(@submission)
+      @submission = submission_from_params(params[:submission])
+      @submission.submissionId = submission_id
+      render_submission_attribute(params[:attribute])
     end
 
   end
