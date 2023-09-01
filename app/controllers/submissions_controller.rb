@@ -30,6 +30,7 @@ class SubmissionsController < ApplicationController
     @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
     @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
     @is_update_ontology = true
+    render "ontologies/new"
   end
 
   # Called when form to "Add submission" is submitted
@@ -56,8 +57,9 @@ class SubmissionsController < ApplicationController
 
   # Called when form to "Edit submission" is submitted
   def edit_properties
-    display_submission_attributes params[:ontology_id], params[:properties]&.split(','), submissionId: params[:id],
+    display_submission_attributes params[:ontology_id], params[:properties]&.split(','), submissionId: params[:submission_id],
                                   inline_save: params[:inline_save]&.eql?('true')
+
     attribute_template_output = render_to_string(inline: helpers.render_submission_inputs(params[:container_id] || 'metadata_by_ontology'))
 
     render inline: attribute_template_output
