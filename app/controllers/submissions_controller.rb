@@ -58,7 +58,10 @@ class SubmissionsController < ApplicationController
   def edit_properties
       display_submission_attributes params[:ontology_id], params[:properties]&.split(','), submissionId: params[:id],
                                                                                            inline_save: params[:inline_save]&.eql?('true')
-      render partial: 'form_content', locals: {id: params[:container_id] || 'metadata_by_ontology'}
+    attribute_template_output = render_to_string(inline: helpers.render_submission_inputs(params[:container_id] || 'metadata_by_ontology'))
+
+    render inline: attribute_template_output
+
   end
 
   def edit

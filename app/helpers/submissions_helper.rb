@@ -173,4 +173,45 @@ module SubmissionsHelper
     submission_metadata.select { |x| x["enforce"].include?('Agent') }.map { |x| x["attribute"] }
   end
 
+  def render_submission_inputs(frame_id)
+    output = ""
+
+    if selected_attribute?('format')
+      output += attribute_form_group_container('format') do
+        render partial: 'submissions/submission_format_form'
+      end
+    end
+
+    if selected_attribute?('location')
+      output += attribute_form_group_container('location') do
+        render partial: 'ontologies/submission_location_form'
+      end
+    end
+
+    if selected_attribute?('contact')
+      output += attribute_form_group_container('contact') do
+        @submission.contact = [] unless @submission.contact && @submission.contact.size > 0
+        contact_input(label: 'Contacts', name: '')
+      end
+    end
+
+    reject_metadata = %w[abstract uploadFilePath contact pullLocation prefLabelProperty definitionProperty synonymProperty authorProperty obsoleteParent obsoleteProperty hasOntologyLanguage]
+    label = inline_save? ? '' : nil
+    submission_metadata.reject { |attr| reject_metadata.include?(attr['attribute']) || !selected_attribute?(attr['attribute']) }.each do |attr|
+      output += attribute_form_group_container(attr['attribute']) do
+        raw attribute_input(attr['attribute'], attr_metadata: attr, label: label)
+      end
+    end
+
+    if selected_attribute?('contact')
+      output += attribute_form_group_container('abstract') do
+        raw attribute_input('abstract',long_text: true, label: label)
+      end
+    end
+
+
+    render TurboFrameComponent.new(id: frame_id) do
+      output.html_safe
+    end
+  end
 end
