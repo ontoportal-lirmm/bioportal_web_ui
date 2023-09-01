@@ -196,7 +196,21 @@ class OntologiesController < ApplicationController
   end
 
   def create
-    save_ontology
+    @ontology = ontology_from_params.save
+
+    if response_error?(@ontology)
+      show_new_errors(@ontology)
+      return
+    end
+
+    @submission = save_submission(new_submission_hash)
+
+    if response_error?(@submission)
+      @ontology.delete
+      show_new_errors(@submission)
+    else
+      redirect_to "/ontologies/success/#{@ontology.acronym}"
+    end
   end
 
   def edit

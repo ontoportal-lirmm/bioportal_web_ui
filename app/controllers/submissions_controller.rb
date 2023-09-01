@@ -35,7 +35,23 @@ class SubmissionsController < ApplicationController
   # Called when form to "Add submission" is submitted
   def create
     @is_update_ontology = true
-    add_ontology_submission(params[:ontology][:acronym] || params[:id])
+
+    if params[:ontology]
+      @ontology = update_existent_ontology(params[:ontology_id])
+
+      if @ontology.nil? || response_error?(@ontology)
+        show_new_errors(@ontology)
+        return
+      end
+    end
+
+    @submission = save_submission(new_submission_hash)
+
+    if response_error?(@submission)
+      show_new_errors(@submission)
+    else
+      redirect_to "/ontologies/success/#{@ontology.acronym}"
+    end
   end
 
   # Called when form to "Edit submission" is submitted
