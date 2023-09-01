@@ -14,11 +14,13 @@
 .upload-ontology-input-field-container
   = render Input::InputFieldComponent.new(name: '', label:'Categories') do
     %div.upload-ontology-chips-container
+      = hidden_field_tag 'ontology[hasDomain][]'
       - @categories.each do |category|
         = check_input(name: "ontology[hasDomain][]", id: category[:acronym] , label: category[:acronym], value: category[:id], checked: @ontology.hasDomain&.any?{|x| x.eql?(category[:id])})
 .upload-ontology-field-container
   = render Input::InputFieldComponent.new(name: '', label:'Groups') do
     %div.upload-ontology-chips-container
+      = hidden_field_tag "ontology[group][]"
       - @groups.each do |group|
         = check_input(name: "ontology[group][]", id: group[:acronym] , label: group[:acronym], value: group[:id], checked: @ontology.group&.any?{|x| x.eql?(group[:id])})
 
