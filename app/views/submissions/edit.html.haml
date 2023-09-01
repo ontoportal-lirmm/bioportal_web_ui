@@ -47,9 +47,9 @@
 
   :javascript
     function onMetadataChange(){
-      document.querySelector('.edit-ontology-tab-item.d-block.active.show')?.classList.remove('active', 'show');
-      document.querySelector('.edit-ontology-tab.tab-pane.fade.active.show')?.classList.remove('active', 'show');
-      document.getElementById('categories-tabs')?.classList.add('disabled');
+      document.querySelector('.edit-ontology-tab-item.d-block.active.show')?.classList.remove('active', 'show')
+      document.querySelector('.edit-ontology-tab.tab-pane.fade.active.show')?.classList.remove('active', 'show')
+      document.getElementById('categories-tabs')?.classList.add('disabled')
 
       let frame = document.getElementById('metadata_by_ontology')
       let properties = document.getElementById('select_search[metadata]')
