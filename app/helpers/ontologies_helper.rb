@@ -521,13 +521,18 @@ module OntologiesHelper
 
 
   def count_subscriptions(ontology_id)
-    users = LinkedData::Client::Models::User.all(include: 'subscription', display_context: false, display_links: false )
-    users.select{ |u| u.subscription.find{ |s| s.ontology.eql?(ontology_id)} }.count
+    users = LinkedData::Client::Models::User.all(include: 'subscription', display_context: false, display_links: false)
+    users.select { |u| u.subscription.find { |s| s.ontology.eql?(ontology_id) } }.count
+  end
+
+  def new_submission_button
+    return unless @ontology.admin?(session[:user])
+    render RoundedButtonComponent.new(link: new_ontology_submission_path(@ontology.acronym), icon: 'icons/plus.svg', size: 'medium')
   end
 
   def ontology_edit_button
-    return unless  @ontology.admin?(session[:user])
-    render RoundedButtonComponent.new(link:   edit_ontology_path(@ontology.acronym), icon: 'edit.svg', size: 'medium')
+    return unless @ontology.admin?(session[:user])
+    render RoundedButtonComponent.new(link: edit_ontology_path(@ontology.acronym), icon: 'edit.svg', size: 'medium')
   end
 
   def submission_json_button

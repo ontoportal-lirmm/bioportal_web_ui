@@ -29,7 +29,9 @@
             = render DateTimeFieldComponent.new(value: sub.creationDate)
     .ontology-details-header-right-container.justify-content-end{style: 'min-width: 20%;'}
       %span.mx-1
-        = submission_json_button
-      %span
+        = new_submission_button
+      %span.mx-1
         = ontology_edit_button
+      %span
+        = submission_json_button
       = subscribe_button(@ontology.id)
