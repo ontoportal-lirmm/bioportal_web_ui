@@ -70,7 +70,10 @@ module SubmissionsHelper
   end
 
   def selected_attribute?(attr)
-    @selected_attributes.nil? || @selected_attributes.empty? || @selected_attributes.include?(attr.to_s) || equivalent_properties(@selected_attributes).include?(attr.to_s)
+    return true if @selected_attributes.nil? || @selected_attributes.empty? || @selected_attributes.include?(attr.to_s)
+    return true if equivalent_properties(@selected_attributes).include?(attr.to_s)
+
+    equivalent_properties(attr.to_s).any? { |x| @selected_attributes.include?(x) }
   end
 
   def save_button
@@ -95,7 +98,7 @@ module SubmissionsHelper
   end
 
   def attribute_form_group_container(attr, &block)
-    render(TurboFrameComponent.new(id: "#{object_name}#{attr}}_from_group_input")) do
+    render(TurboFrameComponent.new(id: "#{object_name}#{attr}_from_group_input")) do
       tag.div(class: 'd-flex w-100 mb-3') do
         html = tag.div(class: 'flex-grow-1 mr-1') do
           capture(&block)
@@ -124,7 +127,7 @@ module SubmissionsHelper
   end
 
   def location_equivalent
-    %w[summaryOnly pullLocation]
+    %w[summaryOnly pullLocation uploadFilePath]
   end
 
   def equivalent_property(attr)
