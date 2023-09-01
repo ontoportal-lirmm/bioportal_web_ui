@@ -18,7 +18,3 @@
                 %div
                   = render_submission_attribute_inline(attr.to_s, submission, acronym)
 
-
-          %div
-            = render EditSubmissionAttributeButtonComponent.new(acronym: ontology.acronym, submission_id: submission_id, attribute: attribute, inline: true) do
-              %i.far.fa-edit

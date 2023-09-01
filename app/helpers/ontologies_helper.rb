@@ -481,10 +481,9 @@ module OntologiesHelper
     languages = languages_options
 
     if languages.empty?
-      content_tag(:div ,data: {'ontology-viewer-tabs-target': 'languageSelector'}, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'} ; margin-bottom: -1px;") do
-        render EditSubmissionAttributeButtonComponent.new(acronym: @ontology.acronym, submission_id: @submission_latest.submissionId, attribute: :naturalLanguage) do
-          concat "Enable multilingual display "
-          concat content_tag(:i , "", class: "fas fa-lg fa-question-circle")
+      content_tag(:div, data: { 'ontology-viewer-tabs-target': 'languageSelector' }, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'} ; margin-bottom: -1px;") do
+        edit_submission_property_link(@ontology.acronym, @submission_latest.submissionId, :naturalLanguage) do
+          "Enable multilingual display " + content_tag(:i, "", class: "fas fa-lg fa-question-circle")
         end
       end
     else

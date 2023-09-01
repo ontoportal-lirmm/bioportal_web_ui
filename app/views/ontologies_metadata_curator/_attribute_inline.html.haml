@@ -31,3 +31,6 @@
         - else
           %p
             = value
+            %div
+              = edit_submission_property_link(ontology.acronym, submission.submissionId, attribute) do
+                %i.far.fa-edit

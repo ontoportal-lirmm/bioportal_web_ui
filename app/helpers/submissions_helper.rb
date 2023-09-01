@@ -35,6 +35,18 @@ module SubmissionsHelper
     "submission[#{acronym}_#{submission_id}]#{attribute.capitalize}_from_group_input"
   end
 
+  def edit_submission_property_link(acronym, submission_id, attribute, container_id = nil, &block)
+    link = "/ontologies/#{acronym}/submissions/#{submission_id}/edit_properties?properties=#{attribute}&inline_save=true"
+    if container_id
+      link += "&container_id=#{container_id}"
+    else
+        link += "&container_id=#{attribute_input_frame_id(acronym, submission_id, attribute)}"
+    end
+    link_to link, data: { turbo: true }, class: 'btn btn-sm btn-light' do
+      capture(&block)
+    end
+  end
+
   def display_submission_attributes(acronym, attributes, submissionId: nil, inline_save: false)
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
     @selected_attributes = attributes
