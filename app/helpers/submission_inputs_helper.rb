@@ -36,6 +36,9 @@ module SubmissionInputsHelper
       @attr_metadata
     end
 
+    def required?
+      Array(@attr_metadata['enforce']).include?('existence')
+    end
   end
 
   # @param attr_key String
@@ -120,7 +123,7 @@ module SubmissionInputsHelper
   # @param attr_key string
   def attr_label(attr_key, attr_metadata: nil, show_tooltip: true)
 
-    data = attr_metadata || SubmissionMetadataInput.new(attr_key.to_s)
+    data = attr_metadata || SubmissionMetadataInput.new(attribute_key: attr_key.to_s)
     return attr_key.humanize if data.nil?
 
     if show_tooltip
@@ -261,21 +264,30 @@ module SubmissionInputsHelper
 
   private
 
+  def attr_header_label(attr, show_tooltip: true)
 
-  def attr_header_label(attr, label = nil, show_tooltip: true)
+    return '' if attr.label && attr.label.empty?
+
     content_tag(:div) do
-      tooltip_span =  render(Display::InfoTooltipComponent.new(text: attribute_help_text(attr)))
-      html = content_tag(:span, label || attr.label)
+      tooltip_span = render(Display::InfoTooltipComponent.new(text: attribute_help_text(attr)))
+      html = content_tag(:span, attr.label)
+      html += content_tag(:span, '*', class: "text-danger") if attr.required?
       html += content_tag(:span, tooltip_span, class: 'ml-1') if show_tooltip
       html
     end
   end
+
   def attribute_help_text(attr)
     label = attr.label
     help = attr.help_text
+    required = attr.required?
     attr = attr.metadata
     attribute = !attr['namespace'].nil? ? "#{attr['namespace']}:#{attr['attribute']}" : "bioportal:#{attr['attribute']}"
-    render SummarySectionComponent.new(title: "#{label} (#{attribute})", show_card: false) do
+
+    title = content_tag(:span, "#{label} (#{attribute})")
+    title += content_tag(:span, 'required', class: 'badge badge-danger mx-1') if required
+
+    render SummarySectionComponent.new(title: title, show_card: false) do
       help_text = ''
       unless attr['metadataMappings'].nil?
         help_text += render(FieldContainerComponent.new(label: 'Equivalents', value: attr['metadataMappings'].join(', ')))
