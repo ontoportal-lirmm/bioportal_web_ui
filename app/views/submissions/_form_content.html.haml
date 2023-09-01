@@ -1,22 +1,20 @@
 = render TurboFrameComponent.new(id:id) do
-  = hidden_field object_name, :ontology, value: @submission.acronym
-  = hidden_field object_name, :id, value: @submission.submissionId
+  - unless @errors.nil?
+    = error_message_alert
+    = form_for :submission, url: ontology_submission_path(params["ontology_id"], params["id"]), html: { id: "ontology_submission_form", method: :put, multipart: true, 'data-turbo': true} do
+      - if selected_attribute?('name')
+        = render 'ontologies/form'
 
-  - if selected_attribute?('format')
-    = attribute_form_group_container('format') do
-      = render partial: 'submissions/submission_format_form'
+      = render_submission_inputs('')
+      %hr#edit-ontology-actions-devider
+      .edit-ontology-actions
+        .reset-all-button#reset-all-button
+          = render Buttons::RegularButtonComponent.new(id:'reset-all-fields', value: "Reset all fields", variant: "secondary", size: "slim") do |btn|
+            - btn.icon_left do
+              - inline_svg_tag "reload.svg"
+        .save-button
+          = render Buttons::RegularButtonComponent.new(id:'save-button', value: "Save", variant: "primary", size: "slim", type: "submit") do |btn|
+            - btn.icon_left do
+              - inline_svg_tag "check.svg"
 
-  - if selected_attribute?('location')
-    = attribute_form_group_container('location') do
-      = render partial: 'ontologies/submission_location_form'
-
-  - if selected_attribute?('contact')
-    = attribute_form_group_container('contact') do
-      - @submission.contact = [] unless @submission.contact && @submission.contact.size > 0
-      = contact_input(label: 'Contacts', name: '')
-
-  - reject_metadata = %w[contact pullLocation prefLabelProperty definitionProperty synonymProperty authorProperty obsoleteParent obsoleteProperty hasOntologyLanguage]
-  - for attr in submission_metadata.reject{|attr| reject_metadata.include?(attr["attribute"]) || !selected_attribute?(attr['attribute'])}
-    = attribute_form_group_container(attr['attribute']) do
-      = raw attribute_input(attr['attribute'], attr_metadata: attr)
 
