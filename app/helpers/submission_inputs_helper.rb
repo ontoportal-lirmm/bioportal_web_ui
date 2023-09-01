@@ -264,13 +264,13 @@ module SubmissionInputsHelper
 
   private
 
-  def attr_header_label(attr, show_tooltip: true)
-
-    return '' if attr.label && attr.label.empty?
+  def attr_header_label(attr, label = nil, show_tooltip: true)
+    label ||= attr.label
+    return '' if label.nil? || label.empty?
 
     content_tag(:div) do
       tooltip_span = render(Display::InfoTooltipComponent.new(text: attribute_help_text(attr)))
-      html = content_tag(:span, attr.label)
+      html = content_tag(:span, label)
       html += content_tag(:span, '*', class: "text-danger") if attr.required?
       html += content_tag(:span, tooltip_span, class: 'ml-1') if show_tooltip
       html
