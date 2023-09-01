@@ -57,8 +57,9 @@ class OntologiesMetadataCuratorController < ApplicationController
     submission_id = params[:submission_id]
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
     @submission = @ontology.explore.submissions({ display: "#{attribute},submissionId" }, submission_id)
-
-    render_submission_attribute(attribute)
+    id = attribute_input_frame_id(acronym, submission_id, attribute)
+    render_turbo_stream replace(id, partial: 'ontologies_metadata_curator/attribute_inline', locals: { id: id, attribute: attribute,
+                                                                                                       submission: @submission, ontology: @ontology })
   end
 
   def edit

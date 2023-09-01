@@ -27,10 +27,6 @@ module SubmissionsHelper
     render partial: 'ontologies_metadata_curator/attribute_inline_editable', locals: { attribute: attribute, submission: submission, ontology: ontology }
   end
 
-  def render_submission_attribute_inline(attribute, submission = @submission, acronym)
-    render partial: "ontologies_metadata_curator/attribute_inline", locals: { attribute: attribute, submission: submission, acronym: acronym }
-  end
-
   def attribute_input_frame_id(acronym, submission_id, attribute)
     "submission[#{acronym}_#{submission_id}]#{attribute.capitalize}_from_group_input"
   end
