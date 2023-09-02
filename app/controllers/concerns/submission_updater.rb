@@ -20,6 +20,7 @@ module SubmissionUpdater
     convert_values_to_types(new_submission_hash)
 
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(new_submission_hash[:ontology]).first
+    new_submission_hash.delete(:ontology)
     @submission = @ontology.explore.submissions({ display: 'all' }, submission_id)
 
     new_values = new_submission_hash
