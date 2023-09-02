@@ -151,7 +151,7 @@ module SubmissionInputsHelper
   end
 
   def generate_agent_input(attr)
-    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.metadata)) do
+    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.metadata['attribute'])) do
       render NestedAgentSearchInputComponent.new(label: attr_header_label(attr),
                                                  agents: attr.values,
                                                  agent_type: agent_type(attr.metadata),
@@ -186,7 +186,7 @@ module SubmissionInputsHelper
   end
 
   def generate_list_field_input(attr, name, label, values, &block)
-    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.metadata)) do
+    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.metadata['attribute'])) do
       render NestedFormInputsComponent.new do |c|
         c.header do
           label
