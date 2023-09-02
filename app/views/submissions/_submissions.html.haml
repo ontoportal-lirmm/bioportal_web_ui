@@ -16,9 +16,9 @@
           %div.align-middle
             Version
         - header.th do
-          = generate_attribute_text("modificationDate", "Modified", tooltip: false)
+          = attr_label("modificationDate", "Modified", show_tooltip: false)
         - header.th do
-          = generate_attribute_text("creationDate", "Uploaded", tooltip: false)
+          = attr_label("creationDate", "Uploaded", show_tooltip: false)
         - unless @ont_restricted
           - header.th do
             %div.align-middle
