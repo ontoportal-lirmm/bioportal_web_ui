@@ -350,12 +350,15 @@ module OntologiesHelper
 
   def new_submission_button
     return unless @ontology.admin?(session[:user])
-    render RoundedButtonComponent.new(link: new_ontology_submission_path(@ontology.acronym), icon: 'icons/plus.svg', size: 'medium')
+    render RoundedButtonComponent.new(link: new_ontology_submission_path(@ontology.acronym), icon: 'icons/plus.svg',
+                                      size: 'medium', title: 'Add new submission')
   end
 
   def ontology_edit_button
     return unless @ontology.admin?(session[:user])
-    render RoundedButtonComponent.new(link: edit_ontology_path(@ontology.acronym), icon: 'edit.svg', size: 'medium')
+    render RoundedButtonComponent.new(link: edit_ontology_path(@ontology.acronym), icon: 'edit.svg',
+                                      size: 'medium',
+                                      title: 'Edit metadata')
   end
 
   def submission_json_button
