@@ -1,14 +1,5 @@
 $ont-metadata-bg-color: #e2ebf0;
 $widget-table-border-color: #EFEFEF;
-$ont-show-bg-color: #e9ecef;
-
-.ontologies.show {
-  background-color: $ont-show-bg-color;
-
-  #bd {
-    background-color: $ont-show-bg-color;
-  }
-}
 
 .ontologies.show .gutter {
   background-repeat: no-repeat;
