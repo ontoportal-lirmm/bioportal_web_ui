@@ -1,0 +1,3 @@
+= render_in_modal do
+  = render Layout::ListComponent.new do |l|
+    = properties_list_component(l, @licenses.map { |x| [x, @submission_latest.send(x.to_s)] }.to_h)

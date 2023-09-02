@@ -1,0 +1,17 @@
+.dropdown-title-bar {
+  display: flex;
+  align-items: center;
+  font-weight: 550;
+  justify-content: space-between;
+  font-size: 16px;
+  color: #000000;
+  cursor: pointer;
+  padding: 0 14px 0 0;
+}
+
+.dropdown-container {
+  border: 1px solid #dfdfdf;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}

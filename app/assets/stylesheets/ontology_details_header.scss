@@ -1,0 +1,110 @@
+.ontology-details-header-container{
+    padding: 0 50px;
+    margin: 20px 0;
+    width: 1248px;
+}
+
+.ontology-details-path{
+    display: flex;
+    color: #888888;
+    margin-bottom: 20px;
+}
+.ontology-details-path img{
+    margin: 0 12px;
+}
+.ontology-details-path a{
+    text-decoration: underline !important;
+    color: #888888 !important;
+}
+.ontology-details-header-sub-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.ontology-details-name-bar{
+    display: flex;
+    align-items: center;
+}
+.ontology-details-name-bar > div{
+    font-size: 25px;
+    font-weight: 700;
+    margin-right: 10px;
+}
+
+.ontology-details-name-bar > div > span{
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.ontology-details-name-bar .ontology-details-licence{
+    display: flex;
+    align-items: center;
+    background-color: #F6F6F6;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #777777;
+    font-weight: 600;
+}
+.ontology-details-name-bar .ontology-details-licence svg{
+    margin-left: 10px;
+    transform: scale(1.2);
+}
+.ontology-details-last-update{
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #888888;
+}
+.ontology-details-last-update img{
+    margin-right: 10px;
+}
+.ontology-details-header-right-container{
+    display: flex;
+}
+.ontology-details-watch-button {
+    color: var(--primary-color);
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--primary-color);
+    border-radius: 32px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color ease 0.3s;
+    white-space: nowrap;
+}
+
+
+.ontology-details-watch-button:hover,.ontology-details-edit-button:hover {
+    background-color: var(--primary-color);
+    color: white !important;
+
+}
+
+.ontology-details-watch-button:hover svg path,.ontology-details-edit-button:hover svg path {
+    fill: white;
+}
+
+.ontology-details-watch-button svg {
+    margin-right: 10px;
+}
+
+.ontology-details-edit-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--primary-color);
+    border-radius: 22.5px;
+    padding: 10px;
+    height: 45px;
+    width: 45px;
+    cursor: pointer;
+    transition: background-color ease 0.3s;
+}
+
+

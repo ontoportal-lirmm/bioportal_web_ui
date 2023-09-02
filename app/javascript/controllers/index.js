@@ -46,6 +46,9 @@ application.register("load-chart", LoadChartController)
 import MetadataDownloaderController from "./metadata_downloader_controller"
 application.register("metadata-downloader", MetadataDownloaderController)
 
+import OntologyRelationsNetworkController from "./ontology_relations_network_controller"
+application.register("ontology-relations-network", OntologyRelationsNetworkController)
+
 import OntologyViewerTabsController from "./ontology_viewer_tabs_controller"
 application.register("ontology-viewer-tabs", OntologyViewerTabsController)
 
@@ -54,6 +57,10 @@ application.register("ontoportal-autocomplete", OntoportalAutocompleteController
 
 import ShowFilterCountController from "./show_filter_count_controller"
 application.register("show-filter-count", ShowFilterCountController)
+
+
+import PlatformLanguageController from "./platform_language_controller"
+application.register("platform-language", PlatformLanguageController)
 
 import ShowModalController from "./show_modal_controller"
 application.register("show-modal", ShowModalController)
@@ -69,6 +76,9 @@ application.register("text-truncate", TextTruncateController)
 
 import TooltipController from "./tooltip_controller"
 application.register("tooltip", TooltipController)
+
+import TopnavResponsivenessController from "./topnav_responsiveness_controller"
+application.register("topnav-responsiveness", TopnavResponsivenessController)
 
 import TurboFrameController from "./turbo_frame_controller"
 application.register("turbo-frame", TurboFrameController)

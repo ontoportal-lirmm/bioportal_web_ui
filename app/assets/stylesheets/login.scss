@@ -1,8 +1,9 @@
 .login-form{
-    margin-top: 30px;
-    padding: 37px 41px;
-    box-shadow: rgba(0, 0, 0, 0.08) 0px 20px 50px;
-    border-radius: 14px;
+  margin-top: 30px;
+  padding: 37px 41px;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 20px 50px;
+  border-radius: 14px;
+  max-width: 439px;
 }
 
 .login-input{
@@ -41,24 +42,13 @@
     text-decoration:none;
     font-size: 13px;
 }
-.login-button{
-    margin-top: 10px;
-   width: 357px;
-   font-size: 16px;
-   color: white;
-   padding: 17px;
-   background-color: var(--primary-color);
-   border: none;
-   border-radius: 9px;
-   margin-bottom: 20px;
-}
-.login-button:hover{
-    background-color: var(--hover-color);
-    cursor: pointer;
-}
-
 .dont-have-account{
     font-size: 15px;
     font-weight: 600;
     text-align: center;
+}
+.login-button-container{
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 357px;
 }

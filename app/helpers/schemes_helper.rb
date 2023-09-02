@@ -41,15 +41,13 @@ module SchemesHelper
   end
 
   def concept_label_to_show(submission: @submission_latest)
-    submission&.hasOntologyLanguage == 'SKOS' ? 'Concepts' : 'Classes'
+    submission&.hasOntologyLanguage == 'SKOS' ? 'concepts' : 'classes'
   end
 
   def section_name(section)
-    if section.eql?('classes')
-      concept_label_to_show(submission: @submission_latest || @submission)
-    else
-      section.capitalize
-    end
+    section = concept_label_to_show(submission: @submission_latest || @submission) if section.eql?('classes')
+
+    t("ontology_details.sections.#{section}")
   end
 
   def scheme_path(scheme_id = '')
@@ -65,12 +63,12 @@ module SchemesHelper
   end
 
   def no_main_scheme_alert
-    render AlertMessageComponent.new(id: 'main-scheme-empty-info') do
+    render Display::AlertComponent.new do
       'no main scheme defined in the URI attribute'
     end
   end
   def no_schemes_alert
-    render AlertMessageComponent.new(id: 'schemes-empty-info') do
+    render Display::AlertComponent.new do
       "#{@ontology.acronym} does not contain schemes (skos:ConceptScheme)"
     end
   end

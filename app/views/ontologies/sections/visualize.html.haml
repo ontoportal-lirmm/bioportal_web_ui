@@ -5,9 +5,9 @@
     - @enable_ontolobridge = !$NEW_TERM_REQUEST_ONTOLOGIES.nil? && $NEW_TERM_REQUEST_ONTOLOGIES.include?(@ontology.acronym)
     %div.tooltip
     %div#bd_content.bd_content.explore{data:{controller: 'container-splitter'}}
-      %div.sidebar.d-flex.flex-column.mr-2.card{data:{'container-splitter-target': 'container'}}
+      %div.sidebar{data:{'container-splitter-target': 'container'}}
         = render partial: 'ontologies/concepts_browsers/concepts_browser'
-      %div#concept_content.d-flex.flex-column.card.p-1.ml-2{data:{'container-splitter-target': 'container'}}
+      %div#concept_content.d-flex.flex-column{data:{'container-splitter-target': 'container'}}
         = render partial: 'concepts/show'
 
     - form_for(:search, :url => {:controller =>'search',:action=>'fetch_results'},:html=>{:id=>'search_form'}) do |f|
@@ -18,14 +18,14 @@
     = "<div id=\"error\"><h2>#{@error}</h2></div>"
 
   :javascript
-      $(document).ready(function() {
-        const ontology_acronym = "#{@ontology.acronym}"
-        let data = #{raw @instance_details.to_json} || null
+    $(document).ready(function() {
+    const ontology_acronym = "#{@ontology.acronym}"
+    let data = #{raw @instance_details.to_json} || null
 
-        if(data && Object.keys(data).length !== 0){
-          $.facebox({ajax: `/ontologies/${ontology_acronym}/instances/${encodeURIComponent(data["@id"])}`})
-        }
-      })
+    if(data && Object.keys(data).length !== 0){
+    $.facebox({ajax: `/ontologies/${ontology_acronym}/instances/${encodeURIComponent(data["@id"])}`})
+    }
+    })
 
 
 

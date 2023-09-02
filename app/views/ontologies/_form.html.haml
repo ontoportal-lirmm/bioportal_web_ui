@@ -1,220 +1,60 @@
-- button_text ||= "Create ontology"
-- title_text ||= "Submit New Ontology"
+.upload-ontology-input-field-container
+  = text_input(name: 'ontology[name]', value: @ontology.name)
+.upload-ontology-input-field-container
+  = text_input(name: 'ontology[acronym]', value: @ontology.acronym, disabled: @is_update_ontology)
+  = hidden_field_tag 'ontology[acronym]', @ontology.acronym if @is_update_ontology
 
+.upload-ontology-input-field-container#visibilityContainer
+  = select_input(label: "Visibility", name: "ontology[viewingRestriction]", values: %w[public private], selected: @ontology.viewingRestriction )
+.upload-ontology-input-field-container#visibility-group{style: 'display: none'}
+  = select_input(label: "Add or remove accounts that are allowed to view classes in this ontology using the account name", name: "ontology[acl]", values: @user_select_list, selected: @ontology.acl, multiple: true)
+
+.upload-ontology-input-field-container
+  = select_input(label: "Administrator", name: "ontology[administeredBy]", values: @user_select_list, selected: @ontology.administeredBy || session[:user].id, multiple: true)
+.upload-ontology-input-field-container
+  = render Input::InputFieldComponent.new(name: '', label:'Categories') do
+    %div.upload-ontology-chips-container
+      = hidden_field_tag 'ontology[hasDomain][]'
+      - @categories.each do |category|
+        = check_input(name: "ontology[hasDomain][]", id: category[:acronym] , label: category[:acronym], value: category[:id], checked: @ontology.hasDomain&.any?{|x| x.eql?(category[:id])})
+.upload-ontology-field-container
+  = render Input::InputFieldComponent.new(name: '', label:'Groups') do
+    %div.upload-ontology-chips-container
+      = hidden_field_tag "ontology[group][]"
+      - @groups.each do |group|
+        = check_input(name: "ontology[group][]", id: group[:acronym] , label: group[:acronym], value: group[:id], checked: @ontology.group&.any?{|x| x.eql?(group[:id])})
+
+.upload-ontology-input-field-container.mt-2
+  %span.d-flex
+    = switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is a view of another ontology?', checked: @ontology.view?)
+  %div#ontology_viewOf{style: "display: #{ !@ontology.view? ? 'none' : 'block'}"}
+    = render partial: "shared/ontology_picker_single", locals: {placeholder: "", field_name: "viewOf", selected: @ontology.viewOf}
 :javascript
-  function hideAllRestrictions() {
-    jQuery(".viewing_restriction_disabled").attr("disabled", true);
-    jQuery("div.viewing_restriction_types").addClass("hidden");
-  }
 
-  function showRestrictionPrivate() {
-    jQuery("#ontology_acl").removeAttr("disabled");
-    jQuery("#viewingRestrictionsPrivate").removeClass("hidden");
-  }
+  function showPrivateAclSelect() {
+    const visibilityGroupDiv = document.getElementById('visibility-group');
+    // Get the selected value from the select element
+    const selectElement = document.getElementById('select_ontology[viewingRestriction]');
+    const selectedValue = selectElement.value;
 
-  function showRestrictionLicensed() {
-    jQuery("#ontology_licenseInformation").removeAttr("disabled");
-    jQuery("#viewingRestrictionsLicensed").removeClass("hidden");
-  }
 
-  jQuery(document).data().bp.acronyms = #{raw LinkedData::Client::Models::Ontology.all.map {|o| o.acronym}.to_json};
-
-  jQuery(document).ready(function(){
-    // Wire up options for restriction how an ontology is viewed
-    jQuery("#ontology_viewingRestriction").change(function(){
-      var select = jQuery(this);
-      if (select.val() == "private") {
-        hideAllRestrictions()
-        showRestrictionPrivate();
-      } else if (select.val() == "licensed") {
-        hideAllRestrictions();
-        showRestrictionLicensed();
-      } else if (select.val() == "public") {
-        hideAllRestrictions();
-      }
-    });
-
-    // Make sure you can see the account select if the select list has private selected
-    if (jQuery("#ontology_viewingRestriction").val() == "private") {
-      showRestrictionPrivate();
-    } else if (jQuery("#ontology_viewingRestriction").val() == "licensed") {
-      showRestrictionLicensed();
+    // Check if the selected value is "private"
+    if (selectedValue === 'private') {
+      // If it's "private", show the visibility-group div
+      visibilityGroupDiv.style.display = 'block';
+    } else {
+      // If it's not "private", hide the visibility-group div
+      visibilityGroupDiv.style.display = 'none';
     }
-
-    jQuery("#ontology_isView").live("click", function(){
-      console.log(jQuery("#ontology_isView").is(":checked"))
-      if (jQuery("#ontology_isView").is(":checked")) {
-        jQuery("#ontology_viewOf").removeAttr('disabled').trigger("liszt:updated");
-      } else {
-        jQuery("#ontology_viewOf").attr('disabled', true).trigger("liszt:updated");
-      }
-    });
-
-    // Wire up chosen selectors
-    jQuery("#ontology_administeredBy").chosen();
-    jQuery("#ontology_acl").chosen();
-    jQuery("#ontology_hasDomain").chosen();
-    jQuery("#ontology_group").chosen();
-
-    // Make acronym upcase as you type
-    jQuery("#ontology_acronym").on('input', function(e) {
-      var input = $(this);
-      var start = input[0].selectionStart;
-      $(this).val(function (_, val) {
-        return val.toUpperCase();
-      });
-      input[0].selectionStart = input[0].selectionEnd = start;
-    });
-
-    // Check acronym as you type
-    jQuery("#ontology_acronym").on('input', function(e) {
-      var $this = $(this);
-      var errors = [];
-      var errorHTML = "";
-
-      if ($this.val().match("^[^a-z^A-Z]{1}")) {
-        errors.push("Acronym must start with a letter");
-      }
-
-      if ($this.val().match("[^-_0-9a-zA-Z]")) {
-        errors.push("Acronym must only contain the folowing characters: -, _, letters, and numbers");
-      }
-
-      if ($this.val().match(".{17,}")) {
-        errors.push("Acronym must be sixteen characters or less");
-      }
-
-      if (jQuery(document).data().bp.acronyms.indexOf($this.val()) !== -1) {
-        errors.push("Acronym already in use");
-      }
-
-      if (errors.length > 0) {
-        errorHTML = "<li>" + errors.join("</li><li>") + "</li>";
-      }
-
-      jQuery("#acronym_errors").html(errorHTML);
-    });
-
-    jQuery("#ontologyForm").validate({
-      errorClass: "ontologyFormError",
-      errorElement: "div",
-      rules: {
-        "ontology[name]": "required",
-        "ontology[acronym]": "required",
-      },
-      messages: {
-        "ontology[name]": "Please enter a name",
-        "ontology[acronym]": "Please enter an acronym",
-      },
-    });
-  });
-
-:css
-  div.ontologyFormError {
-    color: red;
-    padding-top: 3px;
   }
+  const parentDiv = document.getElementById('visibilityContainer');
+  parentDiv.addEventListener('change', () => { showPrivateAclSelect() });
 
-- unless @errors.nil?
-  .enable-lists{:style => "color:red;"}
-    %strong Errors On Form
-    %ul
-      - if @errors[:error].instance_of? OpenStruct
-        - errors = @errors[:error].to_h
-        - errors.delete :links
-        - errors.delete :context
-        - errors.to_h.each do |errors_field, error|
-          - next if error.nil?
-          <style>#ontology_#{errors_field} { border: thin solid red; }</style>
-          %li
-            - if error.instance_of? OpenStruct
-              - error_hash = error.to_h
-              - error_hash.delete :links
-              - error_hash.delete :context
-              - error_hash.each do |error_type, e|
-                = "#{error_type} : #{e}"
-            - else
-              = errors_field
-      - else
-        -# A generic fallback
-        = @errors.to_json
 
-%div.p-5
-  %div
-    %h1
-      #{title_text}
-
-  %div.p-5.card
-    %small.asterik.mb-2.text-right
-      * fields are required
-    %div.form-row
-      %div.form-group.col-md-6
-        = f.label :name, "Name"
-        %span.asterik *
-        = f.text_field :name, value: @ontology.name, class:"form-control"
-      %div.form-group.col-md-3
-        = f.label :acronym, "Acronym"
-        %span.asterik *
-        - acronym_enabled = @ontology.acronym.nil? || ! @errors.nil?
-        = f.text_field(:acronym, value: @ontology.acronym, :disabled => ! acronym_enabled, data: { acronyms: acronyms(@ontologies) }, class:"form-control")
-        %ul#acronym_errors.enable-lists{style: "color: red; padding: 3px;"}
-      %div.form-group.col-md-3
-        %div
-          - viewing_help = "<strong>Public ontologies</strong>; will be accessible to everyone via UI and API. Download can be desactivated on demand.<br/> <strong>Private ontologies</strong>; are only accessible via UI and API to logged users listed explicitly."
-          = f.label :viewingRestriction do
-            = render partial: "shared/ui-component/label_with_help", locals:{help_text: viewing_help, id:"viewing_tooltip" ,label: "Viewing Restriction"}
-        - view_restiction_options = [["Public", "public"], ["Private", "private"]]
-        - selected = @ontology.private? ? "private" : ""
-        - selected = @ontology.licensed? ? "licensed" : selected
-        - display_private = @ontology.private? ? "" : "hidden"
-        - display_licensed = @ontology.licensed? ? "" : "hidden"
-        = f.select :viewingRestriction, view_restiction_options, { :selected => selected }, class:"form-control"
-
-    %div.form-row
-      #viewingRestrictionsPrivate.form-group.col.viewing_restriction_types{class: display_private}
-        = f.label :acl do
-          Add or remove accounts that are allowed to view classes in this ontology using the account name
-        = f.select(:acl, @user_select_list, {include_blank: true, selected: @ontology.acl}, {multiple: true, :"data-placeholder" => "Select users who have access", class:"form-control"})
-    %div.form-row
-      %div#viewingRestrictionsLicensed.form-group.col.viewing_restriction_types{class: display_licensed}
-        = f.label :licenseInformation do
-          %b License Text:
-          The text below explains what licensing information you want to collect before allowing access. We will display this text and record the user's response when the user attempts to access your ontology.
-        - disabled = @ontology.licensed? ? {} : {:disabled => "true"}
-        = f.text_area :licenseInformation, { :rows => 5, :class => "viewing_restriction_disabled form-control", :style => "width: 90%;" }.merge(disabled)
-
-    %div.form-row.form-group
-      %div.col-md-1
-        = f.label :administeredBy, "Administrators", class:" col-form-label"
-        %span.asterik *
-      %div.col-md-11
-        = f.select(:administeredBy, @user_select_list ,{selected: @ontology.administeredBy || session[:user].id}, {multiple: true, :"data-placeholder" => "Select administrators", class:"form-control"})
-    %div.form-group.row
-      %div.col-md-1
-        = f.label :hasDomain, "Categories", class:"col-form-label"
-      %div.col-md-11
-        - cat_select = @categories.sort{|a,b| a.name <=> b.name}.map{|c| [c.name, c.id]}
-        = f.hidden_field(:hasDomain, {value: "", id: "ontology_hasDomain_empty_select_hack", name: "ontology[hasDomain][]"})
-        = f.select(:hasDomain, cat_select, {selected: @ontology.hasDomain}, {multiple: true, :"data-placeholder" => "Select category (domain)", class:"form-control"})
-    %div.form-group.row
-      %div.col-md-1
-        = f.label :group, "Groups", class:"col-form-label"
-      %div.col-md-11
-        - group_select = @groups.sort{|a,b| a.name <=> b.name}.map{|c| [c.name, c.id]}
-        = f.hidden_field(:group, {value: "", id: "ontology_group_empty_select_hack", name: "ontology[group][]"})
-        = f.select(:group, group_select, {selected: @ontology.group}, {multiple: true, :"data-placeholder" => "Select group", class:"form-control"})
-    %div.form-row
-      %div.from-group.col-md-6
-        = f.label :isView, "This ontology is a view of:"
-        = f.check_box :isView, checked: @ontology.view?
-        %div#viewOf_picker.row.form-group
-          - single_picker_locals = {:picker_id => "ontology_viewOf", placeholder: "Select an ontology to create a view on", field_name: "viewOf", disabled: !@ontology.view?, selected: @ontology.viewOf}
-          = render :partial => "shared/ontology_picker_single", :locals => single_picker_locals
-    %div.form-row
-      %div.from-group.col-md-6
-        = f.label :subscribe_notifications, "Subscribe to email notifications for new notes"
-        = f.check_box :subscribe_notifications
-
-    %div.d-flex.justify-content-center
-      = submit_tag "Cancel", formnovalidate: "formnovalidate", class: "btn btn-secondary mx-1 col-2"
-      = submit_tag button_text, class: "btn btn-primary mx-1 col-2"
+  jQuery("#ontology_isView").live("click", function(){
+      if (jQuery("#ontology_isView").is(":checked")) {
+        jQuery("#ontology_viewOf").removeAttr('disabled').show();
+      } else {
+        jQuery("#ontology_viewOf").attr('disabled', true).hide();
+      }
+  });

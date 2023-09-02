@@ -1,0 +1,15 @@
+= render SummarySectionComponent.new(title: "Metrics" , link: Rails.configuration.settings.links[:metrics], link_title: "Metadata properties that provide information about measurements of the ontology, such as the number of classes, individuals, etc.", show_card: false) do
+  - if @metrics.nil? || (@metrics.is_a?(Array) && @metrics.empty?) || (@metrics.respond_to?(:status) && @metrics.status == 404)
+    = empty_state_message("We have not yet calculated metrics for #{@ontology.acronym}")
+  - else
+    .metrics-container.metrics
+      - %w[classes individuals properties].each do |metric|
+        = link_to_modal nil, ontology_path(@ontology.acronym) + "/metrics_evolution?metrics_key=#{metric}",
+                        class: "metrics-item", data: { show_modal_title_value: "Metrics evolution of #{@ontology.acronym}"} do
+          %hr
+          %div
+            %h4
+              = @metrics.send(metric)
+            %p
+              = render PopupLinkTextComponent.new(text: metric.humanize)
+

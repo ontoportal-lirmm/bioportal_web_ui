@@ -1,5 +1,0 @@
-.file_uploader.d-flex.justify-content-center.p-2.bg-secondary{data: {controller: "file-input"}}
-  .file-drop-area.w-100
-    %span.choose-file-button Choose file
-    %span.file-message{data:{'file-input': {target: 'message'}}} or drag and drop file here
-    = file_field_tag @name, class: 'file-input', data:{'file-input-target': 'input', action: 'file-input#updateMessage'}

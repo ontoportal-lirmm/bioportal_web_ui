@@ -1,23 +1,23 @@
-- require 'cgi'
-%div.py-3.pl-3.hide-if-loading
+%div.hide-if-loading.concept_details_component
   %div.card
-    %table.minimal.concept_details{cellpadding: "0", cellspacing: "0", width: "100%"}
-      %tr{style:"visibility:hidden"}
-        %td{style:"width:30%"}
-        %td
-      = header
+    = header
   %div.my-3
-  .accordion.card{id: "accordion-#{@id}"}
-    .card
-      %div{id: "heading-#{@id}"}
-        %h2.mb-0.text-right
-          %button.btn.btn-link{"data-target" => "#collapse-#{@id}", "data-toggle" => "collapse"}
-            %i.fas.fa-sort
-      .collapse.show{id: "collapse-#{@id}", "data-parent" => "#accordion-#{@id}"}
-        %table.minimal.concept_details{cellpadding: "0", cellspacing: "0", width: "100%"}
-          - top_set, leftover_set, bottom_set = filter_properties(@top_keys, @bottom_keys, @exclude_keys, @concept_properties)
-          = render_properties(top_set, @acronym)
-          = render_properties(leftover_set, @acronym)
-          - sections&.each do |section|
+  %div.raw-table
+    = render DropdownContainerComponent.new(title: 'Raw data', id: "accordion-#{@id}") do
+      - top_set, leftover_set, bottom_set = filter_properties(@top_keys, @bottom_keys, @exclude_keys, @concept_properties)
+      = render TableComponent.new(stripped: true) do |t|
+
+        - row_hash_properties(top_set, @acronym).each do |row|
+          - t.add_row(*row)
+
+        - row_hash_properties(leftover_set, @acronym).each do |row|
+          - t.add_row(*row)
+
+
+        - sections.each do |section|
+          - t.row do
             = section
-          = render_properties(bottom_set, @acronym)
+
+
+        - row_hash_properties(bottom_set, @acronym).each do |row|
+          - t.add_row(*row)

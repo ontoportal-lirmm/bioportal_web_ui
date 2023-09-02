@@ -9,10 +9,10 @@
     .card-body
       %div#mappings_select
       - if @options.empty?
-        No mappings available
+        = t('mappings.no_mappings_available')
       - else
-        = select('search', 'ontologies', @options, {:include_blank => ""},{:onchange=>"loadMappings(this.value);", "data-placeholder".to_sym => "Select an Ontology", autocomplete: "off"})
+        = select('search', 'ontologies', @options, {:include_blank => ""},{:onchange=>"loadMappings(this.value);", "data-placeholder".to_sym => t('select_ontologies_list'), autocomplete: "off"})
         #mapping_load
           %img{src: asset_path("jquery.simple.tree/spinner.gif")}/
-          Loading mappings...
+          = t('mappings.loading_mappings')
         #mappingCount{style:'min-height: 300px;'}

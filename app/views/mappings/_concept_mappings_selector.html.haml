@@ -2,13 +2,13 @@
   #headingTwo.card-header
     %h2.mb-0
       %button.btn.btn-link.btn-block.text-left.collapsed{"data-target" => "#collapseTwo", "data-toggle" => "collapse", :type => "button"}
-        Find mappings of a class/concept
-        = link_to(Rails.configuration.settings.links[:mappings], id: "mappings-help", "aria-label": "View mappings help") do
+        = t('mappings.find_mappings')
+        = link_to(Rails.configuration.settings.links[:mappings], id: "mappings-help", "aria-label": t('view_mappings_help')) do
           %i.fas.fa-question-circle.fa-lg{"aria-hidden": "true"}
   #collapseTwo.collapse{"data-parent" => "#accordionExample"}
     .card-body
       %div
-      = render partial: 'shared/concept_picker', locals: {name: :concept_mapping_selector, concept_label: '', ontology_acronym: 'all', include_definition: true }
+      = render partial: 'shared/concept_picker', locals: {name: :concept_mapping_selector, concept_label: '', ontology_acronym: t('all'), include_definition: true }
     %div.mt-1
       = render TurboFrameComponent.new(id:'concept_mappings')
 :javascript

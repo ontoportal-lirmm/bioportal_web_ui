@@ -865,6 +865,220 @@ jQuery(".admin.index").ready(function() {
   });
 
   // end: BUTTON onclick actions -----------------------------------
+
+  //==============================================================
+  //      GROUPS MANAGEMENT
+  //==============================================================
+  displayGroups({});
+
+  // allow selecting of rows, except on link clicks
+  jQuery('#adminGroups tbody').on('click', 'tr', function(event) {
+    if (event.target.tagName.toLowerCase() != 'a') {
+      jQuery(this).toggleClass('selected');
+    }
+  });
+
+  jQuery("div.groups_nav").html(`
+    <span style="padding-left: 30px;">
+        <a class="link_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" id="group_new_action" href="javascript:;">
+      <span class="ui-button-text">New</span>
+    </a>
+    </span>
+    <span style="padding-left:30px;">Apply to Selected Rows:&nbsp;&nbsp;&nbsp;&nbsp;
+      <select id="group_admin_action" name="group_admin_action">
+        <option value="">Please Select</option>        
+        <option value="delete">Delete</option>
+      </select>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <a class="link_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" href="javascript:;" id="group_admin_action_submit">
+        <span class="ui-button-text">Go</span>
+      </a>
+    </span>`);
+
+  jQuery('#group_admin_action_submit').on('click', function(event) {
+      var action = jQuery('#group_admin_action').val();
+
+      if (!action) {
+        alertify.alert("Please choose an action to perform on the selected groups.");
+        return;
+      }
+
+      switch(action) {
+        case "delete":
+          DeleteGroups.act();
+          break;
+      }
+  });
+
+  jQuery(document).on("reveal.facebox", function (event) {
+    jQuery("#facebox form[data-collection=groups]").validate({
+      errorClass: "groupFormError",
+      errorElement: "div",
+      rules: {
+        "group[name]": "required",
+        "group[acronym]": "required",
+      },
+      messages: {
+        "group[name]": "Please enter a name",
+        "group[acronym]": "Please enter an acronym",
+      },
+    });
+
+  });
+
+  jQuery('#group_new_action').on('click', function (event) {
+    jQuery.facebox({
+      ajax: "/admin/groups/new?time=" + new Date().getTime()
+    });
+  });
+
+  jQuery('#adminGroups').on('click', 'a.edit-group', function(event) {
+    jQuery.facebox({
+      ajax: "/admin/groups/" + encodeURIComponent(event.target.dataset.groupName) + "/edit?time=" + new Date().getTime()
+    });
+  });
+
+
+  //==============================================================
+  //      CATEGORIES MANAGEMENT
+  //==============================================================
+  displayCategories({});
+
+  // allow selecting of rows, except on link clicks
+  jQuery('#adminCategories tbody').on('click', 'tr', function(event) {
+    if (event.target.tagName.toLowerCase() != 'a') {
+      jQuery(this).toggleClass('selected');
+    }
+  });
+
+  jQuery("div.categories_nav").html(`
+    <span style="padding-left: 30px;">
+        <a class="link_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" id="category_new_action" href="javascript:;">
+      <span class="ui-button-text">New</span>
+    </a>
+    </span>
+    <span style="padding-left:30px;">Apply to Selected Rows:&nbsp;&nbsp;&nbsp;&nbsp;
+      <select id="category_admin_action" name="category_admin_action">
+        <option value="">Please Select</option>        
+        <option value="delete">Delete</option>
+      </select>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <a class="link_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" href="javascript:;" id="category_admin_action_submit">
+        <span class="ui-button-text">Go</span>
+      </a>
+    </span>`);
+
+  jQuery('#category_admin_action_submit').on('click', function(event) {
+    var action = jQuery('#category_admin_action').val();
+
+    if (!action) {
+      alertify.alert("Please choose an action to perform on the selected categories.");
+      return;
+    }
+
+    switch(action) {
+      case "delete":
+        DeleteCategories.act();
+        break;
+    }
+  });
+
+  jQuery(document).on("reveal.facebox", function (event) {
+    jQuery("#facebox form[data-collection=categories]").validate({
+      errorClass: "categoryFormError",
+      errorElement: "div",
+      rules: {
+        "category[name]": "required",
+        "category[acronym]": "required",
+      },
+      messages: {
+        "category[name]": "Please enter a name",
+        "category[acronym]": "Please enter an acronym",
+      },
+    });
+
+  });
+
+  jQuery('#category_new_action').on('click', function (event) {
+    jQuery.facebox({
+      ajax: "/admin/categories/new?time=" + new Date().getTime()
+    });
+  });
+
+  jQuery('#adminCategories').on('click', 'a.edit-category', function(event) {
+    jQuery.facebox({
+      ajax: "/admin/categories/" + encodeURIComponent(event.target.dataset.categoryName) + "/edit?time=" + new Date().getTime()
+    });
+  });
+
+  //==============================================================
+  //      MANAGEMENT COMMONS
+  //==============================================================
+
+  jQuery(document).on("click", "#facebox a.dismiss-dialog", function (event) {
+    jQuery(document).trigger('close.facebox');
+  });
+
+  jQuery(document).on('ajax:success', "#facebox form.admin-collection-form", (event, response, status, xhr) => {
+    jQuery(document).trigger('close.facebox');
+    if (response && response.success) {
+      _showStatusMessages([response.success], [], [], false);
+    }
+    refreshCollection(event.target.dataset.collection);
+  });
+  jQuery(document).on('ajax:error', "#facebox form.admin-collection-form", (event, xhr, status, error) => {
+    if (xhr.responseJSON) {
+      displayDialogErrorMessages(xhr.responseJSON)
+    } else {
+      displayDialogErrorMessages(status);
+    }
+  });
+
+  function refreshCollection(collectionName) {
+    switch (collectionName) {
+      case "groups":
+        displayGroups({});
+        break;
+      case "categories":
+        displayCategories({});
+        break;
+      default:
+        alertify.alert("Unable to refresh unknown collection '" + collectionName + "'");
+    }
+  }
+
+  function displayDialogErrorMessages(data, settings) {
+    settings ||= {}
+
+    let append = settings.append || false;
+
+    let errorListNode = jQuery("#facebox .alert-box ul");
+
+    if (!append) {
+      errorListNode.empty();
+    }
+
+    let messages = [];
+    if (typeof data == "string" || data instanceof String) {
+      messages.push(data)
+    }
+    if (typeof data == "object" && data.errors) {
+      messages.push.apply(messages, Object.values(data.errors));
+    }
+    if (typeof data == "object" && data.status && data.status / 200 != 1) {
+      messages.push("Request error: " + data.statusText);
+    }
+
+    for (let msg of messages) {
+      errorListNode.append(jQuery("<li></li>").text(msg))
+    }
+
+    if (messages.length == 0) {
+      errorListNode.parents(".alert-box").hide();
+    } else {
+      errorListNode.parents(".alert-box").show();
+    }
+  }
 });
 
 
@@ -1041,3 +1255,337 @@ DeleteUsers.prototype.ajaxCall = function (username){
 DeleteUsers.act = function(user) {
     new DeleteUsers(user).ajaxCall(user);
 };
+
+/* groups part */
+function displayGroups(data, group) {
+    let ontTable = null;
+    let allRows
+    if (jQuery.fn.dataTable.isDataTable('#adminGroups')) {
+        ontTable = jQuery('#adminGroups').DataTable().ajax.reload();
+    } else {
+        ontTable = jQuery("#adminGroups").DataTable({
+            "ajax": {
+                "url": "/admin/groups",
+                "contentType": "application/json",
+                "dataSrc": function (json) {
+                    return populateGroupRows(json);
+                }
+            },
+            "rowCallback": function(row, data, index) {
+                var acronym = jQuery('td:nth-child(4)', row).text();
+
+                jQuery(row).attr("id", "tr_" + acronym);
+            },
+            "initComplete": function(settings, json) {
+            },
+            "columnDefs": [
+                {
+                    "targets": 0,
+                    "searchable": true,
+                    "title": "Name",
+                },
+                {
+                    "targets": 1,
+                    "searchable": true,
+                    "title": "Description",
+                },
+                {
+                    "targets": 2,
+                    "searchable": true,
+                    "title": "Created",
+                },
+                {
+                    "targets": 3,
+                    "searchable": true,
+                    "title": "Id",
+                },
+                {
+                    "targets": 4,
+                    "searchable": false,
+                    "orderable": false,
+                    "title": "Count",
+                },
+                {
+                  "targets": 5,
+                  "searchable": false,
+                  "orderable": false,
+                  "title": "Actions",
+                  "width": "200px"
+                }
+            ],
+            "autoWidth": false,
+            "lengthChange": false,
+            "searching": true,
+            "language": {
+                "search": "Filter: ",
+                "emptyTable": "No groups available"
+            },
+            "info": true,
+            "paging": true,
+            "pageLength": 100,
+            "ordering": true,
+            "responsive": true,
+            "dom": '<"groups_nav"><"top"fi>rtip',
+            "stripeClasses": ["", "alt"],
+        });
+    }
+    return ontTable;
+}
+
+function populateGroupRows(data) {
+    let groups = data['groups'];
+    let allRows = groups.map(group => {
+        let name = group['name'];
+        let description = group['description']
+        let created = group['created'];
+        let id = group['acronym'];
+        let nb = [
+          '<a href="/ontologies?groups='+id+'" target="_blank"> ' + group['ontologies'].length + ' </a>',
+        ];
+        let actions = [
+            '<a href="javascript:;" class="edit-group mx-1" data-group-name="' + id + '">Edit</a>',
+        ]
+        return [name, description, created, id , nb, actions.join('|')];
+    })
+
+    return allRows;
+}
+
+function DeleteGroups() {
+}
+
+DeleteGroups.act = function(groupName) {
+  let group2delete = jQuery("#adminGroups tr.selected td:nth-child(4)").map(function(index, value) { return value.textContent.trim();}).toArray();
+  let confirmMsg = "You are about to delete the following groups: <br style=\"margin-bottom:5px;\"><span style=\"color:red;font-weight:bold;\">" + group2delete.join(",") + "</span><br><br style=\"margin:10px 0;\"/><b>Should I proceed?</b>";
+  alertify.confirm(confirmMsg, (e) => {
+    if (e) {
+      _clearStatusMessages();
+      let success = [];
+      let errors = [];
+      let notices = [];
+      let errorState = false;
+      let deferredObj = jQuery.Deferred();
+      let initialDeferredObj = deferredObj;
+
+      for (let group of group2delete) {
+        fun = () => { return jQuery.ajax("/admin/groups/" + encodeURIComponent(group), {
+            method: "DELETE",
+            dataType: "json",
+            success: function(data, msg) {
+              var reg = /\s*,\s*/g;
+
+              if (data.errors) {
+                errorState = true;
+                errors.push.apply(errors, data.errors);
+              }
+
+              if (data.success) {
+                success.push(data.success);
+              }
+
+              if (data.notices) {
+                notices.push.apply(notices, data.notices);
+              }
+
+              _showStatusMessages(success, errors, notices, false);
+            },
+            error: function(request, textStatus, errorThrown) {
+              errorState = true;
+              errors.push(request.status + ": " + errorThrown);
+              _showStatusMessages(success, errors, notices, false);
+            },
+            complete: function(request, textStatus) {
+              if (errorState) {
+                jQuery("#tr_" + group).removeClass('selected');
+              }
+            }
+          })
+        };
+        deferredObj = deferredObj.then(fun, fun);
+      }
+      // hide progress message and deselect rows after ALL operations have completed
+      deferredObj.always(function () {
+        jQuery("#adminGroups").DataTable().ajax.reload();
+      });
+
+      initialDeferredObj.resolve();
+    }
+  });
+}
+/* categories part */
+function displayCategories(data, category) {
+  let ontTable = null;
+  let allRows
+  if (jQuery.fn.dataTable.isDataTable('#adminCategories')) {
+    ontTable = jQuery('#adminCategories').DataTable().ajax.reload();
+  } else {
+    ontTable = jQuery("#adminCategories").DataTable({
+      "ajax": {
+        "url": "/admin/categories",
+        "contentType": "application/json",
+        "dataSrc": function (json) {
+          return populateCategoryRows(json);
+        }
+      },
+      "rowCallback": function(row, data, index) {
+        var acronym = jQuery('td:nth-child(4)', row).text();
+
+        jQuery(row).attr("id", "tr_" + acronym);
+      },
+      "initComplete": function(settings, json) {
+      },
+      "columnDefs": [
+        {
+          "targets": 0,
+          "searchable": true,
+          "title": "Name",
+        },
+        {
+          "targets": 1,
+          "searchable": true,
+          "title": "Description",
+        },
+        {
+          "targets": 2,
+          "searchable": true,
+          "title": "Created",
+        },
+        {
+          "targets": 3,
+          "searchable": true,
+          "title": "Id",
+        },
+        {
+          "targets": 4,
+          "searchable": false,
+          "orderable": false,
+          "title": "Parent",
+        },
+        {
+          "targets": 5,
+          "searchable": false,
+          "orderable": false,
+          "title": "Count",
+        },
+        {
+          "targets": 6,
+          "searchable": false,
+          "orderable": false,
+          "title": "Actions",
+          "width": "250px"
+        }
+      ],
+      "autoWidth": false,
+      "lengthChange": false,
+      "searching": true,
+      "language": {
+        "search": "Filter: ",
+        "emptyTable": "No categories available"
+      },
+      "info": true,
+      "paging": true,
+      "pageLength": 100,
+      "ordering": true,
+      "responsive": true,
+      "dom": '<"categories_nav"><"top"fi>rtip',
+      "stripeClasses": ["", "alt"],
+    });
+  }
+  return ontTable;
+}
+
+function populateCategoryRows(data) {
+  let categories = data['categories'];
+  let allRows = categories.map(category => {
+    let name = category['name'];
+    let description = category['description']
+    let created = category['created'];
+    let id = category['acronym'];
+    let parentCategory = category['parentCategory'];
+    let nb = [
+      '<a href="/ontologies?categories='+id+'" target="_blank"> ' + category['ontologies'].length + ' </a>',
+    ];
+    let actions = [
+      '<a href="javascript:;" class="edit-category mx-1" data-category-name="' + id + '">Edit</a>',
+    ]
+    return [name, description, created, id , parentCategory, nb , actions.join('|')];
+  })
+
+  return allRows;
+}
+
+function DeleteCategories() {
+}
+
+DeleteCategories.act = function(groupName) {
+  let category2delete = jQuery("#adminCategories tr.selected td:nth-child(4)").map(function(index, value) { return value.textContent.trim();}).toArray();
+  let confirmMsg = "You are about to delete the following categories: <br style=\"margin-bottom:5px;\"><span style=\"color:red;font-weight:bold;\">" + category2delete.join(",") + "</span><br><br style=\"margin:10px 0;\"/><b>Should I proceed?</b>";
+  alertify.confirm(confirmMsg, (e) => {
+    if (e) {
+      _clearStatusMessages();
+      let success = [];
+      let errors = [];
+      let notices = [];
+      let errorState = false;
+      let deferredObj = jQuery.Deferred();
+      let initialDeferredObj = deferredObj;
+
+      for (let category of category2delete) {
+        fun = () => { return jQuery.ajax("/admin/categories/" + encodeURIComponent(category), {
+          method: "DELETE",
+          dataType: "json",
+          success: function(data, msg) {
+            var reg = /\s*,\s*/g;
+
+            if (data.errors) {
+              errorState = true;
+              errors.push.apply(errors, data.errors);
+            }
+
+            if (data.success) {
+              success.push(data.success);
+            }
+
+            if (data.notices) {
+              notices.push.apply(notices, data.notices);
+            }
+
+            _showStatusMessages(success, errors, notices, false);
+          },
+          error: function(request, textStatus, errorThrown) {
+            errorState = true;
+            errors.push(request.status + ": " + errorThrown);
+            _showStatusMessages(success, errors, notices, false);
+          },
+          complete: function(request, textStatus) {
+            if (errorState) {
+              jQuery("#tr_" + category).removeClass('selected');
+            }
+          }
+         })
+        };
+        deferredObj = deferredObj.then(fun, fun);
+      }
+      // hide progress message and deselect rows after ALL operations have completed
+      deferredObj.always(function () {
+        jQuery("#adminCategories").DataTable().ajax.reload();
+      });
+
+      initialDeferredObj.resolve();
+    }
+  });
+}
+
+/*****************************
+ *  COMMON FUNCTIONS
+ *****************************/
+function _clearStatusMessages() {
+  jQuery("#progress_message").hide();
+  jQuery("#success_message").hide();
+  jQuery("#error_message").hide();
+  jQuery("#info_message").hide();
+  jQuery("#progress_message").html("");
+  jQuery("#success_message").html("");
+  jQuery("#error_message").html("");
+  jQuery("#info_message").html("");
+}

@@ -1,12 +1,12 @@
-- @title = "NCBO Annotator +"
+- @title = t('nbco_annotatosplus.index.title')
 
 %head
   = javascript_include_tag "bp_annotator"
 
-%div.container-fluid.annotator
+%div.container-fluid.annotator.flex-grow-1
   %div.row
     %div.col
-      %h2.mt-3 NCBO Annotator +
+      %h2.mt-3= t('nbco_annotatosplus.index.title')
       %p
         = t('nbco_annotatosplus.index.intro', organization: $ORG).html_safe
         = link_to(help_path(anchor: "Annotator_Tab"), id: "annotator-help", target: "_blank") do
@@ -17,82 +17,82 @@
       %form
         %div.form-group
           = hidden_field_tag :annotation_sample_text, t('nbco_annotatosplus.index.sample_text')
-          = text_area_tag("annotation_text", nil, rows: 10, class: "form-control", placeholder: "Enter or paste text to be annotated", "aria-describedby": "annotateTextHelpBlock")
+          = text_area_tag("annotation_text", nil, rows: 10, class: "form-control", placeholder: t('nbco_annotatosplus.enter_paste_text_to_annotate'), "aria-describedby": "annotateTextHelpBlock")
           %small#annotateTextHelpBlock.form-text
-            %a#insert_text_link{href: "javascript:void(0);"} insert sample text
+            %a#insert_text_link{href: "javascript:void(0);"}= t('nbco_annotatosplus.insert_sample_text')
 
-        %a#advancedOptionsLink{:href => "javascript:void(0);"} Show advanced options >>
+        %a#advancedOptionsLink{:href => "javascript:void(0);"}= t('nbco_annotatosplus.show_advanced_options') >>
 
         %div#advanced-options-container.mt-4
           %div.form-group
             %div.custom-control.custom-checkbox.custom-control-inline
               = check_box_tag("longest_only", "all", false, class: "custom-control-input")
-              %label.custom-control-label{for: "longest_only"} Match longest only
+              %label.custom-control-label{for: "longest_only"}= t('nbco_annotatosplus.match_longest_only')
 
             %div.custom-control.custom-checkbox.custom-control-inline
               = check_box_tag("whole_word_only", "all", false, class: "custom-control-input")
-              %label.custom-control-label{for: "whole_word_only"} Match partial words
+              %label.custom-control-label{for: "whole_word_only"}= t('nbco_annotatosplus.match_partial_words')
 
             %div.custom-control.custom-checkbox.custom-control-inline
               = check_box_tag("mappings", "all", false, id: "mappings_all", class: "custom-control-input")
-              %label.custom-control-label{for: "mappings_all"} Include mappings
+              %label.custom-control-label{for: "mappings_all"}= t('nbco_annotatosplus.include_mappings')
 
             %div.custom-control.custom-checkbox.custom-control-inline
               = check_box_tag("exclude_numbers", "all", false, class: "custom-control-input")
-              %label.custom-control-label{for: "exclude_numbers"} Exclude numbers
+              %label.custom-control-label{for: "exclude_numbers"}= t('nbco_annotatosplus.exclude_numbers')
 
             %div.custom-control.custom-checkbox.custom-control-inline
               = check_box_tag("exclude_synonyms", "all", false, class: "custom-control-input")
-              %label.custom-control-label{for: "exclude_synonyms"} Exclude synonyms
+              %label.custom-control-label{for: "exclude_synonyms"}= t('nbco_annotatosplus.exclude_synonyms')
 
           %div.form-group
-            %label{for: "ontology_ontologyId"} Select ontologies
+            %label{for: "ontology_ontologyId"}= t('nbco_annotatosplus.select_ontologies_list')
             = select_tag "ontology_ontologyId", options_for_select(@ontologies_for_select), multiple: true, data: { placeholder: "Click here to select ontologies" }, class: "form-control", "aria-describedby": "selectOntologiesHelpBlock"
-            %small#selectOntologiesHelpBlock.form-text.text-muted Start typing to select ontologies or leave blank to use all
+            %small#selectOntologiesHelpBlock.form-text.text-muted= t('nbco_annotatosplus.select_ontologies')
 
           - if @sem_type_ont
             %div.form-group
-              %label{for: "semantic_types"} Select UMLS semantic types
+              %label{for: "semantic_types"}= t('nbco_annotatosplus.select', t('nbco_annotatosplus.umls.semantic_types'))
               = select_tag("semantic_types", options_for_select(@semantic_types_for_select), multiple: "true", class: "form-control", "aria-describedby": "selectSemanticTypesHelpBlock")
-              %small#selectSemanticTypesHelpBlock.form-text.text-muted Start typing to select UMLS semantic types or leave blank to use all
+              %small#selectSemanticTypesHelpBlock.form-text.text-muted= t('nbco_annotatosplus.start_typing_to_select', t('nbco_annotatosplus.umls.semantic_types'))
 
             %div.form-group
-              %label{for: "semantic_groups"} Select UMLS semantic groups
+              %label{for: "semantic_groups"}= t('nbco_annotatosplus.select', t('nbco_annotatosplus.umls.semantic_groups'))
               = select_tag("semantic_groups", options_for_select(@semantic_groups_for_select), multiple: "true", class: "form-control", "aria-describedby": "selectSemanticGroupsHelpBlock")
-              %small#selectSemanticGroupsHelpBlock.form-text.text-muted Start typing to select UMLS semantic groups or leave blank to use all
+              %small#selectSemanticGroupsHelpBlock.form-text.text-muted= t('nbco_annotatosplus.start_typing_to_select', t('nbco_annotatosplus.umls.semantic_groups'))
 
           %div.form-group
-            %label{for: "class_hierarchy_max_level"} Include ancestors up to level:
+            %label{for: "class_hierarchy_max_level"}= t('nbco_annotatosplus.include_ancestors_up_to_level') + ":"
             - options = [["none", 0], *(1..10).map {|i| [i, i]}, ["all", 999]]
             = select_tag("class_hierarchy_max_level", options_for_select(options, 0), class: "form-control")
 
           %div.form-group
-            %label{for: "score"} Include score:
+            %label{for: "score"}= t('nbco_annotatosplus.include_score') + ":"
             - options = [["none", ""], ["old", "old"], ["cvalue", "cvalue"], ["cvalueh", "cvalueh"]]
             = select_tag(:score, options_for_select(options, 0), class: "form-control", "aria-describedby": "includeScoreHelpBlock")
-            %small#includeScoreHelpBlock.form-text.text-muted Score annotations following the previous 2009 NCBO measure (old) or the C-Value measure (cvalue). If hierarchy expansion is used, then prefer cvalueh. 
+            %small#includeScoreHelpBlock.form-text.text-muted= t('nbco_annotatosplus.score_help')
 
           %div.form-group
-            %label{for: "score_threshold"} Filter by score threshold:
+            %label{for: "score_threshold"}= t('nbco_annotatosplus.filters.score_threshold') + ":"
             = number_field_tag(:score_threshold, 0, id: "score_threshold", class: "form-control", "aria-describedby": "scoreThresholdHelpBlock")
-            %small#scoreThresholdHelpBlock.form-text.text-muted Specify the minimum score value for annotations 
+            %small#scoreThresholdHelpBlock.form-text.text-muted= t('nbco_annotatosplus.filters.score_threshold_help')
 
           %div.form-group
-            %label{for: "confidence_threshold"} Filter confidence threshold:
+            %label{for: "confidence_threshold"}= t('nbco_annotatosplus.filters.confidence_threshold') + ":"
             = number_field_tag(:confidence_threshold, 0, min: 0, max: 100, id: "confidence_threshold", class: "form-control", "aria-describedby": "confidenceThresholdHelpBlock")
-            %small#confidenceThresholdHelpBlock.form-text.text-muted Specify the minimum position in the scoring distribution (between 1 and 100)
+            %small#confidenceThresholdHelpBlock.form-text.text-muted= t('nbco_annotatosplus.filters.confidence_threshold_help')
 
           - if @recognizers.length > 1
             %div.form-group
-              %label{for: "recognizer"} Entity recognizer:
+              %label{for: "recognizer"}= t('nbco_annotatosplus.recognizer') + ":"
               - default_recognizer = @recognizers.include?("mgrep") ? "mgrep" : @recognizers.first
               = select_tag("recognizer", options_for_select(@recognizers.map {|r| [r, r]}, default_recognizer), class: "form-control")
 
           %div.form-group
             %div.custom-control.custom-checkbox
               = check_box_tag("fast_context", :all, false, class: "custom-control-input")
-              %label.custom-control-label{for: "fast_context"} FastContext
-              %small#fast_contextnHelp.form-text.text-muted Enable FastContext to detect : if a concept has been negated (affirmed, negated), who experienced the found concept (patient, other), when the annotated concept occurred (recent, historical, hypothetical), and/or if the annotated concept is uncertain (certain, uncertain).
+              %label.custom-control-label{for: "fast_context"}= t('nbco_annotatosplus.fast_context.title')
+              %small#fast_contextnHelp.form-text.text-muted= t('nbco_annotatosplus.fast_context.help')
 
         %div.my-4
           = button_tag("Get annotations", type: "button", id: "annotator_button", class: "btn btn-primary btn-lg")
@@ -104,9 +104,9 @@
     %div.col
       #annotations_container
         #result_counts
-        %h4 Annotations
+        %h4= t('nbco_annotatosplus.annotations')
         #filter_list{:style => "font-size: 9pt; color: gray; display: none; clear: both; margin: -15px 0 5px"}
-          %span#filter_title> Results are filtered by:
+          %span#filter_title> #{t('nbco_annotatosplus.filters.by.title') + " :"}:&nbsp;
           \&nbsp;
           %span#filter_names
         #results_error{:style => "color: red; margin-bottom: 7px;"}
@@ -114,45 +114,45 @@
           %thead
             %tr
               %th
-                Class
+                = t('nbco_annotatosplus.filters.by.class')
                 %span.popup_container
                   %span.bp_popup_link_container
-                    %a#filter_classes.bp_popup_link{:href => "javascript:void(0);"} filter
+                    %a#filter_classes.bp_popup_link{:href => "javascript:void(0);"}= t('nbco_annotatosplus.filters.by.filter')
                   %div#classes_filter_list.bp_popup_list
               %th
-                Ontology
+                = t('nbco_annotatosplus.filters.by.ontology')
                 %span.popup_container
                   %span.bp_popup_link_container
-                    %a#filter_ontologies.bp_popup_link{:href => "javascript:void(0);"} filter
+                    %a#filter_ontologies.bp_popup_link{:href => "javascript:void(0);"}= t('nbco_annotatosplus.filters.by.filter')
                   %div#ontology_filter_list.bp_popup_list
               %th{class: "match_type"}
-                Type
+                = t('nbco_annotatosplus.filters.by.match_type')
                 %span.popup_container
                   %span.bp_popup_link_container
-                    %a#filter_match_type.bp_popup_link{:href => "javascript:void(0);"} filter
+                    %a#filter_match_type.bp_popup_link{:href => "javascript:void(0);"}= t('nbco_annotatosplus.filters.by.filter')
                   %div#match_type_filter_list.bp_popup_list
-              %th UMLS Sem Type
-              %th{class: "match_context"} Context
+              %th= t('nbco_annotatosplus.filters.by.umls_sem_type')
+              %th{class: "match_context"}= t('nbco_annotatosplus.filters.by.match_context')
               %th
-                Matched Class
+                = t('nbco_annotatosplus.filters.by.matched_class')
                 %span.popup_container
                   %span.bp_popup_link_container
-                    %a#filter_matched_classes.bp_popup_link{:href => "javascript:void(0);"} filter
+                    %a#filter_matched_classes.bp_popup_link{:href => "javascript:void(0);"}= t('nbco_annotatosplus.filters.by.filter')
                   %div#matched_classes_filter_list.bp_popup_list
               %th
-                Matched Ontology
+                = t('nbco_annotatosplus.filters.by.matched_ontology')
                 %span.popup_container
                   %span.bp_popup_link_container
-                    %a#filter_matched_ontologies.bp_popup_link{:href => "javascript:void(0);"} filter
+                    %a#filter_matched_ontologies.bp_popup_link{:href => "javascript:void(0);"}= t('nbco_annotatosplus.filters.by.filter')
                   %div#matched_ontology_filter_list.bp_popup_list
-              %th Score
-              %th Negation
-              %th Experiencer
-              %th Temporality
-              %th Certainty
+              %th= t('nbco_annotatosplus.filters.by.score')
+              %th= t('nbco_annotatosplus.filters.by.negation')
+              %th= t('nbco_annotatosplus.filters.by.experiencer')
+              %th= t('nbco_annotatosplus.filters.by.temporality')
+              %th= t('nbco_annotatosplus.filters.by.certainty')
           %tbody
         %div.my-3
-          %b Format results as:
+          %b= t('nbco_annotatosplus.filters.format_results_as') + ":"
         %div.my-3
           %span#download_links_tabdelimited.link_button.ui_button
           %span#download_links_json.link_button.ui_button
@@ -160,8 +160,8 @@
           %span#download_links_text.link_button.ui_button
           -# %span#download_links_xml.link_button.ui_button
         %div.mt-3
-          Reproduce these results using the 
+          =t('nbco_annotatosplus.filters.reproduce_results_using')
           %span#annotator_parameters
         %div.mb-4
-          Additional parameters explained at
+          =t('nbco_annotatosplus.filters.additional_parameters_explained_at')
           = link_to('Annotator API documentation', "#{$REST_URL}/documentation#nav_annotator", target: "_blank")

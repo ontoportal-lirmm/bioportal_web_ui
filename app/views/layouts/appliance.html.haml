@@ -28,9 +28,10 @@
   %body{:class => "#{controller_name} #{action_name}"}
     = render partial: "layouts/topnav"
     
-    %div
+    %div.flex-grow-1
       = render partial: "layouts/notices"
-      = render TurboModalComponent.new(id: 'application_modal')
+      = modal_frame_container
+
       = yield
 
     = render partial: "layouts/footer"

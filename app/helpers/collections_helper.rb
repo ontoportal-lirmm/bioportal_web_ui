@@ -42,7 +42,7 @@ module CollectionsHelper
   end
 
   def no_collections_alert
-    render AlertMessageComponent.new(id: 'collection-empty-info') do
+    render Display::AlertComponent.new do
       "#{@ontology.acronym} does not contain collections (skos:Collection)"
     end
   end

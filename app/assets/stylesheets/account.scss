@@ -3,7 +3,9 @@
     display: flex;
     justify-content: center;
     margin: 30px 0;
-
+}
+.account-page-center svg path{
+    fill: var(--primary-color)
 }
 .account-page-title{
     font-size: 18px;
@@ -131,10 +133,6 @@
     margin-left: 10px;
     margin-bottom: 5px;
 }
-svg path{
-    fill: var(--primary-color);
-}
-
 .account-page-subscribe-button{
     border: 1px solid var(--primary-color);
     text-decoration: none;

@@ -1,0 +1,7 @@
+- if  show_divider?
+  %div.dropdown-divider
+- if header?
+  %h6.dropdown-header= header
+- items.each do |i|
+  %span.dropdown-item
+    = i

@@ -14,11 +14,11 @@
   }
 
   a.btn.btn-link {
-    padding: 0;  
+    padding: 0;
   }
 }
 
-.concept_details td:nth-child(1) {
+.concept_details td:nth-child(2) {
   white-space: nowrap;
 }
 
@@ -30,4 +30,123 @@ div.synonym-change-request {
 
 div.synonym-change-request button {
   padding: 0px;
+}
+.nav-link.active{
+  border-radius: 5px;
+}
+.concepts-general-details{
+  width: 870px;
+  border-radius: 5px;
+  border: 1px solid #DFDFDF;
+}
+.concepts-nav-item{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.concepts-nav-item a{
+  margin: 12px 24px;
+  color: #888888 !important;
+  cursor: pointer;
+}
+.concepts-tabs-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.concepts-tabs{
+  display: flex;
+  justify-content: space-between;
+  width: 589px;
+}
+.concepts-active-tab a{
+  font-weight: 600;
+  color: var(--primary-color) !important;
+}
+.concepts-active-tab hr{
+  margin: 0;
+  border: 1px solid var(--primary-color);
+  border-radius: 5px;
+  display: block !important;
+  width: 100%;
+}
+.concepts-nav-item hr{
+  margin: 0;
+  display: none;
+}
+#concepts-header-line{
+  margin: 0;
+}
+.concepts-json{
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--primary-color);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 40px;
+    transition: background-color ease 0.3s;
+}
+.concepts-json:hover{
+  background-color: var(--primary-color);
+
+}
+.concepts-json:hover svg path{
+  fill: white;
+}
+
+.concepts-content div{
+  margin-bottom: 5px;
+}
+.concepts-raw-data{
+  margin-top: 20px;
+  border-radius: 5px;
+  border: 1px solid #DFDFDF;
+
+}
+.concepts-raw-title{
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 24px;
+  color: #888888;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 400;
+}
+.concepts-raw-title div{
+  padding: 10px 0px;
+}
+
+#details_content{
+  border: none !important;
+}
+
+#details_content .card{
+  border-top: none !important;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+#concept_browser{
+  .outline-tabs div, .outline-tabs .tab-items{
+    width: 100%;
+  }
+  .outline-tabs .tab-items .nav-item {
+    flex: 1;
+  }
+  .outline-tabs .tab-items .nav-item a {
+    display: flex;
+    justify-content: center;
+    svg path {
+      fill: #5e5e5e !important;
+    }
+  }
+  .outline-tabs .tab-items .nav-item.active a {
+    svg path {
+      fill: var(--primary-color) !important;
+    }
+  }
 }

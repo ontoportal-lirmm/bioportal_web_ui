@@ -26,24 +26,19 @@ export default class extends Controller {
     this.changeEvent.removeEventListener()
   }
 
-  selectTab(event) {
-    this.#updateURL(event)
-  }
-
-  #updateURL(event){
-    const page = jQuery(event.target).attr("data-bp-ont-page");
-    const page_name = jQuery(event.target).attr("data-bp-ont-page-name");
-
-    (new HistoryService()).pushState({p: page}, page_name + " | " + jQuery(document).data().bp.ont_viewer.org_site, "?p=" + page);
-
+  updateLanguageSelector(event) {
+    console.log('language selector update')
+    let page = event.detail.data.selectedTab
     this.#disableLanguageSelector(page)
   }
 
   #disableLanguageSelector(selectedSection){
     if (this.languageSectionsValue.includes(selectedSection)){
       this.languageSelectorTarget.removeAttribute("disabled")
+      this.languageSelectorTarget.style.visibility = 'visible'
     } else{
       this.languageSelectorTarget.setAttribute("disabled", true)
+      this.languageSelectorTarget.style.visibility = 'hidden'
     }
   }
 

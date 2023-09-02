@@ -1,0 +1,19 @@
+%h2.card_title
+  %span.mr-2
+    = @title
+  - if @link
+    %span
+      = link_to(@link, target: "_blank") do
+        = render Display::InfoTooltipComponent.new(text: @link_title)
+
+  - if action_links?
+    %span
+      = render Layout::HorizontalListComponent.new do |l|
+        - action_links.each { |link| l.element { raw link }}
+
+- if show_card?
+  = render Layout::CardComponent.new do
+    = content
+- else
+  %div
+    = content
