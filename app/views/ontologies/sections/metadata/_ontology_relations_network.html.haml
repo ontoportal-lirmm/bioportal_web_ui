@@ -5,7 +5,7 @@
         %span= t("landscape.filter_network")
         %i.fas.fa-chevron-down
       %div#ontologyRelations.collapse.flex-row.flex-wrap.px-2.my-1.fade{'data-action': "change->ontology-relations-network#build"}
-        - values = @relations_array.map{|relation| ["#{attr_label(relation.split(':').last)}(#{relation})", relation]}
+        - values = @relations_array.map{|relation| ["#{attr_label(relation.split(':').last, show_tooltip: false)}(#{relation})", relation]}
         = render SelectInputComponent.new(id:'relation-network', name: 'selectedRelations[]', values: values, selected:@relations_array , multiple: true)
 
       %div{:style => "width: 100%;"}
