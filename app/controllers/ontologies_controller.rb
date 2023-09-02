@@ -215,6 +215,8 @@ class OntologiesController < ApplicationController
 
   def edit
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
+    redirect_to_home unless session[:user] && @ontology.administeredBy.include?(session[:user].id) || session[:user].admin?
+
     submission = @ontology.explore.latest_submission(include: 'submissionId')
     if submission
       redirect_to edit_ontology_submission_path(@ontology.acronym, submission.submissionId)
