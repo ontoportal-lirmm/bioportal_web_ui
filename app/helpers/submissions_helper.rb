@@ -160,9 +160,6 @@ module SubmissionsHelper
     end
   end
 
-  def extractable_metadatum_tooltip(options = {})
-    help_tooltip(options[:content], {}, 'fas fa-file-export', 'extractable-metadatum', options[:text]).html_safe
-  end
 
 
   def attribute_infos(attr_label)

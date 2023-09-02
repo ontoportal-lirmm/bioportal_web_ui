@@ -4,6 +4,10 @@ module MetadataHelper
     attr["enforce"].include?(type)
   end
 
+  def submission_metadata
+    @metadata ||= JSON.parse(Net::HTTP.get(URI.parse("#{$REST_URL}/submission_metadata?apikey=#{$API_KEY}")))
+  end
+
   def attr_metadata(attr_key)
     submission_metadata.select { |attr_hash| attr_hash["attribute"].to_s.eql?(attr_key) }.first
   end

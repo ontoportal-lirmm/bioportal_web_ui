@@ -43,10 +43,6 @@ module ApplicationHelper
     omniauth_provider_info(strategy).keys.first
   end
 
-  def submission_metadata
-    @metadata ||= JSON.parse(Net::HTTP.get(URI.parse("#{REST_URI}/submission_metadata?apikey=#{API_KEY}")))
-  end
-
   def isOwner?(id)
     unless session[:user].nil?
       if session[:user].admin?
