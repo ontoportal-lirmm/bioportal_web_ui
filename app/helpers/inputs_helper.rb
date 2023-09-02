@@ -35,7 +35,7 @@ module InputsHelper
   end
 
   def date_input(name:, value:, label: nil, help: nil)
-    render Input::DateComponent.new(label: input_label(label, name), name: name, value: value || Date.today,
+    render Input::DateComponent.new(label: input_label(label, name), name: name, value: value,
                                     error_message: input_error_message(name),
                                     helper_text: help)
   end

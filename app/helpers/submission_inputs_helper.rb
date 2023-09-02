@@ -163,7 +163,7 @@ module SubmissionInputsHelper
 
   def generate_date_input(attr)
     date_input(label: attr_header_label(attr), name: attr.name,
-               value: attr.values || Date.today)
+               value: attr.values)
   end
 
   def generate_textarea_input(attr)

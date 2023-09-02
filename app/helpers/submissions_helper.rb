@@ -205,7 +205,7 @@ module SubmissionsHelper
       end
     end
 
-    if selected_attribute?('contact')
+    if selected_attribute?('abstract')
       output += attribute_form_group_container('abstract') do
         raw attribute_input('abstract',long_text: true, label: label)
       end
