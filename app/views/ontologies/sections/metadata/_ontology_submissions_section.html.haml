@@ -1,10 +1,2 @@
 = render SummarySectionComponent.new(title: 'Submissions') do |s|
-  - if @ontology.admin?(session[:user])
-    - s.action_link do
-      = link_to(new_ontology_submission_path(@ontology.acronym), "aria-label": "Add submission", title: "Add submission") do
-        %i.fas.fa-plus-circle
-    - unless @submission_latest.nil? || (@submission_latest.respond_to?(:status) && @submission_latest.status == 404)
-      - s.action_link do
-        = link_to(edit_ontology_submission_path(@ontology.acronym, @submission_latest.submissionId), "aria-label": "Edit latest submission", title: "Edit latest submission") do
-          %i.fas.fa-user-edit
   = render TurboFrameComponent.new(id: 'ontology_submissions', src: ontology_submissions_path(@ontology.acronym))
