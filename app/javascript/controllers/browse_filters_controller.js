@@ -42,7 +42,7 @@ export default class extends Controller {
                 filter = "private_only"
                 break;
             default:
-                checks = this.#getSelectedChecks().map(x => x.name)
+                checks = this.#getSelectedChecks().map(x => x.value)
                 filter = this.element.id.split("_")[0]
         }
 
