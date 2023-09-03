@@ -1,0 +1,649 @@
+
+.browse-container p {
+  margin: unset;
+}
+
+.browse-container h2 {
+  margin: unset;
+  line-height: unset;
+}
+
+.browse-container hr {
+  margin: unset;
+}
+
+.browse-center {
+  display: flex;
+  justify-content: center;
+  margin: 20px 50px 50px;
+}
+
+.browse-title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.browse-submit-new-ontology-and-you-are-admin-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  padding: 20px;
+  & > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
+    border: 1px solid #DFDFDF;
+  }
+
+}
+
+.browse-desc-text {
+  font-size: 16px;
+  color: #666666;
+  font-weight: 400;
+  margin: 5px 0 !important;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--read-more-line-clamp, 2);
+}
+
+
+.browse-you-are-admin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  div {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.browse-you-are-admin h3 {
+  font-size: 20px;
+  font-weight: 600;
+
+}
+
+.browse-you-are-admin div p {
+  margin-left: 20px;
+}
+
+.browse-upload-ontology-button {
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--primary-color);
+  width: 226px;
+  padding: 15px 25px;
+  border: 1px solid var(--primary-color);
+  border-radius: 40px;
+}
+
+.browse-show-more-button {
+  cursor: pointer;
+  font-size: 14px;
+  color: gray;
+  margin-bottom: 10px;
+}
+
+.browse-ontology-container {
+  border: 1px solid #DFDFDF;
+  border-radius: 5px;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.browse-ontology-description {
+  width: 540px;
+}
+
+.browse-ontology-title {
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.browse-fair {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 400px;
+}
+
+.browse-sub-container {
+  display: flex;
+}
+
+.browse-first-row {
+  width: 300px;
+  margin-right: 35px;
+
+  .pill-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.browse-second-row {
+  width: 828px;
+
+  .browse-ontologies {
+    margin-top: 90px;
+  }
+
+}
+
+#browse-title-line {
+  width: 55px;
+  margin-top: 3px;
+  border: 0.5px solid var(--primary-color);
+  border-radius: 5px;
+}
+
+.browse-fair-title {
+  font-size: 16px;
+  color: #666666;
+  font-weight: 400;
+}
+
+.browse-progress-bar {
+  width: 154px;
+  height: 10px;
+  border-radius: 20px;
+  background-color: #E7E7E7;
+
+}
+
+.browse-faire-progress {
+  width: 100%;
+  height: 10px;
+  background-color: var(--primary-color);
+  border-radius: 20px 0px 0px 20px;
+}
+
+.browse-fair-score {
+  font-size: 14px;
+  font-weight: 500;
+  color: #666666;
+}
+
+.browse-fair-details {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--primary-color);
+}
+
+.browse-uploaded {
+  font-size: 13px;
+  height: 37px;
+  max-width: 400px;
+  background-color: var(--light-color);
+  border-radius: 5px;
+  display: flex;
+  padding: 2px 15px;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--primary-color);
+  margin-top: 15px;
+}
+
+.browse-uploaded-date {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.browse-ontology-cards {
+  display: grid;
+  grid-template-columns: 113px 113px;
+  grid-template-rows: min-content;
+  grid-column-gap: 15px;
+  grid-row-gap: 15px;
+  direction: rtl;
+}
+
+.browse-onology-card {
+  border: 0.5px solid var(--primary-color);
+  border-radius: 5px;
+  height: 70px;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+}
+
+.browse-card-number {
+  font: 17px;
+  font-weight: 700;
+}
+
+.browse-card-text {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+#browse-sub-title-line {
+  width: 20px;
+  margin-top: 3px;
+  border: 0.5px solid var(--primary-color);
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.browse-filters-title {
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: underline;
+  text-underline-offset: 12px;
+  text-decoration-color: var(--primary-color);
+  text-decoration-thickness: 2px;
+  margin-bottom: 13px !important;
+}
+
+.browse-search-bar {
+  display: flex;
+
+}
+
+.browse-search-bar input {
+  border-radius: 14px;
+  box-shadow: rgba(100, 100, 111, 0.08) 0 7px 29px 0;
+  border: none;
+  // border: 1px solid #dee2e6;
+  padding: 20px 20px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  position: absolute;
+  width: 828px;
+  z-index: 1;
+
+}
+
+.browse-search-bar input:focus {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  outline: none;
+}
+
+.browse-search-bar select {
+  border: none;
+  background-color: white;
+  padding: 20px 20px;
+  margin: 1px;
+  font-size: 16px;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='grey' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-repeat: no-repeat;
+  background-position-x: 90%;
+  background-position-y: 50%;
+
+}
+
+.browse-search-bar select:focus {
+  outline: none;
+  box-shadow: rgba(100, 100, 111, 0.1) 0px 7px 29px 0px;
+}
+
+.browse-search-bar .browse-format-filter {
+  position: absolute;
+  margin-left: 557px;
+  z-index: 2;
+  width: 150px;
+}
+
+.browse-search-bar .browse-sort-by-filter {
+  position: absolute;
+  margin-left: 692px;
+  z-index: 2;
+  width: 135px;
+  border-radius: 0 14px 14px 0;
+}
+
+.browse-search-button {
+  margin-left: 85%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+  padding: 20px;
+  background-color: var(--primary-color);
+  width: 160px;
+  height: 62px;
+  cursor: pointer;
+}
+
+.browse-search-button p {
+  font-size: 16px;
+  color: white;
+  margin-left: 15px;
+}
+
+.browse-filter {
+  border: 1px solid #DFDFDF;
+  border-radius: 5px;
+  padding: 14px 20px;
+  margin-bottom: 12px;
+
+
+}
+
+.browse-filter-checks-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+
+  div {
+    display: grid;
+    flex-grow: 1;
+  }
+
+  .spinner-border-sm{
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+}
+
+.browse-filter-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 400;
+  color: #666666;
+  cursor: pointer;
+}
+
+.browse-ontology-title-bar {
+  display: flex;
+  align-items: center;
+}
+
+.browse-ontology-deprecated {
+  background-color: #EB433521;
+  color: #EB4335;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 8px;
+  margin-left: 15px;
+  margin-right: 15px;
+  font-weight: 500;
+}
+
+.browse-ontology-view {
+  background-color: var(--light-color);
+  color: var(--primary-color);
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 8px;
+  margin-left: 15px;
+  font-weight: 500;
+}
+
+.browse-switch-filter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.browse-switch-filter p {
+  font-size: 16px;
+  color: #666666;
+}
+
+
+.browse-ontology-title-bar {
+  display: flex;
+  align-items: center;
+}
+
+.browse-ontology-deprecated {
+  background-color: #EB433521;
+  color: #EB4335;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 8px;
+  margin-left: 15px;
+  font-weight: 500;
+}
+
+.browse-ontology-view {
+  background-color: var(--light-color);
+  color: var(--primary-color);
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 8px;
+  margin-left: 15px;
+  font-weight: 500;
+}
+
+
+.browse-empty-illustration {
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.browse-empty-illustration p {
+  font-size: 16px;
+  color: #B8B8B8;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+
+@media only screen and (max-width: 1250px) {
+  .browse-first-row {
+    width: 24vw;
+    margin-right: 20px;
+  }
+
+  .browse-second-row {
+    width: 68vw;
+  }
+  .browse-search-bar input {
+    width: 94vw;
+  }
+  .browse-search-bar .browse-format-filter {
+    margin-left: 50%
+  }
+  .browse-search-bar .browse-sort-by-filter {
+    margin-left: 65%
+  }
+
+}
+
+@media only screen and (max-width: 1005px) {
+  .browse-sub-container {
+    display: block;
+  }
+  .browse-second-row {
+    width: 94vw;
+  }
+  .browse-first-row {
+    width: 94vw;
+  }
+  .browse-search-bar input {
+    position: static;
+    margin-bottom: 1vw;
+  }
+  .browse-search-bar .browse-format-filter {
+    margin-left: 0;
+    position: static;
+    border-radius: 14px;
+    width: 46.5vw;
+    box-shadow: rgba(100, 100, 111, 0.1) 0px 7px 29px 0px;
+    margin-right: 1vw;
+  }
+  .browse-search-bar .browse-sort-by-filter {
+    margin-left: 0;
+    position: static;
+    border-radius: 14px;
+    width: 46vw;
+    box-shadow: rgba(100, 100, 111, 0.1) 0px 7px 29px 0px;
+  }
+
+  .browse-sub-container {
+    margin-top: 20px;
+  }
+  .browse-center {
+    margin-left: 20px;
+  }
+}
+
+@media only screen and (max-width: 893px) {
+  .browse-ontology-container {
+    display: block;
+  }
+  .browse-ontology-description {
+    width: 100%;
+  }
+  .browse-ontology-cards {
+    direction: ltr;
+    margin-top: 20px;
+  }
+  .browse-ontology-deprecated {
+    margin-right: 0;
+  }
+  .browse-ontology-view {
+    margin-right: 0;
+  }
+
+}
+
+
+// Browser loader skeleton
+
+.browse-sket {
+  display: flex;
+}
+
+.browse-sket-column-one {
+  margin-right: 37px;
+}
+
+.browse-sket-column-one .one {
+  width: 525px;
+  height: 50px;
+  background: linear-gradient(-90deg, #EEE, #F5F5F5, #EEE);
+  border-radius: 5px;
+  margin-bottom: 15px;
+  background-size: 400% 400%;
+  animation: skeleton 3s ease-in-out infinite;
+}
+
+.browse-sket-column-one .two {
+  width: 525px;
+  height: 44px;
+  background: linear-gradient(-90deg, #EEE, #F5F5F5, #EEE);
+  border-radius: 5px;
+  margin-bottom: 15px;
+  background-size: 400% 400%;
+  animation: skeleton 3s ease-in-out infinite;
+}
+
+.browse-sket-column-one .three {
+  width: 525px;
+  height: 18px;
+  background: linear-gradient(-90deg, #EEE, #F5F5F5, #EEE);
+  border-radius: 5px;
+  margin-bottom: 15px;
+  background-size: 400% 400%;
+  animation: skeleton 3s ease-in-out infinite;
+}
+
+.browse-sket-column-one .four {
+  width: 160px;
+  height: 36px;
+  background: linear-gradient(-90deg, #EEE, #F5F5F5, #EEE);
+  border-radius: 5px;
+  background-size: 400% 400%;
+  animation: skeleton 3s ease-in-out infinite;
+}
+
+.browse-sket-column-two {
+  margin-right: 15px;
+}
+
+.browse-sket-column-two .one {
+  width: 113px;
+  height: 78px;
+  background: linear-gradient(-90deg, #EEE, #F5F5F5, #EEE);
+  border-radius: 5px;
+  margin-bottom: 15px;
+  background-size: 400% 400%;
+  animation: skeleton 3s ease-in-out infinite;
+}
+
+.browse-sket-column-two .two {
+  width: 113px;
+  height: 78px;
+  background: linear-gradient(-90deg, #EEE, #F5F5F5, #EEE);
+  border-radius: 5px;
+  margin-bottom: 15px;
+  background-size: 400% 400%;
+  animation: skeleton 3s ease-in-out infinite;
+}
+
+.browse-sket-column-three .one {
+  width: 113px;
+  height: 78px;
+  background: linear-gradient(-90deg, #EEE, #F5F5F5, #EEE);
+  border-radius: 5px;
+  margin-bottom: 15px;
+  background-size: 400% 400%;
+  animation: skeleton 3s ease-in-out infinite;
+}
+
+.browse-sket-column-three .two {
+  width: 113px;
+  height: 78px;
+  background: linear-gradient(-90deg, #EEE, #F5F5F5, #EEE);
+  border-radius: 5px;
+  margin-bottom: 15px;
+  background-size: 400% 400%;
+  animation: skeleton 3s ease-in-out infinite;
+}
+
+@keyframes skeleton {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 400% 0;
+
+  }
+
+
+}
+
+
+#back_top_btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  transition: background-color .3s,
+  opacity .5s, visibility .5s;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 1000;
+}
+
+
+#back_top_btn.show {
+  opacity: 1;
+  visibility: visible;
+}

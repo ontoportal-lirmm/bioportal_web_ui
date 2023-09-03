@@ -85,6 +85,10 @@ class ApplicationController < ActionController::Base
   before_action :set_global_thread_values, :domain_ontology_set, :authorize_miniprofiler, :clean_empty_strings_from_params_arrays, :init_trial_license
 
 
+  def show_image_modal
+    url = params[:url]
+    render turbo_stream: helpers.prepend('application_modal_content') { helpers.image_tag(url, style:'width: 100%') }
+  end
 
   def set_global_thread_values
     Thread.current[:session] = session
@@ -525,13 +529,6 @@ class ApplicationController < ActionController::Base
     @concept
   end
 
-  def get_metrics_hash
-    metrics_hash = {}
-    # TODO: Metrics do not return for views on the backend, need to enable include_views param there
-    @metrics = LinkedData::Client::Models::Metrics.all(include_views: true)
-    @metrics.each {|m| metrics_hash[m.links['ontology']] = m }
-    return metrics_hash
-  end
 
   def get_ontology_submission_ready(ontology)
     # Get the latest 'ready' submission
@@ -781,7 +778,6 @@ class ApplicationController < ActionController::Base
     @metadata ||= JSON.parse(Net::HTTP.get(URI.parse("#{REST_URI}/submission_metadata?apikey=#{API_KEY}")))
   end
   helper_method :submission_metadata
-
 
   def request_lang
     helpers.request_lang

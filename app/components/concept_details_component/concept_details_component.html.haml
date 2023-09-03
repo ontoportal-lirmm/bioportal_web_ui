@@ -1,20 +1,23 @@
-- require 'cgi'
-%div.hide-if-loading
+%div.hide-if-loading.concept_details_component
   %div.card
-    %table.concepts-content
-      = header
+    = header
   %div.my-3
-  .accordion.concepts-raw-data{id: "accordion-#{@id}"}
-    %div{id: "heading-#{@id}"}
-      %h2.mb-0.text-right
-        .concepts-raw-title{"data-target" => "#collapse-#{@id}", "data-toggle" => "collapse"}
-          %div Raw data
-          %img{src: asset_path("arrow-down.svg")}
-    .collapse{id: "collapse-#{@id}", "data-parent" => "#accordion-#{@id}"}
-      %table#concepts-content.concepts-content
-        - top_set, leftover_set, bottom_set = filter_properties(@top_keys, @bottom_keys, @exclude_keys, @concept_properties)
-        = render_properties(top_set, @acronym)
-        = render_properties(leftover_set, @acronym)
-        - sections&.each do |section|
-          = section
-        = render_properties(bottom_set, @acronym)
+  %div.raw-table
+    = render DropdownContainerComponent.new(title: 'Raw data', id: "accordion-#{@id}") do
+      - top_set, leftover_set, bottom_set = filter_properties(@top_keys, @bottom_keys, @exclude_keys, @concept_properties)
+      = render TableComponent.new(stripped: true) do |t|
+
+        - row_hash_properties(top_set, @acronym).each do |row|
+          - t.add_row(*row)
+
+        - row_hash_properties(leftover_set, @acronym).each do |row|
+          - t.add_row(*row)
+
+
+        - sections.each do |section|
+          - t.row do
+            = section
+
+
+        - row_hash_properties(bottom_set, @acronym).each do |row|
+          - t.add_row(*row)

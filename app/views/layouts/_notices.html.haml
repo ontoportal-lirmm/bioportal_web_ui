@@ -2,10 +2,7 @@
   = license_notification(current_license())
 
 - flash.each do |key, message|
-  %div{class: "flash alert #{flash_class(key)} alert-dismissible fade show", role: "alert"}
-    = message
-    %button{type: 'button', class: 'close', 'data-dismiss': 'alert', 'aria-label': 'Close'}
-      %span{'aria-hidden': 'true'} &times;
+  = render NotificationComponent.new(title: message , type:  notification_type(key))
 
 - do_not_display_subdomain_info_here = Set.new(["homeall_resources"])
 - if at_slice? && !do_not_display_subdomain_info_here.include?("#{controller.controller_name}#{controller.action_name}")

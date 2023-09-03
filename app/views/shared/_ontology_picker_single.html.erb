@@ -10,12 +10,21 @@
 <%disabled ||= nil%>
 
 <script type="text/javascript">
-  jQuery(document).ready(function(){
-    jQuery("#<%=picker_id%>").chosen({search_contains: true});
+  jQuery(document).ready(function() {
+    jQuery("#<%= picker_id %>").chosen({ search_contains: true });
+
+    jQuery("#ontology_isView").change(function() {
+      if (this.checked) {
+        jQuery("#ontology_viewOf").prop("disabled", false).trigger("chosen:updated");
+      } else {
+        jQuery("#ontology_viewOf").val('').trigger("chosen:updated");
+        jQuery("#ontology_viewOf").prop("disabled", true).trigger("chosen:updated");
+      }
+    });
   });
 </script>
 
 <div id="<%=picker_id%>_container" class="ontology_picker_single_container">
-  <%= select object_name, field_name, @onts_for_select, { :include_blank => true, :selected => selected }, :id => picker_id, :class => "ontology_picker_single form-control", "data-placeholder".to_sym => placeholder, disabled: disabled %>
+  <%= select_input(label: placeholder, name: "#{object_name}[#{field_name}]", values: @onts_for_select, selected: selected) %>
 </div>
 

@@ -13,24 +13,16 @@
         - navitems.each do |navItem|
           %li.nav-ul-li
             %a{href: navItem[0], class: ("active" if current_page?(navItem[0]))} #{navItem[1]}
-      %div.d-flex.align-items-center.justify-content-between{style:'min-width: 40%'}
+        - if !session[:user].nil? && session[:user].admin?
+          %li.nav-ul-li
+            %a{href: "/admin", class: ("active" if current_page?("/admin"))} Admin
+      .right-nav-items
         - if current_page?('/')
           .nav-search-container{style:'visibility: hidden'}
             %input
         - else
-          .nav-search-container{'data-controller': "home-search"}
-            %input.nav-input{:placeholder => "Search in "+portal_name+" ...", :type => "text", :name => "search", 'data-home-search-target': 'input', 'data-action': 'input->home-search#search blur->home-search#blur'}
-            #home-search-drop-down.nav-search-drop-down{'data-home-search-target': 'dropDown', 'data-action': 'mousedown->home-search#prevent'}
-              %a.home-search-ontology-content#home-search-ontology-content{href: "#", 'data-home-search-target': 'searchOntologyContent'}
-                %p#seached-ontology{'data-home-search-target': 'ontology'}
-                %div
-                  %img{src: asset_path("loop.svg")}/
-                  %p Search ontology content
-              %a.home-search-ontology-content#home-search-ontologies{href: "#", 'data-home-search-target': 'homeSearchOntologies'}
-                %p#seached-ontologies{'data-home-search-target': 'searchedOntologies'}
-                %div
-                  %img{src: asset_path("loop.svg")}/
-                  %p See all ontologies
+          .nav-search-container
+            = render OntologySearchInputComponent.new(placeholder:  "Search in "+portal_name+" ...", scroll_down: false)
 
         - if session[:user].nil?
           %a.nav-a{:href => "/login"} Login
@@ -44,7 +36,7 @@
             - d.with_section do |s|
               - s.header do
                 Recently Viewed
-              - for ont in session[:ontologies]
+              - for ont in Array(session[:ontologies])
                 - s.item do
                   = link_to(ont.ontology_name, "/ontologies/#{ont.ontology_acronym}/?p=classes&conceptid=#{CGI.escape(ont.concept)}")
             - d.with_section do |s|
@@ -52,7 +44,7 @@
                 = link_to("Logout", logout_path)
 
         = select_tag('language', options_for_select([['EN','en'],['FR','fr']]), id: 'language-select', class: 'nav-language',
-              data: { controller: "platform-language", action: "change->platform-language#handleLangChanged" })
+          data: { controller: "platform-language", action: "change->platform-language#handleLangChanged" })
 
         = render DropdownButtonComponent.new do |d|
           - d.header do

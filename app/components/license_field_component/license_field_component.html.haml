@@ -1,0 +1,8 @@
+- if @value.to_s.start_with?("http://creativecommons.org/licenses") || @value.to_s.start_with?("https://creativecommons.org/licenses")
+  %a{:rel => "license", :alt => "Creative Commons License", :href => "#{@value}", :target => "_blank", :style => "border-width:0", :title => "#{@value}"}
+    %img{:rel => "license", :alt => "Creative Commons License", :title => "#{@value}", :style => "border-width:0", :src => "https://i.creativecommons.org/l/by/4.0/88x31.png"}
+- elsif @value.to_s.start_with?("http://opensource.org/licenses") || @value.to_s.start_with?("https://opensource.org/licenses")
+  %a{:rel => "license", :alt => "Open Source License", :href => "#{@value}", :title => "#{@value}", :target => "_blank", :style => "border-width:0;", :src => "https://opensource.org/files/osi_logo_bold_100X133_90ppi.png"}
+    %img{:rel => "license", :alt => "Open Source License", :title => "#{@value}", :style => "height: 80px; border-width:0;", :src => "https://opensource.org/files/osi_logo_bold_100X133_90ppi.png"}
+- else
+  %a{:rel => "license", :href => "#{@value}", :target => "_blank"}= @value

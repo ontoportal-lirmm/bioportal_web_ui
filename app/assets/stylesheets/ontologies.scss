@@ -1,17 +1,11 @@
 $ont-metadata-bg-color: #e2ebf0;
 $widget-table-border-color: #EFEFEF;
-$ont-show-bg-color: #e9ecef;
 
-.ontologies.show {
-  background-color: $ont-show-bg-color;
-
-  #bd {
-    background-color: $ont-show-bg-color;
-  }
+svg path {
+  fill: var(--primary-color);
 }
 
 .ontologies.show .gutter {
-  background-color: rgba(0, 0, 0, 0.03);
   background-repeat: no-repeat;
   background-position: center;
 
@@ -159,10 +153,7 @@ $ont-show-bg-color: #e9ecef;
   }
 }
 
-#ontology_versions td.show_more_subs {
-  text-align: right; 
-  background-color: white;
-}
+
 
 /************************************
 /* Classes pane
@@ -176,6 +167,7 @@ $ont-show-bg-color: #e9ecef;
 #bd_content .sidebar {
   overflow-x: auto;
   white-space: nowrap;
+  min-width: 35%;
 }
 
 #search_box:focus {
@@ -270,5 +262,4 @@ $ont-show-bg-color: #e9ecef;
   display: flex;
   flex-direction: row;
 }
-
 

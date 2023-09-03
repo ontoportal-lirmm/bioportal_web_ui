@@ -1,4 +1,4 @@
-.chips-container div{
+.chips-container > div{
     margin-right: 10px;
 }
 
@@ -11,15 +11,17 @@
     display: none;
 }
 
+
 .chips-container div label{
     cursor: pointer;
 }
 .chips-container div label input[type="checkbox"]{
     display: none;
 }
-.chips-container div label span{
+.chips-container div label > span{
     position: relative;
-    display: inline-block;
+    display: flex;
+    align-items: center;
     background:white;
     border: 0.5px solid #BDBDBD;
     color: #a7a7a7;
@@ -29,6 +31,10 @@
     user-select: none;
 
 }
+.chips-container.disabled div label > span, .chips-container div label span:has(span.disabled){
+  background-color: #f8f9fa !important;
+}
+
 .chips-container div label input[type="checkbox"]:checked ~ span{
     border: 1px solid var(--primary-color);
     color: var(--primary-color);

@@ -18,7 +18,7 @@
               %th
                 %div
                   = render SwitchInputComponent.new(id: meta, name: 'selected_metadata[]', value: meta) do
-                    %h6{style:'margin-top: 0.2rem'}=generate_attribute_label(meta, label_tag_sym: :span)
+                    %h6{style:'margin-top: 0.2rem'}=attr_label(meta)
 
         %tbody
           - @submissions.each do |submission|

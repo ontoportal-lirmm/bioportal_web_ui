@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class ConceptDetailsComponent < ViewComponent::Base
-  include ApplicationHelper, MultiLanguagesHelper
+  include ApplicationHelper
+  include MultiLanguagesHelper
 
-  renders_one :header
-  renders_many :sections
+  renders_one :header, TableComponent
+  renders_many :sections, TableRowComponent
 
   attr_reader :concept_properties
 
@@ -19,9 +20,20 @@ class ConceptDetailsComponent < ViewComponent::Base
     @concept_properties = concept_properties2hash(@properties) if @properties
   end
 
-  def render_properties(properties_set, ontology_acronym, &block)
-    out = ''
- 
+  def add_sections(keys, &block)
+    scheme_set = properties_set_by_keys(keys, concept_properties)
+    rows = row_hash_properties(scheme_set, concept_properties, &block)
+
+    rows.each do |row|
+      section do |table_row|
+        table_row.create(*row)
+      end
+    end
+
+  end
+
+  def row_hash_properties(properties_set, ontology_acronym, &block)
+    out = []
     properties_set&.each do |key, data|
       next if exclude_relation?(key) || !data[:values]
 
@@ -40,18 +52,12 @@ class ConceptDetailsComponent < ViewComponent::Base
         end
       end
 
-
-      line = <<-EOS
-              <tr>
-                <td nowrap= "" style="width:30%" >
-                    <span title=#{url} data-controller="tooltip">#{remove_owl_notation(key)}</span>
-                </td>
-                <td class="d-flex flex-wrap">#{"<p class='mx-1'>#{ajax_links.join('</p><p class="mx-1">')}".html_safe}</td>
-              </tr>
-      EOS
-      out += line
+      out << [
+        { th: "<span title=#{url} data-controller='tooltip'>#{remove_owl_notation(key)}</span>".html_safe },
+        { td: "<div class='d-flex flex-wrap'> #{"<p class='mx-1'>#{ajax_links.join('</p><p class="mx-1">')}"}</div>".html_safe }
+      ]
     end
-    raw out
+    out
   end
 
   def properties_set_by_keys(keys, concept_properties, exclude_keys = [])
@@ -70,10 +76,11 @@ class ConceptDetailsComponent < ViewComponent::Base
   end
 
   private
+
   def concept_properties2hash(properties)
     # NOTE: example properties
     #
-    #properties
+    # properties
     #=> #<struct
     #  http://www.w3.org/2000/01/rdf-schema#label=
     #    [#<struct
@@ -101,9 +108,6 @@ class ConceptDetailsComponent < ViewComponent::Base
     properties_data = {}
     keys = properties.members # keys is an array of symbols
     keys.each do |key|
-      
-      # binding.pry if key === :"http://www.w3.org/2004/02/skos/core#prefLabel"
-      
       next if properties[key].nil? # ignore :context and :links when nil.
 
       # Shorten the key into a simple label
@@ -137,7 +141,7 @@ class ConceptDetailsComponent < ViewComponent::Base
   end
 
   def exclude_relation?(relation_to_check, ontology = nil)
-    excluded_relations = [ "type", "rdf:type", "[R]", "SuperClass", "InstanceCount" ]
+    excluded_relations = ["type", "rdf:type", "[R]", "SuperClass", "InstanceCount"]
 
     # Show or hide property based on the property and ontology settings
     if ontology

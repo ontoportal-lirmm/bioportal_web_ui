@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
 
+  get 'auth/:provider/callback', to: 'login#create_omniauth'
   get 'locale/:language', to: 'language#set_locale_language'
 
   get '/notes/new_comment', to: 'notes#new_comment'
@@ -9,7 +10,8 @@ Rails.application.routes.draw do
   get '/notes/new_reply', to: 'notes#new_reply'
   delete '/notes', to: 'notes#destroy'
   resources :notes, constraints: { id: /.+/ }
-
+  resources :agents, constraints: { id: /.+/ }
+  post 'agents/:id', to: 'agents#update', constraints: { id: /.+/ }
   resources :ontolobridge do
     post :save_new_term_instructions, on: :collection
   end
@@ -40,10 +42,14 @@ Rails.application.routes.draw do
 
   get 'ontologies/:ontology_id/concepts', to: 'concepts#show_concept'
   resources :ontologies do
-    resources :submissions
+    resources :submissions do 
+      get 'edit_properties'
+    end 
+
     get 'instances/:instance_id', to: 'instances#show', constraints: { instance_id: /[^\/?]+/ }
     get 'schemes/show_scheme', to: 'schemes#show'
     get 'collections/show'
+    get 'metrics_evolution'
   end
 
   resources :login
@@ -118,6 +124,7 @@ Rails.application.routes.draw do
   get '/ontologies/:acronym/classes/:purl_conceptid', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
   get '/ontologies/:acronym/: f', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
   match '/ontologies/:acronym/submissions/:id/edit_metadata' => 'submissions#edit_metadata', via: [:get, :post]
+  get '/ontologies_filter', to:  'ontologies#ontologies_filter'
 
   # Analytics
   get '/analytics/:action' => 'analytics#(?-mix:search_result_clicked|user_intention_surveys)'
@@ -149,11 +156,14 @@ Rails.application.routes.draw do
   get 'ajax/label_xl', to: "label_xl#show"
   get '/ajax/biomixer' => 'concepts#biomixer'
   get '/ajax/fair_score/html' => 'fair_score#details_html'
+  get '/ajax/submission/show_additional_metadata/:id' => 'ontologies#show_additional_metadata'
+  get '/ajax/submission/show_licenses/:id' => 'ontologies#show_licenses'
   get '/ajax/fair_score/json' => 'fair_score#details_json'
   get '/ajax/:ontology/instances' => 'instances#index_by_ontology'
   get '/ajax/:ontology/classes/:conceptid/instances' => 'instances#index_by_class', :constraints => { conceptid: /[^\/?]+/ }
   get '/ajax/ontologies' , to:"ontologies#ajax_ontologies"
-
+  get '/ajax/agents' , to:"agents#ajax_agents"
+  get '/ajax/images/show' => 'application#show_image_modal'
   # User
   get '/logout' => 'login#destroy', :as => :logout
   get '/lost_pass' => 'login#lost_password'
@@ -214,8 +224,6 @@ Rails.application.routes.draw do
 
   get '/exhibit/:ontology/:id' => 'concepts#exhibit'
 
-  if Rails.env.development?
-    mount Lookbook::Engine, at: "/lookbook"
-  end
+  mount Lookbook::Engine, at: "/lookbook"
 
 end

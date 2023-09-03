@@ -3,11 +3,11 @@
     = form_tag("/ontologies_metadata_curator/result", method: "post", data: { turbo: true, turbo_frame: 'selection_metadata_form'}) do
       %div
         %div.mx-1.pt-3
-          = render FormGroupComponent.new(label:' Ontologies', inline: false) do
-            = render :partial => "shared/ontology_picker", locals: {sel_text: '', selected_ontologies: @ontologies_ids}
+          - init_ontology_picker(nil, @ontologies_ids)
+          = select_input(label: 'Ontologies', name: "ontology[ontologyId]", values: @onts_for_select, selected: @ontologies_ids, multiple: true, data: {placeholder: t("select_ontologies")})
       %div.d-flex.align-items-center.mb-5
         %div.mx-1{style: 'width: 65%'}
-          = render MetadataSelectorComponent.new(label: 'Metadata Properties', values: submission_editable_properties , selected:  @metadata_sel)
+          = submission_metadata_selector
         %div.mx-1.mt-3{style: 'width: 15%'}
           = render SwitchInputComponent.new(id:"show_submissions", name: "show_submissions", label: "Include all submissions")
         %div.mt-3.flex-shrink-0

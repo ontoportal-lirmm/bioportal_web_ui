@@ -1,0 +1,14 @@
+%tr.human{:id => agent_table_line_id(agent_id(agent))}
+  %td
+    = agent.name
+  %td
+    = raw display_identifiers(agent.identifiers)
+  %td
+    = raw agent.affiliations.map{|i| "#{i["name"]} ( #{display_identifiers(i["identifiers"])} )"}.join(', ')
+  %td
+    = agent.agentType
+  %td{:class => 'delete_mappings_column'}
+    - if agent.id && !agent.id.empty? && session[:user] && session[:user].admin?
+      %div.d-flex
+        = link_to_agent_edit_modal(agent)
+        = button_to "Delete", CGI.unescape(agent_path(agent.id.split('/').last)), method: :delete, class:'btn btn-link',  form: {data: { turbo: true, turbo_confirm: "Are you sure?", turbo_frame: '_top'}}
