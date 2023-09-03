@@ -6,12 +6,6 @@
           = ontology[:name]+" ("+ontology[:acronym]+")"
           - if ontology[:private]
             %i.fas.fa-key{title:"Private Ontology"}
-        - if ontology[:deprecated]
-          .browse-ontology-deprecated
-            deprecated
-        - if ontology[:viewOfOnt]
-          .browse-ontology-view
-            view
       .browse-desc-container{data:{controller:"text-truncate", 'text-truncate-more-text-value': '+ Show more ...' , 'text-truncate-less-text-value': '- Show less ...'}}
         %p.browse-desc-text{'data-text-truncate-target': 'content'}
           = ontology[:description]
@@ -42,7 +36,12 @@
         - if ontology[:format]
           .browse-ontology-view
             = ontology[:format]
-
+        - if ontology[:deprecated]
+          .browse-ontology-deprecated
+            deprecated
+        - if ontology[:viewOfOnt]
+          .browse-ontology-view
+            view
     .browse-ontology-cards
       - if ontology[:format] != 'SKOS' && ontology[:class_count] > 0
         %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}?p=classes"}
