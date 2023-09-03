@@ -1,25 +1,15 @@
 .browse-center
   .browse-container
-    %h2.browse-title Browse
-    %hr#browse-title-line/
+
     .browse-submit-new-ontology-and-you-are-admin-container
-      - if session[:user].nil?
-        %a.browse-upload-ontology-button{:href => "/login?redirect=/ontologies/new"}
-          %svg{:fill => "none", :height => "14", :viewbox => "0 0 15 14", :width => "15", :xmlns => "http://www.w3.org/2000/svg"}
-            %path{:d => "M3.46242 4.17686L6.91776 0.23682C6.98312 0.162278 7.06302 0.102677 7.15225 0.0618794C7.24149 0.0210821 7.33808 0 7.43576 0C7.53344 0 7.63003 0.0210821 7.71927 0.0618794C7.80851 0.102677 7.8884 0.162278 7.95377 0.23682L11.4092 4.17686C11.533 4.31795 11.5971 4.50373 11.5874 4.69334C11.5777 4.88295 11.4951 5.06086 11.3577 5.18792C11.2204 5.31498 11.0395 5.38079 10.8548 5.37087C10.6702 5.36095 10.497 5.27612 10.3732 5.13503L8.13286 2.58055V10.4116C8.13286 10.6015 8.05942 10.7836 7.92869 10.9178C7.79796 11.0521 7.62065 11.1275 7.43576 11.1275C7.25088 11.1275 7.07357 11.0521 6.94284 10.9178C6.8121 10.7836 6.73866 10.6015 6.73866 10.4116V2.58058L4.49846 5.13512C4.43719 5.20498 4.36313 5.26177 4.28049 5.30223C4.19785 5.3427 4.10826 5.36605 4.01684 5.37096C3.92541 5.37587 3.83394 5.36223 3.74764 5.33084C3.66135 5.29944 3.58192 5.2509 3.51389 5.18798C3.44586 5.12506 3.39057 5.04899 3.35117 4.96413C3.31176 4.87926 3.28902 4.78726 3.28425 4.69337C3.27947 4.59948 3.29274 4.50554 3.32331 4.41692C3.35388 4.32829 3.40115 4.24672 3.46242 4.17686ZM14.1744 12.488H0.697103C0.51222 12.488 0.334909 12.5635 0.204177 12.6977C0.0734445 12.832 0 13.0141 0 13.2039C0 13.3938 0.0734445 13.5759 0.204177 13.7101C0.334909 13.8444 0.51222 13.9198 0.697103 13.9198H14.1744C14.3593 13.9198 14.5366 13.8444 14.6673 13.7101C14.7981 13.5759 14.8715 13.3938 14.8715 13.2039C14.8715 13.0141 14.7981 12.832 14.6673 12.6977C14.5366 12.5635 14.3593 12.488 14.1744 12.488Z", :fill => "#31B404"}
-          Submit new ontology
-      - else
-        %a.browse-upload-ontology-button{:href => "/ontologies/new"}
-          %svg{:fill => "none", :height => "14", :viewbox => "0 0 15 14", :width => "15", :xmlns => "http://www.w3.org/2000/svg"}
-            %path{:d => "M3.46242 4.17686L6.91776 0.23682C6.98312 0.162278 7.06302 0.102677 7.15225 0.0618794C7.24149 0.0210821 7.33808 0 7.43576 0C7.53344 0 7.63003 0.0210821 7.71927 0.0618794C7.80851 0.102677 7.8884 0.162278 7.95377 0.23682L11.4092 4.17686C11.533 4.31795 11.5971 4.50373 11.5874 4.69334C11.5777 4.88295 11.4951 5.06086 11.3577 5.18792C11.2204 5.31498 11.0395 5.38079 10.8548 5.37087C10.6702 5.36095 10.497 5.27612 10.3732 5.13503L8.13286 2.58055V10.4116C8.13286 10.6015 8.05942 10.7836 7.92869 10.9178C7.79796 11.0521 7.62065 11.1275 7.43576 11.1275C7.25088 11.1275 7.07357 11.0521 6.94284 10.9178C6.8121 10.7836 6.73866 10.6015 6.73866 10.4116V2.58058L4.49846 5.13512C4.43719 5.20498 4.36313 5.26177 4.28049 5.30223C4.19785 5.3427 4.10826 5.36605 4.01684 5.37096C3.92541 5.37587 3.83394 5.36223 3.74764 5.33084C3.66135 5.29944 3.58192 5.2509 3.51389 5.18798C3.44586 5.12506 3.39057 5.04899 3.35117 4.96413C3.31176 4.87926 3.28902 4.78726 3.28425 4.69337C3.27947 4.59948 3.29274 4.50554 3.32331 4.41692C3.35388 4.32829 3.40115 4.24672 3.46242 4.17686ZM14.1744 12.488H0.697103C0.51222 12.488 0.334909 12.5635 0.204177 12.6977C0.0734445 12.832 0 13.0141 0 13.2039C0 13.3938 0.0734445 13.5759 0.204177 13.7101C0.334909 13.8444 0.51222 13.9198 0.697103 13.9198H14.1744C14.3593 13.9198 14.5366 13.8444 14.6673 13.7101C14.7981 13.5759 14.8715 13.3938 14.8715 13.2039C14.8715 13.0141 14.7981 12.832 14.6673 12.6977C14.5366 12.5635 14.3593 12.488 14.1744 12.488Z", :fill => "#31B404"}
-          Submit new ontology
       - if session[:user]&.admin?
-        .browse-you-are-admin
-          %h3 Welcome admin
-          %div
-            %svg{:fill => "none", :height => "11", :viewbox => "0 0 11 11", :width => "11", :xmlns => "http://www.w3.org/2000/svg"}
-              %circle{:cx => "5.5", :cy => "5.5", :fill => 'var(--admin-color)', :r => "5.5"}
-            %p This coloring indicates admin-only features
+        %div
+          %div.browse-you-are-admin
+            %h3 Welcome admin
+            %div
+              %svg{:fill => "none", :height => "11", :viewbox => "0 0 11 11", :width => "11", :xmlns => "http://www.w3.org/2000/svg"}
+                %circle{:cx => "5.5", :cy => "5.5", :fill => 'var(--admin-color)', :r => "5.5"}
+              %p This coloring indicates admin-only features
 
     %a#back_top_btn.btn.btn-primary.btn-floating.btn-lg
       %i.fas.fa-arrow-up.text-white
@@ -43,21 +33,13 @@
       });
 
     %div{data: { controller: "turbo-frame history browse-filters" , "turbo-frame-url-value": "/ontologies_filter", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL changed->turbo-frame#updateFrame"}}
-      .browse-search-bar
-        .browse-search-container
-          %input{:name => "search", :placeholder => "Ex: Agrovoc ...", :type => "text", :value => @search, data: {action: "input->browse-filters#dispatchInputEvent"}}
-          .browse-search-filters
-            %select#format.browse-format-filter{:name => "format"}
-              = options_for_select(@formats, @selected_format)
-            %select#Sort_by.browse-sort-by-filter{:name => "Sort_by"}
-              = options_for_select(@sorts_options, '')
-
 
       .browse-sub-container
         .browse-first-row{data:{controller: "browse-filters", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL"}}
-          %div
+          %div.d-flex.p-2{style: "height: 67px"}
+            = upload_ontology_button
+          %div{style:'margin-top: 27px'}
             %p.browse-filters-title Filters
-            %hr#browse-sub-title-line
             - if session[:user]&.admin?
               %div.browse-filter{style: "border-color: var(--admin-color);"}
                 = render SwitchInputComponent.new(id:'filter-private', name:'private_only', checked: @show_private_only) do
@@ -74,32 +56,40 @@
                   .browse-filter-title-bar{"data-target" => "#browse-#{key}-filter", "data-toggle" => "collapse"}
                     %p
                       = browse_filter_section_label(key)
-                      %span.badge.badge-secondary{"data-show-filter-count-target":"countSpan", style: "#{values[2] && values[2].positive? ? '' : 'display: none;'}"}
+                      %span.badge.badge-primary{"data-show-filter-count-target":"countSpan", style: "#{values[2] && values[2].positive? ? '' : 'display: none;'}"}
                         = values[2]
                     %img{:src => "#{asset_path("arrow-down.svg")}"}/
                   .collapse{id: "browse-#{key}-filter", class: "#{values[2].positive? ? 'show': ''}"}
-                    .browse-filter-checks-container
+                    .browse-filter-checks-container.position-relative
                       - values.first.each do |object|
                         - title = (key.eql?(:categories) || key.eql?(:groups) ?  object["name"] : '')
                         - value = (object["value"] || object["acronym"] || object["id"])
-                        %div.mr-2{data: {controller: 'tooltip'}, title: title}
+                        %div{data: {controller: 'tooltip'}, title: title}
                           = render ChipsComponent.new(name: value, value: value ,
                                     label:  object["acronym"].humanize,
                                     checked: values[1]&.include?(object["id"])) do |c|
                             - c.count do
-                              %div.ml-1
+                              %span.badge.badge-light.ml-1
                                 = turbo_frame_tag "count_#{key}_#{object["id"]}" do
-                                  %div.p-1.p-2
-                                    = render LoaderComponent.new(small:true)
+                                  = render LoaderComponent.new(small:true)
 
         .browse-second-row
-          = render TurboFrameComponent.new(id:"ontologies_list_container", data:{"turbo-frame-target":"frame", "turbo-frame-url-value": "/ontologies_filter"}) do |container|
-            = turbo_frame_tag "ontologies_filter_count_request", src: "/ontologies_filter?count=true&#{request.original_url.split('?').last}" do
-              = browser_counter_loader
-            = render TurboFrameComponent.new(id: "ontologies_list_view-page-1" , src: "/ontologies_filter?page=1&#{request.original_url.split('?').last}") do |list|
-              - list.loader do
+          .browse-search-bar
+            .browse-search-container
+              %input{:name => "search", :placeholder => "Start typing to filter ontologies, e.g AGROVOC...", :type => "text", :value => @search, data: {action: "input->browse-filters#dispatchInputEvent"}}
+              .browse-search-filters
+                %select#format.browse-format-filter{:name => "format"}
+                  = options_for_select(@formats, @selected_format)
+                %select#Sort_by.browse-sort-by-filter{:name => "Sort_by"}
+                  = options_for_select(@sorts_options, '')
+          .browse-ontologies
+            = render TurboFrameComponent.new(id:"ontologies_list_container", data:{"turbo-frame-target":"frame", "turbo-frame-url-value": "/ontologies_filter"}) do |container|
+              = turbo_frame_tag "ontologies_filter_count_request", src: "/ontologies_filter?count=true&#{request.original_url.split('?').last}" do
+                = browser_counter_loader
+              = render TurboFrameComponent.new(id: "ontologies_list_view-page-1" , src: "/ontologies_filter?page=1&#{request.original_url.split('?').last}") do |list|
+                - list.loader do
+                  - ontologies_browse_skeleton
+              - container.loader do
+                = browser_counter_loader
                 - ontologies_browse_skeleton
-            - container.loader do
-              = browser_counter_loader
-              - ontologies_browse_skeleton
 

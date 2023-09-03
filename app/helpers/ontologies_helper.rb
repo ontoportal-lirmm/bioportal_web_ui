@@ -2,8 +2,7 @@ module OntologiesHelper
 
   REST_URI = $REST_URL
   API_KEY = $API_KEY
-  LANGUAGE_FILTERABLE_SECTIONS  = %w[classes schemes collections instances]
-
+  LANGUAGE_FILTERABLE_SECTIONS = %w[classes schemes collections instances]
 
   def browse_filter_section_label(key)
     labels = {
@@ -14,7 +13,7 @@ module OntologiesHelper
 
     labels[key] || key.to_s.underscore.humanize.capitalize
   end
-  
+
   def browser_counter_loader
     content_tag(:div, class: "browse-desc-text", style: "margin-bottom: 15px;") do
       content_tag(:div, class: "d-flex align-items-center") do
@@ -71,14 +70,14 @@ module OntologiesHelper
   end
 
   def agent?(sub_metadata, attr)
-    metadata = sub_metadata.select{ |x| x['@id'][attr] }.first
+    metadata = sub_metadata.select { |x| x['@id'][attr] }.first
     metadata && Array(metadata['enforce']).include?('Agent')
   end
 
   def display_contact(contacts)
-    contacts.map {|c| "#{c.name.humanize} at #{c.email}" if c.member?(:name) && c.member?(:email)}&.join(", ")
+    contacts.map { |c| "#{c.name.humanize} at #{c.email}" if c.member?(:name) && c.member?(:email) }&.join(", ")
   end
-  
+
   def count_links(ont_acronym, page_name = 'summary', count = 0)
     ont_url = "/ontologies/#{ont_acronym}"
     if count.nil? || count.zero?
@@ -100,24 +99,24 @@ module OntologiesHelper
     links = []
     if ontology.summaryOnly
       if submission.homepage.nil?
-        links << {href: '', label:'N/A - metadata only'}
+        links << { href: '', label: 'N/A - metadata only' }
       else
         uri = submission.homepage
-        links << {href: uri, label:'Home Page'}
+        links << { href: uri, label: 'Home Page' }
       end
     else
       uri = submission.id + "/download?apikey=#{get_apikey}"
-      links << {href: uri, label:submission.pretty_format}
+      links << { href: uri, label: submission.pretty_format }
       latest = ontology.explore.latest_submission({ include_status: 'ready' })
       if latest && latest.submissionId == submission.submissionId
-        links << {href: "#{ontology.id}/download?apikey=#{get_apikey}&download_format=csv", label:"CSV"}
+        links << { href: "#{ontology.id}/download?apikey=#{get_apikey}&download_format=csv", label: "CSV" }
         if !latest.hasOntologyLanguage.eql?('UMLS')
-          links << {href: "#{ontology.id}/download?apikey=#{get_apikey}&download_format=rdf", label:"RDF/XML"}
+          links << { href: "#{ontology.id}/download?apikey=#{get_apikey}&download_format=rdf", label: "RDF/XML" }
         end
       end
       unless submission.diffFilePath.nil?
         uri = submission.id + "/download_diff?apikey=#{get_apikey}"
-        links << {href: uri, label:"DIFF"}
+        links << { href: uri, label: "DIFF" }
       end
     end
     links
@@ -177,8 +176,8 @@ module OntologiesHelper
   # Link for private/public/licensed ontologies
   def visibility_link(ontology)
     ont_url = "/ontologies/#{ontology.acronym}" # 'ontology' is NOT a submission here
-    page_name = 'summary'  # default ontology page view for visibility link
-    link_name = 'Public'   # default ontology visibility
+    page_name = 'summary' # default ontology page view for visibility link
+    link_name = 'Public' # default ontology visibility
     if ontology.summaryOnly
       link_name = 'Summary Only'
     elsif ontology.private?
@@ -227,15 +226,16 @@ module OntologiesHelper
 
     Rails.configuration.change_request[:ontologies].include? ontology_acronym.to_sym
   end
+
   def current_section
     (params[:p]) ? params[:p] : 'summary'
   end
 
   def link_to_section(section_title)
-    link_to(section_name(section_title) , ontology_path(@ontology.acronym, p: section_title),
+    link_to(section_name(section_title), ontology_path(@ontology.acronym, p: section_title),
             id: "ont-#{section_title}-tab", class: "nav-link #{selected_section?(section_title) ? 'active show' : ''}",
             data: { action: 'click->ontology-viewer-tabs#selectTab',
-                    toggle: "tab", target: "#ont_#{section_title}_content", 'bp-ont-page': section_title ,
+                    toggle: "tab", target: "#ont_#{section_title}_content", 'bp-ont-page': section_title,
                     'bp-ont-page-name': ontology_viewer_page_name(@ontology.name, @concept&.prefLabel || '', section_title) })
   end
 
@@ -254,7 +254,7 @@ module OntologiesHelper
   def section_data(section_title)
     if ontology_data_section?(section_title)
       url_value = selected_section?(section_title) ? request.fullpath : "/ontologies/#{@ontology.acronym}?p=#{section_title}"
-      { controller: "history turbo-frame" , 'turbo-frame-url-value': url_value ,action: "lang_changed->history#updateURL lang_changed->turbo-frame#updateFrame" }
+      { controller: "history turbo-frame", 'turbo-frame-url-value': url_value, action: "lang_changed->history#updateURL lang_changed->turbo-frame#updateFrame" }
     else
       {}
     end
@@ -264,7 +264,7 @@ module OntologiesHelper
     if current_section.eql?(section_title)
       block.call
     else
-      render TurboFrameComponent.new(id: section_title, src: "/ontologies/#{@ontology.acronym}?p=#{section_title}", target: '_top', data: {"turbo-frame-target": "frame"} )
+      render TurboFrameComponent.new(id: section_title, src: "/ontologies/#{@ontology.acronym}?p=#{section_title}", target: '_top', data: { "turbo-frame-target": "frame" })
     end
   end
 
@@ -291,27 +291,27 @@ module OntologiesHelper
     sections
   end
 
-
   def language_selector_tag(name)
     languages = languages_options
 
     if languages.empty? && @submission_latest
+      return unless  @ontology.admin?(session[:user])
       content_tag(:div, data: { 'ontology-viewer-tabs-target': 'languageSelector' }, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'} ; margin-bottom: -1px;") do
-        edit_submission_property_link(@ontology.acronym, @submission_latest.submissionId, :naturalLanguage) do
-          "Enable multilingual display " + content_tag(:i, "", class: "fas fa-lg fa-question-circle")
+        edit_submission_property_link(@ontology.acronym, @submission_latest.submissionId, :naturalLanguage, container_id: '') do
+          ("Enable multilingual display " + content_tag(:i, "", class: "fas fa-lg fa-question-circle")).html_safe
         end
       end
     else
-      select_tag name, languages_options, class: '', disabled: !ontology_data_section?, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'}; border: none; outline: none;", data: {'ontology-viewer-tabs-target': 'languageSelector'}
+      select_tag name, languages_options, class: '', disabled: !ontology_data_section?, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'}; border: none; outline: none;", data: { 'ontology-viewer-tabs-target': 'languageSelector' }
     end
   end
 
   def language_selector_hidden_tag(section)
     hidden_field_tag "language_selector_hidden_#{section}", '',
-                     data: { controller: "language-change", 'language-change-section-value': section, action: "change->language-change#dispatchLangChangeEvent"}
+                     data: { controller: "language-change", 'language-change-section-value': section, action: "change->language-change#dispatchLangChangeEvent" }
   end
 
-  def languages_options(submission =  @submission || @submission_latest)
+  def languages_options(submission = @submission || @submission_latest)
     current_lang = request_lang
     submission_lang = submission_languages(submission)
     # Transform each language into a select option
@@ -333,6 +333,7 @@ module OntologiesHelper
     end
     return html.html_safe
   end
+
   def new_view_path(ont_id)
     ont_id_esc = CGI.escape(ont_id)
     if session[:user].nil?
@@ -341,11 +342,13 @@ module OntologiesHelper
       "/ontologies/new?ontology[viewOf]=#{ont_id_esc}"
     end
   end
+
   def new_element_link(title, link)
     link_to(link, title: title, class: "mx-1") do
       inline_svg_tag("icons/plus.svg", width: '15px', height: '15px')
     end
   end
+
   def ontology_icon_links(links, submission_latest)
     links.map do |icon, attr|
       value = submission_latest.nil? ? nil : submission_latest.send(attr)
@@ -356,8 +359,9 @@ module OntologiesHelper
       link_to(inline_svg("#{icon}.svg"), Array(value).first || '', link_options)
     end.join.html_safe
   end
+
   def ontology_depiction_card
-    return  if Array(@submission_latest&.depiction).empty?
+    return if Array(@submission_latest&.depiction).empty?
 
     render Layout::CardComponent.new do
       list_container(@submission_latest.depiction) do |depiction_url|
@@ -365,18 +369,19 @@ module OntologiesHelper
       end
     end
   end
+
   def metadata_formats_buttons
-    render SummarySectionComponent.new(title: 'Get my metadata back', show_card: false)  do
+    render SummarySectionComponent.new(title: 'Get my metadata back', show_card: false) do
       content_tag :div, data: { controller: 'metadata-downloader' } do
         horizontal_list_container([
-                                           ['NQuads', 'N-Triple'],
-                                           ['JsonLd', 'Json-LD'],
-                                           ['XML', 'RDF/XML']
-                                         ]) do |format, label|
+                                    ['NQuads', 'N-Triple'],
+                                    ['JsonLd', 'Json-LD'],
+                                    ['XML', 'RDF/XML']
+                                  ]) do |format, label|
           render ChipButtonComponent.new(type: 'clickable', 'data-action': "metadata-downloader#download#{format}") do
-              concat content_tag(:span, label)
-              concat content_tag(:span, inline_svg("summary/download.svg", width: '15px', height: '15px'))
-            end
+            concat content_tag(:span, label)
+            concat content_tag(:span, inline_svg("summary/download.svg", width: '15px', height: '15px'))
+          end
         end
       end
     end
@@ -399,6 +404,23 @@ module OntologiesHelper
     render RoundedButtonComponent.new(link: edit_ontology_path(@ontology.acronym), icon: 'edit.svg',
                                       size: 'medium',
                                       title: 'Edit metadata')
+  end
+
+  def upload_ontology_button
+    if session[:user].nil?
+      render PillButtonComponent.new do
+        link_to "/login?redirect=/ontologies/new" do
+          inline_svg('upload.svg') + "Submit new ontology"
+        end
+      end
+
+    else
+      render PillButtonComponent.new do
+        link_to new_ontology_path do
+          inline_svg('upload.svg') + "Submit new ontology"
+        end
+      end
+    end
   end
 
   def submission_json_button

@@ -53,15 +53,13 @@ class OntologiesController < ApplicationController
       update_filters_counts = @object_count.map do |section, values_count|
          values_count.map do |value, count|
            replace("count_#{section}_#{value}") do
-             helpers.turbo_frame_tag("count_#{section}_#{value}") do
-               helpers.content_tag(:span, class: 'p-1 px-2') { count.to_s }
-             end
+             helpers.turbo_frame_tag("count_#{section}_#{value}") { count.to_s }
            end
          end
        end.flatten
       streams = [
         replace('ontologies_filter_count_request') do
-          helpers.content_tag(:p, class: "browse-desc-text", style: "margin-bottom: 15px;") { "Showing #{submissions.size}" }
+          helpers.content_tag(:p, class: "browse-desc-text", style: "margin-bottom: 12px !important;") { "Showing #{submissions.size}" }
         end
       ] + update_filters_counts
     else
