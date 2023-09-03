@@ -32,6 +32,9 @@
               %p.browse-uploaded-date.text-truncate
                 = ontology[:contact].humanize
 
+        - if ontology[:released]
+          .browse-ontology-view{data:{controller:'tooltip'}, title: "Release date #{ontology[:released].split('/').last}"}
+            = DateTime.parse(ontology[:released]).year
 
         - if ontology[:format]
           .browse-ontology-view
