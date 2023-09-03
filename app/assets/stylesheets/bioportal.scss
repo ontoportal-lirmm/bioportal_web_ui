@@ -17,6 +17,17 @@ p {
   float:left;
 }
 
+.admin-border{
+  border: 1px solid;
+  border-color: var(--admin-color) !important;
+}
+
+.admin-background{
+  background-color: var(--light-color) !important;
+  border-color: var(--admin-color) !important;
+  color: var(--admin-color) !important;
+}
+
 #hd {
   background: image-url('layout/header_bg.png') repeat-x;
   width: 100%;

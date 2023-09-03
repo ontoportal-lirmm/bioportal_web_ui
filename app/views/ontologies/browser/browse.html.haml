@@ -41,7 +41,7 @@
           %div{style:'margin-top: 27px'}
             %p.browse-filters-title Filters
             - if session[:user]&.admin?
-              %div.browse-filter{style: "border-color: var(--admin-color);"}
+              %div.browse-filter.admin-border
                 = render SwitchInputComponent.new(id:'filter-private', name:'private_only', checked: @show_private_only) do
                   Show private ontology only
             %div.browse-filter{style:'border: none'}
