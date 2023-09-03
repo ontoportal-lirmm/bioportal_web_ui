@@ -1,6 +1,6 @@
 import tippy from 'tippy.js';
 
-export default function useTooltip(elem) {
+export default function useTooltip(elem, params) {
     const content = elem.title
     elem.removeAttribute('title')
     tippy(elem, {
@@ -9,7 +9,6 @@ export default function useTooltip(elem) {
         content: content,
         allowHTML: true,
         placement: 'top',
-        interactive: true,
-        maxWidth: '400'
+        maxWidth: '400', ...params
     })
 }
