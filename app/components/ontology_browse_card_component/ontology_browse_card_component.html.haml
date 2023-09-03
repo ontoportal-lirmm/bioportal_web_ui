@@ -40,7 +40,7 @@
           .browse-ontology-deprecated
             deprecated
         - if ontology[:viewOfOnt]
-          .browse-ontology-view
+          .browse-ontology-view{data:{controller:'tooltip'}, title: "View of the ontology #{ontology[:viewOfOnt].split('/').last}"}
             view
     .browse-ontology-cards
       - if ontology[:format] != 'SKOS' && ontology[:class_count] > 0
