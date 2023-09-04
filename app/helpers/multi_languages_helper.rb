@@ -8,6 +8,10 @@ module MultiLanguagesHelper
     concept_label
   end
 
+  def sorted_labels(labels)
+    Array(labels).sort_by { |label| label['prefLabel'].is_a?(String) ? label['prefLabel'] : label['prefLabel'].last }
+  end
+
   def select_language_label(concept_label, platform_languages = %i[en fr])
     concept_value = nil
 

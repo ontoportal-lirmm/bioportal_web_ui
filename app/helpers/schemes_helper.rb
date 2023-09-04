@@ -33,15 +33,7 @@ module SchemesHelper
       end
     end
 
-    schemes_labels.sort_by! do |s|
-      pref_label = s['prefLabel']
-      
-      if pref_label.is_a? String
-        pref_label
-      else
-        pref_label.last
-      end
-    end
+    schemes_labels = sorted_labels(schemes_labels)
 
     if selected_label
       schemes_labels.unshift selected_label
@@ -91,22 +83,15 @@ module SchemesHelper
 
   def tree_link_to_schemes(schemes_labels, main_scheme_label, selected_scheme_id)
     out = ''
-   
-    schemes_labels.sort_by { |s|
-      pref_label = s['prefLabel']
-      
-      if pref_label.is_a? String
-        pref_label
-      else
-        pref_label.last
-      end
-    }.each do |s|
+
+    sorted_labels(schemes_labels).each do |s|
       next unless main_scheme_label.nil? || s['prefLabel'] != main_scheme_label['prefLabel']
+
       out  << <<-EOS
             <li class="doc">
               #{link_to_scheme(s, selected_scheme_id)}
             </li>
-          EOS
+      EOS
     end
     out
   end

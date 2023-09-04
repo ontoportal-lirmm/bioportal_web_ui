@@ -66,9 +66,7 @@ module CollectionsHelper
   end
 
   def sort_collections_label(collections_labels)
-    collections_labels.sort_by do |s|
-      s['prefLabel'].is_a?(String) ? s['prefLabel'] : s['prefLabel'].last
-    end
+    sorted_labels(collections_labels)
   end
 
   def link_to_collection(collection, selected_collection_id)
