@@ -3,7 +3,7 @@
                                     next_url: concept_list_url(@page.nextPage, request_collection_id, @ontology.acronym),
                                     current_page: @page.page, next_page: @page.nextPage,
                                     auto_click: @auto_click) do |c|
-  - concepts = c.collection.sort_by{|concept| [concept.prefLabel.capitalize || concept.id]}
+  - concepts = c.collection.sort_by{|concept| [concept.prefLabel&.capitalize || concept.id]}
   - if concepts && !concepts.empty?
     = raw tree_link_to_concept(child: concepts.shift, ontology_acronym: @ontology.acronym, active_style: c.auto_click? ? 'active' : '')
     - concepts.each do  |concept|
