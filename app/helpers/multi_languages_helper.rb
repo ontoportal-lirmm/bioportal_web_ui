@@ -13,7 +13,7 @@ module MultiLanguagesHelper
 
     concept = language_hash(concept_label)
 
-    return { '@none' => concept } if concept.is_a?(String)
+    return ['@none', concept] if concept.is_a?(String)
 
     concept = concept.to_h
 
@@ -27,12 +27,22 @@ module MultiLanguagesHelper
     concept_value || concept.to_a.first
   end
 
+  def main_language_label(label)
+    select_language_label(label).last
+  end
+
   def display_in_multiple_languages(label)
     label = language_hash(label)
 
+    if label.nil?
+      return render Display::AlertComponent.new(message: t('ontology_details.concept.no_preferred_name_for_selected_language'),
+                                                type: "warning",
+                                                closable: true)
+    end
+
     return content_tag(:p, label) if label.is_a?(String)
 
-    raw label.map do |key, value|
+    raw(label.map do |key, value|
       content_tag(:div, class: 'd-flex align-items-center') do
         concat content_tag(:p, Array(value).join(', '), class: 'm-0')
 
@@ -40,7 +50,10 @@ module MultiLanguagesHelper
           concat content_tag(:span, key.upcase, class: 'badge badge-secondary ml-1')
         end
       end
-    end.join
+    end.join)
   end
 
+  def selected_language_label(label)
+    language_hash(label).values.first
+  end
 end

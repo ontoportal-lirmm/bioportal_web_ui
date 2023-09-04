@@ -3,7 +3,6 @@ require 'cgi'
 class ConceptsController < ApplicationController
   include MappingsHelper
   include ConceptsHelper
-  include MultiLanguagesHelper
   layout 'ontology'
 
   def show_concept
@@ -70,7 +69,7 @@ class ConceptsController < ApplicationController
       return
     end
 
-    render LabelLinkComponent.inline(cls_id, concept_label(ont_id, cls_id))
+    render LabelLinkComponent.inline(cls_id, helpers.main_language_label(concept_label(ont_id, cls_id)))
   end
 
   def show_definition

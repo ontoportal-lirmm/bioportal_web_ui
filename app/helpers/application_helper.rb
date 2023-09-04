@@ -9,7 +9,7 @@ module ApplicationHelper
   REST_URI = $REST_URL
   API_KEY = $API_KEY
 
-  include ModalHelper
+  include ModalHelper, MultiLanguagesHelper
 
   RESOLVE_NAMESPACE = {:omv => "http://omv.ontoware.org/2005/05/ontology#", :skos => "http://www.w3.org/2004/02/skos/core#", :owl => "http://www.w3.org/2002/07/owl#",
                        :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#", :rdfs => "http://www.w3.org/2000/01/rdf-schema#", :metadata => "http://data.bioontology.org/metadata/",
@@ -23,8 +23,7 @@ module ApplicationHelper
                        :oboInOwl => "http://www.geneontology.org/formats/oboInOwl#", :idot => "http://identifiers.org/idot/", :sd => "http://www.w3.org/ns/sparql-service-description#",
                        :cclicense => "http://creativecommons.org/licenses/"}
 
-  helper MultiLanguagesHelper
-  
+
   def get_apikey
     unless session[:user].nil?
       return session[:user].apikey
@@ -189,7 +188,7 @@ module ApplicationHelper
 
     return string if node.children.nil? || node.children.empty?
     
-    node.children.sort! { |a, b| (select_language_label(a.prefLabel).last || a.id).downcase <=> (select_language_label(b.prefLabel).last || b.id).downcase }
+    node.children.sort! { |a, b| (select_language_label(a.prefLabel)&.last || a.id).downcase <=> (select_language_label(b.prefLabel)&.last || b.id).downcase }
     node.children.each do |child|
       active_style = child.id.eql?(id) ? "active" : ''
 
@@ -225,7 +224,7 @@ module ApplicationHelper
     if child.prefLabel.nil?
       prefLabelHTML =  child.id.split('/').last
     else
-      prefLabelLang, prefLabelHTML = get_concept_label(child.prefLabel)
+      prefLabelLang, prefLabelHTML = select_language_label(child.prefLabel)
       prefLabelLang = prefLabelLang.to_s.upcase
       tooltip = prefLabelLang.eql?("@NONE") ? "" : "data-controller='tooltip' data-tooltip-position-value='right' title='#{prefLabelLang}'";
     end
@@ -620,7 +619,7 @@ module ApplicationHelper
 
   ###END ruby equivalent of JS code in bp_ajax_controller.
   def ontology_viewer_page_name(ontology_name, concept_label, page)
-    return ontology_name + " | " + select_language_label(concept_label)[1] + " - #{page.capitalize}"
+    ontology_name + " | " + select_language_label(concept_label)[1] + " - #{page.capitalize}"
   end
 
 
