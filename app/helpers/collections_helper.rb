@@ -33,16 +33,7 @@ module CollectionsHelper
       end
     end
 
-    collections_labels.sort_by! do |s|
-      pref_label = s['prefLabel']
-
-      if pref_label.is_a? String
-        pref_label
-      else
-        pref_label.last
-      end
-    end
-
+    collections_labels = sorted_labels(collections_labels)
     collections_labels.unshift selected_label if selected_label
     [collections_labels, selected_label]
   end

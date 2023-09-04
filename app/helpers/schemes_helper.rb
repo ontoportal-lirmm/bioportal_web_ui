@@ -34,10 +34,7 @@ module SchemesHelper
     end
 
     schemes_labels = sorted_labels(schemes_labels)
-
-    if selected_label
-      schemes_labels.unshift selected_label
-    end
+    schemes_labels.unshift selected_label if selected_label
     [schemes_labels, selected_label]
   end
 

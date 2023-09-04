@@ -32,7 +32,7 @@ module MultiLanguagesHelper
   end
 
   def main_language_label(label)
-    select_language_label(label).last
+    select_language_label(label)&.last
   end
 
   def display_in_multiple_languages(label)
