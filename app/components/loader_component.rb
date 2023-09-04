@@ -24,12 +24,4 @@ class LoaderComponent < ViewComponent::Base
       end
     end
   end
-
-  def small?
-    @small
-  end
-  def small_class
-    "spinner-border-sm"
-  end
-
 end
