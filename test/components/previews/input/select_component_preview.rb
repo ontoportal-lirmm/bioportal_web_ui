@@ -11,12 +11,17 @@ class Input::SelectComponentPreview < ViewComponent::Preview
     render Input::SelectComponent.new(id: id, name: name, value: values, selected: selected, multiple: multiple, open_to_add_values: open_to_add_values)
   end
 
-  def open_to_add(id: "", name: "", values: ["choices 1", "choices 2", "choices 3"], selected: "choices 2", multiple: true , open_to_add_values: true)
+  def open_to_add(id: "", name: "", values: ["choices 1", "choices 2", "choices 3"], selected: "choices 2", multiple: true, open_to_add_values: true)
     render Input::SelectComponent.new(id: id, name: name, value: values, selected: selected, multiple: multiple, open_to_add_values: open_to_add_values)
   end
 
-  def with_icon(id: "", name: "", values: [{id: "fr", title: "French", icon: "fi fi-fr fis"}, {id: "en", title: "English", icon: "fi fi-us fis"}], withIcon: true, placeholder: "Choose language")
-    render SelectInputComponent.new(id: id, name: name, values: values, withIcon: withIcon, placeholder: placeholder)
+  def with_icon
+    values = [
+      ['', ''],
+      ["<span class='f32'>\n<span class='flag fr' style='margin-right: 0.5em;'></span></span><span>FR</span>", 'fr'],
+      ["<span class='f32'>\n<span class='flag gb' style='margin-right: 0.5em;'></span><span><span>EN</span>", 'en']
+    ]
+    render SelectInputComponent.new(id: 'id', name: 'name', values: values, placeholder: 'Choose a language')
   end
 
 end
