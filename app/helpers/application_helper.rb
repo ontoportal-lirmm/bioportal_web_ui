@@ -188,7 +188,7 @@ module ApplicationHelper
 
     return string if node.children.nil? || node.children.empty?
     
-    node.children.sort! { |a, b| (select_language_label(a.prefLabel)&.last || a.id).downcase <=> (select_language_label(b.prefLabel)&.last || b.id).downcase }
+    node.children.sort! { |a, b| (main_language_label(a.prefLabel) || a.id).downcase <=> (main_language_label(a.prefLabel) || b.id).downcase }
     node.children.each do |child|
       active_style = child.id.eql?(id) ? "active" : ''
 
