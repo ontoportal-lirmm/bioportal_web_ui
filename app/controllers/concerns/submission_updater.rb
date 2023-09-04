@@ -48,6 +48,7 @@ module SubmissionUpdater
   end
 
   def delete_ontologies_from_object(new_ontologies,old_ontologies,object)
+    new_ontologies = [] if new_ontologies.nil?
     ontologies = old_ontologies - new_ontologies
     ontologies.each do |ont|
       ontology = LinkedData::Client::Models::Ontology.find(ont)
