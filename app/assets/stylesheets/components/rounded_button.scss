@@ -1,0 +1,17 @@
+.rounded-button {
+    border: 1px solid var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: 40px;
+    transition: background-color ease 0.3s;
+}
+
+.rounded-button:hover {
+    background-color: var(--primary-color);
+    
+}
+
+.rounded-button:hover svg path {
+    fill: white;
+}
