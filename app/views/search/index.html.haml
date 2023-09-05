@@ -1,7 +1,7 @@
 - @title = t("search.title")
 
 %div.container.mt-5
-  %h1.display-4 
+  %h1.display-4
     = t("search.class_search")
 
   = form_tag("/search", method: "post") do
@@ -20,7 +20,7 @@
         %div.col-sm-2.mb-4 Search language
         %div.col-sm-10.mb-4
           %div.w-25
-            = render SelectInputComponent.new(id: "search_language", name: "search_language", values: [{id: "fr", title: "French", icon: "fi fi-fr fis"}, {id: "en", title: "English", icon: "fi fi-us fis"}], withIcon: true, placeholder: "Choose language")
+            = render Input::LanguageSelectorComponent.new(id:'search_language' , name:'search_language', languages: {fr: 'French', en: 'English'})
         %div.col-sm-2= t("search.include_in_search") + ":"
         %div.col-sm-10
           %div.form-check
@@ -32,7 +32,7 @@
           %div.form-check
             = check_box(:search, :include_views, class: "form-check-input")
             = label(:search, :include_views, t('search.ontology_views'), class: "form-check-label")
-        
+
         %div.col-sm-2= t("search.narrow_search_to") + ":"
         %div.col-sm-10
           %div.form-check

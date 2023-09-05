@@ -327,7 +327,7 @@ function performSearch() {
         includeNonProduction = jQuery("#search_include_non_production").is(":checked"),
         includeOnlyDefinitions = jQuery("#search_require_definition").is(":checked"),
         exactMatch = jQuery("#search_exact_match").is(":checked"),
-        categories = jQuery("#search_categories").val() || "";
+        categories = jQuery("#search_categories").val() || "",
         language = jQuery("#select_search_language").val() || "";
 
     // Set the list of search words to be blacklisted for the ontology ownership algorithm
