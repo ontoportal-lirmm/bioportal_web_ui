@@ -2,11 +2,12 @@
 
 class Input::LanguageSelectorComponent < ViewComponent::Base
 
-  def initialize(languages:, id: '', name: '' )
+  def initialize(languages:, selected: nil,  id: '', name: '' )
     super
     @languages = languages
     @id = id
     @name = languages
+    @selected = selected
   end
 
   def languages_options
@@ -20,6 +21,6 @@ class Input::LanguageSelectorComponent < ViewComponent::Base
   end
 
   def call
-    render SelectInputComponent.new(id: @id, name: @name, values: languages_options, placeholder: 'Select a language')
+    render SelectInputComponent.new(id: @id, name: @name, values: languages_options, selected: @selected, placeholder: 'Select a language')
   end
 end

@@ -18,8 +18,8 @@ class Input::SelectComponentPreview < ViewComponent::Preview
   def with_icon
     values = [
       ['', ''],
-      ["<span class='f32'>\n<span class='flag fr' style='margin-right: 0.5em;'></span></span><span>FR</span>", 'fr'],
-      ["<span class='f32'>\n<span class='flag gb' style='margin-right: 0.5em;'></span><span><span>EN</span>", 'en']
+      ["<span class='flag-icon flag-icon-fr'></span></span></span><span>FR</span>", 'fr'],
+      ["<span class='flag-icon flag-icon-gb'></span><span><span>EN</span>", 'en']
     ]
     render SelectInputComponent.new(id: 'id', name: 'name', values: values, placeholder: 'Choose a language')
   end
