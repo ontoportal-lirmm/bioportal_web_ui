@@ -235,6 +235,8 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (9.2.2)
     nio4r (2.5.9)
+    nokogiri (1.14.3-x86_64-darwin)
+      racc (~> 1.4)
     nokogiri (1.14.3-x86_64-linux)
       racc (~> 1.4)
     oj (3.14.3)
@@ -418,6 +420,7 @@ GEM
     zeitwerk (2.6.8)
 
 PLATFORMS
+  x86_64-darwin-21
   x86_64-linux
 
 DEPENDENCIES

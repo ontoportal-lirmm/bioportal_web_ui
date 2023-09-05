@@ -13,6 +13,15 @@ application.register("class-search-auto-complete", ClassSearchAutoCompleteContro
 import ContainerSplitterController from "./container_splitter_controller"
 application.register("container-splitter", ContainerSplitterController)
 
+import FairScoreHomeController from "./fair_score_home_controller"
+application.register("fair-score-home", FairScoreHomeController)
+
+import FairScoreLandscapeController from "./fair_score_landscape_controller"
+application.register("fair-score-landscape", FairScoreLandscapeController)
+
+import FairScoreSummaryController from "./fair_score_summary_controller"
+application.register("fair-score-summary", FairScoreSummaryController)
+
 import FormAutoCompleteController from "./form_auto_complete_controller"
 application.register("form-auto-complete", FormAutoCompleteController)
 
