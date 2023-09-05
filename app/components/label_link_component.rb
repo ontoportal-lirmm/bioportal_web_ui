@@ -2,7 +2,7 @@
 
 class LabelLinkComponent < ViewComponent::Base
 
-  def initialize(id:, text:, icon: 'fas fa-external-link-alt')
+  def initialize(id:, text:, icon: 'popup-link')
     @id = id
     @text = text
     @icon = icon
