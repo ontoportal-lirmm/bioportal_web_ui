@@ -5,7 +5,7 @@
     - @enable_ontolobridge = !$NEW_TERM_REQUEST_ONTOLOGIES.nil? && $NEW_TERM_REQUEST_ONTOLOGIES.include?(@ontology.acronym)
     %div.tooltip
     %div#bd_content.bd_content.explore{data:{controller: 'container-splitter'}}
-      %div.sidebar.d-flex.flex-column.mr-2.card{data:{'container-splitter-target': 'container'}}
+      %div.sidebar.d-flex.flex-column.p-1.mr-1{data:{'container-splitter-target': 'container'}}
         = render partial: 'ontologies/concepts_browsers/concepts_browser'
       %div#concept_content.d-flex.flex-column.card.p-1.ml-2{data:{'container-splitter-target': 'container'}}
         = render partial: 'concepts/show'

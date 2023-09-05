@@ -38,33 +38,27 @@
             = link_to("Reset UI cache connection", "#", id: "reset_memcache_connection_action", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
             = link_to("Flush GOO cache", "#", id: "flush_goo_cache_action", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
             = link_to("Flush HTTP cache", "#", id: "flush_http_cache_action", class: "btn btn-outline-secondary btn-sm",  role: "button")
-        
-        -# Check for updates
+
         %div#site-admin-update-check.mb-5
           %div.site-admin-page-header
             VERSION MANAGEMENT
           %dive.site-admin-page-section
             = link_to("Check for updates", "#", id: "update_check_action", class: "btn btn-outline-secondary btn-sm",  role: "button")
 
-        -# View appliance ID
         %div#site-admin-appliance-id.mb-5
           %div.site-admin-page-header
             APPLIANCE ID
           %dive.site-admin-page-section
             %div#appliance-id
               %span
-        
-        -# Clear caches
+
         %div#site-admin-clear-caches.my-5
           %div.site-admin-page-header
             MONITORING LINKS
           %dive.site-admin-page-section
             = link_to("Newrelic", "https://login.newrelic.com/login", target: '_blank', id: "newrelic_link", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
             = link_to("StatusCake", "https://app.statuscake.com/Login", target: '_blank', id: "statuscake_link", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
-          
-
-      -# Ontology Administration tab
-      %div.tab-pane.fade{id: "ontology-admin", role: "tabpanel", aria: { labelledby: "ontology-admin-tab" }}
+      - t.item_content do
         %div.ontologies_list_container.mt-3
           %table{:style => "float:left;"}
             %tr
@@ -75,9 +69,8 @@
                   %span.ui-button-text{:class => "report_date_generated_button"}
           %p.tab_description{:style => "clear:both;"}
           %table#adminOntologies.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
+      - t.item_content do
 
-      -# Licensing tab
-      %div.tab-pane.fade{id: "licensing", role: "tabpanel", aria: { labelledby: "licensing-admin-tab" }}
         %div#renew-license-notice
 
         %table.table.table-sm.table-bordered.mt-5#license-table
@@ -85,22 +78,18 @@
             %tr
               %th{scope: "col"} Licensed to
               %th{scope: "col"} Appliance ID
-              %th{scope: "col"} Valid till  
+              %th{scope: "col"} Valid till
               %th{scope: "col"} Days remaining
           %tbody
 
         %div.mb-5#renew-license-button
-          = link_to("Renew license", new_admin_license_path(), class: "btn btn-primary", role: "button", remote: "true")
+          = link_to("Renew license", new_admin_license_path, class: "btn btn-primary", role: "button", remote: "true")
 
         %div.mb-5#renew-license-form
-
-      -# Users tab
-      %div.tab-pane.fade{id: "users", role: "tabpanel", aria: { labelledby: "users-admin-tab" }}
+      - t.item_content do
         %div.ontologies_list_container.mt-3
           %table#adminUsers.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
-      
-      -# metadata tab
-      %div.tab-pane.fade{id: "ontologies_metadata_curator", role: "tabpanel", aria: { labelledby: "ontologies_metadata_curator-admin-tab" }}
+      - t.item_content do
         = render partial: 'ontologies_metadata_curator/metadata_tab'
 
 
