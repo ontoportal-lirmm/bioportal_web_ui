@@ -7,6 +7,21 @@ require 'pry' # used in a rescue
 
 module ApplicationHelper
 
+  include ModalHelper, MultiLanguagesHelper
+
+  RESOLVE_NAMESPACE = {:omv => "http://omv.ontoware.org/2005/05/ontology#", :skos => "http://www.w3.org/2004/02/skos/core#", :owl => "http://www.w3.org/2002/07/owl#",
+                       :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#", :rdfs => "http://www.w3.org/2000/01/rdf-schema#", :metadata => "http://data.bioontology.org/metadata/",
+                       :metadata_def => "http://data.bioontology.org/metadata/def/", :dc => "http://purl.org/dc/elements/1.1/", :xsd => "http://www.w3.org/2001/XMLSchema#",
+                       :oboinowl_gen => "http://www.geneontology.org/formats/oboInOwl#", :obo_purl => "http://purl.obolibrary.org/obo/",
+                       :umls => "http://bioportal.bioontology.org/ontologies/umls/", :door => "http://kannel.open.ac.uk/ontology#", :dct => "http://purl.org/dc/terms/",
+                       :void => "http://rdfs.org/ns/void#", :foaf => "http://xmlns.com/foaf/0.1/", :vann => "http://purl.org/vocab/vann/", :adms => "http://www.w3.org/ns/adms#",
+                       :voaf => "http://purl.org/vocommons/voaf#", :dcat => "http://www.w3.org/ns/dcat#", :mod => "http://www.isibang.ac.in/ns/mod#", :prov => "http://www.w3.org/ns/prov#",
+                       :cc => "http://creativecommons.org/ns#", :schema => "http://schema.org/", :doap => "http://usefulinc.com/ns/doap#", :bibo => "http://purl.org/ontology/bibo/",
+                       :wdrs => "http://www.w3.org/2007/05/powder-s#", :cito => "http://purl.org/spar/cito/", :pav => "http://purl.org/pav/", :nkos => "http://w3id.org/nkos/nkostype#",
+                       :oboInOwl => "http://www.geneontology.org/formats/oboInOwl#", :idot => "http://identifiers.org/idot/", :sd => "http://www.w3.org/ns/sparql-service-description#",
+                       :cclicense => "http://creativecommons.org/licenses/"}
+
+
   def get_apikey
     unless session[:user].nil?
       return session[:user].apikey
@@ -153,8 +168,8 @@ module ApplicationHelper
   def build_tree(node, string, id, concept_schemes: [])
 
     return string if node.children.nil? || node.children.empty?
-
-    node.children.sort! { |a, b| (a.prefLabel || a.id).downcase <=> (b.prefLabel || b.id).downcase }
+    
+    node.children.sort! { |a, b| (main_language_label(a.prefLabel) || a.id).downcase <=> (main_language_label(a.prefLabel) || b.id).downcase }
     node.children.each do |child|
       active_style = child.id.eql?(id) ? "active" : ''
 
@@ -186,14 +201,27 @@ module ApplicationHelper
     icons = child.relation_icon(node)
     muted_style = child.isInActiveScheme&.empty? ? 'text-muted' : ''
     href = ontology_acronym.blank? ? '#' : "/ontologies/#{child.explore.ontology.acronym}/concepts/?id=#{CGI.escape(child.id)}&language=#{language}"
+
+    if child.prefLabel.nil?
+      prefLabelHTML =  child.id.split('/').last
+    else
+      prefLabelLang, prefLabelHTML = select_language_label(child.prefLabel)
+      prefLabelLang = prefLabelLang.to_s.upcase
+      tooltip = prefLabelLang.eql?("@NONE") ? "" : "data-controller='tooltip' data-tooltip-position-value='right' title='#{prefLabelLang}'";
+    end
+
     link = <<-EOS
-        <a id='#{child.id}' data-conceptid='#{child.id}'
-           data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
-           data-collections-value='#{child.memberOf || []}'
-           data-active-collections-value='#{child.isInActiveCollection || []}'
-           data-skos-collection-colors-target='collection'
-            class='#{muted_style} #{active_style}'>
-            #{child.prefLabel ? child.prefLabel({ use_html: true }) : child.id.split('/').last}
+        <a id='#{child.id}' 
+        data-conceptid='#{child.id}'
+        data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
+        data-collections-value='#{child.memberOf || []}'
+        data-active-collections-value='#{child.isInActiveCollection || []}'
+        data-skos-collection-colors-target='collection'
+        class='#{muted_style} #{active_style}'
+        #{tooltip}
+          >
+            #{ prefLabelHTML }
+            
         </a>
     EOS
 
@@ -554,8 +582,8 @@ module ApplicationHelper
   end
 
   ###END ruby equivalent of JS code in bp_ajax_controller.
-  def ontology_viewer_page_name(ontology_name, concept_name_title , page)
-    ontology_name + " | " +concept_name_title + " - #{page.capitalize}"
+  def ontology_viewer_page_name(ontology_name, concept_label, page)
+    ontology_name + " | " + main_language_label(concept_label) + " - #{page.capitalize}"
   end
 
   def link_to_modal(name, options = nil, html_options = nil, &block)

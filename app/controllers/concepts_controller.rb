@@ -69,7 +69,7 @@ class ConceptsController < ApplicationController
       return
     end
 
-    render LabelLinkComponent.inline(cls_id, concept_label(ont_id, cls_id))
+    render LabelLinkComponent.inline(cls_id, helpers.main_language_label(concept_label(ont_id, cls_id)))
   end
 
   def show_definition

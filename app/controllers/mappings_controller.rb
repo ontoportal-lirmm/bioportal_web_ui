@@ -279,8 +279,8 @@ class MappingsController < ApplicationController
       end
     else
       mapping = LinkedData::Client::Models::Mapping.new
-      @ontology_from = LinkedData::Client::Models::Ontology.find(params[:ontology_from])
-      @ontology_to = LinkedData::Client::Models::Ontology.find(params[:ontology_to])
+      @ontology_from = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_from].split('/').last).first
+      @ontology_to = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_to]&.split('/')&.last).first
       @concept_from = @ontology_from.explore.single_class({ full: true }, params[:conceptid_from]) if @ontology_from
       if @ontology_to
         @concept_to = @ontology_to.explore.single_class({ full: true }, params[:conceptid_to])

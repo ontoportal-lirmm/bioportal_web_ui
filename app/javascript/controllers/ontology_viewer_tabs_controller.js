@@ -26,17 +26,11 @@ export default class extends Controller {
     this.changeEvent.removeEventListener()
   }
 
-  selectTab(event) {
-    this.#updateURL(event)
-  }
-
-  #updateURL(event){
-    const page = event.target.getAttribute("data-bp-ont-page");
-    const page_name = event.target.getAttribute("data-bp-ont-page-name");
-
-    (new HistoryService()).pushState({p: page}, page_name + " | " + jQuery(document).data().bp.ont_viewer.org_site, "?p=" + page);
-
-    this.#disableLanguageSelector(page)
+  updateLanguageSelector(event) {
+    if(event.target.id === "ontology_viewer"){
+      let page = event.detail.data.selectedTab
+      this.#disableLanguageSelector(page)
+    }
   }
 
   #disableLanguageSelector(selectedSection){

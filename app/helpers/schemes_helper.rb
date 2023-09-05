@@ -24,19 +24,17 @@ module SchemesHelper
     schemes_labels = []
     schemes.each do  |x|
       id = x['@id']
-      label = get_scheme_label(x)
+      label = select_language_label(get_scheme_label(x))
       if id.eql? main_uri
-        label = "#{label} (main)" unless label.empty?
+        label[1] = "#{label[1]} (main)" unless label[0].empty?
         selected_label = { 'prefLabel' => label, '@id' => id }
       else
         schemes_labels.append( { 'prefLabel' => label, '@id' => id })
       end
     end
-    schemes_labels.sort_by! { |s|  s['prefLabel']}
 
-    if selected_label
-      schemes_labels.unshift selected_label
-    end
+    schemes_labels = sorted_labels(schemes_labels)
+    schemes_labels.unshift selected_label if selected_label
     [schemes_labels, selected_label]
   end
 
@@ -50,8 +48,8 @@ module SchemesHelper
     t("ontology_details.sections.#{section}")
   end
 
-  def scheme_path(scheme_id = '')
-    "/ontologies/#{@ontology.acronym}/schemes/show_scheme?id=#{escape(scheme_id)}"
+  def scheme_path(scheme_id = '', language = '')
+    "/ontologies/#{@ontology.acronym}/schemes/show_scheme?id=#{escape(scheme_id)}&lang=#{language}"
   end
 
   def no_main_scheme?
@@ -82,21 +80,29 @@ module SchemesHelper
 
   def tree_link_to_schemes(schemes_labels, main_scheme_label, selected_scheme_id)
     out = ''
-    schemes_labels.sort_by { |s| [s['prefLabel']] }.each do |s|
+
+    sorted_labels(schemes_labels).each do |s|
       next unless main_scheme_label.nil? || s['prefLabel'] != main_scheme_label['prefLabel']
 
-      li = <<-EOS
-        <li class="doc">
-          <a id="#{s['@id']}" href="#{scheme_path(s['@id'])}" 
-            data-turbo="true" data-turbo-frame="scheme" data-schemeid="#{s['@id']}"
-            class="#{selected_scheme_id.eql?(s['@id']) ? 'active' : nil}">
-              #{get_scheme_label(s)}
-          </a>
-        </li>
+      out  << <<-EOS
+            <li class="doc">
+              #{link_to_scheme(s, selected_scheme_id)}
+            </li>
       EOS
-      out << li
     end
     out
+  end
+  def link_to_scheme(scheme, selected_scheme_id)
+    pref_label_lang, pref_label_html = get_scheme_label(scheme)
+    tooltip  = pref_label_lang.to_s.eql?('@none') ? '' :  "data-controller='tooltip' data-tooltip-position-value='right' title='#{pref_label_lang.upcase}'"
+    <<-EOS
+          <a id="#{scheme['@id']}" href="#{scheme_path(scheme['@id'], request_lang)}" 
+            data-turbo="true" data-turbo-frame="scheme" data-schemeid="#{scheme['@id']}"
+           #{tooltip}
+            class="#{selected_scheme_id.eql?(scheme['@id']) ? 'active' : nil}">
+              #{pref_label_html}
+          </a>
+    EOS
   end
 end
 

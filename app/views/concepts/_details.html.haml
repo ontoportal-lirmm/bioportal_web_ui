@@ -2,10 +2,7 @@
   - schemes_keys = %w[hasTopConcept topConceptOf]
   - label_xl_set = %w[skos-xl#prefLabel skos-xl#altLabel skos-xl#hiddenLabel]
 
-  - if @concept.prefLabel.nil?
-    %div.py-3.px-2
-      = render(AlertMessageComponent.new(message: t('ontology_details.concept.no_preferred_name_for_selected_language'),  type: "warning", closeable: true))
- 
+
   = render ConceptDetailsComponent.new(id:'concept-details', acronym: @ontology.acronym,
               properties: @concept.properties,
               top_keys: %w[description comment],
@@ -22,25 +19,26 @@
         %td
           %p= @concept.prefLabel({:use_html => true}).html_safe
 
+    - c.header(stripped: true) do |t|
+      - t.add_row({th: t('ontology_details.concept.id')}, {td:@concept.id})
+      - t.add_row({th: t('ontology_details.concept.preferred_name')}) do |h|
+        - h.td do
+          = display_in_multiple_languages(@concept.prefLabel)
+
       - unless @concept.synonym.nil? || @concept.synonym.empty?
-        %tr
-          %td{nowrap: ""}= t('ontology_details.concept.synonyms')
-          %td
-            - for synonym in @concept.synonym
-              %p= synonym
-          %td
-            %div.synonym-change-request
-              = add_synonym_button
-              = remove_synonym_button
-      
-      
+        - t.add_row({th: t('ontology_details.concept.synonyms')}) do |h|
+          - h.td do
+            %div.d-flex
+              %div
+                = display_in_multiple_languages(@concept.synonym)
+              %div.synonym-change-request
+                = add_synonym_button
+                = remove_synonym_button
+
+
       - unless @concept.definition.nil? || @concept.definition.empty?
-        %tr
-          %td{nowrap: ""}= t('ontology_details.concept.definitions')
-          %td
-            %p= @concept.definition.join(" ")
-     
-      
+        - t.add_row({th: t('ontology_details.concept.definitions')}, {td: display_in_multiple_languages(@concept.definition)})
+
       - if @concept.obsolete?
         %tr
           %td{nowrap: ""}= t('ontology_details.concept.obsolete')

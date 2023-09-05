@@ -10,7 +10,7 @@ class LabelXlController < ApplicationController
     label_xl_label = label_xl ? label_xl['literalForm'] : nil
     label_xl_label = params[:id] if label_xl_label.nil? || label_xl_label.empty?
 
-    render LabelLinkComponent.inline(params[:id], label_xl_label)
+    render LabelLinkComponent.inline(params[:id], helpers.main_language_label(label_xl_label))
   end
 
   private

@@ -15,5 +15,4 @@ class LoaderComponent < ViewComponent::Base
       end
     end
   end
-
 end
