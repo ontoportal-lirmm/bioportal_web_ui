@@ -43,6 +43,7 @@
               %div.my-1
                 - @concept.memberOf.each do |v|
                   = raw get_link_for_collection_ajax(v, @ontology.acronym, '_blank')
+
         - unless @concept.inScheme.nil?  || @concept.inScheme.empty?
           %tr
             %td{nowrap: ""} In Schemes

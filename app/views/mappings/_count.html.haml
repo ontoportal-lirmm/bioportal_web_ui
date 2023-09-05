@@ -1,19 +1,19 @@
-%table#mapping_count_table.zebra{cellpadding: "0", cellspacing: "0"}
-  %thead
-    %tr
-      %th Ontology
-      %th Mappings
-  %tbody
-    - if @mapping_counts.blank?
-      %tr
-        %td There are no mappings to or from this ontology
-        %td &nbsp;
-    - else
-      - for mapping_count in @mapping_counts
-        %tr
-          %td
-            %a.facebox{href: "/mappings/show_mappings?id=#{@ontology_acronym}&target=#{mapping_count[:target_ontology].id}&height=600&width=800"}= mapping_count[:target_ontology].name
-          %td= number_with_delimiter(mapping_count[:count], delimiter: ',')
+= render TableComponent.new(id: 'mapping_count_table') do |t|
+  - t.header do |h|
+    - h.th {'Ontology'}
+    - h.th {'Mappings'}
+
+  - if @mapping_counts.blank?
+    - t.row do |r|
+      - r.td {'There are no mappings to or from this ontology'}
+      - r.td {'&nbsp;'}
+  - else
+    - @mapping_counts.each do |mapping_count|
+      - t.row do |r|
+        - r.td do
+          %a.facebox{href: "/mappings/show_mappings?id=#{@ontology_acronym}&target=#{mapping_count[:target_ontology].id}&height=600&width=800"}= mapping_count[:target_ontology].name
+        - r.td do
+          = number_with_delimiter(mapping_count[:count], delimiter: ',')
 
 :javascript
   $(document).ready(() => {

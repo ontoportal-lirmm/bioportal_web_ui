@@ -1,29 +1,26 @@
-%tr{id: "#{note.id}_tr_#{parent_type}"}
-  %td
+= render TableRowComponent.new(id: "#{note.id}_tr_#{parent_type}") do |row|
+  - row.td do
     - if current_user_admin?
       - alert_text = "Are you sure you want to delete the note <span style='color:red;font-weight:bold;'> ''" + (note.subject || '') + "''</span> created by  <span style='color:red;font-weight:bold;'>" + note.creator.split('/')[-1] + "</span>?<br/><b>This action CAN NOT be undone!!!</b>"
       = button_to "Delete", notes_path(noteid: note.id, parent_type: parent_type), method: :delete, class:'btn btn-sm btn-link',  form: {data: { turbo: true, turbo_confirm: alert_text, turbo_frame: '_top'}}
-  %td
+  - row.td do
     - note_link = "/ontologies/#{ontology_acronym}/notes/"
     - note_link =  "#{note_link}?noteid=#{CGI.escape(note.id)}"
     = link_to_modal note.subject || note_link , note_link, id:"row_#{note.id}",
-                                class: "ont_notes_list_link notes_list_link",
-                                data: { show_modal_title_value: ""}
+                                  class: "ont_notes_list_link notes_list_link",
+                                  data: { show_modal_title_value: ""}
     &nbsp;&nbsp;&nbsp;
     %span{:id => "#{note.id}_row_archived", :style => "font-size: x-small; color: grey;"}
       - if note.archived
         archived
-  %td.d-none
-    = note.subject
-  %td.d-none
-    = note.archived || "false"
-  %td
+  - row.td do
     = note.creator.split('/')[-1]
-  %td
+
+  - row.td do
     = note.proposal ? get_note_type_text(note.proposal.type) : "Comment"
   - if parent_type.eql?('ontology')
-    %td
+    - row.td do
       - if note.relatedClass && note.relatedClass.length > 0
-        %a{href: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{CGI.escape(note.relatedClass.first)}"}= note.relatedClass.first
-  %td
+        %a{href: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{CGI.escape(note.relatedClass.first)}", 'data-turbo': 'false'}= note.relatedClass.first
+  - row.td do
     = DateTime.parse(note.created).strftime("%Y-%m-%d")
