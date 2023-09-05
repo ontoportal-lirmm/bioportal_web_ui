@@ -8,7 +8,7 @@ class LanguageFieldComponent < ViewComponent::Base
   def initialize(value:, label: nil)
     super
     @value = value
-    @lang_code = ISO_639.find(value)&.alpha2 || nil
+    @lang_code = ISO_639.find(value.split('/').last)&.alpha2 || nil
     @label = label
   end
 
