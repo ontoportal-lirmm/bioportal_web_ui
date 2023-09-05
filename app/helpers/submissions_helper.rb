@@ -266,7 +266,7 @@ module SubmissionsHelper
 
 
   def attribute_infos(attr_label)
-    @metadata.select{ |attr_hash| attr_hash["attribute"].to_s.eql?(attr_label) }.first
+    submission_metadata.select{ |attr_hash| attr_hash["attribute"].to_s.eql?(attr_label) }.first
   end
 
   def attribute_help_text(attr)
@@ -456,12 +456,14 @@ module SubmissionsHelper
   end
 
 
-  def generate_attribute_text(attr_label , label)
+  def generate_attribute_text(attr_label , label, tooltip: true)
     attr = attribute_infos(attr_label)
     label_html = "<div class='d-flex align-items-center'><span class='mr-1'>#{label}</span><span>"
     # Generate tooltip
-    help_text = attribute_help_text(attr)
-    label_html << help_tooltip(help_text, {:id => "tooltip#{attr["attribute"]}"} ).html_safe
+    if  tooltip
+      help_text = attribute_help_text(attr)
+      label_html << help_tooltip(help_text, {:id => "tooltip#{attr["attribute"]}"} ).html_safe
+    end
     label_html << '</span></div>'
     label_html.html_safe
   end

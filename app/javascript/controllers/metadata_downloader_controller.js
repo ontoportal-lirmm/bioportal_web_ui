@@ -57,7 +57,7 @@ export default class extends Controller {
                 if (subJson["hasDomain"] == null) {
                     subJson["hasDomain"] = ontJson["hasDomain"];
                 } else {
-                    subJson["hasDomain"] = subJson["hasDomain"].split(", ").concat(ontJson["hasDomain"]);
+                    subJson["hasDomain"] = subJson["hasDomain"].join(', ').split(", ").concat(ontJson["hasDomain"]);
                     /* make the array unique:
                      var unique = arr.filter(function(elem, index, self) {
                      return index == self.indexOf(elem);

@@ -1,10 +1,3 @@
-= turbo_frame_tag 'application_modal_content' do
-  - @licenses.each do |attribute|
-    - attr = attribute_infos(attribute)
-    - value = Array(@submission_latest.send(attribute))
-    .creation_info
-      %p.description_text 
-        = attr["label"] || attribute
-    %p.normal_text 
-      = value.join(", ")
-        
+= render_in_modal do
+  = render Layout::ListComponent.new do |l|
+    = properties_list_component(l, @licenses.map { |x| [x.to_s, @submission_latest.send(x.to_s)] }.to_h)

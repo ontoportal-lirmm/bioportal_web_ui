@@ -48,26 +48,6 @@ module MappingsHelper
     return uri
   end
 
-  def get_link_for_cls_ajax(cls_id, ont_acronym, target = nil)
-    # Note: bp_ajax_controller.ajax_process_cls will try to resolve class labels.
-    # Uses 'http' as a more generic attempt to resolve class labels than .include? ont_acronym; the
-    # bp_ajax_controller.ajax_process_cls will try to resolve class labels and
-    # otherwise remove the UNIQUE_SPLIT_STR and the ont_acronym.
-    if target.nil?
-      target = ""
-    else
-      target = " target='#{target}' "
-    end
-    if cls_id.start_with? 'http://'
-      href_cls = " href='#{bp_class_link(cls_id, ont_acronym)}' "
-      data_cls = " data-cls='#{cls_id}' "
-      data_ont = " data-ont='#{ont_acronym}' "
-      return "<a class='cls4ajax' #{data_ont} #{data_cls} #{href_cls} #{target}>#{cls_id}</a>"
-    else
-      return auto_link(cls_id, :all, :target => '_blank')
-    end
-  end
-
   # method to get (using http) prefLabel for interportal classes
   # Using bp_ajax_controller.ajax_process_interportal_cls will try to resolve class labels.
   def ajax_to_inter_portal_cls(cls)
