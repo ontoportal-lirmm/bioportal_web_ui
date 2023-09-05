@@ -74,6 +74,8 @@ gem 'turnout'
 gem 'will_paginate', '~> 3.0'
 
 gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'development'
+gem "flag-icons-rails", "~> 3.4"
+gem "iso-639", "~> 0.3.6"
 
 
 group :staging, :production, :appliance do

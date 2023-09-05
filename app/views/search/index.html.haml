@@ -1,7 +1,7 @@
 - @title = t("search.title")
 
 %div.container.mt-5
-  %h1.display-4 
+  %h1.display-4
     = t("search.class_search")
 
   = form_tag("/search", method: "post") do
@@ -13,10 +13,14 @@
                   aria: {label: t('search.view_search_documentation')}, class: "float-right")
     %div.form-group
       = link_to(t('search.show_advanced_options'), "javascript:void(0)", id: "advanced_options", data: {text_swap: t('search.hide_advanced_options')}, class: "form-text")
-
+  
     -# Advanced search options
-    %div#search_options{style: "display: none;"}
+    %div#search_options
       %div.form-group.row
+        %div.col-sm-2.mb-4 Search language
+        %div.col-sm-10.mb-4
+          %div.w-25
+            = render Input::LanguageSelectorComponent.new(id:'search_language' , name:'search_language', languages: {fr: 'French', en: 'English'})
         %div.col-sm-2= t("search.include_in_search") + ":"
         %div.col-sm-10
           %div.form-check
@@ -28,7 +32,7 @@
           %div.form-check
             = check_box(:search, :include_views, class: "form-check-input")
             = label(:search, :include_views, t('search.ontology_views'), class: "form-check-label")
-      %div.form-group.row
+
         %div.col-sm-2= t("search.narrow_search_to") + ":"
         %div.col-sm-10
           %div.form-check
@@ -58,10 +62,16 @@
 
 :javascript
   // Hash of ontology id => name, acronym for lookup use via JS
+  
   jQuery(document).ready(function() {
+    
     jQuery(document).data().bp.ontologies = #{Hash[LinkedData::Client::Models::Ontology.all(include_views: true).map {|o| [o.id, {name: o.name, acronym: o.acronym}]}].to_json.html_safe}
 
     if (jQuery("#search_keywords").val() !== "") {
         performSearch();
     }
   });
+
+  
+
+

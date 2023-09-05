@@ -1,27 +1,35 @@
-%div
-  - if @errors
-    %div
-      = render AlertMessageComponent.new(id:acronym+'-'+attribute+'-error', type: 'danger') do
-        = @errors.map{|e| e[:error]}.join(',')
-%div
-  - if attribute == "contact"
-    = raw submission.contact.map {|c| [c["name"], c["email"]].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
-  - elsif attribute == "naturalLanguage"
-    - lang_codes = []
-    - submission.send(attribute).each do |lang|
-      - if (lang.to_s.eql?("en") || lang.to_s.eql?("eng") || lang.to_s.eql?("http://lexvo.org/id/iso639-3/eng"))
-        - lang_codes << "gb"
-      - elsif lang.to_s.start_with?("http://lexvo.org")
-        - lang_codes << $LEXVO_TO_FLAG[lang]
-      - else
-        - lang_codes << lang
-    %ul{:class => "f32"}
-      - lang_codes.each do |lang_code|
-        %li{:class => "flag " + lang_code, :style => "margin-right: 0.5em;"}
-  - elsif attribute == "ontology"
-    = acronym
-  - else
-    - if submission.instance_values[attribute.to_s].class == String && submission.instance_values[attribute.to_s][0..3] == "http"
-      %a{:href=> ""+ submission.instance_values[attribute.to_s] +""}= submission.instance_values[attribute.to_s]
-    - else
-      = submission.instance_values[attribute.to_s]
+= render TurboFrameComponent.new(id: id) do
+  %div.d-flex.justify-content-between.align-items-center
+    %div.d-flex.justify-content-between
+      %div
+        - acronym = ontology.acronym
+        - equivalents = equivalent_properties(attribute)
+        - equivalents.each do |attr|
+          %div.d-flex
+            - if equivalents.size > 1
+              %span= "#{attr}: "
+            %div
+              %div
+                = error_message_alert
+              %div
+                - if attribute == "contact"
+                  = raw submission.contact.map {|c| [c["name"], c["email"]].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
+                - elsif attribute == "naturalLanguage"
+                  - submission.send(attribute).each do |lang|
+                    = render LanguageFieldComponent.new(value: lang)
+                - elsif attribute == "ontology"
+                  = acronym
+                - else
+                  - if submission.instance_values[attribute.to_s].is_a?(String) && %w[http https].include?(submission.instance_values[attribute.to_s][0..3])
+                    %a{:href=> ""+ submission.instance_values[attribute.to_s] +""}= submission.instance_values[attribute.to_s]
+                  - else
+                    - Array(submission.instance_values[attribute.to_s]).each do |value|
+                      - if value.is_a?(LinkedData::Client::Models::Agent)
+                        %div
+                          = display_agent(value, link: false)
+                      - else
+                        %p
+                          = value
+            %div
+              = edit_submission_property_link(ontology.acronym, submission.submissionId, attribute) do
+                %i.far.fa-edit

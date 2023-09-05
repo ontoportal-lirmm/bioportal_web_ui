@@ -1,0 +1,8 @@
+- if @lang_code
+  .d-flex.align-items-center
+    = flag_icon(lang_code)
+    - if @label
+      %div.ml-1
+        = @label
+- else
+  = render ChipButtonComponent.new(text: @value)
