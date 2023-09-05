@@ -1,6 +1,6 @@
 = turbo_frame_tag 'concepts_tree_view' do
   #tree_wrapper.hide-if-loading
-    %ul.simpleTree{data:{controller: 'simple-tree history',
+    %ul.simpleTree{data:{controller: 'simple-tree',
                         'simple-tree': { 'auto-click-value': "#{autoCLick}" },
                         action: 'clicked->history#updateURL'}}
       %li.root

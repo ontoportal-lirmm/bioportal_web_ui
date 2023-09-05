@@ -1,4 +1,4 @@
-%div{data:{controller: 'skos-collection-colors turbo-frame history',
+%div{data:{controller: 'skos-collection-colors turbo-frame',
     'skos-collection-colors': {'collections-color-select-target-value': 'collection-color-filter'},
     'turbo-frame': {
       'url-value': "/ajax/classes/treeview?ontology=#{@ontology.acronym}&conceptid=root",
@@ -22,5 +22,5 @@
           Missing roots for #{@ontology.acronym}
     - else
       = render TurboFrameComponent.new(id: 'concepts_tree_view',
-                                     src: "/ajax/classes/treeview?ontology=#{@ontology.acronym}&conceptid=#{escape(@concept.id)}&concept_schemes=#{params[:concept_schemes]}&auto_click=false",
-                                     data: {'turbo-frame-target': 'frame'})                          
+                                     src: "/ajax/classes/treeview?ontology=#{@ontology.acronym}&conceptid=#{escape(@concept.id)}&concept_schemes=#{params[:concept_schemes]}&auto_click=false&language=#{request_lang}",
+                                     data: {'turbo-frame-target': 'frame'})

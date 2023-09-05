@@ -8,7 +8,7 @@
   - if main_scheme_label.nil?
     = no_main_scheme_alert
   %div
-    %ul.simpleTree{data:{controller: 'simple-tree history', action: 'clicked->history#updateURL'}}
+    %ul.simpleTree{data:{controller: 'simple-tree', action: 'clicked->history#updateURL'}}
       %li.root
         %ul
           - if main_scheme_label.nil?

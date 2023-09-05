@@ -1,4 +1,4 @@
-= turbo_frame_tag 'schemes' do
+= render TurboFrameComponent.new(id: "schemes", data: {"turbo-frame-target": "frame"} ) do
   %div.ont-schemes{data:{controller: 'container-splitter'}}
     %div#schemesTree{data:{'container-splitter-target': 'container'}}
       - if no_schemes?

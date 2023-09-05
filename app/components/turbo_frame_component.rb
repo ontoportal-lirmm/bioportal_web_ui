@@ -28,6 +28,9 @@ class TurboFrameComponent < ViewComponent::Base
       @html_options[:class] += " #{out[:class]}"
     end
 
+    if @src && !@src.empty?
+      @html_options[:src] = @src
+    end
 
     @html_options
   end

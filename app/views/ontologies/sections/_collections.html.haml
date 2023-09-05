@@ -1,4 +1,4 @@
-= turbo_frame_tag 'collections' do
+= render TurboFrameComponent.new(id: "collections", data: {"turbo-frame-target": "frame"} ) do
   - if no_collections?
     = no_collections_alert
   - else

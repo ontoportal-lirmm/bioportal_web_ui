@@ -5,7 +5,7 @@
     no collections detected
 - else
   %div
-    %ul.simpleTree{data:{controller: 'simple-tree history', 'simple-tree': { 'auto-click-value': "true" }, action: 'clicked->history#updateURL'}}
+    %ul.simpleTree{data:{controller: 'simple-tree', 'simple-tree': { 'auto-click-value': "true" }, action: 'clicked->history#updateURL'}}
       %li.root
         %ul
           - collections_labels.sort_by{|s| [s["prefLabel"]]}.each do  |s|

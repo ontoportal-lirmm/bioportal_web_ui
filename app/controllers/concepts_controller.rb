@@ -19,7 +19,7 @@ class ConceptsController < ApplicationController
 
     @submission = get_ontology_submission_ready(@ontology)
     @ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
-    @concept = @ontology.explore.single_class({full: true}, params[:id])
+    @concept = @ontology.explore.single_class({full: true, language: request_lang}, params[:id])
     @instances_concept_id = @concept.id
 
     concept_not_found(params[:id]) if @concept.nil?
@@ -53,9 +53,8 @@ class ConceptsController < ApplicationController
 
       @concept = @ontology.explore.single_class({full: true}, params[:id])
       concept_not_found(params[:id]) if @concept.nil?
-
-      show_uri_request # process a full call
-      render :file => '/ontologies/visualize', :use_full_path => true, :layout => 'ontology'
+      @schemes = params[:concept_schemes].split(',')
+      show_ajax_request # process a full call
     end
   end
 
@@ -113,7 +112,8 @@ class ConceptsController < ApplicationController
         page: page,
         sortby:'modified,created',
         order:'desc,desc',
-        display: 'prefLabel,modified,created'
+        display: 'prefLabel,modified,created',
+        language: request_lang
       }
       if @last_date
         params.merge!(last_date: @last_date)
@@ -189,7 +189,7 @@ private
       gather_details
       render :partial => 'load'
     when 'children' # Children is called only for drawing the tree
-      @children = @concept.explore.children(pagesize: 750, concept_schemes: @schemes.join(',')).collection || []
+      @children = @concept.explore.children(pagesize: 750, concept_schemes: @schemes.join(','), language: request_lang, display: 'prefLabel,obsolete,hasChildren').collection || []
       @children.sort! { |x, y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase } unless @children.empty?
       render :partial => 'child_nodes'
     end

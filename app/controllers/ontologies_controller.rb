@@ -28,8 +28,7 @@ class OntologiesController < ApplicationController
     @app_name = 'FacetedBrowsing'
     @app_dir = '/browse'
     @base_path = @app_dir
-    ontologies = LinkedData::Client::Models::Ontology.all(
-include: LinkedData::Client::Models::Ontology.include_params + ',viewOf', include_views: true, display_context: false)
+    ontologies = LinkedData::Client::Models::Ontology.all(include: LinkedData::Client::Models::Ontology.include_params + ',viewOf', include_views: true, display_context: false)
     ontologies_hash = Hash[ontologies.map {|o| [o.id, o] }]
     @admin = session[:user] ? session[:user].admin? : false
     @development = Rails.env.development?
@@ -39,8 +38,7 @@ include: LinkedData::Client::Models::Ontology.include_params + ',viewOf', includ
 
     # The attributes used when retrieving the submission. We are not retrieving all attributes to be faster
     browse_attributes = 'ontology,acronym,submissionStatus,description,pullLocation,creationDate,released,name,naturalLanguage,hasOntologyLanguage,hasFormalityLevel,isOfType,contact'
-    submissions = LinkedData::Client::Models::OntologySubmission.all(include_views: true, display_links: false,
-display_context: false, include: browse_attributes)
+    submissions = LinkedData::Client::Models::OntologySubmission.all(include_views: true, display_links: false,display_context: false, include: browse_attributes)
     submissions_map = Hash[submissions.map {|sub| [sub.ontology.acronym, sub] }]
 
     @categories = LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
@@ -234,8 +232,7 @@ display_context: false, include: browse_attributes)
 
   def new
     @ontology = LinkedData::Client::Models::Ontology.new
-    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym', include_views: true,
-display_links: false, display_context: false)
+    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym', include_views: true,display_links: false, display_context: false)
     @categories = LinkedData::Client::Models::Category.all
     @groups = LinkedData::Client::Models::Group.all
     @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
@@ -338,7 +335,6 @@ display_links: false, display_context: false)
 
     # Get the latest submission (not necessarily the latest 'ready' submission)
     @submission_latest = @ontology.explore.latest_submission rescue @ontology.explore.latest_submission(include: '')
-
     # Is the ontology downloadable?
     @ont_restricted = ontology_restricted?(@ontology.acronym)
 
@@ -456,6 +452,10 @@ display_links: false, display_context: false)
 
 
   private
+
+
+
+
 
   def ontology_params
     p = params.require(:ontology).permit(:name, :acronym, { administeredBy:[] }, :viewingRestriction, { acl:[] },

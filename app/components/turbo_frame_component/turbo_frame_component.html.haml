@@ -1,5 +1,5 @@
 %div.d-flex.flex-column{data: {controller: 'turbo-frame-error'}}
-  = turbo_frame_tag @id, src: @src , **turbo_frame_html_options do
+  = turbo_frame_tag @id, **turbo_frame_html_options do
     %div.hide-if-loading
       = content
   %div.show-if-loading.my-auto.mx-auto

@@ -18,7 +18,7 @@ class CollectionsController < ApplicationController
     @collection = get_request_collection
     page = params[:page] || '1'
     @auto_click = page.to_s.eql?('1')
-    @page = @collection.explore.members({page: page})
+    @page = @collection.explore.members({page: page, language: request_lang})
     @concepts = @page.collection
     if @ontology.nil?
       ontology_not_found params[:ontology]

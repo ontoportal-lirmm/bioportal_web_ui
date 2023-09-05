@@ -1,0 +1,34 @@
+- sub = @submission_latest
+- details_available = true
+- if sub.nil? || (sub.respond_to?(:status) && sub.status == 404)
+  - details_available = false
+-# A header of sorts to display ontology name and subset of details.
+%div.ont-info-bar.rounded
+  %div
+    %h4
+      = link_to(@ontology.name, ontology_path(@ontology.acronym))
+    %div
+      - if (details_available && !sub.released.nil?)
+        %span.text-muted
+          Last uploaded:
+          = l(Date.parse(sub.creationDate), format: :monthfull_day_year)
+  %div.ont-info-links
+    - unless (@ontology.summaryOnly || @ont_restricted || @submission_latest.nil?)
+      = link_to(@submission_latest.id + "/download?apikey=#{get_apikey}", "aria-label": "Download latest version", title: "Download latest version") do
+        %i.fas.fa-lg.fa-download{"aria-hidden": true}
+    - if details_available
+      - if $PURL_ENABLED
+        = link_to(@ontology.purl, "aria-label": "BioPortal PURL", title: "BioPortal PURL", target: "_blank") do
+          %i.fas.fa-lg.fa-link{"aria-hidden": true}
+      = link_to(sub.homepage, "aria-label": "Ontology home page", title: "Ontology home page", target: "_blank") do
+        %i.fas.fa-lg.fa-home{"aria-hidden": true}
+      - unless sub.documentation.nil?
+        = link_to(sub.documentation, "aria-label": "Ontology documentation", title: "Ontology documentation", target: "_blank") do
+          %i.fas.fa-lg.fa-book-reader{"aria-hidden": true}
+      - unless sub.publication.nil?
+        - sub.publication.each do |pub|
+          = link_to(pub, "aria-label": "Ontology publications", title: "Ontology publications", target: "_blank") do
+            %i.fas.fa-lg.fa-book{"aria-hidden": true}
+    - if @ontology.admin?(session[:user])
+      = link_to(edit_ontology_path(@ontology.acronym), "aria-label": "Edit ontology details", title: "Edit ontology details") do
+        %i.fas.fa-lg.fa-user-edit

@@ -25,6 +25,9 @@ application.register("label-ajax", LabelAjaxController)
 import LabelsAjaxContainerController from "./labels_ajax_container_controller"
 application.register("labels-ajax-container", LabelsAjaxContainerController)
 
+import LanguageChangeController from "./language_change_controller"
+application.register("language-change", LanguageChangeController)
+
 import LoadChartController from "./load_chart_controller"
 application.register("load-chart", LoadChartController)
 
@@ -42,6 +45,9 @@ application.register("simple-tree", SimpleTreeController)
 
 import SkosCollectionColorsController from "./skos_collection_colors_controller"
 application.register("skos-collection-colors", SkosCollectionColorsController)
+
+import Ontology_viewer_tabs_controller from "./ontology_viewer_tabs_controller"
+application.register("ontology-viewer-tabs", Ontology_viewer_tabs_controller)
 
 import TabChangeController from "./tab_change_controller"
 application.register("tab-change", TabChangeController)

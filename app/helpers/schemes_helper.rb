@@ -1,11 +1,11 @@
 module SchemesHelper
 
   def get_schemes(ontology)
-    ontology.explore.schemes
+    ontology.explore.schemes(language: request_lang)
   end
 
   def get_scheme(ontology, scheme_uri)
-    ontology.explore.schemes({ include: 'all' }, scheme_uri)
+    ontology.explore.schemes({ include: 'all',  language: request_lang}, scheme_uri)
   end
 
   def get_scheme_label(scheme)

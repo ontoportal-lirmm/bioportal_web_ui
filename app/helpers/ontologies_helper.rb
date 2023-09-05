@@ -2,7 +2,7 @@ module OntologiesHelper
 
   REST_URI = $REST_URL
   API_KEY = $API_KEY
-  LANGUAGE_FILTERABLE_SECTIONS  = ['classes', 'schemes', 'collections']
+  LANGUAGE_FILTERABLE_SECTIONS  = %w[classes schemes collections instances]
 
 
 
@@ -385,19 +385,40 @@ module OntologiesHelper
     (params[:p]) ? params[:p] : 'summary'
   end
 
+  def link_to_section(section_title)
+    link_to(section_name(section_title) , ontology_path(@ontology.acronym, p: section_title),
+            id: "ont-#{section_title}-tab", class: "nav-link #{selected_section?(section_title) ? 'active show' : ''}",
+            data: { action: 'click->ontology-viewer-tabs#selectTab',
+                    toggle: "tab", target: "#ont_#{section_title}_content", 'bp-ont-page': section_title ,
+                   'bp-ont-page-name': ontology_viewer_page_name(@ontology.name, @concept&.prefLabel || '', section_title) })
+  end
+
   def selected_section?(section_title)
     current_section.eql?(section_title)
   end
 
-  def allowed_to_show_language_filter?(section)
-    LANGUAGE_FILTERABLE_SECTIONS.include?(section)
+  def ontology_data_sections
+    LANGUAGE_FILTERABLE_SECTIONS
+  end
+
+  def ontology_data_section?(section_title = current_section)
+    ontology_data_sections.include?(section_title)
+  end
+
+  def section_data(section_title)
+    if ontology_data_section?(section_title)
+      url_value = selected_section?(section_title) ? request.fullpath : "/ontologies/#{@ontology.acronym}?p=#{section_title}"
+      { controller: "history turbo-frame" , 'turbo-frame-url-value': url_value ,action: "lang_changed->history#updateURL lang_changed->turbo-frame#updateFrame" }
+    else
+      {}
+    end
   end
 
   def lazy_load_section(section_title, &block)
     if current_section.eql?(section_title)
       block.call
     else
-      render TurboFrameComponent.new(id: section_title, src: "/ontologies/#{@ontology.acronym}?p=#{section_title}", target: '_top')
+      render TurboFrameComponent.new(id: section_title, src: "/ontologies/#{@ontology.acronym}?p=#{section_title}", target: '_top', data: {"turbo-frame-target": "frame"} )
     end
   end
 
@@ -422,6 +443,33 @@ module OntologiesHelper
       sections += %w[widgets]
     end
     sections
+  end
+
+
+  def language_selector_tag(name)
+    select_tag name, languages_options, class: 'custom-select', disabled: !ontology_data_section?, data: {'ontology-viewer-tabs-target': 'languageSelector'}
+  end
+
+  def language_selector_hidden_tag(section)
+    hidden_field_tag "language_selector_hidden_#{section}", '',
+                     data: { controller: "language-change", 'language-change-section-value': section, action: "change->language-change#dispatchLangChangeEvent"}
+  end
+
+  def languages_options(submission =  @submission || @submission_latest)
+    current_lang = request_lang
+    submission_lang = submission_languages(submission)
+    # Transform each language into a select option
+    submission_lang = submission_lang.map do |lang|
+      lang = lang.split('/').last.upcase
+      [lang, lang, { selected: lang.eql?(current_lang) }]
+    end
+    options_for_select(submission_lang)
+  end
+
+  private
+
+  def submission_languages(submission = @submission)
+    submission.naturalLanguage.map { |natural_language| natural_language["iso639"] && natural_language.split('/').last }.compact
   end
 end
 

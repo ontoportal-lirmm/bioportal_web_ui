@@ -1,4 +1,4 @@
-= turbo_frame_tag 'classes' do
+=  render TurboFrameComponent.new(id: "classes", data: {"turbo-frame-target": "frame"} ) do
   - unless @error
     - @title = "#{@ontology.name} - #{@concept.prefLabel}"
     - @new_term_request_ontologies

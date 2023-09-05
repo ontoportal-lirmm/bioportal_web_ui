@@ -1,5 +1,5 @@
-import {Controller} from "@hotwired/stimulus"
-import {HistoryService} from "../mixins/useHistory";
+import { Controller } from "@hotwired/stimulus"
+import { HistoryService } from "../mixins/useHistory";
 
 // Connects to data-controller="history"
 export default class extends Controller {
@@ -7,9 +7,9 @@ export default class extends Controller {
         this.history = new HistoryService()
     }
     updateURL(event) {
-        const newData = event.detail.data
-        if (newData !== undefined) {
-            this.history.updateHistory(document.location.pathname + document.location.search, newData)
+        const { data } = event.detail
+        if (data !== undefined && Object.keys(data).length > 0) {
+            this.history.updateHistory(document.location.pathname + document.location.search, data)
         }
     }
 

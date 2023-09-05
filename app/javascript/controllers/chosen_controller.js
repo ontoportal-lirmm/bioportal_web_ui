@@ -61,9 +61,6 @@ export default class extends Controller {
 
                 chosenClose.style.position = "unset"
                 chosenClose.style.margin = "auto"
-
-
-
             }
         })
     }

@@ -180,11 +180,12 @@ module ApplicationHelper
   end
 
   def tree_link_to_concept(child:, ontology_acronym:, active_style:, node: nil)
+    language = request_lang
     li_id = child.id.eql?('bp_fake_root') ? 'bp_fake_root' : short_uuid
     open = child.expanded? ? "class='open'" : ''
     icons = child.relation_icon(node)
     muted_style = child.isInActiveScheme&.empty? ? 'text-muted' : ''
-    href = ontology_acronym.blank? ? '#' : "/ontologies/#{child.explore.ontology.acronym}/concepts/?id=#{CGI.escape(child.id)}"
+    href = ontology_acronym.blank? ? '#' : "/ontologies/#{child.explore.ontology.acronym}/concepts/?id=#{CGI.escape(child.id)}&language=#{language}"
     link = <<-EOS
         <a id='#{child.id}' data-conceptid='#{child.id}'
            data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
@@ -200,9 +201,10 @@ module ApplicationHelper
   end
 
   def tree_link_to_children(child:, concept_schemes: [])
+    language = request_lang
     li_id = child.id.eql?('bp_fake_root') ? 'bp_fake_root' : short_uuid
     concept_schemes = concept_schemes.map{|x| CGI.escape(x)}.join(',')
-    link = "<a id='#{child.id}' href='/ajax_concepts/#{child.explore.ontology.acronym}/?conceptid=#{CGI.escape(child.id)}&concept_schemes=#{concept_schemes}&callback=children'>ajax_class</a>"
+    link = "<a id='#{child.id}' href='/ajax_concepts/#{child.explore.ontology.acronym}/?conceptid=#{CGI.escape(child.id)}&concept_schemes=#{concept_schemes}&callback=children&language=#{language}'>ajax_class</a>"
     "<ul class='ajax'><li id='#{li_id}'>#{link}</li></ul>"
   end
 
@@ -464,7 +466,7 @@ module ApplicationHelper
   end
 
   def bp_class_link(cls_id, ont_acronym)
-    return "#{bp_ont_link(ont_acronym)}?p=classes&conceptid=#{escape(cls_id)}"
+    return "#{bp_ont_link(ont_acronym)}?p=classes&conceptid=#{escape(cls_id)}&language=#{request_lang}"
   end
 
   def bp_scheme_link(scheme_id, ont_acronym)
@@ -506,8 +508,8 @@ module ApplicationHelper
 
     if cls_id.start_with?('http://') || cls_id.start_with?('https://')
       link = bp_class_link(cls_id, ont_acronym)
-      ajax_url = '/ajax/classes/label'
-      cls_url = "/ontologies/#{ont_acronym}?p=classes&conceptid=#{CGI.escape(cls_id)}"
+      ajax_url = "/ajax/classes/label?language=#{request_lang}"
+      cls_url = "/ontologies/#{ont_acronym}?p=classes&conceptid=#{CGI.escape(cls_id)}&language=#{request_lang}"
       label_ajax_link(link, cls_id, ont_acronym, ajax_url , cls_url ,target)
     else
       auto_link(cls_id, :all, target: '_blank')
@@ -523,14 +525,14 @@ module ApplicationHelper
 
   def get_link_for_scheme_ajax(scheme, ont_acronym, target = '_blank')
     link = bp_scheme_link(scheme, ont_acronym)
-    ajax_url = '/ajax/schemes/label'
+    ajax_url = "/ajax/schemes/label?language=#{request_lang}"
     scheme_url = "?p=schemes&schemeid=#{CGI.escape(scheme)}"
     label_ajax_link(link, scheme, ont_acronym, ajax_url, scheme_url, target)
   end
 
   def get_link_for_collection_ajax(collection, ont_acronym, target = '_blank')
     link = bp_collection_link(collection, ont_acronym)
-    ajax_url = '/ajax/collections/label'
+    ajax_url = "/ajax/collections/label?language=#{request_lang}"
     collection_url = "?p=collections&collectionid=#{CGI.escape(collection)}"
     label_ajax_link(link, collection, ont_acronym, ajax_url, collection_url, target)
   end
@@ -606,5 +608,11 @@ module ApplicationHelper
   def skos?
     submission = @submission || @submission_latest
     submission&.hasOntologyLanguage === 'SKOS'
+  end
+
+  def request_lang
+    lang = params[:language] || params[:lang]
+    lang = 'EN' unless lang
+    lang.upcase
   end
 end

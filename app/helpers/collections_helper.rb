@@ -2,13 +2,13 @@ module CollectionsHelper
 
 
   def get_collections(ontology, add_colors: false)
-    collections = ontology.explore.collections
+    collections = ontology.explore.collections(language: request_lang)
     generate_collections_colors(collections) if add_colors
     collections
   end
 
   def get_collection(ontology, collection_uri)
-    ontology.explore.collections({ include: 'all' },collection_uri)
+    ontology.explore.collections({ include: 'all', language: request_lang},collection_uri)
   end
 
   def get_collection_label(collection)

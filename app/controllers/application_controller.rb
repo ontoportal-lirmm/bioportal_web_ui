@@ -421,6 +421,8 @@ class ApplicationController < ActionController::Base
 
   def get_class(params)
 
+    lang = request_lang
+    
     if @ontology.flat?
 
       ignore_concept_param = params[:conceptid].nil? ||
@@ -437,7 +439,7 @@ class ApplicationController < ActionController::Base
         @concept.children = []
       else
         # Display only the requested class in the tree
-        @concept = @ontology.explore.single_class({full: true}, params[:conceptid])
+        @concept = @ontology.explore.single_class({full: true, lang: lang }, params[:conceptid])
         @concept.children = []
       end
       @root = LinkedData::Client::Models::Class.new
@@ -446,13 +448,14 @@ class ApplicationController < ActionController::Base
     else
 
       # not ignoring 'bp_fake_root' here
+      include = 'prefLabel,hasChildren,obsolete'
       ignore_concept_param = params[:conceptid].nil? ||
           params[:conceptid].empty? ||
           params[:conceptid].eql?("root")
       if ignore_concept_param
         # get the top level nodes for the root
         # TODO_REV: Support views? Replace old view call: @ontology.top_level_classes(view)
-        @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])        
+        roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes], lang: lang, include: include)
         if @roots.nil? || @roots.empty?
           LOG.add :debug, "Missing @roots for #{@ontology.acronym}"
           @concept = @ontology.explore.classes.collection.first.explore.self(full: true)
@@ -465,7 +468,7 @@ class ApplicationController < ActionController::Base
         # get the initial concept to display
         root_child = @root.children.first
 
-        @concept = root_child.explore.self(full: true)
+        @concept = root_child.explore.self(full: true, lang: lang)
         # Some ontologies have "too many children" at their root. These will not process and are handled here.
         if @concept.nil?
           LOG.add :debug, "Missing class #{root_child.links.self}"
@@ -473,16 +476,16 @@ class ApplicationController < ActionController::Base
         end
       else
         # if the id is coming from a param, use that to get concept
-        @concept = @ontology.explore.single_class({full: true}, params[:conceptid])
+        @concept = @ontology.explore.single_class({full: true, lang: lang}, params[:conceptid])
         if @concept.nil? || @concept.errors
           LOG.add :debug, "Missing class #{@ontology.acronym} / #{params[:conceptid]}"
           not_found("Missing class #{@ontology.acronym} / #{params[:conceptid]}")
         end
 
         # Create the tree
-        rootNode = @concept.explore.tree(include: "prefLabel,hasChildren,obsolete", concept_schemes: params[:concept_schemes])
+        rootNode = @concept.explore.tree(include: include, concept_schemes: params[:concept_schemes], lang: lang)
         if rootNode.nil? || rootNode.empty?
-          @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
+          roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes], lang: lang, include: include)
           if @roots.nil? || @roots.empty?
             LOG.add :debug, "Missing @roots for #{@ontology.acronym}"
             @concept = @ontology.explore.classes.collection.first.explore.self(full: true)
@@ -759,6 +762,10 @@ class ApplicationController < ActionController::Base
   end
   helper_method :submission_metadata
 
+
+  def request_lang
+    helpers.request_lang
+  end
   private
   def not_found_record(exception)
     @error_message = exception.message

@@ -1,6 +1,4 @@
-= render TurboFrameComponent.new(id: 'concept_show',
-     data: {controller:'labels-ajax-container', 'action': 'turbo:before-fetch-request->labels-ajax-container#abortAll', 'labels-ajax-container-label-ajax-outlet': '#concept_show a[data-controller="label-ajax"]'}) do
-  / When we have an ontology with a flat hierarchy, we initially disable the tabs because we don't have a class to display
+= render TurboFrameComponent.new(id: 'concept_show', data: {controller:'labels-ajax-container', 'action': 'turbo:before-fetch-request->labels-ajax-container#abortAll', 'labels-ajax-container-label-ajax-outlet': '#concept_show a[data-controller="label-ajax"]'}) do
   - if @concept.id.eql?("bp_fake_root")
     %div{:style => "padding: 100px 0; font-size: larger; font-weight: bold; text-align: center;"}
       Use the "Jump To" to find a class and display details, visualization, notes, and mappings
