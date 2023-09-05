@@ -85,6 +85,7 @@ Rails.application.routes.draw do
   get '/about' => 'home#about'
   get '/site_config' => 'home#site_config'
   get '/validate_ontology_file' => 'home#validate_ontology_file_show'
+  post '/annotator_recommender_form' => 'home#annotator_recommender_form'
   match '/validate_ontology_file' => 'home#validate_ontology_file', via: [:get, :post]
   get '/layout_partial/:partial' => 'home#render_layout_partial'
   match '/visits', to: 'visits#index', via: :get

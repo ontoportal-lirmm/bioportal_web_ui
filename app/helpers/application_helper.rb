@@ -608,3 +608,8 @@ module ApplicationHelper
     submission&.hasOntologyLanguage === 'SKOS'
   end
 end
+
+def portal_name
+    name = $UI_THEME.to_s.capitalize
+    name.sub! 'portal' , 'Portal'
+end

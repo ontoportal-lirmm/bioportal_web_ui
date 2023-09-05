@@ -7,59 +7,39 @@ class HomeController < ApplicationController
   include FairScoreHelper
 
   def index
-    @ontologies_views = LinkedData::Client::Models::Ontology.all(include_views: true)
-    @ontologies = @ontologies_views.select {|o| !o.viewOf}
-    @ontologies_hash = Hash[@ontologies_views.map {|o| [o.acronym, o]}]
-    @groups = LinkedData::Client::Models::Group.all
-    @notes = LinkedData::Client::Models::Note.all
-    @last_notes = []
-    unless @notes.empty?
-      @notes.sort! {|a,b| b.created <=> a.created }
-      @notes[0..20].each do |n|
-        ont_uri = n.relatedOntology.first
-        ont = LinkedData::Client::Models::Ontology.find(ont_uri)
-        next if ont.nil?
-        username = n.creator.split("/").last
-        note = {
-            :uri => n.links['ui'],
-            :id => n.id,
-            :subject => n.subject,
-            :body => n.body,
-            :created => n.created,
-            :author => username,
-            :ont_name => ont.name
-        }
-        @last_notes.push note
-        break if @last_notes.length >= [$HOME_LATEST_NOTES_COUNT.to_i, 5].max
-      end
-    end
-    # Get the latest manual mappings
-    # All mapping classes are bidirectional.
-    # Each class in the list maps to all other classes in the list.
-    if $DISPLAY_RECENT.nil? || $DISPLAY_RECENT == true
-      @recent_mappings = get_recent_mappings  # application_controller
-    end
-    
-    organize_groups
-
-    # Calculate BioPortal summary statistics
-    @ont_count = @ontologies.length
-    @cls_count = LinkedData::Client::Models::Metrics.all.map { |m| m.classes.to_i }.sum
-    @individuals_count = LinkedData::Client::Models::Metrics.all.map {|m| m.individuals.to_i}.sum
-    @prop_count = 36286
-    @map_count = total_mapping_count
     @analytics = LinkedData::Client::Analytics.last_month
 
+    @ontologies_views = LinkedData::Client::Models::Ontology.all(include_views: true)
+    @ontologies = @ontologies_views.select {|o| !o.viewOf}
     @ontology_names = @ontologies.map { |ont| ["#{ont.name} (#{ont.acronym})", ont.acronym] }
-
-    @anal_ont_names = {}
-    @anal_ont_numbers = []
-    @analytics.onts[0..4].each do |visits|
-      ont = @ontologies_hash[visits[:ont].to_s]
-      @anal_ont_names[ont.acronym] = ont.name
-      @anal_ont_numbers << visits[:views]
+    # Calculate BioPortal summary statistics
+    @ont_count = @analytics.onts.size
+    metrics = LinkedData::Client::Models::Metrics.all
+    metrics = metrics.each_with_object(Hash.new(0)) do |h, sum|
+      h.to_hash.slice(:classes, :properties, :individuals).each { |k, v| sum[k] += v }
     end
 
+    @cls_count = metrics[:classes]
+    @individuals_count = metrics[:individuals]
+    @prop_count = metrics[:properties]
+    @map_count = total_mapping_count
+    @projects_count = LinkedData::Client::Models::Project.all.length
+    @users_count = LinkedData::Client::Models::User.all.length
+
+    @upload_benefits = [
+      'Discover new insights and connections by exploring other ontologies in the repository.',
+      'Contribute to the growth and development of your domain by adding new concepts and categories.',
+      'Use version control to manage the changes to your ontology over time and collaborate with other users.',
+      'Get feedback and suggestions from other users who can review and comment on your ontology.',
+      'Get the FAIR score and metrics for your ontology.'
+    ]
+
+    @anal_ont_names = []
+    @anal_ont_numbers = []
+    @analytics.onts[0..4].each do |visits|
+      @anal_ont_names << visits[:ont]
+      @anal_ont_numbers << visits[:views]
+    end
 
   end
 
@@ -175,6 +155,14 @@ class HomeController < ApplicationController
   def validate_ontology_file
     response = LinkedData::Client::HTTP.post('/validate_ontology_file', ontology_file: params[:ontology_file])
     @process_id = response.process_id
+  end
+
+  def annotator_recommender_form
+    if params[:submit_button] == "annotator"
+      redirect_to "/annotator?text=#{params[:text]}"
+    elsif params[:submit_button] == "recommender"
+      redirect_to "/recommender?text=#{params[:text]}"
+    end
   end
 
   private

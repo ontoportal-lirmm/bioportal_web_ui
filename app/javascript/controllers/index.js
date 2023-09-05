@@ -19,6 +19,9 @@ application.register("form-auto-complete", FormAutoCompleteController)
 import HistoryController from "./history_controller"
 application.register("history", HistoryController)
 
+import HomeSearchController from "./home_search_controller"
+application.register("home-search", HomeSearchController)
+
 import LabelAjaxController from "./label_ajax_controller"
 application.register("label-ajax", LabelAjaxController)
 
