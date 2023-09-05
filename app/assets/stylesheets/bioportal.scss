@@ -1,11 +1,35 @@
+.turbo-progress-bar {
+  height: 5px;
+  background-color: var(--light-color);
+}
+
 a{
   text-decoration: none !important;
 }
+p {
+  margin-bottom: 0;
+}
+
+body{
+  position: relative;
+}
+
 .alignright {
   float:right;
 }
 .alignleft {
   float:left;
+}
+
+.admin-border{
+  border: 1px solid;
+  border-color: var(--admin-color) !important;
+}
+
+.admin-background{
+  background-color: var(--light-color) !important;
+  border-color: var(--admin-color) !important;
+  color: var(--admin-color) !important;
 }
 
 #hd {
