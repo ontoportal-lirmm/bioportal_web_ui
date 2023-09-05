@@ -45,7 +45,7 @@
         - if ontology[:viewOfOnt]
           .browse-ontology-view{data:{controller:'tooltip'}, title: "View of the ontology #{ontology[:viewOfOnt].split('/').last}"}
             view
-        - if session[:user].admin?
+        - if session[:user]&.admin?
           %div.admin-broder{title: content_tag(:div, debug(ontology), style: 'height: 300px; overflow: scroll'), data:{controller: 'tooltip', 'tooltip-interactive-value': 'true'}}
             .browse-ontology-view.admin-background
               Debug

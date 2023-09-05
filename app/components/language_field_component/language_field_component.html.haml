@@ -1,5 +1,8 @@
-- if @lang_code && @lang_code.length == 2
-  %div.f32
-    %span.flag{:class => " #{@lang_code}", :style => "margin-right: 0.5em;"}
+- if @lang_code
+  .d-flex.align-items-center
+    = flag_icon(lang_code)
+    - if @label
+      %div.ml-1
+        = @label
 - else
-  = render ChipButtonComponent.new(text: @lang_code)
+  = render ChipButtonComponent.new(text: @value)

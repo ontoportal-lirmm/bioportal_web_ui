@@ -293,6 +293,8 @@ function currentSearchParams() {
     params.require_definition = jQuery("#search_require_definition").is(":checked");
     params.exact_match = jQuery("#search_exact_match").is(":checked");
     params.categories = jQuery("#search_categories").val() || "";
+    params.lang = jQuery("#select_search_language").val() || "";
+
     return params;
 }
 
@@ -325,7 +327,8 @@ function performSearch() {
         includeNonProduction = jQuery("#search_include_non_production").is(":checked"),
         includeOnlyDefinitions = jQuery("#search_require_definition").is(":checked"),
         exactMatch = jQuery("#search_exact_match").is(":checked"),
-        categories = jQuery("#search_categories").val() || "";
+        categories = jQuery("#search_categories").val() || "",
+        language = jQuery("#select_search_language").val() || "";
 
     // Set the list of search words to be blacklisted for the ontology ownership algorithm
     blacklistSearchWordsArr = query.split(/\s+/);
@@ -336,6 +339,7 @@ function performSearch() {
         url: determineHTTPS(jQuery(document).data().bp.config.rest_url) + "/search",
         data: {
             q: query,
+            lang: language,
             include_properties: includeProps,
             include_views: includeViews,
             obsolete: includeObsolete,

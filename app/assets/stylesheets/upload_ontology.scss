@@ -2,6 +2,9 @@
     display: flex;
     justify-content: center;
     padding: 40px 0;
+    .show {
+        display: block;
+    }
 }
 
 .upload-ontology-card {
@@ -50,9 +53,7 @@
     display: none;
 }
 
-.show {
-    display: block;
-}
+
 
 .upload-ontology-desc {
     font-size: 12px;

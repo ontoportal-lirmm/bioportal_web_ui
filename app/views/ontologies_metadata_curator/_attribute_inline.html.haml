@@ -15,17 +15,8 @@
                 - if attribute == "contact"
                   = raw submission.contact.map {|c| [c["name"], c["email"]].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
                 - elsif attribute == "naturalLanguage"
-                  - lang_codes = []
                   - submission.send(attribute).each do |lang|
-                    - if (lang.to_s.eql?("en") || lang.to_s.eql?("eng") || lang.to_s.eql?("http://lexvo.org/id/iso639-3/eng"))
-                      - lang_codes << "gb"
-                    - elsif lang.to_s.start_with?("http://lexvo.org")
-                      - lang_codes << $LEXVO_TO_FLAG[lang]
-                    - else
-                      - lang_codes << lang
-                  %ul{:class => "f32"}
-                    - lang_codes.each do |lang_code|
-                      %li{:class => "flag " + lang_code, :style => "margin-right: 0.5em;"}
+                    = render LanguageFieldComponent.new(value: lang)
                 - elsif attribute == "ontology"
                   = acronym
                 - else

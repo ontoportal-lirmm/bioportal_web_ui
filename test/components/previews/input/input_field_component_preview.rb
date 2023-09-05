@@ -87,4 +87,8 @@ class Input::InputFieldComponentPreview < ViewComponent::Preview
   def text_area(label: "Label", placeholder: "", error_message: "", helper_text: "", rows: 5)
     render Input::TextAreaComponent.new(label: label, name: "name",value: '', placeholder: placeholder, error_message: error_message, helper_text: helper_text, rows: rows)
   end
+
+  def language_input
+    render Input::LanguageSelectorComponent.new(languages: {fr: 'French', en: 'English'})
+  end
 end
