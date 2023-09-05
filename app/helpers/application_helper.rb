@@ -447,14 +447,14 @@ module ApplicationHelper
     #return DateTime.xmlschema( xml_date_time_str ).to_date.to_s
   end
 
-  def flash_class(level)
+  def notification_type(flash_key)
     bootstrap_alert_class = {
-      'notice' => 'alert-info',
-      'success' => 'alert-success',
-      'error' => 'alert-danger',
-      'alert' => 'alert-danger'
+      'notice' => 'success',
+      'success' => 'success',
+      'error' => 'error',
+      'alert' => 'alert'
     }
-    bootstrap_alert_class[level]
+    bootstrap_alert_class[flash_key]
   end
 
   ###BEGIN ruby equivalent of JS code in bp_ajax_controller.
@@ -607,4 +607,50 @@ module ApplicationHelper
     submission = @submission || @submission_latest
     submission&.hasOntologyLanguage === 'SKOS'
   end
+  
+  def current_page?(path)
+    request.path.eql?(path)
+  end   
+
+  def request_lang
+    lang = params[:language] || params[:lang]
+    lang = 'EN' unless lang
+    lang.upcase
+  end
+
+  def bp_config_json
+    # For config settings, see
+    # config/bioportal_config.rb
+    # config/initializers/ontologies_api_client.rb
+    config = {
+      org: $ORG,
+      org_url: $ORG_URL,
+      site: $SITE,
+      org_site: $ORG_SITE,
+      ui_url: $UI_URL,
+      apikey: LinkedData::Client.settings.apikey,
+      userapikey: get_apikey,
+      rest_url: LinkedData::Client.settings.rest_url,
+      proxy_url: $PROXY_URL,
+      biomixer_url: $BIOMIXER_URL,
+      annotator_url: $ANNOTATOR_URL,
+      ncbo_annotator_url: $NCBO_ANNOTATOR_URL,
+      ncbo_apikey: $NCBO_API_KEY,
+      interportal_hash: $INTERPORTAL_HASH,
+      resolve_namespace: RESOLVE_NAMESPACE
+    }
+    config[:ncbo_slice] = @subdomain_filter[:acronym] if (@subdomain_filter[:active] && !@subdomain_filter[:acronym].empty?)
+    config.to_json
+  end
+
+
+  def portal_name
+    $SITE
+  end
+
+  def navitems
+    items = [["/ontologies", "Browse"],["/mappings", "Mappings"],["/recommender", "Recommender"],["/annotator", "Annotator"], ["/landscape", "Landscape"]]
+  end
+
+
 end

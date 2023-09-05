@@ -3,10 +3,54 @@
   <title>Component Preview</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <%= stylesheet_link_tag "application" %>
+  <%= javascript_include_tag "vendor" %>
+  <script>
+      <%
+        config = {
+            org: $ORG,
+            org_url: $ORG_URL,
+            site: $SITE,
+            org_site: $ORG_SITE,
+            ui_url: $UI_URL,
+            apikey: LinkedData::Client.settings.apikey,
+            userapikey: get_apikey,
+            rest_url: LinkedData::Client.settings.rest_url,
+            proxy_url: $PROXY_URL,
+            biomixer_url: $BIOMIXER_URL,
+            annotator_url: $ANNOTATOR_URL,
+            ncbo_annotator_url: $NCBO_ANNOTATOR_URL,
+            ncbo_apikey: $NCBO_API_KEY,
+            interportal_hash: $INTERPORTAL_HASH,
+            resolve_namespace: {}
+        }
+         bp_config_json = config.to_json
+        %>
+      jQuery(document).data({
+          bp: {
+              config: <%=bp_config_json.html_safe%>,
+              user: <%=(session[:user] || {}).to_hash.to_json.html_safe%>
+          }
+      });
+      jQuery(document).data().bp.ontology =
+      <%=@ontology.to_json.html_safe%> ||
+      {
+      }
+      ;
+      jQuery(document).data().bp.submission_latest =
+      <%=@submission_latest.to_json.html_safe%> ||
+      {
+      }
+      ;
+      jQuery(document).data().bp.ontolobridge_ontologies =
+      <%=$NEW_TERM_REQUEST_ONTOLOGIES.to_json.html_safe%> ||
+      [];
+      jQuery(document).data().bp.ont_viewer = {};
+      jQuery(document).data().bp.ont_chart = {};
+  </script>
 </head>
 <body class="d-flex align-items-center justify-content-center w-100 h-100">
 
-    <%= yield %> <!-- rendered preview will be injected here -->
-
+<%= yield %> <!-- rendered preview will be injected here -->
+<%= javascript_include_tag "application" %>
 </body>
 </html>
