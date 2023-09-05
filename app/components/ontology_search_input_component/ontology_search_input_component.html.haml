@@ -1,0 +1,11 @@
+= render SearchInputComponent.new(placeholder: @placeholder,
+          name:  @name, scroll_down: @scroll_down,  ajax_url: '/ajax/ontologies',
+          item_base_url: '/ontologies/', id_key:'acronym',
+          actions_links: {search_ontology_content: "/search?query=o",  see_all_ontologies: "/ontologies?search=o"}) do |s|
+
+  - s.template do
+    %a{href: "LINK", class: "home-search-ontology-content", 'data-turbo-frame': '_top'}
+      %p#seached-ontology.home-searched-ontology
+        NAME(ACRONYM)
+      %p.home-result-type
+        TYPE
