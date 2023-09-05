@@ -54,3 +54,25 @@
           = link_to("Help", "#{$WIKI_HELP_PAGE}", target: "_blank", class: "dropdown-item")
           = link_to("Release Notes", "#{$RELEASE_NOTES}", target: "_blank", class: "dropdown-item")
           = link_to("Publications", $PUBLICATIONS_URL, target: "_blank", class: "dropdown-item")
+
+        = select_tag('language', options_for_select([['EN','en'],['FR','fr']]), id: 'language-select', class: 'nav-language',
+          data: { controller: "platform-language", action: "change->platform-language#handleLangChanged" })
+
+        = render DropdownButtonComponent.new do |d|
+          - d.header do
+            = link_to("#", id: "supportMenuDropdownLink", class: "nav-link top-nav-nav-link supportMenuDropdownLink", role: "button") do
+              Support
+          - d.with_section(divide: false) do |s|
+            - s.item do
+              = link_to(t(:submit_feedback), feedback_path(location: encode_param(request.url)), id: "submitFeedbackMenuItem", class: "pop_window")
+          - d.with_section do |s|
+            - s.header do
+              Documentation
+            - s.item do
+              = link_to(t(:_help), "#{$WIKI_HELP_PAGE}", target: "_blank")
+            - s.item do
+              = link_to(t(:_release_notes), "#{$RELEASE_NOTES}", target: "_blank")
+            - s.item do
+              = link_to(t(:_publications), $PUBLICATIONS_URL, target: "_blank")
+
+

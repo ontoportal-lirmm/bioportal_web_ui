@@ -416,5 +416,85 @@ module OntologiesHelper
     end
     sections
   end
+
+
+  def language_selector_tag(name)
+    languages = languages_options
+
+    if languages.empty?
+      content_tag(:div ,data: {'ontology-viewer-tabs-target': 'languageSelector'}, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'} ; margin-bottom: -1px;") do
+        render EditSubmissionAttributeButtonComponent.new(acronym: @ontology.acronym, submission_id: @submission_latest.submissionId, attribute: :naturalLanguage) do
+          concat "Enable multilingual display "
+          concat content_tag(:i , "", class: "fas fa-lg fa-question-circle")
+        end
+      end
+    else
+      select_tag name, languages_options, class: '', disabled: !ontology_data_section?, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'}; border: none; outline: none;", data: {'ontology-viewer-tabs-target': 'languageSelector'}
+    end
+  end
+
+  def language_selector_hidden_tag(section)
+    hidden_field_tag "language_selector_hidden_#{section}", '',
+                     data: { controller: "language-change", 'language-change-section-value': section, action: "change->language-change#dispatchLangChangeEvent"}
+  end
+
+  def languages_options(submission =  @submission || @submission_latest)
+    current_lang = request_lang
+    submission_lang = submission_languages(submission)
+    # Transform each language into a select option
+    submission_lang = submission_lang.map do |lang|
+      lang = lang.split('/').last.upcase
+      [lang, lang, { selected: lang.eql?(current_lang) }]
+    end
+    options_for_select(submission_lang)
+  end
+
+  def dispaly_complex_text(definitions)
+    html = ""
+    definitions.each do |definition|
+      if definition.is_a?(String)
+        html += '<p class="prefLabel">' + definition + '</p>'
+      elsif definition.respond_to?(:uri) && definition.uri
+        html += render LinkFieldComponent.new(value: definition.uri)
+      end
+    end
+    return html.html_safe
+  end
+
+
+  def count_subscriptions(ontology_id)
+    users = LinkedData::Client::Models::User.all(include: 'subscription', display_context: false, display_links: false )
+    users.select{ |u| u.subscription.find{ |s| s.ontology.eql?(ontology_id)} }.count
+  end
+
+  def ontology_edit_button
+    return unless  @ontology.admin?(session[:user])
+    render RoundedButtonComponent.new(link:   edit_ontology_path(@ontology.acronym), icon: 'edit.svg', size: 'medium')
+  end
+
+  def submission_json_button
+    render RoundedButtonComponent.new(link:  "#{(@submission_latest || @ontology).id}?display=all", target: '_blank', size: 'medium')
+  end
+
+  def attribute_error(attr)
+    return '' unless @errors && @errors[attr.to_sym]
+    errors = @errors[attr.to_sym]
+
+    errors.values.join(', ')
+  end
+
+  def error_message
+    if !@errors[:error].nil? && @errors[:error].is_a?(String)
+      @errors[:error]
+    else
+      "Errors in fields #{@errors.keys.join(', ')}"
+    end
+
+  end
+  private
+
+  def submission_languages(submission = @submission)
+    submission&.naturalLanguage.map { |natural_language| natural_language["iso639"] && natural_language.split('/').last }.compact
+  end
 end
 

@@ -1,4 +1,4 @@
-.chips-container div{
+.chips-container > div{
     margin-right: 10px;
 }
 
@@ -10,6 +10,7 @@
     margin-right: 6px;
     display: none;
 }
+
 
 .chips-container div label{
     cursor: pointer;

@@ -335,14 +335,14 @@ module ApplicationHelper
   def metadata_for_select
     get_metadata
     return @metadata_for_select
-  end 
+  end
 
   def get_metadata
     @metadata_for_select = []
     submission_metadata.each do |data|
       @metadata_for_select << data["attribute"]
     end
-  end    
+  end
 
 
   def ontologies_to_acronyms(ontologyIDs)
@@ -394,7 +394,7 @@ module ApplicationHelper
                     class: "add_proposal btn btn-primary", data: { show_modal_title_value: "Add a new proposal"}
     end
   end
- 
+
   def subscribe_button(ontology_id)
     if session[:user].nil?
       return link_to 'Subscribe to notes emails', "/login?redirect=#{request.url}", {style:'font-size: .9em;', class:'link_button'}
@@ -606,5 +606,50 @@ module ApplicationHelper
   def skos?
     submission = @submission || @submission_latest
     submission&.hasOntologyLanguage === 'SKOS'
+  end
+
+  def current_page?(path)
+    request.path.eql?(path)
+  end
+
+  def request_lang
+    lang = params[:language] || params[:lang]
+    lang = 'EN' unless lang
+    lang.upcase
+  end
+
+  def bp_config_json
+    # For config settings, see
+    # config/bioportal_config.rb
+    # config/initializers/ontologies_api_client.rb
+    config = {
+      org: $ORG,
+      org_url: $ORG_URL,
+      site: $SITE,
+      org_site: $ORG_SITE,
+      ui_url: $UI_URL,
+      apikey: LinkedData::Client.settings.apikey,
+      userapikey: get_apikey,
+      rest_url: LinkedData::Client.settings.rest_url,
+      proxy_url: $PROXY_URL,
+      biomixer_url: $BIOMIXER_URL,
+      annotator_url: $ANNOTATOR_URL,
+      ncbo_annotator_url: $NCBO_ANNOTATOR_URL,
+      ncbo_apikey: $NCBO_API_KEY,
+      interportal_hash: $INTERPORTAL_HASH,
+      resolve_namespace: RESOLVE_NAMESPACE
+    }
+    config[:ncbo_slice] = @subdomain_filter[:acronym] if (@subdomain_filter[:active] && !@subdomain_filter[:acronym].empty?)
+    config.to_json
+  end
+  def portal_name
+    $SITE
+    end
+  def navitems
+    items = [["/ontologies", "Browse"],["/mappings", "Mappings"],["/recommender", "Recommender"],["/annotator", "Annotator"], ["/landscape", "Landscape"]]
+  end
+
+  def attribute_enforced_values(attr)
+    submission_metadata.select {|x| x['@id'][attr]}.first['enforcedValues']
   end
 end
