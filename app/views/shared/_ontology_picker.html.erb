@@ -31,17 +31,21 @@ var hideChosenResults = function(){
 
 <div id="ontology_picker_container" style="margin-bottom: 1em ; width: 100%">
   <h2 id="ontology_picker_head" style="margin-bottom: 3px; margin-top: 0px;">
-    <%=sel_text%>
+    <%=t('select_ontologies_list')%>
   </h2>
 
   <div id="<%=@select_id%>_container" >
-    <%=select form_object, form_attribute, options_for_select(@onts_for_select, selected_ontologies), { }, :multiple => 'true', "data-placeholder".to_sym => "Start typing to select ontologies or leave blank to use all", :style => "width: 432px;" %>
+    <%=select form_object, form_attribute, options_for_select(@onts_for_select, selected_ontologies), { }, :multiple => 'true', "data-placeholder".to_sym => t("select_ontologies"), :style => "width: 432px;" %>
   </div>
 
   <div style="float: right; font-size: smaller;">
-    <a id="ont_select_clear" href="javascript:void(0)">clear selection</a>
+    <a id="ont_select_clear" href="javascript:void(0)">
+      <%=t("clear_selection")%>
+    </a>
     &nbsp;&nbsp;&nbsp;
-    <a id="ont_select_adv_href" href="javascript:void(0)">select from list</a>
+    <a id="ont_select_adv_href" href="javascript:void(0)">
+     <%=t("select_from_list")%>
+     </a>
   </div>
 
   <%=render_advanced_picker(custom_ontologies, selected_ontologies)%>

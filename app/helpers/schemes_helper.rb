@@ -41,15 +41,13 @@ module SchemesHelper
   end
 
   def concept_label_to_show(submission: @submission_latest)
-    submission&.hasOntologyLanguage == 'SKOS' ? 'Concepts' : 'Classes'
+    submission&.hasOntologyLanguage == 'SKOS' ? 'concepts' : 'classes'
   end
 
   def section_name(section)
-    if section.eql?('classes')
-      concept_label_to_show(submission: @submission_latest || @submission)
-    else
-      section.capitalize
-    end
+    section = concept_label_to_show(submission: @submission_latest || @submission) if section.eql?('classes')
+
+    t("ontology_details.sections.#{section}")
   end
 
   def scheme_path(scheme_id = '')

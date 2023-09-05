@@ -10,7 +10,7 @@
     %div
       - if (details_available && !sub.released.nil?)
         %span.text-muted
-          Last uploaded:
+          = t('ontology_details.header.last_uploaded')
           = l(Date.parse(sub.creationDate), format: :monthfull_day_year)
   %div.ont-info-links
     - unless (@ontology.summaryOnly || @ont_restricted || @submission_latest.nil?)

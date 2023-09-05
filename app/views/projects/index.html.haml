@@ -1,32 +1,32 @@
-- @title = "Project Listing"
+- @title = t("projects.title")
 
-#DescriptionDialog{:style => "display: none", :title => "project description"}
-  %p Description text
-%h1.tab_header Projects
+#DescriptionDialog{:style => "display: none", :title => t("projects.project_description")}
+  %p= t("projects.description_text")
+%h1.tab_header= t("projects.self")
 %p.tab_description
-  = t(".intro", site: "#{$SITE}")
-  = link_to(help_path(anchor: "Projects_Tab"), id: "projects-help", aria: {label: "View projects help"}) do
+  = t("projects.index.intro", site: "#{$SITE}")
+  = link_to(help_path(anchor: "Projects_Tab"), id: "projects-help", aria: {label: t("projects.view_projects_help")}) do
     %i.fas.fa-question-circle.fa-lg{aria: {hidden: "true"}, style: "margin-left: .25em"}
 
 %div{:style => "padding:10px;"}
   %span
     - if session[:user].nil?
-      = button_to "Create New Project", "/login", :method => :get
+      = button_to t("projects.create_new_project"), "/login", :method => :get
     - else
-      = button_to "Create New Project", new_project_path, :method => :get
+      = button_to t("projects.create_new_project"), new_project_path, :method => :get
   %br/
   %br/
   %table#projects.zebra{:cellpadding => "0", :cellspacing => "0"}
     %thead
       %tr
-        %th Project
-        %th Description
-        %th Contacts
-        %th Institutions
-        %th Ontologies
+        %th= t("projects.self")
+        %th= t("projects.description")
+        %th= t("projects.contacts")
+        %th= t("projects.institutions")
+        %th= t("projects.ontologies")
         - if current_user_admin?
-          %th User
-          %th Created
+          %th= t("projects.creator")
+          %th= t("projects.created")
     %tbody
       - for project in @projects
         %tr
@@ -35,15 +35,15 @@
             %strong= link_to(project.name, project_path(project.acronym))
             %br/
             %span{:style => "font-size:75%; vertical-align:bottom;"}
-              = link_to("Home Page", project.homePage, target: "_blank", rel: "nofollow")
+              = link_to(t('projects.home_page'), project.homePage, target: "_blank", rel: "nofollow")
               %span.ui-icon.ui-icon-extlink{:style => "display: inline-block; vertical-align: text-bottom;"}
               \&nbsp;&nbsp;
               - if session[:user] && (project.creator == session[:user].id || session[:user].admin?)
-                = link_to("Edit", edit_project_path(project.acronym))
+                = link_to(t("projects.edit"), edit_project_path(project.acronym))
                 / TODO_REV: Enable delete project for admins
               - if current_user_admin?
                 &nbsp;&nbsp;
-                = link_to("Delete (admin only)", project_path(project.acronym), :method => :delete, :confirm => "Are you sure?")
+                = link_to(t("projects.delete_admin_only"), project_path(project.acronym), :method => :delete, :confirm => t("projects.delete_confirm"))
           / Project description (may be truncated with a dialog)
           %td{:style => "vertical-align:top;", :width => "50%"}
             - if ! project.description.nil?

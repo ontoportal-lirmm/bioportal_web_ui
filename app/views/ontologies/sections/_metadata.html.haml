@@ -2,21 +2,21 @@
   %div.ont-metadata
     -# Details pane
     %section.ont-metadata-card.ont-details-card
-      %header.pb-2.font-weight-bold Details
+      %header.pb-2.font-weight-bold= t('ontology_details.metadata.details')
       %table.table.table-sm
         %tr
-          %td Acronym
+          %td= t('ontology_details.metadata.acronym')
           %td= @ontology.acronym
         %tr
-          %td Visibility
+          %td= t('ontology_details.metadata.visibility')
           %td= strip_links(visibility_link(@ontology))
         - if @ontology.viewing_restricted?
           %tr
-            %td Viewing restriction
+            %td= t('ontology_details.metadata.viewing_restriction')
             %td= @ontology.viewingRestriction.capitalize
         - unless @ontology.viewOf.nil?
           %tr
-            %td View of ontology
+            %td= t('ontology_details.metadata.view_of_ontology')
             %td
               - ont_parent_acronym = @ontology.viewOf.split('/').last
               - if $PURL_ENABLED
@@ -26,32 +26,32 @@
               = link_to(ont_parent_acronym, ont_url)
         - unless @submission_latest.nil?
           %tr
-            %td Description
+            %td= t('ontology_details.metadata.description')
             %td= sanitize(@submission_latest.description)
           %tr
-            %td Status
+            %td= t('ontology_details.metadata.status')
             %td= @submission_latest.status.capitalize unless @submission_latest.status.nil?
           %tr
-            %td Format
+            %td= t('ontology_details.metadata.format')
             %td= @submission_latest.hasOntologyLanguage
           %tr
-            %td Contact
+            %td= t('ontology_details.metadata.contact')
             %td= raw @submission_latest.contact.map {|c| [c.name, c.email].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
           - categories_hash = LinkedData::Client::Models::Category.all_to_hash
           - categories = @ontology.hasDomain
           - unless categories.empty?
             %tr
-              %td Categories
+              %td= t('ontology_details.metadata.categories')
               %td= categories.map {|c| categories_hash[c].name}.sort.join(", ")
             - groups_hash = LinkedData::Client::Models::Group.all_to_hash
             - groups = @ontology.group
             - unless groups.empty?
               %tr
-                %td Groups
+                %td= t('ontology_details.metadata.groups')
                 %td= groups.map {|g| groups_hash[g].name}.sort.join(", ")
           - if @ontology.admin?(session[:user])
             %tr
-              %td Pull URL
+              %td= t('ontology_details.metadata.pull_url')
               %td
                 = link_to @submission_latest.pullLocation, @submission_latest.pullLocation
           = raw additional_details
@@ -61,12 +61,12 @@
     -# Submissions pane
     %section.ont-metadata-card.ont-subs-card
       %div.ont-section-toolbar
-        %header.pb-2.font-weight-bold Submissions
+        %header.pb-2.font-weight-bold= t('ontology_details.metadata.submissions')
         - if @ontology.admin?(session[:user])
-          = link_to(new_ontology_submission_path(@ontology.acronym), "aria-label": "Add submission", title: "Add submission") do
+          = link_to(new_ontology_submission_path(@ontology.acronym), "aria-label": t('ontology_details.metadata.add_submission'), title: t('ontology_details.metadata.add_submission')) do
             %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.75rem;"}
           - unless (@submission_latest.nil? || (@submission_latest.respond_to?(:status) && @submission_latest.status == 404))
-            = link_to(edit_ontology_submission_path(@ontology.acronym, @submission_latest.submissionId), "aria-label": "Edit latest submission", title: "Edit latest submission") do
+            = link_to(edit_ontology_submission_path(@ontology.acronym, @submission_latest.submissionId), "aria-label": t('ontology_details.metadata.edit_latest_submission'), title: t('ontology_details.metadata.edit_latest_submission')) do
               %i.fas.fa-user-edit{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
       = render TurboFrameComponent.new(id: 'ontology_submissions', src: ontology_submissions_path(@ontology.acronym), target: '_top')
 
@@ -75,17 +75,17 @@
     - unless @ontology.view?
       %section.ont-metadata-card.ont-views-card
         %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold= "Views of #{@ontology.acronym}"
+          %header.pb-2.font-weight-bold= "#{t('ontology_details.metadata.views_of')} #{@ontology.acronym}"
           - ont_id_esc = CGI.escape(@ontology.id)
           -# TODO: I don't think we should have brackets in the URL parameters.
           - if session[:user].nil?
-            %a{href: "/login?redirect=#{escape("/ontologies/new?ontology[viewOf]=#{ont_id_esc}")}", "aria-label": "Create new view", title: "Create new view"}
+            %a{href: "/login?redirect=#{escape("/ontologies/new?ontology[viewOf]=#{ont_id_esc}")}", "aria-label": t('ontology_details.metadata.create_new_view'), title: t('ontology_details.metadata.create_new_view')}
               %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
           - else
             %a{href: "/ontologies/new?ontology[viewOf]=#{ont_id_esc}"}
               %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
         - if @views.empty?
-          %p.font-italic= "No views of #{@ontology.acronym} available"
+          %p.font-italic= t('ontology_details.metadata.no_views_of', name: @ontology.acronym)
         - else
           %div.border-top
             %dl
@@ -98,20 +98,20 @@
       -# Misc links pane
       %section.ont-metadata-card.ont-links-card
         %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold Links
-        %a{:href => "#{(@submission_latest || @ontology).id}?display=all", :target => '_blank', :class => "btn btn-primary"} Go to the REST API JSON entry
+          %header.pb-2.font-weight-bold= t('ontology_details.metadata.links')
+        %a{:href => "#{(@submission_latest || @ontology).id}?display=all", :target => '_blank', :class => "btn btn-primary"}= t('ontology_details.metadata.go_to_rest_api_json_entry')
 
       -# Metadata links pane
       %section.ont-metadata-card.ont-metadatalinks-card
         %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold Get my metadata back
+          %header.pb-2.font-weight-bold= t('ontology_details.metadata.get_my_metadata_back')
         %div
           - unless @submission_latest.nil?
             %div{data:{controller: 'metadata-downloader'}}
               =javascript_include_tag "jsonld"
-              %button{:id => "getMetadataBackNquadsBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadNQuads'} N-Triple
-              %button{:id => "getMetadataBackJsonldBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadJsonLd'} Json-LD
-              %button{:id => "getMetadataBackXmlBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadXML'} RDF/XML
+              %button{:id => "getMetadataBackNquadsBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadNQuads'}= t('ontology_details.metadata.n_triple')
+              %button{:id => "getMetadataBackJsonldBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadJsonLd'}= t('ontology_details.metadata.json_ld')
+              %button{:id => "getMetadataBackXmlBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadXML'}= t('ontology_details.metadata.rdf_xml')
             -# Listener in bp_ontology_viewer.js.erb
       -# Fair score pane
       -# TODO temporary hide  fairness_service for AGROVOC after there demand
@@ -126,46 +126,46 @@
       -# Metrics pane
       %section.ont-metadata-card.ont-metrics-card
         %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold Metrics
-          = link_to(Rails.configuration.settings.links[:metrics], target: "_blank", "aria-label": "View individual metrics definitions", title: "View individual metrics definitions") do
+          %header.pb-2.font-weight-bold= t('ontology_details.metadata.metrics')
+          = link_to(Rails.configuration.settings.links[:metrics], target: "_blank", "aria-label": t('ontology_details.metadata.view_individual_metrics_definitions'), title: t('ontology_details.metadata.view_individual_metrics_definitions')) do
             %i.fas.fa-lg.fa-question-circle{"aria-hidden": "true", style: "margin-left: 0.5rem"}
         - if @metrics.nil? || (@metrics.is_a?(Array) && @metrics.empty?) || (@metrics.respond_to?(:status) && @metrics.status == 404)
-          %p.font-italic= "We have not yet calculated metrics for #{@ontology.acronym}"
+          %p.font-italic= "#{t('ontology_details.metadata.metrics_not_calculated_yet')} #{@ontology.acronym}"
         - else
           %table.table.table-sm
             %tr
-              %td Classes
+              %td= t('ontology_details.metadata.classes')
               %td{style: "text-align: right"}= number_with_delimiter(@metrics.classes)
             %tr
-              %td Individuals
+              %td= t('ontology_details.metadata.individuals')
               %td= number_with_delimiter(@metrics.individuals)
             %tr
-              %td Properties
+              %td= t('ontology_details.metadata.properties')
               %td= number_with_delimiter(@metrics.properties)
             %tr
-              %td Maximum depth
+              %td= t('ontology_details.metadata.max_depth')
               %td= number_with_delimiter(@metrics.maxDepth)
             %tr
-              %td Maximum number of children
+              %td= t('ontology_details.metadata.max_children')
               %td= number_with_delimiter(@metrics.maxChildCount)
             %tr
-              %td Average number of children
+              %td= t('ontology_details.metadata.avg_children')
               %td= number_with_delimiter(@metrics.averageChildCount)
             %tr
-              %td Classes with a single child
+              %td= t('ontology_details.metadata.single_child_classes')
               %td= number_with_delimiter(@metrics.classesWithOneChild)
             %tr
-              %td Classes with more than 25 children
+              %td= t('ontology_details.metadata.many_children_classes')
               %td= number_with_delimiter(@metrics.classesWithMoreThan25Children)
             %tr
-              %td Classes with no definition
+              %td= t('ontology_details.metadata.no_definition_classes')
               %td= number_with_delimiter(@metrics.classesWithNoDefinition)
       -# Visits pane
       %section.ont-metadata-card.ont-analytics-card
         %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold Visits
+          %header.pb-2.font-weight-bold= t('ontology_details.metadata.visits')
           - if visits_data(@ontology)
-            = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", "aria-label": "Download as CSV", title: "Download as CSV") do
+            = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", "aria-label": t('ontology_details.metadata.download_as_csv'), title: t('ontology_details.metadata.download_as_csv')) do
               %i.fas.fa-lg.fa-download{"aria-hidden": "true", style: "margin-left: 0.5rem"}
         = render partial: "visits"
 
@@ -177,11 +177,11 @@
       -# Projects pane
       %section.ont-metadata-card.ont-projects-card
         %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold= "Projects using #{@ontology.acronym}"
-          = link_to(new_project_path(), "aria-label": "Create new project", title: "Create new project") do
+          %header.pb-2.font-weight-bold= "#{t('ontology_details.metadata.projects_using')} #{@ontology.acronym}"
+          = link_to(new_project_path(), "aria-label": t('ontology_details.metadata.create_new_project'), title: t('ontology_details.metadata.create_new_project')) do
             %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.5rem"}
         - if @projects.empty?
-          %p.font-italic= "No projects using #{@ontology.acronym}"
+          %p.font-italic= "#{t('ontology_details.metadata.no_projects_using')} #{@ontology.acronym}"
         - else
           %div.border-top
             - for project in @projects

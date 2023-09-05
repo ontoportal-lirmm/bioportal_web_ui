@@ -13,6 +13,29 @@ require 'ontologies_api_client'
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
+  
+  before_action :set_locale
+
+  # Sets the locale based on the locale cookie or the value returned by detect_locale.
+  def set_locale    
+    I18n.locale = cookies[:locale] || detect_locale
+    cookies.permanent[:locale] = I18n.locale if cookies[:locale].nil?
+  end
+
+  # Returns detedted locale based on the Accept-Language header of the request or the default locale if none is found.
+  def detect_locale    
+    languages = request.headers['Accept-Language']&.split(',')
+    supported_languages = I18n.available_locales
+
+    languages.each do |language|
+      language_code = language.split(/[-;]/).first.downcase.to_sym
+      return language_code if supported_languages.include?(language_code)
+    end
+    
+    return I18n.default_locale 
+  end
+  
+
   helper :all # include all helpers, all the time
   helper_method :bp_config_json, :current_license, :using_captcha?
   rescue_from ActiveRecord::RecordNotFound, with: :not_found_record

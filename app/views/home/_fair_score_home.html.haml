@@ -5,22 +5,22 @@
         = render partial: "fair_score/fair_service_header"
       %span
         %h2.p-2.badge.badge-secondary
-          Average
+          = t('average')
           %span.badge.badge-light
             %span#fair-score-average
               0 (0%)
         %h2.p-2.badge.badge-secondary
-          Min
+          = t('min')
           %span.badge.badge-light
             %span#fair-score-min
               0 (0%)
         %h2.p-2.badge.badge-secondary
-          Max
+          = t('max')
           %span.badge.badge-light
             %span#fair-score-max
               0 (0%)
         %h2.p-2.badge.badge-secondary
-          Median
+          = t('median')
           %span.badge.badge-light
             %span#fair-score-median
               0 (0%)
@@ -33,6 +33,6 @@
           %div.col-md-6.col-sm
             = render partial: "shared/fair_score_radar" , locals: {data: nil }
             %a.btn.btn-link{href:"/landscape#fairness_assessment"}
-              See details
+              = t('see_details')
           %div.col-md-6.col-sm
             = render partial: "shared/fair_score_bars", locals: {data: nil}

@@ -1,4 +1,4 @@
-- @title = t(".title", organization: "#{$ORG_SITE}")
+- @title = t("home.index.title", organization: "#{$ORG_SITE}")
 
 - unless $FRONT_NOTICE.nil? || $FRONT_NOTICE.empty? || cookies[:front_page_notice_closed].eql?("true")
   :javascript
@@ -19,27 +19,27 @@
     %div.col
       %div.px-2.py-2.pt-md-5.border-bottom.text-center
         %h2
-          = t(".welcome", site: "#{$SITE}")
+          = t("home.index.welcome", site: "#{$SITE}")
           %small.text-muted
-            = t(".tagline")
+            = t("home.index.tagline")
   %div.row.search.pt-4
     %div.col
       %div.card-deck
         -# Search for a class across ontologies
         %div.card
-          %div.card-header Search for a class
+          %div.card-header= t('home.search_class')
           %div.card-body
             = form_tag("/search", method: "get") do
               %div.input-group.mb-3
-                - placeholder = t(".query_placeholder")
+                - placeholder = t("home.index.query_placeholder")
                 = text_field_tag("query", nil, class: "form-control", placeholder: placeholder)
                 %div.input-group-append
                   = button_tag(type: "submit", class: "btn btn-primary", aria: {label: "Search for a class"}) do
                     %i{class: "fas fa-search fa-lg", aria: {hidden: "true"}}
-              %a{:href => "/search?opt=advanced"} Advanced Search
+              %a{:href => "/search?opt=advanced"}= t("home.advanced_search")
         -# Search for an ontology
         %div.card
-          %div.card-header Find an ontology
+          %div.card-header= t('home.find_ontology')
           %div.card-body
             %input#find_ontology_id{:type => "hidden"}
             %div.input-group.mb-3
@@ -48,11 +48,11 @@
                 = button_tag(class: "btn btn-primary", onclick: "jumpToValueOntology()", aria: {label: "Find an ontology"}) do
                   %i{class: "fas fa-search fa-lg", aria: {hidden: "true"}}
             %div.dropdown
-              = button_tag("Browse Ontologies", type: "button", id: "ontologyGroupsDropdown", class: "btn btn-info dropdown-toggle", data: {toggle: "dropdown", offset: "0,10"}, aria: {haspopup: "true", expanded: "false"})
+              = button_tag(t('home.browse_ontologies'), type: "button", id: "ontologyGroupsDropdown", class: "btn btn-info dropdown-toggle", data: {toggle: "dropdown", offset: "0,10"}, aria: {haspopup: "true", expanded: "false"})
               %div.dropdown-menu{"aria-labelledby": "ontologyGroupsDropdown"}
-                = link_to("All", ontologies_path(), class: "dropdown-item")
+                = link_to(t('all'), ontologies_path(), class: "dropdown-item")
                 %div.dropdown-divider
-                %h6.dropdown-header Browse by group
+                %h6.dropdown-header= t("home.browse_by_group")
                 - @groups.each do |group|
                   = link_to(group[:name], ontologies_path(filter: group[:acronym]), class: "dropdown-item")
   %div.row.pt-3.statistics
@@ -60,33 +60,33 @@
       %div.card-deck
         -# Ontology visits
         %div.card
-          %div.card-header Ontology Visits #{"in full #{$SITE} " if at_slice?} (#{@analytics.date.strftime("%B %Y")})
+          %div.card-header #{t('home.ontology_visits')} #{"in full #{$SITE} " if at_slice?} (#{@analytics.date.strftime("%B %Y")})
           = content_tag(:div, nil, id: "ontology-visits-chart", class: "card-body", data: {ontnames: @anal_ont_names, ontnumbers: @anal_ont_numbers}) do
             %canvas#myChart
-            = link_to("More", visits_path())
+            = link_to(t('more'), visits_path())
         -# Ontology statistics
         %div.card
-          %div.card-header #{$SITE} Statistics #{"in full #{$SITE}" if at_slice?}
+          %div.card-header #{$SITE} #{t('statistics')} #{"in full #{$SITE}" if at_slice?}
           %ul.list-group.list-group-flush
             %li.list-group-item
               %div.d-flex.justify-content-between.align-items-center
-                %span Ontologies
+                %span= t('home.ontologies')
                 %span= number_with_delimiter(@ont_count)
             %li.list-group-item
               %div.d-flex.justify-content-between.align-items-center
-                %span Classes
+                %span= t('home.classes')
                 %span= number_with_delimiter(@cls_count, :delimiter => ",")
             %li.list-group-item
               %div.d-flex.justify-content-between.align-items-center
-                %span Individuals
+                %span= t('home.individuals')
                 %span= number_with_delimiter(@individuals_count, :delimiter => ",")
             %li.list-group-item
               %div.d-flex.justify-content-between.align-items-center
-                %span Projects
+                %span= t('home.projects')
                 %span= LinkedData::Client::Models::Project.all.length
             %li.list-group-item
               %div.d-flex.justify-content-between.align-items-center
-                %span Users
+                %span= t('home.users')
                 %span= LinkedData::Client::Models::User.all.length
   - if fairness_service_enabled?
     %div#fair-home.row.mt-3
@@ -96,11 +96,11 @@
       %div.card-deck
         -# Latest Notes
         %div.card
-          %div.card-header Latest Notes
+          %div.card-header= t('home.latest_notes')
           %ul.list-group.list-group-flush
             - if @last_notes.nil? || @last_notes.empty?
               %li.list-group-item
-                %span No recent notes have been submitted
+                %span= t('home.no_recent_notes')
             - else
               - for note in @last_notes
                 %li.list-group-item
@@ -118,7 +118,7 @@
         - if !$ENABLE_SLICES.nil? && $ENABLE_SLICES == true && !at_slice?
           -# Slices
           %div.card
-            %div.card-header Slices
+            %div.card-header= t("slices")
             %ul.list-group.list-group-flush
               - LinkedData::Client::Models::Slice.all.each_with_index do |slice, index|
                 - break if index == 10
@@ -127,15 +127,12 @@
                 %li.list-group-item
                   = link_to slice_name, slice_link
 
-
-
-  - $HOME_PAGE_LOGOS.to_a.each do |home_page_logos_row|
-    - unless home_page_logos_row[:links].to_a.empty?
-      %div.row.pt-3
-        %div.col
-          %div.card-deck
-            %div.card
-              %div.card-header= home_page_logos_row[:title]
-              %div.logos
-                - home_page_logos_row[:links].to_a.each do |logo|
-                  = link_to(image_tag(logo[:img_src]), logo[:url], target: logo[:target])
+  - $HOME_PAGE_LOGOS.each do |key, home_page_logos_row|
+    %div.row.pt-3
+      %div.col
+        %div.card-deck
+          %div.card
+            %div.card-header= t("home.#{key}")
+            %div.logos
+              - home_page_logos_row.each do |logo|
+                = link_to(image_tag(logo[:img_src]), logo[:url], target: logo[:target])
