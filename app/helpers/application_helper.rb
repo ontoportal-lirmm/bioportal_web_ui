@@ -6,8 +6,10 @@ require 'digest/sha1'
 require 'pry' # used in a rescue
 
 module ApplicationHelper
+  REST_URI = $REST_URL
+  API_KEY = $API_KEY
 
-  include ModalHelper
+  include ModalHelper, MultiLanguagesHelper
 
   RESOLVE_NAMESPACE = {:omv => "http://omv.ontoware.org/2005/05/ontology#", :skos => "http://www.w3.org/2004/02/skos/core#", :owl => "http://www.w3.org/2002/07/owl#",
                        :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#", :rdfs => "http://www.w3.org/2000/01/rdf-schema#", :metadata => "http://data.bioontology.org/metadata/",
@@ -20,6 +22,7 @@ module ApplicationHelper
                        :wdrs => "http://www.w3.org/2007/05/powder-s#", :cito => "http://purl.org/spar/cito/", :pav => "http://purl.org/pav/", :nkos => "http://w3id.org/nkos/nkostype#",
                        :oboInOwl => "http://www.geneontology.org/formats/oboInOwl#", :idot => "http://identifiers.org/idot/", :sd => "http://www.w3.org/ns/sparql-service-description#",
                        :cclicense => "http://creativecommons.org/licenses/"}
+
 
   def get_apikey
     unless session[:user].nil?
@@ -52,6 +55,7 @@ module ApplicationHelper
       end
     end
   end
+  
 
   def encode_param(string)
     CGI.escape(string)
@@ -183,8 +187,8 @@ module ApplicationHelper
   def build_tree(node, string, id, concept_schemes: [])
 
     return string if node.children.nil? || node.children.empty?
-
-    node.children.sort! { |a, b| (a.prefLabel || a.id).downcase <=> (b.prefLabel || b.id).downcase }
+    
+    node.children.sort! { |a, b| (main_language_label(a.prefLabel) || a.id).downcase <=> (main_language_label(a.prefLabel) || b.id).downcase }
     node.children.each do |child|
       active_style = child.id.eql?(id) ? "active" : ''
 
@@ -216,14 +220,27 @@ module ApplicationHelper
     icons = child.relation_icon(node)
     muted_style = child.isInActiveScheme&.empty? ? 'text-muted' : ''
     href = ontology_acronym.blank? ? '#' : "/ontologies/#{child.explore.ontology.acronym}/concepts/?id=#{CGI.escape(child.id)}&language=#{language}"
+
+    if child.prefLabel.nil?
+      prefLabelHTML =  child.id.split('/').last
+    else
+      prefLabelLang, prefLabelHTML = select_language_label(child.prefLabel)
+      prefLabelLang = prefLabelLang.to_s.upcase
+      tooltip = prefLabelLang.eql?("@NONE") ? "" : "data-controller='tooltip' data-tooltip-position-value='right' title='#{prefLabelLang}'";
+    end
+
     link = <<-EOS
-        <a id='#{child.id}' data-conceptid='#{child.id}'
-           data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
-           data-collections-value='#{child.memberOf || []}'
-           data-active-collections-value='#{child.isInActiveCollection || []}'
-           data-skos-collection-colors-target='collection'
-            class='#{muted_style} #{active_style}'>
-            #{child.prefLabel ? child.prefLabel({ use_html: true }) : child.id.split('/').last}
+        <a id='#{child.id}' 
+        data-conceptid='#{child.id}'
+        data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
+        data-collections-value='#{child.memberOf || []}'
+        data-active-collections-value='#{child.isInActiveCollection || []}'
+        data-skos-collection-colors-target='collection'
+        class='#{muted_style} #{active_style}'
+        #{tooltip}
+          >
+            #{ prefLabelHTML }
+            
         </a>
     EOS
 
@@ -274,6 +291,23 @@ module ApplicationHelper
             <i class="#{icon} d-flex"></i> #{text}
           </a>
     BLOCK
+  end
+
+  def error_message_text
+    @errors = @errors[:error] if @errors && @errors[:error]
+    if @errors.is_a?(String)
+      @errors
+    else
+      "Errors in fields #{@errors.keys.join(', ')}"
+    end
+  end
+
+  def error_message_alert
+    return if @errors.nil?
+
+    content_tag(:div, class: 'my-1') do
+      render Display::AlertComponent.new(message: error_message_text, type: 'danger', closable: false)
+    end
   end
 
   def anonymous_user
@@ -529,24 +563,23 @@ module ApplicationHelper
   end
 
   def label_ajax_data(cls_id, ont_acronym, ajax_uri, cls_url)
-    tag.attributes label_ajax_data_h(cls_id, ont_acronym, ajax_uri, cls_url)
+    label_ajax_data_h(cls_id, ont_acronym, ajax_uri, cls_url)
   end
 
-  def label_ajax_link(link, cls_id, ont_acronym, ajax_uri, cls_url, target = '')
-    href_cls = " href='#{link}'"
+  def label_ajax_link(link, cls_id, ont_acronym, ajax_uri, cls_url, target = nil)
     data = label_ajax_data(cls_id, ont_acronym, ajax_uri, cls_url)
-    style = 'btn btn-sm btn-light'
-    "<a data-controller='label-ajax' class='#{style}' #{data} #{href_cls} #{target}>#{cls_id}</a>"
+    options = {  'data-controller': 'label-ajax' }.merge(data)
+    options = options.merge({ target: target }) if target
+
+    render ChipButtonComponent.new(url: link, text: cls_id, type: 'clickable', **options)
   end
 
   def get_link_for_cls_ajax(cls_id, ont_acronym, target = nil)
-    target = target.nil? ? '' : " target='#{target}' "
-
     if cls_id.start_with?('http://') || cls_id.start_with?('https://')
       link = bp_class_link(cls_id, ont_acronym)
       ajax_url = "/ajax/classes/label?language=#{request_lang}"
       cls_url = "?p=classes&conceptid=#{CGI.escape(cls_id)}&language=#{request_lang}"
-      label_ajax_link(link, cls_id, ont_acronym, ajax_url , cls_url ,target)
+      label_ajax_link(link, cls_id, ont_acronym, ajax_url, cls_url, target)
     else
       auto_link(cls_id, :all, target: '_blank')
     end
@@ -585,8 +618,8 @@ module ApplicationHelper
   end
 
   ###END ruby equivalent of JS code in bp_ajax_controller.
-  def ontology_viewer_page_name(ontology_name, concept_name_title , page)
-    ontology_name + " | " +concept_name_title + " - #{page.capitalize}"
+  def ontology_viewer_page_name(ontology_name, concept_label, page)
+    ontology_name + " | " + main_language_label(concept_label) + " - #{page.capitalize}"
   end
 
 

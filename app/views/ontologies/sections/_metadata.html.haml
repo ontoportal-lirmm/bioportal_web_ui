@@ -1,189 +1,66 @@
 = turbo_frame_tag 'summary', target:"_top" do
-  %div.ont-metadata
-    -# Details pane
-    %section.ont-metadata-card.ont-details-card
-      %header.pb-2.font-weight-bold= t('ontology_details.metadata.details')
-      %table.table.table-sm
-        %tr
-          %td= t('ontology_details.metadata.acronym')
-          %td= @ontology.acronym
-        %tr
-          %td= t('ontology_details.metadata.visibility')
-          %td= strip_links(visibility_link(@ontology))
-        - if @ontology.viewing_restricted?
-          %tr
-            %td= t('ontology_details.metadata.viewing_restriction')
-            %td= @ontology.viewingRestriction.capitalize
-        - unless @ontology.viewOf.nil?
-          %tr
-            %td= t('ontology_details.metadata.view_of_ontology')
-            %td
-              - ont_parent_acronym = @ontology.viewOf.split('/').last
-              - if $PURL_ENABLED
-                - ont_url = @ontology.purl.sub(@ontology.acronym, ont_parent_acronym)
-              - else
-                - ont_url = @ontology.links['ui'].sub(@ontology.acronym, ont_parent_acronym)
-              = link_to(ont_parent_acronym, ont_url)
-        - unless @submission_latest.nil?
-          %tr
-            %td= t('ontology_details.metadata.description')
-            %td= sanitize(@submission_latest.description)
-          %tr
-            %td= t('ontology_details.metadata.status')
-            %td= @submission_latest.status.capitalize unless @submission_latest.status.nil?
-          %tr
-            %td= t('ontology_details.metadata.format')
-            %td= @submission_latest.hasOntologyLanguage
-          %tr
-            %td= t('ontology_details.metadata.contact')
-            %td= raw @submission_latest.contact.map {|c| [c.name, c.email].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
-          - categories_hash = LinkedData::Client::Models::Category.all_to_hash
-          - categories = @ontology.hasDomain
-          - unless categories.empty?
-            %tr
-              %td= t('ontology_details.metadata.categories')
-              %td= categories.map {|c| categories_hash[c].name}.sort.join(", ")
-            - groups_hash = LinkedData::Client::Models::Group.all_to_hash
-            - groups = @ontology.group
-            - unless groups.empty?
-              %tr
-                %td= t('ontology_details.metadata.groups')
-                %td= groups.map {|g| groups_hash[g].name}.sort.join(", ")
-          - if @ontology.admin?(session[:user])
-            %tr
-              %td= t('ontology_details.metadata.pull_url')
-              %td
-                = link_to @submission_latest.pullLocation, @submission_latest.pullLocation
-          = raw additional_details
+  .summary-page-center
+    .summary-page-first-row
+      = render partial: 'ontologies/sections/metadata/ontology_description_section'
+      = render partial: 'ontologies/sections/metadata/ontology_fairness_section'
+      = render partial: 'ontologies/sections/metadata/ontology_relations_network'
+      = render partial: 'ontologies/sections/metadata/ontology_submissions_section'
+      = render partial: 'ontologies/sections/metadata/ontology_metrics_section'
+    .summary-page-second-row
+      = ontology_depiction_card
+      = properties_card('Identifiers','Principal identifiers of the ontology', @identifiers) do |values|
+        = horizontal_list_container(values) do |v|
+          = render LinkFieldComponent.new(value: v)
 
-    = render partial: 'additional_metadata'
+      = properties_dropdown('dates','Dates','', @dates_properties) do |values|
+        = horizontal_list_container(values) do |v|
+          = render DateTimeFieldComponent.new(value: v)
 
-    -# Submissions pane
-    %section.ont-metadata-card.ont-subs-card
-      %div.ont-section-toolbar
-        %header.pb-2.font-weight-bold= t('ontology_details.metadata.submissions')
-        - if @ontology.admin?(session[:user])
-          = link_to(new_ontology_submission_path(@ontology.acronym), "aria-label": t('ontology_details.metadata.add_submission'), title: t('ontology_details.metadata.add_submission')) do
-            %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.75rem;"}
-          - unless (@submission_latest.nil? || (@submission_latest.respond_to?(:status) && @submission_latest.status == 404))
-            = link_to(edit_ontology_submission_path(@ontology.acronym, @submission_latest.submissionId), "aria-label": t('ontology_details.metadata.edit_latest_submission'), title: t('ontology_details.metadata.edit_latest_submission')) do
-              %i.fas.fa-user-edit{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
-      = render TurboFrameComponent.new(id: 'ontology_submissions', src: ontology_submissions_path(@ontology.acronym), target: '_top')
+      = properties_dropdown('person_and_organization','Persons and organizations','', @agents_properties) do |values|
+        = horizontal_list_container(values) do |v|
+          = render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: '', class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do
+            = display_agent(v, link: false)
 
+      = properties_dropdown('link','Links','Metadata properties that highlight the links enabling access to datasets, downloading semantic resources, etc', @links_properties)
 
-    -# Views pane (don't show if the ontology is a view - we don't allow views of views).
-    - unless @ontology.view?
-      %section.ont-metadata-card.ont-views-card
-        %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold= "#{t('ontology_details.metadata.views_of')} #{@ontology.acronym}"
-          - ont_id_esc = CGI.escape(@ontology.id)
-          -# TODO: I don't think we should have brackets in the URL parameters.
-          - if session[:user].nil?
-            %a{href: "/login?redirect=#{escape("/ontologies/new?ontology[viewOf]=#{ont_id_esc}")}", "aria-label": t('ontology_details.metadata.create_new_view'), title: t('ontology_details.metadata.create_new_view')}
-              %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
-          - else
-            %a{href: "/ontologies/new?ontology[viewOf]=#{ont_id_esc}"}
-              %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.5rem;"}
-        - if @views.empty?
-          %p.font-italic= t('ontology_details.metadata.no_views_of', name: @ontology.acronym)
-        - else
-          %div.border-top
-            %dl
-              - @view_decorators.each do |view_decorator|
-                %dt= view_decorator.linked_name
-                %dd= view_decorator.description
+      = properties_dropdown('projects_section','Projects and usage information','Details pertaining to the utilization of the ontology.', nil) do |c|
+        - c.row do
+          = render FieldContainerComponent.new do |f|
+            - f.label do
+              Projects using #{@ontology.acronym}
+              = new_element_link('Create new project', new_project_path)
 
-    %div.right-hand-content
+            - if @projects.empty?
+              = empty_state_message("No projects using #{@ontology.acronym}")
+            - else
+              = horizontal_list_container(@projects) do |project|
+                = render ChipButtonComponent.new(url: project_path(project.acronym), text: project.name, type: "clickable")
+        - properties_list_component(c, @projects_properties)
 
-      -# Misc links pane
-      %section.ont-metadata-card.ont-links-card
-        %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold= t('ontology_details.metadata.links')
-        %a{:href => "#{(@submission_latest || @ontology).id}?display=all", :target => '_blank', :class => "btn btn-primary"}= t('ontology_details.metadata.go_to_rest_api_json_entry')
+      = properties_dropdown('methodology','Methodology', 'Metadata properties primarily encompass the design, methods, and actions to create the ontology. This includes elements such as the tools and software employed by the creator of the ontology during its configuration', @methodology_properties)
 
-      -# Metadata links pane
-      %section.ont-metadata-card.ont-metadatalinks-card
-        %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold= t('ontology_details.metadata.get_my_metadata_back')
-        %div
-          - unless @submission_latest.nil?
-            %div{data:{controller: 'metadata-downloader'}}
-              =javascript_include_tag "jsonld"
-              %button{:id => "getMetadataBackNquadsBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadNQuads'}= t('ontology_details.metadata.n_triple')
-              %button{:id => "getMetadataBackJsonldBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadJsonLd'}= t('ontology_details.metadata.json_ld')
-              %button{:id => "getMetadataBackXmlBtn", :class => "btn btn-primary", 'data-action': 'metadata-downloader#downloadXML'}= t('ontology_details.metadata.rdf_xml')
-            -# Listener in bp_ontology_viewer.js.erb
-      -# Fair score pane
-      -# TODO temporary hide  fairness_service for AGROVOC after there demand
-      - if fairness_service_enabled? && @ontology.acronym != 'AGROVOC'
-        %section.ont-metadata-card.ont-fair-score-card#fair-summary
-          %div.ont-section-toolbar
-            %header.pb-2.font-weight-bold
-              = render partial: "fair_score/fair_service_header"
-          %div#fair-score-charts-container
-            = render partial: "fairs_score"
+      = render Layout::CardComponent.new do |c|
+        - c.header do  |h|
+          - h.text do
+            Visits
+            - if visits_data(@ontology)
+              = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", title: "Download as CSV") do
+                = inline_svg("summary/download.svg", width: '30px', height: '20px')
 
-      -# Metrics pane
-      %section.ont-metadata-card.ont-metrics-card
-        %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold= t('ontology_details.metadata.metrics')
-          = link_to(Rails.configuration.settings.links[:metrics], target: "_blank", "aria-label": t('ontology_details.metadata.view_individual_metrics_definitions'), title: t('ontology_details.metadata.view_individual_metrics_definitions')) do
-            %i.fas.fa-lg.fa-question-circle{"aria-hidden": "true", style: "margin-left: 0.5rem"}
-        - if @metrics.nil? || (@metrics.is_a?(Array) && @metrics.empty?) || (@metrics.respond_to?(:status) && @metrics.status == 404)
-          %p.font-italic= "#{t('ontology_details.metadata.metrics_not_calculated_yet')} #{@ontology.acronym}"
-        - else
-          %table.table.table-sm
-            %tr
-              %td= t('ontology_details.metadata.classes')
-              %td{style: "text-align: right"}= number_with_delimiter(@metrics.classes)
-            %tr
-              %td= t('ontology_details.metadata.individuals')
-              %td= number_with_delimiter(@metrics.individuals)
-            %tr
-              %td= t('ontology_details.metadata.properties')
-              %td= number_with_delimiter(@metrics.properties)
-            %tr
-              %td= t('ontology_details.metadata.max_depth')
-              %td= number_with_delimiter(@metrics.maxDepth)
-            %tr
-              %td= t('ontology_details.metadata.max_children')
-              %td= number_with_delimiter(@metrics.maxChildCount)
-            %tr
-              %td= t('ontology_details.metadata.avg_children')
-              %td= number_with_delimiter(@metrics.averageChildCount)
-            %tr
-              %td= t('ontology_details.metadata.single_child_classes')
-              %td= number_with_delimiter(@metrics.classesWithOneChild)
-            %tr
-              %td= t('ontology_details.metadata.many_children_classes')
-              %td= number_with_delimiter(@metrics.classesWithMoreThan25Children)
-            %tr
-              %td= t('ontology_details.metadata.no_definition_classes')
-              %td= number_with_delimiter(@metrics.classesWithNoDefinition)
-      -# Visits pane
-      %section.ont-metadata-card.ont-analytics-card
-        %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold= t('ontology_details.metadata.visits')
-          - if visits_data(@ontology)
-            = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", "aria-label": t('ontology_details.metadata.download_as_csv'), title: t('ontology_details.metadata.download_as_csv')) do
-              %i.fas.fa-lg.fa-download{"aria-hidden": "true", style: "margin-left: 0.5rem"}
-        = render partial: "visits"
+        = render Layout::ListComponent.new do |l|
+          - l.row do
+            = render partial: "visits"
 
-      -# Included in data catalog pane
-      = raw display_data_catalog(@submission_latest) unless @submission_latest.nil?
-      -# Logo & depiction
-      = raw display_logo(@submission_latest) unless @submission_latest.nil?
+      - unless @ontology.view?
+        = render Layout::CardComponent.new do |d|
+          - d.header do |h|
+            - h.text do
+              Views of #{@ontology.acronym}
+              = new_element_link('Create new view', new_view_path(@ontology.id))
+          = render Layout::ListComponent.new do |l|
+            - l.row do
+              = render partial: 'ontology_views'
 
-      -# Projects pane
-      %section.ont-metadata-card.ont-projects-card
-        %div.ont-section-toolbar
-          %header.pb-2.font-weight-bold= "#{t('ontology_details.metadata.projects_using')} #{@ontology.acronym}"
-          = link_to(new_project_path(), "aria-label": t('ontology_details.metadata.create_new_project'), title: t('ontology_details.metadata.create_new_project')) do
-            %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.5rem"}
-        - if @projects.empty?
-          %p.font-italic= "#{t('ontology_details.metadata.no_projects_using')} #{@ontology.acronym}"
-        - else
-          %div.border-top
-            - for project in @projects
-              %p= link_to(project.name, project_path(project.acronym))
-
+      - unless @submission_latest.nil?
+        = javascript_include_tag("jsonld")
+        = metadata_formats_buttons

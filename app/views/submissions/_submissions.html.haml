@@ -4,24 +4,29 @@
   - more_colspan = 7
   - more_colspan = 6 if @ont_restricted
 
-  %div.click_versions_collapse
+  %div.click_versions_collapse.p-1
     = render_alerts_container(AdminController)
-    %table#ontology_versions.table.table-sm.table-striped
-      %thead
-        %tr
-          - if @ontology.admin?(session[:user])
-            %th.align-middle ID
-          %th.align-middle Version
-          %th
-            = generate_attribute_text("released", "Released")
-          %th
-            = generate_attribute_text("modificationDate", "Modified")
-          %th
-            = generate_attribute_text("creationDate", "Uploaded")
-          - unless @ont_restricted
-            %th.align-middle Downloads
-          - if @ontology.admin?(session[:user])
-            %th.align-middle Actions
+    = render TableComponent.new(id: 'ontology_versions', stripped: false, borderless: true) do |t|
+      - t.header do |header|
+        - if @ontology.admin?(session[:user])
+          - header.th do
+            %div.align-middle
+              ID
+        - header.th do
+          %div.align-middle
+            Version
+        - header.th do
+          = attr_label("modificationDate", "Modified", show_tooltip: false)
+        - header.th do
+          = attr_label("creationDate", "Uploaded", show_tooltip: false)
+        - unless @ont_restricted
+          - header.th do
+            %div.align-middle
+              Downloads
+        - if @ontology.admin?(session[:user])
+          - header.th do
+            %div.align-middle
+              Actions
 
       - begin
         - submission_ready = @ontology.explore.latest_submission({:include_status => 'ready', display: 'submissionId'})
@@ -30,23 +35,29 @@
         - submission_readyId = -1
       - @submissions.each_with_index do |sub, index|
         - hidden_row_class = index >= 5 ? "hidden_ont hidden_select" : ""
-        %tr{class: "#{hidden_row_class}", id: "submission_#{sub.submissionId}"}
+        - t.row(id:"submission_#{sub.submissionId}" , class_css: hidden_row_class) do |r|
+
           - if @ontology.admin?(session[:user])
-            %td
-              =  sub.submissionId
-          %td
-            = raw status_link(sub, sub.submissionId==submission_readyId)
-          %td
-            = xmldatetime_to_date(sub.released) unless sub.released.nil?
-          %td
-            = xmldatetime_to_date(sub.modificationDate) unless sub.modificationDate.nil?
-          %td
-            = xmldatetime_to_date(sub.creationDate) unless sub.creationDate.nil?
+            - r.td { raw sub.submissionId }
+          - r.td { raw status_link(sub, sub.submissionId==submission_readyId)}
+          - r.td {  xmldatetime_to_date(sub.modificationDate) unless sub.modificationDate.nil? }
+          - r.td {  xmldatetime_to_date(sub.creationDate) unless sub.creationDate.nil? }
+
           - unless @ont_restricted
-            %td
-              = raw download_link(sub, @ontology)
+            - r.td do
+              %div.dropdown
+                %button.btn.btn-outline-primary.rounded-pill.dropdown-toggle{type:"button", 'data-toggle':"dropdown", 'aria-expanded': "false", style:'white-space: nowrap'}
+                  Download
+                  %span.sr-only Toggle Dropdown
+                .dropdown-menu
+                  - links = download_link(sub,@ontology)
+                  - links.each do |value|
+                    - link,label = value.values               
+                    %a.dropdown-item{ href: link }= label
+                
+              -# = raw download_link(sub, @ontology)
           - if @ontology.admin?(session[:user])
-            %td
+            - r.td do
               %div.d-flex
                 %a.btn.btn-sm.btn-link{:href => "/ontologies/#{@ontology.acronym}/submissions/#{sub.submissionId}/edit"}
                   %span Edit
@@ -55,8 +66,8 @@
                   = button_to "Delete", "/admin/ontologies/#{@ontology.acronym}/submissions/#{sub.submissionId}?turbo_stream=true", method: :delete, class:'btn btn-sm btn-link',  form: {data: { turbo: true, turbo_confirm: alert_text, turbo_frame: '_top'}}
 
       - if @submissions.length > 5
-        %tr
-          %td{colspan: more_colspan, class: "show_more_subs"}
+        - t.row(class_css: "show_more_subs") do |r|
+          - r.td(colspan: more_colspan) do
             %a#version_toggle{:href => ""} more...
 
   :javascript

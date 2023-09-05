@@ -1,9 +1,7 @@
 = turbo_frame_tag 'concept_details' do
   - schemes_keys = %w[hasTopConcept topConceptOf]
   - label_xl_set = %w[skos-xl#prefLabel skos-xl#altLabel skos-xl#hiddenLabel]
-  - if @concept.prefLabel.nil?
-    %div.py-3.px-2
-      = render Display::AlertComponent.new(message: t('ontology_details.concept.no_preferred_name_for_selected_language'),  type: "warning", closable: true)
+
 
   = render ConceptDetailsComponent.new(id:'concept-details', acronym: @ontology.acronym,
               properties: @concept.properties,
@@ -13,22 +11,23 @@
 
     - c.header(stripped: true) do |t|
       - t.add_row({th: t('ontology_details.concept.id')}, {td:@concept.id})
-      - t.add_row({th: t('ontology_details.concept.preferred_name')}, {td:@concept.prefLabel({:use_html => true}).html_safe})
+      - t.add_row({th: t('ontology_details.concept.preferred_name')}) do |h|
+        - h.td do
+          = display_in_multiple_languages(@concept.prefLabel)
 
       - unless @concept.synonym.nil? || @concept.synonym.empty?
         - t.add_row({th: t('ontology_details.concept.synonyms')}) do |h|
           - h.td do
             %div.d-flex
               %div
-              - for synonym in @concept.synonym
-                = synonym
+                = display_in_multiple_languages(@concept.synonym)
               %div.synonym-change-request
                 = add_synonym_button
                 = remove_synonym_button
 
 
       - unless @concept.definition.nil? || @concept.definition.empty?
-        - t.add_row({th: t('ontology_details.concept.definitions')}, {td:dispaly_complex_text(@concept.definition)})
+        - t.add_row({th: t('ontology_details.concept.definitions')}, {td: display_in_multiple_languages(@concept.definition)})
 
       - if @concept.obsolete?
         - t.add_row({th: t('ontology_details.concept.obsolete')}, {td: 'true'})

@@ -7,6 +7,7 @@
                 exclude_keys: []) do |c|
       - c.header(stripped: true) do |t|
         - t.add_row({th: 'ID'} , {td: scheme["@id"]})
-        - t.add_row({th: 'Preferred Name'} , {td: get_scheme_label(scheme)})
+        - t.add_row({th: 'Preferred Name'} , {td: display_in_multiple_languages(get_scheme_label(scheme))})
         - t.add_row({th: 'Type'} , {td: scheme["@type"]})
+
 

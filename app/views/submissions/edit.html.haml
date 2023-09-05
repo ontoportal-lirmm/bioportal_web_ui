@@ -1,6 +1,69 @@
-%div.py-4.py-md-5.flex-column.w-100
-  %h3.text-center.mb-4
-    Edit submission information
-    %small.text-muted for #{@ontology.acronym}
-  = form_for :submission, url: ontology_submission_path(@ontology.acronym, @submission.submissionId), html: { id: "ontology_submission_form", method: :put, multipart: true, 'data-turbo': true } do |f|
-    = render partial: "form", locals: {f: f, button_text: "Save submission"}
+.center
+  .edit-ontology-container
+    = turbo_frame_tag("test") do
+      = form_for :submission, url: ontology_submission_path(@ontology.acronym, params["id"]), html: { id: "ontology_submission_form", method: :put, multipart: true, 'data-turbo': true} do
+        .edit-ontology-title
+          %div Edit ontology
+          %hr
+        .edit-ontology-sub-container
+          - category_attributes = submission_metadata.group_by{|x| x['category']}.transform_values{|x| x.map{|attr| attr['attribute']} }
+          - category_attributes = category_attributes.reject{|key| ['no', 'Object description properties', 'Content', 'Links'].include?(key.to_s)}
+          - category_attributes['license'] << 'hasLicense'
+          - category_attributes['dates'] << ['creationDate', 'modificationDate', 'released']
+          - category_attributes['general'].append(['format', 'contact', 'location'])
+          .edit-ontology-left-column{:role => "tablist",onchange:"onMetadataChange()"}
+            .edit-ontology-desc
+              = submission_metadata_selector
+            %div.nav.nav-pills.flex-column#categories-tabs
+              %a.edit-ontology-tab-item.d-block{href: "#ontology-details-tab", "data-toggle" => "pill", class: 'active show'}
+                Ontology details
+              - category_attributes.keys.each do |key|
+                %a.edit-ontology-tab-item.d-block{href: "##{key.parameterize}-tab", "data-toggle" => "pill", class:  ''}
+                  = key.humanize
+
+          #myTabContent.edit-ontology-right-column.w-100
+            = render TurboFrameComponent.new(id:"metadata_by_ontology") do
+              = metadata_help_link
+              %div.tab-content
+                .edit-ontology-tab.tab-pane.fade{id:'ontology-details-tab', class: 'active show'}
+                  = render partial: 'ontologies/form'
+
+                - category_attributes.each_with_index  do |key_properties, index|
+                  - key, properties = key_properties
+                  .edit-ontology-tab.tab-pane.fade{id: key.parameterize+'-tab', class: ''}
+                    = render TurboFrameComponent.new(id: "ontology-content-#{index}", loading:"lazy", src: "edit_properties?properties=#{properties.join(',')}&container_id=ontology-content-#{index}")
+
+        %hr#edit-ontology-actions-devider
+        .edit-ontology-actions
+          .reset-all-button#reset-all-button
+            = render Buttons::RegularButtonComponent.new(id:'reset-all-fields', value: "Reset all fields", variant: "secondary", size: "slim") do |btn|
+              - btn.icon_left do
+                - inline_svg_tag "reload.svg"
+          .save-button
+            = render Buttons::RegularButtonComponent.new(id:'save-button', value: "Save", variant: "primary", size: "slim", type: "submit") do |btn|
+              - btn.icon_left do
+                - inline_svg_tag "check.svg"
+
+
+  :javascript
+    function onMetadataChange(){
+      document.querySelector('.edit-ontology-tab-item.d-block.active.show')?.classList.remove('active', 'show')
+      document.querySelector('.edit-ontology-tab.tab-pane.fade.active.show')?.classList.remove('active', 'show')
+      document.getElementById('categories-tabs')?.classList.add('disabled')
+
+      let frame = document.getElementById('metadata_by_ontology')
+      let properties = document.getElementById('select_search[metadata]')
+
+      let selectedProperties = "all"
+      if(properties && properties.selectedOptions.length > 0){
+        selectedProperties = Array.from(properties.selectedOptions).map(({ value }) => value).join(',')
+        frame.src = "./edit_properties?properties=" + selectedProperties
+      } else {
+        location.reload()
+      }
+
+    }
+
+      document.getElementById("reset-all-button").addEventListener('click', function() {
+        location.reload();
+      });

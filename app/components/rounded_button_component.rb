@@ -1,9 +1,10 @@
 class RoundedButtonComponent < ViewComponent::Base
-  def initialize(icon: "json.svg", link: "#", size: "small", target: '')
+  def initialize(icon: "json.svg", link: "#", size: "small", target: '', title: '')
     @icon = icon
     @link = link
     @size = size
     @target = target
+    @title = title
   end
 
   def size

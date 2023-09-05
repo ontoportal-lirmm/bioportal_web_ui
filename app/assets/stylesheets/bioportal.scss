@@ -1,8 +1,17 @@
-a {
+.turbo-progress-bar {
+  height: 5px;
+  background-color: var(--admin-color);
+}
+
+a{
   text-decoration: none !important;
 }
 p {
   margin-bottom: 0;
+}
+
+body{
+  position: relative;
 }
 
 .alignright {
@@ -10,6 +19,17 @@ p {
 }
 .alignleft {
   float:left;
+}
+
+.admin-border{
+  border: 1px solid;
+  border-color: var(--admin-color) !important;
+}
+
+.admin-background{
+  background-color: var(--light-color) !important;
+  border-color: var(--admin-color) !important;
+  color: var(--admin-color) !important;
 }
 
 #hd {
@@ -1156,7 +1176,7 @@ a.truncated_less, a.truncated_more {
 
 }
 
-turbo-frame[busy] .hide-if-loading, .show-if-loading {
+turbo-frame[busy] > .hide-if-loading, .show-if-loading {
   display: none;
 }
 turbo-frame[busy] ~ .show-if-loading {

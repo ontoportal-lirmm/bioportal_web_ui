@@ -1,0 +1,90 @@
+- if ontology
+  .browse-ontology-container
+    .browse-ontology-description
+      .browse-ontology-title-bar
+        %a.browse-ontology-title{:href => "/ontologies/#{ontology[:acronym]}", data: {'turbo-frame': '_top'}}
+          = ontology[:name]+" ("+ontology[:acronym]+")"
+          - if ontology[:private]
+            %i.fas.fa-key{title:"Private Ontology"}
+      .browse-desc-container{data:{controller:"text-truncate", 'text-truncate-more-text-value': '+ Show more ...' , 'text-truncate-less-text-value': '- Show less ...'}}
+        %p.browse-desc-text{'data-text-truncate-target': 'content'}
+          = ontology[:description]
+        .browse-show-more-button{data:{'text-truncate-target': 'button', 'action':"click->text-truncate#toggle"}}
+          + Show more ...
+
+
+      - unless ontology[:fairScore].nil? || ontology[:acronym] == 'AGROVOC'
+        .browse-fair
+          %p.browse-fair-title
+            FAIR score
+          .browse-progress-bar
+            .browse-faire-progress{:style => "width: #{ontology[:normalizedFairScore].to_s+"%"}"}
+          %p.browse-fair-score
+            = ontology[:fairScore]
+          %a.browse-fair-details{:href => "/ontologies/#{ontology[:acronym]}#fair-details"} FAIR details ...
+      .d-flex.align-items-baseline
+        - if ontology[:creationDate]
+          .browse-uploaded
+            %p.mr-1 Uploaded
+            %p.browse-uploaded-date{data:{controller: 'timeago', 'timeago-datetime-value': ontology[:creationDate], 'timeago-add-suffix-value': 'true'}}
+            - if ontology[:contact]
+              %p.mx-1 by
+              %p.browse-uploaded-date.text-truncate
+                = ontology[:contact].humanize
+
+        - if ontology[:released]
+          .browse-ontology-view{data:{controller:'tooltip'}, title: "Release date #{ontology[:released].split('/').last}"}
+            = DateTime.parse(ontology[:released]).year
+
+        - if ontology[:format]
+          .browse-ontology-view
+            = ontology[:format]
+        - if ontology[:deprecated]
+          .browse-ontology-deprecated
+            deprecated
+        - if ontology[:viewOfOnt]
+          .browse-ontology-view{data:{controller:'tooltip'}, title: "View of the ontology #{ontology[:viewOfOnt].split('/').last}"}
+            view
+        - if session[:user].admin?
+          %div.admin-broder{title: content_tag(:div, debug(ontology), style: 'height: 300px; overflow: scroll'), data:{controller: 'tooltip', 'tooltip-interactive-value': 'true'}}
+            .browse-ontology-view.admin-background
+              Debug
+    .browse-ontology-cards
+      - if ontology[:format] != 'SKOS' && ontology[:class_count] > 0
+        %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}?p=classes"}
+          %p.browse-card-number
+            = ontology[:class_count_formatted]
+          %p.browse-card-text
+            classes
+      - if ontology[:individual_count] > 0
+        %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}?p=classes"}
+          %p.browse-card-number
+            = ontology[:individual_count_formatted]
+          %p.browse-card-text
+            = ontology[:format] == 'SKOS' ? "concepts" : "instances"
+      - if ontology[:project_count] > 0
+        %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}#projects_content"}
+          %p.browse-card-number
+            = ontology[:project_count]
+          %p.browse-card-text
+            projects
+      - if ontology[:note_count] > 0
+        %a.browse-onology-card{:href => "#"}
+          %p.browse-card-number
+            = ontology[:note_count]
+          %p.browse-card-text
+          notes
+- else
+  .browse-ontology-container
+    .browse-sket
+      .browse-sket-column-one
+        .one
+        .two
+        .three
+        .four
+      .browse-sket-column-two
+        .one
+        .two
+      .browse-sket-column-three
+        .one
+        .two

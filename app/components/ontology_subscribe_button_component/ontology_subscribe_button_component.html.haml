@@ -1,4 +1,4 @@
-%div{@controller_params}
+%div{@controller_params, style: 'margin-left: 10px;'}
   = render PillButtonComponent.new do
     %a.d-flex.align-items-center{href: @link}
       = inline_svg_tag "eye.svg"

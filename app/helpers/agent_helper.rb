@@ -79,6 +79,8 @@ module AgentHelper
   end
 
   def display_agent(agent, link: true)
+    return agent if agent.is_a?(String)
+
     out = agent.name.to_s.humanize
     identifiers = display_identifiers(agent.identifiers, link: link)
     out = "#{out} (#{identifiers})" unless identifiers.empty?

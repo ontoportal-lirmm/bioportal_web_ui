@@ -13,7 +13,7 @@
             %hr.line
       %div
         - pages.each_with_index  do |page, index|
-          %div.progress-content{{'data-progress-pages-target': 'pageContent'}, class: index.zero? ? '' : 'hide'}
+          %div.progress-content.position-relative{{'data-progress-pages-target': 'pageContent'}, class: index.zero? ? '' : 'hide'}
             = page
 
 

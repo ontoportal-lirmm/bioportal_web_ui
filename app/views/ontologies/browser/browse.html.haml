@@ -1,0 +1,96 @@
+.browse-center
+  .browse-container
+
+    .browse-submit-new-ontology-and-you-are-admin-container
+      - if session[:user]&.admin?
+        %div
+          %div.browse-you-are-admin
+            %h3 Welcome admin
+            %div
+              %svg{:fill => "none", :height => "11", :viewbox => "0 0 11 11", :width => "11", :xmlns => "http://www.w3.org/2000/svg"}
+                %circle{:cx => "5.5", :cy => "5.5", :fill => 'var(--admin-color)', :r => "5.5"}
+              %p This coloring indicates admin-only features
+
+    %a#back_top_btn.btn.btn-primary.btn-floating.btn-lg
+      %i.fas.fa-arrow-up.text-white
+
+    :javascript
+      const btn = document.getElementById("back_top_btn");
+      window.addEventListener("scroll", function() {
+        if (window.scrollY > 300) {
+          btn.classList.add("show");
+        } else {
+          btn.classList.remove("show");
+        }
+      });
+
+      btn.addEventListener("click", function(e) {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      });
+
+    %div{data: { controller: "turbo-frame history browse-filters" , "turbo-frame-url-value": "/ontologies_filter", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL changed->turbo-frame#updateFrame"}}
+
+      .browse-sub-container
+        .browse-first-row{data:{controller: "browse-filters", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL"}}
+          %div.d-flex.p-2{style: "height: 67px"}
+            = upload_ontology_button
+          %div{style:'margin-top: 27px'}
+            %p.browse-filters-title Filters
+            - if session[:user]&.admin?
+              %div.browse-filter.admin-border
+                = render SwitchInputComponent.new(id:'filter-private', name:'private_only', checked: @show_private_only) do
+                  Show private ontology only
+            %div.browse-filter{style:'border: none'}
+              = render SwitchInputComponent.new(id:'filter-views', name:'views', checked: @show_views) do
+                Show ontology views
+              = render SwitchInputComponent.new(id:'filter-retired', name:'retired',checked: @show_retired) do
+                Show retired ontologies
+
+            - @filters.each do |key, values|
+              - if session[:user]&.admin? ||  key != :missingStatus
+                .browse-filter{data:{controller: "show-filter-count browse-filters", action: "change->show-filter-count#updateCount change->browse-filters#dispatchFilterEvent"}, id: "#{key}_filter_container", style: "#{"border-color: var(--admin-color);" if key == :missingStatus}"}
+                  .browse-filter-title-bar{"data-target" => "#browse-#{key}-filter", "data-toggle" => "collapse"}
+                    %p
+                      = browse_filter_section_label(key)
+                      %span.badge.badge-primary{"data-show-filter-count-target":"countSpan", style: "#{values[2] && values[2].positive? ? '' : 'display: none;'}"}
+                        = values[2]
+                    %img{:src => "#{asset_path("arrow-down.svg")}"}/
+                  .collapse{id: "browse-#{key}-filter", class: "#{values[2].positive? ? 'show': ''}"}
+                    .browse-filter-checks-container
+                      - values.first.each do |object|
+                        - title = (key.eql?(:categories) || key.eql?(:groups) ?  object["name"] : '')
+                        - value = (object["value"] || object["acronym"] || object["id"])
+                        %div{data: {controller: 'tooltip'}, title: title}
+                          = render ChipsComponent.new(id: value, name: key, value: value,
+                                    label:  object["acronym"].humanize,
+                                    checked: values[1]&.include?(object["id"])) do |c|
+                            - c.count do
+                              %span.badge.badge-light.ml-1
+                                = turbo_frame_tag "count_#{key}_#{object["id"]}", busy: true
+                                %span.show-if-loading
+                                  = render LoaderComponent.new(small:true)
+
+        .browse-second-row
+          .browse-search-bar
+            .browse-search-container
+              %input{:name => "search", :placeholder => "Start typing to filter ontologies, e.g AGROVOC...", :type => "text", :value => @search, data: {action: "input->browse-filters#dispatchInputEvent"}}
+              .browse-search-filters
+                %select#format.browse-format-filter{:name => "format"}
+                  = options_for_select(@formats, @selected_format)
+                %select#Sort_by.browse-sort-by-filter{:name => "Sort_by"}
+                  = options_for_select(@sorts_options, '')
+          .browse-ontologies
+            = render TurboFrameComponent.new(id:"ontologies_list_container", data:{"turbo-frame-target":"frame", "turbo-frame-url-value": "/ontologies_filter"}) do |container|
+              = turbo_frame_tag "ontologies_filter_count_request", src: "/ontologies_filter?count=true&#{request.original_url.split('?').last}" do
+                = browser_counter_loader
+              = render TurboFrameComponent.new(id: "ontologies_list_view-page-1" , src: "/ontologies_filter?page=1&#{request.original_url.split('?').last}") do |list|
+                - list.loader do
+                  - ontologies_browse_skeleton
+              - container.loader do
+                = browser_counter_loader
+                - ontologies_browse_skeleton
+

@@ -1,6 +1,5 @@
 - content_section = current_section
-- concept_title = @concept.nil? ? "" : " - #{@concept.prefLabel} - Classes"
-- @title = "#{@ontology.name}#{concept_title}"
+- @title = ontology_viewer_page_name(@ontology.name, @concept&.prefLabel || '', content_section)
 
 
 = render :partial =>'layouts/header'

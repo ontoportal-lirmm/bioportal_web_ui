@@ -3,6 +3,8 @@
 class TurboFrameComponent < ViewComponent::Base
   include Turbo::FramesHelper
 
+  renders_one :loader
+
   def initialize(id:, src: '', **html_options)
     @id = id
     @src = src

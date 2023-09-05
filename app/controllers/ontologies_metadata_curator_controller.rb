@@ -5,11 +5,12 @@ class OntologiesMetadataCuratorController < ApplicationController
   before_action :submission_metadata, only: [:result, :edit, :update, :show_metadata_by_ontology]
 
   def result
-    @ontologies_ids = params[:ontology][:ontologyId].drop(1)
-    @metadata_sel = params[:search][:metadata].drop(1)
+    @ontologies_ids = params[:ontology] ? params[:ontology][:ontologyId] : []
+    @metadata_sel = params[:search] ? params[:search][:metadata] : []
     @show_submissions = !params[:show_submissions].nil?
     @ontologies = []
     @submissions = []
+
     if @ontologies_ids.nil? || @ontologies_ids.empty?
       @ontologies = LinkedData::Client::Models::Ontology.all
     else
@@ -46,8 +47,7 @@ class OntologiesMetadataCuratorController < ApplicationController
     @acronym = params[:ontology]
     inline_save = params[:inline_save] && params[:inline_save].eql?('true')
     display_submission_attributes(@acronym, params[:properties]&.split(','),
-                                  submissionId: params[:submission_id],
-                                  show_sections: false, inline_save: inline_save)
+                                  submissionId: params[:submission_id], inline_save: inline_save)
     render partial: 'submissions/form_content', locals: { id: params[:form_id] || '', acronym: @acronym, submissionId: params[:submission_id] }
   end
 
@@ -57,8 +57,9 @@ class OntologiesMetadataCuratorController < ApplicationController
     submission_id = params[:submission_id]
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
     @submission = @ontology.explore.submissions({ display: "#{attribute},submissionId" }, submission_id)
-
-    render_submission_attribute(attribute)
+    id = attribute_input_frame_id(acronym, submission_id, attribute)
+    render_turbo_stream replace(id, partial: 'ontologies_metadata_curator/attribute_inline', locals: { id: id, attribute: attribute,
+                                                                                                       submission: @submission, ontology: @ontology })
   end
 
   def edit
@@ -86,7 +87,7 @@ class OntologiesMetadataCuratorController < ApplicationController
       new_data = active_submission_data
       new_data[:ontology] = onto
       new_data[:id] = sub_i
-      error_responses << update_submission(new_data) if new_data
+      error_responses << update_submission(new_data, sub_i) if new_data
       @submissions << @submission
     end
 
@@ -121,45 +122,4 @@ class OntologiesMetadataCuratorController < ApplicationController
     @submissions << sub
   end
 
-  def metadata_params
-    attributes = [
-      :ontology,
-      :description,
-      :hasOntologyLanguage,
-      :prefLabelProperty,
-      :synonymProperty,
-      :definitionProperty,
-      :authorProperty,
-      :obsoleteProperty,
-      :obsoleteParent,
-      :version,
-      :status,
-      :released,
-      :isRemote,
-      :pullLocation,
-      :filePath,
-      { contact: [:name, :email] },
-      :homepage,
-      :documentation,
-      :publication
-    ]
-
-    @metadata.each do |m|
-
-      m_attr = m["attribute"].to_sym
-
-      attributes << if m["enforce"].include?("list")
-                      { m_attr => [] }
-                    else
-                      m_attr
-                    end
-    end
-    out = []
-    params.require(:submission).permit!.tap do |x|
-      x.keys.each do |y|
-        out << x.require(y).permit(attributes.uniq)
-      end
-    end
-    out
-  end
 end

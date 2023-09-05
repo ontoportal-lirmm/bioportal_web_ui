@@ -18,7 +18,7 @@
 .chips-container div label input[type="checkbox"]{
     display: none;
 }
-.chips-container div label span{
+.chips-container div label > span{
     position: relative;
     display: flex;
     align-items: center;
@@ -31,6 +31,10 @@
     user-select: none;
 
 }
+.chips-container.disabled div label > span, .chips-container div label span:has(span.disabled){
+  background-color: #f8f9fa !important;
+}
+
 .chips-container div label input[type="checkbox"]:checked ~ span{
     border: 1px solid var(--primary-color);
     color: var(--primary-color);

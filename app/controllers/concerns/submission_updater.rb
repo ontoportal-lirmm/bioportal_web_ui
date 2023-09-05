@@ -15,14 +15,15 @@ module SubmissionUpdater
     @submission.save(cache_refresh_all: false)
   end
 
-  def update_submission(new_submission_hash)
+  def update_submission(new_submission_hash, submission_id)
 
     convert_values_to_types(new_submission_hash)
 
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(new_submission_hash[:ontology]).first
-    @submission = @ontology.explore.submissions({ display: 'all' }, new_submission_hash[:id])
+    new_submission_hash.delete(:ontology)
+    @submission = @ontology.explore.submissions({ display: 'all' }, submission_id)
 
-    new_values = submission_params(new_submission_hash)
+    new_values = new_submission_hash
     new_values.each do |key, values|
       @submission.send("#{key}=", values)
     rescue StandardError
@@ -36,23 +37,23 @@ module SubmissionUpdater
   def add_ontologies_to_object(ontologies,object)
     ontologies.each do |ont|
       next if object.ontologies.include?(ont)
-        ontology = LinkedData::Client::Models::Ontology.find(ont)
-        if object.type.match(/\/([^\/]+)$/)[1] == 'Group'
-          ontology.group.push(object.id)
-        else 
-          ontology.hasDomain.push(object.id)
-        end
-        ontology.update
+      ontology = LinkedData::Client::Models::Ontology.find(ont)
+      if object.type.match(/\/([^\/]+)$/)[1] == 'Group'
+        ontology.group.push(object.id)
+      else
+        ontology.hasDomain.push(object.id)
+      end
+      ontology.update
     end
   end
 
   def delete_ontologies_from_object(new_ontologies,old_ontologies,object)
-    ontologies = old_ontologies - new_ontologies  
+    ontologies = old_ontologies - new_ontologies
     ontologies.each do |ont|
       ontology = LinkedData::Client::Models::Ontology.find(ont)
       if object.type.match(/\/([^\/]+)$/)[1] == 'Group'
         ontology.group.delete(object.id)
-      else 
+      else
         ontology.hasDomain.delete(object.id)
       end
       ontology.update
@@ -126,6 +127,8 @@ module SubmissionUpdater
                     end
     end
     p = params.permit(attributes.uniq)
+    p['pullLocation'] = '' if p['isRemote']&.eql?('3')
+
     p = p.to_h.transform_values do |v|
       if v.is_a? Hash
         v.values.reject(&:empty?)

@@ -1,85 +1,95 @@
 .input-field-component {
-    width: 100%;
-    font-size: 13px;
-    padding: 10px;
-    border: 1px solid #BDBDBD;
-    border-radius: 5px;
-    outline: none;
-    resize: none;
+  width: 100%;
+  font-size: 13px;
+  padding: 10px;
+  border: 1px solid #BDBDBD;
+  border-radius: 5px;
+  outline: none;
+  resize: none;
 }
 
 .input-field-component:focus {
-    border: 1px solid var(--primary-color);
+  border: 1px solid var(--primary-color);
 }
 
 .text-input-label {
-    font-size: 12px;
+    font-size: 14px;
     color: #666666;
     margin-bottom: 5px;
+  img {
+    width: 15px;
+    height: 15px;
+    vertical-align: text-bottom;
+  }
 }
 
 .text-input-error-text {
-    font-size: 12px;
-    color: var(--error-color)
+  font-size: 12px;
+  color: var(--error-color)
 }
 
 .text-input-helper-text {
-    font-size: 12px;
-    color: #666666;
-    margin-top: 5px;
+  font-size: 12px;
+  color: #666666;
+  margin-top: 5px;
 }
 
 .ts-control {
-    padding: 12px;
-    border-radius: 5px;
-    border-color: #BDBDBD;
+  padding: 12px;
+  border-radius: 5px;
+  border-color: #BDBDBD;
 }
 
 .ts-dropdown-content .option {
-    padding: 12px;
+  padding: 12px;
 }
 
 .ts-dropdown .active {
-    background-color: #f8f8f8;
+  background-color: #f8f8f8;
 
 }
 
 .ts-dropdown {
-    margin: 0;
-    color: #666666;
+  margin: 0;
+  color: #666666;
 }
 
 .chosen-container {
-    padding: 0;
-    border-radius: 5px;
+  padding: 0;
+  border-radius: 5px;
 }
 
 .ts-wrapper.single .ts-control:after {
-    border-color: #343a40 transparent transparent;
-    border-style: solid;
-    border-width: 5px 5px 0;
-    content: " ";
-    display: block;
-    height: 0;
-    margin-top: -3px;
-    position: absolute;
-    right: calc(0.75rem + 5px);
-    top: 50%;
-    width: 0;
+  border-color: #343a40 transparent transparent;
+  border-style: solid;
+  border-width: 5px 5px 0;
+  content: " ";
+  display: block;
+  height: 0;
+  margin-top: -3px;
+  position: absolute;
+  right: calc(0.75rem + 5px);
+  top: 50%;
+  width: 0;
 }
 
 .ts-wrapper.multi .ts-control>div{
-    border-radius: 5px;
-    font-size: 11px;
-    padding: 2px 0 4px 6px;
-    color: #888888;
+  border-radius: 5px;
+  font-size: 11px;
+  padding: 2px 0 4px 6px;
+  color: #888888;
 }
 
 .ts-wrapper.plugin-remove_button:not(.rtl) .item .remove{
-    border-left: none;
-    color: #888888 !important;
-    margin-left: 0;
+  border-left: none;
+  color: #888888 !important;
+  margin-left: 0;
 }
-.ts-wrapper.plugin-remove_button .item .remove:hover{
-    background: unset;
+
+.ts-wrapper.plugin-remove_button .item .remove:hover {
+  background: unset;
+}
+
+.has-items .ts-control > input {
+  width: unset !important;
 }

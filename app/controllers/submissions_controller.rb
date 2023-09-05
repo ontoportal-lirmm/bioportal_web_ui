@@ -22,12 +22,53 @@ class SubmissionsController < ApplicationController
 
   # When getting "Add submission" form to display
   def new
-    @required_only = params[:required].nil? || !params[:required]&.eql?('false')
-    @ontology = LinkedData::Client::Models::Ontology.get(CGI.unescape(params[:ontology_id])) rescue nil
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first unless @ontology
-    @submission = @ontology.explore.latest_submission
-    @submission ||= LinkedData::Client::Models::OntologySubmission.new
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
+    @submission = @ontology.explore.latest_submission || LinkedData::Client::Models::OntologySubmission.new
     @submission.id = nil
+    @categories = LinkedData::Client::Models::Category.all
+    @groups = LinkedData::Client::Models::Group.all
+    @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
+    @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
+    @is_update_ontology = true
+    render "ontologies/new"
+  end
+
+  # Called when form to "Add submission" is submitted
+  def create
+    @is_update_ontology = true
+
+    if params[:ontology]
+      @ontology = update_existent_ontology(params[:ontology_id])
+
+      if @ontology.nil? || response_error?(@ontology)
+        show_new_errors(@ontology)
+        return
+      end
+    end
+
+    @submission = save_submission(new_submission_hash)
+
+    if response_error?(@submission)
+      show_new_errors(@submission)
+    else
+      redirect_to "/ontologies/success/#{@ontology.acronym}"
+    end
+  end
+
+  # Called when form to "Edit submission" is submitted
+  def edit_properties
+    display_submission_attributes params[:ontology_id], params[:properties]&.split(','), submissionId: params[:submission_id],
+                                  inline_save: params[:inline_save]&.eql?('true')
+
+    attribute_template_output = render_to_string(inline: helpers.render_submission_inputs(params[:container_id] || 'metadata_by_ontology'))
+
+    render inline: attribute_template_output
+
+  end
+
+  def edit
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
+    ontology_not_found(params[:ontology_id]) unless @ontology
     @categories = LinkedData::Client::Models::Category.all
     @groups = LinkedData::Client::Models::Group.all
     @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
@@ -35,41 +76,37 @@ class SubmissionsController < ApplicationController
     @is_update_ontology = true
   end
 
-  # Called when form to "Add submission" is submitted
-  def create
-    @is_update_ontology = true
-    add_ontology_submission(params[:ontology][:acronym] || params[:id])
-  end
-
-  # Called when form to "Edit submission" is submitted
-  def edit
-    display_submission_attributes params[:ontology_id], params[:properties]&.split(','), submissionId: params[:id],
-                                  required: params[:required]&.eql?('true'),
-                                  show_sections: params[:show_sections].nil? || params[:show_sections].eql?('true'),
-                                  inline_save: params[:inline_save]&.eql?('true')
-  end
-
   # When editing a submission (called when submit "Edit submission information" form)
   def update
-    error_responses = []
-    _, submission_params = params[:submission].each.first
-
-    error_responses << update_submission(submission_params)
-
-    if error_responses.compact.any? { |x| x.status != 204 }
-      @errors = error_responses.map { |error_response| response_errors(error_response) }
+    acronym = params[:ontology_id]
+    submission_id = params[:id]
+    if params[:ontology]
+      @ontology = update_existent_ontology(acronym)
+      if @ontology.nil? || response_error?(@ontology)
+        show_new_errors(@ontology, partial: 'submissions/form_content', locals: { id: 'test' })
+        return
+      end
     end
 
-    if @errors && !params[:attribute]
-      @required_only = !params['required-only'].nil?
-      @filters_disabled = true
-      reset_agent_attributes
-      render 'edit', status: 422
-    elsif params[:attribute]
-      reset_agent_attributes
-      render_submission_attribute(params[:attribute])
+    if params[:submission].nil?
+      return redirect_to "/ontologies/#{acronym}",
+                         notice: 'Submission updated successfully'
+    end
+
+    @submission = update_submission(update_submission_hash(acronym), submission_id)
+    #reset_agent_attributes
+    if params[:attribute].nil?
+      if response_error?(@submission)
+        show_new_errors(@submission, partial: 'submissions/form_content', locals: { id: 'test' })
+      else
+        redirect_to "/ontologies/#{acronym}",
+                    notice: 'Submission updated successfully'
+      end
     else
-      redirect_to "/ontologies/#{@ontology.acronym}"
+      @errors = response_errors(@submission) if response_error?(@submission)
+      @submission = submission_from_params(params[:submission])
+      @submission.submissionId = submission_id
+      render_submission_attribute(params[:attribute])
     end
 
   end
