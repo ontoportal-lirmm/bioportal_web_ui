@@ -8,6 +8,10 @@ a {
 a i {
   color: $color-primary;
 }
+.text-primary {
+  color: $color-primary !important;
+}
+
 
 .btn-info, .btn-outline-primary:hover, .btn-primary ,  .nav-pills .nav-link.active{
   background-color: $color-primary !important;
