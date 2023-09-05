@@ -75,6 +75,13 @@ gem 'inline_svg'
 
 gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'development'
 
+# Multi-Provider Authentication
+gem 'omniauth'
+gem "omniauth-rails_csrf_protection"
+gem 'omniauth-github'
+gem 'omniauth-google-oauth2'
+gem 'omniauth-orcid'
+gem 'omniauth-keycloak'
 
 group :staging, :production, :appliance do
   # application monitoring

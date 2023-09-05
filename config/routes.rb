@@ -2,6 +2,8 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
 
+  get 'auth/:provider/callback', to: 'login#create_omniauth'
+
   get '/notes/new_comment', to: 'notes#new_comment'
   get '/notes/new_proposal', to: 'notes#new_proposal'
   get '/notes/new_reply', to: 'notes#new_reply'
