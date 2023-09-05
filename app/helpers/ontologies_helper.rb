@@ -421,11 +421,10 @@ module OntologiesHelper
   def language_selector_tag(name)
     languages = languages_options
 
-    if languages.empty?
-      content_tag(:div ,data: {'ontology-viewer-tabs-target': 'languageSelector'}, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'} ; margin-bottom: -1px;") do
-        render EditSubmissionAttributeButtonComponent.new(acronym: @ontology.acronym, submission_id: @submission_latest.submissionId, attribute: :naturalLanguage) do
-          concat "Enable multilingual display "
-          concat content_tag(:i , "", class: "fas fa-lg fa-question-circle")
+    if languages.empty? && @submission_latest
+      content_tag(:div, data: { 'ontology-viewer-tabs-target': 'languageSelector' }, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'} ; margin-bottom: -1px;") do
+        edit_submission_property_link(@ontology.acronym, @submission_latest.submissionId, :naturalLanguage) do
+          "Enable multilingual display " + content_tag(:i, "", class: "fas fa-lg fa-question-circle")
         end
       end
     else
@@ -463,34 +462,36 @@ module OntologiesHelper
 
 
   def count_subscriptions(ontology_id)
-    users = LinkedData::Client::Models::User.all(include: 'subscription', display_context: false, display_links: false )
-    users.select{ |u| u.subscription.find{ |s| s.ontology.eql?(ontology_id)} }.count
+    users = LinkedData::Client::Models::User.all(include: 'subscription', display_context: false, display_links: false)
+    users.select { |u| u.subscription.find { |s| s.ontology.eql?(ontology_id) } }.count
+  end
+
+  def new_submission_button
+    return unless @ontology.admin?(session[:user])
+    render RoundedButtonComponent.new(link: new_ontology_submission_path(@ontology.acronym), icon: 'icons/plus.svg',
+                                      size: 'medium', title: 'Add new submission')
   end
 
   def ontology_edit_button
-    return unless  @ontology.admin?(session[:user])
-    render RoundedButtonComponent.new(link:   edit_ontology_path(@ontology.acronym), icon: 'edit.svg', size: 'medium')
+    return unless @ontology.admin?(session[:user])
+    render RoundedButtonComponent.new(link: edit_ontology_path(@ontology.acronym), icon: 'edit.svg',
+                                      size: 'medium',
+                                      title: 'Edit metadata')
   end
 
   def submission_json_button
-    render RoundedButtonComponent.new(link:  "#{(@submission_latest || @ontology).id}?display=all", target: '_blank', size: 'medium')
+    render RoundedButtonComponent.new(link: "#{(@submission_latest || @ontology).id}?display=all", target: '_blank', size: 'medium')
   end
 
-  def attribute_error(attr)
-    return '' unless @errors && @errors[attr.to_sym]
-    errors = @errors[attr.to_sym]
 
-    errors.values.join(', ')
+  def summary_only?
+    @ontology&.summaryOnly || @submission&.isRemote&.eql?('3')
   end
 
-  def error_message
-    if !@errors[:error].nil? && @errors[:error].is_a?(String)
-      @errors[:error]
-    else
-      "Errors in fields #{@errors.keys.join(', ')}"
-    end
-
+  def ontology_pull_location?
+    !(@submission.pullLocation.nil? || @submission.pullLocation.empty?)
   end
+
   private
 
   def submission_languages(submission = @submission)

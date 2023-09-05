@@ -1,0 +1,2 @@
+= render SummarySectionComponent.new(title: 'Submissions') do |s|
+  = render TurboFrameComponent.new(id: 'ontology_submissions', src: ontology_submissions_path(@ontology.acronym))

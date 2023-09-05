@@ -1,7 +1,0 @@
-%div.d-flex
-  %div.w-50.mx-1.mt-3
-    = render FormGroupComponent.new(name: object_name, method: "contact[#{index.to_s.upcase}][name]", label: 'Name' ) do |c1|
-      = text_field c1.name, "contact[#{index.to_s.upcase}][name]", value: contact ? contact["name"] : '' , class: "form-control flex-grow-1 mx-2"
-  %div.w-50.mx-1.mt-3
-    = render FormGroupComponent.new(name: object_name, method: "contact[#{index.to_s.upcase}][email]", label: 'Email' ) do |c2|
-      = text_field c2.name, "contact[#{index.to_s.upcase}][email]", value: contact ? contact["email"] : '', class: "form-control flex-grow-1 mx-2"

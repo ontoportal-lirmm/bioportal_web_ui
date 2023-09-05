@@ -1,0 +1,217 @@
+.summary-page-center {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.summary-page-center .card_title{
+  margin-top: 40px;
+}
+
+.summary-page-first-row {
+  width: 670px;
+  margin-right: 20px;
+}
+
+.summary-page-second-row {
+  width: 450px;
+}
+
+@media (max-width: 1288px) {
+  .summary-page-first-row {
+    width: 100%;
+    margin: 0;
+    padding: 0 20px;
+  }
+  .summary-page-second-row {
+    width: 100%;
+    margin: 0;
+    padding: 0 20px;
+  }
+}
+
+.show > .btn-outline-primary.dropdown-toggle {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+
+.description_text,
+.description_text a {
+  color: #888888 !important;
+  font-size: 15px;
+  overflow: hidden;
+  margin-bottom: 0;
+  flex: 1;
+  min-width: 500px;
+}
+
+
+.creation_info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+
+
+.date_creation_text {
+  color: #888888;
+  font-size: 14px;
+  font-weight: 550;
+  margin-top: 15px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.creator_text {
+  color: #888888;
+  font-size: 14px;
+  margin-left: 5px;
+  font-weight: 550;
+  margin-top: 15px;
+  width: 300px;
+}
+
+.creation_text {
+  color: #888888;
+  font-size: 14px;
+  margin-left: 1px;
+  margin-top: 15px;
+  margin-right: 2px;
+}
+
+
+.icons_container {
+  margin-top: 10px;
+  justify-content: space-evenly;
+  display: flex;
+  padding: 0 20px;
+  svg path {
+    fill: var(--primary-color);
+  }
+}
+
+
+
+.disabled-icon svg path {
+  fill: rgba(0, 0, 0, 0.1);
+}
+
+.normal_text {
+  font-size: 15px;
+  color: black;
+  word-wrap: break-word;
+}
+
+
+
+.metrics {
+  display: flex;
+  justify-content: space-between;
+}
+
+.metrics-container {
+  border-radius: 8px;
+  height: 90px;
+  box-shadow: 2px 0px 60px rgba(0, 0, 0, 0.1);
+  padding: 71px 40px;
+  margin-top: 10px;
+}
+
+.metrics-container > div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.metrics-container > div > p {
+  font-size: 20px;
+  font-weight: 600;
+  margin-left: 18px;
+}
+
+.metrics-item {
+  display: flex;
+  align-items: center;
+}
+
+.metrics-item hr {
+  height: 73px;
+  width: 0px;
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+  margin-right: 15px;
+}
+
+.metrics-item h4 {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #000000;
+}
+
+.metrics-item p,
+.metrics-item a {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+
+#ontology_versions .show_more_subs td {
+  text-align: right;
+}
+
+
+
+div.vis-network div.vis-navigation {
+  div.vis-button.vis-up{
+    background-color: var(--primary-color);
+    -webkit-mask-image: url(asset-path('icons/circle-up.svg'));
+    mask-image: url(asset-path('icons/circle-up.svg'));
+    background-image: none !important;
+  }
+  div.vis-button.vis-down{
+    background-color: var(--primary-color);
+    -webkit-mask-image: url(asset-path('icons/circle-down.svg'));
+    mask-image: url(asset-path('icons/circle-down.svg'));
+    background-image: none !important;
+  }
+
+  div.vis-button.vis-left{
+    background-color: var(--primary-color);
+    -webkit-mask-image: url(asset-path('icons/circle-left.svg'));
+    mask-image: url(asset-path('icons/circle-left.svg'));
+    background-image: none !important;
+  }
+
+  div.vis-button.vis-right{
+    background-color: var(--primary-color);
+    -webkit-mask-image: url(asset-path('icons/circle-right.svg'));
+    mask-image: url(asset-path('icons/circle-right.svg'));
+    background-image: none !important;
+  }
+
+  div.vis-button.vis-zoomIn{
+    background-color: var(--primary-color);
+    -webkit-mask-image: url(asset-path('icons/zoom-in.svg'));
+    mask-image: url(asset-path('icons/zoom-in.svg'));
+    background-image: none !important;
+  }
+
+  div.vis-button.vis-zoomOut{
+    background-color: var(--primary-color);
+    -webkit-mask-image: url(asset-path('icons/zoom-out.svg'));
+    mask-image: url(asset-path('icons/zoom-out.svg'));
+    background-image: none !important;
+  }
+
+  div.vis-button.vis-zoomExtends{
+    background-color: var(--primary-color);
+    -webkit-mask-image: url(asset-path('icons/zoom-center.svg'));
+    mask-image: url(asset-path('icons/zoom-center.svg'));
+    background-image: none !important;
+  }
+}
+
+

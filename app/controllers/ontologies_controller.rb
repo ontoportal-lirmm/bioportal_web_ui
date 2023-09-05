@@ -191,19 +191,33 @@ display_context: false, include: browse_attributes)
   end
 
   def create
+    @ontology = ontology_from_params.save
 
-    # redirect_to ontologies_path and return if params[:commit].eql? 'Cancel'
-    save_ontology
+    if response_error?(@ontology)
+      show_new_errors(@ontology)
+      return
+    end
+
+    @submission = save_submission(new_submission_hash)
+
+    if response_error?(@submission)
+      @ontology.delete
+      show_new_errors(@submission)
+    else
+      redirect_to "/ontologies/success/#{@ontology.acronym}"
+    end
   end
 
   def edit
-    # Note: find_by_acronym includes ontology views
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
     redirect_to_home unless session[:user] && @ontology.administeredBy.include?(session[:user].id) || session[:user].admin?
-    @categories = LinkedData::Client::Models::Category.all
-    @groups = LinkedData::Client::Models::Group.all
-    @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
-    @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
+
+    submission = @ontology.explore.latest_submission(include: 'submissionId')
+    if submission
+      redirect_to edit_ontology_submission_path(@ontology.acronym, submission.submissionId)
+    else
+      redirect_to new_ontology_submission_path(@ontology.acronym)
+    end
   end
 
   def mappings
@@ -395,32 +409,6 @@ display_context: false, include: browse_attributes)
     end
   end
 
-  def update
-    if params['commit'] == 'Cancel'
-      acronym = params['id']
-      redirect_to "/ontologies/#{acronym}"
-      return
-    end
-    # Note: find_by_acronym includes ontology views
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology][:acronym] || params[:id]).first
-    @ontology.update_from_params(ontology_params)
-    error_response = @ontology.update
-    if response_error?(error_response)
-      @categories = LinkedData::Client::Models::Category.all
-      @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
-      @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
-      @errors = response_errors(error_response)
-      @errors = { acronym: 'Acronym already exists, please use another' } if error_response.status == 409
-      flash[:error] = @errors
-      redirect_to "/ontologies/#{@ontology.acronym}/edit"
-    else
-      # TODO_REV: Enable subscriptions
-      # if params["ontology"]["subscribe_notifications"].eql?("1")
-      #  DataAccess.createUserSubscriptions(@ontology.administeredBy, @ontology.ontologyId, NOTIFICATION_TYPES[:all])
-      # end
-      redirect_to "/ontologies/#{@ontology.acronym}"
-    end
-  end
 
   def virtual
     redirect_new_api

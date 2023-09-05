@@ -6,22 +6,27 @@
 
   %div.click_versions_collapse
     = render_alerts_container(AdminController)
-    %table#ontology_versions.table.table-sm.table-striped
-      %thead
-        %tr
-          - if @ontology.admin?(session[:user])
-            %th.align-middle ID
-          %th.align-middle Version
-          %th
-            = generate_attribute_text("released", "Released")
-          %th
-            = generate_attribute_text("modificationDate", "Modified")
-          %th
-            = generate_attribute_text("creationDate", "Uploaded")
-          - unless @ont_restricted
-            %th.align-middle Downloads
-          - if @ontology.admin?(session[:user])
-            %th.align-middle Actions
+    = render TableComponent.new(id: 'ontology_versions', stripped: false, borderless: true) do |t|
+      - t.header do |header|
+        - if @ontology.admin?(session[:user])
+          - header.th do
+            %div.align-middle
+              ID
+        - header.th do
+          %div.align-middle
+            Version
+        - header.th do
+          = attr_label("modificationDate", "Modified", show_tooltip: false)
+        - header.th do
+          = attr_label("creationDate", "Uploaded", show_tooltip: false)
+        - unless @ont_restricted
+          - header.th do
+            %div.align-middle
+              Downloads
+        - if @ontology.admin?(session[:user])
+          - header.th do
+            %div.align-middle
+              Actions
 
       - begin
         - submission_ready = @ontology.explore.latest_submission({:include_status => 'ready', display: 'submissionId'})

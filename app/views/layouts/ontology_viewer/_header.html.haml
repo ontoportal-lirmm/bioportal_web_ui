@@ -1,0 +1,37 @@
+- sub = @submission_latest
+
+
+-# A header of sorts to display ontology name and subset of details.
+.ontology-details-header-container
+  .ontology-details-path
+    %a{href: "/ontologies"} ontologies
+    %img{src: asset_path("arrow-right-outlined.svg")}/
+    %div
+      = @ontology.acronym
+  .ontology-details-header-sub-container
+    .ontology-details-header-left-container{style:'width: 70%'}
+      .ontology-details-name-bar
+        %div{style:'max-width: 60%'}
+          = @ontology.name
+          %span
+            = "("+ @ontology.acronym+")"
+        - unless sub.nil? || sub.hasLicense.nil?
+          = render ChipButtonComponent.new(class: 'chip_button_small') do
+            = link_to_modal(nil, "/ajax/submission/show_licenses/#{@ontology.acronym}",data: { show_modal_title_value: "More licenses", show_modal_size_value: 'modal-xl' }) do
+              = attribute_enforced_values('hasLicense')[sub.hasLicense] || sub.hasLicense
+              = inline_svg_tag "icons/popup-link.svg"
+
+      - unless sub.nil? ||  sub.creationDate.nil?
+        .ontology-details-last-update
+          %img{src: asset_path("update.svg")}/
+          %div
+            = t('ontology_details.header.last_uploaded')
+            = render DateTimeFieldComponent.new(value: sub.creationDate)
+    .ontology-details-header-right-container.justify-content-end{style: 'min-width: 20%;'}
+      %span.mx-1
+        = new_submission_button
+      %span.mx-1
+        = ontology_edit_button
+      %span
+        = submission_json_button
+      = subscribe_button(@ontology.id)

@@ -1,5 +1,5 @@
-import {Controller} from "@hotwired/stimulus"
-import {useChosen} from "../../javascript/mixins/useChosen";
+import { Controller } from "@hotwired/stimulus"
+import {useTomSelect} from "../../javascript/mixins/useTomSelect";
 
 export default class extends Controller {
 
@@ -111,27 +111,11 @@ export default class extends Controller {
         } else {
             return this.selectedValuesTarget.value
         }
+
+        useTomSelect(this.element, myOptions, this.#triggerChange.bind(this))
     }
 
-    #toggle() {
-        if (this.selectedValuesTarget.value === 'other') {
-            this.#displayOtherValueField()
-        } else {
-            this.#hideOtherValueField()
-        }
+    #triggerChange() {
+        document.dispatchEvent(new Event('change', { target: this.element }))
     }
-
-    #displayOtherValueField() {
-        this.inputValueFieldTarget.value = ""
-        this.btnValueFieldTarget.style.display = 'block'
-        this.inputValueFieldTarget.style.display = 'block'
-    }
-
-    #hideOtherValueField() {
-        this.inputValueFieldTarget.value = ""
-        this.btnValueFieldTarget.style.display = 'none'
-        this.inputValueFieldTarget.style.display = 'none'
-    }
-
-
 }
