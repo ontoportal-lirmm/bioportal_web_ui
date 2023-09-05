@@ -1159,3 +1159,7 @@ turbo-frame[busy] .hide-if-loading, .show-if-loading {
 turbo-frame[busy] ~ .show-if-loading {
   display: inline-block;
 }
+
+.hide{
+  display:none;
+}
