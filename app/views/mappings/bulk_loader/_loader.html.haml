@@ -14,6 +14,6 @@
                   = JSON.pretty_generate @example_code
         = form_with url: '/mappings/loader', method: :post, multipart: true, data: { turbo: true} do
           %div
-            = render FileInputLoaderComponent.new(name: :file)
+            = render Form::FileInputComponent.new(name: :file)
           %button.btn.btn-secondary.btn-block.mt-2{type:'submit'}
             Save
