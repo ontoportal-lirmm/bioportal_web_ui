@@ -38,7 +38,8 @@ module SubmissionUpdater
   end
 
   def delete_ontologies_from_object(new_ontologies,old_ontologies,object)
-    ontologies = old_ontologies - new_ontologies  
+    new_ontologies = [] if new_ontologies.nil?
+    ontologies = old_ontologies - new_ontologies
     ontologies.each do |ont|
       ontology = LinkedData::Client::Models::Ontology.find(ont)
       if object.type.match(/\/([^\/]+)$/)[1] == 'Group'
