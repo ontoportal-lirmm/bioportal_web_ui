@@ -577,9 +577,9 @@ module ApplicationHelper
   def get_link_for_cls_ajax(cls_id, ont_acronym, target = nil)
     if cls_id.start_with?('http://') || cls_id.start_with?('https://')
       link = bp_class_link(cls_id, ont_acronym)
-      ajax_url = "/ajax/classes/label?language=#{request_lang}"
-      cls_url = "?p=classes&conceptid=#{CGI.escape(cls_id)}&language=#{request_lang}"
-      label_ajax_link(link, cls_id, ont_acronym, ajax_url, cls_url, target)
+      ajax_url = '/ajax/classes/label'
+      cls_url = "/ontologies/#{ont_acronym}?p=classes&conceptid=#{CGI.escape(cls_id)}"
+      label_ajax_link(link, cls_id, ont_acronym, ajax_url , cls_url ,target)
     else
       auto_link(cls_id, :all, target: '_blank')
     end
@@ -607,14 +607,19 @@ module ApplicationHelper
   end
 
 
-  def get_link_for_label_xl_ajax(label_xl, ont_acronym, cls_id)
+  def get_link_for_label_xl_ajax(label_xl, ont_acronym, cls_id, modal: true)
     link = label_xl
     ajax_uri = "/ajax/label_xl/label?cls_id=#{CGI.escape(cls_id)}"
     label_xl_url = "/ajax/label_xl/?id=#{CGI.escape(label_xl)}&ontology=#{ont_acronym}&cls_id=#{CGI.escape(cls_id)}"
     data = label_ajax_data_h(label_xl, ont_acronym, ajax_uri, label_xl_url)
     data[:data][:controller] = 'label-ajax'
+    if modal
+      link_to_modal(cls_id, link, {data: data[:data] , class: 'btn btn-sm btn-light'})
+    else
+      link_to(link,'', {data: data[:data], class: 'btn btn-sm btn-light', target: '_blank'})
+    end
+     
 
-    link_to_modal(cls_id, link, {data: data[:data] , class: 'btn btn-sm btn-light'})
   end
 
   ###END ruby equivalent of JS code in bp_ajax_controller.

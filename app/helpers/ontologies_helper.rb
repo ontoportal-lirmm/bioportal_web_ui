@@ -290,6 +290,17 @@ module OntologiesHelper
     end
     sections
   end
+  def dispaly_complex_text(definitions)
+    html = ""
+    definitions.each do |definition|
+      if definition.is_a?(String)
+        html += '<p class="prefLabel">' + definition + '</p>'
+      elsif definition.respond_to?(:uri) && definition.uri
+        html +=  '<p>' + definition.uri + '</p>'
+      end
+    end
+    return html.html_safe
+  end
 
   def language_selector_tag(name)
     languages = languages_options

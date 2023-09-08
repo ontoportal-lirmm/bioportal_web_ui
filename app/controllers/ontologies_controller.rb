@@ -105,8 +105,6 @@ class OntologiesController < ApplicationController
       @notes = @concept.explore.notes
     end
 
-    update_tab(@ontology, @concept.id)
-
     if request.xhr?
       render 'ontologies/sections/visualize', layout: false
     else

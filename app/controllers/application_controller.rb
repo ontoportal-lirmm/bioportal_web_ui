@@ -482,13 +482,15 @@ class ApplicationController < ActionController::Base
       if ignore_concept_param
         # get the top level nodes for the root
         # TODO_REV: Support views? Replace old view call: @ontology.top_level_classes(view)
-        roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes], lang: lang, include: include)
-        if roots.nil? || roots.empty?
-          LOG.add :debug, "Missing roots for #{@ontology.acronym}"
-          not_found("Missing roots for #{@ontology.acronym}")
+        @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])        
+        if @roots.nil? || @roots.empty?
+          LOG.add :debug, "Missing @roots for #{@ontology.acronym}"
+          @concept = @ontology.explore.classes.collection.first.explore.self(full: true)
+          return
         end
+        
         @root = LinkedData::Client::Models::Class.new(read_only: true)
-        @root.children = roots.sort{|x,y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase}
+        @root.children = @roots.sort{|x,y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase}
 
         # get the initial concept to display
         root_child = @root.children.first
@@ -510,13 +512,14 @@ class ApplicationController < ActionController::Base
         # Create the tree
         rootNode = @concept.explore.tree(include: include, concept_schemes: params[:concept_schemes], lang: lang)
         if rootNode.nil? || rootNode.empty?
-          roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes], lang: lang, include: include)
-          if roots.nil? || roots.empty?
-            LOG.add :debug, "Missing roots for #{@ontology.acronym}"
-            not_found("Missing roots for #{@ontology.acronym}")
+          @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
+          if @roots.nil? || @roots.empty?
+            LOG.add :debug, "Missing @roots for #{@ontology.acronym}"
+            @concept = @ontology.explore.classes.collection.first.explore.self(full: true)
+            return
           end
-          if roots.any? {|c| c.id == @concept.id}
-            rootNode = roots
+          if @roots.any? {|c| c.id == @concept.id}
+            rootNode = @roots
           else
             rootNode = [@concept]
           end

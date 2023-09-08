@@ -93,7 +93,7 @@ export default class extends Controller {
                 }
 
                 // Add id and type
-                if (subJson["URI"] !== undefined) {
+                if (subJson["URI"] !== null) {
                     jsonldObject["@id"] = subJson["URI"];
                 } else {
                     jsonldObject["@id"] = ontJson["id"];

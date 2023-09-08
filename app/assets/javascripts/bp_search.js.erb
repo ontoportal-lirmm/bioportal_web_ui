@@ -989,7 +989,7 @@ function resultLinksSpan(res) {
     clsCode = encodeURIComponent(clsID);
     // construct link for class 'details' in facebox
     detailsAttr = {
-        "href": "/ajax/class_details?ontology=" + ontAcronym + "&conceptid=" + clsCode + "&styled=false",
+        "href": "/ajax/class_details?modal=false&ontology=" + ontAcronym + "&conceptid=" + clsCode + "&styled=false",
         "rel": "facebox[.class_details_pop]"
     };
     detailsAnchor = jQuery("<a>");

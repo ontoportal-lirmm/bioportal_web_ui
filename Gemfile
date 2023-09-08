@@ -115,7 +115,7 @@ group :development do
 
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
-
+  gem 'i18n-tasks'
 end
 
 group :test, :development do
@@ -133,3 +133,5 @@ end
 gem "net-ftp", "~> 0.2.0", require: false
 gem "net-http"
 
+
+gem "easy_translate", "~> 0.5.1", :group => :development

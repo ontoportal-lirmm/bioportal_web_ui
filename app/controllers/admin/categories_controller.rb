@@ -52,7 +52,7 @@ class Admin::CategoriesController < ApplicationController
     start = Time.now
     begin
       category = LinkedData::Client::Models::Category.find_by_acronym(params[:id], include: ATTRIBUTE_TO_INCLUDE ).first
-      add_ontologies_to_object(category_params[:ontologies],category) if (category_params[:ontologies].size > 0 && category_params[:ontologies].first != '')
+      add_ontologies_to_object(category_params[:ontologies],category) if (category_params[:ontologies].present? && category_params[:ontologies].size > 0 && category_params[:ontologies].first != '')
       delete_ontologies_from_object(category_params[:ontologies],category.ontologies,category) 
       category.update_from_params(category_params)
       category_update = category.update
