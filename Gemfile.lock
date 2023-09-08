@@ -92,6 +92,13 @@ GEM
       execjs (~> 2)
     base64 (0.1.1)
     bcrypt_pbkdf (1.1.0)
+    better_html (2.0.2)
+      actionview (>= 6.0)
+      activesupport (>= 6.0)
+      ast (~> 2.0)
+      erubi (~> 1.4)
+      parser (>= 2.4)
+      smart_properties
     bindata (2.4.15)
     bindex (0.8.1)
     bootsnap (1.16.0)
@@ -144,6 +151,9 @@ GEM
     diff-lcs (1.5.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
+    easy_translate (0.5.1)
+      thread
+      thread_safe
     ed25519 (1.3.0)
     erubi (1.12.0)
     erubis (2.7.0)
@@ -175,6 +185,7 @@ GEM
       temple (>= 0.8.0)
       tilt
     hashie (5.0.0)
+    highline (2.1.0)
     html2haml (2.3.0)
       erubis (~> 2.7.0)
       haml (>= 4.0)
@@ -187,6 +198,17 @@ GEM
       domain_name (~> 0.5)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
+    i18n-tasks (1.0.12)
+      activesupport (>= 4.0.2)
+      ast (>= 2.1.0)
+      better_html (>= 1.0, < 3.0)
+      erubi
+      highline (>= 2.0.0)
+      i18n
+      parser (>= 2.2.3.0)
+      rails-i18n
+      rainbow (>= 2.2.2, < 4.0)
+      terminal-table (>= 1.5.1)
     iconv (1.0.8)
     importmap-rails (1.2.1)
       actionpack (>= 6.0.0)
@@ -248,7 +270,7 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2023.0808)
     mini_mime (1.1.5)
-    minitest (5.19.0)
+    minitest (5.20.0)
     msgpack (1.7.2)
     multi_json (1.15.0)
     multi_xml (0.6.0)
@@ -441,6 +463,7 @@ GEM
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     sexp_processor (4.17.0)
+    smart_properties (1.17.0)
     snaky_hash (2.0.1)
       hashie
       version_gem (~> 1.1, >= 1.1.1)
@@ -459,6 +482,8 @@ GEM
     stimulus-rails (1.2.2)
       railties (>= 6.0.0)
     temple (0.10.2)
+    terminal-table (3.0.2)
+      unicode-display_width (>= 1.1.1, < 3)
     terser (1.1.18)
       execjs (>= 0.3.0, < 3)
     thin (1.8.2)
@@ -466,6 +491,8 @@ GEM
       eventmachine (~> 1.0, >= 1.0.4)
       rack (>= 1, < 3)
     thor (1.2.2)
+    thread (0.2.2)
+    thread_safe (0.3.6)
     tilt (2.2.0)
     time (0.2.2)
       date
@@ -530,6 +557,7 @@ DEPENDENCIES
   cube-ruby
   dalli
   debug
+  easy_translate (~> 0.5.1)
   ed25519 (>= 1.2, < 2.0)
   flag-icons-rails (~> 3.4)
   flamegraph
@@ -537,6 +565,7 @@ DEPENDENCIES
   haml (~> 5.1)
   html2haml
   i18n
+  i18n-tasks
   iconv
   importmap-rails
   inline_svg
