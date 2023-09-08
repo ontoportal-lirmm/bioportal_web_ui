@@ -121,6 +121,7 @@ class OntologiesController < ApplicationController
   end
 
   def create
+    @is_update_ontology = false
     @ontology = ontology_from_params.save
 
     if response_error?(@ontology)
@@ -128,7 +129,7 @@ class OntologiesController < ApplicationController
       return
     end
 
-    @submission = save_submission(new_submission_hash)
+    @submission = save_submission(new_submission_hash(@ontology))
 
     if response_error?(@submission)
       @ontology.delete
