@@ -38,15 +38,14 @@ class SubmissionsController < ApplicationController
     @is_update_ontology = true
 
     if params[:ontology]
-      @ontology = update_existent_ontology(params[:ontology_id])
+      @ontology, response = update_existent_ontology(params[:ontology_id])
 
-      if @ontology.nil? || response_error?(@ontology)
-        show_new_errors(@ontology)
+      if response.nil? || response_error?(response)
+        show_new_errors(response)
         return
       end
     end
-
-    @submission = save_submission(new_submission_hash)
+    @submission = save_submission(new_submission_hash(@ontology))
 
     if response_error?(@submission)
       show_new_errors(@submission)
@@ -78,12 +77,13 @@ class SubmissionsController < ApplicationController
 
   # When editing a submission (called when submit "Edit submission information" form)
   def update
+    @is_update_ontology = true
     acronym = params[:ontology_id]
     submission_id = params[:id]
     if params[:ontology]
       @ontology = update_existent_ontology(acronym)
       if @ontology.nil? || response_error?(@ontology)
-        show_new_errors(@ontology, partial: 'submissions/form_content', locals: { id: 'test' })
+        show_new_errors(@ontology, partial: 'submissions/form_content', id: 'test')
         return
       end
     end
@@ -93,35 +93,23 @@ class SubmissionsController < ApplicationController
                          notice: 'Submission updated successfully'
     end
 
-    @submission = update_submission(update_submission_hash(acronym), submission_id)
-    #reset_agent_attributes
+    @submission, response = update_submission(update_submission_hash(acronym), submission_id)
     if params[:attribute].nil?
-      if response_error?(@submission)
-        show_new_errors(@submission, partial: 'submissions/form_content', locals: { id: 'test' })
+      if response_error?(response)
+        show_new_errors(response, partial: 'submissions/form_content', id: 'test')
       else
         redirect_to "/ontologies/#{acronym}",
-                    notice: 'Submission updated successfully'
+                    notice: 'Submission updated successfully', status: :see_other
       end
     else
-      @errors = response_errors(@submission) if response_error?(@submission)
+      @errors = response_errors(response) if response_error?(response)
       @submission = submission_from_params(params[:submission])
       @submission.submissionId = submission_id
+      helpers.reset_agent_attributes
       render_submission_attribute(params[:attribute])
     end
 
   end
 
-  private
-
-  def reset_agent_attributes
-    helpers.agent_attributes.each do |attr|
-      current_val = @submission.send(attr)
-      new_values = Array(current_val).map { |x| LinkedData::Client::Models::Agent.find(x) }
-
-      new_values = new_values.first unless current_val.is_a?(Array)
-
-      @submission.send("#{attr}=", new_values)
-    end
-  end
 
 end
