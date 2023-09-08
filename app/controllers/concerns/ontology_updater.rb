@@ -36,7 +36,7 @@ module OntologyUpdater
     @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
     @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
     @errors = response_errors(object)
-    @is_update_ontology = true
+    @is_update_ontology = !@ontology.id.nil?
     @selected_attributes = (Array(errors_attributes) + Array(params[:submission]&.keys)).uniq
     @ontology = ontology_from_params
 
