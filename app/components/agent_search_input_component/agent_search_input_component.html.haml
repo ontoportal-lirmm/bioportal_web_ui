@@ -3,8 +3,8 @@
      use_cache: false,
      actions_links: {create_new_agent: {link: "/agents/new?name=&id=#{@id}&parent_id=#{@parent_id}&new_agent=false&type=#{@agent_type}&show_affiliations=false&edit_on_modal=#{@edit_on_modal}&name_prefix=#{@name_prefix}[#{@id}]", target:'_self'}}) do |s|
   - s.template do
-    %a{href: "LINK", class: "home-search-ontology-content", 'data-turbo-frame': '_self'}
-      %p#seached-ontology.home-searched-ontology
+    %a{href: "LINK", class: "search-content", 'data-turbo-frame': '_self'}
+      %p.search-element.home-searched-ontology
         NAME (IDENTIFIERS)
       %p.home-result-type
         TYPE
