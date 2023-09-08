@@ -42,7 +42,13 @@ module OntologyUpdater
 
     @submission = submission_from_params(params[:submission]) if params[:submission]
     render redirection
+    if redirection.is_a?(Hash) && redirection[:id]
+      render_turbo_stream replace(redirection[:id], partial: redirection[:partial])
+    else
+      render redirection, status: 422
   end
+  end
+
   def errors_attributes
     @errors = @errors[:error] if @errors && @errors[:error]
     @errors.keys.map(&:to_s) if @errors.is_a?(Hash)
