@@ -62,4 +62,4 @@
         - get_link_for_scheme_ajax(v, @ontology.acronym, '_blank')
     - c.section do
       = c.render_properties(label_xl_set, c.concept_properties) do |v|
-        - get_link_for_label_xl_ajax(v, @ontology.acronym, @concept.id)
+        - get_link_for_label_xl_ajax(v, @ontology.acronym, @concept.id, modal: params[:modal].nil? || params[:modal]&.eql?('true'))
