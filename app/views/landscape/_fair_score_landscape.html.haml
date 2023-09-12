@@ -4,37 +4,37 @@
       %span
         = render partial: "fair_score/fair_service_header"
       %span
-        %span.p-2.badge.badge-secondary
+        %span.p-2.badge.badge-primary
           Average
           %span.badge.badge-light
             %span#fair-score-average
               0 (0%)
-        %span.p-2.badge.badge-secondary
+        %span.p-2.badge.badge-primary
           Min
           %span.badge.badge-light
             %span#fair-score-min
               0 (0%)
-        %span.p-2.badge.badge-secondary
+        %span.p-2.badge.badge-primary
           Max
           %span.badge.badge-light
             %span#fair-score-max
               0 (0%)
-        %span.p-2.badge.badge-secondary
+        %span.p-2.badge.badge-primary
           Median
           %span.badge.badge-light
             %span#fair-score-median
               0 (0%)
-    %div.p-3
+    %div.p-3.text-secondary{style:'font-weight: normal;'}
       %div#detailedFilter.row.text-left
         = render :partial => "shared/ontology_picker", locals: {sel_text: ""}
       %div
-        This interface shows how an ontology or a group responded successfully to O’FAIRe FAIRness assessment questions
+        This interface shows how an ontology or a group responded successfully to O’FAIRe FAIRness assessment questions.
       %div
-        See details for each ontologies on the specific ontology summary pages
+        See details for each ontologies on the specific ontology summary pages.
   %div.card-body
     %div#fair-score-charts-container.row
       %div.col
         %span.text-secondary.mt-4
-          hover on a principle to see details
+          Put the mouse hover a principle to see details on the right side.
         = render partial: "fair_score_criteria_bars" , locals: {data: nil }
       %div#chartjs-tooltip-container.col{style: "height :700px ; position: relative"}

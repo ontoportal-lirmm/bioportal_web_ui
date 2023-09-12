@@ -613,7 +613,7 @@ class LandscapeController < ApplicationController
 
     @metrics_average.each do |metrics|
       if !sub.send(metrics[:attr]).nil?
-        metrics[:array].push(sub.send(metrics[:attr]))
+        metrics[:array].push(sub.metrics.send(metrics[:attr]))
       end
     end
   end

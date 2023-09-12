@@ -1,18 +1,18 @@
 .feedback-email{
     font-size: 12px;
     color: #666666;
-    width: 363px;
+
     margin-bottom: 21px;
 }
 .feedback-email a{
     color: var(--primary-color);
     font-weight: 600;
     text-decoration: none;
+    width: 100%;
 }
 .feedback-text{
     font-size: 12px;
     color: #666666;
-    width: 363px;
     margin-bottom: 0;
 }
 .feedback-text font{
@@ -24,14 +24,7 @@
     text-align: center;
     font-weight: 700;
 }
-#feedback-title-line{
-    width: 128px;
-    margin: auto;
-    margin-bottom: 17px;
-    margin-top: 3px;
-    border: 0.5px solid var(--primary-color);
-    border-radius: 5px;
-}
+
 .feedback-input-title{
     font-size: 12px;
     color: #666666;
@@ -43,7 +36,6 @@
 
 }
 .feedback-input{
-    width: 363px;
     outline: none;
     padding: 14px;
     font-size: 15px;
@@ -52,13 +44,13 @@
     border-radius: 9px;
     margin-bottom: 14px;
     resize: none;
+    width: 100%;
 }
 .feedback-input:focus{
     border: 1px solid var(--primary-color);
 }
 .feedback-button{
     margin-top: 10px;
-   width: 363px;
    font-size: 16px;
    color: white;
    padding: 17px;
@@ -71,7 +63,6 @@
     cursor: pointer;
 }
 .feedback-checks{
-    max-width: 363px;
     margin: 0 auto;    
     display: flex;
     flex-wrap: wrap;

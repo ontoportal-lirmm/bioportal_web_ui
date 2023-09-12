@@ -56,8 +56,8 @@ class AdminController < ApplicationController
     @acronym = params["acronym"]
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params["acronym"]).first
     begin
-      submissions = @ontology.explore.submissions
-      @submissions = submissions.sort {|a,b| b.submissionId <=> a.submissionId }
+      @submissions = @ontology.explore.submissions({include: "submissionId,creationDate,released,modificationDate,submissionStatus,hasOntologyLanguage,version,diffFilePath,ontology"})
+                              .sort {|a,b| b.submissionId.to_i <=> a.submissionId.to_i } || []
     rescue
       @submissions = []
     end

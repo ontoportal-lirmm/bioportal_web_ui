@@ -101,13 +101,13 @@ function syncGroupsAndCategories() {
           jQuery(groupsMap[jQuery(this).val()]).each(function(){
               selected_ontologies[this] = 1; // this is an ontology URI (ID)
           });
-          group_category_names.push(jQuery("label[for='" + jQuery(this).attr("id") + "']").html());
+          //group_category_names.push(jQuery("label[for='" + jQuery(this).attr("id") + "']").html());
       });
       categories.each(function(){
           jQuery(categoriesMap[jQuery(this).val()]).each(function(){
               selected_ontologies[this] = 1; // this is an ontology URI (ID)
           });
-          group_category_names.push(jQuery("label[for='" + jQuery(this).attr("id") + "']").html());
+          //group_category_names.push(jQuery("label[for='" + jQuery(this).attr("id") + "']").html());
       });
       // Hide ontologies not in a selected group/category, show if in a selected group/category
       jQuery("#ont_select_adv tr.ont_select_boxes_tr input").each(function(){
@@ -120,8 +120,8 @@ function syncGroupsAndCategories() {
           jQuery("#select_all_filtered_row").show();
       });
       // Put group/category names on the screen
-      jQuery("#groups_and_category_names").html(group_category_names.join(", "));
-      jQuery("#groups_categories_names_container").show();
+      //jQuery("#groups_and_category_names").html(group_category_names.join(", "));
+     // jQuery("#groups_categories_names_container").show();
   }
 }
 
@@ -369,7 +369,7 @@ jQuery(document).ready(function(){
 
         <tr id="select_all_filtered_row" style="display: none;">
           <td style="padding-bottom: 15px;"><%= check_box_tag "ont_select_all_filtered" %></td>
-          <td style="padding: 0 0 15px 5px;"><%= label_tag "ont_select_all_filtered", "Select all filtered ontologies", :style => "color: #338D0C; font-weight: bold;" %>&nbsp;&nbsp;(<a href="javascript:void(0);" id="show_all_filtered_ontologies">show all</a>)</td>
+          <td style="padding: 0 0 15px 5px;"><%= label_tag "ont_select_all_filtered", "Select all filtered ontologies", :style => "color: var(--primary-color); font-weight: bold;" %>&nbsp;&nbsp;(<a href="javascript:void(0);" id="show_all_filtered_ontologies">show all</a>)</td>
         </tr>
 
         <% @onts_for_select.each do |ont| %>

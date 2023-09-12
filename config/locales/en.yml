@@ -117,7 +117,7 @@ en:
         list.
   annotator:
     index:
-      intro: Get annotations for ecological text with classes from the semantic resources
+      intro: Get annotations for ecological text with classes from the semantic resources.
       annotatorplus_html: <em>Check out <a href="%{annotatorplus_href}">AnnotatorPlus</a> beta; a new version of the Annotator with added support for negation, and more!</em>
       fast_context:
         tooltip: "Enable FastContext to detect : if a concept has been negated (affirmed, negated), who experienced the found concept (patient, other), when the annotated concept occurred (recent, historical, hypothetical), and/or if the annotated concept is uncertain (certain, uncertain)."
@@ -150,10 +150,10 @@ en:
 
   projects:
     index:
-      intro: Browse a selection of projects that use %{site} resources
+      intro: Browse a selection of projects that use %{site} resources.
 
   ontologies:
-    intro: Browse the library of semantic resources
+    intro: Browse the library of semantic resources.
 
   concepts:
     request_term:

@@ -37,13 +37,13 @@
           .account-page-card-container
             .account-page-card-sub-container
               %h4.account-page-card-title Mailing list subscription
-              %p.account-page-card-desc AgroPortal announcements email list
+              %p.account-page-card-desc #{$SITE} announcements email list
             - subscribed = false
             - if subscribed 
-              %a.account-page-subscribe-button{:href =>"mailto:#{$ANNOUNCE_SERVICE_HOST}?Subject=unsubscribe%20#{$ANNOUNCE_LIST}"}
+              %a.btn.btn-primary{:href =>"mailto:#{$ANNOUNCE_SERVICE_HOST}?Subject=unsubscribe%20#{$ANNOUNCE_LIST}"}
                 Unsubscribe
             - else
-              %a.account-page-subscribe-button{:href => "mailto:#{$ANNOUNCE_SERVICE_HOST}?Subject=subscribe%20#{$ANNOUNCE_LIST}%20#{@user.firstName}%20#{@user.lastName}"}
+              %a.btn.btn-primary{:href => "mailto:#{$ANNOUNCE_SERVICE_HOST}?Subject=subscribe%20#{$ANNOUNCE_LIST}%20#{@user.firstName}%20#{@user.lastName}"}
                 Subscribe
         .account-page-card
           .account-page-card-container
@@ -54,25 +54,25 @@
                 = session[:user].apikey
             %a{:href => "javascript:navigator.clipboard.writeText('"+session[:user].apikey+"');"}
               = render partial: "shared/svgs/copy_icon"
-        .account-page-api-documentation-link
-          %a{href: "https://data.bioportal.lirmm.fr/documentation", target: "_blank"}
-            API documentation
-            = render partial: "shared/svgs/external_link_icon"
+          .account-page-api-documentation-link
+            %a{href: "#{$REST_URL.chomp('/')}/documentation", target: "_blank"}
+              API documentation
+              = render partial: "shared/svgs/external_link_icon"
         .account-page-card
           %h4.account-page-card-title
-            Custom Semantic Resource Set
+            Custom semantic resource set
           #custom_ontologies.enable-lists
             - if at_slice?
               %p{style: "padding-left: 7px; font-size: 10pt; margin: -3px 0 7px;"}
                 Please
                 %a{href: "#{$UI_URL}/account"} visit the main site
-                to modify your Custom Semantic Resource Set.
+                to modify your Custom semantic resource set.
             - else
               %p.account-page-card-desc
-                Customize your AgroPortal display: Pick the semantic resources that you want to see on AgroPortal will hide all other Semantic Resources.
+                Customize your #{$SITE} display: pick the semantic resources that you want to see on #{$SITE}. Pay attention: this will hide all other Semantic Resources.
               %p
                 %span{style: "font-weight: normal; font-size: 9pt; padding-left: 7px;"}
-                  %a#edit_custom_ontologies{href: "javascript:void(0);"} select semantic resources
+                  %a#edit_custom_ontologies{href: "javascript:void(0);"} Select semantic resources
               - if @user_ontologies && !@user_ontologies.empty?
                 %ul
                   - @user_ontologies.each do |ont|
@@ -80,14 +80,13 @@
                     %li
                       #{ont.name} (#{ont.acronym})
               - else
-                %p{style: "padding-left: 7px;"} You haven't picked any Semantic Resources yet
-          %p.account-page-card-desc Note: This feature works only when you are logged in.
+                %p{style: "padding-left: 7px;"} You haven't picked any Semantic Resources yet.
           #custom_ontologies_picker{style: "left: -9999px; position: absolute;"}
             = form_tag custom_ontologies_path(url_encode(@user.username)) do
               - selected = @user.customOntology.map {|o| LinkedData::Client::Models::Ontology.get(o).acronym}
               - locals = { custom_ontologies: @all_ontologies, selected_ontologies: selected, sel_text: "Select Custom Semantic Resources" }
               = render partial: "shared/ontology_picker", locals: locals
-              = submit_tag "Save Custom Semantic Resources", class: "link_button"
+              = submit_tag "Save custom semantic resources", class: "bnt btn-primary"
       .account-page-second-row
         - unless @user.subscription.nil? || @user.subscription.empty?
           .account-page-card
@@ -108,7 +107,7 @@
         - unless @admin_ontologies.nil? || @admin_ontologies.empty?
           - no_ontologies = false
           .account-page-card
-            %h4.account-page-card-title Submitted Semantic Resources
+            %h4.account-page-card-title Submitted semantic resources
             .account-page-small-cards-container
               - @admin_ontologies.each do |ont|
                 .account-page-submitted-ontology

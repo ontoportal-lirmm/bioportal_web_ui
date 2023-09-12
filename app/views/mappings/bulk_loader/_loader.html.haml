@@ -15,5 +15,5 @@
         = form_with url: '/mappings/loader', method: :post, multipart: true, data: { turbo: true} do
           %div
             = render FileInputLoaderComponent.new(name: :file)
-          %button.btn.btn-secondary.btn-block.mt-2{type:'submit'}
+          %button.btn.btn-primary.btn-block.mt-2{type:'submit'}
             Save

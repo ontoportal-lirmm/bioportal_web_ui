@@ -31,7 +31,6 @@ class DataciteCreatorService < ApplicationService
       }
     }
 
-    json_metadata = data_cite_hash.to_json
     url = URI(@url)
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -40,7 +39,7 @@ class DataciteCreatorService < ApplicationService
     request = Net::HTTP::Post.new(url)
     request['content-type'] = 'application/vnd.api+json'
     request['authorization'] = "Basic #{Base64.encode64("#{@username}:#{@password}").gsub("\n", '')}"
-    request.body = json_metadata
+    request.body = data_cite_hash.to_json
 
     response = http.request(request)
     json_response = response.read_body
@@ -49,7 +48,6 @@ class DataciteCreatorService < ApplicationService
     json_response = JSON.parse(json_response) if json_response.is_a?(String) && json_response.start_with?('{')
     json_response
   end
-
 
   # def update_doi_information_to_datacite(json_metadata)
   #   url = URI('https://api.test.datacite.org/dois/id')

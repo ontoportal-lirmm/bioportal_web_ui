@@ -374,7 +374,7 @@ module ApplicationHelper
 
   def add_comment_button(parent_id, parent_type)
     if session[:user].nil?
-      link_to "Add comment",  login_index_path(redirect: request.url), class: "link_button"
+      link_to "Add comment",  login_index_path(redirect: request.url), class: "link_button", target: '_top'
     else
       link_to_modal "Add comment", notes_new_comment_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
                     class: "add_comment btn btn-primary", data: { show_modal_title_value: "Add a new comment"}
@@ -392,7 +392,7 @@ module ApplicationHelper
 
   def add_proposal_button(parent_id, parent_type)
     if session[:user].nil?
-        link_to "Add proposal",  login_index_path(redirect: request.url), class: "link_button"
+        link_to "Add proposal",  login_index_path(redirect: request.url), class: "link_button", target: '_top'
     else
       link_to_modal "Add proposal", notes_new_proposal_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
                     class: "add_proposal btn btn-primary", data: { show_modal_title_value: "Add a new proposal"}
@@ -401,11 +401,11 @@ module ApplicationHelper
  
   def subscribe_button(ontology_id)
     if session[:user].nil?
-      return link_to 'Subscribe to notes emails', "/login?redirect=#{request.url}", {style:'font-size: .9em;', class:'link_button'}
+      return link_to 'Subscribe to notes emails', "/login?redirect=#{request.url}", {style:'font-size: .9em;', class: 'link_button'}
     end
 
     user = LinkedData::Client::Models::User.find(session[:user].id)
-    ontology_acronym = ontology_id.split('/').last
+    ontology_acronym = ontology_id&.split('/')&.last
     subscribed = subscribed_to_ontology?(ontology_acronym, user)
 
     render OntologySubscribeButtonComponent.new(ontology_id: ontology_id, subscribed: subscribed, user_id: user.id)
@@ -417,7 +417,7 @@ module ApplicationHelper
     return false if user.subscription.nil? or user.subscription.empty?
     user.subscription.each do |sub|
       #sub = {ontology: ontology_acronym, notification_type: "NOTES"}
-      sub_ont_acronym = sub[:ontology].split('/').last # make sure we get the acronym, even if it's a full URI
+      sub_ont_acronym = sub[:ontology]&.split('/')&.last # make sure we get the acronym, even if it's a full URI
       return true if sub_ont_acronym == ontology_acronym
     end
     return false

@@ -6,7 +6,7 @@
 %div.container-fluid.flex-grow-1
   %div.row
     %div.col
-      %h2.mt-3 Annotator
+      %h1.mt-3 Annotator
       %p
         = t('annotator.index.intro', site: $SITE).html_safe
         = link_to(Rails.configuration.settings.links[:help_annotator], target: '_blank') do
@@ -47,46 +47,46 @@
               %label.custom-control-label{for: "exclude_synonyms"} Exclude synonyms
 
           %div.form-group
-            %label{for: "ontology_ontologyId"} Select ontologies
+            %h6{for: "ontology_ontologyId"} Select ontologies
             = select_tag("ontology_ontologyId", options_from_collection_for_select(@annotator_ontologies, :acronym, lambda { |ont| "#{ont.name} (#{ont.acronym})" }), |
                 multiple: true, class: "form-control", "aria-describedby": "selectOntologiesHelpBlock") |
             %small#selectOntologiesHelpBlock.form-text.text-muted Start typing to select ontologies or leave blank to use all
 
           - if @sem_type_ont
             %div.form-group
-              %label{for: "semantic_types"} Select UMLS semantic types
+              %h6{for: "semantic_types"} Select UMLS semantic types
               = select_tag("semantic_types", options_for_select(@semantic_types_for_select), multiple: "true", class: "form-control", "aria-describedby": "selectSemanticTypesHelpBlock")
               %small#selectSemanticTypesHelpBlock.form-text.text-muted Start typing to select UMLS semantic types or leave blank to use all
 
             %div.form-group
-              %label{for: "semantic_groups"} Select UMLS semantic groups
+              %h6{for: "semantic_groups"} Select UMLS semantic groups
               = select_tag("semantic_groups", options_for_select(@semantic_groups_for_select), multiple: "true", class: "form-control", "aria-describedby": "selectSemanticGroupsHelpBlock")
               %small#selectSemanticGroupsHelpBlock.form-text.text-muted Start typing to select UMLS semantic groups or leave blank to use all
 
           %div.form-group
-            %label{for: "class_hierarchy_max_level"} Include ancestors up to level
+            %h6{for: "class_hierarchy_max_level"} Include ancestors up to level
             - options = [["none", 0], *(1..10).map {|i| [i, i]}, ["all", 999]]
             = select_tag("class_hierarchy_max_level", options_for_select(options, 0), class: "form-control")
 
           %div.form-group
-            %label{for: "score"} Include score
+            %h6{for: "score"} Include score
             - options = [["none", ""], ["old", "old"], ["cvalue", "cvalue"], ["cvalueh", "cvalueh"]]
             = select_tag(:score, options_for_select(options, 0), class: "form-control", "aria-describedby": "includeScoreHelpBlock")
             %small#includeScoreHelpBlock.form-text.text-muted Score annotations following the previous 2009 NCBO measure (old) or the C-Value measure (cvalue). If hierarchy expansion is used, then prefer cvalueh. 
 
           %div.form-group
-            %label{for: "score_threshold"} Filter by score threshold
+            %h6{for: "score_threshold"} Filter by score threshold
             = number_field_tag(:score_threshold, 0, id: "score_threshold", class: "form-control", "aria-describedby": "scoreThresholdHelpBlock")
             %small#scoreThresholdHelpBlock.form-text.text-muted Specify the minimum score value for annotations 
 
           %div.form-group
-            %label{for: "confidence_threshold"} Filter confidence threshold
+            %h6{for: "confidence_threshold"} Filter confidence threshold
             = number_field_tag(:confidence_threshold, 0, min: 0, max: 100, id: "confidence_threshold", class: "form-control", "aria-describedby": "confidenceThresholdHelpBlock")
             %small#confidenceThresholdHelpBlock.form-text.text-muted Specify the minimum position in the scoring distribution (between 1 and 100)
 
           - if @recognizers.length > 1
             %div.form-group
-              %label{for: "recognizer"} Entity recognizer
+              %h6{for: "recognizer"} Entity recognizer
               - default_recognizer = @recognizers.include?("mgrep") ? "mgrep" : @recognizers.first
               = select_tag("recognizer", options_for_select(@recognizers.map {|r| [r, r]}, default_recognizer), class: "form-control")
 

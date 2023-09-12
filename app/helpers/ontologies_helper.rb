@@ -52,7 +52,7 @@ module OntologiesHelper
     logo_attributes = ["logo", "depiction"]
     logo_html = ""
     logo_attributes.each do |metadata|
-      if !sub.send(metadata).nil?
+      if !sub.send(metadata).nil? && !sub.send(metadata).empty?
         puts sub.send(metadata)
         logo_html.concat(content_tag(:section, { :class => "ont-metadata-card ont-logo-depiction-card" }) do
           concat(content_tag(:div, { :class => "ont-section-toolbar" }) do
@@ -88,7 +88,12 @@ module OntologiesHelper
     metadata_not_displayed = ["status", "description", "documentation", "homepage",
                               "openSearchDescription", "dataDump", "includedInDataCatalog", "logo",
                               "depiction", "submissionId", "submissionStatus", 'ontology', 'contact',
-                              "metrics", "uploadFilePath"]
+                              "metrics", "uploadFilePath",
+                              "prefLabelProperty", "definitionProperty", "synonymProperty",
+                              "authorProperty", "hierarchyProperty","classType", "obsoleteProperty", "createdProperty",
+                              "diffFilePath", "modifiedProperty", "obsoleteParent", "uriLookupEndpoint", "csvDump",
+                              "hasPriorVersion", "hasOntologyLanguage"
+    ]
     begin
 
       metadata_list.each do |metadata, label|
