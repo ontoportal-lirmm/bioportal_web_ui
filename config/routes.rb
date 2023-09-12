@@ -45,7 +45,12 @@ Rails.application.routes.draw do
     get 'collections/show'
   end
 
-  resources :login
+  if $SSO_ENABLED
+    get "/login" => "oauth2#login", as: :login_index
+    get "/logout" => "oauth2#logout"
+  else
+    resources :login
+  end
 
   resources :admin, only: [:index]
 
