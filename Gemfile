@@ -122,4 +122,5 @@ end
 
 gem "net-ftp", "~> 0.2.0", require: false
 gem "net-http"
+gem 'openid_connect', '~> 2.2.0'
 
