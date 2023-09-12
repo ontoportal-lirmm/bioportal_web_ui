@@ -1,7 +1,7 @@
 - @title = "Search"
 
 %div.container.mt-5
-  %h1.display-4 
+  %h1
     Class Search
 
   = form_tag("/search", method: "post") do
@@ -38,7 +38,7 @@
             = check_box(:search, :require_definition, class: "form-check-input")
             = label(:search, :require_definition, "Classes with definitions", class: "form-check-label")
       %div.form-group
-        %h6{style: "font-size: 10pt !important"} Categories
+        %h2{style: "font-size: 10pt !important"} Categories
         = select(:search, :categories, options_for_select(categories_for_select), {}, style: "width: 432px", multiple: "true", data: {placeholder: t(".categories_placeholder")})
       %div.form-group.mb-5{style: "width:432px"}
         = render :partial => "shared/ontology_picker", locals: {sel_text: "Ontologies"}

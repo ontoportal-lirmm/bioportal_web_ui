@@ -1,4 +1,17 @@
 = render TurboFrameComponent.new(id:id) do
+  %div#editMetadataDiv
+    %div
+      %p
+        To understand the ontologies metadata:
+        %a{:href => "https://github.com/agroportal/documentation/wiki/Ontology-metadata", :target => "_blank"} see the Wiki
+    %div.d-flex.align-items-center.justify-content-between{onchange: "onMetadataChange()", style: "visibility: #{@filters_disabled ? 'hidden' : 'visible'}"}
+      %div.w-75.mt-3
+        - if @submission.id
+          = render MetadataSelectorComponent.new(label: 'Filter properties to show', values: submission_editable_properties , selected:  nil, inline: true)
+      %div
+        = render SwitchInputComponent.new(id:"filter-required-only", name: "required-only", label: "Required only", checked: @required_only)
+
+
   - unless @errors.nil?
     %div
       %div.enable-lists{style: "color:red;"}
@@ -21,7 +34,7 @@
       = attribute_container('format', required: true) do
         = turbo_frame_tag  "#{object_name(acronym, submissionId)}Format_from_group_input" do
           = render partial: 'submissions/submission_format_form'
-      = attribute_text_field_container('version')
+      = attribute_text_field_container('version', required: true)
 
       = attribute_form_group_container('status', required: true) do |c|
         - selected_status = c.value ? c.value : "alpha"
@@ -37,7 +50,7 @@
         = form_group_attribute("URI", required: true)
         = render partial: 'submissions/submission_identifier_form'
 
-        = form_group_attribute('hasCreator', required: true)
+        = form_group_attribute('hasCreator', label: 'Creator(s)', required: true)
         = form_group_attribute('publisher', required: true)
 
         = attribute_form_group_container('description', required: true) do |c|
@@ -46,7 +59,7 @@
         = form_group_attribute('alternative', required: true)
 
         -# Publications page
-        = form_group_attribute('publication', required: true) do
+        = form_group_attribute('publication', label: 'Publication(s)', required: true) do
           %p
             Enter a URL for a page that lists publications about your ontology.
 

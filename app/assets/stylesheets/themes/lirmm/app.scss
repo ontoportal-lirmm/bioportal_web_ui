@@ -96,6 +96,7 @@ body.ontologies.index {
     */
 
     /* SOLUTION 2 */
+    display: inline;
     white-space: nowrap;
     margin-bottom: -7px;
   }
@@ -125,10 +126,6 @@ body.ontologies.index {
     }
   }
 
-  .trigger_highlight-add, .trigger_highlight-remove {
-    -webkit-animation: highlight 1s;
-    animation: highlight 1s;
-  }
 
   #ontologies {
   }

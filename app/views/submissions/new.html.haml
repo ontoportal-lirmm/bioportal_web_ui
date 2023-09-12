@@ -1,7 +1,7 @@
 - @title = "Add new ontology submission"
 
 %div.container.py-4.py-md-5
-  %h3.text-center.mb-4
+  %h1
     Add new submission
     - if !(@submission.ontology.nil? || (@submission.ontology.is_a? String))
       %small.text-muted for #{@submission.ontology.acronym}

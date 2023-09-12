@@ -6,7 +6,7 @@
       %label{for: "#{@name}_#{@method_name}", }
         = @label_text
     - if required?
-      %span.asterik *
+      %span.asterik
   %div{class: content_class}
     = render TurboFrameComponent.new(id: "#{container_id}_from_group_input") do
       %div.d-flex.w-100

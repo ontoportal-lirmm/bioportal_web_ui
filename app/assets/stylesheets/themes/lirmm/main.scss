@@ -94,7 +94,7 @@ textarea.error {
  ************************************/
 
 .nav-tabs .nav-link {
-  color: #999 !important
+  color: #999
 }
 
 .nav-tabs .nav-link.active {
@@ -109,13 +109,6 @@ textarea.error {
   line-height: 55px;
 }
 
-.navbar-nav .nav-link {
-  color: rgba(255, 255, 255, 0.7) !important;
-  
-  &:hover {
-    color: rgba(255, 255, 255, 1.0) !important;
-  }
-}
 
 .navbar-nav i {
   color: #fff;

@@ -292,7 +292,7 @@ module SubmissionsHelper
   end
 
   # Generate the HTML label for every attributes
-  def generate_attribute_label(attr_label, label_tag_sym: :label)
+  def generate_attribute_label(attr_label, label: nil, label_tag_sym: :label)
     # Get the attribute hash corresponding to the given attribute
     attr = attribute_infos(attr_label)
 
@@ -303,7 +303,7 @@ module SubmissionsHelper
     #             end.to_s.html_safe
 
 
-    label = attr["label"].nil? ? attr_label.underscore.humanize : attr["label"]
+    label ||= attr["label"].nil? ? attr_label.underscore.humanize : attr["label"]
 
     if label_tag_sym.eql? :label
       label_html << label_tag("submission_#{attr_label}", label , { class: 'form-label' })
@@ -496,7 +496,7 @@ module SubmissionsHelper
   def form_group_attribute(attr, options = {}, &block)
     attribute_form_group_container(attr, required: !options[:required].nil?) do |c|
       c.label do
-        generate_attribute_label(attr)
+        generate_attribute_label(attr, label: options[:label])
       end
       c.input do
         raw generate_attribute_input(attr, options)

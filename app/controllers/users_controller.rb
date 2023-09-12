@@ -149,18 +149,18 @@ class UsersController < ApplicationController
     redirect_to user_path(@user.username)
   end
 
-  
+
   def subscribe
     @user = LinkedData::Client::Models::User.find_by_username(params[:username]).first
     deliver "subscribe", SubscribeMailer.register_for_announce_list(@user.email,@user.firstName,@user.lastName)
   end
 
   def un_subscribe
-    @email = params[:email] 
+    @email = params[:email]
     deliver "unsubscribe", SubscribeMailer.unregister_for_announce_list(@email)
   end
 
-  
+
   private
 
   def deliver(action,job)
@@ -181,10 +181,10 @@ class UsersController < ApplicationController
                                      :password_confirmation, :register_mail_list, :admin)
     p.to_h
   end
-  
+
   def extract_id_from_url(url, pattern)
     if url && url.include?(pattern)
-      url.split('/').last 
+      url.split('/').last
     else
       url
     end
@@ -231,7 +231,7 @@ class UsersController < ApplicationController
     end
 
     if params[:username].nil? || params[:username].length < 1 || !params[:username].match(/^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$/)
-      errors << "please enter a valid username"
+      errors << "Please provide a valid username, which should not be your email address or include any special characters"
     end
     return errors
   end
@@ -250,10 +250,16 @@ class UsersController < ApplicationController
     if params[:username].nil? || params[:username].length < 1
       errors << "Last name field is required"
     end
-    if ((!params[:orcidId].match(/^\d{4}+(-\d{4})+$/)) || (params[:orcidId].length != 19)) && !(params[:orcidId].nil? || params[:orcidId].length < 1)
-      errors << "Please enter a valide orcide id"
+    if params[:orcidId] && ((!params[:orcidId].match(/^\d{4}+(-\d{4})+$/)) || (params[:orcidId].length != 19)) && !(params[:orcidId].nil? || params[:orcidId].length < 1)
+      errors << "Please enter a valid orcid id"
     end
-    if !params[:password].eql?(params[:password_confirmation])
+
+
+    if params[:password].nil? || params[:password].empty?
+      errors << "Your Password can't be empty"
+    end
+
+    if params[:password] && !params[:password].eql?(params[:password_confirmation])
       errors << "Your Password and Password Confirmation do not match"
     end
 

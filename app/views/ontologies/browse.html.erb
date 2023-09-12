@@ -8,7 +8,7 @@
 </div>
 
 <main class="grid-container" role="main" style="margin-bottom: 1em; margin-top: 1em;" ng-cloak>
-  <h1 style="font-size: 3em;">Browse</h1>
+  <h1 class="mt-5">Browser</h1>
   <p>
     <%= t('ontologies.intro').html_safe %>
     <%= link_to(Rails.configuration.settings.links[:help_ontology_browse], target: '_blank') do %>
@@ -18,7 +18,7 @@
 
   <div ng-controller="OntologyList">
     <div class="welcome_admin admin" ng-show="admin">
-      <b>Welcome admin</b><br/>This coloring indicates admin-only features
+      <b>Welcome admin</b><br/>This coloring indicates admin-only features.
     </div>
 
     <div ng-show="debug" class="facet" style="position: relative;">
@@ -43,7 +43,7 @@
       Define possibles values for the attr in config/enforced_attribute_values.rb-->
       <div id="ont_view_facet" class="facet">
         <h4>Entry Type</h4>
-        <div class="checkbox_list">
+        <div class="checkbox_list" style="height: 50px">
           <span ng-repeat="type in types | toArray | orderBy:'sort'">
             <input type="checkbox" checklist-model="facets.types.active" checklist-value="type.id" id="include_{{type.id}}" name="include_{{type.id}}" ng-disabled="!facet_counts['types'][type.id]">
             <label for="include_{{type.id}}" ng-class="{facet_disabled: !facet_counts['types'][type.id]}">
@@ -248,7 +248,7 @@
         <div class="badges grid-25 grid-parent" ng-if="ontology.submission !== null">
 
           <a href="/ontologies/{{ontology.acronym}}#fair-details" ng-if="ontology.fairScore !==null && ontology.acronym != 'AGROVOC'">
-            <div class="grid-50 badge_grid badge-fair">
+            <div class="grid-50 badge_grid">
               <div class="ontology_badge" title="{{ontology.normalizedFairScore}}%">
                 <div class="badge_title">FAIR score</div>
                 <div class="badge_count">{{ontology.fairScore}}</div>
