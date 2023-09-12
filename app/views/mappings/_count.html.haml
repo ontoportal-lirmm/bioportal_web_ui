@@ -1,12 +1,12 @@
 %table#mapping_count_table.zebra{cellpadding: "0", cellspacing: "0"}
   %thead
     %tr
-      %th Ontology
+      %th Semantic resource
       %th Mappings
   %tbody
     - if @mapping_counts.blank?
       %tr
-        %td There are no mappings to or from this ontology
+        %td There are no mappings to or from this Semantic resource
         %td &nbsp;
     - else
       - for mapping_count in @mapping_counts

@@ -1,0 +1,6 @@
+- @title = "Create new category"
+
+%div
+  = form_for :category, url: admin_categories_path, method: "POST", remote: true, data: { collection: "categories"}, html: {class: "admin-collection-form" } do |f|
+    = render partial: "form", locals: {f: f, title_text: "Create category",
+                                             button_text: "Create category" }

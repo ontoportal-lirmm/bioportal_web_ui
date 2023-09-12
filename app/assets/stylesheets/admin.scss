@@ -16,6 +16,7 @@
 .error {
   background: #ffecec image-url("error.png") no-repeat 10px 50%;
   border: 1px solid #f5aca6;
+  padding-left: 30px;
 }
 
 .success {
@@ -139,3 +140,29 @@ table.dataTable tbody tr.selected {
     margin-right: 8px;
   }
 }
+
+#process-scheduling {
+
+  .site-admin-page-header {
+    justify-content: space-between;
+
+    .job-title {
+      text-transform: uppercase;
+    }
+  }
+
+  .site-admin-page-section {
+    margin-bottom: 3rem
+  }
+
+  .job-schedule {
+    font-style: italic;
+    cursor: help;
+  }
+}
+
+div.groupFormError {
+  color: red;
+  padding-top: 3px;
+}
+

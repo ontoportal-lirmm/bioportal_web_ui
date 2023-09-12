@@ -34,9 +34,8 @@ function set_last_params(params) {
 function insertSampleText(event) {
   "use strict";
   event.preventDefault();
-  var text = "The patient has no sign of melanoma but his father had skin cancer. The epithelial tissue cells show no abnormal activity.";
   jQuery("#annotation_text").focus();
-  jQuery("#annotation_text").val(text);
+  jQuery("#annotation_text").val(jQuery("#annotation_sample_text").val());
 }
 
 function get_annotations() {

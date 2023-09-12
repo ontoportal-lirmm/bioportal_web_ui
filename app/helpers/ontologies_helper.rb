@@ -42,6 +42,11 @@ module OntologiesHelper
     end
   end
 
+  def agent?(sub_metadata, attr)
+    metadata = sub_metadata.select{ |x| x['@id'][attr] }.first
+    metadata && Array(metadata['enforce']).include?('Agent')
+  end
+
   # Display data catalog metadata under visits (in _metadata.html.haml)
   def display_logo(sub)
     logo_attributes = ["logo", "depiction"]
@@ -74,16 +79,16 @@ module OntologiesHelper
     metadata_list = {}
     # Get extracted metadata and put them in a hash with their label, if one, as value
     json_metadata.each do |metadata|
-      if metadata["extracted"] == true
-        metadata_list[metadata["attribute"]] = metadata["label"]
-      end
+      metadata_list[metadata['attribute']] = metadata['label']
     end
     metadata_list = metadata_list.sort
 
     html = []
 
-    metadata_not_displayed = ["status", "description", "documentation", "publication", "homepage", "openSearchDescription", "dataDump", "includedInDataCatalog", "logo", "depiction"]
-
+    metadata_not_displayed = ["status", "description", "documentation", "homepage",
+                              "openSearchDescription", "dataDump", "includedInDataCatalog", "logo",
+                              "depiction", "submissionId", "submissionStatus", 'ontology', 'contact',
+                              "metrics", "uploadFilePath"]
     begin
 
       metadata_list.each do |metadata, label|
@@ -126,6 +131,22 @@ module OntologiesHelper
                   end)
                 end
 
+              elsif agent?(json_metadata, metadata)
+                html << content_tag(:tr) do
+                  if label.nil?
+                    concat(content_tag(:td, metadata.gsub(/(?=[A-Z])/, " ")))
+                  else
+                    concat(content_tag(:td, label))
+                  end
+
+                  metadata_array = []
+
+                  sub.send(metadata).each do |metadata_value|
+                    metadata_array << "<div> #{display_agent(metadata_value)} </div>"
+                  end
+
+                  concat(content_tag(:td, raw(metadata_array.join(""))))
+                end
               else
                 html << content_tag(:tr) do
                   if label.nil?
@@ -160,7 +181,18 @@ module OntologiesHelper
           else
 
             # SINGLE METADATA
-            if !sub.send(metadata).nil?
+            if agent?(json_metadata, metadata)
+              next if sub.send(metadata).nil?
+
+              html << content_tag(:tr) do
+                if label.nil?
+                  concat(content_tag(:td, metadata.gsub(/(?=[A-Z])/, " ")))
+                else
+                  concat(content_tag(:td, label))
+                end
+                concat(content_tag(:td, raw("<div> #{display_agent(sub.send(metadata))} </div>")))
+              end
+            elsif !sub.send(metadata).nil?
               html << content_tag(:tr) do
                 if label.nil?
                   concat(content_tag(:td, metadata.gsub(/(?=[A-Z])/, " ")))
@@ -240,6 +272,21 @@ module OntologiesHelper
       LOG.add :debug, "error message: #{e.message}"
     end
     html.join("")
+  end
+
+  def social_share_link(ont, sharer)
+    return <<-HTML
+      <a href='javascript:;' 
+        aria-label='Share on #{sharer}'
+        title='Share on #{sharer}'
+        style='margin-left: 0.5rem'
+        data-sharer='#{sharer.downcase}'
+        data-title='#{ont.name}'
+        data-url='#{CGI::escapeHTML($UI_URL + ontology_path(ont.acronym))}'>
+        <i class="fab fa-lg fa-#{sharer.downcase}"></i>
+      </a>
+    HTML
+             .html_safe
   end
 
   def count_links(ont_acronym, page_name = 'summary', count = 0)

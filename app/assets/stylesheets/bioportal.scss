@@ -1,3 +1,6 @@
+a{
+  text-decoration: none !important;
+}
 .alignright {
   float:right;
 }
@@ -1144,6 +1147,11 @@ a.truncated_less, a.truncated_more {
     display: revert;
   }
 
+}
+
+.img_logo {
+  height: 40px;
+  margin: 6px;
 }
 
 turbo-frame[busy] .hide-if-loading, .show-if-loading {

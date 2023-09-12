@@ -1,0 +1,6 @@
+- @title = "Create new group"
+
+%div
+  = form_for :group, url: admin_groups_path, method: "POST", remote: true, data: { collection: "groups"}, html: {class: "admin-collection-form" } do |f|
+    = render partial: "form", locals: {f: f, title_text: "Create group",
+                                             button_text: "Create group" }

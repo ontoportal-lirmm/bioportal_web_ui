@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
 
 <div class="splash" ng-cloak>
-  <div style="font-size: 3em;">Ontologies loading</div>
+  <div style="font-size: 3em;">Semantic resources loading</div>
   <p>please wait...</p>
 </div>
 
@@ -11,8 +11,7 @@
   <h1 style="font-size: 3em;">Browse</h1>
   <p>
     <%= t('ontologies.intro').html_safe %>
-    <%= link_to(Rails.configuration.settings.links[:help_ontology_browse], id: 'ontology-browse-help',
-                'aria-label': 'View ontology browse help') do %>
+    <%= link_to(Rails.configuration.settings.links[:help_ontology_browse], target: '_blank') do %>
       <i class='fas fa-question-circle fa-lg' aria-hidden='true'></i>
     <% end %>
   </p>
@@ -34,13 +33,9 @@
 
     <div id="facets" class="grid-20">
       <%if session[:user].nil?%>
-        <a class="new_ontology_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" href="/login?redirect=/ontologies/new">
-          <span class="ui-button-text">Submit New Ontology</span>
-        </a>
+        <a class="new_ontology_button btn btn-primary" href="/login?redirect=/ontologies/new">Submit New Semantic Resource</a>
       <%else%>
-        <a class="new_ontology_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" href="/ontologies/new">
-          <span class="ui-button-text">Submit New Ontology</span>
-        </a>
+        <a class="new_ontology_button btn btn-primary" href="/ontologies/new">Submit New Semantic Resource</a>
       <%end%>
 
       <!-- To add a new facet: set new filter to $scope.facets in angular defined in public/browse/app.js
