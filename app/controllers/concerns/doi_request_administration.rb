@@ -3,7 +3,7 @@ module DoiRequestAdministration
 
   included do
     # Access the constant through the controller's class
-    SUB_DATA_CITE_METADATA_URL = lambda { |acronym, subId| "#{AdminController::ONTOLOGIES_LIST_URL}#{acronym}/submissions/#{subId}/datacite_metadata_json" }
+    SUB_DATA_CITE_METADATA_URL = lambda { |acronym, subId| "#{AdminController::ONTOLOGIES_LIST_URL}#{acronym}/latest_submission/datacite_metadata_json" }
     DOI_REQUESTS_URL = "#{AdminController::ADMIN_URL}doi_requests_list"
   end
 
@@ -48,7 +48,7 @@ module DoiRequestAdministration
               error_response = nil
               case action
               when 'process'
-                error_response = process_doi(doi_request, ont_submission_id, ontology_id)
+                error_response = process_doi(doi_request)
               when 'reject'
                 error_response = change_request_status(doi_request, 'REJECTED') unless error_response
               else
@@ -81,12 +81,11 @@ module DoiRequestAdministration
   private
 
   def process_doi(doi_request)
-    doi_req_submission = doi_request.submission
+    doi_req_submission =  LinkedData::Client::Models::OntologySubmission.find(doi_request.submission.id, include: 'all')
     ont_submission_id = doi_req_submission.submissionId
     ontology_id = doi_req_submission.ontology.id
     ontology_acronym = ontology_id.split('/').last
     hash_metadata = data_cite_metadata_json(ontology_acronym, ont_submission_id)
-
     if doi_request.requestType == 'DOI_CREATE'
       satisfy_doi_creation_request(doi_request, hash_metadata, doi_req_submission)
     elsif doi_request.requestType == 'DOI_UPDATE'
@@ -97,7 +96,11 @@ module DoiRequestAdministration
   def data_cite_metadata_json(ontology_acronym, ont_submission_id)
     sub_metadata_url = SUB_DATA_CITE_METADATA_URL.call(ontology_acronym, ont_submission_id)
     hash_metadata = LinkedData::Client::HTTP.get(sub_metadata_url, {}, raw: true)
-    JSON.parse(hash_metadata, symbolize_names: true)
+    json = JSON.parse(hash_metadata, symbolize_names: true)
+
+    json[:title] = json[:titles]&.first ? json[:titles].first[:title] : ontology_acronym
+    json[:url] = helpers.ontologies_url + '/' +ontology_acronym
+    json
   end
 
   def new_doi_request_hash(req)
@@ -122,16 +125,8 @@ module DoiRequestAdministration
     errors = { error: 'There was an error, please try again' }
     return errors unless error_hash && error_hash.length > 0
 
-    errors = {}
-    error_hash.each do |error|
-      p error
-      p error.is_a?(Hash)
-      p error.key?('title')
-      if error.is_a?(Hash) && error.key?('title')
-        errors[:error] = error['title']
-      end
-    end
-    errors
+    errors = error_hash[:error]
+    errors.to_a.map{|x,y| "#{x}: #{y}"}
   end
 
   def satisfy_doi_creation_request(doi_request, hash_metadata, submission)
