@@ -39,7 +39,8 @@
 
           - if @ontology.admin?(session[:user])
             - r.td { raw sub.submissionId }
-          - r.td { raw status_link(sub, sub.submissionId==submission_readyId)}
+          - r.td do
+            = render SubmissionStatusComponent.new(sub, sub.submissionId==submission_readyId) 
           - r.td {  xmldatetime_to_date(sub.modificationDate) unless sub.modificationDate.nil? }
           - r.td {  xmldatetime_to_date(sub.creationDate) unless sub.creationDate.nil? }
 
