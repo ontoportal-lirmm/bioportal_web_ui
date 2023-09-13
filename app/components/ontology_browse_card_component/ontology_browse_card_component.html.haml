@@ -4,6 +4,8 @@
       .browse-ontology-title-bar
         %a.browse-ontology-title{:href => "/ontologies/#{ontology[:acronym]}", data: {'turbo-frame': '_top'}}
           = ontology[:name]+" ("+ontology[:acronym]+")"
+          - ontology_status = status_string(ontology)
+          = render Display::InfoTooltipComponent.new(text: ontology_status, icon: submission_status_icons(ontology_status)) 
           - if ontology[:private]
             %i.fas.fa-key{title:"Private Ontology"}
       .browse-desc-container{data:{controller:"text-truncate", 'text-truncate-more-text-value': '+ Show more ...' , 'text-truncate-less-text-value': '- Show less ...'}}
