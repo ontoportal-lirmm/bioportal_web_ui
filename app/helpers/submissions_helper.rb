@@ -1,8 +1,24 @@
 module SubmissionsHelper
+  def metadata_help_link
+    content_tag(:div, class: 'edit-ontology-desc') do
+      html = content_tag(:span, 'To understand the ontologies metadata:')
+      html += content_tag(:span, style: 'width: 10px; height: 10px') do
+        link_to(render(ExternalLinkTextComponent.new(text: 'see the Wiki')), "https://github.com/agroportal/documentation/wiki/Ontology-metadata")
+      end
+      html.html_safe
+    end
+  end
+
 
   def ontology_submission_id_label(acronym, submission_id)
     [acronym, submission_id].join('#')
   end
+
+  def submission_metadata_selector(id: 'search_metadata', name: 'search[metadata]', label: 'Filter properties to show')
+    select_input(id: id, name: name, label: label, values: submission_editable_properties.sort, multiple: true,
+                 data: { placeholder: 'Start typing to select properties' })
+  end
+
   def ontology_and_submission_id(value)
     value.split('#')
   end
@@ -11,22 +27,33 @@ module SubmissionsHelper
     render partial: 'ontologies_metadata_curator/attribute_inline_editable', locals: { attribute: attribute, submission: submission, ontology: ontology }
   end
 
-  def render_submission_attribute_inline(attribute, submission = @submission, acronym)
-    render partial:"ontologies_metadata_curator/attribute_inline", locals:{attribute: attribute, submission: submission, acronym: acronym}
-  end
-
   def attribute_input_frame_id(acronym, submission_id, attribute)
     "submission[#{acronym}_#{submission_id}]#{attribute.capitalize}_from_group_input"
   end
 
-  def display_submission_attributes(acronym, attributes, submissionId: nil, required: false, show_sections: false, inline_save: false)
+  def edit_submission_property_link(acronym, submission_id, attribute, container_id = nil, &block)
+    link = "/ontologies/#{acronym}/submissions/#{submission_id}/edit_properties?properties=#{attribute}&inline_save=true"
+    if container_id
+      link += "&container_id=#{container_id}"
+    else
+        link += "&container_id=#{attribute_input_frame_id(acronym, submission_id, attribute)}"
+    end
+    link_to link, data: { turbo: true }, class: 'btn btn-sm btn-light' do
+      capture(&block)
+    end
+  end
+
+  def display_submission_attributes(acronym, attributes, submissionId: nil, inline_save: false)
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
     @selected_attributes = attributes
-    @required_only = required
-    @hide_sections = !show_sections
     @inline_save = inline_save
 
-    display_properties = @selected_attributes && !@selected_attributes.empty? ? (equivalent_properties(@selected_attributes) + [:ontology, :submissionId]).join(',') : 'all'
+    if @selected_attributes && !@selected_attributes.empty?
+      display_properties = (equivalent_properties(@selected_attributes) + [:ontology, :submissionId]).join(',')
+    else
+      display_properties = 'all'
+    end
+
     if submissionId
       @submission = @ontology.explore.submissions({ display: display_properties }, submissionId)
     else
@@ -34,39 +61,15 @@ module SubmissionsHelper
     end
   end
 
-  def metadata_section(id, label, collapsed: true, parent_id: nil, &block)
-    if @hide_sections
-      content_tag(:div) do
-        capture(&block)
-      end
-    else
-      collapsed = false if !@selected_attributes.nil? || !@errors.nil?
-      render CollapsableBlockComponent.new(id: id, parent_id: (parent_id || "#{id}-card"), title: label, collapsed: collapsed) do
-        capture(&block)
-      end
-    end
-  end
-
-  def attribute_container(attr, required: false, &block)
-    if show_attribute?(attr, required)
-    content_tag(:div) do
-      capture(&block)
-    end
-  end
-  end
-
   def inline_save?
     !@inline_save.nil? && @inline_save
   end
 
   def selected_attribute?(attr)
-    @selected_attributes.nil? || @selected_attributes.empty? || @selected_attributes.include?(attr.to_s) || equivalent_properties(@selected_attributes).include?(attr.to_s)
-  end
+    return true if @selected_attributes.nil? || @selected_attributes.empty? || @selected_attributes.include?(attr.to_s)
+    return true if equivalent_properties(@selected_attributes).include?(attr.to_s)
 
-  def show_attribute?(attr, required)
-    selected = selected_attribute?(attr)
-    required_only = @required_only && required || !@required_only
-    selected && required_only
+    equivalent_properties(attr.to_s).any? { |x| @selected_attributes.include?(x) }
   end
 
   def save_button
@@ -90,36 +93,22 @@ module SubmissionsHelper
     end
   end
 
-  def attribute_form_group_container(attr, label: '', required: false, &block)
-    attribute_container(attr, required: required) do
-      render FormGroupComponent.new(object: @submission, name: object_name, method: attr, label: label, required: required) do |c|
+  def attribute_form_group_container(attr, &block)
+    render(TurboFrameComponent.new(id: "#{object_name}#{attr}_from_group_input")) do
+      tag.div(class: 'd-flex w-100 mb-3') do
+        html = tag.div(class: 'flex-grow-1 mr-1') do
+          capture(&block)
+        end
+
         if inline_save?
-          c.submit do
+          html += tag.div(class: 'd-flex') do
             html = ''
             html += save_button
             html += cancel_button(cancel_link(attribute: attr))
             html.html_safe
           end
         end
-
-        capture(c, &block)
-      end
-    end
-  end
-
-  def attribute_text_field_container(attr, label: '', required: false, inline: true, &block)
-    attribute_container(attr, required: required) do
-      render TextFieldComponent.new(object: @submission, name: object_name, label: label, method: attr, required: required, inline: inline) do |c|
-        if inline_save?
-          c.submit do
-            html = ''
-            html += save_button
-            html += cancel_button(cancel_link(attribute: attr))
-            html.html_safe
-          end
-        end
-
-        capture(c, &block) if block_given?
+        html
       end
     end
   end
@@ -134,122 +123,34 @@ module SubmissionsHelper
   end
 
   def location_equivalent
-    %w[summaryOnly pullLocation]
+    %w[summaryOnly pullLocation uploadFilePath]
   end
 
   def equivalent_property(attr)
     equivalents = submission_properties
 
     found = equivalents.select { |x| x.is_a?(Array) && x[0].eql?(attr.to_sym) }
-    found.empty? ?  attr.to_sym: found.first[1]
+    found.empty? ? attr.to_sym : found.first[1]
   end
 
   def equivalent_properties(attr_labels)
     labels = Array(attr_labels)
-
     labels.map { |x| equivalent_property(x) }.flatten
   end
 
   def submission_properties
-    out = [
-      [:format, format_equivalent],
-      :version,
-      :status,
-      [:location, location_equivalent],
-      :URI,
-      :deprecated,
-      :hasOntologySyntax,
-      :hasFormalityLevel,
-      :isOfType,
-      :naturalLanguage,
-      :description,
-      :homepage,
-      :documentation,
-      :publication,
-      :usedOntologyEngineeringTool,
-      :abstract, :notes, :keywords, :alternative, :identifier,
-      :knownUsage,
-      :designedForOntologyTask,
-      :hasDomain,
-      :coverage,
-      :example,
-      :conformsToKnowledgeRepresentationParadigm,
-      :usedOntologyEngineeringMethodology,
-      :accrualMethod,
-      :accrualPeriodicity,
-      :accrualPolicy,
-      :competencyQuestion,
-      :versionIRI,
-      :source,
-      :isFormatOf,
-      :hasFormat,
-      :includedInDataCatalog,
-      :depiction,
-      :logo,
-      :associatedMedia,
-      :released,
-      :modificationDate,
-      :valid,
-      :curatedOn,
-      :publisher,
-      :hasLicense,
-      :morePermissions,
-      :copyrightHolder,
-      :contact,
-      :hasContributor,
-      :hasCreator,
-      :audience,
-      :toDoList,
-      :useGuidelines,
-      :repository,
-      :bugDatabase,
-      :mailingList,
-      :award,
-      :wasGeneratedBy,
-      :wasInvalidatedBy,
-      :curatedBy,
-      :endorsedBy,
-      :fundedBy,
-      :translator,
-      :useImports,
-      :hasPriorVersion,
-      :isAlignedTo,
-      :ontologyRelatedTo,
-      :isBackwardCompatibleWith,
-      :isIncompatibleWith,
-      :comesFromTheSameDomain,
-      :similarTo,
-      :explanationEvolution,
-      :generalizes,
-      :hasDisparateModelling,
-      :hasPart,
-      :usedBy,
-      :workTranslation,
-      :translationOfWork,
-      :preferredNamespacePrefix,
-      :preferredNamespaceUri,
-      :keyClasses,
-      :endpoint,
-      :dataDump,
-      :csvDump,
-      :openSearchDescription,
-      :uriLookupEndpoint,
-      :uriRegexPattern,
-      :metadataVoc,
-      :exampleIdentifier,
-      :numberOfClasses,
-      :numberOfIndividuals,
-      :numberOfProperties,
-      :entities,
-      :numberOfAxioms
-    ]
-    out.uniq
+    format_equivalents = format_equivalent
+    location_equivalents = location_equivalent
+    equivalents = location_equivalents + format_equivalents
+    out = submission_metadata.map { |x| x['attribute'] }.reject { |x| equivalents.include?(x) }
+    out << [:format, format_equivalent]
+    out << [:location, location_equivalent]
+
+    out
   end
 
   def submission_editable_properties
-
     properties = submission_properties
-
     properties.map do |x|
       if x.is_a? Array
         [x[0].to_s.underscore.humanize, x[0]]
@@ -257,280 +158,62 @@ module SubmissionsHelper
         [x.to_s.underscore.humanize, x]
       end
     end
-
   end
 
-  def extractable_metadatum_tooltip(options = {})
-    help_tooltip(options[:content], {}, 'fas fa-file-export', 'extractable-metadatum', options[:text]).html_safe
-  end
 
 
   def attribute_infos(attr_label)
-    @metadata.select{ |attr_hash| attr_hash["attribute"].to_s.eql?(attr_label) }.first
+    submission_metadata.select{ |attr_hash| attr_hash["attribute"].to_s.eql?(attr_label) }.first
   end
 
-  def attribute_help_text(attr)
-
-    if !attr["namespace"].nil?
-      help_text = "&lt;strong&gt;#{attr["namespace"]}:#{attr["attribute"]}&lt;/strong&gt;"
-    else
-      help_text = "&lt;strong&gt;bioportal:#{attr["attribute"]}&lt;/strong&gt;"
-    end
-
-    if (attr["metadataMappings"] != nil)
-      help_text << " (#{attr["metadataMappings"].join(", ")})"
-    end
-
-    if (!attr["enforce"].nil? && attr["enforce"].include?("uri"))
-      help_text << "&lt;br&gt;This metadata should be an &lt;strong&gt;URI&lt;/strong&gt;"
-    end
-
-    if (attr["helpText"] != nil)
-      help_text << "&lt;br&gt;&lt;br&gt;#{attr["helpText"]}"
-    end
-    help_text
-  end
-
-  # Generate the HTML label for every attributes
-  def generate_attribute_label(attr_label, label_tag_sym: :label)
-    # Get the attribute hash corresponding to the given attribute
-    attr = attribute_infos(attr_label)
-
-    return attr_label if attr.nil?
-    label_html = ''.html_safe
-    # label_html = if !attr["extracted"].nil? && attr["extracted"] == true
-    #               extractable_metadatum_tooltip({ content: 'Extractable metadatum' })
-    #             end.to_s.html_safe
-
-
-    label = attr["label"].nil? ? attr_label.underscore.humanize : attr["label"]
-
-    if label_tag_sym.eql? :label
-      label_html << label_tag("submission_#{attr_label}", label , { class: 'form-label' })
-    else
-      label_html << content_tag(label_tag_sym, label, {class: 'form-label'})
-    end
-
-    # Generate tooltip
-    help_text = attribute_help_text(attr)
-    label_html << help_tooltip(help_text, {:id => "tooltip#{attr["attribute"]}"}).html_safe
-    label_html
-  end
-
-  def object_name(acronym= @ontology.acronym, submissionId= @submission.submissionId)
-    "submission[#{acronym}_#{submissionId}]"
-  end
-
-  def attribute_input_name(attr_label)
-    object_name_val = object_name
-    name = "#{object_name_val}[#{attr_label}]"
-    [object_name_val, name]
-  end
-
-  def generate_integer_input(attr)
-    number_field object_name, attr["attribute"].to_s.to_sym, value: @submission.send(attr["attribute"]), class: 'metadataInput form-control'
-  end
-
-  def generate_agent_input(attr, type: 'person')
-    render NestedAgentSearchInputComponent.new(agents: @submission.send(attr["attribute"]), agent_type: type, name_prefix: object_name + "[#{attr['attribute']}]", parent_id: '')
-  end
-
-  def generate_date_input(attr)
-    field_id = [:submission, attr["attribute"].to_s, @ontology.acronym].join('_')
-    date_value = @submission.send(attr["attribute"]).presence
-    data_flat_picker = { controller: "flatpickr", flatpickr_date_format: "Y-m-d", flatpickr_alt_input: "true", flatpickr_alt_format: "F j, Y" }
-    content_tag(:div, class: 'input-group') do
-      [
-        date_field(object_name, attr["attribute"].to_s.to_sym, value: date_value, id: field_id, data: data_flat_picker, class: "not-disabled")
-      ].join.html_safe
-    end
-  end
-
-  def generate_textarea_input(attr)
-    text_area(object_name, attr["attribute"].to_s.to_sym, rows: 3, value: @submission.send(attr["attribute"]), class: 'metadataInput form-control')
-  end
-
-  def generate_select_input(attr, name, select_values, metadata_values, multiple: false)
-    id = attr["attribute"].to_s + "_" + @ontology.acronym
-    render SelectInputComponent.new(id: id, name: name, values: select_values , selected: metadata_values , multiple: multiple)
-  end
-
-  def generate_list_field_input(attr, name, values, field_func)
-    render NestedFormInputsComponent.new do |c|
-      c.template do
-        method(field_func).call("#{name}[NEW_RECORD]", '', :id => attr["attribute"].to_s + "_" + @ontology.acronym, class: "metadataInput form-control my-1")
-      end
-
-      c.empty_state do
-        hidden_field_tag "#{name}[#{values.size}]"
-      end
-
-      values.each_with_index do |metadata_val, i|
-        c.row do
-          method(field_func).call("#{name}[#{i}]", metadata_val, :id => "submission_#{attr["attribute"].to_s}" + "_" + @ontology.acronym, class: "metadataInput my-1 form-control")
-        end
-      end
-    end
-  end
-
-  def generate_url_input(attr, name, values)
-    generate_list_field_input(attr, name, values, :url_field_tag)
-  end
-
-  def generate_list_text_input(attr, name, values)
-    generate_list_field_input(attr, name, values, :text_field_tag)
-  end
-
-  def generate_boolean_input(attr, name)
-    value = attribute_values(attr)
-    value = value.to_s unless value.nil?
-
-    render SwitchInputComponent.new(id: name, name:  name, label: "", checked: value.eql?('true') , value: value, boolean_switch: true)
-  end
-
-  def input_type?(attr, type)
-    attr["enforce"].include?(type)
-  end
-
-  def enforce_values?(attr)
-    !attr["enforcedValues"].nil?
-  end
-
-  def attribute_values(attr)
-    begin
-      @submission.send(attr["attribute"])
-    rescue
-      nil
-    end
+  def object_name(acronym = @ontology.acronym, submissionId = @submission.submissionId)
+    # TO REMOVE or Update
+    'submission'
   end
 
   def agent_attributes
-    submission_metadata.select{|x| x["enforce"].include?('Agent')}.map{|x| x["attribute"]}
-  end
-  # Generate the HTML input for every attributes.
-  def generate_attribute_input(attr_label, options = {})
-    input_html = ''.html_safe
-
-    # Get the attribute hash corresponding to the given attribute
-    attr = @metadata.select { |attr_hash| attr_hash["attribute"].to_s.eql?(attr_label) }.first
-
-    object_name, name = attribute_input_name(attr["attribute"])
-
-    if input_type?(attr, 'Agent')
-      type = if input_type?(attr, 'is_person')
-               'person'
-             elsif input_type?(attr, 'is_organization')
-               'organization'
-             else
-               ''
-             end
-      generate_agent_input(attr, type: type)
-    elsif input_type?(attr, 'integer')
-      generate_integer_input(attr)
-    elsif input_type?(attr, 'date_time')
-      generate_date_input(attr)
-    elsif input_type?(attr, 'textaclrea')
-      generate_textarea_input(attr)
-    elsif enforce_values?(attr)
-      metadata_values, select_values = selected_values(attr, enforced_values(attr))
-      if input_type?(attr, "list")
-        input_html << generate_select_input(attr, name, select_values, metadata_values, multiple: true)
-      else
-        select_values << ["", ""]
-        select_values << %w[Other other]
-
-        metadata_values = "" if metadata_values.nil?
-
-        input_html << generate_select_input(attr, name, select_values, metadata_values)
-      end
-
-      return input_html
-    elsif input_type?(attr, 'isOntology')
-      metadata_values, select_values = selected_values(attr, ontologies_for_select.dup)
-      input_html << generate_select_input(attr, name, select_values, metadata_values, multiple: attr["enforce"].include?("list"))
-      return input_html
-    elsif input_type?(attr, "uri")
-      uri_values = attribute_values(attr) || ['']
-      if input_type?(attr, "list")
-        input_html << generate_url_input(attr, name, uri_values)
-      else
-        input_html << text_field(object_name, attr["attribute"].to_s.to_sym, value: Array(uri_values).first, class: "metadataInput form-control")
-      end
-      return input_html
-    elsif input_type?(attr, "boolean")
-      input_html << generate_boolean_input(attr, name)
-    else
-      # If input a simple text
-      values = attribute_values(attr) || ['']
-      if input_type?(attr, "list")
-        input_html << generate_list_text_input(attr, name, values)
-      else
-        # if single value text
-        # TODO: For some reason @submission.send("URI") FAILS... I don't know why... so I need to call it manually
-        if attr["attribute"].to_s.eql?("URI")
-          input_html << text_field(object_name, attr["attribute"].to_s.to_sym, value: @submission.URI, class: "metadataInput form-control")
-        else
-          input_html << text_field(object_name, attr["attribute"].to_s.to_sym, value: @submission.send(attr["attribute"]), class: "metadataInput form-control")
-        end
-      end
-      input_html
-    end
+    submission_metadata.select { |x| x["enforce"].include?('Agent') }.map { |x| x["attribute"] }
   end
 
+  def render_submission_inputs(frame_id)
+    output = ""
 
-  def generate_attribute_text(attr_label , label)
-    attr = attribute_infos(attr_label)
-    label_html = "<div class='d-flex align-items-center'><span class='mr-1'>#{label}</span><span>"
-    # Generate tooltip
-    help_text = attribute_help_text(attr)
-    label_html << help_tooltip(help_text, {:id => "tooltip#{attr["attribute"]}"} ).html_safe
-    label_html << '</span></div>'
-    label_html.html_safe
-  end
-  def ontologies_for_select
-    @ontologies_for_select ||= LinkedData::Client::Models::Ontology.all.collect do |onto|
-      ["#{onto.name} (#{onto.acronym})", onto.id]
-    end
-  end
-
-  def form_group_attribute(attr, options = {}, &block)
-    attribute_form_group_container(attr, required: !options[:required].nil?) do |c|
-      c.label do
-        generate_attribute_label(attr)
-      end
-      c.input do
-        raw generate_attribute_input(attr, options)
-      end
-      if block_given?
-        c.help do
-          capture(&block)
-        end
+    if selected_attribute?('format')
+      output += attribute_form_group_container('format') do
+        render partial: 'submissions/submission_format_form'
       end
     end
-  end
 
-  private
-
-  def enforced_values(attr)
-    attr["enforcedValues"].collect { |k, v| [v, k] }
-  end
-
-  def selected_values(attr, enforced_values)
-    metadata_values = attribute_values(attr)
-    select_values = enforced_values
-
-    if metadata_values.kind_of?(Array)
-      metadata_values.map do |metadata|
-        unless select_values.flatten.include?(metadata)
-          select_values << metadata
-        end
-      end
-    else
-      if !select_values.flatten.include?(metadata_values) && !metadata_values.to_s.empty?
-        select_values << metadata_values
+    if selected_attribute?('location')
+      output += attribute_form_group_container('location') do
+        render partial: 'ontologies/submission_location_form'
       end
     end
-    [metadata_values, select_values]
-  end
 
+    if selected_attribute?('contact')
+      output += attribute_form_group_container('contact') do
+        @submission.contact = [] unless @submission.contact && @submission.contact.size > 0
+        contact_input(label: 'Contacts', name: '')
+      end
+    end
+
+    reject_metadata = %w[abstract uploadFilePath contact pullLocation prefLabelProperty definitionProperty synonymProperty authorProperty obsoleteParent obsoleteProperty hasOntologyLanguage]
+    label = inline_save? ? '' : nil
+    submission_metadata.reject { |attr| reject_metadata.include?(attr['attribute']) || !selected_attribute?(attr['attribute']) }.each do |attr|
+      output += attribute_form_group_container(attr['attribute']) do
+        raw attribute_input(attr['attribute'], attr_metadata: attr, label: label)
+      end
+    end
+
+    if selected_attribute?('abstract')
+      output += attribute_form_group_container('abstract') do
+        raw attribute_input('abstract',long_text: true, label: label)
+      end
+    end
+
+
+    render TurboFrameComponent.new(id: frame_id) do
+      output.html_safe
+    end
+  end
 end

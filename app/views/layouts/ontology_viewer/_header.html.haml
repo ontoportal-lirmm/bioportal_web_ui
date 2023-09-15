@@ -15,13 +15,13 @@
           = @ontology.name
           %span
             = "("+ @ontology.acronym+")"
-        - unless sub.hasLicense.nil?
+        - unless sub.nil? || sub.hasLicense.nil?
           = render ChipButtonComponent.new(class: 'chip_button_small') do
             = link_to_modal(nil, "/ajax/submission/show_licenses/#{@ontology.acronym}",data: { show_modal_title_value: "More licenses", show_modal_size_value: 'modal-xl' }) do
               = attribute_enforced_values('hasLicense')[sub.hasLicense] || sub.hasLicense
               = inline_svg_tag "icons/popup-link.svg"
 
-      - unless sub.creationDate.nil?
+      - unless sub.nil? ||  sub.creationDate.nil?
         .ontology-details-last-update
           %img{src: asset_path("update.svg")}/
           %div
@@ -29,7 +29,9 @@
             = render DateTimeFieldComponent.new(value: sub.creationDate)
     .ontology-details-header-right-container.justify-content-end{style: 'min-width: 20%;'}
       %span.mx-1
-        = submission_json_button
-      %span
+        = new_submission_button
+      %span.mx-1
         = ontology_edit_button
+      %span
+        = submission_json_button
       = subscribe_button(@ontology.id)

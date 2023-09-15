@@ -53,4 +53,5 @@
       %input#user_register_mail_list{:checked => "checked", :name => "user[register_mail_list]", :type => "checkbox", :value => "1"}/
       %p#register-check-text 
         = t('register.mailing_list')
-    %input.register-button{:type => "submit", :value => t('register.title')}/
+    .register-button-container
+      = render Buttons::PrimaryButtonComponent.new(type: "submit", value: "Register")

@@ -1,0 +1,15 @@
+.d-flex.align-items-center.flex-column.position-relative
+  = inline_svg("errors/agroportal.svg")
+  .position-absolute.text-center{style: "top: 425px; font-size: 30px; font-weight: 800; color: #263238;"}
+    %div
+      We're sorry but something has gone wrong.
+    %div
+      We have been notified of this error.
+  .buttons.d-flex.justify-content-center.mt-3
+    %div{style: "width: 216px;"}
+      = render Buttons::RegularButtonComponent.new(id:'Home-button', value: "Go home", variant: "secondary", href: "/")
+    %div{style: "width: 216px; margin-left: 22px"}
+      = render Buttons::RegularButtonComponent.new(id:"feedback-button" ,value: "Send a feedback", variant: "primary", href: "/feedback")
+
+
+

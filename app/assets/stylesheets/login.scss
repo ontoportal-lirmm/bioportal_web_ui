@@ -42,24 +42,13 @@
     text-decoration:none;
     font-size: 13px;
 }
-.login-button{
-    margin-top: 10px;
-   width: 357px;
-   font-size: 16px;
-   color: white;
-   padding: 17px;
-   background-color: var(--primary-color);
-   border: none;
-   border-radius: 9px;
-   margin-bottom: 20px;
-}
-.login-button:hover{
-    background-color: var(--hover-color);
-    cursor: pointer;
-}
-
 .dont-have-account{
     font-size: 15px;
     font-weight: 600;
     text-align: center;
+}
+.login-button-container{
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 357px;
 }

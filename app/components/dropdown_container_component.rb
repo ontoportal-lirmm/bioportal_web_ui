@@ -6,5 +6,6 @@ class DropdownContainerComponent < ViewComponent::Base
     super
     @title = title
     @id = id
+    @tooltip = tooltip
   end
 end

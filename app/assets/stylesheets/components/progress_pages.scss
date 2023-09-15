@@ -1,0 +1,118 @@
+.progress-pages-container {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    width: 100%;
+}
+
+.progress-pages-container hr {
+    flex-grow: 1;
+    border: 1px solid #D9D9D9;
+    margin: 0;
+}
+
+.progress-pages-container hr.active {
+    border: 1px solid var(--primary-color);
+}
+
+.progress-pages-container .progress-item {
+    position: relative;
+    & > div {
+        position: absolute;
+        top: -13px;
+        left: -13px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.progress-pages-container .progress-item:first-of-type {
+    & > div {
+        align-items: start;
+        left: 0;
+    }
+}
+
+.progress-pages-container .progress-item:last-of-type {
+    & > div {
+        align-items: end;
+        left: -23px;
+    }
+}
+
+.progress-pages-container .progress-item div .active:nth-child(2) {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.progress-pages-container .progress-item div span:nth-child(2) {
+    position: absolute;
+    font-size: 12px;
+    top: 33px;
+    white-space: nowrap;
+    color: #A9A9A9;
+}
+
+.progress-pages-container .progress-content .active:nth-child(2) {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.progress-pages-container .progress-content div:nth-child(2) {
+    position: absolute;
+    right: -38px;
+    top: 33px;
+
+}
+
+
+
+.outlined-checked-circle {
+    border: 2px solid var(--primary-color) !important;
+    background-color: var(--primary-color) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.outlined-active-circle {
+    border: 2px solid var(--primary-color) !important;
+}
+
+.outlined-circle {
+    border: 1px solid #D9D9D9;
+    border-radius: 13px;
+    height: 26px;
+    width: 26px;
+    background-color: white;
+
+}
+
+.outlined-checked-circle img {
+    display: block !important;
+}
+
+.outlined-active-circle img {
+    display: none;
+}
+
+.outlined-circle img {
+    display: none;
+}
+
+
+
+.progress-pages-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.progress-pages-next-button {
+    margin-left: 25px;
+}
+
+
+

@@ -7,7 +7,7 @@ class Display::InfoTooltipComponent < ViewComponent::Base
     @text = text
   end
   def call
-    image_tag("icons/info.svg", data:{controller:'tooltip'}, title: @text)
+    image_tag("icons/info.svg", data:{controller:'tooltip', 'tooltip-interactive-value': 'true'}, title: @text)
   end
 
 end

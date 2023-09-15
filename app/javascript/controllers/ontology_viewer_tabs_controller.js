@@ -27,9 +27,10 @@ export default class extends Controller {
   }
 
   updateLanguageSelector(event) {
-    console.log('language selector update')
-    let page = event.detail.data.selectedTab
-    this.#disableLanguageSelector(page)
+    if(event.target.id === "ontology_viewer"){
+      let page = event.detail.data.selectedTab
+      this.#disableLanguageSelector(page)
+    }
   }
 
   #disableLanguageSelector(selectedSection){

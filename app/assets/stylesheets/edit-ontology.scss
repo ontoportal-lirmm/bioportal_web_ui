@@ -1,0 +1,146 @@
+.center {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.edit-ontology-container {
+  padding: 0 50px;
+  width: 1248px
+}
+
+.edit-ontology-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.edit-ontology-title hr {
+  width: 93px;
+  border: 1px solid var(--primary-color);
+  margin: 0;
+  opacity: 100%;
+}
+
+.edit-ontology-sub-container {
+
+  display: flex;
+}
+
+.edit-ontology-left-column {
+  border-radius: 5px;
+  width: 400px;
+  margin-right: 58px;
+
+}
+
+.edit-ontology-left-column {
+  .nav-pills.disabled  a {
+    color: #888888 !important;
+    cursor: not-allowed;
+  }
+
+  .nav-pills:not(.disabled){
+    .edit-ontology-tab-item.active {
+      color: var(--primary-color);
+      background-color: var(--light-color) !important;
+      border-left: 3px solid var(--primary-color);
+      font-weight: 700;
+    }
+
+
+
+    .edit-ontology-tab-item:hover {
+      background-color: #F6F6F6;
+    }
+
+  }
+}
+
+.edit-ontology-tab-item {
+  font-size: 14px;
+  width: 100%;
+  padding: 10px 15px;
+  font-weight: 500;
+  margin: 3px 0;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color ease 0.3s;
+}
+
+.edit-ontology-right-column {
+  border-radius: 5px;
+  width: 100%;
+}
+
+.edit-ontology-desc {
+  font-size: 12px;
+  color: #777777;
+  margin: 10px 0;
+}
+
+.edit-ontology-desc a {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+.edit-ontology-desc a svg {
+  transform: scale(1.2);
+}
+
+.edit-ontology-left-column input {
+  border: 1px solid #BDBDBD;
+  outline: none;
+  font-size: 14px;
+  border-radius: 5px;
+  padding: 10px 15px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+
+
+
+.edit-ontology-field div {
+  font-size: 11px;
+  color: #666;
+
+}
+
+.edit-ontology-field input {
+  border: 1px solid #BDBDBD;
+  border-radius: 5px;
+  font-size: 14px;
+  padding: 10px 15px;
+  outline: none;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
+.edit-ontology-field input:focus {
+  border-color: var(--primary-color);
+}
+
+#edit-ontology-actions-devider {
+  width: 100%;
+  border: 1px solid #E9E9E9;
+  border-radius: 210px;
+  margin: 20px 0;
+  opacity: 100%;
+
+}
+
+.edit-ontology-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.reset-all-button {
+  margin-right: 25px;
+  width: 186px;
+}
+
+.save-button {
+  width: 90px;
+}
+

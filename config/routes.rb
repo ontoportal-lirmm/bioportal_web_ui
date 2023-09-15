@@ -42,10 +42,14 @@ Rails.application.routes.draw do
 
   get 'ontologies/:ontology_id/concepts', to: 'concepts#show_concept'
   resources :ontologies do
-    resources :submissions
+    resources :submissions do 
+      get 'edit_properties'
+    end 
+
     get 'instances/:instance_id', to: 'instances#show', constraints: { instance_id: /[^\/?]+/ }
     get 'schemes/show_scheme', to: 'schemes#show'
     get 'collections/show'
+    get 'metrics_evolution'
   end
 
   resources :login
@@ -120,6 +124,7 @@ Rails.application.routes.draw do
   get '/ontologies/:acronym/classes/:purl_conceptid', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
   get '/ontologies/:acronym/: f', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
   match '/ontologies/:acronym/submissions/:id/edit_metadata' => 'submissions#edit_metadata', via: [:get, :post]
+  get '/ontologies_filter', to:  'ontologies#ontologies_filter'
 
   # Analytics
   get '/analytics/:action' => 'analytics#(?-mix:search_result_clicked|user_intention_surveys)'
@@ -151,6 +156,7 @@ Rails.application.routes.draw do
   get 'ajax/label_xl', to: "label_xl#show"
   get '/ajax/biomixer' => 'concepts#biomixer'
   get '/ajax/fair_score/html' => 'fair_score#details_html'
+  get '/ajax/submission/show_additional_metadata/:id' => 'ontologies#show_additional_metadata'
   get '/ajax/submission/show_licenses/:id' => 'ontologies#show_licenses'
   get '/ajax/fair_score/json' => 'fair_score#details_json'
   get '/ajax/:ontology/instances' => 'instances#index_by_ontology'

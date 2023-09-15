@@ -6,17 +6,18 @@
   })
 
 - if @fair_scores_data
-  - text = "<span>Total score : #{@fair_scores_data[:score]} ( #{@fair_scores_data[:normalizedScore]}% )</span> <span class='badge badge-light'>details</span>"
-  = link_to_modal(text.html_safe,
-                "/ajax/fair_score/html/?ontologies=#{@ontology.acronym}",
-                class: "btn btn-primary w-100",
-                data: { show_modal_title_value: "FAIRness assessment questions", show_modal_size_value: 'modal-xl' },
-                )
-  %div.statistics_container{data:{controller:"fair-score-summary"}}
-    %div
+  %div.statistics_container.d-flex.flex-grow-1{data:{controller:"fair-score-summary"}}
+    %div.w-50
       = render partial: "shared/fair_score_radar" , locals: {data: @fair_scores_data}
-    %div
+    %div.w-50
       = render partial: "shared/fair_score_bars" , locals: {data: @fair_scores_data}
+  %div.text-center
+    - text = " <span> See details</span>"
+    = link_to_modal(text.html_safe,
+                  "/ajax/fair_score/html/?ontologies=#{@ontology.acronym}",
+                  class: "btn",
+                  data: { show_modal_title_value: "FAIRness assessment questions", show_modal_size_value: 'modal-xl' },
+                  )
 - else
   %p.font-italic= "We are still collecting data for #{@ontology.acronym}"
 

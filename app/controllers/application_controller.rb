@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
     languages = request.headers['Accept-Language']&.split(',')
     supported_languages = I18n.available_locales
 
-    languages.each do |language|
+    Array(languages).each do |language|
       language_code = language.split(/[-;]/).first.downcase.to_sym
       return language_code if supported_languages.include?(language_code)
     end
@@ -482,13 +482,15 @@ class ApplicationController < ActionController::Base
       if ignore_concept_param
         # get the top level nodes for the root
         # TODO_REV: Support views? Replace old view call: @ontology.top_level_classes(view)
-        roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes], lang: lang, include: include)
-        if roots.nil? || roots.empty?
-          LOG.add :debug, "Missing roots for #{@ontology.acronym}"
-          not_found("Missing roots for #{@ontology.acronym}")
+        @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])        
+        if @roots.nil? || @roots.empty?
+          LOG.add :debug, "Missing @roots for #{@ontology.acronym}"
+          @concept = @ontology.explore.classes.collection.first.explore.self(full: true)
+          return
         end
+        
         @root = LinkedData::Client::Models::Class.new(read_only: true)
-        @root.children = roots.sort{|x,y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase}
+        @root.children = @roots.sort{|x,y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase}
 
         # get the initial concept to display
         root_child = @root.children.first
@@ -510,13 +512,14 @@ class ApplicationController < ActionController::Base
         # Create the tree
         rootNode = @concept.explore.tree(include: include, concept_schemes: params[:concept_schemes], lang: lang)
         if rootNode.nil? || rootNode.empty?
-          roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes], lang: lang, include: include)
-          if roots.nil? || roots.empty?
-            LOG.add :debug, "Missing roots for #{@ontology.acronym}"
-            not_found("Missing roots for #{@ontology.acronym}")
+          @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
+          if @roots.nil? || @roots.empty?
+            LOG.add :debug, "Missing @roots for #{@ontology.acronym}"
+            @concept = @ontology.explore.classes.collection.first.explore.self(full: true)
+            return
           end
-          if roots.any? {|c| c.id == @concept.id}
-            rootNode = roots
+          if @roots.any? {|c| c.id == @concept.id}
+            rootNode = @roots
           else
             rootNode = [@concept]
           end
@@ -529,13 +532,6 @@ class ApplicationController < ActionController::Base
     @concept
   end
 
-  def get_metrics_hash
-    metrics_hash = {}
-    # TODO: Metrics do not return for views on the backend, need to enable include_views param there
-    @metrics = LinkedData::Client::Models::Metrics.all(include_views: true)
-    @metrics.each {|m| metrics_hash[m.links['ontology']] = m }
-    return metrics_hash
-  end
 
   def get_ontology_submission_ready(ontology)
     # Get the latest 'ready' submission
@@ -785,7 +781,6 @@ class ApplicationController < ActionController::Base
     @metadata ||= JSON.parse(Net::HTTP.get(URI.parse("#{REST_URI}/submission_metadata?apikey=#{API_KEY}")))
   end
   helper_method :submission_metadata
-
 
   def request_lang
     helpers.request_lang

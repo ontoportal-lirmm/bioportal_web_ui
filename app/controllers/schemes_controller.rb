@@ -10,7 +10,7 @@ class SchemesController < ApplicationController
     scheme_label = scheme ? scheme['prefLabel'] : params[:id]
     scheme_label = scheme_label.nil? || scheme_label.empty? ? params[:id] : scheme_label
 
-    render LabelLinkComponent.inline(params[:id], scheme_label)
+    render LabelLinkComponent.inline(params[:id], helpers.main_language_label(scheme_label))
   end
 
   private

@@ -1,20 +1,40 @@
-import { Controller } from "@hotwired/stimulus"
-import TomSelect from "tom-select"
+import {Controller} from "@hotwired/stimulus"
+import {useTomSelect} from "../../javascript/mixins/useTomSelect"
 
 export default class extends Controller {
     static values = {
-        multiple: Boolean,
-        openAdd : Boolean
-    }
+        multiple: {type: Boolean, default: false},
+        openAdd: {type: Boolean, default: false}
+    };
+
+
     connect() {
         let myOptions = {}
+
+        myOptions = {
+            create: true,
+            render: {
+                option: (data) => {
+                    return `<div> ${data.text} </div>`
+                },
+                item: (data) => {
+                    return `<div> ${data.text} </div>`
+                }
+            }
+        }
+
         if (this.multipleValue) {
             myOptions['plugins'] = ['remove_button'];
         }
+
         if (this.openAddValue) {
             myOptions['create'] = true;
         }
-        new TomSelect(this.element, myOptions);
+
+        useTomSelect(this.element, myOptions, this.#triggerChange.bind(this))
     }
 
+    #triggerChange() {
+        document.dispatchEvent(new Event('change', {target: this.element}))
+    }
 }
