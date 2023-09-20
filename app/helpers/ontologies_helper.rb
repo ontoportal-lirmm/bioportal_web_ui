@@ -182,12 +182,11 @@ module OntologiesHelper
   end
   
   def submission_status_icons(status)
-    case status
-    when '(Parsed)'
+    if status.include?('Parsed') && !status.include?('Error Diff')
       "success-icon.svg"
-    when '(Error Diff)'
+    elsif status.include?('Error Diff') && !status.include?('Parsed')
       'error-icon.svg'
-    when '(Archived)'
+    elsif status == '(Archived)'
       'archive.svg'
     else
       "alert-triangle.svg"
