@@ -486,7 +486,8 @@ class ApplicationController < ActionController::Base
         @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])        
         if @roots.nil? || @roots.empty?
           LOG.add :debug, "Missing @roots for #{@ontology.acronym}"
-          @concept = @ontology.explore.classes.collection.first.explore.self(full: true)
+          classes = @ontology.explore.classes.collection
+          @concept = classes.first.explore.self(full: true) if classes.first
           return
         end
         
