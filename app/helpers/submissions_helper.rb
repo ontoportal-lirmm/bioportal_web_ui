@@ -201,7 +201,7 @@ module SubmissionsHelper
     label = inline_save? ? '' : nil
     submission_metadata.reject { |attr| reject_metadata.include?(attr['attribute']) || !selected_attribute?(attr['attribute']) }.each do |attr|
       output += attribute_form_group_container(attr['attribute']) do
-        raw attribute_input(attr['attribute'], attr_metadata: attr, label: label)
+        raw attribute_input(attr['attribute'], label: label)
       end
     end
 
