@@ -329,7 +329,11 @@ class OntologiesController < ApplicationController
     @ontology_relations_data = ontology_relations_data
 
     category_attributes = submission_metadata.group_by{|x| x['category']}.transform_values{|x| x.map{|attr| attr['attribute']} }
-
+    @relations_array_display = @relations_array.map do |relation|
+      attr = relation.split(':').last
+      ["#{helpers.attr_label(attr, attr_metadata: helpers.attr_metadata(attr), show_tooltip: false)}(#{relation})",
+       relation]
+    end
     @methodology_properties = properties_hash_values(category_attributes["methodology"])
     @agents_properties = properties_hash_values(category_attributes["people"].without('wasGeneratedBy', 'wasInvalidatedBy') + [:hasCreator, :hasContributor, :translator, :publisher, :copyrightHolder])
     @dates_properties = properties_hash_values(category_attributes["dates"] + [:creationDate, :modificationDate, :released])
