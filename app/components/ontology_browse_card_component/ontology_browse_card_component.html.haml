@@ -2,7 +2,7 @@
   .browse-ontology-container
     .browse-ontology-description
       .browse-ontology-title-bar
-        %a.browse-ontology-title{:href => "/ontologies/#{ontology[:acronym]}", data: {'turbo-frame': '_top'}}
+        %a.browse-ontology-title{:href => "/ontologies/#{ontology[:acronym]}", data: {'turbo': 'false'}}
           = ontology[:name]+" ("+ontology[:acronym]+")"
           - if ontology[:private]
             %i.fas.fa-key{title:"Private Ontology"}
@@ -21,7 +21,7 @@
             .browse-faire-progress{:style => "width: #{ontology[:normalizedFairScore].to_s+"%"}"}
           %p.browse-fair-score
             = ontology[:fairScore]
-          %a.browse-fair-details{:href => "/ontologies/#{ontology[:acronym]}#fair-details"} FAIR details ...
+          %a.browse-fair-details{:href => "/ontologies/#{ontology[:acronym]}#fair-details", 'data-turbo': 'false'} FAIR details ...
       .d-flex.align-items-baseline
         - if ontology[:creationDate]
           .browse-uploaded
@@ -51,25 +51,25 @@
               Debug
     .browse-ontology-cards
       - if ontology[:format] != 'SKOS' && ontology[:class_count] > 0
-        %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}?p=classes"}
+        %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}?p=classes", 'data-turbo': 'false'}
           %p.browse-card-number
             = ontology[:class_count_formatted]
           %p.browse-card-text
             classes
       - if ontology[:individual_count] > 0
-        %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}?p=classes"}
+        %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}?p=#{ontology[:format] == 'SKOS' ? "classes" : "instances"}", 'data-turbo': 'false'}
           %p.browse-card-number
             = ontology[:individual_count_formatted]
           %p.browse-card-text
             = ontology[:format] == 'SKOS' ? "concepts" : "instances"
       - if ontology[:project_count] > 0
-        %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}#projects_content"}
+        %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}#projects_content", 'data-turbo': 'false'}
           %p.browse-card-number
             = ontology[:project_count]
           %p.browse-card-text
             projects
       - if ontology[:note_count] > 0
-        %a.browse-onology-card{:href => "#"}
+        %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}?p=notes", 'data-turbo': 'false'}
           %p.browse-card-number
             = ontology[:note_count]
           %p.browse-card-text
