@@ -23,9 +23,15 @@ export default class extends Controller {
             type: "POST",
             url: url,
             dataType: "json",
-            success: () => {
+            success: (data) => {
                 // Change subbed value on a element
                 this.#hideSpinner()
+
+                if(!data.updated_sub){
+                    this.#showError()
+                    return
+                }
+
                 let linkElement = $(this.element);
                 this.isSubbedValue = !isSubbed
 
