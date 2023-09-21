@@ -12,7 +12,6 @@ export default class extends Controller {
         let myOptions = {}
 
         myOptions = {
-            create: true,
             render: {
                 option: (data) => {
                     return `<div> ${data.text} </div>`
