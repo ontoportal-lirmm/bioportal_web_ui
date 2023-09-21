@@ -485,7 +485,7 @@ module ApplicationHelper
     return false if user.subscription.nil? or user.subscription.empty?
     user.subscription.each do |sub|
       #sub = {ontology: ontology_acronym, notification_type: "NOTES"}
-      sub_ont_acronym = sub[:ontology].split('/').last # make sure we get the acronym, even if it's a full URI
+      sub_ont_acronym = sub[:ontology] ?  sub[:ontology].split('/').last : nil #  make sure we get the acronym, even if it's a full URI
       return true if sub_ont_acronym == ontology_acronym
     end
     return false
