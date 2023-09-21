@@ -53,16 +53,21 @@ module SubmissionFilter
 
     filters_boolean_map = {
       show_views: { api_key: :also_include_views, default: 'true' },
-      private_only: { api_key: :viewingRestriction, default: 'private' },
-      show_retired: { api_key: :status, default: 'retired' }
+      private_only: { api_key: :viewingRestriction, default: 'private' }
     }
     @filters = {}
 
     filters_boolean_map.each do |k, v|
-      next unless params[k].eql?('true') || params[k].eql?(v[:default])
+      next if params[k].eql?('') || !params[k].eql?('true') && !params[k].eql?(v[:default])
 
       @filters.merge!(k => v[:default])
       request_params.merge!(v[:api_key] => v[:default])
+    end
+
+    if params[:show_retired].blank?
+      @filters[:show_retired] = ''
+      request_params[:status] = 'retired'
+
     end
 
     filters_values_map.each do |filter, api_key|
