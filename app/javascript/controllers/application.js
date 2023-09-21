@@ -17,5 +17,6 @@ application.register('read-more', ReadMore)
 import Timeago from 'stimulus-timeago'
 application.register('timeago', Timeago)
 export { application }
-
+import Reveal from 'stimulus-reveal-controller'
+application.register('reveal', Reveal)
 
