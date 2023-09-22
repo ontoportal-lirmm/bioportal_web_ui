@@ -26,7 +26,6 @@ class ApplicationController < ActionController::Base
   def detect_locale    
     languages = request.headers['Accept-Language']&.split(',')
     supported_languages = I18n.available_locales
-    return I18n.default_locale
 
     Array(languages).each do |language|
       language_code = language.split(/[-;]/).first.downcase.to_sym

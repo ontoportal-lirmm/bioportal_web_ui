@@ -3,21 +3,22 @@
     = header
   %div.my-3
   %div.raw-table
-    = render DropdownContainerComponent.new(title: 'Raw data', id: "accordion-#{@id}") do
-      - top_set, leftover_set, bottom_set = filter_properties(@top_keys, @bottom_keys, @exclude_keys, @concept_properties)
-      = render TableComponent.new(stripped: true) do |t|
+    - if @bottom_keys.present?
+      = render DropdownContainerComponent.new(title: 'Raw data', id: "accordion-#{@id}") do
+        - top_set, leftover_set, bottom_set = filter_properties(@top_keys, @bottom_keys, @exclude_keys, @concept_properties)
+        = render TableComponent.new(stripped: true) do |t|
 
-        - row_hash_properties(top_set, @acronym).each do |row|
-          - t.add_row(*row)
+          - row_hash_properties(top_set, @acronym).each do |row|
+            - t.add_row(*row)
 
-        - row_hash_properties(leftover_set, @acronym).each do |row|
-          - t.add_row(*row)
-
-
-        - sections.each do |section|
-          - t.row do
-            = section
+          - row_hash_properties(leftover_set, @acronym).each do |row|
+            - t.add_row(*row)
 
 
-        - row_hash_properties(bottom_set, @acronym).each do |row|
-          - t.add_row(*row)
+          - sections.each do |section|
+            - t.row do
+              = section
+
+
+          - row_hash_properties(bottom_set, @acronym).each do |row|
+            - t.add_row(*row)

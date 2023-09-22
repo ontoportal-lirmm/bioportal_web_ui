@@ -50,11 +50,11 @@ class ConceptDetailsComponent < ViewComponent::Base
             display_in_multiple_languages([v].to_h)
           end
         end
-      end
+      end if values.is_a?(Array)
 
       out << [
         { th: "<span title=#{url} data-controller='tooltip'>#{remove_owl_notation(key)}</span>".html_safe },
-        { td: "<div class='d-flex flex-wrap'> #{"<p class='mx-1'>#{ajax_links.join('</p><p class="mx-1">')}"}</div>".html_safe }
+        { td: "<div class='d-flex flex-wrap'> #{"<p class='mx-1'>#{ajax_links&.join('</p><p class="mx-1">')}"}</div>".html_safe }
       ]
     end
     out
@@ -153,7 +153,7 @@ class ConceptDetailsComponent < ViewComponent::Base
     end
 
     excluded_relations.each do |relation|
-      return true if relation_to_check.include?(relation)
+      return true if relation_to_check.is_a?(Array) && relation_to_check.include?(relation)
     end
     return false
   end
