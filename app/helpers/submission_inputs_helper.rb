@@ -3,9 +3,9 @@ module SubmissionInputsHelper
   class SubmissionMetadataInput
     include MetadataHelper
 
-    def initialize(attribute_key:, submission: nil, attr_metadata: nil, label: nil)
+    def initialize(attribute_key:, attr_metadata: , submission: nil, label: nil)
       @attribute_key = attribute_key
-      @attr_metadata = attr_metadata || attr_metadata(attribute_key)
+      @attr_metadata = attr_metadata
       @submission = submission
       @label = label
     end
@@ -42,8 +42,9 @@ module SubmissionInputsHelper
   end
 
   # @param attr_key String
-  def attribute_input(attr_key, attr_metadata: nil, long_text: false, label: nil, show_tooltip: true)
-    attr = SubmissionMetadataInput.new(attribute_key: attr_key, submission: @submission, label: label, attr_metadata: attr_metadata)
+  def attribute_input(attr_key, long_text: false, label: nil, show_tooltip: true)
+    attr = SubmissionMetadataInput.new(attribute_key: attr_key, submission: @submission, label: label,
+                                       attr_metadata: attr_metadata(attr_key))
 
     if attr.type?('Agent')
       generate_agent_input(attr)
@@ -85,7 +86,7 @@ module SubmissionInputsHelper
   end
 
   def contact_input(label: '', name: 'Contact', show_help: true)
-    attr = SubmissionMetadataInput.new(attribute_key: 'contact')
+    attr = SubmissionMetadataInput.new(attribute_key: 'contact', attr_metadata: attr_metadata('contact'))
     render Input::InputFieldComponent.new(name: '', label: attr_header_label(attr, label, show_tooltip: show_help),
                                           error_message: attribute_error(:contact)) do
       render NestedFormInputsComponent.new(object_name: 'Contact') do |c|
@@ -122,8 +123,7 @@ module SubmissionInputsHelper
 
   # @param attr_key string
   def attr_label(attr_key, label = nil, attr_metadata: nil, show_tooltip: true)
-
-    data = attr_metadata || SubmissionMetadataInput.new(attribute_key: attr_key.to_s)
+    data = SubmissionMetadataInput.new(attribute_key: attr_key.to_s, attr_metadata: attr_metadata)
     return attr_key.humanize if data.nil?
 
     if show_tooltip

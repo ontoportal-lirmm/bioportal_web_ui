@@ -91,7 +91,7 @@
           - if fairness_service_enabled?
             %div#fair-home{data:{controller:"fair-score-home"}}
               = render partial: "shared/fair_score_bars", locals: {data: nil}
-            %a{:href => "#fairDetails"}
+            %a{:href => "/landscape#fairness_assessment"}
               %div.home-fair-details
                 %p See details
                 = inline_svg_tag "arrow-right.svg"
