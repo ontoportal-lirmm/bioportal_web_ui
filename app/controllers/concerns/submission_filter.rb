@@ -10,7 +10,7 @@ module SubmissionFilter
     @show_private_only = params[:private_only]&.eql?('true')
     @show_retired = params[:show_retired]&.eql?('true')
     @selected_format = params[:format]
-    @selected_sort_by = params[:sort_by]
+    @selected_sort_by = params[:sort_by].blank? ? 'ontology_name' : params[:sort_by]
     @search = params[:search]
   end
 
@@ -40,7 +40,7 @@ module SubmissionFilter
     request_params = { display_links: false, display_context: false,
                        include: includes, include_status: 'RDF' }
     request_params.merge!(page: page, pagesize: pagesize) if page
-    params[:sort_by] ||= 'ontology_name'
+    params[:sort_by] = 'ontology_name' if params[:sort_by].blank?
     filters_values_map = {
       categories: :hasDomain,
       groups: :group,
@@ -78,6 +78,7 @@ module SubmissionFilter
     @show_private_only = params[:private_only]&.eql?('true')
     @show_retired = params[:show_retired]&.eql?('true')
     @selected_format = params[:format]
+    @selected_sort_by = params[:sort_by]
     @search = params[:search]
 
     request_params
@@ -176,9 +177,9 @@ module SubmissionFilter
     end
 
     @formats = [['All formats', ''], 'OBO', 'OWL', 'SKOS', 'UMLS']
-    @sorts_options = [['Sort by', ''], ['Name', 'ontology_name'],
-                      ['Class count', 'metrics_classes'], ['Instances/Concepts count', 'metrics_individuals'],
-                      ['Upload date', 'creationDate'], ['Release date', 'released']]
+    @sorts_options = [['Sort by name', 'ontology_name'],
+                      ['Sort by class count', 'metrics_classes'], ['Sort by instances/Concepts count', 'metrics_individuals'],
+                      ['Sort by upload date', 'creationDate'], ['Sort by release date', 'released']]
 
     init_filters(params)
     # @missingStatus = [
