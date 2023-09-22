@@ -67,7 +67,8 @@ module SubmissionFilter
     if params[:show_retired].blank?
       @filters[:show_retired] = ''
       request_params[:status] = 'retired'
-
+    else
+      @filters[:show_retired] = 'true'
     end
 
     filters_values_map.each do |filter, api_key|
