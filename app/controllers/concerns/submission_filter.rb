@@ -66,6 +66,13 @@ module SubmissionFilter
       request_params.merge!(v[:api_key] => v[:default])
     end
 
+    if params[:show_retired].blank?
+      @filters[:show_retired] = ''
+      request_params[:status] = 'retired'
+    else
+      @filters[:show_retired] = 'true'
+    end
+
     filters_values_map.each do |filter, api_key|
       next if params[filter].nil? || params[filter].empty?
 
