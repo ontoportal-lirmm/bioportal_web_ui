@@ -685,7 +685,11 @@ module ApplicationHelper
     $SITE
     end
   def navitems
-    items = [["/ontologies", "Browse"],["/mappings", "Mappings"],["/recommender", "Recommender"],["/annotator", "Annotator"], ["/landscape", "Landscape"]]
+    items = [["/ontologies", t('layout.header.browse')],
+             ["/mappings", t('layout.header.mappings')],
+             ["/recommender", t("layout.header.recommender")],
+             ["/annotator", t("layout.header.annotator")],
+             ["/landscape", t("layout.header.landscape")]]
   end
 
   def attribute_enforced_values(attr)
