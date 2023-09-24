@@ -35,7 +35,7 @@ set :log_level, :error
 set :linked_dirs, %w{log tmp/pids tmp/cache public/system public/assets}
 append :linked_files, 'config/database.yml', 'config/bioportal_config_appliance.rb'
 append :linked_dirs, 'log', 'tmp', '.bundle', 'config/locales'
-append :linked_files, 'config/secrets.yml', 'config/site_config.rb', 'config/newrelic.yml','config/credentials/appliance.key', 'config/credentials/appliance.yml.enc'
+append :linked_files, 'config/secrets.yml', 'config/site_config.rb','config/credentials/appliance.key', 'config/credentials/appliance.yml.enc'
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }

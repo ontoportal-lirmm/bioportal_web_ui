@@ -73,7 +73,8 @@ gem 'turnout'
 gem 'will_paginate', '~> 3.0'
 gem 'inline_svg'
 gem "lookbook", '~> 1.5.5'
-gem 'ontologies_api_client', git: 'https://github.com/lifewatch-eric/ontologies_api_ruby_client.git', branch: 'ecoportal-ontoportal-reset'
+gem 'ffi', '~> 1.15.5'
+gem 'ontologies_api_client', git: 'https://github.com/lifewatch-eric/ontologies_api_ruby_client.git', branch: 'master'
 
 
 group :staging, :production, :appliance do

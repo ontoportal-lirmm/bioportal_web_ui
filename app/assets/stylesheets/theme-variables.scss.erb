@@ -1,6 +1,6 @@
 <%# This file contains all the color themes of ontoportal alliance%>
-<% if (ui_theme = $UI_THEME.to_s.parameterize).present? && File.exists?(Rails.root.join('app', 'assets', 'stylesheets', 'themes', ui_theme)) 
-    case ui_theme
+<% if $UI_THEME
+    case $UI_THEME.to_s
     when "agroportal" %>
         :root{
             --primary-color: #31B404;
