@@ -31,7 +31,7 @@
     display: flex;
     justify-content: space-between;
     align-items:center;
-    width: 1020px;
+    width: 1020px;    
 }
 .nav-items > ul {
     display: flex;
@@ -189,5 +189,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 50%
+    width: 50%;
+    gap: 20px;
 }

@@ -16,7 +16,7 @@ fr:
 
   login:
     title: Connexion
-    username_or_email: "Nom d'utilisateur ou Email"
+    username_or_email: "Nom d'utilisateur ou Email" 
     enter_email: "Saisissez votre email"
     enter_password: "Saisissez votre mot de passe"
     no_account: "Vous n'avez pas de compte ?"
@@ -427,7 +427,7 @@ fr:
       projects: Projets
       team: Équipe
       copyright_html: Copyright &copy; 2005-2022, Conseil d'administration de Leland Stanford Junior University. Tous droits réservés.
-
+         
       grant_html: >
         <strong>%{site}</strong> est actuellement développé dans le cadre du <a href="http://www.d2kab.org">projet ANR D2KAB</a> (<a href="http:// www.agence-nationale-recherche.fr/Projet-ANR-18-CE23-0017">ANR-18-CE23-0017</a>). Il reçoit ou a également reçu le soutien du <a href="http://www.lirmm.fr/sifr">projet ANR SIFR</a> (<a href="https://anr.fr/Projet-ANR- 12-JS02-0010">ANR-12-JS02-0010</a>), Union Européenne <a href="http://www.lirmm.fr/sifr">Projet H2020-MSCA SIFRm</a> ( <a href="https://cordis.europa.eu/project/id/701771">N° 701771</a>), le <a href="https://www.lirmm.fr/numev/"> Labex NUMEV</a> (ANR-10-LABX-20), le <ahref="http://www.ibc-montpellier.fr/">projet IBC de Montpellier</a> (ANR-11-BINF0002) , l'<a href="https://www.agropolis-fondation.fr/The-LabEx-AGRO?lang=fr">Agro Labex</a> (ANR-10-LABX-0001) ainsi que de l'Université de Montpellier et du CNRS.
     notices:
