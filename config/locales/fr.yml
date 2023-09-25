@@ -1,5 +1,20 @@
 ---
 fr:
+  activerecord:
+    errors:
+      models:
+        license:
+          attributes:
+            encrypted_key:
+              invalid_license_key: est une clé de licence invalide
+              no_appliance_id_for_comparison: n'a pas pu être validé. Impossible de récupérer l'ID de l'appliance virtuelle.
+              appliance_id_mismatch: est une non-concordance d'ID d'appliance
+  date:
+    formats:
+      year_month_day_concise: "%Y-%m-%d" # 2017-03-01
+      month_day_year: "%b %-d, %Y" # Mar 1, 2017
+      monthfull_day_year: "%B %-d, %Y" # March 1, 201
+
   acceptance: Acceptation
   additional_parameters: 'Paramètres supplémentaires expliqués à '
   admin:
