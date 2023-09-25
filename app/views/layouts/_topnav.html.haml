@@ -43,8 +43,7 @@
               - s.item do
                 = link_to(t('layout.header.logout'), logout_path)
 
-        = select_tag('language', options_for_select([['EN','en'],['FR','fr']]), id: 'language-select', class: 'nav-language',
-          data: { controller: "platform-language", action: "change->platform-language#handleLangChanged" })
+        = portal_language_selector
 
         = render DropdownButtonComponent.new do |d|
           - d.header do

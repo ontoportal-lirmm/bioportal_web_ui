@@ -692,6 +692,12 @@ module ApplicationHelper
              ["/landscape", t("layout.header.landscape")]]
   end
 
+  def portal_language_selector(id: 'language-select')
+    languages = %w[en fr it de].map{|x| [x.upcase, x]}
+    select_tag('language',options_for_select(languages), id: id, class: 'nav-language',
+               data: { controller: "platform-language", action: "change->platform-language#handleLangChanged" })
+
+  end
   def attribute_enforced_values(attr)
     submission_metadata.select {|x| x['@id'][attr]}.first['enforcedValues']
   end
