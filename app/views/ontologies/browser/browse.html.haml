@@ -47,8 +47,8 @@
             %div.browse-filter{style:'border: none'}
               = render SwitchInputComponent.new(id:'filter-views', name:'views', checked: @show_views) do
                 Show ontology views
-              = render SwitchInputComponent.new(id:'filter-retired', name:'retired',checked: @show_retired) do
-                Show retired ontologies
+              = # render SwitchInputComponent.new(id:'filter-retired', name:'retired',checked: @show_retired) do
+              = # Show retired ontologies
 
             - @filters.each do |key, values|
               - if session[:user]&.admin? ||  key != :missingStatus
