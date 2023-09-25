@@ -12,7 +12,7 @@ module BioportalWebUi
     config.load_defaults 7.0
 
     # permitted locales available for the application
-    config.i18n.available_locales = [:en, :fr]
+    config.i18n.available_locales = [:en, :fr, :it, :de]
     config.i18n.default_locale = :en
 
 
