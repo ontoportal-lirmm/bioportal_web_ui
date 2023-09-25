@@ -1,5 +1,21 @@
 ---
 de:
+  activaterecord:
+    errors:
+      models:
+        license:
+          attributes:
+            encrypted_key:
+              invalid_license_key: is an invalid license key
+              no_appliance_id_for_comparison: Could not be validated. Unable to retrieve virtual appliance ID.
+              appliance_id_mismatch: is an appliance id mismatch
+
+  date:
+    formats:
+      year_month_day_concise: "%Y-%m-%d" # 2017-03-01
+      month_day_year: "%b %-d, %Y" # Mar 1, 2017
+      monthfull_day_year: "%B %-d, %Y" # March 1, 2017
+      
   additional_parameters: Zusätzliche Parameter werden erklärt unter
   admin:
     licenses:
