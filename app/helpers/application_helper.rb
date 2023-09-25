@@ -459,6 +459,7 @@ module ApplicationHelper
   end
 
   def subscribe_button(ontology_id)
+    return if ontology_id.nil?
     ontology_acronym = ontology_id.split('/').last
 
     if session[:user].nil?
