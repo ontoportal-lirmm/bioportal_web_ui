@@ -54,4 +54,4 @@
       %p#register-check-text 
         = t('register.mailing_list')
     .register-button-container
-      = render Buttons::PrimaryButtonComponent.new(type: "submit", value: "Register")
+      = render Buttons::RegularButtonComponent.new(id: 'register-button', value: "Register", type:'submit')

@@ -41,7 +41,7 @@ module ApplicationHelper
   end
 
   def omniauth_token_provider(strategy)
-    omniauth_provider_info(strategy).keys.first
+    omniauth_provider_info(strategy.to_sym).keys.first
   end
 
   def isOwner?(id)
