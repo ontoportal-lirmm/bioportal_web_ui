@@ -1,7 +1,7 @@
-
 function round(val , base = 1){
     return Math.floor( val * 100 * base) / 100
 }
+
 function getObtainedNotObtainedNA(scoresIn, portalMax , max , normalize = true){
     const delimiter = (val) => (normalize ? val : 1)
     const notObtained = portalMax.map((x,i) => {
@@ -391,17 +391,17 @@ class FairScoreCriteriaRadar extends FairScoreChart{
 
     getFairScoreDataSet() {
         const scores = this.fairScoreChartCanvas.data('normalizedScores')
-           return [
-                {
-                    label: 'Fair score',
-                    data: scores,
-                    fill: true,
-                    backgroundColor: 'rgba(151, 187, 205, 0.2)',
-                    borderColor: 'rgba(151, 187, 205, 1)',
-                    pointBorderColor: 'rgba(151, 187, 205, 1)',
-                    pointBackgroundColor: 'rgba(151, 187, 205, 1)'
-                }
-            ]
+        return [
+            {
+                label: 'Fair score',
+                data: scores,
+                fill: true,
+                backgroundColor: 'rgba(151, 187, 205, 0.2)',
+                borderColor: 'rgba(151, 187, 205, 1)',
+                pointBorderColor: 'rgba(151, 187, 205, 1)',
+                pointBackgroundColor: 'rgba(151, 187, 205, 1)'
+            }
+        ]
     }
 
 
@@ -492,7 +492,7 @@ class FairScoreCriteriaBar extends  FairScoreChart{
 
             if (topOffset  <= 0)
                 topOffset = 0
-           else if( (topOffset + tooltipEl.clientHeight) >=  position.height)
+            else if( (topOffset + tooltipEl.clientHeight) >=  position.height)
                 topOffset = position.height - tooltipEl.clientHeight
 
             // Display, position, and set styles for font
@@ -627,63 +627,5 @@ class FairScoreCriteriaBar extends  FairScoreChart{
     }
 }
 
-
-/*
-    For landscape
- */
-jQuery('#fairness_assessment').ready(()=> {
-    let fairCriteriaBars = new FairScoreCriteriaBar('ont-fair-scores-criteria-bars-canvas')
-    let fairContainer = new FairScoreChartContainer('fair-score-charts-container' , [fairCriteriaBars])
-    let ontologies = jQuery("#ontology_ontologyId");
-
-    fairContainer.getFairScoreData("all")
-    ontologies.change( (e) => {
-        if(ontologies.val() !== null){
-            fairContainer.getFairScoreData(ontologies.val().join(','))
-        } else if(ontologies.val() === null){
-            fairContainer.getFairScoreData("all")
-        }
-        e.preventDefault()
-    })
-    return false
-})
-
-
-
-/*
-    For the home
- */
-jQuery('#fair-home').ready( function (e) {
-
-    let fairScoreBar = new FairScorePrincipleBar( 'ont-fair-scores-canvas')
-    let fairScoreRadar = new FairScoreCriteriaRadar(  'ont-fair-criteria-scores-canvas')
-    let fairContainer = new FairScoreChartContainer('fair-score-charts-container' , [   fairScoreRadar , fairScoreBar])
-    let ontologies = jQuery("#ontology_ontologyId");
-
-    fairContainer.getFairScoreData("all")
-    ontologies.change( (e) => {
-            if(ontologies.val() !== null){
-                fairContainer.getFairScoreData(ontologies.val().join(','))
-            } else if(ontologies.val() === null){
-                fairContainer.getFairScoreData("all")
-            }
-        e.preventDefault()
-    })
-    return false
-})
-
-/*
-    For the summary
-*/
-jQuery('#fair-summary').ready( function (e) {
-
-    let fairScoreBar = new FairScorePrincipleBar( 'ont-fair-scores-canvas')
-    let fairScoreRadar = new FairScoreCriteriaRadar(  'ont-fair-criteria-scores-canvas')
-    let fairContainer = new FairScoreChartContainer('fair-score-charts-container' , [   fairScoreRadar , fairScoreBar])
-
-    fairContainer.getFairScoreData(window.location.pathname.split('/')[2])
-
-    return false
-})
-
+export {round, getObtainedNotObtainedNA, FairScoreChartContainer, FairScoreChart, FairScorePrincipleBar, FairScoreCriteriaRadar, FairScoreCriteriaBar}
 

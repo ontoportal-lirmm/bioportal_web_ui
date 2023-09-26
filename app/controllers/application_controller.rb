@@ -466,7 +466,11 @@ class ApplicationController < ActionController::Base
         root_child = @root.children.first
 
         @concept = root_child.explore.self(full: true)
-
+         # Some ontologies have "too many children" at their root. These will not process and are handled here.
+         if @concept.nil?
+          LOG.add :debug, "Missing class #{root_child.links.self}"
+          not_found("Missing class #{root_child.links.self}")
+        end
       else
         # if the id is coming from a param, use that to get concept
         @concept = @ontology.explore.single_class({full: true}, params[:conceptid])
