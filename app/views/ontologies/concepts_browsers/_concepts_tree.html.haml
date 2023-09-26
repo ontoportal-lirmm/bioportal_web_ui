@@ -19,7 +19,7 @@
     - if skos? && @roots.empty?
       %div.text-wrap
         = render AlertMessageComponent.new do
-          Missing roots for #{@ontology.acronym}
+          Missing roots for #{@ontology.acronym} (skos:topConceptOf)
     - else
       = render TurboFrameComponent.new(id: 'concepts_tree_view',
                                      src: "/ajax/classes/treeview?ontology=#{@ontology.acronym}&conceptid=#{escape(@concept.id)}&concept_schemes=#{params[:concept_schemes]}&auto_click=false",
