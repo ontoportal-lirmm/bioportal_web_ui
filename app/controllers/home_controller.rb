@@ -159,7 +159,7 @@ class HomeController < ApplicationController
     @user_ontologies = @user.customOntology
     @user_ontologies ||= []
 
-    onts = LinkedData::Client::Models::Ontology.all
+    onts = LinkedData::Client::Models::Ontology.all(include_views: true);
     @admin_ontologies = onts.select { |o| o.administeredBy.include? @user.id }
 
     projects = LinkedData::Client::Models::Project.all

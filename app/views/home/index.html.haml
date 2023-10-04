@@ -123,7 +123,7 @@
               - LinkedData::Client::Models::Slice.all.each_with_index do |slice, index|
                 - break if index == 10
                 - slice_name = "#{slice.name} (#{slice.acronym})"
-                - slice_link = "http://#{slice.acronym}.#{$UI_URL.sub("http://", "")}"
+                - slice_link = "https://#{slice.acronym}.#{$UI_URL.sub("https://", "").sub("http://", "")}"
                 %li.list-group-item
                   = link_to slice_name, slice_link
 

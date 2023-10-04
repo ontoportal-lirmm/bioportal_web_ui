@@ -9,7 +9,7 @@
   .d-flex.justify-content-center
     .login-form
       %p.login-input-title Username or Email
-      = text_field 'user', 'username', class: "login-input email-input", placeholder: "Enter your password"
+      = text_field 'user', 'username', class: "login-input email-input", placeholder: "Enter your email"
       %p.login-input-title Password
       = password_field 'user','password', :autocomplete => "off", class: "login-input password-input", placeholder: "Enter your password"
       %a.login-forgot-password{:href => "/lost_pass"}
