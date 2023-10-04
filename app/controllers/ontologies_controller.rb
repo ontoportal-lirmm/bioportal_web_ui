@@ -404,14 +404,6 @@ class OntologiesController < ApplicationController
     render partial: 'ontologies/sections/metadata/metrics_evolution_graph', locals: { data: data }
   end
 
-  def tab_properties
-    @data = JSON.parse(params[:data])
-    @acronym = params[:acronym]
-    respond_to do |format|
-      format.html { render partial: 'tab_properties' }
-    end  
-  end
-
   private
   def get_views(ontology)
     views = ontology.explore.views || []
