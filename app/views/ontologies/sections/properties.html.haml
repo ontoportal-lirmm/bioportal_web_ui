@@ -6,8 +6,10 @@
 
   :javascript
     function generatePropertyDetails(data) {
+      const jsonString = JSON.stringify(data);
+      var chaineSansHash = jsonString.replace(/#/g, "£");
       $.ajax({
-        url: '/tab_properties?data=' + JSON.stringify(data) + '&acronym=#{@ontology.acronym}',
+        url: '/ontologies/#{@ontology.acronym}/properties/show?data=' + chaineSansHash,
         dataType: 'html',
         success: function(response) {
           $("#prop_contents").html(response);
