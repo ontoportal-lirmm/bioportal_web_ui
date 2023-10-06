@@ -49,8 +49,3 @@
           Support
         %div.dropdown-menu.dropdown-menu-right{aria: {labelledby: "supportMenuDropdownLink"}}
           = link_to("Submit Feedback", feedback_path(location: encode_param(request.url)), id: "submitFeedbackMenuItem", class: "dropdown-item pop_window")
-          %div.dropdown-divider
-          %h6.dropdown-header Documentation
-          = link_to("Help", "#{$WIKI_HELP_PAGE}", target: "_blank", class: "dropdown-item")
-          = link_to("Release Notes", "#{$RELEASE_NOTES}", target: "_blank", class: "dropdown-item")
-          = link_to("Publications", $PUBLICATIONS_URL, target: "_blank", class: "dropdown-item")
