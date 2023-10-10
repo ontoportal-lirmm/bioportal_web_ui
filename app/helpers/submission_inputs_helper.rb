@@ -97,10 +97,10 @@ module SubmissionInputsHelper
         c.template do
           content_tag(:div, class: 'd-flex my-1') do
             out = content_tag(:div, class: ' w-50 mr-2') do
-              text_input(label: '', name: 'submission[contact][NEW_RECORD][name]', value: '')
+              text_input(label: '', name: 'submission[contact][NEW_RECORD][name]', value: '', error_message: '')
             end
             out + content_tag(:div, class: ' w-50') do
-              text_input(label: '', name: 'submission[contact][NEW_RECORD][email]', value: '')
+              text_input(label: '', name: 'submission[contact][NEW_RECORD][email]', value: '', error_message: '')
             end
           end
         end
@@ -109,10 +109,10 @@ module SubmissionInputsHelper
           c.row do
             content_tag(:div, class: 'd-flex my-1') do
               out = content_tag(:div, class: 'w-50 mr-2') do
-                text_input(label: '', name: "submission[contact][#{i}][name]", value: contact['name'])
+                text_input(label: '', name: "submission[contact][#{i}][name]", value: contact['name'], error_message: '')
               end
               out + content_tag(:div, class: 'w-50') do
-                text_input(label: '', name: "submission[contact][#{i}][email]", value: contact['email'])
+                text_input(label: '', name: "submission[contact][#{i}][email]", value: contact['email'], error_message: '')
               end
             end
           end
