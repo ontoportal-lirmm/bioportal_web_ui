@@ -42,7 +42,7 @@ module SubmissionInputsHelper
   end
 
   # @param attr_key String
-  def attribute_input(attr_key, long_text: false, label: nil, show_tooltip: true)
+  def attribute_input(attr_key, long_text: false, label: nil, show_tooltip: true, max_date: nil)
     attr = SubmissionMetadataInput.new(attribute_key: attr_key, submission: @submission, label: label,
                                        attr_metadata: attr_metadata(attr_key))
 
@@ -51,7 +51,7 @@ module SubmissionInputsHelper
     elsif attr.type?('integer')
       generate_integer_input(attr)
     elsif attr.type?('date_time')
-      generate_date_input(attr)
+      generate_date_input(attr, max_date: max_date)
     elsif attr.type?('textarea')
       generate_textarea_input(attr)
     elsif enforce_values?(attr)
@@ -161,9 +161,10 @@ module SubmissionInputsHelper
 
   end
 
-  def generate_date_input(attr)
+  def generate_date_input(attr, max_date: nil)
     date_input(label: attr_header_label(attr), name: attr.name,
-               value: attr.values)
+               value: attr.values,
+               max_date: max_date)
   end
 
   def generate_textarea_input(attr)
