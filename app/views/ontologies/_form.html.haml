@@ -5,7 +5,7 @@
   = hidden_field_tag 'ontology[acronym]', @ontology.acronym if @is_update_ontology
 
 .upload-ontology-input-field-container
-  = render Layout::RevealComponent.new(init_show: @ontology.viewingRestrictio&.eql?('private'), show_condition: 'private') do |c|
+  = render Layout::RevealComponent.new(init_show: @ontology.viewingRestriction&.eql?('private'), show_condition: 'private') do |c|
     - c.button do
       = select_input(label: "Visibility", name: "ontology[viewingRestriction]", values: %w[public private], selected: @ontology.viewingRestriction )
     .upload-ontology-input-field-container
