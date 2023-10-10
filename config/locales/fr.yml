@@ -1,57 +1,30 @@
 ---
 fr:
-  Notes: Notes
-  _account_setting: Account setting
-  _help: Help
-  _publications: Publications
-  _release_notes: Release notes
-  about: |
-    <div class='about p-2'> <h2>Résumé</h2> <p> De nombreux vocabulaires et ontologies sont produits pour représenter et annoter les données agronomiques. Il est donc nécessaire de disposer d'une plateforme commune pour les identifier, les héberger et les utiliser dans les applications d'agro-informatique. Le projet AgroPortal vise à offrir un référentiel d'ontologies de référence pour l'agronomie, en réutilisant la technologie NCBO BioPortal. Les résultats scientifiques et l'expérience du domaine biomédical sont ainsi exploités et transposés dans le domaine de l'agronomie, comprenant les plantes, l'alimentation, l'environnement et éventuellement les sciences animales. Nous proposons un portail d'ontologies qui offre l'hébergement d'ontologies, la recherche, la versioning, la visualisation, le commentaire, la recommandation, permet l'annotation sémantique, ainsi que le stockage et l'exploitation d'alignements d'ontologies. Tout cela dans une infrastructure totalement conforme au web sémantique. Le projet AgroPortal accorde une attention particulière au respect des exigences de la communauté agronomique en termes de formats d'ontologies (par exemple, SKOS, dictionnaires de traits) ou de fonctionnalités prises en charge. Le projet AgroPortal est basé sur cinq cas d'utilisation agronomique qui participent à la conception et à l'orientation de la plateforme. AgroPortal offre déjà un référentiel de référence robuste et stable, d'une grande valeur pour le domaine de l'agronomie. </p> <h2>Use cases</h2> <ul class="bulletlist m-3"> <li class="bulletlist"><a href="http://www.agrold.org">Projet IBC Rice Genomics & AgroLD</a> (P. Larmande): Data integration and knowledge management related to rice</li> <li class="bulletlist"><a href="https://www.rd-alliance.org/groups/wheat-data-interoperability-wg.html">Groupe de travail RDA Wheat Data Interoperability</a> (E. Dzalé-Yeumo) : Cadre commun de publication des données blé</li> <li class="bulletlist"><a href="http://lovinra.inra.fr">LovInra : Vocabulaires Ouverts Liés Inra</a> (S. Aubin) : Vocabulaires produits par des scientifiques de l'INRA</li> <li class="bulletlist"><a href="http://www.cropontology.org">Projet Crop Ontology</a> (E. Arnaud) : Ontologies pour décrire le germoplasme et les caractères des cultures</li> <li class="bulletlist"><a href="http://vest.agrisemantics.org">GODAN carte mondiale des normes de données agroalimentaires</a> (V. Pesce) : VEST/AgroPortal MAP of standards</li> </ul> <br> <h2>Nouvelles fonctionnalités</h2> <p> See the <a href="https://github.com/agroportal/documentation/wiki/Release-notes">notes de version</a> </p> <br> <h2>Les partenaires</h2> <p>Le Centre National d'Ontologie Biomédicale (NCBO), l'Institut de Recherche pour le Développement (IRD), Research Data Alliance (RDA),
-     Bioversity International, Food & Agriculture Organization (FAO), Global Open Data for Agriculture & Nutrition (Godan Action), Institut National de la Recherche Agronomique (INRA)</p>
-    <h2>remerciements</h2> <p>L'AgroPortail est en partie réalisé dans le cadre du projet d'Indexation Sémantique des Ressources Biomédicales Françaises (<a href="www.lirmm.fr/sifr">SIFR</a>)
-     qui ont reçu un financement du programme de recherche et d'innovation H2020 de l'UE dans le cadre de Marie Sklodowska-Curie (subvention 701771)
-     et l'Agence Nationale de la Recherche (bourse ANR-12-JS02-01001), le Labex NUMEV (bourse ANR-10-LABX-20),
-     l'Institut de Biologie Computationnelle de Montpellier (bourse ANR-11-BINF-0002) ainsi que par l'Université de Montpellier et le CNRS.
-     Nous remercions également le Centre National des Ontologies Biomédicales pour son aide et le temps passé avec nous dans le déploiement de l'AgroPortail.</p>
-    <h2>Équipe</h2> Pour nous contacter: firstname.lastname@lirmm.fr <ul class="bulletlist m-3"> <li class="bulletlist"><b>Clément Jonquet</b>,chercheur au LIRMM (Univ. de Montpellier, France), investigateur principal du projet AgroPortal</li> <li class="bulletlist"><b>Anne Toulet</b>, chercheuse au LIRMM (Univ. de Montpellier, France)</li> <li class="bulletlist"><b>Vincent Emonet</b>, ingénieur au LIRMM (Univ. de Montpellier, France)</li> </ul> </div>
-  accept: Accept
-  acceptance: Acceptation
-  activaterecord:
-    errors:
-      models:
-        license:
-          attributes:
-            encrypted_key:
-              appliance_id_mismatch: is an appliance id mismatch
-              invalid_license_key: is an invalid license key
-              no_appliance_id_for_comparison: Could not be validated. Unable to retrieve
-                virtual appliance ID.
   activerecord:
     errors:
       models:
         license:
           attributes:
             encrypted_key:
-              appliance_id_mismatch: est une non-concordance d'ID d'appliance
               invalid_license_key: est une clé de licence invalide
-              no_appliance_id_for_comparison: n'a pas pu être validé. Impossible de
-                récupérer l'ID de l'appliance virtuelle.
+              no_appliance_id_for_comparison: n'a pas pu être validé. Impossible de récupérer l'ID de l'appliance virtuelle.
+              appliance_id_mismatch: est une non-concordance d'ID d'appliance
+  date:
+    formats:
+      year_month_day_concise: "%Y-%m-%d" # 2017-03-01
+      month_day_year: "%b %-d, %Y" # Mar 1, 2017
+      monthfull_day_year: "%B %-d, %Y" # March 1, 201
+
+  acceptance: Acceptation
   additional_parameters: 'Paramètres supplémentaires expliqués à '
   admin:
     licenses:
       create:
         success: Licence renouvelée avec succès !
-    licenses_helper:
-      license_notification:
-        license_contact: License contact
-        license_expired: License expired
-        license_obtain: License obtain
-        license_trial: License trial
-  admins: Administrateurs
   all: Tout
   annotator:
+    annotate_text_prompt: Saisissez ou collez le texte à annoter
     annotations_result: Annotations
-    enter_or_paste_text: Entrer ou coller le texte à annoter
     fast_context: FastContext
     filters:
       confidence_threshold: Seuil de confiance du filtre
@@ -63,9 +36,6 @@ fr:
       match_longest_only: Correspond le plus long uniquement
       match_partial_words: Reconnaître des mots partiels
       max_hierarchy_level: Inclure les ancêtres jusqu'au niveau
-      recognizer: Recognizer
-      recognizer de reconnaissance: outil de reconnaissance d'entité
-      recognizer recognizer: entity recognition tool
       score: Inclure le score
       score_help: Annotations de score suivant la mesure NCBO 2009 précédente (ancienne)
         ou Annotations de score suivant la mesure C-Value (cvalue) ou Annotations
@@ -74,9 +44,6 @@ fr:
       score_threshold_help: Spécifier la valeur de score minimum pour les annotations
     get_annotator: Obtenir les annotations
     index:
-      annotatorplus_html: <em>Consultez la version bêta d'<a href="%{annotatorplus_href}">AnnotatorPlus</a> ;
-        une nouvelle version de l'Annotator avec un support supplémentaire pour la
-        négation, et plus encore !</em>
       fast_context:
         tooltip: 'Activer FastContext pour détecter : si un concept a été nié (affirmé,
           nié), qui a vécu le concept trouvé (patient, autre), quand le concept annoté
@@ -98,14 +65,8 @@ fr:
     umls:
       semantic_groups: Groupes sémantiques UMLS
       semantic_types: Types sémantiques UMLS
-  artifacts: Artéfacts
-  average: Moyenne
-  categories: Catégories
-  category: Catégorie
   certainty: Certitude
   class: Classe
-  classes: classes
-  classes_count: Nombre de classes
   clear_selection: Effacer la sélection
   concepts:
     request_term:
@@ -128,73 +89,44 @@ fr:
           </blockquote>
   context: Contexte
   coverage: Couverture
-  date:
-    formats:
-      month_day_year: "%b %-d, %Y"
-      monthfull_day_year: "%B %-d, %Y"
-      year_month_day_concise: "%Y-%m-%d"
-  exact_matches: Exact matches
-  experience: Experience
   experiencer: Experiencer
-  fair_score: Score FAIR
   filter: Filtre
-  formality_levels: Niveaux de formalité
-  format: Format
   format_results: 'Formater les résultats en '
-  formats: Formats
   get_json_version: Get the json version
   get_recommendations: Obtenir des recommandations
-  group: Groupe
-  groups: Groupes
   help: Aide
   home:
-    advanced_search: Recherche avancée
-    browse_by_group: Parcourir par groupe
-    browse_ontologies: Parcourir les ontologies
-    classes: Des classes
-    clear_selection: Effacer la sélection
-    comprehensive_repository: le référentiel d'ontologies biomédicales le plus complet
-      au monde
-    fair_scores: Scores FAIR
-    find_ontology: Trouver une ontologie
-    help:
-      announce_list_html: 'Pour recevoir des avis de nouvelles versions ou de pannes
-        de site, veuillez vous abonner au <a href="https://mailman.stanford.edu/mailman/listinfo/bioontology-support"
-        target="_blank">liste de support bioontologie</a>.
-
-        '
-      browse: |
-        Les utilisateurs peuvent parcourir et explorer des ontologies individuelles en naviguant soit dans une structure arborescente, soit dans une vue graphique animée. Les utilisateurs peuvent également afficher les mappages et
-          métadonnées d'ontologie et téléchargement d'ontologies. De plus, les utilisateurs connectés peuvent soumettre une nouvelle ontologie à la bibliothèque.
-      getting_started: "%{site} permet aux utilisateurs de parcourir, charger, télécharger,
-        rechercher, commenter et créer des mappages pour les ontologies.\n"
-      rest_examples_html: affichez la documentation et des exemples de l'<a href="http://data.bioontology.org/documentation"
-        target="_blank">%{site} API REST</a>.
-      welcome: Bienvenue à la le %{site} du Centre national d'ontologie biomédicale.
-        %{site} est une application Web permettant d'accéder et de partager des ontologies
-        biomédicales.
+    agroportal_figures: "%{site} en chiffres:"
+    benefit1: Découvrez de nouvelles perspectives et connexions en explorant d'autres
+      ontologies dans le référentiel.
+    benefit2: Contribuez à la croissance et au développement de votre domaine en ajoutant
+      de nouveaux concepts et catégories.
+    benefit3: Utilisez le contrôle de version pour gérer les modifications apportées
+      à votre ontologie au fil du temps et collaborer avec d'autres utilisateurs.
+    benefit4: Obtenez des commentaires et des suggestions d'autres utilisateurs qui
+      peuvent examiner et commenter votre ontologie.
+    benefit5: Obtenez le score et les mesures FAIR pour votre ontologie.
+    fair_details: Voir les détails
+    fairness: Scores FAIR
+    get_annotations: Obtenir des annotations
+    get_recommendations: Obtenir des recommandations
     index:
-      find_ontology_placeholder: Commencez à taper le nom de l'ontologie, puis choisissez
-        dans
-      query_placeholder: Entrez une classe, par exemple Melanoma
       tagline: le référentiel d'ontologies biomédicales le plus complet au monde
       title: Bienvenue à la %{organization}
       welcome: Bienvenue à la %{site},
-    individuals: Personnes
-    latest_notes: Dernières notes
-    no_recent_notes: Aucune note récente n'a été soumise
-    ontologies: Ontologies
-    ontology_visits: Visites d'ontologie
-    projects: Projets
-    search_class: Rechercher une classe
-    supported_by: Supported by
-    users: Utilisateurs
-    with_collaboration: With the collaboration of
+    ontology_upload: Veux-tu télécharger une ontologie ?
+    ontology_upload_benefits: 'En téléchargeant votre ontologie sur %{site}, vous
+      pouvez :'
+    ontology_upload_button: Télécharger une ontologie
+    ontology_upload_desc: Télécharger une ontologie est un moyen de partager vos connaissances
+      du domaine avec les autres.
+    paste_text_prompt: Collez un paragraphe de texte ou quelques mots-clés..
+    recommender_annotator: Recommandateur et annotateur
+    supported_by: Soutenu par
+    twitter_news: Actualités twitter
+    with_collaboration: Avec la collaboration de
   input: Entrée
-  insert_sample_input: Insérer une entrée d'exemple
   insert_sample_text: Insérer un exemple de texte
-  instances_concepts_count: Nombre d'instances/concepts
-  is_of_type: Est du type
   keywords: Mots-clés
   keywords_separated_by_commas: Mots-clés séparés par des virgules
   knowledge_detail: Détail de la connaissance
@@ -224,7 +156,6 @@ fr:
     ontologies_formats: Format utilisé
     ontologies_languages: Langues naturelles des ontologies
     ontologies_licenses: Licences utilisées par les ontologies
-    ontologies_properties: Ontologies properties
     ontologies_with_notes_reviews_projects: Ontologies avec des notes, des critiques
       et des projets
     ontology_fairness_evaluator: Évaluateur de conformité FAIR des ontologies (O’FAIRe)
@@ -233,7 +164,6 @@ fr:
       dans les ontologies
     ontology_relations_network: Réseau de relations ontologiques
     ontology_tools: Outils les plus utilisés pour construire des ontologies
-    ontology_types: Types d'ontologie
     owl_ontology_author_uris: URIs de propriétés d'auteur utilisées pour les ontologies
       OWL
     owl_ontology_definition_uris: URIs de propriétés de définition utilisées pour
@@ -249,119 +179,43 @@ fr:
     size: Taille
     title: "%{site} Paysage"
   layout:
-    footer:
-      ":": ":"
-      about: About
-      about_us: About Us
-      acknowledgments: Acknowledgments
-      agreements: Agreements
-      api: API
-      cite_us: Cite Us
-      contact_us: Contact Us
-      copyright_html: Droit d'auteur &copie; 2005‑2022, Conseil d'administration de
-        l'Université Leland Stanford Junior. Tous les droits sont réservés.
-      documentation: Documentation
-      grant_html: '<strong>%{site}</strong> est actuellement développé dans le cadre
-        du <a href="http://www.d2kab.org">projet ANR D2KAB</a> (<a href="http:// www.agence-nationale-recherche.fr/Projet-ANR-18-CE23-0017">ANR-18-CE23-0017</a>).
-        Il reçoit ou a également reçu le soutien du <a href="http://www.lirmm.fr/sifr">projet
-        ANR SIFR</a> (<a href="https://anr.fr/Projet-ANR- 12-JS02-0010">ANR-12-JS02-0010</a>),
-        Union Européenne <a href="http://www.lirmm.fr/sifr">Projet H2020-MSCA SIFRm</a>
-        ( <a href="https://cordis.europa.eu/project/id/701771">N° 701771</a>), le
-        <a href="https://www.lirmm.fr/numev/"> Labex NUMEV</a> (ANR-10-LABX-20), le
-        <ahref="http://www.ibc-montpellier.fr/">projet IBC de Montpellier</a> (ANR-11-BINF0002)
-        , l''<a href="https://www.agropolis-fondation.fr/The-LabEx-AGRO?lang=fr">Agro
-        Labex</a> (ANR-10-LABX-0001) ainsi que de l''Université de Montpellier et
-        du CNRS.
-
-        '
-      ontoportal: OntoPortal
-      privacy_policy: Privacy Policy
-      products: Produits
-      projects: Projects
-      release_notes: Release Notes
-      sparql: SPARQL
-      support: Support
-      team: Team
-      terms: Terms
-      wiki: Wiki
     header:
       account_setting: Paramètres du compte
       annotator: Annotateur
       browse: Parcourir
+      documentation: Documentation
       help: Aide
       landscape: Paysage
-      login: Se connecter
+      login: Connexion
+      logout: Déconnecter
       mappings: Mappings
-      ncbo_annotator_plus: NCBO Annotator+
-      projects: Projets
       publications: Publications
-      recommend: Recommend
       recommender: Recommender
       release_notes: Notes de version
-      search: Rechercher
+      search_prompt: Rechercher dans %{portal_name} ...
       submit_feedback: Envoyer un commentaire
-    notes:
-      license_contact: |
-        For more information, email <a href="mailto:support@ontoportal.org">support@ontoportal.org</a> or
-          visit <a href="https://ontoportal.org/licensing" target="_blank">https://ontoportal.org/licensing</a>.
-      license_expired: |
-        We're sorry, but the license for this OntoPortal installation has expired. If you are the owner of this OntoPortal installation,
-         please visit <a href="https://license.ontoportal.org" target="_blank">https://license.ontoportal.org</a> to renew your license.
-      license_obtain: |
-        If you are the owner of this OntoPortal installation, you can visit
-          <a href="https://license.ontoportal.org" target="_blank">https://license.ontoportal.org</a> to obtain a license.
-      license_trial:
-        one: This OntoPortal appliance installation is a trial license, which will
-          expire in 1 day.
-        other: This OntoPortal appliance installation is a trial license, which will
-          expire in %{count} days.
-    notices:
-      license_contact: |
-        Pour plus d'informations, envoyez un e-mail à <a href="mailto:support@ontoportal.org">support@ontoportal.org</a> ou
-          visitez <a href="https://ontoportal.org/licensing" target="_blank">https://ontoportal.org/licensing</a>.
-      license_expired: |
-        Nous sommes désolés, mais la licence pour cette installation d'OntoPortal a expiré. Si vous êtes le propriétaire de cette installation OntoPortal,
-         veuillez visiter <a href="https://license.ontoportal.org" target="_blank">https://license.ontoportal.org</a> pour renouveler votre licence.
-      license_obtain: |
-        Si vous êtes le propriétaire de cette installation OntoPortal, vous pouvez visiter
-          <a href="https://license.ontoportal.org" target="_blank">https://license.ontoportal.org</a> pour obtenir une licence.
-      license_trial:
-        one: Cette installation de l'appliance OntoPortal est une licence d'essai,
-          qui expirera dans 1 jour.
-        other: Cette installation de l'appliance OntoPortal est une licence d'essai,
-          qui expirera dans %{count} jours.
-  mapping:
-    select_class: Select class
+      support: assistance
+  login:
+    enter_email: Saisissez votre email
+    enter_password: Saisissez votre mot de passe
+    forgot_password: Mot de passe oublié ?
+    invalid_login: Erreurs sur le formulaire
+    no_account: Vous n'avez pas de compte ?
+    password: Mot de passe
+    register: S'inscrire
+    title: Connexion
+    username_or_email: Nom d'utilisateur ou Email
   mappings:
     find_mappings: Trouver les correspondances d'une classe / concept
-    include_ancestors_up_to_level: Inclure les ancêtres jusqu'au niveau
-    include_score: Inclure le score
     intro: Parcourir les correspondances entre les classes de différentes ontologies
     loading_mappings: Chargement des correspondances en cours...
     mappings_bulk_load: Chargement en masse des correspondances
     no_mappings_available: Aucune correspondance disponible
-    select_class: Commencez à taper pour sélectionner une classe
-    select_ontologies: Commencez à taper pour sélectionner des ontologies ou laissez
-      vide pour utiliser toutes les ontologies
-    select_semantic_groups: Sélectionnez les groupes sémantiques UMLS
-    select_semantic_groups_help: Commencez à taper pour sélectionner les groupes sémantiques
-      UMLS ou laissez vide pour utiliser tous les groupes
-    select_semantic_types: Sélectionnez les types sémantiques UMLS
-    select_semantic_types_help: Commencez à taper pour sélectionner les types sémantiques
-      UMLS ou laissez vide pour utiliser tous les types
     title: Correspondances
     upload_mappings: Télécharger les correspondances
-    view_mappings_help: View mappings help
   matched_class: Classe correspondante
   matched_ontology: ontologie correspondante
-  max: Max
   max_ontologies_per_set: Nombre maximum d'ontologies par ensemble
-  median: Médiane
-  min: Min
-  missing_status: Statut manquant
-  more: Plus
-  name: Nom
-  natural_language: Langage naturel
   nbco_annotatosplus:
     annotations: Annotations
     enter_paste_text_to_annotate: 'Entrez ou collez le texte à annoter :'
@@ -394,20 +248,8 @@ fr:
       confidence_threshold: Seuil de confiance du filtre
       confidence_threshold_help: Spécifiez la position minimale dans la distribution
         des scores (entre 1 et 100)
-      entity_recognizer: entity recognition tool
-      exclude_numbers: Exclure des numéros
-      exclude_synonyms: Exclure les synonymes
       format_results_as: 'Formater les résultats en tant que :'
-      include_mappings: Inclure les mappages
-      match_longest_only: Correspond le plus long uniquement
-      match_partial_words: Reconnaître des mots partiels
-      max_hierarchy_level: Inclure les ancêtres jusqu'au niveau
-      recognizer de reconnaissance: outil de reconnaissance d'entité
       reproduce_results_using: Reproduire ces résultats en utilisant le
-      score: Inclure le score
-      score_help: Annotations de score suivant la mesure NCBO 2009 précédente (ancienne)
-        ou Annotations de score suivant la mesure C-Value (cvalue) ou Annotations
-        de score suivant la mesure C-Value avec expansion de la hiérarchie (cvalueh)
       score_threshold: Filtrer par seuil de score
       score_threshold_help: Spécifier la valeur de score minimum pour les annotations
     include_ancestors_up_to_level: Inclure les ancêtres jusqu'au niveau
@@ -439,95 +281,29 @@ fr:
     start_typing_to_select: Commencez à taper pour sélectionner %{type} ou laissez
       vide pour tout utiliser
     umls:
-      semantic: sémantique UMLS
       semantic_groups: Groupes sémantiques UMLS
       semantic_types: Types sémantiques UMLS
   negation: négation
-  no_matches: Aucune correspondance !
-  no_submissions_available: Aucune soumission disponible
   none: aucune
-  notes: Notes
-  of: de
   ontologies:
-    admin_help: Cette couleur indique les fonctionnalités réservées aux administrateurs
-    browse: Explorer
-    debug_info: Informations de débogage
-    entry_type: Type d'entrée
-    intro: Parcourir la bibliothèque d'ontologies
-    loading: Chargement des ontologies
-    please_wait: S'il vous plaît, attendez..
+    ontology_search_prompt: 'Recherchez une ontologie ou un concept (Ex : Agrovoc...)'
     self: Ontologies
-    submit_new_ontology: Soumettre une nouvelle ontologie
-    uploaded_in_the_last: Téléchargé dans les derniers
-    welcome_admin: Bienvenue admin
   ontology: Ontologie
-  ontology_content: Contenu de l'ontologie
   ontology_details:
     concept:
       definitions: Définitions
       id: Identifiant
       in_schemes: Dans les schémas
       member_of: Membre de
-      no_definitions_for_selected_language: No Definitions for selected language.
-      no_definitions_for_selected_language : Aucune définition pour la langue sélectionnée.
       no_preferred_name_for_selected_language: Pas de nom préféré pour la langue sélectionnée.
-      no_synonym_name_for_selected_language: No Synonym for selected language.
-      no_synonym_name_for_selected_language : Aucun synonyme pour la langue sélectionnée.
-      no_value_for_selected_language: Pas de valeur pour la langue sélectionnée.
       obsolete: Obsolète
       preferred_name: Nom préféré
       synonyms: Synonymes
       type: Type
-    header:
-      last_uploaded: Last uploaded
     metadata:
-      acronym: Acronym
-      add_submission: Ajouter une soumission
       additional_metadata: Métadonnées supplémentaires
-      avg_children: Nombre moyen d'enfants
-      categories: Catégories
-      classes: Classes
-      contact: Contact
-      create_new_project: Créer un nouveau projet
-      create_new_view: Créer une nouvelle vue
-      description: Description
-      details: Détails
-      download_as_csv: Télécharger en CSV
-      format: Format
-      get_my_metadata_back: Récupérer mes métadonnées
-      go_to_rest_api_json_entry: Accéder à l'entrée JSON de l'API REST
-      groups: Groupes
-      individuals: Individus
-      json_ld: JSON-LD
-      links: Liens
-      many_children_classes: Classes avec plus de 25 enfants
-      max_children: Nombre maximum d'enfants
-      max_depth: Profondeur maximale
-      metrics: Métriques
-      metrics_not_calculated_yet: Nous n'avons pas encore calculé de métriques pour
-      n_triple: N-Triple
-      no_definition_classes: Classes sans définition
-      no_projects_using: Aucun projet n'utilise
-      no_views_of: Aucune vue de %{name} disponible
-      projects_using: Projets utilisant
-      properties: Propriétés
-      pull_url: URL de pull
-      rdf_xml: RDF/XML
-      single_child_classes: Classes avec un seul enfant
-      status: Statut
-      submissions: Soumissions
-      view_individual_metrics_definitions: Voir les définitions de métriques individuelles
-      view_of_ontology: Vue de l'ontologie
-      viewing_restriction: Restriction de visualisation
-      views_of: Vues de
-      visibility: Visibilité
-      visits: Visites
   ontology_sets: Ensembles d'ontologies
-  or: Ou
   output: Sortie
-  paste_input_text: Collez un paragraphe de texte ou des mots-clés à utiliser dans
-    le calcul des recommandations d'ontologie
-  popular: Populaire
   projects:
     contacts: Contacts
     create_new_project: Créer un nouveau projet
@@ -544,30 +320,9 @@ fr:
     institutions: Institutions
     ontologies: Ontologies
     project_description: Description du projet
-    projects: Projects
     self: Projets
     title: Liste de projets
     view_projects_help: Aide à la visualisation des projets
-  recommend:
-    intro: Get recommendations for the most relevant ontologies from an excerpt of
-      a biomedical text or a list of keywords
-    no_recommendations: No recommendations found
-    no_sets_recommended: There are no recommended ontology sets for the provided input.
-      Please try the 'Ontologies' output.
-    ontology_recommendation_input: Please paste a paragraph of text or some keywords
-      to compute ontology recommendations.
-    ontology_recommender: Ontology Recommender
-    recommendation_error: Problem retrieving recommendations, please try again
-    text_length_limit: Please use less than 500 words. If you need to annotate longer
-      pieces of text, you can use the recommendation web service.
-    title: recommender
-    valid_integer_max_ontologies_per_set: Max ontologies per set must be a valid integer
-      value
-    valid_max_ontologies_per_set_range: Max ontologies per set must be a number between
-      2 and 4
-    valid_numeric_weights: All weights must be valid numeric values
-    weight_sum_greater_than_zero: The sum of weights must be greater than zero
-    weights_greater_than_zero: All weights must be greater than or equal to zero
   recommender:
     intro: Obtenez des recommandations pour les ontologies les plus pertinentes à
       partir d'un extrait d'un texte biomédical ou d'une liste de mots-clés
@@ -577,10 +332,10 @@ fr:
     ontology_recommendation_input: Veuillez coller un paragraphe de texte ou quelques
       mots-clés pour calculer les recommandations d'ontologie.
     ontology_recommender: Recommandeur d'ontologie
+    paste_text_recommendations: Collez un paragraphe de texte ou quelques mots-clés
+      à utiliser pour calculer les recommandations d'ontologie
     recommendation_error: Problème lors de la récupération des recommandations, veuillez
       réessayer
-    sample_keywords: Sample keywords
-    sample_text: Sample text
     text_length_limit: Veuillez utiliser moins de 500 mots. Si vous devez annoter
       de plus grands morceaux de texte, vous pouvez utiliser le service web de recommandation.
     title: recommandeur
@@ -591,20 +346,29 @@ fr:
     valid_numeric_weights: Tous les poids doivent être des valeurs numériques valides
     weight_sum_greater_than_zero: La somme des poids doit être supérieure à zéro
     weights_greater_than_zero: Tous les poids doivent être supérieurs ou égaux à zéro
-  release_date: Date de publication
+  register:
+    account_errors: 'Erreurs lors de la création de votre compte :'
+    confirm_password: Confirmer le mot de passe
+    create_account: Créer un nouveau compte
+    email: Email
+    first_name: Prénom
+    last_name: Nom
+    mailing_list: S'inscrire à la liste de diffusion d'AgroPortal
+    optional: "(Facultatif)"
+    password: Mot de passe
+    title: S'inscrire
+    username: Nom d'utilisateur
   reproduce_results: 'Reproduisez ces résultats en utilisant le '
   score: Score
   search:
     categories: Catégories
     class_search: Recherche de classe
     classes_with_definitions: Classes avec Définitions
-    exact_matches: " Correspondances Exactes"
     hide_advanced_options: Masquer les options avancées
     include_in_search: Inclure dans la recherche
     index:
       categories_placeholder: Commencez à taper pour sélectionner des catégories ou
         laissez vide pour tout utiliser
-      intro: Rechercher une classe dans plusieurs ontologies
       obsolete_definition: 'Une classe que les auteurs de l''ontologie ont signalée
         comme étant obsolète et qu''ils recommandent de ne pas utiliser. Ces cours
         sont souvent laissés dans des ontologies (plutôt que de les supprimer entièrement)
@@ -623,35 +387,16 @@ fr:
     show_advanced_options: Afficher les options avancées
     title: Rechercher
     view_search_documentation: Voir la documentation de recherche
-  search_rank: Classement de recherche
-  see_details: Voir les détails
   select_from_list: Sélectionner dans la liste
   select_ontologies: Commencez à taper pour sélectionner des ontologies ou laissez
     vide pour toutes les utiliser
   select_ontologies_list: Sélectionnez les ontologies
-  selected_ontologies: Ontologies sélectionnées
-  shared:
-    insert_sample_text: Insert sample text
-    show_advanced_options: Show advanced options
   show_advanced_options: Afficher les options avancées
-  showing: Affichage
-  size: size
-  slices: Tranches
-  sort: Trier
   specialization: Spécialisation
-  statistics: Statistiques
-  status: Statut
-  submit_feedback: Submit feedback
-  summary_only: Résumé seulement
   temporality: Temporalité
   text: Texte
   type: Type
-  types: Types
   umls_sem_type: Type Sem UMLS
-  upload_date: Date de téléchargement
-  uploaded: Téléchargé
-  view: Vue
   view_fair_scores_definitions: View fair scores definitions
-  view_mappings_help: View mappings help
-  view_of: Vue de
+  visits: Visites
   weights_configuration: Configuration des poids

@@ -1,57 +1,30 @@
 ---
 en:
-  Notes: Notes
-  _account_setting: Account setting
-  _help: Help
-  _publications: Publications
-  _release_notes: Release notes
-  about: |
-    <div class='about p-2'> <h2>Summary</h2> <p> Many vocabularies and ontologies are produced to represent and annotate agronomic data. It is therefore necessary to have a common platform to identify them, host them and use them in agro-informatics applications. The AgroPortal project aims to provide a repository of reference ontologies for agronomy, by reusing the NCBO BioPortal technology. The scientific results and the experience of the biomedical field are thus exploited and transposed in the field of agronomy, including plants, food, the environment and possibly animal sciences. We propose an ontology portal that offers ontology hosting, search, versioning, visualization, commenting, recommendation, allows semantic annotation, as well as storing and exploiting alignments of ontologies. All this in an infrastructure fully compliant with the Semantic Web. The AgroPortal project pays particular attention to meeting the requirements of the agronomic community in terms of ontology formats (e.g. SKOS, trait dictionaries) or supported functionalities. The AgroPortal project is based on five agronomic use cases that participate in the design and orientation of the platform. AgroPortal already offers a robust and stable reference repository, of great value for the field of agronomy. </p> <h2>Use cases</h2> <ul class="bulletlist m-3"> <li class="bulletlist"><a href="http://www.agrold.org">IBC Rice Genomics & AgroLD Project</a> (P. Larmande): Data integration and knowledge management related to rice</ li> <li class="bulletlist"><a href="https://www.rd-alliance.org/groups/wheat-data-interoperability-wg.html">RDA Wheat Data Interoperability Working Group</a> ( E. Dzalé-Yeumo): Common framework for the publication of wheat data</li> <li class="bulletlist"><a href="http://lovinra.inra.fr">LovInra: Open Vocabularies Linked Inra</a> (S. Aubin): Vocabularies produced by INRA scientists< /li> <li class="bulletlist"><a href="http://www.cropontology.org">Crop Ontology Project</a> (E. Arnaud): Ontologies to describe crop germplasm and traits</li > <li class="bulletlist"><a href="http://vest.agrisemantics.org">GODAN global map of agrifood data standards</a> (V. Pesce): VEST/AgroPortal MAP of standards</ li> </ul> <br> <h2>New Features</h2> <p> See the <a href="https://github.com/agroportal/documentation/wiki/Release-notes">release-notes</a> </p> <br> <h2>Partners</h2> <p>The National Center for Biomedical Ontology (NCBO), the Research Institute for Development (IRD), Research Data Alliance (RDA),
-     Bioversity International, Food & Agriculture Organization (FAO), Global Open Data for Agriculture & Nutrition (Godan Action), National Institute for Agronomic Research (INRA)</p>
-    <h2>thanks</h2> <p>The AgroPortail is partly produced as part of the Semantic Indexing of French Biomedical Resources project (<a href="www.lirmm.fr/sifr">SIFR</a>)
-     who have received funding from the EU H2020 research and innovation program under Marie Sklodowska-Curie (grant 701771)
-     and the National Research Agency (ANR-12-JS02-01001 grant), Labex NUMEV (ANR-10-LABX-20 grant),
-     the Institute of Computational Biology of Montpellier (grant ANR-11-BINF-0002) as well as by the University of Montpellier and the CNRS.
-     We also thank the National Center of Biomedical Ontologies for their help and the time spent with us in the deployment of the AgroPortail.</p>
-    <h2>Team</h2> To contact us: firstname.lastname@lirmm.fr <ul class="bulletlist m-3"> <li class="bulletlist"><b>Clément Jonquet</b>, researcher at LIRMM (Univ. of Montpellier, France), principal investigator of the AgroPortal project</li> <li class="bulletlist"><b>Anne Toulet</b>, researcher at LIRMM (Univ. of Montpellier, France)</li> <li class="bulletlist"><b>Vincent Emonet</b>, engineer at LIRMM (Univ. of Montpellier, France)</li> </ul> </div>
-  accept: Accept
-  acceptance: Acceptation
   activaterecord:
     errors:
       models:
         license:
           attributes:
             encrypted_key:
-              appliance_id_mismatch: is an appliance id mismatch
               invalid_license_key: is an invalid license key
-              no_appliance_id_for_comparison: Could not be validated. Unable to retrieve
-                virtual appliance ID.
-  activerecord:
-    errors:
-      models:
-        license:
-          attributes:
-            encrypted_key:
-              appliance_id_mismatch: est une non-concordance d'ID d'appliance
-              invalid_license_key: est une clé de licence invalide
-              no_appliance_id_for_comparison: n'a pas pu être validé. Impossible de
-                récupérer l'ID de l'appliance virtuelle.
+              no_appliance_id_for_comparison: Could not be validated. Unable to retrieve virtual appliance ID.
+              appliance_id_mismatch: is an appliance id mismatch
+
+  date:
+    formats:
+      year_month_day_concise: "%Y-%m-%d" # 2017-03-01
+      month_day_year: "%b %-d, %Y" # Mar 1, 2017
+      monthfull_day_year: "%B %-d, %Y" # March 1, 2017
+
   additional_parameters: 'Additional Parameters Explained at '
   admin:
     licenses:
       create:
         success: License renewed successfully!
-    licenses_helper:
-      license_notification:
-        license_contact: License contact
-        license_expired: License expired
-        license_obtain: License obtain
-        license_trial: License trial
-  admins: Administrators
   all: All
   annotator:
+    annotate_text_prompt: Enter or paste text to be annotated
     annotations_result: Annotations
-    enter_or_paste_text: Enter or paste text to annotate
     fast_context: FastContext
     filters:
       confidence_threshold: Filter Confidence Threshold
@@ -63,9 +36,6 @@ en:
       match_longest_only: Match longest only
       match_partial_words: Recognize partial words
       max_hierarchy_level: Include ancestors up to level
-      recognizer: Recognizer
-      recognizer de reconnaissance: outil de reconnaissance d'entité
-      recognizer recognizer: entity recognition tool
       score: Include score
       score_help: Score annotations following previous NCBO 2009 measure (old) or
         Score annotations following C-Value measure (cvalue) or Score annotations
@@ -74,8 +44,6 @@ en:
       score_threshold_help: Specify minimum score value for annotations
     get_annotator: Get annotations
     index:
-      annotatorplus_html: <em>Check out the beta version of <a href="%{annotatorplus_href}">AnnotatorPlus</a>;
-        a new version of the Annotator with added support for negation, and more!</em>
       fast_context:
         tooltip: 'Enable FastContext to detect: if a concept was denied (affirmed,
           denied), who experienced the found concept (patient, other), when the annotated
@@ -95,14 +63,8 @@ en:
     umls:
       semantic_groups: UMLS Semantic Groups
       semantic_types: UMLS Semantic Types
-  artifacts: Artifacts
-  average: Average
-  categories: Categories
-  category: Category
   certainty: Certainty
   class: Class
-  classes: classes
-  classes_count: Number of classes
   clear_selection: Clear Selection
   concepts:
     request_term:
@@ -125,71 +87,42 @@ en:
           </blockquote>
   context: Context
   coverage: Coverage
-  date:
-    formats:
-      month_day_year: "%b %-d, %Y"
-      monthfull_day_year: "%B %-d, %Y"
-      year_month_day_concise: "%Y-%m-%d"
-  exact_matches: Exact matches
-  experience: Experience
-  experiencer: Experiencer
-  fair_score: FAIR score
   filter: Filter
-  formality_levels: Formality levels
-  format: Format
   format_results: 'Format results as '
-  formats: formats
   get_json_version: Get the json version
   get_recommendations: Get recommendations
-  group: Group
-  groups: Groups
   help: Help
   home:
-    advanced_search: Advanced Search
-    browse_by_group: Browse by Group
-    browse_ontologies: Browse ontologies
-    classes: Classes
-    clear_selection: Clear Selection
-    comprehensive_repository: the most comprehensive repository of biomedical ontologies
-      in the world
-    fair_scores: FAIR Scores
-    find_ontology: Find an ontology
-    help:
-      announce_list_html: 'To receive notices of new releases or site outages, please
-        subscribe to <a href="https://mailman.stanford.edu/mailman/listinfo/bioontology-support"
-        target="_blank">bioontology support list</a>.
-
-        '
-      browse: |
-        Users can browse and explore individual ontologies by navigating either in a tree structure or in an animated graphical view. Users can also view mappings and
-          ontology metadata and ontology download. Additionally, logged in users can submit a new ontology to the library.
-      getting_started: "%{site} allows users to browse, upload, download, search,
-        comment, and create mappings for ontologies.\n"
-      rest_examples_html: View documentation and examples for the <a href="http://data.bioontology.org/documentation"
-        target="_blank">%{site} REST API</a>.
-      welcome: Welcome to the %{site} of the National Center for Biomedical Ontology.
-        %{site} is a web application for accessing and sharing biomedical ontologies.
+    agroportal_figures: "%{site} in figures:"
+    benefit1: Discover new insights and connections by exploring other ontologies
+      in the repository.
+    benefit2: Contribute to the growth and development of your domain by adding new
+      concepts and categories.
+    benefit3: Use version control to manage the changes to your ontology over time
+      and collaborate with other users.
+    benefit4: Get feedback and suggestions from other users who can review and comment
+      on your ontology.
+    benefit5: Get the FAIR score and metrics for your ontology.
+    fair_details: See details
+    fairness: FAIR Scores
+    get_annotations: Get annotations
+    get_recommendations: Get recommendations
     index:
-      find_ontology_placeholder: Start typing the ontology name, then choose from
-      query_placeholder: Enter a class, eg Melanoma
       tagline: The home of vocabularies and ontologies in agronomy and related fields.
       title: Welcome to the %{organization}
       welcome: Welcome to %{site},
-    individuals: People
-    latest_notes: Latest Notes
-    no_recent_notes: No recent notes were submitted
-    ontologies: Ontologies
-    ontology_visits: Ontology visits
-    projects: Projects
-    search_class: Search Class
+    ontology_upload: Wanna upload an ontology?
+    ontology_upload_benefits: 'By uploading your ontology to %{site}, you can:'
+    ontology_upload_button: Upload ontology
+    ontology_upload_desc: Uploading an ontology is a way of sharing your domain knowledge
+      with others.
+    paste_text_prompt: Paste a paragraph of text or some keywords ...
+    recommender_annotator: Recommender and annotator
     supported_by: Supported by
-    users: Users
+    twitter_news: Twitter news
     with_collaboration: With the collaboration of
   input: Input
-  insert_sample_input: Insert sample input
   insert_sample_text: Insert sample text
-  instances_concepts_count: Number of instances/concepts
-  is_of_type: Is of type
   keywords: Keywords
   keywords_separated_by_commas: Keywords separated by commas
   knowledge_detail: Knowledge Detail
@@ -217,14 +150,12 @@ en:
     ontologies_formats: Format used
     ontologies_languages: Natural languages of ontologies
     ontologies_licenses: Licenses used by ontologies
-    ontologies_properties: Ontologies properties
     ontologies_with_notes_reviews_projects: Ontologies with notes, reviews, and projects
     ontology_fairness_evaluator: Ontology FAIRness Evaluator (O’FAIRe)
     ontology_formality_levels: Formality levels of ontologies
     ontology_properties_pie_charts: Pie charts for the properties used in ontologies
     ontology_relations_network: Ontology Relations Network
     ontology_tools: Most used tools to build ontologies
-    ontology_types: Ontology types
     owl_ontology_author_uris: URIs for author properties used for OWL ontologies
     owl_ontology_definition_uris: URIs for definition properties used for OWL ontologies
     owl_ontology_preflabel_uris: URIs for prefLabel properties used for OWL ontologies
@@ -236,120 +167,42 @@ en:
     size: Size
     title: "%{site} Landscape"
   layout:
-    footer:
-      ":": ":"
-      about: About
-      about_us: About Us
-      acknowledgments: Acknowledgments
-      agreements: Agreements
-      api: API
-      cite_us: Cite Us
-      contact_us: Contact Us
-      copyright_html: Copyright &copy; 2005-2022, Leland Stanford Junior University
-        Board of Trustees. All rights reserved.
-      documentation: Documentation
-      grant_html: '<strong>%{site}</strong> is currently being developed as part of
-        the <a href="http://www.d2kab.org">ANR D2KAB project</a> (<a href="http:/
-        / www.agence-nationale-recherche.fr/Projet-ANR-18-CE23-0017">ANR-18-CE23-0017</a>).
-        It receives or has also received support from the <a href="http://www.lirmm.fr/sifr">ANR
-        SIFR project</a> (<a href="https://anr.fr/Projet- ANR- 12-JS02-0010">ANR-12-JS02-0010</a>),
-        European Union <a href="http://www.lirmm.fr/sifr">Project H2020-MSCA SIFRm</a
-        > (<a href="https://cordis.europa.eu/project/id/701771">N° 701771</a>), the
-        <a href="https://www.lirmm.fr/numev /"> Labex NUMEV</a> (ANR-10-LABX-20),
-        the <ahref="http://www.ibc-montpellier.fr/">Montpellier IBC project</a> (ANR-11
-        -BINF0002) , the <a href="https://www.agropolis-fondation.fr/The-LabEx-AGRO?lang=fr">Agro
-        Labex</a> (ANR-10-LABX-0001) as well than the University of Montpellier and
-        the CNRS.
-
-        '
-      ontoportal: OntoPortal
-      privacy_policy: Privacy Policy
-      products: Products
-      projects: Projects
-      release_notes: Release Notes
-      sparql: SPARQL
-      support: Support
-      team: Team
-      terms: Terms
-      wiki: Wiki
     header:
       account_setting: Account Settings
       annotator: Annotator
       browse: Browse
+      documentation: Documentation
       help: Help
       landscape: Landscape
       login: Login
+      logout: logout
       mappings: Mappings
-      ncbo_annotator_plus: NCBO Annotator+
-      projects: Projects
       publications: Publications
-      recommend: Recommend
-      recommender: Recommender
       release_notes: Release Notes
-      search: Search
+      search_prompt: Search in %{portal_name} ...
       submit_feedback: Send Feedback
-    notes:
-      license_contact: |
-        For more information, email <a href="mailto:support@ontoportal.org">support@ontoportal.org</a> or
-          visit <a href="https://ontoportal.org/licensing" target="_blank">https://ontoportal.org/licensing</a>.
-      license_expired: |
-        We're sorry, but the license for this OntoPortal installation has expired. If you are the owner of this OntoPortal installation,
-         please visit <a href="https://license.ontoportal.org" target="_blank">https://license.ontoportal.org</a> to renew your license.
-      license_obtain: |
-        If you are the owner of this OntoPortal installation, you can visit
-          <a href="https://license.ontoportal.org" target="_blank">https://license.ontoportal.org</a> to obtain a license.
-      license_trial:
-        one: This OntoPortal appliance installation is a trial license, which will
-          expire in 1 day.
-        other: This OntoPortal appliance installation is a trial license, which will
-          expire in %{count} days.
-    notices:
-      license_contact: |
-        Pour plus d'informations, envoyez un e-mail à <a href="mailto:support@ontoportal.org">support@ontoportal.org</a> ou
-          visitez <a href="https://ontoportal.org/licensing" target="_blank">https://ontoportal.org/licensing</a>.
-      license_expired: |
-        Nous sommes désolés, mais la licence pour cette installation d'OntoPortal a expiré. Si vous êtes le propriétaire de cette installation OntoPortal,
-         veuillez visiter <a href="https://license.ontoportal.org" target="_blank">https://license.ontoportal.org</a> pour renouveler votre licence.
-      license_obtain: |
-        Si vous êtes le propriétaire de cette installation OntoPortal, vous pouvez visiter
-          <a href="https://license.ontoportal.org" target="_blank">https://license.ontoportal.org</a> pour obtenir une licence.
-      license_trial:
-        one: Cette installation de l'appliance OntoPortal est une licence d'essai,
-          qui expirera dans 1 jour.
-        other: Cette installation de l'appliance OntoPortal est une licence d'essai,
-          qui expirera dans %{count} jours.
-  mapping:
-    select_class: Select class
+      support: support
+  login:
+    enter_email: Enter your email
+    enter_password: Enter your password
+    forgot_password: Forgot password?
+    invalid_login: Errors On Form
+    no_account: Don't have an account?
+    password: Password
+    register: Register
+    title: Login
+    username_or_email: Username or Email
   mappings:
     find_mappings: Find mappings of a class/concept
-    include_ancestors_up_to_level: Include ancestors up to level
-    include_score: Include score
     intro: Browse mappings between classes of different ontologies
     loading_mappings: Loading mappings...
     mappings_bulk_load: Mapping Bulk Load
     no_mappings_available: No mappings available
-    select_class: Start typing to select a class
-    select_ontologies: Start typing to select ontologies or leave blank to use all
-      ontologies
-    select_semantic_groups: Select UMLS semantic groups
-    select_semantic_groups_help: Start typing to select UMLS semantic groups or leave
-      blank to use all groups
-    select_semantic_types: Select UMLS semantic types
-    select_semantic_types_help: Start typing to select UMLS semantic types or leave
-      blank to use all types
     title: Correspondences
     upload_mappings: Upload mappings
-    view_mappings_help: View mappings help
   matched_class: Matched class
   matched_ontology: matched ontology
-  max: Max
   max_ontologies_per_set: Maximum number of ontologies per set
-  median: Median
-  min: Min
-  missing_status: Missing Status
-  more: More
-  name: Name
-  natural_language: Natural language
   nbco_annotatosplus:
     annotations: Annotations
     enter_paste_text_to_annotate: 'Enter or paste the text to annotate:'
@@ -382,20 +235,8 @@ en:
       confidence_threshold: Filter confidence threshold
       confidence_threshold_help: Specify the minimum position in the scores distribution
         (between 1 and 100)
-      entity_recognizer: entity recognition tool
-      exclude_numbers: Exclude numbers
-      exclude_synonyms: Exclude synonyms
       format_results_as: 'Format results as:'
-      include_mappings: Include mappings
-      match_longest_only: Match longest only
-      match_partial_words: Recognize partial words
-      max_hierarchy_level: Include ancestors up to level
-      recognizer de reconnaissance: outil de reconnaissance d'entité
       reproduce_results_using: Reproduce these results using the
-      score: Include score
-      score_help: Score annotations according to the previous NCBO 2009 measure (old)
-        or score annotations using the C-Value measure (cvalue) or score annotations
-        using the C-Value measure with hierarchy expansion (cvalueh)
       score_threshold: Filter by score threshold
       score_threshold_help: Specify the minimum score value for annotations
     include_ancestors_up_to_level: Include ancestors up to level
@@ -426,95 +267,29 @@ en:
     show_advanced_options: Show advanced options
     start_typing_to_select: Start typing to select %{type} or leave blank to use all
     umls:
-      semantic: UMLS Semantic
       semantic_groups: UMLS Semantic Groups
       semantic_types: UMLS Semantic Types
   negation: negation
-  no_matches: No matches!
-  no_submissions_available: No submissions available
   none: none
-  notes: Notes
-  of: of
   ontologies:
-    admin_help: This color indicates features reserved for administrators
-    browse: Explore
-    debug_info: Debug Info
-    entry_type: Entry Type
-    intro: Browse the Ontology Library
-    loading: Loading ontologies
-    please_wait: Please wait..
+    ontology_search_prompt: 'Search for an ontology or concept (Ex: Agrovoc ...)'
     self: Ontologies
-    submit_new_ontology: Submit a new ontology
-    uploaded_in_the_last: Uploaded in the last
-    welcome_admin: Welcome admin
   ontology: Ontology
-  ontology_content: Ontology content
   ontology_details:
     concept:
       definitions: Definitions
       id: ID
       in_schemes: In Schemes
       member_of: Member of
-      no_definitions_for_selected_language: No Definitions for selected language.
-      no_definitions_for_selected_language : Aucune définition pour la langue sélectionnée.
       no_preferred_name_for_selected_language: No preferred name for selected language.
-      no_synonym_name_for_selected_language: No Synonym for selected language.
-      no_synonym_name_for_selected_language : Aucun synonyme pour la langue sélectionnée.
-      no_value_for_selected_language: No value for selected language.
       obsolete: Obsolete
       preferred_name: Preferred name
       synonyms: Synonyms
       type: Type
-    header:
-      last_uploaded: Last uploaded
     metadata:
-      acronym: Acronym
-      add_submission: Add Submission
       additional_metadata: Additional Metadata
-      avg_children: Average number of children
-      categories: Categories
-      classes: Classes
-      contact: Contact
-      create_new_project: Create a new project
-      create_new_view: Create a new view
-      description: Description
-      details: Details
-      download_as_csv: Download as CSV
-      format: Format
-      get_my_metadata_back: Get my metadata back
-      go_to_rest_api_json_entry: Go to REST API JSON Entry
-      groups: Groups
-      individuals: Individuals
-      json_ld: JSON-LD
-      links: Links
-      many_children_classes: Classes with more than 25 children
-      max_children: Maximum number of children
-      max_depth: Maximum depth
-      metrics: Metrics
-      metrics_not_calculated_yet: We have not yet calculated metrics for
-      n_triple: N-Triple
-      no_definition_classes: Classes without definition
-      no_projects_using: No projects are using
-      no_views_of: No views of %{name} available
-      projects_using: Projects Using
-      properties: Properties
-      pull_url: Pull URL
-      rdf_xml: RDF/XML
-      single_child_classes: Classes with a single child
-      status: Status
-      submissions: Submissions
-      view_individual_metrics_definitions: View individual metrics definitions
-      view_of_ontology: View of ontology
-      viewing_restriction: Viewing Restriction
-      views_of: Views of
-      visibility: Visibility
-      visits: Visits
   ontology_sets: Ontology sets
-  or: Or
   output: Output
-  paste_input_text: Paste a paragraph of text or keywords to use in calculating ontology
-    recommendations
-  popular: Popular
   projects:
     contacts: Contacts
     create_new_project: Create New Project
@@ -531,11 +306,10 @@ en:
     institutions: Institutions
     ontologies: Ontologies
     project_description: Project Description
-    projects: Projects
     self: Projects
     title: Projects List
     view_projects_help: View Projects Help
-  recommend:
+  recommender:
     intro: Get recommendations for the most relevant ontologies from an excerpt of
       a biomedical text or a list of keywords
     no_recommendations: No recommendations found
@@ -544,6 +318,8 @@ en:
     ontology_recommendation_input: Please paste a paragraph of text or some keywords
       to compute ontology recommendations.
     ontology_recommender: Ontology Recommender
+    paste_text_recommendations: Paste a paragraph of text or some keywords to use
+      in calculating ontology recommendations
     recommendation_error: Problem retrieving recommendations, please try again
     text_length_limit: Please use less than 500 words. If you need to annotate longer
       pieces of text, you can use the recommendation web service.
@@ -555,43 +331,29 @@ en:
     valid_numeric_weights: All weights must be valid numeric values
     weight_sum_greater_than_zero: The sum of weights must be greater than zero
     weights_greater_than_zero: All weights must be greater than or equal to zero
-  recommender:
-    intro: Obtenez des recommandations pour les ontologies les plus pertinentes à
-      partir d'un extrait d'un texte biomédical ou d'une liste de mots-clés
-    no_recommendations: Aucune recommandation trouvée
-    no_sets_recommended: Il n'y a pas d'ensembles d'ontologies recommandés pour l'entrée
-      fournie. Veuillez essayer la sortie 'Ontologies'.
-    ontology_recommendation_input: Veuillez coller un paragraphe de texte ou quelques
-      mots-clés pour calculer les recommandations d'ontologie.
-    ontology_recommender: Recommandeur d'ontologie
-    recommendation_error: Problème lors de la récupération des recommandations, veuillez
-      réessayer
-    sample_keywords: Sample keywords
-    sample_text: Sample text
-    text_length_limit: Veuillez utiliser moins de 500 mots. Si vous devez annoter
-      de plus grands morceaux de texte, vous pouvez utiliser le service web de recommandation.
-    title: recommandeur
-    valid_integer_max_ontologies_per_set: Le nombre maximum d'ontologies par ensemble
-      doit être une valeur entière valide
-    valid_max_ontologies_per_set_range: Le nombre maximum d'ontologies par ensemble
-      doit être un nombre entre 2 et 4
-    valid_numeric_weights: Tous les poids doivent être des valeurs numériques valides
-    weight_sum_greater_than_zero: La somme des poids doit être supérieure à zéro
-    weights_greater_than_zero: Tous les poids doivent être supérieurs ou égaux à zéro
-  release_date: Release date
+  register:
+    account_errors: 'Errors creating your account:'
+    confirm_password: Confirm password
+    create_account: Create new account
+    email: Email
+    first_name: First name
+    last_name: Last name
+    mailing_list: Register for the AgroPortal's mailing list
+    optional: "(Optional)"
+    password: Password
+    title: Register
+    username: Username
   reproduce_results: 'Reproduce these results using the '
   score: Score
   search:
     categories: Categories
     class_search: Class Search
     classes_with_definitions: Classes with Definitions
-    exact_matches: Exact Matches
     hide_advanced_options: Hide Advanced Options
     include_in_search: Include in Search
     index:
       categories_placeholder: Start typing to select categories or leave blank to
         use all
-      intro: Search for a class across multiple ontologies
       obsolete_definition: 'A class that the ontology authors have flagged as obsolete
         and recommend not to use. These classes are often left in ontologies (rather
         than being deleted entirely) so that existing systems that depend on them
@@ -610,35 +372,16 @@ en:
     show_advanced_options: Show Advanced Options
     title: Search
     view_search_documentation: View Search Documentation
-  search_rank: Search Rank
-  see_details: See details
   select_from_list: Select from list
   select_ontologies: Start typing to select ontologies or leave blank to use them
     all
   select_ontologies_list: Select ontologies
-  selected_ontologies: Selected ontologies
-  shared:
-    insert_sample_text: Insert sample text
-    show_advanced_options: Show advanced options
   show_advanced_options: Show advanced options
-  showing: Display
-  size: size
-  slices: Slices
-  sort: Sort
   specialization: Specialization
-  statistics: Statistics
-  status: Status
-  submit_feedback: Submit feedback
-  summary_only: Summary only
   temporality: Temporality
   text: Text
   type: Type
-  types: Types
   umls_sem_type: UMLS Sem Type
-  upload_date: Upload date
-  uploaded: Uploaded
-  view: View
   view_fair_scores_definitions: View fair scores definitions
-  view_mappings_help: View mappings help
-  view_of: View of
+  visits: Visits
   weights_configuration: Weights Configuration
