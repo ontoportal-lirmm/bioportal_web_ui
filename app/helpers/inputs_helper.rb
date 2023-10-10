@@ -1,8 +1,8 @@
 module InputsHelper
 
-  def text_input(name:, value:, label: nil, disabled: false, help: nil)
+  def text_input(name:, value:, label: nil, disabled: false, help: nil, error_message: nil)
     render Input::TextInputComponent.new(label: input_label(label, name), name: name, value: value,
-                                         error_message: input_error_message(name),
+                                         error_message: error_message || input_error_message(name),
                                          disabled: disabled,
                                          helper_text: help)
   end
