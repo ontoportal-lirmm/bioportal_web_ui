@@ -254,7 +254,7 @@ module SubmissionInputsHelper
 
     unless multiple
       select_values << ['', '']
-      metadata_values = '' if metadata_values.nil?
+      metadata_values = '' if metadata_values.nil? && !attr.required?
     end
 
     select_input(name: name, label: label, values: select_values,
