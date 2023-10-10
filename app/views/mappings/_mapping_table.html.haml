@@ -20,7 +20,8 @@
         %th Relations
         %th Source
         %th Type
-        %th{:class => 'delete_mappings_column'} Actions
+        - if current_user_admin?
+          %th{:class => 'delete_mappings_column'} Actions
     %tbody#concept_mappings_table_content
       - @mappings.each do |map|
         = render partial: 'mappings/show_line' , locals: {map: map, concept: @concept}
