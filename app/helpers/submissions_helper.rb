@@ -230,7 +230,7 @@ module SubmissionsHelper
       end
     end
 
-    reject_metadata = %w[abstract description uploadFilePath contact pullLocation]
+    reject_metadata = %w[abstract description uploadFilePath contact pullLocation hasOntologyLanguage]
     label = inline_save? ? '' : nil
 
     if selected_attribute?('abstract')
