@@ -1,35 +1,15 @@
 .upload-ontology-input-field-container
-  = text_input(name: 'ontology[name]', value: @ontology.name)
+  = ontology_name_input
 .upload-ontology-input-field-container
-  = text_input(name: 'ontology[acronym]', value: @ontology.acronym, disabled: @is_update_ontology)
-  = hidden_field_tag 'ontology[acronym]', @ontology.acronym if @is_update_ontology
+  = ontology_acronym_input
 
 .upload-ontology-input-field-container
-  = render Layout::RevealComponent.new(init_show: @ontology.viewingRestriction&.eql?('private'), show_condition: 'private') do |c|
-    - c.button do
-      = select_input(label: "Visibility", name: "ontology[viewingRestriction]", values: %w[public private], selected: @ontology.viewingRestriction )
-    .upload-ontology-input-field-container
-      = select_input(label: "Add or remove accounts that are allowed to view classes in this ontology using the account name", name: "ontology[acl]", values: @user_select_list, selected: @ontology.acl, multiple: true)
-
+  = ontology_visibility_input
 .upload-ontology-input-field-container
-  = select_input(label: "Administrator", name: "ontology[administeredBy]", values: @user_select_list, selected: @ontology.administeredBy || session[:user].id, multiple: true)
+  = ontology_administered_by_input
 .upload-ontology-input-field-container
-  = render Input::InputFieldComponent.new(name: '', label:'Categories') do
-    %div.upload-ontology-chips-container
-      = hidden_field_tag 'ontology[hasDomain][]'
-      - @categories.each do |category|
-        = check_input(name: "ontology[hasDomain][]", id: category[:acronym] , label: category[:acronym], value: category[:id], checked: @ontology.hasDomain&.any?{|x| x.eql?(category[:id])})
+  = ontology_categories_input
 .upload-ontology-field-container
-  = render Input::InputFieldComponent.new(name: '', label:'Groups') do
-    %div.upload-ontology-chips-container
-      = hidden_field_tag "ontology[group][]"
-      - @groups.each do |group|
-        = check_input(name: "ontology[group][]", id: group[:acronym] , label: group[:acronym], value: group[:id], checked: @ontology.group&.any?{|x| x.eql?(group[:id])})
-
+  = ontology_groups_input
 .upload-ontology-input-field-container.mt-2
-  = render Layout::RevealComponent.new(init_show: @ontology.view?) do |c|
-    - c.button do
-      %span.d-flex
-        = switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is a view of another ontology?', checked: @ontology.view?)
-    %div
-      = render partial: "shared/ontology_picker_single", locals: {placeholder: "", field_name: "viewOf", selected: @ontology.viewOf}
+  = ontology_view_of_input

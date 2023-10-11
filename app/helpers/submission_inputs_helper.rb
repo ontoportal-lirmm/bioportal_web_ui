@@ -85,6 +85,81 @@ module SubmissionInputsHelper
 
   end
 
+
+  def ontology_name_input(ontology = @ontology)
+    text_input(name: 'ontology[name]', value: ontology.name)
+  end
+
+  def ontology_acronym_input(ontology = @ontology, update: @is_update_ontology)
+    out = text_input(name: 'ontology[acronym]', value: ontology.acronym, disabled: update)
+    out += hidden_field_tag('ontology[acronym]', ontology.acronym) if update
+    out
+  end
+
+  def ontology_administered_by_input(ontology = @ontology, users_list = @user_select_list)
+    unless users_list
+      users_list = LinkedData::Client::Models::User.all(include: "username").map { |u| [u.username, u.id] }
+      users_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
+    end
+    select_input(label: "Administrator", name: "ontology[administeredBy]", values: users_list, selected: ontology.administeredBy || session[:user].id, multiple: true)
+  end
+
+  def ontology_categories_input(ontology = @ontology, categories = @categories)
+    categories ||= LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
+
+    render Input::InputFieldComponent.new(name: '', label: 'Categories') do
+      content_tag(:div, class: 'upload-ontology-chips-container') do
+        hidden_field_tag('ontology[hasDomain][]') +
+          categories.map do |category|
+            check_input(name: "ontology[hasDomain][]", id: category[:acronym], label: category[:acronym], value: category[:id], checked: ontology.hasDomain&.any? { |x| x.eql?(category[:id]) })
+          end.join.html_safe
+      end
+    end
+  end
+
+  def ontology_groups_input(ontology = @ontology, groups = @groups)
+    groups ||=  LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
+
+    render Input::InputFieldComponent.new(name: '', label: 'Groups') do
+      content_tag(:div, class: 'upload-ontology-chips-container') do
+        hidden_field_tag('ontology[group][]') +
+          groups.map do |group|
+            check_input(name: "ontology[group][]", id: group[:acronym], label: group[:acronym], value: group[:id], checked: ontology.group&.any? { |x| x.eql?(group[:id]) })
+          end.join.html_safe
+      end
+    end
+  end
+
+  def ontology_visibility_input(ontology = @ontology)
+    unless @user_select_list
+      @user_select_list = LinkedData::Client::Models::User.all(include: "username").map { |u| [u.username, u.id] }
+      @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
+    end
+
+    render(Layout::RevealComponent.new(init_show: ontology.viewingRestriction&.eql?('private'), show_condition: 'private')) do |c|
+      c.button do
+        select_input(label: "Visibility", name: "ontology[viewingRestriction]", values: %w[public private], selected: ontology.viewingRestriction )
+      end
+      content_tag(:div, class: 'upload-ontology-input-field-container') do
+        select_input(label: "Add or remove accounts that are allowed to view classes in this ontology using the account name", name: "ontology[acl]", values: @user_select_list, selected: ontology.acl, multiple: true)
+      end
+    end
+  end
+
+  def ontology_view_of_input(ontology = @ontology)
+    render Layout::RevealComponent.new(init_show: ontology.view?) do |c|
+      c.button do
+        content_tag(:span, class: 'd-flex') do
+          switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is a view of another ontology?', checked: ontology.view?)
+        end
+      end
+
+      content_tag(:div) do
+        render partial: "shared/ontology_picker_single", locals: {placeholder: "", field_name: "viewOf", selected: ontology.viewOf}
+      end
+    end
+  end
+
   def contact_input(label: '', name: 'Contact', show_help: true)
     attr = SubmissionMetadataInput.new(attribute_key: 'contact', attr_metadata: attr_metadata('contact'))
     render Input::InputFieldComponent.new(name: '', label: attr_header_label(attr, label, show_tooltip: show_help),
