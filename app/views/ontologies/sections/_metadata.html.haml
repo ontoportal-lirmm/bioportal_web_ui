@@ -94,7 +94,8 @@
                 %dd= view_decorator.description
 
     %div.right-hand-content
-
+      -# Logo & depiction
+        = raw display_logo(@submission_latest) unless @submission_latest.nil?
       -# Misc links pane
       %section.ont-metadata-card.ont-links-card
         %div.ont-section-toolbar
@@ -171,8 +172,6 @@
 
       -# Included in data catalog pane
       = raw display_data_catalog(@submission_latest) unless @submission_latest.nil?
-      -# Logo & depiction
-      = raw display_logo(@submission_latest) unless @submission_latest.nil?
 
       -# Projects pane
       %section.ont-metadata-card.ont-projects-card
