@@ -271,10 +271,10 @@ module SubmissionInputsHelper
         end
 
         c.empty_state do
-          hidden_field_tag "#{name}[#{values.size}]"
+          hidden_field_tag "#{name}[#{Array(values).size}]"
         end
 
-        values.each_with_index do |metadata_val, i|
+        Array(values).each_with_index do |metadata_val, i|
           c.row do
             block.call(metadata_val, "#{name}[#{i}]", "submission_#{attr.metadata['attribute'].to_s}" + '_' + @ontology.acronym)
           end
@@ -289,7 +289,7 @@ module SubmissionInputsHelper
     values = attr.values
     name = attr.name
     if attr.type?('list')
-      generate_list_field_input(attr, name, label, values || ['']) do |value, row_name, id|
+      generate_list_field_input(attr, name, label, values) do |value, row_name, id|
         url_input(label: '', name: row_name, value: value)
       end
     else
