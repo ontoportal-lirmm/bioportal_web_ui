@@ -381,6 +381,10 @@ module OntologiesHelper
   end
 
   def new_element_link(title, link)
+    if session[:user].nil?
+      link = "/login?redirect=#{link}"
+    end
+
     link_to(link, title: title, class: "mx-1") do
       inline_svg_tag("icons/plus.svg", width: '15px', height: '15px')
     end
