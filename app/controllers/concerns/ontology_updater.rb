@@ -26,6 +26,7 @@ module OntologyUpdater
     # p[:acl].reject!(&:blank?)
     p[:hasDomain].reject!(&:blank?) if p[:hasDomain]
     p[:group].reject!(&:blank?) if p[:group]
+    p[:viewOf] = '' if p.key?(:viewOf) && !p.key?(:isView)
     p.to_h
   end
 
