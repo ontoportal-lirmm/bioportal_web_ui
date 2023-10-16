@@ -10,7 +10,7 @@
       %tr
         %td{nowrap: ""} ID
         %td
-          %p= @concept.id
+          %p= link_to @concept.id,  @concept.id, data: {turbo: false}
       %tr
         %td{nowrap: ""} Preferred Name
         %td
