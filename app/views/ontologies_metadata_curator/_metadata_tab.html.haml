@@ -11,7 +11,7 @@
         %div.mx-1.mt-3{style: 'width: 15%'}
           = render SwitchInputComponent.new(id:"show_submissions", name: "show_submissions", label: "Include all submissions")
         %div.mt-3.flex-shrink-0
-          %button{type: "submit", class: "btn btn-success"}
+          %button{type: "submit", class: "btn btn-primary"}
             Get values
         %div.mt-3.flex-shrink-0.flex-fill.d-flex.align-items-center
           = turbo_frame_tag "edit_metadata_btn"
