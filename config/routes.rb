@@ -50,6 +50,11 @@ Rails.application.routes.draw do
     get "/logout" => "oauth2#logout"
   else
     resources :login
+    get '/logout' => 'login#destroy', :as => :logout
+    get '/lost_pass' => 'login#lost_password'
+    get '/lost_pass_success' => 'login#lost_password_success'
+    get '/reset_password' => 'login#reset_password'
+    post '/login/send_pass', to: 'login#send_pass'
   end
 
   resources :admin, only: [:index]
@@ -162,13 +167,8 @@ Rails.application.routes.draw do
   get '/ajax/agents' , to:"agents#ajax_agents"
 
   # User
-  get '/logout' => 'login#destroy', :as => :logout
-  get '/lost_pass' => 'login#lost_password'
-  get '/lost_pass_success' => 'login#lost_password_success'
-  get '/reset_password' => 'login#reset_password'
   post '/accounts/:id/custom_ontologies' => 'users#custom_ontologies', :as => :custom_ontologies
   get '/login_as/:login_as' => 'login#login_as' , constraints: { login_as:  /[\d\w\.\-\%\+ ]+/ }
-  post '/login/send_pass', to: 'login#send_pass'
 
   # History
   get '/tab/remove/:ontology' => 'history#remove', :as => :remove_tab
