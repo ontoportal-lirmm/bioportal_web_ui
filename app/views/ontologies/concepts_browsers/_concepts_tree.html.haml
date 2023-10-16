@@ -16,7 +16,7 @@
                         'chosen-enable-colors-value': 'true'}}
   -# Class tree
   %div#sd_content.card.p-1.py-3{style: 'overflow-y: scroll; height: 60vh;'}
-    - if skos? && @roots.empty?
+    - if skos? && @roots&.empty?
       %div.text-wrap
         = render AlertMessageComponent.new do
           Missing roots for #{@ontology.acronym} (skos:topConceptOf)
