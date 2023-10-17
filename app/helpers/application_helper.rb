@@ -179,11 +179,12 @@ module ApplicationHelper
     string
   end
 
-  def tree_link_to_concept(child:, ontology_acronym:, active_style:, node: nil)
+  def tree_link_to_concept(child:, ontology_acronym:, active_style:, node: nil, skos: false)
     li_id = child.id.eql?('bp_fake_root') ? 'bp_fake_root' : short_uuid
     open = child.expanded? ? "class='open'" : ''
     icons = child.relation_icon(node)
-    muted_style = child.isInActiveScheme&.empty? ? 'text-muted' : ''
+    muted_style = skos && Array(child.isInActiveScheme).empty? ? 'text-muted' : nil
+    muted_title = muted_style  && !child.obsolete? ? "title='is not in a scheme'" : nil
     href = ontology_acronym.blank? ? '#' : "/ontologies/#{child.explore.ontology.acronym}/concepts/?id=#{CGI.escape(child.id)}"
     link = <<-EOS
         <a id='#{child.id}' data-conceptid='#{child.id}'
@@ -191,7 +192,7 @@ module ApplicationHelper
            data-collections-value='#{child.memberOf || []}'
            data-active-collections-value='#{child.isInActiveCollection || []}'
            data-skos-collection-colors-target='collection'
-            class='#{muted_style} #{active_style}'>
+            class='#{muted_style} #{active_style}' #{muted_title}>
             #{child.prefLabel ? child.prefLabel({ use_html: true }) : child.id}
         </a>
     EOS
