@@ -24,10 +24,10 @@ class HomeController < ApplicationController
 
     @upload_benefits = [
       'Discover new insights and connections by exploring other ontologies in the repository.',
-      'Contribute to the growth and development of your domain by adding new concepts and categories.',
-      'Use version control to manage the changes to your ontology over time and collaborate with other users.',
+      'Contribute to knowledge sharing and semantic interoperability in your domain.',
+      'Map your ontology to other relevant ones in the domain and collaborate with other users.',
       'Get feedback and suggestions from other users who can review and comment on your ontology.',
-      'Get the FAIR score and metrics for your ontology.'
+      'Precisely describe your ontology with relevant metadata and get a FAIR score for your ontology.'
     ]
 
     @anal_ont_names = []

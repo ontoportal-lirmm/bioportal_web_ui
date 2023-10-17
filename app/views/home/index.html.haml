@@ -47,9 +47,9 @@
  
 .home-body-container
   .home-section
-    %h4 Wanna upload an ontology?
+    %h4 Do you want to share an ontology?
     %hr.home-section-line/
-    %p Uploading an ontology is a way of sharing your domain knowledge with others.
+    %p Uploading an ontology or another type of semantic artefact (vocabulary, terminology, thesaurus, ...) ...".
     %p By uploading your ontology to #{$SITE}, you can:
     .home-upload-benifits
       - @upload_benefits.each do |benefit|
@@ -60,18 +60,18 @@
     - if session[:user].nil?
       %a.home-upload-ontology-button{:href => "/login?redirect=/ontologies/new"}
         = inline_svg_tag "upload.svg", class: "home-upload-icon"
-        upload ontology
+        Submit ontology
     - else
       %a.home-upload-ontology-button{:href => "/ontologies/new"}
         = inline_svg_tag "upload.svg", class: "home-upload-icon"
         Upload ontology
   .home-section
     %h4
-      Recommender and annotator
+      Recommender and Annotator
     %hr.home-section-line/
     .home-card
       %form{action: "/annotator_recommender_form", method: "post"}
-        %textarea.home-recommendations-and-annotations{rows: "6" , placeholder: "Paste a paragraph of text or some keywords ...", name: "text"}
+        %textarea.home-recommendations-and-annotations{rows: "6" , placeholder: "Enter a paragraph of text or some keywords ...", name: "text"}
         %input.d-none{type: "submit", name: "submit_button" ,value: "annotator", id: "annotator_submit"}/
         %input.d-none{type: "submit" , name: "submit_button" ,value: "recommender", id: "recommender_submit"}/
         .home-services-buttons
