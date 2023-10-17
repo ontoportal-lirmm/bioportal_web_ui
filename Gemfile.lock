@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git
-  revision: f49cd49aee437c98221521f7763ecb8386855e17
+  revision: 775c59477cfc99d8cbf02ce199089f984476fca1
   branch: development
   specs:
     ontologies_api_client (2.2.0)
@@ -182,7 +182,7 @@ GEM
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
     io-console (0.6.0)
-    irb (1.8.1)
+    irb (1.8.3)
       rdoc
       reline (>= 0.3.8)
     jquery-rails (4.6.0)
@@ -239,6 +239,8 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (9.5.0)
     nio4r (2.5.9)
+    nokogiri (1.15.4-x86_64-darwin)
+      racc (~> 1.4)
     nokogiri (1.15.4-x86_64-linux)
       racc (~> 1.4)
     oj (3.16.1)
@@ -329,7 +331,7 @@ GEM
       rspec-mocks (~> 3.12)
       rspec-support (~> 3.12)
     rspec-support (3.12.1)
-    rubocop (1.57.0)
+    rubocop (1.57.1)
       base64 (~> 0.1.1)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -427,6 +429,7 @@ GEM
     zeitwerk (2.6.12)
 
 PLATFORMS
+  x86_64-darwin-21
   x86_64-linux
 
 DEPENDENCIES
@@ -493,4 +496,4 @@ DEPENDENCIES
   will_paginate (~> 3.0)
 
 BUNDLED WITH
-   2.3.23
+   2.4.12
