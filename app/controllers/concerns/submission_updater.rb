@@ -18,10 +18,16 @@ module SubmissionUpdater
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(new_submission_hash[:ontology]).first
     @submission = @ontology.explore.submissions({ display: 'all' }, new_submission_hash[:id])
 
-    @submission.update_from_params(submission_params(new_submission_hash))
+    new_values =  submission_params(new_submission_hash)
+    new_values.each do |key, values|
+      @submission.send("#{key}=", values)
+    rescue StandardError
+      next
+    end
+
 
     update_ontology_summary_only
-    @submission.update(cache_refresh_all: false)
+    @submission.update(values: new_values, cache_refresh_all: false)
   end
 
   def add_ontologies_to_object(ontologies,object)
@@ -86,7 +92,6 @@ module SubmissionUpdater
 
   def submission_params(params)
     attributes = [
-      :ontology,
       :description,
       :hasOntologyLanguage,
       :prefLabelProperty,

@@ -480,7 +480,7 @@ class ApplicationController < ActionController::Base
         end
 
         # Create the tree
-        rootNode = @concept.explore.tree(include: "prefLabel,hasChildren,obsolete", concept_schemes: params[:concept_schemes])
+        rootNode = @concept.explore.tree(concept_schemes: params[:concept_schemes])
         if rootNode.nil? || rootNode.empty?
           @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
           if @roots.nil? || @roots.empty?

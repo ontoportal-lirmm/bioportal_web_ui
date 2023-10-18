@@ -143,14 +143,14 @@ module ApplicationHelper
     end
   end
 
-  def draw_tree(root, id = nil, concept_schemes = [])
+  def draw_tree(root, acronym, id = nil, concept_schemes = nil)
     id = root.children.first.id if id.nil?
 
     # TODO: handle tree view for obsolete classes, e.g. 'http://purl.obolibrary.org/obo/GO_0030400'
-    raw build_tree(root, '', id, concept_schemes: concept_schemes)
+    raw build_tree(root, '', id, acronym, concept_schemes: concept_schemes)
   end
 
-  def build_tree(node, string, id, concept_schemes: [])
+  def build_tree(node, string, id, acronym, concept_schemes: nil)
 
     return string if node.children.nil? || node.children.empty?
 
@@ -161,16 +161,16 @@ module ApplicationHelper
       # This fake root will be present at the root of "flat" ontologies, we need to keep the id intact
 
       if child.id.eql?('bp_fake_root')
-        string << tree_link_to_concept(child: child, ontology_acronym: '',
-                                       active_style: active_style, node: node)
+        string << tree_link_to_concept(child: child, ontology_acronym: acronym,
+                                       active_style: active_style, node: node, skos: !concept_schemes.nil?)
       else
-        string << tree_link_to_concept(child: child, ontology_acronym: child.explore.ontology.acronym,
-                                       active_style: active_style, node: node)
+        string << tree_link_to_concept(child: child, ontology_acronym: acronym,
+                                       active_style: active_style, node: node, skos: !concept_schemes.nil?)
         if child.hasChildren && !child.expanded?
-          string << tree_link_to_children(child: child, concept_schemes: concept_schemes)
+          string << tree_link_to_children(child: child, acronym: acronym, concept_schemes: concept_schemes)
         elsif child.expanded?
           string << '<ul>'
-          build_tree(child, string, id, concept_schemes: concept_schemes)
+          build_tree(child, string, id, acronym, concept_schemes: concept_schemes)
           string << '</ul>'
         end
         string << '</li>'
@@ -179,11 +179,12 @@ module ApplicationHelper
     string
   end
 
-  def tree_link_to_concept(child:, ontology_acronym:, active_style:, node: nil)
+  def tree_link_to_concept(child:, ontology_acronym:, active_style:, node: nil, skos: false)
     li_id = child.id.eql?('bp_fake_root') ? 'bp_fake_root' : short_uuid
     open = child.expanded? ? "class='open'" : ''
     icons = child.relation_icon(node)
-    muted_style = child.isInActiveScheme&.empty? ? 'text-muted' : ''
+    muted_style = skos && Array(child.isInActiveScheme).empty? ? 'text-muted' : nil
+    muted_title = muted_style  && !child.obsolete? ? "title='is not in a scheme'" : nil
     href = ontology_acronym.blank? ? '#' : "/ontologies/#{child.explore.ontology.acronym}/concepts/?id=#{CGI.escape(child.id)}"
     link = <<-EOS
         <a id='#{child.id}' data-conceptid='#{child.id}'
@@ -191,7 +192,7 @@ module ApplicationHelper
            data-collections-value='#{child.memberOf || []}'
            data-active-collections-value='#{child.isInActiveCollection || []}'
            data-skos-collection-colors-target='collection'
-            class='#{muted_style} #{active_style}'>
+            class='#{muted_style} #{active_style}' #{muted_title}>
             #{child.prefLabel ? child.prefLabel({ use_html: true }) : child.id}
         </a>
     EOS
@@ -199,10 +200,11 @@ module ApplicationHelper
     "<li #{open} id='#{li_id}'>#{link} #{icons}"
   end
 
-  def tree_link_to_children(child:, concept_schemes: [])
+  def tree_link_to_children(child:, acronym: ,concept_schemes: nil)
     li_id = child.id.eql?('bp_fake_root') ? 'bp_fake_root' : short_uuid
-    concept_schemes = concept_schemes.map{|x| CGI.escape(x)}.join(',')
-    link = "<a id='#{child.id}' href='/ajax_concepts/#{child.explore.ontology.acronym}/?conceptid=#{CGI.escape(child.id)}&concept_schemes=#{concept_schemes}&callback=children'>ajax_class</a>"
+    concept_schemes = "&concept_schemes=#{concept_schemes.map{|x| CGI.escape(x)}.join(',')}" if concept_schemes
+
+    link = "<a id='#{child.id}' href='/ajax_concepts/#{acronym}/?conceptid=#{CGI.escape(child.id)}#{concept_schemes}&callback=children'>ajax_class</a>"
     "<ul class='ajax'><li id='#{li_id}'>#{link}</li></ul>"
   end
 
@@ -397,7 +399,7 @@ module ApplicationHelper
  
   def subscribe_button(ontology_id)
     if session[:user].nil?
-      return link_to 'Subscribe to notes emails', "/login?redirect=#{request.url}", {style:'font-size: .9em;', class:'link_button'}
+      return link_to 'Subscribe to notes emails', "/login?redirect=#{request.url}", {style:'font-size: .9em;', class: 'link_button'}
     end
 
     user = LinkedData::Client::Models::User.find(session[:user].id)
