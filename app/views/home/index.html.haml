@@ -112,43 +112,43 @@
           %hr/
           %div
             %h4
-              = number_with_delimiter(@ont_count, :delimiter => ",")
+              = format_number_abbreviated(@ont_count)
             %p Ontologies
         .home-statistics-item
           %hr/
           %div
             %h4
-              = number_with_delimiter(@cls_count, :delimiter => ",")
+              = format_number_abbreviated(@cls_count)
             %p Classes
         .home-statistics-item
           %hr/
           %div
             %h4
-              = number_with_delimiter(@individuals_count, :delimiter => ",")
+              = format_number_abbreviated(@individuals_count)
             %p Individuals
         .home-statistics-item
           %hr/
           %div
             %h4
-              = number_with_delimiter(@prop_count, :delimiter => ",")
+              = format_number_abbreviated(@prop_count)
             %p Properties
         .home-statistics-item
           %hr/
           %div
             %h4
-              = number_with_delimiter(@projects_count, :delimiter => ",")
+              = format_number_abbreviated(@projects_count)
             %p Projects
         .home-statistics-item
           %hr/
           %div
             %h4
-              = number_with_delimiter(@map_count, :delimiter => ",")
+              = format_number_abbreviated(@map_count)
             %p Mappings
         .home-statistics-item
           %hr/
           %div
             %h4
-              = number_with_delimiter(@users_count, :delimiter => ",")
+              = format_number_abbreviated(@users_count)
             %p Users
   .home-section
     .home-statistics-container
