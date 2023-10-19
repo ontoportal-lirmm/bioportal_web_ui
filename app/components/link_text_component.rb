@@ -2,9 +2,10 @@
 
 class LinkTextComponent < ViewComponent::Base
 
-  def initialize(text:, icon: nil)
+  def initialize(text:, icon: nil, target: nil)
     @text = text
     @icon = icon
+    @target = target
   end
 
   def call

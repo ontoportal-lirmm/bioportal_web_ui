@@ -7,7 +7,7 @@ module SubmissionsHelper
         content_tag(:p, 'See guidelines and recommendations for metadata.')
       end
       html += content_tag(:span, style: 'width: 10px; height: 10px') do
-        link_to(render(ExternalLinkTextComponent.new(text: 'see the Wiki')), "https://github.com/agroportal/documentation/wiki/Ontology-metadata")
+        link_to(render(ExternalLinkTextComponent.new(text: '')), "https://github.com/agroportal/documentation/wiki/Ontology-metadata", target: "_blank")
       end
       html.html_safe
     end
