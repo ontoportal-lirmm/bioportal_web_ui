@@ -4,46 +4,40 @@ en:
       <div class='about p-2'>
       <h2>Abstract</h2>
       <p>
-      Many vocabularies and ontologies are produced to represent and annotate agronomic data. Therefore, there is a need of
-      a common platform to identify, host and use them in agro-informatics application. The AgroPortal project aims to offer
-      a reference ontology repository for agronomy, reusing the NCBO BioPortal technology. The scientific outcomes and the
-      experience of the biomedical domain are thus exploited and transposed in the agronomy domain, including plants, food,
-      environment and possibly animal sciences. We offer an ontology portal which features ontology hosting, search, versioning,
-      visualization, comment, recommendation, enables semantic annotation, as well as storing and exploiting ontology alignments.
-      All of these within a fully semantic web compliant infrastructure. The AgroPortal specifically pays attention to respect the
-      requirements of the agronomic community in terms of ontology formats (e.g., SKOS, trait dictionaries) or supported features.
-      AgroPortal project is based on five driving agronomic use cases which participate in the design and orientation of the platform.
-      AgroPortal already offers a robust and stable reference repository highly valuable for the agronomic domain.
+      Many vocabularies and ontologies are produced to represent and annotate Earth and Environmental data. Therefore, there is a need of
+      a common platform to identify, host and use them in earth-informatics application. The EarthPortal project aims to offer
+      a reference ontology repository for Earth Sciences, reusing the NCBO BioPortal and AgroPortal technology. We offer an ontology portal which features ontology hosting, search, versioning,
+      visualization, comment, recommendation, enables semantic annotation, fairness assessment, as well as storing and exploiting ontology alignments.
+      All of these within a fully semantic web compliant infrastructure. The EarthPortal specifically pays attention to respect the
+      requirements of the Earth community in terms of ontology formats (e.g., SKOS, OWL) or supported features.
+      EarthPortal project is based on five driving earth use cases which participate in the design and orientation of the platform.
+      EarthPortal already offers a robust and stable reference repository highly valuable for the Earth domain.
       </p>
-      <h2>Use cases</h2>
+      <!--h2>Use cases</h2>
       <ul class="bulletlist m-3">
       <li class="bulletlist"><a href="http://www.agrold.org">IBC Rice Genomics & AgroLD project</a> (P. Larmande): Data integration and knowledge management related to rice</li>
       <li class="bulletlist"><a href="https://www.rd-alliance.org/groups/wheat-data-interoperability-wg.html">RDA Wheat Data Interoperability working group</a> (E. Dzalé-Yeumo): Common framework for publishing wheat data</li>
       <li class="bulletlist"><a href="http://lovinra.inra.fr">LovInra : INRA Linked Open Vocabularies</a> (S. Aubin): Vocabularies produced by INRA scientists</li>
       <li class="bulletlist"><a href="http://www.cropontology.org">Crop Ontology project</a> (E. Arnaud): Ontologies for describing crop germplasm & traits</li>
       <li class="bulletlist"><a href="http://vest.agrisemantics.org">GODAN global map of agri-food data standards</a> (V. Pesce): VEST/AgroPortal MAP of standards</li>
-      </ul>
+      </ul-->
       <br>
       <h2>New features</h2>
       <p>
-      See the <a href="https://github.com/agroportal/documentation/wiki/Release-notes">release notes</a>
+      See the <a href="https://github.com/EarthPortal/documentation/wiki/Release-notes">release notes</a>
       </p>
       <br>
       <h2>Partners</h2>
-      <p>The National Center For Biomedical Ontology (NCBO), Institut de Recherche pour le Développement (IRD), Research Data Alliance (RDA),
+      <p>The National Center For Biomedical Ontology (NCBO), Institut National de Recherche pour l'Agriculture, l'alimentation et l'Environnement (INRAE), Infrastructure de recherche pour le système terre (Data Terra), Pole de données du domaine Atmosphere (Aeris), Pole de données du domaine Surface Continentale (Theia), Pole de données du domaine marin (ODATIS), Pole de données du domaine Terre Solide (Form@ter), Bureau des Recherches Géologiques et Minières (BRGM)
       Bioversity International, Food & Agriculture Organization (FAO), Global Open Data for Agriculture & Nutrition (Godan Action), Institut National de la Recherche Agronomique (INRA)</p>
       <h2>Acknowledgments</h2>
-      <p>The AgroPortal is partly achieved within the Semantic Indexing of French biomedical Resources (<a href="www.lirmm.fr/sifr">SIFR</a>) project
-      that received funding from the EU H2020 research and innovation programme under the Marie Sklodowska-Curie (grant 701771)
-      and the French National Research Agency (grant ANR-12-JS02-01001), the NUMEV Labex (grant ANR-10-LABX-20),
-      the Computational Biology Institute of Montpellier (grant ANR-11-BINF-0002) as well as by University of Montpellier and the CNRS.
-      We also thank the National Center for Biomedical Ontologies for help and time spent with us in deploying the AgroPortal.</p>
+      <p>The EarthPortal received funding from the EU Horizon Europe research and innovation programme under the FAIR-IMPACT (grant ),  as well as by the CNRS.
+      We also thank the AgroPortal for help and time spent with us in deploying the EarthPortal.</p>
       <h2>Team</h2>
-      To contact us: firstname.lastname@lirmm.fr
+      To contact us: firstname.lastname@data-terra.org
       <ul class="bulletlist m-3">
-      <li class="bulletlist"><b>Clément Jonquet</b>, researcher at LIRMM (Univ. of Montpellier, France), main investigator of the AgroPortal project</li>
-      <li class="bulletlist"><b>Anne Toulet</b>, researcher at LIRMM (Univ. of Montpellier, France)</li>
-      <li class="bulletlist"><b>Vincent Emonet</b>, engineer at LIRMM (Univ. of Montpellier, France)</li>
+      <li class="bulletlist"><b>Guillaume Alviset</b>, ingénieur de recherche (Data Terra, Montpellier, France)</li>
+      <li class="bulletlist"><b>Christelle Pierkot</b>, ingénieur de recherche (Data Terra, Montpellier, France)</li>
       </ul>
       </div>
   
@@ -72,7 +66,7 @@ en:
     footer:
       copyright_html: Copyright &copy; 2005‑2022, The Board of Trustees of Leland Stanford Junior University. All rights reserved.
       grant_html: >
-        <strong>%{site}</strong> is currently being developed within the european <a href="https://fair-impact.eu/">FAIR-IMPACT project</a>. It is maintained by the french research institute <a href="https://www.google.com/search?client=firefox-b-d&q=data+terra">Data Terra</a> and supported by the CNRS.
+        <strong>%{site}</strong> is currently being developed within the European <a href="https://fair-impact.eu/">FAIR-IMPACT project</a>. It is maintained by the French Research Institute <a href="https://www.google.com/search?client=firefox-b-d&q=data+terra">Data Terra</a> and supported by the CNRS.
     notices:
       license_contact: >
         For more information, email <a href="mailto:support@ontoportal.org">support@ontoportal.org</a> or 
@@ -91,18 +85,18 @@ en:
 
   home:
     index:
-      find_ontology_placeholder: Start typing ontology name, then choose from list
-      query_placeholder: Enter a class
-      tagline: the repository dedicated to Earth systems
+      find_ontology_placeholder: Start typing the semantic artefact name, then choose from list
+      query_placeholder: Enter a class or term
+      tagline: the repository dedicated to Earth sciences
       title: Welcome to the %{organization} 
       welcome: Welcome to %{site},
     help:
-      welcome: Welcome to Data Terra's %{site}. %{site} is a web-based application for accessing and sharing Earth and Environment systems semantic artefacts.
+      welcome: Welcome to Data Terra's %{site}. %{site} is a web-based application for accessing and sharing Earth and Environment sciences semantic artefacts.
       getting_started: >
         %{site} allows users to browse, upload, download, search, comment on, and create mappings for semantic artefacts.
       browse: >
         Users can browse and explore individual semantic artefacts by navigating either a tree structure or an animated graphical view. Users can also view mappings and 
-        semantic artefacts metadata, and download semantic artefacs. Additionally, users who are signed in may submit a new ontology to the library.
+        semantic artefacts metadata, and download semantic artefacts. Additionally, users who are signed in may submit a new semantic artefact to the library.
       rest_examples_html: View documentation and examples of the <a href="http://data.bioontology.org/documentation" target="_blank">%{site} REST API</a>.
       announce_list_html: >
         To receive notices of new releases or site outages, please subscribe to the 
@@ -110,12 +104,11 @@ en:
 
   annotator:
     index:
-      intro: Get annotations for biomedical text with classes from the ontologies
+      intro: Get annotations for Earth sciences text with terms from semantic artefacts
       annotatorplus_html: <em>Check out <a href="%{annotatorplus_href}">AnnotatorPlus</a> beta; a new version of the Annotator with added support for negation, and more!</em>
       fast_context:
-        tooltip: "Enable FastContext to detect : if a concept has been negated (affirmed, negated), who experienced the found concept (patient, other), when the annotated concept occurred (recent, historical, hypothetical), and/or if the annotated concept is uncertain (certain, uncertain)."
-      sample_text: Melanoma is a malignant tumor of melanocytes which are found predominantly in skin but also in the bowel and the eye.
-
+        tooltip: "Enable FastContext to detect : if a concept has been negated (affirmed, negated), who experienced the found concept, when the annotated concept occurred (recent, historical, hypothetical), and/or if the annotated concept is uncertain (certain, uncertain)."
+      sample_text: As the access to Solid Earth data is not facilitated for now, current activities are focused on the development of a new portal/service to evaluate automatically SO2 flux emissions by volcanoes by analysis of satellite observations from the Sentinel-5P/TROPOMI sensor together with ECMWF wind fields. Several publications are also in preparation for 1- the presentation of the new service (SO2 flux calculator) and its theoretical framework, 2- the scientific applications of these new services, in particular the analysis of specific eruptions and their impacts on the atmosphere (air quality, climate) using the VOLCPLUME webportal (under further development). 
   nbco_annotatosplus:
     index:
       intro: >
@@ -128,24 +121,24 @@ en:
       sample_text: Melanoma is a malignant tumor of melanocytes which are found predominantly in skin but also in the bowel and the eye.
 
   recommender:
-    intro: Get recommendations for the most relevant ontologies based on an excerpt from a biomedical text or a list of keywords
+    intro: Get recommendations for the most relevant semantic artefact based on an excerpt from a text related to Earth sciences or a list of keywords
 
   search:
     index:
-      intro: Search for a class in multiple ontologies
-      search_keywords_placeholder: Enter a class
+      intro: Search for a class or term in multiple semantic artefacts
+      search_keywords_placeholder: Enter a class or term
       categories_placeholder: Start typing to select categories or leave blank to use all
       property_definition: Named association between two entities. Examples are "definition" (a relation between a class and some text) and "part-of" (a relation between two classes).
       obsolete_definition: >
-        A class that the authors of the ontology have flagged as being obsolete and which they recommend that people not use. These classes 
-        are often left in ontologies (rather than removing them entirely) so that existing systems that depend on them will continue to function.
+        A class that the authors of the semantic artefact have flagged as being obsolete and which they recommend that people not use. These terms 
+        are often left in semantic artefacts (rather than removing them entirely) so that existing systems that depend on them will continue to function.
 
   projects:
     index:
       intro: Browse a selection of projects that use %{site} resources
 
   ontologies:
-    intro: Browse the library of ontologies
+    intro: Browse the library of semantic artefacts
 
   concepts:
     request_term:
@@ -158,7 +151,7 @@ en:
           <p>Term description (required)<br>A brief definition, description, or usage of your suggested term.   Additional term synonyms may be listed in this section.</p>
         </blockquote>
         <blockquote>
-          <p>Superclass (required)<br>The parent term of the suggested term. The parent term should be an existing entry of the current ontology. The superclass can be selected directly from Bioportal's Classes tree viewer.</p>
+          <p>Superclass (required)<br>The parent term of the suggested ontology. The parent term should be an existing entry of the current semantic artefact. The superclass can be selected directly from EarthPortal's Classes tree viewer.</p>
         </blockquote>
         <blockquote>
           <p>References (optional)<br>Provide evidence for the existence of the requested term such as Pubmed IDs of papers or links to other resources that describe the term.</p>
