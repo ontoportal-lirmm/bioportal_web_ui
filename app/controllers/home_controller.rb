@@ -103,7 +103,7 @@ class HomeController < ApplicationController
     unless params[:question].nil? || params[:question].empty?
       @tags << "Question"
     end
-    unless params[:ontology_submissions_request].nil? || params[:bug].empty?
+    unless params[:ontology_submissions_request].nil? || params[:ontology_submissions_request].empty?
       @tags << "Ontology submissions request"
     end
 
