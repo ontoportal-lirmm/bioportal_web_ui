@@ -58,12 +58,12 @@
           %p
             = benefit
     - if session[:user].nil?
-      %a.home-upload-ontology-button{:href => "/login?redirect=/ontologies/new"}
-        = inline_svg_tag "upload.svg", class: "home-upload-icon"
+      %a.home-upload-ontology-button{:href => "/login?redirect=/ontologies/new", class: "home-upload-icon"}
+        = inline_svg_tag "upload-white.svg"
         Submit ontology
     - else
-      %a.home-upload-ontology-button{:href => "/ontologies/new"}
-        = inline_svg_tag "upload.svg", class: "home-upload-icon"
+      %a.home-upload-ontology-button{:href => "/ontologies/new", class: "home-upload-icon"}
+        = inline_svg_tag "upload-white.svg"
         Upload ontology
   .home-section
     %h4
@@ -77,7 +77,7 @@
         .home-services-buttons
           .home-get-recommendations{onclick: "submitRecommender()"}
             %p Get recommendations
-            = inline_svg_tag "play.svg", class: "home-play-icon"
+            %img{:src => asset_path("play-white.svg")}/
           .home-services-buttons
             .home-get-annotations{onclick: "submitAnnotator()"}
               %p Get annotations
@@ -105,9 +105,8 @@
   .home-section
     .home-statistics-container
       .home-agroportal-figures
-        = inline_svg_tag "ontoportal-icon.svg"
         %p
-          = portal_name+" in figures:"
+          = portal_name+" in figures"
       .home-statistics
         .home-statistics-item
           %hr/

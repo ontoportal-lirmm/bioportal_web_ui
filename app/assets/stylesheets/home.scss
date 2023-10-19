@@ -227,6 +227,9 @@ i.fa.fa-caret-square-o-down {
   margin-top: 3px
 }
 .home-upload-ontology-button{
+  cursor: pointer;
+  color: white !important;
+  background-color: var(--primary-color);
   margin-top: 30px;
   text-decoration: none;
   color: var(--primary-color);
@@ -242,7 +245,7 @@ i.fa.fa-caret-square-o-down {
 }
 .home-upload-ontology-button:hover{
   color: white !important;
-  background-color: var(--primary-color);
+  background-color: var(--hover-color);
 }
 .home-upload-ontology-button:hover .home-upload-icon path{
   fill: white;
@@ -292,19 +295,19 @@ i.fa.fa-caret-square-o-down {
 }
 .home-get-recommendations{
   cursor: pointer;
-  color: var(--primary-color);
+  color: white;
+  background-color: var(--primary-color);
   display: flex;
-  width: fit-content;
-  height: fit-content;
+  width: fit-content; 
   align-items: center;
   padding: 15px 20px;
   border-radius: 8px;
-  border: 1px solid var(--primary-color);
+  margin-left: 10px;
   transition: background-color 0.3s ease;
 }
 .home-get-recommendations:hover{
   color: white !important;
-  background-color: var(--primary-color);
+  background-color: var(--hover-color);
 }
 .home-get-recommendations:hover .home-play-icon path{
   fill: white;
