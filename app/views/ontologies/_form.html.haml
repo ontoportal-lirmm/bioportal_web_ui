@@ -10,7 +10,7 @@
   = select_input(label: "Add or remove accounts that are allowed to view classes in this ontology using the account name", name: "ontology[acl]", values: @user_select_list, selected: @ontology.acl, multiple: true)
 
 .upload-ontology-input-field-container
-  = select_input(label: "Administrator", name: "ontology[administeredBy]", values: @user_select_list, selected: @ontology.administeredBy || session[:user].id, multiple: true)
+  = select_input(label: "Administrators", name: "ontology[administeredBy]", values: @user_select_list, selected: @ontology.administeredBy || session[:user].id, multiple: true)
 .upload-ontology-input-field-container
   = render Input::InputFieldComponent.new(name: '', label:'Categories') do
     %div.upload-ontology-chips-container
@@ -26,7 +26,7 @@
 
 .upload-ontology-input-field-container.mt-2
   %span.d-flex
-    = switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is a view of another ontology?', checked: @ontology.view?)
+    = switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is this ontology a view of another ontology?', checked: @ontology.view?)
   %div#ontology_viewOf{style: "display: #{ !@ontology.view? ? 'none' : 'block'}"}
     = render partial: "shared/ontology_picker_single", locals: {placeholder: "", field_name: "viewOf", selected: @ontology.viewOf}
 :javascript

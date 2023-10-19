@@ -1,7 +1,11 @@
 module SubmissionsHelper
   def metadata_help_link
     content_tag(:div, class: 'edit-ontology-desc') do
-      html = content_tag(:span, 'To understand the ontologies metadata:')
+       html = content_tag(:div) do
+        content_tag(:p, 'Please fill in basic general information about your ontology.') +
+        content_tag(:p, 'AgroPortal will automatically extract metadata properties declared for the owl:Ontology object in the source file.') +
+        content_tag(:p, 'See guidelines and recommendations for metadata.')
+      end
       html += content_tag(:span, style: 'width: 10px; height: 10px') do
         link_to(render(ExternalLinkTextComponent.new(text: 'see the Wiki')), "https://github.com/agroportal/documentation/wiki/Ontology-metadata")
       end
