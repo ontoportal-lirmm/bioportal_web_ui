@@ -25,7 +25,6 @@ class OntologiesController < ApplicationController
   EXTERNAL_MAPPINGS_GRAPH = "http://data.bioontology.org/metadata/ExternalMappings"
   INTERPORTAL_MAPPINGS_GRAPH = "http://data.bioontology.org/metadata/InterportalMappings"
 
-
   # GET /ontologies
   def index
     @categories = LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
@@ -39,45 +38,39 @@ class OntologiesController < ApplicationController
 
     params[:sort_by] = 'creationDate' if params[:search]
 
+    @ontologies = submissions_paginate_filter(params)
+    @object_count = count_objects(@ontologies)
 
-    if params[:count]
-      request_params  = filters_params(params, includes: 'ontology,naturalLanguage,hasFormalityLevel,isOfType', page: nil)
-      submissions = LinkedData::Client::Models::OntologySubmission.all(request_params)
-      @object_count = count_objects(submissions.map { |sub| ontology_hash(sub) })
-
-      update_filters_counts = @object_count.map do |section, values_count|
-         values_count.map do |value, count|
-           replace("count_#{section}_#{value}") do
-             helpers.turbo_frame_tag("count_#{section}_#{value}") do
-               helpers.content_tag(:span, count.to_s, class: "hide-if-loading #{count.zero? ? 'disabled' : ''}")
-             end
-           end
-         end
-       end.flatten
-      streams = [
-        replace('ontologies_filter_count_request') do
-          helpers.content_tag(:p, class: "browse-desc-text", style: "margin-bottom: 12px !important;") { "Showing #{submissions.size}" }
+    update_filters_counts = @object_count.map do |section, values_count|
+      values_count.map do |value, count|
+        replace("count_#{section}_#{value}") do
+          helpers.turbo_frame_tag("count_#{section}_#{value}") do
+            helpers.content_tag(:span, count.to_s, class: "hide-if-loading #{count.zero? ? 'disabled' : ''}")
+          end
         end
-      ] + update_filters_counts
-    else
-      @ontologies = submissions_paginate_filter(params)
-      streams = if params[:page].nil?
-                  [
-                    prepend('ontologies_list_container', partial: 'ontologies/browser/ontologies'),
-                    prepend('ontologies_list_container') {
-                      helpers.turbo_frame_tag("ontologies_filter_count_request", src: ontologies_filter_url(@filters, page: nil, count: true)) do
-                        helpers.browser_counter_loader
-                      end
-                    }
-                  ]
-                else
-                  [replace("ontologies_list_view-page-#{@page.page}", partial: 'ontologies/browser/ontologies')]
-                end
-    end
+      end
+    end.flatten
 
+    count_streams = [
+      replace('ontologies_filter_count_request') do
+        helpers.content_tag(:p, class: "browse-desc-text", style: "margin-bottom: 12px !important;") { "Showing #{@ontologies.size}" }
+      end
+    ] + update_filters_counts
 
+    streams =if params[:page].nil?
+               [
+                 prepend('ontologies_list_container', partial: 'ontologies/browser/ontologies'),
+                 prepend('ontologies_list_container') {
+                   helpers.turbo_frame_tag("ontologies_filter_count_request") do
+                     helpers.browser_counter_loader
+                   end
+                 }
+               ]
+             else
+               [replace("ontologies_list_view-page-1", partial: 'ontologies/browser/ontologies')]
+             end
 
-    render turbo_stream: streams
+    render turbo_stream: streams + count_streams
   end
 
   def classes

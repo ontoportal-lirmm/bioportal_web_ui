@@ -15,12 +15,13 @@ module SubmissionFilter
   end
 
   def submissions_paginate_filter(params)
-    request_params = filters_params(params, page: params[:page] || 1)
+    request_params = filters_params(params, page: nil)
     init_filters(params)
-    @page = LinkedData::Client::Models::OntologySubmission.all(request_params)
-
-    submissions = @page.collection
-
+    # pagination disabled because is not supported by 4store,
+    # see  https://github.com/ontoportal-lirmm/ontologies_api/issues/25
+    # @page = LinkedData::Client::Models::OntologySubmission.all(request_params)
+    @page = OpenStruct.new(page: 1, next_page: nil)
+    submissions = LinkedData::Client::Models::OntologySubmission.all(request_params)
     # analytics = LinkedData::Client::Analytics.last_month
     # @analytics = Hash[analytics.onts.map { |o| [o[:ont].to_s, o[:views]] }]
 
