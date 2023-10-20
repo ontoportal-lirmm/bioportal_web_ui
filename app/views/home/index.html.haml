@@ -57,14 +57,11 @@
           %img{:src => asset_path("check-outlined.svg")}/
           %p
             = benefit
-    - if session[:user].nil?
-      %a.home-upload-ontology-button{:href => "/login?redirect=/ontologies/new", class: "home-upload-icon"}
-        = inline_svg_tag "upload-white.svg"
-        Submit ontology
-    - else
-      %a.home-upload-ontology-button{:href => "/ontologies/new", class: "home-upload-icon"}
-        = inline_svg_tag "upload-white.svg"
-        Upload ontology
+    - link = session[:user].nil? ? "/login?redirect=/ontologies/new" :  "/ontologies/new"
+    %a.home-upload-ontology-button{:href => link , class: "home-upload-icon"}  
+      = inline_svg_tag "upload.svg"
+      Submit ontology
+  
   .home-section
     %h4
       Recommender and Annotator
@@ -93,7 +90,7 @@
           - if fairness_service_enabled?
             %div#fair-home{data:{controller:"fair-score-home"}}
               = render partial: "shared/fair_score_bars", locals: {data: nil}
-            %a{:href => "#fairDetails"}
+            %a{:href => "/landscape#fairness_assessment"}
               %div.home-fair-details
                 %p See details
                 = inline_svg_tag "arrow-right.svg"
