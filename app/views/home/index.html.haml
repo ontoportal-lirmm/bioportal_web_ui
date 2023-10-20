@@ -85,7 +85,9 @@
   .home-section
     .home-section-sub-sections-container
       .home-sub-section-left
-        %h4 FAIR scores
+        %div.align-items
+          %h4.margin-items FAIR scores
+          = render Display::InfoTooltipComponent.new(text: "You are seing the average scores for all the public ontologies in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness")
         %hr.home-section-line/
         .home-card.home-fair-scores
           - if fairness_service_enabled?
@@ -103,10 +105,10 @@
           %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
 
   .home-section
+    %h4
+      = portal_name+" in figures"
+    %hr.home-section-line/
     .home-statistics-container
-      .home-agroportal-figures
-        %p
-          = portal_name+" in figures"
       .home-statistics
         .home-statistics-item
           %hr/
