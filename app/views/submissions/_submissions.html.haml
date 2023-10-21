@@ -48,9 +48,9 @@
           - if @ontology.admin?(session[:user])
             %td
               %div.d-flex
-                %a.btn.btn-sm.btn-link{:href => "/ontologies/#{@ontology.acronym}/submissions/#{sub.submissionId}/edit", 'data-turbo-frame':"_top"}
-                  %span Edit
-                - unless index.zero?
+                -#%a.btn.btn-sm.btn-link{:href => "/ontologies/#{@ontology.acronym}/submissions/#{sub.submissionId}/edit", 'data-turbo-frame':"_top"}
+                -#  %span Edit
+                - unless sub.submissionId.eql?(submission_readyId)
                   - alert_text = "Are you sure you want to delete submission <span style='color:red;font-weight:bold;'>" + sub.submissionId.to_s + "</span> for ontology <span style='color:red;font-weight:bold;'>" + @ontology.acronym + "</span>?<br/><b>This action CAN NOT be undone!!!</b>"
                   = button_to "Delete", "/admin/ontologies/#{@ontology.acronym}/submissions/#{sub.submissionId}?turbo_stream=true", method: :delete, class:'btn btn-sm btn-link',  form: {data: { turbo: true, turbo_confirm: alert_text, turbo_frame: '_top'}}
 
