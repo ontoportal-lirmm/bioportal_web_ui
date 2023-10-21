@@ -63,7 +63,7 @@
       %div.ont-section-toolbar
         %header.pb-2.font-weight-bold Submissions
         - if @ontology.admin?(session[:user])
-          = link_to(new_ontology_submission_path(@ontology.acronym), "aria-label": "Add submission", title: "Add submission") do
+          = link_to(new_ontology_submission_path(@ontology.acronym, required: false), "aria-label": "Add submission", title: "Add submission") do
             %i.fas.fa-lg.fa-plus-circle{"aria-hidden": "true", style: "margin-left: 0.75rem;"}
           - unless (@submission_latest.nil? || (@submission_latest.respond_to?(:status) && @submission_latest.status == 404))
             = link_to(edit_ontology_submission_path(@ontology.acronym, @submission_latest.submissionId), "aria-label": "Edit latest submission", title: "Edit latest submission") do
