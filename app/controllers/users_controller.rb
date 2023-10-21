@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  
+
   before_action :unescape_id, only: [:edit, :show, :update]
   before_action :verify_owner, only: [:edit, :show, :subscribe, :un_subscribe]
   before_action :authorize_admin, only: [:index,:subscribe, :un_subscribe]
@@ -231,7 +231,7 @@ class UsersController < ApplicationController
     end
 
     if params[:username].nil? || params[:username].length < 1 || !params[:username].match(/^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$/)
-      errors << "Please provide a valid username, which should not be your email address or include any special characters"
+      errors << "please enter a valid username"
     end
     return errors
   end
@@ -250,16 +250,10 @@ class UsersController < ApplicationController
     if params[:username].nil? || params[:username].length < 1
       errors << "Last name field is required"
     end
-    if params[:orcidId] && ((!params[:orcidId].match(/^\d{4}+(-\d{4})+$/)) || (params[:orcidId].length != 19)) && !(params[:orcidId].nil? || params[:orcidId].length < 1)
-      errors << "Please enter a valid orcid id"
+    if params[:orcidId].present? && ((!params[:orcidId].match(/^\d{4}-\d{4}-\d{4}-\d{4}$/)) || (params[:orcidId].length != 19))
+      errors << "Please enter a valide orcide id"
     end
-
-
-    if params[:password].nil? || params[:password].empty?
-      errors << "Your Password can't be empty"
-    end
-
-    if params[:password] && !params[:password].eql?(params[:password_confirmation])
+    if !params[:password].eql?(params[:password_confirmation])
       errors << "Your Password and Password Confirmation do not match"
     end
 
