@@ -22,18 +22,18 @@
     .home-bubble.home-bubble-one
       %h5
         = @anal_ont_names[0]
-      %p
-        = @anal_ont_numbers[0].to_s + " visits"
+      %p 
+        = @anal_ont_numbers[0].to_s + " " + t('visits')
     .home-bubble.home-bubble-two
       %h5
         = @anal_ont_names[1]
-      %p
-        = @anal_ont_numbers[1].to_s + " visits"
+      %p 
+        = @anal_ont_numbers[1].to_s + " " + t('visits')
     .home-bubble.home-bubble-three
       %h5
         = @anal_ont_names[2]
-      %p
-        = @anal_ont_numbers[2].to_s + " visits"
+      %p 
+        = @anal_ont_numbers[2].to_s + " " + t('visits')
     %a.home-bubble.home-bubble-four{:href => "/visits"}
       %h5 ...
 
@@ -42,15 +42,15 @@
       %h4
         = t('.welcome', site: $SITE)
       %p
-        = t('.tagline')
+        = t('home.index.tagline')
       = render OntologySearchInputComponent.new
  
 .home-body-container
   .home-section
-    %h4 Do you want to share an ontology?
+    %h4= t('home.ontology_upload')
     %hr.home-section-line/
-    %p Uploading an ontology or another type of semantic artefact (vocabulary, terminology, thesaurus, ...) ...".
-    %p By uploading your ontology to #{$SITE}, you can:
+    %p= t('home.ontology_upload_desc')
+    %p= t('home.ontology_upload_benefits', site: $SITE)
     .home-upload-benifits
       - @upload_benefits.each do |benefit|
         %div
@@ -59,25 +59,25 @@
             = benefit
     - link = session[:user].nil? ? "/login?redirect=/ontologies/new" :  "/ontologies/new"
     %a.home-upload-ontology-button{:href => link , class: "home-upload-icon"}  
-      = inline_svg_tag "upload.svg"
-      Submit ontology
+      = inline_svg_tag "upload.svg", class:"home-upload-icon"
+      = t('home.ontology_upload_button')
   
   .home-section
     %h4
-      Recommender and Annotator
+      = t('home.recommender_annotator')
     %hr.home-section-line/
     .home-card
       %form{action: "/annotator_recommender_form", method: "post"}
-        %textarea.home-recommendations-and-annotations{rows: "6" , placeholder: "Enter a paragraph of text or some keywords ...", name: "text"}
+        %textarea.home-recommendations-and-annotations{rows: "6" , placeholder: t('home.paste_text_prompt'), name: "text"}
         %input.d-none{type: "submit", name: "submit_button" ,value: "annotator", id: "annotator_submit"}/
         %input.d-none{type: "submit" , name: "submit_button" ,value: "recommender", id: "recommender_submit"}/
         .home-services-buttons
           .home-get-recommendations{onclick: "submitRecommender()"}
-            %p Get recommendations
-            %img{:src => asset_path("play-white.svg")}/
+            %p= t('home.get_recommendations')
+            = inline_svg_tag "play.svg", class: "home-play-icon"
           .home-services-buttons
             .home-get-annotations{onclick: "submitAnnotator()"}
-              %p Get annotations
+              %p= t('home.get_annotations')
               %img{:src => asset_path("play-white.svg")}/
   .home-section
     .home-section-sub-sections-container
@@ -92,10 +92,10 @@
               = render partial: "shared/fair_score_bars", locals: {data: nil}
             %a{:href => "/landscape#fairness_assessment"}
               %div.home-fair-details
-                %p See details
-                = inline_svg_tag "arrow-right.svg"
+                %p= t('home.fair_details')
+          
       .home-sub-section-right
-        %h4 News
+        %h4= t('home.twitter_news')
         %hr.home-section-line
         .home-card.home-twitter-news
           %a.twitter-timeline{"data-height" => "349", :href => "https://twitter.com/lagroportal?ref_src=twsrc%5Etfw"} Tweets by lagroportal
@@ -103,7 +103,7 @@
 
   .home-section
     %h4
-      = portal_name+" in figures"
+      = t('home.agroportal_figures', site: portal_name)
     %hr.home-section-line/
     .home-statistics-container
       .home-statistics
@@ -152,14 +152,14 @@
   .home-section
     .home-statistics-container
       .home-support-title
-        %p Supported by
+        %p= t('home.supported_by')
         %hr.home-section-line/
       .home-support-items
         - $HOME_PAGE_LOGOS[:supported_by].each do |logo|
           %a{href:logo[:url], target: "_blanc"}
             %img{src: asset_path(logo[:img_src])}
       .home-support-title
-        %p With the collaboration of
+        %p= t('home.with_collaboration')
         %hr.home-section-line/
       .home-support-items
         - $HOME_PAGE_LOGOS[:with_the_collaboration_of].each do |logo|

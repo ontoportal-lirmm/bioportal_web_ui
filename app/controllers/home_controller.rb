@@ -23,11 +23,11 @@ class HomeController < ApplicationController
     @users_count = LinkedData::Client::Models::User.all.length
 
     @upload_benefits = [
-      'Discover new insights and connections by exploring other ontologies in the repository.',
-      'Contribute to knowledge sharing and semantic interoperability in your domain.',
-      'Map your ontology to other relevant ones in the domain and collaborate with other users.',
-      'Get feedback and suggestions from other users who can review and comment on your ontology.',
-      'Precisely describe your ontology with relevant metadata and get a FAIR score for your ontology.'
+      t('home.benefit1'),
+      t('home.benefit2'),
+      t('home.benefit3'), 
+      t('home.benefit4'),
+      t('home.benefit5')
     ]
 
     @anal_ont_names = []
