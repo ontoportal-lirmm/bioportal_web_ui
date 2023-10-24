@@ -637,7 +637,7 @@ function get_class_details_from_raw(cls) {
       ont_name = undefined;
     }
     if (ont_name === undefined) {
-      ont_link = get_link_for_ont_ajax(ont_acronym);
+      ont_link = ont_acronym; //get_link_for_ont_ajax(ont_acronym);
     } else {
       ont_link = get_link(ont_rel_ui, ont_name); // no ajax required!
     }
