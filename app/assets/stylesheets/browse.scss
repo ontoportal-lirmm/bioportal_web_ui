@@ -335,7 +335,14 @@
   padding: 14px 20px;
   margin-bottom: 12px;
 
+.align-items-alert {
+  display: flex;
+  align-items: center;
+}
 
+.align-alert{
+  justify-content: center;
+  display: flex;
 }
 
 .browse-filter-checks-container {

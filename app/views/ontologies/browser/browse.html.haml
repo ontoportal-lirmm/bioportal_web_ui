@@ -1,16 +1,14 @@
 .browse-center
   .browse-container
-
-    .browse-submit-new-ontology-and-you-are-admin-container
+    .container.align-alert
       - if session[:user]&.admin?
-        %div
-          %div.browse-you-are-admin
-            %h3 Welcome admin
-            %div
-              %svg{:fill => "none", :height => "11", :viewbox => "0 0 11 11", :width => "11", :xmlns => "http://www.w3.org/2000/svg"}
-                %circle{:cx => "5.5", :cy => "5.5", :fill => 'var(--admin-color)', :r => "5.5"}
-              %p This coloring indicates admin-only features
-
+        = render Display::AlertComponent.new(type: 'info', style: "justify-content: space-between;") do
+          %strong Welcome admin
+          %span.align-items-alert
+            %svg{:fill => "none", :height => "11", :viewbox => "0 0 11 11", :width => "11", :xmlns => "http://www.w3.org/2000/svg"}
+              %circle{:cx => "5.5", :cy => "5.5", :fill => 'var(--admin-color)', :r => "5.5"}
+            %p{style: "margin: 10px"} This coloring indicates admin-only features
+    .browse-submit-new-ontology-and-you-are-admin-container
     %a#back_top_btn.btn.btn-primary.btn-floating.btn-lg
       %i.fas.fa-arrow-up.text-white
 
