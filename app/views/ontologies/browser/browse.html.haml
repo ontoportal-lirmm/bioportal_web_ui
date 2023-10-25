@@ -75,7 +75,7 @@
         .browse-second-row
           .browse-search-bar
             .browse-search-container
-              %input{:name => "search", :placeholder => "Start typing to filter ontologies, e.g AGROVOC...", :type => "text", :value => @search, data: {action: "input->browse-filters#dispatchInputEvent"}}
+              %input{:name => "search", :placeholder => "Start typing to filter ontologies, e.g., AGROVOC...", :type => "text", :value => @search, data: {action: "input->browse-filters#dispatchInputEvent"}}
               .browse-search-filters
                 %select#format.browse-format-filter{:name => "format"}
                   = options_for_select(@formats, @selected_format)
