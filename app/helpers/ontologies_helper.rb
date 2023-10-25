@@ -7,7 +7,7 @@ module OntologiesHelper
   def browse_filter_section_label(key)
     labels = {
       hasFormalityLevel: 'Formality levels',
-      isOfType: 'Generic Types',
+      isOfType: 'Ontology types',
       naturalLanguage: 'Natural languages'
     }
 
@@ -445,16 +445,15 @@ module OntologiesHelper
 
   def upload_ontology_button
     if session[:user].nil?
-      render PillButtonComponent.new do
-        link_to "/login?redirect=/ontologies/new" do
-          inline_svg('upload.svg') + "Submit new ontology"
+      render Buttons::RegularButtonComponent.new(id: "upload-ontology-button", value: "Submit new ontology", variant: "secondary", state: "regular", href: "/login?redirect=/ontologies/new") do |btn|
+        btn.icon_left do
+          inline_svg_tag "upload.svg"
         end
       end
-
     else
-      render PillButtonComponent.new do
-        link_to new_ontology_path do
-          inline_svg('upload.svg') + "Submit new ontology"
+      render Buttons::RegularButtonComponent.new(id: "upload-ontology-button", value: "Submit new ontology", variant: "secondary", state: "regular", href: new_ontology_path) do |btn|
+        btn.icon_left do
+          inline_svg_tag "upload.svg"
         end
       end
     end
