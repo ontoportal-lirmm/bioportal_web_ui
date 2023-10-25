@@ -8,11 +8,10 @@
             %i.fas.fa-key{title:"Private Ontology"}
           - ontology_status = status_string(ontology)
           = render Display::InfoTooltipComponent.new(text: ontology_status, icon: submission_status_icons(ontology_status)) if session[:user]&.admin?
-      .browse-desc-container{data:{controller:"text-truncate", 'text-truncate-more-text-value': '+ Show more ...' , 'text-truncate-less-text-value': '- Show less ...'}}
+      .browse-desc-container{data:{controller:"text-truncate", 'text-truncate-more-text-value': '...+' , 'text-truncate-less-text-value': '...-'}}
         %p.browse-desc-text{'data-text-truncate-target': 'content'}
           = ontology[:description]
-        .browse-show-more-button{data:{'text-truncate-target': 'button', 'action':"click->text-truncate#toggle"}}
-          + Show more ...
+          %p.browse-show-more-button{data:{'text-truncate-target': 'button', 'action':"click->text-truncate#toggle"}}...+
 
 
       - unless ontology[:fairScore].nil? || ontology[:acronym] == 'AGROVOC'
@@ -35,15 +34,16 @@
                 = ontology[:contact].humanize
 
         - if ontology[:released]
-          .browse-ontology-view{data:{controller:'tooltip'}, title: "Release date #{ontology[:released].split('/').last}"}
-            = DateTime.parse(ontology[:released]).year
+          - date = render DateTimeFieldComponent.new(value: ontology[:released])
+          .browse-ontology-view{data:{controller:'tooltip'}, title: "Release date #{date}"}
+            = DateTime.parse(date).year
 
         - if ontology[:format]
           .browse-ontology-view
             = ontology[:format]
         - if ontology[:deprecated]
           .browse-ontology-deprecated
-            deprecated
+            Retired
         - if ontology[:viewOfOnt]
           .browse-ontology-view{data:{controller:'tooltip'}, title: "View of the ontology #{ontology[:viewOfOnt].split('/').last}"}
             view
