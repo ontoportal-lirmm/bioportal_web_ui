@@ -8,14 +8,16 @@ module ComponentsHelper
   end
   
   def properties_list_component(c, properties, &block)
-    properties.each do |k, v|
+    properties.each do |k, value|
+
+      v, label = value
       c.row do
         content = if block_given?
                     capture(v, &block)
                   else
                     v
                   end
-        render FieldContainerComponent.new(label: attr_label(k, show_tooltip: false)) do
+        render FieldContainerComponent.new(label: attr_label(k, label, show_tooltip: false)) do
           content
         end
       end

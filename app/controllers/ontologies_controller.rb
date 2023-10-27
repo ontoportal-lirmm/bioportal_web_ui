@@ -332,7 +332,7 @@ class OntologiesController < ApplicationController
 
     @methodology_properties = properties_hash_values(category_attributes["methodology"])
     @agents_properties = properties_hash_values(category_attributes["people"].without('wasGeneratedBy', 'wasInvalidatedBy') + [:hasCreator, :hasContributor, :translator, :publisher, :copyrightHolder])
-    @dates_properties = properties_hash_values(category_attributes["dates"] + [:creationDate, :modificationDate, :released])
+    @dates_properties = properties_hash_values(category_attributes["dates"] + [:creationDate, :modificationDate, :released] , custom_labels: {creationDate: "Initially created On"})
     @links_properties = properties_hash_values(category_attributes["links"].without('includedInDataCatalog') +[:wasGeneratedBy, :wasInvalidatedBy] )
     @identifiers = properties_hash_values( [:URI, :versionIRI, :identifier])
     @projects_properties = properties_hash_values(category_attributes["usage"].without('hasDomain') + [:audience, :includedInDataCatalog])
@@ -447,10 +447,10 @@ class OntologiesController < ApplicationController
 
     ontology_relations_array
   end
-  def properties_hash_values(properties, sub = @submission_latest)
+  def properties_hash_values(properties, sub: @submission_latest, custom_labels: {})
     return {} if sub.nil?
 
-    properties.map { |x| [x.to_s, sub.send(x.to_s)] }.to_h
+    properties.map { |x| [x.to_s, [sub.send(x.to_s), custom_labels[x]]] }.to_h
   end
 
   def get_metrics_hash
