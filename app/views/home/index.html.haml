@@ -59,11 +59,11 @@
     %div.col
       %div.card-deck
         -# Ontology visits
-        %div.card
-          %div.card-header Ontology Visits #{"in full #{$SITE} " if at_slice?} (#{@analytics.date.strftime("%B %Y")})
-          = content_tag(:div, nil, id: "ontology-visits-chart", class: "card-body", data: {ontnames: @anal_ont_names, ontnumbers: @anal_ont_numbers}) do
-            %canvas#myChart
-            = link_to("More", visits_path())
+        -# %div.card
+        -#  %div.card-header Ontology Visits #{"in full #{$SITE} " if at_slice?} (#{@analytics.date.strftime("%B %Y")})
+        -#  = content_tag(:div, nil, id: "ontology-visits-chart", class: "card-body", data: {ontnames: @anal_ont_names, ontnumbers: @anal_ont_numbers}) do
+        -#    %canvas#myChart
+        -#    = link_to("More", visits_path())
         -# Ontology statistics
         %div.card
           %div.card-header #{$SITE} Statistics #{"in full #{$SITE}" if at_slice?}

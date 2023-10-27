@@ -20,8 +20,8 @@
           = link_to("NCBO Annotator+", '/ncbo_annotatorplus', class: "nav-link")
       %li.nav-item
         = link_to("Projects", projects_path(), class: "nav-link")
-      %li.nav-item
-        = link_to("Landscape", '/landscape', class: "nav-link")
+      -#%li.nav-item
+      -#  = link_to("Landscape", '/landscape', class: "nav-link")
       -if (!session[:user].nil? && session[:user].admin?)
         %li.nav-item
           = link_to("Admin", admin_index_path, class: "nav-link")
