@@ -17,7 +17,7 @@
             = "("+ @ontology.acronym+")"
         - unless sub.nil? || sub.hasLicense.nil?
           = render ChipButtonComponent.new(class: 'chip_button_small') do
-            = link_to_modal(nil, "/ajax/submission/show_licenses/#{@ontology.acronym}",data: { show_modal_title_value: "More licenses", show_modal_size_value: 'modal-xl' }) do
+            = link_to_modal(nil, "/ajax/submission/show_licenses/#{@ontology.acronym}",data: { show_modal_title_value: "Additionnal license a access rights information", show_modal_size_value: 'modal-xl' }) do
               = attribute_enforced_values('hasLicense')[sub.hasLicense] || sub.hasLicense
               = inline_svg_tag "icons/popup-link.svg"
 

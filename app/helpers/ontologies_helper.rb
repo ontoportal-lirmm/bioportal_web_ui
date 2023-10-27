@@ -408,12 +408,12 @@ module OntologiesHelper
   end
 
   def metadata_formats_buttons
-    render SummarySectionComponent.new(title: 'Get my metadata back', show_card: false) do
+    render SummarySectionComponent.new(title: 'Download metadata (profile/syntax)', show_card: false) do
       content_tag :div, data: { controller: 'metadata-downloader' } do
         horizontal_list_container([
-                                    ['NQuads', 'N-Triple'],
-                                    ['JsonLd', 'Json-LD'],
-                                    ['XML', 'RDF/XML']
+                                    ['NQuads', 'MOD/n-triple'],
+                                    ['JsonLd', 'MOD/json-ld'],
+                                    ['XML', 'MOD/rdf-xml']
                                   ]) do |format, label|
           render ChipButtonComponent.new(type: 'clickable', 'data-action': "metadata-downloader#download#{format}") do
             concat content_tag(:span, label)
