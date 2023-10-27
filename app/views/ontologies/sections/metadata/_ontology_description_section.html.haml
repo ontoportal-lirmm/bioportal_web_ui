@@ -10,7 +10,7 @@
     - l.row do
       %span.creation_text
         - if @submission_latest&.released
-          Initial release occurred on
+          Inititally created on
           %span.date_creation_text= l(Date.parse(@submission_latest.released), format: :monthfull_day_year) + '.'
         - if @submission_latest&.contact
           For additional information, reach out
@@ -50,4 +50,4 @@
     = ontology_icon_links(@ontology_icon_links, @submission_latest)
   %hr.w-100.my-3
   %div.text-center.pb-3
-    = link_to_modal('See all metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "All metadata properties", show_modal_size_value: 'modal-xl' })
+    = link_to_modal('See all metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "All metadata properties for #{@ontology.acronym}", show_modal_size_value: 'modal-xl' })
