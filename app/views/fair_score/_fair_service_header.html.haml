@@ -3,7 +3,6 @@
   %span.badge.badge-pill.badge-secondary
     beta
 %span
-  = link_to("https://github.com/agroportal/fairness", target: "_blank", "aria-label": t("view_fair_scores_definitions"), title: t("view_fair_scores_definitions")) do
-    %i.fas.fa-question-circle{"aria-hidden": "true", style: "margin-left: 0.5rem"}
+  = render Display::InfoTooltipComponent.new(text: t("view_fair_scores_definitions"))
   = link_to(get_fairness_service_url,id: "fairness-service-url", target: "_blank", "aria-label": t("get_json_version"), title: t("get_json_version")) do
     %i.fas.fa-code{"aria-hidden": "true", style: "margin-left: 0.5rem" }

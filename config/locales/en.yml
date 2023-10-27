@@ -515,7 +515,7 @@ en:
   keywords: "Keywords"
   keywords_separated_by_commas: "Keywords separated by commas"
   see_details: "See details"
-  view_fair_scores_definitions: "View fair scores definitions"
+  view_fair_scores_definitions: "You are seing the average scores for all the public ontologies in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
   get_json_version: "Get the json version"
   select_ontologies: "Start typing to select ontologies or leave blank to use them all"
   clear_selection: "Clear Selection"
