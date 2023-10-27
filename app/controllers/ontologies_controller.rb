@@ -332,9 +332,9 @@ class OntologiesController < ApplicationController
 
     @methodology_properties = properties_hash_values(category_attributes["methodology"])
     @agents_properties = properties_hash_values(category_attributes["people"].without('wasGeneratedBy', 'wasInvalidatedBy') + [:hasCreator, :hasContributor, :translator, :publisher, :copyrightHolder])
-    @dates_properties = properties_hash_values(category_attributes["dates"] + [:creationDate, :modificationDate, :released] , custom_labels: {creationDate: "Initially created On"})
+    @dates_properties = properties_hash_values([:released, :modificationDate, :creationDate, :valid] , custom_labels: {released: "Initially created on", modificationDate: "Modified on", creationDate: "Last uploaded to #{portal_name} on"})
     @links_properties = properties_hash_values(category_attributes["links"].without('includedInDataCatalog') +[:wasGeneratedBy, :wasInvalidatedBy] )
-    @identifiers = properties_hash_values( [:URI, :versionIRI, :identifier])
+    @identifiers = properties_hash_values([:URI, :versionIRI, :identifier], custom_labels: {URI: "URI", versionIRI: "Version IRI"})
     @projects_properties = properties_hash_values(category_attributes["usage"].without('hasDomain') + [:audience, :includedInDataCatalog])
     @ontology_icon_links = [%w[summary/download dataDump], %w[summary/homepage homepage], %w[summary/documentation documentation], %w[icons/github repository], %w[summary/sparql endpoint]]
     if request.xhr?
