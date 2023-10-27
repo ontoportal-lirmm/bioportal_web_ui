@@ -1,0 +1,15 @@
+= render_in_modal do
+  %table.form.w-100
+    %tr
+      %th
+        Ontology
+      %th
+        Properties used in
+
+    - agent_usages.each do |ont, properties|
+      %tr
+        %td.top
+          =  link_to ont
+        %td.top
+          =  properties.join(', ')
+

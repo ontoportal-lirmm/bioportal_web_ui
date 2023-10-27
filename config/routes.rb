@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get '/notes/new_reply', to: 'notes#new_reply'
   delete '/notes', to: 'notes#destroy'
   resources :notes, constraints: { id: /.+/ }
+  get 'agents/:id/usages', to: 'agents#agent_usages', constraints: { id: /.+/ }
   resources :agents, constraints: { id: /.+/ }
   post 'agents/:id', to: 'agents#update', constraints: { id: /.+/ }
   resources :ontolobridge do

@@ -103,4 +103,16 @@ module AgentHelper
     a.creator = session[:user].id
     a
   end
+
+  def agent_usages(agent = @agent)
+    usages = agent.usages.to_h
+    usages.delete(:links)
+    usages.delete(:context)
+    usages
+  end
+
+  def agent_usages_count(agent = @agent)
+    usages = agent_usages(agent)
+    usages.values.size
+  end
 end
