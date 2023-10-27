@@ -1,2 +1,2 @@
-= render SummarySectionComponent.new(title: 'Submissions') do |s|
+= render SummarySectionComponent.new(title: 'Submissions', link: "", link_title: "Information and evolution diagrams about metrics and other measurements of the ontology.") do |s|
   = render TurboFrameComponent.new(id: 'ontology_submissions', src: ontology_submissions_path(@ontology.acronym))
