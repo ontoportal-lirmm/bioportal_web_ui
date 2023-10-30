@@ -34,10 +34,11 @@ module InputsHelper
                                         helper_text: help)
   end
 
-  def date_input(name:, value:, label: nil, help: nil)
+  def date_input(name:, value:, label: nil, help: nil, max_date: nil)
     render Input::DateComponent.new(label: input_label(label, name), name: name, value: value,
                                     error_message: input_error_message(name),
-                                    helper_text: help)
+                                    helper_text: help,
+                                    max_date: max_date)
   end
 
   private
