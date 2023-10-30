@@ -294,12 +294,9 @@ module ApplicationHelper
   end
 
   def error_message_text
+    return @errors if @errors.is_a?(String)
     @errors = @errors[:error] if @errors && @errors[:error]
-    if @errors.is_a?(String)
-      @errors
-    else
-      "Errors in fields #{@errors.keys.join(', ')}"
-    end
+    "Errors in fields #{@errors.keys.join(', ')}"
   end
 
   def error_message_alert

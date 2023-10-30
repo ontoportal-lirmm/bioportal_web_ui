@@ -52,6 +52,7 @@ module InputsHelper
   end
 
   def attribute_error(attr)
+    return '' if @errors.is_a?(String)
     return '' unless @errors && @errors[attr.to_sym]
 
     errors = @errors[attr.to_sym]
