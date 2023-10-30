@@ -1,112 +1,112 @@
 - @title=  t('recommender.title')
+%div.container
+  %h2.mt-5= t('recommender.ontology_recommender')
+  %p
+    = t('recommender.intro').html_safe
+    = link_to(Rails.configuration.settings.links[:help_recommender], id: "recommender-help",
+              "aria-label": "View ontology recommender help") do
+      %i.fas.fa-question-circle.fa-lg{"aria-hidden": "true"}
 
-%h2.mt-5= t('recommender.ontology_recommender')
-%p
-  = t('recommender.intro').html_safe
-  = link_to(Rails.configuration.settings.links[:help_recommender], id: "recommender-help",
-            "aria-label": "View ontology recommender help") do
-    %i.fas.fa-question-circle.fa-lg{"aria-hidden": "true"}
+  %form
+    = hidden_field_tag :recommender_sample_text, t('recommender.sample_text')
+    = hidden_field_tag :recommender_sample_keywords,t('recommender.sample_keywords')
+    
+    -# Specify input format
+    %h5= t('input')
+    %div.form-check.form-check-inline
+      %input#radioItText.form-check-input{name: "input_type", type: "radio", value: "1", checked: "checked"}
+      %label.form-check-label{for: "radioItText"}= t('text')
+    %div.form-check.form-check-inline
+      %input#radioItKeywords.form-check-input{name: "input_type", type: "radio", value: "2"} 
+      %label.form-check-label{for: "radioItKeywords"}= t('keywords') + " ( " + t('keywords_separated_by_commas') + " ) "
+    
+    -# Specify output format
+    %h5.pt-3= t('output')
+    %div.form-check.form-check-inline
+      %input#radioOtSingle.form-check-input{name: "output_type", type: "radio", value: "1", checked: "checked"} 
+      %label.form-check-label{for: "radioOtSingle"}= t('ontologies.self')
+    %div.form-check.form-check-inline
+      %input#radioOtSets.form-check-input{name: "output_type", type: "radio", value: "2"} 
+      %label.form-check-label{for: "radioOtSets"}= t('ontology_sets')
+    
+    -# Input text or keywords
+    %div.form-group.mt-4
+      = text_area_tag("inputText", @text, rows: 10, class: "form-control default", placeholder: t('recommender.paste_text_recommendations'), aria: {describedby: "inputTextHelpBlock"})
+      %div.card#inputTextHighlighted
+        %div.card-body
+      %small#inputTextHelpBlock.form-text
+        %a#insertInputLink{href: "javascript:void(0);"}= t('insert_sample_text')
 
-%form
-  = hidden_field_tag :recommender_sample_text, t('recommender.sample_text')
-  = hidden_field_tag :recommender_sample_keywords,t('recommender.sample_keywords')
-  
-  -# Specify input format
-  %h5= t('input')
-  %div.form-check.form-check-inline
-    %input#radioItText.form-check-input{name: "input_type", type: "radio", value: "1", checked: "checked"}
-    %label.form-check-label{for: "radioItText"}= t('text')
-  %div.form-check.form-check-inline
-    %input#radioItKeywords.form-check-input{name: "input_type", type: "radio", value: "2"} 
-    %label.form-check-label{for: "radioItKeywords"}= t('keywords') + " ( " + t('keywords_separated_by_commas') + " ) "
-  
-  -# Specify output format
-  %h5.pt-3= t('output')
-  %div.form-check.form-check-inline
-    %input#radioOtSingle.form-check-input{name: "output_type", type: "radio", value: "1", checked: "checked"} 
-    %label.form-check-label{for: "radioOtSingle"}= t('ontologies.self')
-  %div.form-check.form-check-inline
-    %input#radioOtSets.form-check-input{name: "output_type", type: "radio", value: "2"} 
-    %label.form-check-label{for: "radioOtSets"}= t('ontology_sets')
-  
-  -# Input text or keywords
-  %div.form-group.mt-4
-    = text_area_tag("inputText", @text, rows: 10, class: "form-control default", placeholder: "Paste a paragraph of text or some keywords to use in calculating ontology recommendations", aria: {describedby: "inputTextHelpBlock"})
-    %div.card#inputTextHighlighted
-      %div.card-body
-    %small#inputTextHelpBlock.form-text
-      %a#insertInputLink{href: "javascript:void(0);"}= t('insert_sample_text')
+    %a#advancedOptionsLink{:href => "javascript:void(0);"}= t('show_advanced_options') + " >>"
 
-  %a#advancedOptionsLink{:href => "javascript:void(0);"}= t('show_advanced_options') + " >>"
+    -# Advanced options
+    %div#advancedOptions.optionsBox
+      -# Specify weights
+      %h6= t('weights_configuration')
+      %div.form-row
+        %div.form-group.col-md-2
+          %label{for: "input_wc"}= t('coverage')
+          = number_field_tag("input_wc", "0.55", min: "0", step: "1", class: "form-control")
+        %div.form-group.col-md-2
+          %label{for: "input_wa"}= t('acceptance')
+          = number_field_tag("input_wa", "0.15", min: "0", step: "1", class: "form-control")
+        %div.form-group.col-md-2
+          %label{for: "input_wd"}= t('knowledge_detail')
+          = number_field_tag("input_wd", "0.15", min: "0", step: "1", class: "form-control")
+        %div.form-group.col-md-2
+          %label{for: "input_ws"}= t('specialization')
+          = number_field_tag("input_ws", "0.15", min: "0", step: "1", class: "form-control")
+      -# Specify ontology set size
+      %h6= t('max_ontologies_per_set')
+      %div.form-row
+        %div.form-group.col-md-2
+          = number_field_tag("input_max_ontologies", "3", in: 2...5, class: "form-control")
+      -# Specify ontologies
+      %div#ontologyPicker
+        = render(partial: "shared/ontology_picker")
 
-  -# Advanced options
-  %div#advancedOptions.optionsBox
-    -# Specify weights
-    %h6= t('weights_configuration')
-    %div.form-row
-      %div.form-group.col-md-2
-        %label{for: "input_wc"}= t('coverage')
-        = number_field_tag("input_wc", "0.55", min: "0", step: "1", class: "form-control")
-      %div.form-group.col-md-2
-        %label{for: "input_wa"}= t('acceptance')
-        = number_field_tag("input_wa", "0.15", min: "0", step: "1", class: "form-control")
-      %div.form-group.col-md-2
-        %label{for: "input_wd"}= t('knowledge_detail')
-        = number_field_tag("input_wd", "0.15", min: "0", step: "1", class: "form-control")
-      %div.form-group.col-md-2
-        %label{for: "input_ws"}= t('specialization')
-        = number_field_tag("input_ws", "0.15", min: "0", step: "1", class: "form-control")
-    -# Specify ontology set size
-    %h6= t('max_ontologies_per_set')
-    %div.form-row
-      %div.form-group.col-md-2
-        = number_field_tag("input_max_ontologies", "3", in: 2...5, class: "form-control")
-    -# Specify ontologies
-    %div#ontologyPicker
-      = render(partial: "shared/ontology_picker")
+    %div.my-4
+      = submit_tag(t('get_recommendations'), id: "recommenderButton", type: "button", class: "btn btn-primary")
+      = submit_tag("Edit Input", id: "editButton", type: "button", style: "display: none;", class: "btn btn-primary")
+      = content_tag(:span, class: "recommenderSpinner") do
+        = image_tag("spinners/spinner_000000_16px.gif", style: "vertical-align: middle;")
 
-  %div.my-4
-    = submit_tag(t('get_recommendations'), id: "recommenderButton", type: "button", class: "btn btn-primary")
-    = submit_tag("Edit Input", id: "editButton", type: "button", style: "display: none;", class: "btn btn-primary")
-    = content_tag(:span, class: "recommenderSpinner") do
-      = image_tag("spinners/spinner_000000_16px.gif", style: "vertical-align: middle;")
+  %div.row#recommenderErrorsDisplay.mb-4
+    %div.col
+      %span.notTextError
+        = t('recommender.ontology_recommendation_input')
+        %br/
+      %span.sumWeightsError
+        = t('recommender.weight_sum_greater_than_zero')
+        %br/
+      %span.rangeWeightsError
+        = t('recommender.weights_greater_than_zero')
+        %br/
+      %span.invalidWeightsError
+        = t('recommender.valid_numeric_weights')
+        %br/
+      %span.invalidMaxOntError
+        = t('recommender.valid_integer_max_ontologies_per_set')
+        %br/
+      %span.maxOntologiesError
+        = t('recommender.valid_max_ontologies_per_set_range')
+        %br/
+      %span.generalError
+        = t('recommender.recommendation_error')
+        %br/
+      %span#noResults
+        = t('recommender.no_recommendations')
+        %br/
+      %span#noResultsSets
+        = t('recommender.no_sets_recommended')
+        %br/
+      %span.inputSizeError
+        = t('recommender.text_length_limit')
 
-%div.row#recommenderErrorsDisplay.mb-4
-  %div.col
-    %span.notTextError
-      = t('recommender.ontology_recommendation_input')
-      %br/
-    %span.sumWeightsError
-      = t('recommender.weight_sum_greater_than_zero')
-      %br/
-    %span.rangeWeightsError
-      = t('recommender.weights_greater_than_zero')
-      %br/
-    %span.invalidWeightsError
-      = t('recommender.valid_numeric_weights')
-      %br/
-    %span.invalidMaxOntError
-      = t('recommender.valid_integer_max_ontologies_per_set')
-      %br/
-    %span.maxOntologiesError
-      = t('recommender.valid_max_ontologies_per_set_range')
-      %br/
-    %span.generalError
-      = t('recommender.recommendation_error')
-      %br/
-    %span#noResults
-      = t('recommender.no_recommendations')
-      %br/
-    %span#noResultsSets
-      = t('recommender.no_sets_recommended')
-      %br/
-    %span.inputSizeError
-      = t('recommender.text_length_limit')
-
-%div.row#resultsDisplay
-  %div.col
-    %h5#resultsHeader
-    %div#recommender-results.mb-5
+  %div.row#resultsDisplay
+    %div.col
+      %h5#resultsHeader
+      %div#recommender-results.mb-5
 
 :javascript
   window.addEventListener("load", function() {

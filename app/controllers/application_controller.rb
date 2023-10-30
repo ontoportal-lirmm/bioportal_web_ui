@@ -20,6 +20,7 @@ class ApplicationController < ActionController::Base
   def set_locale    
     I18n.locale = cookies[:locale] || detect_locale
     cookies.permanent[:locale] = I18n.locale if cookies[:locale].nil?
+    logger.debug "* Locale set to '#{I18n.locale}'"
   end
 
   # Returns detedted locale based on the Accept-Language header of the request or the default locale if none is found.
