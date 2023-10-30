@@ -5,7 +5,7 @@
   = hidden_field_tag 'ontology[acronym]', @ontology.acronym if @is_update_ontology
 
 .upload-ontology-input-field-container
-  = render Layout::RevealComponent.new(init_show: @ontology.viewingRestriction&.eql?('private'), show_condition: 'private') do |c|
+  = render Layout::RevealComponent.new(init_show: @ontology.viewingRestrictio&.eql?('private'), show_condition: 'private') do |c|
     - c.button do
       = select_input(label: "Visibility", name: "ontology[viewingRestriction]", values: %w[public private], selected: @ontology.viewingRestriction )
     .upload-ontology-input-field-container
@@ -27,36 +27,9 @@
         = check_input(name: "ontology[group][]", id: group[:acronym] , label: group[:acronym], value: group[:id], checked: @ontology.group&.any?{|x| x.eql?(group[:id])})
 
 .upload-ontology-input-field-container.mt-2
-  %span.d-flex
-    = switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is a view of another ontology?', checked: @ontology.view?)
-  %div#ontology_viewOf{style: "display: #{ !@ontology.view? ? 'none' : 'block'}"}
-    = render partial: "shared/ontology_picker_single", locals: {placeholder: "", field_name: "viewOf", selected: @ontology.viewOf}
-:javascript
-
-  function showPrivateAclSelect() {
-    const visibilityGroupDiv = document.getElementById('visibility-group');
-    // Get the selected value from the select element
-    const selectElement = document.getElementById('select_ontology[viewingRestriction]');
-    const selectedValue = selectElement.value;
-
-
-    // Check if the selected value is "private"
-    if (selectedValue === 'private') {
-      // If it's "private", show the visibility-group div
-      visibilityGroupDiv.style.display = 'block';
-    } else {
-      // If it's not "private", hide the visibility-group div
-      visibilityGroupDiv.style.display = 'none';
-    }
-  }
-  const parentDiv = document.getElementById('visibilityContainer');
-  parentDiv.addEventListener('change', () => { showPrivateAclSelect() });
-
-
-  jQuery("#ontology_isView").live("click", function(){
-      if (jQuery("#ontology_isView").is(":checked")) {
-        jQuery("#ontology_viewOf").removeAttr('disabled').show();
-      } else {
-        jQuery("#ontology_viewOf").attr('disabled', true).hide();
-      }
-  });
+  = render Layout::RevealComponent.new(init_show: @ontology.view?) do |c|
+    - c.button do
+      %span.d-flex
+        = switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is a view of another ontology?', checked: @ontology.view?)
+    %div
+      = render partial: "shared/ontology_picker_single", locals: {placeholder: "", field_name: "viewOf", selected: @ontology.viewOf}
