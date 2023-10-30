@@ -95,7 +95,7 @@ class HomeController < ApplicationController
     end
 
     unless @errors.empty?
-      render render 'home/feedback/feedback', layout: feedback_layout
+      render 'home/feedback/feedback', layout: feedback_layout
       return
     end
 
