@@ -63,13 +63,14 @@ class AgentsController < ApplicationController
   end
 
   def edit
-    @agent = LinkedData::Client::Models::Agent.find("#{REST_URI}/Agents/#{params[:id]}")
+    @agent = find_agent_display_all
     @name_prefix = params[:parent_id] || ''
     @show_affiliations = params[:show_affiliations].nil? || params[:show_affiliations].eql?('true')
   end
 
   def update
     agent_update, agent = update_agent(params[:id].split('/').last, agent_params)
+
     parent_id = params[:parent_id]
     alert_id = agent_alert_container_id(agent, parent_id)
 
@@ -90,12 +91,38 @@ class AgentsController < ApplicationController
   end
 
   def agent_usages
-    @agent = LinkedData::Client::Models::Agent.where({display: 'all'}) do |obj|
-      obj.id.eql?("#{REST_URI}/Agents/#{params[:id]}")
-    end.first
-
+    @agent = find_agent_display_all
+    @ontology_acronyms = LinkedData::Client::Models::Ontology.all(include: 'acronym', display_links: false, display_context: false, include_views: true).map(&:acronym)
     not_found("Agent with id #{@agent.id}") if @agent.nil?
     render partial: 'agents/agent_usage'
+  end
+
+  def update_agent_usages
+    agent = find_agent_display_all
+    responses = update_agent_usages_action(agent, agent_usages_params)
+    parent_id = params[:parent_id]
+    alert_id = agent_alert_container_id(agent, parent_id)
+
+
+    if responses.values.any? { |x| response_error?(x) }
+      errors = {}
+      responses.each do |ont, response|
+        errors[ont.acronym] = response_errors(response) if response_error?(response)
+      end
+
+      render_turbo_stream(alert_error(id: alert_id) { helpers.agent_usage_errors_display(errors) })
+    else
+
+      success_message = 'Agent usages successfully updated'
+      table_line_id = agent_table_line_id(agent_id(agent))
+
+      streams = [alert_success(id: alert_id) { success_message },
+                 replace(table_line_id, partial: 'agents/show_line', locals: { agent: agent })
+      ]
+
+      render_turbo_stream(*streams)
+    end
+
   end
 
   def destroy
@@ -157,6 +184,50 @@ class AgentsController < ApplicationController
     [res, agent.update_from_params(params)]
   end
 
+  def update_agent_usages_action(agent, params)
+    current_usages = helpers.agents_used_properties(agent)
+    new_usages = params
+
+    changed_usages = new_usages.select { |x, v| !((current_usages[x] - v) + (v - current_usages[x])).empty? }
+    changed_usages = changed_usages.reduce({}) do |h, attr_acronyms|
+      attr, acronyms = attr_acronyms
+      acronyms.each do |acronym|
+        h[acronym] ||= []
+        h[acronym] << attr
+      end
+      h
+    end
+    responses = {}
+    changed_usages.each do |ontology, attrs|
+      ontology = LinkedData::Client::Models::Ontology.find_by_acronym(ontology).first
+      sub = ontology.explore.latest_submission({ include: 'all' })
+      values = {}
+      attrs.each do |attr|
+        current_val = sub.send(attr)
+        if current_val.is_a?(Array)
+          existent_agent = current_val.find_index { |x| x.id.eql?(agent.id) }
+          if existent_agent
+            current_val.delete_at(existent_agent)
+          else
+            current_val << agent
+          end
+          values[attr.to_sym] = current_val.map { |x| x.id }
+        else
+          values[attr.to_sym] = agent
+        end
+      end
+
+      responses[ontology] = sub.update(values: values, cache_refresh_all: false)
+    end
+
+    responses
+  end
+
+  def agent_usages_params
+    p = params.permit(hasCreator: [], hasContributor: [], curatedBy: [], publisher: [], fundedBy: [], endorsedBy: [], translator: [])
+    p.to_h
+  end
+
   def agent_params
     p = params.permit(:agentType, :name, :email, :acronym, :homepage, :creator,
                       { identifiers: [:notation, :schemaAgency, :creator] },
@@ -178,5 +249,12 @@ class AgentsController < ApplicationController
       affiliation[:identifiers] = affiliation[:identifiers].values if affiliation.is_a?(Hash) && affiliation[:identifiers]
     end
     p
+  end
+
+  def find_agent_display_all(id = params[:id])
+    # TODO fix in the api client, the find with params
+    LinkedData::Client::Models::Agent.where({ display: 'all' }) do |obj|
+      obj.id.eql?("#{REST_URI}/Agents/#{id}")
+    end.first
   end
 end

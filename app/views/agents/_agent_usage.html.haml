@@ -1,15 +1,11 @@
 = render_in_modal do
-  %table.form.w-100
-    %tr
-      %th
-        Ontology
-      %th
-        Properties used in
-
-    - agent_usages.each do |ont, properties|
-      %tr
-        %td.top
-          =  link_to ont
-        %td.top
-          =  properties.join(', ')
-
+  = agent_alert_container(@agent, params[:parent_id])
+  - usages = agent_usages(@agent)
+  - attributes = agents_metadata_attributes
+  = form_with url:  "/agents/#{@agent.id.split('/').last}/usages", method: 'post', data:{turbo: true} do
+    %div.form.w-100
+      - attributes.each do |attr, label|
+        - selected = usages.select{|x, v| v.any?{|uri| uri[attr]}}.keys.map{|x| x.to_s.split('/')[-3]}
+        = select_input(id: attr, name: nil, label: label, values: @ontology_acronyms, selected: selected, multiple: true)
+    %div.mt-2.d-flex.justify-content-end
+      = submit_tag 'Save', class: "btn btn-primary mr-sm-2 group-form-accept"

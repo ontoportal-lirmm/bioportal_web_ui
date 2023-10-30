@@ -3,16 +3,12 @@
   %colgroup
     %col
     %col{style: "width: 100%"}
-  - if params[:parent_id]
-    = hidden_field_tag :parent_id, params[:parent_id]
 
-  - if params[:name_prefix]
-    = hidden_field_tag :name_prefix, params[:name_prefix]
+  = hidden_field_tag :parent_id, params[:parent_id] if params[:parent_id]
+  = hidden_field_tag :name_prefix, params[:name_prefix] if params[:name_prefix]
+  = hidden_field_tag agent_field_name(:id, name_prefix), agent.id if agent.id
 
-  - if agent.id
-    = hidden_field_tag agent_field_name(:id, name_prefix), agent.id
-
-  -  if affiliation?(agent)
+  - if affiliation?(agent)
     = hidden_field_tag agent_field_name(:agentType, name_prefix), agent.agentType
   - else
     %tr
