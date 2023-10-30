@@ -205,6 +205,16 @@ module SubmissionsHelper
       end
     end
 
+
+    if selected_attribute?('viewOf')
+      output += attribute_form_group_container('viewOf') do
+        ontology_view_of_input
+      end
+    end
+
+    reject_metadata = %w[abstract description uploadFilePath contact pullLocation hasOntologyLanguage]
+    label = inline_save? ? '' : nil
+
     if selected_attribute?('abstract')
       output += attribute_form_group_container('abstract') do
         raw attribute_input('abstract',long_text: true, label: label)

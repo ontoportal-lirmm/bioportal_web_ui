@@ -68,11 +68,13 @@ class SubmissionsController < ApplicationController
   def edit
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
     ontology_not_found(params[:ontology_id]) unless @ontology
-    @categories = LinkedData::Client::Models::Category.all
-    @groups = LinkedData::Client::Models::Group.all
-    @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
-    @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
-    @is_update_ontology = true
+    category_attributes = submission_metadata.group_by{|x| x['category']}.transform_values{|x| x.map{|attr| attr['attribute']} }
+    category_attributes = category_attributes.reject{|key| ['no'].include?(key.to_s)}
+    category_attributes['general'] << %w[acronym name groups administeredBy categories]
+    category_attributes['license'] << 'viewingRestriction'
+    category_attributes['relations'] << 'viewOf'
+    @categories_order = ['general', 'description', 'dates', 'license', 'people', 'links', 'images', 'community', 'usage' ,'relations', 'content','methodology', 'object description properties']
+    @category_attributes = category_attributes
   end
 
   # When editing a submission (called when submit "Edit submission information" form)
