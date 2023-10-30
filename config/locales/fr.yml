@@ -6,6 +6,7 @@ fr:
         license:
           attributes:
             encrypted_key:
+              appliance_id_mismatch: est une non-concordance d'ID d'appliance
               invalid_license_key: est une clé de licence invalide
               no_appliance_id_for_comparison: n'a pas pu être validé. Impossible de récupérer l'ID de l'appliance virtuelle.
               appliance_id_mismatch: est une non-concordance d'ID d'appliance
