@@ -107,7 +107,7 @@ class SubmissionsController < ApplicationController
       @errors = response_errors(response) if response_error?(response)
       @submission = submission_from_params(params[:submission])
       @submission.submissionId = submission_id
-      helpers.reset_agent_attributes
+      reset_agent_attributes
       render_submission_attribute(params[:attribute])
     end
 
