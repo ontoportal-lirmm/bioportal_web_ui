@@ -8,7 +8,7 @@ module InputsHelper
   end
 
   def select_input(name:, values:, id: nil, label: nil, selected: nil, multiple: false, help: nil, data: {})
-    render Input::SelectComponent.new(label: input_label(label, name), id: id, name: name, value: values,
+    render Input::SelectComponent.new(label: input_label(label, name), id: id || name, name: name, value: values,
                                       selected: selected,
                                       multiple: multiple,
                                       helper_text: help, data: data)
@@ -53,7 +53,7 @@ module InputsHelper
   end
 
   def attribute_error(attr)
-    return '' if @errors.is_a?(String)
+    return '' if @errors&.is_a?(String)
     return '' unless @errors && @errors[attr.to_sym]
 
     errors = @errors[attr.to_sym]
