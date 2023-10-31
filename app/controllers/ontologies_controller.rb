@@ -101,7 +101,7 @@ class OntologiesController < ApplicationController
 
     @current_purl = @concept.purl if $PURL_ENABLED
 
-    unless @concept.id == 'bp_fake_root'
+    unless @concept.nil? || @concept.id == 'bp_fake_root'
       @notes = @concept.explore.notes
     end
 

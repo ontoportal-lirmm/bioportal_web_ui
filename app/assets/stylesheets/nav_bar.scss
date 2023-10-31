@@ -31,7 +31,7 @@
     display: flex;
     justify-content: space-between;
     align-items:center;
-    width: 1020px;
+    width: 1020px;    
 }
 .nav-items > ul {
     display: flex;
@@ -41,7 +41,7 @@
 }
 
 .nav-items > ul > li {
-    margin-left: 20px;
+    margin-left: 17px;
 }
 
 .nav-items > ul > li > a {
@@ -61,6 +61,7 @@
 
 .nav-search-container {
     width: 50% ;
+    position: relative;
 }
 .nav-search-container div > input {
     height: 33px;
@@ -77,6 +78,7 @@
 .nav-search-container div > input:focus{
     opacity: 100%;
     border-radius: 5px 5px 0 0;
+    border: 1px solid white;
 }
 .nav-search-container div > input::placeholder{
     color: white;
@@ -87,11 +89,11 @@
     opacity: 60%;
 }
 
-.nav-search-container #home-search-drop-down{
+.nav-search-container .search-container{
     position: absolute;
     z-index: 9999;
     font-size: 12px !important;
-    width: 228px !important;
+
 }
 
 .nav-language{
@@ -187,5 +189,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 50%
+    width: 50%;
+    gap: 20px;
 }

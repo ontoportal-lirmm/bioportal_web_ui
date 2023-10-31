@@ -41,7 +41,7 @@ module ApplicationHelper
   end
 
   def omniauth_token_provider(strategy)
-    omniauth_provider_info(strategy).keys.first
+    omniauth_provider_info(strategy.to_sym).keys.first
   end
 
   def isOwner?(id)
@@ -294,12 +294,9 @@ module ApplicationHelper
   end
 
   def error_message_text
+    return @errors if @errors.is_a?(String)
     @errors = @errors[:error] if @errors && @errors[:error]
-    if @errors.is_a?(String)
-      @errors
-    else
-      "Errors in fields #{@errors.keys.join(', ')}"
-    end
+    "Errors in fields #{@errors.keys.join(', ')}"
   end
 
   def error_message_alert
@@ -485,7 +482,7 @@ module ApplicationHelper
     return false if user.subscription.nil? or user.subscription.empty?
     user.subscription.each do |sub|
       #sub = {ontology: ontology_acronym, notification_type: "NOTES"}
-      sub_ont_acronym = sub[:ontology].split('/').last # make sure we get the acronym, even if it's a full URI
+      sub_ont_acronym = sub[:ontology] ?  sub[:ontology].split('/').last : nil #  make sure we get the acronym, even if it's a full URI
       return true if sub_ont_acronym == ontology_acronym
     end
     return false
