@@ -3,9 +3,9 @@ module SubmissionInputsHelper
   class SubmissionMetadataInput
     include MetadataHelper
 
-    def initialize(attribute_key:, submission: nil, attr_metadata: nil, label: nil)
+    def initialize(attribute_key:, attr_metadata: , submission: nil, label: nil)
       @attribute_key = attribute_key
-      @attr_metadata = attr_metadata || attr_metadata(attribute_key)
+      @attr_metadata = attr_metadata
       @submission = submission
       @label = label
     end
@@ -42,15 +42,16 @@ module SubmissionInputsHelper
   end
 
   # @param attr_key String
-  def attribute_input(attr_key, attr_metadata: nil, long_text: false, label: nil, show_tooltip: true)
-    attr = SubmissionMetadataInput.new(attribute_key: attr_key, submission: @submission, label: label, attr_metadata: attr_metadata)
+  def attribute_input(attr_key, long_text: false, label: nil, show_tooltip: true, max_date: nil)
+    attr = SubmissionMetadataInput.new(attribute_key: attr_key, submission: @submission, label: label,
+                                       attr_metadata: attr_metadata(attr_key))
 
     if attr.type?('Agent')
       generate_agent_input(attr)
     elsif attr.type?('integer')
       generate_integer_input(attr)
     elsif attr.type?('date_time')
-      generate_date_input(attr)
+      generate_date_input(attr, max_date: max_date)
     elsif attr.type?('textarea')
       generate_textarea_input(attr)
     elsif enforce_values?(attr)
@@ -84,11 +85,86 @@ module SubmissionInputsHelper
 
   end
 
+
+  def ontology_name_input(ontology = @ontology)
+    text_input(name: 'ontology[name]', value: ontology.name)
+  end
+
+  def ontology_acronym_input(ontology = @ontology, update: @is_update_ontology)
+    out = text_input(name: 'ontology[acronym]', value: ontology.acronym, disabled: update)
+    out += hidden_field_tag('ontology[acronym]', ontology.acronym) if update
+    out
+  end
+
+  def ontology_administered_by_input(ontology = @ontology, users_list = @user_select_list)
+    unless users_list
+      users_list = LinkedData::Client::Models::User.all(include: "username").map { |u| [u.username, u.id] }
+      users_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
+    end
+    select_input(label: "Administrator", name: "ontology[administeredBy]", values: users_list, selected: ontology.administeredBy || session[:user].id, multiple: true)
+  end
+
+  def ontology_categories_input(ontology = @ontology, categories = @categories)
+    categories ||= LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
+
+    render Input::InputFieldComponent.new(name: '', label: 'Categories') do
+      content_tag(:div, class: 'upload-ontology-chips-container') do
+        hidden_field_tag('ontology[hasDomain][]') +
+          categories.map do |category|
+            check_input(name: "ontology[hasDomain][]", id: category[:acronym], label: category[:acronym], value: category[:id], checked: ontology.hasDomain&.any? { |x| x.eql?(category[:id]) })
+          end.join.html_safe
+      end
+    end
+  end
+
+  def ontology_groups_input(ontology = @ontology, groups = @groups)
+    groups ||=  LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
+
+    render Input::InputFieldComponent.new(name: '', label: 'Groups') do
+      content_tag(:div, class: 'upload-ontology-chips-container') do
+        hidden_field_tag('ontology[group][]') +
+          groups.map do |group|
+            check_input(name: "ontology[group][]", id: group[:acronym], label: group[:acronym], value: group[:id], checked: ontology.group&.any? { |x| x.eql?(group[:id]) })
+          end.join.html_safe
+      end
+    end
+  end
+
+  def ontology_visibility_input(ontology = @ontology)
+    unless @user_select_list
+      @user_select_list = LinkedData::Client::Models::User.all(include: "username").map { |u| [u.username, u.id] }
+      @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
+    end
+
+    render(Layout::RevealComponent.new(init_show: ontology.viewingRestriction&.eql?('private'), show_condition: 'private')) do |c|
+      c.button do
+        select_input(label: "Visibility", name: "ontology[viewingRestriction]", values: %w[public private], selected: ontology.viewingRestriction )
+      end
+      content_tag(:div, class: 'upload-ontology-input-field-container') do
+        select_input(label: "Add or remove accounts that are allowed to view classes in this ontology using the account name", name: "ontology[acl]", values: @user_select_list, selected: ontology.acl, multiple: true)
+      end
+    end
+  end
+
+  def ontology_view_of_input(ontology = @ontology)
+    render Layout::RevealComponent.new(init_show: ontology.view?) do |c|
+      c.button do
+        content_tag(:span, class: 'd-flex') do
+          switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is a view of another ontology?', checked: ontology.view?)
+        end
+      end
+
+      content_tag(:div) do
+        render partial: "shared/ontology_picker_single", locals: {placeholder: "", field_name: "viewOf", selected: ontology.viewOf}
+      end
+    end
+  end
+
   def contact_input(label: '', name: 'Contact', show_help: true)
-    attr = SubmissionMetadataInput.new(attribute_key: 'contact')
+    attr = SubmissionMetadataInput.new(attribute_key: 'contact', attr_metadata: attr_metadata('contact'))
     render Input::InputFieldComponent.new(name: '', label: attr_header_label(attr, label, show_tooltip: show_help),
                                           error_message: attribute_error(:contact)) do
-      render NestedFormInputsComponent.new(object_name: 'Contact') do |c|
+      render NestedFormInputsComponent.new(object_name: 'Contact', default_empty_row: true) do |c|
         c.header do
           content_tag(:div, "#{name} name", class: 'w-50') + content_tag(:div, "#{name} email", class: 'w-50')
         end
@@ -96,10 +172,10 @@ module SubmissionInputsHelper
         c.template do
           content_tag(:div, class: 'd-flex my-1') do
             out = content_tag(:div, class: ' w-50 mr-2') do
-              text_input(label: '', name: 'submission[contact][NEW_RECORD][name]', value: '')
+              text_input(label: '', name: 'submission[contact][NEW_RECORD][name]', value: '', error_message: '')
             end
             out + content_tag(:div, class: ' w-50') do
-              text_input(label: '', name: 'submission[contact][NEW_RECORD][email]', value: '')
+              text_input(label: '', name: 'submission[contact][NEW_RECORD][email]', value: '', error_message: '')
             end
           end
         end
@@ -108,10 +184,10 @@ module SubmissionInputsHelper
           c.row do
             content_tag(:div, class: 'd-flex my-1') do
               out = content_tag(:div, class: 'w-50 mr-2') do
-                text_input(label: '', name: "submission[contact][#{i}][name]", value: contact['name'])
+                text_input(label: '', name: "submission[contact][#{i}][name]", value: contact['name'], error_message: '')
               end
               out + content_tag(:div, class: 'w-50') do
-                text_input(label: '', name: "submission[contact][#{i}][email]", value: contact['email'])
+                text_input(label: '', name: "submission[contact][#{i}][email]", value: contact['email'], error_message: '')
               end
             end
           end
@@ -122,8 +198,7 @@ module SubmissionInputsHelper
 
   # @param attr_key string
   def attr_label(attr_key, label = nil, attr_metadata: nil, show_tooltip: true)
-
-    data = attr_metadata || SubmissionMetadataInput.new(attribute_key: attr_key.to_s)
+    data = SubmissionMetadataInput.new(attribute_key: attr_key.to_s, attr_metadata: attr_metadata)
     return attr_key.humanize if data.nil?
 
     if show_tooltip
@@ -161,9 +236,10 @@ module SubmissionInputsHelper
 
   end
 
-  def generate_date_input(attr)
+  def generate_date_input(attr, max_date: nil)
     date_input(label: attr_header_label(attr), name: attr.name,
-               value: attr.values)
+               value: attr.values,
+               max_date: max_date)
   end
 
   def generate_textarea_input(attr)
@@ -196,10 +272,10 @@ module SubmissionInputsHelper
         end
 
         c.empty_state do
-          hidden_field_tag "#{name}[#{values.size}]"
+          hidden_field_tag "#{name}[#{Array(values).size}]"
         end
 
-        values.each_with_index do |metadata_val, i|
+        Array(values).each_with_index do |metadata_val, i|
           c.row do
             block.call(metadata_val, "#{name}[#{i}]", "submission_#{attr.metadata['attribute'].to_s}" + '_' + @ontology.acronym)
           end
@@ -214,7 +290,7 @@ module SubmissionInputsHelper
     values = attr.values
     name = attr.name
     if attr.type?('list')
-      generate_list_field_input(attr, name, label, values || ['']) do |value, row_name, id|
+      generate_list_field_input(attr, name, label, values) do |value, row_name, id|
         url_input(label: '', name: row_name, value: value)
       end
     else

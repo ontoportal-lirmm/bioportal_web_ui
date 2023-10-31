@@ -10,23 +10,35 @@ module SubmissionFilter
     @show_private_only = params[:private_only]&.eql?('true')
     @show_retired = params[:show_retired]&.eql?('true')
     @selected_format = params[:format]
-    @selected_sort_by = params[:sort_by]
+    @selected_sort_by = params[:sort_by].blank? ? 'visits' : params[:sort_by]
     @search = params[:search]
   end
 
   def submissions_paginate_filter(params)
-    request_params = filters_params(params, page: params[:page] || 1)
+    request_params = filters_params(params, page: nil)
     init_filters(params)
-    @page = LinkedData::Client::Models::OntologySubmission.all(request_params)
+    # pagination disabled because is not supported by 4store,
+    # see  https://github.com/ontoportal-lirmm/ontologies_api/issues/25
+    # @page = LinkedData::Client::Models::OntologySubmission.all(request_params)
+    @page = OpenStruct.new(page: 1, next_page: nil)
+    submissions = LinkedData::Client::Models::OntologySubmission.all(request_params)
+    analytics = LinkedData::Client::Analytics.all
+    @analytics = analytics.to_h.map do |key, ontology_analytics|
+      next if key.eql?(:links) || key.eql?(:context)
 
-    submissions = @page.collection
-
-    # analytics = LinkedData::Client::Analytics.last_month
-    # @analytics = Hash[analytics.onts.map { |o| [o[:ont].to_s, o[:views]] }]
+      [key.to_s, ontology_analytics.to_h.values.map { |x| x&.values }.flatten.compact.sum]
+    end.compact.to_h
 
     # get fair scores of all ontologies
     @fair_scores = fairness_service_enabled? ? get_fair_score('all') : nil
-    submissions.reject{|sub| sub.ontology.nil?}.map { |sub| ontology_hash(sub) }
+    submissions = submissions.reject { |sub| sub.ontology.nil? }.map { |sub| ontology_hash(sub) }
+
+    if @selected_sort_by.eql?('visits')
+      submissions = submissions.sort_by { |x| -x[:popularity] }
+    elsif @selected_sort_by.eql?('fair')
+      submissions = submissions.sort_by { |x| -x[:fairScore] }
+    end
+    submissions
   end
 
   def ontologies_filter_url(filters, page: 1, count: false)
@@ -39,7 +51,6 @@ module SubmissionFilter
     request_params = { display_links: false, display_context: false,
                        include: includes, include_status: 'RDF' }
     request_params.merge!(page: page, pagesize: pagesize) if page
-    params[:sort_by] ||= 'ontology_name'
     filters_values_map = {
       categories: :hasDomain,
       groups: :group,
@@ -65,6 +76,15 @@ module SubmissionFilter
       request_params.merge!(v[:api_key] => v[:default])
     end
 
+    if params[:show_retired].blank?
+      @filters[:show_retired] = ''
+      request_params[:status] = 'alpha,beta,production'
+    else
+      request_params[:status] = 'alpha,beta,production,retired'
+      @filters[:show_retired] = 'true'
+    end
+
+
     filters_values_map.each do |filter, api_key|
       next if params[filter].nil? || params[filter].empty?
 
@@ -73,12 +93,8 @@ module SubmissionFilter
         request_params.merge!(key => params[filter])
       end
     end
-    @show_views = params[:show_views]&.eql?('true')
-    @show_private_only = params[:private_only]&.eql?('true')
-    @show_retired = params[:show_retired]&.eql?('true')
-    @selected_format = params[:format]
-    @search = params[:search]
 
+    request_params.delete(:order_by) if %w[visits fair].include?(request_params[:sort_by].to_s)
     request_params
   end
 
@@ -102,7 +118,7 @@ module SubmissionFilter
 
     o[:note_count] = ont.notes.length
     o[:project_count] = ont.projects.length
-    # o[:popularity] = @analytics[ont.acronym] || 0
+    o[:popularity] = @analytics[ont.acronym] || 0
 
     # if o[:type].eql?('ontology_view')
     #   unless ontologies_hash[ont.viewOf].blank?
@@ -175,9 +191,15 @@ module SubmissionFilter
     end
 
     @formats = [['All formats', ''], 'OBO', 'OWL', 'SKOS', 'UMLS']
-    @sorts_options = [['Sort by', ''], ['Name', 'ontology_name'],
-                      ['Class count', 'metrics_classes'], ['Instances/Concepts count', 'metrics_individuals'],
-                      ['Upload date', 'creationDate'], ['Release date', 'released']]
+    @sorts_options = [
+      ['Sort by name', 'ontology_name'],
+      ['Sort by class count', 'metrics_classes'],
+      ['Sort by instances/Concepts count', 'metrics_individuals'],
+      ['Sort by upload date', 'creationDate'],
+      ['Sort by release date', 'released'],
+      ['Sort by FAIR score', 'fair'],
+      ['Sort by popularity', 'visits'],
+    ]
 
     init_filters(params)
     # @missingStatus = [

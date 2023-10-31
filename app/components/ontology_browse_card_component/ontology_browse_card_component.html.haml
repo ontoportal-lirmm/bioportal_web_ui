@@ -1,81 +1,76 @@
-- if ontology
+-if ontology
   .browse-ontology-container
-    .browse-ontology-description
-      .browse-ontology-title-bar
-        %a.browse-ontology-title{:href => "/ontologies/#{ontology[:acronym]}", data: {'turbo-frame': '_top'}}
-          = ontology[:name]+" ("+ontology[:acronym]+")"
-          - if ontology[:private]
-            %i.fas.fa-key{title:"Private Ontology"}
-          - ontology_status = status_string(ontology)
-          = render Display::InfoTooltipComponent.new(text: ontology_status, icon: submission_status_icons(ontology_status)) if session[:user]&.admin?
-      .browse-desc-container{data:{controller:"text-truncate", 'text-truncate-more-text-value': '+ Show more ...' , 'text-truncate-less-text-value': '- Show less ...'}}
-        %p.browse-desc-text{'data-text-truncate-target': 'content'}
-          = ontology[:description]
-        .browse-show-more-button{data:{'text-truncate-target': 'button', 'action':"click->text-truncate#toggle"}}
-          + Show more ...
+    .d-flex
+      .browse-ontology-description
+        .browse-ontology-title-bar
+          %a.browse-ontology-title{:href => "/ontologies/#{ontology[:acronym]}", data: {'turbo-frame': '_top'}}
+            = ontology[:name]+" ("+ontology[:acronym]+")"
+            - if ontology[:private]
+              %i.fas.fa-key{title:"Private Ontology"}
+            - ontology_status = status_string(ontology)
+            = render Display::InfoTooltipComponent.new(text: ontology_status, icon: submission_status_icons(ontology_status)) if session[:user]&.admin?
+        .browse-desc-container{data:{controller:"text-truncate", 'text-truncate-more-text-value': '+ Show more ...' , 'text-truncate-less-text-value': '- Show less ...'}}
+          %p.browse-desc-text{'data-text-truncate-target': 'content'}
+            = ontology[:description]
+          .browse-show-more-button{data:{'text-truncate-target': 'button', 'action':"click->text-truncate#toggle"}}
+            + Show more ...
 
 
-      - unless ontology[:fairScore].nil? || ontology[:acronym] == 'AGROVOC'
-        .browse-fair
-          %p.browse-fair-title
-            FAIR score
-          .browse-progress-bar
-            .browse-faire-progress{:style => "width: #{ontology[:normalizedFairScore].to_s+"%"}"}
-          %p.browse-fair-score
-            = ontology[:fairScore]
-          %a.browse-fair-details{:href => "/ontologies/#{ontology[:acronym]}#fair-details"} FAIR details ...
-      .d-flex.align-items-baseline
-        - if ontology[:creationDate]
-          .browse-uploaded
-            %p.mr-1 Uploaded
-            %p.browse-uploaded-date{data:{controller: 'timeago', 'timeago-datetime-value': ontology[:creationDate], 'timeago-add-suffix-value': 'true'}}
+          - unless ontology[:fairScore].nil? || ontology[:acronym] == 'AGROVOC'
+            .browse-fair
+              %p.browse-fair-title
+                FAIR score
+              .browse-progress-bar
+                .browse-faire-progress{:style => "width: #{ontology[:normalizedFairScore].to_s+"%"}"}
+              %p.browse-fair-score
+                = ontology[:fairScore]
+              %a.browse-fair-details{:href => "/ontologies/#{ontology[:acronym]}#fair-details", 'data-turbo': 'false'} FAIR details ...
+
+      .browse-ontology-cards
+        = render SquareBadgeComponent.new(label: 'classes',  count: ontology[:class_count_formatted], link:  "/ontologies/#{ontology[:acronym]}?p=classes" )
+
+        = render SquareBadgeComponent.new(label: ontology[:format] == 'SKOS' ? "concepts" : "instances",
+                                                   count: ontology[:individual_count_formatted],
+                                                  link:  "/ontologies/#{ontology[:acronym]}?p=#{ontology[:format] == 'SKOS' ? "classes" : "instances"}")
+
+        = render SquareBadgeComponent.new(label: 'projects',  count: ontology[:project_count], link:  "/ontologies/#{ontology[:acronym]}#projects_section" )
+
+        = render SquareBadgeComponent.new(label: 'notes',  count: ontology[:note_count], link: "/ontologies/#{ontology[:acronym]}?p=notes" )
+
+
+    .d-flex.align-items-baseline.mt-1
+      - if ontology[:creationDate]
+        %span.mr-1
+          = render ChipButtonComponent.new(type: "clickable") do
+            %span.mr-1 Uploaded
+            %span.browse-uploaded-date{data:{controller: 'timeago', 'timeago-datetime-value': ontology[:creationDate], 'timeago-add-suffix-value': 'true'}}
             - if ontology[:contact]
-              %p.mx-1 by
-              %p.browse-uploaded-date.text-truncate
+              %span.mx-1 by
+              %span.browse-uploaded-date.text-truncate
                 = ontology[:contact].humanize
 
-        - if ontology[:released]
-          .browse-ontology-view{data:{controller:'tooltip'}, title: "Release date #{ontology[:released].split('/').last}"}
+      - if ontology[:released]
+        %span{data:{controller:'tooltip'}, title: "Release date #{ontology[:released].split('/').last}"}
+          = render ChipButtonComponent.new(type: "clickable") do
             = DateTime.parse(ontology[:released]).year
 
-        - if ontology[:format]
-          .browse-ontology-view
+      - if ontology[:format]
+        %span.mx-1
+          = render ChipButtonComponent.new(type: "clickable") do
             = ontology[:format]
-        - if ontology[:deprecated]
-          .browse-ontology-deprecated
-            deprecated
-        - if ontology[:viewOfOnt]
-          .browse-ontology-view{data:{controller:'tooltip'}, title: "View of the ontology #{ontology[:viewOfOnt].split('/').last}"}
-            view
-        - if session[:user]&.admin?
-          %div.admin-broder{title: content_tag(:div, debug(ontology), style: 'height: 300px; overflow: scroll'), data:{controller: 'tooltip', 'tooltip-interactive-value': 'true'}}
-            .browse-ontology-view.admin-background
-              Debug
-    .browse-ontology-cards
-      - if ontology[:format] != 'SKOS' && ontology[:class_count] > 0
-        %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}?p=classes"}
-          %p.browse-card-number
-            = ontology[:class_count_formatted]
-          %p.browse-card-text
-            classes
-      - if ontology[:individual_count] > 0
-        %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}?p=classes"}
-          %p.browse-card-number
-            = ontology[:individual_count_formatted]
-          %p.browse-card-text
-            = ontology[:format] == 'SKOS' ? "concepts" : "instances"
-      - if ontology[:project_count] > 0
-        %a.browse-onology-card{:href => "/ontologies/#{ontology[:acronym]}#projects_content"}
-          %p.browse-card-number
-            = ontology[:project_count]
-          %p.browse-card-text
-            projects
-      - if ontology[:note_count] > 0
-        %a.browse-onology-card{:href => "#"}
-          %p.browse-card-number
-            = ontology[:note_count]
-          %p.browse-card-text
-          notes
+      - if ontology[:deprecated]
+        %span.mx-1
+          = render ChipButtonComponent.new(type: "clickable", text: "Retired")
+      - if ontology[:viewOfOnt]
+        %span.mx-1{data:{controller:'tooltip'}, title: "View of the ontology #{ontology[:viewOfOnt].split('/').last}"}
+          = render ChipButtonComponent.new(type: "clickable", text: "View")
+
+      - if session[:user]&.admin?
+        %div.mx-1{title: content_tag(:div, debug(ontology), style: 'height: 300px; overflow: scroll'), data:{controller: 'tooltip', 'tooltip-interactive-value': 'true'}}
+          %span.admin-background
+            = render ChipButtonComponent.new(type: "clickable", text: "Debug")
+
+
 - else
   .browse-ontology-container
     .browse-sket

@@ -2,6 +2,11 @@ $ont-metadata-bg-color: #e2ebf0;
 $widget-table-border-color: #EFEFEF;
 
 
+.admin-background{
+  a.chip_button_container_clickable{
+    color: var(--admin-color) !important;
+  }
+}
 .ontologies.show .gutter {
   background-repeat: no-repeat;
   background-position: center;
