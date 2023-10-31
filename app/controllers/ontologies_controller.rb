@@ -35,9 +35,6 @@ class OntologiesController < ApplicationController
   end
 
   def ontologies_filter
-
-    params[:sort_by] = 'creationDate' if params[:search]
-
     @ontologies = submissions_paginate_filter(params)
     @object_count = count_objects(@ontologies)
 

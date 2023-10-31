@@ -10,7 +10,7 @@ module SubmissionFilter
     @show_private_only = params[:private_only]&.eql?('true')
     @show_retired = params[:show_retired]&.eql?('true')
     @selected_format = params[:format]
-    @selected_sort_by = params[:sort_by].blank? ? 'ontology_name' : params[:sort_by]
+    @selected_sort_by = params[:sort_by].blank? ? 'visits' : params[:sort_by]
     @search = params[:search]
   end
 
@@ -51,7 +51,6 @@ module SubmissionFilter
     request_params = { display_links: false, display_context: false,
                        include: includes, include_status: 'RDF' }
     request_params.merge!(page: page, pagesize: pagesize) if page
-    params[:sort_by] = 'ontology_name' if params[:sort_by].blank?
     filters_values_map = {
       categories: :hasDomain,
       groups: :group,
@@ -94,16 +93,8 @@ module SubmissionFilter
         request_params.merge!(key => params[filter])
       end
     end
-   
-    request_params.delete(:sort_by) if %w[visits fair].include?(request_params[:sort_by].to_s)
 
-    @show_views = params[:show_views]&.eql?('true')
-    @show_private_only = params[:private_only]&.eql?('true')
-    @show_retired = params[:show_retired]&.eql?('true')
-    @selected_format = params[:format]
-    @selected_sort_by = params[:sort_by]
-    @search = params[:search]
-
+    request_params.delete(:order_by) if %w[visits fair].include?(request_params[:sort_by].to_s)
     request_params
   end
 
