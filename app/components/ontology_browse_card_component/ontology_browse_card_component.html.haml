@@ -3,7 +3,7 @@
     .d-flex
       .browse-ontology-description
         .browse-ontology-title-bar
-          %a.browse-ontology-title{:href => "/ontologies/#{ontology[:acronym]}", data: {'turbo-frame': '_top'}}
+          %a.browse-ontology-title{:href => "/ontologies/#{ontology[:acronym]}", data: {'turbo': 'false'}}
             = ontology[:name]+" ("+ontology[:acronym]+")"
             - if ontology[:private]
               %i.fas.fa-key{title:"Private Ontology"}
