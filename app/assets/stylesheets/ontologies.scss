@@ -5,6 +5,11 @@ svg path {
   fill: var(--primary-color);
 }
 
+.admin-background{
+  a.chip_button_container_clickable{
+    color: var(--admin-color) !important;
+  }
+}
 .ontologies.show .gutter {
   background-repeat: no-repeat;
   background-position: center;
