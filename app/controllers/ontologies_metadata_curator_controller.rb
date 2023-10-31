@@ -87,7 +87,7 @@ class OntologiesMetadataCuratorController < ApplicationController
       new_data = active_submission_data
       new_data[:ontology] = onto
       new_data[:id] = sub_i
-      error_responses << update_submission(new_data, sub_i) if new_data
+      error_responses << update_submission(new_data, sub_i).last if new_data
       @submissions << @submission
     end
 

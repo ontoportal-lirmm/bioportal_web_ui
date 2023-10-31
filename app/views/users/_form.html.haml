@@ -5,50 +5,53 @@
         %img.lost-password-arrowback{:src => "#{asset_path("arrow-back.svg")}"}
       .register-title-container
         %h2.register-title
-          Create new account
+          = t('register.create_account')
         %hr#register-title-line/
       %div
     .register-double-input
       .register-first-input
         %p.register-input-title
-          First name
+          = t('register.first_name')
           %font{:color => "red"} *
         = text_field :user, :firstName, value: @user.firstname, class: "register-input-short"
       %div
         %p.register-input-title
-          Last name
+          = t('register.last_name')
           %font{:color => "red"} *
         = text_field :user, :lastName, value: @user.lastname, class: "register-input-short"
     %p.register-input-title
-      Username
+      = t('register.username')
       %font{:color => "red"} *
     = text_field :user, :username, value: @user.username, class: "register-input-long"
     %p.register-input-title
       ORCID ID
-      %font.register-optional (optional)
+      %font.register-optional 
+      = t('register.optional')
     %img.register-input-icon{:src => "#{asset_path("orcid.svg")}"}/
     = text_field :user, :orcidId, value: @user.orcidId, class: "register-input-long register-input-with-icon"
     %p.register-input-title
       Github ID
-      %font.register-optional (optional)
+      %font.register-optional 
+      = t('register.optional')
     %img.register-input-icon{:src => "#{asset_path("github-icon.svg")}"}/
     = text_field :user, :githubId, value: @user.githubId, class: "register-input-long register-input-with-icon"
     %p.register-input-title
-      Email
+      = t('register.email')
       %font{:color => "red"} *
     = text_field :user, :email, value: @user.email, class: "register-input-long"
     %p.register-input-title
-      Password
+      = t('register.password')
       %font{:color => "red"} *
     = password_field :user, :password, class: "register-input-long"
     %p.register-input-title
-      Confirm password
+      = t('register.confirm_password')
       %font{:color => "red"} *
     = password_field :user, :password_confirmation, class: "register-input-long"
     - if using_captcha?
       = recaptcha_tags
     .d-flex
       %input#user_register_mail_list{:checked => "checked", :name => "user[register_mail_list]", :type => "checkbox", :value => "1"}/
-      %p#register-check-text Register for the AgroPortal's mailing list
+      %p#register-check-text 
+        = t('register.mailing_list')
     .register-button-container
-      = render Buttons::PrimaryButtonComponent.new(type: "submit", value: "Register")
+      = render Buttons::RegularButtonComponent.new(id: 'register-button', value: "Register", type:'submit')

@@ -15,7 +15,7 @@ module ComponentsHelper
                   else
                     v
                   end
-        render FieldContainerComponent.new(label: attr_label(k, show_tooltip: false)) do
+        render FieldContainerComponent.new(label: attr_label(k, attr_metadata: attr_metadata(k), show_tooltip: false)) do
           content
         end
       end
@@ -64,7 +64,7 @@ module ComponentsHelper
   def properties_dropdown(id, title, tooltip, properties, &block)
     render DropdownContainerComponent.new(title: title, id: id, tooltip: tooltip) do |d|
       d.empty_state do
-        properties_string = properties.keys[0..4].map{|key| "<b>#{attr_label(key, show_tooltip: false)}</b>" }.join(', ')+'... ' if properties
+        properties_string = properties.keys[0..4].map{|key| "<b>#{attr_label(key, attr_metadata: attr_metadata(key), show_tooltip: false)}</b>" }.join(', ')+'... ' if properties
         empty_state_message "The fields #{properties_string} are empty"
       end
 

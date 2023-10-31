@@ -148,8 +148,10 @@ module OntologiesHelper
     version_link + status_text
   end
 
-  def submission_status2string(sub)
-    return '' if sub.submissionStatus.nil?
+
+  def submission_status2string(data)
+    return '' if data[:submissionStatus].nil?
+  
     # Massage the submission status into a UI string
     # submission status values, from:
     # https://github.com/ncbo/ontologies_linked_data/blob/master/lib/ontologies_linked_data/models/submission_status.rb
@@ -157,7 +159,7 @@ module OntologiesHelper
     # Strip the URI prefix from the status codes (works even if they are not URIs)
     # The order of the codes must be assumed to be random, it is not an entirely
     # predictable sequence of ontology processing stages.
-    codes = sub.submissionStatus.map { |s| s.split('/').last }
+    codes = data[:submissionStatus].map { |s| s.split('/').last }
     errors = codes.select { |c| c.start_with? 'ERROR' }.map { |c| c.gsub("_", " ").split(/(\W)/).map(&:capitalize).join }.compact
     status = []
     status.push('Parsed') if (codes.include? 'RDF') && (codes.include? 'RDF_LABELS')
@@ -169,8 +171,26 @@ module OntologiesHelper
     end
     status.concat errors
     return '' if status.empty?
-
+  
     '(' + status.join(', ') + ')'
+  end
+
+  def status_string(data)
+    return '' unless data.present? && data[:submissionStatus].present?
+
+    submission_status2string(data)
+  end
+  
+  def submission_status_icons(status)
+    if status.include?('Parsed') && !status.include?('Error Diff')
+      "success-icon.svg"
+    elsif status.include?('Error Diff') && !status.include?('Parsed')
+      'error-icon.svg'
+    elsif status == '(Archived)'
+      'archive.svg'
+    else
+      "alert-triangle.svg"
+    end
   end
 
   # Link for private/public/licensed ontologies

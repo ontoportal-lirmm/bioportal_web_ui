@@ -21,7 +21,10 @@
           = render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: '', class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do
             = display_agent(v, link: false)
 
-      = properties_dropdown('link','Links','Metadata properties that highlight the links enabling access to datasets, downloading semantic resources, etc', @links_properties)
+      = properties_dropdown('link','Links','Metadata properties that highlight the links enabling access to datasets, downloading semantic resources, etc', @links_properties)  do |values|
+        = horizontal_list_container(values) do |v|
+          = render LinkFieldComponent.new(value: v, raw: true)
+
 
       = properties_dropdown('projects_section','Projects and usage information','Details pertaining to the utilization of the ontology.', nil) do |c|
         - c.row do

@@ -91,7 +91,7 @@ class OntologiesController < ApplicationController
 
     @current_purl = @concept.purl if $PURL_ENABLED
 
-    unless @concept.id == 'bp_fake_root'
+    unless @concept.nil? || @concept.id == 'bp_fake_root'
       @notes = @concept.explore.notes
     end
 
@@ -111,6 +111,7 @@ class OntologiesController < ApplicationController
   end
 
   def create
+    @is_update_ontology = false
     @ontology = ontology_from_params.save
 
     if response_error?(@ontology)
@@ -118,7 +119,7 @@ class OntologiesController < ApplicationController
       return
     end
 
-    @submission = save_submission(new_submission_hash)
+    @submission = save_submission(new_submission_hash(@ontology))
 
     if response_error?(@submission)
       @ontology.delete

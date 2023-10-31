@@ -23,11 +23,11 @@ class HomeController < ApplicationController
     @users_count = LinkedData::Client::Models::User.all.length
 
     @upload_benefits = [
-      'Discover new insights and connections by exploring other ontologies in the repository.',
-      'Contribute to the growth and development of your domain by adding new concepts and categories.',
-      'Use version control to manage the changes to your ontology over time and collaborate with other users.',
-      'Get feedback and suggestions from other users who can review and comment on your ontology.',
-      'Get the FAIR score and metrics for your ontology.'
+      t('home.benefit1'),
+      t('home.benefit2'),
+      t('home.benefit3'), 
+      t('home.benefit4'),
+      t('home.benefit5')
     ]
 
     @anal_ont_names = []
@@ -42,12 +42,6 @@ class HomeController < ApplicationController
   def render_layout_partial
     partial = params[:partial]
     render partial: "layouts/#{partial}"
-  end
-
-  def help
-    # Show the header/footer or not
-    layout = params[:pop].eql?('true') ? 'popup' : 'ontology'
-    render layout: layout
   end
 
   def all_resources
@@ -101,7 +95,7 @@ class HomeController < ApplicationController
     end
 
     unless @errors.empty?
-      render render 'home/feedback/feedback', layout: feedback_layout
+      render 'home/feedback/feedback', layout: feedback_layout
       return
     end
 

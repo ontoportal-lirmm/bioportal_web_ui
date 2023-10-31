@@ -1,12 +1,13 @@
 module OntologyUpdater
   extend ActiveSupport::Concern
   include SubmissionUpdater
+  include TurboHelper
 
   def update_existent_ontology(acronym)
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
     return nil if @ontology.nil?
 
-    @ontology.update(values: ontology_params)
+    [@ontology, @ontology.update(values: ontology_params)]
   end
 
   def ontology_from_params
@@ -25,6 +26,7 @@ module OntologyUpdater
     # p[:acl].reject!(&:blank?)
     p[:hasDomain].reject!(&:blank?) if p[:hasDomain]
     p[:group].reject!(&:blank?) if p[:group]
+    p[:viewOf] = '' if p.key?(:viewOf) && !p.key?(:isView)
     p.to_h
   end
 
@@ -36,20 +38,25 @@ module OntologyUpdater
     @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
     @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
     @errors = response_errors(object)
-    @is_update_ontology = true
     @selected_attributes = (Array(errors_attributes) + Array(params[:submission]&.keys)).uniq
     @ontology = ontology_from_params
 
     @submission = submission_from_params(params[:submission]) if params[:submission]
     render redirection
+    if redirection.is_a?(Hash) && redirection[:id]
+      render_turbo_stream replace(redirection[:id], partial: redirection[:partial])
+    else
+      render redirection, status: 422
   end
+  end
+
   def errors_attributes
     @errors = @errors[:error] if @errors && @errors[:error]
     @errors.keys.map(&:to_s) if @errors.is_a?(Hash)
   end
 
-  def new_submission_hash
-    @submission = @ontology.explore.latest_submission({ display: 'all' })
+  def new_submission_hash(ontology)
+    @submission = ontology.explore.latest_submission({ display: 'all' })
 
     submission_params = submission_params(params[:submission])
 
@@ -68,5 +75,17 @@ module OntologyUpdater
     submission_params = submission_params(params[:submission])
     submission_params[:ontology] = acronym
     submission_params
+  end
+
+  private
+  def reset_agent_attributes
+    helpers.agent_attributes.each do |attr|
+      current_val = @submission[attr]
+      new_values = Array(current_val).map { |x| LinkedData::Client::Models::Agent.find(x) }
+
+      new_values = new_values.first unless current_val.is_a?(Array)
+
+      @submission[attr] = new_values
+    end
   end
 end
