@@ -47,8 +47,8 @@
             %div.browse-filter{style:'border: none'}
               = render SwitchInputComponent.new(id:'filter-views', name:'views', checked: @show_views) do
                 Show ontology views
-              = # render SwitchInputComponent.new(id:'filter-retired', name:'retired',checked: @show_retired) do
-              = # Show retired ontologies
+              = render SwitchInputComponent.new(id:'filter-retired', name:'retired',checked: @show_retired) do
+                Show retired ontologies
 
             - @filters.each do |key, values|
               - if session[:user]&.admin? ||  key != :missingStatus
@@ -85,7 +85,7 @@
                   = options_for_select(@sorts_options, @selected_sort_by)
           .browse-ontologies
             = render TurboFrameComponent.new(id:"ontologies_list_container", data:{"turbo-frame-target":"frame", "turbo-frame-url-value": "/ontologies_filter"}) do |container|
-              = turbo_frame_tag "ontologies_filter_count_request", src: "/ontologies_filter?count=true&#{request.original_url.split('?').last}" do
+              = turbo_frame_tag "ontologies_filter_count_request" do
                 = browser_counter_loader
               = render TurboFrameComponent.new(id: "ontologies_list_view-page-1" , src: "/ontologies_filter?page=1&#{request.original_url.split('?').last}") do |list|
                 - list.loader do
