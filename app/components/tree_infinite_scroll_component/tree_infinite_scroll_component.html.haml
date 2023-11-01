@@ -11,5 +11,5 @@
 
   - c.error do
     %div.text-wrap
-      = render AlertMessageComponent.new(id: "#{@id}_view_alert") do
+      = render Display::AlertComponent.new(type:'info') do
         = error

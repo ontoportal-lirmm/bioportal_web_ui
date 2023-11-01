@@ -1,0 +1,399 @@
+---
+it:
+  activaterecord:
+    errors:
+      models:
+        license:
+          attributes:
+            encrypted_key:
+              invalid_license_key: is an invalid license key
+              no_appliance_id_for_comparison: Could not be validated. Unable to retrieve virtual appliance ID.
+              appliance_id_mismatch: is an appliance id mismatch
+
+  date:
+    formats:
+      year_month_day_concise: "%Y-%m-%d" # 2017-03-01
+      month_day_year: "%b %-d, %Y" # Mar 1, 2017
+      monthfull_day_year: "%B %-d, %Y" # March 1, 2017
+
+  additional_parameters: Parametri aggiuntivi spiegati in
+  admin:
+    licenses:
+      create:
+        success: Licenza rinnovata con successo!
+  all: Tutti
+  annotator:
+    annotate_text_prompt: Inserire o incollare il testo da annotare
+    annotations_result: Annotazioni
+    fast_context: Contesto veloce
+    filters:
+      confidence_threshold: Soglia di confidenza del filtro
+      confidence_threshold_help: Specificare la posizione minima nella distribuzione
+        dei punteggi (tra 1 e 100)
+      exclude_numbers: Escludere i numeri
+      exclude_synonyms: Escludere sinonimi
+      include_mappings: Includere le mappature
+      match_longest_only: Solo la partita più lunga
+      match_partial_words: Riconoscere parole parziali
+      max_hierarchy_level: Includere gli antenati fino al livello
+      score: Includere il punteggio
+      score_help: Punteggio delle annotazioni secondo la precedente misura NCBO 2009
+        (old) o Punteggio delle annotazioni secondo la misura C-Value (cvalue) o Punteggio
+        delle annotazioni secondo la misura C-Value con espansione gerarchica (cvalueh)
+      score_threshold: Filtrare per soglia di punteggio
+      score_threshold_help: Specificare il valore minimo del punteggio per le annotazioni
+    get_annotator: Ottenere le annotazioni
+    index:
+      fast_context:
+        tooltip: 'Abilita FastContext a rilevare: se un concetto è stato negato (affermato,
+          negato), chi ha sperimentato il concetto trovato (paziente, altro), quando
+          si è verificato il concetto annotato (recente, storico, ipotetico), e/o
+          se il concetto annotato è incerto (certo, incerto).'
+      intro: Ottenere annotazioni per un testo biomedico con classi ontologiche
+      lemmatize:
+        tooltip: Abilita Lemmatize per lemmatizzare il testo inviato e utilizzare
+          un dizionario lemmatizzato per le annotazioni
+      sample_text: Il melanoma è un tumore maligno dei melanociti che si trova principalmente
+        nella pelle, ma anche nell'intestino e nell'occhio.
+    lemmatize: Lemmatizzare
+    results_filtered_by: I risultati sono filtrati da
+    select: Selezionare %{name}
+    start_typing_to_select: Iniziare a digitare per selezionare %{type} o lasciare
+      in bianco per utilizzare tutti i dati
+    title: Annotatore
+    umls:
+      semantic_groups: Gruppi semantici UMLS
+      semantic_types: Tipi semantici UMLS
+  certainty: Certezza
+  class: Classe
+  clear_selection: Azzeramento della selezione
+  concepts:
+    request_term:
+      new_term_instructions: |
+        <p>Questa ontologia si integra con OntoloBridge, permettendo agli utenti della comunità di suggerire aggiunte all'ontologia pubblica. Compilare il modello sottostante per inviare una richiesta di termine direttamente al gestore dell'ontologia.</p>
+          <blockquote>
+            <p>Etichetta del termine (obbligatorio)<br>Nome del termine suggerito. Se un termine può essere descritto con più di un sinonimo, inserire qui solo il nome preferito.</p>
+          </blockquote>
+          <blockquote>
+            <p>Descrizione del termine (obbligatorio)<br>Breve definizione, descrizione o uso del termine suggerito. In questa sezione si possono elencare i sinonimi di altri termini.</p>
+          </blockquote>
+          <blockquote>
+            <p>Superclasse (obbligatorio)<br>Il termine padre del termine suggerito. Il termine genitore deve essere una voce esistente nell'ontologia corrente. La superclasse può essere selezionata direttamente dall'albero delle classi del Bioportale.</p>
+          </blockquote>
+          <blockquote>
+            <p>Riferimenti (facoltativo)<br>Fornire prove dell'esistenza del termine richiesto, come ID Pubmed di articoli o link ad altre risorse che descrivono il termine.</p>
+          </blockquote>
+          <blockquote>
+            <p>Giustificazione (opzionale)<br>Fornisci qui qualsiasi informazione aggiuntiva sul termine richiesto.</p>
+          </blockquote>
+  context: Contesto
+  coverage: Copertura
+  filter: Filtro
+  format_results: Formatta i risultati come
+  get_json_version: Ottenere la versione json
+  get_recommendations: Raccomandazioni
+  help: Aiuto
+  home:
+    agroportal_figures: "%{site} in cifre:"
+    benefit1: Scoprite nuove intuizioni e connessioni esplorando le altre ontologie
+      presenti nel repository.
+    benefit2: Contribuite alla crescita e allo sviluppo del vostro dominio aggiungendo
+      nuovi concetti e categorie.
+    benefit3: Utilizzate il controllo di versione per gestire le modifiche alla vostra
+      ontologia nel tempo e collaborare con altri utenti.
+    benefit4: Ottenere feedback e suggerimenti da altri utenti che possono rivedere
+      e commentare la vostra ontologia.
+    benefit5: Ottenere il punteggio e le metriche FAIR per l'ontologia.
+    fair_details: Vedi dettagli
+    fairness: Punteggi FAIR
+    get_annotations: Ottenere le annotazioni
+    get_recommendations: Raccomandazioni
+    index:
+      tagline: La casa dei vocabolari e delle ontologie in agronomia e nei campi correlati.
+      title: Benvenuti alla %{organization}
+      welcome: Benvenuti al %{site},
+    ontology_upload: Volete caricare un'ontologia?
+    ontology_upload_benefits: 'Caricando la propria ontologia su %{site}, è possibile:'
+    ontology_upload_button: Caricare l'ontologia
+    ontology_upload_desc: Caricare un'ontologia è un modo per condividere la propria
+      conoscenza del dominio con altri.
+    paste_text_prompt: Incollare un paragrafo di testo o alcune parole chiave ...
+    recommender_annotator: Raccomandatore e annotatore
+    supported_by: Supportato da
+    twitter_news: Notizie su Twitter
+    with_collaboration: Con la collaborazione di
+  input: Ingresso
+  insert_sample_text: Inserire un testo di esempio
+  keywords: Parole chiave
+  keywords_separated_by_commas: Parole chiave separate da virgole
+  knowledge_detail: Dettaglio della conoscenza
+  landscape:
+    average_metrics: Metriche medie
+    category: Categoria
+    filter_network: Rete di filtraggio
+    funding_endorsing_organizations: Organizzazioni che finanziano e sostengono il
+      maggior numero di ontologie
+    group: Gruppo
+    groups_and_categories: Gruppi e categorie
+    intro: Visualizzare i dati recuperati dalle ontologie memorizzate nel portale
+    more_properties_charts: Altri grafici delle proprietà
+    most_active_ontologies: Le ontologie più attive
+    most_active_organizations: Le organizzazioni più attive
+    most_active_people: Le persone più attive
+    most_active_people_as_reviewer: Le persone più attive come recensori
+    most_mentioned_people: Le persone più citate come contatto, creatore, collaboratore
+      o curatore
+    most_mentioned_people_as_reviewer: Persone che hanno pubblicato note, recensioni
+      e progetti
+    ontologies_activity_on: Attività ontologica su %{site}
+    ontologies_by: Ontologie per %{type}
+    ontologies_contributors: Contribuenti allo sviluppo dell'ontologia
+    ontologies_count_by_catalog: Numero di ontologie in ogni catalogo di dati
+    ontologies_formats: Formato utilizzato
+    ontologies_languages: Linguaggi naturali delle ontologie
+    ontologies_licenses: Licenze utilizzate dalle ontologie
+    ontologies_with_notes_reviews_projects: Ontologie con note, recensioni e progetti
+    ontology_fairness_evaluator: Valutatore di ontologia FAIR (O'FAIRe)
+    ontology_formality_levels: Livelli di formalità delle ontologie
+    ontology_properties_pie_charts: Grafici a torta per le proprietà utilizzate nelle
+      ontologie
+    ontology_relations_network: Rete di relazioni ontologiche
+    ontology_tools: Strumenti più utilizzati per costruire ontologie
+    owl_ontology_author_uris: URI per le proprietà dell'autore utilizzate per le ontologie
+      OWL
+    owl_ontology_definition_uris: URI per le proprietà di definizione utilizzate per
+      le ontologie OWL
+    owl_ontology_preflabel_uris: URI per le proprietà prefLabel utilizzate per le
+      ontologie OWL
+    owl_ontology_synonym_uris: URI per le proprietà dei sinonimi utilizzati per le
+      ontologie OWL
+    properties_usage_proportion: La percentuale di utilizzo delle proprietà tra le
+      ontologie memorizzate
+    properties_use: Uso della proprietà
+    relations_between_stored_ontologies: Relazioni tra le ontologie memorizzate nel
+      portale
+    size: Dimensione
+    title: "%{site} Paesaggio"
+  layout:
+    header:
+      account_setting: Impostazioni dell'account
+      annotator: Annotatore
+      browse: Sfogliare
+      documentation: Documentazione
+      help: Aiuto
+      landscape: Paesaggio
+      login: Accesso
+      logout: logout
+      mappings: Mappature
+      publications: Pubblicazioni
+      release_notes: Note di rilascio
+      search_prompt: Cerca in %{portal_name} ...
+      submit_feedback: Invia un feedback
+      support: supporto
+  login:
+    enter_email: Inserisci il tuo indirizzo e-mail
+    enter_password: Inserire la password
+    forgot_password: Hai dimenticato la password?
+    invalid_login: Errori nel modulo
+    no_account: Non avete un account?
+    password: Password
+    register: Registro
+    title: Accesso
+    username_or_email: Nome utente o e-mail
+  mappings:
+    find_mappings: Trovare le mappature di una classe/concetto
+    intro: Sfogliare le mappature tra classi di diverse ontologie
+    loading_mappings: Caricamento delle mappature...
+    mappings_bulk_load: Mappatura del carico massivo
+    no_mappings_available: Nessuna mappatura disponibile
+    title: Corrispondenze
+    upload_mappings: Caricare le mappature
+  matched_class: Classe abbinata
+  matched_ontology: ontologia abbinata
+  max_ontologies_per_set: Numero massimo di ontologie per set
+  nbco_annotatosplus:
+    annotations: Annotazioni
+    enter_paste_text_to_annotate: 'Inserire o incollare il testo da annotare:'
+    exclude_numbers: Escludere i numeri
+    exclude_synonyms: Escludere sinonimi
+    fast_context:
+      help: 'Attivare FastContext per rilevare: se un concetto è stato negato (affermato,
+        negato), chi ha sperimentato il concetto trovato (paziente, altro), quando
+        si è verificato il concetto annotato (recente, storico, ipotetico), e/o se
+        il concetto annotato è incerto (certo, incerto).'
+      title: Contesto veloce
+    filters:
+      additional_parameters_explained_at: 'Ulteriori parametri sono spiegati nella
+        pagina:'
+      by:
+        certainty: Certezza
+        class: Classe
+        experiencer: Esperto
+        filter: Filtro
+        match_context: Contesto
+        match_type: Tipo
+        matched_class: Classe associata
+        matched_ontology: Ontologia associata
+        negation: Negazione
+        ontology: Ontologia
+        score: Punteggio
+        temporality: Temporalità
+        title: I risultati sono filtrati da
+        umls_sem_type: Tipo semantico UMLS
+      confidence_threshold: Soglia di fiducia del filtro
+      confidence_threshold_help: Specificare la posizione minima nella distribuzione
+        dei punteggi (tra 1 e 100)
+      format_results_as: 'Formattare i risultati come:'
+      reproduce_results_using: Riprodurre questi risultati utilizzando il metodo
+      score_threshold: Filtrare per soglia di punteggio
+      score_threshold_help: Specificare il valore minimo del punteggio per le annotazioni
+    include_ancestors_up_to_level: Includere gli antenati fino al livello
+    include_mappings: Includere le mappature
+    include_score: Includere il punteggio
+    index:
+      intro: |
+        NCBO Annotator+ è un proxy che chiama il servizio web NCBO Annotator sul BioPortale NCBO.
+           <br/><br/>
+           Tchechmedjiev, A., Abdaoui, A., Emonet, V., Melzi, S., Jonnagaddala, J., & Jonquet, C. (2018). <a href="https://doi.org/10.1093/bioinformatics/bty009" target="_blank">Funzioni migliorate per l'annotazione e l'indicizzazione di testi clinici con NCBO Annotator+</a>. Bioinformatica, 34(11), 1962-1965.
+           </br><br/>
+           Se si utilizza l'API, fornire una chiave API NCBO BioPortal valida e accedere al servizio all'indirizzo <a href="http://services.bioportal.lirmm.fr/ncbo_annotatorplus">http://services.bioportal.lirmm. en/ncbo_annotatorplus </a></br>
+           Il testo inviato a NCBO Annotator+ deve essere in inglese.
+      sample_text: Il melanoma è un tumore maligno dei melanociti che si trova principalmente
+        nella pelle, ma anche nell'intestino e nell'occhio.
+      title: Annotatore NCBO +
+    insert_sample_text: Inserire un testo di esempio
+    match_longest_only: Solo la partita più lunga
+    match_partial_words: Abbinare parole parziali
+    recognizer: Riconoscimento dell'entità
+    score_help: Punteggio delle annotazioni secondo la precedente misura NCBO 2009
+      (old) o Punteggio delle annotazioni secondo la misura C-Value (cvalue) o Punteggio
+      delle annotazioni secondo la misura C-Value con espansione gerarchica (cvalueh)
+    select: Selezionare %{name}
+    select_ontologies: Iniziare a digitare per selezionare le ontologie o lasciare
+      vuoto per utilizzare tutte le ontologie
+    select_ontologies_list: Selezionare le ontologie
+    show_advanced_options: Mostra le opzioni avanzate
+    start_typing_to_select: Iniziare a digitare per selezionare %{type} o lasciare
+      vuoto per usare tutti
+    umls:
+      semantic_groups: Gruppi semantici UMLS
+      semantic_types: Tipi semantici UMLS
+  negation: negazione
+  none: nessuno
+  ontologies:
+    ontology_search_prompt: 'Ricerca di un''ontologia o di un concetto (es.: Agrovoc
+      ...)'
+    self: Ontologie
+  ontology: Ontologia
+  ontology_details:
+    concept:
+      definitions: Definizioni
+      id: ID
+      in_schemes: In Schemi
+      member_of: Membro di
+      no_preferred_name_for_selected_language: Nessun nome preferito per la lingua
+        selezionata.
+      obsolete: Obsoleto
+      preferred_name: Nome preferito
+      synonyms: Sinonimi
+      type: Tipo
+    metadata:
+      additional_metadata: Metadati aggiuntivi
+  ontology_sets: Insiemi di ontologie
+  output: Uscita
+  projects:
+    contacts: Contatti
+    create_new_project: Creare un nuovo progetto
+    created: Creato
+    creator: Utente
+    delete_admin_only: Elimina (solo per l'amministratore)
+    delete_confirm: Sei sicuro?
+    description: Descrizione
+    description_text: Descrizione Testo
+    edit: Modifica
+    home_page: Pagina iniziale
+    index:
+      intro: Sfoglia una selezione di progetti che utilizzano risorse %{site}
+    institutions: Istituzioni
+    ontologies: Ontologie
+    project_description: Descrizione del progetto
+    self: Progetti
+    title: Elenco dei progetti
+    view_projects_help: Visualizza i progetti Aiuto
+  recommender:
+    intro: Ottenere raccomandazioni per le ontologie più rilevanti da un estratto
+      di un testo biomedico o da un elenco di parole chiave
+    no_recommendations: Nessuna raccomandazione trovata
+    no_sets_recommended: Non ci sono set di ontologie consigliati per l'input fornito.
+      Provare con l'output "Ontologie".
+    ontology_recommendation_input: Incollare un paragrafo di testo o alcune parole
+      chiave per calcolare le raccomandazioni dell'ontologia.
+    ontology_recommender: Raccomandatore di ontologia
+    paste_text_recommendations: Incollare un paragrafo di testo o alcune parole chiave
+      da utilizzare per calcolare le raccomandazioni dell'ontologia
+    recommendation_error: Problema nel recupero delle raccomandazioni, provare di
+      nuovo
+    text_length_limit: Si prega di utilizzare meno di 500 parole. Se avete bisogno
+      di annotare testi più lunghi, potete utilizzare il servizio web di raccomandazione.
+    title: raccomandatore
+    valid_integer_max_ontologies_per_set: Il numero massimo di ontologie per set deve
+      essere un valore intero valido
+    valid_max_ontologies_per_set_range: Il numero massimo di ontologie per set deve
+      essere un numero compreso tra 2 e 4
+    valid_numeric_weights: Tutti i pesi devono essere valori numerici validi
+    weight_sum_greater_than_zero: La somma dei pesi deve essere maggiore di zero
+    weights_greater_than_zero: Tutti i pesi devono essere maggiori o uguali a zero
+  register:
+    account_errors: 'Errori nella creazione dell''account:'
+    confirm_password: Confermare la password
+    create_account: Creare un nuovo account
+    email: Email
+    first_name: Nome
+    last_name: Cognome
+    mailing_list: Registrarsi alla mailing list di AgroPortal
+    optional: "(Opzionale)"
+    password: Password
+    title: Registro
+    username: Nome utente
+  reproduce_results: Riprodurre questi risultati utilizzando il metodo
+  score: Punteggio
+  search:
+    categories: Categorie
+    class_search: Ricerca di classe
+    classes_with_definitions: Classi con definizioni
+    hide_advanced_options: Nascondere le opzioni avanzate
+    include_in_search: Includere nella ricerca
+    index:
+      categories_placeholder: Iniziare a digitare per selezionare le categorie o lasciare
+        vuoto per utilizzare tutte le categorie
+      obsolete_definition: 'Una classe che gli autori dell''ontologia hanno segnalato
+        come obsoleta e che raccomandano di non usare. Spesso queste classi vengono
+        lasciate nelle ontologie (invece di essere eliminate del tutto) in modo che
+        i sistemi esistenti che dipendono da esse continuino a funzionare"
+
+        '
+      property_definition: Un'associazione nominativa tra due entità. Esempi sono
+        "definizione" (una relazione tra una classe e un testo) e "parte di" (una
+        relazione tra due classi).
+      search_keywords_placeholder: Inserire una classe, ad es. Melanoma
+    narrow_search_to: Restringere la ricerca a
+    obsolete_classes: Classi obsolete
+    ontologies: Ontologie
+    ontology_views: Viste ontologiche
+    property_values: Valori della proprietà
+    show_advanced_options: Mostra opzioni avanzate
+    title: Ricerca
+    view_search_documentation: Visualizza la documentazione della ricerca
+  select_from_list: Selezionare dall'elenco
+  select_ontologies: Iniziare a digitare per selezionare le ontologie o lasciare vuoto
+    per utilizzarle tutte
+  select_ontologies_list: Selezionare le ontologie
+  show_advanced_options: Mostra le opzioni avanzate
+  specialization: Specializzazione
+  temporality: Temporalità
+  text: Testo
+  type: Tipo
+  umls_sem_type: Tipo UMLS Sem
+  view_fair_scores_definitions: Visualizza le definizioni dei punteggi equi
+  visits: Visite
+  weights_configuration: Configurazione dei pesi

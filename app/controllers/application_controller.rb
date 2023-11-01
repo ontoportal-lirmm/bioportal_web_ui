@@ -20,6 +20,7 @@ class ApplicationController < ActionController::Base
   def set_locale    
     I18n.locale = cookies[:locale] || detect_locale
     cookies.permanent[:locale] = I18n.locale if cookies[:locale].nil?
+    logger.debug "* Locale set to '#{I18n.locale}'"
   end
 
   # Returns detedted locale based on the Accept-Language header of the request or the default locale if none is found.
@@ -485,7 +486,8 @@ class ApplicationController < ActionController::Base
         @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])        
         if @roots.nil? || @roots.empty?
           LOG.add :debug, "Missing @roots for #{@ontology.acronym}"
-          @concept = @ontology.explore.classes.collection.first.explore.self(full: true)
+          classes = @ontology.explore.classes.collection
+          @concept = classes.first.explore.self(full: true) if classes.first
           return
         end
         

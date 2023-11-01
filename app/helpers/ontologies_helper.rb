@@ -1,3 +1,4 @@
+require 'iso-639'
 module OntologiesHelper
 
   REST_URI = $REST_URL
@@ -348,6 +349,7 @@ module OntologiesHelper
     # Transform each language into a select option
     submission_lang = submission_lang.map do |lang|
       lang = lang.split('/').last.upcase
+      lang = ISO_639.find(lang.to_s.downcase)&.alpha2 || lang
       [lang, lang, { selected: lang.eql?(current_lang) }]
     end
 
@@ -381,6 +383,10 @@ module OntologiesHelper
   end
 
   def new_element_link(title, link)
+    if session[:user].nil?
+      link = "/login?redirect=#{link}"
+    end
+
     link_to(link, title: title, class: "mx-1") do
       inline_svg_tag("icons/plus.svg", width: '15px', height: '15px')
     end

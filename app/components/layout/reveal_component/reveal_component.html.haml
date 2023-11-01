@@ -1,0 +1,5 @@
+%div{data: container_data}
+  %div{'data-action': "change->reveal-component#toggle"}
+    = button
+  %div{'data-reveal-component-target': "item", class: @init_show ? '' : @hidden_class}
+    = content

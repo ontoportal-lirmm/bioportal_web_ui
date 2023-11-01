@@ -4,10 +4,10 @@
 
 
   = render ConceptDetailsComponent.new(id:'concept-details', acronym: @ontology.acronym,
-              properties: @concept.properties,
-              top_keys: %w[description comment],
-              bottom_keys: %w[disjoint subclass is_a has_part],
-              exclude_keys: schemes_keys + label_xl_set + ['inScheme']) do |c|
+                properties: @concept.properties,
+                top_keys: %w[description comment],
+                bottom_keys: %w[disjoint subclass is_a has_part],
+                exclude_keys: schemes_keys + label_xl_set + ['inScheme', 'narrower']) do |c|
 
     - c.header(stripped: true) do |t|
       - t.add_row({th: t('ontology_details.concept.id')}, {td:@concept.id})
@@ -36,15 +36,15 @@
         - unless @concept.memberOf.nil?  || @concept.memberOf.empty?
           - t.add_row({th: t('ontology_details.concept.member_of')}) do |h|
             - h.td do
-              %div.my-1
-                - @concept.memberOf.each do |v|
+              - @concept.memberOf.each do |v|
+                %span.m-1
                   = raw get_link_for_collection_ajax(v, @ontology.acronym, '_blank')
 
         - unless @concept.inScheme.nil?  || @concept.inScheme.empty?
           - t.add_row({th: t('ontology_details.concept.in_schemes')}) do |h|
             - h.td do
-              %div.my-1
-                - @concept.inScheme.each do |v|
+              - @concept.inScheme.each do |v|
+                %span.m-1
                   = raw get_link_for_scheme_ajax(v, @ontology.acronym, '_blank')
 
         - t.add_row({th: t('ontology_details.concept.type')} , {td: @concept.type})
