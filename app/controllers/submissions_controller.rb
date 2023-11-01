@@ -71,9 +71,9 @@ class SubmissionsController < ApplicationController
     category_attributes = submission_metadata.group_by{|x| x['category']}.transform_values{|x| x.map{|attr| attr['attribute']} }
     category_attributes = category_attributes.reject{|key| ['no'].include?(key.to_s)}
     category_attributes['general'] << %w[acronym name groups administeredBy categories]
-    category_attributes['license'] << 'viewingRestriction'
+    category_attributes['licensing'] << 'viewingRestriction'
     category_attributes['relations'] << 'viewOf'
-    @categories_order = ['general', 'description', 'dates', 'license', 'people', 'links', 'images', 'community', 'usage' ,'relations', 'content','methodology', 'object description properties']
+    @categories_order = ['general', 'description', 'dates', 'licensing', 'persons and organizations', 'links', 'media', 'community', 'usage' ,'relations', 'content','methodology', 'object description properties']
     @category_attributes = category_attributes
   end
 

@@ -318,11 +318,11 @@ class OntologiesController < ApplicationController
        relation]
     end
     @methodology_properties = properties_hash_values(category_attributes["methodology"])
-    @agents_properties = properties_hash_values(category_attributes["people"].without('wasGeneratedBy', 'wasInvalidatedBy') + [:hasCreator, :hasContributor, :translator, :publisher, :copyrightHolder])
-    @dates_properties = properties_hash_values(category_attributes["dates"] + [:creationDate, :modificationDate, :released])
-    @links_properties = properties_hash_values(category_attributes["links"].without('includedInDataCatalog') +[:wasGeneratedBy, :wasInvalidatedBy] )
-    @identifiers = properties_hash_values( [:URI, :versionIRI, :identifier])
-    @projects_properties = properties_hash_values(category_attributes["usage"].without('hasDomain') + [:audience, :includedInDataCatalog])
+    @agents_properties = properties_hash_values(category_attributes["persons and organizations"])
+    @dates_properties = properties_hash_values(category_attributes["dates"])
+    @links_properties = properties_hash_values(category_attributes["links"])
+    @identifiers = properties_hash_values([:URI, :versionIRI, :identifier])
+    @projects_properties = properties_hash_values(category_attributes["usage"])
     @ontology_icon_links = [%w[summary/download dataDump], %w[summary/homepage homepage], %w[summary/documentation documentation], %w[icons/github repository], %w[summary/sparql endpoint]]
     if request.xhr?
       render partial: 'ontologies/sections/metadata', layout: false
