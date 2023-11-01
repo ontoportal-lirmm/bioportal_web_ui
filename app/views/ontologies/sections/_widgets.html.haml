@@ -134,7 +134,7 @@
                             %code uri
                             put the complete URI of the class (e.g.,
                             = succeed ")" do
-                              %a.external.free{:href => @ontology.explore.classes["collection"].first.id, :rel => "nofollow", :title => "/visualize/39478/Common_Neoplasm"}
+                              %a.external.free{:href => @ontology.explore.classes["collection"].first&.id, :rel => "nofollow", :title => "/visualize/39478/Common_Neoplasm"}
                                 = @ontology.explore.classes["collection"].first.id
                           %li
                             %code shortid

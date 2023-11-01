@@ -178,10 +178,30 @@ module SubmissionsHelper
   def render_submission_inputs(frame_id)
     output = ""
 
-    if selected_attribute?('format')
-      output += attribute_form_group_container('format') do
-        render partial: 'submissions/submission_format_form'
-      end
+    if selected_attribute?('acronym')
+      output += ontology_acronym_input(update: true)
+    end
+
+    if selected_attribute?('name')
+      output += ontology_name_input
+    end
+
+
+    if selected_attribute?('hasOntologyLanguage')
+      output += render partial: 'submissions/submission_format_form'
+    end
+
+    if selected_attribute?('categories')
+      output +=  ontology_categories_input
+    end
+
+    if selected_attribute?('groups')
+      output +=  ontology_groups_input
+    end
+
+
+    if selected_attribute?('administeredBy')
+      output += ontology_administered_by_input
     end
 
     if selected_attribute?('location')
@@ -197,19 +217,41 @@ module SubmissionsHelper
       end
     end
 
-    reject_metadata = %w[abstract uploadFilePath contact pullLocation prefLabelProperty definitionProperty synonymProperty authorProperty obsoleteParent obsoleteProperty hasOntologyLanguage]
-    label = inline_save? ? '' : nil
-    submission_metadata.reject { |attr| reject_metadata.include?(attr['attribute']) || !selected_attribute?(attr['attribute']) }.each do |attr|
-      output += attribute_form_group_container(attr['attribute']) do
-        raw attribute_input(attr['attribute'], attr_metadata: attr, label: label)
+    if selected_attribute?('viewingRestriction')
+      output += attribute_form_group_container('viewingRestriction') do
+        ontology_visibility_input
       end
     end
+
+
+    if selected_attribute?('viewOf')
+      output += attribute_form_group_container('viewOf') do
+        ontology_view_of_input
+      end
+    end
+
+    reject_metadata = %w[abstract description uploadFilePath contact pullLocation hasOntologyLanguage]
+    label = inline_save? ? '' : nil
 
     if selected_attribute?('abstract')
       output += attribute_form_group_container('abstract') do
         raw attribute_input('abstract',long_text: true, label: label)
       end
     end
+
+    if selected_attribute?('description')
+      output += attribute_form_group_container('description') do
+        raw attribute_input('description',long_text: true, label: label)
+      end
+    end
+
+    submission_metadata.reject { |attr| reject_metadata.include?(attr['attribute']) || !selected_attribute?(attr['attribute']) }.each do |attr|
+      output += attribute_form_group_container(attr['attribute']) do
+        raw attribute_input(attr['attribute'], label: label)
+      end
+    end
+
+
 
 
     render TurboFrameComponent.new(id: frame_id) do

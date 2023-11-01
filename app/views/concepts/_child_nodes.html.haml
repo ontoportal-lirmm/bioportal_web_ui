@@ -1,7 +1,7 @@
 - output =""
 - for child in @children
-  - output << tree_link_to_concept(child: child, ontology_acronym: child.explore.ontology.acronym, active_style: '', node: @concept)
+  - output << tree_link_to_concept(child: child, ontology_acronym: @ontology.acronym, active_style: '', node: @concept, skos: !@schemes.nil?)
   - if child.hasChildren
-    - output << tree_link_to_children(child: child, concept_schemes: @schemes)
+    - output << tree_link_to_children(child: child, acronym: @ontology.acronym, concept_schemes: @schemes)
   - output << "</li>"
 = raw output

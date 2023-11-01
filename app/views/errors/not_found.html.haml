@@ -1,6 +1,6 @@
-.d-flex.align-items-center.flex-column.position-relative
+.d-flex.align-items-center.flex-column.position-relative.error-page
     = inline_svg("errors/agroportal.svg") 
-    .position-absolute{style: "top: 442px; font-size: 30px; font-weight: 800; color: #263238;"}
+    %h1.position-absolute{style: "top: 442px; font-size: 30px; font-weight: 800; color: #263238;"}
         = @error_message || "Page not found"
     .buttons.d-flex.justify-content-center.mt-3
         %div{style: "width: 216px;"}

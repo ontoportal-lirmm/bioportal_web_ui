@@ -6,7 +6,7 @@
         .description_text
           = render TextAreaFieldComponent.new(value: @submission_latest&.description)
         - unless @submission_latest&.logo.nil?
-          = image_tag(@submission_latest&.logo, class: 'description_img')
+          = image_tag(@submission_latest&.logo, class: 'description_img', width: '145px')
     - l.row do
       %span.creation_text
         - if @submission_latest&.released

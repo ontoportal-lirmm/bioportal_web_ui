@@ -16,39 +16,39 @@
     %div.col
       %form
         %div.form-group
-          = text_area_tag("annotation_text", nil, rows: 10, class: "form-control", placeholder: "Enter or paste text to be annotated", "aria-describedby": "annotateTextHelpBlock")
+          = text_area_tag("annotation_text", nil, rows: 10, class: "form-control", placeholder: t('annotator.annotate_text_prompt'), "aria-describedby": "annotateTextHelpBlock")
           %small#annotateTextHelpBlock.form-text
-            %a#insert_text_link{href: "javascript:void(0);"} insert sample text
+            %a#insert_text_link{href: "javascript:void(0);"}= t('nbco_annotatosplus.insert_sample_text')
 
-        %a#advancedOptionsLink{:href => "javascript:void(0);"} Show advanced options >>
+        %a#advancedOptionsLink{:href => "javascript:void(0);"}= t('nbco_annotatosplus.show_advanced_options') + ">>"
 
         %div#advanced-options-container.mt-4
           %div.form-group
             %div.custom-control.custom-checkbox.custom-control-inline
               = check_box_tag("longest_only", "all", false, class: "custom-control-input")
-              %label.custom-control-label{for: "longest_only"} Match longest only
+              %label.custom-control-label{for: "longest_only"}= t('nbco_annotatosplus.match_longest_only')
 
             %div.custom-control.custom-checkbox.custom-control-inline
               = check_box_tag("whole_word_only", "all", false, class: "custom-control-input")
-              %label.custom-control-label{for: "whole_word_only"} Match partial words
+              %label.custom-control-label{for: "whole_word_only"}= t('nbco_annotatosplus.match_partial_words')
 
             %div.custom-control.custom-checkbox.custom-control-inline
               = check_box_tag("mappings", "all", false, id: "mappings_all", class: "custom-control-input")
-              %label.custom-control-label{for: "mappings_all"} Include mappings
+              %label.custom-control-label{for: "mappings_all"}= t('nbco_annotatosplus.include_mappings')
 
             %div.custom-control.custom-checkbox.custom-control-inline
               = check_box_tag("exclude_numbers", "all", false, class: "custom-control-input")
-              %label.custom-control-label{for: "exclude_numbers"} Exclude numbers
+              %label.custom-control-label{for: "exclude_numbers"}= t('nbco_annotatosplus.exclude_numbers')
 
             %div.custom-control.custom-checkbox.custom-control-inline
               = check_box_tag("exclude_synonyms", "all", false, class: "custom-control-input")
-              %label.custom-control-label{for: "exclude_synonyms"} Exclude synonyms
+              %label.custom-control-label{for: "exclude_synonyms"}= t('nbco_annotatosplus.exclude_synonyms')
 
           %div.form-group
             %label{for: "ontology_ontologyId"} Select ontologies
             = select_tag("ontology_ontologyId", options_from_collection_for_select(@annotator_ontologies, :acronym, lambda { |ont| "#{ont.name} (#{ont.acronym})" }), |
                 multiple: true, class: "form-control", "aria-describedby": "selectOntologiesHelpBlock") |
-            %small#selectOntologiesHelpBlock.form-text.text-muted Start typing to select ontologies or leave blank to use all
+            %small#selectOntologiesHelpBlock.form-text.text-muted= t('nbco_annotatosplus.select_ontologies')
 
           - if @sem_type_ont
             %div.form-group

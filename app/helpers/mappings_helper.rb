@@ -37,7 +37,6 @@ module MappingsHelper
         false
       end
     else
-      LOG.add :error, "Warning: Mapping relation is not an array"
       false
     end
   end

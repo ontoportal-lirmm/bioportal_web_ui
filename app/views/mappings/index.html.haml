@@ -1,13 +1,14 @@
 - @title= t('mappings.title')
-%div#mappings_container.container-fluid.py-4.flex-grow-1
-  %h1.my-1= t('mappings.title')
+%div.container
+  %div#mappings_container.container-fluid.py-4.flex-grow-1
+    %h1.my-1= t('mappings.title')
 
-  %div#mappings_uploader.my-2
-    = link_to_modal t('mappings.upload_mappings') , "/mappings/loader", class: "btn btn-primary btn-block",
-       data: { show_modal_title_value: t('mappings.mappings_bulk_load'), show_modal_size_value: 'modal-xl'}
-  %hr.my-3.w-100
-    #accordionExample.accordion
-      = render partial: 'ontology_mappings'
-      = render partial: 'concept_mappings_selector'
+    %div#mappings_uploader.my-2
+      = link_to_modal t('mappings.upload_mappings') , "/mappings/loader", class: "btn btn-primary btn-block",
+        data: { show_modal_title_value: t('mappings.mappings_bulk_load'), show_modal_size_value: 'modal-xl'}
+    %hr.my-3.w-100
+      #accordionExample.accordion
+        = render partial: 'ontology_mappings'
+        = render partial: 'concept_mappings_selector'
 
 

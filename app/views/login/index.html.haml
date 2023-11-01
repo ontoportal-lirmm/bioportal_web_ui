@@ -1,24 +1,24 @@
-- @title = "Login"
+- @title = t('login.title')
 - unless @errors.nil?
   %div{:style => "color:red;"}
-    Errors On Form
+    = t('login.invalid_login')
     %ul
       - for error in @errors
         %li= error
 .d-flex.justify-content-center
   .login-form
     = form_for(:user, :url => {:controller => 'login',:action=>'create'}) do |f|
-      %p.login-input-title Username or Email
-      = text_field 'user', 'username', class: "login-input email-input", placeholder: "Enter your email"
-      %p.login-input-title Password
-      = password_field 'user','password', :autocomplete => "off", class: "login-input password-input", placeholder: "Enter your password"
+      %p.login-input-title= t('login.username_or_email')
+      = text_field 'user', 'username', class: "login-input email-input", placeholder: t('login.enter_email')
+      %p.login-input-title= t('login.password')
+      = password_field 'user','password', :autocomplete => "off", class: "login-input password-input", placeholder:  t('login.enter_password')
       %a.login-forgot-password{:href => "/lost_pass"}
-        %p Forgot password?
+        %p= t('login.forgot_password')
       .login-button-container
         = render Buttons::RegularButtonComponent.new(id: 'login-button', value: "Login", type:'submit')
       %p.dont-have-account
-        Don't have an account?
-        %a.text-decoration-none{:href => new_user_path} Register
+        = t('login.no_account')
+        %a.text-decoration-none{:href => new_user_path}= t('login.register')
     %hr.divider.w-100
     %div.d-flex.justify-content-center.flew-wrap
       - omniauth_providers_info.each do |provider, config|
