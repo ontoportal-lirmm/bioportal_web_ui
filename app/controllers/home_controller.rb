@@ -7,9 +7,9 @@ class HomeController < ApplicationController
   include FairScoreHelper
 
   def index
-    @analytics = LinkedData::Client::Analytics.last_month
+    @analytics =  helpers.ontologies_analytics
     # Calculate BioPortal summary statistics
-    @ont_count = @analytics.onts.size
+    @ont_count = @analytics.keys.size
     metrics = LinkedData::Client::Models::Metrics.all
     metrics = metrics.each_with_object(Hash.new(0)) do |h, sum|
       h.to_hash.slice(:classes, :properties, :individuals).each { |k, v| sum[k] += v }
@@ -32,9 +32,9 @@ class HomeController < ApplicationController
 
     @anal_ont_names = []
     @anal_ont_numbers = []
-    @analytics.onts[0..4].each do |visits|
-      @anal_ont_names << visits[:ont]
-      @anal_ont_numbers << visits[:views]
+    @analytics.sort_by{|ont, count| -count}[0..4].each do |ont, count|
+      @anal_ont_names << ont
+      @anal_ont_numbers << count
     end
 
   end

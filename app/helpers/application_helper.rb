@@ -24,6 +24,14 @@ module ApplicationHelper
                        :cclicense => "http://creativecommons.org/licenses/"}
 
 
+  def ontologies_analytics
+    LinkedData::Client::Analytics.all.to_h.map do |key, ontology_analytics|
+      next if key.eql?(:links) || key.eql?(:context)
+
+      [key.to_s, ontology_analytics.to_h.values.map { |x| x&.values }.flatten.compact.sum]
+    end.compact.to_h
+  end
+
   def get_apikey
     unless session[:user].nil?
       return session[:user].apikey

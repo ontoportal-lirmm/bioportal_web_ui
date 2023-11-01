@@ -22,12 +22,7 @@ module SubmissionFilter
     # @page = LinkedData::Client::Models::OntologySubmission.all(request_params)
     @page = OpenStruct.new(page: 1, next_page: nil)
     submissions = LinkedData::Client::Models::OntologySubmission.all(request_params)
-    analytics = LinkedData::Client::Analytics.all
-    @analytics = analytics.to_h.map do |key, ontology_analytics|
-      next if key.eql?(:links) || key.eql?(:context)
-
-      [key.to_s, ontology_analytics.to_h.values.map { |x| x&.values }.flatten.compact.sum]
-    end.compact.to_h
+    @analytics =  helpers.ontologies_analytics
 
     # get fair scores of all ontologies
     @fair_scores = fairness_service_enabled? ? get_fair_score('all') : nil
