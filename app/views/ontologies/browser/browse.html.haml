@@ -34,15 +34,15 @@
 
       .browse-sub-container
         .browse-first-row{data:{controller: "browse-filters", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL"}}
-          %div.d-flex.p-2{style: "height: 67px"}
+          %div.pt-1
             = upload_ontology_button
-          %div{style:'margin-top: 27px'}
+          %div{style:'margin-top: 30px'}
             %p.browse-filters-title Filters
             - if session[:user]&.admin?
               %div.browse-filter.admin-border
                 = render SwitchInputComponent.new(id:'filter-private', name:'private_only', checked: @show_private_only) do
                   Show private ontology only
-            %div.browse-filter{style:'border: none'}
+            %div.browse-filter
               = render SwitchInputComponent.new(id:'filter-views', name:'views', checked: @show_views) do
                 Show ontology views
               = render SwitchInputComponent.new(id:'filter-retired', name:'retired',checked: @show_retired) do
