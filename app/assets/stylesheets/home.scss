@@ -228,24 +228,7 @@ i.fa.fa-caret-square-o-down {
 }
 .home-upload-ontology-button{
   margin-top: 30px;
-  text-decoration: none;
-  color: var(--primary-color);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   width: fit-content;
-  padding: 15px 25px;
-  border: 1px solid var(--primary-color);
-  border-radius: 8px;
-  font-size: 15px;
-  transition: background-color 0.3s ease;
-}
-.home-upload-ontology-button:hover{
-  color: white !important;
-  background-color: var(--primary-color);
-}
-.home-upload-ontology-button:hover .home-upload-icon path{
-  fill: white;
 }
 
 .home-upload-icon {
