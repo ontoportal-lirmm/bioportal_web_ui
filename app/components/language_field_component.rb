@@ -13,11 +13,7 @@ class LanguageFieldComponent < ViewComponent::Base
   end
 
   def lang_code
-    if @lang_code
-      @lang_code = 'gb' if @lang_code.eql?('en')
-      @lang_code
-    else
-      @value
-    end
+    @lang_code = 'gb' if @lang_code.eql?('en')
+    @lang_code
   end
 end

@@ -97,8 +97,6 @@
   border-radius: 5px;
   padding: 15px 20px;
   margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
   position: relative;
 }
 
@@ -197,7 +195,6 @@
 }
 
 .browse-uploaded-date {
-  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -296,16 +293,16 @@
 
 .browse-search-bar .browse-format-filter {
   position: absolute;
-  margin-left: 557px;
+  margin-left: 500px;
   z-index: 2;
   width: 150px;
 }
 
 .browse-search-bar .browse-sort-by-filter {
   position: absolute;
-  margin-left: 692px;
+  margin-left: 632px;
   z-index: 2;
-  width: 135px;
+  width: 200px;
   border-radius: 0 14px 14px 0;
 }
 

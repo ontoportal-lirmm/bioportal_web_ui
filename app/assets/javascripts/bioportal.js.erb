@@ -512,7 +512,7 @@ function bpPopWindow(e) {
     newWindow.focus()
   };
 }
-jQuery(".footer, div.dropdown-menu.dropdown-menu-right").on("click", "a.pop_window", { w: "800", h: "600" }, bpPopWindow)
+jQuery("#submitFeedbackMenuItem").on("click", { w: "800", h: "600" }, bpPopWindow)
 
 /**************************************************************
  * Standardized BP modal popups
