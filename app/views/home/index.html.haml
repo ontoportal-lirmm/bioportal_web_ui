@@ -42,7 +42,7 @@
       %h4
         = t('.welcome', site: $SITE)
       %p
-        = t('.tagline')
+        = t('home.index.tagline')
       = render OntologySearchInputComponent.new
  
 .home-body-container
@@ -91,7 +91,7 @@
           - if fairness_service_enabled?
             %div#fair-home{data:{controller:"fair-score-home"}}
               = render partial: "shared/fair_score_bars", locals: {data: nil}
-          %a{:href => "#fairDetails"}
+            %a{:href => "/landscape#fairness_assessment"}
             %div.home-fair-details
               %p= t('home.fair_details')
               = inline_svg_tag "arrow-right.svg"

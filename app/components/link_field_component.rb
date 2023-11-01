@@ -2,9 +2,10 @@
 
 class LinkFieldComponent < ViewComponent::Base
 
-  def initialize(value:)
+  def initialize(value:, raw: false)
     super
     @value = value
+    @raw = raw
   end
 
 

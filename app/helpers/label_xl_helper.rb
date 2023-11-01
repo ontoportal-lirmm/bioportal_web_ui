@@ -1,7 +1,7 @@
 module LabelXlHelper
 
   def get_label_xl(ontology, label_xl_uri)
-    ontology.explore.xl_labels({ include: 'all' }, label_xl_uri)
+    ontology.explore.xl_labels({ include: 'all', lang: 'all'}, label_xl_uri)
   end
 
   def get_label_xl_label(label_xl)

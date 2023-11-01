@@ -7,8 +7,9 @@ class NestedFormInputsComponent < ViewComponent::Base
   renders_many :rows
   renders_one :empty_state
 
-  def initialize(object_name: '')
+  def initialize(object_name: '', default_empty_row: false)
     super
     @object_name = object_name
+    @default_row = default_empty_row
   end
 end
