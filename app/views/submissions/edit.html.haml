@@ -25,6 +25,10 @@
 
         %hr#edit-ontology-actions-devider
         .edit-ontology-actions
+          .cancel-button.mx-2{onClick: 'window.history.back();'}
+            = render Buttons::RegularButtonComponent.new(id:'cancel-button', value: "Cancel", variant: "secondary", size: "slim") do |btn|
+              - btn.icon_left do
+                - inline_svg_tag "x.svg", width: "20", height: "20"
           .reset-all-button#reset-all-button
             = render Buttons::RegularButtonComponent.new(id:'reset-all-fields', value: "Reset all fields", variant: "secondary", size: "slim") do |btn|
               - btn.icon_left do
