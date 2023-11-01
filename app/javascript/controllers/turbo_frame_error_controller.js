@@ -34,18 +34,13 @@ export default class extends Turbo_frame_controller {
     Array.from(styles).forEach(e => el.removeChild(e))
 
     let body = el.querySelector('h1')
-    let div = document.createElement('div')
-    div.className ="text-center"
-    div.innerHTML = (body ? body.innerText : el.innerHTML)
-    this.errorMessageTarget.firstElementChild.appendChild(div)
+    this.errorMessageTarget.firstElementChild.querySelector('.alert-message').innerHTML =  (body ? body.innerText : el.innerHTML)
     $(this.errorMessageTarget).show()
   }
 
   #hideError(){
-    let child =this.errorMessageTarget.firstElementChild
     let count = this.errorMessageTarget.firstElementChild.childElementCount
-    if(count === 2) {
-      child.removeChild(child.lastElementChild)
+    if(count !== 0) {
       $(this.errorMessageTarget).hide()
     }
   }

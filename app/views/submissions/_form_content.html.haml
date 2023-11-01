@@ -1,20 +1,19 @@
-= render TurboFrameComponent.new(id:id) do
-  - unless @errors.nil?
-    = error_message_alert
-    = form_for :submission, url: ontology_submission_path(params["ontology_id"], params["id"]), html: { id: "ontology_submission_form", method: :put, multipart: true, 'data-turbo': true} do
-      - if selected_attribute?('name')
-        = render 'ontologies/form'
+- unless @errors.nil?
+  = error_message_alert
+  = form_for :submission, url: ontology_submission_path(params["ontology_id"], params["id"]), html: { id: "ontology_submission_form", method: :put, multipart: true, 'data-turbo': true} do
+    - if selected_attribute?('name')
+      = render 'ontologies/form'
 
-      = render_submission_inputs('')
-      %hr#edit-ontology-actions-devider
-      .edit-ontology-actions
-        .reset-all-button#reset-all-button
-          = render Buttons::RegularButtonComponent.new(id:'reset-all-fields', value: "Reset all fields", variant: "secondary", size: "slim") do |btn|
-            - btn.icon_left do
-              - inline_svg_tag "reload.svg"
-        .save-button
-          = render Buttons::RegularButtonComponent.new(id:'save-button', value: "Save", variant: "primary", size: "slim", type: "submit") do |btn|
-            - btn.icon_left do
-              - inline_svg_tag "check.svg"
+    = render_submission_inputs('')
+    %hr#edit-ontology-actions-devider
+    .edit-ontology-actions
+      .reset-all-button#reset-all-button
+        = render Buttons::RegularButtonComponent.new(id:'reset-all-fields', value: "Reset all fields", variant: "secondary", size: "slim") do |btn|
+          - btn.icon_left do
+            - inline_svg_tag "reload.svg"
+      .save-button
+        = render Buttons::RegularButtonComponent.new(id:'save-button', value: "Save", variant: "primary", size: "slim", type: "submit") do |btn|
+          - btn.icon_left do
+            - inline_svg_tag "check.svg"
 
 

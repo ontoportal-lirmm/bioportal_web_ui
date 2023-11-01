@@ -61,7 +61,7 @@
     %a.home-upload-ontology-button{:href => link , class: "home-upload-icon"}  
       = inline_svg_tag "upload.svg", class:"home-upload-icon"
       = t('home.ontology_upload_button')
-  
+ 
   .home-section
     %h4
       = t('home.recommender_annotator')
@@ -83,7 +83,7 @@
     .home-section-sub-sections-container
       .home-sub-section-left
         %div.align-items
-          %h4.margin-items FAIR scores
+          %h4.margin-items= t('home.fairness')
           = render Display::InfoTooltipComponent.new(text: "You are seing the average scores for all the public ontologies in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness")
         %hr.home-section-line/
         .home-card.home-fair-scores
@@ -93,7 +93,7 @@
             %a{:href => "/landscape#fairness_assessment"}
               %div.home-fair-details
                 %p= t('home.fair_details')
-          
+         
       .home-sub-section-right
         %h4= t('home.twitter_news')
         %hr.home-section-line

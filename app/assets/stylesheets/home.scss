@@ -233,7 +233,7 @@ i.fa.fa-caret-square-o-down {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 193px;
+  width: fit-content;
   padding: 15px 25px;
   border: 1px solid var(--primary-color);
   border-radius: 8px;
@@ -246,6 +246,10 @@ i.fa.fa-caret-square-o-down {
 }
 .home-upload-ontology-button:hover .home-upload-icon path{
   fill: white;
+}
+
+.home-upload-icon {
+  margin-right: 10px;
 }
 
 

@@ -1,12 +1,5 @@
-:javascript
-  jQuery(document).ready(function() {
-    if(window.location.href.includes("#fair-details")){
-      jQuery('#fair-details').click()
-    }
-  })
-
 - if @fair_scores_data
-  %div.statistics_container.d-flex.flex-grow-1{data:{controller:"fair-score-summary"}}
+  %div#fair-details.statistics_container.d-flex.flex-grow-1{data:{controller:"fair-score-summary"}}
     %div.w-50
       = render partial: "shared/fair_score_radar" , locals: {data: @fair_scores_data}
     %div.w-50
@@ -16,10 +9,18 @@
     = link_to_modal(text.html_safe,
                   "/ajax/fair_score/html/?ontologies=#{@ontology.acronym}",
                   class: "btn",
+                  id:'fair-details-link',
                   data: { show_modal_title_value: "FAIRness assessment questions", show_modal_size_value: 'modal-xl' },
                   )
 - else
   %p.font-italic= "We are still collecting data for #{@ontology.acronym}"
 
+
+:javascript
+  jQuery(document).ready(() => {
+     if(window.location.href.includes("#fair-details")){
+        jQuery('#fair-details-link')[0].click()
+     }
+  })
 
 

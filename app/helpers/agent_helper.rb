@@ -84,7 +84,7 @@ module AgentHelper
     out = agent.name.to_s.humanize
     identifiers = display_identifiers(agent.identifiers, link: link)
     out = "#{out} (#{identifiers})" unless identifiers.empty?
-    affiliations = agent.affiliations.map { |a| display_agent(a, link: link) }.join(', ')
+    affiliations = Array(agent.affiliations).map { |a| display_agent(a, link: link) }.join(', ')
     out = "#{out} (affiliations: #{affiliations})" unless affiliations.empty?
     out
   end

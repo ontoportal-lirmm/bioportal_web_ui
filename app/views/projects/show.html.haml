@@ -1,27 +1,30 @@
 - @title = "Project #{@project.name}"
-%div{:style => "padding: 1em;"}
-  %h1{:style => "font-size: xx-large;"}= @project.name
-  - if session[:user] && (@project.creator.include?(session[:user].id) || session[:user].admin?)
-    = link_to "Edit Project", edit_project_path(@project.acronym)
-  %br/
-  %br/
-  %p{:style => "margin-bottom: 5px;"}
-    %strong Description:
-    = @project.description
-  %p{:style => "margin-bottom: 5px;"}
-    %strong Institution:
-    = @project.institution
-  %p{:style => "margin-bottom: 5px;"}
-    %strong Contacts:
-    = @project.contacts
-  %p
-    %strong Home Page:
-    - if @project.homePage
-      = link_to @project.homePage, @project.homePage, rel: "nofollow"
-  %h2{:style => "padding-top: 1em;"} Ontologies Used
-  - if @ontologies_used.empty?
-    No ontologies are currently associated with this project
-  %table.zebra{:cellpadding => "0", :cellspacing => "0", :width => "70%"}
-    %ul
-      - for ontology in @ontologies_used
-        %li= link_to(ontology["name"], ontology_path(ontology["acronym"]))
+
+%div.container
+
+  %div{:style => "padding: 1em;"}
+    %h1{:style => "font-size: xx-large;"}= @project.name
+    - if session[:user] && (@project.creator.include?(session[:user].id) || session[:user].admin?)
+      = link_to "Edit Project", edit_project_path(@project.acronym)
+    %br/
+    %br/
+    %p{:style => "margin-bottom: 5px;"}
+      %strong Description:
+      = @project.description
+    %p{:style => "margin-bottom: 5px;"}
+      %strong Institution:
+      = @project.institution
+    %p{:style => "margin-bottom: 5px;"}
+      %strong Contacts:
+      = @project.contacts
+    %p
+      %strong Home Page:
+      - if @project.homePage
+        = link_to @project.homePage, @project.homePage, rel: "nofollow"
+    %h2{:style => "padding-top: 1em;"} Ontologies Used
+    - if @ontologies_used.empty?
+      No ontologies are currently associated with this project
+    %table.zebra{:cellpadding => "0", :cellspacing => "0", :width => "70%"}
+      %ul
+        - for ontology in @ontologies_used
+          %li= link_to(ontology["name"], ontology_path(ontology["acronym"]))

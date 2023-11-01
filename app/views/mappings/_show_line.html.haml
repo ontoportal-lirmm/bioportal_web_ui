@@ -43,13 +43,14 @@
         %img{:src => asset_path('sifr/english_language_flag.png'), :style => "padding: 5px", :align => "right", :title => "Traduction"}
   %td
     = type
-  %td{:class => 'delete_mappings_column'}
-    - if map.id && !map.id.empty? && session[:user] && (session[:user].id.to_i == map.creator || session[:user].admin?) && map.source.eql?('REST')
-      %div.d-flex
-        = link_to_modal("Edit",
-                mapping_path(map_id, {conceptid_from: @concept.id}),
-                role: "button",
-                class: "btn btn-link",
-                data: { show_modal_title_value: "Edit mapping for #{@concept.prefLabel}" },
-                )
-        = button_to "Delete", CGI.unescape(mapping_path(map.id)), method: :delete, class:'btn btn-link',  form: {data: { turbo: true, turbo_confirm: "Are you sure?", turbo_frame: '_top'}}
+  - if current_user_admin?
+    %td{:class => 'delete_mappings_column'}
+      - if map.id && !map.id.empty? && session[:user] && (session[:user].id.to_i == map.creator || session[:user].admin?) && map.source.eql?('REST')
+        %div.d-flex
+          = link_to_modal("Edit",
+                  mapping_path(map_id, {conceptid_from: @concept.id}),
+                  role: "button",
+                  class: "btn btn-link",
+                  data: { show_modal_title_value: "Edit mapping for #{@concept.prefLabel}" },
+                  )
+          = button_to "Delete", CGI.unescape(mapping_path(map.id)), method: :delete, class:'btn btn-link',  form: {data: { turbo: true, turbo_confirm: "Are you sure?", turbo_frame: '_top'}}
