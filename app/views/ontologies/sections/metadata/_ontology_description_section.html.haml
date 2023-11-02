@@ -10,16 +10,12 @@
     - l.row do
       %span.creation_text
         - if @submission_latest&.released
-          %ul
-            %li
-              Inititally created on
-              %span.date_creation_text= l(Date.parse(@submission_latest.released), format: :monthfull_day_year) + '.'
+          Initial release occurred on
+          %span.date_creation_text= l(Date.parse(@submission_latest.released), format: :monthfull_day_year) + '.'
         - if @submission_latest&.contact
-          %ul
-            %li
-              For additional information, contact:
-              %span.creator_text
-                = display_contact(@submission_latest.contact)
+          For additional information, reach out
+          %span.creator_text
+            = display_contact(@submission_latest.contact)
 
     - unless Array(@submission_latest&.naturalLanguage).empty?
       - l.row do
