@@ -101,7 +101,7 @@ module SubmissionInputsHelper
       users_list = LinkedData::Client::Models::User.all(include: "username").map { |u| [u.username, u.id] }
       users_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
     end
-    select_input(label: "Administrator", name: "ontology[administeredBy]", values: users_list, selected: ontology.administeredBy || session[:user].id, multiple: true)
+    select_input(label: "Administrators", name: "ontology[administeredBy]", values: users_list, selected: ontology.administeredBy || session[:user].id, multiple: true)
   end
 
   def ontology_categories_input(ontology = @ontology, categories = @categories)
@@ -150,7 +150,7 @@ module SubmissionInputsHelper
     render Layout::RevealComponent.new(init_show: ontology.view?) do |c|
       c.button do
         content_tag(:span, class: 'd-flex') do
-          switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is a view of another ontology?', checked: ontology.view?)
+          switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is a view of another ontology?', checked: ontology.view?, style: 'font-size: 14px;')
         end
       end
 
@@ -166,7 +166,7 @@ module SubmissionInputsHelper
                                           error_message: attribute_error(:contact)) do
       render NestedFormInputsComponent.new(object_name: 'contact') do |c|
         c.header do
-          content_tag(:div, "#{name} name", class: 'w-50') + content_tag(:div, "#{name} email", class: 'w-50')
+          content_tag(:div, "#{name} Name", class: 'w-50') + content_tag(:div, "#{name} Email", class: 'w-50')
         end
 
         c.template do

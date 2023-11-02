@@ -1,9 +1,9 @@
 module SubmissionsHelper
   def metadata_help_link
     content_tag(:div, class: 'edit-ontology-desc') do
-      html = content_tag(:span, 'To understand the ontologies metadata:')
+      html = content_tag(:span, 'Learn more about ontology ')
       html += content_tag(:span, style: 'width: 10px; height: 10px') do
-        link_to(render(ExternalLinkTextComponent.new(text: 'see the Wiki')), "https://github.com/agroportal/documentation/wiki/Ontology-metadata")
+        link_to(render(ExternalLinkTextComponent.new(text: 'metadata in ' + portal_name + ' here:')), "https://github.com/agroportal/documentation/wiki/Ontology-metadata")
       end
       html.html_safe
     end
