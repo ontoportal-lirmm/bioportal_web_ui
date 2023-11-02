@@ -2,7 +2,7 @@
   - if @boolean_switch
     = hidden_field_tag @name, @value
   - if content || !@label.empty?
-    %p
+    %p{style: @style}
       = content || @label
   %label.switch{for: check_box_id}
     = check_box_tag  check_box_name, @value, @checked, class: '', id:  check_box_id, onChange: "#{boolean_switch_action}"
