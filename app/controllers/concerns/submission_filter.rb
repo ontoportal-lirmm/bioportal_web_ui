@@ -189,7 +189,7 @@ module SubmissionFilter
     @sorts_options = [
       ['Sort by name', 'ontology_name'],
       ['Sort by class count', 'metrics_classes'],
-      ['Sort by instances/Concepts count', 'metrics_individuals'],
+      ['Sort by instances/concepts count', 'metrics_individuals'],
       ['Sort by upload date', 'creationDate'],
       ['Sort by release date', 'released'],
       ['Sort by FAIR score', 'fair'],
