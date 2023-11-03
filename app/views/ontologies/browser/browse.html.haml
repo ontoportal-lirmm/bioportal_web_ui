@@ -2,7 +2,7 @@
   .browse-container
     .container.align-alert
       - if session[:user]&.admin?
-        .div{style:'width: 100%;'}    
+        %div{style:'width: 70%;'}
           = render Display::AlertComponent.new(type: 'info') do
             %span.d-flex.align-items-center
               %svg{:fill => "none", :height => "11", :viewbox => "0 0 11 11", :width => "11", :xmlns => "http://www.w3.org/2000/svg"}
