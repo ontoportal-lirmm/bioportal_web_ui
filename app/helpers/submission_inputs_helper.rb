@@ -164,7 +164,7 @@ module SubmissionInputsHelper
     attr = SubmissionMetadataInput.new(attribute_key: 'contact', attr_metadata: attr_metadata('contact'))
     render Input::InputFieldComponent.new(name: '', label: attr_header_label(attr, label, show_tooltip: show_help),
                                           error_message: attribute_error(:contact)) do
-      render NestedFormInputsComponent.new(object_name: 'contact') do |c|
+      render NestedFormInputsComponent.new(object_name: 'contact', default_empty_row: true) do |c|
         c.header do
           content_tag(:div, "#{name} Name", class: 'w-50') + content_tag(:div, "#{name} Email", class: 'w-50')
         end
