@@ -1,10 +1,14 @@
 module SubmissionsHelper
   def metadata_help_link
     content_tag(:div, class: 'edit-ontology-desc') do
-      html = content_tag(:span, 'Learn more about ontology ')
-      html += content_tag(:span, style: 'width: 10px; height: 10px') do
-        link_to(render(ExternalLinkTextComponent.new(text: 'metadata in ' + portal_name + ' here:')), "https://github.com/agroportal/documentation/wiki/Ontology-metadata")
+      html = content_tag(:div) do
+          content_tag(:div, 'Please fill in basic general information about your ontology.') +
+          content_tag(:span, 'AgroPortal will automatically extract metadata properties declared for the owl:Ontology object in the source file, ') +
+          content_tag(:span, style: 'width: 10px; height: 10px') do
+            link_to(render(ExternalLinkTextComponent.new(text: 'see guidelines and recommendations for metadata here:')), "https://github.com/agroportal/documentation/wiki/Ontology-metadata", target: "_blank")
+          end
       end
+
       html.html_safe
     end
   end
@@ -36,7 +40,7 @@ module SubmissionsHelper
     if container_id
       link += "&container_id=#{container_id}"
     else
-        link += "&container_id=#{attribute_input_frame_id(acronym, submission_id, attribute)}"
+      link += "&container_id=#{attribute_input_frame_id(acronym, submission_id, attribute)}"
     end
     link_to link, data: { turbo: true }, class: 'btn btn-sm btn-light' do
       capture(&block)

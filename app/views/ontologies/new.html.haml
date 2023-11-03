@@ -9,10 +9,10 @@
           .upload-ontology-center
             .Upload-ontology-title
               %div
-                = @is_update_ontology ? "Upload new update" : "Upload ontology"
+                = @is_update_ontology ? "Add new submisison for ontology #{@ontology.acronym}" : "Submit new ontology"
               %hr
             .upload-ontology-progress
-              = render Layout::ProgressPagesComponent.new(pages_title: ['Details', 'General metadata', 'Dates contacts']) do |c|
+              = render Layout::ProgressPagesComponent.new(pages_title: ['Details', 'General information', 'Dates and contacts']) do |c|
                 - c.page do
                   = render partial: 'ontologies/form'
                 - c.page do
@@ -47,8 +47,8 @@
                 - c.page do
                   .upload-ontology-input-field-container
                     - if @is_update_ontology
-                      = attribute_input('modificationDate', label: 'Modification date (dd/mm/yy)', max_date: Date.today)
+                      = attribute_input('modificationDate', label: 'Modification date', max_date: Date.today)
                     - else
-                      = attribute_input('released',  label: 'Date of original creation (dd/mm/yy)',  max_date: Date.today)
+                      = attribute_input('released',  label: 'Date of original creation',  max_date: Date.today)
                   .upload-ontology-contact
                     = contact_input(show_help: false)

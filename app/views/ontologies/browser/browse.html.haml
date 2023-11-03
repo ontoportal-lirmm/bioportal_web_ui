@@ -1,16 +1,14 @@
 .browse-center
   .browse-container
-
-    .browse-submit-new-ontology-and-you-are-admin-container
+    .container.align-alert
       - if session[:user]&.admin?
-        %div
-          %div.browse-you-are-admin
-            %h3 Welcome admin
-            %div
+        %div{style:'width: 70%;'}
+          = render Display::AlertComponent.new(type: 'info') do
+            %span.d-flex.align-items-center
               %svg{:fill => "none", :height => "11", :viewbox => "0 0 11 11", :width => "11", :xmlns => "http://www.w3.org/2000/svg"}
                 %circle{:cx => "5.5", :cy => "5.5", :fill => 'var(--admin-color)', :r => "5.5"}
-              %p This coloring indicates admin-only features
-
+              %p{style: "margin: 10px"} Welcome admin,this coloring indicates admin-only features
+    .browse-submit-new-ontology-and-you-are-admin-container
     %a#back_top_btn.btn.btn-primary.btn-floating.btn-lg
       %i.fas.fa-arrow-up.text-white
 
@@ -36,15 +34,15 @@
 
       .browse-sub-container
         .browse-first-row{data:{controller: "browse-filters", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL"}}
-          %div.d-flex.p-2{style: "height: 67px"}
+          %div.pt-1
             = upload_ontology_button
-          %div{style:'margin-top: 27px'}
+          %div{style:'margin-top: 30px'}
             %p.browse-filters-title Filters
             - if session[:user]&.admin?
               %div.browse-filter.admin-border
                 = render SwitchInputComponent.new(id:'filter-private', name:'private_only', checked: @show_private_only) do
                   Show private ontology only
-            %div.browse-filter{style:'border: none'}
+            %div.browse-filter
               = render SwitchInputComponent.new(id:'filter-views', name:'views', checked: @show_views) do
                 Show ontology views
               = render SwitchInputComponent.new(id:'filter-retired', name:'retired',checked: @show_retired) do
@@ -77,7 +75,7 @@
         .browse-second-row
           .browse-search-bar
             .browse-search-container
-              %input{:name => "search", :placeholder => "Start typing to filter ontologies, e.g AGROVOC...", :type => "text", :value => @search, data: {action: "input->browse-filters#dispatchInputEvent"}}
+              %input{:name => "search", :placeholder => "Start typing to filter ontologies, e.g., AGROVOC...", :type => "text", :value => @search, data: {action: "input->browse-filters#dispatchInputEvent"}}
               .browse-search-filters
                 %select#format.browse-format-filter{:name => "format"}
                   = options_for_select(@formats, @selected_format)

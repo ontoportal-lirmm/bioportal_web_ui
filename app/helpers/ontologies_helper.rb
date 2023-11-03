@@ -8,7 +8,7 @@ module OntologiesHelper
   def browse_filter_section_label(key)
     labels = {
       hasFormalityLevel: 'Formality levels',
-      isOfType: 'Generic Types',
+      isOfType: 'Ontology types',
       naturalLanguage: 'Natural languages'
     }
 
@@ -414,12 +414,12 @@ module OntologiesHelper
   end
 
   def metadata_formats_buttons
-    render SummarySectionComponent.new(title: 'Get my metadata back', show_card: false) do
+    render SummarySectionComponent.new(title: 'Download metadata (profile/syntax)', show_card: false) do
       content_tag :div, data: { controller: 'metadata-downloader' } do
         horizontal_list_container([
-                                    ['NQuads', 'N-Triple'],
-                                    ['JsonLd', 'Json-LD'],
-                                    ['XML', 'RDF/XML']
+                                    ['NQuads', 'MOD/n-triple'],
+                                    ['JsonLd', 'MOD/json-ld'],
+                                    ['XML', 'MOD/rdf-xml']
                                   ]) do |format, label|
           render ChipButtonComponent.new(type: 'clickable', 'data-action': "metadata-downloader#download#{format}") do
             concat content_tag(:span, label)
@@ -451,16 +451,15 @@ module OntologiesHelper
 
   def upload_ontology_button
     if session[:user].nil?
-      render PillButtonComponent.new do
-        link_to "/login?redirect=/ontologies/new" do
-          inline_svg('upload.svg') + "Submit new ontology"
+      render Buttons::RegularButtonComponent.new(id: "upload-ontology-button", value: t('home.ontology_upload_button'), variant: "secondary", state: "regular", href: "/login?redirect=/ontologies/new") do |btn|
+        btn.icon_left do
+          inline_svg_tag "upload.svg"
         end
       end
-
     else
-      render PillButtonComponent.new do
-        link_to new_ontology_path do
-          inline_svg('upload.svg') + "Submit new ontology"
+      render Buttons::RegularButtonComponent.new(id: "upload-ontology-button", value: t('home.ontology_upload_button'), variant: "secondary", state: "regular", href: new_ontology_path) do |btn|
+        btn.icon_left do
+          inline_svg_tag "upload.svg"
         end
       end
     end

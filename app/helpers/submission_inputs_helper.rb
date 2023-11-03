@@ -152,7 +152,7 @@ module SubmissionInputsHelper
     render Layout::RevealComponent.new(init_show: ontology.view?) do |c|
       c.button do
         content_tag(:span, class: 'd-flex') do
-          switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is a view of another ontology?', checked: ontology.view?, style: 'font-size: 14px;')
+          switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is this ontology a view of another ontology?', checked: ontology.view?, style: 'font-size: 14px;')
         end
       end
 
@@ -166,6 +166,7 @@ module SubmissionInputsHelper
     attr = SubmissionMetadataInput.new(attribute_key: 'contact', attr_metadata: attr_metadata('contact'))
     render Input::InputFieldComponent.new(name: '', label: attr_header_label(attr, label, show_tooltip: show_help),
                                           error_message: attribute_error(:contact)) do
+
       render NestedFormInputsComponent.new(object_name: 'contact', default_empty_row: true) do |c|
         c.header do
           content_tag(:div, "#{name} Name", class: 'w-50') + content_tag(:div, "#{name} Email", class: 'w-50')
@@ -200,9 +201,8 @@ module SubmissionInputsHelper
 
   # @param attr_key string
   def attr_label(attr_key, label = nil, attr_metadata: nil, show_tooltip: true)
-    data = SubmissionMetadataInput.new(attribute_key: attr_key.to_s, attr_metadata: attr_metadata)
-    return attr_key.humanize if data.nil?
 
+    data = SubmissionMetadataInput.new(attribute_key: attr_key.to_s, attr_metadata: attr_metadata)
     if show_tooltip
       attr_header_label(data, label, show_tooltip: show_tooltip)
     else

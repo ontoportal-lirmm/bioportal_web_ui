@@ -98,6 +98,7 @@
   padding: 15px 20px;
   margin-bottom: 20px;
   position: relative;
+  box-shadow: rgba(100, 100, 111, 0.08) 0 7px 29px 0;
 }
 
 .browse-ontology-description {
@@ -331,8 +332,13 @@
   border-radius: 5px;
   padding: 14px 20px;
   margin-bottom: 12px;
+  box-shadow: rgba(100, 100, 111, 0.08) 0 7px 29px 0;
+}
 
 
+.align-alert{
+  justify-content: center;
+  display: flex;
 }
 
 .browse-filter-checks-container {

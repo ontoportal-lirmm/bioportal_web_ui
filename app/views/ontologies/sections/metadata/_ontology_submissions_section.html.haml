@@ -1,2 +1,2 @@
-= render SummarySectionComponent.new(title: 'Submissions') do |s|
+= render SummarySectionComponent.new(title: 'Submissions', link: "", link_title: "Set of all the files that have been submitted to #{portal_name}. Each previous metadata record is accessible but only the content of the latest parsed file is accessible via #{portal_name} services") do |s|
   = render TurboFrameComponent.new(id: 'ontology_submissions', src: ontology_submissions_path(@ontology.acronym))

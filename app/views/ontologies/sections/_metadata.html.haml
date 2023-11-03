@@ -8,7 +8,7 @@
       = render partial: 'ontologies/sections/metadata/ontology_metrics_section'
     .summary-page-second-row
       = ontology_depiction_card
-      = properties_card('Identifiers','Principal identifiers of the ontology', @identifiers) do |values|
+      = properties_card('Identifiers','Principal identifiers of the ontology.', @identifiers) do |values|
         = horizontal_list_container(values) do |v|
           = render LinkFieldComponent.new(value: v)
 
@@ -21,10 +21,10 @@
           = render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: '', class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do
             = display_agent(v, link: false)
 
-      = properties_dropdown('link','Links','Metadata properties that highlight the links enabling access to datasets, downloading semantic resources, etc', @links_properties)  do |values|
+
+      = properties_dropdown('link','Other links','Metadata properties that highlight the links enabling access to datasets, downloading semantic resources, etc', @links_properties) do |values|
         = horizontal_list_container(values) do |v|
           = render LinkFieldComponent.new(value: v, raw: true)
-
 
       = properties_dropdown('projects_section','Projects and usage information','Details pertaining to the utilization of the ontology.', nil) do |c|
         - c.row do
@@ -40,7 +40,7 @@
                 = render ChipButtonComponent.new(url: project_path(project.acronym), text: project.name, type: "clickable")
         - properties_list_component(c, @projects_properties)
 
-      = properties_dropdown('methodology','Methodology', 'Metadata properties primarily encompass the design, methods, and actions to create the ontology. This includes elements such as the tools and software employed by the creator of the ontology during its configuration', @methodology_properties)
+      = properties_dropdown('methodology','Methodology and provenance', 'Metadata properties primarily encompass the design, methods, and actions to create the ontology. This includes elements such as the tools and software employed by the creator of the ontology during its configuration.', @methodology_properties)
 
       = render Layout::CardComponent.new do |c|
         - c.header do  |h|

@@ -7,8 +7,9 @@
             = ontology[:name]+" ("+ontology[:acronym]+")"
             - if ontology[:private]
               %i.fas.fa-key{title:"Private Ontology"}
-            - ontology_status = status_string(ontology)
-            = render Display::InfoTooltipComponent.new(text: ontology_status, icon: submission_status_icons(ontology_status)) if session[:user]&.admin?
+            - if session[:user]&.admin?
+              - ontology_status = status_string(ontology)
+              = render Display::InfoTooltipComponent.new(text: ontology_status, icon: submission_status_icons(ontology_status))
         .browse-desc-container{data:{controller:"text-truncate", 'text-truncate-more-text-value': '+ Show more ...' , 'text-truncate-less-text-value': '- Show less ...'}}
           %p.browse-desc-text{'data-text-truncate-target': 'content'}
             = ontology[:description]
@@ -50,9 +51,10 @@
                 = ontology[:contact].humanize
 
       - if ontology[:released]
-        %span{data:{controller:'tooltip'}, title: "Release date #{ontology[:released].split('/').last}"}
+        - date = render DateTimeFieldComponent.new(value: ontology[:released])
+        %span{data:{controller:'tooltip'}, title: "Release date #{date}"}
           = render ChipButtonComponent.new(type: "clickable") do
-            = DateTime.parse(ontology[:released]).year
+            = DateTime.parse(date).year
 
       - if ontology[:format]
         %span.mx-1
@@ -69,8 +71,6 @@
         %div.mx-1{title: content_tag(:div, debug(ontology), style: 'height: 300px; overflow: scroll'), data:{controller: 'tooltip', 'tooltip-interactive-value': 'true'}}
           %span.admin-background
             = render ChipButtonComponent.new(type: "clickable", text: "Debug")
-
-
 - else
   .browse-ontology-container
     .browse-sket
