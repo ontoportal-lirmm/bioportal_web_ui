@@ -57,6 +57,8 @@ module SubmissionInputsHelper
     elsif enforce_values?(attr)
       if attr.type?('list')
         generate_select_input(attr, multiple: true)
+      elsif attr.type?('boolean')
+        generate_boolean_input(attr)
       else
         generate_select_input(attr)
       end
