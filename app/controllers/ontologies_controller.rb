@@ -319,7 +319,7 @@ class OntologiesController < ApplicationController
     end
     @methodology_properties = properties_hash_values(category_attributes["methodology"])
     @agents_properties = properties_hash_values(category_attributes["persons and organizations"])
-    @dates_properties = properties_hash_values(category_attributes["dates"], custom_labels: {creationDate: "Initially created On"})
+    @dates_properties = properties_hash_values(category_attributes["dates"], custom_labels: {released: "Initially created On"})
     @links_properties = properties_hash_values(category_attributes["links"])
     @identifiers = properties_hash_values([:URI, :versionIRI, :identifier])
     @projects_properties = properties_hash_values(category_attributes["usage"])
@@ -437,7 +437,7 @@ class OntologiesController < ApplicationController
   def properties_hash_values(properties, sub: @submission_latest, custom_labels: {})
     return {} if sub.nil?
 
-    properties.map { |x| [x.to_s, [sub.send(x.to_s), custom_labels[x]]] }.to_h
+    properties.map { |x| [x.to_s, [sub.send(x.to_s), custom_labels[x.to_sym]]] }.to_h
   end
 
   def get_metrics_hash
