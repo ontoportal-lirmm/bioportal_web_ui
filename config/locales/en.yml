@@ -15,7 +15,6 @@ en:
       year_month_day_concise: "%Y-%m-%d" # 2017-03-01
       month_day_year: "%b %-d, %Y" # Mar 1, 2017
       monthfull_day_year: "%B %-d, %Y" # March 1, 2017
-
   additional_parameters: 'Additional Parameters Explained at '
   admin:
     licenses:
@@ -94,15 +93,11 @@ en:
   help: Help
   home:
     agroportal_figures: "%{site} in figures:"
-    benefit1: Discover new insights and connections by exploring other ontologies
-      in the repository.
-    benefit2: Contribute to the growth and development of your domain by adding new
-      concepts and categories.
-    benefit3: Use version control to manage the changes to your ontology over time
-      and collaborate with other users.
-    benefit4: Get feedback and suggestions from other users who can review and comment
-      on your ontology.
-    benefit5: Get the FAIR score and metrics for your ontology.
+    benefit1: Discover new insights and connections by exploring other ontologies in the repository.
+    benefit2: Contribute to knowledge sharing and semantic interoperability in your domain.
+    benefit3: Map your ontology to other relevant ones in the domain and collaborate with other users.
+    benefit4: Get feedback and suggestions from other users who can review and comment on your ontology.
+    benefit5: Precisely describe your ontology with relevant metadata and get a FAIR score for your ontology.
     fair_details: See details
     fairness: FAIR Scores
     get_annotations: Get annotations
@@ -111,12 +106,12 @@ en:
       tagline: The home of vocabularies and ontologies in agronomy and related fields.
       title: Welcome to the %{organization}
       welcome: Welcome to %{site},
-    ontology_upload: Wanna upload an ontology?
+    ontology_upload: Do you want to share an ontology?
     ontology_upload_benefits: 'By uploading your ontology to %{site}, you can:'
-    ontology_upload_button: Upload ontology
-    ontology_upload_desc: Uploading an ontology is a way of sharing your domain knowledge
+    ontology_upload_button: Submit ontology
+    ontology_upload_desc: Uploading an ontology or another type of semantic artefact (vocabulary, terminology, thesaurus, ...)
       with others.
-    paste_text_prompt: Paste a paragraph of text or some keywords ...
+    paste_text_prompt: Enter a paragraph of text or some keywords ...
     recommender_annotator: Recommender and annotator
     supported_by: Supported by
     twitter_news: Twitter news
@@ -272,7 +267,7 @@ en:
   negation: negation
   none: none
   ontologies:
-    ontology_search_prompt: 'Search for an ontology or concept (Ex: Agrovoc ...)'
+    ontology_search_prompt: 'Search an ontology (e.g., Agrovoc) or concept (e.g., plant height)'
     self: Ontologies
   ontology: Ontology
   ontology_details:

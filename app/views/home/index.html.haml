@@ -57,8 +57,10 @@
           %img{:src => asset_path("check-outlined.svg")}/
           %p
             = benefit
+
     %div.home-upload-ontology-button
       = upload_ontology_button
+
   .home-section
     %h4
       = t('home.recommender_annotator')
@@ -79,16 +81,18 @@
   .home-section
     .home-section-sub-sections-container
       .home-sub-section-left
-        %h4= t('home.fairness')
+        %div.align-items
+          %h4.margin-items= t('home.fairness')
+          = render Display::InfoTooltipComponent.new(text: "You are seing the average scores for all the public ontologies in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness")
         %hr.home-section-line/
         .home-card.home-fair-scores
           - if fairness_service_enabled?
             %div#fair-home{data:{controller:"fair-score-home"}}
               = render partial: "shared/fair_score_bars", locals: {data: nil}
             %a{:href => "/landscape#fairness_assessment"}
-            %div.home-fair-details
-              %p= t('home.fair_details')
-              = inline_svg_tag "arrow-right.svg"
+              %div.home-fair-details
+                %p= t('home.fair_details')
+         
       .home-sub-section-right
         %h4= t('home.twitter_news')
         %hr.home-section-line
@@ -97,53 +101,52 @@
           %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
 
   .home-section
+    %h4
+      = t('home.agroportal_figures', site: portal_name)
+    %hr.home-section-line/
     .home-statistics-container
-      .home-agroportal-figures
-        = inline_svg_tag "ontoportal-icon.svg"
-        %p 
-          = t('home.agroportal_figures', site: $SITE)
       .home-statistics
         .home-statistics-item
           %hr/
           %div
             %h4
-              = number_with_delimiter(@ont_count, :delimiter => ",")
+              = format_number_abbreviated(@ont_count)
             %p Ontologies
         .home-statistics-item
           %hr/
           %div
             %h4
-              = number_with_delimiter(@cls_count, :delimiter => ",")
+              = format_number_abbreviated(@cls_count)
             %p Classes
         .home-statistics-item
           %hr/
           %div
             %h4
-              = number_with_delimiter(@individuals_count, :delimiter => ",")
+              = format_number_abbreviated(@individuals_count)
             %p Individuals
         .home-statistics-item
           %hr/
           %div
             %h4
-              = number_with_delimiter(@prop_count, :delimiter => ",")
+              = format_number_abbreviated(@prop_count)
             %p Properties
         .home-statistics-item
           %hr/
           %div
             %h4
-              = number_with_delimiter(@projects_count, :delimiter => ",")
+              = format_number_abbreviated(@projects_count)
             %p Projects
         .home-statistics-item
           %hr/
           %div
             %h4
-              = number_with_delimiter(@map_count, :delimiter => ",")
+              = format_number_abbreviated(@map_count)
             %p Mappings
         .home-statistics-item
           %hr/
           %div
             %h4
-              = number_with_delimiter(@users_count, :delimiter => ",")
+              = format_number_abbreviated(@users_count)
             %p Users
   .home-section
     .home-statistics-container
