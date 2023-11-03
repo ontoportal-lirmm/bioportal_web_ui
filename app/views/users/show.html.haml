@@ -56,7 +56,7 @@
             %a{:href => "javascript:navigator.clipboard.writeText('"+session[:user].apikey+"');"}
               = render partial: "shared/svgs/copy_icon"
         .account-page-api-documentation-link
-          %a{href: "https://data.#{portal_name}.lirmm.fr/documentation", target: "_blank"}
+          %a{href: "#{$REST_URL}/documentation", target: "_blank"}
             API documentation
             = render partial: "shared/svgs/external_link_icon"
         .account-page-card
