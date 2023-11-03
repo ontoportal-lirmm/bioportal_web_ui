@@ -312,7 +312,7 @@ module SubmissionInputsHelper
     value = value.to_s unless value.nil?
     name = attr.name
     content_tag(:div, class: 'd-flex') do
-      switch_input(id: name, name: name, label: attr_header_label(attr), checked: value.eql?('true'), value: value, boolean_switch: true)
+      switch_input(id: name, name: name, label: attr_header_label(attr), checked: value.eql?('true'), value: value, boolean_switch: true, style: 'font-size: 14px;')
     end
   end
 

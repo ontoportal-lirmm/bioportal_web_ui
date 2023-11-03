@@ -5,7 +5,7 @@
   justify-content: space-between;
   margin-bottom: 20px;
 }
-.switch-filter p{
+.switch-filter > p, .switch-filter > div{
   font-size: 16px;
   color: #666666;
   margin-bottom: 0;
