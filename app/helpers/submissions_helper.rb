@@ -246,10 +246,6 @@ module SubmissionsHelper
     end
 
     submission_metadata.reject { |attr| reject_metadata.include?(attr['attribute']) || !selected_attribute?(attr['attribute']) }.each do |attr|
-      attr['label'] = "Modified on" if attr['attribute'] == "modificationDate"
-      attr['label'] = "Uploaded on #{portal_name} on" if attr['attribute'] == "creationDate"
-      attr['label'] = "Curated on" if attr['attribute'] == "curatedOn"
-      attr['label'] = "Initially created on" if attr['attribute'] == "released"
       output += attribute_form_group_container(attr['attribute']) do
         raw attribute_input(attr['attribute'], label: label)
       end
