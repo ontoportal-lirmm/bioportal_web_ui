@@ -116,9 +116,13 @@ module AgentHelper
     usages.values.flatten.size
   end
 
+  def agents_metadata
+    submission_metadata.select { |x| x["enforce"]&.include?('Agent') }.map do |x|
+      SubmissionInputsHelper::SubmissionMetadataInput.new(attribute_key: x["attribute"], attr_metadata: x)
+    end
+  end
   def agents_metadata_attributes
-    submission_metadata.select { |x| x["enforce"]&.include?('Agent') }
-                       .map { |x| [x["attribute"], x["label"]] }
+    agents_metadata.map { |x| [x.attr, x.label] }
   end
 
   def agents_used_properties(agent)
