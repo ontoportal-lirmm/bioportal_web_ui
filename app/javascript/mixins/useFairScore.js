@@ -253,7 +253,7 @@ class FairScorePrincipleBar extends  FairScoreChart{
                 pointBackgroundColor: 'rgba(251, 192, 45, 1)'
             },
             {
-                label: 'N/A score',
+                label: 'Not yet supported',
                 data: na,
                 fill: true,
                 backgroundColor: 'rgba(176, 190, 197, 0.2)',
@@ -597,7 +597,7 @@ class FairScoreCriteriaBar extends  FairScoreChart{
                 pointBackgroundColor: 'rgba(251, 192, 45, 1)',
             },
             {
-                label: 'N/A score',
+                label: 'Not yet supported',
                 data: na,
                 fill: true,
                 backgroundColor: 'rgba(176, 190, 197, 0.2)',
