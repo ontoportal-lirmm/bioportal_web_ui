@@ -622,8 +622,9 @@ module ApplicationHelper
   def ontology_viewer_page_name(ontology_name, concept_label, page)
     ontology_name + " | " + main_language_label(concept_label) + " - #{page.capitalize}"
   end
-
-
+  def help_path(anchor: nil)
+    "#{Rails.configuration.settings.links[:help]}##{anchor}"
+  end
 
   def uri?(url)
     url =~ /\A#{URI::DEFAULT_PARSER.make_regexp(%w[http https])}\z/
