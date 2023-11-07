@@ -304,9 +304,9 @@ module OntologiesHelper
     sections = ['summary']
 
     unless @ontology.summaryOnly || @submission_latest.nil?
-      sections += %w[classes properties notes mappings]
-      sections += %w[schemes collections] if skos?
-      sections += %w[instances] unless skos?
+      sections += %w[properties notes mappings]
+      sections += %w[schemes collections concepts] if skos?
+      sections += %w[instances classes] unless skos?
       sections += %w[widgets]
     end
     sections

@@ -50,7 +50,7 @@
       %div.ontologies-tabs-container{data:{action: 'tab-selected->ontology-viewer-tabs#updateLanguageSelector'}}
         = render TabsContainerComponent.new(id: 'ontology_viewer', url_parameter: 'p') do |t|
           - sections.each do |section_title|
-            - t.item(title: section_title,
+            - t.item(title: section_name(section_title),
                      path: ontology_path(@ontology.acronym, p: section_title),
                      selected: selected_section?(section_title),
                      page_name: ontology_viewer_page_name(@ontology.name, @concept&.prefLabel || '', section_title))
