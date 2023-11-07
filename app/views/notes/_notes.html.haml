@@ -6,9 +6,6 @@
       = add_comment_button(parent_id, parent_type)
     .add_proposal.mx-1
       = add_proposal_button(parent_id, parent_type)
-    .subscribe_to_notes.mx-1
-      = subscribe_button(@ontology.id)
-
   %div.ont_notes_filter.my-1.d-flex.justify-content-end.align-items-baseline
     Filter:
     %input#hide_archived_ont.mx-1{:checked => "true", :name => "hide_archived_ont", :type => "checkbox"}
