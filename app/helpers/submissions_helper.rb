@@ -5,7 +5,7 @@ module SubmissionsHelper
           content_tag(:div, 'Please fill in basic general information about your ontology.') +
           content_tag(:span, 'AgroPortal will automatically extract metadata properties declared for the owl:Ontology object in the source file, ') +
           content_tag(:span, style: 'width: 10px; height: 10px') do
-            link_to(render(ExternalLinkTextComponent.new(text: 'see guidelines and recommendations for metadata here:')), "https://github.com/agroportal/documentation/wiki/Ontology-metadata", target: "_blank")
+            link_to(render(ExternalLinkTextComponent.new(text: 'see guidelines and recommendations for metadata here:')), Rails.configuration.settings.links[:metadata_help], target: "_blank")
           end
       end
 
