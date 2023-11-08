@@ -39,7 +39,7 @@ class TabsContainerComponent < ViewComponent::Base
       toggle: 'tab',
       target: item_target(item),
       'tab-id': item.id,
-      'tab-title': item.title,
+      'tab-title': item.page_name,
       'url-parameter': @url_parameter,
       action: 'click->tabs-container#selectTab'
     }
