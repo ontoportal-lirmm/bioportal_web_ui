@@ -405,6 +405,14 @@ i.fa.fa-caret-square-o-down {
   width: 96px;
   height: 93px;
 }
+.fair-scores-badge-section{
+  height: 5px !important;
+}
+.fair-scores-badge-margin{
+  margin-right: 10px;
+  margin-bottom: 20px;
+}
+
 @keyframes scale-up {
   from { transform: scale(0.1); }
   to { transform: scale(1); }

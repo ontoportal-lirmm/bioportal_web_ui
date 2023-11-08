@@ -90,6 +90,22 @@
             %i.fas.fa-question-circle{"aria-hidden": "true", style: "margin-left: 0.5rem"}
         %hr.home-section-line/
         .home-card.home-fair-scores
+          %div.fair-scores-badge-section
+            %h2.p-2.badge.badge-secondary.fair-scores-badge-margin
+              Average
+              %span.badge.badge-light
+                %span#fair-score-average
+                  0 (0%)
+            %h2.p-2.badge.badge-secondary.fair-scores-badge-margin
+              Min
+              %span.badge.badge-light
+                %span#fair-score-min
+                  0 (0%)
+            %h2.p-2.badge.badge-secondary.fair-scores-badge-margin
+              Max
+              %span.badge.badge-light
+                %span#fair-score-max
+                  0 (0%)
           - if fairness_service_enabled?
             %div#fair-home{data:{controller:"fair-score-home"}}
               = render partial: "shared/fair_score_bars", locals: {data: nil}
