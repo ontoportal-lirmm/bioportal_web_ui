@@ -364,6 +364,11 @@ i.fa.fa-caret-square-o-down {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  img{
+    object-fit: scale-down;
+    width: 100px;
+    height: 100px;
+  }
   
 }
 .home-support-items  > *:not(:first-child){
