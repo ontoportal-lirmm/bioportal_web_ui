@@ -9,14 +9,15 @@
     "flatpickr": "^4.6.13",
     "split.js": "^1.6.5",
     "stimulus-flatpickr": "^3.0.0-0",
-    "stimulus-read-more": "^4.1.0",
     "stimulus-rails-nested-form": "^4.0.0",
+    "stimulus-read-more": "^4.1.0",
+    "stimulus-reveal-controller": "^4.1.0",
     "stimulus-timeago": "^4.1.0",
+    "tippy.js": "^6.3.7",
+    "tom-select": "^2.2.2",
     "vis-data": "^7.1.6",
     "vis-network": "^9.1.6",
-    "vis-util": "^5.0.3",
-    "tippy.js": "^6.3.7",
-    "tom-select": "^2.2.2"
+    "vis-util": "^5.0.3"
   },
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds"

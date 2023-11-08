@@ -1,6 +1,6 @@
 = render TurboFrameComponent.new(id: 'concept_show', data: {controller:'labels-ajax-container', 'action': 'turbo:before-fetch-request->labels-ajax-container#abortAll', 'labels-ajax-container-label-ajax-outlet': '#concept_show a[data-controller="label-ajax"]'}) do
   - if @concept.id.eql?("bp_fake_root")
-    %div{:style => "padding: 100px 0; font-size: larger; font-weight: bold; text-align: center;"}
+    = render Display::AlertComponent.new do
       Use the "Jump To" to find a class and display details, visualization, notes, and mappings
   - else
     = render TabsContainerComponent.new(type:'outline') do |c|

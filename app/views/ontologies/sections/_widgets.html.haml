@@ -8,7 +8,7 @@
         Widgets are only available for ontologies stored in #{$SITE}.
   - else
     #widgets_content
-      %h5.pb-3 Add #{$ORG} Web Widgets to your site for #{@ontology.acronym}
+      %h5.pb-3 Add #{portal_name} Web Widgets to your site for #{@ontology.acronym}
       %table#widget_table{width: "100%"}
         %tr
           %th
@@ -134,7 +134,7 @@
                             %code uri
                             put the complete URI of the class (e.g.,
                             = succeed ")" do
-                              %a.external.free{:href => @ontology.explore.classes["collection"].first.id, :rel => "nofollow", :title => "/visualize/39478/Common_Neoplasm"}
+                              %a.external.free{:href => @ontology.explore.classes["collection"].first&.id, :rel => "nofollow", :title => "/visualize/39478/Common_Neoplasm"}
                                 = @ontology.explore.classes["collection"].first.id
                           %li
                             %code shortid

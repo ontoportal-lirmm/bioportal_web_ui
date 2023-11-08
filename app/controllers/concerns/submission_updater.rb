@@ -6,9 +6,6 @@ module SubmissionUpdater
     LinkedData::Client::Models::OntologySubmission.new(values: submission_params(new_submission_hash))
   end
   def save_submission(new_submission_hash)
-
-
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(new_submission_hash[:ontology]).first
     @submission = submission_from_params(new_submission_hash)
 
     update_ontology_summary_only
@@ -31,7 +28,7 @@ module SubmissionUpdater
     end
 
     update_ontology_summary_only
-    @submission.update(values: new_values, cache_refresh_all: false)
+    [@submission, @submission.update(values: new_values, cache_refresh_all: false)]
   end
 
   def add_ontologies_to_object(ontologies,object)

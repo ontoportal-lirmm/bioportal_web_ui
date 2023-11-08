@@ -15,12 +15,12 @@ class SelectInputComponent < ViewComponent::Base
   end
 
   def call
-    select_input_tag(@id, @values, @selected, multiple: @multiple, open_to_add_values: @open_to_add_values, placeholder: @placeholder)
+    select_input_tag(@id, @name, @values, @selected, multiple: @multiple, open_to_add_values: @open_to_add_values, placeholder: @placeholder)
   end
 
   private
 
-  def select_input_tag(id, values, selected, options = {})
+  def select_input_tag(id, name, values, selected, options = {})
     multiple = options[:multiple] || false
     open_to_add_values = options[:open_to_add_values] || false
     placeholder = options[:placeholder] || ''
@@ -37,6 +37,7 @@ class SelectInputComponent < ViewComponent::Base
       multiple: multiple,
       data: data
     }
-    select_tag(id, options_for_select(values, selected), select_html_options)
+    select_tag(name, options_for_select(values, selected), select_html_options)
+
   end
 end

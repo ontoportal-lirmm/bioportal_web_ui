@@ -44,8 +44,8 @@ module SchemesHelper
 
   def section_name(section)
     section = concept_label_to_show(submission: @submission_latest || @submission) if section.eql?('classes')
-
-    t("ontology_details.sections.#{section}")
+    section
+    #t("ontology_details.sections.#{section}" , section)
   end
 
   def scheme_path(scheme_id = '', language = '')

@@ -3,7 +3,7 @@
 class PopupLinkTextComponent < LinkTextComponent
 
   def initialize(text:)
-    super(text: text, icon: 'icons/popup-link')
+    super(text: text, icon: 'icons/popup-link.svg')
   end
 
 end

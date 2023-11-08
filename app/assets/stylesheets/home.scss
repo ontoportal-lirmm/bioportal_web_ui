@@ -228,29 +228,16 @@ i.fa.fa-caret-square-o-down {
 }
 .home-upload-ontology-button{
   margin-top: 30px;
-  text-decoration: none;
-  color: var(--primary-color);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 193px;
-  padding: 15px 25px;
-  border: 1px solid var(--primary-color);
-  border-radius: 8px;
-  font-size: 15px;
-  transition: background-color 0.3s ease;
+  width: fit-content;
 }
-.home-upload-ontology-button:hover{
-  color: white !important;
-  background-color: var(--primary-color);
-}
-.home-upload-ontology-button:hover .home-upload-icon path{
-  fill: white;
+
+.home-upload-icon {
+  margin-right: 10px;
 }
 
 
 .home-recommendations-and-annotations{
-  font-size: 16px;
+  font-size: 20px;
   outline: none;
   padding: 20px;
   width: 100%;
@@ -377,6 +364,11 @@ i.fa.fa-caret-square-o-down {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  img{
+    object-fit: scale-down;
+    width: 100px;
+    height: 100px;
+  }
   
 }
 .home-support-items  > *:not(:first-child){
@@ -395,12 +387,23 @@ i.fa.fa-caret-square-o-down {
   margin-bottom: 0;
 }
 
+.home-upload-ontology-button path:hover {
+  fill: white;
+}
+
 .home-searched-ontology{
   margin-bottom: 0;
   word-wrap: break-word;
   max-width: 400px;
   margin-right: 20px;
 
+}
+.align-items{
+  display: flex;
+  align-items: center;
+}
+.margin-items{
+  margin-right: 10px;
 }
 
 @keyframes scale-up {

@@ -24,6 +24,14 @@ module ApplicationHelper
                        :cclicense => "http://creativecommons.org/licenses/"}
 
 
+  def ontologies_analytics
+    LinkedData::Client::Analytics.all.to_h.map do |key, ontology_analytics|
+      next if key.eql?(:links) || key.eql?(:context)
+
+      [key.to_s, ontology_analytics.to_h.values.map { |x| x&.values }.flatten.compact.sum]
+    end.compact.to_h
+  end
+
   def get_apikey
     unless session[:user].nil?
       return session[:user].apikey
@@ -41,7 +49,7 @@ module ApplicationHelper
   end
 
   def omniauth_token_provider(strategy)
-    omniauth_provider_info(strategy).keys.first
+    omniauth_provider_info(strategy.to_sym).keys.first
   end
 
   def isOwner?(id)
@@ -177,14 +185,14 @@ module ApplicationHelper
     end
   end
 
-  def draw_tree(root, id = nil, concept_schemes = [])
+  def draw_tree(root, acronym, id = nil, concept_schemes = nil)
     id = root.children.first.id if id.nil?
 
     # TODO: handle tree view for obsolete classes, e.g. 'http://purl.obolibrary.org/obo/GO_0030400'
-    raw build_tree(root, '', id, concept_schemes: concept_schemes)
+    raw build_tree(root, '', id, acronym, concept_schemes: concept_schemes)
   end
 
-  def build_tree(node, string, id, concept_schemes: [])
+  def build_tree(node, string, id, acronym, concept_schemes: nil)
 
     return string if node.children.nil? || node.children.empty?
     
@@ -195,16 +203,16 @@ module ApplicationHelper
       # This fake root will be present at the root of "flat" ontologies, we need to keep the id intact
 
       if child.id.eql?('bp_fake_root')
-        string << tree_link_to_concept(child: child, ontology_acronym: '',
-                                       active_style: active_style, node: node)
+        string << tree_link_to_concept(child: child, ontology_acronym: acronym,
+                                       active_style: active_style, node: node, skos: !concept_schemes.nil?)
       else
-        string << tree_link_to_concept(child: child, ontology_acronym: child.explore.ontology.acronym,
-                                       active_style: active_style, node: node)
+        string << tree_link_to_concept(child: child, ontology_acronym: acronym,
+                                       active_style: active_style, node: node, skos: !concept_schemes.nil?)
         if child.hasChildren && !child.expanded?
-          string << tree_link_to_children(child: child, concept_schemes: concept_schemes)
+          string << tree_link_to_children(child: child, acronym: acronym, concept_schemes: concept_schemes)
         elsif child.expanded?
           string << '<ul>'
-          build_tree(child, string, id, concept_schemes: concept_schemes)
+          build_tree(child, string, id, acronym, concept_schemes: concept_schemes)
           string << '</ul>'
         end
         string << '</li>'
@@ -213,45 +221,35 @@ module ApplicationHelper
     string
   end
 
-  def tree_link_to_concept(child:, ontology_acronym:, active_style:, node: nil)
+  def tree_link_to_concept(child:, ontology_acronym:, active_style:, node: nil, skos: false)
     language = request_lang
     li_id = child.id.eql?('bp_fake_root') ? 'bp_fake_root' : short_uuid
     open = child.expanded? ? "class='open'" : ''
     icons = child.relation_icon(node)
-    muted_style = child.isInActiveScheme&.empty? ? 'text-muted' : ''
+    muted_style = skos && Array(child.isInActiveScheme).empty? ? 'text-muted' : nil
+    muted_title = muted_style  && !child.obsolete? ? "title='is not in a scheme'" : nil
     href = ontology_acronym.blank? ? '#' : "/ontologies/#{child.explore.ontology.acronym}/concepts/?id=#{CGI.escape(child.id)}&language=#{language}"
-
-    if child.prefLabel.nil?
-      prefLabelHTML =  child.id.split('/').last
-    else
-      prefLabelLang, prefLabelHTML = select_language_label(child.prefLabel)
-      prefLabelLang = prefLabelLang.to_s.upcase
-      tooltip = prefLabelLang.eql?("@NONE") ? "" : "data-controller='tooltip' data-tooltip-position-value='right' title='#{prefLabelLang}'";
-    end
-
     link = <<-EOS
-        <a id='#{child.id}' 
-        data-conceptid='#{child.id}'
-        data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
-        data-collections-value='#{child.memberOf || []}'
-        data-active-collections-value='#{child.isInActiveCollection || []}'
-        data-skos-collection-colors-target='collection'
-        class='#{muted_style} #{active_style}'
-        #{tooltip}
-          >
-            #{ prefLabelHTML }
-            
+        <a id='#{child.id}' data-conceptid='#{child.id}'
+           data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
+           data-collections-value='#{child.memberOf || []}'
+           data-active-collections-value='#{child.isInActiveCollection || []}'
+           data-skos-collection-colors-target='collection'
+            class='#{muted_style} #{active_style}' #{muted_title}>
+            #{child.prefLabel ? child.prefLabel({ use_html: true }) : child.id}
         </a>
     EOS
 
     "<li #{open} id='#{li_id}'>#{link} #{icons}"
   end
 
-  def tree_link_to_children(child:, concept_schemes: [])
+
+  def tree_link_to_children(child:, acronym: ,concept_schemes: nil)
     language = request_lang
     li_id = child.id.eql?('bp_fake_root') ? 'bp_fake_root' : short_uuid
-    concept_schemes = concept_schemes.map{|x| CGI.escape(x)}.join(',')
-    link = "<a id='#{child.id}' href='/ajax_concepts/#{child.explore.ontology.acronym}/?conceptid=#{CGI.escape(child.id)}&concept_schemes=#{concept_schemes}&callback=children&language=#{language}'>ajax_class</a>"
+    concept_schemes = "&concept_schemes=#{concept_schemes.map{|x| CGI.escape(x)}.join(',')}" if concept_schemes
+
+    link = "<a id='#{child.id}' href='/ajax_concepts/#{acronym}/?conceptid=#{CGI.escape(child.id)}#{concept_schemes}&callback=children&language=#{language}'>ajax_class</a>"
     "<ul class='ajax'><li id='#{li_id}'>#{link}</li></ul>"
   end
 
@@ -294,12 +292,9 @@ module ApplicationHelper
   end
 
   def error_message_text
+    return @errors if @errors.is_a?(String)
     @errors = @errors[:error] if @errors && @errors[:error]
-    if @errors.is_a?(String)
-      @errors
-    else
-      "Errors in fields #{@errors.keys.join(', ')}"
-    end
+    "Errors in fields #{@errors.keys.join(', ')}"
   end
 
   def error_message_alert
@@ -462,6 +457,7 @@ module ApplicationHelper
   end
 
   def subscribe_button(ontology_id)
+    return if ontology_id.nil?
     ontology_acronym = ontology_id.split('/').last
 
     if session[:user].nil?
@@ -485,7 +481,7 @@ module ApplicationHelper
     return false if user.subscription.nil? or user.subscription.empty?
     user.subscription.each do |sub|
       #sub = {ontology: ontology_acronym, notification_type: "NOTES"}
-      sub_ont_acronym = sub[:ontology].split('/').last # make sure we get the acronym, even if it's a full URI
+      sub_ont_acronym = sub[:ontology] ?  sub[:ontology].split('/').last : nil #  make sure we get the acronym, even if it's a full URI
       return true if sub_ont_acronym == ontology_acronym
     end
     return false
@@ -626,8 +622,9 @@ module ApplicationHelper
   def ontology_viewer_page_name(ontology_name, concept_label, page)
     ontology_name + " | " + main_language_label(concept_label) + " - #{page.capitalize}"
   end
-
-
+  def help_path(anchor: nil)
+    "#{Rails.configuration.settings.links[:help]}##{anchor}"
+  end
 
   def uri?(url)
     url =~ /\A#{URI::DEFAULT_PARSER.make_regexp(%w[http https])}\z/
@@ -688,9 +685,19 @@ module ApplicationHelper
     $SITE
     end
   def navitems
-    items = [["/ontologies", "Browse"],["/mappings", "Mappings"],["/recommender", "Recommender"],["/annotator", "Annotator"], ["/landscape", "Landscape"]]
+    items = [["/ontologies", t('layout.header.browse')],
+             ["/mappings", t('layout.header.mappings')],
+             ["/recommender", t("layout.header.recommender")],
+             ["/annotator", t("layout.header.annotator")],
+             ["/landscape", t("layout.header.landscape")]]
   end
 
+  def portal_language_selector(id: 'language-select')
+    languages = %w[en fr it de].map{|x| [x.upcase, x]}
+    select_tag('language',options_for_select(languages), id: id, class: 'nav-language',
+               data: { controller: "platform-language", action: "change->platform-language#handleLangChanged" })
+
+  end
   def attribute_enforced_values(attr)
     submission_metadata.select {|x| x['@id'][attr]}.first['enforcedValues']
   end

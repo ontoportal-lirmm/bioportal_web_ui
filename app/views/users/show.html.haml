@@ -6,7 +6,7 @@
       .account-page-first-row
         .account-page-card
           .account-page-personal-informations-title-bar
-            %h4.account-page-card-title Personal information
+            %h4.account-page-card-title Personal Information
             %a.account-page-rounded-button{:href => edit_user_path(url_encode(@user.username))}
               = render partial: "shared/svgs/edit_icon"
           .account-page-info-column
@@ -18,7 +18,7 @@
             %p.info
               = @user.lastName
           .account-page-info-column
-            %p.title Email address:
+            %p.title Email:
             %p.info
               = @user.email
           .account-page-info-column
@@ -30,14 +30,14 @@
             %p.info
               =@user.orcidId
           .account-page-info-column
-            %p.title Github ID:
+            %p.title GitHub ID:
             %p.info
               =@user.githubId
         .account-page-card
           .account-page-card-container
             .account-page-card-sub-container
-              %h4.account-page-card-title Mailing list subscription
-              %p.account-page-card-desc AgroPortal announcements email list
+              %h4.account-page-card-title Mailing List Subscription
+              %p.account-page-card-desc= "#{portal_name} announcements email list"
             - subscribed = false
             - if subscribed 
               %a.account-page-subscribe-button{:href =>"mailto:#{$ANNOUNCE_SERVICE_HOST}?Subject=unsubscribe%20#{$ANNOUNCE_LIST}"}
@@ -49,30 +49,31 @@
           .account-page-card-container
             .account-page-card-sub-container
               %h4.account-page-card-title API Key
-              %p.account-page-card-desc Your API Key can be used to access the NCBO API (REST) Services
+              %p.account-page-card-desc
+                = "Your API Key can be used to access #{portal_name} Web services"
               %p.apikey
                 = session[:user].apikey
             %a{:href => "javascript:navigator.clipboard.writeText('"+session[:user].apikey+"');"}
               = render partial: "shared/svgs/copy_icon"
         .account-page-api-documentation-link
-          %a{href: "https://data.bioportal.lirmm.fr/documentation", target: "_blank"}
+          %a{href: "#{$REST_URL}/documentation", target: "_blank"}
             API documentation
             = render partial: "shared/svgs/external_link_icon"
         .account-page-card
           %h4.account-page-card-title
-            Custom Ontology Set
+            Custom Semantic Resource Set
           #custom_ontologies.enable-lists
             - if at_slice?
               %p{style: "padding-left: 7px; font-size: 10pt; margin: -3px 0 7px;"}
                 Please
                 %a{href: "#{$UI_URL}/account"} visit the main site
-                to modify your Custom Ontology Set.
+                to modify your Custom Semantic Resource Set.
             - else
               %p.account-page-card-desc
-                Customize your AgroPortal display: Pick the ontologies that you want to see on AgroPortal will hide all other ontologies.
+                Customize your #{portal_name} display: Pick the semantic resources that you want to see on #{portal_name} will hide all other semantic resources.
               %p
                 %span{style: "font-weight: normal; font-size: 9pt; padding-left: 7px;"}
-                  %a#edit_custom_ontologies{href: "javascript:void(0);"} select ontologies
+                  %a#edit_custom_ontologies{href: "javascript:void(0);"} Select semantic resources 
               - if @user_ontologies && !@user_ontologies.empty?
                 %ul
                   - @user_ontologies.each do |ont|
@@ -80,14 +81,14 @@
                     %li
                       #{ont.name} (#{ont.acronym})
               - else
-                %p{style: "padding-left: 7px;"} You haven't picked any ontologies yet
-          %p.account-page-card-desc Note: This feature works only when you are logged in.
+                %p{style: "padding-left: 7px;"} You haven't picked any semantic resources yet
+          %p.account-page-card-desc Note: this feature works only when you are logged in.
           #custom_ontologies_picker{style: "left: -9999px; position: absolute;"}
             = form_tag custom_ontologies_path(url_encode(@user.username)) do
               - selected = @user.customOntology.map {|o| LinkedData::Client::Models::Ontology.get(o).acronym}
-              - locals = { custom_ontologies: @all_ontologies, selected_ontologies: selected, sel_text: "Select Custom Ontologies" }
+              - locals = { custom_ontologies: @all_ontologies, selected_ontologies: selected, sel_text: "Select Custom Semantic Resources" }
               = render partial: "shared/ontology_picker", locals: locals
-              = submit_tag "Save Custom Ontologies", class: "link_button"
+              = submit_tag "Save Custom Semantic Resources", class: "link_button"
       .account-page-second-row
         - unless @user.subscription.nil? || @user.subscription.empty?
           .account-page-card
@@ -108,7 +109,7 @@
         - unless @admin_ontologies.nil? || @admin_ontologies.empty?
           - no_ontologies = false
           .account-page-card
-            %h4.account-page-card-title Submitted ontologies
+            %h4.account-page-card-title Submitted Semantic Resources
             .account-page-small-cards-container
               - @admin_ontologies.each do |ont|
                 .account-page-submitted-ontology{data: {controller: 'tooltip'}, title: ont.name}
@@ -129,8 +130,8 @@
           .account-page-card
             .account-page-no-ontology
               %img{:src => "#{asset_path("empty-box.svg")}"}/
-              %p You didn't upload any ontology yet
-              %a.account-page-upload-ontology-button{href: "/ontologies/new"} Upload ontology
+              %p You didn't upload any semantic resource yet
+              %a.account-page-upload-ontology-button{href: "/ontologies/new"} Upload semantic resource
 :javascript
   jQuery(document).ready(function(){
     jQuery("#edit_custom_ontologies").click(editCustomOntologies);

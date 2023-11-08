@@ -14,7 +14,9 @@ class Input::SelectComponent < Input::InputFieldComponent
 
   def call
     render Input::InputFieldComponent.new(name: @name, error_message: @error_message, helper_text: @helper_text, label: @label) do
-      render SelectInputComponent.new(id: @id, name: @name, values: @values, selected: @selected, multiple: @multiple, open_to_add_values: @open_to_add_values, data: @data)
+      render SelectInputComponent.new(id: @id, name: @name, values: @values, selected: @selected,
+                                      placeholder: @placeholder,
+                                      multiple: @multiple, open_to_add_values: @open_to_add_values, data: @data)
     end
   end
 end

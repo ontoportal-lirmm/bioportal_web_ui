@@ -22,17 +22,17 @@
             %input
         - else
           .nav-search-container
-            = render OntologySearchInputComponent.new(placeholder:  "Search in "+portal_name+" ...", scroll_down: false)
+            = render OntologySearchInputComponent.new(placeholder:  t('layout.header.search_prompt', portal_name: portal_name ), scroll_down: false)
 
         - if session[:user].nil?
-          %a.nav-a{:href => "/login"} Login
+          %a.nav-a{:href => "/login"}= t('layout.header.login')
         - else
           = render DropdownButtonComponent.new do |d|
             - d.header do
               = session[:user].username
             - d.with_section(divide: false) do |s|
               - s.item do
-                = link_to(t(:_account_setting), "/account")
+                = link_to(t('layout.header.account_setting'), "/account")
             - d.with_section do |s|
               - s.header do
                 Recently Viewed
@@ -41,26 +41,25 @@
                   = link_to(ont.ontology_name, "/ontologies/#{ont.ontology_acronym}/?p=classes&conceptid=#{CGI.escape(ont.concept)}")
             - d.with_section do |s|
               - s.item do
-                = link_to("Logout", logout_path)
+                = link_to(t('layout.header.logout'), logout_path)
 
-        = select_tag('language', options_for_select([['EN','en'],['FR','fr']]), id: 'language-select', class: 'nav-language',
-          data: { controller: "platform-language", action: "change->platform-language#handleLangChanged" })
+        = portal_language_selector
 
         = render DropdownButtonComponent.new do |d|
           - d.header do
             = link_to("#", id: "supportMenuDropdownLink", class: "nav-link top-nav-nav-link supportMenuDropdownLink", role: "button") do
-              Support
+              = t('layout.header.support')
           - d.with_section(divide: false) do |s|
             - s.item do
-              = link_to(t(:submit_feedback), feedback_path(location: encode_param(request.url)), id: "submitFeedbackMenuItem", class: "pop_window")
+              = link_to(t('layout.header.submit_feedback'), feedback_path(location: encode_param(request.url)), id: "submitFeedbackMenuItem", class: "pop_window")
           - d.with_section do |s|
             - s.header do
-              Documentation
+              = t('layout.header.documentation')
             - s.item do
-              = link_to(t(:_help), "#{$WIKI_HELP_PAGE}", target: "_blank")
+              = link_to(t('layout.header.help'), "#{$WIKI_HELP_PAGE}", target: "_blank")
             - s.item do
-              = link_to(t(:_release_notes), "#{$RELEASE_NOTES}", target: "_blank")
+              = link_to(t('layout.header.release_notes'), "#{$RELEASE_NOTES}", target: "_blank")
             - s.item do
-              = link_to(t(:_publications), $PUBLICATIONS_URL, target: "_blank")
+              = link_to(t('layout.header.publications'), $PUBLICATIONS_URL, target: "_blank")
 
 

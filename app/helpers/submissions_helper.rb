@@ -1,10 +1,14 @@
 module SubmissionsHelper
   def metadata_help_link
     content_tag(:div, class: 'edit-ontology-desc') do
-      html = content_tag(:span, 'To understand the ontologies metadata:')
-      html += content_tag(:span, style: 'width: 10px; height: 10px') do
-        link_to(render(ExternalLinkTextComponent.new(text: 'see the Wiki')), "https://github.com/agroportal/documentation/wiki/Ontology-metadata")
+      html = content_tag(:div) do
+          content_tag(:div, 'Please fill in basic general information about your ontology.') +
+          content_tag(:span, 'AgroPortal will automatically extract metadata properties declared for the owl:Ontology object in the source file, ') +
+          content_tag(:span, style: 'width: 10px; height: 10px') do
+            link_to(render(ExternalLinkTextComponent.new(text: 'see guidelines and recommendations for metadata here:')), Rails.configuration.settings.links[:metadata_help], target: "_blank")
+          end
       end
+
       html.html_safe
     end
   end
@@ -36,7 +40,7 @@ module SubmissionsHelper
     if container_id
       link += "&container_id=#{container_id}"
     else
-        link += "&container_id=#{attribute_input_frame_id(acronym, submission_id, attribute)}"
+      link += "&container_id=#{attribute_input_frame_id(acronym, submission_id, attribute)}"
     end
     link_to link, data: { turbo: true }, class: 'btn btn-sm btn-light' do
       capture(&block)
@@ -178,10 +182,30 @@ module SubmissionsHelper
   def render_submission_inputs(frame_id)
     output = ""
 
-    if selected_attribute?('format')
-      output += attribute_form_group_container('format') do
-        render partial: 'submissions/submission_format_form'
-      end
+    if selected_attribute?('acronym')
+      output += ontology_acronym_input(update: true)
+    end
+
+    if selected_attribute?('name')
+      output += ontology_name_input
+    end
+
+
+    if selected_attribute?('hasOntologyLanguage')
+      output += render partial: 'submissions/submission_format_form'
+    end
+
+    if selected_attribute?('categories')
+      output +=  ontology_categories_input
+    end
+
+    if selected_attribute?('groups')
+      output +=  ontology_groups_input
+    end
+
+
+    if selected_attribute?('administeredBy')
+      output += ontology_administered_by_input
     end
 
     if selected_attribute?('location')
@@ -197,19 +221,41 @@ module SubmissionsHelper
       end
     end
 
-    reject_metadata = %w[abstract uploadFilePath contact pullLocation prefLabelProperty definitionProperty synonymProperty authorProperty obsoleteParent obsoleteProperty hasOntologyLanguage]
-    label = inline_save? ? '' : nil
-    submission_metadata.reject { |attr| reject_metadata.include?(attr['attribute']) || !selected_attribute?(attr['attribute']) }.each do |attr|
-      output += attribute_form_group_container(attr['attribute']) do
-        raw attribute_input(attr['attribute'], attr_metadata: attr, label: label)
+    if selected_attribute?('viewingRestriction')
+      output += attribute_form_group_container('viewingRestriction') do
+        ontology_visibility_input
       end
     end
+
+
+    if selected_attribute?('viewOf')
+      output += attribute_form_group_container('viewOf') do
+        ontology_view_of_input
+      end
+    end
+
+    reject_metadata = %w[abstract description uploadFilePath contact pullLocation hasOntologyLanguage]
+    label = inline_save? ? '' : nil
 
     if selected_attribute?('abstract')
       output += attribute_form_group_container('abstract') do
         raw attribute_input('abstract',long_text: true, label: label)
       end
     end
+
+    if selected_attribute?('description')
+      output += attribute_form_group_container('description') do
+        raw attribute_input('description',long_text: true, label: label)
+      end
+    end
+
+    submission_metadata.reject { |attr| reject_metadata.include?(attr['attribute']) || !selected_attribute?(attr['attribute']) }.each do |attr|
+      output += attribute_form_group_container(attr['attribute']) do
+        raw attribute_input(attr['attribute'], label: label)
+      end
+    end
+
+
 
 
     render TurboFrameComponent.new(id: frame_id) do

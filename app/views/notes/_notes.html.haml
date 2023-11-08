@@ -6,9 +6,6 @@
       = add_comment_button(parent_id, parent_type)
     .add_proposal.mx-1
       = add_proposal_button(parent_id, parent_type)
-    .subscribe_to_notes.mx-1
-      = subscribe_button(@ontology.id)
-
   %div.ont_notes_filter.my-1.d-flex.justify-content-end.align-items-baseline
     Filter:
     %input#hide_archived_ont.mx-1{:checked => "true", :name => "hide_archived_ont", :type => "checkbox"}
@@ -17,7 +14,7 @@
   = render_alerts_container("notes_#{parent_type}_list_table_alerts")
 
   .ont_notes_table_container
-    - cols = ['Action', 'Subject', 'Author', 'Type', (parent_type.eql?('ontology') ? 'Class' : nil),'Created'].compact
+    - cols = [ (current_user_admin? ? 'Action' : nil), 'Subject', 'Author', 'Type', (parent_type.eql?('ontology') ? 'Class' : nil),'Created'].compact
     = render TableComponent.new(id:"#{parent_type}_notes") do |t|
       - t.header do |row|
         - row.create(*cols.map{|col| {th: col}})

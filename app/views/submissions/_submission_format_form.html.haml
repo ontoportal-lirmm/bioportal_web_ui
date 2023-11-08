@@ -19,12 +19,13 @@
 
 = attribute_form_group_container('hasOntologyLanguage') do
   %div{onchange: 'ontologyFormatChange(event)'}
-    = select_input(label: "Format", name: "submission[hasOntologyLanguage]", values: ["OBO", "OWL", "SKOS", "UMLS"], selected: @submission.hasOntologyLanguage)
+    = select_input(label: "Representation language", name: "submission[hasOntologyLanguage]", values: ["OBO", "OWL", "SKOS", "UMLS"], selected: @submission.hasOntologyLanguage)
     %div#skos_options.upload-ontology-desc{style: "display:#{skos? ? 'block': 'none'}"}
       SKOS vocabularies submitted to BioPortal must contain a minimum of one concept scheme and top concept assertion.
       Please refer to the NCBO wiki for a more #{link_to 'detailed explanation', 'https://www.bioontology.org/wiki/index.php/SKOSSupport', target: "_blank" }
       with examples.
       %div
+-#
   %div#owl_options
     %a#collapseOWLOptions{href: "#owl-options-properties", role: "button", data: {toggle: "collapse"}, aria: {expanded: "false", controls: "owl-options"},
                   class: "btn btn-outline-primary btn-sm"} Show advanced options
