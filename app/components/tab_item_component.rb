@@ -27,7 +27,7 @@ class TabItemComponent < ViewComponent::Base
 
 
   def id
-    @title || @id
+    @id || @title
   end
 
   def title
