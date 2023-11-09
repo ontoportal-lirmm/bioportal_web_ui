@@ -81,7 +81,7 @@ module AgentHelper
   def display_agent(agent, link: true)
     return agent if agent.is_a?(String)
 
-    out = agent.name.to_s.humanize
+    out = agent.name.to_s
     identifiers = display_identifiers(agent.identifiers, link: link)
     out = "#{out} (#{identifiers})" unless identifiers.empty?
     affiliations = Array(agent.affiliations).map { |a| display_agent(a, link: link) }.join(', ')
@@ -128,6 +128,7 @@ module AgentHelper
   def agents_used_properties(agent)
     usages = agent_usages(agent)
     attributes = agents_metadata_attributes
+
     attributes.map do |attr, label|
       [attr, usages.select { |x, v| v.any? { |uri| uri[attr] } }.keys.map { |x| x.to_s.split('/')[-3] }]
     end.to_h
