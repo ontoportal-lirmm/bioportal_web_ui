@@ -98,6 +98,7 @@ class SubmissionsController < ApplicationController
     @submission, response = update_submission(update_submission_hash(acronym), submission_id)
     if params[:attribute].nil?
       if response_error?(response)
+        reset_agent_attributes
         show_new_errors(response, partial: 'submissions/form_content', id: 'test')
       else
         redirect_to "/ontologies/#{acronym}",

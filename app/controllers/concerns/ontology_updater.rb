@@ -39,9 +39,9 @@ module OntologyUpdater
     @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
     @errors = response_errors(object)
     @selected_attributes = (Array(errors_attributes) + Array(params[:submission]&.keys)).uniq
-    @ontology = ontology_from_params
+    @ontology = ontology_from_params if @ontology.nil?
 
-    @submission = submission_from_params(params[:submission]) if params[:submission]
+    @submission = submission_from_params(params[:submission]) if params[:submission] && @submission.nil?
     reset_agent_attributes
     if redirection.is_a?(Hash) && redirection[:id]
       render_turbo_stream replace(redirection[:id], partial: redirection[:partial])
