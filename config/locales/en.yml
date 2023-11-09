@@ -104,7 +104,7 @@ en:
     get_recommendations: Get recommendations
     index:
       tagline: The home of vocabularies and ontologies in agronomy and related fields.
-      title: Welcome to the %{organization}
+      title: Welcome to %{site}
       welcome: Welcome to %{site},
     ontology_upload: Do you want to share an ontology?
     ontology_upload_benefits: 'By uploading your ontology to %{site}, you can:'
