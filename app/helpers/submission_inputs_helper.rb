@@ -10,6 +10,10 @@ module SubmissionInputsHelper
       @label = label
     end
 
+    def attr
+      @attribute_key
+    end
+
     def name
       "submission[#{@attribute_key}]"
     end
@@ -233,7 +237,7 @@ module SubmissionInputsHelper
                                                  agents: attr.values,
                                                  agent_type: agent_type(attr.metadata),
                                                  name_prefix: attr.name,
-                                                 parent_id: '')
+                                                 parent_id: attr.attr)
     end
 
   end
@@ -264,13 +268,14 @@ module SubmissionInputsHelper
   end
 
   def generate_list_field_input(attr, name, label, values, &block)
-    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.metadata['attribute'])) do
+    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.attr)) do
       render NestedFormInputsComponent.new do |c|
         c.header do
           label
         end
         c.template do
-          block.call('', "#{name}[NEW_RECORD]", attr.metadata['attribute'].to_s + '_' + @ontology.acronym)
+          binding.pry if @ontology.acronym.nil?
+          block.call('', "#{name}[NEW_RECORD]", attr.attr.to_s + '_' + @ontology.acronym)
         end
 
         c.empty_state do
@@ -279,7 +284,7 @@ module SubmissionInputsHelper
 
         Array(values).each_with_index do |metadata_val, i|
           c.row do
-            block.call(metadata_val, "#{name}[#{i}]", "submission_#{attr.metadata['attribute'].to_s}" + '_' + @ontology.acronym)
+            block.call(metadata_val, "#{name}[#{i}]", "submission_#{attr.attr.to_s}" + '_' + @ontology.acronym)
           end
         end
       end
