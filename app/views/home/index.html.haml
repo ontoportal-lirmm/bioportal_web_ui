@@ -183,7 +183,7 @@
       .home-support-items
         - $HOME_PAGE_LOGOS[:with_the_collaboration_of].each do |logo|
           %a{href:logo[:url], target: "_blanc"}
-            %img{src: asset_path(logo[:img_src]), class: (logo[:img_src] == 'logos/collaboration/ontoportal.png' ? 'custom-logo-class' : '')}
+            %img{src: asset_path(logo[:img_src]), class: 'custom-logo-class'}
 
 
 
