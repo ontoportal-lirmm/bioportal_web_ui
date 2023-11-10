@@ -112,7 +112,7 @@ fr:
     get_recommendations: Obtenir des recommandations
     index:
       tagline: le référentiel d'ontologies biomédicales le plus complet au monde
-      title: Bienvenue à la %{organization}
+      title: Bienvenue à la %{site}
       welcome: Bienvenue à la %{site},
     ontology_upload: Veux-tu télécharger une ontologie ?
     ontology_upload_benefits: 'En téléchargeant votre ontologie sur %{site}, vous
@@ -123,7 +123,7 @@ fr:
     paste_text_prompt: Collez un paragraphe de texte ou quelques mots-clés..
     recommender_annotator: Recommandateur et annotateur
     supported_by: Soutenu par
-    twitter_news: Actualités twitter
+    twitter_news: Actualités
     with_collaboration: Avec la collaboration de
   input: Entrée
   insert_sample_text: Insérer un exemple de texte

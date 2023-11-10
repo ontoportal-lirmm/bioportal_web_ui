@@ -112,7 +112,7 @@ de:
     index:
       tagline: Die Heimat von Vokabularen und Ontologien in der Agrarwissenschaft
         und verwandten Bereichen.
-      title: Willkommen bei der %{organization}
+      title: Willkommen bei der %{site}
       welcome: Willkommen auf der %{site},
     ontology_upload: Möchten Sie eine Ontologie hochladen?
     ontology_upload_benefits: 'Indem Sie Ihre Ontologie auf %{site} hochladen, können
@@ -123,7 +123,7 @@ de:
     paste_text_prompt: Einfügen eines Textabsatzes oder einiger Schlüsselwörter ...
     recommender_annotator: Empfehlungsgeber und Kommentator
     supported_by: Unterstützt von
-    twitter_news: Twitter-Nachrichten
+    twitter_news: Nachrichten
     with_collaboration: In Zusammenarbeit mit der
   input: Eingabe
   insert_sample_text: Beispieltext einfügen
