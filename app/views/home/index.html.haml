@@ -84,10 +84,7 @@
         %div.align-items
           %h4.margin-items= t('home.fairness')
           = render Display::InfoTooltipComponent.new(text: "You are seing the average scores for all the public ontologies in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness")
-          = link_to(get_fairness_service_url,id: "fairness-service-url", target: "_blank", "aria-label": t("get_json_version"), title: t("get_json_version")) do
-            %i.fas.fa-code{"aria-hidden": "true", style: "margin-left: 0.5rem" }
-          = link_to("https://github.com/agroportal/fairness", target: "_blank", "aria-label": t("view_fair_scores_definitions"), title: t("view_fair_scores_definitions")) do
-            %i.fas.fa-question-circle{"aria-hidden": "true", style: "margin-left: 0.5rem"}
+          = fairness_link
         %hr.home-section-line/
         .home-card.home-fair-scores
           %div.fair-scores-badge-section
