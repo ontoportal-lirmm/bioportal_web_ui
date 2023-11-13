@@ -126,7 +126,7 @@ Rails.application.routes.draw do
   match '/ontologies/:acronym/submissions/:id/edit_metadata' => 'submissions#edit_metadata', via: [:get, :post]
   get '/ontologies_filter', to:  'ontologies#ontologies_filter'
 
-  get '/ontologies/:acronym/properties/show', to: 'properties#show', as: 'ontology_properties_show'
+  get '/ontologies/:acronym/properties/show', to: 'properties#show'
 
   # Analytics
   get '/analytics/:action' => 'analytics#(?-mix:search_result_clicked|user_intention_surveys)'

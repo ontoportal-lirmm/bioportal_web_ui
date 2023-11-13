@@ -1,9 +1,8 @@
 class PropertiesController < ApplicationController
     def show
-        @data = JSON.parse(params[:data])
+        @property =  LinkedData::Client::HTTP.get("/ontologies/#{params[:acronym]}/properties/#{helpers.encode_param(params[:id])}")
+
         @acronym = params[:acronym]
-        respond_to do |format|
-            format.html { render partial: 'show' }
-        end 
+        render partial: 'show' 
     end
 end

@@ -1,0 +1,19 @@
+%div#propTree
+
+:javascript
+    $(document).ready(() => {
+        $("#propTree").NCBOPropertyTree({
+                ontology: "#{@ontology.acronym}",
+                ncboUIURL: "",
+                width: "100%",
+        
+            }).on("afterSelect", function (e, classId, label, node) {
+                 e.target.dispatchEvent(new CustomEvent("change", { 
+                    bubbles: true,
+                    detail: {
+                        data: {id: decodeURIComponent(node.data().id)}
+                    }
+                 }))
+            })
+    })
+   

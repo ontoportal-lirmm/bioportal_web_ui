@@ -1,51 +1,8 @@
-= turbo_frame_tag 'properties' do
-  %div.ont-properties{data: {controller: 'container-splitter'}}
-    %div#propTree{data: {'container-splitter-target': 'container'}}
+= render TurboFrameComponent.new(id: "properties", data: {"turbo-frame-target": "frame"} ) do
+  %div.ont-properties{data: {controller: 'container-splitter turbo-frame', 'turbo-frame': {
+      'url-value': "/ontologies/#{@ontology.acronym}/properties/show"
+      }}}
+    %div#propTree{data: {'container-splitter-target': 'container', action: 'change->turbo-frame#updateFrame'}}
+      = render partial: 'properties/properties_tree'
     %div#prop_contents.pl-3{data: {'container-splitter-target': 'container'}}
-
-
-  :javascript
-    function generatePropertyDetails(data) {
-      const jsonString = JSON.stringify(data);
-      var chaineSansHash = jsonString.replace(/#/g, "£");
-      $.ajax({
-        url: '/ontologies/#{@ontology.acronym}/properties/show?data=' + chaineSansHash,
-        dataType: 'html',
-        success: function(response) {
-          $("#prop_contents").html(response);
-        },
-        error: function(error) {
-          console.error(error);
-        }
-      });
-    }
-
-
-    function initOntPropertiesTab() {
-      $("#propTree").NCBOPropertyTree({
-        ontology: "#{@ontology.acronym}",
-        ncboUIURL: "",
-        width: "100%",
-        onInit: function() {
-          var ontPropTree = $("#propTree").data().NCBOPropertyTree;
-          var firstLinkData = $("#propTree").find("a:first").data();
-          if (firstLinkData) {
-            ontPropTree.selectClass(firstLinkData.id);
-            firstLinkData.id = decodeURIComponent(firstLinkData.id);
-            $("#prop_contents").html(generatePropertyDetails(firstLinkData));
-          }
-        }
-      }).on("afterSelect", function (e, classId, label, node) {
-        var data = node.data();
-        data.id = decodeURIComponent(data.id);
-        generatePropertyDetails(data)
-      });
-    }
-
-    document.addEventListener('turbo:load',function () {
-      initOntPropertiesTab();
-    });
-
-    $(document).ready(function(){
-      initOntPropertiesTab();
-    });
+      = render partial: 'properties/show' 
