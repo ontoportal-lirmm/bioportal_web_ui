@@ -4,7 +4,8 @@ class OntologiesController < ApplicationController
   include InstancesHelper
   include ActionView::Helpers::NumberHelper
   include OntologiesHelper
-  include SchemesHelper, ConceptsHelper
+  include ConceptsHelper
+  include SchemesHelper
   include CollectionsHelper
   include MappingStatistics
   include OntologyUpdater
@@ -25,7 +26,6 @@ class OntologiesController < ApplicationController
   EXTERNAL_MAPPINGS_GRAPH = "http://data.bioontology.org/metadata/ExternalMappings"
   INTERPORTAL_MAPPINGS_GRAPH = "http://data.bioontology.org/metadata/InterportalMappings"
 
-
   # GET /ontologies
   def index
     @categories = LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
@@ -36,48 +36,39 @@ class OntologiesController < ApplicationController
   end
 
   def ontologies_filter
+    @ontologies = submissions_paginate_filter(params)
+    @object_count = count_objects(@ontologies)
 
-    params[:sort_by] = 'creationDate' if params[:search]
-
-
-    if params[:count]
-      request_params  = filters_params(params, includes: 'ontology,naturalLanguage,hasFormalityLevel,isOfType', page: nil)
-      submissions = LinkedData::Client::Models::OntologySubmission.all(request_params)
-      @object_count = count_objects(submissions.map { |sub| ontology_hash(sub) })
-
-      update_filters_counts = @object_count.map do |section, values_count|
-         values_count.map do |value, count|
-           replace("count_#{section}_#{value}") do
-             helpers.turbo_frame_tag("count_#{section}_#{value}") do
-               helpers.content_tag(:span, count.to_s, class: "hide-if-loading #{count.zero? ? 'disabled' : ''}")
-             end
-           end
-         end
-       end.flatten
-      streams = [
-        replace('ontologies_filter_count_request') do
-          helpers.content_tag(:p, class: "browse-desc-text", style: "margin-bottom: 12px !important;") { "Showing #{submissions.size}" }
+    update_filters_counts = @object_count.map do |section, values_count|
+      values_count.map do |value, count|
+        replace("count_#{section}_#{value}") do
+          helpers.turbo_frame_tag("count_#{section}_#{value}") do
+            helpers.content_tag(:span, count.to_s, class: "hide-if-loading #{count.zero? ? 'disabled' : ''}")
+          end
         end
-      ] + update_filters_counts
-    else
-      @ontologies = submissions_paginate_filter(params)
-      streams = if params[:page].nil?
-                  [
-                    prepend('ontologies_list_container', partial: 'ontologies/browser/ontologies'),
-                    prepend('ontologies_list_container') {
-                      helpers.turbo_frame_tag("ontologies_filter_count_request", src: ontologies_filter_url(@filters, page: nil, count: true)) do
-                        helpers.browser_counter_loader
-                      end
-                    }
-                  ]
-                else
-                  [replace("ontologies_list_view-page-#{@page.page}", partial: 'ontologies/browser/ontologies')]
-                end
-    end
+      end
+    end.flatten
 
+    count_streams = [
+      replace('ontologies_filter_count_request') do
+        helpers.content_tag(:p, class: "browse-desc-text", style: "margin-bottom: 12px !important;") { "Showing #{@ontologies.size} of #{@analytics.keys.size}" }
+      end
+    ] + update_filters_counts
 
+    streams =if params[:page].nil?
+               [
+                 prepend('ontologies_list_container', partial: 'ontologies/browser/ontologies'),
+                 prepend('ontologies_list_container') {
+                   helpers.turbo_frame_tag("ontologies_filter_count_request") do
+                     helpers.browser_counter_loader
+                   end
+                 }
+               ]
+             else
+               [replace("ontologies_list_view-page-1", partial: 'ontologies/browser/ontologies')]
+             end
 
-    render turbo_stream: streams
+    render turbo_stream: streams + count_streams
   end
 
   def classes
@@ -101,7 +92,7 @@ class OntologiesController < ApplicationController
 
     @current_purl = @concept.purl if $PURL_ENABLED
 
-    unless @concept.id == 'bp_fake_root'
+    unless @concept.nil? || @concept.id == 'bp_fake_root'
       @notes = @concept.explore.notes
     end
 
@@ -124,6 +115,7 @@ class OntologiesController < ApplicationController
   end
 
   def create
+    @is_update_ontology = false
     @ontology = ontology_from_params.save
 
     if response_error?(@ontology)
@@ -131,7 +123,7 @@ class OntologiesController < ApplicationController
       return
     end
 
-    @submission = save_submission(new_submission_hash)
+    @submission = save_submission(new_submission_hash(@ontology))
 
     if response_error?(@submission)
       @ontology.delete
@@ -308,15 +300,6 @@ class OntologiesController < ApplicationController
 
   # Main ontology description page (with metadata): /ontologies/ACRONYM
   def summary
-    # Note: find_by_acronym includes ontology views
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first if @ontology.nil?
-    ontology_not_found(params[:id]) if @ontology.nil?
-    # Check to see if user is requesting json-ld, return the file from REST service if so
-    if request.accept.to_s.eql?('application/ld+json') || request.accept.to_s.eql?('application/json')
-      headers['Content-Type'] = request.accept.to_s
-      render plain: @ontology.to_jsonld
-      return
-    end
 
     @metrics = @ontology.explore.metrics rescue []
     #@reviews = @ontology.explore.reviews.sort {|a,b| b.created <=> a.created} || []
@@ -332,13 +315,17 @@ class OntologiesController < ApplicationController
     @ontology_relations_data = ontology_relations_data
 
     category_attributes = submission_metadata.group_by{|x| x['category']}.transform_values{|x| x.map{|attr| attr['attribute']} }
-
+    @relations_array_display = @relations_array.map do |relation|
+      attr = relation.split(':').last
+      ["#{helpers.attr_label(attr, attr_metadata: helpers.attr_metadata(attr), show_tooltip: false)}(#{relation})",
+       relation]
+    end
     @methodology_properties = properties_hash_values(category_attributes["methodology"])
-    @agents_properties = properties_hash_values(category_attributes["people"].without('wasGeneratedBy', 'wasInvalidatedBy') + [:hasCreator, :hasContributor, :translator, :publisher, :copyrightHolder])
-    @dates_properties = properties_hash_values(category_attributes["dates"] + [:creationDate, :modificationDate, :released])
-    @links_properties = properties_hash_values(category_attributes["links"].without('includedInDataCatalog') +[:wasGeneratedBy, :wasInvalidatedBy] )
-    @identifiers = properties_hash_values( [:URI, :versionIRI, :identifier])
-    @projects_properties = properties_hash_values(category_attributes["usage"].without('hasDomain') + [:audience, :includedInDataCatalog])
+    @agents_properties = properties_hash_values(category_attributes["persons and organizations"])
+    @dates_properties = properties_hash_values(category_attributes["dates"], custom_labels: {released: "Initially created On"})
+    @links_properties = properties_hash_values(category_attributes["links"])
+    @identifiers = properties_hash_values([:URI, :versionIRI, :identifier])
+    @projects_properties = properties_hash_values(category_attributes["usage"])
     @ontology_icon_links = [%w[summary/download dataDump], %w[summary/homepage homepage], %w[summary/documentation documentation], %w[icons/github repository], %w[summary/sparql endpoint]]
     if request.xhr?
       render partial: 'ontologies/sections/metadata', layout: false
@@ -401,7 +388,7 @@ class OntologiesController < ApplicationController
     metrics = @submissions.map { |s| s.metrics }
 
     data = {
-      key => metrics.map { |m| m[key] }
+      key => metrics.map { |m| m.nil? ? 0 : m[key] }
     }
 
     render partial: 'ontologies/sections/metadata/metrics_evolution_graph', locals: { data: data }
@@ -435,7 +422,7 @@ class OntologiesController < ApplicationController
         target_id = relation_value
         target_in_portal = false
         # if we find our portal URL in the ontology URL, then we just keep the ACRONYM to try to get the ontology.
-          relation_value = relation_value.split('/').last if relation_value.include?($UI_URL)
+        relation_value = relation_value.split('/').last if relation_value.include?($UI_URL)
 
         # Use acronym to get ontology from the portal
         target_ont = LinkedData::Client::Models::Ontology.find_by_acronym(relation_value).first
@@ -450,10 +437,10 @@ class OntologiesController < ApplicationController
 
     ontology_relations_array
   end
-  def properties_hash_values(properties, sub = @submission_latest)
+  def properties_hash_values(properties, sub: @submission_latest, custom_labels: {})
     return {} if sub.nil?
 
-    properties.map { |x| [x.to_s, sub.send(x.to_s)] }.to_h
+    properties.map { |x| [x.to_s, [sub.send(x.to_s), custom_labels[x.to_sym]]] }.to_h
   end
 
   def get_metrics_hash

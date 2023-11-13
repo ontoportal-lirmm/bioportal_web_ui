@@ -7,9 +7,9 @@ class HomeController < ApplicationController
   include FairScoreHelper
 
   def index
-    @analytics = LinkedData::Client::Analytics.last_month
+    @analytics =  helpers.ontologies_analytics
     # Calculate BioPortal summary statistics
-    @ont_count = @analytics.onts.size
+    @ont_count = @analytics.keys.size
     metrics = LinkedData::Client::Models::Metrics.all
     metrics = metrics.each_with_object(Hash.new(0)) do |h, sum|
       h.to_hash.slice(:classes, :properties, :individuals).each { |k, v| sum[k] += v }
@@ -23,18 +23,18 @@ class HomeController < ApplicationController
     @users_count = LinkedData::Client::Models::User.all.length
 
     @upload_benefits = [
-      'Discover new insights and connections by exploring other ontologies in the repository.',
-      'Contribute to the growth and development of your domain by adding new concepts and categories.',
-      'Use version control to manage the changes to your ontology over time and collaborate with other users.',
-      'Get feedback and suggestions from other users who can review and comment on your ontology.',
-      'Get the FAIR score and metrics for your ontology.'
+      t('home.benefit1'),
+      t('home.benefit2'),
+      t('home.benefit3'), 
+      t('home.benefit4'),
+      t('home.benefit5')
     ]
 
     @anal_ont_names = []
     @anal_ont_numbers = []
-    @analytics.onts[0..4].each do |visits|
-      @anal_ont_names << visits[:ont]
-      @anal_ont_numbers << visits[:views]
+    @analytics.sort_by{|ont, count| -count}[0..4].each do |ont, count|
+      @anal_ont_names << ont
+      @anal_ont_numbers << count
     end
 
   end
@@ -42,12 +42,6 @@ class HomeController < ApplicationController
   def render_layout_partial
     partial = params[:partial]
     render partial: "layouts/#{partial}"
-  end
-
-  def help
-    # Show the header/footer or not
-    layout = params[:pop].eql?('true') ? 'popup' : 'ontology'
-    render layout: layout
   end
 
   def all_resources
@@ -79,7 +73,7 @@ class HomeController < ApplicationController
     unless params[:question].nil? || params[:question].empty?
       @tags << "Question"
     end
-    unless params[:ontology_submissions_request].nil? || params[:bug].empty?
+    unless params[:ontology_submissions_request].nil? || params[:ontology_submissions_request].empty?
       @tags << "Ontology submissions request"
     end
 
@@ -101,7 +95,7 @@ class HomeController < ApplicationController
     end
 
     unless @errors.empty?
-      render render 'home/feedback/feedback', layout: feedback_layout
+      render 'home/feedback/feedback', layout: feedback_layout
       return
     end
 

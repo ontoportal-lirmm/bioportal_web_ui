@@ -12,4 +12,15 @@ module HomeHelper
     link_to(link_content, options[:url], target: options[:target], class: options[:css_class].to_s, style: options[:text].blank? ? 'text-decoration: none' : '').html_safe if link_content
   end
 
+
+  def format_number_abbreviated(number)
+    if number >= 1_000_000
+      (number / 1_000_000).to_s + 'M'
+    elsif number >= 1_000
+      (number / 1_000).to_s + 'K'
+    else
+      number.to_s
+    end
+  end  
+
 end

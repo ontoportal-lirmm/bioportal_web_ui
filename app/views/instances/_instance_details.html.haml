@@ -2,7 +2,7 @@
   - ontology_acronym = params[:ontology_id]
   - filter_properties = ["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"]
   %h4
-    Details of  #{link_to_instance(@instance,ontology_acronym)} of type : #{@instance.types.map {|cls| link_to_class(ontology_acronym,cls)}.join(', ').html_safe}
+    Details of  #{link_to_instance(@instance,ontology_acronym)} of type: #{@instance.types.map {|cls| link_to_class(ontology_acronym,cls)}.join(', ').html_safe}
   %table.zebra{style:'width: 80vw'}
     %thead
       %tr

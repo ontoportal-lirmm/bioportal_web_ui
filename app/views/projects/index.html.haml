@@ -1,78 +1,78 @@
 - @title = t("projects.title")
+%div.container
+  #DescriptionDialog{:style => "display: none", :title => t("projects.project_description")}
+    %p= t("projects.description_text")
+  %h1.tab_header= t("projects.self")
+  %p.tab_description
+    = t("projects.index.intro", site: "#{$SITE}")
+    = link_to(help_path(anchor: "Projects_Tab"), id: "projects-help", aria: {label: t("projects.view_projects_help")}) do
+      %i.fas.fa-question-circle.fa-lg{aria: {hidden: "true"}, style: "margin-left: .25em"}
 
-#DescriptionDialog{:style => "display: none", :title => t("projects.project_description")}
-  %p= t("projects.description_text")
-%h1.tab_header= t("projects.self")
-%p.tab_description
-  = t("projects.index.intro", site: "#{$SITE}")
-  = link_to(help_path(anchor: "Projects_Tab"), id: "projects-help", aria: {label: t("projects.view_projects_help")}) do
-    %i.fas.fa-question-circle.fa-lg{aria: {hidden: "true"}, style: "margin-left: .25em"}
-
-%div{:style => "padding:10px;"}
-  %span
-    - if session[:user].nil?
-      = button_to t("projects.create_new_project"), "/login", :method => :get
-    - else
-      = button_to t("projects.create_new_project"), new_project_path, :method => :get
-  %br/
-  %br/
-  %table#projects.zebra{:cellpadding => "0", :cellspacing => "0"}
-    %thead
-      %tr
-        %th= t("projects.self")
-        %th= t("projects.description")
-        %th= t("projects.contacts")
-        %th= t("projects.institutions")
-        %th= t("projects.ontologies")
-        - if current_user_admin?
-          %th= t("projects.creator")
-          %th= t("projects.created")
-    %tbody
-      - for project in @projects
+  %div{:style => "padding:10px;"}
+    %span
+      - if session[:user].nil?
+        = button_to t("projects.create_new_project"), "/login", :method => :get
+      - else
+        = button_to t("projects.create_new_project"), new_project_path, :method => :get
+    %br/
+    %br/
+    %table#projects.zebra{:cellpadding => "0", :cellspacing => "0"}
+      %thead
         %tr
-          / Project name, home page, and controls for editors
-          %td{:style => "vertical-align:top;", :width => "30%"}
-            %strong= link_to(project.name, project_path(project.acronym))
-            %br/
-            %span{:style => "font-size:75%; vertical-align:bottom;"}
-              = link_to(t('projects.home_page'), project.homePage, target: "_blank", rel: "nofollow")
-              %span.ui-icon.ui-icon-extlink{:style => "display: inline-block; vertical-align: text-bottom;"}
-              \&nbsp;&nbsp;
-              - if session[:user] && (project.creator == session[:user].id || session[:user].admin?)
-                = link_to(t("projects.edit"), edit_project_path(project.acronym))
-                / TODO_REV: Enable delete project for admins
-              - if current_user_admin?
-                &nbsp;&nbsp;
-                = link_to(t("projects.delete_admin_only"), project_path(project.acronym), :method => :delete, :confirm => t("projects.delete_confirm"))
-          / Project description (may be truncated with a dialog)
-          %td{:style => "vertical-align:top;", :width => "50%"}
-            - if ! project.description.nil?
-              - descLength = 250
-              - if project.description.length < descLength
-                = project.description
-              - else
-                - descShort = smart_truncate(project.description, :words => 20)
-                %span{:style => "cursor:help;", :title => project.description}
-                  = descShort
-          / Contacts
-          %td{:style => "vertical-align:top;", :width => "10%"}
-            = raw project.contacts
-          / Institutions
-          %td{:style => "vertical-align:top;", :width => "8%"}
-            = raw project.institution
-          / Ontologies
-          %td{:style => "vertical-align:top;", :width => "2%"}
-            - ontologyCount = 0
-            - ontologyLabels = ""
-            - for ontology in project.ontologyUsed
-              - ontologyLabels += @ontologies_hash[ontology].name + "\n" rescue next
-              - ontologyCount += 1
-            - if ontologyCount > 0
-              %span{:style => "cursor:help;text-decoration: none; border-bottom:1px dotted;", :title => ontologyLabels}= ontologyCount
-            - else
-              = ontologyCount
+          %th= t("projects.self")
+          %th= t("projects.description")
+          %th= t("projects.contacts")
+          %th= t("projects.institutions")
+          %th= t("projects.ontologies")
           - if current_user_admin?
-            %td
-              = project.creator.map {|c| c.split("/").last}.join(", ")
-            %td
-              = project.created
+            %th= t("projects.creator")
+            %th= t("projects.created")
+      %tbody
+        - for project in @projects
+          %tr
+            / Project name, home page, and controls for editors
+            %td{:style => "vertical-align:top;", :width => "30%"}
+              %strong= link_to(project.name, project_path(project.acronym))
+              %br/
+              %span{:style => "font-size:75%; vertical-align:bottom;"}
+                = link_to(t('projects.home_page'), project.homePage, target: "_blank", rel: "nofollow")
+                %span.ui-icon.ui-icon-extlink{:style => "display: inline-block; vertical-align: text-bottom;"}
+                \&nbsp;&nbsp;
+                - if session[:user] && (project.creator == session[:user].id || session[:user].admin?)
+                  = link_to(t("projects.edit"), edit_project_path(project.acronym))
+                  / TODO_REV: Enable delete project for admins
+                - if current_user_admin?
+                  &nbsp;&nbsp;
+                  = link_to(t("projects.delete_admin_only"), project_path(project.acronym), :method => :delete, :confirm => t("projects.delete_confirm"))
+            / Project description (may be truncated with a dialog)
+            %td{:style => "vertical-align:top;", :width => "50%"}
+              - if ! project.description.nil?
+                - descLength = 250
+                - if project.description.length < descLength
+                  = project.description
+                - else
+                  - descShort = smart_truncate(project.description, :words => 20)
+                  %span{:style => "cursor:help;", :title => project.description}
+                    = descShort
+            / Contacts
+            %td{:style => "vertical-align:top;", :width => "10%"}
+              = raw project.contacts
+            / Institutions
+            %td{:style => "vertical-align:top;", :width => "8%"}
+              = raw project.institution
+            / Ontologies
+            %td{:style => "vertical-align:top;", :width => "2%"}
+              - ontologyCount = 0
+              - ontologyLabels = ""
+              - for ontology in project.ontologyUsed
+                - ontologyLabels += @ontologies_hash[ontology].name + "\n" rescue next
+                - ontologyCount += 1
+              - if ontologyCount > 0
+                %span{:style => "cursor:help;text-decoration: none; border-bottom:1px dotted;", :title => ontologyLabels}= ontologyCount
+              - else
+                = ontologyCount
+            - if current_user_admin?
+              %td
+                = project.creator.map {|c| c.split("/").last}.join(", ")
+              %td
+                = project.created

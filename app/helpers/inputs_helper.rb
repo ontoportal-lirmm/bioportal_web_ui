@@ -1,14 +1,14 @@
 module InputsHelper
 
-  def text_input(name:, value:, label: nil, disabled: false, help: nil)
+  def text_input(name:, value:, label: nil, disabled: false, help: nil, error_message: nil)
     render Input::TextInputComponent.new(label: input_label(label, name), name: name, value: value,
-                                         error_message: input_error_message(name),
+                                         error_message: error_message || input_error_message(name),
                                          disabled: disabled,
                                          helper_text: help)
   end
 
   def select_input(name:, values:, id: nil, label: nil, selected: nil, multiple: false, help: nil, data: {})
-    render Input::SelectComponent.new(label: input_label(label, name), id: id, name: name, value: values,
+    render Input::SelectComponent.new(label: input_label(label, name), id: id || name, name: name, value: values,
                                       selected: selected,
                                       multiple: multiple,
                                       helper_text: help, data: data)
@@ -18,8 +18,8 @@ module InputsHelper
     render ChipsComponent.new(name: name, id: id, label: label, value: value, checked: checked)
   end
 
-  def switch_input(id:, name:, label:, checked: false, value: '', boolean_switch: false)
-    render SwitchInputComponent.new(id: id, name: name, label: label, checked: checked, value: value, boolean_switch: boolean_switch)
+  def switch_input(id:, name:, label:, checked: false, value: '', boolean_switch: false, style: nil)
+    render SwitchInputComponent.new(id: id, name: name, label: label, checked: checked, value: value, boolean_switch: boolean_switch, style: style)
   end
 
   def url_input(name:, value:, label: nil, help: nil)
@@ -34,10 +34,11 @@ module InputsHelper
                                         helper_text: help)
   end
 
-  def date_input(name:, value:, label: nil, help: nil)
+  def date_input(name:, value:, label: nil, help: nil, max_date: nil)
     render Input::DateComponent.new(label: input_label(label, name), name: name, value: value,
                                     error_message: input_error_message(name),
-                                    helper_text: help)
+                                    helper_text: help,
+                                    max_date: max_date)
   end
 
   private
@@ -52,6 +53,7 @@ module InputsHelper
   end
 
   def attribute_error(attr)
+    return '' if @errors&.is_a?(String)
     return '' unless @errors && @errors[attr.to_sym]
 
     errors = @errors[attr.to_sym]

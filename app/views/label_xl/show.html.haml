@@ -7,5 +7,5 @@
                 exclude_keys: []) do |c|
       - c.header(stripped: true) do |t|
         - t.add_row({th: 'ID'}, {td: @label_xl["@id"]})
-        - t.add_row({th: 'Preferred Name'}, {td: get_label_xl_label(@label_xl)})
+        - t.add_row({th: 'Preferred Name'}, {td: display_in_multiple_languages(get_label_xl_label(@label_xl))})
         - t.add_row({th: 'Type'}, {td: @label_xl["@type"]})

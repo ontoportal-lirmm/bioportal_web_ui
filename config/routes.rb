@@ -91,8 +91,6 @@ Rails.application.routes.draw do
   # Top-level pages
   match '/feedback', to: 'home#feedback', via: [:get, :post]
   get '/account' => 'home#account'
-  get '/help' => 'home#help'
-  get '/about' => 'home#about'
   get '/site_config' => 'home#site_config'
   get '/validate_ontology_file' => 'home#validate_ontology_file_show'
   post '/annotator_recommender_form' => 'home#annotator_recommender_form'

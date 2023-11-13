@@ -21,6 +21,7 @@ shared:
     widgets: 'http://www.bioontology.org/wiki/NCBO_Widgets'
     wiki: 'https://www.bioontology.org/wiki/'
     mappings: 'https://www.bioontology.org/wiki/BioPortal_Help#Mappings_Tab'
+    metadata_help: 'https://doc.jonquetlab.lirmm.fr/share/32c082ff-97f5-45f4-bafe-05f41c9a5ce4'
 
 development:
   links:

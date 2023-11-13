@@ -38,6 +38,10 @@ class TabItemComponent < ViewComponent::Base
     selected_item? ? 'active show' : ''
   end
 
+  def page_name
+    @page_name
+  end
+
   def call
     if title && !title.empty?
       link_to(title, @path, id: "#{item_id}_tab", class: "#{active_class} tab-link")

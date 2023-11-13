@@ -6,7 +6,7 @@
         .description_text
           = render TextAreaFieldComponent.new(value: @submission_latest&.description)
         - unless @submission_latest&.logo.nil?
-          = image_tag(@submission_latest&.logo, class: 'description_img')
+          = image_tag(@submission_latest&.logo, class: 'description_img', width: '145px')
     - l.row do
       %span.creation_text
         - if @submission_latest&.released
@@ -50,4 +50,4 @@
     = ontology_icon_links(@ontology_icon_links, @submission_latest)
   %hr.w-100.my-3
   %div.text-center.pb-3
-    = link_to_modal('See all metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "All metadata properties", show_modal_size_value: 'modal-xl' })
+    = link_to_modal('See all metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: "All metadata properties for #{@ontology.acronym}", show_modal_size_value: 'modal-xl' })
