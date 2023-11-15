@@ -1,7 +1,3 @@
-.optionsBox {
-  margin-top: 15px;
-}
-
 #inputTextHighlighted {
   display:none;
   background-color: #e2ebf0;
@@ -34,4 +30,13 @@
 
 #recommender-help i {
   margin-left: .25em;
+}
+
+.recommender.index div#bd form, table#recommendations {
+  a {
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
 }

@@ -1,49 +1,64 @@
-%nav.navbar.navbar-expand-lg.navbar-dark.navbar-custom
-  = link_to(image_tag("logos/bioportal-logo.png"), root_path, class: "navbar-brand")
-  = button_tag(type: "button", class: "navbar-toggler", data: {toggle: "collapse", target: "#topNavigationToggler"}, aria: {controls: "topNavigationToggler", expanded: "false", label: "Toggle navigation"}) do
-    %span.navbar-toggler-icon
+%nav.navbar.navbar-expand-lg.navbar-dark.navbar-custom.fixed-top
+  %div.container-fluid
+    = link_to(image_tag("logos/bioportal-logo.png"), root_path, class: "navbar-brand")
+    = button_tag(type: "button", class: "navbar-toggler", "data-bs-toggle": "collapse",
+                 "data-bs-target": "#topNavigationToggler",
+                 aria: {controls: "topNavigationToggler", expanded: "false", label: "Toggle navigation"}) do
+      %span.navbar-toggler-icon
 
-  %div#topNavigationToggler.navbar-collapse.collapse.justify-content-between
-    %ul.navbar-nav
-      %li.nav-item
-        = link_to("Ontologies", ontologies_path, class: "nav-link")
-      %li.nav-item
-        = link_to("Search", search_path, class: "nav-link")
-      %li.nav-item
-        = link_to("Annotator", annotator_index_path, class: "nav-link")
-      %li.nav-item
-        = link_to("Recommender", recommender_index_path, class: "nav-link")
-      %li.nav-item
-        = link_to("Mappings", mappings_path, class: "nav-link")
-      -if session[:user].present? && session[:user].admin?
+    %div#topNavigationToggler.navbar-collapse.collapse
+      %ul{class: "navbar-nav me-auto"}
         %li.nav-item
-          = link_to("Admin", admin_index_path, class: "nav-link")
-    %ul.navbar-nav
-      - if session[:user].nil?
+          = link_to("Ontologies", ontologies_path, class: "nav-link")
         %li.nav-item
-          = link_to("Login", login_index_path(redirect: request.original_url), class: "btn btn-bp-login mr-md-2")
-      - else
-        -# Account menu
+          = link_to("Search", search_path, class: "nav-link")
+        %li.nav-item
+          = link_to("Annotator", annotator_index_path, class: "nav-link")
+        %li.nav-item
+          = link_to("Recommender", recommender_index_path, class: "nav-link")
+        %li.nav-item
+          = link_to("Mappings", mappings_path, class: "nav-link")
+        -if session[:user].present? && session[:user].admin?
+          %li.nav-item
+            = link_to("Admin", admin_index_path, class: "nav-link")
+      %ul.navbar-nav
+        - if session[:user].nil?
+          %li.nav-item
+            = link_to("Login", login_index_path(redirect: request.original_url), class: "btn btn-login me-2")
+        - else
+          -# Account menu
+          %li.nav-item.dropdown
+            = link_to("#", class: "nav-link dropdown-toggle me-1", role: "button", "data-bs-toggle": "dropdown", "aria-expanded": "false") do
+              = session[:user].username
+            %ul.dropdown-menu.dropdown-menu-end
+              %li
+                = link_to("Account settings", "/account", class: "dropdown-item")
+              - unless session[:ontologies].nil?
+                %li
+                  %hr.dropdown-divider
+                %li
+                  %h6.dropdown-header Recently Viewed
+                  - for ont in session[:ontologies]
+                    %li
+                      = link_to(ont.ontology_name, "/ontologies/#{ont.ontology_acronym}/?p=classes&conceptid=#{CGI.escape(ont.concept)}", class: "dropdown-item")
+                %li
+                  %hr.dropdown-divider
+              %li
+                = link_to("Logout", logout_path, class: "dropdown-item")
+        -# Support menu
         %li.nav-item.dropdown
-          = link_to("#", id: "accountMenuDropdownLink", class: "nav-link dropdown-toggle", role: "button", data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}) do
-            = session[:user].username
-          %div.dropdown-menu.dropdown-menu-right{aria: {labelledby: "accountMenuDropdownLink"}}
-            = link_to("Account Settings", "/account", class: "dropdown-item")
-            - unless session[:ontologies].nil?
-              %div.dropdown-divider
-              %h6.dropdown-header Recently Viewed
-              - for ont in session[:ontologies]
-                = link_to(ont.ontology_name, "/ontologies/#{ont.ontology_acronym}/?p=classes&conceptid=#{CGI.escape(ont.concept)}", class: "dropdown-item")
-              %div.dropdown-divider
-            = link_to("Logout", logout_path, class: "dropdown-item")
-      -# Support menu
-      %li.nav-item.dropdown
-        = link_to("#", id: "supportMenuDropdownLink", class: "nav-link dropdown-toggle", role: "button", data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}) do
-          Support
-        %div.dropdown-menu.dropdown-menu-right{aria: {labelledby: "supportMenuDropdownLink"}}
-          = link_to("Submit Feedback", feedback_path, id: "submitFeedbackMenuItem", class: "dropdown-item pop_window")
-          %div.dropdown-divider
-          %h6.dropdown-header Documentation
-          = link_to("Help", Rails.configuration.settings.links[:help], target: "_blank", class: "dropdown-item")
-          = link_to("Release Notes", Rails.configuration.settings.links[:release_notes], target: "_blank", class: "dropdown-item")
-          = link_to("How to Cite", Rails.configuration.settings.links[:cite], target: "_blank", class: "dropdown-item")
+          = link_to("#", class: "nav-link dropdown-toggle", role: "button", "data-bs-toggle": "dropdown", "aria-expanded": "false") do
+            Support
+          %ul.dropdown-menu.dropdown-menu-end
+            %li
+              = link_to("Submit feedback", feedback_path, id: "submitFeedbackMenuItem", class: "dropdown-item pop_window")
+            %li
+              %hr.dropdown-divider
+            %li
+              %h6.dropdown-header Documentation
+            %li
+              = link_to("Help", Rails.configuration.settings.links[:help], target: "_blank", class: "dropdown-item")
+            %li
+              = link_to("Release notes", Rails.configuration.settings.links[:release_notes], target: "_blank", class: "dropdown-item")
+            %li
+              = link_to("How to cite", Rails.configuration.settings.links[:cite], target: "_blank", class: "dropdown-item")

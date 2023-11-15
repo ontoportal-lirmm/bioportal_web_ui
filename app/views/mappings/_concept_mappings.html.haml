@@ -15,7 +15,7 @@
               id: "new_mapping_btn", |
               role: "button", |
               class: "btn btn-primary", |
-              data: {toggle: "modal", target: "#createNewMappingModal", concept_label: "#{@concept.prefLabel}"}, | 
+              data: {'bs-toggle': "modal", 'bs-target': "#createNewMappingModal", concept_label: "#{@concept.prefLabel}"}, |
               remote: "true")
 
     = link_to "Delete Selected Mappings", "javascript:void(0);", :onclick => "if (confirm('Really delete mappings? This cannot be undone.')) deleteMappings()", :id => "delete_mappings_button", :class => "btn btn-default", role: "button"

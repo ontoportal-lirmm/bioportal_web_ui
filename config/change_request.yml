@@ -5,6 +5,8 @@ test:
 
 development:
   ontologies:
+    ENVO:
+      repository: 'hrshdhgd/envo'
     GO:
       repository: 'hrshdhgd/go-ontology'
     MONDO:
@@ -14,15 +16,19 @@ development:
 
 staging:
   ontologies:
+    ENVO:
+      repository: 'hrshdhgd/envo'
     GO:
-      repository: 'geneontology/go-ontology'
+      repository: 'hrshdhgd/go-ontology'
     MONDO:
-      repository: 'monarch-initiative/mondo'
+      repository: 'hrshdhgd/mondo'
     UBERON:
-      repository: 'obophenotype/uberon'
+      repository: 'hrshdhgd/uberon'
 
 production:
   ontologies:
+    ENVO:
+      repository: 'EnvironmentOntology/envo'
     GO:
       repository: 'geneontology/go-ontology'
     MONDO:

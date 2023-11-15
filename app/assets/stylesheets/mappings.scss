@@ -33,13 +33,21 @@ div#mapping_load {
 }
 
 div#mappingCount {
-  text-align: center;
   overflow: hidden;
   padding-top: 10px;
 }
 
 #mapping_count_table {
   width: 100%;
+
+  tbody > tr :nth-child(1) {
+    a {
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 /* Create New Mapping dialog */

@@ -15,7 +15,6 @@
 //= require bp_class_tree
 //= require bp_ajax_controller
 //= require bp_ontology_viewer
-//= require bp_reviews
 //= require bp_notes
 //= require bp_ontolobridge
 //= require bp_form_complete

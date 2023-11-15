@@ -4,25 +4,22 @@
 - flash.each do |key, message|
   %div{class: "flash alert #{flash_class(key)} alert-dismissible fade show", role: "alert"}
     = message
-    %button{type: 'button', class: 'close', 'data-dismiss': 'alert', 'aria-label': 'Close'}
-      %span{'aria-hidden': 'true'} &times;
+    %button{type: 'button', class: 'btn-close', 'data-bs-dismiss': 'alert', 'aria-label': 'Close'}
 
 - do_not_display_subdomain_info_here = Set.new(["homeall_resources"])
 - if at_slice? && !do_not_display_subdomain_info_here.include?("#{controller.controller_name}#{controller.action_name}")
-  .subdomain_info{:style => "margin: 13px; padding: 5px; border: 1px solid gray; font-size:14px; background-color: #ffffcc;"}
-    %p{:style => "text-align: left; margin-bottom: 0;"}
-      - query_string = request.query_string.empty? ? "" : "?#{request.query_string}"
-      You are viewing the
-      %b= @subdomain_filter[:name]
-      %a.pop_window{:href => "help?pop=true#slice_definition", :target => "_blank"}
-        = $SITE
-        Slice
-      at
-      = succeed "." do
-        %b= request.host
-      = $SITE
-      = succeed "." do
-        %a{:href => "#{$UI_URL}#{request.path}#{query_string}"} visit the full site
+  %div{class: 'alert alert-warning mt-3'}
+    - query_string = request.query_string.empty? ? "" : "?#{request.query_string}"
+    You are viewing the
+    %b= @subdomain_filter[:name]
+    = link_to("#{$SITE} slice", Rails.configuration.settings.links[:help_slice], target: '_blank')
+    at
+    = succeed "." do
+      %b= request.host
+    Visit the full
+    = link_to("#{$SITE}", "#{$UI_URL}#{request.path}#{query_string}")
+    = succeed "." do
+      site
 #site-notice
   - message_name = ""
   - unless $SITE_NOTICE.nil? || $SITE_NOTICE.empty?

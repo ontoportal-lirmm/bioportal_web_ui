@@ -18,7 +18,7 @@ module ChangeRequestsHelper
             role: 'button',
             class: 'btn btn-link',
             aria: { label: 'Create synonym' },
-            data: { toggle: 'modal', target: '#changeRequestModal' },
+            data: { 'bs-toggle': 'modal', 'bs-target': '#changeRequestModal' },
             remote: 'true') do
       content_tag(:i, '', class: 'fas fa-plus-circle fa-lg', aria: { hidden: 'true' }).html_safe
     end
@@ -35,7 +35,7 @@ module ChangeRequestsHelper
       link_to(change_requests_remove_synonym_path(concept_id: @concept.id, concept_label: @concept.prefLabel,
                                                   ont_acronym: @ontology.acronym, concept_synonyms: @concept.synonym),
               role: 'button', class: 'btn btn-link', aria: { label: 'Remove synonym' },
-              data: { toggle: 'modal', target: '#changeRequestModal' }, remote: 'true') do
+              data: { 'bs-toggle': 'modal', 'bs-target': '#changeRequestModal' }, remote: 'true') do
         tag.i class: 'fas fa-minus-circle fa-lg', aria: { hidden: 'true' }
       end
     end
@@ -43,6 +43,6 @@ module ChangeRequestsHelper
 
   def synonym_qualifier_select(form)
     options = [%w[exact exact], %w[narrow narrow], %w[broad broad], %w[related related]]
-    form.select :qualifier, options_for_select(options, 0), {}, { class: 'form-control' }
+    form.select :qualifier, options_for_select(options, 0), {}, { class: 'form-select' }
   end
 end

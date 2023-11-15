@@ -1,5 +1,4 @@
 require 'uri'
-require 'open-uri'
 require 'net/http'
 require 'net/https'
 require 'net/ftp'
@@ -28,6 +27,8 @@ class ApplicationController < ActionController::Base
   EXPIRY_SEMANTIC_TYPES = 60 * 60 * 24 # 24:00 hours
   EXPIRY_RECENT_MAPPINGS = 60 * 60     #  1:00 hours
   EXPIRY_ONTOLOGY_SIMPLIFIED = 60 * 1  #  0:01 minute
+
+  RETRY_LIMIT = 1
 
   $trial_license_initialized = false
 
@@ -579,21 +580,17 @@ class ApplicationController < ActionController::Base
   end
 
   def parse_json(uri)
-    uri = URI.parse(uri)
     begin
-      response = open(uri, "Authorization" => "apikey token=#{get_apikey}").read
-    rescue Exception => error
+      response = Net::HTTP.get(URI(uri), { 'Authorization' => "apikey token=#{get_apikey}" })
+    rescue StandardError => e
       @retries ||= 0
-      if @retries < 1  # retry once only
-        @retries += 1
-        retry
-      else
-        raise error
-      end
+      raise e unless @retries < RETRY_LIMIT
+
+      @retries += 1
+      retry
     end
     JSON.parse(response)
   end
-
 
   def get_batch_results(params)
     begin

@@ -1,23 +1,20 @@
-%div{class: 'modal-dialog modal-dialog-centered modal-lg', role: 'document'}
-  %div{class: 'modal-content'}
-    %div{class: 'modal-header'}
-      %h5{class: 'modal-title', id: 'changeRequestModalLabel'}
-        = "Remove synonym proposal for #{@concept_label}"
-      %button{type: 'button', class: 'close', 'data-dismiss': 'modal', 'aria-label': 'Close'}
-        %span{'aria-hidden': 'true'} &times;
-    = form_with scope: :remove_synonym, url: change_requests_path, local: false do |f|
-      = hidden_field_tag 'concept_id', @concept_id
-      = hidden_field_tag 'concept_label', @concept_label
-      = hidden_field_tag 'ont_acronym', @ont_acronym
-      = hidden_field_tag 'username', @username
-      = hidden_field_tag 'operation', KGCL::Operations::REMOVE_SYNONYM
-      %div{class: 'modal-body'}
-        %div{class: 'form-group'}
-          %label{for: 'remove_synonym_synonym'} Synonyms
-          = f.select :synonym, options_for_select(@concept_synonyms, 0), {}, { class: 'form-control' }
-        %div{class: 'form-group'}
-          = f.label :comment, 'Comment'
-          = f.text_area :comment, rows: 5, class: 'form-control'
-      %div{class: 'modal-footer'}
-        %button{type: 'button', class: 'btn btn-secondary', 'data-dismiss': 'modal'} Close
-        = submit_tag 'Submit', id: 'remove_synonym_button', class: 'btn btn-primary'
+%div{class: 'modal-header'}
+  %h5{class: 'modal-title', id: 'changeRequestModalLabel'}
+    = "Remove synonym proposal for #{@concept_label}"
+  %button{type: 'button', class: 'btn-close', 'data-bs-dismiss': 'modal', 'aria-label': 'Close'}
+= form_with scope: :remove_synonym, url: change_requests_path, local: false do |f|
+  = hidden_field_tag 'concept_id', @concept_id
+  = hidden_field_tag 'concept_label', @concept_label
+  = hidden_field_tag 'ont_acronym', @ont_acronym
+  = hidden_field_tag 'username', @username
+  = hidden_field_tag 'operation', KGCL::Operations::REMOVE_SYNONYM
+  %div{class: 'modal-body'}
+    %div.mb-3
+      %label{for: 'remove_synonym_synonym', class: 'form-label'} Synonyms
+      = f.select :synonym, options_for_select(@concept_synonyms, 0), {}, { class: 'form-select' }
+    %div.mb-3
+      = f.label :comment, 'Comment', class: 'form-label'
+      = f.text_area :comment, rows: 5, class: 'form-control'
+  %div{class: 'modal-footer'}
+    %button{type: 'button', class: 'btn btn-secondary', 'data-bs-dismiss': 'modal'} Close
+    = submit_tag 'Submit', id: 'remove_synonym_button', class: 'btn btn-primary'

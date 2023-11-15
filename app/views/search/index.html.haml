@@ -5,42 +5,47 @@
     Class Search
 
   = form_tag("/search", method: "post") do
-    %div.form-group
+    %div.mb-3
       = text_field_tag("search_keywords", nil, class: "form-control", aria: {describedby: "classSearchHelpBlock"})
-      %small#classSearchHelpBlock.form-text.text-muted
+      %div#classSearchHelpBlock.form-text
         = t(".search_keywords_placeholder")
         = link_to("help", Rails.configuration.settings.links[:help_search], id: "search-help",
-                  aria: {label: "View search documentation"}, class: "float-right")
-    %div.form-group
-      = link_to("Show advanced options", "javascript:void(0)", id: "advanced_options", data: {text_swap: "Hide advanced options"}, class: "form-text")
+                  aria: {label: "View search documentation"})
+    %div.mb-3
+      = link_to("Show advanced options >>", "javascript:void(0)", id: "advanced_options",
+                data: {text_swap: "Hide advanced options <<"})
 
     -# Advanced search options
-    %div#search_options{style: "display: none;"}
-      %div.form-group.row
-        %div.col-sm-2 Include in search:
+    %div#search_options{class: 'mb-3', style: 'display: none;'}
+      %fieldset.row.mb-3
+        %legend{class: 'col-form-label col-sm-2 pt-0'} Include in search:
         %div.col-sm-10
           %div.form-check
             = check_box(:search, :include_properties, class: "form-check-input")
-            = label(:search, :include_properties, "Property values", class: "form-check-label definition", title: t(".property_definition"))
+            = label(:search, :include_properties, "Property values", class: "form-check-label definition",
+                    title: t(".property_definition"), for: 'search_include_properties')
           %div.form-check
             = check_box(:search, :include_obsolete, class: "form-check-input")
-            = label(:search, :include_obsolete, "Obsolete classes", class: "form-check-label definition", title: t(".obsolete_definition"))
+            = label(:search, :include_obsolete, "Obsolete classes", class: "form-check-label definition",
+                    title: t(".obsolete_definition").chomp, for: 'search_include_obsolete')
           %div.form-check
             = check_box(:search, :include_views, class: "form-check-input")
-            = label(:search, :include_views, "Ontology views", class: "form-check-label")
-      %div.form-group.row
-        %div.col-sm-2 Narrow search to:
+            = label(:search, :include_views, "Ontology views", class: "form-check-label", for: 'search_include_views')
+      %fieldset.row.mb-3
+        %legend{class: 'col-form-label col-sm-2 pt-0'} Narrow search to:
         %div.col-sm-10
           %div.form-check
             = check_box(:search, :exact_match, class: "form-check-input")
-            = label(:search, :exact_match, "Exact matches", class: "form-check-label")
+            = label(:search, :exact_match, "Exact matches", class: "form-check-label", for: 'search_exact_match')
           %div.form-check
             = check_box(:search, :require_definition, class: "form-check-input")
-            = label(:search, :require_definition, "Classes with definitions", class: "form-check-label")
-      %div.form-group
+            = label(:search, :require_definition, "Classes with definitions", class: "form-check-label",
+                    for: 'search_require_definition')
+
+      %div.mb-3
         %h6{style: "font-size: 10pt !important"} Categories
         = select(:search, :categories, options_for_select(categories_for_select), {}, style: "width: 432px", multiple: "true", data: {placeholder: t(".categories_placeholder")})
-      %div.form-group.mb-5
+      %div.mb-5
         = render :partial => "shared/ontology_picker", locals: {sel_text: "Ontologies"}
 
     = button_tag("Search", id: "search_button", class: "btn btn-primary")
@@ -48,7 +53,7 @@
       %img{src: asset_path('spinners/spinner_000000_16px.gif'), style: "vertical-align: middle;"}
 
   -# Search results
-  %div.row.mt-4#search_results_container
+  %div.row.my-4#search_results_container
     %div.col
       #result_stats
       #search_messages

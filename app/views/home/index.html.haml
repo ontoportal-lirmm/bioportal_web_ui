@@ -1,4 +1,4 @@
-- @title = t(".title", organization: "#{$ORG_SITE}")
+- @title = t('.title', organization: "#{$ORG_SITE}")
 
 - unless $FRONT_NOTICE.nil? || $FRONT_NOTICE.empty? || cookies[:front_page_notice_closed].eql?("true")
   :javascript
@@ -18,69 +18,77 @@
     %div.col
       %div.px-2.py-2.pt-md-5.border-bottom.text-center
         %h2
-          = t(".welcome", site: "#{$SITE}")
+          = t('.welcome', site: "#{$SITE}")
           %small.text-muted
-            = t(".tagline")
-  %div.row.search.pt-4
+            = t('.tagline')
+  %div{class: 'row row-cols-1 row-cols-md-2 g-3 pt-4'}
     %div.col
-      %div.card-deck
-        -# Search for a class across ontologies
-        %div.card
-          %div.card-header Search for a class
-          %div.card-body
-            = form_tag("/search", method: "get") do
-              %div.input-group.mb-3
-                - placeholder = t(".query_placeholder")
-                = text_field_tag("query", nil, class: "form-control", placeholder: placeholder)
-                %div.input-group-append
-                  = button_tag(type: "submit", class: "btn btn-primary", aria: {label: "Search for a class"}) do
-                    %i{class: "fas fa-search fa-lg", aria: {hidden: "true"}}              
-              %a{:href => "/search?opt=advanced"} Advanced Search
-        -# Search for an ontology
-        %div.card
-          %div.card-header Find an ontology
-          %div.card-body
-            %input#find_ontology_id{:type => "hidden"}
+      -# Search for a class across ontologies
+      %div.card.h-100
+        %h5.card-header Search for a class
+        %div.card-body 
+          = form_tag(search_path, method: 'get') do
             %div.input-group.mb-3
-              = text_field_tag("ontology", nil, id: "find_ontology", class: "form-control", data: {ontologynames: @ontology_names}, placeholder: t(".find_ontology_placeholder"))
-              %div.input-group-append
-                = button_tag(class: "btn btn-primary", onclick: "jumpToValueOntology()", aria: {label: "Find an ontology"}) do
-                  %i{class: "fas fa-search fa-lg", aria: {hidden: "true"}}
-            %div.dropdown
-              = button_tag("Browse Ontologies", type: "button", id: "ontologyGroupsDropdown", class: "btn btn-info dropdown-toggle", data: {toggle: "dropdown", offset: "0,10"}, aria: {haspopup: "true", expanded: "false"})
-              %div.dropdown-menu{"aria-labelledby": "ontologyGroupsDropdown"}
-                = link_to("All", ontologies_path(), class: "dropdown-item")
-                %div.dropdown-divider
-                %h6.dropdown-header Browse by group
-                - @groups.each do |group|
-                  = link_to(group[:name], ontologies_path(filter: group[:acronym]), class: "dropdown-item")
-  %div.row.pt-3.statistics
+              = text_field_tag('query', nil, class: 'form-control', placeholder: t('.query_placeholder'))
+              = button_tag(class: 'btn btn-outline-primary') do
+                %i.fas.fa-search.fa-lg{'aria-hidden': 'true'}
+            = link_to('Advanced search', search_path(opt: 'advanced'), class: 'btn btn-link')
     %div.col
-      %div.card-deck
-        -# Ontology visits
-        %div.card
-          %div.card-header Ontology Visits #{"in full #{$SITE} " if at_slice?} (#{@analytics.date.strftime("%B %Y")})
-          = content_tag(:div, nil, id: "ontology-visits-chart", class: "card-body", data: {ontnames: @anal_ont_names, ontnumbers: @anal_ont_numbers}) do
-            %canvas#myChart
-            = link_to("More", visits_path())
-        -# Ontology statistics
-        %div.card
-          %div.card-header #{$SITE} Statistics #{"in full #{$SITE}" if at_slice?}
+      -# Search for an ontology
+      %div.card.h-100
+        %h5.card-header Find an ontology
+        %div.card-body 
+          %input#find_ontology_id{type: 'hidden'}
+          %div.input-group.mb-3
+            = text_field_tag('ontology', nil, id: 'find_ontology', class: 'form-control',
+                             data: {ontologynames: @ontology_names}, placeholder: t('.find_ontology_placeholder'))
+            = button_tag(class: 'btn btn-outline-primary', onclick: 'jumpToValueOntology()') do
+              %i.fas.fa-search.fa-lg{'aria-hidden': 'true'}
+          %div.dropdown
+            %div.btn-group
+              %button{type: 'button', class: 'btn btn-info'} Browse ontologies
+              %button{type: 'button', class: 'btn btn-info dropdown-toggle dropdown-toggle-split',
+                      'data-bs-toggle': 'dropdown', 'aria-expanded': false}
+                %span.visually-hidden Toggle browse ontologies dropdown
+              %ul.dropdown-menu
+                = link_to('All', ontologies_path, class: 'dropdown-item')
+                %li
+                  %hr.dropdown-divider
+                %li
+                  %h6.dropdown-header Browse by group
+                - @groups.each do |group|
+                  = link_to(group[:name], ontologies_path(filter: group[:acronym]), class: 'dropdown-item')
+    %div.col
+      -# Ontology visits chart
+      %div.card.h-100
+        %h5.card-header Ontology visits #{"in full #{$SITE} " if at_slice?} (#{@analytics.date.strftime("%B %Y")})
+        = tag.div(id: 'ontology-visits-chart', class: 'card-body',
+                  data: {ontnames: @anal_ont_names, ontnumbers: @anal_ont_numbers}) do
+          %canvas#myChart
+          = link_to('More', visits_path, class: 'btn btn-link')
+    %div.col
+      -# Statistics list group
+      %div.card.h-100
+        %h5.card-header Statistics #{"in full #{$SITE}" if at_slice?}
+        %div.card-body
           %ul.list-group.list-group-flush
             %li.list-group-item 
               %div.d-flex.justify-content-between.align-items-center
-                %span Ontologies
-                %span= number_with_delimiter(@ont_count)
+                Ontologies
+                %h4
+                  %span.badge.text-bg-secondary= number_with_delimiter(@ont_count)
             %li.list-group-item
               %div.d-flex.justify-content-between.align-items-center
-                %span Classes
-                %span= number_with_delimiter(@cls_count)
+                Classes
+                %h4
+                  %span.badge.text-bg-secondary= number_with_delimiter(@cls_count)
             %li.list-group-item
               %div.d-flex.justify-content-between.align-items-center
-                %span Properties
-                %span= number_with_delimiter(@prop_count)
+                Properties
+                %h4
+                  %span.badge.text-bg-secondary= number_with_delimiter(@prop_count)
             %li.list-group-item
               %div.d-flex.justify-content-between.align-items-center
-                %span Mappings
-                %span= number_with_delimiter(@map_count)
-
+                Mappings
+                %h4
+                  %span.badge.text-bg-secondary= number_with_delimiter(@map_count)

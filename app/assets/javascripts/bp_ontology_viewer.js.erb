@@ -80,7 +80,6 @@ function displayTree(data) {
   var concept_param = jQuery(document).data().bp.ont_viewer.concept_param;
   var concept_name = jQuery(document).data().bp.ont_viewer.concept_name;
   var metadata_only = jQuery(document).data().bp.ont_viewer.metadata_only;
-  var current_purl = jQuery(document).data().bp.ont_viewer.current_purl;
   var purl_prefix = jQuery(document).data().bp.ont_viewer.purl_prefix;
   var concept_name_title = jQuery(document).data().bp.ont_viewer.concept_name_title;
 
@@ -255,7 +254,9 @@ jQuery(document).ready(function() {
   if (typeof jQuery.bioportal.ont_pages[content_section].init === 'function') {
     jQuery.bioportal.ont_pages[content_section].init(jQuery.bioportal.ont_pages[content_section]);
   }
-  jQuery("#ont-" + content_section + "-tab").tab("show");
+  const triggerEl = document.querySelector(`#navbar-ontology a[data-bs-target="#ont_${content_section}_content"]`);
+  const tabTrigger = new bootstrap.Tab(triggerEl);
+  bootstrap.Tab.getInstance(triggerEl).show();
 
   // Retrieve AJAX content if not already displayed
   if ($.QueryString["skip_ajax_tabs"] != 'true') {

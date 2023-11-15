@@ -6,10 +6,9 @@
   %div#bd_content.bd_content.explore
     %div.sidebar.d-flex.flex-column.pr-2
       -# Search box for class tree
-      %div#qsearch.input-group.pb-2
-        %div.input-group-prepend
-          %span.input-group-text Jump to:
-        = text_field_tag("search_box", nil, class: "form-control rounded-right", aria: {label: "Jump to:"})
+      %div#qsearch{class: "input-group pb-2 pe-2"}
+        %span.input-group-text Jump to:
+        = text_field_tag("search_box", nil, class: "form-control rounded-end", "aria-label": "Jump to:")
         = hidden_field_tag("jump_to_concept_id")
       -# Class tree
       %div#sd_content
@@ -93,8 +92,10 @@
             %li#request_term_top.tab
               %a{:href => "#request_term"}
                 New Term Requests
-          - if $PURL_ENABLED
-            = link_to("#classPermalinkModal", class: "class-permalink", title: "Get a permanent link to this class", aria: {label: "Get a permanent link to this class"}, data: {toggle: "modal", current_purl: "#{@current_purl}"}) do
+          - if Rails.configuration.settings.purl[:enabled]
+            = link_to("#classPermalinkModal", class: "class-permalink", title: "Get a link to this page",
+                      aria: {label: "Get a link to this page"},
+                      data: {"bs-toggle": "modal", current_purl: "#{@current_purl}"}) do
               %i{class: "fas fa-link", aria: {hidden: "true"}}
         #contents
           #details_content.tab_container= render :partial =>'/concepts/details'

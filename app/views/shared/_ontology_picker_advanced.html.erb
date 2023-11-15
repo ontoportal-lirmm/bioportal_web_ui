@@ -307,11 +307,7 @@ function clearAllSelections() {
     });
   }
 
-
-  //ondomready
-  jQuery(function () {
-    listFilter(jQuery("#advanced_filter_input"), jQuery("#ont_list"));
-  });
+  jQuery(document).ready(() => listFilter(jQuery("#advanced_filter_input"), jQuery("#ont_list")));
 }(jQuery));
 </script>
 

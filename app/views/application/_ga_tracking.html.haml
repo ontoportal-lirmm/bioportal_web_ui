@@ -1,9 +1,10 @@
--# Google Analytics
-- unless $ANALYTICS_ID.nil? || $ANALYTICS_ID.empty?
+-# Google tag
+- tag_id = Rails.application.credentials.dig(:google_analytics, :tag_id)
+- if tag_id.present?
+  <script async src="https://www.googletagmanager.com/gtag/js?id=#{tag_id}"></script>
   %script
-    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-    ga('create', '#{$ANALYTICS_ID}', 'auto');
-    ga('send', 'pageview');
-  <script async src='https://www.google-analytics.com/analytics.js'></script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  
+    gtag('config', '#{tag_id}');

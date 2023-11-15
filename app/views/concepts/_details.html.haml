@@ -1,21 +1,24 @@
 - require 'cgi'
 
-%div.py-3.pl-3
+%div.py-3.ps-3
   %div#change-request-notice
 
   - if change_requests_enabled?(@ontology.acronym)
     %div#addProposalDropdownDiv{class: 'd-flex flex-row-reverse'}
-      %div.btn-group.dropleft
+      %div.btn-group.dropstart
         = button_tag('Add a proposal', id: 'addProposalDropdown', class: 'btn btn-sm btn-primary dropdown-toggle',
-                     type: 'button', 'data-toggle': 'dropdown',  'aria-haspopup': 'true', 'aria-expanded': 'false')
+                     type: 'button', 'data-bs-toggle': 'dropdown',  'aria-haspopup': 'true', 'aria-expanded': 'false')
         %div.dropdown-menu{'aria-labelledby': 'addProposalDropdown'}
           = link_to('Deepen class', '#', class: 'dropdown-item disabled')
           = link_to('Delete class', '#', class: 'dropdown-item disabled')
           = link_to('Obsolete class',
                     change_requests_node_obsoletion_path(concept_id: @concept.id, concept_label: @concept.prefLabel,
                                                          ont_acronym: @ontology.acronym),
-                    class: 'dropdown-item change-request-item', remote: 'true')
-          = link_to('Rename class', '#', class: 'dropdown-item disabled')
+                    class: 'dropdown-item', remote: 'true')
+          = link_to('Rename class',
+                    change_requests_node_rename_path(concept_id: @concept.id, concept_label: @concept.prefLabel,
+                                                     ont_acronym: @ontology.acronym),
+                    class: 'dropdown-item', remote: 'true')
     %div#addProposalFormDiv
 
   %table.minimal.concept_details{cellpadding: "0", cellspacing: "0", width: "100%"}

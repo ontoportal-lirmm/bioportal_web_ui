@@ -1,33 +1,23 @@
 # frozen_string_literal: true
 
 class ChangeRequestsController < ApplicationController
-  before_action :require_login, except: [:create]
+  before_action :require_login
+  before_action :set_common_instance_variables, except: [:create]
 
   def node_obsoletion
-    @concept_label = params[:concept_label]
-    @concept_id = params[:concept_id]
-    @ont_acronym = params[:ont_acronym]
-    @username = session[:user].username
+    respond_to :js
+  end
 
+  def node_rename
     respond_to :js
   end
 
   def create_synonym
-    @concept_label = params[:concept_label]
-    @concept_id = params[:concept_id]
-    @ont_acronym = params[:ont_acronym]
-    @username = session[:user].username
-
     respond_to :js
   end
 
   def remove_synonym
-    @concept_id = params[:concept_id]
-    @concept_label = params[:concept_label]
     @concept_synonyms = params[:concept_synonyms].sort! { |a, b| a.downcase <=> b.downcase }
-    @ont_acronym = params[:ont_acronym]
-    @username = session[:user].username
-
     respond_to :js
   end
 
@@ -64,5 +54,12 @@ class ChangeRequestsController < ApplicationController
     #   https://stackoverflow.com/a/10607511
     #   https://stackoverflow.com/a/51275445
     render js: "window.location.href='#{login_index_path}'"
+  end
+
+  def set_common_instance_variables
+    @concept_label = params[:concept_label]
+    @concept_id = params[:concept_id]
+    @ont_acronym = params[:ont_acronym]
+    @username = session[:user].username
   end
 end

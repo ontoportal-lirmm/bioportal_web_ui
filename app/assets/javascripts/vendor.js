@@ -28,7 +28,6 @@
 //= require jquery.hoverIntent
 //= require jquery.simple.tree
 //= require jquery.scrollTo-1.4.0-min
-//= require jquery.rating.pack
 //= require history/jquery.history
 //= require alertify
 //= require jquery.tooltip

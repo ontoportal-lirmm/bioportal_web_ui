@@ -1,7 +1,7 @@
 let forms = document.getElementById('addProposalFormDiv').getElementsByTagName('form');
 if (forms.length === 0) {
   document.getElementById('addProposalFormDiv')
-          .insertAdjacentHTML('afterbegin', '<%= j render 'change_requests/node_obsoletion' %>');
+    .insertAdjacentHTML('afterbegin', '<%= j render 'change_requests/node_rename' %>');
 }
 
 let button = document.getElementById('cancel_kgcl_proposal');

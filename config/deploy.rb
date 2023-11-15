@@ -23,7 +23,7 @@ set :deploy_to, "/srv/ontoportal/#{fetch(:application)}"
 # set :format, :pretty
 
 # Default value for :log_level is :debug
-set :log_level, :error
+# set :log_level, :error
 
 # Default value for :pty is false
 # set :pty, true
@@ -54,6 +54,10 @@ set :passenger_restart_with_touch, true
 # set :passenger_restart_with_touch, false # Note that `nil` is NOT the same as `false` here
 # If you don't set `:passenger_restart_with_touch`, capistrano-passenger will check what version of passenger you are running
 # and use `passenger-config restart-app` if it is available in that version.
+
+# rbenv ruby version
+set :rbenv_type, :system
+set :rbenv_ruby, File.read('.ruby-version').strip
 
 desc "Check if agent forwarding is working"
 task :forwarding do

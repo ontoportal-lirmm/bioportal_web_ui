@@ -1,11 +1,11 @@
 jQuery(".admin.index").ready(function() {
 
-  jQuery('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-    var href = jQuery(e.target).data('href');
-    if (typeof href !== 'undefined' && href === '/admin/licenses') {
+  jQuery('button[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+    const target = jQuery(e.target).data('bsTarget');
+    if (typeof target !== 'undefined' && target === '#licensing') {
       jQuery.ajax({
         method: 'GET',
-        url: href,
+        url: 'admin/licenses',
         success: function(data){},
         error: function(data){}
       });

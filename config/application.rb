@@ -10,6 +10,10 @@ module BioportalWebUi
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
+    config.active_record.yaml_column_permitted_classes = [
+      ActionController::Parameters,
+      HashWithIndifferentAccess
+    ]
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -17,6 +21,8 @@ module BioportalWebUi
     # in config/environments, which are processed later.
     #
     # config.time_zone = "Central Time (US & Canada)"
+    # config.eager_load_paths << Rails.root.join("extras")
+
     config.exceptions_app = self.routes
 
     config.settings = config_for :settings

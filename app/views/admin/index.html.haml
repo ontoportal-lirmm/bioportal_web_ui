@@ -13,16 +13,23 @@
 
 %div.row
   %div.col
-
-    %ul.nav.nav-tabs{id: "admin-tabs", role: "tablist"}
-      %li.nav-item
-        =link_to("Site Administration", "#site-admin", id: "site-admin-tab", class: "nav-link active", role: "tab", data: { toggle: "tab" }, aria: { controls: "site-admin", selected: "true" })
-      %li.nav-item
-        =link_to("Ontology Administration", "#ontology-admin", id: "ontology-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab" }, aria: { controls: "ontology-admin", selected: "false" })
-      %li.nav-item
-        =link_to("Licensing", "#licensing", id: "licensing-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: admin_licenses_path() }, aria: { controls: "licensing", selected: "false" })
-      %li.nav-item
-        =link_to("Users", "#users", id: "users-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab" }, aria: { controls: "users", selected: "false" })
+    %ul{class: "nav nav-tabs", id: "admin-tabs", role: "tablist"}
+      %li{class: "nav-item", role: "presentation"}
+        = tag.button("Site administration", class: "nav-link active", id: "site-admin-tab", "data-bs-toggle": "tab",
+                     "data-bs-target": "#site-admin", type: "button", role: "tab", "aria-controls": "site-admin",
+                     "aria-selected": "true")
+      %li{class: "nav-item", role: "presentation"}
+        = tag.button("Ontology administration", class: "nav-link", id: "ontology-admin-tab", "data-bs-toggle": "tab",
+                     "data-bs-target": "#ontology-admin", type: "button", role: "tab",
+                     "aria-controls": 'ontology-admin', "aria-selected": "false")
+      %li{class: "nav-item", role: "presentation"}
+        = tag.button("Licensing", class: "nav-link", id: "licensing-admin-tab", "data-bs-toggle": "tab",
+                     "data-bs-target": "#licensing", type: "button", role: "tab", "aria-controls": "licensing",
+                     "aria-selected": "false")
+      %li{class: "nav-item", role: "presentation"}
+        = tag.button("Users", class: "nav-link", id: "users-admin-tab", "data-bs-toggle": "tab",
+                     "data-bs-target": "#users", type: "button", role: "tab", "aria-controls": "users",
+                     "aria-selected": "false")
     %div#adminTabContent.tab-content
 
       -# Site Administration tab

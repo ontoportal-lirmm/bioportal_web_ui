@@ -59,12 +59,6 @@ class OntologiesController < ApplicationController
     analytics = LinkedData::Client::Analytics.last_month
     @analytics = Hash[analytics.onts.map {|o| [o[:ont].to_s, o[:views]]}]
 
-    reviews = {}
-    LinkedData::Client::Models::Review.all(display_links: false, display_context: false).each do |r|
-      reviews[r.reviewedOntology] ||= []
-      reviews[r.reviewedOntology] << r
-    end
-
     metrics_hash = get_metrics_hash
 
     @formats = Set.new
@@ -86,11 +80,9 @@ class OntologiesController < ApplicationController
       o[:id]               = ont.id
       o[:type]             = ont.viewOf.nil? ? "ontology" : "ontology_view"
       o[:show]             = ont.viewOf.nil? ? true : false # show ontologies only by default
-      o[:reviews]          = reviews[ont.id] || []
       o[:groups]           = ont.group || []
       o[:categories]       = ont.hasDomain || []
       o[:note_count]       = ont.notes.length
-      o[:review_count]     = ont.reviews.length
       o[:project_count]    = ont.projects.length
       o[:private]          = ont.private?
       o[:popularity]       = @analytics[ont.acronym] || 0
@@ -112,7 +104,6 @@ class OntologiesController < ApplicationController
 
       o[:artifacts] = []
       o[:artifacts] << "notes" if ont.notes.length > 0
-      o[:artifacts] << "reviews" if ont.reviews.length > 0
       o[:artifacts] << "projects" if ont.projects.length > 0
       o[:artifacts] << "summary_only" if ont.summaryOnly
 
@@ -147,7 +138,7 @@ class OntologiesController < ApplicationController
       render plain: @concept.to_jsonld, content_type: request.accept and return
     end
 
-    @current_purl = @concept.purl if $PURL_ENABLED
+    @current_purl = @concept.purl if Rails.configuration.settings.purl[:enabled]
     @submission = get_ontology_submission_ready(@ontology)
 
     unless @concept.id == "bp_fake_root"

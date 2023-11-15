@@ -72,7 +72,7 @@ function addContact(event) {
   var removeButton = newContact.querySelector("button").cloneNode(true);
   removeButton.classList.replace("btn-success", "btn-danger");
   removeButton.classList.replace("add-contact", "remove-contact");
-  removeButton.classList.add("ml-1")
+  removeButton.classList.add("ms-1")
   removeButton.querySelector("i").classList.replace("fa-plus", "fa-minus");
   newContact.appendChild(removeButton);
   

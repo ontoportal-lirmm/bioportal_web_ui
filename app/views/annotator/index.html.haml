@@ -12,52 +12,58 @@
   = link_to(Rails.configuration.settings.links[:help_annotator], id: "annotator-help", "aria-label": "View annotator help") do
     %i.fas.fa-question-circle.fa-lg{"aria-hidden": "true"}
 
-%form{style: "margin-bottom: 25px"}
-  %div.form-group
-    = text_area_tag("annotation_text", nil, rows: 15, class: "form-control", placeholder: "Enter or paste text to be annotated", aria: {describedby: "inputTextHelpBlock"})
-    %small#inputTextHelpBlock.form-text
-      %a#insert_text_link{href: "javascript:void(0);"} insert sample text
+%form.mb-4
+  %div.mb-3
+    = text_area_tag("annotation_text", nil, rows: 10, class: "form-control",
+                    placeholder: "Enter or paste text to be annotated", 'aria-describedby': "inputTextHelpBlock")
+    %div#inputTextHelpBlock
+      = link_to('insert sample text', 'javascript:void(0);', id: 'insert_text_link', class: 'form-text')
 
-  %div.form-check.form-check-inline
-    = check_box_tag("longest_only", "all", false, class: "form-check-input")
-    %label.form-check-label{for: "longest_only"} Match longest only
-  %div.form-check.form-check-inline
-    = check_box_tag("whole_word_only", "all", false, class: "form-check-input")
-    %label.form-check-label{for: "whole_word_only"} Match partial words
-  %div.form-check.form-check-inline
-    = check_box_tag("mappings", "all", false, id: "mappings_all", class: "form-check-input")
-    %label.form-check-label{for: "mappings_all"} Include mappings
-  %div.form-check.form-check-inline
-    = check_box_tag("exclude_numbers", "all", false, class: "form-check-input")
-    %label.form-check-label{for: "exclude_numbers"} Exclude numbers
-  %div.form-check.form-check-inline
-    = check_box_tag("exclude_synonyms", "all", false, class: "form-check-input")
-    %label.form-check-label{for: "exclude_synonyms"} Exclude synonyms
+  %div.mb-3
+    %div.form-check.form-check-inline
+      = check_box_tag("longest_only", "all", false, class: "form-check-input")
+      %label.form-check-label{for: "longest_only"} Match longest only
+    %div.form-check.form-check-inline
+      = check_box_tag("whole_word_only", "all", false, class: "form-check-input")
+      %label.form-check-label{for: "whole_word_only"} Match partial words
+    %div.form-check.form-check-inline
+      = check_box_tag("mappings", "all", false, id: "mappings_all", class: "form-check-input")
+      %label.form-check-label{for: "mappings_all"} Include mappings
+    %div.form-check.form-check-inline
+      = check_box_tag("exclude_numbers", "all", false, class: "form-check-input")
+      %label.form-check-label{for: "exclude_numbers"} Exclude numbers
+    %div.form-check.form-check-inline
+      = check_box_tag("exclude_synonyms", "all", false, class: "form-check-input")
+      %label.form-check-label{for: "exclude_synonyms"} Exclude synonyms
 
-  %div.form-group.pt-4
-    = render partial: "shared/ontology_picker", locals: { :custom_ontologies => @annotator_ontologies }
+  %div.mb-3
+    = render partial: 'shared/ontology_picker', locals: { custom_ontologies: @annotator_ontologies }
   
   - if @sem_type_ont
-    %div.form-group
-      %label{for: "semantic_types"} Select UMLS semantic types
-      = select_tag("semantic_types", options_for_select(@semantic_types_for_select), multiple: "true", data: {placeholder: "Start typing to select UMLS semantic types"}, class: "form-control", style: "width: 432px")
+    %div.mb-3
+      %label{for: "semantic_types", class: 'form-label'} Select UMLS semantic types
+      = select_tag("semantic_types", options_for_select(@semantic_types_for_select), multiple: "true",
+                   data: {placeholder: "Start typing to select UMLS semantic types"}, class: "form-select",
+                   style: "width: 432px")
 
-  %div.form-group
-    %label{for: "class_hierarchy_max_level"} Include ancestors up to level
+  %div.mb-3
+    %label{for: "class_hierarchy_max_level", class: 'form-label'} Include ancestors up to level
     - options = [["none", 0], *(1..10).map {|i| [i, i]}, ["all", 999]]
-    = select_tag("class_hierarchy_max_level", options_for_select(options, 0), class: "form-control", style: "width: 432px")
+    = select_tag("class_hierarchy_max_level", options_for_select(options, 0), class: "form-select",
+                 style: "width: 432px")
 
   - if @recognizers.length > 1
-    %div.form-group
-      %label{for: "recognizer"} Entity recognizer
+    %div.mb-3
+      %label{for: "recognizer", class: 'form-label'} Entity recognizer
       - default_recognizer = @recognizers.include?("mgrep") ? "mgrep" : @recognizers.first
-      = select_tag("recognizer", options_for_select(@recognizers.map {|r| [r,r]}, default_recognizer), class: "form-control", style: "width: 432px")
+      = select_tag("recognizer", options_for_select(@recognizers.map { |r| [r, r] }, default_recognizer),
+                   class: "form-select", style: "width: 432px")
 
-  / annotator_button calls 'get_annotations' in bp_annotator.js
-  %input#annotator_button{type: "button", value: "Get Annotations", class: "btn btn-primary"}/
-  %span.annotator_spinner{style: "display: none;"}
-    %img{src: asset_path('spinners/spinner_000000_16px.gif'), style: "vertical-align: middle;"}/
-  %span#annotator_error.annotator_error{style: "color: red; vertical-align: middle; margin-left: 3px;"}
+  %div.mb-3
+    %input#annotator_button{type: "button", value: "Get Annotations", class: "btn btn-primary"}/
+    %span.annotator_spinner{style: "display: none;"}
+      %img{src: asset_path('spinners/spinner_000000_16px.gif'), style: "vertical-align: middle;"}/
+    %span#annotator_error.annotator_error{style: "color: red; vertical-align: middle; margin-left: 3px;"}
 
 %div.row
   %div.col

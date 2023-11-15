@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_30_230915) do
+ActiveRecord::Schema.define(version: 2023_06_16_231337) do
 
-  create_table "analytics", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "analytics", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "segment"
     t.string "action"
     t.string "bp_slice"
@@ -23,13 +23,27 @@ ActiveRecord::Schema.define(version: 2021_11_30_230915) do
     t.datetime "updated_at"
   end
 
-  create_table "licenses", charset: "utf8mb3", force: :cascade do |t|
+  create_table "licenses", charset: "utf8", force: :cascade do |t|
     t.text "encrypted_key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "ontologies", charset: "utf8mb3", force: :cascade do |t|
+  create_table "margin_notes", id: :integer, charset: "utf8", force: :cascade do |t|
+    t.integer "parent_id"
+    t.integer "mapping_id"
+    t.integer "note_type"
+    t.integer "user_id"
+    t.integer "ontology_id"
+    t.integer "ontology_version_id"
+    t.string "concept_id"
+    t.string "subject"
+    t.text "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "ontologies", charset: "utf8", force: :cascade do |t|
     t.string "acronym", null: false
     t.text "new_term_instructions"
     t.text "custom_message"
@@ -38,7 +52,7 @@ ActiveRecord::Schema.define(version: 2021_11_30_230915) do
     t.index ["acronym"], name: "index_ontologies_on_acronym", unique: true
   end
 
-  create_table "timeouts", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "timeouts", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "path"
     t.integer "ontology_id"
     t.text "concept_id"
@@ -46,7 +60,7 @@ ActiveRecord::Schema.define(version: 2021_11_30_230915) do
     t.timestamp "created"
   end
 
-  create_table "virtual_appliance_users", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "virtual_appliance_users", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"

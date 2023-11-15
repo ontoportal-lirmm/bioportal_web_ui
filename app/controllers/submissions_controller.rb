@@ -1,11 +1,19 @@
-class SubmissionsController < ApplicationController
+# frozen_string_literal: true
 
+class SubmissionsController < ApplicationController
   layout :determine_layout
-  before_action :authorize_and_redirect, :only=>[:edit,:update,:create,:new]
+  before_action :authorize_and_redirect, only: [:edit, :update, :create, :new]
 
   def new
-    @ontology = LinkedData::Client::Models::Ontology.get(CGI.unescape(params[:ontology_id])) rescue nil
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first unless @ontology
+    begin
+      # REVIEW: do we really need this double attempt to locate an ontology? I think find_by_acronym (below) should
+      #    be sufficient. It's not evident that we call the new method with a full URI anymore.
+      @ontology = LinkedData::Client::Models::Ontology.get(CGI.unescape(params[:ontology_id]))
+    rescue MultiJson::ParseError
+      nil
+    end
+
+    @ontology ||= LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
     @submission = @ontology.explore.latest_submission
     @submission ||= LinkedData::Client::Models::OntologySubmission.new
   end
@@ -16,21 +24,21 @@ class SubmissionsController < ApplicationController
 
     @submission = LinkedData::Client::Models::OntologySubmission.new(values: submission_params)
     @ontology = LinkedData::Client::Models::Ontology.get(params[:submission][:ontology])
-    
+
     # Update summaryOnly on ontology object
-    @ontology.summaryOnly = @submission.isRemote.eql?("3")
+    @ontology.summaryOnly = @submission.isRemote.eql?('3')
     @ontology.update
-    
-    @submission_saved = @submission.save
+
+    @submission_saved = @submission.save(cache_refresh_all: false)
     if response_error?(@submission_saved)
       @errors = response_errors(@submission_saved) # see application_controller::response_errors
       if @errors && @errors[:uploadFilePath]
-        @errors = ["Please specify the location of your ontology"]
+        @errors = ['Please specify the location of your ontology']
       elsif @errors && @errors[:contact]
-        @errors = ["Please enter a contact"]
+        @errors = ['Please enter a contact']
       end
 
-      render "new"
+      render 'new'
     else
       redirect_to "/ontologies/success/#{@ontology.acronym}"
     end
@@ -39,7 +47,7 @@ class SubmissionsController < ApplicationController
   def edit
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
     submissions = @ontology.explore.submissions
-    @submission = submissions.select {|o| o.submissionId == params["id"].to_i}.first
+    @submission = submissions.select { |o| o.submissionId == params['id'].to_i }.first
   end
 
   def update
@@ -50,13 +58,13 @@ class SubmissionsController < ApplicationController
 
     @ontology = LinkedData::Client::Models::Ontology.get(params[:submission][:ontology])
     submissions = @ontology.explore.submissions
-    @submission = submissions.select {|o| o.submissionId == params["id"].to_i}.first
+    @submission = submissions.select { |o| o.submissionId == params['id'].to_i }.first
 
     @submission.update_from_params(submission_params)
     # Update summaryOnly on ontology object
-    @ontology.summaryOnly = @submission.isRemote.eql?("3")
+    @ontology.summaryOnly = @submission.isRemote.eql?('3')
     @ontology.update
-    error_response = @submission.update
+    error_response = @submission.update(cache_refresh_all: false)
     if response_error?(error_response)
       @errors = response_errors(error_response) # see application_controller::response_errors
       render 'edit'
@@ -71,9 +79,8 @@ class SubmissionsController < ApplicationController
     p = params.require(:submission).permit(:ontology, :description, :hasOntologyLanguage, :prefLabelProperty,
                                            :synonymProperty, :definitionProperty, :authorProperty, :obsoleteProperty,
                                            :obsoleteParent, :version, :status, :released, :isRemote, :pullLocation,
-                                           :filePath, { contact:[:name, :email] }, :homepage, :documentation,
+                                           :filePath, { contact: [:name, :email] }, :homepage, :documentation,
                                            :publication)
     p.to_h
   end
-
 end

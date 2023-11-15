@@ -2,3 +2,15 @@ i.fa.fa-caret-square-o-down {
   vertical-align: middle;
   margin-left: 2px;
 }
+
+table#ontology-visits {
+  a {
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  thead tr {
+    white-space: nowrap;
+  }
+}

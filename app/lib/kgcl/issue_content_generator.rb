@@ -5,6 +5,7 @@ module KGCL
     RENDERERS = {
       KGCL::Operations::NEW_SYNONYM => KGCL::Renderers::NewSynonymContent,
       KGCL::Operations::NODE_OBSOLETION => KGCL::Renderers::NodeObsoletionContent,
+      KGCL::Operations::NODE_RENAME => KGCL::Renderers::NodeRenameContent,
       KGCL::Operations::REMOVE_SYNONYM => KGCL::Renderers::RemoveSynonymContent
     }.freeze
 

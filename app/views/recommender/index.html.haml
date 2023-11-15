@@ -1,6 +1,6 @@
 - @title = "Recommender"
 
-%h2.mt-5 Ontology Recommender
+%h2.mt-4 Ontology Recommender
 %p
   = t('recommender.intro').html_safe
   = link_to(Rails.configuration.settings.links[:help_recommender], id: "recommender-help",
@@ -9,58 +9,62 @@
 
 %form
   -# Specify input format
-  %h5 Input
-  %div.form-check.form-check-inline
-    %input#radioItText.form-check-input{name: "input_type", type: "radio", value: "1", checked: "checked"}
-    %label.form-check-label{for: "radioItText"} Text
-  %div.form-check.form-check-inline
-    %input#radioItKeywords.form-check-input{name: "input_type", type: "radio", value: "2"} 
-    %label.form-check-label{for: "radioItKeywords"} Keywords (separated by commas)
+  %div.mb-3
+    %h5 Input
+    %div.form-check.form-check-inline
+      %input#radioItText.form-check-input{name: "input_type", type: "radio", value: "1", checked: "checked"}
+      %label.form-check-label{for: "radioItText"} Text
+    %div.form-check.form-check-inline
+      %input#radioItKeywords.form-check-input{name: "input_type", type: "radio", value: "2"}
+      %label.form-check-label{for: "radioItKeywords"} Keywords (separated by commas)
   
   -# Specify output format
-  %h5.pt-3 Output
-  %div.form-check.form-check-inline
-    %input#radioOtSingle.form-check-input{name: "output_type", type: "radio", value: "1", checked: "checked"} 
-    %label.form-check-label{for: "radioOtSingle"} Ontologies
-  %div.form-check.form-check-inline
-    %input#radioOtSets.form-check-input{name: "output_type", type: "radio", value: "2"} 
-    %label.form-check-label{for: "radioOtSets"} Ontology sets
+  %div.mb-3
+    %h5 Output
+    %div.form-check.form-check-inline
+      %input#radioOtSingle.form-check-input{name: "output_type", type: "radio", value: "1", checked: "checked"}
+      %label.form-check-label{for: "radioOtSingle"} Ontologies
+    %div.form-check.form-check-inline
+      %input#radioOtSets.form-check-input{name: "output_type", type: "radio", value: "2"}
+      %label.form-check-label{for: "radioOtSets"} Ontology sets
   
   -# Input text or keywords
-  %div.form-group.mt-4
+  %div.mb-3
     = text_area_tag("inputText", nil, rows: 10, class: "form-control default", placeholder: "Paste a paragraph of text or some keywords to use in calculating ontology recommendations", aria: {describedby: "inputTextHelpBlock"})
     %div.card#inputTextHighlighted
       %div.card-body
-    %small#inputTextHelpBlock.form-text
+    %div#inputTextHelpBlock.form-text
       %a#insertInputLink{href: "javascript:void(0);"} insert sample input
 
-  %a#advancedOptionsLink{:href => "javascript:void(0);"} Show advanced options >>
+  %div.mb-3
+    %a#advancedOptionsLink{:href => "javascript:void(0);"} Show advanced options >>
 
   -# Advanced options
-  %div#advancedOptions.optionsBox
+  %div#advancedOptions
     -# Specify weights
     %h6 Weights configuration
-    %div.form-row
-      %div.form-group.col-md-2
+    %div.row.mb-3
+      %div.col-md-2
         %label{for: "input_wc"} Coverage
         = number_field_tag("input_wc", "0.55", min: "0", step: "1", class: "form-control")
-      %div.form-group.col-md-2
+      %div.col-md-2
         %label{for: "input_wa"} Acceptance
         = number_field_tag("input_wa", "0.15", min: "0", step: "1", class: "form-control")
-      %div.form-group.col-md-2
+      %div.col-md-2
         %label{for: "input_wd"} Knowledge detail
         = number_field_tag("input_wd", "0.15", min: "0", step: "1", class: "form-control")
-      %div.form-group.col-md-2
+      %div.col-md-2
         %label{for: "input_ws"} Specialization
         = number_field_tag("input_ws", "0.15", min: "0", step: "1", class: "form-control")
     -# Specify ontology set size
     %h6 Maximum ontologies per set
-    %div.form-row
-      %div.form-group.col-md-2
+    %div.row.mb-3
+      %div.col-md-2
         = number_field_tag("input_max_ontologies", "3", in: 2...5, class: "form-control")
-    -# Specify ontologies
-    %div#ontologyPicker
-      = render(partial: "shared/ontology_picker")
+    %div.row.mb-3
+      -# Specify ontologies
+      %div#ontologyPicker
+        = render(partial: "shared/ontology_picker")
 
   %div.my-4
     = submit_tag("Get Recommendations", id: "recommenderButton", type: "button", class: "btn btn-primary")
@@ -98,7 +102,7 @@
       There are no ontology sets recommended for the input provided. Please try the "Ontologies" output.
       %br/
     %span.inputSizeError
-      Please use less than 500 words. If you need to annotate larger pieces of text you can use the Recommender Web Service
+      Please use less than 500 words. If you need to annotate larger pieces of text you can use the Recommender Web Service.
 
 %div.row#resultsDisplay
   %div.col
