@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
   root to: 'home#index'
-  mount LetterOpenerWeb::Engine, at: "/letter_opener"
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   get 'auth/:provider/callback', to: 'login#create_omniauth'
   get 'locale/:language', to: 'language#set_locale_language'

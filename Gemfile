@@ -117,6 +117,7 @@ group :development do
   gem 'web-console'
   gem 'i18n-tasks'
   gem 'deepl-rb'
+  gem 'letter_opener_web', '~> 2.0'
 end
 
 group :test, :development do
@@ -133,5 +134,4 @@ end
 
 gem "net-ftp", "~> 0.2.0", require: false
 gem "net-http"
-gem 'letter_opener_web', '~> 2.0'
 
