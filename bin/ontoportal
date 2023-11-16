@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+docker compose run --rm rails  bash -c "bundle check || bundle install"  > /dev/null 2>&1
+
+case "$1" in
+  "bundle")
+    echo "Run: $*"
+    docker compose run --rm -it rails bash -c "$*"
+    ;;
+  "dev")
+    echo "Starting development server..."
+    if [ ! -f ".env" ]; then
+      echo "the file .env was not found"
+      exit 0
+    fi
+
+    if [ ! -f "config/bioportal_config_development.rb" ]; then
+      echo "Creating config/bioportal_config_development.rb file from config/bioportal_config_env.rb.sample"
+      cp config/bioportal_config_env.rb.sample config/bioportal_config_development.rb
+    fi
+
+    if [ ! -f "config/database.yml" ]; then
+      echo "Creating config/database.yml file from config/database.yml.sample"
+      cp config/database.yml.sample config/database.yml
+    fi
+
+    echo "Run: bundle exec rails s -b 0.0.0.0"
+    docker compose run --rm -it --service-ports rails bash -c "bin/rails db:prepare && bundle exec rails s -b 0.0.0.0"
+    ;;
+  "test")
+    echo "Running API..."
+    bin/run_api
+
+    echo "Running tests..."
+    echo "Run: API_URL=http://localhost:9393 bundle exec rails test -v $*"
+    docker compose run --rm -it test bash -c "RAILS_ENV=test bin/rails db:prepare && API_URL=http://localhost:9393 bundle exec rails test -v $*"
+
+    echo "Stopping API..."
+    bin/stop_api
+
+    ;;
+  *)
+    echo "Usage: $0 {dev|test|bundle}"
+    exit 1
+    ;;
+esac
