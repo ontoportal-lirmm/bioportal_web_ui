@@ -40,6 +40,8 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   helper_method :bp_config_json, :current_license, :using_captcha?
   rescue_from ActiveRecord::RecordNotFound, with: :not_found_record
+  rescue_from StandardError, with: :internal_server_error
+  
   # Pull configuration parameters for REST connection.
   REST_URI = $REST_URL
   API_KEY = $API_KEY
@@ -790,6 +792,12 @@ class ApplicationController < ActionController::Base
   private
   def not_found_record(exception)
     @error_message = exception.message
+
     render 'errors/not_found', status: 404
+  end
+
+  def internal_server_error(exception)
+    Notifier.error(exception).deliver
+    render 'errors/internal_server_error', status: 500
   end
 end
