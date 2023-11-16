@@ -1,9 +1,10 @@
 class Notifier < ApplicationMailer
 
   def error(error)
+    @error_message = error.message
+    @backtrace = error.backtrace
     mail(to: "#{$SUPPORT_EMAIL}", from: "#{$SUPPORT_EMAIL}",
-        subject: "[#{$SITE}] Exception Mailer: #{error.message}",
-        body: "#{error.backtrace}")
+        subject: "[#{$SITE}] Exception Mailer: #{@error_message}")
   end
 
   def feedback(name, email, comment, location, tags)

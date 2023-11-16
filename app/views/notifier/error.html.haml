@@ -1,0 +1,14 @@
+!!!
+%html
+    %head
+        %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+        %meta{content: "no-cache", name: "turbo-cache-control"}/
+    %body
+        %strong Error message: 
+        %p
+            #{@error_message}
+        %p
+            %br/
+            %strong Details:
+            - backtrace = @backtrace.join("\n")
+            = simple_format(backtrace)
