@@ -133,4 +133,5 @@ end
 
 gem "net-ftp", "~> 0.2.0", require: false
 gem "net-http"
+gem 'letter_opener_web', '~> 2.0'
 
