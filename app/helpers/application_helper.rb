@@ -305,13 +305,6 @@ module ApplicationHelper
     end
   end
 
-  def anonymous_user
-    #
-    # TODO: Fix and failures from removing 'DataAccess' call here.
-    #
-    #user = DataAccess.getUser($ANONYMOUS_USER)
-    user ||= User.new({"id" => 0})
-  end
 
   def render_advanced_picker(custom_ontologies = nil, selected_ontologies = [], align_to_dom_id = nil)
     selected_ontologies ||= []

@@ -76,9 +76,6 @@ class ApplicationController < ActionController::Base
 
   $trial_license_initialized = false
 
-  if !$EMAIL_EXCEPTIONS.nil? && $EMAIL_EXCEPTIONS == true
-    include ExceptionNotifiable
-  end
 
   # See ActionController::RequestForgeryProtection for details
   protect_from_forgery
@@ -128,10 +125,7 @@ class ApplicationController < ActionController::Base
     Thread.current[:slice] = @subdomain_filter
   end
 
-  def anonymous_user
-    user = DataAccess.getUser($ANONYMOUS_USER)
-    user ||= User.new({"id" => 0})
-  end
+
 
   def ontology_not_found(ontology_acronym)
     not_found("Ontology #{ontology_acronym} not found")
