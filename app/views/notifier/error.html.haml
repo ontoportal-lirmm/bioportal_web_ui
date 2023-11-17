@@ -7,6 +7,19 @@
         %strong Error message: 
         %p
             #{@error_message}
+        - if @current_user
+            %p
+                %strong Current User:
+                %ul
+                    %li User Name: 
+                    = @current_user[:username]
+                %ul
+                    %li Email: 
+                    = @current_user[:email]  
+        - else
+            %p
+                %strong Request IP:
+                = @request_ip
         %p
             %br/
             %strong Details:

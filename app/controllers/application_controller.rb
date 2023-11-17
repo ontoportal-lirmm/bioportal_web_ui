@@ -797,7 +797,10 @@ class ApplicationController < ActionController::Base
   end
 
   def internal_server_error(exception)
-    Notifier.error(exception).deliver
+    current_user = session[:user] if defined?(session)
+    request_ip = request.remote_ip if defined?(request)
+    
+    Notifier.error(exception, current_user, request_ip).deliver_now
     render 'errors/internal_server_error', status: 500
   end
 end
