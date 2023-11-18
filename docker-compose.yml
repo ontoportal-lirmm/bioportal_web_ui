@@ -25,6 +25,10 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 3  
 
   cache:
     image: memcached:latest
@@ -41,9 +45,12 @@ services:
   rails:
     <<: *default-app
     depends_on:
-      - db
-      - cache
-      - node
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_started
+      node:
+        condition: service_started
     links:
       - db
       - cache
