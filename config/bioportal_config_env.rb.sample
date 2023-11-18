@@ -174,4 +174,78 @@ $FRONT_NOTICE = ''
 # EX: $SITE_NOTICE = { :unique_key => 'Put your message here (can include <a href="/link">html</a> if you use single quotes).' }
 $SITE_NOTICE = { }
 
+$HOME_PAGE_LOGOS = {
+  supported_by: [
+    {
+      img_src: 'logos/supports/numev.png',
+      url: 'http://www.lirmm.fr/numev',
+      target: '_blank'
+    },
+    {
+      img_src: 'logos/supports/anr.png',
+      url: 'https://anr.fr/en',
+      target: '_blank'
+    },
+    {
+      img_src: 'logos/supports/eu.png',
+      url: 'https://commission.europa.eu/research-and-innovation_en',
+      target: '_blank'
+    }
+  ],
+  with_the_collaboration_of: [
+    {
+      img_src: 'logos/collaboration/d2kab.png',
+      url: 'http://d2kab.mystrikingly.com',
+      target: '_blank'
+    },
+    {
+      img_src: 'logos/collaboration/lirmm.png',
+      url: 'http://www.lirmm.fr',
+      target: '_blank'
+    },
+    {
+      img_src: 'logos/collaboration/inrae.png',
+      url: 'https://www.inrae.fr/enm',
+      target: '_blank'
+    },
+    {
+      img_src: 'logos/collaboration/stanford.png',
+      url: 'https://www.stanford.edu',
+      target: '_blank'
+    }
+  ]
+}
 
+$FOOTER_LINKS = {
+  social: [
+    { logo: 'social/people.svg', link: 'https://github.com/orgs/agroportal/people' },
+    { logo: 'social/github.svg', link: 'https://github.com/agroportal' },
+    { logo: 'social/twitter.svg', link: 'https://twitter.com/lagroportal' }
+  ],
+  sections: {
+    products: {
+      ontoportal: 'https://ontoportal.org/',
+      release_notes: 'https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/release-notes-btKjZk5tU2',
+      api: 'https://data.agroportal.lirmm.fr/',
+      sparql: 'https://sparql.agroportal.lirmm.fr/test/'
+    },
+    support: {
+      contact_us: 'https://agroportal.lirmm.fr/feedback',
+      wiki: 'https://www.bioontology.org/wiki/',
+      documentation: 'https://ontoportal.github.io/documentation/'
+    },
+    agreements: {
+      terms: '',
+      privacy_policy: '',
+      cite_us: '',
+      acknowledgments: ''
+    },
+    about: {
+      about_us: 'https://github.com/agroportal/project-management',
+      projects: 'https://d2kab.mystrikingly.com/',
+      team: 'https://github.com/orgs/agroportal/people'
+    }
+  }
+}
+
+$UI_THEME = ENV['UI_THEME'] || 'ontoportal'
