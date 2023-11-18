@@ -37,14 +37,6 @@ services:
   node:
     <<: *default-app
     command: "yarn build --watch"
-    tty: true
-    volumes:
-      - .:/app
-      - bundle:/usr/local/bundle
-      - node:/node_modules
-      - rails_cache:/app/tmp/cache
-      - assets:/app/public/assets
-      - /var/run/docker.sock:/var/run/docker.sock
 
   rails:
     <<: *default-app

@@ -2,14 +2,23 @@
 
 # Function to display script usage information
 show_help() {
-  echo "Usage: $0 {dev|test|run|help} [--api-url API_URL] [--api-key API_KEY]"
-  echo "  dev     : Start the development server."
-  echo "            Example: $0 dev --api-url http://localhost:9393 --api-key my_api_key"
-  echo "  test    : Run tests."
-  echo "  run     : Run a command in the Rails Docker container."
-  echo "  help    : Show this help message."
+  echo "Usage: $0 {dev|test|run|help} [--reset-cache] [--api-url API_URL] [--api-key API_KEY]"
+  echo "  dev            : Start the Ontoportal Web UI development server."
+  echo "                  Example: $0 dev --api-url http://localhost:9393 --api-key my_api_key"
+  echo "                  Use --reset-cache to remove volumes: $0 dev --reset-cache"
+  echo "  test           : Run tests."
+  echo "  run            : Run a command in the Ontoportal Web UI Docker container."
+  echo "  help           : Show this help message."
+  echo
+  echo "Description:"
+  echo "  This script provides convenient commands for managing an Ontoportal Web UI"
+  echo "  application using Docker Compose. It includes options for starting the development server,"
+  echo "  running tests, and executing commands within the Ontoportal Web UI Docker container."
+  echo
+  echo "Goals:"
+  echo "  - Simplify common tasks related to Ontoportal Web UI development using Docker."
+  echo "  - Provide a consistent and easy-to-use interface for common actions."
 }
-
 # Function to update or create the .env file with API_URL and API_KEY
 update_env_file() {
   local api_url="$1"
@@ -50,15 +59,20 @@ create_config_files() {
 
 # Function to handle the "dev" option
 dev() {
-  echo "Starting development server..."
+  echo "Starting Ontoportal Web UI development server..."
+  
   create_config_files
-
+  local reset_cache=false
   local api_url=""
   local api_key=""
 
   # Check for command line arguments
   while [[ "$#" -gt 0 ]]; do
     case $1 in
+      --reset-cache)
+        reset_cache=true
+        shift
+        ;;
       --api-url)
         api_url="$2"
         shift 2
@@ -74,6 +88,8 @@ dev() {
         ;;
     esac
   done
+
+ 
 
   # Check if arguments are provided
   if [ -n "$api_url" ] && [ -n "$api_key" ]; then
@@ -91,6 +107,11 @@ dev() {
     exit 1
   fi
 
+  # Check if --reset-cache is present and execute docker compose down --volumes
+  if [ "$reset_cache" = true ]; then
+    echo "Resetting cache. Running: docker compose down --volumes"
+    docker compose down --volumes
+  fi
 
   echo "Run: bundle exec rails s -b 0.0.0.0 -p 3000"
   docker compose run --rm -it --service-ports rails bash -c "(bundle check || bundle install) && bin/rails db:prepare && bundle exec rails s -b 0.0.0.0 -p 3000"
