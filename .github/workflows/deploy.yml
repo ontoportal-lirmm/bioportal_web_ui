@@ -18,14 +18,13 @@ name: Capistrano Deployment
 # Controls when the action will run.
 on:
   push:
-    branches: [ development stage test]
+    branches: [ stage test]
   # Allows running this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       BRANCH:
         description: 'Branch/tag to deploy'
         options:
-          - development
           - stage
           - test
           - master
@@ -35,7 +34,6 @@ on:
         description: 'target environment to deploy to'
         type: choice
         options:
-          - development
           - staging
           - production
           - appliance
