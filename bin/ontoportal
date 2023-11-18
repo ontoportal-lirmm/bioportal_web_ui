@@ -1,45 +1,136 @@
 #!/usr/bin/env bash
+
+# Function to display script usage information
+show_help() {
+  echo "Usage: $0 {dev|test|run|help} [--api-url API_URL] [--api-key API_KEY]"
+  echo "  dev     : Start the development server."
+  echo "            Example: $0 dev --api-url http://localhost:9393 --api-key my_api_key"
+  echo "  test    : Run tests."
+  echo "  run     : Run a command in the Rails Docker container."
+  echo "  help    : Show this help message."
+}
+
+# Function to update or create the .env file with API_URL and API_KEY
+update_env_file() {
+  local api_url="$1"
+  local api_key="$2"
+
+  # Update  the .env file with the provided values
+  file_content=$(<.env)
+
+  # Make changes to the variable
+  while IFS= read -r line; do
+        if [[ "$line" == "API_URL="* ]]; then
+          echo "API_URL=$api_url"
+        elif [[ "$line" == "API_KEY="* ]]; then
+          echo "API_KEY=$api_key"
+        else
+          echo "$line"
+        fi
+  done <<< "$file_content" > .env
+}
+
+# Function to create configuration files if they don't exist
+create_config_files() {
+  if [ ! -f ".env" ]; then
+      echo "Creating .env file from env.sample"
+      cp .env.sample .env
+  fi
+
+  if [ ! -f "config/bioportal_config_development.rb" ]; then
+    echo "Creating config/bioportal_config_development.rb file from config/bioportal_config_env.rb.sample"
+    cp config/bioportal_config_env.rb.sample config/bioportal_config_development.rb
+  fi
+
+  if [ ! -f "config/database.yml" ]; then
+    echo "Creating config/database.yml file from config/database.yml.sample"
+    cp config/database.yml.sample config/database.yml
+  fi
+}
+
+# Function to handle the "dev" option
+dev() {
+  echo "Starting development server..."
+  create_config_files
+
+  local api_url=""
+  local api_key=""
+
+  # Check for command line arguments
+  while [[ "$#" -gt 0 ]]; do
+    case $1 in
+      --api-url)
+        api_url="$2"
+        shift 2
+        ;;
+      --api-key)
+        api_key="$2"
+        shift 2
+        ;;
+      *)
+        echo "Unknown option: $1"
+        show_help
+        exit 1
+        ;;
+    esac
+  done
+
+  # Check if arguments are provided
+  if [ -n "$api_url" ] && [ -n "$api_key" ]; then
+    # If arguments are provided, update the .env file
+    update_env_file "$api_url" "$api_key"
+  else
+    # If no arguments, fetch values from the .env file
+    source .env
+    api_url="$API_URL"
+    api_key="$API_KEY"
+  fi
+
+  if [ -z "$api_url" ] || [ -z "$api_key" ]; then
+    echo "Error: Missing required arguments. Please provide both --api-url and --api-key or update them in your .env"
+    exit 1
+  fi
+
+
+  echo "Run: bundle exec rails s -b 0.0.0.0 -p 3000"
+  docker compose run --rm -it --service-ports rails bash -c "(bundle check || bundle install) && bin/rails db:prepare && bundle exec rails s -b 0.0.0.0 -p 3000"
+}
+
+# Function to handle the "test" option
+test() {
+  echo "Running API..."
+  bin/run_api
+
+  echo "Running tests..."
+  echo "Run: API_URL=http://localhost:9393 bundle exec rails test -v $*"
+  docker compose run --rm -it test bash -c "(bundle check || bundle install) && RAILS_ENV=test bin/rails db:prepare && API_URL=http://localhost:9393 bundle exec rails test -v $*"
+
+  echo "Stopping API..."
+  bin/stop_api
+}
+
+# Function to handle the "run" option
+run() {
+  echo "Run: $*"
+  docker compose run --rm -it rails bash -c "$*"
+}
+
+# Main script logic
 case "$1" in
-  "bundle")
-    echo "Run: $*"
-    docker compose run --rm -it rails bash -c "$*"
+  "run")
+    run "${@:2}"
     ;;
   "dev")
-    echo "Starting development server..."
-    if [ ! -f ".env" ]; then
-      echo "the file .env was not found"
-      exit 0
-    fi
-
-    if [ ! -f "config/bioportal_config_development.rb" ]; then
-      echo "Creating config/bioportal_config_development.rb file from config/bioportal_config_env.rb.sample"
-      cp config/bioportal_config_env.rb.sample config/bioportal_config_development.rb
-    fi
-
-    if [ ! -f "config/database.yml" ]; then
-      echo "Creating config/database.yml file from config/database.yml.sample"
-      cp config/database.yml.sample config/database.yml
-    fi
-
-
-    echo "Run: bundle exec rails s -b 0.0.0.0"
-    docker compose run --rm -it --service-ports rails bash -c "(bundle check || bundle install) && bin/rails db:prepare && bundle exec rails s -b 0.0.0.0"
+    dev "${@:2}"
     ;;
   "test")
-    echo "Running API..."
-    bin/run_api
-
-    echo "Running tests..."
-    echo "Run: API_URL=http://localhost:9393 bundle exec rails test -v $*"
-
-    docker compose run --rm -it test bash -c "(bundle check || bundle install) && RAILS_ENV=test bin/rails db:prepare && API_URL=http://localhost:9393 bundle exec rails test -v $*"
-
-    echo "Stopping API..."
-    bin/stop_api
-
+    test "${@:2}"
+    ;;
+  "help")
+    show_help
     ;;
   *)
-    echo "Usage: $0 {dev|test|bundle}"
+    show_help
     exit 1
     ;;
 esac
