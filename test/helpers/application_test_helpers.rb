@@ -11,7 +11,16 @@ module ApplicationTestHelpers
     end
 
     def create_user(user)
-      LinkedData::Client::Models::User.new(values: user.to_h).save
+      unless (existent_user = LinkedData::Client::Models::User.find_by_username(user.username).first)
+        existent_user = LinkedData::Client::Models::User.new(values: user.to_h).save
+      end
+
+      existent_user.password = user.password
+      existent_user
+    end
+
+    def delete_user(user)
+      LinkedData::Client::Models::User.find_by_username(user.username).first&.delete
     end
   end
 

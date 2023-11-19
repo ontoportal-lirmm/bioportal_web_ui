@@ -8,12 +8,16 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include ApplicationTestHelpers::Categories
   include ApplicationTestHelpers::Groups
 
-  driven_by :selenium, using: :chrome, options: {
-    browser: :remote,
-    url: "http://localhost:4444"
+
+  driven_by :selenium, using:  ENV['CI'].present? ? :headless_chrome : :chrome , screen_size: [1400, 1400] , options: {
+      browser: :remote,
+      url: "http://localhost:4444"
   }
 
+
   def login_in_as(user)
+    create_user(user)
+
     visit login_index_url
 
     # Fill in the login form
@@ -23,34 +27,32 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     # Click the login button
     click_button 'Login'
   end
-  
+
   def tom_select(selector, values)
 
     multiple = values.is_a?(Array)
 
-
     real_select = "[name='#{selector}']"
 
+    ts_wrapper_selector = "#{real_select} + div.ts-wrapper"
+    assert_selector ts_wrapper_selector
+
     # Click on the Tom Select input to open the dropdown
-    find("#{real_select} + div").click
+    find(ts_wrapper_selector).click
     sleep 1
 
-    return unless page.has_selector?("#{real_select} + div > .ts-dropdown")
+    return unless page.has_selector?("#{ts_wrapper_selector} > .ts-dropdown")
 
     if multiple
       # reset the input to empty
-      all("#{real_select} + div > .ts-control > .item .remove").each do |element|
+      all("#{ts_wrapper_selector} > .ts-control > .item .remove").each do |element|
         element.click
       end
-
-      page.execute_script("document.querySelector(\"#{real_select} + div > .ts-control\").innerHTML = '';")
     else
       values = Array(values)
     end
 
-    within "#{real_select} + div > .ts-dropdown > .ts-dropdown-content" do
-
-
+    within "#{ts_wrapper_selector} > .ts-dropdown > .ts-dropdown-content" do
       values.each do |value|
         if page.has_selector?('.option', text: value)
           find('.option', text: value).click
@@ -59,7 +61,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     end
 
     if multiple
-      find("#{real_select} + div").click
+      find(ts_wrapper_selector).click
       sleep 1
     end
   end

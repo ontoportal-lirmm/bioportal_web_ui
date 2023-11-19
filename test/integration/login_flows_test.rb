@@ -9,12 +9,14 @@ class LoginFlowsTest < ActionDispatch::IntegrationTest
 
 
   setup do
+    @user_john = fixtures(:users)[:john]
     @user_bob = fixtures(:users)[:bob]
-    create_user(@user_bob)
+    @user_bob = create_user(@user_bob)
   end
 
   teardown do
-    @user_bob.delete
+    delete_user(@user_bob)
+    delete_user(@user_john)
   end
 
   test 'go to sign up page, save, and see account details' do
@@ -25,9 +27,10 @@ class LoginFlowsTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     get new_user_path
-    new_user = fixtures(:users)[:john]
 
-    LinkedData::Client::Models::User.find_by_username(new_user.username).first&.delete
+    new_user = @user_john
+    delete_user(new_user)
+
     post users_path, params: {
       user: {
         firstName: new_user.first_name,
@@ -73,7 +76,6 @@ class LoginFlowsTest < ActionDispatch::IntegrationTest
   test 'go to login page and click save' do
     get login_index_url
     assert_response :success
-
     post login_index_url, params: {
       user: {
         username: @user_bob.username,

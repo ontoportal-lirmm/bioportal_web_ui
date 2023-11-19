@@ -3,12 +3,13 @@ require "application_system_test_case"
 class LoginFlowsTest < ApplicationSystemTestCase
 
   setup do
-    @user_bob = fixtures(:users)[:bob]
-    create_user(@user_bob)
+    @user_john = fixtures(:users)[:john]
+    @user_bob = create_user(fixtures(:users)[:bob])
   end
 
   teardown do
-    @user_bob.delete
+    delete_user(@user_bob)
+    delete_user(@user_john)
   end
 
   test "go to sign up page, save and see account details" do
@@ -16,7 +17,9 @@ class LoginFlowsTest < ApplicationSystemTestCase
     click_on 'Login'
 
     click_on 'Register'
-    new_user = fixtures(:users)[:john]
+
+    new_user = @user_john
+    delete_user(new_user)
 
     LinkedData::Client::Models::User.find_by_username(new_user.username).first&.delete
 
@@ -67,6 +70,6 @@ class LoginFlowsTest < ApplicationSystemTestCase
   test "go to login page and click save" do
     login_in_as(@user_bob)
 
-    assert_selector '.notification', text: "Welcome #{@user_bob.username}!"
+    assert_selector '.notification', text: "Welcome #{@user_bob.username}!", wait: 10
   end
 end

@@ -31,7 +31,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
   test "create a new ontology and go to it's summary page" do
     visit new_ontology_url
 
-    assert_selector ".Upload-ontology-title > div", text: 'Submit new ontology'
+    assert_selector ".Upload-ontology-title > div", text: 'Submit new ontology', wait: 10
     selected_categories = @categories[0..3]
     selected_groups = @groups[0..3]
 
@@ -107,9 +107,4 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
 
   end
 
-  test "edit an ontology metadata" do
-  end
-
-  test "add new submission to an ontology" do
-  end
 end
