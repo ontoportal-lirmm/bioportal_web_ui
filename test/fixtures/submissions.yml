@@ -1,0 +1,249 @@
+submission1:
+  URI: "http://example.org/ontologies/ontology1"
+  versionIRI: "http://example.org/ontologies/ontology1/v1"
+  version: "1.0"
+  status: "production"
+  deprecated: false
+  hasOntologyLanguage: "OWL"
+  hasFormalityLevel: "http://example.org/formality#Informal"
+  hasOntologySyntax: "http://www.w3.org/2002/07/owl#FunctionalSyntax"
+  naturalLanguage:
+    - "en"
+  isOfType: "http://example.org/ontologyType#DomainOntology"
+  identifier:
+    - "http://example.org/ontologies/ontology1/identifier1"
+    - "http://example.org/ontologies/ontology1/identifier2"
+  description: "An example ontology submission"
+  homepage: "http://example.org/ontologies/ontology1/homepage"
+  documentation: "http://example.org/ontologies/ontology1/documentation"
+  notes:
+    - "Note 1"
+    - "Note 2"
+  keywords:
+    - "Keyword1"
+    - "Keyword2"
+  hiddenLabel:
+    - "HiddenLabel1"
+    - "HiddenLabel2"
+  alternative:
+    - "Alternative1"
+    - "Alternative2"
+  abstract: "An abstract for the ontology"
+  publication:
+    - "http://example.org/publication1"
+    - "http://example.org/publication2"
+  hasLicense: "http://example.org/licenses/license1"
+  useGuidelines: "Guidelines for use"
+  morePermissions: "Additional permissions"
+  released: "2023-01-01T00:00:00Z"
+  valid: "2023-01-31T00:00:00Z"
+  curatedOn:
+    - "2023-01-15T12:00:00Z"
+    - "2023-01-20T14:30:00Z"
+  creationDate: "2023-01-01T00:00:00Z"
+  modificationDate: "2023-01-15T16:45:00Z"
+  contact: {
+             contact1: "contact1@test.com",
+             contact2: "contact2@test.com"
+  }
+  pullLocation: 'https://raw.githubusercontent.com/owlcs/pizza-ontology/master/pizza.owl'
+
+submission2:
+  URI: "http://example.org/ontologies/ontology2"
+  versionIRI: "http://example.org/ontologies/ontology2/v1"
+  version: "2.0"
+  status: "beta"
+  deprecated: true
+  hasOntologyLanguage: "SKOS"
+  hasFormalityLevel: "http://example.org/formality#Formal"
+  hasOntologySyntax: "http://www.w3.org/2002/07/owl#ManchesterSyntax"
+  naturalLanguage:
+    - "fr"
+  isOfType: "http://example.org/ontologyType#KnowledgeBase"
+  identifier:
+    - "http://example.org/ontologies/ontology2/identifier1"
+    - "http://example.org/ontologies/ontology2/identifier2"
+  description: "Another example ontology submission"
+  homepage: "http://example.org/ontologies/ontology2/homepage"
+  documentation: "http://example.org/ontologies/ontology2/documentation"
+  notes:
+    - "Note 3"
+    - "Note 4"
+  keywords:
+    - "Keyword3"
+    - "Keyword4"
+  hiddenLabel:
+    - "HiddenLabel3"
+    - "HiddenLabel4"
+  alternative:
+    - "Alternative3"
+    - "Alternative4"
+  abstract: "Abstract for the second ontology"
+  publication:
+    - "http://example.org/publication3"
+    - "http://example.org/publication4"
+  hasLicense: "http://example.org/licenses/license2"
+  useGuidelines: "Usage guidelines"
+  morePermissions: "More permissions"
+  released: "2023-02-01T00:00:00Z"
+  valid: "2023-02-28T00:00:00Z"
+  curatedOn:
+    - "2023-02-15T12:00:00Z"
+    - "2023-02-20T14:30:00Z"
+  creationDate: "2023-02-01T00:00:00Z"
+  modificationDate: "2023-02-15T16:45:00Z"
+  contact: {
+    contact3: "contact3@test.com",
+    contact4: "contact4@test.com"
+  }
+  pullLocation: 'https://www.w3.org/2009/08/skos-reference/skos.rdf'
+
+submission3:
+  URI: "http://example.org/ontologies/ontology3"
+  versionIRI: "http://example.org/ontologies/ontology3/v1"
+  version: "1.5"
+  status: "production"
+  deprecated: false
+  hasOntologyLanguage: "OWL"
+  hasFormalityLevel: "http://example.org/formality#Informal"
+  hasOntologySyntax: "http://www.w3.org/2002/07/owl#FunctionalSyntax"
+  naturalLanguage:
+    - "en"
+  isOfType: "http://example.org/ontologyType#DomainOntology"
+  identifier:
+    - "http://example.org/ontologies/ontology3/identifier1"
+    - "http://example.org/ontologies/ontology3/identifier2"
+  description: "Yet another example ontology submission"
+  homepage: "http://example.org/ontologies/ontology3/homepage"
+  documentation: "http://example.org/ontologies/ontology3/documentation"
+  notes:
+    - "Note 5"
+    - "Note 6"
+  keywords:
+    - "Keyword5"
+    - "Keyword6"
+  hiddenLabel:
+    - "HiddenLabel5"
+    - "HiddenLabel6"
+  alternative:
+    - "Alternative5"
+    - "Alternative6"
+  abstract: "Abstract for the third ontology"
+  publication:
+    - "http://example.org/publication5"
+    - "http://example.org/publication6"
+  hasLicense: "http://example.org/licenses/license3"
+  useGuidelines: "Guidelines for use"
+  morePermissions: "Additional permissions"
+  released: "2023-03-01T00:00:00Z"
+  valid: "2023-03-31T00:00:00Z"
+  curatedOn:
+    - "2023-03-15T12:00:00Z"
+    - "2023-03-20T14:30:00Z"
+  creationDate: "2023-02-01T00:00:00Z"
+  modificationDate: "2023-02-15T16:45:00Z"
+  contact: {
+    contact5: "contact5@test.com",
+    contact6: "contact6@test.com"
+  }
+  pullLocation: 'http://example.org/pull3'
+
+submission4:
+  URI: "http://example.org/ontologies/ontology4"
+  versionIRI: "http://example.org/ontologies/ontology4/v1"
+  version: "1.2"
+  status: "alpha"
+  deprecated: true
+  hasOntologyLanguage: "SKOS"
+  hasFormalityLevel: "http://example.org/formality#Formal"
+  hasOntologySyntax: "http://www.w3.org/2002/07/owl#ManchesterSyntax"
+  naturalLanguage:
+    - "fr"
+  isOfType: "http://example.org/ontologyType#KnowledgeBase"
+  identifier:
+    - "http://example.org/ontologies/ontology4/identifier1"
+    - "http://example.org/ontologies/ontology4/identifier2"
+  description: "A different example ontology submission"
+  homepage: "http://example.org/ontologies/ontology4/homepage"
+  documentation: "http://example.org/ontologies/ontology4/documentation"
+  notes:
+    - "Note 7"
+    - "Note 8"
+  keywords:
+    - "Keyword7"
+    - "Keyword8"
+  hiddenLabel:
+    - "HiddenLabel7"
+    - "HiddenLabel8"
+  alternative:
+    - "Alternative7"
+    - "Alternative8"
+  abstract: "Abstract for the fourth ontology"
+  publication:
+    - "http://example.org/publication7"
+    - "http://example.org/publication8"
+  hasLicense: "http://example.org/licenses/license4"
+  useGuidelines: "Usage guidelines"
+  morePermissions: "More permissions"
+  released: "2023-04-01T00:00:00Z"
+  valid: "2023-04-30T00:00:00Z"
+  curatedOn:
+    - "2023-04-15T12:00:00Z"
+    - "2023-04-20T14:30:00Z"
+  creationDate: "2023-04-01T00:00:00Z"
+  modificationDate: "2023-04-15T16:45:00Z"
+  contact: {
+    contact7: "contact7@test.com",
+    contact8: "contact8@test.com"
+  }
+  pullLocation: 'http://example.org/pull4'
+
+submission5:
+  URI: "http://example.org/ontologies/ontology5"
+  versionIRI: "http://example.org/ontologies/ontology5/v1"
+  version: "1.8"
+  status: "production"
+  deprecated: false
+  hasOntologyLanguage: "OWL"
+  hasFormalityLevel: "http://example.org/formality#Informal"
+  hasOntologySyntax: "http://www.w3.org/2002/07/owl#FunctionalSyntax"
+  naturalLanguage:
+    - "en"
+  isOfType: "http://example.org/ontologyType#DomainOntology"
+  identifier:
+    - "http://example.org/ontologies/ontology5/identifier1"
+    - "http://example.org/ontologies/ontology5/identifier2"
+  description: "Yet another different example ontology submission"
+  homepage: "http://example.org/ontologies/ontology5/homepage"
+  documentation: "http://example.org/ontologies/ontology5/documentation"
+  notes:
+    - "Note 9"
+    - "Note 10"
+  keywords:
+    - "Keyword9"
+    - "Keyword10"
+  hiddenLabel:
+    - "HiddenLabel9"
+    - "HiddenLabel10"
+  alternative:
+    - "Alternative9"
+    - "Alternative10"
+  abstract: "Abstract for the fifth ontology"
+  publication:
+    - "http://example.org/publication9"
+    - "http://example.org/publication10"
+  hasLicense: "http://example.org/licenses/license5"
+  useGuidelines: "Guidelines for use"
+  morePermissions: "Additional permissions"
+  released: "2023-05-01T00:00:00Z"
+  valid: "2023-05-31T00:00:00Z"
+  curatedOn:
+    - "2023-05-15T12:00:00Z"
+    - "2023-05-20T14:30:00Z"
+  creationDate: "2023-05-01T00:00:00Z"
+  modificationDate: "2023-05-15T16:45:00Z"
+  contact: {
+    contact9: "contact9@test.com",
+    contact10: "contact10@test.com"
+  }
+  pullLocation: 'http://example.org/pull5'
