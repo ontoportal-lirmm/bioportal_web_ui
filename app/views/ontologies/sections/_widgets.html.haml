@@ -94,6 +94,7 @@
             %br/
             %input{:class => "bp_form_complete-#{CGI.escape(@ontology.acronym).sub('-', '%2d')}-name", :name => "c", :size => "100", :type => "text"}/
             #form{:style => "display:none;"}
+              - first_class_id = @ontology.explore.classes["collection"].first&.id || ''
               .enable-lists
                 %h2 Step 2: Follow the Instructions
                 %hr/
@@ -135,7 +136,7 @@
                             put the complete URI of the class (e.g.,
                             = succeed ")" do
                               %a.external.free{:href => @ontology.explore.classes["collection"].first&.id, :rel => "nofollow", :title => "/visualize/39478/Common_Neoplasm"}
-                                = @ontology.explore.classes["collection"].first.id
+                                = first_class_id
                           %li
                             %code shortid
                             put the short id of the class, as used in #{$SITE} (e.g., "Common_Neoplasm");
@@ -172,7 +173,7 @@
           %td
             #bp_vis_container
               - rest_domain = $REST_URL.sub(/https?:\/\//, "")
-              <iframe frameborder="0" src="/widgets/visualization?ontology=#{@ontology.acronym}&class=#{CGI.escape(@ontology.explore.classes["collection"].first.id)}&apikey=#{$API_KEY}&restURLPrefix=#{rest_domain}" width="100%" height="350"></iframe>
+              <iframe frameborder="0" src="/widgets/visualization?ontology=#{@ontology.acronym}&class=#{CGI.escape(first_class_id)}&apikey=#{$API_KEY}&restURLPrefix=#{rest_domain}" width="100%" height="350"></iframe>
             #vis{:style => "display:none;"}
               %h2 Step 2: Follow the Instructions
               %hr/
@@ -182,7 +183,7 @@
               %pre
                 = preserve do
                   :escaped
-                    <iframe frameborder="0" src="/widgets/visualization?ontology=#{@ontology.acronym}&class=#{CGI.escape(@ontology.explore.classes["collection"].first.id)}&apikey=YOUR_API_KEY"></iframe>
+                    <iframe frameborder="0" src="/widgets/visualization?ontology=#{@ontology.acronym}&class=#{CGI.escape(first_class_id)}&apikey=YOUR_API_KEY"></iframe>
               %p
                 For more help visit
                 %a{:href => "http://bioontology.org/wiki/index.php/NCBO_Widgets#How_to_use_NCBO_Widgets", :target => "_blank"} NCBO Widget Wiki

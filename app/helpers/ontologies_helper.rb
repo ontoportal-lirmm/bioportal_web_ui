@@ -321,7 +321,7 @@ module OntologiesHelper
   end
 
   def submission_ready?(submission)
-    submission.nil? || Array(submission.submissionStatus).include?('RDF')
+    Array(submission&.submissionStatus).include?('RDF')
   end
 
   def sections_to_show
@@ -351,7 +351,11 @@ module OntologiesHelper
 
       elsif !submission_ready?(submission)
         type = 'info'
-        message = "The ontology is processing. Sections such as #{ontology_data_sections.join(', ')} will be available once processing is complete."
+        if submission.nil?
+          message = "Upload an ontology. Sections such as #{ontology_data_sections.join(', ')} will be available once done."
+        else
+          message = "The ontology is processing. Sections such as #{ontology_data_sections.join(', ')} will be available once processing is complete."
+        end
       end
       render Display::AlertComponent.new(message: message, type: type) if type
     end

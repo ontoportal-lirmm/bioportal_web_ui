@@ -18,7 +18,7 @@
   %div#sd_content.card.p-1.py-3{style: 'overflow-y: scroll; height: 60vh;'}
     - if skos? && @roots&.empty?
       %div.text-wrap
-        = render AlertMessageComponent.new do
+        = render Display::AlertComponent.new do
           Missing roots for #{@ontology.acronym} (skos:topConceptOf)
     - else
       - concept_schemes = skos? ? "&concept_schemes=#{params[:concept_schemes]}" : ''
