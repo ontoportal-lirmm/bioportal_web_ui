@@ -85,6 +85,8 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     click_on current_url.gsub("/ontologies/success/#{@new_ontology.acronym}", '') + ontology_path(@new_ontology.acronym)
 
     assert_text "#{@new_ontology.name} (#{@new_ontology.acronym})"
+    assert_selector '.alert-message', text: "The ontology is processing."
+
     selected_categories.each do |cat|
       assert_text cat.name
     end
