@@ -329,6 +329,7 @@ module OntologiesHelper
 
     if !@ontology.summaryOnly && submission_ready?(@submission_latest)
       sections += ['classes']
+      sections += %w[properties notes mappings]
       sections += %w[schemes collections] if skos?
       sections += %w[instances] unless skos?
       sections += %w[widgets]
