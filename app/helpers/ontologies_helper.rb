@@ -152,7 +152,7 @@ module OntologiesHelper
 
   def submission_status2string(data)
     return '' if data[:submissionStatus].nil?
-  
+
     # Massage the submission status into a UI string
     # submission status values, from:
     # https://github.com/ncbo/ontologies_linked_data/blob/master/lib/ontologies_linked_data/models/submission_status.rb
@@ -172,7 +172,7 @@ module OntologiesHelper
     end
     status.concat errors
     return '' if status.empty?
-  
+
     '(' + status.join(', ') + ')'
   end
 
@@ -181,16 +181,30 @@ module OntologiesHelper
 
     submission_status2string(data)
   end
-  
+
+  def submission_status_ok?(status)
+    status.include?('Parsed') && !status.include?('Error')
+  end
+
+  def submission_status_error?(status)
+    !status.include?('Parsed') && status.include?('Error')
+  end
+
+  def submission_status_warning?(status)
+    status.include?('Parsed') && status.include?('Error')
+  end
+
   def submission_status_icons(status)
-    if status.include?('Parsed') && !status.include?('Error Diff')
+    if submission_status_ok?(status)
       "success-icon.svg"
-    elsif status.include?('Error Diff') && !status.include?('Parsed')
+    elsif submission_status_error?(status)
       'error-icon.svg'
     elsif status == '(Archived)'
       'archive.svg'
-    else
+    elsif submission_status_warning?(status)
       "alert-triangle.svg"
+    else
+      "info.svg"
     end
   end
 
@@ -306,6 +320,10 @@ module OntologiesHelper
      }].to_json
   end
 
+  def submission_ready?(submission)
+    submission.nil? || Array(submission.submissionStatus).include?('RDF')
+  end
+
   def sections_to_show
     sections = ['summary']
 
@@ -317,6 +335,27 @@ module OntologiesHelper
     end
     sections
   end
+
+  def not_ready_submission_alert(ontology: @ontology, submission: @submission)
+    if ontology.admin?(session[:user])
+      status = status_string(submission)
+      type = nil
+      message = nil
+      if submission_status_error?(status)
+        type = 'danger'
+        message = "The ontology processing failed, with the current statuses: #{status}"
+      elsif submission_status_warning?(status)
+        message = "The ontology parsing succeeded, but some processing steps failed, here are the current statuses: #{status}"
+        type = 'warning'
+
+      elsif !submission_ready?(submission)
+        type = 'info'
+        message = "The ontology is processing. Sections such as #{ontology_data_sections.join(', ')} will be available once processing is complete."
+      end
+      render Display::AlertComponent.new(message: message, type: type) if type
+    end
+  end
+
   def dispaly_complex_text(definitions)
     html = ""
     definitions.each do |definition|
