@@ -39,9 +39,12 @@ class ApplicationController < ActionController::Base
 
   helper :all # include all helpers, all the time
   helper_method :bp_config_json, :current_license, :using_captcha?
-  rescue_from ActiveRecord::RecordNotFound, with: :not_found_record
-  rescue_from StandardError, with: :internal_server_error
-  
+
+  unless Rails.env.development?
+    rescue_from ActiveRecord::RecordNotFound, with: :not_found_record
+    rescue_from StandardError, with: :internal_server_error
+  end
+
   # Pull configuration parameters for REST connection.
   REST_URI = $REST_URL
   API_KEY = $API_KEY
