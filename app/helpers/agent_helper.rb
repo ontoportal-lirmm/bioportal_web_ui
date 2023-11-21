@@ -79,7 +79,7 @@ module AgentHelper
   end
 
   def display_agent(agent, link: true)
-    out = agent.name.to_s.humanize
+    out = agent.name.to_s.titleize
     identifiers = display_identifiers(agent.identifiers, link: link)
     out = "#{out} (#{identifiers})" unless identifiers.empty?
     affiliations = agent.affiliations.map { |a| display_agent(a, link: link) }.join(', ')
