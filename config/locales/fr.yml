@@ -6,51 +6,53 @@ fr:
         license:
           attributes:
             encrypted_key:
-              invalid_license_key: est une clé de licence invalide
+              invalid_license_key: est une clé de licence invalide.
               no_appliance_id_for_comparison: n'a pas pu être validé. Impossible de récupérer l'ID de l'appliance virtuelle.
-              appliance_id_mismatch: est une non-concordance d'ID d'appliance
+              appliance_id_mismatch: ne correspond pas à l'ID de l'appliance virtuelle.
+  
   date:
     formats:
-      year_month_day_concise: "%Y-%m-%d" # 2017-03-01
-      month_day_year: "%b %-d, %Y" # Mar 1, 2017
-      monthfull_day_year: "%B %-d, %Y" # March 1, 201
+      year_month_day_concise: "%d-%m-%Y" # 01-03-2017
+      month_day_year: "%-d %b %Y" # 1 Mar 2017
+      monthfull_day_year: "%-d %B %Y" # 1 March 2017
 
   acceptance: Acceptation
   additional_parameters: 'Paramètres supplémentaires expliqués à '
   admin:
     licenses:
       create:
-        success: Licence renouvelée avec succès !
+        success: Licence renouvelée avec succès !
+  
   all: Tout
+  
   annotator:
     annotate_text_prompt: Saisissez ou collez le texte à annoter
     annotations_result: Annotations
     fast_context: FastContext
     filters:
-      confidence_threshold: Seuil de confiance du filtre
+      confidence_threshold: Seuil de confiance
       confidence_threshold_help: Spécifiez la position minimale dans la distribution
-        des scores (entre 1 et 100)
-      exclude_numbers: Exclure des numéros
+        des scores (entre 1 et 100).
+      exclude_numbers: Exclure les numéros
       exclude_synonyms: Exclure les synonymes
-      include_mappings: Inclure les mappages
-      match_longest_only: Correspond le plus long uniquement
-      match_partial_words: Reconnaître des mots partiels
+      include_mappings: Inclure les alignements
+      match_longest_only: Reconnaître les mots les plus long uniquement
+      match_partial_words: Reconnaître les mots partiels
       max_hierarchy_level: Inclure les ancêtres jusqu'au niveau
       score: Inclure le score
-      score_help: Annotations de score suivant la mesure NCBO 2009 précédente (ancienne)
-        ou Annotations de score suivant la mesure C-Value (cvalue) ou Annotations
-        de score suivant la mesure C-Value avec expansion de la hiérarchie (cvalueh)
-      score_threshold: Filtrer par seuil de score
-      score_threshold_help: Spécifier la valeur de score minimum pour les annotations
+      score_help: Score des annoations suivant la mesure originale NCBO 2009 (ancienne)
+        ou Score des annoations suivant la mesure C-Value (cvalue) ou Score des annoations
+         suivant la mesure C-Value avec expansion de la hiérarchie (cvalueh).
+      score_threshold: Seuil de score
+      score_threshold_help: Spécifiez la valeur de score minimum pour les annotations.
     get_annotator: Obtenir les annotations
     index:
       fast_context:
-        tooltip: 'Activer FastContext pour détecter : si un concept a été nié (affirmé,
+        tooltip: 'Activez FastContext pour détecter : si un concept est négatif (affirmé,
           nié), qui a vécu le concept trouvé (patient, autre), quand le concept annoté
-          s''est produit (récent, historique, hypothétique), et/ou si le concept annoté
+          s''est-il produit (récent, historique, hypothétique), et/ou si le concept annoté
           est incertain (certain, incertain).'
-      intro: Obtenez des annotations pour le texte biomédical avec des classes des
-        ontologies
+      intro: Obtenez des annotations avec des classes des ontologies
       lemmatize:
         tooltip: Activez Lemmatize pour lemmatiser le texte soumis et utiliser un
           dictionnaire lemmatisé pour les annotations
@@ -59,12 +61,12 @@ fr:
     lemmatize: Lemmatiser
     results_filtered_by: Les résultats sont filtrés par
     select: Sélectionnez %{name}
-    start_typing_to_select: Commencez à taper pour sélectionner %{type} ou laissez
-      vide pour tout utiliser
+    start_typing_to_select: Commencez à taper pour sélectionner %{type} ou laissez vide pour tout utiliser
     title: Annotateur
     umls:
       semantic_groups: Groupes sémantiques UMLS
       semantic_types: Types sémantiques UMLS
+  
   certainty: Certitude
   class: Classe
   clear_selection: Effacer la sélection

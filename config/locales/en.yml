@@ -6,49 +6,53 @@ en:
         license:
           attributes:
             encrypted_key:
-              invalid_license_key: is an invalid license key
+              invalid_license_key: is an invalid license key.
               no_appliance_id_for_comparison: Could not be validated. Unable to retrieve virtual appliance ID.
-              appliance_id_mismatch: is an appliance id mismatch
+              appliance_id_mismatch: is an appliance id mismatch.
 
   date:
     formats:
       year_month_day_concise: "%Y-%m-%d" # 2017-03-01
       month_day_year: "%b %-d, %Y" # Mar 1, 2017
       monthfull_day_year: "%B %-d, %Y" # March 1, 2017
-  additional_parameters: 'Additional Parameters Explained at '
+  
+  acceptance: Acceptance
+  additional_parameters: 'Additional parameters explained at '
   admin:
     licenses:
       create:
         success: License renewed successfully!
+  
   all: All
+  
   annotator:
     annotate_text_prompt: Enter or paste text to be annotated
     annotations_result: Annotations
     fast_context: FastContext
     filters:
-      confidence_threshold: Filter Confidence Threshold
+      confidence_threshold: Filter confidence threshold
       confidence_threshold_help: Specify the minimum position in the score distribution
-        (between 1 and 100)
-      exclude_numbers: Exclude Numbers
+        (between 1 and 100).
+      exclude_numbers: Exclude numbers
       exclude_synonyms: Exclude synonyms
-      include_mappings: Include Mappings
+      include_mappings: Include mappings
       match_longest_only: Match longest only
       match_partial_words: Recognize partial words
       max_hierarchy_level: Include ancestors up to level
       score: Include score
       score_help: Score annotations following previous NCBO 2009 measure (old) or
         Score annotations following C-Value measure (cvalue) or Score annotations
-        following C-Value measure with hierarchy expansion (cvalueh)
+        following C-Value measure with hierarchy expansion (cvalueh).
       score_threshold: Filter by score threshold
-      score_threshold_help: Specify minimum score value for annotations
+      score_threshold_help: Specify minimum score value for annotations.
     get_annotator: Get annotations
     index:
       fast_context:
-        tooltip: 'Enable FastContext to detect: if a concept was denied (affirmed,
+        tooltip: 'Enable FastContext to detect: if a concept is denied (affirmed,
           denied), who experienced the found concept (patient, other), when the annotated
           concept occurred (recent, historical, hypothetical), and/ or if the annotated
           concept is uncertain (certain, uncertain).'
-      intro: Get annotations for biomedical text with ontology classes
+      intro: Get annotations for text with ontology classes
       lemmatize:
         tooltip: Enable Lemmatize to lemmatize submitted text and use a lemmatized
           dictionary for annotations
@@ -62,6 +66,7 @@ en:
     umls:
       semantic_groups: UMLS Semantic Groups
       semantic_types: UMLS Semantic Types
+  
   certainty: Certainty
   class: Class
   clear_selection: Clear Selection
