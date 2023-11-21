@@ -34,6 +34,7 @@
           = link_to("Annotator", annotator_index_path(), class: "dropdown-item")
           - if $NCBO_ANNOTATORPLUS_ENABLED == true
             = link_to("NCBO Annotator+", '/ncbo_annotatorplus', class: "dropdown-item")
+          = link_to("VocBench", "http://vocbench.lifewatchitaly.eu", class: "dropdown-item", target: "_blank")
       %li.nav-item
         = link_to("Projects", projects_path(), class: "nav-link")
       %li.nav-item
@@ -41,8 +42,6 @@
       -if (!session[:user].nil? && session[:user].admin?)
         %li.nav-item
           = link_to("Admin", admin_index_path, class: "nav-link")
-      %li.nav-item
-        = link_to("VocBench", "http://vocbench.lifewatchitaly.eu", target: "_blank", class: "nav-link")
       -# Support menu
       %li.nav-item.dropdown
         = link_to("#", id: "supportMenuDropdownLink", class: "nav-link dropdown-toggle", role: "button", data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}) do
