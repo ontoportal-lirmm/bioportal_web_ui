@@ -81,10 +81,10 @@ fr:
             <p>Description du terme (obligatoire)<br>Une brève définition, description ou utilisation du terme suggéré. Des synonymes de termes supplémentaires peuvent être répertoriés dans cette section.</p>
           </blockquote>
           <blockquote>
-            <p>Superclasse (obligatoire)<br>Le terme parent du terme suggéré. Le terme parent doit être une entrée existante de l'ontologie actuelle. La superclasse peut être sélectionnée directement à partir de l'arborescence des classes de Bioportal.</p>
+            <p>Superclasse (obligatoire)<br>Le terme parent du terme suggéré. Le terme parent doit être une entrée existante de l'ontologie actuelle. La superclasse peut être sélectionnée directement à partir de l'arborescence des classes.</p>
           </blockquote>
           <blockquote>
-            <p>Références (facultatif)<br>Fournissez des preuves de l'existence du terme demandé, telles que les identifiants Pubmed des articles ou des liens vers d'autres ressources décrivant le terme.</p>
+            <p>Références (facultatif)<br>Fournissez des preuves de l'existence du terme demandé, telles que les identifiants  d'articles ou des liens vers d'autres ressources décrivant le terme.</p>
           </blockquote>
           <blockquote>
             <p>Justification (facultatif)<br>Fournissez ici toute information supplémentaire sur le terme demandé.</p>
@@ -94,44 +94,41 @@ fr:
   experiencer: Experiencer
   filter: Filtre
   format_results: 'Formater les résultats en '
-  get_json_version: Get the json version
+  get_json_version: Obtenir la version json
   get_recommendations: Obtenir des recommandations
   help: Aide
+  
   home:
-    agroportal_figures: "%{site} en chiffres:"
-    benefit1: Découvrez de nouvelles perspectives et connexions en explorant d'autres
-      ontologies dans le référentiel.
-    benefit2: Contribuez à la croissance et au développement de votre domaine en ajoutant
-      de nouveaux concepts et catégories.
-    benefit3: Utilisez le contrôle de version pour gérer les modifications apportées
-      à votre ontologie au fil du temps et collaborer avec d'autres utilisateurs.
-    benefit4: Obtenez des commentaires et des suggestions d'autres utilisateurs qui
-      peuvent examiner et commenter votre ontologie.
-    benefit5: Obtenez le score et les mesures FAIR pour votre ontologie.
-    fair_details: Voir les détails
-    fairness: Scores FAIR
+    agroportail_figures: "%{site} en chiffres"
+    benefit1: Découvrez de nouvelles perspectives et connaissances en explorant d'autres ontologies ou resources sémantiques dans le portail.
+    benefit2: Contribuez au partage des connaissances et à l’interopérabilité sémantique dans votre domaine.
+    benefit3: Alignez votre ontologie avec d'autres ontologies du domaine et collaborez avec d'autres utilisateurs.
+    benefit4: Obtenez des commentaires et des suggestions d'autres utilisateurs qui peuvent utiliser et commenter votre ontologie.
+    benefit5: Décrivez précisément votre ontologie avec des métadonnées pertinentes et obtenez un score de "FAIRness" pour votre ontologie.
+    fair_details: Voir détails
+    fairness: Score FAIR
     get_annotations: Obtenir des annotations
     get_recommendations: Obtenir des recommandations
     index:
-      tagline: le référentiel d'ontologies biomédicales le plus complet au monde
-      title: Bienvenue à la %{site}
-      welcome: Bienvenue à la %{site},
-    ontology_upload: Veux-tu télécharger une ontologie ?
-    ontology_upload_benefits: 'En téléchargeant votre ontologie sur %{site}, vous
-      pouvez :'
-    ontology_upload_button: Télécharger une ontologie
-    ontology_upload_desc: Télécharger une ontologie est un moyen de partager vos connaissances
-      du domaine avec les autres.
-    paste_text_prompt: Collez un paragraphe de texte ou quelques mots-clés..
-    recommender_annotator: Recommandateur et annotateur
-    supported_by: Soutenu par
+      tagline: L'hôte des ontologies et des artefacts sémantiques dans l’agroalimentaire et les domaines connexes.
+      title: Bienvenue sur %{site}
+      welcome: Bienvenue sur %{site},
+    ontology_upload: Voulez-vous charger une ontologie ?
+    ontology_upload_benefits: 'En chargeant et partageant votre ontologie sur %{site}, vous pouvez :'
+    ontology_upload_button: Charger une ontologie
+    ontology_upload_desc: Charger une ontologie ou un autre type d'artefact sémantique (vocabulaire, terminologie, thésaurus, ...) est un moyen de partager vos connaissances avec d'autres.
+    paste_text_prompt: Collez un paragraphe de texte ou quelques mots-clés...
+    recommender_annotator: Recommandeur et Annotateur
+    supported_by: Avec le soutien de
     twitter_news: Actualités
-    with_collaboration: Avec la collaboration de
+    with_collaboration: Une collaboration de
+  
   input: Entrée
-  insert_sample_text: Insérer un exemple de texte
+  insert_sample_text: Insérez un exemple de texte
   keywords: Mots-clés
   keywords_separated_by_commas: Mots-clés séparés par des virgules
   knowledge_detail: Détail de la connaissance
+  
   landscape:
     average_metrics: Métriques moyennes
     category: Catégorie
@@ -179,7 +176,8 @@ fr:
     relations_between_stored_ontologies: Relations entre les ontologies stockées sur
       le portail
     size: Taille
-    title: "%{site} Paysage"
+    title: "Panorama"
+  
   layout:
     header:
       account_setting: Paramètres du compte
@@ -194,7 +192,7 @@ fr:
       publications: Publications
       recommender: Recommender
       release_notes: Notes de version
-      search_prompt: Rechercher dans %{portal_name} ...
+      search_prompt: Rechercher dans %{portail_name} ...
       submit_feedback: Envoyer un commentaire
       support: assistance
   login:
@@ -259,11 +257,11 @@ fr:
     include_score: Inclure le score
     index:
       intro: |
-        Le NCBO Annotator+ est un proxy appelant le service Web NCBO Annotator sur le NCBO BioPortal.
+        Le NCBO Annotator+ est un proxy appelant le service Web NCBO Annotator du NCBO Bioportail.
           <br/><br/>
           Tchechmedjiev, A., Abdaoui, A., Emonet, V., Melzi, S., Jonnagaddala, J., & Jonquet, C. (2018). <a href="https://doi.org/10.1093/bioinformatics/bty009" target="_blank">Fonctionnalités améliorées pour annoter et indexer le texte clinique avec NCBO Annotator+</a>. Bioinformatique, 34(11), 1962-1965.
           </br><br/>
-          Si vous utilisez l'API, veuillez fournir une clé API NCBO BioPortal valide et accéder au service sur <a href="http://services.bioportal.lirmm.fr/ncbo_annotatorplus">http://services.bioportal.lirmm.fr/ncbo_annotatorplus </a></br>
+          Si vous utilisez l'API, veuillez fournir une clé d'API pour le NCBO Bioportail valide et accéder au service sur <a href="http://services.bioportail.lirmm.fr/ncbo_annotatorplus">http://services.bioportail.lirmm.fr/ncbo_annotatorplus </a></br>
           Le texte soumis au NCBO Annotator+ doit être en anglais.
       sample_text: Le mélanome est une tumeur maligne des mélanocytes qui se trouvent
         principalement dans la peau mais aussi dans l'intestin et l'œil.
@@ -355,7 +353,7 @@ fr:
     email: Email
     first_name: Prénom
     last_name: Nom
-    mailing_list: S'inscrire à la liste de diffusion d'AgroPortal
+    mailing_list: S'inscrire à la liste de diffusion d'Agroportail
     optional: "(Facultatif)"
     password: Mot de passe
     title: S'inscrire
