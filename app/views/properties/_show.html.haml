@@ -10,5 +10,5 @@
       - c.header(stripped: true) do |t|
         - t.add_row({th: 'ID'}, {td: c.concept_properties[:id][:values]}) if c.concept_properties[:id][:values].present?
         - t.add_row({th: 'Labels'}, {td: c.concept_properties[:prefLabel][:values]}) if  c.concept_properties[:prefLabel][:values].present?
-        - t.add_row({th: 'Definitions'}, {td: c.concept_properties[:definition][:values]}) if c.concept_properties[:definition][:values].present?
-        - t.add_row({th: 'Parent'}, {td: c.concept_properties[:parents][:values]}) if c.concept_properties[:parents][:values].present?
+        - t.add_row({th: 'Definitions'}, {td: c.concept_properties[:definition][:values].join(', ')}) if c.concept_properties[:definition][:values].present?
+        - t.add_row({th: 'Parent'}, {td: c.concept_properties[:parents][:values].join(', ')}) if c.concept_properties[:parents][:values].present?
