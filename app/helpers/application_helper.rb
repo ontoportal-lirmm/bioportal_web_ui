@@ -468,6 +468,15 @@ module ApplicationHelper
     render OntologySubscribeButtonComponent.new(ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: link)
   end
 
+  def admin_block(ontology: @ontology, user: session[:user], class_css: "admin-border", &block)
+    if ontology.admin?(user)
+      content_tag(:div, class: class_css) do
+        capture(&block) if block_given?
+      end
+    end
+  end
+
+
   def subscribed_to_ontology?(ontology_acronym, user)
     user.bring(:subscription) if user.subscription.nil?
     # user.subscription is an array of subscriptions like {ontology: ontology_id, notification_type: "NOTES"}

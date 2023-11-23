@@ -7,6 +7,14 @@ $widget-table-border-color: #EFEFEF;
     color: var(--admin-color) !important;
   }
 }
+
+.admin-border {
+  .dropdown-container{
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+}
+
 .ontologies.show .gutter {
   background-repeat: no-repeat;
   background-position: center;

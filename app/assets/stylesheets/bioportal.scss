@@ -23,6 +23,7 @@ body{
 
 .admin-border{
   border: 1px solid;
+  border-radius: 5px;
   border-color: var(--admin-color) !important;
 }
 
@@ -30,6 +31,7 @@ body{
   background-color: var(--light-color) !important;
   border-color: var(--admin-color) !important;
   color: var(--admin-color) !important;
+  border-radius: 5px;
 }
 
 #hd {
