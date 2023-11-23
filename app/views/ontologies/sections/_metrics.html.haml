@@ -1,0 +1,11 @@
+= render_in_modal do
+  = render TableComponent.new do |t|
+    - t.add_row({th: "Classes"}, {td: number_with_delimiter(@metrics.classes)})
+    - t.add_row({th: "Individuals"},  {td: number_with_delimiter(@metrics.individuals)})
+    - t.add_row({th: "Properties"},  {td: number_with_delimiter(@metrics.properties)})
+    - t.add_row({th: "Maximum depth"},  {td: number_with_delimiter(@metrics.maxDepth)})
+    - t.add_row({th: "Maximum number of children"},  {td: number_with_delimiter(@metrics.maxChildCount)})
+    - t.add_row({th: "Average number of children"},  {td: number_with_delimiter(@metrics.averageChildCount)})
+    - t.add_row({th: "Classes with a single child"},  {td: number_with_delimiter(@metrics.classesWithOneChild)})
+    - t.add_row({th: "Classes with more than 25 children"}, { td: number_with_delimiter(@metrics.classesWithMoreThan25Children)})
+    - t.add_row({th: "Classes with no definition"}, {td: number_with_delimiter(@metrics.classesWithNoDefinition)})

@@ -14,7 +14,6 @@ export default class extends Controller {
         this.modal = new UseModal()
         this.boundHide = this.hide.bind(this)
         this.modal.onClose(this.element,  this.boundHide)
-        this.setSize()
     }
 
     disconnect() {
@@ -23,6 +22,7 @@ export default class extends Controller {
 
     show() {
         this.setTitle()
+        this.setSize()
         let target = this.targetModalElement
         if (target) {
             this.modal.showModal(target)
@@ -53,6 +53,7 @@ export default class extends Controller {
     }
 
     setSize() {
+        debugger
         const target = this.targetModalElement
         const newSize = this.sizeValue
         if (target && newSize){

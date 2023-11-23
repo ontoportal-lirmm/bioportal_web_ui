@@ -1,4 +1,9 @@
-= render SummarySectionComponent.new(title: "Metrics" , link: Rails.configuration.settings.links[:metrics], link_title: "Information and evolution diagrams about metrics and other measurements of the ontology.", show_card: false) do
+= render SummarySectionComponent.new(title: "Metrics" , link: Rails.configuration.settings.links[:metrics], link_title: "Information and evolution diagrams about metrics and other measurements of the ontology.", show_card: false) do |s|
+  - s.action_link do
+    = link_to_modal '', ontology_path(@ontology.acronym) + "/metrics",
+                        class: "metrics-item", title: "See all the metrics of #{@ontology.acronym}",
+                        data: { controller: "tooltip", show_modal_size_value: 'modal-md' , show_modal_title_value: "All the metrics of #{@ontology.acronym}"}
+
   - if @metrics.nil? || (@metrics.is_a?(Array) && @metrics.empty?) || (@metrics.respond_to?(:status) && @metrics.status == 404)
     = empty_state_message("We have not yet calculated metrics for #{@ontology.acronym}")
   - else

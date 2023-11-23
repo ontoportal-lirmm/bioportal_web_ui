@@ -384,6 +384,12 @@ class OntologiesController < ApplicationController
 
  
 
+  def metrics
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
+    @metrics = @ontology.explore.metrics(display_context: false, display_links: false)
+    render partial: 'ontologies/sections/metrics'
+  end
+
   def metrics_evolution
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
     key = params[:metrics_key]
