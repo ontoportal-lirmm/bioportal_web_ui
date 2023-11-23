@@ -320,6 +320,7 @@ class OntologiesController < ApplicationController
        relation]
     end
     @methodology_properties = properties_hash_values(category_attributes["methodology"])
+    @methodology_properties = properties_hash_values(category_attributes["methodology"] + [:toDoList, :notes])
     @agents_properties = properties_hash_values(category_attributes["persons and organizations"])
     @dates_properties = properties_hash_values(category_attributes["dates"], custom_labels: {released: "Initially created On"})
     @links_properties = properties_hash_values(category_attributes["links"] + [:associatedMedia, :bugDatabase, :mailingList, :uriRegexPattern])
