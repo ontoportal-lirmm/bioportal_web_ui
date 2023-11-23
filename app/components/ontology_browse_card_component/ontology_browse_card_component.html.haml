@@ -53,7 +53,7 @@
         - date = render DateTimeFieldComponent.new(value: ontology[:released])
         %span{data:{controller:'tooltip'}, title: "Release date #{date}"}
           = render ChipButtonComponent.new(type: "clickable") do
-            = DateTime.parse(date).year
+            = DateTime.parse(date).year rescue date
 
       - if ontology[:format]
         %span.mx-1
