@@ -1,4 +1,4 @@
-name: Docker branch Images build
+name: Docker branch Images build - ARM version
 
 on:
   push:
@@ -39,17 +39,18 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: |
-            agroportal/ontoloportal_web_ui
+          images: | 
+            agroportal/ontologies_api
             ghcr.io/agroportal/ontoloportal_web_ui
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
-          platforms: linux/amd64
+          platforms: linux/arm64
           build-args: |
             RUBY_VERSION=2.7
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}-${{ env.BRANCH_NAME }}-arm64
           labels: ${{ steps.meta.outputs.labels }}
+
