@@ -324,7 +324,7 @@ class OntologiesController < ApplicationController
     @dates_properties = properties_hash_values(category_attributes["dates"], custom_labels: {released: "Initially created On"})
     @links_properties = properties_hash_values(category_attributes["links"])
     @identifiers = properties_hash_values([:URI, :versionIRI, :identifier])
-    @projects_properties = properties_hash_values(category_attributes["usage"])
+    @projects_properties = properties_hash_values(category_attributes["usage"] + [:award])
     @ontology_icon_links = [%w[summary/download dataDump],
                             %w[summary/homepage homepage],
                             %w[summary/documentation documentation],
