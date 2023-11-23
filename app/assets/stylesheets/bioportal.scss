@@ -34,6 +34,33 @@ body{
   border-radius: 5px;
 }
 
+.container-gradient {
+  background: linear-gradient(-45deg, var(--admin-color), var(--primary-color), var(--admin-color));
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  .header-component{
+    color: white;
+  }
+
+  .field-description_text{
+    color: white !important;
+    opacity: 0.7;
+  }
+
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 #hd {
   background: image-url('layout/header_bg.png') repeat-x;
   width: 100%;

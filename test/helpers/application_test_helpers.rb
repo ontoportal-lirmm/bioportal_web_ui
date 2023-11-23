@@ -1,5 +1,17 @@
 require 'rails/test_help'
 module ApplicationTestHelpers
+
+  def self.transform_models_to_ids(object)
+    object.each_pair do |key, value|
+      if value.is_a?(Array) && value.first.is_a?(LinkedData::Client::Base)
+        object[key] = value.map(&:id)
+      elsif value.is_a?(LinkedData::Client::Base)
+        object[key] = value.id
+      end
+    end
+    object
+  end
+
   module Users
     def sign_in_as(username)
       user = fixtures(:users)[username]
@@ -24,26 +36,65 @@ module ApplicationTestHelpers
     end
   end
 
-
   module Ontologies
-    def create_ontology(ontology)
-      LinkedData::Client::Models::Ontology.new(values: ontology.to_h).save
+    def create_ontology(ontology, submission)
+      ontology = LinkedData::Client::Models::Ontology.new(values: ApplicationTestHelpers.transform_models_to_ids(ontology).to_h).save
+      if ontology.errors
+        puts "Ontology creation error: #{ontology.errors}"
+        delete_ontologies([ontology])
+        ontology = LinkedData::Client::Models::Ontology.new(values: ApplicationTestHelpers.transform_models_to_ids(ontology).to_h).save
+      end
+      submission[:ontology] = ontology.id
+      submission.curatedOn = nil # TODO fix the curatedOn not saving
+      submission.naturalLanguage = Array(submission.naturalLanguage).map{|x| x.gsub('iso639-1','iso639-3')}
+      submission = LinkedData::Client::Models::OntologySubmission.new(values: ApplicationTestHelpers.transform_models_to_ids(submission).to_h).save
+      [ontology, submission]
+    end
+
+    def delete_ontologies(ontologies = @ontologies)
+      Array(ontologies).each do |o|
+        LinkedData::Client::Models::Ontology.find_by_acronym(o.acronym).first&.delete
+      end
     end
   end
 
   module Categories
     def create_category(category)
       created = LinkedData::Client::Models::Category.new(values: category.to_h).save
-      return category if created.errors
+      return LinkedData::Client::Models::Category.find_by_acronym(category.acronym).first if created.errors
       created
+    end
+
+    def create_categories(categories_data = fixtures(:categories))
+      @categories = []
+      categories_data.to_a.each do |name, category|
+        @categories << create_category(category)
+      end
+      @categories
+    end
+
+    def delete_categories(categories = @categories)
+      Array(categories).each { |g| g.delete }
     end
   end
 
   module Groups
     def create_group(group)
       created = LinkedData::Client::Models::Group.new(values: group.to_h).save
-      return group if created.errors
+      return  LinkedData::Client::Models::Group.find_by_acronym(group.acronym).first if created.errors
       created
+    end
+
+    def create_groups(groups_data = fixtures(:groups))
+      @groups = []
+      groups_data.to_a.each do |name, group|
+        @groups << create_group(group)
+      end
+      @groups
+    end
+
+    def delete_groups(groups = @groups)
+      Array(groups).each { |g| g.delete }
     end
   end
 end

@@ -15,7 +15,7 @@ ontology2:
   notes: "This is the second ontology."
   administeredBy:
   group:
-  viewingRestriction: "public"
+  viewingRestriction: "private"
   hasDomain:
   acl:
 

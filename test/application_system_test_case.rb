@@ -15,6 +15,21 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   }
 
 
+  def wait_for(selector, tries = 5)
+    tries.times.each do
+      break  if page.has_selector?(selector)
+      sleep 1
+    end
+  end
+
+  def wait_for_text(text, tries = 60)
+    tries.times.each do
+      sleep 1
+      break  if page.has_text?(text)
+    end
+    assert_text text
+  end
+
   def login_in_as(user)
     create_user(user)
 
@@ -28,6 +43,48 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     click_button 'Login'
   end
 
+
+  def assert_date(date)
+    assert_text I18n.l(DateTime.parse(date), format: '%B %-d, %Y')
+  end
+
+  def search_input(selector, value)
+    within "#{selector}" do
+      find(".search-inputs .input-field-component").last.set(value)
+      page.execute_script("document.querySelector('#{selector} > .search-inputs .input-field-component').dispatchEvent(new Event('input'))")
+      sleep 1
+      find(".search-inputs .search-content", text: value).click
+      sleep 1
+      find("input", text: 'Save').click
+    end
+  end
+  def list_checks(selected_values, all_values = [])
+    all_values.each do |val|
+      uncheck val, allow_label_click: true
+    end
+
+    selected_values.each do |val|
+      check val, allow_label_click: true
+    end
+  end
+
+  def list_inputs(parent_selector, selector, values)
+    within parent_selector do
+      all('.delete').each { |x| x.click  }
+      find('.add-another-object', text: 'Add another').click
+      if values.is_a?(Hash)
+        values.each do |key , val|
+          all("[name^='#{selector}'][name$='[#{key}]']").last.set(val)
+        end
+      elsif values.is_a?(Array)
+        values.each do |val|
+          all("[name^='#{selector}']").last.set(val)
+          find('.add-another-object', text: 'Add another').click
+        end
+      end
+
+    end
+  end
   def tom_select(selector, values)
 
     multiple = values.is_a?(Array)
