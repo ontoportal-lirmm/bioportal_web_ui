@@ -29,10 +29,7 @@
             = render Buttons::RegularButtonComponent.new(id:'cancel-button', value: "Cancel", variant: "secondary", size: "slim") do |btn|
               - btn.icon_left do
                 - inline_svg_tag "x.svg", width: "20", height: "20"
-          .reset-all-button#reset-all-button
-            = render Buttons::RegularButtonComponent.new(id:'reset-all-fields', value: "Reset all fields", variant: "secondary", size: "slim") do |btn|
-              - btn.icon_left do
-                - inline_svg_tag "reload.svg"
+
           .save-button
             = render Buttons::RegularButtonComponent.new(id:'save-button', value: "Save", variant: "primary", size: "slim", type: "submit") do |btn|
               - btn.icon_left do
@@ -57,7 +54,3 @@
       }
 
     }
-
-      document.getElementById("reset-all-button").addEventListener('click', function() {
-        location.reload();
-      });
