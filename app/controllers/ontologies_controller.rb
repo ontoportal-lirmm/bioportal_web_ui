@@ -322,7 +322,7 @@ class OntologiesController < ApplicationController
     @methodology_properties = properties_hash_values(category_attributes["methodology"])
     @agents_properties = properties_hash_values(category_attributes["persons and organizations"])
     @dates_properties = properties_hash_values(category_attributes["dates"], custom_labels: {released: "Initially created On"})
-    @links_properties = properties_hash_values(category_attributes["links"])
+    @links_properties = properties_hash_values(category_attributes["links"] + [:associatedMedia, :bugDatabase, :mailingList, :uriRegexPattern])
     @identifiers = properties_hash_values([:URI, :versionIRI, :identifier, :exampleIdentifier])
     @projects_properties = properties_hash_values(category_attributes["usage"] + [:award])
     @ontology_icon_links = [%w[summary/download dataDump],
