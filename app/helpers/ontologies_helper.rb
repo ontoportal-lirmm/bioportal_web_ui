@@ -443,13 +443,25 @@ module OntologiesHelper
   end
 
   def ontology_icon_links(links, submission_latest)
-    links.map do |icon, attr|
+    links.map do |icon, attr, label|
       value = submission_latest.nil? ? nil : submission_latest.send(attr)
 
-      link_options = { style: "text-decoration: none; width: 30px; height: 30px" }
-      link_options[:class] = 'disabled-icon' if value.nil?
+      link_options = {
+        style: "text-decoration: none; width: 30px; height: 30px"
+      }
 
-      link_to(inline_svg("#{icon}.svg"), Array(value).first || '', link_options)
+      if Array(value).empty?
+        link_options[:class] = 'disabled-icon'
+        link_options[:disabled] = 'disabled'
+        title = label
+      else
+        title = label + '<br>' + link_to(Array(value).first)
+      end
+
+      content_tag(:span, data: {controller:"tooltip" } , title:  title) do
+        link_to(inline_svg("#{icon}.svg", width: "32", height: '32'),
+                Array(value).first || '', link_options)
+      end
     end.join.html_safe
   end
 

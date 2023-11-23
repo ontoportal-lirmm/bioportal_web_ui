@@ -325,7 +325,15 @@ class OntologiesController < ApplicationController
     @links_properties = properties_hash_values(category_attributes["links"])
     @identifiers = properties_hash_values([:URI, :versionIRI, :identifier])
     @projects_properties = properties_hash_values(category_attributes["usage"])
-    @ontology_icon_links = [%w[summary/download dataDump], %w[summary/homepage homepage], %w[summary/documentation documentation], %w[icons/github repository], %w[summary/sparql endpoint]]
+    @ontology_icon_links = [%w[summary/download dataDump],
+                            %w[summary/homepage homepage],
+                            %w[summary/documentation documentation],
+                            %w[icons/github repository],
+                            %w[summary/sparql endpoint],
+                            %w[icons/publication publication]]
+    @ontology_icon_links.each do |icon|
+      icon << helpers.attr_label(icon[1], attr_metadata: helpers.attr_metadata(icon[1]), show_tooltip: false)
+    end
     if request.xhr?
       render partial: 'ontologies/sections/metadata', layout: false
     else
