@@ -60,3 +60,6 @@
       - unless @submission_latest.nil?
         = javascript_include_tag("jsonld")
         = metadata_formats_buttons
+
+      = admin_block do
+        = properties_dropdown('configuration','Configuration metadata', 'Regroup all the metadata properties used by the portal to configure the behavior of the resource', @config_properties)

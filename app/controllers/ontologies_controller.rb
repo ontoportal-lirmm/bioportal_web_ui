@@ -319,7 +319,7 @@ class OntologiesController < ApplicationController
       ["#{helpers.attr_label(attr, attr_metadata: helpers.attr_metadata(attr), show_tooltip: false)}(#{relation})",
        relation]
     end
-    @methodology_properties = properties_hash_values(category_attributes["methodology"])
+    @config_properties = properties_hash_values([:obsoleteParent] + category_attributes["object description properties"])
     @methodology_properties = properties_hash_values(category_attributes["methodology"] + [:toDoList, :notes])
     @agents_properties = properties_hash_values(category_attributes["persons and organizations"])
     @dates_properties = properties_hash_values(category_attributes["dates"], custom_labels: {released: "Initially created On"})
