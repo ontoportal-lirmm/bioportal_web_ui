@@ -568,7 +568,27 @@ module OntologiesHelper
       end
     end
   end
+  def ontology_import_code(submission = @submission_latest )
+    prefix = submission.preferredNamespacePrefix
+    namespace= submission.preferredNamespaceUri || submission.URI
+    return if prefix.blank? && namespace.blank?
 
+    render ChipButtonComponent.new do
+      concat content_tag(:span , "@prefix ", style: 'color: #FA7070')
+      concat content_tag(:span , "#{prefix}: ", style: 'color: var(--primary-color);font-weight: 700;')
+      concat content_tag(:span , "<#{namespace}>", style: 'color:#9999a9;')
+    end
+  end
+  def metadata_vocabulary_display(vocabularies)
+    vocabularies_data = attribute_enforced_values('metadataVoc')
+    horizontal_list_container(vocabularies) do |voc|
+      label = vocabularies_data[voc] || voc
+      label =  content_tag(:span, data: {controller:'tooltip'}, title: "Go to: #{link_to(voc)}") do
+        render(ExternalLinkTextComponent.new(text: label))
+      end
+      render ChipButtonComponent.new(url: voc, text: label, type: 'clickable')
+    end
+  end
 
   def summary_only?
     @ontology&.summaryOnly || @submission&.isRemote&.eql?('3')
