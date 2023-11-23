@@ -5,6 +5,21 @@ module OntologiesHelper
   API_KEY = $API_KEY
   LANGUAGE_FILTERABLE_SECTIONS = %w[classes schemes collections instances]
 
+
+  def ontology_retired?(submission)
+    submission[:status].to_s.eql?('retired') || submission[:deprecated].to_s.eql?('true')
+  end
+
+  def ontology_retired_badge(submission, small: false, clickable: true)
+    return unless ontology_retired?(submission)
+
+    style = "text-white bg-danger #{small && 'chip_button_small'}"
+    render ChipButtonComponent.new(class:  style, text: "Retired", type: clickable ? 'clickable' : 'static')
+  end
+
+  def private_ontology_icon(is_private)
+    raw(content_tag(:i, '', class: 'fas fa-key', title: "Private Ontology")) if is_private
+  end
   def browse_filter_section_label(key)
     labels = {
       hasFormalityLevel: 'Formality levels',

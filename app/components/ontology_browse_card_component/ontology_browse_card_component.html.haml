@@ -5,8 +5,7 @@
         .browse-ontology-title-bar
           %a.browse-ontology-title{:href => "/ontologies/#{ontology[:acronym]}", data: {'turbo': 'false'}}
             = ontology[:name]+" ("+ontology[:acronym]+")"
-            - if ontology[:private]
-              %i.fas.fa-key{title:"Private Ontology"}
+            = private_ontology_icon(ontology[:private])
             - if session[:user]&.admin?
               - ontology_status = status_string(ontology)
               = render Display::InfoTooltipComponent.new(text: ontology_status, icon: submission_status_icons(ontology_status))
@@ -62,7 +61,7 @@
             = ontology[:format]
       - if ontology[:deprecated]
         %span.mx-1
-          = render ChipButtonComponent.new(type: "clickable", text: "Retired")
+          = ontology_retired_badge(ontology)
       - if ontology[:viewOfOnt]
         %span.mx-1{data:{controller:'tooltip'}, title: "View of the ontology #{ontology[:viewOfOnt].split('/').last}"}
           = render ChipButtonComponent.new(type: "clickable", text: "View")
