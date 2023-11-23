@@ -543,7 +543,12 @@ module OntologiesHelper
   end
 
   def submission_json_button
-    render RoundedButtonComponent.new(link: "#{(@submission_latest || @ontology).id}?display=all", target: '_blank', size: 'medium')
+    render RoundedButtonComponent.new(link: "#{(@submission_latest || @ontology).id}?display=all",
+                                      target: '_blank',
+                                      size: 'medium',
+                                      title: 'Go to API')
+  end
+
   end
 
 
