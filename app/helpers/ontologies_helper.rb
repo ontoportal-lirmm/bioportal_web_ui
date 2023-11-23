@@ -139,7 +139,7 @@ module OntologiesHelper
   end
 
   def link?(string)
-    string.start_with?('http://') || string.start_with?('https://')
+    string.to_s.start_with?('http://') || string.to_s.start_with?('https://')
   end
 
   def mappings_link(ontology, count)
@@ -549,6 +549,22 @@ module OntologiesHelper
                                       title: 'Go to API')
   end
 
+
+  def projects_field(projects, ontology_acronym = @ontology.acronym)
+    render FieldContainerComponent.new do |f|
+      f.label do
+        concat "Projects using #{ontology_acronym}"
+        concat new_element_link('Create new project', new_project_path)
+      end
+
+      if projects.empty?
+        empty_state_message("No projects using #{ontology_acronym}")
+      else
+        horizontal_list_container(projects) do |project|
+           render ChipButtonComponent.new(url: project_path(project.acronym), text: project.name, type: "clickable")
+        end
+      end
+    end
   end
 
 
