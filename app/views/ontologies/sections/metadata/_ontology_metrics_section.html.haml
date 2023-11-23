@@ -5,7 +5,7 @@
     .metrics-container.metrics
       - %w[classes individuals properties].each do |metric|
         = link_to_modal nil, ontology_path(@ontology.acronym) + "/metrics_evolution?metrics_key=#{metric}",
-                        class: "metrics-item", data: { show_modal_title_value: "Evolution of the number of #{@metrics.send(metric)} in #{@ontology.acronym} per submissions."} do
+                        class: "metrics-item", data: { show_modal_title_value: "Evolution of the number of #{metric} in #{@ontology.acronym} per submissions."} do
           %hr
           %div
             %h4
