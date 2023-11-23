@@ -11,7 +11,7 @@ module OntologiesHelper
   end
 
   def ontology_retired_badge(submission, small: false, clickable: true)
-    return unless ontology_retired?(submission)
+    return if submission.nil? || ontology_retired?(submission)
 
     style = "text-white bg-danger #{small && 'chip_button_small'}"
     render ChipButtonComponent.new(class:  style, text: "Retired", type: clickable ? 'clickable' : 'static')

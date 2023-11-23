@@ -18,7 +18,8 @@
           - if @ontology.private?
             = render ChipButtonComponent.new(class: 'chip_button_small mr-1') do
               = private_ontology_icon(@ontology.private?)
-          = render ChipButtonComponent.new(class: 'chip_button_small mr-1', text: @submission_latest.hasOntologyLanguage)
+          - if @submission_latest&.hasOntologyLanguage
+            = render ChipButtonComponent.new(class: 'chip_button_small mr-1', text: @submission_latest.hasOntologyLanguage)
           = ontology_retired_badge(@submission_latest, small: true, clickable: false)
 
       - unless sub.nil? ||  sub.creationDate.nil?
