@@ -36,6 +36,15 @@ module MetadataHelper
     input_type?(attr_metadata(attr_label), 'isOntology')
   end
 
+
+  def metadata_categories
+    submission_metadata.group_by{|x| x['category']}.transform_values{|x| x.map{|attr| attr['attribute']} }
+  end
+  def ontology_relation?(attr_label)
+    relations_attr = metadata_categories['relations']
+    relations_attr.include?(attr_label.to_s)
+  end
+
   def attr_uri?(attr_label)
     input_type?(attr_metadata(attr_label), "uri")
   end
