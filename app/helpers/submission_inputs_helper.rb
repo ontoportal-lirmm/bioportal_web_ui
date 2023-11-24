@@ -53,7 +53,7 @@ module SubmissionInputsHelper
       if attr.type?('list')
         generate_list_agent_input(attr)
       else
-        generate_agent_input(attr)
+        # generate_agent_input(attr)
       end
     elsif attr.type?('integer')
       generate_integer_input(attr)
@@ -238,10 +238,18 @@ module SubmissionInputsHelper
     attr_key = attr.metadata['attribute'].to_s
     agent = attr.values
     render Input::InputFieldComponent.new(name: '', label: attr_header_label(attr), error_message: attribute_error(attr.metadata['attribute'])) do
-      render TurboFrameComponent.new(id: "submission[#{attr_key}]") do
-        render partial: 'agents/agent_show', locals: { agent: agent, name_prefix: '', edit_on_modal: false,
-                                                       parent_id: "submission[#{attr_key}]",
-                                                       deletable: !agent.nil?}
+      render TurboFrameComponent.new(id: "submission_#{attr_key}_NEW_RECORD") do
+        if agent
+          render partial: 'agents/agent_show', locals: { agent: agent, name_prefix: '', edit_on_modal: false,
+                                                         parent_id: "submission_",
+                                                         frame_id: "submission[#{attr_key}]",
+                                                         deletable: true}
+        else
+          render AgentSearchInputComponent.new(id: "" , agent_type: agent_type(attr.metadata),
+                                               parent_id: "submission_#{attr_key}",
+                                               edit_on_modal: false,
+                                               deletable: true)
+        end
       end
     end
   end

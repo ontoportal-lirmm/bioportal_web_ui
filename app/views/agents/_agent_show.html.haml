@@ -1,5 +1,6 @@
 - deletable ||= false
-= render TurboFrameComponent.new(id: agent_frame_id(agent, parent_id)) do
+- frame_id ||= agent_frame_id(agent, parent_id)
+= render TurboFrameComponent.new(id: frame_id) do
   %div.d-flex
     - return agent if agent.is_a? String
     - if agent.id
