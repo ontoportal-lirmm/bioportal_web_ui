@@ -7,9 +7,10 @@
               "aria-label": "View ontology recommender help") do
       %i.fas.fa-question-circle.fa-lg{"aria-hidden": "true"}
 
+
   %form
-    = hidden_field_tag :recommender_sample_text, t('recommender.sample_text')
-    = hidden_field_tag :recommender_sample_keywords,t('recommender.sample_keywords')
+    = hidden_field_tag :recommender_sample_text, "Melanoma is a malignant tumor of melanocytes which are found predominantly in skin but also in the bowel and the eye."
+    = hidden_field_tag :recommender_sample_keywords,"Backpain, White blood cell, Carcinoma, Cavity of stomach, Ductal Carcinoma in Situ, Adjuvant chemotherapy, Axillary lymph node staging, Mastectomy, tamoxifen, serotonin reuptake inhibitors, Invasive Breast Cancer, hormone receptor positive breast cancer, ovarian ablation, premenopausal women, surgical management, biopsy of breast tumor, Fine needle aspiration, entinel lymph node, breast preservation, adjuvant radiation therapy, prechemotherapy, Inflammatory Breast Cancer, ovarian failure, Bone scan, lumpectomy, brain metastases, pericardial effusion, aromatase inhibitor, postmenopausal, Palliative care, Guidelines, Stage IV breast cancer disease, Trastuzumab, Breast MRI examination"
     
     -# Specify input format
     %h5= t('input')
