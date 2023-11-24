@@ -53,7 +53,6 @@ export default class extends Controller {
     }
 
     setSize() {
-        debugger
         const target = this.targetModalElement
         const newSize = this.sizeValue
         if (target && newSize){

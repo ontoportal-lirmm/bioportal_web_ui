@@ -47,7 +47,11 @@ module SubmissionInputsHelper
                                        attr_metadata: attr_metadata(attr_key))
 
     if attr.type?('Agent')
-      generate_agent_input(attr)
+      if  attr.type?('list')
+        generate_list_agent_input(attr)
+      else
+        generate_agent_input(attr)
+      end
     elsif attr.type?('integer')
       generate_integer_input(attr)
     elsif attr.type?('date_time')
@@ -228,6 +232,18 @@ module SubmissionInputsHelper
   end
 
   def generate_agent_input(attr)
+    attr_key = attr.metadata['attribute'].to_s
+    render Input::InputFieldComponent.new(name: '', label: attr_header_label(attr), error_message: attribute_error(attr.metadata['attribute'])) do
+      render TurboFrameComponent.new(id: agent_id_frame_id("submission[#{attr_key}]", '')) do
+        render AgentSearchInputComponent.new(id: "submission[#{attr_key}]", agent_type: agent_type(attr.metadata),
+                                             parent_id: '', edit_on_modal: false)
+      end
+
+    end
+
+  end
+
+  def generate_list_agent_input(attr)
     render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.metadata['attribute'])) do
       render NestedAgentSearchInputComponent.new(label: attr_header_label(attr),
                                                  agents: attr.values,

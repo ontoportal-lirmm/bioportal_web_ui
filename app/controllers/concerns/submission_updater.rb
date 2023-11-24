@@ -111,7 +111,8 @@ module SubmissionUpdater
       { contact: [:name, :email] },
       :homepage,
       :documentation,
-      :publication
+      :publication,
+      {copyrightHolder: {}} # TODO add automatically no list Agents
     ]
 
     submission_metadata.each do |m|
@@ -136,6 +137,7 @@ module SubmissionUpdater
         v
       end
     end
+    p["copyrightHolder"] = p["copyrightHolder"].first  if p["copyrightHolder"] # TODO automatize
 
     submission_metadata.each do |m|
       m_attr = m['attribute'].to_sym
