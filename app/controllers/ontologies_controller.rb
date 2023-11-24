@@ -371,7 +371,7 @@ class OntologiesController < ApplicationController
 
     @metadata = submission_metadata
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    @licenses= ["hasLicense","morePermissions","copyrightHolder"]
+    @licenses= %w[hasLicense morePermissions copyrightHolder useGuidelines]
     @submission_latest = @ontology.explore.latest_submission(include: @licenses.join(","))
     render partial: 'ontologies/sections/licenses'
   end

@@ -20,7 +20,7 @@ module ComponentsHelper
                       Array(values).join(', ')
                     end
                   end
-        render FieldContainerComponent.new(label: attr_label(k, label, attr_metadata: attr_metadata(k), show_tooltip: false), value: content.to_s.html_safe)
+        render FieldContainerComponent.new(label: attr_label(k, label, attr_metadata: attr_metadata(k.to_s), show_tooltip: false), value: content.to_s.html_safe)
       end
     end
 
