@@ -189,7 +189,7 @@ private
       gather_details
       render :partial => 'load'
     when 'children' # Children is called only for drawing the tree
-      @children = @concept.explore.children(pagesize: 750, concept_schemes: @schemes.join(','), language: request_lang, display: 'prefLabel,obsolete,hasChildren').collection || []
+      @children = @concept.explore.children(pagesize: 750, concept_schemes: Array(@schemes).join(','), language: request_lang, display: 'prefLabel,obsolete,hasChildren').collection || []
       @children.sort! { |x, y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase } unless @children.empty?
       render :partial => 'child_nodes'
     end
