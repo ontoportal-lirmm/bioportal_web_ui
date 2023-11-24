@@ -23,6 +23,10 @@ export default class extends Controller {
         }
 
         if (this.multipleValue) {
+            myOptions['onItemAdd'] = function(){
+                this.setTextboxValue('');
+                this.refreshOptions();
+            }
             myOptions['plugins'] = ['remove_button'];
         }
 
