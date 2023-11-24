@@ -43,9 +43,9 @@ class LandscapeController < ApplicationController
 
     ontologyFormatsCount = {"OWL" => 0, "SKOS" => 0, "UMLS" => 0, "OBO" => 0}
 
-    @metrics_average = [{attr: "numberOfClasses", label: "Number of classes", array: []},
-                        {attr: "numberOfIndividuals", label: "Number of individuals", array: []},
-                        {attr: "numberOfProperties", label: "Number of properties", array: []},
+    @metrics_average = [{attr: "classes", label: "Number of classes", array: []},
+                        {attr: "individuals", label: "Number of individuals", array: []},
+                        {attr: "properties", label: "Number of properties", array: []},
                         {attr: "maxDepth", label: "Max depth", array: []},
                         {attr: "maxChildCount", label: "Max child count", array: []},
                         {attr: "averageChildCount", label: "Average child count", array: []},
@@ -73,11 +73,12 @@ class LandscapeController < ApplicationController
 
     # We need prefixes to display them, we remove them to call them in the include
     relations_attributes = @relations_array.map {|r| r.to_s.split(":")[1]}
+
     metrics_attributes = @metrics_average.map {|m| m[:attr]}
 
     # Concat all attributes array and generate a string separated with comma for include param
     all_attributes = sub_attributes.concat(contributors_attr_list).concat(org_attr_list)
-                         .concat(relations_attributes).concat(metrics_attributes).concat(pref_properties_attributes).join(",")
+                         .concat(relations_attributes).concat([:metrics]).concat(pref_properties_attributes).join(",")
 
 
     # Special treatment for includedInDataCatalog: arrays with a lot of different values, so it trigger the SPARQL default
@@ -100,7 +101,7 @@ class LandscapeController < ApplicationController
     end
 
     # Get all latest submissions with the needed attributes (this request can be slow)
-    @submissions = LinkedData::Client::Models::OntologySubmission.all(include_status: "any", include_views: true, display_links: false, display_context: false, include: all_attributes)
+    @submissions = LinkedData::Client::Models::OntologySubmission.all(include_status: "any", include_views: true, display_links: false, display_context: false, include: 'all')
 
     # Iterate ontologies to get the submissions with all metadata
     @submissions.each do |sub|
@@ -610,11 +611,14 @@ class LandscapeController < ApplicationController
   # Add metrics metadata from the param sub to the @metrics_average var to get the average for each metrics
   def get_metrics_for_average(sub)
     # Adding metrics to their arrays
-
-    @metrics_average.each do |metrics|
-      if !sub.send(metrics[:attr]).nil?
-        metrics[:array].push(sub.send(metrics[:attr]))
+    metrics = sub.send(:metrics)
+    @metrics_average.each do |m|
+      if metrics.nil? || metrics.send(m[:attr]).nil?
+        m[:array].push(0)
+      else
+        m[:array].push(metrics.send(m[:attr]))
       end
+
     end
   end
 
