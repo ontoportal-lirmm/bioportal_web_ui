@@ -1,10 +1,11 @@
 class Notifier < ApplicationMailer
 
-  def error(error, current_user = nil, request_ip = nil)
+  def error(error, current_user = nil, request_ip = nil, current_url = nil)
     @error_message = error.message
     @backtrace = error.backtrace
     @current_user = current_user
     @request_ip = request_ip
+    @current_url = current_url
   
     mail(to: "#{$SUPPORT_EMAIL}", from: "#{$SUPPORT_EMAIL}",
         subject: "[#{$SITE}] Exception Mailer: #{@error_message}")
