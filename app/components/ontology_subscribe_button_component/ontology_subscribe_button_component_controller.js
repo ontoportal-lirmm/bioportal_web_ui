@@ -40,6 +40,7 @@ export default class extends Controller {
                 let count = parseInt(this.countTarget.innerHTML)
 
                 let newButtonText = txt.match("UnWatch") ? txt.replace("UnWatch", "Watch") : txt.replace("Watch", "UnWatch");
+                this.element.setAttribute('title', newButtonText + ' this ontology')
                 this.textTarget.innerHTML  = newButtonText
                 this.countTarget.innerHTML  = newButtonText.match("UnWatch") ? (count + 1) :  (count - 1)
             },
