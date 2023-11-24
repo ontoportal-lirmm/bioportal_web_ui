@@ -52,6 +52,22 @@ module AgentHelper
     end
   end
 
+
+  def link_to_search_agent(parent_id , agent_type, deletable)
+    link_to("/agents/show_search?parent_id=#{parent_id}&agent_type=#{agent_type}&deletable=#{deletable}", class: 'btn btn-sm btn-light') do
+      inline_svg_tag "x.svg", width: "25", height: "25"
+    end
+  end
+
+  def agent_search_input(id, agent_type, deletable: false)
+    render TurboFrameComponent.new(id: agent_id_frame_id(id, '')) do
+      render AgentSearchInputComponent.new(id: id, agent_type: agent_type,
+                                           parent_id: '', deletable: deletable,
+                                           edit_on_modal: false)
+    end
+  end
+
+
   def affiliation?(agent)
     agent.agentType.eql?('organization')
   end

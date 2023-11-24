@@ -13,6 +13,7 @@ class AgentsController < ApplicationController
     @agent_id = params[:id] || agent_id(@agent)
     @name_prefix = params[:name_prefix] ? "#{params[:name_prefix]}[#{params[:id]}]" : ''
     @edit_on_modal = params[:edit_on_modal]&.eql?('true')
+    @deletable = params[:deletable]&.eql?('true')
   end
 
   def ajax_agents
@@ -68,6 +69,14 @@ class AgentsController < ApplicationController
     @show_affiliations = params[:show_affiliations].nil? || params[:show_affiliations].eql?('true')
   end
 
+  def show_search
+    id = params[:parent_id]
+    agent_type = params[:agent_type]
+    agent_deletable = params[:deletable].to_s.eql?('true')
+
+    attribute_template_output = render_to_string(inline: helpers.agent_search_input(id, agent_type, deletable: agent_deletable))
+    render_turbo_stream(replace(id) { attribute_template_output } )
+  end
   def update
     agent_update, agent = update_agent(params[:id].split('/').last, agent_params)
     parent_id = params[:parent_id]
