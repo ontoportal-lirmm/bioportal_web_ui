@@ -200,7 +200,7 @@ module SubmissionInputsHelper
   end
 
   # @param attr_key string
-  def attr_label(attr_key, label = nil, attr_metadata: , show_tooltip: true)
+  def attr_label(attr_key, label = nil, attr_metadata: attr_metadata(attr_key), show_tooltip: true)
 
     data = SubmissionMetadataInput.new(attribute_key: attr_key.to_s, attr_metadata: attr_metadata)
     if show_tooltip

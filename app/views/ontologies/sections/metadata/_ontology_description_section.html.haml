@@ -78,11 +78,11 @@
               = raw get_link_for_cls_ajax(v, @ontology.acronym, '_blank')
             - else
               = render ChipButtonComponent.new(text: v, type: "static")
-
-    - unless Array(@ontology.hasDomain).empty?
+    - domains = Array(@ontology.hasDomain) + Array(@submission_latest.hasDomain)
+    - unless domains.empty?
       - l.row do
         = render FieldContainerComponent.new(label: 'Categories and subjects') do
-          = horizontal_list_container(@ontology.hasDomain) do |v|
+          = horizontal_list_container(domains.uniq) do |v|
             = render ChipButtonComponent.new(text: show_category_name(v), type: "static")
     - unless Array(@ontology.group).empty?
       - l.row do
