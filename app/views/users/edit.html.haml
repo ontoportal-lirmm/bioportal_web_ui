@@ -125,7 +125,7 @@
           %font{:color => "red"} *
         = password_field :user, :password_confirmation, class: "register-input-long"
       %br
-      %input.register-button{:type => "submit", :value => "Save", :name => "Update"}/
+      = render Buttons::RegularButtonComponent.new(id: 'update-button', value: "Save", type:'submit')
       - unless params[:password].eql?("true")
         .change-password
           %a{:href => edit_user_path(@user.username, password: true)}
