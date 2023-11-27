@@ -1,0 +1,63 @@
+ontology1:
+  acronym: "ONT1"
+  name: "Ontology One"
+  notes: "This is the first ontology."
+  administeredBy:
+  group:
+  viewingRestriction: "public"
+  hasDomain:
+  summaryOnly: false
+  acl:
+
+ontology2:
+  acronym: "ONT2"
+  name: "Ontology Two"
+  notes: "This is the second ontology."
+  administeredBy:
+  group:
+  viewingRestriction: "public"
+  hasDomain:
+  acl:
+
+ontology3:
+  acronym: "ONT3"
+  name: "Ontology Three"
+  notes: "This is the third ontology."
+  administeredBy:
+  group:
+  viewingRestriction: "public"
+  doNotUpdate: false
+  hasDomain:
+  acl:
+
+ontology4:
+  acronym: "ONT4"
+  name: "Ontology Four"
+  notes: "This is the fourth ontology."
+  administeredBy:
+  group:
+  viewingRestriction: "public"
+  hasDomain:
+  summaryOnly: true
+  acl:
+
+ontology_private:
+  acronym: "ontology_private"
+  name: "Ontology private"
+  notes: "This is the fourth ontology."
+  administeredBy:
+  group:
+  viewingRestriction: "private"
+  hasDomain:
+  acl:
+
+ontology_view:
+  acronym: "ontology_view"
+  name: "View of ONT1"
+  notes: "This is a view ontology."
+  administeredBy:
+  group:
+  viewingRestriction: "public"
+  hasDomain:
+  acl:
+  viewOf: "ONT1"

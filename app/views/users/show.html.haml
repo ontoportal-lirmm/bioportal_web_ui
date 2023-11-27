@@ -90,9 +90,11 @@
               = render partial: "shared/ontology_picker", locals: locals
               = submit_tag "Save Custom Semantic Resources", class: "link_button"
       .account-page-second-row
-        - unless @user.subscription.nil? || @user.subscription.empty?
-          .account-page-card
-            %h4.account-page-card-title Subscriptions
+        .account-page-card
+          %h4.account-page-card-title Subscriptions
+          - if @user.subscription.nil? || @user.subscription.empty?
+            Not subscribed to any semantic resource
+          - else
             - @user.subscription.each do |subscription|
               - ont_id = subscription[:ontology]
               - ont = (!subscription[:ontology].nil? ? subscription[:ontology].split('/').last: nil) # ensure we get the acronym
@@ -105,12 +107,15 @@
                   - else
                     = type
                   = subscribe_button(ont_id)
-        - no_ontologies = true
-        - unless @admin_ontologies.nil? || @admin_ontologies.empty?
-          - no_ontologies = false
-          .account-page-card
-            %h4.account-page-card-title Submitted Semantic Resources
-            .account-page-small-cards-container
+        .account-page-card
+          %h4.account-page-card-title Submitted Semantic Resources
+          .account-page-small-cards-container
+            - if @admin_ontologies.nil? || @admin_ontologies.empty?
+              .account-page-no-ontology.w-100
+                %img{:src => "#{asset_path("empty-box.svg")}"}/
+                %p You didn't upload any semantic resource yet
+                %a.account-page-upload-ontology-button{href: "/ontologies/new"} Upload semantic resource
+            - else
               - @admin_ontologies.each do |ont|
                 .account-page-submitted-ontology{data: {controller: 'tooltip'}, title: ont.name}
                   %a{href: "/ontologies/#{ont.acronym}"}= ont.acronym
@@ -118,20 +123,17 @@
                   - ont.views.each do |view|
                     .account-page-submitted-ontology{data: {controller: 'tooltip'}, title: ont.name}
                       %a{href: "/ontologies/#{view.match(/\/([^\/]+)$/)[1]}"}= view.match(/\/([^\/]+)$/)[1]
-        - unless @user_projects.nil? || @user_projects.empty?
-          - no_ontologies = false
-          .account-page-card
-            %h4.account-page-card-title Projects Created
-            .account-page-small-cards-container
+
+        .account-page-card
+          %h4.account-page-card-title Projects Created
+          .account-page-small-cards-container
+            - if @user_projects.nil? || @user_projects.empty?
+              No project created
+            - else
               - @user_projects.each do |project|
                 .account-page-submitted-ontology
                   %a{href: "/projects/#{project.acronym}"}= project.name
-        - if no_ontologies
-          .account-page-card
-            .account-page-no-ontology
-              %img{:src => "#{asset_path("empty-box.svg")}"}/
-              %p You didn't upload any semantic resource yet
-              %a.account-page-upload-ontology-button{href: "/ontologies/new"} Upload semantic resource
+
 :javascript
   jQuery(document).ready(function(){
     jQuery("#edit_custom_ontologies").click(editCustomOntologies);

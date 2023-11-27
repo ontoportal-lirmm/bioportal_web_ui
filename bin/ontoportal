@@ -61,7 +61,7 @@ create_config_files() {
 dev() {
   echo "Starting Ontoportal Web UI development server..."
   
-  create_config_files
+
   local reset_cache=false
   local api_url=""
   local api_key=""
@@ -119,15 +119,45 @@ dev() {
 
 # Function to handle the "test" option
 test() {
-  echo "Running API..."
-  bin/run_api
+
+
+  local api_url=""
+  local api_key=""
+  local test_options=""
+
+  # Check for command line arguments
+  while [ "$#" -gt 0 ]; do
+     case "$1" in
+       --api-url)
+         shift
+         api_url="$1"
+         ;;
+       *)
+
+         if [ -z "$test_options" ]; then
+           test_options="$1"
+         else
+
+           test_options="$test_options $1"
+         fi
+         ;;
+     esac
+     shift
+  done
+
+  if [ -z "$api_url" ]; then
+      api_url=http://localhost:9393
+      echo "Running API..."
+      bin/run_api
+  fi
 
   echo "Running tests..."
-  echo "Run: API_URL=http://localhost:9393 bundle exec rails test -v $*"
-  docker compose run --rm -it test bash -c "(bundle check || bundle install) && RAILS_ENV=test bin/rails db:prepare && API_URL=http://localhost:9393 bundle exec rails test -v $*"
+  echo "Run: API_URL=$api_url bundle exec rails test -v $test_options"
 
-  echo "Stopping API..."
-  bin/stop_api
+  docker compose run --rm -it test bash -c "(bundle check || bundle install) && RAILS_ENV=test bin/rails db:prepare && API_URL=$api_url bundle exec rails test -v $test_options"
+
+  # echo "Stopping API..."
+  # bin/stop_api
 }
 
 # Function to handle the "run" option
@@ -136,6 +166,7 @@ run() {
   docker compose run --rm -it rails bash -c "$*"
 }
 
+create_config_files
 # Main script logic
 case "$1" in
   "run")

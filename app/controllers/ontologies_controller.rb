@@ -244,11 +244,9 @@ class OntologiesController < ApplicationController
 
     # Handle the case where an ontology is converted to summary only.
     # See: https://github.com/ncbo/bioportal_web_ui/issues/133.
-    if @ontology.summaryOnly && params[:p].present?
-      pages = KNOWN_PAGES - ['summary', 'notes']
-      if pages.include?(params[:p])
+    data_pages = KNOWN_PAGES - %w[summary notes]
+    if @ontology.summaryOnly && params[:p].present? && data_pages.include?(params[:p].to_s)
         redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
-      end
     end
 
     #@ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
@@ -256,6 +254,9 @@ class OntologiesController < ApplicationController
     # Get the latest submission (not necessarily the latest 'ready' submission)
     @submission_latest = @ontology.explore.latest_submission(include: 'all') rescue @ontology.explore.latest_submission(include: '')
 
+    if !helpers.submission_ready?(@submission_latest) && params[:p].present? && data_pages.include?(params[:p].to_s)
+      redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
+    end
     # Is the ontology downloadable?
     @ont_restricted = ontology_restricted?(@ontology.acronym)
 

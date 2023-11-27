@@ -8,6 +8,6 @@ if [ -d "tmp/ontoportal_docker" ]; then
       docker stop "$container_names"
   fi
 
-   cd  "tmp/ontoportal_docker" && docker compose stop
+   cd  "tmp/ontoportal_docker" && docker compose down
 fi
 

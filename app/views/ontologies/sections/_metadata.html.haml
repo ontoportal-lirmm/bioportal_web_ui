@@ -1,4 +1,5 @@
 = turbo_frame_tag 'summary', target:"_top" do
+  = not_ready_submission_alert(submission: @submission_latest)
   .summary-page-center
     .summary-page-first-row
       = render partial: 'ontologies/sections/metadata/ontology_description_section'

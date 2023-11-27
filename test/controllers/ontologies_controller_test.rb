@@ -15,6 +15,9 @@ class OntologiesControllerTest < ActionDispatch::IntegrationTest
     test "should get page #{page} of #{ont.acronym} ontology" do
       path = "#{ontologies_path}/#{ont.acronym}?p=#{page}"
       get path
+      if response.redirect?
+        follow_redirect!
+      end
       assert_response :success, "GET #{path} returned #{response.status}"
     end
   end

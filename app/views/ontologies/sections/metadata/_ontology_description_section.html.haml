@@ -44,7 +44,11 @@
         = render FieldContainerComponent.new(label: 'Categories and subjects') do
           = horizontal_list_container(@ontology.hasDomain) do |v|
             = render ChipButtonComponent.new(text: show_category_name(v), type: "static")
-
+    - unless Array(@ontology.group).empty?
+      - l.row do
+        = render FieldContainerComponent.new(label: 'Groups') do
+          = horizontal_list_container(@ontology.group) do |v|
+            = render ChipButtonComponent.new(text: show_group_name(v), type: "static")
   %hr.w-100.my-3
   .icons_container
     = ontology_icon_links(@ontology_icon_links, @submission_latest)

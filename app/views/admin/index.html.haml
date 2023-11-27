@@ -90,7 +90,8 @@
           %table#adminCategories.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
       - t.item_content do
         %div.ontologies_list_container.mt-3
-          = render TurboFrameComponent.new(id: 'agents-list', src: '/agents', loading: 'lazy')
+          %div.mx-auto.w-75
+            = render TurboFrameComponent.new(id: 'agents-list', src: '/agents', loading: 'lazy')
 
       -# Groups tab
       %div.tab-pane.fade{id: "groups", role: "tabpanel", aria: { labelledby: "groups-admin-tab" }}

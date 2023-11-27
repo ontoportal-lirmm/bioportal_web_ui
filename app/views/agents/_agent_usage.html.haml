@@ -1,0 +1,12 @@
+= render_in_modal do
+  = agent_alert_container(@agent, params[:parent_id])
+  - usages = agent_usages(@agent)
+  - attributes_metadata = agents_metadata
+  = form_with url:  "/agents/#{@agent.id.split('/').last}/usages", method: 'post', data:{turbo: true} do
+    %div.form.w-100
+      - attributes_metadata.each do |attr_metadata|
+        - attr = attr_metadata.metadata['attribute']
+        - selected = usages.select{|x, v| v.any?{|uri| uri[attr]}}.keys.map{|x| x.to_s.split('/')[-3]}
+        = select_input(id: attr, name: attr, label: attr_header_label(attr_metadata), values: @ontology_acronyms, selected: selected, multiple: true)
+    %div.mt-2.d-flex.justify-content-end
+      = submit_tag 'Save', class: "btn btn-primary mr-sm-2 group-form-accept"
