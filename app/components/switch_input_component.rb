@@ -15,7 +15,7 @@ class SwitchInputComponent < ViewComponent::Base
   end
 
   def boolean_switch_action
-    "this.previousElementSibling.value = this.previousElementSibling.value !== 'true'" if @boolean_switch
+    "this.parentElement.previousElementSibling.value = this.parentElement.previousElementSibling.value !== 'true'" if @boolean_switch
   end
 
   def check_box_name
