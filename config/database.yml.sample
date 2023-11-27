@@ -13,8 +13,8 @@ default: &default
   adapter: mysql2
   encoding: utf8mb4
   username: root
-  password: bp_user
-  host: 127.0.0.1
+  password: root
+  host: <%= ENV["DB_HOST"] %>
 
 development:
   <<: *default

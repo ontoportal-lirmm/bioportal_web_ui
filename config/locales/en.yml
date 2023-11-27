@@ -104,7 +104,7 @@ en:
     get_recommendations: Get recommendations
     index:
       tagline: The home of vocabularies and ontologies in agronomy and related fields.
-      title: Welcome to the %{organization}
+      title: Welcome to %{site}
       welcome: Welcome to %{site},
     ontology_upload: Do you want to share an ontology?
     ontology_upload_benefits: 'By uploading your ontology to %{site}, you can:'
@@ -114,7 +114,7 @@ en:
     paste_text_prompt: Enter a paragraph of text or some keywords ...
     recommender_annotator: Recommender and annotator
     supported_by: Supported by
-    twitter_news: Twitter news
+    twitter_news: News
     with_collaboration: With the collaboration of
   input: Input
   insert_sample_text: Insert sample text

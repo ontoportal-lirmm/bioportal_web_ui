@@ -28,6 +28,12 @@ module FairScoreHelper
     get_fairness_json(ontologies_acronyms, apikey)['combinedScores']
   end
 
+  def fairness_link
+    link_to(get_fairness_service_url, id: "fairness-service-url", target: "_blank", "aria-label": t("get_json_version"), title: t("get_json_version")) do
+      tag.img(src: asset_path('json.svg'), "aria-hidden" => "true", style: "margin-left: 0.5rem; width: 18px; margin-bottom: 4px;")
+    end
+  end
+  
 
   def create_fair_scores_data(fair_scores, count = nil)
     return nil if fair_scores.nil?

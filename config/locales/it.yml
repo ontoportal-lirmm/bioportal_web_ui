@@ -110,7 +110,7 @@ it:
     get_recommendations: Raccomandazioni
     index:
       tagline: La casa dei vocabolari e delle ontologie in agronomia e nei campi correlati.
-      title: Benvenuti alla %{organization}
+      title: Benvenuti alla %{site}
       welcome: Benvenuti al %{site},
     ontology_upload: Volete caricare un'ontologia?
     ontology_upload_benefits: 'Caricando la propria ontologia su %{site}, è possibile:'
@@ -120,7 +120,7 @@ it:
     paste_text_prompt: Incollare un paragrafo di testo o alcune parole chiave ...
     recommender_annotator: Raccomandatore e annotatore
     supported_by: Supportato da
-    twitter_news: Notizie su Twitter
+    twitter_news: Notizie
     with_collaboration: Con la collaborazione di
   input: Ingresso
   insert_sample_text: Inserire un testo di esempio

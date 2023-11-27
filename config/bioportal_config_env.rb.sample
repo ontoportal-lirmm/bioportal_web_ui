@@ -1,33 +1,17 @@
 # coding: utf-8
 
-#local IP address lookup.  This doesn't make connection to external hosts
-require 'socket'
-def local_ip   
-  orig, Socket.do_not_reverse_lookup = Socket.do_not_reverse_lookup, true  # turn off reverse DNS resolution temporarily
-
-  UDPSocket.open do |s|
-    s.connect '8.8.8.8', 1 #google
-    s.addr.last
-  end
-ensure
-  Socket.do_not_reverse_lookup = orig
-end
-
-$LOCAL_IP = local_ip
-
 # Organization info
-$ORG = "NCBO"
-$ORG_URL = "http://www.bioontology.org"
+$ORG = ENV['ORG']
+$ORG_URL = ENV['ORG_URL']
 
 # Site name (required)
-$SITE = "BioPortal"
-$SITE_URL = "localhost"
+$SITE = ENV['SITE']
 
 # Full string for site, EX: "NCBO BioPortal", do not modify
 $ORG_SITE = ($ORG.nil? || $ORG.empty?) ? $SITE : "#{$ORG} #{$SITE}"
 
 # The URL for the BioPortal Rails UI (this application)
-$UI_URL = "http://localhost:3000"
+$UI_URL = ENV['UI_URL']
 
 
 # If you are running a PURL server to provide URLs for ontologies in your BioPortal instance, enable this option
@@ -41,14 +25,24 @@ $PURL_PREFIX = "http://purl.bioontology.org/ontology"
 $ANNOTATOR_DISABLED = false
 
 # Unique string representing the UI's id for use with the BioPortal Core
-$API_KEY = ""
+$API_KEY = ENV['API_KEY']
 
 # BioPortal API service address
-$REST_URL = "http://example.org:8080/"
+$REST_URL = ENV['API_URL']
 
 # Annotator REST service address
 #$ANNOTATOR_URL = "http://services.stageportal.lirmm.fr/annotator"
-$ANNOTATOR_URL = "#{$REST_URL}/annotator"
+$ANNOTATOR_URL = ENV['ANNOTATOR_URL']
+
+# NCBO annotator URL and apikey
+$NCBO_ANNOTATORPLUS_ENABLED = ENV['NCBO_ANNOTATORPLUS_ENABLED']
+$NCBO_ANNOTATOR_URL = ENV['NCBO_ANNOTATOR_URL']
+$NCBO_API_KEY = ENV['NCBO_API_KEY']
+
+# Fairness Assessment.
+$FAIRNESS_DISABLED = ENV['FAIRNESS_DISABLED']
+$FAIRNESS_URL  = ENV['FAIRNESS_URL']
+
 
 # Announcements sympa mailing list REQUEST address, EX: list-request@lists.example.org
 $ANNOUNCE_LIST_SERVICE ||= "SERVICE_EXAMPLE"
@@ -97,7 +91,7 @@ $MULTIPLE_RECOGNIZERS = false
 
 # Remove download for these ontologies. Default:
 # ["CPT","ICD10","ICNP","ICPC2P","MDDB","MEDDRA","MSHFRE","MSHSPA_1","NDDF","NDFRT","NIC","RCD","SCTSPA","SNOMEDCT","WHO-ART"]
-$RESTRICTED_DOWNLOADS = ["MDRFRE", "WHO-ARTFRE", "MSHFRE", "CIM-10"]
+$RESTRICTED_DOWNLOADS = []
 
 # Ontolobridge endpoint url
 $ONTOLOBRIDGE_BASE_URL = "https://ontolobridge.ccs.miami.edu/api-test/requests"
@@ -111,38 +105,21 @@ $NEW_TERM_REQUEST_ONTOLOGIES = []
 # Legacy REST core service address (BioPortal v3.x and lower)
 $LEGACY_REST_URL = "http://example.org:8080/bioportal"
 
-# Max number of children to return when rendering a tree view
-$MAX_CHILDREN = 2500
-
-# Max number of children that it's possible to display (more than this is either too slow or not helpful to users)
-$MAX_POSSIBLE_DISPLAY = 10000
 
 # Release version text (appears in footer of all pages, except 404 and 500 errors)
-$RELEASE_VERSION = "4.24 (February 2016)"
+$RELEASE_VERSION = ENV['RELEASE_VERSION']
 
 # Enable Slices, filtering of ontologies based on subdomain and ontology groups
 $ENABLE_SLICES = false
 
 # Google Analytics ID (optional)
-$ANALYTICS_ID = ""
+$ANALYTICS_ID = ENV['ANALYTICS_ID']
 
-# A user id for user 'anonymous' for use when a user is required for an action on the REST service but you don't want to require a user to login
-$ANONYMOUS_USER = 0
 
-# Redis server to use for NCBO::Resolver
-$REDIS_HOST = ""
-$REDIS_PORT = 6379
-
-# Cube metrics reporting
-$ENABLE_CUBE = false
-$CUBE_HOST = "localhost"
-$CUBE_PORT = 1180
 
 # Enable client request caching
-$CLIENT_REQUEST_CACHING = false
+$CLIENT_REQUEST_CACHING = true
 
-# If you don't use Airbrake you can have exceptions emailed to the $ERROR_EMAIL address by setting this to 'true'
-$EMAIL_EXCEPTIONS = false
 
 # Email settings
 ActionMailer::Base.smtp_settings = {
@@ -153,13 +130,13 @@ ActionMailer::Base.smtp_settings = {
 
 # Announcements mailman mailing list REQUEST address, EX: list-request@lists.example.org
 # NOTE: You must use the REQUEST address for the mailing list. ONLY WORKS WITH MAILMAN LISTS.
-$ANNOUNCE_LIST = "sifrportal-users@lirmm.fr"
+$ANNOUNCE_LIST = ENV['SUPPORT_EMAIL']
 
 # Email addresses used for sending notifications (errors, feedback, support)
-$SUPPORT_EMAIL = "sifrportal-support@lirmm.fr"
+$SUPPORT_EMAIL = ENV['SUPPORT_EMAIL']
 
 # Email used to send notifications
-$NOTIFICATION_EMAIL = "notifications@bioportal.lirmm.fr"
+$NOTIFICATION_EMAIL = ENV['SUPPORT_EMAIL']
 
 # reCAPTCHA
 # In order to use reCAPTCHA on the account creation and feedback submission pages:
@@ -175,29 +152,11 @@ ENV['USE_RECAPTCHA'] = 'false'
 
 # Custom BioPortal logging
 require 'log'
-$REMOTE_LOGGING = false
-
-##
-# Flex Options
-##
-
-# URL to pull Flex apps from
-$FLEX_URL = "/flex"
-
-# Flex App API keys
-$ANNOTATOR_FLEX_APIKEY = ""
-$SEARCH_FLEX_APIKEY = ""
-$RECOMMENDER_FLEX_APIKEY = ""
-$FLEXOVIZ_APIKEY = ""
 
 # URL where BioMixer GWT app is located
 #$BIOMIXER_URL = "http://bioportal-integration.bio-mixer.appspot.com"
-$BIOMIXER_URL = "http://#{$SITE_URL}/BioMixer"
-
-# Array with all the additional ontology metadata to display in the ontology details
-$ADDITIONAL_ONTOLOGY_METADATA = ["naturalLanguage", "hasLicense", "notes", "modificationDate", "URI", "hasContributor", "hasCreator", "endorsedBy", "hasDomain",
-                                 "keyClasses", "keywords", "isOfType", "knowUsage", "designedForOntologyTask", "hasFormalityLevel", "usedImports", "usedKnowledgeRepresentationParadigm",
-                                 "usedOntologyEngineeringMethodology", "usedOntologyEngineeringTool"]
+$BIOMIXER_URL = ENV['BIOMIXER_URL']
+$BIOMIXER_APIKEY = ENV['BIOMIXER_APIKEY']
 
 ##
 # Custom Ontology Details
@@ -215,35 +174,78 @@ $FRONT_NOTICE = ''
 # EX: $SITE_NOTICE = { :unique_key => 'Put your message here (can include <a href="/link">html</a> if you use single quotes).' }
 $SITE_NOTICE = { }
 
-# Used in browse for facetted search to avoid having to call the API (for performance)
-$FORMALITY_LEVELS = {
-    "http://w3id.org/nkos/nkostype#classification_schema" => "Classification scheme",
-    "http://w3id.org/nkos/nkostype#dictionary" => "Dictionary",
-    "http://w3id.org/nkos/nkostype#gazetteer" => "Gazetteer",
-    "http://w3id.org/nkos/nkostype#glossary" => "Glossary",
-    "http://w3id.org/nkos/nkostype#list" => "List",
-    "http://w3id.org/nkos/nkostype#name_authority_list" => "Name authority list",
-    "http://w3id.org/nkos/nkostype#ontology" => "Ontology",
-    "http://w3id.org/nkos/nkostype#semantic_network" => "Semantic network",
-    "http://w3id.org/nkos/nkostype#subject_heading_scheme" => "Subject heading scheme",
-    "http://w3id.org/nkos/nkostype#synonym_ring" => "Synonym ring",
-    "http://w3id.org/nkos/nkostype#taxonomy" => "Taxonomy",
-    "http://w3id.org/nkos/nkostype#terminology" => "Terminology",
-    "http://w3id.org/nkos/nkostype#thesaurus" => "Thesaurus"
+$HOME_PAGE_LOGOS = {
+  supported_by: [
+    {
+      img_src: 'logos/supports/numev.png',
+      url: 'http://www.lirmm.fr/numev',
+      target: '_blank'
+    },
+    {
+      img_src: 'logos/supports/anr.png',
+      url: 'https://anr.fr/en',
+      target: '_blank'
+    },
+    {
+      img_src: 'logos/supports/eu.png',
+      url: 'https://commission.europa.eu/research-and-innovation_en',
+      target: '_blank'
+    }
+  ],
+  with_the_collaboration_of: [
+    {
+      img_src: 'logos/collaboration/d2kab.png',
+      url: 'http://d2kab.mystrikingly.com',
+      target: '_blank'
+    },
+    {
+      img_src: 'logos/collaboration/lirmm.png',
+      url: 'http://www.lirmm.fr',
+      target: '_blank'
+    },
+    {
+      img_src: 'logos/collaboration/inrae.png',
+      url: 'https://www.inrae.fr/enm',
+      target: '_blank'
+    },
+    {
+      img_src: 'logos/collaboration/stanford.png',
+      url: 'https://www.stanford.edu',
+      target: '_blank'
+    }
+  ]
 }
-$IS_OF_TYPE = {
-    "http://omv.ontoware.org/2005/05/ontology#ApplicationOntology" => "Application Ontology",
-    "http://omv.ontoware.org/2005/05/ontology#CoreOntology" => "Core Ontology",
-    "http://omv.ontoware.org/2005/05/ontology#DomainOntology" => "Domain Ontology",
-    "http://omv.ontoware.org/2005/05/ontology#TaskOntology" => "Task Ontology",
-    "http://omv.ontoware.org/2005/05/ontology#UpperLevelOntology" => "Upper Level Ontology",
-    "http://omv.ontoware.org/2005/05/ontology#Vocabulary" => "Vocabulary"
+
+$FOOTER_LINKS = {
+  social: [
+    { logo: 'social/people.svg', link: 'https://github.com/orgs/agroportal/people' },
+    { logo: 'social/github.svg', link: 'https://github.com/agroportal' },
+    { logo: 'social/twitter.svg', link: 'https://twitter.com/lagroportal' }
+  ],
+  sections: {
+    products: {
+      ontoportal: 'https://ontoportal.org/',
+      release_notes: 'https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/release-notes-btKjZk5tU2',
+      api: 'https://data.agroportal.lirmm.fr/',
+      sparql: 'https://sparql.agroportal.lirmm.fr/test/'
+    },
+    support: {
+      contact_us: 'https://agroportal.lirmm.fr/feedback',
+      wiki: 'https://www.bioontology.org/wiki/',
+      documentation: 'https://ontoportal.github.io/documentation/'
+    },
+    agreements: {
+      terms: '',
+      privacy_policy: '',
+      cite_us: '',
+      acknowledgments: ''
+    },
+    about: {
+      about_us: 'https://github.com/agroportal/project-management',
+      projects: 'https://d2kab.mystrikingly.com/',
+      team: 'https://github.com/orgs/agroportal/people'
+    }
+  }
 }
-$NATURAL_LANGUAGES = {
-    "http://lexvo.org/id/iso639-3/eng" => "English",
-    "http://lexvo.org/id/iso639-3/fra" => "French",
-    "http://lexvo.org/id/iso639-3/spa" => "Spanish",
-    "http://lexvo.org/id/iso639-3/por" => "Portuguese",
-    "http://lexvo.org/id/iso639-3/ita" => "Italian",
-    "http://lexvo.org/id/iso639-3/deu" => "German"
-}
+
+$UI_THEME = ENV['UI_THEME'] || 'ontoportal'

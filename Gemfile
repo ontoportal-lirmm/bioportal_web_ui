@@ -57,7 +57,7 @@ gem 'i18n'
 gem 'rails-i18n', '~> 7.0.0'
 gem 'iconv'
 gem 'multi_json'
-gem 'mysql2', '0.5.3'
+gem 'mysql2'
 gem 'oj'
 gem 'open_uri_redirections'
 gem 'pry'
@@ -117,6 +117,7 @@ group :development do
   gem 'web-console'
   gem 'i18n-tasks'
   gem 'deepl-rb'
+  gem 'letter_opener_web', '~> 2.0'
 end
 
 group :test, :development do
@@ -127,7 +128,8 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem 'capybara'
   gem 'selenium-webdriver'
-  gem 'webdrivers'
+  gem 'simplecov', require: false
+  #gem 'webdrivers'
 end
 
 

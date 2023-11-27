@@ -1,0 +1,14 @@
+= render TurboFrameComponent.new(id: 'property', data: {"turbo-frame-target": "frame"}) do
+  - if !@property
+    = render LoaderComponent.new
+  - else
+    = render ConceptDetailsComponent.new(id:'property-details', acronym: @acronym,
+                    properties: OpenStruct.new(LinkedData::Client::Models::Property.properties_to_hash(@property).first),
+                    top_keys: [],
+                    bottom_keys: [],
+                    exclude_keys: []) do |c|
+      - c.header(stripped: true) do |t|
+        - t.add_row({th: 'ID'}, {td: c.concept_properties[:id][:values]}) if c.concept_properties[:id][:values].present?
+        - t.add_row({th: 'Labels'}, {td: c.concept_properties[:prefLabel][:values]}) if  c.concept_properties[:prefLabel][:values].present?
+        - t.add_row({th: 'Definitions'}, {td: c.concept_properties[:definition][:values]}) if c.concept_properties[:definition][:values].present?
+        - t.add_row({th: 'Parent'}, {td: c.concept_properties[:parents][:values]}) if c.concept_properties[:parents][:values].present?

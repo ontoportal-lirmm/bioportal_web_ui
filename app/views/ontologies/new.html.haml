@@ -28,7 +28,7 @@
                   .upload-ontology-field-container
                     = render Layout::RevealComponent.new(init_show: @submission.hasOntologyLanguage&.eql?('SKOS'), show_condition: 'SKOS') do |c|
                       - c.button do
-                        = select_input(label: "Format", name: "submission[hasOntologyLanguage]", values: ["OBO", "OWL", "SKOS", "UMLS"], selected: @submission.hasOntologyLanguage)
+                        = attribute_input("hasOntologyLanguage")
                       .upload-ontology-desc
                         %div
                           SKOS vocabularies submitted to BioPortal must contain a minimum of one concept scheme and top concept assertion. Please

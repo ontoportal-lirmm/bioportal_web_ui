@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 $SITE = 'Testportal'
+$HOSTNAME = 'testportal'
 $UI_HOSTNAME = 'localhost'
 $UI_URL = "http://#{$UI_HOSTNAME}:3000"
 

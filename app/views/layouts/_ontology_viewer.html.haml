@@ -1,5 +1,5 @@
 - content_section = current_section
-- @title = ontology_viewer_page_name(@ontology.name, @concept&.prefLabel || '', content_section)
+- @title = ontology_viewer_page_name(@ontology.acronym, @concept&.prefLabel || '', content_section)
 
 
 = render :partial =>'layouts/header'
@@ -54,7 +54,7 @@
                      title: section_name(section_title),
                      path: ontology_path(@ontology.acronym, p: section_title),
                      selected: selected_section?(section_title),
-                     page_name: ontology_viewer_page_name(@ontology.name, @concept&.prefLabel || '', section_title))
+                     page_name: ontology_viewer_page_name(@ontology.acronym, @concept&.prefLabel || '', section_title))
             - t.pinned_right do
               = language_selector_tag(:language_selector)
             - t.item_content do

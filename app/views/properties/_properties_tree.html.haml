@@ -1,0 +1,25 @@
+%div#propTree
+
+:javascript
+    // TODO migrate this backend rendered component
+    $(document).ready(() => {
+        $('#propTree').NCBOPropertyTree({
+                ontology: '#{@ontology.acronym}',
+                ncboUIURL: '',
+                width: '100%',
+                onInit: function () {
+                     let activeElem = $('#propTree a')[0]
+                      if (activeElem) {
+                        activeElem.click()
+                      }
+                }
+            }).on('afterSelect', function (e, classId, label, node) {
+                 e.target.dispatchEvent(new CustomEvent('change', {
+                    bubbles: true,
+                    detail: {
+                        data: {id: decodeURIComponent(node.data().id)}
+                    }
+                 }))
+            })
+    })
+   

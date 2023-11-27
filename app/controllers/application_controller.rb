@@ -39,7 +39,12 @@ class ApplicationController < ActionController::Base
 
   helper :all # include all helpers, all the time
   helper_method :bp_config_json, :current_license, :using_captcha?
-  rescue_from ActiveRecord::RecordNotFound, with: :not_found_record
+
+  unless Rails.env.development?
+    rescue_from ActiveRecord::RecordNotFound, with: :not_found_record
+    rescue_from StandardError, with: :internal_server_error
+  end
+
   # Pull configuration parameters for REST connection.
   REST_URI = $REST_URL
   API_KEY = $API_KEY
@@ -76,9 +81,6 @@ class ApplicationController < ActionController::Base
 
   $trial_license_initialized = false
 
-  if !$EMAIL_EXCEPTIONS.nil? && $EMAIL_EXCEPTIONS == true
-    include ExceptionNotifiable
-  end
 
   # See ActionController::RequestForgeryProtection for details
   protect_from_forgery
@@ -128,10 +130,7 @@ class ApplicationController < ActionController::Base
     Thread.current[:slice] = @subdomain_filter
   end
 
-  def anonymous_user
-    user = DataAccess.getUser($ANONYMOUS_USER)
-    user ||= User.new({"id" => 0})
-  end
+
 
   def ontology_not_found(ontology_acronym)
     not_found("Ontology #{ontology_acronym} not found")
@@ -790,6 +789,16 @@ class ApplicationController < ActionController::Base
   private
   def not_found_record(exception)
     @error_message = exception.message
+
     render 'errors/not_found', status: 404
+  end
+
+  def internal_server_error(exception)
+    current_user = session[:user] if defined?(session)
+    request_ip = request.remote_ip if defined?(request)
+    current_url = request.original_url if defined?(request)
+  
+    Notifier.error(exception, current_user, request_ip, current_url).deliver_now
+    render 'errors/internal_server_error', status: 500
   end
 end

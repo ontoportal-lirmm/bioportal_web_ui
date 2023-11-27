@@ -316,11 +316,11 @@ i.fa.fa-caret-square-o-down {
   font-weight: 700;
 }
 .home-fair-scores{
-  height: 349px;
+  height: 360px;
   padding-top: 35px;
 }
 .home-twitter-news{
-  height: 349px;
+  height: 360px;
 }
 .home-fair-scores a{
   text-decoration: none;
@@ -404,6 +404,20 @@ i.fa.fa-caret-square-o-down {
 }
 .margin-items{
   margin-right: 10px;
+}
+
+.custom-logo-class{
+  width: 96px;
+  height: 96px;
+  object-fit: scale-down;
+}
+.fair-scores-badge-section{
+  height: 5px !important;
+}
+.fair-scores-badge-margin{
+  margin-right: 10px;
+  margin-bottom: 20px;
+  background-color: var(--primary-color) !important;
 }
 
 @keyframes scale-up {

@@ -11,10 +11,13 @@ class OntologiesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  ONTOLOGIES.sample(5).flat_map { |ont| PAGES.map { |page| [ont, page] } }.each do |ont, page|
+  ONTOLOGIES.flat_map { |ont| PAGES.map { |page| [ont, page] } }.each do |ont, page|
     test "should get page #{page} of #{ont.acronym} ontology" do
       path = "#{ontologies_path}/#{ont.acronym}?p=#{page}"
       get path
+      if response.redirect?
+        follow_redirect!
+      end
       assert_response :success, "GET #{path} returned #{response.status}"
     end
   end

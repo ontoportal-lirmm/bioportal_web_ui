@@ -15,7 +15,7 @@
       .footer-social-media-links
         - $FOOTER_LINKS[:social].each do |link|
           %a{:href => link[:link], :target => "_blank"}
-            %img{:src => "#{asset_path(link[:logo])}"}/
+            = inline_svg(link[:logo], width: "32px", height: "32px")
     .footer-nav-links
       - $FOOTER_LINKS[:sections].each do |key, section_links|
         %div

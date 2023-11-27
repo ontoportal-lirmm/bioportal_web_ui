@@ -27,6 +27,9 @@ footer{
 }
 .footer-social-media-links a{
     margin-left: 20px;
+    svg path {
+        fill: white;
+    }
 }
 .footer-nav-links{
     display: flex;

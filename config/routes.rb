@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
   root to: 'home#index'
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   get 'auth/:provider/callback', to: 'login#create_omniauth'
   get 'locale/:language', to: 'language#set_locale_language'
@@ -125,6 +126,8 @@ Rails.application.routes.draw do
   get '/ontologies/:acronym/: f', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
   match '/ontologies/:acronym/submissions/:id/edit_metadata' => 'submissions#edit_metadata', via: [:get, :post]
   get '/ontologies_filter', to:  'ontologies#ontologies_filter'
+
+  get '/ontologies/:acronym/properties/show', to: 'properties#show'
 
   # Analytics
   get '/analytics/:action' => 'analytics#(?-mix:search_result_clicked|user_intention_surveys)'

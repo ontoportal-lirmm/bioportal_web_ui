@@ -9,7 +9,7 @@ class AdminController < ApplicationController
                      :$DEBUG_BEFORE, :$stdout, :$-0, :$-l, :$-I, :$DEBUG, :$',
                      :$gems_rake_task, :$_, :$CODERAY_DEBUG, :$-F, :$", :$0, :$=, :$FILENAME, :$?,
                      :$!, :$rdebug_in_irb, :$-K, :$TESTING, :$fileutils_rb_have_lchmod,
-                     :$EMAIL_EXCEPTIONS, :$binding, :$-v, :$>, :$SAFE, :$/,
+                     :$binding, :$-v, :$>, :$SAFE, :$/,
                      :$fileutils_rb_have_lchown, :$-p, :$-W, :$:, :$__dbg_interface,
                      :$stderr, :$\, :$&, :$<, :$debug, :$;, :$~, :$-a,
                      :$DEBUG_RDOC, :$CGI_ENV, :$LOAD_PATH, :$-d, :$*, :$., :$-w, :$+,

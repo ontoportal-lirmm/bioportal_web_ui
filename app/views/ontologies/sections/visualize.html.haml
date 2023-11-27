@@ -1,6 +1,6 @@
 =  render TurboFrameComponent.new(id: "classes", data: {"turbo-frame-target": "frame"} ) do
   - unless @error || @concept.nil?
-    - @title = "#{@ontology.name} - #{@concept.prefLabel}"
+    - @title = "#{@ontology.acronym} - #{@concept.prefLabel}"
     - @new_term_request_ontologies
     - @enable_ontolobridge = !$NEW_TERM_REQUEST_ONTOLOGIES.nil? && $NEW_TERM_REQUEST_ONTOLOGIES.include?(@ontology.acronym)
     %div.tooltip

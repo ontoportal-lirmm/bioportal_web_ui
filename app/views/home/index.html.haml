@@ -1,4 +1,4 @@
-- @title = t("home.index.title", organization: "#{$ORG_SITE}")
+- @title = t("home.index.title", site: "#{$SITE}")
 
 - unless $FRONT_NOTICE.nil? || $FRONT_NOTICE.empty? || cookies[:front_page_notice_closed].eql?("true")
   :javascript
@@ -84,8 +84,25 @@
         %div.align-items
           %h4.margin-items= t('home.fairness')
           = render Display::InfoTooltipComponent.new(text: "You are seing the average scores for all the public ontologies in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness")
+          = fairness_link
         %hr.home-section-line/
         .home-card.home-fair-scores
+          %div.fair-scores-badge-section
+            %h2.p-2.badge.badge-secondary.fair-scores-badge-margin
+              Average
+              %span.badge.badge-light
+                %span#fair-score-average
+                  0 (0%)
+            %h2.p-2.badge.badge-secondary.fair-scores-badge-margin
+              Min
+              %span.badge.badge-light
+                %span#fair-score-min
+                  0 (0%)
+            %h2.p-2.badge.badge-secondary.fair-scores-badge-margin
+              Max
+              %span.badge.badge-light
+                %span#fair-score-max
+                  0 (0%)
           - if fairness_service_enabled?
             %div#fair-home{data:{controller:"fair-score-home"}}
               = render partial: "shared/fair_score_bars", locals: {data: nil}
@@ -97,7 +114,7 @@
         %h4= t('home.twitter_news')
         %hr.home-section-line
         .home-card.home-twitter-news
-          %a.twitter-timeline{"data-height" => "349", :href => "https://twitter.com/lagroportal?ref_src=twsrc%5Etfw"} Tweets by lagroportal
+          %a.twitter-timeline{"data-height" => "360", :href => "https://twitter.com/lagroportal?ref_src=twsrc%5Etfw"} Tweets by lagroportal
           %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
 
   .home-section
@@ -163,7 +180,7 @@
       .home-support-items
         - $HOME_PAGE_LOGOS[:with_the_collaboration_of].each do |logo|
           %a{href:logo[:url], target: "_blanc"}
-            %img{src: asset_path(logo[:img_src])}
+            %img{src: asset_path(logo[:img_src]), class: 'custom-logo-class'}
 
 
 
