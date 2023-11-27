@@ -28,6 +28,9 @@ application.register("fair-score-summary", FairScoreSummaryController)
 import FormAutoCompleteController from "./form_auto_complete_controller"
 application.register("form-auto-complete", FormAutoCompleteController)
 
+import FormDisplayController from "./form_display_controller"
+application.register("form-options-display", FormDisplayController)
+
 import HistoryController from "./history_controller"
 application.register("history", HistoryController)
 
@@ -55,12 +58,11 @@ application.register("ontology-viewer-tabs", OntologyViewerTabsController)
 import OntoportalAutocompleteController from "./ontoportal_autocomplete_controller"
 application.register("ontoportal-autocomplete", OntoportalAutocompleteController)
 
-import ShowFilterCountController from "./show_filter_count_controller"
-application.register("show-filter-count", ShowFilterCountController)
-
-
 import PlatformLanguageController from "./platform_language_controller"
 application.register("platform-language", PlatformLanguageController)
+
+import ShowFilterCountController from "./show_filter_count_controller"
+application.register("show-filter-count", ShowFilterCountController)
 
 import ShowModalController from "./show_modal_controller"
 application.register("show-modal", ShowModalController)

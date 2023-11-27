@@ -119,4 +119,50 @@ module AgentHelper
     a.creator = session[:user].id
     a
   end
+
+  def agent_usages(agent = @agent)
+    usages = agent.usages.to_h
+    usages.delete(:links)
+    usages.delete(:context)
+    usages
+  end
+
+  def agent_usages_count(agent = @agent)
+    usages = agent_usages(agent)
+    usages.values.flatten.size
+  end
+
+  def agents_metadata
+    submission_metadata.select { |x| x["enforce"]&.include?('Agent') }.map do |x|
+      SubmissionInputsHelper::SubmissionMetadataInput.new(attribute_key: x["attribute"], attr_metadata: x)
+    end
+  end
+  def agents_metadata_attributes
+    agents_metadata.map { |x| [x.attr, x.label] }
+  end
+
+  def agents_used_properties(agent)
+    usages = agent_usages(agent)
+    attributes = agents_metadata_attributes
+
+    attributes.map do |attr, label|
+      [attr, usages.select { |x, v| v.any? { |uri| uri[attr] } }.keys.map { |x| x.to_s.split('/')[-3] }]
+    end.to_h
+  end
+
+  def agent_usage_errors_display(errors)
+    content_tag(:div) do
+      errors.map do |ont, message|
+        content_tag(:p) do
+          (content_tag(:strong, ont) + ' ontology is not valid, here are the errors: ' + agent_usage_error_display(message[:error])).html_safe
+        end
+      end.join.html_safe
+    end
+  end
+
+  def agent_usage_error_display(error)
+    error.map do |attr, details|
+      details.values.join(', ').html_safe
+    end.join('. ').html_safe
+  end
 end
