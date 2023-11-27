@@ -7,17 +7,17 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include ApplicationTestHelpers::Users
   include ApplicationTestHelpers::Categories
   include ApplicationTestHelpers::Groups
+  include ApplicationTestHelpers::Agents
 
-
-  driven_by :selenium, using:  ENV['CI'].present? ? :headless_chrome : :chrome , screen_size: [1400, 1400] , options: {
-      browser: :remote,
-      url: "http://localhost:4444"
+  driven_by :selenium, using: ENV['CI'].present? ? :headless_chrome : :chrome, screen_size: [1400, 1400], options: {
+    browser: :remote,
+    url: "http://localhost:4444"
   }
 
-
-  def wait_for(selector, tries = 5)
+  def wait_for(selector, tries = 60)
     tries.times.each do
-      break  if page.has_selector?(selector)
+      puts "waiting for #{selector}"
+      break if page.has_selector?(selector)
       sleep 1
     end
   end
@@ -25,13 +25,14 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   def wait_for_text(text, tries = 60)
     tries.times.each do
       sleep 1
-      break  if page.has_text?(text)
+      puts "waiting for #{text}"
+      break if page.has_text?(text)
     end
     assert_text text
   end
 
-  def login_in_as(user)
-    create_user(user)
+  def login_in_as(user, admin: false)
+    create_user(user, admin: admin)
 
     visit login_index_url
 
@@ -42,7 +43,6 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     # Click the login button
     click_button 'Login'
   end
-
 
   def assert_date(date)
     assert_text I18n.l(DateTime.parse(date), format: '%B %-d, %Y')
@@ -58,6 +58,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
       find("input", text: 'Save').click
     end
   end
+
   def list_checks(selected_values, all_values = [])
     all_values.each do |val|
       uncheck val, allow_label_click: true
@@ -68,24 +69,29 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     end
   end
 
-  def list_inputs(parent_selector, selector, values)
+  def list_inputs(parent_selector, selector, values, &block)
     within parent_selector do
-      all('.delete').each { |x| x.click  }
+      all('.delete').each { |x| x.click }
       find('.add-another-object', text: 'Add another').click
-      if values.is_a?(Hash)
-        values.each do |key , val|
-          all("[name^='#{selector}'][name$='[#{key}]']").last.set(val)
+      last_index = values.size - 1
+      values.each_with_index do |value, index|
+        if value.is_a?(Hash)
+          value.each do |key, val|
+            all("[name^='#{selector}'][name$='[#{key}]']").last.set(val)
+          end
+        else
+          if block_given?
+            block.call(selector, value, index)
+          else
+            all("[name^='#{selector}']").last.set(value)
+          end
         end
-      elsif values.is_a?(Array)
-        values.each do |val|
-          all("[name^='#{selector}']").last.set(val)
-          find('.add-another-object', text: 'Add another').click
-        end
+        find('.add-another-object', text: 'Add another').click unless index.eql?(last_index)
       end
-
     end
   end
-  def tom_select(selector, values)
+
+  def tom_select(selector, values, open_to_add: false)
 
     multiple = values.is_a?(Array)
 
@@ -95,8 +101,9 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     assert_selector ts_wrapper_selector
 
     # Click on the Tom Select input to open the dropdown
-    find(ts_wrapper_selector).click
-    sleep 1
+    element = find(ts_wrapper_selector)
+    element.click
+
 
     return unless page.has_selector?("#{ts_wrapper_selector} > .ts-dropdown")
 
@@ -109,23 +116,78 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
       values = Array(values)
     end
 
-    within "#{ts_wrapper_selector} > .ts-dropdown > .ts-dropdown-content" do
-      values.each do |value|
+    values.each do |value|
+      find("#{ts_wrapper_selector} input").set(value) if open_to_add
+      within "#{ts_wrapper_selector} > .ts-dropdown" do
         if page.has_selector?('.option', text: value)
           find('.option', text: value).click
+        elsif open_to_add
+          find('.create').click
         end
       end
     end
 
     if multiple
-      find(ts_wrapper_selector).click
-      sleep 1
+      find("#{ts_wrapper_selector} input").click
     end
   end
 
-
-  def date_picker_fill_in(selector, value)
-    page.execute_script("document.querySelector(\"[name='#{selector}']\").flatpickr().setDate('#{value}')")
+  def date_picker_fill_in(selector, value, index = 0)
+    page.execute_script("document.querySelectorAll(\"[name^='#{selector}']\")[#{index}].flatpickr().setDate('#{value}')")
   end
 
+  def agent_search(name)
+    within(".search-inputs:last-of-type") do
+      input = find("input[name^='agent']")
+      agent_id = input[:name].split('agent').last
+      input.set(name)
+      sleep 2
+      links = all('a', text: name)
+      links_size = links.size
+      sleep 1
+      first(:link, name).click
+      return links_size.eql?(1) ? agent_id : nil
+    end
+
+  end
+
+  def agent_fill(agent, parent_id: nil, enable_affiliations: true)
+    within "form[action=\"/agents\"]" do
+      choose "", option: agent.agentType, allow_label_click: true if enable_affiliations
+      fill_in 'name', with: agent.name
+
+      if agent.agentType.eql?('organization')
+        refute_selector('input[name="email"]')
+        fill_in 'acronym', with: agent.acronym
+        fill_in 'homepage', with: agent.homepage
+      else
+        refute_selector('input[name="acronym"]')
+        refute_selector('input[name="homepage"]')
+        fill_in 'email', with: agent.email
+      end
+
+      list_inputs ".agents-identifiers",
+                  "[identifiers]", agent.identifiers
+
+      unless enable_affiliations
+        refute_selector ".agents-affiliations"
+        return
+      end
+
+      within '.agents-affiliations' do
+        Array(agent.affiliations).each do |aff|
+          aff = OpenStruct.new(aff)
+          find('.add-another-object', text: 'Add another').click
+          agent_id = agent_search(aff.name)
+          id = parent_id && !parent_id.eql?('NEW_RECORD') ? "#{parent_id}_#{agent_id}" : agent_id
+          within "turbo-frame[id=\"#{id}\"]" do
+            agent_fill(aff, enable_affiliations: false)
+            click_on "Save"
+            sleep 1
+          end
+        end
+      end
+      click_on "Save"
+    end
+  end
 end

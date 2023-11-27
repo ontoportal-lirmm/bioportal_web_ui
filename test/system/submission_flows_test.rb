@@ -16,7 +16,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     @new_ontology[:group] = @groups[0..3]
     @new_submission[:isRemote] = '1'
 
-    login_in_as(@logged_user)
+    login_in_as(@logged_user, admin: true)
   end
 
   teardown do
@@ -25,6 +25,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     delete_ontologies([@new_ontology])
     delete_groups
     delete_categories
+    delete_agents
   end
 
   test "create a new ontology and go to it's summary page" do
@@ -114,201 +115,69 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
 
     # click edit button
     find("a.rounded-button[href=\"#{edit_ontology_path(@new_ontology.acronym)}\"]").click
-
-    # General tab
-    wait_for_text 'Acronym'
-
-    assert_text 'Acronym'
-    assert_selector 'input[name="ontology[acronym]"][disabled="disabled"]'
-    fill_in 'ontology[name]', with: ontology_2.name
-    tom_select 'submission[hasOntologyLanguage]', submission_2.hasOntologyLanguage
+    sleep 1
 
     selected_categories = @categories[3..4]
     selected_groups = Array(@groups[2])
 
-    list_checks selected_categories.map(&:acronym), @categories.map(&:acronym)
-    list_checks selected_groups.map(&:acronym), @groups.map(&:acronym)
+    within 'form#ontology_submission_form' do
 
-    tom_select 'ontology[administeredBy][]', [@user_bob.username]
+      # General tab
+      submission_general_edit_fill(ontology_2, submission_2,
+                                   selected_groups: selected_groups,
+                                   selected_categories: selected_categories)
+      # Description tab
+      click_on "Description"
+      submission_description_edit_fill(submission_2)
 
-    fill_in 'submission[URI]', with: submission_2.URI
-    fill_in 'submission[versionIRI]', with: submission_2.versionIRI
-    fill_in 'submission[version]', with: submission_2.version
-    tom_select 'submission[status]', submission_2.status
+      # Dates tab
+      click_on "Dates"
+      submission_date_edit_fill(submission_2)
 
-    # TODO test deprecated
-
-    tom_select 'submission[hasFormalityLevel]', submission_2.hasFormalityLevel
-    tom_select 'submission[hasOntologySyntax]', submission_2.hasOntologySyntax
-    tom_select 'submission[naturalLanguage][]', submission_2.naturalLanguage
-    tom_select 'submission[isOfType]', submission_2.isOfType
-
-    list_inputs "#submissionidentifier_from_group_input",
-                "submission[identifier]",
-                submission_2.identifier
+      # Licencing tab
+      click_on "Licensing"
+      submission_licensing_edit_fill(ontology_2, submission_2)
 
 
+      # Persons and organizations tab
+      click_on "Persons and organizations"
+      submission_agent_edit_fill(submission_2)
+
+      # Links tab
+      click_on "Links"
+      submission_links_edit_fill(submission_2)
+      # Media tab
+      click_on "Media"
+      submission_media_edit_fill(submission_2)
+
+      # Community tab
+      click_on "Community"
+      submission_community_edit_fill(submission_2)
+
+      # Usage tab
+      click_on "Usage"
+      submission_usage_edit_fill(submission_2)
 
 
-    # Description tab
-    click_on "Description"
-    wait_for_text "Description"
+      # Relation tab
+      click_on "Relation"
+      submission_relations_edit_fill(submission_2)
 
-    fill_in 'submission[description]', with: submission_2.description
-    fill_in 'submission[abstract]', with: submission_2.abstract
-    fill_in 'submission[homepage]', with: submission_2.homepage
-    fill_in 'submission[documentation]', with: submission_2.documentation
+      # Content tab
+      click_on "Content"
+      submission_content_edit_fill(submission_2)
 
-    list_inputs "#submissionnotes_from_group_input",
-                "submission[notes]", submission_2.notes
+      # Methodology tab
+      click_on "Methodology"
+      submission_methodology_fill(submission_2)
 
-    list_inputs "#submissionkeywords_from_group_input",
-                "submission[keywords]", submission_2.keywords
-
-    list_inputs "#submissionhiddenLabel_from_group_input",
-                "submission[hiddenLabel]", submission_2.hiddenLabel
-
-    list_inputs "#submissionalternative_from_group_input",
-                "submission[alternative]", submission_2.alternative
-
-    list_inputs "#submissionpublication_from_group_input",
-                "submission[publication]", submission_2.publication
-
-
-    # Dates tab
-    click_on "Dates"
-    wait_for_text "Submission date"
-
-    date_picker_fill_in 'submission[released]', submission_2.released
-    date_picker_fill_in 'submission[valid]', submission_2.valid
-    #date_picker_fill_in 'submission[curatedOn]', submission_2.valid TODO fix curatedOn
-    date_picker_fill_in 'submission[creationDate]', submission_2.creationDate
-    date_picker_fill_in 'submission[modificationDate]', submission_2.modificationDate
-
-
-    # Licencing tab
-    click_on "Licensing"
-    wait_for_text "Visibility"
-
-    tom_select 'ontology[viewingRestriction]', ontology_2.viewingRestriction
-    tom_select 'submission[hasLicense]', 'CC Attribution 3.0'
-    fill_in 'submission[useGuidelines]', with: submission_2.useGuidelines
-    fill_in 'submission[morePermissions]',with:  submission_2.morePermissions
-    # search_input
-    # Persons and organizations tab
-    click_on "Persons and organizations"
+      click_button 'save-button'
+    end
     sleep 1
-    # TODO agents test
-
-    # Links tab
-    click_on "Links"
-    wait_for_text "Location"
-
-    choose 'submission[isRemote]', option: '1'
-    fill_in 'submission[pullLocation]', with: submission_2.pullLocation
-    list_inputs "#submissionsource_from_group_input",
-                "submission[source]", submission_2.source
-    list_inputs "#submissionendpoint_from_group_input",
-                "submission[endpoint]", submission_2.endpoint
-    #tom_select 'submission[includedInDataCatalog][]', submission_2.includedInDataCatalog #TODO
-
-    # Media tab
-    click_on "Media"
-    wait_for_text "Depiction"
-
-    list_inputs "#submissionassociatedMedia_from_group_input",
-                "submission[associatedMedia]", submission_2.associatedMedia
-
-    list_inputs "#submissiondepiction_from_group_input",
-                "submission[depiction]", submission_2.depiction
-
-    fill_in 'submission[logo]', with: submission_2.logo
-
-    # Community tab
-    click_on "Community"
-    wait_for_text "Audience"
-
-    fill_in 'submission[audience]',  with: submission_2.audience
-    fill_in 'submission[repository]',  with: submission_2.repository
-    fill_in 'submission[bugDatabase]',  with: submission_2.bugDatabase
-    fill_in 'submission[mailingList]',  with: submission_2.mailingList
-
-    list_inputs "#submissiontoDoList_from_group_input",
-                "submission[toDoList]", submission_2.toDoList
-    list_inputs "#submissionaward_from_group_input",
-                "submission[award]", submission_2.award
-
-    # Usage tab
-    click_on "Usage"
-    wait_for_text "Known usage"
-    list_inputs "#submissionknownUsage_from_group_input",
-                "submission[knownUsage]", submission_2.knownUsage
-
-    tom_select 'submission[designedForOntologyTask][]', submission_2.designedForOntologyTask
-
-    list_inputs "#submissionhasDomain_from_group_input",
-                "submission[hasDomain]", submission_2.hasDomain
-
-    fill_in 'submission[coverage]',  with: submission_2.coverage
-
-    list_inputs "#submissionexample_from_group_input",
-                  "submission[example]", submission_2.example
-
-    # Relation tab
-    click_on "Relation"
-    wait_for_text "Prior version"
-
-    # TODO ontology view check in
-
-    fill_in "submission[hasPriorVersion]", with: submission_2.hasPriorVersion
-    relations = [:hasPart, :ontologyRelatedTo, :similarTo, :comesFromTheSameDomain,
-                 :isAlignedTo, :isBackwardCompatibleWith, :isIncompatibleWith,
-                 :hasDisparateModelling, :hasDisjunctionsWith, :generalizes]
-
-    relations.each do |key|
-      list_inputs "#submission#{key}_from_group_input",
-                  "submission[#{key}]", 2.times.map{|id| "https://#{key}.2.#{id}.com"}
-    end
-
-    # Content tab
-    click_on "Content"
-    wait_for_text "Root of obsolete branch"
-
-    fill_in "submission[obsoleteParent]", with: submission_2.obsoleteParent
-    fill_in "submission[uriRegexPattern]", with: submission_2.uriRegexPattern
-    fill_in "submission[preferredNamespaceUri]", with: submission_2.preferredNamespaceUri
-    fill_in "submission[preferredNamespacePrefix]", with: submission_2.preferredNamespacePrefix
-    fill_in "submission[exampleIdentifier]", with: submission_2.exampleIdentifier
-    list_inputs "#submissionkeyClasses_from_group_input",
-                "submission[keyClasses]", submission_2.keyClasses
-    tom_select "submission[metadataVoc][]", submission_2.metadataVoc
-
-    # Methodology tab
-    click_on "Methodology"
-    wait_for_text "Knowledge representation paradigm"
-
-    fill_in "submission[conformsToKnowledgeRepresentationParadigm]", with: submission_2.conformsToKnowledgeRepresentationParadigm
-    fill_in "submission[usedOntologyEngineeringMethodology]", with: submission_2.usedOntologyEngineeringMethodology
-    tom_select "submission[usedOntologyEngineeringTool][]", submission_2.usedOntologyEngineeringTool
-
-    list_inputs "#submissionaccrualMethod_from_group_input",
-                  "submission[accrualMethod]", submission_2.accrualMethod
-
-    tom_select "submission[accrualPeriodicity]", submission_2.accrualPeriodicity
-
-    fill_in "submission[accrualPolicy]", with: submission_2.accrualPolicy
-
-    [:competencyQuestion, :wasGeneratedBy, :wasInvalidatedBy].each do |key|
-      list_inputs "#submission#{key}_from_group_input",
-                  "submission[#{key}]", 2.times.map{|i| "#{key}-#{i}"}
-    end
-
-
-    click_button 'save-button'
-    #sleep 60
-    wait_for '.notification', 10
+    wait_for '.notification'
     assert_selector '.notification', text: "Submission updated successfully"
     assert_text "#{ontology_2.name} (#{@new_ontology.acronym})"
+
 
     selected_categories.each do |cat|
       assert_text cat.name
@@ -344,11 +213,12 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
       assert_text alt
     end
 
-
     open_dropdown "#dates"
     assert_date submission_2.released
     assert_date submission_2.valid
-    # assert_date submission_2.curatedOn # TODO fix
+    submission_2.curatedOn.each do |date|
+      assert_date date
+    end
     assert_date submission_2.creationDate
     assert_date submission_2.modificationDate
 
@@ -370,6 +240,14 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_text submission_2.bugDatabase
     assert_text submission_2.mailingList
 
+    # Assert persons and organizations
+    open_dropdown "#person_and_organization"
+
+    agent1 = fixtures(:agents)[:agent1]
+    agent2 = fixtures(:agents)[:agent2]
+
+    assert_text agent1.name, count: 3
+    assert_text agent2.name, count: 3
 
 
     # Assert usage
@@ -380,21 +258,20 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
       :award
     ]
     usage_properties.each do |property|
-      Array(submission_2[property]).each { |v|  assert_text v} # check
+      Array(submission_2[property]).each { |v| assert_text v } # check
     end
 
     submission_2.designedForOntologyTask.each do |task|
       assert_text task.delete(' ') # TODO fix in the UI the disaply of taskes
     end
 
-    # Assert relations
-    # TODO test hasPriorVersion, not showed in summary page
-    # TODO tests the relations
+
+
 
     # Assert Content
-    # TODO fix configuration tests
-    #open_dropdown "#configuration"
-    #assert_text submission_2.obsoleteParent # check
+    open_dropdown "#configuration"
+    assert_text submission_2.obsoleteParent
+
     assert_text submission_2.uriRegexPattern
     assert_text submission_2.exampleIdentifier
 
@@ -420,18 +297,256 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     ]
 
     methodology_properties.each do |key|
-      Array(submission_2[key]).map{|x| assert_text x}
+      Array(submission_2[key]).map { |x| assert_text x }
     end
 
     [:competencyQuestion, :wasGeneratedBy, :wasInvalidatedBy].each do |key|
-      2.times.map{|i| assert_text "#{key}-#{i}" }
+      2.times.map { |i| assert_text "#{key}-#{i}" }
     end
 
     assert_text submission_2.accrualPeriodicity.split('/').last.downcase
+
+    # Assert relations
+    click_on "See all metadata"
+    sleep 1
+    within "#application_modal_content" do
+      wait_for 'input[type="search"]'
+      find('input').set('hasPriorVersion')
+
+      assert_text submission_2.hasPriorVersion
+
+      relations = [:hasPart, :ontologyRelatedTo, :similarTo, :comesFromTheSameDomain,
+                   :isAlignedTo, :isBackwardCompatibleWith, :isIncompatibleWith,
+                   :hasDisparateModelling, :hasDisjunctionsWith, :generalizes,
+                   :explanationEvolution, :useImports,
+                   :usedBy, :workTranslation, :translationOfWork
+      ]
+      relations.each do |key|
+        find('input').set(key)
+        2.times.each{|id| assert_text  "https://#{key}.2.#{id}.com" }
+      end
+    end
+
   end
 
-
   private
+
+  def submission_general_edit_fill(ontology, submission, selected_categories:, selected_groups:)
+    wait_for_text 'Acronym'
+
+    assert_text 'Acronym'
+    assert_selector 'input[name="ontology[acronym]"][disabled="disabled"]'
+    fill_in 'ontology[name]', with: ontology.name
+    tom_select 'submission[hasOntologyLanguage]', submission.hasOntologyLanguage
+
+    list_checks selected_categories.map(&:acronym), @categories.map(&:acronym)
+    list_checks selected_groups.map(&:acronym), @groups.map(&:acronym)
+
+    tom_select 'ontology[administeredBy][]', [@user_bob.username]
+
+    fill_in 'submission[URI]', with: submission.URI
+    fill_in 'submission[versionIRI]', with: submission.versionIRI
+    fill_in 'submission[version]', with: submission.version
+    tom_select 'submission[status]', submission.status
+
+    # TODO test deprecated
+
+    tom_select 'submission[hasFormalityLevel]', submission.hasFormalityLevel
+    tom_select 'submission[hasOntologySyntax]', submission.hasOntologySyntax
+    tom_select 'submission[naturalLanguage][]', submission.naturalLanguage
+    tom_select 'submission[isOfType]', submission.isOfType
+
+    list_inputs "#submissionidentifier_from_group_input",
+                "submission[identifier]",
+                submission.identifier
+  end
+
+  def submission_description_edit_fill(submission)
+    wait_for_text "Description"
+
+    fill_in 'submission[description]', with: submission.description
+    fill_in 'submission[abstract]', with: submission.abstract
+    fill_in 'submission[homepage]', with: submission.homepage
+    fill_in 'submission[documentation]', with: submission.documentation
+
+    list_inputs "#submissionnotes_from_group_input",
+                "submission[notes]", submission.notes
+
+    list_inputs "#submissionkeywords_from_group_input",
+                "submission[keywords]", submission.keywords
+
+    list_inputs "#submissionhiddenLabel_from_group_input",
+                "submission[hiddenLabel]", submission.hiddenLabel
+
+    list_inputs "#submissionalternative_from_group_input",
+                "submission[alternative]", submission.alternative
+
+    list_inputs "#submissionpublication_from_group_input",
+                "submission[publication]", submission.publication
+
+  end
+
+  def submission_date_edit_fill(submission)
+    wait_for_text "Submission date"
+
+    date_picker_fill_in 'submission[released]', submission.released
+    date_picker_fill_in 'submission[valid]', submission.valid
+    list_inputs "#submissioncuratedOn_from_group_input",
+                "submission[curatedOn]", submission.curatedOn do |selector, value, index|
+      date_picker_fill_in selector, value, index + 1
+    end
+
+    date_picker_fill_in 'submission[creationDate]', submission.creationDate
+    date_picker_fill_in 'submission[modificationDate]', submission.modificationDate
+
+  end
+
+  def submission_licensing_edit_fill(ontology, submission)
+    wait_for_text "Visibility"
+
+    tom_select 'ontology[viewingRestriction]', ontology.viewingRestriction
+    tom_select 'submission[hasLicense]', 'CC Attribution 3.0'
+    fill_in 'submission[useGuidelines]', with: submission.useGuidelines
+    fill_in 'submission[morePermissions]', with: submission.morePermissions
+
+    within "#submissioncopyrightHolder_from_group_input" do
+      new_agent = fixtures(:agents)[:agent1]
+      agent_id = agent_search(new_agent.name)
+      agent_fill(new_agent, parent_id: agent_id)
+    end
+
+  end
+
+  def submission_agent_edit_fill(submission)
+    # TODO use list_inputs
+    submission.contact.each do |contact|
+      all("[name^='submission[contact]'][name$='[name]']").last.set(contact["name"])
+      all("[name^='submission[contact]'][name$='[email]']").last.set(contact["email"])
+      find('.add-another-object', text: 'Add another contact').click
+    end
+
+    agent1 = fixtures(:agents)[:agent1]
+    agent2 = fixtures(:agents)[:agent2]
+
+
+    [:hasCreator, :hasContributor, :curatedBy].each do |key|
+      list_inputs "#submission#{key}_from_group_input", "submission[#{key}]" , [agent1, agent2] do |selector, value, index|
+        element = all("turbo-frame:last-of-type").last
+        within element do
+          agent_id = agent_search(value.name)
+          agent_fill(value, parent_id: agent_id) if agent_id
+        end
+      end
+    end
+
+
+    # TODO agents test
+  end
+
+  def submission_links_edit_fill(submission)
+    wait_for_text "Location"
+
+    choose 'submission[isRemote]', option: '1'
+    fill_in 'submission[pullLocation]', with: submission.pullLocation
+    list_inputs "#submissionsource_from_group_input",
+                "submission[source]", submission.source
+    list_inputs "#submissionendpoint_from_group_input",
+                "submission[endpoint]", submission.endpoint
+    tom_select 'submission[includedInDataCatalog][]', submission.includedInDataCatalog
+  end
+
+  def submission_media_edit_fill(submission)
+    wait_for_text "Depiction"
+
+    list_inputs "#submissionassociatedMedia_from_group_input",
+                "submission[associatedMedia]", submission.associatedMedia
+
+    list_inputs "#submissiondepiction_from_group_input",
+                "submission[depiction]", submission.depiction
+
+    fill_in 'submission[logo]', with: submission.logo
+  end
+
+  def submission_community_edit_fill(submission)
+    wait_for_text "Audience"
+
+    fill_in 'submission[audience]', with: submission.audience
+    fill_in 'submission[repository]', with: submission.repository
+    fill_in 'submission[bugDatabase]', with: submission.bugDatabase
+    fill_in 'submission[mailingList]', with: submission.mailingList
+
+    list_inputs "#submissiontoDoList_from_group_input",
+                "submission[toDoList]", submission.toDoList
+    list_inputs "#submissionaward_from_group_input",
+                "submission[award]", submission.award
+
+  end
+
+  def submission_usage_edit_fill(submission)
+    wait_for_text "Known usage"
+    list_inputs "#submissionknownUsage_from_group_input",
+                "submission[knownUsage]", submission.knownUsage
+
+    tom_select 'submission[designedForOntologyTask][]', submission.designedForOntologyTask
+
+    list_inputs "#submissionhasDomain_from_group_input",
+                "submission[hasDomain]", submission.hasDomain
+
+    fill_in 'submission[coverage]', with: submission.coverage
+
+    list_inputs "#submissionexample_from_group_input",
+                "submission[example]", submission.example
+  end
+  def submission_content_edit_fill(submission)
+    wait_for_text "Root of obsolete branch"
+
+    fill_in "submission[obsoleteParent]", with: submission.obsoleteParent
+    fill_in "submission[uriRegexPattern]", with: submission.uriRegexPattern
+    fill_in "submission[preferredNamespaceUri]", with: submission.preferredNamespaceUri
+    fill_in "submission[preferredNamespacePrefix]", with: submission.preferredNamespacePrefix
+    fill_in "submission[exampleIdentifier]", with: submission.exampleIdentifier
+    list_inputs "#submissionkeyClasses_from_group_input",
+                "submission[keyClasses]", submission.keyClasses
+    tom_select "submission[metadataVoc][]", submission.metadataVoc
+
+  end
+  def submission_relations_edit_fill(submission)
+    wait_for_text "Prior version"
+
+    # TODO ontology view check in
+
+    fill_in "submission[hasPriorVersion]", with: submission.hasPriorVersion
+    relations = [:hasPart, :ontologyRelatedTo, :similarTo, :comesFromTheSameDomain,
+                 :isAlignedTo, :isBackwardCompatibleWith, :isIncompatibleWith,
+                 :hasDisparateModelling, :hasDisjunctionsWith, :generalizes,
+                 :explanationEvolution, :useImports,
+                 :usedBy, :workTranslation, :translationOfWork
+    ]
+
+    relations.each do |key|
+      tom_select "submission[#{key}][]", 2.times.map { |id| "https://#{key}.2.#{id}.com" }, open_to_add: true
+    end
+  end
+
+  def submission_methodology_fill(submission)
+    wait_for_text "Knowledge representation paradigm"
+
+    fill_in "submission[conformsToKnowledgeRepresentationParadigm]", with: submission.conformsToKnowledgeRepresentationParadigm
+    fill_in "submission[usedOntologyEngineeringMethodology]", with: submission.usedOntologyEngineeringMethodology
+    tom_select "submission[usedOntologyEngineeringTool][]", submission.usedOntologyEngineeringTool
+
+    list_inputs "#submissionaccrualMethod_from_group_input",
+                "submission[accrualMethod]", submission.accrualMethod
+
+    tom_select "submission[accrualPeriodicity]", submission.accrualPeriodicity
+
+    fill_in "submission[accrualPolicy]", with: submission.accrualPolicy
+
+    [:competencyQuestion, :wasGeneratedBy, :wasInvalidatedBy].each do |key|
+      list_inputs "#submission#{key}_from_group_input",
+                  "submission[#{key}]", 2.times.map { |i| "#{key}-#{i}" }
+    end
+  end
   def open_dropdown(target)
     find(".dropdown-container .dropdown-title-bar[data-target=\"#{target}\"]").click
     sleep 1

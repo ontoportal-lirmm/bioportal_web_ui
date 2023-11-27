@@ -22,9 +22,11 @@ module ApplicationTestHelpers
       session[:user] = logged_in_user
     end
 
-    def create_user(user)
+    def create_user(user , admin: false)
       unless (existent_user = LinkedData::Client::Models::User.find_by_username(user.username).first)
-        existent_user = LinkedData::Client::Models::User.new(values: user.to_h).save
+        values = user.to_h
+        values[:role] = ["ADMINISTRATOR"]   if admin
+        existent_user = LinkedData::Client::Models::User.new(values: values).save
       end
 
       existent_user.password = user.password
@@ -73,7 +75,7 @@ module ApplicationTestHelpers
       @categories
     end
 
-    def delete_categories(categories = @categories)
+    def delete_categories(categories = LinkedData::Client::Models::Category.all)
       Array(categories).each { |g| g.delete }
     end
   end
@@ -93,8 +95,14 @@ module ApplicationTestHelpers
       @groups
     end
 
-    def delete_groups(groups = @groups)
+    def delete_groups(groups = LinkedData::Client::Models::Group.all)
       Array(groups).each { |g| g.delete }
+    end
+  end
+
+  module Agents
+    def delete_agents(agents = LinkedData::Client::Models::Agent.all)
+      Array(agents).each { |g| g.delete }
     end
   end
 end
