@@ -348,16 +348,19 @@ module SubmissionInputsHelper
 
   def generate_ontology_select_input(name, label , selected, multiple)
     unless @ontology_acronyms
-      @ontology_acronyms = LinkedData::Client::Models::Ontology.all(include: 'acronym', display_links: false, display_context: false, include_views: true)
-                                                               .map{|x| [x.acronym, x.id.to_s]}
+      @ontology_acronyms = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', display_links: false, display_context: false, include_views: true)
+                                                               .map { |x| ["#{x.name} (#{x.acronym})", x.id.to_s] }
       @ontology_acronyms << ['', '']
     end
 
     input = ''
 
-    input = hidden_field_tag("#{name}[]")  if multiple
+    input = hidden_field_tag("#{name}[]") if multiple
 
-    input + select_input(id: name, name: name, label: label, values: @ontology_acronyms, selected: selected, multiple: multiple)
+    input + select_input(id: name, name: name,
+                         label: label, values: @ontology_acronyms + selected,
+                         selected: selected, multiple: multiple,
+                         open_to_add: true)
   end
 
   def generate_list_text_input(attr)

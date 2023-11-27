@@ -42,7 +42,7 @@ module MetadataHelper
   end
   def ontology_relation?(attr_label)
     relations_attr = metadata_categories['relations']
-    relations_attr.include?(attr_label.to_s)
+    !attr_label.to_s.eql?('hasPriorVersion') && relations_attr.include?(attr_label.to_s)
   end
 
   def attr_uri?(attr_label)
