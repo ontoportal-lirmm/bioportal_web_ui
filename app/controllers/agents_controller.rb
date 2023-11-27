@@ -12,7 +12,7 @@ class AgentsController < ApplicationController
     not_found("Agent with id #{params[:agent_id]}") if @agent.nil?
 
     @agent_id = params[:id] || agent_id(@agent)
-    @name_prefix = params[:name_prefix] ? "#{params[:name_prefix]}[#{params[:id]}]" : ''
+    @name_prefix = params[:name_prefix]
     @edit_on_modal = params[:edit_on_modal]&.eql?('true')
     @deletable = params[:deletable]&.eql?('true')
   end
@@ -39,9 +39,8 @@ class AgentsController < ApplicationController
     @agent.creator = session[:user].id
     @agent.agentType = params[:type] || 'person'
     @agent.name = params[:name]
-    @new_agent = params[:new_agent].nil? || params[:new_agent].eql?('true')
     @name_prefix = params[:name_prefix] || ''
-    @show_affiliations = params[:show_affiliations]&.eql?('true')
+    @show_affiliations = params[:show_affiliations].nil? || params[:show_affiliations]&.eql?('true')
   end
 
   def create
@@ -57,8 +56,7 @@ class AgentsController < ApplicationController
       streams = [alert_success(id: alert_id) { success_message }]
 
       streams << prepend('agents_table_content', partial: 'agents/show_line', locals: { agent: new_agent })
-
-      streams << replace_agent_form(new_agent, frame_id: params[:id], parent_id: parent_id, name_prefix: name_prefix) if params[:parent_id]
+      streams << replace_agent_form(new_agent, agent_id: nil, frame_id: params[:id], parent_id: parent_id, name_prefix: name_prefix) if params[:parent_id]
 
       render_turbo_stream(*streams)
     end
@@ -71,13 +69,20 @@ class AgentsController < ApplicationController
   end
 
   def show_search
-    id = params[:parent_id]
+    id = params[:id]
+    parent_id = params[:parent_id]
+    name_prefix = params[:name_prefix]
     agent_type = params[:agent_type]
     agent_deletable = params[:deletable].to_s.eql?('true')
 
-    attribute_template_output = render_to_string(inline: helpers.agent_search_input(id, agent_type, deletable: agent_deletable))
-    render_turbo_stream(replace(id) { attribute_template_output } )
+    attribute_template_output = helpers.agent_search_input(id, agent_type,
+                                                           parent_id: parent_id,
+                                                           name_prefix: name_prefix,
+                                                           deletable: agent_deletable)
+    render_turbo_stream(replace(helpers.agent_id_frame_id(id, parent_id)) {  render_to_string(inline: attribute_template_output) } )
+
   end
+
   def update
     agent_update, agent = update_agent(params[:id].split('/').last, agent_params)
 
@@ -171,12 +176,14 @@ class AgentsController < ApplicationController
 
   private
 
-  def replace_agent_form(agent, frame_id: nil, parent_id:, partial: 'agents/agent_show', name_prefix: '')
+  def replace_agent_form(agent, agent_id: nil, frame_id: nil, parent_id:, partial: 'agents/agent_show', name_prefix: '')
 
     frame_id = frame_id ? agent_id_frame_id(frame_id, parent_id) : agent_frame_id(agent, parent_id)
 
-    replace(frame_id, partial: partial,
-            locals: { agent: agent, name_prefix: name_prefix, parent_id: parent_id, edit_on_modal: false })
+    replace(frame_id, partial: partial, layout: false ,
+            locals: { agent_id: agent_id, agent: agent, name_prefix: name_prefix, parent_id: parent_id,
+                      edit_on_modal: false,
+                      deletable: true})
   end
 
   def save_agent(params)

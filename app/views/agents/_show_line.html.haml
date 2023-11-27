@@ -6,7 +6,7 @@
   %td
     = raw display_identifiers(agent.identifiers)
   %td
-    = raw agent.affiliations.map{|i| "#{i["name"]} ( #{display_identifiers(i["identifiers"])} )"}.join(', ')
+    = raw agent.affiliations.map{|i| display_agent(i)}.join(', ')
   %td
     = agent.agentType
   %td{:class => 'delete_mappings_column'}

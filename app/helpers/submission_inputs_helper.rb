@@ -57,7 +57,7 @@ module SubmissionInputsHelper
       if attr.type?('list')
         generate_list_agent_input(attr)
       else
-        # generate_agent_input(attr)
+        generate_agent_input(attr)
       end
     elsif attr.type?('integer')
       generate_integer_input(attr)
@@ -241,17 +241,20 @@ module SubmissionInputsHelper
   def generate_agent_input(attr)
     attr_key = attr.metadata['attribute'].to_s
     agent = attr.values
+    random_id = rand(100_000..999_999).to_s
     render Input::InputFieldComponent.new(name: '', label: attr_header_label(attr), error_message: attribute_error(attr.metadata['attribute'])) do
-      render TurboFrameComponent.new(id: "submission_#{attr_key}_NEW_RECORD") do
+      render TurboFrameComponent.new(id: "submission_#{attr_key}_#{random_id}") do
         if agent
-          render partial: 'agents/agent_show', locals: { agent: agent, name_prefix: '', edit_on_modal: false,
-                                                         parent_id: "submission_",
-                                                         frame_id: "submission[#{attr_key}]",
-                                                         deletable: true}
+          render partial: 'agents/agent_show', locals: { agent_id:  random_id,
+                                                         agent: agent,
+                                                         name_prefix: attr.name,
+                                                         parent_id: "submission_#{attr_key}",
+                                                         edit_on_modal: false, deletable: true }
         else
-          render AgentSearchInputComponent.new(id: "" , agent_type: agent_type(attr.metadata),
+          render AgentSearchInputComponent.new(id: random_id, agent_type: agent_type(attr.metadata),
                                                parent_id: "submission_#{attr_key}",
                                                edit_on_modal: false,
+                                               name_prefix: attr.name,
                                                deletable: true)
         end
       end

@@ -4,13 +4,14 @@ class SearchInputComponent < ViewComponent::Base
 
   renders_one :template
 
-  def initialize(name: '', placeholder: '', actions_links: {},
+  def initialize(id: '',
+                 name: '', placeholder: '', actions_links: {},
                  scroll_down: true, use_cache: true,
                  ajax_url:,
                  item_base_url:,
                  id_key:,
                  links_target: '_top')
-    super
+    @id = id
     @name = name
     @placeholder = placeholder
     @actions_links = actions_links

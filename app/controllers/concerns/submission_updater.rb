@@ -137,7 +137,13 @@ module SubmissionUpdater
         v
       end
     end
-    p["copyrightHolder"] = p["copyrightHolder"].first  if p["copyrightHolder"] # TODO automatize
+
+    if p["copyrightHolder"]&.first&.include?("id") # TODO automatize
+      p["copyrightHolder"] = p["copyrightHolder"].first["id"]
+    elsif p["copyrightHolder"]
+      p["copyrightHolder"] = ''
+    end
+
 
     submission_metadata.each do |m|
       m_attr = m['attribute'].to_sym
