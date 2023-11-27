@@ -62,7 +62,11 @@ module SubmissionInputsHelper
     elsif attr.type?('integer')
       generate_integer_input(attr)
     elsif attr.type?('date_time')
-      generate_date_input(attr, max_date: max_date)
+      if attr.type?('list')
+        generate_list_date_input(attr, max_date: max_date)
+      else
+        generate_date_input(attr, max_date: max_date)
+      end
     elsif attr.type?('textarea')
       generate_textarea_input(attr)
     elsif enforce_values?(attr)
@@ -273,6 +277,15 @@ module SubmissionInputsHelper
 
   end
 
+  def generate_list_date_input(attr, max_date: nil)
+    generate_list_field_input(attr, attr.name, attr_header_label(attr), attr.values) do |value, row_name, id|
+      date_input(label: '', name:  row_name,
+                 value: value,
+                 max_date: max_date)
+    end
+
+  end
+
   def generate_date_input(attr, max_date: nil)
     date_input(label: attr_header_label(attr), name: attr.name,
                value: attr.values,
@@ -333,7 +346,7 @@ module SubmissionInputsHelper
       if is_relation
         generate_ontology_select_input(name, label, values, true)
       else
-       generate_list_field_input(attr, name, label, values) do |value, row_name, id|
+        generate_list_field_input(attr, name, label, values) do |value, row_name, id|
           url_input(label: '', name: row_name, value: value)
         end
       end

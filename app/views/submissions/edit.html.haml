@@ -1,3 +1,4 @@
+- section = params[:section] || 'general'
 .center
   .edit-ontology-container
     = turbo_frame_tag("test") do
@@ -11,7 +12,7 @@
               = submission_metadata_selector
             %div.nav.nav-pills.flex-column#categories-tabs
               - @categories_order.each_with_index  do |key, index|
-                %a.edit-ontology-tab-item.d-block{href: "##{key.parameterize}-tab", "data-toggle" => "pill", class:  index.zero? ? 'active show' : ''}
+                %a.edit-ontology-tab-item.d-block{href: "##{key.parameterize}-tab", "data-toggle" => "pill", class:  section.eql?(key.parameterize) ? 'active show' : ''}
                   = key.humanize
 
           #myTabContent.edit-ontology-right-column.w-100
@@ -20,7 +21,7 @@
               %div.tab-content
                 - @categories_order.each_with_index  do |key, index|
                   - properties = @category_attributes[key]
-                  .edit-ontology-tab.tab-pane.fade{id: key.parameterize+'-tab', class: index.zero? ? 'active show' : ''}
+                  .edit-ontology-tab.tab-pane.fade{id: key.parameterize+'-tab', class: section.eql?(key.parameterize) ? 'active show' : ''}
                     = render TurboFrameComponent.new(id: "ontology-content-#{index}", loading:"lazy", src: "edit_properties?properties=#{properties.join(',')}&container_id=ontology-content-#{index}")
 
         %hr#edit-ontology-actions-devider

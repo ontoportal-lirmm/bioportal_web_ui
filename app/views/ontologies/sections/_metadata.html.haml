@@ -14,8 +14,9 @@
           = render LinkFieldComponent.new(value: v)
 
       = properties_dropdown('dates','Dates','', @dates_properties) do |values|
-        = horizontal_list_container(values) do |v|
-          = render DateTimeFieldComponent.new(value: v)
+        - Array(values).sort.map do |v|
+          %div
+            = render DateTimeFieldComponent.new(value: v)
 
       = properties_dropdown('person_and_organization','Persons and organizations','', @agents_properties) do |values|
         = horizontal_list_container(values) do |v|
