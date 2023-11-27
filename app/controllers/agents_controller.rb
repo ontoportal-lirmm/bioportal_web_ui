@@ -65,7 +65,7 @@ class AgentsController < ApplicationController
   end
 
   def edit
-    @agent = find_agent_display_all
+    @agent = LinkedData::Client::Models::Agent.find("#{rest_url}/Agents/#{params[:id]}")
     @name_prefix = params[:parent_id] || ''
     @show_affiliations = params[:show_affiliations].nil? || params[:show_affiliations].eql?('true')
   end
@@ -137,7 +137,7 @@ class AgentsController < ApplicationController
 
   def destroy
     error = nil
-    @agent = LinkedData::Client::Models::Agent.find("#{REST_URI}/Agents/#{params[:id]}")
+    @agent = LinkedData::Client::Models::Agent.find("#{rest_url}/Agents/#{params[:id]}")
     success_text = ''
 
     if @agent.nil?
@@ -186,7 +186,7 @@ class AgentsController < ApplicationController
   end
 
   def update_agent(id = params[:id], params)
-    agent = LinkedData::Client::Models::Agent.find("#{REST_URI}/Agents/#{id}")
+    agent = LinkedData::Client::Models::Agent.find("#{rest_url}/Agents/#{id}")
 
     params[:creator] = session[:user].id if (agent.creator.nil? || agent.creator.empty?) && (params[:creator] || '').empty?
 
@@ -272,7 +272,7 @@ class AgentsController < ApplicationController
   def find_agent_display_all(id = params[:id])
     # TODO fix in the api client, the find with params
     LinkedData::Client::Models::Agent.where({ display: 'all' }) do |obj|
-      obj.id.eql?("#{REST_URI}/Agents/#{id}")
+      obj.id.to_s.eql?("#{rest_url}/Agents/#{id}")
     end.first
   end
 end
