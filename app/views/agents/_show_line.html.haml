@@ -19,4 +19,8 @@
         %span.mx-1
           = link_to_agent_edit_modal(agent)
         %span
-          = button_to "Delete", CGI.unescape(agent_path(agent.id.split('/').last)), method: :delete, class: 'btn btn-link',  form: {data: { turbo: true, turbo_confirm: "Are you sure?", turbo_frame: '_top'}}
+          - if count.zero?
+            = button_to "Delete", CGI.unescape(agent_path(agent.id.split('/').last)), method: :delete, class: 'btn btn-link',  form: {data: { turbo: true, turbo_confirm: "Are you sure?", turbo_frame: '_top'}}
+          - else
+            %span{data: { controller: 'tooltip' }, title: "Can't delete this #{agent.agentType} because still used"}
+              = link_to "Delete", "", class: 'btn btn-link disabled'

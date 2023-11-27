@@ -49,7 +49,7 @@ jobs:
           bundler-cache: true
 
       - name: Run OntoPortal API
-        run: bin/run_api -k ${{ env.REMOTE_API_KEY }} -r agroportal -t stage -s STY -u ${{ env.REMOTE_API_URL }}
+        run: bin/run_api -k ${{ env.REMOTE_API_KEY }} -r agroportal -t development -s STY -u ${{ env.REMOTE_API_URL }}
 
       # Add or replace database setup steps here
       - name: set up config file
