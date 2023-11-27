@@ -45,6 +45,14 @@ module MetadataHelper
     !attr_label.to_s.eql?('hasPriorVersion') && relations_attr.include?(attr_label.to_s)
   end
 
+  def open_to_add_metadata?(attr_key)
+    attrs = [:naturalLanguage, :hasLicense, :usedOntologyEngineeringTool,
+             :accrualPeriodicity, :includedInDataCatalog, :metadataVoc]
+    attrs = attrs +  metadata_categories['relations'].map(&:to_sym).reject{|x| x.eql?(:hasPriorVersion)}
+    attrs = attrs +  metadata_categories['object description properties'].map(&:to_sym)
+    attrs.include?(attr_key.to_sym)
+  end
+
   def attr_uri?(attr_label)
     input_type?(attr_metadata(attr_label), "uri")
   end

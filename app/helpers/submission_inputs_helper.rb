@@ -13,10 +13,8 @@ module SubmissionInputsHelper
     def attr
       @attribute_key
     end
+    alias :attr_key  :attr
 
-    def attr_key
-      @attribute_key
-    end
     def name
       "submission[#{@attribute_key}]"
     end
@@ -308,7 +306,8 @@ module SubmissionInputsHelper
     end
 
     select_input(name: name, label: label, values: select_values,
-                 selected: metadata_values, multiple: multiple)
+                 selected: metadata_values, multiple: multiple,
+                 open_to_add: open_to_add_metadata?(attr.attr_key))
   end
 
   def generate_list_field_input(attr, name, label, values, &block)
@@ -371,7 +370,7 @@ module SubmissionInputsHelper
     input = hidden_field_tag("#{name}[]") if multiple
 
     input + select_input(id: name, name: name,
-                         label: label, values: @ontology_acronyms + selected,
+                         label: label, values: @ontology_acronyms + Array(selected),
                          selected: selected, multiple: multiple,
                          open_to_add: true)
   end
