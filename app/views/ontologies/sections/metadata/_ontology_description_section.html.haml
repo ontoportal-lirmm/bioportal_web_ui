@@ -29,12 +29,6 @@
           %span.date_creation_text
             #{display_contact(@submission_latest.contact)}.
 
-        - alt_labels = (Array(@submission_latest&.alternative) + Array(@submission_latest&.hiddenLabel))
-        - unless alt_labels.empty?
-          %div.creation_text
-            Alternatively it can  also be named
-            %span.date_creation_text
-              = alt_labels.length > 1 ? "#{alt_labels[0..-2].join(', ')} or #{alt_labels.last}." : "#{alt_labels.first}."
       - unless @submission_latest.nil? || @submission_latest.hasLicense.nil?
         %div.creation_text
           %span
@@ -55,19 +49,7 @@
           = horizontal_list_container(Array(@submission_latest&.naturalLanguage)) do |v|
             = render LanguageFieldComponent.new(value: v)
 
-    - unless Array(@submission_latest&.metadataVoc).empty?
-      - l.row do
-        = render FieldContainerComponent.new(label: 'Used Metadata vocabularies') do
-          = metadata_vocabulary_display(@submission_latest&.metadataVoc)
 
-
-    - if  @submission_latest&.pullLocation
-      - l.row do
-        = admin_block(class_css: '') do
-          = render FieldContainerComponent.new(label: 'Pull location') do
-            = horizontal_list_container([@submission_latest&.pullLocation]) do |v|
-              %span.admin-background
-                = render LinkFieldComponent.new(value: v)
     - unless  Array(@submission_latest&.keywords).empty? && Array(@submission_latest&.keyClasses).empty?
       - l.row do
         = render FieldContainerComponent.new(label: 'Keywords and classes') do
@@ -84,11 +66,14 @@
         = render FieldContainerComponent.new(label: 'Categories and subjects') do
           = horizontal_list_container(domains.uniq) do |v|
             = render ChipButtonComponent.new(text: show_category_name(v), type: "static")
-    - unless Array(@ontology.group).empty?
+
+    - if  @submission_latest&.pullLocation
       - l.row do
-        = render FieldContainerComponent.new(label: 'Groups') do
-          = horizontal_list_container(@ontology.group) do |v|
-            = render ChipButtonComponent.new(text: show_group_name(v), type: "static")
+        = admin_block(class_css: '') do
+          = render FieldContainerComponent.new(label: 'Pull location') do
+            = horizontal_list_container([@submission_latest&.pullLocation]) do |v|
+              %span.admin-background
+                = render LinkFieldComponent.new(value: v)
   %hr.w-100.my-3
   .icons_container
     = ontology_icon_links(@ontology_icon_links, @submission_latest)

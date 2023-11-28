@@ -31,11 +31,22 @@
       = properties_dropdown('projects_section','Projects and usage information','Details pertaining to the utilization of the ontology.', nil) do |c|
         - c.row do
           = projects_field(@projects)
-
         - properties_list_component(c, @projects_properties)
 
       = properties_dropdown('methodology','Methodology and provenance', 'Metadata properties primarily encompass the design, methods, and actions to create the ontology. This includes elements such as the tools and software employed by the creator of the ontology during its configuration.', @methodology_properties)
+      = properties_dropdown('community','Community', 'Metadata properties primarily encompass the design, methods, and actions to create the ontology. This includes elements such as the tools and software employed by the creator of the ontology during its configuration.', nil ) do |c|
+        - properties_list_component(c, @community_properties)
+        - unless Array(@ontology.group).empty?
+          - c.row do
+            = render FieldContainerComponent.new(label: 'Groups') do
+              = horizontal_list_container(@ontology.group) do |v|
+                = render ChipButtonComponent.new(text: show_group_name(v), type: "static")
 
+      = properties_dropdown('content','Content', 'Metadata properties primarily encompass the design, methods, and actions to create the ontology. This includes elements such as the tools and software employed by the creator of the ontology during its configuration.', nil) do |c|
+        - properties_list_component(c, @content_properties.reject{|k, v| %w[keyClasses metadataVoc].include?(k.to_s)})
+        - c.row do
+          = render FieldContainerComponent.new(label: attr_label('metadataVoc', attr_metadata: attr_metadata("metadataVoc"), show_tooltip: false)) do
+            = Array(@content_properties['metadataVoc']).map{|x| metadata_vocabulary_display(x)}.join.html_safe
       = render Layout::CardComponent.new do |c|
         - c.header do  |h|
           - h.text do

@@ -319,13 +319,15 @@ class OntologiesController < ApplicationController
       ["#{helpers.attr_label(attr, attr_metadata: helpers.attr_metadata(attr), show_tooltip: false)}(#{relation})",
        relation]
     end
-    @config_properties = properties_hash_values([:obsoleteParent] + category_attributes["object description properties"])
-    @methodology_properties = properties_hash_values(category_attributes["methodology"] + [:toDoList, :notes])
+    @config_properties = properties_hash_values(category_attributes["object description properties"])
+    @methodology_properties = properties_hash_values(category_attributes["methodology"])
     @agents_properties = properties_hash_values(category_attributes["persons and organizations"])
     @dates_properties = properties_hash_values(category_attributes["dates"], custom_labels: {released: "Initially created On"})
-    @links_properties = properties_hash_values(category_attributes["links"] + [:associatedMedia, :bugDatabase, :mailingList, :uriRegexPattern])
-    @identifiers = properties_hash_values([:URI, :versionIRI, :identifier, :exampleIdentifier])
-    @projects_properties = properties_hash_values(category_attributes["usage"] + [:award])
+    @links_properties = properties_hash_values(category_attributes["links"])
+    @content_properties = properties_hash_values(category_attributes["content"])
+    @community_properties = properties_hash_values(category_attributes["community"] + [:notes])
+    @identifiers = properties_hash_values([:URI, :versionIRI, :identifier])
+    @projects_properties = properties_hash_values(category_attributes["usage"])
     @ontology_icon_links = [%w[summary/download dataDump],
                             %w[summary/homepage homepage],
                             %w[summary/documentation documentation],
