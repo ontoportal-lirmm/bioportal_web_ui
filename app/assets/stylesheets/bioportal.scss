@@ -49,6 +49,12 @@ body{
 
 }
 
+.text-truncate-scroll{
+  overflow: scroll;
+  white-space: nowrap;
+}
+
+
 .bg-warning-light{
   background-color: var(--bg-warning-light-color) !important;
 }
