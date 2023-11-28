@@ -11,7 +11,7 @@
   .ontology-details-header-sub-container
     .ontology-details-header-left-container{style:'width: 70%'}
       .ontology-details-name-bar
-        %div{style:'max-width: 60%'}
+        %div{style:'max-width: 60%', data: { controller: 'tooltip'}, title: ontology_alternative_names }
           = @ontology.name
           %span
             = "("+ @ontology.acronym+")"

@@ -18,6 +18,21 @@ module OntologiesHelper
     render ChipButtonComponent.new(class:  style, text: text_content, type: clickable ? 'clickable' : 'static')
   end
 
+  def ontology_alternative_names(submission = @submission_latest)
+    alt_labels = (Array(submission&.alternative) + Array(submission&.hiddenLabel))
+    return unless alt_labels.present?
+
+    content_tag(:div, class: 'creation_text') do
+      concat("It can also be referred to as ")
+      concat(content_tag(:span, class: 'date_creation_text') do
+        if alt_labels.length > 1
+          concat("#{alt_labels[0..-2].join(', ')} or #{alt_labels.last}.")
+        else
+          concat("#{alt_labels.first}.")
+        end
+      end)
+    end
+  end
   def private_ontology_icon(is_private)
     raw(content_tag(:i, '', class: 'fas fa-key', title: "Private Ontology")) if is_private
   end
@@ -576,6 +591,7 @@ module OntologiesHelper
     end
   end
   def ontology_import_code(submission = @submission_latest )
+    # TODO remove or reuse somewhere elese
     prefix = submission.preferredNamespacePrefix
     namespace= submission.preferredNamespaceUri || submission.URI
     return if prefix.blank? && namespace.blank?
