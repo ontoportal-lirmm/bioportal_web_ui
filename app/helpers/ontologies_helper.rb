@@ -9,7 +9,21 @@ module OntologiesHelper
   def ontology_retired?(submission)
     submission[:status].to_s.eql?('retired') || submission[:deprecated].to_s.eql?('true')
   end
+  def ontology_license_badge(acronym, submission = @submission_latest)
+    no_license = submission.hasLicense.blank?
+    render ChipButtonComponent.new(class: "chip_button_small #{no_license && 'disabled-link'}", type: 'clickable') do
+      if no_license
+        content_tag(:span) do
+          content_tag(:span, "No license", class: "mx-1") + inline_svg_tag('icons/law.svg', width: "15px")
+        end
+      else
+        link_to_modal(nil, "/ajax/submission/show_licenses/#{acronym}",data: { show_modal_title_value: "Additional license a access rights information"}) do
+          content_tag(:span, "View license", class: "mx-1") + inline_svg_tag('icons/law.svg')
+        end
+      end
 
+    end
+  end
   def ontology_retired_badge(submission, small: false, clickable: true)
     return if submission.nil? || !ontology_retired?(submission)
     text_color = submission[:status].to_s.eql?('retired') ? 'text-danger bg-danger-light' : 'text-warning bg-warning-light'

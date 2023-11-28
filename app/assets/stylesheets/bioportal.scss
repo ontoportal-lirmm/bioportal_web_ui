@@ -49,6 +49,18 @@ body{
 
 }
 
+.disabled-link{
+  color: #888888 !important;
+  span{
+    opacity: 0.6;
+  }
+  a {
+    color: #888888 !important;
+  }
+  svg path{
+    fill: #888888 !important;
+  }
+}
 .text-truncate-scroll{
   overflow: scroll;
   white-space: nowrap;

@@ -1,5 +1,6 @@
 - if @type == "static"
-    %span.chip_button_container{@html_options}
-        = @text || content
+  %span.chip_button_container{@html_options}
+    = @text || content
 - else
-    %a.chip_button_container_clickable{@html_options}= @text || content
+  %span.chip_button_container_clickable{@html_options}
+    = @text || content

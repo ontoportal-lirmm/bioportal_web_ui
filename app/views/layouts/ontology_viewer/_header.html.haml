@@ -11,9 +11,9 @@
   .ontology-details-header-sub-container
     .ontology-details-header-left-container{style:'width: 70%'}
       .ontology-details-name-bar
-        %div{style:'max-width: 60%', data: { controller: 'tooltip'}, title: ontology_alternative_names }
+        %div
           = @ontology.name
-          %span
+          %span{data: { controller: 'tooltip'}, title: ontology_alternative_names}
             = "("+ @ontology.acronym+")"
           - if @ontology.private?
             = render ChipButtonComponent.new(class: 'chip_button_small mr-1') do
@@ -21,6 +21,7 @@
           - if @submission_latest&.hasOntologyLanguage
             = render ChipButtonComponent.new(class: 'chip_button_small mr-1', text: @submission_latest.hasOntologyLanguage)
           = ontology_retired_badge(@submission_latest, small: true, clickable: false)
+          = ontology_license_badge(@ontology.acronym, @submission_latest)
 
       - unless sub.nil? ||  sub.creationDate.nil?
         .ontology-details-last-update
