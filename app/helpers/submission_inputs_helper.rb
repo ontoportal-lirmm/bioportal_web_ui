@@ -15,6 +15,9 @@ module SubmissionInputsHelper
     end
     alias :attr_key  :attr
 
+    def attr_key
+      @attribute_key
+    end
     def name
       "submission[#{@attribute_key}]"
     end

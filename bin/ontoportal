@@ -6,7 +6,8 @@ show_help() {
   echo "  dev            : Start the Ontoportal Web UI development server."
   echo "                  Example: $0 dev --api-url http://localhost:9393 --api-key my_api_key"
   echo "                  Use --reset-cache to remove volumes: $0 dev --reset-cache"
-  echo "  test           : Run tests."
+  echo "  test           : Run tests. Specify either a test file:line_number or  empty for 'all'."
+  echo "                   Example: $0 test test/integration/login_flows_test.rb:22 "
   echo "  run            : Run a command in the Ontoportal Web UI Docker container."
   echo "  help           : Show this help message."
   echo

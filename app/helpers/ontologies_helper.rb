@@ -12,7 +12,7 @@ module OntologiesHelper
 
   def ontology_retired_badge(submission, small: false, clickable: true)
     return if submission.nil? || !ontology_retired?(submission)
-    text_color = submission[:status].to_s.eql?('retired') ? 'text-danger alert-danger-type' : 'text-warning alert-warning-type'
+    text_color = submission[:status].to_s.eql?('retired') ? 'text-danger bg-danger-light' : 'text-warning bg-warning-light'
     text_content = submission[:status].to_s.eql?('retired') ?  'Retired' : 'Deprecated'
     style = "#{text_color} #{small && 'chip_button_small'}"
     render ChipButtonComponent.new(class:  style, text: text_content, type: clickable ? 'clickable' : 'static')

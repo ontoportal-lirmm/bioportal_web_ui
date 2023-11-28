@@ -49,6 +49,14 @@ body{
 
 }
 
+.bg-warning-light{
+  background-color: var(--bg-warning-light-color) !important;
+}
+
+.bg-danger-light{
+  background-color: var(--bg-danger-light-color) !important;
+}
+
 @keyframes gradient {
   0% {
     background-position: 0% 50%;
