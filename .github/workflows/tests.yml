@@ -55,8 +55,7 @@ jobs:
       # Add or replace test runners here
       - name: Run tests
         run:  COVERAGE=true RAILS_ENV=test bin/rails test -v
-      - name: Upload Code Coverage
-        uses: actions/upload-artifact@v2
-        with:
-          name: code-coverage
-          path: coverage/
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

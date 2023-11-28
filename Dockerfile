@@ -30,7 +30,7 @@ ENV RAILS_LOG_TO_STDOUT="1" \
     BUNDLE_WITHOUT="${BUNDLE_WITHOUT}"
 
 # fix for ruby v2.7.8 only
-RUN gem install uri -v 0.12.2 --no-document
+RUN gem install uri --no-document
 
 COPY Gemfile* .
 RUN bundle install

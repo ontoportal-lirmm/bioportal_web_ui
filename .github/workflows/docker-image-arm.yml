@@ -49,7 +49,7 @@ jobs:
           context: .
           platforms: linux/arm64
           build-args: |
-            RUBY_VERSION=2.7
+            RUBY_VERSION=2.7.8
           push: true
           tags: ${{ steps.meta.outputs.tags }}-${{ env.BRANCH_NAME }}-arm64
           labels: ${{ steps.meta.outputs.labels }}
