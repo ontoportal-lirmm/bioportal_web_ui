@@ -59,7 +59,7 @@
         %span.mx-1
           = render ChipButtonComponent.new(type: "clickable") do
             = ontology[:format]
-      - if ontology[:deprecated]
+      - if ontology_retired?(ontology)
         %span.mx-1
           = ontology_retired_badge(ontology)
       - if ontology[:viewOfOnt]
@@ -68,8 +68,7 @@
 
       - if session[:user]&.admin?
         %div.mx-1{title: content_tag(:div, debug(ontology), style: 'height: 300px; overflow: scroll'), data:{controller: 'tooltip', 'tooltip-interactive-value': 'true'}}
-          %span.admin-background
-            = render ChipButtonComponent.new(type: "clickable", text: "Debug")
+          = render ChipButtonComponent.new(type: "clickable", text: "Debug" , class: 'admin-background')
 - else
   .browse-ontology-container
     .browse-sket

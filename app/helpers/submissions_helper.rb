@@ -192,7 +192,7 @@ module SubmissionsHelper
 
 
     if selected_attribute?('hasOntologyLanguage')
-      output += render partial: 'submissions/submission_format_form'
+      output += has_ontology_language_input
     end
 
     if selected_attribute?('categories')

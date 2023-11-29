@@ -7,12 +7,13 @@ module InputsHelper
                                          helper_text: help)
   end
 
-  def select_input(name:, values:, id: nil, label: nil, selected: nil, multiple: false, help: nil, open_to_add: false, data: {})
+  def select_input(name:, values:, id: nil, label: nil, selected: nil, multiple: false, help: nil, open_to_add: false, required: false,  data: {})
     render Input::SelectComponent.new(label: input_label(label, name), id: id || name, name: name, value: values,
                                       selected: selected,
                                       multiple: multiple,
                                       helper_text: help,
                                       open_to_add_values: open_to_add,
+                                      required: required,
                                       data: data)
   end
 

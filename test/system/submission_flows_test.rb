@@ -86,9 +86,6 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
       assert_text cat.name
     end
 
-    @new_ontology.group.each do |group|
-      assert_text group.name
-    end
 
     assert_text @new_submission.URI
     assert_text @new_submission.description
@@ -105,6 +102,17 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
       assert_text contact["name"]
       assert_text contact["email"]
     end
+
+    # Assert relations
+    open_dropdown "#community"
+
+    @new_ontology.group.each do |group|
+      assert_text group.name
+    end
+
+
+
+
   end
 
   test "click on button edit submission and change all the fields and save" do
@@ -158,7 +166,6 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
       click_on "Usage"
       submission_usage_edit_fill(submission_2)
 
-
       # Relation tab
       click_on "Relation"
       submission_relations_edit_fill(submission_2)
@@ -178,14 +185,10 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_selector '.notification', text: "Submission updated successfully"
     assert_text "#{ontology_2.name} (#{@new_ontology.acronym})"
 
-
     selected_categories.each do |cat|
       assert_text cat.name
     end
 
-    selected_groups.each do |group|
-      assert_text group.name
-    end
     assert_text submission_2.URI
     assert_text submission_2.versionIRI
     assert_selector '#submission-status', text: submission_2.version
@@ -205,14 +208,6 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_selector "a[href=\"#{Array(submission_2.publication).last}\"]" # TODO the publication display is an array can't be an Icon
     assert_text submission_2.abstract
 
-    submission_2.alternative.each do |alt|
-      assert_text alt
-    end
-
-    submission_2.hiddenLabel.each do |alt|
-      assert_text alt
-    end
-
     open_dropdown "#dates"
     assert_date submission_2.released
     assert_date submission_2.valid
@@ -224,9 +219,10 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
 
     # Assert media
     open_dropdown "#link"
-    submission_2.associatedMedia.each do |media|
-      assert_text media
-    end
+    # associatedMedia not displayed for now
+    # submission_2.associatedMedia.each do |media|
+    #  assert_text media
+    # end
 
     submission_2.depiction.map do |d|
       assert_selector "img[src=\"#{d}\"]"
@@ -237,9 +233,6 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     # Assert links
     assert_selector "a[href=\"#{submission_2.repository}\"]"
 
-    assert_text submission_2.bugDatabase
-    assert_text submission_2.mailingList
-
     # Assert persons and organizations
     open_dropdown "#person_and_organization"
 
@@ -249,13 +242,11 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_text agent1.name, count: 3
     assert_text agent2.name, count: 3
 
-
     # Assert usage
     open_dropdown "#projects_section"
     usage_properties = [
       :coverage, :knownUsage,
-      :hasDomain, :example,
-      :award
+      :hasDomain, :example
     ]
     usage_properties.each do |property|
       Array(submission_2[property]).each { |v| assert_text v } # check
@@ -265,35 +256,12 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
       assert_text task.delete(' ') # TODO fix in the UI the disaply of taskes
     end
 
-
-
-
-    # Assert Content
-    open_dropdown "#configuration"
-    assert_text submission_2.obsoleteParent
-
-    assert_text submission_2.uriRegexPattern
-    assert_text submission_2.exampleIdentifier
-
-    submission_2.metadataVoc.each do |voc|
-      assert_text voc
-    end
-
-    assert_text submission_2.preferredNamespaceUri
-    assert_text submission_2.preferredNamespacePrefix
-
-    submission_2.keyClasses.each do |key|
-      assert_text key
-    end
-
     # Assert Methodology
     open_dropdown "#methodology"
     methodology_properties = [
       :conformsToKnowledgeRepresentationParadigm,
       :usedOntologyEngineeringMethodology,
-      :accrualPolicy,
-      :toDoList,
-      :notes,
+      :accrualPolicy
     ]
 
     methodology_properties.each do |key|
@@ -306,14 +274,53 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
 
     assert_text submission_2.accrualPeriodicity.split('/').last.downcase
 
+    # Assert Community
+    open_dropdown "#community"
+    assert_text submission_2.bugDatabase
+    assert_text submission_2.mailingList
+    [:toDoList, :notes, :award].each do |key|
+      Array(submission_2[key]).map { |x| assert_text x }
+    end
+
+    selected_groups.each do |group|
+      assert_text group.name
+    end
+
+    # Assert Content
+    open_dropdown "#content"
+    assert_text submission_2.obsoleteParent
+    assert_text submission_2.exampleIdentifier
+    assert_text submission_2.uriRegexPattern
+    assert_text submission_2.preferredNamespaceUri
+    assert_text submission_2.preferredNamespacePrefix
+
+    submission_2.metadataVoc.each do |voc|
+      assert_text voc
+    end
+
+    open_dropdown "#configuration"
+
+    submission_2.keyClasses.each do |key|
+      assert_text key
+    end
+
     # Assert relations
     click_on "See all metadata"
     sleep 1
     within "#application_modal_content" do
       wait_for 'input[type="search"]'
       find('input').set('hasPriorVersion')
-
       assert_text submission_2.hasPriorVersion
+
+      submission_2.alternative.each do |alt|
+        find('input').set('alternative')
+        assert_text alt
+      end
+
+      submission_2.hiddenLabel.each do |alt|
+        find('input').set('hiddenLabel')
+        assert_text alt
+      end
 
       relations = [:hasPart, :ontologyRelatedTo, :similarTo, :comesFromTheSameDomain,
                    :isAlignedTo, :isBackwardCompatibleWith, :isIncompatibleWith,
@@ -323,7 +330,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
       ]
       relations.each do |key|
         find('input').set(key)
-        2.times.each{|id| assert_text  "https://#{key}.2.#{id}.com" }
+        2.times.each { |id| assert_text "https://#{key}.2.#{id}.com" }
       end
     end
 
@@ -362,7 +369,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
   end
 
   def submission_description_edit_fill(submission)
-    wait_for_text "Description"
+    wait_for '[name="submission[description]"]'
 
     fill_in 'submission[description]', with: submission.description
     fill_in 'submission[abstract]', with: submission.abstract
@@ -428,9 +435,8 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     agent1 = fixtures(:agents)[:agent1]
     agent2 = fixtures(:agents)[:agent2]
 
-
     [:hasCreator, :hasContributor, :curatedBy].each do |key|
-      list_inputs "#submission#{key}_from_group_input", "submission[#{key}]" , [agent1, agent2] do |selector, value, index|
+      list_inputs "#submission#{key}_from_group_input", "submission[#{key}]", [agent1, agent2] do |selector, value, index|
         element = all("turbo-frame:last-of-type").last
         within element do
           agent_id = agent_search(value.name)
@@ -438,7 +444,6 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
         end
       end
     end
-
 
     # TODO agents test
   end
@@ -497,6 +502,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     list_inputs "#submissionexample_from_group_input",
                 "submission[example]", submission.example
   end
+
   def submission_content_edit_fill(submission)
     wait_for_text "Root of obsolete branch"
 
@@ -510,6 +516,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     tom_select "submission[metadataVoc][]", submission.metadataVoc
 
   end
+
   def submission_relations_edit_fill(submission)
     wait_for_text "Prior version"
 
@@ -547,6 +554,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
                   "submission[#{key}]", 2.times.map { |i| "#{key}-#{i}" }
     end
   end
+
   def open_dropdown(target)
     find(".dropdown-container .dropdown-title-bar[data-target=\"#{target}\"]").click
     sleep 1

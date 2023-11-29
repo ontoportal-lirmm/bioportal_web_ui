@@ -10,8 +10,10 @@ module OntologiesHelper
     submission[:status].to_s.eql?('retired') || submission[:deprecated].to_s.eql?('true')
   end
   def ontology_license_badge(acronym, submission = @submission_latest)
+    return if submission.nil?
+
     no_license = submission.hasLicense.blank?
-    render ChipButtonComponent.new(class: "chip_button_small #{no_license && 'disabled-link'}", type: 'clickable') do
+    render ChipButtonComponent.new(class: "chip_button_small #{no_license && 'disabled-link'}", type: no_license ? 'static' : 'clickable') do
       if no_license
         content_tag(:span) do
           content_tag(:span, "No license", class: "mx-1") + inline_svg_tag('icons/law.svg', width: "15px")
@@ -29,7 +31,7 @@ module OntologiesHelper
     text_color = submission[:status].to_s.eql?('retired') ? 'text-danger bg-danger-light' : 'text-warning bg-warning-light'
     text_content = submission[:status].to_s.eql?('retired') ?  'Retired' : 'Deprecated'
     style = "#{text_color} #{small && 'chip_button_small'}"
-    render ChipButtonComponent.new(class:  style, text: text_content, type: clickable ? 'clickable' : 'static')
+    render ChipButtonComponent.new(class:  "#{style} mr-1", text: text_content, type: clickable ? 'clickable' : 'static')
   end
 
   def ontology_alternative_names(submission = @submission_latest)
