@@ -25,6 +25,8 @@ class SubscriptionsController < ApplicationController
       # So here we re-generate a new subscription Array (instead of directly updating it, which causes error)
       all_subs = []
       u.subscription.each do |subs|
+        next if subs.ontology.nil?
+
         # Add all subscription to the array, but not the one to be deleted
         if !subs.ontology.split('/').last.eql?(ont.acronym)
           all_subs.push({ontology: subs.ontology, notification_type: subs.notification_type})
@@ -42,6 +44,7 @@ class SubscriptionsController < ApplicationController
       already_subscribed = false
       all_subs = []
       u.subscription.each do |subs|
+        next if subs.ontology.nil?
         # add all existing subscriptions
         all_subs.push({ontology: subs.ontology, notification_type: subs.notification_type})
         if subs.ontology.split("/").last == ont.acronym && subs.notification_type == "NOTES"
