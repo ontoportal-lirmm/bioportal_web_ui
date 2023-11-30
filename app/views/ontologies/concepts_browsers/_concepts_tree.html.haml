@@ -23,5 +23,5 @@
     - else
       - concept_schemes = skos? ? "&concept_schemes=#{params[:concept_schemes]}" : ''
       = render TurboFrameComponent.new(id: 'concepts_tree_view',
-                                     src: "/ajax/classes/treeview?ontology=#{@ontology.acronym}&conceptid=#{escape(@concept.id)}#{concept_schemes}&auto_click=false",
+                                     src: "/ajax/classes/treeview?ontology=#{@ontology.acronym}&conceptid=#{escape(@concept.id)}#{concept_schemes}&auto_click=false&language=#{request_lang}",
                                      data: {'turbo-frame-target': 'frame'})                          
