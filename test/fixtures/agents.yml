@@ -120,3 +120,54 @@ organization1:
     acronym: "TSG"
     homepage: "https://www.techsolutionsgroup.com/"
 
+organization2:
+  name: "Quantum Dynamics Solutions"
+  agentType: "organization"
+  identifiers:
+    - notation: "5678-9012"
+  affiliations:
+    - name: "Space Exploration Consortium"
+      agentType: "organization"
+      identifiers:
+        - notation: "1234-1234"
+      affiliations: []
+      email: "contact@spaceconsortium.com"
+      acronym: "SEC"
+      homepage: "https://www.spaceconsortium.com/"
+    - name: "Tech Innovators Guild"
+      agentType: "organization"
+      identifiers:
+        - notation: "7890-1234"
+      affiliations: []
+      email: "info@techinnovatorsguild.com"
+      acronym: "TIG"
+      homepage: "https://www.techinnovatorsguild.com/"
+  email: "info@quantumdynamics.com"
+  acronym: "QDS"
+  homepage: "https://www.quantumdynamics.com/"
+
+organization3:
+  name: "BioTech Solutions Inc."
+  agentType: "organization"
+  identifiers:
+    - notation: "2345-6789"
+  affiliations:
+    - name: "Health Research Alliance"
+      agentType: "organization"
+      identifiers:
+        - notation: "5678-9012"
+      affiliations: []
+      email: "contact@healthresearchalliance.com"
+      acronym: "HRA"
+      homepage: "https://www.healthresearchalliance.com/"
+    - name: "GreenTech Innovations"
+      agentType: "organization"
+      identifiers:
+        - notation: "8901-2345"
+      affiliations: []
+      email: "info@greentechinnovations.com"
+      acronym: "GTI"
+      homepage: "https://www.greentechinnovations.com/"
+  email: "info@biotechsolutions.com"
+  acronym: "BSI"
+  homepage: "https://www.biotechsolutions.com/"

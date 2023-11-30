@@ -152,7 +152,9 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   end
 
   def agent_fill(agent, parent_id: nil, enable_affiliations: true)
-    within "form[action=\"/agents\"]" do
+    id = agent.id ? "/#{agent.id}": ''
+    form = all("form[action=\"/agents#{id}\"]").first
+    within form  do
       choose "", option: agent.agentType, allow_label_click: true if enable_affiliations
       fill_in 'name', with: agent.name
 
@@ -175,6 +177,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
       end
 
       within '.agents-affiliations' do
+        all('.delete').each { |x| x.click }
         Array(agent.affiliations).each do |aff|
           aff = OpenStruct.new(aff)
           find('.add-another-object', text: 'Add another').click
