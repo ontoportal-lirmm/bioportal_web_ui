@@ -161,4 +161,7 @@ en:
         </blockquote>
   mappings:
     intro: Browse mappings between classes in different ontologies
+  account:
+    email_announcement: EarthPortal announcements email list
+    custom_ontology_set: "Customize your EarthPortal display: Pick the ontologies that you want to see on EarthPortal while hiding all other ontologies."
 

@@ -37,7 +37,7 @@
           .account-page-card-container
             .account-page-card-sub-container
               %h4.account-page-card-title Mailing list subscription
-              %p.account-page-card-desc AgroPortal announcements email list
+              %p.account-page-card-desc= t("account.email_announcement")
             - subscribed = false
             - if subscribed 
               %a.account-page-subscribe-button{:href =>"mailto:#{$ANNOUNCE_SERVICE_HOST}?Subject=unsubscribe%20#{$ANNOUNCE_LIST}"}
@@ -69,7 +69,7 @@
                 to modify your Custom Ontology Set.
             - else
               %p.account-page-card-desc
-                Customize your AgroPortal display: Pick the ontologies that you want to see on AgroPortal will hide all other ontologies.
+                = t("account.custom_ontology_set")
               %p
                 %span{style: "font-weight: normal; font-size: 9pt; padding-left: 7px;"}
                   %a#edit_custom_ontologies{href: "javascript:void(0);"} select ontologies
