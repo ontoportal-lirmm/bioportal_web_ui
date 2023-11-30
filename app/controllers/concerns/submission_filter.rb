@@ -53,7 +53,7 @@ module SubmissionFilter
       isOfType: :isOfType,
       format: :hasOntologyLanguage,
       hasFormalityLevel: :hasFormalityLevel,
-      search: %i[name acronym],
+      search: %i[name acronym description],
       sort_by: :order_by
     }
 
