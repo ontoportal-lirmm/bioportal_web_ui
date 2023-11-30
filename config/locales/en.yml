@@ -6,49 +6,53 @@ en:
         license:
           attributes:
             encrypted_key:
-              invalid_license_key: is an invalid license key
+              invalid_license_key: is an invalid license key.
               no_appliance_id_for_comparison: Could not be validated. Unable to retrieve virtual appliance ID.
-              appliance_id_mismatch: is an appliance id mismatch
+              appliance_id_mismatch: is an appliance id mismatch.
 
   date:
     formats:
       year_month_day_concise: "%Y-%m-%d" # 2017-03-01
       month_day_year: "%b %-d, %Y" # Mar 1, 2017
       monthfull_day_year: "%B %-d, %Y" # March 1, 2017
-  additional_parameters: 'Additional Parameters Explained at '
+  
+  acceptance: Acceptance
+  additional_parameters: 'Additional parameters explained at '
   admin:
     licenses:
       create:
         success: License renewed successfully!
+  
   all: All
+  
   annotator:
     annotate_text_prompt: Enter or paste text to be annotated
     annotations_result: Annotations
     fast_context: FastContext
     filters:
-      confidence_threshold: Filter Confidence Threshold
+      confidence_threshold: Filter confidence threshold
       confidence_threshold_help: Specify the minimum position in the score distribution
-        (between 1 and 100)
-      exclude_numbers: Exclude Numbers
+        (between 1 and 100).
+      exclude_numbers: Exclude numbers
       exclude_synonyms: Exclude synonyms
-      include_mappings: Include Mappings
+      include_mappings: Include mappings
       match_longest_only: Match longest only
       match_partial_words: Recognize partial words
       max_hierarchy_level: Include ancestors up to level
       score: Include score
       score_help: Score annotations following previous NCBO 2009 measure (old) or
         Score annotations following C-Value measure (cvalue) or Score annotations
-        following C-Value measure with hierarchy expansion (cvalueh)
+        following C-Value measure with hierarchy expansion (cvalueh).
       score_threshold: Filter by score threshold
-      score_threshold_help: Specify minimum score value for annotations
+      score_threshold_help: Specify minimum score value for annotations.
     get_annotator: Get annotations
     index:
       fast_context:
-        tooltip: 'Enable FastContext to detect: if a concept was denied (affirmed,
+        tooltip: 'Enable FastContext to detect: if a concept is denied (affirmed,
           denied), who experienced the found concept (patient, other), when the annotated
           concept occurred (recent, historical, hypothetical), and/ or if the annotated
           concept is uncertain (certain, uncertain).'
-      intro: Get annotations for biomedical text with ontology classes
+      intro: Get annotations for text with ontology classes
       lemmatize:
         tooltip: Enable Lemmatize to lemmatize submitted text and use a lemmatized
           dictionary for annotations
@@ -62,9 +66,10 @@ en:
     umls:
       semantic_groups: UMLS Semantic Groups
       semantic_types: UMLS Semantic Types
+  
   certainty: Certainty
   class: Class
-  clear_selection: Clear Selection
+  clear_selection: Clear selection
   concepts:
     request_term:
       new_term_instructions: |
@@ -76,10 +81,10 @@ en:
             <p>Term Description (required)<br>A brief definition, description, or usage of the suggested term. Synonyms of additional terms may be listed in this section.</p>
           </blockquote>
           <blockquote>
-            <p>Superclass (required)<br>The parent term of the suggested term. The parent term must be an existing entry in the current ontology. The superclass can be selected directly from the Bioportal class tree.</p>
+            <p>Superclass (required)<br>The parent term of the suggested term. The parent term must be an existing entry in the current ontology. The superclass can be selected directly from the class tree.</p>
           </blockquote>
           <blockquote>
-            <p>References (optional)<br>Provide evidence that the requested term exists, such as Pubmed IDs of articles or links to other resources describing the term.</p>
+            <p>References (optional)<br>Provide evidence that the requested term exists, such as IDs of articles or links to other resources describing the term.</p>
           </blockquote>
           <blockquote>
             <p>Justification (optional)<br>Provide here any additional information about the requested term.</p>
@@ -91,116 +96,121 @@ en:
   get_json_version: Get the json version
   get_recommendations: Get recommendations
   help: Help
+  
   home:
-    agroportal_figures: "%{site} in figures:"
-    benefit1: Discover new insights and connections by exploring other ontologies in the repository.
+    agroportal_figures: "%{site} in figures"
+    benefit1: Discover new insights and knowledge by exploring other ontologies or smeantic resources in the repository.
     benefit2: Contribute to knowledge sharing and semantic interoperability in your domain.
     benefit3: Map your ontology to other relevant ones in the domain and collaborate with other users.
-    benefit4: Get feedback and suggestions from other users who can review and comment on your ontology.
+    benefit4: Get feedback and suggestions from other users who can use and comment on your ontology.
     benefit5: Precisely describe your ontology with relevant metadata and get a FAIR score for your ontology.
     fair_details: See details
-    fairness: FAIR Scores
+    fairness: FAIR Score
     get_annotations: Get annotations
     get_recommendations: Get recommendations
     index:
-      tagline: The home of vocabularies and ontologies in agronomy and related fields.
+      tagline: The home of ontologies and semantic artefacts in agri-food and related domains.
       title: Welcome to %{site}
       welcome: Welcome to %{site},
     ontology_upload: Do you want to share an ontology?
-    ontology_upload_benefits: 'By uploading your ontology to %{site}, you can:'
+    ontology_upload_benefits: 'By uploading and sharing your ontology to %{site}, you can:'
     ontology_upload_button: Submit ontology
-    ontology_upload_desc: Uploading an ontology or another type of semantic artefact (vocabulary, terminology, thesaurus, ...)
-      with others.
-    paste_text_prompt: Enter a paragraph of text or some keywords ...
-    recommender_annotator: Recommender and annotator
+    ontology_upload_desc: Uploading an ontology or another type of semantic artefact (vocabulary, terminology, thesaurus, ...) is a way of sharing your knowledge with others.
+    paste_text_prompt: Enter a paragraph of text or some keywords...
+    recommender_annotator: Recommender and Annotator
     supported_by: Supported by
     twitter_news: News
     with_collaboration: With the collaboration of
+  
   input: Input
   insert_sample_text: Insert sample text
   keywords: Keywords
   keywords_separated_by_commas: Keywords separated by commas
-  knowledge_detail: Knowledge Detail
+  knowledge_detail: Knowledge detail
+  
   landscape:
     average_metrics: Average metrics
-    category: Category
+    category: category
     filter_network: Filter network
     funding_endorsing_organizations: Organizations funding and endorsing the most
       ontologies
-    group: Group
+    group: group
     groups_and_categories: Groups and Categories
-    intro: Visualize data retrieved from ontologies stored in the portal
+    intro: Visualize the panorama of ontologies and other semantic resources of %{site} via metadata aggregation.
     more_properties_charts: More properties charts
     most_active_ontologies: Most active ontologies
     most_active_organizations: Most active organizations
     most_active_people: Most active people
-    most_active_people_as_reviewer: Most active people as reviewers
-    most_mentioned_people: Most mentioned people as contact, creator, contributor
-      or curator
-    most_mentioned_people_as_reviewer: People who published notes, reviews, and projects
-    ontologies_activity_on: Ontology Activity on %{site}
+    most_active_people_as_reviewer: Most active user account
+    most_mentioned_people: Most mentioned people as contact, creator, contributor or curator
+    most_mentioned_people_as_reviewer: User account who published notes, reviews, and projects
+    ontologies_activity_on: Ontology activity
     ontologies_by: Ontologies by %{type}
     ontologies_contributors: Contributors to ontology development
-    ontologies_count_by_catalog: Number of ontologies in each data catalog
-    ontologies_formats: Format used
-    ontologies_languages: Natural languages of ontologies
-    ontologies_licenses: Licenses used by ontologies
+    ontologies_count_by_catalog: Number of ontologies in each semantic artefact catalog
+    ontologies_formats: Representation language
+    ontologies_languages: Natural languages
+    ontologies_licenses: Licenses
     ontologies_with_notes_reviews_projects: Ontologies with notes, reviews, and projects
     ontology_fairness_evaluator: Ontology FAIRness Evaluator (O’FAIRe)
-    ontology_formality_levels: Formality levels of ontologies
-    ontology_properties_pie_charts: Pie charts for the properties used in ontologies
-    ontology_relations_network: Ontology Relations Network
+    ontology_formality_levels: Formality levels
+    ontology_properties_pie_charts: Pie charts retated to object description properties (i.e., meatdata properties used to describe ontology objects).
+    ontology_relations_network: Ontology relations network
     ontology_tools: Most used tools to build ontologies
-    owl_ontology_author_uris: URIs for author properties used for OWL ontologies
-    owl_ontology_definition_uris: URIs for definition properties used for OWL ontologies
-    owl_ontology_preflabel_uris: URIs for prefLabel properties used for OWL ontologies
-    owl_ontology_synonym_uris: URIs for synonym properties used for OWL ontologies
-    properties_usage_proportion: The proportion of properties usage among stored ontologies
-    properties_use: Property Usage
-    relations_between_stored_ontologies: Relations between stored ontologies in the
-      portal
-    size: Size
-    title: "%{site} Landscape"
+    owl_ontology_author_uris: Properties used to specify object author
+    owl_ontology_definition_uris: Properties used to specify objects definition
+    owl_ontology_preflabel_uris: Properties used to specify objects preferred label
+    owl_ontology_synonym_uris: Properties used to specify object synonyms
+    properties_usage_proportion: Pie charts related to the most frequent values for certain metadata properties
+    properties_use: Property usage
+    relations_between_stored_ontologies: Set of relationships between %{site} ontologies as captured by metadata. Green ontologies are stored in the repository while those in blue are external resources.
+    size: size
+    title: "Landscape"
+  
   layout:
     header:
-      account_setting: Account Settings
+      account_setting: Account settings
       annotator: Annotator
       browse: Browse
       documentation: Documentation
       help: Help
       landscape: Landscape
       login: Login
-      logout: logout
+      logout: Logout
       mappings: Mappings
       publications: Publications
-      release_notes: Release Notes
+      release_notes: Release notes
       search_prompt: Search in %{portal_name} ...
-      submit_feedback: Send Feedback
-      support: support
+      submit_feedback: Send feedback
+      support: Support
+  
   login:
-    enter_email: Enter your email
+    enter_email: Enter your username
     enter_password: Enter your password
     forgot_password: Forgot password?
-    invalid_login: Errors On Form
-    no_account: Don't have an account?
+    invalid_login: Errors on the form
+    no_account: Do not have an account?
     password: Password
     register: Register
     title: Login
-    username_or_email: Username or Email
+    username_or_email: Username
+  
   mappings:
     find_mappings: Find mappings of a class/concept
-    intro: Browse mappings between classes of different ontologies
+    intro: Find all the mappings of an ontology
     loading_mappings: Loading mappings...
-    mappings_bulk_load: Mapping Bulk Load
+    mappings_bulk_load: Upload mappings in bulk from a source file
     no_mappings_available: No mappings available
-    title: Correspondences
+    title: Mappings
     upload_mappings: Upload mappings
+  
   matched_class: Matched class
   matched_ontology: matched ontology
   max_ontologies_per_set: Maximum number of ontologies per set
+  
   nbco_annotatosplus:
     annotations: Annotations
-    enter_paste_text_to_annotate: 'Enter or paste the text to annotate:'
+    enter_paste_text_to_annotate: 'Enter or paste the text to annotate'
     exclude_numbers: Exclude numbers
     exclude_synonyms: Exclude synonyms
     fast_context:
@@ -228,8 +238,7 @@ en:
         title: Results are filtered by
         umls_sem_type: UMLS Semantic Type
       confidence_threshold: Filter confidence threshold
-      confidence_threshold_help: Specify the minimum position in the scores distribution
-        (between 1 and 100)
+      confidence_threshold_help: Specify the minimum position in the scores distribution (between 1 and 100)
       format_results_as: 'Format results as:'
       reproduce_results_using: Reproduce these results using the
       score_threshold: Filter by score threshold
@@ -245,8 +254,7 @@ en:
            </br><br/>
            If you are using the API, please provide a valid NCBO BioPortal API key and access the service at <a href="http://services.bioportal.lirmm.fr/ncbo_annotatorplus">http://services.bioportal.lirmm. en/ncbo_annotatorplus </a></br>
            Text submitted to NCBO Annotator+ must be in English.
-      sample_text: Melanoma is a malignant tumor of melanocytes found mainly in the
-        skin but also in the intestine and the eye.
+      sample_text: Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.
       title: NCBO Annotator +
     insert_sample_text: Insert sample text
     match_longest_only: Match longest only
@@ -266,15 +274,17 @@ en:
       semantic_types: UMLS Semantic Types
   negation: negation
   none: none
+ 
   ontologies:
-    ontology_search_prompt: 'Search an ontology (e.g., Agrovoc) or concept (e.g., plant height)'
+    ontology_search_prompt: 'Search an ontology or a term (e.g., plant height)'
     self: Ontologies
+  
   ontology: Ontology
   ontology_details:
     concept:
       definitions: Definitions
       id: ID
-      in_schemes: In Schemes
+      in_schemes: In schemes
       member_of: Member of
       no_preferred_name_for_selected_language: No preferred name for selected language.
       obsolete: Obsolete
@@ -285,40 +295,37 @@ en:
       additional_metadata: Additional Metadata
   ontology_sets: Ontology sets
   output: Output
+  
   projects:
     contacts: Contacts
-    create_new_project: Create New Project
+    create_new_project: Create new project
     created: Created
     creator: User
     delete_admin_only: Delete (admin only)
     delete_confirm: Are you sure?
     description: Description
-    description_text: Description Text
+    description_text: Description text
     edit: Edit
-    home_page: Home Page
+    home_page: Home page
     index:
-      intro: Browse a selection of projects that use %{site} resources
+      intro: Browse a selection of projects that use %{site} ontologies
     institutions: Institutions
     ontologies: Ontologies
     project_description: Project Description
     self: Projects
     title: Projects List
-    view_projects_help: View Projects Help
+    view_projects_help: View projects help
+  
   recommender:
-    intro: Get recommendations for the most relevant ontologies from an excerpt of
-      a biomedical text or a list of keywords
+    intro: Get recommendations for the most relevant ontologies from an excerpt of text or a list of keywords
     no_recommendations: No recommendations found
-    no_sets_recommended: There are no recommended ontology sets for the provided input.
-      Please try the 'Ontologies' output.
-    ontology_recommendation_input: Please paste a paragraph of text or some keywords
-      to compute ontology recommendations.
-    ontology_recommender: Ontology Recommender
-    paste_text_recommendations: Paste a paragraph of text or some keywords to use
-      in calculating ontology recommendations
-    recommendation_error: Problem retrieving recommendations, please try again
-    text_length_limit: Please use less than 500 words. If you need to annotate longer
-      pieces of text, you can use the recommendation web service.
-    title: recommender
+    no_sets_recommended: There are no recommended ontology sets for the provided input. Please try the 'Ontologies' output.
+    ontology_recommendation_input: Please paste a paragraph of text or some keywords to compute ontology recommendations.
+    ontology_recommender: Recommender
+    paste_text_recommendations: Paste a paragraph of text or some keywords separated by commas to compute ontology recommendations
+    recommendation_error: Problem computing recommendations, please try again.
+    text_length_limit: Please use less than 500 words. If you need to annotate longer pieces of text, you can use the recommendation wWb service.
+    title: Recommender
     valid_integer_max_ontologies_per_set: Max ontologies per set must be a valid integer
       value
     valid_max_ontologies_per_set_range: Max ontologies per set must be a number between
@@ -326,6 +333,7 @@ en:
     valid_numeric_weights: All weights must be valid numeric values
     weight_sum_greater_than_zero: The sum of weights must be greater than zero
     weights_greater_than_zero: All weights must be greater than or equal to zero
+  
   register:
     account_errors: 'Errors creating your account:'
     confirm_password: Confirm password
@@ -333,19 +341,21 @@ en:
     email: Email
     first_name: First name
     last_name: Last name
-    mailing_list: Register for the AgroPortal's mailing list
+    mailing_list: Register to the %{site}'s mailing list
     optional: "(Optional)"
     password: Password
     title: Register
     username: Username
+  
   reproduce_results: 'Reproduce these results using the '
   score: Score
+  
   search:
     categories: Categories
     class_search: Class Search
-    classes_with_definitions: Classes with Definitions
-    hide_advanced_options: Hide Advanced Options
-    include_in_search: Include in Search
+    classes_with_definitions: Classes with definitions
+    hide_advanced_options: Hide advanced pptions
+    include_in_search: Include in search
     index:
       categories_placeholder: Start typing to select categories or leave blank to
         use all
@@ -358,25 +368,25 @@ en:
       property_definition: A named association between two entities. Examples are
         'definition' (a relationship between a class and text) and 'part of' (a relationship
         between two classes).
-      search_keywords_placeholder: Enter a class, e.g. Melanoma
-    narrow_search_to: Narrow Search to
-    obsolete_classes: Obsolete Classes
+      search_keywords_placeholder: Enter a term, e.g. Melanoma
+    narrow_search_to: Narrow search to
+    obsolete_classes: Obsolete classes
     ontologies: Ontologies
-    ontology_views: Ontology Views
-    property_values: Property Values
-    show_advanced_options: Show Advanced Options
+    ontology_views: Ontology views
+    property_values: Property values
+    show_advanced_options: Show advanced options
     title: Search
-    view_search_documentation: View Search Documentation
+    view_search_documentation: View search documentation
+  
   select_from_list: Select from list
-  select_ontologies: Start typing to select ontologies or leave blank to use them
-    all
+  select_ontologies: Start typing to select ontologies or leave blank to use them all
   select_ontologies_list: Select ontologies
   show_advanced_options: Show advanced options
   specialization: Specialization
   temporality: Temporality
   text: Text
   type: Type
-  umls_sem_type: UMLS Sem Type
-  view_fair_scores_definitions: View fair scores definitions
+  umls_sem_type: UMLS Semantic Type
+  view_fair_scores_definitions: View FAIR scores definitions
   visits: Visits
-  weights_configuration: Weights Configuration
+  weights_configuration: Weights configuration
