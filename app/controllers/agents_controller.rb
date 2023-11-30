@@ -68,7 +68,7 @@ class AgentsController < ApplicationController
 
   def edit
     @agent = LinkedData::Client::Models::Agent.find("#{rest_url}/Agents/#{params[:id]}")
-    @name_prefix = params[:parent_id] || ''
+    @name_prefix = params[:name_prefix] || ''
     @show_affiliations = params[:show_affiliations].nil? || params[:show_affiliations].eql?('true')
     @deletable = params[:deletable].to_s.eql?('true')
   end
@@ -104,7 +104,7 @@ class AgentsController < ApplicationController
                  replace(table_line_id, partial: 'agents/show_line', locals: { agent: agent })
       ]
 
-      streams << replace_agent_form(agent, parent_id: parent_id, deletable: deletable) if params[:parent_id]
+      streams << replace_agent_form(agent, agent_id: agent_id(agent.id), name_prefix: params[:name_prefix] , parent_id: parent_id, deletable: deletable) if params[:parent_id]
 
       render_turbo_stream(*streams)
     end

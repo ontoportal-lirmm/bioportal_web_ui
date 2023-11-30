@@ -41,13 +41,13 @@ module AgentHelper
 
   def link_to_agent_edit_modal(agent, parent_id = nil)
 
-    link_to_modal(nil, edit_agent_path(agent_id(agent), parent_id: parent_id, show_affiliations: parent_id.nil? || parent_id.empty?), class: 'btn btn-sm btn-light', data: { show_modal_title_value: "Edit agent #{agent.id}" }) do
+    link_to_modal(nil, edit_agent_path(agent_id(agent), parent_id: parent_id, show_affiliations: parent_id.nil? || parent_id.empty?), class: 'btn btn-sm btn-light', data: { show_modal_title_value: "Edit agent #{agent.name}" }) do
       content_tag(:i, '', class: 'far fa-edit')
     end
   end
 
-  def link_to_agent_edit(agent, parent_id = nil, deletable: false, show_affiliations: true)
-    link_to(edit_agent_path(agent_id(agent), deletable: deletable, parent_id: parent_id, show_affiliations: show_affiliations), class: 'btn btn-sm btn-light') do
+  def link_to_agent_edit(agent, parent_id, name_prefix, deletable: false, show_affiliations: true)
+    link_to(edit_agent_path(agent_id(agent), name_prefix: name_prefix, deletable: deletable, parent_id: parent_id, show_affiliations: show_affiliations), class: 'btn btn-sm btn-light') do
       content_tag(:i, '', class: 'far fa-edit')
     end
   end
