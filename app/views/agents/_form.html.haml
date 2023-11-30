@@ -6,6 +6,7 @@
 
   = hidden_field_tag :parent_id, params[:parent_id] if params[:parent_id]
   = hidden_field_tag :name_prefix, params[:name_prefix] if params[:name_prefix]
+  = hidden_field_tag :deletable, deletable if deletable
   = hidden_field_tag agent_field_name(:id, name_prefix), agent.id if agent.id
 
   - if affiliation?(agent) &&  params[:parent_id]
@@ -18,10 +19,10 @@
       %td.top
         %div.d-flex
           %div.custom-control.custom-radio.mx-1
-            = radio_button_tag agent_field_name(:agentType, name_prefix), :person, agent.agentType.eql?('person'), class: 'custom-control-input', 'data-action': "change->form-options-display#showOption1"
+            = radio_button_tag agent_field_name(:agentType, name_prefix), :person, !agent.agentType.eql?('organization'), class: 'custom-control-input', 'data-action': "change->form-options-display#showOption1"
             = label_tag :agentType_person, "Person",  class: 'custom-control-label'
           %div.custom-control.custom-radio.mx-1
-            = radio_button_tag agent_field_name(:agentType, name_prefix), :organization,!agent.agentType.eql?('person'), class: 'custom-control-input', 'data-action': "change->form-options-display#showOption2"
+            = radio_button_tag agent_field_name(:agentType, name_prefix), :organization, agent.agentType.eql?('organization'), class: 'custom-control-input', 'data-action': "change->form-options-display#showOption2"
             = label_tag :agentType_organization, "Organization",  class: 'custom-control-label'
   %tr
     %th

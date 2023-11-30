@@ -13,6 +13,6 @@
       - if edit_on_modal
         = link_to_agent_edit_modal(agent, parent_id)
       - else
-        = link_to_agent_edit(agent, parent_id)
+        = link_to_agent_edit(agent, parent_id, deletable: deletable)
     - if deletable
       = link_to_search_agent(agent_id, parent_id, name_prefix ,agent.agentType, deletable)

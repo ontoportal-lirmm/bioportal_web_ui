@@ -46,8 +46,8 @@ module AgentHelper
     end
   end
 
-  def link_to_agent_edit(agent, parent_id = nil)
-    link_to(edit_agent_path(agent_id(agent), parent_id: parent_id, show_affiliations: parent_id.nil? || parent_id.empty?), class: 'btn btn-sm btn-light') do
+  def link_to_agent_edit(agent, parent_id = nil, deletable: false, show_affiliations: true)
+    link_to(edit_agent_path(agent_id(agent), deletable: deletable, parent_id: parent_id, show_affiliations: show_affiliations), class: 'btn btn-sm btn-light') do
       content_tag(:i, '', class: 'far fa-edit')
     end
   end
