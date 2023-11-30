@@ -41,6 +41,7 @@ class AgentsController < ApplicationController
     @agent.name = params[:name]
     @name_prefix = params[:name_prefix] || ''
     @show_affiliations = params[:show_affiliations].nil? || params[:show_affiliations]&.eql?('true')
+    @deletable = params[:deletable]&.eql?('true')
   end
 
   def create
@@ -48,7 +49,7 @@ class AgentsController < ApplicationController
     parent_id = params[:parent_id]
     name_prefix = params[:name_prefix]
     alert_id = agent_id_alert_container_id(params[:id], parent_id)
-
+    deletable = params[:deletable]&.eql?('true')
     if new_agent.errors
       render_turbo_stream alert_error(id: alert_id) { JSON.pretty_generate(response_errors(new_agent)) }
     else
@@ -56,7 +57,10 @@ class AgentsController < ApplicationController
       streams = [alert_success(id: alert_id) { success_message }]
 
       streams << prepend('agents_table_content', partial: 'agents/show_line', locals: { agent: new_agent })
-      streams << replace_agent_form(new_agent, agent_id: nil, frame_id: params[:id], parent_id: parent_id, name_prefix: name_prefix) if params[:parent_id]
+      streams << replace_agent_form(new_agent, agent_id: nil, frame_id: params[:id],
+                                    parent_id: parent_id, name_prefix: name_prefix,
+                                    deletable: deletable
+      ) if params[:parent_id]
 
       render_turbo_stream(*streams)
     end
@@ -66,6 +70,7 @@ class AgentsController < ApplicationController
     @agent = LinkedData::Client::Models::Agent.find("#{rest_url}/Agents/#{params[:id]}")
     @name_prefix = params[:parent_id] || ''
     @show_affiliations = params[:show_affiliations].nil? || params[:show_affiliations].eql?('true')
+    @deletable = params[:deletable].to_s.eql?('true')
   end
 
   def show_search
@@ -88,18 +93,18 @@ class AgentsController < ApplicationController
 
     parent_id = params[:parent_id]
     alert_id = agent_alert_container_id(agent, parent_id)
-
+    deletable = params[:deletable]&.eql?('true')
     if response_error?(agent_update)
       render_turbo_stream(alert_error(id: alert_id) { JSON.pretty_generate(response_errors(agent_update)) })
     else
       success_message = 'Agent successfully updated'
       table_line_id = agent_table_line_id(agent_id(agent))
-
+      agent = LinkedData::Client::Models::Agent.find(agent.id)
       streams = [alert_success(id: alert_id) { success_message },
                  replace(table_line_id, partial: 'agents/show_line', locals: { agent: agent })
       ]
 
-      streams << replace_agent_form(agent, parent_id: parent_id) if params[:parent_id]
+      streams << replace_agent_form(agent, parent_id: parent_id, deletable: deletable) if params[:parent_id]
 
       render_turbo_stream(*streams)
     end
@@ -176,14 +181,14 @@ class AgentsController < ApplicationController
 
   private
 
-  def replace_agent_form(agent, agent_id: nil, frame_id: nil, parent_id:, partial: 'agents/agent_show', name_prefix: '')
+  def replace_agent_form(agent, agent_id: nil, frame_id: nil, parent_id:, partial: 'agents/agent_show', name_prefix: '', deletable: true)
 
     frame_id = frame_id ? agent_id_frame_id(frame_id, parent_id) : agent_frame_id(agent, parent_id)
 
     replace(frame_id, partial: partial, layout: false ,
             locals: { agent_id: agent_id, agent: agent, name_prefix: name_prefix, parent_id: parent_id,
                       edit_on_modal: false,
-                      deletable: true})
+                      deletable: deletable})
   end
 
   def save_agent(params)
