@@ -77,6 +77,30 @@ class ConceptDetailsComponent < ViewComponent::Base
 
   private
 
+  def modify_preflabel_key(concept_properties)
+    modified_properties = {}
+  
+    concept_properties.each do |key, value|
+      modified_key = key
+      if value.is_a?(Hash) && value.key?(:key)
+        key_string = value[:key].to_s
+          modified_key = modify_key_based_on_namespace(key_string, key)
+      end
+      modified_properties[modified_key] = value
+    end
+  
+    return modified_properties
+  end
+  
+  def modify_key_based_on_namespace(key_string,key)
+    RESOLVE_NAMESPACE.each do |namespace_key, namespace_value|
+      if key_string.include?(namespace_value)
+        return "#{namespace_key.to_s}:#{key}"
+      end
+    end
+    return key
+  end
+
   def concept_properties2hash(properties)
     # NOTE: example properties
     #
