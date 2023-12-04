@@ -22,7 +22,7 @@
     - l.row do
       %div.creation_text
         - if @submission_latest&.released
-          Initial release occurred on
+          Initial created on
           %span.date_creation_text= l(Date.parse(@submission_latest.released), format: :monthfull_day_year) + '.'
         - if @submission_latest&.contact
           For additional information, reach out
