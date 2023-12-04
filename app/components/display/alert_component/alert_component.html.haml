@@ -7,6 +7,9 @@
         = inline_svg_tag alert_icon
     .alert-message{class: alert_type_class}
         = message || content
+    - if button
+        .alert-button
+            = render button
     - if closable?
         .alert-close{"data-action":"click->alert-component#close", class: alert_type_class}
             = inline_svg_tag "x.svg"

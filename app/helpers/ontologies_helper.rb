@@ -412,7 +412,7 @@ module OntologiesHelper
           message = "The ontology is processing. Sections such as #{ontology_data_sections.join(', ')} will be available once processing is complete."
         end
       end
-      render Display::AlertComponent.new(message: message, type: type) if type
+      render Display::AlertComponent.new(message: message, type: type, button: Buttons::RegularButtonComponent.new(id:'regular-button', value: "Contact support", variant: "primary", href: "/feedback", color: "danger", size: "slim")) if type
     end
   end
 
