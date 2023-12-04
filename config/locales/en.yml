@@ -293,6 +293,8 @@ en:
       type: Type
     metadata:
       additional_metadata: Additional Metadata
+    header:
+      last_submission_date: Last submission date
   ontology_sets: Ontology sets
   output: Output
   

@@ -295,6 +295,8 @@ fr:
       type: Type
     metadata:
       additional_metadata: Métadonnées supplémentaires
+    header:
+      last_submission_date: Date de la dernière soumission
   ontology_sets: Ensembles d'ontologies
   output: Sortie
  
