@@ -13,7 +13,7 @@ module OntologiesHelper
     return if submission.nil?
 
     no_license = submission.hasLicense.blank?
-    render ChipButtonComponent.new(class: "chip_button_small #{no_license && 'disabled-link'}", type: no_license ? 'static' : 'clickable') do
+    render ChipButtonComponent.new(class: "no-wrap-text chip_button_small #{no_license && 'disabled-link'}", type: no_license ? 'static' : 'clickable') do
       if no_license
         content_tag(:span) do
           content_tag(:span, "No license", class: "mx-1") + inline_svg_tag('icons/law.svg', width: "15px")
