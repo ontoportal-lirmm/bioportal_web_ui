@@ -32,6 +32,10 @@ module SubmissionFilter
       submissions = submissions.sort_by { |x| -x[:popularity] }
     elsif @selected_sort_by.eql?('fair')
       submissions = submissions.sort_by { |x| -x[:fairScore] }
+    elsif @selected_sort_by.eql?('notes')
+      submissions = submissions.sort_by { |x| -x[:note_count] }
+    elsif @selected_sort_by.eql?('projects')
+      submissions = submissions.sort_by { |x| -x[:project_count] }
     end
     submissions
   end
@@ -194,6 +198,8 @@ module SubmissionFilter
       ['Sort by release date', 'released'],
       ['Sort by FAIR score', 'fair'],
       ['Sort by popularity', 'visits'],
+      ['Sort by notes', 'notes'],
+      ['Sort by projects', 'projects'],
     ]
 
     init_filters(params)
