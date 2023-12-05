@@ -538,7 +538,7 @@ module OntologiesHelper
                                     ['JsonLd', 'MOD/json-ld'],
                                     ['XML', 'MOD/rdf-xml']
                                   ]) do |format, label|
-          render ChipButtonComponent.new(type: 'clickable', 'data-action': "metadata-downloader#download#{format}") do
+          render ChipButtonComponent.new(type: 'clickable', 'data-action': "click->metadata-downloader#download#{format}") do
             concat content_tag(:span, label)
             concat content_tag(:span, inline_svg("summary/download.svg", width: '15px', height: '15px'))
           end
@@ -601,7 +601,7 @@ module OntologiesHelper
         empty_state_message("No projects using #{ontology_acronym}")
       else
         horizontal_list_container(projects) do |project|
-           render ChipButtonComponent.new(url: project_path(project.acronym), text: project.name, type: "clickable")
+          render ChipButtonComponent.new(url: project_path(project.acronym), text: project.name, type: "clickable")
         end
       end
     end
