@@ -23,8 +23,8 @@
     %div.d-flex.justify-content-center.flew-wrap
       - omniauth_providers_info.each do |provider, config|
         = button_to  "/auth/#{config[:name] || config[:strategy] || provider}",
-                    class: 'btn btn-lg', style:'width: 70px', title: "Login with #{provider.to_s.humanize}", 'data-turbo': false do
+                    class: 'btn btn-lg',disabled: !config[:enable] ,style:'width: 70px', title: "Login with #{provider.to_s.humanize}", 'data-turbo': false do; 
           - if config[:icon]
             = inline_svg config[:icon]
-          - else
+          - else 
             = provider.to_s.humanize
