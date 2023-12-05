@@ -183,6 +183,7 @@ en:
       search_prompt: Search in %{portal_name} ...
       submit_feedback: Send feedback
       support: Support
+      cite_us: Cite Us
   
   login:
     enter_email: Enter your username

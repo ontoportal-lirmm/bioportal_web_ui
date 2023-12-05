@@ -54,13 +54,10 @@
             - s.item do
               = link_to(t('layout.header.submit_feedback'), feedback_path(location: encode_param(request.url)), id: "submitFeedbackMenuItem", class: "pop_window")
           - d.with_section do |s|
-            - s.header do
-              = t('layout.header.documentation')
             - s.item do
-              = link_to(t('layout.header.help'), "#{$WIKI_HELP_PAGE}", target: "_blank")
+              = link_to(t('layout.header.documentation'), "https://ontoportal.github.io/documentation/", target: "_blank")
             - s.item do
-              = link_to(t('layout.header.release_notes'), "#{$RELEASE_NOTES}", target: "_blank")
+              = link_to(t('layout.header.cite_us'), "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/publications-and-references-87tEoeoGKy", target: "_blank")
             - s.item do
-              = link_to(t('layout.header.publications'), $PUBLICATIONS_URL, target: "_blank")
-
+              = link_to(t('layout.header.release_notes'), "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/release-notes-btKjZk5tU2", target: "_blank")
 
