@@ -10,6 +10,10 @@ $ont-show-bg-color: #e9ecef;
   }
 }
 
+svg path {
+  fill: var(--primary-color);
+}
+
 .ontologies.show .gutter {
   background-color: rgba(0, 0, 0, 0.03);
   background-repeat: no-repeat;
