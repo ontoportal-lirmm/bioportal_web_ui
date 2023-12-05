@@ -5,6 +5,6 @@
                         action: 'clicked->history#updateURL'}}
       %li.root
         %ul
-          = draw_tree(@root, @concept.id, (params[:concept_schemes] || '').split(','))
+          = draw_tree(@root, params[:ontology], @concept.id, params[:concept_schemes]&.split(','))
 
 

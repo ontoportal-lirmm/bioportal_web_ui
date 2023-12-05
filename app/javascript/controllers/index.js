@@ -4,6 +4,9 @@
 
 import { application } from "./application"
 
+import BrowseFiltersController from "./browse_filters_controller"
+application.register("browse-filters", BrowseFiltersController)
+
 import ChosenController from "./chosen_controller"
 application.register("chosen", ChosenController)
 
@@ -12,6 +15,15 @@ application.register("class-search-auto-complete", ClassSearchAutoCompleteContro
 
 import ContainerSplitterController from "./container_splitter_controller"
 application.register("container-splitter", ContainerSplitterController)
+
+import FairScoreHomeController from "./fair_score_home_controller"
+application.register("fair-score-home", FairScoreHomeController)
+
+import FairScoreLandscapeController from "./fair_score_landscape_controller"
+application.register("fair-score-landscape", FairScoreLandscapeController)
+
+import FairScoreSummaryController from "./fair_score_summary_controller"
+application.register("fair-score-summary", FairScoreSummaryController)
 
 import FormAutoCompleteController from "./form_auto_complete_controller"
 application.register("form-auto-complete", FormAutoCompleteController)
@@ -34,6 +46,8 @@ application.register("metadata-downloader", MetadataDownloaderController)
 import OntoportalAutocompleteController from "./ontoportal_autocomplete_controller"
 application.register("ontoportal-autocomplete", OntoportalAutocompleteController)
 
+import ShowFilterCountController from "./show_filter_count_controller"
+application.register("show-filter-count", ShowFilterCountController)
 import ShowModalController from "./show_modal_controller"
 application.register("show-modal", ShowModalController)
 

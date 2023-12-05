@@ -29,7 +29,7 @@
         %tr
           %td{nowrap: ""} Definitions
           %td
-            %p= @concept.definition.join(" ")
+            = dispaly_complex_text(@concept.definition)
       - if @concept.obsolete?
         %tr
           %td{nowrap: ""} Obsolete

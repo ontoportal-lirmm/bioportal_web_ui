@@ -9,6 +9,7 @@ class SelectInputComponent < ViewComponent::Base
     @values = values
     @selected = selected
     @multiple = multiple
+    @open_to_add_values = open_to_add_values
   end
   
   def call 

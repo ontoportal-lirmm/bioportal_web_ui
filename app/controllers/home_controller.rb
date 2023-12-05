@@ -103,7 +103,7 @@ class HomeController < ApplicationController
     unless params[:question].nil? || params[:question].empty?
       @tags << "Question"
     end
-    unless params[:ontology_submissions_request].nil? || params[:bug].empty?
+    unless params[:ontology_submissions_request].nil? || params[:ontology_submissions_request].empty?
       @tags << "Ontology submissions request"
     end
 
@@ -159,7 +159,7 @@ class HomeController < ApplicationController
     @user_ontologies = @user.customOntology
     @user_ontologies ||= []
 
-    onts = LinkedData::Client::Models::Ontology.all
+    onts = LinkedData::Client::Models::Ontology.all(include_views: true);
     @admin_ontologies = onts.select { |o| o.administeredBy.include? @user.id }
 
     projects = LinkedData::Client::Models::Project.all

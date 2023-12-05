@@ -16,6 +16,8 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   helper_method :bp_config_json, :current_license, :using_captcha?
   rescue_from ActiveRecord::RecordNotFound, with: :not_found_record
+  rescue_from StandardError, with: :internal_server_error
+
   # Pull configuration parameters for REST connection.
   REST_URI = $REST_URL
   API_KEY = $API_KEY
@@ -470,8 +472,8 @@ class ApplicationController < ActionController::Base
         root_child = @root.children.first
 
         @concept = root_child.explore.self(full: true)
-        # Some ontologies have "too many children" at their root. These will not process and are handled here.
-        if @concept.nil?
+         # Some ontologies have "too many children" at their root. These will not process and are handled here.
+         if @concept.nil?
           LOG.add :debug, "Missing class #{root_child.links.self}"
           not_found("Missing class #{root_child.links.self}")
         end
@@ -484,7 +486,7 @@ class ApplicationController < ActionController::Base
         end
 
         # Create the tree
-        rootNode = @concept.explore.tree(include: "prefLabel,hasChildren,obsolete", concept_schemes: params[:concept_schemes])
+        rootNode = @concept.explore.tree(concept_schemes: params[:concept_schemes])
         if rootNode.nil? || rootNode.empty?
           @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
           if @roots.nil? || @roots.empty?
@@ -767,5 +769,15 @@ class ApplicationController < ActionController::Base
   def not_found_record(exception)
     @error_message = exception.message
     render 'errors/not_found', status: 404
+  end
+
+  def internal_server_error(exception)
+    current_user = session[:user] if defined?(session)
+    request_ip = request.remote_ip if defined?(request)
+    current_url = request.original_url if defined?(request)
+
+    Notifier.error(exception, current_user, request_ip, current_url).deliver_now
+
+    render 'errors/internal_server_error', status: 500
   end
 end
