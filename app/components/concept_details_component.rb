@@ -21,7 +21,7 @@ class ConceptDetailsComponent < ViewComponent::Base
   end
 
   def add_sections(keys, &block)
-    scheme_set = properties_set_by_keys(keys, modify_preflabel_key(concept_properties))
+    scheme_set = properties_set_by_keys(keys, prefix_properties(concept_properties))
     rows = row_hash_properties(scheme_set, concept_properties, &block)
 
     rows.each do |row|
@@ -76,31 +76,6 @@ class ConceptDetailsComponent < ViewComponent::Base
   end
 
   private
-
-  def modify_preflabel_key(concept_properties)
-    modified_properties = {}
-  
-    concept_properties.each do |key, value|
-      modified_key = key                                      
-      if value.is_a?(Hash) && value.key?(:key)
-        key_string = value[:key].to_s
-        modified_key = modify_key_based_on_namespace(key_string, key)
-        modified_properties[modified_key] = value unless modified_key.nil?
-      end
-    end
-  
-    return modified_properties
-  end
-  
-  def modify_key_based_on_namespace(key_string, key)
-    return nil if key_string.include?('metadata')
-
-    namespace_key, namespace_value = RESOLVE_NAMESPACE.find { |_, value| key_string.include?(value) }
-    return "#{namespace_key}:#{key}" if namespace_key
-
-    key_string.split(/[#\/]/).last
-
-  end
 
   def concept_properties2hash(properties)
     # NOTE: example properties
