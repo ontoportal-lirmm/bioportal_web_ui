@@ -16,9 +16,14 @@ class LoginController < ApplicationController
 
   # logs in a user
   def create
+    if params[:user][:username] =~ /\A[^@\s]+@[^@\s]+\z/ #this is a regular expression to check if the input is an email or not
+      username = LinkedData::Client::Models::User.find_by_email(params[:user][:username]).first.username
+    else
+      username = params[:user][:username]
+    end
     @errors = validate(params[:user])
     if @errors.size < 1
-      logged_in_user = LinkedData::Client::Models::User.authenticate(params[:user][:username], params[:user][:password])
+      logged_in_user = LinkedData::Client::Models::User.authenticate(username, params[:user][:password])
       if logged_in_user && !logged_in_user.errors
         login(logged_in_user)
         redirect = "/"
