@@ -126,7 +126,7 @@ module OntologiesHelper
     contacts.map do |c|
       next unless c.member?(:name) && c.member?(:email)
   
-      formatted_name = c[:name].split.map(&:capitalize).join(' ')
+      formatted_name = c[:name].titleize
       formatted_email = c[:email].downcase
       "<span class='date_creation_text'>#{formatted_name}</span> (#{formatted_email})"
     end&.join(" and ")
