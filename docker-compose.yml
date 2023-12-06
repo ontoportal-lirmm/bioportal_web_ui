@@ -1,5 +1,5 @@
 x-app: &default-app
-  image: agroportal/ontoportal_web_ui:test
+  image: agroportal/ontoportal_web_ui:development
   env_file:
     - ".env"
   tty: true

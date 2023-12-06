@@ -92,8 +92,10 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
   # Include the BioPortal-specific configuration options
-  require Rails.root.join('config', "bioportal_config_#{Rails.env}.rb")
-  
+  if File.exist?(Rails.root.join('config', "bioportal_config_#{Rails.env}.rb"))
+    require Rails.root.join('config', "bioportal_config_#{Rails.env}.rb")
+  end
+
   # Use a different cache store in production.
   config.cache_store = :mem_cache_store, ENV["MEMCACHE_SERVERS"] || "localhost:11211", { namespace: 'bioportal_web_ui', expires_in: 1.day }
 
