@@ -173,7 +173,9 @@ module SubmissionInputsHelper
 
     render(Layout::RevealComponent.new(init_show: ontology.viewingRestriction&.eql?('private'), show_condition: 'private')) do |c|
       c.button do
-        select_input(label: "Visibility", name: "ontology[viewingRestriction]", values: %w[public private], selected: ontology.viewingRestriction)
+        select_input(label: "Visibility", name: "ontology[viewingRestriction]", required: true,
+                     values: %w[public private],
+                     selected: ontology.viewingRestriction)
       end
       content_tag(:div, class: 'upload-ontology-input-field-container') do
         select_input(label: "Add or remove accounts that are allowed to see this ontology in #{portal_name}.", name: "ontology[acl]", values: @user_select_list, selected: ontology.acl, multiple: true)
