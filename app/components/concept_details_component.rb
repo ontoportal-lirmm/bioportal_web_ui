@@ -21,7 +21,7 @@ class ConceptDetailsComponent < ViewComponent::Base
   end
 
   def add_sections(keys, &block)
-    scheme_set = properties_set_by_keys(keys, concept_properties)
+    scheme_set = properties_set_by_keys(keys, prefix_properties(concept_properties))
     rows = row_hash_properties(scheme_set, concept_properties, &block)
 
     rows.each do |row|
