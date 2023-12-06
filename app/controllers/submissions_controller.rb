@@ -45,7 +45,8 @@ class SubmissionsController < ApplicationController
         return
       end
     end
-    @submission = save_submission(new_submission_hash(@ontology))
+    @submission = @ontology.explore.latest_submission({ display: 'all' })
+    @submission = save_submission(new_submission_hash(@ontology, @submission))
 
     if response_error?(@submission)
       show_new_errors(@submission)

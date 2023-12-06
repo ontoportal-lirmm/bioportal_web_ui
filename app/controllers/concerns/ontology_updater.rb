@@ -7,7 +7,13 @@ module OntologyUpdater
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
     return nil if @ontology.nil?
 
-    [@ontology, @ontology.update(values: ontology_params)]
+    new_values = ontology_params
+    new_values.each do |key, values|
+      @ontology.send("#{key}=", values)
+    rescue StandardError
+      next
+    end
+    [@ontology, @ontology.update(values: new_values)]
   end
 
   def ontology_from_params
@@ -55,20 +61,19 @@ module OntologyUpdater
     @errors.keys.map(&:to_s) if @errors.is_a?(Hash)
   end
 
-  def new_submission_hash(ontology)
-    @submission = ontology.explore.latest_submission({ display: 'all' })
-
-    submission_params = submission_params(params[:submission])
+  def new_submission_hash(ontology, submission = nil)
+    @submission = submission
+    new_submission_params = submission_params(params[:submission])
 
     if @submission
-      submission_params = submission_params(ActionController::Parameters.new(@submission.to_hash.delete_if do |k, v|
-        v.nil? || v.respond_to?(:empty?) && v.empty?
-      end.merge(submission_params)))
+      old_submission_values = @submission.to_hash.delete_if {  |k, v| !copyable_submission_params?(k, v)}
+      new_submission_params = ActionController::Parameters.new(old_submission_values.merge(new_submission_params))
+      new_submission_params = submission_params(new_submission_params)
     end
 
-    submission_params.delete 'submissionId'
-    submission_params[:ontology] = @ontology.acronym
-    ActionController::Parameters.new(submission_params)
+    new_submission_params.delete 'submissionId'
+    new_submission_params[:ontology] = ontology.acronym
+    ActionController::Parameters.new(new_submission_params)
   end
 
   def update_submission_hash(acronym)
@@ -87,5 +92,15 @@ module OntologyUpdater
 
       @submission[attr] = new_values
     end
+  end
+
+  def copyable_submission_params?(key, value)
+    return false if value.nil? || (value.respond_to?(:empty?) && value.empty?)
+
+    attr_to_not_copy = [:versionIRI, :version, :deprecated, :valid, :curatedOn,
+                        :pullLocation, :metadataVoc, :hasPriorVersion,
+                        :submissionStatus]
+
+    !attr_to_not_copy.include?(key.to_sym)
   end
 end
