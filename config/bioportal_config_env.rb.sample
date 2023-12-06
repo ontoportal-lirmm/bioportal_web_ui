@@ -208,6 +208,10 @@ $FOOTER_LINKS = {
     }
   }
 }
+
+$NOT_DOWNLOADABLE = {}
+
+
 $UI_THEME = ENV['UI_THEME'] || 'ontoportal'
 $HOSTNAME = ENV['API_URL']
 if $HOSTNAME

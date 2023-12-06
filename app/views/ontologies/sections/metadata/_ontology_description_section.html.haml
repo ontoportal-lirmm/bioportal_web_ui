@@ -25,9 +25,9 @@
           Initial release occurred on
           %span.date_creation_text= l(Date.parse(@submission_latest.released), format: :monthfull_day_year) + '.'
         - if @submission_latest&.contact
-          For additional information, reach out
-          %span.date_creation_text
-            #{display_contact(@submission_latest.contact)}.
+          For additional information, contact
+          %span
+            #{display_contact(@submission_latest.contact).html_safe}.
 
     - unless Array(@submission_latest&.naturalLanguage).empty?
       - l.row do

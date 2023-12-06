@@ -322,7 +322,7 @@ class OntologiesController < ApplicationController
     @config_properties = properties_hash_values(category_attributes["object description properties"])
     @methodology_properties = properties_hash_values(category_attributes["methodology"])
     @agents_properties = properties_hash_values(category_attributes["persons and organizations"])
-    @dates_properties = properties_hash_values(category_attributes["dates"], custom_labels: {released: "Initially created On"})
+    @dates_properties = properties_hash_values(category_attributes["dates"])
     @links_properties = properties_hash_values(category_attributes["links"])
     @content_properties = properties_hash_values(category_attributes["content"])
     @community_properties = properties_hash_values(category_attributes["community"] + [:notes])

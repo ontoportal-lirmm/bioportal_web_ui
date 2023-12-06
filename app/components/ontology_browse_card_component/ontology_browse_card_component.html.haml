@@ -42,7 +42,7 @@
       - if ontology[:creationDate]
         %span.mr-1
           = render ChipButtonComponent.new(type: "clickable") do
-            %span.mr-1 Uploaded
+            %span.mr-1 Submitted
             %span.browse-uploaded-date{data:{controller: 'timeago', 'timeago-datetime-value': ontology[:creationDate], 'timeago-add-suffix-value': 'true'}}
             - if ontology[:contact]
               %span.mx-1 by
@@ -51,7 +51,7 @@
 
       - if ontology[:released]
         - date = render DateTimeFieldComponent.new(value: ontology[:released])
-        %span{data:{controller:'tooltip'}, title: "Release date #{date}"}
+        %span{data:{controller:'tooltip'}, title: "Creation date #{date}"}
           = render ChipButtonComponent.new(type: "clickable") do
             = DateTime.parse(date).year rescue date
 

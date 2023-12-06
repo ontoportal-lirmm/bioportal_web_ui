@@ -288,7 +288,7 @@ GEM
     net-ftp (0.2.0)
       net-protocol
       time
-    net-http (0.3.2)
+    net-http (0.4.0)
       uri
     net-imap (0.4.7)
       date
