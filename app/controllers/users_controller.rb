@@ -227,7 +227,7 @@ class UsersController < ApplicationController
       end
     end
     if ((!params[:orcidId].match(/^\d{4}+(-\d{4})+$/)) || (params[:orcidId].length != 19)) && !(params[:orcidId].nil? || params[:orcidId].length < 1)
-      errors << "Please enter a valide orcid id"
+      errors << "Please enter a valid ORCID."
     end
 
     if params[:username].nil? || params[:username].length < 1 || !params[:username].match(/^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$/)
