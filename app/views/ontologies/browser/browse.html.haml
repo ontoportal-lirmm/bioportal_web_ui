@@ -60,17 +60,13 @@
                   .collapse{id: "browse-#{key}-filter", class: "#{values[2].positive? ? 'show': ''}"}
                     .browse-filter-checks-container
                       - values.first.each do |object|
-                        - title = (key.eql?(:categories) || key.eql?(:groups) ?  object["name"] : '')
-                        - value = (object["value"] || object["acronym"] || object["id"])
-                        %div{data: {controller: 'tooltip'}, title: title}
-                          = render ChipsComponent.new(id: value, name: key, value: value,
-                                    label:  object["acronym"].humanize,
-                                    checked: values[1]&.include?(object["id"])) do |c|
-                            - c.count do
-                              %span.badge.badge-light.ml-1
-                                = turbo_frame_tag "count_#{key}_#{object["id"]}", busy: true
-                                %span.show-if-loading
-                                  = render LoaderComponent.new(small:true)
+                        - title = (key.eql?(:categories) || key.eql?(:groups)) ? nil : ''
+                        = group_chip_component(name: key, object: object, checked: values[1]&.include?(object["id"]), title: title) do |c|
+                          - c.count do
+                            %span.badge.badge-light.ml-1
+                              = turbo_frame_tag "count_#{key}_#{object["id"]}", busy: true
+                              %span.show-if-loading
+                                = render LoaderComponent.new(small:true)
 
         .browse-second-row
           .browse-search-bar

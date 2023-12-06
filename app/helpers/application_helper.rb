@@ -431,6 +431,21 @@ module ApplicationHelper
     output = "<span class='more_less_container'><span class='truncated_more'>#{truncate(text, :length => length, :omission => trailing_text)}" + more + "</span>"
   end
 
+  def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, &block)
+    content_tag(:div, data: { controller: 'tooltip' }, title: tooltip) do
+      check_input(id: id, name: name, value: value, label: label, checked: checked, &block)
+    end
+  end
+
+  def group_chip_component(id: nil, name: , object: , checked: , value: nil, title: nil, &block)
+    title ||= object["name"]
+    value ||= (object["value"] || object["acronym"] || object["id"])
+
+    chips_component(id: id || value, name: name, label: object["acronym"],
+                    checked: checked,
+                    value: value, tooltip: title, &block)
+  end
+  alias  :category_chip_component :group_chip_component
 
   def add_comment_button(parent_id, parent_type)
     if session[:user].nil?
