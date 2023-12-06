@@ -251,7 +251,7 @@ class UsersController < ApplicationController
       errors << "Last name field is required"
     end
     if params[:orcidId].present? && ((!params[:orcidId].match(/^\d{4}-\d{4}-\d{4}-\d{4}$/)) || (params[:orcidId].length != 19))
-      errors << "Please enter a valide orcide id"
+      errors << "Please enter a valid ORCID."
     end
     if !params[:password].eql?(params[:password_confirmation])
       errors << "Your Password and Password Confirmation do not match"
