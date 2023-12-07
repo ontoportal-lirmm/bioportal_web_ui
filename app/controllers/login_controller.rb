@@ -16,9 +16,14 @@ class LoginController < ApplicationController
 
   # logs in a user
   def create
+    if is_email(params[:user][:username])
+      username = LinkedData::Client::Models::User.find_by_email(params[:user][:username]).first.username
+    else
+      username = params[:user][:username]
+    end
     @errors = validate(params[:user])
     if @errors.size < 1
-      logged_in_user = LinkedData::Client::Models::User.authenticate(params[:user][:username], params[:user][:password])
+      logged_in_user = LinkedData::Client::Models::User.authenticate(username, params[:user][:password])
       if logged_in_user && !logged_in_user.errors
         login(logged_in_user)
         redirect = "/"
@@ -151,6 +156,10 @@ class LoginController < ApplicationController
     end
 
     return errors
+  end
+
+  def is_email(email)
+    email =~ /\A[^@\s]+@[^@\s]+\z/
   end
 
 

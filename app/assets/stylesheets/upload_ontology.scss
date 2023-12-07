@@ -21,20 +21,6 @@
     flex-direction: column;
 }
 
-.Upload-ontology-title {
-    font-size: 18px;
-    display: flex;
-    font-weight: bold;
-    flex-direction: column;
-    align-items: center;
-}
-
-.Upload-ontology-title hr {
-    border: 1px solid var(--primary-color);
-    width: 93px;
-    margin: 0;
-}
-
 .upload-ontology-progress {
     display: flex;
     align-items: center;

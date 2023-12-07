@@ -52,3 +52,10 @@
     margin-bottom: 20px;
     width: 357px;
 }
+.disabled-login-sso{
+    width: 40px;
+    margin: 7px 10px;
+}
+.login-active-sso path{
+    fill: var(--primary-color)
+}

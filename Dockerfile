@@ -29,21 +29,20 @@ ENV RAILS_LOG_TO_STDOUT="1" \
     BUNDLE_PATH=/usr/local/bundle \
     BUNDLE_WITHOUT="${BUNDLE_WITHOUT}"
 
-# fix for ruby v2.7.8 only
-RUN gem install uri --no-document
-
-COPY Gemfile* .
-RUN bundle install
-
-RUN echo "--modules-folder /node_modules" > .yarnrc
-COPY package.json *yarn* ./
-RUN yarn install
+RUN gem update --system --no-document && \
+    gem install -N bundler
 
 COPY . .
+
+RUN bundle install
+RUN yarn install && yarn build
+
+
 
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile --gemfile app/ lib/
 
+# RUN SECRET_KEY_BASE_DUMMY="1" ./bin/rails assets:precompile
 
 ENV BINDING="0.0.0.0"
 EXPOSE 3000

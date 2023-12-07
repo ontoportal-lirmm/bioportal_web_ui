@@ -19,12 +19,17 @@
       %p.dont-have-account
         = t('login.no_account')
         %a.text-decoration-none{:href => new_user_path}= t('login.register')
-    %hr.divider.w-100
-    %div.d-flex.justify-content-center.flew-wrap
+    %hr.divider.w-100.mb-4.mt-4
+    %div.d-flex.justify-content-around.flew-wrap
       - omniauth_providers_info.each do |provider, config|
-        = button_to  "/auth/#{config[:name] || config[:strategy] || provider}",
-                    class: 'btn btn-lg', style:'width: 70px', title: "Login with #{provider.to_s.humanize}", 'data-turbo': false do
-          - if config[:icon]
-            = inline_svg config[:icon]
-          - else
-            = provider.to_s.humanize
+        - if config[:enable]
+          = button_to  "/auth/#{config[:name] || config[:strategy] || provider}",
+                      class: 'btn btn-lg',disabled: !config[:enable] ,style:'width: 70px', title: "Login with #{provider.to_s.humanize}", 'data-turbo': false do; 
+            - if config[:icon]
+              = inline_svg "icons/#{config[:icon]}", class: 'login-active-sso'
+            - else 
+              = provider.to_s.humanize
+        - else
+          .disabled-login-sso
+            = render Display::InfoTooltipComponent.new(text: "#{provider.to_s.humanize} is disabled", icon: config[:icon])
+          

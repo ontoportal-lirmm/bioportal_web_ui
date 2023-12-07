@@ -18,7 +18,7 @@ class OntologySubscribeButtonComponent < ViewComponent::Base
       title: title
     }
   end
-
+  
   def title
     if @subscribed
       "#{@sub_text} this resource"
