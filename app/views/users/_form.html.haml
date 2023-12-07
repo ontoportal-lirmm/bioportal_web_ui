@@ -13,12 +13,12 @@
         %p.register-input-title
           = t('register.first_name')
           %font{:color => "red"} *
-        = text_field :user, :firstName, value: @user.firstname, class: "register-input-short"
+        = text_field :user, :firstName, value: @user.firstName, class: "register-input-short"
       %div
         %p.register-input-title
           = t('register.last_name')
           %font{:color => "red"} *
-        = text_field :user, :lastName, value: @user.lastname, class: "register-input-short"
+        = text_field :user, :lastName, value: @user.lastName, class: "register-input-short"
     %p.register-input-title
       = t('register.username')
       %font{:color => "red"} *
