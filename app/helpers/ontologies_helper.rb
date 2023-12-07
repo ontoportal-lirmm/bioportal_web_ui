@@ -123,8 +123,14 @@ module OntologiesHelper
   end
 
   def display_contact(contacts)
-    contacts.map { |c| "#{c.name.humanize} at #{c.email}" if c.member?(:name) && c.member?(:email) }&.join(", ")
-  end
+    contacts.map do |c|
+      next unless c.member?(:name) && c.member?(:email)
+  
+      formatted_name = c[:name].titleize
+      formatted_email = c[:email].downcase
+      "<span class='date_creation_text'>#{formatted_name}</span> (#{formatted_email})"
+    end&.join(" and ")
+  end  
 
   def count_links(ont_acronym, page_name = 'summary', count = 0)
     ont_url = "/ontologies/#{ont_acronym}"

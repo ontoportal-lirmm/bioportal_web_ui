@@ -185,6 +185,26 @@ fr:
       search_prompt: Rechercher dans %{portail_name} ...
       submit_feedback: Envoyer un commentaire
       support: Assistance
+      cite_us: Citez-nous
+    footer:
+      products: Produits
+      ontoportal: OntoPortal
+      release_notes: Notes de version
+      api: API
+      sparql: SPARQL
+      support: Assistance
+      contact_us: Contactez nous
+      wiki: Wiki
+      documentation: Documentation
+      agreements: Juridique
+      terms: Termes et Conditions
+      privacy_policy: Politique de confidentialité
+      cite_us: Citez-nous
+      acknowledgments: Remerciements
+      about: À propos
+      about_us: À propos de nous
+      projects: D2KAB
+      team: Équipe
  
   login:
     enter_email: Saisissez votre nom d'utilisateur
