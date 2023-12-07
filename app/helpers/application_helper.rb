@@ -716,26 +716,29 @@ module ApplicationHelper
 
   def prefix_properties(concept_properties)
     modified_properties = {}
-  
+
     concept_properties.each do |key, value|
-      modified_key = key                                      
       if value.is_a?(Hash) && value.key?(:key)
         key_string = value[:key].to_s
-        modified_key = prefix_prorperty_url(key_string, key)
+        next if key_string.include?('metadata')
+
+        modified_key = prefix_property_url(key_string, key)
         modified_properties[modified_key] = value unless modified_key.nil?
       end
     end
-  
-    return modified_properties
+
+    modified_properties
   end
-  
-  def prefix_prorperty_url(key_string, key)
-    return nil if key_string.include?('metadata')
 
-    namespace_key, namespace_value = RESOLVE_NAMESPACE.find { |_, value| key_string.include?(value) }
-    return "#{namespace_key}:#{key}" if namespace_key
+  def prefix_property_url(key_string, key = nil)
+    namespace_key, _ = RESOLVE_NAMESPACE.find { |_, value| key_string.include?(value) }
 
-    key_string.split(/[#\/]/).last
-
+    if key && namespace_key
+      "#{namespace_key}:#{key}"
+    elsif key.nil? && namespace_key
+      namespace_key
+    else # we don't try to guess the prefix
+       nil
+    end
   end
 end

@@ -624,11 +624,15 @@ module OntologiesHelper
       concat content_tag(:span , "<#{namespace}>", style: 'color:#9999a9;')
     end
   end
+
   def metadata_vocabulary_display(vocabularies)
     vocabularies_data = attribute_enforced_values('metadataVoc')
     horizontal_list_container(vocabularies) do |voc|
-      label = vocabularies_data[voc] || voc
-      label =  content_tag(:span, data: {controller:'tooltip'}, title: "Go to: #{link_to(voc)}") do
+      tooltip = vocabularies_data[voc] || nil
+      tooltip = "#{tooltip} (#{link_to(voc)})" if tooltip
+      label = prefix_property_url(voc, nil) || voc
+
+      label =  content_tag(:span, data: {controller:'tooltip'}, title: tooltip) do
         render(ExternalLinkTextComponent.new(text: label))
       end
       render ChipButtonComponent.new(url: voc, text: label, type: 'clickable')
