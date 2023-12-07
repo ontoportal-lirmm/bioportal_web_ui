@@ -95,17 +95,6 @@ module AgentHelper
     end.join(', ')
   end
 
-  def display_agent(agent, link: true)
-    return agent if agent.is_a?(String)
-
-    out = agent.name.to_s
-    identifiers = display_identifiers(agent.identifiers, link: link)
-    out = "#{out} ( #{identifiers} )" unless identifiers.empty?
-    affiliations = Array(agent.affiliations).map { |a| display_agent(a, link: link) }.join(', ')
-    out = "#{out} (affiliations: #{affiliations})" unless affiliations.empty?
-    out
-  end
-
   def agent_field_name(name, name_prefix = '')
     name_prefix&.empty? ? name : "#{name_prefix}[#{name}]"
   end
@@ -166,4 +155,20 @@ module AgentHelper
       details.values.join(', ').html_safe
     end.join('. ').html_safe
   end
+
+  def agent_tooltip(agent)
+    name = agent.name
+    email = agent.email
+    type = agent.agentType 
+    identifiers = display_identifiers(agent.identifiers, link: false)
+    affiliations = Array(agent.affiliations).map { |a| display_agent(a, link: false) }.join(', ')
+    person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
+    organization_icon = inline_svg_tag 'icons/organization.svg', class: 'agent-type-icon'
+    agent_icon = type == "organization" ? organization_icon : person_icon
+    tooltip_html = "<div class='agent-container'><div class='agent-circle'>#{agent_icon}</div><div class='agent-name'>#{name}</div><div class='agent-dependency'>#{email || ''}</div><div class='agent-dependency'>#{identifiers || ''}</div><div class='agent-dependency'>#{affiliations || ''}</div></div>"
+    return tooltip_html
+  end
+
+
+
 end
