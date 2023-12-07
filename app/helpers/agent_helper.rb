@@ -157,14 +157,7 @@ module AgentHelper
   end
 
   def display_agent(agent, link: true)
-    return agent if agent.is_a?(String)
-
-    out = agent.name.to_s
-    identifiers = display_identifiers(agent.identifiers, link: link)
-    out = "#{out} ( #{identifiers} )" unless identifiers.empty?
-    affiliations = Array(agent.affiliations).map { |a| display_agent(a, link: link) }.join(', ')
-    out = "#{out} (affiliations: #{affiliations})" unless affiliations.empty?
-    out
+    agent_chip_component(agent)
   end
 
   def agent_tooltip(agent)
