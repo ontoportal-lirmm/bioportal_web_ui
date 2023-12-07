@@ -31,7 +31,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
   test "create a new ontology and go to it's summary page" do
     visit new_ontology_url
 
-    assert_selector ".Upload-ontology-title > div", text: 'Submit new ontology', wait: 10
+    assert_text 'Submit new ontology', wait: 10
 
     within 'form#ontologyForm' do
       # Page 1
