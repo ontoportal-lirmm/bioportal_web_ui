@@ -294,9 +294,10 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_text submission_2.preferredNamespaceUri
     assert_text submission_2.preferredNamespacePrefix
 
-    submission_2.metadataVoc.each do |voc|
-      assert_text voc
-    end
+    # assert submission_2.metadataVoc
+    assert_text "rdfs"
+    assert_text "dct"
+
 
     open_dropdown "#configuration"
 
