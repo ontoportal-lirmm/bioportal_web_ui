@@ -156,6 +156,17 @@ module AgentHelper
     end.join('. ').html_safe
   end
 
+  def display_agent(agent, link: true)
+    return agent if agent.is_a?(String)
+
+    out = agent.name.to_s
+    identifiers = display_identifiers(agent.identifiers, link: link)
+    out = "#{out} ( #{identifiers} )" unless identifiers.empty?
+    affiliations = Array(agent.affiliations).map { |a| display_agent(a, link: link) }.join(', ')
+    out = "#{out} (affiliations: #{affiliations})" unless affiliations.empty?
+    out
+  end
+
   def agent_tooltip(agent)
     name = agent.name
     email = agent.email
@@ -180,5 +191,11 @@ module AgentHelper
       end
     end
   end
-  
+
+  def agent_chip_component(agent)
+    render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: agent_tooltip(agent) , class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do 
+      agent.name.to_s
+    end 
+  end 
+
 end

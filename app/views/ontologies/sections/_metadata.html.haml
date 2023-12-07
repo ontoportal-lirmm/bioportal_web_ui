@@ -20,8 +20,7 @@
 
       = properties_dropdown('person_and_organization','Persons and organizations','', @agents_properties) do |values|
         = horizontal_list_container(values) do |v|
-          = render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: agent_tooltip(v) , class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do
-            = v.name.to_s
+          = agent_chip_component(v)
             
       = properties_dropdown('link','Other links','Metadata properties that highlight the links enabling access to datasets, downloading semantic resources, etc', @links_properties) do |values|
         = horizontal_list_container(values) do |v|
