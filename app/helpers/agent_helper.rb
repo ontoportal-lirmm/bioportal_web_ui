@@ -165,10 +165,20 @@ module AgentHelper
     person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
     organization_icon = inline_svg_tag 'icons/organization.svg', class: 'agent-type-icon'
     agent_icon = type == "organization" ? organization_icon : person_icon
-    tooltip_html = "<div class='agent-container'><div class='agent-circle'>#{agent_icon}</div><div class='agent-name'>#{name}</div><div class='agent-dependency'>#{email || ''}</div><div class='agent-dependency'>#{identifiers || ''}</div><div class='agent-dependency'>#{affiliations || ''}</div></div>"
+    tooltip_html = generate_tooltip_html(agent_icon, name, email, identifiers, affiliations)
     return tooltip_html
   end
 
-
-
+  def generate_tooltip_html(agent_icon, name, email = nil, identifiers = nil, affiliations = nil)
+    content_tag(:div, class: 'agent-container') do
+      content_tag(:div, agent_icon, class: 'agent-circle') +
+      content_tag(:div) do
+        content_tag(:div, name, class: 'agent-name') +
+        content_tag(:div, email || '', class: 'agent-dependency') +
+        content_tag(:div, identifiers || '', class: 'agent-dependency') +
+        content_tag(:div, affiliations || '', class: 'agent-dependency')
+      end
+    end
+  end
+  
 end

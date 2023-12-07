@@ -1,6 +1,5 @@
 .agent-container{
     display: flex;
-    flex-direction: column;
     align-items: center;
     margin: 10px;
 }
@@ -12,7 +11,7 @@
     justify-content: center;
     align-items: center;
     border-radius: 35px;
-    margin-bottom: 12px;
+    margin-right: 12px;
 }
 .agent-name{
     font-size: 18px;
