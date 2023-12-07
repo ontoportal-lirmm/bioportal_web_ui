@@ -10,7 +10,7 @@
             .d-flex.justify-content-between
               %a{:href => "javascript:javascript:history.go(-1)"}
                 %img.lost-password-arrowback{:src => "#{asset_path("arrow-back.svg")}"}
-              .register-title-container
+              .register-title-container.Upload-ontology-title
                 %h2.register-title
                   = @is_update_ontology ? "Add new submisison for ontology #{@ontology.acronym}" : "Submit new ontology" 
                 %hr#register-title-line/
