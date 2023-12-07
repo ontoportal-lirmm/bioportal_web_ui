@@ -333,7 +333,9 @@ class OntologiesController < ApplicationController
                             %w[summary/documentation documentation],
                             %w[icons/github repository],
                             %w[summary/sparql endpoint],
-                            %w[icons/publication publication]]
+                            %w[icons/publication publication],
+                            %w[icons/searching_database openSearchDescription]
+    ]
     @ontology_icon_links.each do |icon|
       icon << helpers.attr_label(icon[1], attr_metadata: helpers.attr_metadata(icon[1]), show_tooltip: false)
     end
