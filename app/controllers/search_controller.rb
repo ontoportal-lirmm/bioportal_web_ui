@@ -29,7 +29,8 @@ class SearchController < ApplicationController
       # record_type = format_record_type(result[:recordType], result[:obsolete])
       record_type = ""
 
-      target_value = result.prefLabel
+      target_value = result.prefLabel.select{|x| x.include?( params[:q].delete('*'))}.first || result.prefLabel.first
+
       case params[:target]
         when "name"
           target_value = result.prefLabel
@@ -46,7 +47,7 @@ class SearchController < ApplicationController
       json << "|#{record_type}"
       json << "|#{result.explore.ontology.acronym}"
       json << "|#{result.id}" # Duplicated because we used to have shortId and fullId
-      json << "|#{result.prefLabel}"
+      json << "|#{target_value}"
       # This is nasty, but hard to workaround unless we rewrite everything (form_autocomplete, jump_to, crossdomain_autocomplete)
       # to use JSON from the bottom up. To avoid this, we pass a tab separated column list
       # Columns: synonym
