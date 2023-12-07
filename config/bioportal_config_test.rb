@@ -14,20 +14,23 @@ $FAIRNESS_URL = ENV['ANNOTATOR_URL']
 # config/initializers/omniauth_providers.rb
 $OMNIAUTH_PROVIDERS = {
   github: {
-    client_id: 'id',
-    client_secret: 'secret',
-    icon: 'icons/github.svg'
+    client_id: 'CLIENT_ID',
+    client_secret: 'CLIENT_SECRET',
+    icon: 'github.svg',
+    enable: true
   },
   google: {
     strategy: :google_oauth2,
-    client_id: 'id',
-    client_secret: 'secret',
-    icon: 'icons/google.svg'
+    client_id: 'CLIENT_ID',
+    client_secret: 'CLIENT_SECRET',
+    icon: 'google.svg',
+    enable: true
   },
   orcid: {
-    client_id: 'YOUR_ORCID_CLIENT_ID',
-    client_secret: 'YOUR_ORCID_CLIENT_SECRET',
-    icon: 'icons/orcid.svg'
+    client_id: 'CLIENT_SECRET',
+    client_secret: 'CLIENT_SECRET',
+    icon: 'orcid.svg',
+    enable: false
   },
   keycloak: {
     strategy: :keycloak_openid,
@@ -35,7 +38,8 @@ $OMNIAUTH_PROVIDERS = {
     client_secret: 'YOUR_KEYCLOAK_CLIENT_SECRET',
     client_options: { site: 'KEYCLOAK_SITE', realm: 'KEYCLOAK_REALM' },
     name: 'keycloak',
-    icon: 'icons/keycloak.svg'
+    icon: 'keycloak.svg',
+    enable: false
   }
 }.freeze
 
