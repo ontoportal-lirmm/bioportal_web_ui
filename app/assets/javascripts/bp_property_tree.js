@@ -301,7 +301,7 @@
           } else {
             ROOT.html("No properties exist for this ontology");
             ROOT.css("font-size", "14px").css("margin", "5px");
-            jQuery(".spinner-border").hide()
+            jQuery("#prop_contents .spinner-border").hide()
           }
 
           if (typeof OPTIONS.onInit === 'function') { OPTIONS.onInit(); }
