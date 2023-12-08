@@ -206,7 +206,7 @@ module AgentHelper
     render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: title , class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do 
       content_tag(:div, class: 'agent-chip') do
         content_tag(:div, agent_icon, class: 'agent-chip-circle') +
-        content_tag(:div, name, class: 'agent-chip-name')
+        content_tag(:div, name, class: 'agent-chip-name text-truncate')
       end   
     end 
   end
