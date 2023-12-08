@@ -186,19 +186,30 @@ module AgentHelper
   end
 
   def agent_chip_component(agent)
-    name = agent.name
-    type = agent.agentType
     person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
     organization_icon = inline_svg_tag 'icons/organization.svg', class: 'agent-type-icon'
-    agent_icon = type == "organization" ? organization_icon : person_icon
-    "<div class='agent-chip'><div class='agent-chip-circle'>#{agent_icon}</div><div class='agent-name'>#{name}</div></div>"
-    render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: agent_tooltip(agent) , class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do 
+    agent_icon =  person_icon
+
+    if agent.is_a?(String)
+      name = agent
+      title = nil
+    else
+      name = agent.name
+      agent_icon = agent.agentType.eql?("organization") ? organization_icon : person_icon
+      title = agent_tooltip(agent)
+    end
+    render_chip_component(title, agent_icon, name)
+  end 
+
+
+  def render_chip_component(title,agent_icon,name)
+    render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: title , class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do 
       content_tag(:div, class: 'agent-chip') do
         content_tag(:div, agent_icon, class: 'agent-chip-circle') +
         content_tag(:div, name, class: 'agent-chip-name')
-      end
+      end   
     end 
-  end 
+  end
 
 
   
