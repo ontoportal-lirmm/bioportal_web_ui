@@ -17,8 +17,6 @@ class OntologySubscribeButtonComponent < ViewComponent::Base
       },
       title: title
     }
-    @link = link
-    @count = count
   end
   
   def title

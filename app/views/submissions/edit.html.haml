@@ -2,7 +2,7 @@
 .center
   .edit-ontology-container
     = turbo_frame_tag("test") do
-      = form_for :submission, url: ontology_submission_path(@ontology.acronym, params["id"]), html: { id: "ontology_submission_form", method: :put, multipart: true, 'data-turbo': true, 'data-turbo-frame': '_top'} do
+      = form_for :submission, url: ontology_submission_path(@ontology.acronym, params["id"]), html: { id: "ontology_submission_form", method: :put, multipart: true, 'data-turbo': true, 'data-turbo-frame': '_top', novalidate: 'true'} do
         .edit-ontology-title
           %div Edit ontology
           %hr

@@ -37,7 +37,7 @@
           .account-page-card-container
             .account-page-card-sub-container
               %h4.account-page-card-title Mailing List Subscription
-              %p.account-page-card-desc= "#{portal_name} announcements email list"
+              %p.account-page-card-desc="Register to the #{portal_name} announcements mailing list."
             - subscribed = false
             - if subscribed 
               %a.account-page-subscribe-button{:href =>"mailto:#{$ANNOUNCE_SERVICE_HOST}?Subject=unsubscribe%20#{$ANNOUNCE_LIST}"}

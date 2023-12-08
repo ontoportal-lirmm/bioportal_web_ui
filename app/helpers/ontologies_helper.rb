@@ -13,7 +13,7 @@ module OntologiesHelper
     return if submission.nil?
 
     no_license = submission.hasLicense.blank?
-    render ChipButtonComponent.new(class: "chip_button_small #{no_license && 'disabled-link'}", type: no_license ? 'static' : 'clickable') do
+    render ChipButtonComponent.new(class: "text-nowrap chip_button_small #{no_license && 'disabled-link'}", type: no_license ? 'static' : 'clickable') do
       if no_license
         content_tag(:span) do
           content_tag(:span, "No license", class: "mx-1") + inline_svg_tag('icons/law.svg', width: "15px")
@@ -123,8 +123,14 @@ module OntologiesHelper
   end
 
   def display_contact(contacts)
-    contacts.map { |c| "#{c.name.humanize} at #{c.email}" if c.member?(:name) && c.member?(:email) }&.join(", ")
-  end
+    contacts.map do |c|
+      next unless c.member?(:name) && c.member?(:email)
+  
+      formatted_name = c[:name].titleize
+      formatted_email = c[:email].downcase
+      "<span class='date_creation_text'>#{formatted_name}</span> (#{formatted_email})"
+    end&.join(" and ")
+  end  
 
   def count_links(ont_acronym, page_name = 'summary', count = 0)
     ont_url = "/ontologies/#{ont_acronym}"
@@ -412,7 +418,7 @@ module OntologiesHelper
           message = "The ontology is processing. Sections such as #{ontology_data_sections.join(', ')} will be available once processing is complete."
         end
       end
-      render Display::AlertComponent.new(message: message, type: type) if type
+      render Display::AlertComponent.new(message: message, type: type, button: Buttons::RegularButtonComponent.new(id:'regular-button', value: "Contact support", variant: "primary", href: "/feedback", color: type, size: "slim")) if type
     end
   end
 
@@ -538,7 +544,7 @@ module OntologiesHelper
                                     ['JsonLd', 'MOD/json-ld'],
                                     ['XML', 'MOD/rdf-xml']
                                   ]) do |format, label|
-          render ChipButtonComponent.new(type: 'clickable', 'data-action': "metadata-downloader#download#{format}") do
+          render ChipButtonComponent.new(type: 'clickable', 'data-action': "click->metadata-downloader#download#{format}") do
             concat content_tag(:span, label)
             concat content_tag(:span, inline_svg("summary/download.svg", width: '15px', height: '15px'))
           end
@@ -601,7 +607,7 @@ module OntologiesHelper
         empty_state_message("No projects using #{ontology_acronym}")
       else
         horizontal_list_container(projects) do |project|
-           render ChipButtonComponent.new(url: project_path(project.acronym), text: project.name, type: "clickable")
+          render ChipButtonComponent.new(url: project_path(project.acronym), text: project.name, type: "clickable")
         end
       end
     end
@@ -618,11 +624,15 @@ module OntologiesHelper
       concat content_tag(:span , "<#{namespace}>", style: 'color:#9999a9;')
     end
   end
+
   def metadata_vocabulary_display(vocabularies)
     vocabularies_data = attribute_enforced_values('metadataVoc')
     horizontal_list_container(vocabularies) do |voc|
-      label = vocabularies_data[voc] || voc
-      label =  content_tag(:span, data: {controller:'tooltip'}, title: "Go to: #{link_to(voc)}") do
+      tooltip = vocabularies_data[voc] || nil
+      tooltip = "#{tooltip} (#{link_to(voc)})" if tooltip
+      label = prefix_property_url(voc, nil) || voc
+
+      label =  content_tag(:span, data: {controller:'tooltip'}, title: tooltip) do
         render(ExternalLinkTextComponent.new(text: label))
       end
       render ChipButtonComponent.new(url: voc, text: label, type: 'clickable')

@@ -116,14 +116,9 @@ module SubmissionUpdater
     ]
 
     submission_metadata.each do |m|
-
       m_attr = m["attribute"].to_sym
-
-      attributes << if m["enforce"].include?("list")
-                      [{ m_attr => {} }, { m_attr => []}]
-                    else
-                      m_attr
-                    end
+      m_attr =  Array(m["enforce"]).include?("list") ? [{ m_attr => {} }, { m_attr => []}] : m_attr
+      attributes << m_attr
     end
     p = params.permit(attributes.uniq)
     p['pullLocation'] = '' if p['isRemote']&.eql?('3')

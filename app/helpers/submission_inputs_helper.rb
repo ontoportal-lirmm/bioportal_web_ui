@@ -132,7 +132,9 @@ module SubmissionInputsHelper
       content_tag(:div, class: 'upload-ontology-chips-container') do
         hidden_field_tag('ontology[hasDomain][]') +
           categories.map do |category|
-            check_input(name: "ontology[hasDomain][]", id: category[:acronym], label: category[:acronym], value: category[:id], checked: ontology.hasDomain&.any? { |x| x.eql?(category[:id]) })
+            category_chip_component(id: category[:acronym], name: "ontology[hasDomain][]",
+                                    object: category, value: category[:id],
+                                    checked: ontology.hasDomain&.any? { |x| x.eql?(category[:id]) })
           end.join.html_safe
       end
     end
@@ -159,7 +161,9 @@ module SubmissionInputsHelper
       content_tag(:div, class: 'upload-ontology-chips-container') do
         hidden_field_tag('ontology[group][]') +
           groups.map do |group|
-            check_input(name: "ontology[group][]", id: group[:acronym], label: group[:acronym], value: group[:id], checked: ontology.group&.any? { |x| x.eql?(group[:id]) })
+            group_chip_component(name: "ontology[group][]", id: group[:acronym],
+                                 object: group, value: group[:id],
+                                 checked: ontology.group&.any? { |x| x.eql?(group[:id]) })
           end.join.html_safe
       end
     end
@@ -173,7 +177,9 @@ module SubmissionInputsHelper
 
     render(Layout::RevealComponent.new(init_show: ontology.viewingRestriction&.eql?('private'), show_condition: 'private')) do |c|
       c.button do
-        select_input(label: "Visibility", name: "ontology[viewingRestriction]", values: %w[public private], selected: ontology.viewingRestriction)
+        select_input(label: "Visibility", name: "ontology[viewingRestriction]", required: true,
+                     values: %w[public private],
+                     selected: ontology.viewingRestriction)
       end
       content_tag(:div, class: 'upload-ontology-input-field-container') do
         select_input(label: "Add or remove accounts that are allowed to see this ontology in #{portal_name}.", name: "ontology[acl]", values: @user_select_list, selected: ontology.acl, multiple: true)

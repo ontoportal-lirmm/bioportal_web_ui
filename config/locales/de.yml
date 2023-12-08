@@ -306,6 +306,9 @@ de:
       type: Typ
     metadata:
       additional_metadata: Zusätzliche Metadaten
+    header:
+      last_submission_date: Datum laatste indiening
+    
   ontology_sets: Ontologie-Sets
   output: Ausgabe
   projects:

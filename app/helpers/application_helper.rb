@@ -431,6 +431,21 @@ module ApplicationHelper
     output = "<span class='more_less_container'><span class='truncated_more'>#{truncate(text, :length => length, :omission => trailing_text)}" + more + "</span>"
   end
 
+  def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, &block)
+    content_tag(:div, data: { controller: 'tooltip' }, title: tooltip) do
+      check_input(id: id, name: name, value: value, label: label, checked: checked, &block)
+    end
+  end
+
+  def group_chip_component(id: nil, name: , object: , checked: , value: nil, title: nil, &block)
+    title ||= object["name"]
+    value ||= (object["value"] || object["acronym"] || object["id"])
+
+    chips_component(id: id || value, name: name, label: object["acronym"],
+                    checked: checked,
+                    value: value, tooltip: title, &block)
+  end
+  alias  :category_chip_component :group_chip_component
 
   def add_comment_button(parent_id, parent_type)
     if session[:user].nil?
@@ -716,26 +731,29 @@ module ApplicationHelper
 
   def prefix_properties(concept_properties)
     modified_properties = {}
-  
+
     concept_properties.each do |key, value|
-      modified_key = key                                      
       if value.is_a?(Hash) && value.key?(:key)
         key_string = value[:key].to_s
-        modified_key = prefix_prorperty_url(key_string, key)
+        next if key_string.include?('metadata')
+
+        modified_key = prefix_property_url(key_string, key)
         modified_properties[modified_key] = value unless modified_key.nil?
       end
     end
-  
-    return modified_properties
+
+    modified_properties
   end
-  
-  def prefix_prorperty_url(key_string, key)
-    return nil if key_string.include?('metadata')
 
-    namespace_key, namespace_value = RESOLVE_NAMESPACE.find { |_, value| key_string.include?(value) }
-    return "#{namespace_key}:#{key}" if namespace_key
+  def prefix_property_url(key_string, key = nil)
+    namespace_key, _ = RESOLVE_NAMESPACE.find { |_, value| key_string.include?(value) }
 
-    key_string.split(/[#\/]/).last
-
+    if key && namespace_key
+      "#{namespace_key}:#{key}"
+    elsif key.nil? && namespace_key
+      namespace_key
+    else # we don't try to guess the prefix
+       nil
+    end
   end
 end

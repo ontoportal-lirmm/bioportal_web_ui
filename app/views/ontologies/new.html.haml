@@ -7,10 +7,14 @@
         = error_message_alert
         .upload-ontology-card
           .upload-ontology-center
-            .Upload-ontology-title
+            .d-flex.justify-content-between
+              %a{:href => "javascript:javascript:history.go(-1)"}
+                %img.lost-password-arrowback{:src => "#{asset_path("arrow-back.svg")}"}
+              .register-title-container
+                %h2.register-title
+                  = @is_update_ontology ? "Add new submisison for ontology #{@ontology.acronym}" : "Submit new ontology" 
+                %hr#register-title-line/
               %div
-                = @is_update_ontology ? "Add new submisison for ontology #{@ontology.acronym}" : "Submit new ontology"
-              %hr
             .upload-ontology-progress
               = render Layout::ProgressPagesComponent.new(pages_title: ['Details', 'General information', 'Dates and contacts']) do |c|
                 - c.page do
@@ -23,7 +27,7 @@
                   .upload-ontology-input-field-container
                     = attribute_input('description', long_text: true)
                   - if @is_update_ontology
-                    .upload-ontology-input-field-container
+                    .upload-ontology-input-field-container{id: "submissionnotes_from_group_input"}
                       = attribute_input("notes", label: 'Change notes')
                   .upload-ontology-field-container
                     = render Layout::RevealComponent.new(init_show: @submission.hasOntologyLanguage&.eql?('SKOS'), show_condition: 'SKOS') do |c|
@@ -40,6 +44,7 @@
                       - c.button do
                         = attribute_input("status")
                       .upload-ontology-field-container
+                        - @submission.valid = nil unless @submission.status&.eql?('retired')
                         = attribute_input("valid")
                   .upload-ontology-field-container
                     = render partial: 'ontologies/submission_location_form'
@@ -50,5 +55,5 @@
                       = attribute_input('modificationDate', label: 'Modification date', max_date: Date.today)
                     - else
                       = attribute_input('released',  label: 'Date of original creation',  max_date: Date.today)
-                  .upload-ontology-contact
+                  .upload-ontology-contact{id: "submissioncontact_from_group_input"}
                     = contact_input(show_help: false)

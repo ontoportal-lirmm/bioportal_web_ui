@@ -299,6 +299,9 @@ it:
       type: Tipo
     metadata:
       additional_metadata: Metadati aggiuntivi
+    header:
+      last_submission_date: Data dell'ultimo invio
+
   ontology_sets: Insiemi di ontologie
   output: Uscita
   projects:

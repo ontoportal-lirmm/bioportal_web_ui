@@ -159,6 +159,7 @@ jQuery(document).ready(function() {
     jQuery("#search_results a.additional_ont_results_link").live("click", showAdditionalOntResults);
     jQuery("#search_results a.additional_cls_results_link").live("click", showAdditionalClsResults);
 
+    jQuery("#search_options").hide();
     jQuery("#advanced_options").on('click', toggleAdvancedSearchOptions);
 
     // Events to run whenever search results are updated (mainly counts)
@@ -828,11 +829,22 @@ function updatePopupCounts() {
 function classLabelSpan(cls) {
     // Wrap the class prefLabel in a span, indicating that the  class is obsolete
     // if necessary.
+    let prefLabel = cls.prefLabel
+
+    if(Array.isArray(prefLabel)){
+        let query = jQuery("#search_keywords").val()
+        // Filter labels containing the query or return the first label
+        let filteredLabels = prefLabel.filter(label => label.includes(query))
+        // If there are matching labels, use the first one; otherwise, use the first label
+        prefLabel = filteredLabels.length > 0 ? filteredLabels[0] : prefLabel[0]
+    }
+
     var MAX_LENGTH = 60,
-        labelText = cls.prefLabel,
+        labelText = prefLabel,
         labelSpan = null;
+
     if (labelText > MAX_LENGTH) {
-        labelText = cls.prefLabel.substring(0, MAX_LENGTH) + "...";
+        labelText = prefLabel.substring(0, MAX_LENGTH) + "...";
     }
     labelSpan = jQuery("<span>").text(labelText);
     if (cls.obsolete === true) {

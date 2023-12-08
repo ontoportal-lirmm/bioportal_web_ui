@@ -1,77 +1,63 @@
-# coding: utf-8
-
 # Organization info
 $ORG = ENV['ORG']
 $ORG_URL = ENV['ORG_URL']
-
 # Site name (required)
 $SITE = ENV['SITE']
-
 # Full string for site, EX: "NCBO BioPortal", do not modify
-$ORG_SITE = ($ORG.nil? || $ORG.empty?) ? $SITE : "#{$ORG} #{$SITE}"
-
+$ORG_SITE = $ORG.nil? || $ORG.empty? ? $SITE : "#{$ORG} #{$SITE}"
 # The URL for the BioPortal Rails UI (this application)
 $UI_URL = ENV['UI_URL']
-
-
 # If you are running a PURL server to provide URLs for ontologies in your BioPortal instance, enable this option
 $PURL_ENABLED = false
-
 # The PURL URL is generated using this prefix + the abbreviation for an ontology.
 # The PURL URL generation algorithm can be altered in app/models/ontology_wrapper.rb
-$PURL_PREFIX = "http://purl.bioontology.org/ontology"
-
+$PURL_PREFIX = 'http://purl.bioontology.org/ontology'
 # If your BioPortal installation includes Annotator set this to false
 $ANNOTATOR_DISABLED = false
-
 # Unique string representing the UI's id for use with the BioPortal Core
 $API_KEY = ENV['API_KEY']
-
 # BioPortal API service address
 $REST_URL = ENV['API_URL']
-
 # Annotator REST service address
-#$ANNOTATOR_URL = "http://services.stageportal.lirmm.fr/annotator"
+# $ANNOTATOR_URL = "http://services.stageportal.lirmm.fr/annotator"
 $ANNOTATOR_URL = ENV['ANNOTATOR_URL']
-
 # NCBO annotator URL and apikey
 $NCBO_ANNOTATORPLUS_ENABLED = ENV['NCBO_ANNOTATORPLUS_ENABLED']
 $NCBO_ANNOTATOR_URL = ENV['NCBO_ANNOTATOR_URL']
 $NCBO_API_KEY = ENV['NCBO_API_KEY']
-
 # Fairness Assessment.
 $FAIRNESS_DISABLED = ENV['FAIRNESS_DISABLED']
-$FAIRNESS_URL  = ENV['FAIRNESS_URL']
-
-
+$FAIRNESS_URL = ENV['FAIRNESS_URL']
 # Announcements sympa mailing list REQUEST address, EX: list-request@lists.example.org
-$ANNOUNCE_LIST_SERVICE ||= "SERVICE_EXAMPLE"
-$ANNOUNCE_SERVICE_HOST ||= "service@test.com"
-$ANNOUNCE_LIST||= "users-list@test"  
-
+$ANNOUNCE_LIST_SERVICE ||= 'SERVICE_EXAMPLE'
+$ANNOUNCE_SERVICE_HOST ||= 'service@test.com'
+$ANNOUNCE_LIST ||= 'users-list@test'
 # Used to define other bioportal that can be mapped to
 # Example to map to ncbo bioportal : {"ncbo" => {"api" => "http://data.bioontology.org", "ui" => "http://bioportal.bioontology.org", "apikey" => ""}
 # Then create the mapping using the following class in JSON : "http://purl.bioontology.org/ontology/MESH/C585345": "ncbo:MESH"
 # Where "ncbo" is the namespace used as key in the interportal_hash
 $INTERPORTAL_HASH = {}
-
+$NOT_DOWNLOADABLE = {}
 # OAuth2 authentication
 $OMNIAUTH_PROVIDERS = {
   github: {
     client_id: 'CLIENT_ID',
     client_secret: 'CLIENT_SECRET',
-    icon: 'icons/github.svg',
+    icon: 'github.svg',
+    enable: true
   },
   google: {
     strategy: :google_oauth2,
     client_id: 'CLIENT_ID',
     client_secret: 'CLIENT_SECRET',
-    icon: 'icons/google.svg',
+    icon: 'google.svg',
+    enable: true
   },
   orcid: {
     client_id: 'CLIENT_SECRET',
     client_secret: 'CLIENT_SECRET',
-    icon: 'icons/orcid.svg'
+    icon: 'orcid.svg',
+    enable: false
   },
   keycloak: {
     strategy: :keycloak_openid,
@@ -79,65 +65,46 @@ $OMNIAUTH_PROVIDERS = {
     client_secret: 'YOUR_KEYCLOAK_CLIENT_SECRET',
     client_options: { site: 'KEYCLOAK_SITE', realm: 'KEYCLOAK_REALM' },
     name: 'keycloak',
-    icon: 'icons/keycloak.svg'
+    icon: 'keycloak.svg',
+    enable: false
   }
 }.freeze
-
 # Don't load and don't display recent mappings if false, in case of too many mappings (take longer to load homepage)
 $DISPLAY_RECENT = false
-
 # If true then the UI will get available recognize at API_URL/annotators/recognizers
 $MULTIPLE_RECOGNIZERS = false
-
 # Remove download for these ontologies. Default:
 # ["CPT","ICD10","ICNP","ICPC2P","MDDB","MEDDRA","MSHFRE","MSHSPA_1","NDDF","NDFRT","NIC","RCD","SCTSPA","SNOMEDCT","WHO-ART"]
 $RESTRICTED_DOWNLOADS = []
-
 # Ontolobridge endpoint url
-$ONTOLOBRIDGE_BASE_URL = "https://ontolobridge.ccs.miami.edu/api-test/requests"
-
+$ONTOLOBRIDGE_BASE_URL = 'https://ontolobridge.ccs.miami.edu/api-test/requests'
 # Ontolobridge authentication token
-$ONTOLOBRIDGE_AUTHENTICATION_TOKEN = "Token Uq2pae73ktMtmgjUgtnhEOuHxr9sZeuK"
-
+$ONTOLOBRIDGE_AUTHENTICATION_TOKEN = 'Token Uq2pae73ktMtmgjUgtnhEOuHxr9sZeuK'
 # Ontologies for which to enable the new term request (Ontolobridge) tab
 $NEW_TERM_REQUEST_ONTOLOGIES = []
-
 # Legacy REST core service address (BioPortal v3.x and lower)
-$LEGACY_REST_URL = "http://example.org:8080/bioportal"
-
-
+$LEGACY_REST_URL = 'http://example.org:8080/bioportal'
 # Release version text (appears in footer of all pages, except 404 and 500 errors)
 $RELEASE_VERSION = ENV['RELEASE_VERSION']
-
 # Enable Slices, filtering of ontologies based on subdomain and ontology groups
 $ENABLE_SLICES = false
-
 # Google Analytics ID (optional)
 $ANALYTICS_ID = ENV['ANALYTICS_ID']
-
-
-
 # Enable client request caching
 $CLIENT_REQUEST_CACHING = true
-
-
 # Email settings
 ActionMailer::Base.smtp_settings = {
-  :address  => "", # smtp server address, ex: smtp.example.org
-  :port  => 25, # smtp server port
-  :domain  => "", # fqdn of rails server, ex: rails.example.org
+  address: '', # smtp server address, ex: smtp.example.org
+  port: 25, # smtp server port
+  domain: '' # fqdn of rails server, ex: rails.example.org
 }
-
 # Announcements mailman mailing list REQUEST address, EX: list-request@lists.example.org
 # NOTE: You must use the REQUEST address for the mailing list. ONLY WORKS WITH MAILMAN LISTS.
 $ANNOUNCE_LIST = ENV['SUPPORT_EMAIL']
-
 # Email addresses used for sending notifications (errors, feedback, support)
 $SUPPORT_EMAIL = ENV['SUPPORT_EMAIL']
-
 # Email used to send notifications
 $NOTIFICATION_EMAIL = ENV['SUPPORT_EMAIL']
-
 # reCAPTCHA
 # In order to use reCAPTCHA on the account creation and feedback submission pages:
 #    1. Obtain a reCAPTCHA v2 key from: https://www.google.com/recaptcha/admin
@@ -149,15 +116,12 @@ $NOTIFICATION_EMAIL = ENV['SUPPORT_EMAIL']
 #
 #    3. Set the USE_RECAPTCHA option to 'true'
 ENV['USE_RECAPTCHA'] = 'false'
-
 # Custom BioPortal logging
 require 'log'
-
 # URL where BioMixer GWT app is located
-#$BIOMIXER_URL = "http://bioportal-integration.bio-mixer.appspot.com"
+# $BIOMIXER_URL = "http://bioportal-integration.bio-mixer.appspot.com"
 $BIOMIXER_URL = ENV['BIOMIXER_URL']
 $BIOMIXER_APIKEY = ENV['BIOMIXER_APIKEY']
-
 ##
 # Custom Ontology Details
 # Custom details can be added on a per ontology basis using a key/value pair as columns of the details table
@@ -166,14 +130,11 @@ $BIOMIXER_APIKEY = ENV['BIOMIXER_APIKEY']
 # $ADDITIONAL_ONTOLOGY_DETAILS = { "STY" => { "Additional Detail" => "Text to be shown in the right-hand column." } }
 ##
 $ADDITIONAL_ONTOLOGY_DETAILS = {}
-
-#Front notice appears on the front page only and is closable by the user. It remains closed for seven days (stored in cookie)
+# Front notice appears on the front page only and is closable by the user. It remains closed for seven days (stored in cookie)
 $FRONT_NOTICE = ''
-
 # Site notice appears on all pages and remains closed indefinitely. Stored below as a hash with a unique key and a string message
 # EX: $SITE_NOTICE = { :unique_key => 'Put your message here (can include <a href="/link">html</a> if you use single quotes).' }
-$SITE_NOTICE = { }
-
+$SITE_NOTICE = {}
 $HOME_PAGE_LOGOS = {
   supported_by: [
     {
@@ -250,11 +211,13 @@ $FOOTER_LINKS = {
 
 $NOT_DOWNLOADABLE = {}
 
-$UI_THEME = ENV['UI_THEME'] || 'ontoportal'
 
+$UI_THEME = ENV['UI_THEME'] || 'ontoportal'
 $HOSTNAME = ENV['API_URL']
 if $HOSTNAME
   $HOSTNAME = ENV['API_URL'].split('data.').last
   # add custom stage server configuration if needed (e.g bioportal_config_development_stageportal.lirmm.fr)
-  require_relative "bioportal_config_development_#{$HOSTNAME}" if File.exist?("config/bioportal_config_development_#{$HOSTNAME}")
+  if File.exist?("config/bioportal_config_development_#{$HOSTNAME}")
+    require_relative "bioportal_config_development_#{$HOSTNAME}"
+  end
 end

@@ -5,5 +5,5 @@
       = t('register.account_errors')
       %ul
         - for error in @errors
-          %li= error
+          %li= error.is_a?(Array) ? error.last : error
   = render :partial => 'form', :locals => {:f => f}

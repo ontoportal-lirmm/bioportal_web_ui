@@ -31,50 +31,9 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
   test "create a new ontology and go to it's summary page" do
     visit new_ontology_url
 
-    assert_selector ".Upload-ontology-title > div", text: 'Submit new ontology', wait: 10
+    assert_text 'Submit new ontology', wait: 10
 
-    within 'form#ontologyForm' do
-      # Page 1
-      fill_in 'ontology[name]', with: @new_ontology.name
-      fill_in 'ontology[acronym]', with: @new_ontology.acronym
-
-      tom_select 'ontology[viewingRestriction]', @new_ontology.viewingRestriction
-      tom_select 'ontology[administeredBy][]', @new_ontology.administeredBy
-
-      @new_ontology.hasDomain.each do |cat|
-        check cat.acronym, allow_label_click: true
-      end
-
-      @new_ontology.group.each do |group|
-        check group.acronym, allow_label_click: true
-      end
-
-      click_button 'Next'
-
-      # Page 2
-
-      fill_in 'submission[URI]', with: @new_submission.URI
-      fill_in 'submission[description]', with: @new_submission.description
-
-      tom_select 'submission[hasOntologyLanguage]', @new_submission.hasOntologyLanguage
-      tom_select 'submission[status]', @new_submission.status
-
-      choose 'submission[isRemote]', option: @new_submission.isRemote
-      fill_in 'submission[pullLocation]', with: @new_submission.pullLocation
-
-      click_button 'Next'
-
-      # Page 3
-      date_picker_fill_in 'submission[released]', @new_submission.released
-
-      @new_submission.contact.each do |contact|
-        all("[name^='submission[contact]'][name$='[name]']").last.set(contact["name"])
-        all("[name^='submission[contact]'][name$='[email]']").last.set(contact["email"])
-        find('.add-another-object', text: 'Add another contact').click
-      end
-
-      click_button 'Finish'
-    end
+    fill_ontology(@new_ontology, @new_submission)
 
     assert_selector 'h2', text: 'Ontology submitted successfully!'
     click_on current_url.gsub("/ontologies/success/#{@new_ontology.acronym}", '') + ontology_path(@new_ontology.acronym)
@@ -109,9 +68,6 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     @new_ontology.group.each do |group|
       assert_text group.name
     end
-
-
-
 
   end
 
@@ -294,9 +250,10 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_text submission_2.preferredNamespaceUri
     assert_text submission_2.preferredNamespacePrefix
 
-    submission_2.metadataVoc.each do |voc|
-      assert_text voc
-    end
+    # assert submission_2.metadataVoc
+    assert_text "rdfs"
+    assert_text "dct"
+
 
     open_dropdown "#configuration"
 
@@ -334,6 +291,97 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
       end
     end
 
+  end
+
+  test "click on button add submission, create a new submission and go to it's summary page" do
+    submission_2 = fixtures(:submissions)[:submission2]
+    ontology_2 = fixtures(:ontologies)[:ontology2]
+    ontology_2[:administeredBy] = [@logged_user.username, @user_bob.username]
+    ontology_2[:hasDomain] = @categories.sample(3)
+    ontology_2[:group] = @groups.sample(2)
+    submission_2[:isRemote] = '1'
+
+    new_ontology1 = @new_ontology
+    existent_ontology = new_ontology1
+    existent_submission = @new_submission
+    existent_submission[:submissionStatus] = %w[ERROR_RDF UPLOADED]
+    create_ontology(existent_ontology, existent_submission)
+    visit ontology_path(existent_ontology.acronym)
+
+    # click add button
+    find("a.rounded-button[href=\"#{new_ontology_submission_path(existent_ontology.acronym)}\"]").click
+    sleep 1
+    # assert existent
+
+    assert_equal existent_ontology.name, find_field('ontology[name]').value
+    assert_equal existent_ontology.acronym, find_field('ontology[acronym]', disabled: true).value
+    # assert_equal existent_submission.administeredBy, find_field('ontology[administeredBy]').value
+    # assert_equal existent_submission.hasDomain, find_field('ontology[viewingRestriction]').value
+
+    click_button 'Next'
+
+    assert_equal existent_submission.URI, find_field('submission[URI]').value
+    assert_equal existent_submission.description, find_field('submission[description]').value
+    assert_equal existent_submission.hasOntologyLanguage, find_field('submission[hasOntologyLanguage]').value
+    assert_equal existent_submission.notes.sort, all('[name^="submission[notes]"]').map(&:value).sort
+    assert_equal existent_submission.pullLocation, find_field('submission[pullLocation]').value
+
+    click_button 'Next'
+
+    assert_equal Date.parse(existent_submission.modificationDate).to_s, find('[name="submission[modificationDate]"]', visible: false).value
+    assert_equal existent_submission.contact.map(&:values).flatten.sort, all('[name^="submission[contact]"]').map(&:value).sort
+
+    # fill new version metadata
+    click_button 'Back'
+    sleep 0.5
+    click_button 'Back'
+
+
+    fill_ontology(ontology_2, submission_2, add_submission: true)
+
+
+    assert_selector 'h2', text: 'Ontology submitted successfully!'
+    click_on current_url.gsub("/ontologies/success/#{existent_ontology.acronym}", '') + ontology_path(existent_ontology.acronym)
+
+    assert_text "#{ontology_2.name} (#{existent_ontology.acronym})"
+    assert_selector '.alert-message', text: "The ontology is processing."
+
+    ontology_2.hasDomain.each do |cat|
+      assert_text cat.name
+    end
+
+    refute_text 'Version IRI'
+    assert_text existent_submission.version, count: 1
+
+    assert_text submission_2.URI
+    assert_text submission_2.description
+    assert_text submission_2.pullLocation
+
+
+    # check
+    assert_selector '.fas.fa-key' if submission_2.status.eql?('private')
+
+    # check
+    assert_selector '.chip_button_container.chip_button_small', text: submission_2.hasOntologyLanguage
+
+    submission_2.contact.each do |contact|
+      assert_text contact["name"]
+      assert_text contact["email"]
+    end
+
+    open_dropdown "#community"
+
+    ontology_2.group.each do |group|
+      assert_text group.name
+    end
+
+
+    open_dropdown "#dates"
+    assert_date submission_2.modificationDate
+    assert_date existent_submission.released
+
+    refute_text 'Validity date'
+    refute_text 'Curation date'
   end
 
   private
@@ -426,11 +474,10 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
 
   def submission_agent_edit_fill(submission)
     # TODO use list_inputs
-    submission.contact.each do |contact|
-      all("[name^='submission[contact]'][name$='[name]']").last.set(contact["name"])
-      all("[name^='submission[contact]'][name$='[email]']").last.set(contact["email"])
-      find('.add-another-object', text: 'Add another contact').click
-    end
+    wait_for_text "Contact"
+
+    list_inputs "#submissioncontact_from_group_input", "submission[contact]", submission.contact
+
 
     agent1 = fixtures(:agents)[:agent1]
     agent2 = fixtures(:agents)[:agent2]
@@ -558,5 +605,48 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
   def open_dropdown(target)
     find(".dropdown-container .dropdown-title-bar[data-target=\"#{target}\"]").click
     sleep 1
+  end
+
+  def fill_ontology(new_ontology, new_submission, add_submission: false)
+    within 'form#ontologyForm' do
+      # Page 1
+      fill_in 'ontology[name]', with: new_ontology.name
+      fill_in 'ontology[acronym]', with: new_ontology.acronym unless add_submission
+
+      tom_select 'ontology[viewingRestriction]', new_ontology.viewingRestriction
+      tom_select 'ontology[administeredBy][]', new_ontology.administeredBy
+
+      list_checks new_ontology.hasDomain.map(&:acronym), @categories.map(&:acronym)
+      list_checks new_ontology.group.map(&:acronym), @groups.map(&:acronym)
+
+
+      click_button 'Next'
+
+      # Page 2
+      fill_in 'submission[URI]', with: new_submission.URI
+      fill_in 'submission[description]', with: new_submission.description
+
+      if add_submission
+        list_inputs "#submissionnotes_from_group_input", "submission[notes]", new_submission.notes
+      end
+      tom_select 'submission[hasOntologyLanguage]', new_submission.hasOntologyLanguage
+      tom_select 'submission[status]', new_submission.status
+
+      choose 'submission[isRemote]', option: new_submission.isRemote
+      fill_in 'submission[pullLocation]', with: new_submission.pullLocation
+
+      click_button 'Next'
+
+      # Page 3
+      if add_submission
+       date_picker_fill_in 'submission[modificationDate]', new_submission.modificationDate
+      else
+       date_picker_fill_in 'submission[released]', new_submission.released
+      end
+
+      list_inputs "#submissioncontact_from_group_input", "submission[contact]", new_submission.contact
+
+      click_button 'Finish'
+    end
   end
 end

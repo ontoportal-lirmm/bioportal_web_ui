@@ -27,7 +27,7 @@
         .ontology-details-last-update
           %img{src: asset_path("update.svg")}/
           %div
-            = t('ontology_details.header.last_uploaded')
+            = t('ontology_details.header.last_submission_date')
             = render DateTimeFieldComponent.new(value: sub.creationDate)
     .ontology-details-header-right-container.justify-content-end{style: 'min-width: 20%;'}
       %span.mx-1

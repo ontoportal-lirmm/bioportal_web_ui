@@ -14,10 +14,6 @@ class SelectInputComponent < ViewComponent::Base
     @data = data
     @required = required
   end
-  
-  def call 
-    select_input_tag(@id, @values, @selected, multiple: @multiple, open_to_add_values: @open_to_add_values)
-  end
 
   def call
     select_input_tag(@id, @name, @values, @selected, multiple: @multiple, open_to_add_values: @open_to_add_values,
