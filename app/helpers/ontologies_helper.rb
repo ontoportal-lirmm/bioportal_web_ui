@@ -125,12 +125,12 @@ module OntologiesHelper
   def display_contact(contacts)
     contacts.map do |c|
       next unless c.member?(:name) && c.member?(:email)
-  
+
       formatted_name = c[:name].titleize
       formatted_email = c[:email].downcase
       "<span class='date_creation_text'>#{formatted_name}</span> (#{formatted_email})"
     end&.join(" and ")
-  end  
+  end
 
   def count_links(ont_acronym, page_name = 'summary', count = 0)
     ont_url = "/ontologies/#{ont_acronym}"
@@ -434,19 +434,19 @@ module OntologiesHelper
     return html.html_safe
   end
 
-  def language_selector_tag(name)
-    languages = languages_options
+  def edit_sub_languages_button(ontology = @ontology, submission = @submission_latest)
+    return unless ontology.admin?(session[:user])
 
-    if languages.empty? && @submission_latest
-      return unless  @ontology.admin?(session[:user])
-      content_tag(:div, data: { 'ontology-viewer-tabs-target': 'languageSelector' }, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'} ; margin-bottom: -1px;") do
-        edit_submission_property_link(@ontology.acronym, @submission_latest.submissionId, :naturalLanguage, container_id: '') do
-          ("Enable multilingual display " + content_tag(:i, "", class: "fas fa-lg fa-question-circle")).html_safe
-        end
+    link = edit_ontology_submission_path(ontology.acronym, submission.submissionId, properties: 'naturalLanguage', container_id: 'application_modal_content')
+    link_to_modal(nil,  link, class: "btn", id:'fair-details-link',
+                  data: { show_modal_title_value: "Edit natural languages of #{ontology.acronym}", show_modal_size_value: 'modal-md' }) do
+      render ChipButtonComponent.new(type: 'clickable', class: 'admin-background chip_button_small' ) do
+        ("Click here to edit available languages" + content_tag(:i, "", class: "fas fa-lg fa-edit")).html_safe
       end
-    else
-      select_tag name, languages_options, class: '', disabled: !ontology_data_section?, style: "visibility: #{ontology_data_section? ? 'visible' : 'hidden'}; border: none; outline: none;", data: { 'ontology-viewer-tabs-target': 'languageSelector' }
     end
+  end
+  def language_selector_tag(name)
+    content_language_selector(id: name, name: name)
   end
 
   def language_selector_hidden_tag(section)
@@ -454,21 +454,7 @@ module OntologiesHelper
                      data: { controller: "language-change", 'language-change-section-value': section, action: "change->language-change#dispatchLangChangeEvent" }
   end
 
-  def languages_options(submission =  @submission || @submission_latest)
-    current_lang = request_lang.downcase
-    submission_lang = submission_languages(submission)
-    # Transform each language into a select option
-    submission_lang = submission_lang.map do |lang|
-      lang = lang.split('/').last.upcase
-      lang = ISO_639.find(lang.to_s.downcase)&.alpha2 || lang
-      [lang, lang, { selected: lang.eql?(current_lang) }]
-    end
 
-    # Add the option to select all language
-    submission_lang.push(['All', 'all', { selected: current_lang.eql?('all') }])
-
-    options_for_select(submission_lang)
-  end
 
   def display_complex_text(definitions)
     html = ""

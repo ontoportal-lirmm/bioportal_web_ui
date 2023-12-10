@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   helper_method :bp_config_json, :current_license, :using_captcha?
 
-  unless Rails.env.development?
+  unless Rails.env.development? || Rails.env.test?
     rescue_from ActiveRecord::RecordNotFound, with: :not_found_record
     rescue_from StandardError, with: :internal_server_error
   end

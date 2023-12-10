@@ -80,4 +80,23 @@ module ComponentsHelper
       end
     end
   end
+
+  def form_save_button
+    render Buttons::RegularButtonComponent.new(id:'save-button', value: "Save", variant: "primary", size: "slim", type: "submit") do |btn|
+      btn.icon_left do
+        inline_svg_tag "check.svg"
+      end
+    end
+  end
+
+  def form_cancel_button
+    render Buttons::RegularButtonComponent.new(id:'cancel-button', value: "Cancel", variant: "secondary", size: "slim") do |btn|
+      btn.icon_left do
+         inline_svg_tag "x.svg", width: "20", height: "20"
+
+      end
+    end
+  end
+
+
 end

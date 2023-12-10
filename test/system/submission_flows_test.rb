@@ -322,7 +322,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
 
     assert_equal existent_submission.URI, find_field('submission[URI]').value
     assert_equal existent_submission.description, find_field('submission[description]').value
-    assert_equal existent_submission.hasOntologyLanguage, find_field('submission[hasOntologyLanguage]').value
+    assert_equal existent_submission.hasOntologyLanguage, find_field('submission[hasOntologyLanguage]', visible: false).value
     assert_equal existent_submission.notes.sort, all('[name^="submission[notes]"]').map(&:value).sort
     assert_equal existent_submission.pullLocation, find_field('submission[pullLocation]').value
 

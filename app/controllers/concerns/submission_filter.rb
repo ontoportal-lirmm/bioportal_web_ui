@@ -171,7 +171,7 @@ module SubmissionFilter
       ont_hash[:fairScore] = @fair_scores[ont.acronym]['score']
       ont_hash[:normalizedFairScore] = @fair_scores[ont.acronym]['normalizedScore']
     else
-      ont_hash[:fairScore] = nil
+      ont_hash[:fairScore] = 0
       ont_hash[:normalizedFairScore] = 0
     end
   end

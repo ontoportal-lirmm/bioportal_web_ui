@@ -59,9 +59,44 @@ module MultiLanguagesHelper
   def search_language_selector(id: 'search_language', name: 'search_language')
     render Input::LanguageSelectorComponent.new(id: id, name: name, enable_all: true,
                                                 languages: search_languages,
+                                                'data-select-input-searchable-value': false,
                                                 title: search_language_help_text)
 
   end
+
+  def content_languages(submission = @submission || @submission_latest)
+    current_lang = request_lang.downcase
+    submission_lang = submission_languages(submission)
+    # Transform each language into a select option
+    submission_lang = submission_lang.map do |lang|
+      lang = lang.split('/').last.upcase
+      lang = ISO_639.find(lang.to_s.downcase)
+      next nil unless lang
+      [lang.alpha2, lang.english_name]
+    end.compact
+
+    [submission_lang, current_lang]
+  end
+  def content_language_help_text
+    content_tag(:div, style: 'width: 350px;') do
+      concat content_tag(:div, "Indicate the language  on which the content of this resource will be displayed.")
+      concat(content_tag(:div, class: "mt-1" ) do
+        content_tag(:span, "The available languages are specified by the resource admin.") + edit_sub_languages_button
+      end)
+    end
+  end
+  def content_language_selector(id: 'content_language', name: 'content_language')
+    languages, selected = content_languages
+    render Input::LanguageSelectorComponent.new(id: id, name: name, enable_all: true,
+                                                languages: languages,
+                                                selected: selected || 'all',
+                                                'data-tooltip-interactive-value': true,
+                                                'data-select-input-searchable-value': false,
+                                                title: content_language_help_text)
+
+  end
+
+
   def language_hash(concept_label)
 
     return concept_label.first if concept_label.is_a?(Array)

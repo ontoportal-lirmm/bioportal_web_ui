@@ -74,8 +74,12 @@ class SubmissionsController < ApplicationController
     category_attributes['general'] << %w[acronym name groups administeredBy categories]
     category_attributes['licensing'] << 'viewingRestriction'
     category_attributes['relations'] << 'viewOf'
-    @categories_order = ['general', 'description', 'dates', 'licensing', 'persons and organizations', 'links', 'media', 'community', 'usage' ,'relations', 'content','methodology', 'object description properties']
-    @category_attributes = category_attributes
+    @selected_attributes = Array(params[:properties])
+    if @selected_attributes.empty?
+      @categories_order = ['general', 'description', 'dates', 'licensing', 'persons and organizations', 'links', 'media', 'community', 'usage' ,'relations', 'content','methodology', 'object description properties']
+      @category_attributes = category_attributes
+    end
+    render 'submissions/edit', layout: params[:container_id] ?  nil : 'ontology'
   end
 
   # When editing a submission (called when submit "Edit submission information" form)

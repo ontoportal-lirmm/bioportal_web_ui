@@ -284,3 +284,12 @@ $widget-table-border-color: #EFEFEF;
   flex-direction: row;
 }
 
+
+#select_content_language{
+  & ~ .ts-wrapper .ts-control{
+    padding: 6px 8px !important;
+    .item{
+      margin-right: 15px;
+    }
+  }
+}
