@@ -2,7 +2,7 @@
 
 class SelectInputComponent < ViewComponent::Base
 
-  def initialize(id:, name:, values:, selected: nil, multiple: false, open_to_add_values: false, required: false, data: {}, placeholder: '')
+  def initialize(id:, name:, values:, selected: nil, multiple: false, open_to_add_values: false, required: false, data: {}, placeholder: '', **html_options)
     super
     @id = id || ''
     @name = name
@@ -13,6 +13,7 @@ class SelectInputComponent < ViewComponent::Base
     @placeholder = placeholder
     @data = data
     @required = required
+    @html_options = html_options
   end
 
   def call
@@ -39,8 +40,11 @@ class SelectInputComponent < ViewComponent::Base
       placeholder: placeholder,
       autocomplete: 'off',
       multiple: multiple,
-      data: data
-    }
+      data: data,
+    }.merge(@html_options)
+
+    select_html_options[:style] = "#{select_html_options[:style]}; visibility: hidden"
+
     select_tag(name, options_for_select(values, selected), select_html_options)
 
   end

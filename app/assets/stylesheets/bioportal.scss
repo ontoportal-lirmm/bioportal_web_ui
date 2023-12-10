@@ -50,6 +50,7 @@ body{
 }
 
 .disabled-link{
+  pointer-events: none;
   color: #888888 !important;
   span{
     opacity: 0.6;
