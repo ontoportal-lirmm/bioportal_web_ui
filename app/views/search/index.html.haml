@@ -20,7 +20,7 @@
         %div.col-sm-2.mb-4 Search language
         %div.col-sm-10.mb-4
           %div.w-25
-            = render Input::LanguageSelectorComponent.new(id:'search_language' , name:'search_language', languages: {fr: 'French', en: 'English'})
+            = search_language_selector
         %div.col-sm-2= t("search.include_in_search") + ":"
         %div.col-sm-10
           %div.form-check

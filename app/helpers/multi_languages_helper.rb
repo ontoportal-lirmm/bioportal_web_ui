@@ -47,6 +47,21 @@ module MultiLanguagesHelper
     end
   end
 
+  def search_language_help_text
+    content_tag(:div, style: 'width: 300px; text-align: center') do
+      "Indicate the language on which to perform the search, restricting text matching exclusively to terms with that language"
+    end
+  end
+  def search_languages
+    # top ten spoken languages
+    portal_languages.keys + %w[zh es hi ar bn pt ru ur id]
+  end
+  def search_language_selector(id: 'search_language', name: 'search_language')
+    render Input::LanguageSelectorComponent.new(id: id, name: name, enable_all: true,
+                                                languages: search_languages,
+                                                title: search_language_help_text)
+
+  end
   def language_hash(concept_label)
 
     return concept_label.first if concept_label.is_a?(Array)

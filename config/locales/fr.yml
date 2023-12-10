@@ -182,7 +182,7 @@ fr:
       publications: Publications
       recommender: Recommendeur
       release_notes: Notes de version
-      search_prompt: Rechercher dans %{portail_name} ...
+      search_prompt: Rechercher dans %{portal_name} ...
       submit_feedback: Envoyer un commentaire
       support: Assistance
       cite_us: Citez-nous
