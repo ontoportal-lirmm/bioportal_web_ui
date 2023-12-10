@@ -2,6 +2,6 @@
   %div.dropdown-divider
 - if header?
   %h6.dropdown-header= header
-- items.each do |i|
-  %span.dropdown-item
-    = i
+- items.each_with_index do |text,  index|
+  %span.dropdown-item{class: index.eql?(@selected) ? 'dropdown-item-selected' : ''}
+    = text
