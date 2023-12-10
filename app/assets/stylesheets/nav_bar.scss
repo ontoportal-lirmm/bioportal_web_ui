@@ -96,15 +96,21 @@
 
 }
 
-.nav-language{
-    background-color: transparent;
-    width: 47px;
-    color: white;
-    border: none;
-    outline: none;
-    cursor: pointer;
+.nav-language {
+    width: 47px !important;
+    .ts-control{
+        background-color: transparent;
+        color: white;
+        border: none;
+        outline: none;
+        cursor: pointer;
+    }
 
+    &.single.input-active .ts-control{
+        background: transparent !important;
+    }
 }
+
 .nav-language option{
     background-color: white;
     color: black;

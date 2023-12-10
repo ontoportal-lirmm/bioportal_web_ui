@@ -15,9 +15,9 @@ module ApplicationHelper
                        :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#", :rdfs => "http://www.w3.org/2000/01/rdf-schema#", :metadata => "http://data.bioontology.org/metadata/",
                        :metadata_def => "http://data.bioontology.org/metadata/def/", :dc => "http://purl.org/dc/elements/1.1/", :xsd => "http://www.w3.org/2001/XMLSchema#",
                        :oboinowl_gen => "http://www.geneontology.org/formats/oboInOwl#", :obo_purl => "http://purl.obolibrary.org/obo/",
-                       :umls => "http://bioportal.bioontology.org/ontologies/umls/", :door => "http://kannel.open.ac.uk/ontology#", :dct => "http://purl.org/dc/terms/",
-                       :void => "http://rdfs.org/ns/void#", :foaf => "http://xmlns.com/foaf/0.1/", :vann => "http://purl.org/vocab/vann/", :adms => "http://www.w3.org/ns/adms#",
-                       :voaf => "http://purl.org/vocommons/voaf#", :dcat => "http://www.w3.org/ns/dcat#", :mod => "http://www.isibang.ac.in/ns/mod#", :prov => "http://www.w3.org/ns/prov#",
+                        :umls => "http://bioportal.bioontology.org/ontologies/umls/", :door => "http://kannel.open.ac.uk/ontology#", :dct => "http://purl.org/dc/terms/",
+                        :void => "http://rdfs.org/ns/void#", :foaf => "http://xmlns.com/foaf/0.1/", :vann => "http://purl.org/vocab/vann/", :adms => "http://www.w3.org/ns/adms#",
+                        :voaf => "http://purl.org/vocommons/voaf#", :dcat => "http://www.w3.org/ns/dcat#", :mod => "http://www.isibang.ac.in/ns/mod#", :prov => "http://www.w3.org/ns/prov#",
                        :cc => "http://creativecommons.org/ns#", :schema => "http://schema.org/", :doap => "http://usefulinc.com/ns/doap#", :bibo => "http://purl.org/ontology/bibo/",
                        :wdrs => "http://www.w3.org/2007/05/powder-s#", :cito => "http://purl.org/spar/cito/", :pav => "http://purl.org/pav/", :nkos => "http://w3id.org/nkos/nkostype#",
                        :oboInOwl => "http://www.geneontology.org/formats/oboInOwl#", :idot => "http://identifiers.org/idot/", :sd => "http://www.w3.org/ns/sparql-service-description#",
@@ -195,7 +195,7 @@ module ApplicationHelper
   def build_tree(node, string, id, acronym, concept_schemes: nil)
 
     return string if node.children.nil? || node.children.empty?
-    
+
     node.children.sort! { |a, b| (main_language_label(a.prefLabel) || a.id).downcase <=> (main_language_label(a.prefLabel) || b.id).downcase }
     node.children.each do |child|
       active_style = child.id.eql?(id) ? "active" : ''
@@ -320,7 +320,7 @@ module ApplicationHelper
     selected_ontologies ||= []
     init_ontology_picker(custom_ontologies, selected_ontologies)
     render :partial => "shared/ontology_picker_advanced", :locals => {
-        :custom_ontologies => custom_ontologies, :selected_ontologies => selected_ontologies, :align_to_dom_id => align_to_dom_id
+      :custom_ontologies => custom_ontologies, :selected_ontologies => selected_ontologies, :align_to_dom_id => align_to_dom_id
     }
   end
 
@@ -678,12 +678,6 @@ module ApplicationHelper
     request.path.eql?(path)
   end
 
-  def request_lang
-    lang = params[:language] || params[:lang]
-    lang = 'EN' unless lang
-    lang.upcase
-  end
-
   def bp_config_json
     # For config settings, see
     # config/bioportal_config.rb
@@ -719,12 +713,12 @@ module ApplicationHelper
              ["/landscape", t("layout.header.landscape")]]
   end
 
-  def portal_language_selector(id: 'language-select')
-    languages = %w[en fr it de].map{|x| [x.upcase, x]}
-    select_tag('language',options_for_select(languages), id: id, class: 'nav-language',
-               data: { controller: "platform-language", action: "change->platform-language#handleLangChanged" })
 
+  def beta_badge(text = 'beta', tooltip: 'This feature is experimental and may have issues')
+    return unless text
+    content_tag(:span, text, data: { controller: 'tooltip' }, title: tooltip, class: 'badge badge-pill bg-secondary text-white')
   end
+
   def attribute_enforced_values(attr)
     submission_metadata.select {|x| x['@id'][attr]}.first['enforcedValues']
   end

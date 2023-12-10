@@ -1,4 +1,51 @@
 module MultiLanguagesHelper
+  def portal_lang
+    session[:locale] || 'en'
+  end
+  def request_lang
+    lang = params[:language] || params[:lang]
+    lang = portal_lang unless lang
+    lang.upcase
+  end
+
+  def portal_language_help_text
+    "Indicate the language in which the interfaces should appear"
+  end
+  def portal_languages
+    {
+      en: { badge: nil, disabled: false },
+      fr: { badge: 'beta', disabled: false },
+      it: { badge: 'coming', disabled: true },
+      de: { badge: 'coming', disabled: true }
+    }
+  end
+
+  def portal_language_selector
+    languages = portal_languages
+    selected_language = portal_lang
+    selected_language = content_tag(:span, selected_language.upcase, data: { controller: 'tooltip' }, title: portal_language_help_text)
+    render DropdownButtonComponent.new do |d|
+      d.header { selected_language }
+      d.section(divide: false, selected_index: languages.find_index(selected_language)) do |s|
+        languages.each do |lang, metadata|
+          s.item do
+            text = content_tag(:div, class: 'd-flex align-items-center') do
+              content_tag(:span, render(LanguageFieldComponent.new(value: lang, auto_label: true)), class: 'mr-1') + beta_badge(metadata[:badge])
+            end
+            link_options = { data: { turbo: true } }
+
+            if metadata[:disabled]
+              link_options[:class] = 'disabled-link'
+              link_options[:disabled] = 'disabled'
+            end
+
+            link_to(text, "/locale/#{lang}", link_options)
+          end
+        end
+
+      end
+    end
+  end
 
   def language_hash(concept_label)
 
