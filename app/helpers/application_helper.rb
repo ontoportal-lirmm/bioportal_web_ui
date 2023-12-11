@@ -166,54 +166,6 @@ module ApplicationHelper
     end
   end
 
-  def draw_tree(root, acronym, id = nil, concept_schemes = nil)
-    id = root.children.first.id if id.nil?
-
-    # TODO: handle tree view for obsolete classes, e.g. 'http://purl.obolibrary.org/obo/GO_0030400'
-    raw build_tree(root, '', id, acronym, concept_schemes: concept_schemes)
-  end
-
-  def build_tree(node, string, id, acronym, concept_schemes: nil)
-
-    return string if node.children.nil? || node.children.empty?
-
-    node.children.sort! { |a, b| (main_language_label(a.prefLabel) || a.id).downcase <=> (main_language_label(a.prefLabel) || b.id).downcase }
-    node.children.each do |child|
-      active_style = child.id.eql?(id) ? "active" : ''
-
-      # This fake root will be present at the root of "flat" ontologies, we need to keep the id intact
-
-      if child.id.eql?('bp_fake_root')
-        string << tree_link_to_concept(child: child, ontology_acronym: acronym,
-                                       active_style: active_style, node: node, skos: !concept_schemes.nil?)
-      else
-        string << tree_link_to_concept(child: child, ontology_acronym: acronym,
-                                       active_style: active_style, node: node, skos: !concept_schemes.nil?)
-        if child.hasChildren && !child.expanded?
-          string << tree_link_to_children(child: child, acronym: acronym, concept_schemes: concept_schemes)
-        elsif child.expanded?
-          string << '<ul>'
-          build_tree(child, string, id, acronym, concept_schemes: concept_schemes)
-          string << '</ul>'
-        end
-        string << '</li>'
-      end
-    end
-    string
-  end
-
-  def tree_link_to_concept(child:, ontology_acronym:, active_style:, node: nil, skos: false)
-    language = request_lang
-    li_id = child.id.eql?('bp_fake_root') ? 'bp_fake_root' : short_uuid
-    open = child.expanded? ? "class='open'" : ''
-    #icons = child.relation_icon(node) removed because slow
-    muted_style = skos && Array(child.isInActiveScheme).empty? ? 'text-muted' : nil
-    muted_title = muted_style && !child.obsolete? ? "title='is not in a scheme'" : nil
-    href = ontology_acronym.blank? ? '#' : "/ontologies/#{ontology_acronym}/concepts/?id=#{CGI.escape(child.id)}&language=#{language}"
-
-
-
-
   def child_id(child)
     child.id.to_s.split('/').last
   end

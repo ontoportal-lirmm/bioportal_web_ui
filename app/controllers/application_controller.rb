@@ -468,13 +468,13 @@ class ApplicationController < ActionController::Base
   def get_class(params)
 
     lang = request_lang
-    
+
     if @ontology.flat?
 
       ignore_concept_param = params[:conceptid].nil? ||
-          params[:conceptid].empty? ||
-          params[:conceptid].eql?("root") ||
-          params[:conceptid].eql?("bp_fake_root")
+        params[:conceptid].empty? ||
+        params[:conceptid].eql?("root") ||
+        params[:conceptid].eql?("bp_fake_root")
       if ignore_concept_param
         # Don't display any classes in the tree
         @concept = LinkedData::Client::Models::Class.new
@@ -496,19 +496,19 @@ class ApplicationController < ActionController::Base
       # not ignoring 'bp_fake_root' here
       include = 'prefLabel,hasChildren,obsolete'
       ignore_concept_param = params[:conceptid].nil? ||
-          params[:conceptid].empty? ||
-          params[:conceptid].eql?("root")
+        params[:conceptid].empty? ||
+        params[:conceptid].eql?("root")
       if ignore_concept_param
         # get the top level nodes for the root
         # TODO_REV: Support views? Replace old view call: @ontology.top_level_classes(view)
-        @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])        
+        @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
         if @roots.nil? || @roots.empty?
           LOG.add :debug, "Missing @roots for #{@ontology.acronym}"
           classes = @ontology.explore.classes.collection
           @concept = classes.first.explore.self(full: true) if classes.first
           return
         end
-        
+
         @root = LinkedData::Client::Models::Class.new(read_only: true)
         @root.children = @roots.sort{|x,y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase}
 

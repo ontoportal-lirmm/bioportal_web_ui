@@ -1,8 +1,0 @@
-= turbo_frame_tag child_id(@concept)+'_childs' do 
-  - output =""
-  - for child in @children
-    - output <<  render(TreeLinkComponent.new(child: child, ontology_acronym: child.explore.ontology.acronym, active_style: 'active_style', node: @concept, language: request_lang))
-    - if child.hasChildren
-      - output << render(TurboFrameComponent.new(id:"#{child_id(child)}_childs"))
-    - output << "</li>"
-  = raw output

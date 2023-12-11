@@ -3,6 +3,9 @@ require 'cgi'
 class ConceptsController < ApplicationController
   include MappingsHelper
   include ConceptsHelper
+  include TurboHelper
+  include ApplicationHelper
+
   layout 'ontology'
 
   def show_concept
@@ -40,22 +43,14 @@ class ConceptsController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     @ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
 
-    if request.xhr?
-      display = params[:callback].eql?('load') ? {full: true} : {display: "prefLabel"}
-      @concept = @ontology.explore.single_class(display, params[:id])
-      concept_not_found(params[:id]) if @concept.nil?
-      @schemes = params[:concept_schemes]&.split(',')
-      show_ajax_request # process an ajax call
-    else
-      # Get the latest 'ready' submission, or fallback to any latest submission
-      # TODO: change the logic here if the fallback will crash the visualization
+    # Get the latest 'ready' submission, or fallback to any latest submission
+    # TODO: change the logic here if the fallback will crash the visualization
       @submission = get_ontology_submission_ready(@ontology)  # application_controller
 
       @concept = @ontology.explore.single_class({full: true}, params[:id])
-      concept_not_found(params[:id]) if @concept.nil?
-      @schemes = params[:concept_schemes].split(',')
-      show_ajax_request # process a full call
-    end
+    concept_not_found(params[:id]) if @concept.nil?
+    @schemes = params[:concept_schemes].split(',')
+    show_ajax_request
   end
 
   def show_label
@@ -94,9 +89,13 @@ class ConceptsController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     if @ontology.nil?
       ontology_not_found(params[:ontology])
-    else 
+    else
       get_class(params) #application_controller
-      render partial: 'ontologies/treeview', locals: { autoCLick: params[:auto_click] || true }
+      render TreeViewComponent.new('concepts_tree_view',  @ontology,
+                                   params[:concept_schemes], request_lang,
+                                   @root, @concept,
+                                   auto_click: params[:auto_click] || true, data: {"turbo-frame-target": 'frame'}
+      ), layout: nil
     end
   end
 
@@ -178,15 +177,24 @@ class ConceptsController < ApplicationController
     render partial: "biomixer", layout: false
   end
 
-# PRIVATE -----------------------------------------
-private
+  # PRIVATE -----------------------------------------
+  private
 
   def show_ajax_request
     case params[:callback]
     when 'children' # Children is called only for drawing the tree
-      @children = @concept.explore.children(pagesize: 750, concept_schemes: Array(@schemes).join(','), language: request_lang, display: 'prefLabel,obsolete,hasChildren').collection || []
-      @children.sort! { |x, y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase } unless @children.empty?
-      render :partial => 'child_nodes'
+      @concept.children = @concept.explore.children(pagesize: 750, concept_schemes: Array(@schemes).join(','), language: request_lang, display: 'prefLabel,obsolete,hasChildren').collection || []
+      @concept.children.sort! { |x, y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase } unless @concept.children.empty?
+      render turbo_stream: [
+        replace(child_id(@concept) + '_open_link') do
+          "<i class='fas fa-chevron-down text-primary' data-action='click->simple-tree#toggleChildren'></i>".html_safe
+        end,
+        replace(child_id(@concept) + '_childs') do
+          render_to_string(TreeViewComponent.new('',  @ontology,
+                                                 Array(@schemes).join(','), request_lang,
+                                                 @concept, @concept), layout: nil)
+        end
+      ]
     end
   end
 
