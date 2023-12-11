@@ -165,7 +165,12 @@ module AgentHelper
     email = agent.email
     type = agent.agentType 
     identifiers = display_identifiers(agent.identifiers, link: false)
-    affiliations = Array(agent.affiliations).map { |a| display_agent(a, link: false) }.join(', ')
+    if agent.affiliations && agent.affiliations != nil
+      affiliations = "affiliations: "
+      agent.affiliations.each do |affiliation|
+        affiliations = affiliations + affiliation.name + ". "
+      end
+    end
     person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
     organization_icon = inline_svg_tag 'icons/organization.svg', class: 'agent-type-icon'
     agent_icon = type == "organization" ? organization_icon : person_icon
