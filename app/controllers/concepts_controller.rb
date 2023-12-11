@@ -4,7 +4,6 @@ class ConceptsController < ApplicationController
   include MappingsHelper
   include ConceptsHelper
   include TurboHelper
-  include ApplicationHelper
 
   layout 'ontology'
 
@@ -186,13 +185,12 @@ class ConceptsController < ApplicationController
       @concept.children = @concept.explore.children(pagesize: 750, concept_schemes: Array(@schemes).join(','), language: request_lang, display: 'prefLabel,obsolete,hasChildren').collection || []
       @concept.children.sort! { |x, y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase } unless @concept.children.empty?
       render turbo_stream: [
-        replace(child_id(@concept) + '_open_link') do
-          "<i class='fas fa-chevron-down text-primary' data-action='click->simple-tree#toggleChildren'></i>".html_safe
-        end,
-        replace(child_id(@concept) + '_childs') do
+        replace(helpers.child_id(@concept) + '_open_link') { helpers.tree_close_icon },
+        replace(helpers.child_id(@concept) + '_childs') do
           render_to_string(TreeViewComponent.new('',  @ontology,
                                                  Array(@schemes).join(','), request_lang,
-                                                 @concept, @concept), layout: nil)
+                                                 @concept, @concept,
+                                                 sub_tree: true), layout: nil)
         end
       ]
     end

@@ -1,7 +1,8 @@
-# frozen_string_literal: false
+# frozen_string_literal: true
 
 class TreeLinkComponent < ViewComponent::Base
   include MultiLanguagesHelper
+  include ComponentsHelper
 
   def initialize(child:, ontology_acronym:, active_style: '', node: nil, concept_schemes: nil, language:)
     @child = child
@@ -57,11 +58,17 @@ class TreeLinkComponent < ViewComponent::Base
 
   def open_children_link
     return unless @child.hasChildren
-
-    link_to children_link(@child, @concept_schemes, @language),
-            data: { turbo: true, turbo_frame: "#{child_id + '_childs'}" } do
-      content_tag(:i, nil, class: "fas #{@child.expanded? ? 'fa-chevron-down' : 'fa-chevron-right'}")
+    if @child.expanded?
+      tree_close_icon
+    else
+      content_tag('turbo_frame', id: "#{child_id}_open_link") do
+        link_to children_link(@child, @concept_schemes, @language),
+                data: { turbo: true, turbo_frame: "#{child_id + '_childs'}" } do
+          content_tag(:i, nil, class: "fas fa-chevron-right")
+        end
+      end
     end
+
   end
 
 end

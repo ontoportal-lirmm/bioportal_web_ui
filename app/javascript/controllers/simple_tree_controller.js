@@ -19,7 +19,7 @@ export default class extends Controller {
   }
 
   select (event) {
-    this.element.querySelector('a.active').classList.toggle('active')
+    this.element.querySelector('a.active')?.classList.toggle('active')
     event.currentTarget.classList.toggle('active')
     this.#afterClick(event.currentTarget)
   }

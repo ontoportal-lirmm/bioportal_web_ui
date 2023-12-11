@@ -1,9 +1,10 @@
-# frozen_string_literal: false
+# frozen_string_literal: true
 
 class TreeViewComponent < ViewComponent::Base
   include Turbo::FramesHelper
+  include ComponentsHelper
 
-  def initialize(id, ontology, concept_schemes, language, root, concept, auto_click: false, **html_options)
+  def initialize(id, ontology, concept_schemes, language, root, concept, auto_click: false, sub_tree: false, **html_options)
     @id = id
     @conceptid = concept.id
     @concept_schemes = concept_schemes.is_a?(String) ? concept_schemes.split(',') : Array(concept_schemes)
@@ -13,12 +14,13 @@ class TreeViewComponent < ViewComponent::Base
     @concept = concept
     @auto_click = auto_click
     @html_options = html_options
+    @sub_tree = sub_tree
   end
 
   private
 
   def sub_tree?
-    @root.id.eql?(@concept.id)
+    @sub_tree
   end
 
   def tree_container(&block)
@@ -40,15 +42,6 @@ class TreeViewComponent < ViewComponent::Base
   # TDOD check where used
   def child_id(child)
     child.id.to_s.split('/').last
-  end
-
-  # TODO make this a component, and update its usages
-  def tree_link_to_concept(child:, ontology_acronym:, active_style:, node: nil, concept_schemes: nil)
-    render TreeLinkComponent.new(child: child, ontology_acronym: ontology_acronym,
-                                 active_style: active_style,
-                                 node: node,
-                                 concept_schemes: concept_schemes, language: @language
-    )
   end
 
 end
