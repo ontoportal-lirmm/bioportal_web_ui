@@ -211,37 +211,11 @@ module ApplicationHelper
     muted_title = muted_style && !child.obsolete? ? "title='is not in a scheme'" : nil
     href = ontology_acronym.blank? ? '#' : "/ontologies/#{ontology_acronym}/concepts/?id=#{CGI.escape(child.id)}&language=#{language}"
 
-    if child.prefLabel.nil?
-      pref_label_html = child.id.split('/').last
-    else
-      pref_label_lang, pref_label_html = select_language_label(child.prefLabel)
-      pref_label_lang = pref_label_lang.to_s.upcase
-      tooltip = pref_label_lang.eql?("@NONE") ? "" : "data-controller='tooltip' data-tooltip-position-value='right' title='#{pref_label_lang}'";
-    end
-
-    link = <<-EOS
-        <a id='#{child.id}' data-conceptid='#{child.id}'
-           data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
-           data-collections-value='#{child.memberOf || []}'
-           data-active-collections-value='#{child.isInActiveCollection || []}'
-           data-skos-collection-colors-target='collection'
-           class='#{muted_style} #{active_style}' #{muted_title}'
-           #{tooltip}
-          >
-            #{ pref_label_html }
-        </a>
-    EOS
-    "<li #{open} id='#{li_id}'>#{link}"
-  end
 
 
-  def tree_link_to_children(child:, acronym: ,concept_schemes: nil)
-    language = request_lang
-    li_id = child.id.eql?('bp_fake_root') ? 'bp_fake_root' : short_uuid
-    concept_schemes = "&concept_schemes=#{concept_schemes.map{|x| CGI.escape(x)}.join(',')}" if concept_schemes
 
-    link = "<a id='#{child.id}' href='/ajax_concepts/#{acronym}/?conceptid=#{CGI.escape(child.id)}#{concept_schemes}&callback=children&language=#{language}'>ajax_class</a>"
-    "<ul class='ajax'><li id='#{li_id}'>#{link}</li></ul>"
+  def child_id(child)
+    child.id.to_s.split('/').last
   end
 
   def loading_spinner(padding = false, include_text = true)
@@ -253,11 +227,7 @@ module ApplicationHelper
     end
   end
 
-  # This gives a very hacky short code to use to uniquely represent a class
-  # based on its parent in a tree. Used for unique ids in HTML for the tree view
-  def short_uuid
-    rand(36**8).to_s(36)
-  end
+ 
 
   def help_icon(link, html_attribs = {})
     html_attribs["title"] ||= "Help"

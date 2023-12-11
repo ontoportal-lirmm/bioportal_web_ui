@@ -1,0 +1,13 @@
+%li{id:li_id , class: open?}
+  %turbo_frame{id: "#{child_id}_open_link"}
+    = open_children_link
+  %a{id: @child.id, data: { controller: 'tooltip', conceptid: @child.id, turbo: true, 'turbo-frame': 'concept_show',
+                            'active-collections-value': @child.isInActiveCollection || [], 'collections-value': @child.memberOf || [],
+                            'skos-collection-colors-target': 'collection', action: 'click->simple-tree#select'}, title:  @tooltip,
+            href: @href, class: "tree-link #{@muted_style} #{@active_style} #{border_left} #{open?}"}
+    = @pref_label_html
+
+  - if @child.hasChildren
+    = render TurboFrameComponent.new(id: "#{child_id}_childs")
+
+

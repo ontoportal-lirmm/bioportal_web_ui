@@ -651,6 +651,7 @@ div.tree_error {
 
 #bd ul.simpleTree li{
   margin-left:-10px;
+  padding: 5px 0 0 10px;
 }
 
 #bd ul.simpleTree{
@@ -668,6 +669,22 @@ div.tree_error {
   overflow:auto;
   border: 1px solid #444444;
   */
+  a.tree-link {
+    display: inline-block;
+    padding: 5px;
+  }
+
+  a.tree-link.active {
+    cursor: default;
+    background-color: var(--light-color);
+    font-weight: bold;
+    border-radius: 2px;
+  }
+
+  .tree-border-left{
+    border-left: 2px dotted #eee;
+    margin-left: 6px;
+  }
 }
 .simpleTree li {
   list-style: none;

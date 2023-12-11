@@ -1,6 +1,6 @@
 export class HistoryService {
 
-    unWantedData = ['turbo', 'controller', 'target', 'value']
+    unWantedData = ['turbo', 'controller', 'target', 'value', 'action']
 
 
     constructor() {
