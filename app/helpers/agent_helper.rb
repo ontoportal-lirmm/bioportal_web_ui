@@ -165,7 +165,8 @@ module AgentHelper
     email = agent.email
     type = agent.agentType 
     identifiers = display_identifiers(agent.identifiers, link: false)
-    if agent.affiliations && agent.affiliations != nil
+    #binding.pry
+    if agent.affiliations && agent.affiliations != []
       affiliations = "affiliations: "
       agent.affiliations.each do |affiliation|
         affiliations = affiliations + affiliation.name + ". "
