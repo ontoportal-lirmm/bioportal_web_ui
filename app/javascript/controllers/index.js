@@ -29,7 +29,7 @@ import FormAutoCompleteController from "./form_auto_complete_controller"
 application.register("form-auto-complete", FormAutoCompleteController)
 
 import FormDisplayController from "./form_display_controller"
-application.register("form-options-display", FormDisplayController)
+application.register("form-display", FormDisplayController)
 
 import HistoryController from "./history_controller"
 application.register("history", HistoryController)
@@ -57,6 +57,9 @@ application.register("ontology-viewer-tabs", OntologyViewerTabsController)
 
 import OntoportalAutocompleteController from "./ontoportal_autocomplete_controller"
 application.register("ontoportal-autocomplete", OntoportalAutocompleteController)
+
+import SearchController from "./search_controller"
+application.register("search", SearchController)
 
 import ShowFilterCountController from "./show_filter_count_controller"
 application.register("show-filter-count", ShowFilterCountController)
