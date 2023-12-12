@@ -25,7 +25,6 @@ class ConceptsController < ApplicationController
     @instances_concept_id = @concept.id
 
     concept_not_found(params[:id]) if @concept.nil?
-    gather_details
     render :partial => 'show'
   end
 
@@ -49,7 +48,18 @@ class ConceptsController < ApplicationController
       @concept = @ontology.explore.single_class({full: true}, params[:id])
     concept_not_found(params[:id]) if @concept.nil?
     @schemes = params[:concept_schemes].split(',')
-    show_ajax_request
+
+    @concept.children = @concept.explore.children(pagesize: 750, concept_schemes: Array(@schemes).join(','), language: request_lang, display: 'prefLabel,obsolete,hasChildren').collection || []
+    @concept.children.sort! { |x, y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase } unless @concept.children.empty?
+    render turbo_stream: [
+      replace(helpers.child_id(@concept) + '_open_link') { helpers.tree_close_icon },
+      replace(helpers.child_id(@concept) + '_childs') do
+        render_to_string(TreeViewComponent.new('',  @ontology,
+                                               Array(@schemes).join(','), request_lang,
+                                               @concept, @concept,
+                                               sub_tree: true), layout: nil)
+      end
+    ]
   end
 
   def show_label
@@ -176,44 +186,12 @@ class ConceptsController < ApplicationController
     render partial: "biomixer", layout: false
   end
 
-  # PRIVATE -----------------------------------------
+
   private
 
-  def show_ajax_request
-    case params[:callback]
-    when 'children' # Children is called only for drawing the tree
-      @concept.children = @concept.explore.children(pagesize: 750, concept_schemes: Array(@schemes).join(','), language: request_lang, display: 'prefLabel,obsolete,hasChildren').collection || []
-      @concept.children.sort! { |x, y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase } unless @concept.children.empty?
-      render turbo_stream: [
-        replace(helpers.child_id(@concept) + '_open_link') { helpers.tree_close_icon },
-        replace(helpers.child_id(@concept) + '_childs') do
-          render_to_string(TreeViewComponent.new('',  @ontology,
-                                                 Array(@schemes).join(','), request_lang,
-                                                 @concept, @concept,
-                                                 sub_tree: true), layout: nil)
-        end
-      ]
-    end
-  end
 
-  # gathers the full set of data for a node
-  def show_uri_request
-    gather_details
-    build_tree
-  end
 
-  def gather_details
-    @notes = @concept.explore.notes
-    update_tab(@ontology, @concept.id) #updates the 'history' tab with the current node
-  end
-
-  def build_tree
-    # find path to root
-    rootNode = @concept.explore.tree(include: "prefLabel,hasChildren,obsolete,subClassOf")
-    @root = LinkedData::Client::Models::Class.new(read_only: true)
-    @root.children = rootNode unless rootNode.nil?
-  end
-
+  
   def filter_concept_with_no_date(concepts)
     concepts.filter { |c| !concept_date(c).nil?}
   end

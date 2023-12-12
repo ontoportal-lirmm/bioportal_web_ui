@@ -162,12 +162,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def undo_param(name) #Undo Paramaterization
-    unless name.nil?
-      name.to_s.gsub('_'," ")
-    end
-  end
-
   def bp_config_json
     # For config settings, see
     # config/bioportal_config.rb
@@ -193,22 +187,6 @@ class ApplicationController < ActionController::Base
     config.to_json
   end
 
-  def remote_file_exists?(url)
-    begin
-      url = URI.parse(url)
-
-      if url.kind_of?(URI::FTP)
-        check = check_ftp_file(url)
-      else
-        check = check_http_file(url)
-      end
-
-    rescue
-      return false
-    end
-
-    check
-  end
 
   def rest_url
     # Split the URL into protocol and path parts
@@ -313,15 +291,6 @@ class ApplicationController < ActionController::Base
     redirect_to "/"
   end
 
-  def redirect_to_history # Redirects to the correct tab through the history system
-    if session[:redirect].nil?
-      redirect_to_home
-    else
-      tab = find_tab(session[:redirect][:ontology])
-      session[:redirect]=nil
-      redirect_to uri_url(:ontology=>tab.ontology_id,:conceptid=>tab.concept)
-    end
-  end
 
   def redirect_new_api(class_view = false)
     # Hack to make ontologyid and conceptid work in addition to id and ontology params
@@ -378,24 +347,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # Verifies that a user owns an object
-  def authorize_owner(id=nil)
-    if id.nil?
-      id = params[:id].to_i
-    end
-
-    id.map! {|i| i.to_i} if id.kind_of?(Array)
-
-    if session[:user].nil?
-      redirect_to_home
-    else
-      if id.kind_of?(Array)
-        redirect_to_home if !session[:user].admin? && !id.include?(session[:user].id.to_i)
-      else
-        redirect_to_home if !session[:user].admin? && !session[:user].id.to_i.eql?(id)
-      end
-    end
-  end
 
   def authorize_admin
     admin = session[:user] && session[:user].admin?
@@ -410,41 +361,7 @@ class ApplicationController < ActionController::Base
     restrict_downloads = $NOT_DOWNLOADABLE
     restrict_downloads.include? acronym
   end
-  # updates the 'history' tab with the current selected concept
-  def update_tab(ontology, concept)
-    array = session[:ontologies] || []
-    found = false
-    for item in array
-      if item.ontology_id.eql?(ontology.id)
-        item.concept=concept
-        found=true
-      end
-    end
 
-    unless found
-      array << History.new(ontology.id, ontology.name, ontology.acronym, concept)
-    end
-
-    session[:ontologies]=array
-  end
-
-  # Removes a 'history' tab
-  def remove_tab(ontology_id)
-    array = session[:ontologies]
-    array.delete(find_tab(ontology_id))
-    session[:ontologies]=array
-  end
-
-  # Returns a specific 'history' tab
-  def find_tab(ontology_id)
-    array = session[:ontologies]
-    for item in array
-      if item.ontology_id.eql?(ontology_id)
-        return item
-      end
-    end
-    return nil
-  end
 
   def check_delete_mapping_permission(mappings)
     # ensure mappings is an Array of mappings (some calls may provide only a single mapping instance)
@@ -574,17 +491,7 @@ class ApplicationController < ActionController::Base
     return simple_ontologies
   end
 
-  def get_ontology_details(ont_uri)
-    # Note the simplify_ontology_model will cache individual ontology data.
-    begin
-      ont_model = LinkedData::Client::Models::Ontology.find(ont_uri)
-      ont = simplify_ontology_model(ont_model)
-    rescue Exception => e
-      LOG.add :error, e.message
-      return nil
-    end
-    return ont
-  end
+
 
   def simplify_classes(classes)
     # Simplify the classes batch service data for the UI
