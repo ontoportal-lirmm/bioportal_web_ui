@@ -1,5 +1,31 @@
 - new_record = @category.acronym.nil?
-%div.alert-box.error{style: @errors.nil? ?  "display: none" : nil }
+
+:javascript
+  function validateCategoryForm() {
+    var acronymField = document.getElementById('category_acronym');
+    var nameField = document.getElementById('category_name');
+    var errorAcronym = document.getElementById('error-category-acronym');
+    var errorName = document.getElementById('error-category-name');
+
+    errorAcronym.innerText = '';
+    errorName.innerText = '';
+
+    var isValid = true;
+
+    if (acronymField.value.trim() === '') {
+      errorAcronym.innerText = 'Please enter an acronym';
+      isValid = false;
+    }
+
+    if (nameField.value.trim() === '') {
+      errorName.innerText = 'Please enter a name';
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
+%div.alert-box.error{style: @errors.nil? ? 'display: none' : nil }
   %ul
     - unless @errors.nil?
       - for error in @errors
@@ -18,7 +44,8 @@
         %span.asterik *
       %td.top
         - if new_record
-          = f.text_field :acronym, class: "form-control"
+          = f.text_field :acronym, class: "form-control", id: "category_acronym"
+          %div#error-category-acronym.groupFormError
         - else
           = f.text_field :acronym, class: "form-control", readonly: true
     %tr
@@ -26,7 +53,8 @@
         Name
         %span.asterik *
       %td.top
-        = f.text_field :name, class: "form-control"
+        = f.text_field :name, class: "form-control", id: "category_name"
+        %div#error-category-name.groupFormError
     %tr
       %th
         Description
@@ -45,5 +73,5 @@
           = render SelectInputComponent.new(id: "category_ontologies", name: "category[ontologies]", values: @ontologies_category, selected: @category.ontologies, multiple: true, open_to_add_values: true)
           %div.d-flex.mt-1{:style => "display: none;"}
   %div.mt-2
-    = f.submit button_text, class: "btn btn-primary mr-sm-2 group-form-accept"
-    = link_to "Cancel", "javascript:;", class: "btn btn-primary dismiss-dialog"
+    %input{type: "submit", value: button_text, class: "btn btn-primary mr-sm-2 group-form-accept", onclick: "return validateCategoryForm();"}
+    %a{href: "javascript:;", class: "btn btn-primary dismiss-dialog"} Cancel
