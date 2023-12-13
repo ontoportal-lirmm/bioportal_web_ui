@@ -148,6 +148,8 @@ module OntologiesHelper
   end
 
   def metadata_filled_count(submission = @submission_latest, ontology = @ontology)
+    return if submission.nil?
+    
     reject = [:csvDump, :dataDump, :openSearchDescription, :metrics, :prefLabelProperty, :definitionProperty,
               :definitionProperty, :synonymProperty, :authorProperty, :hierarchyProperty, :obsoleteProperty,
               :ontology, :endpoint, :submissionId, :submissionStatus, :uploadFilePath, :context, :links, :ontology]

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SubmissionMetadataComponent < ViewComponent::Base
-  include ApplicationHelper, MetadataHelper,OntologiesHelper, AgentHelper
+  include ApplicationHelper, MetadataHelper, SubmissionInputsHelper,OntologiesHelper, AgentHelper
 
   def initialize(submission: , submission_metadata:)
     super
@@ -13,8 +13,10 @@ class SubmissionMetadataComponent < ViewComponent::Base
     @json_metadata.each do |metadata|
       metadata_list[metadata["attribute"]] = metadata["label"]
     end
-
-    @metadata_list = metadata_list.sort
+    reject = [:csvDump, :dataDump, :openSearchDescription, :metrics, :prefLabelProperty, :definitionProperty,
+              :definitionProperty, :synonymProperty, :authorProperty, :hierarchyProperty, :obsoleteProperty,
+              :ontology, :endpoint, :submissionId, :submissionStatus, :uploadFilePath]
+    @metadata_list = metadata_list.reject{|k,v| reject.include?(k.to_sym)}.sort
   end
 
   def display_attributes(metadata)
@@ -28,25 +30,5 @@ class SubmissionMetadataComponent < ViewComponent::Base
       end.join
     end
     out.html_safe
-  end
-  def attribute_help_text(attr)
-    if !attr["namespace"].nil?
-      help_text = "<strong>#{attr["namespace"]}:#{attr["attribute"]}</strong>"
-    else
-      help_text = "<strong>bioportal:#{attr["attribute"]}</strong>"
-    end
-
-    if (attr["metadataMappings"] != nil)
-      help_text += " (#{attr["metadataMappings"].join(", ")})"
-    end
-
-    if (!attr["enforce"].nil? && attr["enforce"].include?("uri"))
-      help_text += "<br/>This metadata should be an <strong>URI</strong>"
-    end
-
-    if (attr["helpText"] != nil)
-      help_text += "<br/><br/>#{attr["helpText"]}"
-    end
-    help_text.html_safe
   end
 end
