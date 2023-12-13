@@ -1,0 +1,22 @@
+.search-result-component
+    %a.title{href: "/"}
+        = @title
+    - if @uri
+        .uri
+            = @uri
+    - if @text
+        .text
+            = @text
+    .actions
+        .button 
+            = inline_svg_tag "icons/details.svg"
+            .text
+                Details
+        .button 
+            = inline_svg_tag "icons/visualize.svg"
+            .text
+                Visualize
+        .button.icon-right
+            .text
+                9 more from this ontology
+            = inline_svg_tag "icons/arrow-down.svg"
