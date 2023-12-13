@@ -83,7 +83,7 @@ module MetadataHelper
     elsif attr_uri?(metadata)
       render LinkFieldComponent.new(value: value)
     elsif input_type?(attr_metadata(metadata), 'contact')
-      display_contact(value)
+      display_contact([value]).html_safe
     else
       render TextAreaFieldComponent.new(value: value.to_s)
     end
