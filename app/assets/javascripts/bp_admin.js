@@ -910,22 +910,6 @@ jQuery(".admin.index").ready(function() {
       }
   });
 
-  jQuery(document).on("reveal.facebox", function (event) {
-    jQuery("#facebox form[data-collection=groups]").validate({
-      errorClass: "groupFormError",
-      errorElement: "div",
-      rules: {
-        "group[name]": "required",
-        "group[acronym]": "required",
-      },
-      messages: {
-        "group[name]": "Please enter a name",
-        "group[acronym]": "Please enter an acronym",
-      },
-    });
-
-  });
-
   jQuery('#group_new_action').on('click', function (event) {
     jQuery.facebox({
       ajax: "/admin/groups/new?time=" + new Date().getTime()
@@ -981,22 +965,6 @@ jQuery(".admin.index").ready(function() {
         DeleteCategories.act();
         break;
     }
-  });
-
-  jQuery(document).on("reveal.facebox", function (event) {
-    jQuery("#facebox form[data-collection=categories]").validate({
-      errorClass: "categoryFormError",
-      errorElement: "div",
-      rules: {
-        "category[name]": "required",
-        "category[acronym]": "required",
-      },
-      messages: {
-        "category[name]": "Please enter a name",
-        "category[acronym]": "Please enter an acronym",
-      },
-    });
-
   });
 
   jQuery('#category_new_action').on('click', function (event) {
