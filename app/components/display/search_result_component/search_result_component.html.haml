@@ -1,4 +1,4 @@
-.search-result-component
+.search-result-component{class: sub_component_class}
     %a.title{href: "/"}
         = @title
     - if @uri
@@ -20,3 +20,16 @@
             .text
                 9 more from this ontology
             = inline_svg_tag "icons/arrow-down.svg"
+        .button.icon-right
+            .text
+                4 mapped ontologies
+            = inline_svg_tag "icons/arrow-down.svg"
+    - if subresults?
+        .more-from-ontology
+            .vertical-line
+            .search-result-sub-components
+                - subresults.each do |result|
+                    .search-result-sub-component
+                        - #result.update(is_sub_component: true)
+                        = result
+    

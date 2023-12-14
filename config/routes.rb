@@ -192,6 +192,9 @@ Rails.application.routes.draw do
   match '/admin/update_check_enabled' => 'admin#update_check_enabled', via: [:get]
   match '/admin/users' => 'admin#users', via: [:get]
 
+  # Search
+  get 'search', to: 'search#index'
+
   # Ontolobridge
   # post '/ontolobridge/:save_new_term_instructions' => 'ontolobridge#save_new_term_instructions'
 
