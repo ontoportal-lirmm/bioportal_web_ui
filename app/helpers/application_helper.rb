@@ -182,10 +182,10 @@ module ApplicationHelper
   def tree_link_to_concept(child:, ontology_acronym:, active_style:, node: nil, skos: false)
     li_id = child.id.eql?('bp_fake_root') ? 'bp_fake_root' : short_uuid
     open = child.expanded? ? "class='open'" : ''
-    icons = child.relation_icon(node)
+    icons = nil
     muted_style = skos && Array(child.isInActiveScheme).empty? ? 'text-muted' : nil
     muted_title = muted_style  && !child.obsolete? ? "title='is not in a scheme'" : nil
-    href = ontology_acronym.blank? ? '#' : "/ontologies/#{child.explore.ontology.acronym}/concepts/?id=#{CGI.escape(child.id)}"
+    href = "/ontologies/#{ontology_acronym}/concepts/?id=#{CGI.escape(child.id)}"
     link = <<-EOS
         <a id='#{child.id}' data-conceptid='#{child.id}'
            data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
