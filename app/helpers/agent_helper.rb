@@ -95,17 +95,6 @@ module AgentHelper
     end.join(', ')
   end
 
-  def display_agent(agent, link: true)
-    return agent if agent.is_a?(String)
-
-    out = agent.name.to_s
-    identifiers = display_identifiers(agent.identifiers, link: link)
-    out = "#{out} ( #{identifiers} )" unless identifiers.empty?
-    affiliations = Array(agent.affiliations).map { |a| display_agent(a, link: link) }.join(', ')
-    out = "#{out} (affiliations: #{affiliations})" unless affiliations.empty?
-    out
-  end
-
   def agent_field_name(name, name_prefix = '')
     name_prefix&.empty? ? name : "#{name_prefix}[#{name}]"
   end
@@ -166,4 +155,68 @@ module AgentHelper
       details.values.join(', ').html_safe
     end.join('. ').html_safe
   end
+
+  def display_agent(agent, link: true)
+    agent_chip_component(agent)
+  end
+
+  def agent_tooltip(agent)
+    name = agent.name
+    email = agent.email
+    type = agent.agentType 
+    identifiers = display_identifiers(agent.identifiers, link: false)
+    #binding.pry
+    if agent.affiliations && agent.affiliations != []
+      affiliations = "affiliations: "
+      agent.affiliations.each do |affiliation|
+        affiliations = affiliations + affiliation.name + ". "
+      end
+    end
+    person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
+    organization_icon = inline_svg_tag 'icons/organization.svg', class: 'agent-type-icon'
+    agent_icon = type == "organization" ? organization_icon : person_icon
+    tooltip_html = generate_agent_tooltip(agent_icon, name, email, identifiers, affiliations)
+    return tooltip_html
+  end
+
+  def generate_agent_tooltip(agent_icon, name, email = nil, identifiers = nil, affiliations = nil)
+    content_tag(:div, class: 'agent-container') do
+      content_tag(:div, agent_icon, class: 'agent-circle') +
+      content_tag(:div) do
+        content_tag(:div, name, class: 'agent-name') +
+        content_tag(:div, email || '', class: 'agent-dependency') +
+        content_tag(:div, identifiers || '', class: 'agent-dependency') +
+        content_tag(:div, affiliations || '', class: 'agent-dependency')
+      end
+    end
+  end
+
+  def agent_chip_component(agent)
+    person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
+    organization_icon = inline_svg_tag 'icons/organization.svg', class: 'agent-type-icon'
+    agent_icon =  person_icon
+
+    if agent.is_a?(String)
+      name = agent
+      title = nil
+    else
+      name = agent.name
+      agent_icon = agent.agentType.eql?("organization") ? organization_icon : person_icon
+      title = agent_tooltip(agent)
+    end
+    render_chip_component(title, agent_icon, name)
+  end 
+
+
+  def render_chip_component(title,agent_icon,name)
+    render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: title , class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do 
+      content_tag(:div, class: 'agent-chip') do
+        content_tag(:div, agent_icon, class: 'agent-chip-circle') +
+        content_tag(:div, name, class: 'agent-chip-name text-truncate')
+      end   
+    end 
+  end
+
+
+  
 end

@@ -9,7 +9,7 @@ class Layout::HorizontalListComponent < ViewComponent::Base
     content_tag(:div, class: 'd-flex flex-wrap align-items-center') do
       out = ''
       elements.each do |element|
-        out = out +  content_tag(:div, element, class: 'mr-1 mb-1 text-truncate-scroll')
+        out = out +  content_tag(:div, element, class: 'mr-1 mb-1 text-truncate')
       end
       raw out
     end
