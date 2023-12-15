@@ -2,3 +2,28 @@
   @extend .form-control !optional;
   height: 100% !important;
 }
+.agent-chip{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.agent-chip-circle svg{
+  height: 15px;
+}
+
+.agent-chip-circle{
+  height: 30px;
+  width: 30px;
+  background-color: rgba(128, 128, 128, 0.08);
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right:10px;
+}
+
+.agent-chip-name{
+  color: #8C8E8D;
+  font-size: 15px;
+}

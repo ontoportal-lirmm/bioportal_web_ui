@@ -4,6 +4,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
   include AgentHelper
 
   setup do
+    teardown
     @logged_user = fixtures(:users)[:john]
     @new_person = fixtures(:agents)[:agent1]
     @new_organization = fixtures(:agents)[:organization1]
@@ -12,7 +13,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
 
   def teardown
     delete_agents
-    delete_user(@logged_user)
+    delete_users
   end
 
   test "go admin page and create an agent person and edit it" do
@@ -75,7 +76,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
 
       new_agent.affiliations.map do |aff|
         aff["identifiers"] = aff["identifiers"].each{|x| x["schemaAgency"] = 'ORCID'}
-        assert_text display_agent(OpenStruct.new(aff), link: false)
+        assert_text aff['name']
       end
     end
   end
@@ -96,7 +97,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
 
       agent.affiliations.map do |aff|
         aff["identifiers"] = aff["identifiers"].each{|x| x["schemaAgency"] = 'ORCID'}
-        assert_text display_agent(OpenStruct.new(aff), link: false)
+        assert_text aff['name']
       end
     end
   end
