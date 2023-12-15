@@ -59,9 +59,10 @@
           - title = "#{result[:title][:preflab]} - #{result[:title][:ontology]}"
           - id = result[:title][:id]
           - sub_number = result[:descendants].length
-          = render Display::SearchResultComponent.new(title: title, uri: id, sub_number: sub_number) do |c|
+          - link = result[:title][:link]
+          = render Display::SearchResultComponent.new(title: title, uri: id, sub_number: sub_number, link: link) do |c|
             - result[:descendants].each do |d|
-              - c.subresult(title: d[:preflab] , uri: d[:id], is_sub_component: true)
+              - c.subresult(title: d[:preflab] , uri: d[:id], link: d[:link] ,is_sub_component: true)
         
         
 
