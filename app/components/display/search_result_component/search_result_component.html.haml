@@ -16,14 +16,16 @@
             = inline_svg_tag "icons/visualize.svg"
             .text
                 Visualize
-        .button.icon-right
-            .text
-                9 more from this ontology
-            = inline_svg_tag "icons/arrow-down.svg"
-        .button.icon-right
-            .text
-                4 mapped ontologies
-            = inline_svg_tag "icons/arrow-down.svg"
+        - unless  @sub_number == 0
+            .button.icon-right
+                .text
+                    = "#{@sub_number} more from this ontology"
+                = inline_svg_tag "icons/arrow-down.svg"
+        - unless @mappings == 0
+            .button.icon-right
+                .text
+                    = "#{@mappings} mapped ontologies"
+                = inline_svg_tag "icons/arrow-down.svg"
     - if subresults?
         .more-from-ontology
             .vertical-line
