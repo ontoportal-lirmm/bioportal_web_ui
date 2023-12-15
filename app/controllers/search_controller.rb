@@ -141,7 +141,8 @@ class SearchController < ApplicationController
     grouped_results.each_key do |key|
       element_pref_lab = grouped_results[key][0].prefLabel[0]
       element_id = grouped_results[key][0].id
-
+      element_ontology_uri = grouped_results[key][0].links['ontology']
+      element_ontology_name_acronym = get_ontology_name_acronym_by_uri(element_ontology_uri)
       decendents = []
       grouped_results[key].each_with_index do |e , index|
         next if index == 0
@@ -152,11 +153,19 @@ class SearchController < ApplicationController
       end
       
       search_result_element = {
-        title: { preflab: element_pref_lab, ontology: "Ontology", id: element_id, link: "link1" },
+        title: { preflab: element_pref_lab, ontology: element_ontology_name_acronym, id: element_id, link: "link1" },
         descendants: decendents
       }
 
       search_results.push(search_result_element)
     end
     return search_results
+  end
+
+  def get_ontology_name_acronym_by_uri(element_ontology)
+    element_ontology_info = LinkedData::Client::Models::Ontology.find(element_ontology)
+    element_ontology_name = element_ontology_info.name
+    element_ontology_acronym = element_ontology_info.acronym
+    element_ontology_name_acronym = "#{element_ontology_name} (#{element_ontology_acronym})"
+    return element_ontology_name_acronym
   end
