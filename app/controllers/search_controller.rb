@@ -9,6 +9,34 @@ class SearchController < ApplicationController
   def index
     @search_query = params[:query].nil? ? params[:q] : params[:query]
     @search_query ||= ""
+
+    unless @search_query.eql?("")
+      data = LinkedData::Client::Models::Class.search(@search_query, params)
+      results = data.collection
+      grouped_results =  group_results_by_ontology(results)
+
+      @search_results = []
+
+      grouped_results.each_key do |key|
+        element_pref_lab = grouped_results[key][0].prefLabel[0]
+        decendents = []
+        grouped_results[key].each_with_index do |e , index|
+          next if index == 0
+          e_pref_lab = e.prefLabel[0]
+          decendents_list_element = {preflab: e_pref_lab,id: index, link: "link"}
+          decendents.push(decendents_list_element)
+        end
+        
+        search_result_element = {
+          title: { preflab: element_pref_lab, ontology: "Ontology", id: "", link: "link1" },
+          descendants: decendents
+        }
+
+        @search_results.push(search_result_element)
+
+      end
+    end
+    #binding.pry
   end
 
   def json_search
@@ -119,6 +147,10 @@ class SearchController < ApplicationController
     end
     record_text = "Obsolete Class" if obsolete
     record_text
+  end
+
+  def group_results_by_ontology(results)
+    results.group_by { |element| element['links']['ontology'] }
   end
 
 end
