@@ -8,8 +8,10 @@ class SearchController < ApplicationController
 
   def index
     @search_query = params[:query].nil? ? params[:q] : params[:query]
+    params[:q] = params[:query]
+    params[:query] = nil
     @search_query ||= ""
-
+    
     unless @search_query.eql?("")
       data = LinkedData::Client::Models::Class.search(@search_query, params)
       results = data.collection
