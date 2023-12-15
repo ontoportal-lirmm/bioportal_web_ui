@@ -15,24 +15,7 @@ class SearchController < ApplicationController
       results = data.collection
       grouped_results =  group_results_by_ontology(results)
 
-      @search_results = []
-
-      grouped_results.each_key do |key|
-        element_pref_lab = grouped_results[key][0].prefLabel[0]
-        decendents = []
-        grouped_results[key].each_with_index do |e , index|
-          next if index == 0
-          e_pref_lab = e.prefLabel[0]
-          decendents_list_element = {preflab: e_pref_lab,id: index, link: "link"}
-          decendents.push(decendents_list_element)
-        end
-        
-        search_result_element = {
-          title: { preflab: element_pref_lab, ontology: "Ontology", id: "", link: "link1" },
-          descendants: decendents
-        }
-
-        @search_results.push(search_result_element)
+      @search_results = make_search_result(grouped_results)
 
       end
     end
@@ -153,4 +136,27 @@ class SearchController < ApplicationController
     results.group_by { |element| element['links']['ontology'] }
   end
 
-end
+  def make_search_result(grouped_results)
+    search_results = []
+    grouped_results.each_key do |key|
+      element_pref_lab = grouped_results[key][0].prefLabel[0]
+      element_id = grouped_results[key][0].id
+
+      decendents = []
+      grouped_results[key].each_with_index do |e , index|
+        next if index == 0
+        e_pref_lab = e.prefLabel[0]
+        e_id = e.id
+        decendents_list_element = {preflab: e_pref_lab,id: e_id, link: "link"}
+        decendents.push(decendents_list_element)
+      end
+      
+      search_result_element = {
+        title: { preflab: element_pref_lab, ontology: "Ontology", id: element_id, link: "link1" },
+        descendants: decendents
+      }
+
+      search_results.push(search_result_element)
+    end
+    return search_results
+  end

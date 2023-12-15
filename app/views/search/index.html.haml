@@ -57,10 +57,11 @@
       - @search_results.each do |result|
         .search-page-result-element
           - title = "#{result[:title][:preflab]} - #{result[:title][:ontology]}"
+          - id = result[:title][:id]
           - sub_number = result[:descendants].length
-          = render Display::SearchResultComponent.new(title: title, uri: 'http://opendata.inrae.fr/thesaurusINRAE/c_17053', sub_number: sub_number) do |c|
+          = render Display::SearchResultComponent.new(title: title, uri: id, sub_number: sub_number) do |c|
             - result[:descendants].each do |d|
-              - c.subresult(title: d[:preflab] , uri: 'http://opendata.inrae.fr/thesaurusINRAE/c_17053', is_sub_component: true)
+              - c.subresult(title: d[:preflab] , uri: d[:id], is_sub_component: true)
         
         
 
