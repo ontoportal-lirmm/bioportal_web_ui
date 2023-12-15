@@ -143,17 +143,25 @@ class SearchController < ApplicationController
       element_id = grouped_results[key][0].id
       element_ontology_uri = grouped_results[key][0].links['ontology']
       element_ontology_name_acronym = get_ontology_name_acronym_by_uri(element_ontology_uri)
+      ui_link = grouped_results[key][0].links['ui']
+      end_point = get_after_last_slash(ui_link)
+      element_link = "/ontologies/#{end_point}"
+
+      
       decendents = []
       grouped_results[key].each_with_index do |e , index|
         next if index == 0
         e_pref_lab = e.prefLabel[0]
         e_id = e.id
-        decendents_list_element = {preflab: e_pref_lab,id: e_id, link: "link"}
+        e_ui_link = e.links['ui']
+        e_end_point = get_after_last_slash(e_ui_link)
+        e_link = "/ontologies/#{e_end_point}"
+        decendents_list_element = {preflab: e_pref_lab,id: e_id, link: e_link}
         decendents.push(decendents_list_element)
       end
       
       search_result_element = {
-        title: { preflab: element_pref_lab, ontology: element_ontology_name_acronym, id: element_id, link: "link1" },
+        title: { preflab: element_pref_lab, ontology: element_ontology_name_acronym, id: element_id, link: element_link },
         descendants: decendents
       }
 
@@ -168,4 +176,10 @@ class SearchController < ApplicationController
     element_ontology_acronym = element_ontology_info.acronym
     element_ontology_name_acronym = "#{element_ontology_name} (#{element_ontology_acronym})"
     return element_ontology_name_acronym
+  end
+
+  def get_after_last_slash(input_string)
+    segments = input_string.split('/')
+    result = segments.last
+    return result
   end
