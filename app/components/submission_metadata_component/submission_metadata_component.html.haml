@@ -1,18 +1,13 @@
 = render TableComponent.new(id: 'submission_metadata_table', borderless: true, layout_fixed: true) do |t|
-  - t.header do |h|
-    - h.th(width:'15%') {"Label"}
-    - h.th(width:'50%') {"Value"}
-    - h.th(width:'35%') {"Metadata"}
-
   - @metadata_list.each do |metadata, label|
+    - next if Array(@submission.send(metadata)).empty?
     - t.row do |r|
       - r.td do
-        = label || metadata.underscore.humanize
+        = attr_label(metadata.to_s, attr_metadata: attr_metadata(metadata.to_s))
       - r.td do
         .d-flex.flex-wrap.align-items-center
           = display_attributes(metadata)
-      - r.td {attribute_help_text(attr_metadata(metadata))}
 :javascript
-   $("#submission_metadata_table").dataTable({ paging: false, autoWidth: false })
+   $("#submission_metadata_table").dataTable({ paging: false, autoWidth: true, search :false })
 
 

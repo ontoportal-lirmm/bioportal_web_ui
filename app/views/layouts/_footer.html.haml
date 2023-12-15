@@ -8,10 +8,8 @@
     .footer-header
       .footer-logo
         %img{:src => "#{asset_path("logos/ontoportal.svg")}"}
-        - logo = $UI_THEME.to_s.capitalize
-        - logo.sub! 'portal' , 'Portal'
         %p
-          = logo
+          = portal_name
       .footer-social-media-links
         - $FOOTER_LINKS[:social].each do |link|
           %a{:href => link[:link], :target => "_blank"}

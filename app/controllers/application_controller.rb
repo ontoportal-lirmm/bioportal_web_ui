@@ -803,6 +803,7 @@ class ApplicationController < ActionController::Base
   private
   def not_found_record(exception)
     @error_message = exception.message
+
     render 'errors/not_found', status: 404
   end
 end
