@@ -33,6 +33,11 @@ module ApplicationTestHelpers
       existent_user
     end
 
+    def delete_users(ontologies = LinkedData::Client::Models::Ontology.all)
+      Array(ontologies).each do |o|
+        LinkedData::Client::Models::Ontology.find_by_acronym(o.acronym).first&.delete
+      end
+    end
     def delete_user(user)
       LinkedData::Client::Models::User.find_by_username(user.username).first&.delete
     end
