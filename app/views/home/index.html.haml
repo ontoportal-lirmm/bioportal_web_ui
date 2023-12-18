@@ -71,6 +71,10 @@
         %input.d-none{type: "submit", name: "submit_button" ,value: "annotator", id: "annotator_submit"}/
         %input.d-none{type: "submit" , name: "submit_button" ,value: "recommender", id: "recommender_submit"}/
         .home-services-buttons.container
+          .insert-sample-text-button{onclick: "insertSampleText()"}
+            %div
+              Insert sample text
+            = inline_svg_tag 'icons/arrow-curved-up.svg'
           .home-get-recommendations{onclick: "submitRecommender()"}
             %p= t('home.get_recommendations')
             = inline_svg_tag "play.svg", class: "home-play-icon"
@@ -190,5 +194,10 @@
   }
   function submitRecommender(){
   document.getElementById("recommender_submit").click()
+  }
+  let recommenderAnnotatorArea = document.querySelector('.home-recommendations-and-annotations');
+  
+  function insertSampleText(){
+    recommenderAnnotatorArea.value = 'Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.';
   }
 
