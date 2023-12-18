@@ -63,7 +63,7 @@ module ApplicationHelper
       end
     end
   end
-  
+
 
   def encode_param(string)
     CGI.escape(string)
@@ -476,21 +476,15 @@ module ApplicationHelper
 
   def subscribe_button(ontology_id)
     return if ontology_id.nil?
-    ontology_acronym = ontology_id.split('/').last
-
-    if session[:user].nil?
-      link = "/login?redirect=#{request.url}"
-      subscribed = false
-      user_id = nil
-    else
-      user = LinkedData::Client::Models::User.find(session[:user].id)
-      subscribed = subscribed_to_ontology?(ontology_acronym, user)
-      link = "javascript:void(0);"
-      user_id = user.id
+    render TurboFrameComponent.new(id: 'subscribe_button', src: ontology_subscriptions_path(ontology_id: ontology_id.split('/').last), class: 'ml-1') do |t|
+      t.loader do
+        content_tag(:div, style: 'margin-left: 10px;') do
+          render PillButtonComponent.new do
+            (content_tag(:span, 'Watching', class: 'ml-1') + render(LoaderComponent.new(small: true))).html_safe
+          end
+        end
+      end
     end
-
-    count = count_subscriptions(ontology_id)
-    render OntologySubscribeButtonComponent.new(ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: link)
   end
 
   def admin_block(ontology: @ontology, user: session[:user], class_css: "admin-border", &block)
