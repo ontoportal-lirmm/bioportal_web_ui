@@ -1,4 +1,4 @@
-- acronym = ontology.acronym
+- acronym = ontology ? ontology.acronym : submission.id.split('/')[-3]
 - submission_id = submission.submissionId
 - id = attribute_input_frame_id(acronym, submission_id, attribute)
 = render TurboFrameComponent.new(id: id+'_form') do
@@ -7,4 +7,4 @@
     = hidden_field object_name(acronym, submission_id), :id, value: submission_id
     = hidden_field_tag :attribute, attribute
     = render partial: "ontologies_metadata_curator/attribute_inline", locals: { id: id, attribute: attribute,
-                    submission: submission, ontology: ontology }
+                    submission: submission , ontology: ontology}

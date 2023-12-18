@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git
-  revision: 169afb7c1002f9db2b3276af36d552575cc80ba2
+  revision: 674193220f93d99587e6d3a969adcb384caf0a61
   branch: development
   specs:
     ontologies_api_client (2.2.0)
@@ -99,6 +99,7 @@ GEM
       erubi (~> 1.4)
       parser (>= 2.4)
       smart_properties
+    bigdecimal (3.1.5)
     bindata (2.4.15)
     bindex (0.8.1)
     bootsnap (1.17.0)
@@ -147,9 +148,9 @@ GEM
     daemons (1.4.1)
     dalli (3.2.6)
     date (3.3.4)
-    debug (1.8.0)
-      irb (>= 1.5.0)
-      reline (>= 0.3.1)
+    debug (1.9.0)
+      irb (~> 1.10)
+      reline (>= 0.3.8)
     deepl-rb (2.5.3)
     diff-lcs (1.5.0)
     docile (1.4.0)
@@ -158,7 +159,7 @@ GEM
     erubi (1.12.0)
     erubis (2.7.0)
     eventmachine (1.2.7)
-    excon (0.105.0)
+    excon (0.108.0)
     execjs (2.9.1)
     faraday (2.0.1)
       faraday-net_http (~> 2.0)
@@ -177,7 +178,7 @@ GEM
     flamegraph (0.9.5)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    graphql (2.1.6)
+    graphql (2.1.7)
       racc (~> 1.4)
     graphql-client (0.18.0)
       activesupport (>= 3.0)
@@ -218,8 +219,8 @@ GEM
     inline_svg (1.9.0)
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
-    io-console (0.6.0)
-    irb (1.9.1)
+    io-console (0.7.1)
+    irb (1.10.1)
       rdoc
       reline (>= 0.3.8)
     iso-639 (0.3.6)
@@ -231,7 +232,7 @@ GEM
       railties (>= 3.2.16)
     jsbundling-rails (1.2.1)
       railties (>= 6.0.0)
-    json (2.7.0)
+    json (2.7.1)
     json-jwt (1.16.3)
       activesupport (>= 4.2)
       aes_key_wrap
@@ -319,7 +320,8 @@ GEM
       rack (>= 1.2, < 4)
       snaky_hash (~> 2.0)
       version_gem (~> 1.1)
-    oj (3.16.1)
+    oj (3.16.3)
+      bigdecimal (>= 3.0)
     omniauth (2.1.1)
       hashie (>= 3.4.6)
       rack (>= 2.2.3)
@@ -346,7 +348,7 @@ GEM
       actionpack (>= 4.2)
       omniauth (~> 2.0)
     open_uri_redirections (0.2.1)
-    parallel (1.23.0)
+    parallel (1.24.0)
     parser (3.2.2.4)
       ast (~> 2.4.1)
       racc
@@ -412,7 +414,7 @@ GEM
     recaptcha (5.9.0)
       json
     redcarpet (3.6.0)
-    regexp_parser (2.8.2)
+    regexp_parser (2.8.3)
     reline (0.4.1)
       io-console (~> 0.5)
     rest-client (2.1.0)

@@ -28,11 +28,6 @@
             %div.align-middle
               Actions
 
-      - begin
-        - submission_ready = @ontology.explore.latest_submission({:include_status => 'ready', display: 'submissionId'})
-        - submission_readyId = submission_ready.submissionId unless submission_ready.nil?
-      - rescue
-        - submission_readyId = -1
       - @submissions.each_with_index do |sub, index|
         - hidden_row_class = index >= 5 ? "hidden_ont hidden_select" : ""
         - t.row(id:"submission_#{sub.submissionId}" , class_css: hidden_row_class) do |r|
@@ -40,7 +35,7 @@
           - if @ontology.admin?(session[:user])
             - r.td { raw sub.submissionId }
           - r.td do
-            = render SubmissionStatusComponent.new(sub, sub.submissionId==submission_readyId) 
+            = render SubmissionStatusComponent.new(sub, submission_ready?(sub))
           - r.td {  xmldatetime_to_date(sub.modificationDate) unless sub.modificationDate.nil? }
           - r.td {  xmldatetime_to_date(sub.creationDate) unless sub.creationDate.nil? }
 

@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class OntologySubscribeButtonComponent < ViewComponent::Base
-  def initialize(ontology_id:, subscribed:, user_id:, count: 0, link: 'javascript:void(0);')
+  def initialize(id: '', ontology_id:, subscribed:, user_id:, count: 0, link: 'javascript:void(0);')
     super
+    @id = id
     @subscribed = subscribed
     @sub_text = subscribed ? 'UnWatch' : 'Watch'
     @link = link
