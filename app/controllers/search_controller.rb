@@ -139,7 +139,7 @@ class SearchController < ApplicationController
   def make_search_result(grouped_results)
     search_results = []
     grouped_results.each_key do |key|
-      element_pref_lab = grouped_results[key][0].prefLabel[0]
+      element_pref_lab = get_closest_preflab(grouped_results[key][0].prefLabel) 
       element_id = grouped_results[key][0].id
       element_ontology_uri = grouped_results[key][0].links['ontology']
       element_ontology_name_acronym = get_ontology_name_acronym_by_uri(element_ontology_uri)
@@ -154,7 +154,7 @@ class SearchController < ApplicationController
       decendents = []
       grouped_results[key].each_with_index do |e , index|
         next if index == 0
-        e_pref_lab = e.prefLabel[0]
+        e_pref_lab = get_closest_preflab(e.prefLabel) 
         e_id = e.id
         e_ui_link = e.links['ui']
         e_definition = get_element_defintion(e.definition)
@@ -196,4 +196,17 @@ class SearchController < ApplicationController
       end
     end
     result
+  end
+
+  def get_closest_preflab(preflabs_list)
+
+    result = preflabs_list.first
+    preflabs_list.each do |pref_lab|
+      if pref_lab.include?(@search_query) || @search_query.include?(pref_lab)
+        result = pref_lab 
+      end
+    end
+    
+    return result
+
   end
