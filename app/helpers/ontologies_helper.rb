@@ -562,7 +562,7 @@ module OntologiesHelper
 
   def ontology_edit_button
     return unless @ontology.admin?(session[:user])
-    render RoundedButtonComponent.new(link: edit_ontology_path(@ontology.acronym), icon: 'edit.svg',
+    render RoundedButtonComponent.new(link: edit_ontology_submission_path(ontology_id: @ontology.acronym, id: @submission_latest.id.split('/').last), icon: 'edit.svg',
                                       size: 'medium',
                                       title: 'Edit metadata')
   end

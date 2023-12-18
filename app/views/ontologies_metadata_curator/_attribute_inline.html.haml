@@ -1,8 +1,8 @@
+- acronym = ontology ? ontology.acronym : submission.id.split('/')[-3]
 = render TurboFrameComponent.new(id: id) do
   %div.d-flex.justify-content-between.align-items-center
     %div.d-flex.justify-content-between
       %div
-        - acronym = ontology.acronym
         - equivalents = equivalent_properties(attribute)
         - equivalents.each do |attr|
           %div.d-flex
@@ -31,5 +31,5 @@
                         %p
                           = value
             %div
-              = edit_submission_property_link(ontology.acronym, submission.submissionId, attribute) do
+              = edit_submission_property_link(acronym, submission.submissionId, attribute) do
                 %i.far.fa-edit
