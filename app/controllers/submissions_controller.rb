@@ -88,9 +88,10 @@ class SubmissionsController < ApplicationController
     acronym = params[:ontology_id]
     submission_id = params[:id]
     if params[:ontology]
-      @ontology = update_existent_ontology(acronym)
-      if @ontology.nil? || response_error?(@ontology)
-        show_new_errors(@ontology, partial: 'submissions/form_content', id: 'test')
+      @ontology, response = update_existent_ontology(acronym)
+
+      if response.nil? || response_error?(response)
+        show_new_errors(response, partial: 'submissions/form_content', id: 'test')
         return
       end
     end
@@ -100,7 +101,7 @@ class SubmissionsController < ApplicationController
                          notice: 'Submission updated successfully'
     end
 
-    @submission, response = update_submission(update_submission_hash(acronym), submission_id)
+    @submission, response = update_submission(update_submission_hash(acronym), submission_id, @ontology)
     if params[:attribute].nil?
       if response_error?(response)
         show_new_errors(response, partial: 'submissions/form_content', id: 'test')

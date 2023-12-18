@@ -13,7 +13,7 @@ module OntologyUpdater
     rescue StandardError
       next
     end
-    [@ontology, @ontology.update(values: new_values)]
+    [@ontology, @ontology.update(values: new_values, cache_refresh_all: false)]
   end
 
   def ontology_from_params

@@ -292,21 +292,16 @@ module OntologiesHelper
 
   def show_category_name(domain)
     acronym = domain.split('/').last.upcase
-    category = LinkedData::Client::Models::Category.find_by_acronym(acronym).first
+    category = LinkedData::Client::Models::Category.find(acronym).first
     category ? category.name : acronym.titleize
   end
 
   def show_group_name(domain)
     acronym = domain.split('/').last.upcase
-    category = LinkedData::Client::Models::Group.find_by_acronym(acronym).first
+    category = LinkedData::Client::Models::Group.find(acronym).first
     category ? category.name : acronym.titleize
   end
 
-  def show_group_name(domain)
-    acronym = domain.split('/').last.upcase
-    category = LinkedData::Client::Models::Group.find_by_acronym(acronym).first
-    category ? category.name : acronym
-  end
 
   def visits_data(ontology = nil)
     ontology ||= @ontology
