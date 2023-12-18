@@ -67,10 +67,10 @@
     %hr.home-section-line/
     .home-card
       %form{action: "/annotator_recommender_form", method: "post"}
-        %textarea.home-recommendations-and-annotations{rows: "6" , placeholder: t('home.paste_text_prompt'), name: "text"}
+        %textarea.home-recommendations-and-annotations{rows: "4" , placeholder: t('home.paste_text_prompt'), name: "text"}
         %input.d-none{type: "submit", name: "submit_button" ,value: "annotator", id: "annotator_submit"}/
         %input.d-none{type: "submit" , name: "submit_button" ,value: "recommender", id: "recommender_submit"}/
-        .home-services-buttons
+        .home-services-buttons.container
           .home-get-recommendations{onclick: "submitRecommender()"}
             %p= t('home.get_recommendations')
             = inline_svg_tag "play.svg", class: "home-play-icon"

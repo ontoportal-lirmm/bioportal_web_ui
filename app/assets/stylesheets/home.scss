@@ -249,10 +249,13 @@ i.fa.fa-caret-square-o-down {
 .home-services-buttons{
   background-color: white;
   border-radius: 8px;
-  padding: 20px;
+  padding: 0;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+.home-services-buttons.container{
+  padding: 0 30px 30px 0;
 }
 .home-card{
   border-radius: 8px;
