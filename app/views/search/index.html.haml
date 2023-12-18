@@ -67,6 +67,8 @@
               - result[:descendants].each do |d|
                 - c.subresult(title: d[:preflab] , uri: d[:id], link: d[:link] ,is_sub_component: true)
     - if @no_results    
-      Here we put the empty state
-        
+      .browse-empty-illustration
+        %img{:src => "#{asset_path("empty-box.svg")}"}
+        %p No result was found
+          
 
