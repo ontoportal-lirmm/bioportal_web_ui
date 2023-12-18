@@ -1,7 +1,7 @@
 .search-page-container 
   .search-page-subcontainer{'data-controller': 'search'}
-    = form_tag(search_path, method: :get) do
-      .search-page-input-container
+    = form_tag(search_path, method: :get, 'data-turbo': true) do
+      .search-page-input-container{'data-controller': 'reveal'}
         .search-page-input
           %input{type:"text", placeholder:"Enter a term, e.g. Melanoma", name: "q", value: @search_query}
           %button.search-page-button{type:'submit'}
