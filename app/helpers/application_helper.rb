@@ -473,6 +473,13 @@ module ApplicationHelper
                     class: "add_proposal btn btn-primary", data: { show_modal_title_value: "Add a new proposal"}
     end
   end
+  def link?(str)
+    # Regular expression to match strings starting with "http://" or "https://"
+    link_pattern = /\Ahttps?:\/\//
+
+    # Check if the string matches the pattern
+    !!(str =~ link_pattern)
+  end
 
   def subscribe_button(ontology_id)
     return if ontology_id.nil?
