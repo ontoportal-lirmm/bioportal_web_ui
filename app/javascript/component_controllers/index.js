@@ -15,6 +15,7 @@ import Tabs_container_component_controller
     from "../../components/tabs_container_component/tabs_container_component_controller";
 
 import alert_component_controller from "../../components/display/alert_component/alert_component_controller";
+import search_result_component_controller from "../../components/display/search_result_component/search_result_component_controller";
 import Progress_pages_component_controller
     from "../../components/layout/progress_pages_component/progress_pages_component_controller";
 import Reveal_component_controller from "../../components/layout/reveal_component/reveal_component_controller";
@@ -28,5 +29,6 @@ application.register("search-input", Search_input_component_controller)
 application.register("tabs-container", Tabs_container_component_controller)
 application.register("circle-progress-bar", CircleProgressBarComponentController)
 application.register("alert-component", alert_component_controller)
+application.register("search-result-component", search_result_component_controller)
 application.register("progress-pages", Progress_pages_component_controller)
 application.register("reveal-component", Reveal_component_controller)
