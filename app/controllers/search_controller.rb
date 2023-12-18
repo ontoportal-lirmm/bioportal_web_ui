@@ -148,7 +148,10 @@ class SearchController < ApplicationController
       ui_link = grouped_results[key][0].links['ui']
       end_point = get_after_last_slash(ui_link)
       element_link = "/ontologies/#{end_point}"
-
+      
+      element_definition = get_element_defintion(grouped_results[key][0].definition) 
+      
+      
       
       decendents = []
       grouped_results[key].each_with_index do |e , index|
@@ -156,14 +159,15 @@ class SearchController < ApplicationController
         e_pref_lab = e.prefLabel[0]
         e_id = e.id
         e_ui_link = e.links['ui']
+        e_definition = get_element_defintion(e.definition)
         e_end_point = get_after_last_slash(e_ui_link)
         e_link = "/ontologies/#{e_end_point}"
-        decendents_list_element = {preflab: e_pref_lab,id: e_id, link: e_link}
+        decendents_list_element = {preflab: e_pref_lab,id: e_id, link: e_link, definition: e_definition}
         decendents.push(decendents_list_element)
       end
       
       search_result_element = {
-        title: { preflab: element_pref_lab, ontology: element_ontology_name_acronym, id: element_id, link: element_link },
+        title: { preflab: element_pref_lab, ontology: element_ontology_name_acronym, id: element_id, link: element_link, definition: element_definition},
         descendants: decendents
       }
 
@@ -184,4 +188,14 @@ class SearchController < ApplicationController
     segments = input_string.split('/')
     result = segments.last
     return result
+  end
+
+  def get_element_defintion(definitions_array)
+    result = ""
+    unless definitions_array.eql?(nil)
+      definitions_array.each do |defintion|
+        result = "#{result} #{defintion}. "
+      end
+    end
+    result
   end
