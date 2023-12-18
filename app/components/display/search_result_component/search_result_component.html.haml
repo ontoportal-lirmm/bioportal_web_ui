@@ -1,4 +1,4 @@
-.search-result-component{class: sub_component_class}
+.search-result-component{class: sub_component_class, 'data-controller': 'search-result-component'}
     %a.title{href: @link}
         = @title
     - if @uri
@@ -17,7 +17,7 @@
             .text
                 Visualize
         - unless  @sub_number == 0
-            .button.icon-right
+            .button.icon-right{'data-action': "click->search-result-component#showSubOntologies"}
                 .text
                     = "#{@sub_number} more from this ontology"
                 = inline_svg_tag "icons/arrow-down.svg"
@@ -27,7 +27,7 @@
                     = "#{@mappings} mapped ontologies"
                 = inline_svg_tag "icons/arrow-down.svg"
     - if subresults?
-        .more-from-ontology
+        .more-from-ontology.d-none{'data-search-result-component-target': 'subOntologies'}
             .vertical-line
             .search-result-sub-components
                 - subresults.each do |result|
