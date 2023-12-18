@@ -36,10 +36,10 @@ export default class extends Controller {
   #disableLanguageSelector(selectedSection){
     if (this.languageSectionsValue.includes(selectedSection)){
       this.languageSelectorTarget.removeAttribute("disabled")
-      this.languageSelectorTarget.style.visibility = 'visible'
+      this.languageSelectorTarget.style.display = 'block'
     } else{
       this.languageSelectorTarget.setAttribute("disabled", true)
-      this.languageSelectorTarget.style.visibility = 'hidden'
+      this.languageSelectorTarget.style.display = 'none'
     }
   }
 

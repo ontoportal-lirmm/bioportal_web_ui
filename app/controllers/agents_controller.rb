@@ -67,7 +67,7 @@ class AgentsController < ApplicationController
   end
 
   def edit
-    @agent = LinkedData::Client::Models::Agent.find("#{rest_url}/Agents/#{params[:id]}")
+    @agent = LinkedData::Client::Models::Agent.find(params[:id])
     @name_prefix = params[:name_prefix] || ''
     @show_affiliations = params[:show_affiliations].nil? || params[:show_affiliations].eql?('true')
     @deletable = params[:deletable].to_s.eql?('true')
@@ -147,7 +147,7 @@ class AgentsController < ApplicationController
 
   def destroy
     error = nil
-    @agent = LinkedData::Client::Models::Agent.find("#{rest_url}/Agents/#{params[:id]}")
+    @agent = LinkedData::Client::Models::Agent.find(params[:id])
     success_text = ''
 
     if @agent.nil?
@@ -198,7 +198,7 @@ class AgentsController < ApplicationController
   end
 
   def update_agent(id = params[:id], params)
-    agent = LinkedData::Client::Models::Agent.find("#{rest_url}/Agents/#{id}")
+    agent = LinkedData::Client::Models::Agent.find(id)
 
     params[:creator] = session[:user].id if (agent.creator.nil? || agent.creator.empty?) && (params[:creator] || '').empty?
 

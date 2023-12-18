@@ -86,7 +86,7 @@ module OntologyUpdater
   def reset_agent_attributes
     helpers.agent_attributes.each do |attr|
       current_val = @submission[attr]
-      new_values = Array(current_val).map { |x| LinkedData::Client::Models::Agent.find(x) }
+      new_values = Array(current_val).map { |x| LinkedData::Client::Models::Agent.find(x.split('/').last) }
 
       new_values = new_values.first unless current_val.is_a?(Array)
 

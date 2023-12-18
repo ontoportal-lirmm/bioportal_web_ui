@@ -293,7 +293,7 @@ module OntologiesHelper
   def show_category_name(domain)
     return domain unless link?(domain)
 
-    acronym = domain.split('/').last.upcase
+    acronym = domain.split('/').last.upcase.strip
     category = LinkedData::Client::Models::Category.find(acronym).first
     category ? category.name : acronym.titleize
   end
@@ -301,7 +301,7 @@ module OntologiesHelper
   def show_group_name(domain)
     return domain unless link?(domain)
 
-    acronym = domain.split('/').last.upcase
+    acronym = domain.split('/').last.upcase.strip
     category = LinkedData::Client::Models::Group.find(acronym).first
     category ? category.name : acronym.titleize
   end
