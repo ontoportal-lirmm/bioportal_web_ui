@@ -2,10 +2,10 @@
 class Display::SearchResultComponent < ViewComponent::Base
     renders_many :subresults, Display::SearchResultComponent
     
-    def initialize(title: nil, uri: nil, text: nil, link: nil, other_reuses: nil, is_sub_component: false, sub_number: 0, mappings: 0)
+    def initialize(title: nil, uri: nil, definition: nil, link: nil, other_reuses: nil, is_sub_component: false, sub_number: 0, mappings: 0)
         @title = title
         @uri = uri
-        @text = text
+        @definition = definition
         @link = link
         @other_reuses = other_reuses
         @is_sub_component = is_sub_component

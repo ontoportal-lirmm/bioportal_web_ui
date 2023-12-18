@@ -26,7 +26,7 @@
           
           .filter-container
             .title
-              = t("exact_matches")
+              Include in search
             .options
               = render(ChipsComponent.new(name: 'property-values', value: 'Property values'))
               = render(ChipsComponent.new(name: 'obsolete-classes', value: 'Obsolete classes'))
@@ -34,14 +34,15 @@
 
           .filter-container
             .title
-              show only
+              Show only
             .options
               = render(ChipsComponent.new(name: 'exact-matches', value: 'Exact Matches'))
               = render(ChipsComponent.new(name: 'classes-with-definitions', value: 'Classes with definitions'))
               
         .search-page-options
-          .search-page-number-of-results 
-            = "Match in #{@search_results.length} ontologies"
+          - if @search_results
+            .search-page-number-of-results 
+              = "Match in #{@search_results.length} ontologies"
           .search-page-advanced-button.show-options{'data': {'action': 'click->search#show_advanced_options', 'search-target': 'showOptionsButton'}}
             .icon
               =inline_svg_tag 'icons/settings.svg'
@@ -52,17 +53,18 @@
               =inline_svg_tag 'icons/hide.svg'
             .text
               hide advanced options
-
-    .search-page-results-container
-      - @search_results.each do |result|
-        .search-page-result-element
-          - title = "#{result[:title][:preflab]} - #{result[:title][:ontology]}"
-          - id = result[:title][:id]
-          - sub_number = result[:descendants].length
-          - link = result[:title][:link]
-          = render Display::SearchResultComponent.new(title: title, uri: id, sub_number: sub_number, link: link) do |c|
-            - result[:descendants].each do |d|
-              - c.subresult(title: d[:preflab] , uri: d[:id], link: d[:link] ,is_sub_component: true)
+    - if @search_results
+      .search-page-results-container
+        - @search_results.each do |result|
+          .search-page-result-element
+            - title = "#{result[:title][:preflab]} - #{result[:title][:ontology]}"
+            - id = result[:title][:id]
+            - sub_number = result[:descendants].length
+            - link = result[:title][:link]
+            - definition = result[:title][:definition]
+            = render Display::SearchResultComponent.new(title: title, uri: id, sub_number: sub_number, link: link, definition: definition) do |c|
+              - result[:descendants].each do |d|
+                - c.subresult(title: d[:preflab] , uri: d[:id], link: d[:link] ,is_sub_component: true)
         
         
 
