@@ -176,10 +176,9 @@ module OntologiesHelper
     else
       uri = submission.id + "/download?apikey=#{get_apikey}"
       links << { href: uri, label: submission.pretty_format }
-      latest = ontology.explore.latest_submission({ include_status: 'ready' })
-      if latest && latest.submissionId == submission.submissionId
+      if submission_ready?(submission)
         links << { href: "#{ontology.id}/download?apikey=#{get_apikey}&download_format=csv", label: "CSV" }
-        if !latest.hasOntologyLanguage.eql?('UMLS')
+        unless submission.hasOntologyLanguage.eql?('UMLS')
           links << { href: "#{ontology.id}/download?apikey=#{get_apikey}&download_format=rdf", label: "RDF/XML" }
         end
       end
