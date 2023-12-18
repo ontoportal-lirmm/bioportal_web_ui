@@ -78,7 +78,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     visit ontology_path(@new_ontology.acronym)
 
     # click edit button
-    find("a.rounded-button[href=\"#{edit_ontology_path(@new_ontology.acronym)}\"]").click
+    find("a.rounded-button[href=\"#{edit_ontology_submission_path(ontology_id: @new_ontology.acronym, id: 1)}\"]").click
     sleep 1
 
     selected_categories = @categories[3..4]

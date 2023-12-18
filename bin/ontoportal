@@ -179,7 +179,7 @@ test() {
   echo "Running tests..."
   echo "Run: API_URL=$api_url bundle exec rails test -v $test_options"
 
-  docker compose run --rm -it test bash -c "(bundle check || bundle install) && RAILS_ENV=test bin/rails db:prepare && API_URL=$api_url bundle exec rails test -v $test_options"
+  docker compose run --rm -it test bash -c "bundle config unset local.ontologies_api_client && (bundle check || bundle install) && RAILS_ENV=test bin/rails db:prepare && API_URL=$api_url bundle exec rails test -v $test_options"
 
   # echo "Stopping API..."
   # bin/stop_api

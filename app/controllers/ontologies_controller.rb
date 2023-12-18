@@ -357,7 +357,7 @@ class OntologiesController < ApplicationController
       subscribed = false
       user_id = nil
     else
-      user = LinkedData::Client::Models::User.find(session[:user].id).first
+      user = LinkedData::Client::Models::User.find(session[:user].id)
       subscribed = helpers.subscribed_to_ontology?(ontology_acronym, user)
       link = "javascript:void(0);"
       user_id = user.id

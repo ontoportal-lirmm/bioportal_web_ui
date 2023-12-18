@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git
-  revision: 81313703f27bcd9b054fcf9fbe9d3c389647bcbe
+  revision: 674193220f93d99587e6d3a969adcb384caf0a61
   branch: development
   specs:
     ontologies_api_client (2.2.0)
