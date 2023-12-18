@@ -199,14 +199,9 @@ class SearchController < ApplicationController
   end
 
   def get_closest_preflab(preflabs_list)
+    selected = preflabs_list.select do |pref_lab| 
+        pref_lab.include?(@search_query) || @search_query.include?(pref_lab) 
+    end.first  
 
-    result = preflabs_list.first
-    preflabs_list.each do |pref_lab|
-      if pref_lab.include?(@search_query) || @search_query.include?(pref_lab)
-        result = pref_lab 
-      end
-    end
-    
-    return result
-
+    selected || preflabs_list&.first 
   end
