@@ -16,12 +16,10 @@ class SearchController < ApplicationController
       data = LinkedData::Client::Models::Class.search(@search_query, params)
       results = data.collection
       grouped_results =  group_results_by_ontology(results)
-
       @search_results = make_search_result(grouped_results)
-
+      @no_results = @search_results.eql?([])
       end
     end
-    #binding.pry
   end
 
   def json_search

@@ -8,37 +8,38 @@
             = inline_svg_tag 'icons/search.svg'
         .search-page-sizedbox
         .search-page-advanced.d-none{'data-search-target': 'advancedOptions'}
-          .filter-container
-            .title
-              Search language
-            .field
-              = search_language_selector
-          .filter-container
-            .title
-              = t("search.categories")
-            .field
-              = render Input::SelectComponent.new(id: 'search-categories', name: 'search-categories', value: options_for_select(categories_for_select), multiple: "multiple")
-          .filter-container
-            .title
-              = t("search.ontologies")
-            .field
-              = render Input::SelectComponent.new(id: 'search-categories', name: 'search-categories', value: options_for_select(@onts_for_select), multiple: "multiple")
-          
-          .filter-container
-            .title
-              Include in search
-            .options
-              = render(ChipsComponent.new(name: 'property-values', value: 'Property values'))
-              = render(ChipsComponent.new(name: 'obsolete-classes', value: 'Obsolete classes'))
-              = render(ChipsComponent.new(name: 'ontology-views', value: 'Ontology views'))
+          .left
+            .filter-container
+              .title
+                Search language
+              .field
+                = search_language_selector
+            .filter-container
+              .title
+                = t("search.categories")
+              .field
+                = render Input::SelectComponent.new(id: 'search-categories', name: 'search-categories', value: options_for_select(categories_for_select), multiple: "multiple")
+            .filter-container
+              .title
+                = t("search.ontologies")
+              .field
+                = render Input::SelectComponent.new(id: 'search-categories', name: 'search-categories', value: options_for_select(@onts_for_select), multiple: "multiple")
+          .right 
+            .filter-container
+              .title
+                Include in search
+              .options
+                = render(ChipsComponent.new(name: 'property-values', value: 'Property values'))
+                = render(ChipsComponent.new(name: 'obsolete-classes', value: 'Obsolete classes'))
+                = render(ChipsComponent.new(name: 'ontology-views', value: 'Ontology views'))
 
-          .filter-container
-            .title
-              Show only
-            .options
-              = render(ChipsComponent.new(name: 'exact-matches', value: 'Exact Matches'))
-              = render(ChipsComponent.new(name: 'classes-with-definitions', value: 'Classes with definitions'))
-              
+            .filter-container
+              .title
+                Show only
+              .options
+                = render(ChipsComponent.new(name: 'exact-matches', value: 'Exact Matches'))
+                = render(ChipsComponent.new(name: 'classes-with-definitions', value: 'Classes with definitions'))
+                
         .search-page-options
           - if @search_results
             .search-page-number-of-results 
@@ -65,6 +66,7 @@
             = render Display::SearchResultComponent.new(title: title, uri: id, sub_number: sub_number, link: link, definition: definition) do |c|
               - result[:descendants].each do |d|
                 - c.subresult(title: d[:preflab] , uri: d[:id], link: d[:link] ,is_sub_component: true)
-        
+    - if @no_results    
+      Here we put the empty state
         
 
