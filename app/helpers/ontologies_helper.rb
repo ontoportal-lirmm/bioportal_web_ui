@@ -176,10 +176,9 @@ module OntologiesHelper
     else
       uri = submission.id + "/download?apikey=#{get_apikey}"
       links << { href: uri, label: submission.pretty_format }
-      latest = ontology.explore.latest_submission({ include_status: 'ready' })
-      if latest && latest.submissionId == submission.submissionId
+      if submission_ready?(submission)
         links << { href: "#{ontology.id}/download?apikey=#{get_apikey}&download_format=csv", label: "CSV" }
-        if !latest.hasOntologyLanguage.eql?('UMLS')
+        unless submission.hasOntologyLanguage.eql?('UMLS')
           links << { href: "#{ontology.id}/download?apikey=#{get_apikey}&download_format=rdf", label: "RDF/XML" }
         end
       end
@@ -292,22 +291,21 @@ module OntologiesHelper
   end
 
   def show_category_name(domain)
-    acronym = domain.split('/').last.upcase
-    category = LinkedData::Client::Models::Category.find_by_acronym(acronym).first
+    return domain unless link?(domain)
+
+    acronym = domain.split('/').last.upcase.strip
+    category = LinkedData::Client::Models::Category.find(acronym)
     category ? category.name : acronym.titleize
   end
 
   def show_group_name(domain)
-    acronym = domain.split('/').last.upcase
-    category = LinkedData::Client::Models::Group.find_by_acronym(acronym).first
+    return domain unless link?(domain)
+
+    acronym = domain.split('/').last.upcase.strip
+    category = LinkedData::Client::Models::Group.find(acronym)
     category ? category.name : acronym.titleize
   end
 
-  def show_group_name(domain)
-    acronym = domain.split('/').last.upcase
-    category = LinkedData::Client::Models::Group.find_by_acronym(acronym).first
-    category ? category.name : acronym
-  end
 
   def visits_data(ontology = nil)
     ontology ||= @ontology
@@ -568,7 +566,7 @@ module OntologiesHelper
 
   def ontology_edit_button
     return unless @ontology.admin?(session[:user])
-    render RoundedButtonComponent.new(link: edit_ontology_path(@ontology.acronym), icon: 'edit.svg',
+    render RoundedButtonComponent.new(link: edit_ontology_submission_path(ontology_id: @ontology.acronym, id: @submission_latest.id.split('/').last), icon: 'edit.svg',
                                       size: 'medium',
                                       title: 'Edit metadata')
   end

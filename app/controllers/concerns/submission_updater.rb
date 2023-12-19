@@ -12,13 +12,14 @@ module SubmissionUpdater
     @submission.save(cache_refresh_all: false)
   end
 
-  def update_submission(new_submission_hash, submission_id)
+  def update_submission(new_submission_hash, submission_id , ontology = nil)
 
     convert_values_to_types(new_submission_hash)
 
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(new_submission_hash[:ontology]).first
+    @ontology = ontology || LinkedData::Client::Models::Ontology.find_by_acronym(new_submission_hash[:ontology]).first
     new_submission_hash.delete(:ontology)
-    @submission = @ontology.explore.submissions({ display: 'all' }, submission_id)
+
+    @submission = @ontology.explore.submissions({ include: 'all' }, submission_id)
 
     new_values = new_submission_hash
     new_values.each do |key, values|
@@ -61,8 +62,9 @@ module SubmissionUpdater
   private
 
   def update_ontology_summary_only(is_remote = @submission.isRemote)
-    @ontology.summaryOnly = is_remote&.eql?('3')
-    @ontology.update
+    if is_remote && @ontology.summaryOnly != is_remote.eql?('3')
+      @ontology.update(values: {summaryOnly: is_remote.eql?('3')}, cache_refresh_all: false)
+    end
   end
 
   def convert_values_to_types(new_submission_hash)

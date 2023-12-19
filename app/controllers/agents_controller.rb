@@ -8,7 +8,7 @@ class AgentsController < ApplicationController
 
   def show
     # we use :agent_id not :id
-    @agent = LinkedData::Client::Models::Agent.find(params[:agent_id])
+    @agent = LinkedData::Client::Models::Agent.find(params[:agent_id].split('/').last)
     not_found("Agent with id #{params[:agent_id]}") if @agent.nil?
 
     @agent_id = params[:id] || agent_id(@agent)
@@ -67,7 +67,7 @@ class AgentsController < ApplicationController
   end
 
   def edit
-    @agent = LinkedData::Client::Models::Agent.find("#{rest_url}/Agents/#{params[:id]}")
+    @agent = LinkedData::Client::Models::Agent.find(params[:id].split('/').last)
     @name_prefix = params[:name_prefix] || ''
     @show_affiliations = params[:show_affiliations].nil? || params[:show_affiliations].eql?('true')
     @deletable = params[:deletable].to_s.eql?('true')
@@ -99,7 +99,7 @@ class AgentsController < ApplicationController
     else
       success_message = 'Agent successfully updated'
       table_line_id = agent_table_line_id(agent_id(agent))
-      agent = LinkedData::Client::Models::Agent.find(agent.id)
+      agent = LinkedData::Client::Models::Agent.find(agent.id.split('/').last)
       streams = [alert_success(id: alert_id) { success_message },
                  replace(table_line_id, partial: 'agents/show_line', locals: { agent: agent })
       ]
@@ -147,7 +147,7 @@ class AgentsController < ApplicationController
 
   def destroy
     error = nil
-    @agent = LinkedData::Client::Models::Agent.find("#{rest_url}/Agents/#{params[:id]}")
+    @agent = LinkedData::Client::Models::Agent.find(params[:id].split('/').last)
     success_text = ''
 
     if @agent.nil?
@@ -198,7 +198,7 @@ class AgentsController < ApplicationController
   end
 
   def update_agent(id = params[:id], params)
-    agent = LinkedData::Client::Models::Agent.find("#{rest_url}/Agents/#{id}")
+    agent = LinkedData::Client::Models::Agent.find(id)
 
     params[:creator] = session[:user].id if (agent.creator.nil? || agent.creator.empty?) && (params[:creator] || '').empty?
 

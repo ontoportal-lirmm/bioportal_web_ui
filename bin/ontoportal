@@ -64,12 +64,17 @@ dev() {
   
 
   local reset_cache=false
+  local api_client_path=""
   local api_url=""
   local api_key=""
 
   # Check for command line arguments
   while [[ "$#" -gt 0 ]]; do
     case $1 in
+      --api-client-path)
+        api_client_path="$2"
+        shift 2
+        ;;
       --reset-cache)
         reset_cache=true
         shift
@@ -114,8 +119,27 @@ dev() {
     docker compose down --volumes
   fi
 
+  local docker_run_cmd="docker compose run --rm -it"
+  local bash_cmd=""
+  # Conditionally add bind mounts only if the paths are not empty
+      for path_var in "api_client_path:ontologies_api_ruby_client" ; do
+        IFS=':' read -r path value <<< "$path_var"
+
+        if [ -n "${!path}" ]; then
+          host_path="$(realpath "$(dirname "${!path}")")/$value"
+          echo "Run: bundle config local.$value ${!path}"
+          container_path="/app/tmp/$value"
+          docker_run_cmd+=" -v $host_path:$container_path"
+          bash_cmd+="(bundle config local.ontologies_api_client $container_path) &&"
+        else
+          bash_cmd+=" (bundle config unset local.ontologies_api_client) &&"
+        fi
+  done
+  bash_cmd+=" (bundle check || bundle install || bundle update) && bin/rails db:prepare && bundle exec rails s -b 0.0.0.0 -p 3000"
+  docker_run_cmd+=" --service-ports rails bash -c \"$bash_cmd\""
+  echo "$docker_run_cmd"
   echo "Run: bundle exec rails s -b 0.0.0.0 -p 3000"
-  docker compose run --rm -it --service-ports rails bash -c "(bundle check || bundle install) && bin/rails db:prepare && bundle exec rails s -b 0.0.0.0 -p 3000"
+  eval "$docker_run_cmd"
 }
 
 # Function to handle the "test" option
@@ -155,7 +179,7 @@ test() {
   echo "Running tests..."
   echo "Run: API_URL=$api_url bundle exec rails test -v $test_options"
 
-  docker compose run --rm -it test bash -c "(bundle check || bundle install) && RAILS_ENV=test bin/rails db:prepare && API_URL=$api_url bundle exec rails test -v $test_options"
+  docker compose run --rm -it test bash -c "bundle config unset local.ontologies_api_client && (bundle check || bundle install) && RAILS_ENV=test bin/rails db:prepare && API_URL=$api_url bundle exec rails test -v $test_options"
 
   # echo "Stopping API..."
   # bin/stop_api

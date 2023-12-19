@@ -13,7 +13,11 @@ module FairScoreHelper
   end
   def get_fairness_json(ontologies_acronyms, apikey = user_apikey)
     begin
-      MultiJson.load(Faraday.get(get_fairness_service_url(apikey) + "&ontologies=#{ontologies_acronyms}&combined").body.force_encoding('ISO-8859-1').encode('UTF-8'))
+      conn = Faraday.new do |conn|
+        conn.options.timeout = 1
+      end
+      response = conn.get(get_fairness_service_url(apikey) + "&ontologies=#{ontologies_acronyms}&combined")
+      MultiJson.load(response.body.force_encoding('ISO-8859-1').encode('UTF-8'))
     rescue
       Rails.logger.warn "FAIRness service issue unreachable"
       {}
