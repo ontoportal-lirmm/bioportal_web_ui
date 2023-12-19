@@ -226,9 +226,16 @@ i.fa.fa-caret-square-o-down {
 .home-upload-benifits div img{
   margin-top: 3px
 }
-.home-upload-ontology-button{
+.home-ontologies-actions{
+  display: flex;
+  align-items: center;
   margin-top: 30px;
+
+}
+.home-upload-ontology-button{
+  
   width: fit-content;
+  margin-right: 20px;
 }
 
 .home-upload-icon {

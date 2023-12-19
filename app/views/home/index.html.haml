@@ -57,9 +57,13 @@
           %img{:src => asset_path("check-outlined.svg")}/
           %p
             = benefit
-
-    %div.home-upload-ontology-button
-      = upload_ontology_button
+    .home-ontologies-actions
+      .home-upload-ontology-button
+        = upload_ontology_button
+      .discover-ontologies
+        = render Buttons::RegularButtonComponent.new(id: 'discover-ontologies-button', value: t('home.discover_ontologies_button'), variant: "secondary", state: "regular", href: "/ontologies") do |btn|
+          - btn.icon_right do
+            - inline_svg_tag "arrow-right.svg"
 
   .home-section
     %h4

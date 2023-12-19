@@ -115,6 +115,7 @@ it:
     ontology_upload: Volete caricare un'ontologia?
     ontology_upload_benefits: 'Caricando la propria ontologia su %{site}, è possibile:'
     ontology_upload_button: Caricare l'ontologia
+    discover_ontologies_button: Scopri le ontologie
     ontology_upload_desc: Caricare un'ontologia è un modo per condividere la propria
       conoscenza del dominio con altri.
     paste_text_prompt: Incollare un paragrafo di testo o alcune parole chiave ...

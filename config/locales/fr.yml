@@ -116,6 +116,7 @@ fr:
     ontology_upload: Voulez-vous charger une ontologie ?
     ontology_upload_benefits: 'En chargeant et partageant votre ontologie sur %{site}, vous pouvez :'
     ontology_upload_button: Charger une ontologie
+    discover_ontologies_button: Découvrez les ontologies
     ontology_upload_desc: Charger une ontologie ou un autre type d'artefact sémantique (vocabulaire, terminologie, thésaurus, ...) est un moyen de partager vos connaissances avec d'autres.
     paste_text_prompt: Collez un paragraphe de texte ou quelques mots-clés...
     recommender_annotator: Recommandeur et Annotateur

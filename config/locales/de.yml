@@ -118,6 +118,7 @@ de:
     ontology_upload_benefits: 'Indem Sie Ihre Ontologie auf %{site} hochladen, können
       Sie:'
     ontology_upload_button: Ontologie hochladen
+    discover_ontologies_button: Ontdek ontologieën
     ontology_upload_desc: Das Hochladen einer Ontologie ist eine Möglichkeit, Ihr
       Fachwissen mit anderen zu teilen.
     paste_text_prompt: Einfügen eines Textabsatzes oder einiger Schlüsselwörter ...
