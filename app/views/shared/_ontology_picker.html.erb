@@ -1,6 +1,8 @@
-<%custom_ontologies ||= nil%>
+<%custom_ontologies ||= LinkedData::Client::Models::Ontology.all(include: "acronym,name")%>
+<%groups ||= LinkedData::Client::Models::Group.all(include: "acronym,name,ontologies")%>
+<%categories ||= LinkedData::Client::Models::Category.all(include: "acronym,name,ontologies")%>
 <%selected_ontologies ||= []%>
-<%init_ontology_picker(custom_ontologies, selected_ontologies)%>
+<%init_ontology_picker(custom_ontologies, selected_ontologies, groups, categories)%>
 <%form_object ||= :ontology%>
 <%form_attribute ||= "ontologyId"%>
 <%sel_text ||= "Select ontologies"%>
@@ -48,6 +50,6 @@ var hideChosenResults = function(){
      </a>
   </div>
 
-  <%=render_advanced_picker(custom_ontologies, selected_ontologies)%>
+  <%=render_advanced_picker(custom_ontologies, selected_ontologies, groups, categories)%>
 </div>
 

@@ -316,18 +316,18 @@ module ApplicationHelper
   end
 
 
-  def render_advanced_picker(custom_ontologies = nil, selected_ontologies = [], align_to_dom_id = nil)
+  def render_advanced_picker(custom_ontologies = nil, selected_ontologies = [], groups = nil, categories= nil,  align_to_dom_id = nil)
     selected_ontologies ||= []
-    init_ontology_picker(custom_ontologies, selected_ontologies)
+    init_ontology_picker(custom_ontologies, selected_ontologies, groups, categories)
     render :partial => "shared/ontology_picker_advanced", :locals => {
       :custom_ontologies => custom_ontologies, :selected_ontologies => selected_ontologies, :align_to_dom_id => align_to_dom_id
     }
   end
 
-  def init_ontology_picker(ontologies = nil, selected_ontologies = [])
+  def init_ontology_picker(ontologies = nil, selected_ontologies = [], groups = nil, categories = nil)
     get_ontologies_data(ontologies)
-    get_groups_data
-    get_categories_data
+    get_groups_data(groups)
+    get_categories_data(categories)
     # merge group and category ontologies into a json array
     onts_in_gp_or_cat = @groups_map.values.flatten.to_set
     onts_in_gp_or_cat.merge @categories_map.values.flatten.to_set
@@ -371,10 +371,10 @@ module ApplicationHelper
     return @categories_for_select
   end
 
-  def get_categories_data
+  def get_categories_data(categories = nil)
     @categories_for_select = []
     @categories_map = {}
-    categories = LinkedData::Client::Models::Category.all(include: "name,ontologies")
+    categories ||= LinkedData::Client::Models::Category.all(include: "name,ontologies")
     categories.each do |c|
       @categories_for_select << [ c.name, c.id ]
       @categories_map[c.id] = ontologies_to_acronyms(c.ontologies) # c.ontologies is a list of URIs
@@ -383,10 +383,10 @@ module ApplicationHelper
     @categories_for_js = @categories_map.to_json
   end
 
-  def get_groups_data
+  def get_groups_data(groups = nil)
     @groups_map = {}
     @groups_for_select = []
-    groups = LinkedData::Client::Models::Group.all(include: "acronym,name,ontologies")
+    groups ||= LinkedData::Client::Models::Group.all(include: "acronym,name,ontologies")
     groups.each do |g|
       next if ( g.acronym.nil? or g.acronym.empty? )
       @groups_for_select << [ g.name + " (#{g.acronym})", g.acronym ]

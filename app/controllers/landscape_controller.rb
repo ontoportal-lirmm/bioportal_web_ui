@@ -78,12 +78,13 @@ class LandscapeController < ApplicationController
 
     # Concat all attributes array and generate a string separated with comma for include param
     all_attributes = sub_attributes.concat(contributors_attr_list).concat(org_attr_list)
-                         .concat(relations_attributes).concat([:metrics]).concat(pref_properties_attributes).join(",")
+                                   .concat(relations_attributes).concat([:metrics]).concat(pref_properties_attributes).join(",")
 
 
     # Special treatment for includedInDataCatalog: arrays with a lot of different values, so it trigger the SPARQL default
     # when we retrieve multiple attr with multiple values in the array, and make the request slower
-    data_catalog_submissions = LinkedData::Client::Models::OntologySubmission.all(include_status: "any", include_views: true, display_links: false, display_context: false, include: "includedInDataCatalog")
+    @submissions = LinkedData::Client::Models::OntologySubmission.all(include_status: "any", include_views: true, display_links: false, display_context: false, include: 'all')
+    data_catalog_submissions = @submissions
 
     dataCatalog_count_hash = {}
     # Add our Portal to the dataCatalog list
@@ -99,9 +100,6 @@ class LandscapeController < ApplicationController
         end
       end
     end
-
-    # Get all latest submissions with the needed attributes (this request can be slow)
-    @submissions = LinkedData::Client::Models::OntologySubmission.all(include_status: "any", include_views: true, display_links: false, display_context: false, include: 'all')
 
     # Iterate ontologies to get the submissions with all metadata
     @submissions.each do |sub|
@@ -558,27 +556,27 @@ class LandscapeController < ApplicationController
     end
 
     @landscape_data = {
-        people_count_json_cloud: people_count_json_cloud,
-        org_count_json_cloud: org_count_json_cloud,
-        engineering_tool_cloud_json: engineering_tool_cloud_json,
-        notes_ontologies_json_cloud: notes_ontologies_json_cloud,
-        notes_people_json_cloud: notes_people_json_cloud,
-        natural_language_json_pie: natural_language_json_pie,
-        licenseProperty_json_pie: licenseProperty_json_pie,
-        ontology_relations_array: ontology_relations_array,
-        prefLabelProperty_json_pie: prefLabelProperty_json_pie,
-        synonymProperty_json_pie: synonymProperty_json_pie,
-        definitionProperty_json_pie: definitionProperty_json_pie,
-        authorProperty_json_pie: authorProperty_json_pie,
-        ontologyFormatsChartJson: ontologyFormatsChartJson,
-        isOfTypeChartJson: isOfTypeChartJson,
-        formalityLevelChartJson: formalityLevelChartJson,
-        dataCatalogChartJson: dataCatalogChartJson,
-        groupCountChartJson: groupCountChartJson,
-        groupsInfoHash: groups_info_hash,
-        domainCountChartJson: domainCountChartJson,
-        domainsInfoHash: domains_info_hash,
-        sizeSlicesChartJson: sizeSlicesChartJson
+      people_count_json_cloud: people_count_json_cloud,
+      org_count_json_cloud: org_count_json_cloud,
+      engineering_tool_cloud_json: engineering_tool_cloud_json,
+      notes_ontologies_json_cloud: notes_ontologies_json_cloud,
+      notes_people_json_cloud: notes_people_json_cloud,
+      natural_language_json_pie: natural_language_json_pie,
+      licenseProperty_json_pie: licenseProperty_json_pie,
+      ontology_relations_array: ontology_relations_array,
+      prefLabelProperty_json_pie: prefLabelProperty_json_pie,
+      synonymProperty_json_pie: synonymProperty_json_pie,
+      definitionProperty_json_pie: definitionProperty_json_pie,
+      authorProperty_json_pie: authorProperty_json_pie,
+      ontologyFormatsChartJson: ontologyFormatsChartJson,
+      isOfTypeChartJson: isOfTypeChartJson,
+      formalityLevelChartJson: formalityLevelChartJson,
+      dataCatalogChartJson: dataCatalogChartJson,
+      groupCountChartJson: groupCountChartJson,
+      groupsInfoHash: groups_info_hash,
+      domainCountChartJson: domainCountChartJson,
+      domainsInfoHash: domains_info_hash,
+      sizeSlicesChartJson: sizeSlicesChartJson
     }.to_json.html_safe
 
   end
