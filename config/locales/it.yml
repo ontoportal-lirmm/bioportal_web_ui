@@ -119,9 +119,9 @@ it:
       conoscenza del dominio con altri.
     paste_text_prompt: Incollare un paragrafo di testo o alcune parole chiave ...
     recommender_annotator: Raccomandatore e annotatore
-    supported_by: Supportato da
+    support_and_collaborations: Supporto e collaborazioni
     twitter_news: Notizie
-    with_collaboration: Con la collaborazione di
+    
   input: Ingresso
   insert_sample_text: Inserire un testo di esempio
   keywords: Parole chiave

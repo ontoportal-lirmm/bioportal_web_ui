@@ -119,9 +119,9 @@ fr:
     ontology_upload_desc: Charger une ontologie ou un autre type d'artefact sémantique (vocabulaire, terminologie, thésaurus, ...) est un moyen de partager vos connaissances avec d'autres.
     paste_text_prompt: Collez un paragraphe de texte ou quelques mots-clés...
     recommender_annotator: Recommandeur et Annotateur
-    supported_by: Avec le soutien de
+    support_and_collaborations: Support & Collaborations
     twitter_news: Actualités
-    with_collaboration: Une collaboration de
+
   
   input: Entrée
   insert_sample_text: Insérez un exemple de texte
