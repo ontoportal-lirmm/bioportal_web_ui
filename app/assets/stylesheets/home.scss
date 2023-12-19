@@ -324,6 +324,9 @@ i.fa.fa-caret-square-o-down {
   color: white !important;
   background-color: var(--primary-color);
 }
+.home-get-recommendations svg path{
+  fill: var(--primary-color)
+}
 .home-get-recommendations:hover .home-play-icon path{
   fill: white;
 }
