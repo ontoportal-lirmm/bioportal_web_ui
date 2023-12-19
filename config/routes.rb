@@ -48,13 +48,14 @@ Rails.application.routes.draw do
   resources :ontologies do
     resources :submissions do 
       get 'edit_properties'
-    end 
+    end
 
     get 'instances/:instance_id', to: 'instances#show', constraints: { instance_id: /[^\/?]+/ }
     get 'schemes/show_scheme', to: 'schemes#show'
     get 'collections/show'
     get 'metrics'
     get 'metrics_evolution'
+    get 'subscriptions'
   end
 
   resources :login

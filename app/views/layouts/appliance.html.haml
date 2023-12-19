@@ -15,7 +15,6 @@
     = stylesheet_link_tag "application", media: "all"
 
     = javascript_include_tag "vendor"
-    = javascript_include_tag "//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"
 
     %script
       jQuery(document).data({bp: {config: #{bp_config_json.html_safe}, user: #{(session[:user] || {}).to_hash.to_json.html_safe}}});

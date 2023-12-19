@@ -1,0 +1,29 @@
+.agent-container{
+    display: flex;
+    align-items: center;
+    margin: 10px;
+}
+.agent-circle{
+    width: 70px;
+    height: 70px;
+    background-color: var(--light-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 35px;
+    margin-right: 12px;
+}
+.agent-name{
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+.agent-dependency{
+    font-size: 16px;
+    font-weight: 400;
+    color: #767676;
+    margin-bottom: 3px;
+}
+.agent-type-icon path{
+    fill: var(--primary-color)
+}
