@@ -41,8 +41,8 @@
 
           - unless @ont_restricted
             - r.td do
-              %div.dropdown
-                %button.btn.btn-outline-primary.rounded-pill.dropdown-toggle{type:"button", 'data-toggle':"dropdown", 'aria-expanded': "false", style:'white-space: nowrap'}
+              %div.dropdown{ style: 'display: flex;' }
+                %button.btn.btn-outline-primary.rounded-pill.dropdown-toggle{type:"button", 'data-toggle':"dropdown", 'aria-expanded': "false", style:'white-space: nowrap; width: 75%;font-size: small;'}
                   Download
                   %span.sr-only Toggle Dropdown
                 .dropdown-menu
@@ -50,7 +50,9 @@
                   - links.each do |value|
                     - link,label = value.values               
                     %a.dropdown-item{ href: link }= label
-                
+                = link_to("#{@ontology.id}/submissions/#{sub.submissionId}?display=all", target: "_blank",title: 'Go to API') do
+                  = tag.img(src: asset_path('json.svg'), "aria-hidden" => "true", style: "margin-left: 0.5rem; width: 17px; margin-top: 9px;")
+
               -# = raw download_link(sub, @ontology)
           - if @ontology.admin?(session[:user])
             - r.td do

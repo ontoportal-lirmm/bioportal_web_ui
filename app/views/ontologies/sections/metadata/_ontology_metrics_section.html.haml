@@ -1,4 +1,4 @@
-= render SummarySectionComponent.new(title: "Metrics" , link: Rails.configuration.settings.links[:metrics], link_title: "Information and evolution diagrams about metrics and other measurements of the ontology.", show_card: false) do |s|
+= render SummarySectionComponent.new(title: "Metrics" , link: Rails.configuration.settings.links[:metrics], link_title: "Information and evolution diagrams about metrics and other measurements of the ontology.", show_card: false, show_icon: true, service_link: "#{@ontology.id}/metrics?display=all") do |s|
   - s.action_link do
     = link_to_modal '', ontology_path(@ontology.acronym) + "/metrics",
                         class: "metrics-item", title: "See all the metrics of #{@ontology.acronym}",

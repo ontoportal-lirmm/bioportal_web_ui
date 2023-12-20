@@ -5,6 +5,8 @@
     %span
       = link_to(@link, target: "_blank") do
         = render Display::InfoTooltipComponent.new(text: @link_title)
+  - if show_icon?
+    = link_svg(@service_link)
 
   - if action_links?
     %span
