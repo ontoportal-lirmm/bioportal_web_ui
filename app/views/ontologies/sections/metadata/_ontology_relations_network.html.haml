@@ -1,5 +1,5 @@
 - unless @ontology_relations_data.nil? || @ontology_relations_data.empty?
-  = render SummarySectionComponent.new(title: 'Ontology relations network') do
+  = render SummarySectionComponent.new(title: 'Ontology relations network', link: "", link_title: "Relation with other ontologies either in <span style='color: #3CB371 !important;'>#{portal_name}</span> or <span style='color:#007bff;'>outside</span>") do
     %div.d-flex.flex-column.justify-content-center{data: {controller: "ontology-relations-network", "ontology-relations-network-data-value": @ontology_relations_data.to_json.html_safe }}
       %button.btn.btn-link.m-2{'data-toggle': "collapse",'data-target': "#ontologyRelations"}
         %span= t("landscape.filter_network")

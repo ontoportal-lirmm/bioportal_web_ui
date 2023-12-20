@@ -475,9 +475,11 @@ class OntologiesController < ApplicationController
         target_in_portal = false
         target_ont = nil
         # if we find our portal URL in the ontology URL, then we just keep the ACRONYM to try to get the ontology.
-        if relation_value.include?(portal_name)
-          relation_value = relation_value.split('/').last
-          target_ont = LinkedData::Client::Models::Ontology.find_by_acronym(relation_value).first
+        relation_value = relation_value.split('/').last if relation_value.include?(helpers.portal_name.downcase)
+
+        # Use acronym to get ontology from the portal
+        target_ont = LinkedData::Client::Models::Ontology.find_by_acronym(relation_value).first
+        if target_ont
           target_id = target_ont.acronym
           target_in_portal = true
         end
