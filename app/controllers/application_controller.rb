@@ -41,8 +41,9 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   helper_method :bp_config_json, :current_license, :using_captcha?
 
-  if !Rails.env.development? && !Rails.env.test?
+  unless Rails.env.development? || Rails.env.test?
     rescue_from ActiveRecord::RecordNotFound, with: :not_found_record
+    #rescue_from StandardError, with: :internal_server_error
   end
 
   # Pull configuration parameters for REST connection.
@@ -87,6 +88,10 @@ class ApplicationController < ActionController::Base
 
   before_action :set_global_thread_values, :domain_ontology_set, :authorize_miniprofiler, :clean_empty_strings_from_params_arrays, :init_trial_license
 
+
+  def invalidate_cache?
+    params[:invalidate_cache] && params[:invalidate_cache].to_s.eql?('true')
+  end
 
   def show_image_modal
     url = params[:url]
@@ -803,6 +808,16 @@ class ApplicationController < ActionController::Base
   private
   def not_found_record(exception)
     @error_message = exception.message
+
     render 'errors/not_found', status: 404
+  end
+
+  def internal_server_error(exception)
+    current_user = session[:user] if defined?(session)
+    request_ip = request.remote_ip if defined?(request)
+    current_url = request.original_url if defined?(request)
+  
+    Notifier.error(exception, current_user, request_ip, current_url).deliver_now
+    render 'errors/internal_server_error', status: 500
   end
 end

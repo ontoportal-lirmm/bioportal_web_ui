@@ -48,13 +48,14 @@ Rails.application.routes.draw do
   resources :ontologies do
     resources :submissions do 
       get 'edit_properties'
-    end 
+    end
 
     get 'instances/:instance_id', to: 'instances#show', constraints: { instance_id: /[^\/?]+/ }
     get 'schemes/show_scheme', to: 'schemes#show'
     get 'collections/show'
     get 'metrics'
     get 'metrics_evolution'
+    get 'subscriptions'
   end
 
   resources :login
@@ -97,19 +98,13 @@ Rails.application.routes.draw do
   match '/feedback', to: 'home#feedback', via: [:get, :post]
   get '/account' => 'home#account'
   get '/site_config' => 'home#site_config'
-  get '/validate_ontology_file' => 'home#validate_ontology_file_show'
   post '/annotator_recommender_form' => 'home#annotator_recommender_form'
-  match '/validate_ontology_file' => 'home#validate_ontology_file', via: [:get, :post]
-  get '/layout_partial/:partial' => 'home#render_layout_partial'
   match '/visits', to: 'visits#index', via: :get
 
   # Error pages
   match "/404", to: "errors#not_found", via: :all
   match "/500", to: "errors#internal_server_error", via: :all
 
-  # Analytics
-  match 'analytics', to: 'analytics#track', via: [:post] 
-  
   # Robots.txt
   get '/robots.txt' => 'robots#index'
 
@@ -131,8 +126,6 @@ Rails.application.routes.draw do
 
   get '/ontologies/:acronym/properties/show', to: 'properties#show'
 
-  # Analytics
-  get '/analytics/:action' => 'analytics#(?-mix:search_result_clicked|user_intention_surveys)'
 
   # Notes
   get 'ontologies/:ontology/notes/:noteid', to: 'notes#virtual_show', as: :note_virtual, noteid: /.+/
@@ -146,7 +139,6 @@ Rails.application.routes.draw do
   get '/ajax/json_ontology' => 'ajax_proxy#json_ontology'
   get '/ajax/json_class' => 'ajax_proxy#json_class'
   get '/ajax/jsonp' => 'ajax_proxy#jsonp'
-  get '/ajax/loading_spinner' => 'ajax_proxy#loading_spinner'
   get '/ajax/notes/delete' => 'notes#destroy'
   get '/ajax/notes/concept_list' => 'notes#show_concept_list'
   get '/ajax/classes/label' => 'concepts#show_label'

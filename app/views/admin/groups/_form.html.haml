@@ -1,5 +1,30 @@
 - new_record = @group.acronym.nil?
-%div.alert-box.error{style: @errors.nil? ?  "display: none" : nil }
+
+:javascript
+  function validateForm() {
+    var acronymField = document.getElementById('group_acronym');
+    var nameField = document.getElementById('group_name');
+    var errorAcronym = document.getElementById('error-acronym');
+    var errorName = document.getElementById('error-name');
+
+    errorAcronym.innerText = '';
+    errorName.innerText = '';
+
+    var isValid = true; 
+
+    if (acronymField.value.trim() === '') {
+      errorAcronym.innerText = 'Please enter an acronym';
+      isValid = false;
+    }
+
+    if (nameField.value.trim() === '') {
+      errorName.innerText = 'Please enter a name';
+      isValid = false;
+    }
+
+    return isValid;
+  }
+%div.alert-box.error{style: @errors.nil? ? 'display: none' : nil }
   %ul
     - unless @errors.nil?
       - for error in @errors
@@ -18,7 +43,8 @@
         %span.asterik *
       %td.top
         - if new_record
-          = f.text_field :acronym, class: "form-control"
+          = f.text_field :acronym, class: "form-control", id: "group_acronym"
+          %div#error-acronym.groupFormError
         - else
           = f.text_field :acronym, class: "form-control", readonly: true
     %tr
@@ -26,7 +52,8 @@
         Name
         %span.asterik *
       %td.top
-        = f.text_field :name, class: "form-control"
+        = f.text_field :name, class: "form-control", id: "group_name"
+        %div#error-name.groupFormError
     %tr
       %th
         Description
@@ -44,5 +71,5 @@
         %td.top
           = render SelectInputComponent.new(id: "group_ontologies", name: "group[ontologies]", values: @ontologies_group , selected: @group.ontologies , multiple: true, open_to_add_values: true)
   %div.mt-2
-    = f.submit button_text, class: "btn btn-primary mr-sm-2 group-form-accept"
-    = link_to "Cancel", "javascript:;", class: "btn btn-primary dismiss-dialog"
+    %input{type: "submit", value: button_text, class: "btn btn-primary mr-sm-2 group-form-accept", onclick: "return validateForm();"}
+    %a{href: "javascript:;", class: "btn btn-primary dismiss-dialog"} Cancel

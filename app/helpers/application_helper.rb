@@ -65,6 +65,7 @@ module ApplicationHelper
   end
   
 
+
   def encode_param(string)
     CGI.escape(string)
   end
@@ -103,22 +104,6 @@ module ApplicationHelper
 
   def current_user_admin?
     session[:user] && session[:user].admin?
-  end
-
-  def remove_owl_notation(string)
-    # TODO_REV: No OWL notation, but should we modify the IRI?
-    return string
-
-    unless string.nil?
-      strings = string.split(":")
-      if strings.size<2
-        #return string.titleize
-        return string
-      else
-        #return strings[1].titleize
-        return strings[1]
-      end
-    end
   end
 
   def draw_note_tree(notes,key)
@@ -316,18 +301,18 @@ module ApplicationHelper
   end
 
 
-  def render_advanced_picker(custom_ontologies = nil, selected_ontologies = [], align_to_dom_id = nil)
+  def render_advanced_picker(custom_ontologies = nil, selected_ontologies = [], groups = nil, categories= nil,  align_to_dom_id = nil)
     selected_ontologies ||= []
-    init_ontology_picker(custom_ontologies, selected_ontologies)
+    init_ontology_picker(custom_ontologies, selected_ontologies, groups, categories)
     render :partial => "shared/ontology_picker_advanced", :locals => {
       :custom_ontologies => custom_ontologies, :selected_ontologies => selected_ontologies, :align_to_dom_id => align_to_dom_id
     }
   end
 
-  def init_ontology_picker(ontologies = nil, selected_ontologies = [])
+  def init_ontology_picker(ontologies = nil, selected_ontologies = [], groups = nil, categories = nil)
     get_ontologies_data(ontologies)
-    get_groups_data
-    get_categories_data
+    get_groups_data(groups)
+    get_categories_data(categories)
     # merge group and category ontologies into a json array
     onts_in_gp_or_cat = @groups_map.values.flatten.to_set
     onts_in_gp_or_cat.merge @categories_map.values.flatten.to_set
@@ -371,10 +356,10 @@ module ApplicationHelper
     return @categories_for_select
   end
 
-  def get_categories_data
+  def get_categories_data(categories = nil)
     @categories_for_select = []
     @categories_map = {}
-    categories = LinkedData::Client::Models::Category.all(include: "name,ontologies")
+    categories ||= LinkedData::Client::Models::Category.all(include: "name,ontologies")
     categories.each do |c|
       @categories_for_select << [ c.name, c.id ]
       @categories_map[c.id] = ontologies_to_acronyms(c.ontologies) # c.ontologies is a list of URIs
@@ -383,10 +368,10 @@ module ApplicationHelper
     @categories_for_js = @categories_map.to_json
   end
 
-  def get_groups_data
+  def get_groups_data(groups = nil)
     @groups_map = {}
     @groups_for_select = []
-    groups = LinkedData::Client::Models::Group.all(include: "acronym,name,ontologies")
+    groups ||= LinkedData::Client::Models::Group.all(include: "acronym,name,ontologies")
     groups.each do |g|
       next if ( g.acronym.nil? or g.acronym.empty? )
       @groups_for_select << [ g.name + " (#{g.acronym})", g.acronym ]
@@ -473,24 +458,25 @@ module ApplicationHelper
                     class: "add_proposal btn btn-primary", data: { show_modal_title_value: "Add a new proposal"}
     end
   end
+  def link?(str)
+    # Regular expression to match strings starting with "http://" or "https://"
+    link_pattern = /\Ahttps?:\/\//
+
+    # Check if the string matches the pattern
+    !!(str =~ link_pattern)
+  end
 
   def subscribe_button(ontology_id)
     return if ontology_id.nil?
-    ontology_acronym = ontology_id.split('/').last
-
-    if session[:user].nil?
-      link = "/login?redirect=#{request.url}"
-      subscribed = false
-      user_id = nil
-    else
-      user = LinkedData::Client::Models::User.find(session[:user].id)
-      subscribed = subscribed_to_ontology?(ontology_acronym, user)
-      link = "javascript:void(0);"
-      user_id = user.id
+    render TurboFrameComponent.new(id: 'subscribe_button', src: ontology_subscriptions_path(ontology_id: ontology_id.split('/').last), class: 'ml-1') do |t|
+      t.loader do
+        content_tag(:div, style: 'margin-left: 10px;') do
+          render PillButtonComponent.new do
+            (content_tag(:span, 'Watching', class: 'ml-1') + render(LoaderComponent.new(small: true))).html_safe
+          end
+        end
+      end
     end
-
-    count = count_subscriptions(ontology_id)
-    render OntologySubscribeButtonComponent.new(ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: link)
   end
 
   def admin_block(ontology: @ontology, user: session[:user], class_css: "admin-border", &block)

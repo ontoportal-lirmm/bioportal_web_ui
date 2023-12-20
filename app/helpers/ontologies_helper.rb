@@ -147,6 +147,21 @@ module OntologiesHelper
     count_links(ontology.ontology.acronym, 'classes', count)
   end
 
+  def metadata_filled_count(submission = @submission_latest, ontology = @ontology)
+    return if submission.nil?
+    
+    reject = [:csvDump, :dataDump, :openSearchDescription, :metrics, :prefLabelProperty, :definitionProperty,
+              :definitionProperty, :synonymProperty, :authorProperty, :hierarchyProperty, :obsoleteProperty,
+              :ontology, :endpoint, :submissionId, :submissionStatus, :uploadFilePath, :context, :links, :ontology]
+    sub_values = submission.to_hash.except(*reject).values
+    count = sub_values.count{|x| !x.blank?}
+    content_tag(:div, class: 'd-flex align-items-center justify-content-center') do
+      content_tag(:span, style:'width: 50px; height: 50px', data: {controller: 'tooltip'}, title: "#{count} of #{sub_values.size}") do
+        render CircleProgressBarComponent.new(count: count , max:  sub_values.size )
+      end  +  content_tag(:span, class: 'mx-1') { "of #{ontology.acronym}  metadata properties are filled"}
+    end.html_safe
+  end
+
   # Creates a link based on the status of an ontology submission
   def download_link(submission, ontology = nil)
     ontology ||= @ontology
@@ -161,10 +176,9 @@ module OntologiesHelper
     else
       uri = submission.id + "/download?apikey=#{get_apikey}"
       links << { href: uri, label: submission.pretty_format }
-      latest = ontology.explore.latest_submission({ include_status: 'ready' })
-      if latest && latest.submissionId == submission.submissionId
+      if submission_ready?(submission)
         links << { href: "#{ontology.id}/download?apikey=#{get_apikey}&download_format=csv", label: "CSV" }
-        if !latest.hasOntologyLanguage.eql?('UMLS')
+        unless submission.hasOntologyLanguage.eql?('UMLS')
           links << { href: "#{ontology.id}/download?apikey=#{get_apikey}&download_format=rdf", label: "RDF/XML" }
         end
       end
@@ -277,22 +291,21 @@ module OntologiesHelper
   end
 
   def show_category_name(domain)
-    acronym = domain.split('/').last.upcase
-    category = LinkedData::Client::Models::Category.find_by_acronym(acronym).first
+    return domain unless link?(domain)
+
+    acronym = domain.split('/').last.upcase.strip
+    category = LinkedData::Client::Models::Category.find(acronym)
     category ? category.name : acronym.titleize
   end
 
   def show_group_name(domain)
-    acronym = domain.split('/').last.upcase
-    category = LinkedData::Client::Models::Group.find_by_acronym(acronym).first
+    return domain unless link?(domain)
+
+    acronym = domain.split('/').last.upcase.strip
+    category = LinkedData::Client::Models::Group.find(acronym)
     category ? category.name : acronym.titleize
   end
 
-  def show_group_name(domain)
-    acronym = domain.split('/').last.upcase
-    category = LinkedData::Client::Models::Group.find_by_acronym(acronym).first
-    category ? category.name : acronym
-  end
 
   def visits_data(ontology = nil)
     ontology ||= @ontology
@@ -541,8 +554,9 @@ module OntologiesHelper
   end
 
   def count_subscriptions(ontology_id)
+    ontology_id = ontology_id.split('/').last
     users = LinkedData::Client::Models::User.all(include: 'subscription', display_context: false, display_links: false)
-    users.select { |u| u.subscription.find { |s| s.ontology.eql?(ontology_id) } }.count
+    users.select { |u| u.subscription.find { |s| s.ontology && s.ontology.split('/').last.eql?(ontology_id) } }.count
   end
 
   def new_submission_button
@@ -553,7 +567,7 @@ module OntologiesHelper
 
   def ontology_edit_button
     return unless @ontology.admin?(session[:user])
-    render RoundedButtonComponent.new(link: edit_ontology_path(@ontology.acronym), icon: 'edit.svg',
+    render RoundedButtonComponent.new(link: edit_ontology_submission_path(ontology_id: @ontology.acronym, id: @submission_latest.id.split('/').last), icon: 'edit.svg',
                                       size: 'medium',
                                       title: 'Edit metadata')
   end

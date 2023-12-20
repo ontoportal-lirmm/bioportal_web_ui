@@ -56,17 +56,17 @@ class OntologiesController < ApplicationController
     ] + update_filters_counts
 
     streams =if params[:page].nil?
-               [
-                 prepend('ontologies_list_container', partial: 'ontologies/browser/ontologies'),
-                 prepend('ontologies_list_container') {
-                   helpers.turbo_frame_tag("ontologies_filter_count_request") do
-                     helpers.browser_counter_loader
-                   end
-                 }
-               ]
-             else
-               [replace("ontologies_list_view-page-1", partial: 'ontologies/browser/ontologies')]
-             end
+                [
+                  prepend('ontologies_list_container', partial: 'ontologies/browser/ontologies'),
+                  prepend('ontologies_list_container') {
+                    helpers.turbo_frame_tag("ontologies_filter_count_request") do
+                      helpers.browser_counter_loader
+                    end
+                  }
+                ]
+              else
+                [replace("ontologies_list_view-page-1", partial: 'ontologies/browser/ontologies')]
+              end
 
     render turbo_stream: streams + count_streams
   end
@@ -246,13 +246,15 @@ class OntologiesController < ApplicationController
     # See: https://github.com/ncbo/bioportal_web_ui/issues/133.
     data_pages = KNOWN_PAGES - %w[summary notes]
     if @ontology.summaryOnly && params[:p].present? && data_pages.include?(params[:p].to_s)
-        redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
+      redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
     end
 
     #@ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
 
     # Get the latest submission (not necessarily the latest 'ready' submission)
-    @submission_latest = @ontology.explore.latest_submission(include: 'all') rescue @ontology.explore.latest_submission(include: '')
+
+    @submission_latest = @ontology.explore.latest_submission(include: 'all', invalidate_cache: invalidate_cache?)  rescue @ontology.explore.latest_submission(include: '')
+
 
     if !helpers.submission_ready?(@submission_latest) && params[:p].present? && data_pages.include?(params[:p].to_s)
       redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
@@ -346,6 +348,28 @@ class OntologiesController < ApplicationController
     end
   end
 
+  def subscriptions
+    ontology_id = params[:ontology_id]
+    return not_found if ontology_id.nil?
+
+    ontology_acronym = ontology_id.split('/').last
+
+    if session[:user].nil?
+      link = "/login?redirect=#{request.url}"
+      subscribed = false
+      user_id = nil
+    else
+      user = LinkedData::Client::Models::User.find(session[:user].id)
+      subscribed = helpers.subscribed_to_ontology?(ontology_acronym, user)
+      link = "javascript:void(0);"
+      user_id = user.id
+    end
+
+    count = helpers.count_subscriptions(params[:ontology_id])
+    render inline:  helpers.turbo_frame_tag('subscribe_button') {
+      render_to_string(OntologySubscribeButtonComponent.new(id: '', ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: link),  layout: nil)
+    }
+  end
 
   def virtual
     redirect_new_api
@@ -362,7 +386,6 @@ class OntologiesController < ApplicationController
       render partial: 'ontologies/sections/widgets', layout: 'ontology_viewer'
     end
   end
-  
 
   def show_additional_metadata
     @metadata = submission_metadata
@@ -439,12 +462,11 @@ class OntologiesController < ApplicationController
 
         target_id = relation_value
         target_in_portal = false
+        target_ont = nil
         # if we find our portal URL in the ontology URL, then we just keep the ACRONYM to try to get the ontology.
-        relation_value = relation_value.split('/').last if relation_value.include?($UI_URL)
-
-        # Use acronym to get ontology from the portal
-        target_ont = LinkedData::Client::Models::Ontology.find_by_acronym(relation_value).first
-        if target_ont
+        if relation_value.include?(portal_name)
+          relation_value = relation_value.split('/').last
+          target_ont = LinkedData::Client::Models::Ontology.find_by_acronym(relation_value).first
           target_id = target_ont.acronym
           target_in_portal = true
         end

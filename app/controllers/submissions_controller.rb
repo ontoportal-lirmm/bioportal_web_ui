@@ -13,7 +13,7 @@ class SubmissionsController < ApplicationController
     @ont_restricted = ontology_restricted?(@ontology.acronym)
 
     # Retrieve submissions in descending submissionId order (should be reverse chronological order)
-    @submissions = @ontology.explore.submissions({include: "submissionId,creationDate,released,modificationDate,submissionStatus,hasOntologyLanguage,version,diffFilePath,ontology"})
+    @submissions = @ontology.explore.submissions({include: "submissionId,creationDate,released,modificationDate,submissionStatus,hasOntologyLanguage,version,diffFilePath,ontology", invalidate_cache: invalidate_cache?})
                             .sort {|a,b| b.submissionId.to_i <=> a.submissionId.to_i } || []
 
     LOG.add :error, "No submissions for ontology: #{@ontology.id}" if @submissions.empty?
@@ -88,9 +88,10 @@ class SubmissionsController < ApplicationController
     acronym = params[:ontology_id]
     submission_id = params[:id]
     if params[:ontology]
-      @ontology = update_existent_ontology(acronym)
-      if @ontology.nil? || response_error?(@ontology)
-        show_new_errors(@ontology, partial: 'submissions/form_content', id: 'test')
+      @ontology, response = update_existent_ontology(acronym)
+
+      if response.nil? || response_error?(response)
+        show_new_errors(response, partial: 'submissions/form_content', id: 'test')
         return
       end
     end
@@ -100,7 +101,7 @@ class SubmissionsController < ApplicationController
                          notice: 'Submission updated successfully'
     end
 
-    @submission, response = update_submission(update_submission_hash(acronym), submission_id)
+    @submission, response = update_submission(update_submission_hash(acronym), submission_id, @ontology)
     if params[:attribute].nil?
       if response_error?(response)
         show_new_errors(response, partial: 'submissions/form_content', id: 'test')

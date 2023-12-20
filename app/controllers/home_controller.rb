@@ -39,10 +39,6 @@ class HomeController < ApplicationController
 
   end
 
-  def render_layout_partial
-    partial = params[:partial]
-    render partial: "layouts/#{partial}"
-  end
 
   def all_resources
     @conceptid = params[:conceptid]
@@ -109,9 +105,6 @@ class HomeController < ApplicationController
     end
   end
 
-  def user_intention_survey
-    render partial: 'user_intention_survey', layout: false
-  end
 
   def site_config
     render json: bp_config_json
@@ -140,11 +133,12 @@ class HomeController < ApplicationController
 
   def feedback_complete; end
 
-  def validate_ontology_file_show; end
-
-  def validate_ontology_file
-    response = LinkedData::Client::HTTP.post('/validate_ontology_file', ontology_file: params[:ontology_file])
-    @process_id = response.process_id
+  def annotator_recommender_form
+    if params[:submit_button] == "annotator"
+      redirect_to "/annotator?text=#{params[:text]}"
+    elsif params[:submit_button] == "recommender"
+      redirect_to "/recommender?text=#{params[:text]}"
+    end
   end
 
   def annotator_recommender_form

@@ -78,7 +78,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     visit ontology_path(@new_ontology.acronym)
 
     # click edit button
-    find("a.rounded-button[href=\"#{edit_ontology_path(@new_ontology.acronym)}\"]").click
+    find("a.rounded-button[href=\"#{edit_ontology_submission_path(ontology_id: @new_ontology.acronym, id: 1)}\"]").click
     sleep 1
 
     selected_categories = @categories[3..4]
@@ -264,32 +264,33 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     # Assert relations
     click_on "See all metadata"
     sleep 1
-    within "#application_modal_content" do
-      wait_for 'input[type="search"]'
-      find('input').set('hasPriorVersion')
-      assert_text submission_2.hasPriorVersion
-
-      submission_2.alternative.each do |alt|
-        find('input').set('alternative')
-        assert_text alt
-      end
-
-      submission_2.hiddenLabel.each do |alt|
-        find('input').set('hiddenLabel')
-        assert_text alt
-      end
-
-      relations = [:hasPart, :ontologyRelatedTo, :similarTo, :comesFromTheSameDomain,
-                   :isAlignedTo, :isBackwardCompatibleWith, :isIncompatibleWith,
-                   :hasDisparateModelling, :hasDisjunctionsWith, :generalizes,
-                   :explanationEvolution, :useImports,
-                   :usedBy, :workTranslation, :translationOfWork
-      ]
-      relations.each do |key|
-        find('input').set(key)
-        2.times.each { |id| assert_text "https://#{key}.2.#{id}.com" }
-      end
-    end
+    # TODO put again when the sell all metadata popup, have the option to search all the metadata
+    # within "#application_modal_content" do
+    #   wait_for 'input[type="search"]'
+    #   find('input').set('hasPriorVersion')
+    #   assert_text submission_2.hasPriorVersion
+    #
+    #   submission_2.alternative.each do |alt|
+    #     find('input').set('alternative')
+    #     assert_text alt
+    #   end
+    #
+    #   submission_2.hiddenLabel.each do |alt|
+    #     find('input').set('hiddenLabel')
+    #     assert_text alt
+    #   end
+    #
+    #   relations = [:hasPart, :ontologyRelatedTo, :similarTo, :comesFromTheSameDomain,
+    #                :isAlignedTo, :isBackwardCompatibleWith, :isIncompatibleWith,
+    #                :hasDisparateModelling, :hasDisjunctionsWith, :generalizes,
+    #                :explanationEvolution, :useImports,
+    #                :usedBy, :workTranslation, :translationOfWork
+    #   ]
+    #   relations.each do |key|
+    #     find('input').set(key)
+    #     2.times.each { |id| assert_text "https://#{key}.2.#{id}.com" }
+    #   end
+    # end
 
   end
 

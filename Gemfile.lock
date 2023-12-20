@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git
-  revision: 169afb7c1002f9db2b3276af36d552575cc80ba2
+  revision: 674193220f93d99587e6d3a969adcb384caf0a61
   branch: development
   specs:
     ontologies_api_client (2.2.0)
@@ -82,7 +82,7 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-    addressable (2.8.5)
+    addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
     aes_key_wrap (1.1.0)
     airbrussh (1.5.0)
@@ -99,6 +99,7 @@ GEM
       erubi (~> 1.4)
       parser (>= 2.4)
       smart_properties
+    bigdecimal (3.1.5)
     bindata (2.4.15)
     bindex (0.8.1)
     bootsnap (1.17.0)
@@ -147,9 +148,9 @@ GEM
     daemons (1.4.1)
     dalli (3.2.6)
     date (3.3.4)
-    debug (1.8.0)
-      irb (>= 1.5.0)
-      reline (>= 0.3.1)
+    debug (1.9.0)
+      irb (~> 1.10)
+      reline (>= 0.3.8)
     deepl-rb (2.5.3)
     diff-lcs (1.5.0)
     docile (1.4.0)
@@ -158,7 +159,7 @@ GEM
     erubi (1.12.0)
     erubis (2.7.0)
     eventmachine (1.2.7)
-    excon (0.105.0)
+    excon (0.108.0)
     execjs (2.9.1)
     faraday (2.0.1)
       faraday-net_http (~> 2.0)
@@ -177,7 +178,7 @@ GEM
     flamegraph (0.9.5)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    graphql (2.1.6)
+    graphql (2.2.0)
       racc (~> 1.4)
     graphql-client (0.18.0)
       activesupport (>= 3.0)
@@ -218,8 +219,8 @@ GEM
     inline_svg (1.9.0)
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
-    io-console (0.6.0)
-    irb (1.9.1)
+    io-console (0.7.1)
+    irb (1.10.1)
       rdoc
       reline (>= 0.3.8)
     iso-639 (0.3.6)
@@ -231,7 +232,7 @@ GEM
       railties (>= 3.2.16)
     jsbundling-rails (1.2.1)
       railties (>= 6.0.0)
-    json (2.7.0)
+    json (2.7.1)
     json-jwt (1.16.3)
       activesupport (>= 4.2)
       aes_key_wrap
@@ -279,7 +280,7 @@ GEM
     method_source (1.0.0)
     mime-types (3.5.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2023.1003)
+    mime-types-data (3.2023.1205)
     mini_mime (1.1.5)
     minitest (5.20.0)
     msgpack (1.7.2)
@@ -292,7 +293,7 @@ GEM
       time
     net-http (0.3.2)
       uri
-    net-imap (0.4.7)
+    net-imap (0.4.8)
       date
       net-protocol
     net-pop (0.1.2)
@@ -312,14 +313,14 @@ GEM
       racc (~> 1.4)
     nokogiri (1.15.5-x86_64-linux)
       racc (~> 1.4)
-    oauth2 (2.0.9)
+    oauth2 (1.4.11)
       faraday (>= 0.17.3, < 3.0)
       jwt (>= 1.0, < 3.0)
+      multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 4)
-      snaky_hash (~> 2.0)
-      version_gem (~> 1.1)
-    oj (3.16.1)
+    oj (3.16.3)
+      bigdecimal (>= 3.0)
     omniauth (2.1.1)
       hashie (>= 3.4.6)
       rack (>= 2.2.3)
@@ -327,10 +328,11 @@ GEM
     omniauth-github (2.0.0)
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.7.1)
-    omniauth-google-oauth2 (0.8.0)
+    omniauth-google-oauth2 (1.0.1)
       jwt (>= 2.0)
-      omniauth (>= 1.1.1)
-      omniauth-oauth2 (>= 1.6)
+      oauth2 (~> 1.1)
+      omniauth (~> 2.0)
+      omniauth-oauth2 (~> 1.7.1)
     omniauth-keycloak (1.5.1)
       faraday
       json-jwt (> 1.13.0)
@@ -346,7 +348,7 @@ GEM
       actionpack (>= 4.2)
       omniauth (~> 2.0)
     open_uri_redirections (0.2.1)
-    parallel (1.23.0)
+    parallel (1.24.0)
     parser (3.2.2.4)
       ast (~> 2.4.1)
       racc
@@ -362,7 +364,7 @@ GEM
     rack (2.2.8)
     rack-accept (0.4.5)
       rack (>= 0.4)
-    rack-mini-profiler (3.1.1)
+    rack-mini-profiler (3.3.0)
       rack (>= 1.2.0)
     rack-protection (3.1.0)
       rack (~> 2.2, >= 2.2.4)
@@ -412,7 +414,7 @@ GEM
     recaptcha (5.9.0)
       json
     redcarpet (3.6.0)
-    regexp_parser (2.8.2)
+    regexp_parser (2.8.3)
     reline (0.4.1)
       io-console (~> 0.5)
     rest-client (2.1.0)
@@ -439,7 +441,7 @@ GEM
       rspec-mocks (~> 3.12)
       rspec-support (~> 3.12)
     rspec-support (3.12.1)
-    rubocop (1.58.0)
+    rubocop (1.59.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -484,9 +486,6 @@ GEM
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
     smart_properties (1.17.0)
-    snaky_hash (2.0.1)
-      hashie
-      version_gem (~> 1.1, >= 1.1.1)
     spawnling (2.1.5)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)

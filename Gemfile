@@ -138,5 +138,3 @@ gem "net-ftp", "~> 0.2.0", require: false
 gem "net-http", "~> 0.3.2"
 
 
-
-gem "bugsnag", "~> 6.26"
