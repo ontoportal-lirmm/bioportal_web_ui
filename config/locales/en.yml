@@ -179,9 +179,9 @@ en:
       logout: Logout
       mappings: Mappings
       publications: Publications
-      release_notes: Release notes
+      release_notes: Release Notes
       search_prompt: Search in %{portal_name} ...
-      submit_feedback: Send feedback
+      submit_feedback: Send Feedback
       support: Support
       cite_us: Cite Us
     footer:
