@@ -529,7 +529,7 @@ module OntologiesHelper
 
       content_tag(:span, data: {controller:"tooltip" } , title:  title) do
         link_to(inline_svg("#{icon}.svg", width: "32", height: '32'),
-                Array(value).first || '', link_options)
+                Array(value).first || '', link_options.merge(target: '_blank'))
       end
     end.join.html_safe
   end
