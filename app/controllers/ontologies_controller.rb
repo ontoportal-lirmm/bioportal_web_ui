@@ -252,7 +252,9 @@ class OntologiesController < ApplicationController
     #@ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
 
     # Get the latest submission (not necessarily the latest 'ready' submission)
-    @submission_latest = @ontology.explore.latest_submission(include: 'all') rescue @ontology.explore.latest_submission(include: '')
+
+    @submission_latest = @ontology.explore.latest_submission(include: 'all', invalidate_cache: invalidate_cache?)  rescue @ontology.explore.latest_submission(include: '')
+
 
     if !helpers.submission_ready?(@submission_latest) && params[:p].present? && data_pages.include?(params[:p].to_s)
       redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
@@ -363,9 +365,9 @@ class OntologiesController < ApplicationController
       user_id = user.id
     end
 
-    count = helpers.count_subscriptions(ontology_id)
+    count = helpers.count_subscriptions(params[:ontology_id])
     render inline:  helpers.turbo_frame_tag('subscribe_button') {
-      render_to_string(OntologySubscribeButtonComponent.new(id: 'subscribe_button', ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: link),  layout: nil)
+      render_to_string(OntologySubscribeButtonComponent.new(id: '', ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: link),  layout: nil)
     }
   end
 

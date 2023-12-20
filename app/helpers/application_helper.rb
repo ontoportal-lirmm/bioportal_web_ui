@@ -105,22 +105,6 @@ module ApplicationHelper
     session[:user] && session[:user].admin?
   end
 
-  def remove_owl_notation(string)
-    # TODO_REV: No OWL notation, but should we modify the IRI?
-    return string
-
-    unless string.nil?
-      strings = string.split(":")
-      if strings.size<2
-        #return string.titleize
-        return string
-      else
-        #return strings[1].titleize
-        return strings[1]
-      end
-    end
-  end
-
   def draw_note_tree(notes,key)
     output = ""
     draw_note_tree_leaves(notes,0,output,key)
