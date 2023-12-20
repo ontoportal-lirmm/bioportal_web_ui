@@ -7,7 +7,7 @@
 %div{:class => "container theme-showcase", :role => "main", :style => "width: 80%; display: block;", :align => "center"}
   %h1{:style => "font-size: 45px;"}
     = t("landscape.title", site: $SITE)
-  %p= t("landscape.intro")
+  %p= t("landscape.intro", site: portal_name)
 
   %div{:class => "panel panel-success", :style => "margin-top: 2em;"}
     %div{:class => "panel-heading"}

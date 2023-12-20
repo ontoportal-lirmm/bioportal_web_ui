@@ -29,8 +29,7 @@ ENV RAILS_LOG_TO_STDOUT="1" \
     BUNDLE_PATH=/usr/local/bundle \
     BUNDLE_WITHOUT="${BUNDLE_WITHOUT}"
 
-RUN gem update --system --no-document && \
-    gem install -N bundler
+RUN gem update --system 3.4.22 # the 3.4.22 can be removed if we support Ruby version > 3.0
 
 COPY . .
 

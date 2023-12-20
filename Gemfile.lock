@@ -178,7 +178,7 @@ GEM
     flamegraph (0.9.5)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    graphql (2.1.7)
+    graphql (2.2.0)
       racc (~> 1.4)
     graphql-client (0.18.0)
       activesupport (>= 3.0)

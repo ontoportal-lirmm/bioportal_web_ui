@@ -158,4 +158,20 @@ class ConceptDetailsComponent < ViewComponent::Base
     return false
   end
 
+  def remove_owl_notation(string)
+    # TODO_REV: No OWL notation, but should we modify the IRI?
+    return string
+
+    unless string.nil?
+      strings = string.split(":")
+      if strings.size<2
+        #return string.titleize
+        return string
+      else
+        #return strings[1].titleize
+        return strings[1]
+      end
+    end
+  end
+
 end

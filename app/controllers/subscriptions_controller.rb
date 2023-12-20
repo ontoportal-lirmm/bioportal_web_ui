@@ -3,7 +3,7 @@ class SubscriptionsController < ApplicationController
   def create
     # Try to get the user linked data instance
     user_id = params[:user_id]
-    u = LinkedData::Client::Models::User.find(user_id)
+    u = LinkedData::Client::Models::User.find(user_id, include: 'all')
     raise Exception if u.nil?
 
     # Try to get the ontology linked data instance

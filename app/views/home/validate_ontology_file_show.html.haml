@@ -1,7 +1,0 @@
-%div#bd_container{style: "padding: 2em;"}
-  %h1 Validate your ontology file
-
-  %div#validate_form{style: "margin-top: 1em;"}
-    =form_tag({:action => 'validate_ontology_file'}, :multipart => true) do
-      %input{type: "file", name: "ontology_file"}
-      %input{type: "submit", value: "Validate"}
