@@ -13,7 +13,7 @@ class SubmissionsController < ApplicationController
     @ont_restricted = ontology_restricted?(@ontology.acronym)
 
     # Retrieve submissions in descending submissionId order (should be reverse chronological order)
-    @submissions = @ontology.explore.submissions({include: "submissionId,creationDate,released,modificationDate,submissionStatus,hasOntologyLanguage,version,diffFilePath,ontology"})
+    @submissions = @ontology.explore.submissions({include: "submissionId,creationDate,released,modificationDate,submissionStatus,hasOntologyLanguage,version,diffFilePath,ontology", invalidate_cache: invalidate_cache?})
                             .sort {|a,b| b.submissionId.to_i <=> a.submissionId.to_i } || []
 
     LOG.add :error, "No submissions for ontology: #{@ontology.id}" if @submissions.empty?
