@@ -554,8 +554,9 @@ module OntologiesHelper
   end
 
   def count_subscriptions(ontology_id)
+    ontology_id = ontology_id.split('/').last
     users = LinkedData::Client::Models::User.all(include: 'subscription', display_context: false, display_links: false)
-    users.select { |u| u.subscription.find { |s| s.ontology.eql?(ontology_id) } }.count
+    users.select { |u| u.subscription.find { |s| s.ontology && s.ontology.split('/').last.eql?(ontology_id) } }.count
   end
 
   def new_submission_button
