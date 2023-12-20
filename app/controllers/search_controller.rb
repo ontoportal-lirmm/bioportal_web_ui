@@ -13,6 +13,7 @@ class SearchController < ApplicationController
     @search_query ||= ""
     
     unless @search_query.eql?("")
+      params[:pagesize] = "5000"
       data = LinkedData::Client::Models::Class.search(@search_query, params)
       results = data.collection
       grouped_results =  group_results_by_ontology(results)
