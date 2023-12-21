@@ -217,9 +217,13 @@ module ApplicationHelper
     if child.prefLabel.nil?
       pref_label_html = child.id.split('/').last
     else
-      pref_label_lang, pref_label_html = select_language_label(child.prefLabel)
-      pref_label_lang = pref_label_lang.to_s.upcase
-      tooltip = pref_label_lang.eql?("@NONE") ? "" : "data-controller='tooltip' data-tooltip-position-value='right' title='#{pref_label_lang}'";
+      if child.obsolete?
+        pref_label_html = "<span class='obsolete_class'>#{child.prefLabel}</span>"
+      else 
+        pref_label_lang, pref_label_html = select_language_label(child.prefLabel)
+        pref_label_lang = pref_label_lang.to_s.upcase
+        tooltip = pref_label_lang.eql?("@NONE") ? "" : "data-controller='tooltip' data-tooltip-position-value='right' title='#{pref_label_lang}'";
+      end
     end
 
     link = <<-EOS
