@@ -11,9 +11,13 @@ class SearchController < ApplicationController
     params[:q] = params[:query]
     params[:query] = nil
     @search_query ||= ""
-    
+    @advanced_options_open = false
     unless @search_query.eql?("")
       params[:pagesize] = "5000"
+      define_search_api_params(params)
+      @advanced_options_open = !params_empty?(params) 
+      @select_ontologies = params[:ontologies_list]
+      @select_categories = params[:categories_list]
       data = LinkedData::Client::Models::Class.search(@search_query, params)
       results = data.collection
       grouped_results =  group_results_by_ontology(results)
@@ -205,4 +209,27 @@ class SearchController < ApplicationController
     end.first  
 
     selected || preflabs_list&.first 
+  end
+
+  def define_search_api_params(params)
+    @language = params[:search_language]
+    selected_ontologies_string = params[:ontologies_list]&.join(',')
+    selected_categories_string = params[:categories_list]&.join(',')
+    @exact_matches = params["exact-matches"].eql?(nil) ? "false" : "true"
+    @require_definition = params["classes-with-definitions"].eql?(nil) ? "false" : "true"
+    @property_values = params['property-values'].eql?(nil) ? "false" : "true"
+    @obsolete_classes = params['obsolete-classes'].eql?(nil) ? "false" : "true"
+    @ontology_views = params['ontology-views'].eql?(nil) ? "false" : "true"
+    params[:lang] = @language
+    params[:categories] = selected_categories_string
+    params[:ontologies] = selected_ontologies_string
+    params[:require_definition] = @require_definition
+    params[:exact_match] = @exact_matches
+    params[:include_views] = @ontology_views
+    params[:obsolete] = @obsolete_classes
+    params[:include_properties] = @property_values
+  end
+
+  def params_empty?(params)
+    return (params[:search_language].eql?('all') || params[:search_language].eql?(nil))   && params[:ontologies_list].eql?(nil) && params[:categories_list].eql?(nil) && params["exact-matches"].eql?(nil) && params["classes-with-definitions"].eql?(nil) && params['property-values'].eql?(nil) && params['obsolete-classes'].eql?(nil) && params['ontology-views'].eql?(nil)
   end
