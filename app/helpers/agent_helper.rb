@@ -165,11 +165,11 @@ module AgentHelper
     email = agent.email
     type = agent.agentType 
     identifiers = display_identifiers(agent.identifiers, link: false)
-    #binding.pry
+    identifiers = orcid_number(identifiers)
     if agent.affiliations && agent.affiliations != []
-      affiliations = "affiliations: "
+      affiliations = ""
       agent.affiliations.each do |affiliation|
-        affiliations = affiliations + affiliation.name + ". "
+        affiliations = affiliations + affiliation.acronym + " "
       end
     end
     person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
@@ -185,11 +185,22 @@ module AgentHelper
       content_tag(:div) do
         content_tag(:div, name, class: 'agent-name') +
         content_tag(:div, email || '', class: 'agent-dependency') +
-        content_tag(:div, identifiers || '', class: 'agent-dependency') +
-        content_tag(:div, affiliations || '', class: 'agent-dependency')
+        unless identifiers.to_s.empty?
+          content_tag(:div, class: 'agent-dependency') do
+            inline_svg_tag('icons/orcid.svg', class: 'agent-dependency-icon') +
+            identifiers || ''
+          end
+        end +
+        unless affiliations.to_s.empty?
+          content_tag(:div, class: 'agent-dependency') do
+            inline_svg_tag('icons/organization.svg', class: 'agent-dependency-icon') +
+            affiliations || ''
+          end
+        end
       end
     end
   end
+  
 
   def agent_chip_component(agent)
     person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
@@ -215,6 +226,10 @@ module AgentHelper
         content_tag(:div, name, class: 'agent-chip-name text-truncate')
       end   
     end 
+  end
+
+  def orcid_number(orcid)
+    return orcid.split("/").last
   end
 
 
