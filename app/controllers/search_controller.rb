@@ -143,21 +143,26 @@ class SearchController < ApplicationController
 
   def make_search_result(grouped_results)
     search_results = []
+    grouped_results = add_reuses_to_structure(grouped_results)
+    grouped_results = add_ontology_reuses(grouped_results)
+
+    binding.pry
     grouped_results.each_key do |key|
-      element_pref_lab = get_closest_preflab(grouped_results[key][0].prefLabel) 
-      element_id = grouped_results[key][0].id
-      element_ontology_uri = grouped_results[key][0].links['ontology']
+      ontology_classes = grouped_results[key][:classes]
+      element_pref_lab = get_closest_preflab(ontology_classes[0].prefLabel) 
+      element_id = ontology_classes[0].id
+      element_ontology_uri = ontology_classes[0].links['ontology']
       element_ontology_name_acronym = get_ontology_name_acronym_by_uri(element_ontology_uri)
-      ui_link = grouped_results[key][0].links['ui']
+      ui_link = ontology_classes[0].links['ui']
       end_point = get_after_last_slash(ui_link)
       element_link = "/ontologies/#{end_point}"
       
-      element_definition = get_element_defintion(grouped_results[key][0].definition) 
+      element_definition = get_element_defintion(ontology_classes[0].definition) 
       
       
       
       decendents = []
-      grouped_results[key].each_with_index do |e , index|
+      ontology_classes.each_with_index do |e , index|
         next if index == 0
         e_pref_lab = get_closest_preflab(e.prefLabel) 
         e_id = e.id
@@ -232,4 +237,44 @@ class SearchController < ApplicationController
 
   def params_empty?(params)
     return (params[:search_language].eql?('all') || params[:search_language].eql?(nil))   && params[:ontologies_list].eql?(nil) && params[:categories_list].eql?(nil) && params["exact-matches"].eql?(nil) && params["classes-with-definitions"].eql?(nil) && params['property-values'].eql?(nil) && params['obsolete-classes'].eql?(nil) && params['ontology-views'].eql?(nil)
+  end
+
+  def add_reuses_to_structure(grouped_results)
+    transformed_structure = {}
+
+    grouped_results.each do |ontology_id, classes|
+      transformed_structure[ontology_id] = {
+        classes: classes,
+        reuses: []  
+      }
+    end
+
+    return transformed_structure
+  end
+
+  def add_ontology_reuses(data)
+    data.each do |ontology_id, ontology|
+      ontology_classes = ontology[:classes]
+  
+      data.each do |other_ontology_id, other_ontology|
+        next if ontology_id == other_ontology_id
+  
+        other_classes = other_ontology[:classes]
+        common_ids = ontology_classes.map { |c| c[:id] } & other_classes.map { |c| c[:id] }
+  
+        unless common_ids.empty?
+          # Embed the entire ontology with its ID
+          embedded_ontology = {
+            id: other_ontology_id,
+            classes: other_ontology[:classes]
+          }
+  
+          ontology[:reuses] << embedded_ontology
+  
+          # Remove the second ontology from the main structure
+          data.delete(other_ontology_id)
+        end
+      end
+    end
+    return data
   end
