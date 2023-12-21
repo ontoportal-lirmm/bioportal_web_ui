@@ -7,49 +7,51 @@
           %button.search-page-button{type:'submit'}
             = inline_svg_tag 'icons/search.svg'
         .search-page-sizedbox
-        .search-page-advanced.d-none{'data-search-target': 'advancedOptions'}
+        .search-page-advanced{'data-search-target': 'advancedOptions', class: "#{@advanced_options_open ? '' : 'd-none'}"}
           .left
             .filter-container
               .title
                 Search language
               .field
-                = search_language_selector
+                = search_language_selector(selected:@language)
             .filter-container
               .title
                 = t("search.categories")
               .field
-                = render Input::SelectComponent.new(id: 'search-categories', name: 'search-categories', value: options_for_select(categories_for_select), multiple: "multiple")
+                = render Input::SelectComponent.new(id: 'search-categories', name: 'categories_list[]', value: categories_for_select, multiple: "multiple", selected: @select_categories)
+                
             .filter-container
               .title
                 = t("search.ontologies")
               .field
-                = render Input::SelectComponent.new(id: 'search-categories', name: 'search-categories', value: options_for_select(@onts_for_select), multiple: "multiple")
+
+                = render Input::SelectComponent.new(id: 'search-ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected: @select_ontologies)
           .right 
             .filter-container
               .title
                 Include in search
               .options
-                = render(ChipsComponent.new(name: 'property-values', value: 'Property values'))
-                = render(ChipsComponent.new(name: 'obsolete-classes', value: 'Obsolete classes'))
-                = render(ChipsComponent.new(name: 'ontology-views', value: 'Ontology views'))
+                = render(ChipsComponent.new(name: 'property-values', value: 'Property values', checked: @property_values.eql?("true")))
+                = render(ChipsComponent.new(name: 'obsolete-classes', value: 'Obsolete classes', checked: @obsolete_classes.eql?("true")))
+                = render(ChipsComponent.new(name: 'ontology-views', value: 'Ontology views', checked: @ontology_views.eql?("true")))
 
             .filter-container
               .title
                 Show only
               .options
-                = render(ChipsComponent.new(name: 'exact-matches', value: 'Exact Matches'))
-                = render(ChipsComponent.new(name: 'classes-with-definitions', value: 'Classes with definitions'))
+                = render(ChipsComponent.new(name: 'exact-matches', value: 'Exact Matches', checked: @exact_matches.eql?("true")))
+                = render(ChipsComponent.new(name: 'classes-with-definitions', value: 'Classes with definitions', checked: @require_definition.eql?("true")))
                 
         .search-page-options
           - if @search_results
             .search-page-number-of-results 
               = "Match in #{@search_results.length} ontologies"
-          .search-page-advanced-button.show-options{'data': {'action': 'click->search#show_advanced_options', 'search-target': 'showOptionsButton'}}
+          .search-page-advanced-button.show-options{class: "#{@advanced_options_open ? 'd-none' : ''}",'data': {'action': 'click->search#show_advanced_options', 'search-target': 'showOptionsButton'}}
             .icon
               =inline_svg_tag 'icons/settings.svg'
             .text
               Show advanced options
-          .search-page-advanced-button.hide-options.d-none{'data': {'action': 'click->search#hide_advanced_options', 'search-target': 'hideOptionsButton'}}
+          .search-page-advanced-button.hide-options{class: "#{@advanced_options_open ? '' : 'd-none'}", 'data': {'action': 'click->search#hide_advanced_options', 'search-target': 'hideOptionsButton'}}
             .icon
               =inline_svg_tag 'icons/hide.svg'
             .text
