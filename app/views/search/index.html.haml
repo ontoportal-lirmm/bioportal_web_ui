@@ -68,7 +68,7 @@
             = render Display::SearchResultComponent.new(title: title, uri: id, sub_number: sub_number, link: link, definition: definition) do |c|
               - result[:descendants].each do |d|
                 - c.subresult(title: d[:preflab] , uri: d[:id], link: d[:link] ,is_sub_component: true)
-                
+                - c.reuse(title: 'Plant height average', uri: 'http://opendata.inrae.fr/thesaurusINRAE/c_17053', is_sub_component: true)
     - if @no_results    
       .browse-empty-illustration
         %img{:src => "#{asset_path("empty-box.svg")}"}
