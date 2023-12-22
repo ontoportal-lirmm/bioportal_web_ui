@@ -146,7 +146,7 @@ class SearchController < ApplicationController
     grouped_results = add_reuses_to_structure(grouped_results)
     grouped_results = add_ontology_reuses(grouped_results)
 
-    #binding.pry
+    
     grouped_results.each_key do |key|
       ontology_classes = grouped_results[key][:classes]
       element_pref_lab = get_closest_preflab(ontology_classes[0].prefLabel) 
@@ -158,8 +158,6 @@ class SearchController < ApplicationController
       element_link = "/ontologies/#{end_point}"
       
       element_definition = get_element_defintion(ontology_classes[0].definition) 
-      
-      
       
       decendents = []
       ontology_classes.each_with_index do |e , index|
@@ -173,14 +171,28 @@ class SearchController < ApplicationController
         decendents_list_element = {preflab: e_pref_lab,id: e_id, link: e_link, definition: e_definition}
         decendents.push(decendents_list_element)
       end
+
+      reuses = []
+      ontology_reuses = grouped_results[key][:reuses]
+      ontology_reuses.each do |reuse|
+        reuses_list_element = {title: nil, decendants: []}
+        title_element = {preflab: 'test', ontology: nil, id: nil, link: nil, definition: nil}
+        reuse_ontology_uri = reuse[:id]
+        reuse_ontology_name_acronym = get_ontology_name_acronym_by_uri(reuse_ontology_uri)
+        title_element[:ontology] = reuse_ontology_name_acronym
+        reuses_list_element[:title] = title_element
+        reuses.push(reuses_list_element)
+      end
       
       search_result_element = {
         title: { preflab: element_pref_lab, ontology: element_ontology_name_acronym, id: element_id, link: element_link, definition: element_definition},
-        descendants: decendents
+        descendants: decendents,
+        reuses: reuses
       }
 
       search_results.push(search_result_element)
     end
+    #binding.pry
     return search_results
   end
 
@@ -263,15 +275,12 @@ class SearchController < ApplicationController
         common_ids = ontology_classes.map { |c| c[:id] } & other_classes.map { |c| c[:id] }
   
         unless common_ids.empty?
-          # Embed the entire ontology with its ID
           embedded_ontology = {
             id: other_ontology_id,
             classes: other_ontology[:classes]
           }
   
           ontology[:reuses] << embedded_ontology
-  
-          # Remove the second ontology from the main structure
           data.delete(other_ontology_id)
         end
       end
