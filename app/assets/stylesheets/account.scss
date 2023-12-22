@@ -153,9 +153,10 @@
     font-weight: 400;
     color: var(--primary-color);
 }
-.account-page-subscription div{
+.account-page-subscription > div{
     display: flex;
 }
+
 .account-page-subscription div .notes{
     margin-right: 23px;
     color: #666666 !important;

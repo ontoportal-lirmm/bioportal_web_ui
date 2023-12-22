@@ -307,6 +307,8 @@ GEM
     newrelic_rpm (9.6.0)
       base64
     nio4r (2.7.0)
+    nokogiri (1.15.5-x86_64-darwin)
+      racc (~> 1.4)
     nokogiri (1.15.5-x86_64-linux)
       racc (~> 1.4)
     oauth2 (1.4.11)
@@ -543,6 +545,7 @@ GEM
     zeitwerk (2.6.12)
 
 PLATFORMS
+  x86_64-darwin-23
   x86_64-linux
 
 DEPENDENCIES
@@ -624,4 +627,4 @@ DEPENDENCIES
   will_paginate (~> 3.0)
 
 BUNDLED WITH
-   2.3.23
+   2.4.21
