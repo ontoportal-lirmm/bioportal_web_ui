@@ -159,7 +159,8 @@ class ConceptsController < ApplicationController
 
     @concept = @ontology.explore.single_class({full: true}, CGI.unescape(params[:conceptid]))
     concept_not_found(CGI.unescape(params[:conceptid])) if @concept.nil?
-
+    @container_id = params[:modal] ? 'application_modal_content' : 'concept_details'
+    
     if params[:styled].eql?("true")
       render :partial => "details", :layout => "partial"
     else

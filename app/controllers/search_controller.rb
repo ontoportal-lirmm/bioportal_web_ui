@@ -146,7 +146,7 @@ class SearchController < ApplicationController
     grouped_results = add_reuses_to_structure(grouped_results)
     grouped_results = add_ontology_reuses(grouped_results)
 
-    binding.pry
+    #binding.pry
     grouped_results.each_key do |key|
       ontology_classes = grouped_results[key][:classes]
       element_pref_lab = get_closest_preflab(ontology_classes[0].prefLabel) 
