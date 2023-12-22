@@ -178,9 +178,31 @@ class SearchController < ApplicationController
         reuses_list_element = {title: nil, decendants: []}
         title_element = {preflab: 'test', ontology: nil, id: nil, link: nil, definition: nil}
         reuse_ontology_uri = reuse[:id]
+        reuse_preflab = get_closest_preflab(reuse[:classes][0].prefLabel)
         reuse_ontology_name_acronym = get_ontology_name_acronym_by_uri(reuse_ontology_uri)
+        reuse_id = reuse[:classes][0].id
+        r_link = get_after_last_slash(reuse[:classes][0].links['ui'])
+        reuse_link = "/ontologies/#{r_link}"
+        reuse_definition = get_element_defintion(reuse[:classes][0].definition)
         title_element[:ontology] = reuse_ontology_name_acronym
+        title_element[:preflab] = reuse_preflab
+        title_element[:id] = reuse_id
+        title_element[:link] = reuse_link
+        title_element[:definition] = reuse_definition
         reuses_list_element[:title] = title_element
+        reuse_decendents_list = []
+        reuse[:classes].each_with_index do |c, index|
+          next if index == 0
+          c_pref_lab = get_closest_preflab(c.prefLabel)
+          c_id = c.id
+          c_ui_link = c.links['ui']
+          c_end_point = get_after_last_slash(c_ui_link)
+          c_link = "/ontologies/#{c_end_point}"
+          c_definition = get_element_defintion(c.definition)
+          reuse_decendents_list_element = {preflab: c_pref_lab, id: c_id, link: c_link, definition: c_definition}
+          reuse_decendents_list.push(reuse_decendents_list_element)
+        end
+        reuses_list_element[:decendants] = reuse_decendents_list
         reuses.push(reuses_list_element)
       end
       

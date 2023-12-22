@@ -24,10 +24,10 @@
                 .text
                     = "#{@sub_number} more from this ontology"
                 = inline_svg_tag "icons/arrow-down.svg"
-        - unless @mappings == 0
-            .button.icon-right
+        - unless @reuses == 0
+            .button.icon-right{'data-action': "click->search-result-component#showReuses"}
                 .text
-                    = "#{@mappings} mapped ontologies"
+                    = "Reuses in #{@reuses} ontologies"
                 = inline_svg_tag "icons/arrow-down.svg"
     - if subresults?
         .more-from-ontology.d-none{'data-search-result-component-target': 'subOntologies'}
@@ -37,7 +37,7 @@
                     .search-result-sub-component
                         = result
     - if reuses?
-        .more-from-ontology.reuses
+        .more-from-ontology.reuses.d-none{'data-search-result-component-target': 'reuses'}
             .vertical-line
             .search-result-sub-components
                 .reuses-title 
