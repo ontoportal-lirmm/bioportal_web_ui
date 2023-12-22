@@ -66,7 +66,8 @@
             - reuses_number = result[:reuses].length
             - link = result[:title][:link]
             - definition = result[:title][:definition]
-            = render Display::SearchResultComponent.new(title: title, uri: id, sub_number: sub_number ,reuses: reuses_number, link: link, definition: definition) do |c|
+            - ontology_acronym = result[:title][:ontology_acronym]
+            = render Display::SearchResultComponent.new(title: title, uri: id, sub_number: sub_number ,reuses: reuses_number, link: link, definition: definition, ontology_acronym: ontology_acronym) do |c|
               - result[:descendants].each do |d|
                 - c.subresult(title: d[:preflab] , uri: d[:id], link: d[:link] ,is_sub_component: true)
               - result[:reuses].each do |r|
@@ -74,7 +75,9 @@
                 - reuse_id =  r[:title][:id]
                 - reuse_link = r[:title][:link]
                 - reuse_definition = r[:title][:definition]
-                - c.reuse(title: reuse_title, uri: reuse_id, link: reuse_link, definition: reuse_definition, sub_number: r[:decendants].length ,is_sub_component: true) do |b|
+                - reuse_acronym = r[:title][:reuse_acronym]
+                -#binding.pry
+                - c.reuse(title: reuse_title, uri: reuse_id, link: reuse_link, definition: reuse_definition, ontology_acronym: reuse_acronym ,sub_number: r[:decendants].length ,is_sub_component: true) do |b|
                   - r[:decendants].each do |dd|
                     - b.subresult(title: dd[:preflab], uri: dd[:id], definition: dd[:definition], link: dd[:link] , is_sub_component: true)
                   

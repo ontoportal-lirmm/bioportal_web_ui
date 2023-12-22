@@ -8,13 +8,13 @@
         .text
             = @definition
     .actions
-        =  link_to_modal(nil, "/ajax/class_details?modal=true&ontology=INRAETHES&conceptid=http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_17053&styled=false",data: { show_modal_title_value: "class name", show_modal_size_value: 'modal-xl' }) do
+        =  link_to_modal(nil, "/ajax/class_details?modal=true&ontology=#{@ontology_acronym}&conceptid=#{@uri}&styled=false",data: { show_modal_title_value: @title, show_modal_size_value: 'modal-xl' }) do
             .button 
                 = inline_svg_tag "icons/details.svg"
                 .text
                     Details
         
-        =  link_to_modal(nil, "/ajax/biomixer/?ontology=INRAETHES&conceptid=http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_17053",data: { show_modal_title_value: "class name", show_modal_size_value: 'modal-xl' }) do
+        =  link_to_modal(nil, "/ajax/biomixer/?ontology=#{@ontology_acronym}&conceptid=#{@uri}",data: { show_modal_title_value: @title, show_modal_size_value: 'modal-xl' }) do
             .button 
                 = inline_svg_tag "icons/visualize.svg"
                 .text

@@ -153,6 +153,7 @@ class SearchController < ApplicationController
       element_id = ontology_classes[0].id
       element_ontology_uri = ontology_classes[0].links['ontology']
       element_ontology_name_acronym = get_ontology_name_acronym_by_uri(element_ontology_uri)
+      element_ontology_acronym = ontology_acronym(element_ontology_uri)
       ui_link = ontology_classes[0].links['ui']
       end_point = get_after_last_slash(ui_link)
       element_link = "/ontologies/#{end_point}"
@@ -184,11 +185,13 @@ class SearchController < ApplicationController
         r_link = get_after_last_slash(reuse[:classes][0].links['ui'])
         reuse_link = "/ontologies/#{r_link}"
         reuse_definition = get_element_defintion(reuse[:classes][0].definition)
+        reuse_acronym = ontology_acronym(reuse_ontology_uri)
         title_element[:ontology] = reuse_ontology_name_acronym
         title_element[:preflab] = reuse_preflab
         title_element[:id] = reuse_id
         title_element[:link] = reuse_link
         title_element[:definition] = reuse_definition
+        title_element[:reuse_acronym] = reuse_acronym
         reuses_list_element[:title] = title_element
         reuse_decendents_list = []
         reuse[:classes].each_with_index do |c, index|
@@ -207,7 +210,7 @@ class SearchController < ApplicationController
       end
       
       search_result_element = {
-        title: { preflab: element_pref_lab, ontology: element_ontology_name_acronym, id: element_id, link: element_link, definition: element_definition},
+        title: {ontology_acronym: element_ontology_acronym, preflab: element_pref_lab, ontology: element_ontology_name_acronym, id: element_id, link: element_link, definition: element_definition,},
         descendants: decendents,
         reuses: reuses
       }
@@ -224,6 +227,12 @@ class SearchController < ApplicationController
     element_ontology_acronym = element_ontology_info.acronym
     element_ontology_name_acronym = "#{element_ontology_name} (#{element_ontology_acronym})"
     return element_ontology_name_acronym
+  end
+
+  def ontology_acronym(element_ontology_uri)
+    element_ontology_info = LinkedData::Client::Models::Ontology.find(element_ontology_uri)
+    element_ontology_acronym = element_ontology_info.acronym
+    return element_ontology_acronym
   end
 
   def get_after_last_slash(input_string)
