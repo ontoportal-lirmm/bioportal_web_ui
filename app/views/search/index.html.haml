@@ -63,14 +63,22 @@
             - title = "#{result[:title][:preflab]} - #{result[:title][:ontology]}"
             - id = result[:title][:id]
             - sub_number = result[:descendants].length
+            - reuses_number = result[:reuses].length
             - link = result[:title][:link]
             - definition = result[:title][:definition]
-            = render Display::SearchResultComponent.new(title: title, uri: id, sub_number: sub_number, link: link, definition: definition) do |c|
+            = render Display::SearchResultComponent.new(title: title, uri: id, sub_number: sub_number ,reuses: reuses_number, link: link, definition: definition) do |c|
               - result[:descendants].each do |d|
                 - c.subresult(title: d[:preflab] , uri: d[:id], link: d[:link] ,is_sub_component: true)
               - result[:reuses].each do |r|
                 - reuse_title = "#{r[:title][:preflab]} - #{r[:title][:ontology]}"
-                - c.reuse(title: reuse_title, uri: 'http://opendata.inrae.fr/thesaurusINRAE/c_17053', is_sub_component: true)
+                - reuse_id =  r[:title][:id]
+                - reuse_link = r[:title][:link]
+                - reuse_definition = r[:title][:definition]
+                - c.reuse(title: reuse_title, uri: reuse_id, link: reuse_link, definition: reuse_definition, sub_number: r[:decendants].length ,is_sub_component: true) do |b|
+                  - r[:decendants].each do |dd|
+                    - b.subresult(title: dd[:preflab], uri: dd[:id], definition: dd[:definition], link: dd[:link] , is_sub_component: true)
+                  
+
     - if @no_results    
       .browse-empty-illustration
         %img{:src => "#{asset_path("empty-box.svg")}"}
