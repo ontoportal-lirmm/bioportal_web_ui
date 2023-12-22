@@ -89,5 +89,25 @@
   margin: 20px 0;
 }
 
+.search-result-sub-components .reuses-title{
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.search-result-sub-components .reuses-title div{
+  margin-left: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #888888;
+}
+
+.more-from-ontology.reuses{
+  background-color: #F8F8F8;
+}
+.more-from-ontology.reuses .vertical-line{
+  background-color: #888888;
+}
+
 
 

@@ -2,7 +2,7 @@
 class Display::SearchResultComponent < ViewComponent::Base
     include ModalHelper
     renders_many :subresults, Display::SearchResultComponent
-    
+    renders_many :reuses, Display::SearchResultComponent
     def initialize(title: nil, uri: nil, definition: nil, link: nil, other_reuses: nil, is_sub_component: false, sub_number: 0, mappings: 0)
         @title = title
         @uri = uri

@@ -36,5 +36,15 @@
                 - subresults.each do |result|
                     .search-result-sub-component
                         = result
+    - if reuses?
+        .more-from-ontology.reuses
+            .vertical-line
+            .search-result-sub-components
+                .reuses-title 
+                    = inline_svg_tag 'icons/reuses.svg'
+                    %div Reuses in other ontologies
+                - reuses.each do |reuse|
+                    .search-result-sub-component
+                        = reuse
     
     
