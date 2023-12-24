@@ -6,41 +6,41 @@
           %input{type:"text", placeholder:"Enter a term, e.g. Melanoma", name: "q", value: @search_query}
           %button.search-page-button{type:'submit'}
             = inline_svg_tag 'icons/search.svg'
-        .search-page-sizedbox
+
         .search-page-advanced{'data-search-target': 'advancedOptions', class: "#{@advanced_options_open ? '' : 'd-none'}"}
           .left
             .filter-container
               .title
                 Search language
               .field
-                = search_language_selector(selected:@language)
+                = search_language_selector(name: 'lang', selected: params[:lang])
             .filter-container
               .title
                 = t("search.categories")
               .field
-                = render Input::SelectComponent.new(id: 'search-categories', name: 'categories_list[]', value: categories_for_select, multiple: "multiple", selected: @select_categories)
+                = render Input::SelectComponent.new(id: 'search-categories', name: 'categories[]', value: categories_for_select, multiple: "multiple", selected: params[:categories])
                 
             .filter-container
               .title
                 = t("search.ontologies")
               .field
 
-                = render Input::SelectComponent.new(id: 'search-ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected: @select_ontologies)
+                = render Input::SelectComponent.new(id: 'search-ontologies', name: 'ontologies[]', value: @onts_for_select, multiple: "multiple", selected:  params[:ontologies])
           .right 
             .filter-container
               .title
                 Include in search
-              .options
-                = render(ChipsComponent.new(name: 'property-values', value: 'Property values', checked: @property_values.eql?("true")))
-                = render(ChipsComponent.new(name: 'obsolete-classes', value: 'Obsolete classes', checked: @obsolete_classes.eql?("true")))
-                = render(ChipsComponent.new(name: 'ontology-views', value: 'Ontology views', checked: @ontology_views.eql?("true")))
+              .d-flex
+                = render(ChipsComponent.new(name: 'include_properties', label: 'Property values', checked:  params[:include_properties]))
+                = render(ChipsComponent.new(name: 'obsolete', label: 'Obsolete classes', checked:  params[:obsolete]))
+                = render(ChipsComponent.new(name: 'include_views', label: 'Ontology views', checked: params[:include_views]))
 
             .filter-container
               .title
                 Show only
-              .options
-                = render(ChipsComponent.new(name: 'exact-matches', value: 'Exact Matches', checked: @exact_matches.eql?("true")))
-                = render(ChipsComponent.new(name: 'classes-with-definitions', value: 'Classes with definitions', checked: @require_definition.eql?("true")))
+              .d-flex
+                = render(ChipsComponent.new(name: 'exact_match', label: 'Exact Matches',  checked:  params[:exact_match]))
+                = render(ChipsComponent.new(name: 'require_definition', label: 'Classes with definitions', checked: params[:require_definition]))
                 
         .search-page-options
           - if @search_results

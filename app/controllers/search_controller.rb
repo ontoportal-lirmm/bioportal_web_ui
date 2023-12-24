@@ -7,25 +7,19 @@ class SearchController < ApplicationController
   layout :determine_layout
 
   def index
-    @search_query = params[:query].nil? ? params[:q] : params[:query]
-    params[:q] = params[:query]
-    params[:query] = nil
-    @search_query ||= ""
+    @search_query = params[:query] || params[:q] || ''
     @advanced_options_open = false
-    unless @search_query.eql?("")
-      params[:pagesize] = "5000"
-      define_search_api_params(params)
-      @advanced_options_open = !params_empty?(params) 
-      @select_ontologies = params[:ontologies_list]
-      @select_categories = params[:categories_list]
-      data = LinkedData::Client::Models::Class.search(@search_query, params)
-      results = data.collection
-      grouped_results =  group_results_by_ontology(results)
-      @search_results = make_search_result(grouped_results)
-      @no_results = @search_results.eql?([])
+    @search_results = []
+
+    return if @search_query.empty?
+
+    params[:pagesize] = "150"
+
+    results = LinkedData::Client::Models::Class.search(@search_query, params).collection
+
+    @advanced_options_open = !search_params_empty?
+    @search_results = aggregate_results(@search_query, results)
       end
-    end
-  end
 
   def json_search
     if params[:q].nil?
