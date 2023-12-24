@@ -9,12 +9,10 @@
 .search-page-input-container{
   width: 100%;
 }
-.search-page-sizedbox{
 
-  padding-top: 80px;
-}
 .search-page-input{
   position: relative;
+  padding-bottom: 80px;
 }
 .search-page-input input{
   position: absolute;
@@ -45,9 +43,7 @@
   color: #888888;
   font-size: 14px;
 }
-.search-page-advanced .filter-container .options{
-  display: flex;
-}
+
 
 
 
