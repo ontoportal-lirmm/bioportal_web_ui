@@ -61,7 +61,7 @@ module MultiLanguagesHelper
                                                 languages: search_languages,
                                                 'data-select-input-searchable-value': false,
                                                 title: search_language_help_text,
-                                                selected: selected)
+                                                selected: selected&.to_sym)
 
   end
 

@@ -6,42 +6,42 @@
           %input{type:"text", placeholder:"Enter a term, e.g. Melanoma", name: "q", value: @search_query}
           %button.search-page-button{type:'submit'}
             = inline_svg_tag 'icons/search.svg'
-        .search-page-sizedbox
+
         .search-page-advanced{'data-search-target': 'advancedOptions', class: "#{@advanced_options_open ? '' : 'd-none'}"}
           .left
             .filter-container
               .title
                 Search language
               .field
-                = search_language_selector(selected:@language)
+                = search_language_selector(name: 'lang', selected: params[:lang])
             .filter-container
               .title
                 = t("search.categories")
               .field
-                = render Input::SelectComponent.new(id: 'search-categories', name: 'categories_list[]', value: categories_for_select, multiple: "multiple", selected: @select_categories)
+                = render Input::SelectComponent.new(id: 'search-categories', name: 'categories[]', value: categories_for_select, multiple: "multiple", selected: params[:categories])
                 
             .filter-container
               .title
                 = t("search.ontologies")
               .field
 
-                = render Input::SelectComponent.new(id: 'search-ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected: @select_ontologies)
+                = render Input::SelectComponent.new(id: 'search-ontologies', name: 'ontologies[]', value: @onts_for_select, multiple: "multiple", selected:  params[:ontologies])
           .right 
             .filter-container
               .title
                 Include in search
-              .options
-                = render(ChipsComponent.new(name: 'property-values', value: 'Property values', checked: @property_values.eql?("true")))
-                = render(ChipsComponent.new(name: 'obsolete-classes', value: 'Obsolete classes', checked: @obsolete_classes.eql?("true")))
-                = render(ChipsComponent.new(name: 'ontology-views', value: 'Ontology views', checked: @ontology_views.eql?("true")))
+              .d-flex
+                = render(ChipsComponent.new(name: 'include_properties', label: 'Property values', checked:  params[:include_properties]))
+                = render(ChipsComponent.new(name: 'obsolete', label: 'Obsolete classes', checked:  params[:obsolete]))
+                = render(ChipsComponent.new(name: 'include_views', label: 'Ontology views', checked: params[:include_views]))
 
             .filter-container
               .title
                 Show only
-              .options
-                = render(ChipsComponent.new(name: 'exact-matches', value: 'Exact Matches', checked: @exact_matches.eql?("true")))
-                = render(ChipsComponent.new(name: 'classes-with-definitions', value: 'Classes with definitions', checked: @require_definition.eql?("true")))
-                
+              .d-flex
+                = render(ChipsComponent.new(name: 'exact_match', label: 'Exact Matches',  checked:  params[:exact_match]))
+                = render(ChipsComponent.new(name: 'require_definition', label: 'Classes with definitions', checked: params[:require_definition]))
+
         .search-page-options
           - if @search_results
             .search-page-number-of-results 
@@ -60,29 +60,15 @@
       .search-page-results-container
         - @search_results.each do |result|
           .search-page-result-element
-            - title = "#{result[:title][:preflab]} - #{result[:title][:ontology]}"
-            - id = result[:title][:id]
-            - sub_number = result[:descendants].length
-            - reuses_number = result[:reuses].length
-            - link = result[:title][:link]
-            - definition = result[:title][:definition]
-            - ontology_acronym = result[:title][:ontology_acronym]
-            = render Display::SearchResultComponent.new(title: title, uri: id, sub_number: sub_number ,reuses: reuses_number, link: link, definition: definition, ontology_acronym: ontology_acronym) do |c|
-              - result[:descendants].each do |d|
-                - c.subresult(title: d[:preflab] , uri: d[:id], link: d[:link] ,is_sub_component: true)
-              - result[:reuses].each do |r|
-                - reuse_title = "#{r[:title][:preflab]} - #{r[:title][:ontology]}"
-                - reuse_id =  r[:title][:id]
-                - reuse_link = r[:title][:link]
-                - reuse_definition = r[:title][:definition]
-                - reuse_acronym = r[:title][:reuse_acronym]
-                -#binding.pry
-                - c.reuse(title: reuse_title, uri: reuse_id, link: reuse_link, definition: reuse_definition, ontology_acronym: reuse_acronym ,sub_number: r[:decendants].length ,is_sub_component: true) do |b|
-                  - r[:decendants].each do |dd|
-                    - b.subresult(title: dd[:preflab], uri: dd[:id], definition: dd[:definition], link: dd[:link] , is_sub_component: true)
-                  
+            - descendants = result[:descendants]
+            - reuses = result[:reuses]
+            = render Display::SearchResultComponent.new(result[:root]) do |c|
+              - descendants.each { |d| c.subresult(d.merge(is_sub_component: true))}
+              - reuses.each do |r|
+                - c.reuse(r[:root].merge(is_sub_component: true)) do |b|
+                  - r[:descendants].each { |dd|  b.subresult(dd.merge(is_sub_component: true))}
 
-    - if @no_results    
+    - if @search_results.empty?
       .browse-empty-illustration
         %img{:src => "#{asset_path("empty-box.svg")}"}
         %p No result was found
