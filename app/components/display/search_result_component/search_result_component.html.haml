@@ -8,17 +8,8 @@
         .text
             = @definition
     .actions
-        =  link_to_modal(nil, "/ajax/class_details?modal=true&ontology=#{@ontology_acronym}&conceptid=#{@uri}&styled=false",data: { show_modal_title_value: @title, show_modal_size_value: 'modal-xl' }) do
-            .button 
-                = inline_svg_tag "icons/details.svg"
-                .text
-                    Details
-        
-        =  link_to_modal(nil, "/ajax/biomixer/?ontology=#{@ontology_acronym}&conceptid=#{@uri}",data: { show_modal_title_value: @title, show_modal_size_value: 'modal-xl' }) do
-            .button 
-                = inline_svg_tag "icons/visualize.svg"
-                .text
-                    Visualize
+        = details_button
+        = visualize_button
         - if subresults?
             .button.icon-right{'data-action': "click->search-result-component#showSubOntologies"}
                 .text
