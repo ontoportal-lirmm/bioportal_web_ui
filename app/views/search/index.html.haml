@@ -14,18 +14,14 @@
                 Search language
               .field
                 = search_language_selector(name: 'lang', selected: params[:lang])
-            .filter-container
-              .title
-                = t("search.categories")
-              .field
-                = render Input::SelectComponent.new(id: 'search-categories', name: 'categories[]', value: categories_for_select, multiple: "multiple", selected: params[:categories])
                 
             .filter-container
               .title
                 = t("search.ontologies")
               .field
-
-                = render Input::SelectComponent.new(id: 'search-ontologies', name: 'ontologies[]', value: @onts_for_select, multiple: "multiple", selected:  params[:ontologies])
+                - get_ontologies_data
+                = render Input::SelectComponent.new(id: 'search-ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected:  params[:ontologies_list])
+          
           .right 
             .filter-container
               .title
@@ -67,8 +63,8 @@
               - reuses.each do |r|
                 - c.reuse(r[:root].merge(is_sub_component: true)) do |b|
                   - r[:descendants].each { |dd|  b.subresult(dd.merge(is_sub_component: true))}
-
-    - if @search_results.empty?
+    
+    - if @search_results.empty? && !@search_query.empty?
       .browse-empty-illustration
         %img{:src => "#{asset_path("empty-box.svg")}"}
         %p No result was found
