@@ -361,7 +361,6 @@ it:
   reproduce_results: Riprodurre questi risultati utilizzando il metodo
   score: Punteggio
   search:
-    categories: Categorie
     class_search: Ricerca di classe
     classes_with_definitions: Classi con definizioni
     hide_advanced_options: Nascondere le opzioni avanzate
