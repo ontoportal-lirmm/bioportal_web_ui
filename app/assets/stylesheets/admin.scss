@@ -8,6 +8,20 @@
   margin-bottom: 30px;
 }
 
+.analytics {
+  .card-header-1{
+    color: white; font-size: 60px; font-weight: 600; word-wrap: break-word
+  }
+
+  .card-header-2{
+    color: white; font-size: 14px;  font-weight: 400; word-wrap: break-word
+  }
+
+  .card-header-3{
+    color: white; opacity: 0.6; font-size: 14px;  font-weight: 400; word-wrap: break-word
+  }
+}
+
 .alert-box span {
   font-weight: bold;
   text-transform: uppercase;
