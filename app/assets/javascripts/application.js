@@ -27,7 +27,6 @@
 //= require home
 //= require_tree ./helpers
 //= require_tree ./components
-//= require ontologies
 //= require projects
 //= require application_esbuild
 customElements.define('data-table-loader', DataTableLoader );
