@@ -384,14 +384,18 @@ module OntologiesHelper
   end
 
   def visits_chart_dataset(visits_data)
-    [{
-       label: 'Visits',
-       data: visits_data,
-       backgroundColor: 'rgba(151, 187, 205, 0.2)',
-       borderColor: 'rgba(151, 187, 205, 1)',
-       pointBorderColor: 'rgba(151, 187, 205, 1)',
-       pointBackgroundColor: 'rgba(151, 187, 205, 1)',
-     }].to_json
+    [
+      {
+        label: 'Visits',
+        data: visits_data,
+        borderWidth: 2,
+        borderRadius: 5,
+        borderSkipped: false,
+        cubicInterpolationMode: 'monotone',
+        tension: 0.4,
+        fill: true
+      }
+    ].to_json
   end
 
   def submission_ready?(submission)

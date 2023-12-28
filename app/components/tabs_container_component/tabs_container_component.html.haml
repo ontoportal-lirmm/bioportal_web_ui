@@ -1,5 +1,5 @@
 %div{data: {controller:'tabs-container'}, class: container_class, id: @id}
-  %div
+  %div{class: !pinned_right? && 'justify-content-center'}
     .tab-items.nav
       - items.each do |item|
         %div{data:  tabs_container_data(item), class: item.active_class + ' nav-item'}
