@@ -28,7 +28,7 @@
           %div.card-header-1
             = @users_visits[:visits].last
           %div.card-header-3
-            #{ @users_visits[:visits].last - @users_visits[:visits][-2] }  users since last month
+            #{ visits_evolution }  users since last month
       %div.d-flex.flex-wrap.m-2.p-2.justify-content-center.w-100
         %div.col.card.p-2.mr-2
           = chart_component(title: 'Ontology visits', type: 'bar',

@@ -10,4 +10,10 @@ module AdminHelper
                 "The following ontologies: #{@new_ontologies_count.join(', ')} were created in this year",
                 style: 'width: 400px; max-height: 300px')
   end
+
+  def visits_evolution
+    return 0 if @users_visits[:visits].empty?
+
+    @users_visits[:visits].last - @users_visits[:visits][-2]
+  end
 end

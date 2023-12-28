@@ -321,7 +321,11 @@ class AdminController < ApplicationController
   end
 
   def user_visits_data
-    analytics = JSON.parse(LinkedData::Client::HTTP.get("#{rest_url}/data/analytics/users", {}, raw: true))
+    begin
+      analytics = JSON.parse(LinkedData::Client::HTTP.get("#{rest_url}/data/analytics/users", {}, raw: true))
+    rescue
+      analytics = {}
+    end
     visits_data = { visits: [], labels: [] }
 
     return visits_data if analytics.empty?
@@ -336,14 +340,18 @@ class AdminController < ApplicationController
   end
 
   def ontology_visits_data
-    analytics = JSON.parse(LinkedData::Client::HTTP.get("#{rest_url}/data/analytics/ontologies", {}, raw: true))
+    begin
+      analytics = JSON.parse(LinkedData::Client::HTTP.get("#{rest_url}/data/analytics/ontologies", {}, raw: true))
+    rescue
+      analytics = {}
+    end
     visits_data = { visits: [], labels: [] }
+    @new_ontologies_count = []
+    @ontologies_count = 0
 
     return visits_data if analytics.empty?
 
     aggregated_data = {}
-    @ontologies_count = 0
-    @new_ontologies_count = []
     analytics.each do |acronym, years_data|
       current_year_count = 0
       previous_year_count  = 0
@@ -378,7 +386,11 @@ class AdminController < ApplicationController
   end
 
   def page_visits_data
-    analytics = JSON.parse(LinkedData::Client::HTTP.get("#{rest_url}/data/analytics/page_visits", {}, raw: true))
+    begin
+      analytics = JSON.parse(LinkedData::Client::HTTP.get("#{rest_url}/data/analytics/page_visits", {}, raw: true))
+    rescue
+      analytics = {}
+    end
     visits_data = { visits: [], labels: [] }
 
     return visits_data if analytics.empty?
