@@ -25,11 +25,8 @@ module ApplicationHelper
 
 
   def ontologies_analytics
-    LinkedData::Client::Analytics.all.to_h.map do |key, ontology_analytics|
-      next if key.eql?(:links) || key.eql?(:context)
-
-      [key.to_s, ontology_analytics.to_h.values.map { |x| x&.values }.flatten.compact.sum]
-    end.compact.to_h
+    data = LinkedData::Client::Analytics.last_month.onts
+    data.map{|x| [x[:ont].to_s, x[:views]]}.to_h
   end
 
   def get_apikey
