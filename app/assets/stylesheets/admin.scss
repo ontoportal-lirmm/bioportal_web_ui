@@ -22,6 +22,13 @@
   }
 }
 
+.yasgui .autocompleteWrapper, .yasgui .tabContextButton{
+  display: none !important;
+}
+.yasqe .yasqe_buttons .yasqe_share{
+  display: none !important;
+}
+
 .alert-box span {
   font-weight: bold;
   text-transform: uppercase;

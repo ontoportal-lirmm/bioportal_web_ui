@@ -12,12 +12,13 @@
 
 %div
   %div.mx-1
-    - sections = ['Analytics', 'Site Administration','Ontology Administration',  'Licensing', 'Users', 'Metadata Administration', 'Groups', 'Categories', 'Persons & Organizations']
+    - sections = ['Analytics', 'Site Administration','Ontology Administration',  'Licensing', 'Users', 'Metadata Administration', 'Groups', 'Categories', 'Persons & Organizations', 'SPARQL']
+    - selected = params[:section] || sections.first
     = render TabsContainerComponent.new do |t|
       - sections.each do |section_title|
         - t.item(title: section_title,
                      path: '',
-                     selected: section_title.eql?(sections.first),
+                     selected: section_title.downcase.eql?(selected),
                      page_name: '')
       - t.item_content do
         = render 'analytics'
@@ -66,8 +67,6 @@
         %div.ontologies_list_container.mt-3
           %div.mx-auto.w-75
             = render TurboFrameComponent.new(id: 'agents-list', src: '/agents', loading: 'lazy')
-
-      -# Groups tab
-      %div.tab-pane.fade{id: "groups", role: "tabpanel", aria: { labelledby: "groups-admin-tab" }}
-        %div.ontologies_list_container.mt-3
-          %table#adminGroups.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
+      - t.item_content do
+        %div.container
+          = sparql_query_container

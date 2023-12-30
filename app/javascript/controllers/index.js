@@ -70,6 +70,9 @@ application.register("simple-tree", SimpleTreeController)
 import SkosCollectionColorsController from "./skos_collection_colors_controller"
 application.register("skos-collection-colors", SkosCollectionColorsController)
 
+import SparqlController from "./sparql_controller"
+application.register("sparql", SparqlController)
+
 import TextTruncateController from "./text_truncate_controller"
 application.register("text-truncate", TextTruncateController)
 
