@@ -94,7 +94,7 @@ Rails.application.routes.draw do
     
   get '' => 'home#index'
 
-  post 'sparql_proxy', to: 'admin#sparql_endpoint'
+  match 'sparql_proxy', to: 'admin#sparql_endpoint', via: [:get, :post]
 
   # Top-level pages
   match '/feedback', to: 'home#feedback', via: [:get, :post]

@@ -45,6 +45,7 @@ module SparqlHelper
   end
 
   def sparql_query(query)
+    return 'No SPARQL endpoint configured' if $SPARQL_URL.blank?
     return 'INSERT Queries not permitted' unless  is_allowed_query?(query)
     endpoint = $SPARQL_URL.gsub('test', 'sparql')
     begin
