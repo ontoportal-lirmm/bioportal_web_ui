@@ -1,5 +1,5 @@
 class AdminController < ApplicationController
-  include TurboHelper, HomeHelper
+  include TurboHelper, HomeHelper, SparqlHelper
   layout :determine_layout
   before_action :cache_setup
 
@@ -9,6 +9,20 @@ class AdminController < ApplicationController
   ONTOLOGY_URL = lambda { |acronym| "#{ADMIN_URL}ontologies/#{acronym}" }
   PARSE_LOG_URL = lambda { |acronym| "#{ONTOLOGY_URL.call(acronym)}/log" }
   REPORT_NEVER_GENERATED = "NEVER GENERATED"
+
+
+  def sparql_endpoint
+    graph = params["named-graph-uri"]
+    if !session[:user]&.admin? && !graph.blank?
+      acronym = graph.split('/')[-3]
+      @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
+      render(inline: 'Query not permitted') && return  if @ontology.nil? || @ontology.errors
+    end
+
+    response = helpers.ontology_sparql_query(params[:query], graph)
+
+    render inline:  response
+  end
 
   def index
     @users = LinkedData::Client::Models::User.all

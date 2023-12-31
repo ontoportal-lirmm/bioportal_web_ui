@@ -10,6 +10,7 @@ class OntologiesController < ApplicationController
   include MappingStatistics
   include OntologyUpdater
   include TurboHelper
+  include SparqlHelper
   include SubmissionFilter
 
   require 'multi_json'
@@ -22,7 +23,7 @@ class OntologiesController < ApplicationController
 
   before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
   before_action :submission_metadata, only: [:show]
-  KNOWN_PAGES = Set.new(["terms", "classes", "mappings", "notes", "widgets", "summary", "properties", "instances", "schemes", "collections"])
+  KNOWN_PAGES = Set.new(["terms", "classes", "mappings", "notes", "widgets", "summary", "properties", "instances", "schemes", "collections", "sparql"])
   EXTERNAL_MAPPINGS_GRAPH = "http://data.bioontology.org/metadata/ExternalMappings"
   INTERPORTAL_MAPPINGS_GRAPH = "http://data.bioontology.org/metadata/InterportalMappings"
 
@@ -208,6 +209,14 @@ class OntologiesController < ApplicationController
     end
   end
 
+
+  def sparql
+    if request.xhr?
+      render partial: 'ontologies/sections/sparql', layout: false
+    else
+      render partial: 'ontologies/sections/sparql', layout: 'ontology_viewer'
+    end
+  end
   # GET /ontologies/ACRONYM
   # GET /ontologies/1.xml
   def show
@@ -240,7 +249,7 @@ class OntologiesController < ApplicationController
 
     # Note: find_by_acronym includes ontology views
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-    ontology_not_found(params[:ontology]) if @ontology.nil?
+    ontology_not_found(params[:ontology]) if @ontology.nil? || @ontology.errors
 
     # Handle the case where an ontology is converted to summary only.
     # See: https://github.com/ncbo/bioportal_web_ui/issues/133.
@@ -288,6 +297,8 @@ class OntologiesController < ApplicationController
       self.schemes
     when 'collections'
       self.collections
+    when 'sparql'
+      self.sparql
     else
       self.summary
     end
