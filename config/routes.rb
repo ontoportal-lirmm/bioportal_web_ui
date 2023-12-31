@@ -102,6 +102,7 @@ Rails.application.routes.draw do
   get '/site_config' => 'home#site_config'
   post '/annotator_recommender_form' => 'home#annotator_recommender_form'
   match '/visits', to: 'visits#index', via: :get
+  get 'statistics/index'
 
   # Error pages
   match "/404", to: "errors#not_found", via: :all

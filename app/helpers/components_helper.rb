@@ -1,16 +1,18 @@
 module ComponentsHelper
 
-  def chart_component(title: '', type: , labels: , datasets: , index_axis: 'x')
+  def chart_component(title: '', type: , labels: , datasets: , index_axis: 'x', show_legend: false)
       data =  {
         controller: 'load-chart',
         'load-chart-type-value': type,
         'load-chart-title-value': title,
         'load-chart-labels-value': labels,
         'load-chart-index-axis-value': index_axis,
-        'load-chart-datasets-value': datasets
+        'load-chart-datasets-value': datasets,
+        'load-chart-legend-value': show_legend,
       }
       content_tag(:canvas, nil, data: data)
   end
+
   def info_tooltip(text)
     render Display::InfoTooltipComponent.new(text: text)
   end
