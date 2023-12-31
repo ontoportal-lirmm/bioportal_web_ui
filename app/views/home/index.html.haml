@@ -165,6 +165,9 @@
             %h4
               = format_number_abbreviated(@users_count)
             %p Users
+      .home-statistics-link.justify-content-end
+        = link_to 'See details','/statistics', target: "_blank"
+
   .home-section
     .home-statistics-container
       .home-support-title
