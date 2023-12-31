@@ -149,7 +149,7 @@ module OntologiesHelper
 
   def metadata_filled_count(submission = @submission_latest, ontology = @ontology)
     return if submission.nil?
-    
+
     reject = [:csvDump, :dataDump, :openSearchDescription, :metrics, :prefLabelProperty, :definitionProperty,
               :definitionProperty, :synonymProperty, :authorProperty, :hierarchyProperty, :obsoleteProperty,
               :ontology, :endpoint, :submissionId, :submissionStatus, :uploadFilePath, :context, :links, :ontology]
@@ -384,18 +384,23 @@ module OntologiesHelper
   end
 
   def visits_chart_dataset(visits_data)
-    [
+    visits_chart_dataset_array({'Visits': visits_data})
+  end
+
+  def visits_chart_dataset_array(visits_data, fill: true)
+    visits_data = visits_data.map do |label , x|
       {
-        label: 'Visits',
-        data: visits_data,
+        label: label,
+        data: x,
         borderWidth: 2,
         borderRadius: 5,
         borderSkipped: false,
         cubicInterpolationMode: 'monotone',
         tension: 0.4,
-        fill: true
+        fill: fill
       }
-    ].to_json
+    end
+    visits_data.to_json
   end
 
   def submission_ready?(submission)
