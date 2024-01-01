@@ -6,34 +6,27 @@
 //
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
-//
+// Jquery 2 dependencies
 //= require jquery2
 //= require jquery-migrate-1.3.0.min
 //= require jquery_ujs
 //= require jquery-ui
+//= require jquery.readyselector
+// popper is required by bootstrap 4
 //= require popper
 //= require bootstrap-sprockets
-//
+// Other
 //= require jquery.blockUI
 //= require facebox
 //= require thickbox
-//= require fg.menu
-//= require jquery.tools.min
 //= require jquery.dataTables
-//= require dataTables.fixedHeader
 //= require chosen.jquery
-//= require ajax-chosen
-//= require jquery.cookie
 //= require autocomplete
-//= require jquery.hoverIntent
 //= require jquery.simple.tree
-//= require jquery.scrollTo-1.4.0-min
-//= require jquery.rating.pack
+// History is used in search and useHistory files
 //= require history/jquery.history
+// Alertify is used the admin page
 //= require alertify
-//= require jquery.tooltip
-//= require Chart.min
-//= require select2 
-//= require jquery.readyselector
+// can be removed used only in the ontology bridge form
 //= require trumbowyg
 
