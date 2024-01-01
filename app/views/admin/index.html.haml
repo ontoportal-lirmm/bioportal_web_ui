@@ -13,7 +13,7 @@
 %div
   %div.mx-1
     - sections = ['Analytics', 'Site Administration','Ontology Administration',  'Licensing', 'Users', 'Metadata Administration', 'Groups', 'Categories', 'Persons & Organizations', 'SPARQL']
-    - selected = params[:section] || sections.first
+    - selected = params[:section] || sections.first.downcase
     = render TabsContainerComponent.new do |t|
       - sections.each do |section_title|
         - t.item(title: section_title,
