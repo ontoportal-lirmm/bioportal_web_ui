@@ -15,7 +15,6 @@
 // popper is required by bootstrap 4
 //= require popper
 //= require bootstrap-sprockets
-//
 //= require jquery.blockUI
 //= require facebox
 //= require thickbox
@@ -28,7 +27,6 @@
 //= require autocomplete
 //= require jquery.hoverIntent
 //= require jquery.simple.tree
-//= require jquery.scrollTo-1.4.0-min
 //= require jquery.rating.pack
 //= require history/jquery.history
 //= require alertify
