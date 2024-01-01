@@ -31,7 +31,6 @@
 //= require jquery.rating.pack
 //= require history/jquery.history
 //= require alertify
-//= require jquery.tooltip
 //= require Chart.min
 //= require jquery.readyselector
 //= require trumbowyg
