@@ -19,7 +19,10 @@ export default class extends Controller {
         this.simpleTreeCollection.ready(() => {
             let activeElem = this.element.querySelector('a.active')
             if (activeElem) {
-                $(this.element).scrollTo($(activeElem))
+                this.element.scrollTo({
+                    top: activeElem.offsetTop,
+                    behavior: 'smooth'
+                });
 
                 if (this.autoClickValue) {
                     activeElem.click()

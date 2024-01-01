@@ -496,21 +496,26 @@ function generateParameters() {
 jQuery(document).ready(function() {
   "use strict";
   jQuery("#annotator_button").click(get_annotations);
-  
-  jQuery("#semantic_types").select2({
-    allowClear: true,
-    dropdownParent: jQuery(".annotatorplus form")
+
+
+  jQuery("#semantic_types").chosen({
+    allow_single_deselect: true,
+    width: '100%', // Adjust the width as needed
+    dropdown_parent: jQuery(".annotatorplus form")
   });
 
-  jQuery("#semantic_groups").select2({
-    allowClear: true,
-    dropdownParent: jQuery(".annotatorplus form")
+  jQuery("#semantic_groups").chosen({
+    allow_single_deselect: true,
+    width: '100%', // Adjust the width as needed
+    dropdown_parent: jQuery(".annotatorplus form")
   });
 
-  jQuery("#ontology_ontologyId").select2({
-    allowClear: true,
-    dropdownParent: jQuery(".annotatorplus form")
+  jQuery("#ontology_ontologyId").chosen({
+    allow_single_deselect: true,
+    width: '100%', // Adjust the width as needed
+    dropdown_parent: jQuery(".annotatorplus form")
   });
+
 
   jQuery("#insert_text_link").click(insertSampleText);
 

@@ -13,10 +13,9 @@ gem 'terser' #ugilifer replacent
 # gem 'duktape'
 
 gem 'bootstrap', '~> 4.2.0'
-gem 'chart-js-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'select2-rails'
+
 
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]

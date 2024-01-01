@@ -40,8 +40,6 @@ Rails.application.routes.draw do
   resources :mappings
   get 'mappings/:id', to: 'mappings#show', constraints: { id: /.+/ }
 
-  resources :margin_notes
-
   resources :concepts
 
   get 'ontologies/:ontology_id/concepts', to: 'concepts#show_concept'
