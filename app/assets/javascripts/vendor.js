@@ -15,20 +15,17 @@
 // popper is required by bootstrap 4
 //= require popper
 //= require bootstrap-sprockets
+// Other
 //= require jquery.blockUI
 //= require facebox
 //= require thickbox
-//= require jquery.tools.min
 //= require jquery.dataTables
-//= require dataTables.fixedHeader
 //= require chosen.jquery
-//= require ajax-chosen
-//= require jquery.cookie
 //= require autocomplete
-//= require jquery.hoverIntent
 //= require jquery.simple.tree
-//= require jquery.rating.pack
+// History is used in search and useHistory files
 //= require history/jquery.history
+// Alertify is used the admin page
 //= require alertify
 // can be removed used only in the ontology bridge form
 //= require trumbowyg

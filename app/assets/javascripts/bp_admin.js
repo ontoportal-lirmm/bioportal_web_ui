@@ -1,9 +1,3 @@
-/**
- * Created by mdorf on 3/27/15.
- * Updated by Syphax.Bouazzouni on 28/04/21 , users admin part
- */
-
-
 var DUMMY_ONTOLOGY = "DUMMY_ONT";
 if (window.BP_CONFIG === undefined) {
   window.BP_CONFIG = jQuery(document).data().bp.config;
@@ -663,8 +657,6 @@ function displayOntologies(data, ontology) {
           _showStatusMessages([], [json.errors], [], false);
         }
         setDateGenerated(json);
-        // Keep header at top of table even when scrolling
-        // new jQuery.fn.dataTable.FixedHeader(ontTable);
       },
       "columnDefs": [
         {
