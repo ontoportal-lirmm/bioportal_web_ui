@@ -6,11 +6,13 @@
 //
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
-//
+// Jquery 2 dependencies
 //= require jquery2
 //= require jquery-migrate-1.3.0.min
 //= require jquery_ujs
 //= require jquery-ui
+//= require jquery.readyselector
+// popper is required by bootstrap 4
 //= require popper
 //= require bootstrap-sprockets
 //
@@ -30,7 +32,6 @@
 //= require jquery.rating.pack
 //= require history/jquery.history
 //= require alertify
-//= require Chart.min
-//= require jquery.readyselector
+// can be removed used only in the ontology bridge form
 //= require trumbowyg
 
