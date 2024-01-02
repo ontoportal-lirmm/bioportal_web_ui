@@ -174,12 +174,15 @@ module AgentHelper
     end
     person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
     organization_icon = inline_svg_tag 'icons/organization.svg', class: 'agent-type-icon'
+    ror_icon = inline_svg_tag 'icons/ror.svg', class: 'agent-dependency-icon ror'
+    orcid_icon = inline_svg_tag 'icons/orcid.svg', class: 'agent-dependency-icon'
     agent_icon = type == "organization" ? organization_icon : person_icon
-    tooltip_html = generate_agent_tooltip(agent_icon, name, email, identifiers, affiliations)
+    identifiers_icon = type == "organization" ? ror_icon : orcid_icon
+    tooltip_html = generate_agent_tooltip(agent_icon, name, email, identifiers, affiliations, identifiers_icon)
     return tooltip_html
   end
 
-  def generate_agent_tooltip(agent_icon, name, email = nil, identifiers = nil, affiliations = nil)
+  def generate_agent_tooltip(agent_icon, name, email = nil, identifiers = nil, affiliations = nil, identifiers_icon = nil)
     content_tag(:div, class: 'agent-container') do
       content_tag(:div, agent_icon, class: 'agent-circle') +
       content_tag(:div) do
@@ -187,7 +190,7 @@ module AgentHelper
         content_tag(:div, email || '', class: 'agent-dependency') +
         unless identifiers.to_s.empty?
           content_tag(:div, class: 'agent-dependency') do
-            inline_svg_tag('icons/orcid.svg', class: 'agent-dependency-icon') +
+            identifiers_icon +
             identifiers || ''
           end
         end +
