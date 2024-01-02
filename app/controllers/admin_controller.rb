@@ -197,10 +197,7 @@ class AdminController < ApplicationController
     rescue JSON::ParserError => e
       response[:errors] = "Error parsing JSON response - #{e.class}: #{e.message}"
     rescue Exception => e
-      binding.pry
       response[:errors] = "Problem synchronizing groups - #{e.class}: #{e.message}"
-      # Log the exception if needed
-      # Rails.logger.error "#{e.class}: #{e.message}\n#{e.backtrace.join("\n\t")}"
     end
   
     render json: response

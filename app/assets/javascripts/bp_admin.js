@@ -930,21 +930,6 @@ jQuery(".admin.index").ready(function() {
     SynchronizeGroups.act();
   });
 
-  jQuery(document).on("reveal.facebox", function (event) {
-    jQuery("#facebox form[data-collection=groups]").validate({
-      errorClass: "groupFormError",
-      errorElement: "div",
-      rules: {
-        "group[name]": "required",
-        "group[acronym]": "required",
-      },
-      messages: {
-        "group[name]": "Please enter a name",
-        "group[acronym]": "Please enter an acronym",
-      },
-    });
-
-  });
 
   jQuery('#group_new_action').on('click', function (event) {
     jQuery.facebox({
