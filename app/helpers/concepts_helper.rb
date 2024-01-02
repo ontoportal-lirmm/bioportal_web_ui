@@ -1,5 +1,31 @@
 # frozen_string_literal: true
 module ConceptsHelper
+
+  def concept_link(acronym, child, language)
+    child.id.eql?('bp_fake_root') ? '#' : "/ontologies/#{acronym}/concepts/?id=#{CGI.escape(child.id)}&language=#{language}"
+  end
+
+  def concept_children_link(acronym, child, language, concept_schemes)
+    "/ajax_concepts/#{acronym}/?conceptid=#{CGI.escape(child.id)}&concept_schemes=#{concept_schemes.join(',')}&language=#{language}"
+  end
+
+  def concept_tree_data(acronym, child, language, concept_schemes)
+    href = concept_link(acronym, child, language)
+    children_link = concept_children_link(acronym, child, language, concept_schemes)
+    data = {
+      conceptid: child.id,
+      'active-collections-value': child.isInActiveCollection || [],
+      'collections-value': child.memberOf || [],
+      'skos-collection-colors-target': 'collection',
+    }
+    [children_link, data, href]
+  end
+  def concepts_tree_component(root, selected_concept, acronym, concept_schemes, language, sub_tree: false, id: nil, auto_click: false)
+    tree_component(root, selected_concept, target_frame: 'concept_show', sub_tree: sub_tree, id: id, auto_click: auto_click) do |child|
+      concept_tree_data(acronym, child, language, concept_schemes)
+    end
+  end
+
   def exclude_relation?(relation_to_check, ontology = nil)
     excluded_relations = %w[type rdf:type [R] SuperClass InstanceCount]
 
@@ -39,7 +65,7 @@ module ConceptsHelper
   def default_sub_menu?
     !sub_menu_active?('list') && !sub_menu_active?('date')
   end
-  
+
   def default_sub_menu_class
     "active show" if default_sub_menu?
   end

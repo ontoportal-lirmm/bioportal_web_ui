@@ -25,6 +25,8 @@ class ConceptsController < ApplicationController
     @instances_concept_id = @concept.id
 
     concept_not_found(params[:id]) if @concept.nil?
+    @notes = @concept.explore.notes
+
     render :partial => 'show'
   end
 
@@ -54,10 +56,7 @@ class ConceptsController < ApplicationController
     render turbo_stream: [
       replace(helpers.child_id(@concept) + '_open_link') { helpers.tree_close_icon },
       replace(helpers.child_id(@concept) + '_childs') do
-        render_to_string(TreeViewComponent.new('',  @ontology,
-                                               Array(@schemes).join(','), request_lang,
-                                               @concept, @concept,
-                                               sub_tree: true), layout: nil)
+        helpers.concepts_tree_component(@concept, @concept, @ontology.acronym, Array(@schemes), request_lang, sub_tree: true)
       end
     ]
   end
@@ -100,11 +99,9 @@ class ConceptsController < ApplicationController
       ontology_not_found(params[:ontology])
     else
       get_class(params) #application_controller
-      render TreeViewComponent.new('concepts_tree_view',  @ontology,
-                                   params[:concept_schemes], request_lang,
-                                   @root, @concept,
-                                   auto_click: params[:auto_click] || true, data: {"turbo-frame-target": 'frame'}
-      ), layout: nil
+      render inline: helpers.concepts_tree_component(@root, @concept,
+                                      @ontology.acronym, params[:concept_schemes].split(','), request_lang,
+                                      id: 'concepts_tree_view', auto_click: params[:auto_click] || true)
     end
   end
 
@@ -191,7 +188,7 @@ class ConceptsController < ApplicationController
 
 
 
-  
+
   def filter_concept_with_no_date(concepts)
     concepts.filter { |c| !concept_date(c).nil?}
   end
