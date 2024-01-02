@@ -2,8 +2,6 @@
 
 class TreeLinkComponent < ViewComponent::Base
   include MultiLanguagesHelper
-  include ComponentsHelper
-
   def initialize(child:, href:, children_href: , selected: false , data: {}, muted: false, target_frame: nil)
     @child = child
     @active_style = selected ? 'active' : ''

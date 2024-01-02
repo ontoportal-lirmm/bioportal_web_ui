@@ -10,7 +10,6 @@ class PropertiesController < ApplicationController
   def show_tree
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     ontology_not_found(params[:ontology]) if @ontology.nil?
-    @ontology.explore
     @root = OpenStruct.new({children: property_roots(params[:ontology])})
     if params[:propertyid]
         @property = get_property(params[:propertyid])

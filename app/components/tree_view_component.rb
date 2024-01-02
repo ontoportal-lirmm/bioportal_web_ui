@@ -2,7 +2,7 @@
 
 class TreeViewComponent < ViewComponent::Base
   include Turbo::FramesHelper
-  include ComponentsHelper
+
 
   renders_many :children, TreeLinkComponent
 

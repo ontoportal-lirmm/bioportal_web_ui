@@ -21,7 +21,6 @@
 //= require jquery.dataTables
 //= require chosen.jquery
 //= require autocomplete
-//= require jquery.simple.tree
 // Alertify is used the admin page
 //= require alertify
 //= require jquery.readyselector
