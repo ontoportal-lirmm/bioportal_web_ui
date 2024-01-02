@@ -556,9 +556,13 @@ tr.mainresource td {
   margin-bottom: 1em;
 }
 
-.feedback ul li, .enable-lists ul li {
+.enable-lists ul li {
   list-style-position: outside;
   list-style-type: square;
+  margin-left: 1.5em;
+}
+.feedback ul li{
+  list-style-position: outside;
   margin-left: 1.5em;
 }
 
