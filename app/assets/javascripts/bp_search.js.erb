@@ -1,23 +1,20 @@
 "use strict";
 
-// History and navigation management
-(function(window, undefined) {
-    // Establish Variables
-    var History = window.History;
-    // History.debug.enable = true;
-
-    // Abort it not right page
-    var path = currentPathArray();
+(() => {
+    // Abort if not the right page
+    const path = currentPathArray();
     if (path[0] !== "search") {
-      return;
+        return;
     }
 
-    // Bind to State Change
-    History.Adapter.bind(window, 'statechange', function() {
-      var state = History.getState();
-      autoSearch();
-    });
-}(window));
+    // Function to get current path array
+    function currentPathArray() {
+        // Implement the logic to get the current path array
+        // Replace the following line with your actual logic
+        return window.location.pathname.split('/');
+    }
+
+})();
 
 var showAdditionalResults = function(obj, resultSelector) {
     var ontAcronym = jQuery(obj).attr("data-bp_ont");
@@ -174,7 +171,9 @@ jQuery(document).ready(function() {
     // Perform search
     jQuery("#search_button").click(function(event) {
         event.preventDefault();
-        History.pushState(currentSearchParams(), document.title, "/search?" + objToQueryString(currentSearchParams()));
+        history.pushState(currentSearchParams(), document.title, "/search?" + objToQueryString(currentSearchParams()));
+        var state = history.state || {};
+        autoSearch()
     });
 
     // Search on enter

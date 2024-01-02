@@ -22,11 +22,9 @@
 //= require chosen.jquery
 //= require autocomplete
 //= require jquery.simple.tree
-// History is used in search and useHistory files
-//= require history/jquery.history
 // Alertify is used the admin page
 //= require alertify
-// can be removed used only in the ontology bridge form
 //= require jquery.readyselector
+// can be removed used only in the ontology bridge form
 //= require trumbowyg
 

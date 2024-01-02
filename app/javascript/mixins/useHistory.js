@@ -4,15 +4,17 @@ export class HistoryService {
 
 
     constructor() {
-        this.history = History
+        this.history = window.history
+        this.state  = {data: {}}
     }
 
     pushState(data, title, url) {
         this.history.pushState(data, title, url)
+        this.state = {data: data}
     }
 
     getState() {
-        return this.history.getState()
+        return this.state
     }
 
     updateHistory(currentUrl, newData) {
