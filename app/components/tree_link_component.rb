@@ -4,20 +4,14 @@ class TreeLinkComponent < ViewComponent::Base
   include MultiLanguagesHelper
   include ComponentsHelper
 
-  def initialize(child:, ontology_acronym:, active_style: '', node: nil, concept_schemes: nil, language:)
+  def initialize(child:, href:, children_href: , selected_child: , data: {}, muted: false, target_frame: nil)
     @child = child
-    @acronym = ontology_acronym
-    @active_style = active_style
-    @node = node
-
-    @language = language
-
+    @selected_child = selected_child
+    @active_style = child.id.eql?(selected_child&.id) && 'active'
     #@icons = child.relation_icon(node)
-    @muted_style = child.isInActiveScheme&.empty? ? 'text-muted' : ''
-    @href = ontology_acronym.blank? ? '#' : "/ontologies/#{child.explore.ontology.acronym}/concepts/?id=#{CGI.escape(child.id)}&language=#{language}"
-
-    @concept_schemes = concept_schemes&.map { |x| CGI.escape(x) }&.join(',') rescue binding.pry
-
+    @muted_style = muted ? 'text-muted' : ''
+    @href = href
+    @children_link = children_href
     if @child.prefLabel.nil?
       @pref_label_html = child.id.split('/').last
     else
@@ -25,7 +19,11 @@ class TreeLinkComponent < ViewComponent::Base
       pref_label_lang = pref_label_lang.to_s.upcase
       @tooltip = pref_label_lang.eql?("@NONE") ? "" : pref_label_lang
     end
+    @data ||= { controller: 'tooltip', 'tooltip-position-value': 'right', turbo: true, 'turbo-frame': target_frame, action: 'click->simple-tree#select'}
 
+    @data.merge!(data) do |_, old, new|
+      "#{old} #{new}"
+    end
   end
 
 
@@ -52,9 +50,6 @@ class TreeLinkComponent < ViewComponent::Base
     @child.id.eql?('bp_fake_root') ? 'bp_fake_root' : short_uuid
   end
 
-  def children_link(child, concept_schemes, language)
-    "/ajax_concepts/#{child.explore.ontology.acronym}/?conceptid=#{CGI.escape(child.id)}&concept_schemes=#{concept_schemes}&callback=children&language=#{language}"
-  end
 
   def open_children_link
     return unless @child.hasChildren
@@ -62,7 +57,7 @@ class TreeLinkComponent < ViewComponent::Base
       tree_close_icon
     else
       content_tag('turbo_frame', id: "#{child_id}_open_link") do
-        link_to children_link(@child, @concept_schemes, @language),
+        link_to @children_link,
                 data: { turbo: true, turbo_frame: "#{child_id + '_childs'}" } do
           content_tag(:i, nil, class: "fas fa-chevron-right")
         end
