@@ -1,17 +1,8 @@
 %turbo-frame{id: "#{@id}", **@html_options}
   = tree_container do
-    - @root.children.sort! { |a, b| (a.prefLabel || a.id).downcase <=> (b.prefLabel || b.id).downcase }
-    - @root.children.each do |child|
-      - active_style = child.id.eql?(@concept.id) ? "active" : ''
-      - acronym  = child.id.eql?('bp_fake_root') ? '' : @ontology.acronym
-
-      = tree_link_to_concept(child: child, ontology_acronym: acronym, active_style: active_style, node: @root, concept_schemes: @concept_schemes) do
-        - if child.hasChildren && !child.expanded?
-          = render TurboFrameComponent.new(id: "#{child_id(child)}_childs")
-        - elsif child.expanded?
-          %div{class: 'pl-2 tree-border-left'}
-            = render TreeViewComponent.new('', @ontology, @concept_schemes, @language, child, @concept, sub_tree: true, auto_click: @auto_click)
-
+    - children.each do |child|
+      = child
+    = content
 
 
 

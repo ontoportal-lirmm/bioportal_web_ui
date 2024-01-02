@@ -4,14 +4,10 @@ class TreeViewComponent < ViewComponent::Base
   include Turbo::FramesHelper
   include ComponentsHelper
 
-  def initialize(id, ontology, concept_schemes, language, root, concept, auto_click: false, sub_tree: false, **html_options)
+  renders_many :children, TreeLinkComponent
+
+  def initialize(id:, auto_click: false, sub_tree: false, **html_options)
     @id = id
-    @conceptid = concept.id
-    @concept_schemes = concept_schemes.is_a?(String) ? concept_schemes.split(',') : Array(concept_schemes)
-    @language = language
-    @ontology = ontology
-    @root = root
-    @concept = concept
     @auto_click = auto_click
     @html_options = html_options
     @sub_tree = sub_tree
@@ -29,7 +25,7 @@ class TreeViewComponent < ViewComponent::Base
     else
       content_tag(:div, class: 'tree_wrapper hide-if-loading') do
         content_tag(:ul, capture(&block), class: 'simpleTree root', data: { controller: 'simple-tree',
-                                                      'simple-tree': { 'auto-click-value': "#{auto_click?}" },
+                                                      'simple-tree-auto-click-value': "#{auto_click?}",
                                                       action: 'clicked->history#updateURL' })
       end
     end
