@@ -650,7 +650,7 @@ div.tree_error {
 }
 
 #bd ul.simpleTree li{
-  margin-left:-10px;
+  margin-left: 0px;
   padding: 5px 0 0 10px;
 }
 
@@ -683,7 +683,7 @@ div.tree_error {
 
   .tree-border-left{
     border-left: 2px dotted #eee;
-    margin-left: 6px;
+    margin-left: 2px;
   }
 }
 .simpleTree li {
