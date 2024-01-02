@@ -78,31 +78,40 @@ module SchemesHelper
     [schemes_labels, main_scheme, selected_scheme]
   end
 
-  def tree_link_to_schemes(schemes_labels, main_scheme_label, selected_scheme_id)
-    out = ''
+  def schemes_tree(schemes_labels, main_scheme_label, selected_scheme_id)
+    selected_scheme = nil
+    schemes = sorted_labels(schemes_labels).map do |s|
+      next nil unless main_scheme_label.nil? || s['prefLabel'] != main_scheme_label['prefLabel']
+      scheme = OpenStruct.new(s)
+      scheme.prefLabel = Array(get_scheme_label(s)).last
+      scheme.id = scheme['@id']
+      selected_scheme = scheme if  scheme.id.eql?(selected_scheme_id)
+      scheme
+    end.compact
 
-    sorted_labels(schemes_labels).each do |s|
-      next unless main_scheme_label.nil? || s['prefLabel'] != main_scheme_label['prefLabel']
 
-      out  << <<-EOS
-            <li class="doc">
-              #{link_to_scheme(s, selected_scheme_id)}
-            </li>
-      EOS
+    main_scheme = nil
+    if main_scheme_label.nil?
+      children = schemes
+    else
+      main_scheme = OpenStruct.new(main_scheme_label)
+      main_scheme.prefLabel = Array(get_scheme_label(main_scheme_label)).last
+      main_scheme.children = schemes
+      main_scheme.id = main_scheme['@id']
+      main_scheme['expanded?'] = true
+      main_scheme['hasChildren'] = true
+      children = [main_scheme]
     end
-    out
-  end
-  def link_to_scheme(scheme, selected_scheme_id)
-    pref_label_lang, pref_label_html = get_scheme_label(scheme)
-    tooltip  = pref_label_lang.to_s.eql?('@none') ? '' :  "data-controller='tooltip' data-tooltip-position-value='right' title='#{pref_label_lang.upcase}'"
-    <<-EOS
-          <a id="#{scheme['@id']}" href="#{scheme_path(scheme['@id'], request_lang)}" 
-            data-turbo="true" data-turbo-frame="scheme" data-schemeid="#{scheme['@id']}"
-           #{tooltip}
-            class="#{selected_scheme_id.eql?(scheme['@id']) ? 'active' : nil}">
-              #{pref_label_html}
-          </a>
-    EOS
+    root = OpenStruct.new
+    root.children = children
+    selected_scheme = selected_scheme || main_scheme || root.children.first
+
+
+    tree_component(root, selected_scheme, target_frame: 'scheme', auto_click: true) do |child|
+      href = scheme_path(child['@id'], request_lang) rescue  ''
+      data = { schemeid: (child['@id'] rescue '')}
+      ["#", data, href]
+    end
   end
 end
 
