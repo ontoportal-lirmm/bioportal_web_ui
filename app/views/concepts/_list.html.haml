@@ -5,9 +5,11 @@
                                     auto_click: @auto_click) do |c|
   - concepts = c.collection.sort_by{|concept| [concept.prefLabel&.capitalize || concept.id]}
   - if concepts && !concepts.empty?
-    = raw tree_link_to_concept(child: concepts.shift, ontology_acronym: @ontology.acronym, active_style: c.auto_click? ? 'active' : '')
     - concepts.each do  |concept|
-      = raw tree_link_to_concept(child: concept, ontology_acronym: @ontology.acronym, active_style: '')
+      - children_link, data, href = concept_tree_data(@ontology.acronym, concept, request_lang, [])
+      = render TreeLinkComponent.new(child: concept, href: href,
+          children_href: '#', selected: concept.id.eql?(concepts.first.id) && c.auto_click?,
+          target_frame: 'concept_show', data: data)
   - c.error do
     The Collection didn't define any member
 

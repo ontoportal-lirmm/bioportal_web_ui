@@ -105,22 +105,25 @@ module ConceptsHelper
     year.eql?(date.year) && month.eql?(date.strftime('%B'))
   end
 
-  def concepts_li_list(concepts)
+  def concepts_li_list(concepts, auto_click: false)
     out = ''
     concepts.each do |concept|
-      out += tree_link_to_concept(child: concept, ontology_acronym: @ontology.acronym, active_style: '')
+      children_link, data, href = concept_tree_data(@ontology.acronym, concept, request_lang, [])
+      out += render TreeLinkComponent.new(child: concept, href: href,
+                                          children_href: '#', selected: concept.id.eql?(concepts.first.id) && auto_click,
+                                          target_frame: 'concept_show', data: data)
     end
     out
   end
 
-  def render_concepts_by_dates
-    return if  @concepts_year_month.empty?
+  def render_concepts_by_dates(auto_click: false)
+    return if @concepts_year_month.empty?
 
     first_year, first_month_concepts = @concepts_year_month.shift
     first_month, first_concepts = first_month_concepts.shift
     out = ''
     if same_period?(first_year, first_month, @last_date)
-      out += "<ul>#{concepts_li_list(first_concepts)}</ul>"
+      out += "<ul>#{concepts_li_list(first_concepts, auto_click: auto_click)}</ul>"
     else
       tmp = {}
       tmp[first_month] = first_concepts
@@ -133,7 +136,7 @@ module ConceptsHelper
     @concepts_year_month.each do |year, month_concepts|
       month_concepts.each do |month, concepts|
         out += "<ul> #{month + ' ' + year.to_s}"
-        out += concepts_li_list(concepts)
+        out += concepts_li_list(concepts, auto_click: auto_click)
         out += "</ul>"
       end
     end
