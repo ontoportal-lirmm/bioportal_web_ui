@@ -165,5 +165,25 @@ export default class extends Controller {
         // initialize your network!
         const network = new Network(container, data, options);
         network.fit();
+        // Add a button click event listener
+        var fullscreenButton = document.getElementById('fullscreen-button');
+        fullscreenButton.addEventListener('click', function () {
+            toggleFullScreen(container);
+        });
+
+        // Function to toggle full screen mode
+        function toggleFullScreen(element) {
+            var networkContainer = document.getElementById('networkContainer');
+
+            // check to existance of element
+            if (networkContainer) {
+                var parentElement = networkContainer.parentNode;
+
+                // add style background: 
+                parentElement.style.backgroundColor = 'white';
+            }
+            networkContainer.parentNode.classList.toggle('active-fullscreen');
+            //element.children[0].canvas.classList.toggle('active-fullscreen')
+        }
     }
 }
