@@ -11,7 +11,6 @@
 //= require jquery-migrate-1.3.0.min
 //= require jquery_ujs
 //= require jquery-ui
-//= require jquery.readyselector
 // popper is required by bootstrap 4
 //= require popper
 //= require bootstrap-sprockets
@@ -28,5 +27,6 @@
 // Alertify is used the admin page
 //= require alertify
 // can be removed used only in the ontology bridge form
+//= require jquery.readyselector
 //= require trumbowyg
 
