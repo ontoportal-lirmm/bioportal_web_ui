@@ -22,8 +22,22 @@
     font-size: 16px;
     font-weight: 400;
     color: #767676;
-    margin-bottom: 3px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
 }
 .agent-type-icon path{
     fill: var(--primary-color)
+}
+.agent-dependency-icon{
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+.agent-dependency-icon.ror{
+    width: 30px;
+    height: 30px;
+}
+.agent-dependency-icon path{
+    fill: #C0C0C0
 }
