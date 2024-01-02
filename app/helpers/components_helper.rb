@@ -1,12 +1,25 @@
 module ComponentsHelper
 
-  def tree_link_to_concept(child:, ontology_acronym:, active_style:, node: nil, concept_schemes: nil, &block)
-    render TreeLinkComponent.new(child: child, ontology_acronym: ontology_acronym,
-                                 active_style: active_style,
-                                 node: node,
-                                 concept_schemes: concept_schemes, language: @language
-    ) do
-      capture(&block) if block_given?
+  def tree_component(root, selected, target_frame:, sub_tree: false, id: nil, auto_click: false, &child_data_generator)
+    root.children.sort! { |a, b| (a.prefLabel || a.id).downcase <=> (b.prefLabel || b.id).downcase }
+
+    render TreeViewComponent.new(id: id, sub_tree: sub_tree, auto_click: auto_click) do |tree_child|
+      root.children.each do |child|
+        children_link, data, href = child_data_generator.call(child)
+
+        if children_link.nil? || data.nil? || href.nil?
+          raise ArgumentError, "child_data_generator block did not provide all the child arguements"
+        end
+
+        tree_child.child(child: child, href: href,
+                         children_href: children_link, selected: child.id.eql?(selected&.id),
+                         muted: child.isInActiveScheme&.empty?,
+                         target_frame: target_frame,
+                         data: data) do
+          tree_component(child, selected, target_frame: target_frame, sub_tree: true,
+                         id: id, auto_click: auto_click, &child_data_generator)
+        end
+      end
     end
   end
 

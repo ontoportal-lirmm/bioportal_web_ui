@@ -4,10 +4,9 @@ class TreeLinkComponent < ViewComponent::Base
   include MultiLanguagesHelper
   include ComponentsHelper
 
-  def initialize(child:, href:, children_href: , selected_child: , data: {}, muted: false, target_frame: nil)
+  def initialize(child:, href:, children_href: , selected: false , data: {}, muted: false, target_frame: nil)
     @child = child
-    @selected_child = selected_child
-    @active_style = child.id.eql?(selected_child&.id) && 'active'
+    @active_style = selected ? 'active' : ''
     #@icons = child.relation_icon(node)
     @muted_style = muted ? 'text-muted' : ''
     @href = href
@@ -43,7 +42,7 @@ class TreeLinkComponent < ViewComponent::Base
   end
 
   def border_left
-    !@child.hasChildren && 'pl-3 tree-border-left'
+    !@child.hasChildren  ?  'pl-3 tree-border-left' :  ''
   end
 
   def li_id
