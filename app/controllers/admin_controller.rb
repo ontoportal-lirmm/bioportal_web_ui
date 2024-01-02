@@ -9,6 +9,7 @@ class AdminController < ApplicationController
   ONTOLOGY_URL = lambda { |acronym| "#{ADMIN_URL}ontologies/#{acronym}" }
   PARSE_LOG_URL = lambda { |acronym| "#{ONTOLOGY_URL.call(acronym)}/log" }
   REPORT_NEVER_GENERATED = "NEVER GENERATED"
+  GROUPS_SYNCHRONIZE_URL = "#{LinkedData::Client.settings.rest_url}/slices/synchronize_groups"
 
 
   def sparql_endpoint
@@ -179,6 +180,29 @@ class AdminController < ApplicationController
     end
     render :json => response
   end
+
+  def synchronize_groups
+    response = {}
+  
+    begin
+      response_raw = LinkedData::Client::HTTP.get(GROUPS_SYNCHRONIZE_URL, params, raw: true)
+
+      response_json = JSON.parse(response_raw, symbolize_names: true)
+
+      if !response_json.is_a?(Array) && response_json[:errors]
+        _process_errors(response_json[:errors], response, true)
+      else
+        response[:success] = "Synchronization of groups started successfully"
+      end
+    rescue JSON::ParserError => e
+      response[:errors] = "Error parsing JSON response - #{e.class}: #{e.message}"
+    rescue Exception => e
+      response[:errors] = "Problem synchronizing groups - #{e.class}: #{e.message}"
+    end
+  
+    render json: response
+  end
+  
 
   def process_ontologies
     _process_ontologies('enqued for processing', 'processing', :_process_ontology)

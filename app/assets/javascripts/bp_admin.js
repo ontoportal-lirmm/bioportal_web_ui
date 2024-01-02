@@ -885,6 +885,9 @@ jQuery(".admin.index").ready(function() {
       <a class="link_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" href="javascript:;" id="group_admin_action_submit">
         <span class="ui-button-text">Go</span>
       </a>
+      <a class="link_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" href="javascript:;" id="group_admin_action_synchronize">
+        <span class="ui-button-text">Synchronize groups</span>
+      </a>
     </span>`);
 
   jQuery('#group_admin_action_submit').on('click', function(event) {
@@ -901,6 +904,32 @@ jQuery(".admin.index").ready(function() {
           break;
       }
   });
+
+  function SynchronizeGroups() {
+    AjaxAction.call(this, "GET", "SYNCHRONIZE GROUPS REPORT", "synchronize_groups", true);
+    var msg = "Synchronizing groups with slices";
+    this.setConfirmMsg(msg);
+  }
+
+  SynchronizeGroups.prototype = Object.create(AjaxAction.prototype);
+  SynchronizeGroups.prototype.constructor = SynchronizeGroups;
+
+  SynchronizeGroups.prototype.onSuccessAction = function(data) {
+    _clearStatusMessages();
+
+    console.log("Groups synchronized successfully!");
+    this.showStatusMessages([data.success], [], [], true);
+  };
+
+  SynchronizeGroups.act = function() {
+    new SynchronizeGroups().ajaxCall();
+  };
+
+  // Gestion de l'événement pour le bouton "Synchronize groups"
+  jQuery('#group_admin_action_synchronize').click(function() {
+    SynchronizeGroups.act();
+  });
+
 
   jQuery('#group_new_action').on('click', function (event) {
     jQuery.facebox({
