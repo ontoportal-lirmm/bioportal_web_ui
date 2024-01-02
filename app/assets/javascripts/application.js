@@ -19,7 +19,6 @@
 //= require bp_mappings
 //= require bp_admin
 //= require bp_recommender
-//= require bp_property_tree
 //= require concepts
 //= require_tree ./helpers
 //= require_tree ./components
