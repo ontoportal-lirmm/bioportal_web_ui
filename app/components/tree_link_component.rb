@@ -11,10 +11,11 @@ class TreeLinkComponent < ViewComponent::Base
     @muted_style = muted ? 'text-muted' : ''
     @href = href
     @children_link = children_href
-    if @child.prefLabel.nil?
+    label = @child.prefLabel rescue @child.id
+    if label.nil?
       @pref_label_html = child.id.split('/').last
     else
-      pref_label_lang, @pref_label_html = select_language_label(@child.prefLabel)
+      pref_label_lang, @pref_label_html = select_language_label(label)
       pref_label_lang = pref_label_lang.to_s.upcase
       @tooltip = pref_label_lang.eql?("@NONE") ? "" : pref_label_lang
     end

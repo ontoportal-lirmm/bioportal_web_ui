@@ -45,9 +45,9 @@ class ConceptsController < ApplicationController
 
     # Get the latest 'ready' submission, or fallback to any latest submission
     # TODO: change the logic here if the fallback will crash the visualization
-      @submission = get_ontology_submission_ready(@ontology)  # application_controller
+    @submission = get_ontology_submission_ready(@ontology)  # application_controller
 
-      @concept = @ontology.explore.single_class({full: true}, params[:id])
+    @concept = @ontology.explore.single_class({full: true}, params[:id])
     concept_not_found(params[:id]) if @concept.nil?
     @schemes = params[:concept_schemes].split(',')
 
@@ -100,7 +100,7 @@ class ConceptsController < ApplicationController
     else
       get_class(params) #application_controller
       render inline: helpers.concepts_tree_component(@root, @concept,
-                                      @ontology.acronym, params[:concept_schemes].split(','), request_lang,
+                                      @ontology.acronym, params[:concept_schemes]&.split(','), request_lang,
                                       id: 'concepts_tree_view', auto_click: params[:auto_click] || true)
     end
   end

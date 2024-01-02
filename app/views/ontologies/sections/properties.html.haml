@@ -2,7 +2,7 @@
   %div.ont-properties{data: {controller: 'container-splitter turbo-frame', 'turbo-frame': {
       'url-value': "/ontologies/#{@ontology.acronym}/properties/show"
       }}}
-    %div#propTree{data: {'container-splitter-target': 'container', action: 'change->turbo-frame#updateFrame'}}
+    %div#propTree.card.pt-2.sidebar{data: {'container-splitter-target': 'container', action: 'change->turbo-frame#updateFrame'}}
       = render partial: 'properties/properties_tree'
     %div#prop_contents.pl-3{data: {'container-splitter-target': 'container'}}
       = render partial: 'properties/show' 
