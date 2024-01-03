@@ -11,7 +11,6 @@
 //= require jquery-migrate-1.3.0.min
 //= require jquery_ujs
 //= require jquery-ui
-//= require jquery.readyselector
 // popper is required by bootstrap 4
 //= require popper
 //= require bootstrap-sprockets
@@ -22,11 +21,9 @@
 //= require jquery.dataTables
 //= require chosen.jquery
 //= require autocomplete
-//= require jquery.simple.tree
-// History is used in search and useHistory files
-//= require history/jquery.history
 // Alertify is used the admin page
 //= require alertify
+//= require jquery.readyselector
 // can be removed used only in the ontology bridge form
 //= require trumbowyg
 

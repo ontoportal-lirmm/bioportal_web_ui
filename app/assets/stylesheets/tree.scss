@@ -321,3 +321,7 @@ div.tree_error {
     -webkit-border-radius: 0;
     border-radius: 0;
 }
+
+li.open > i.fa-chevron-down {
+  margin-left: -4px;
+}

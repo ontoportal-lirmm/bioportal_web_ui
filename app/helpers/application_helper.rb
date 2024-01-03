@@ -166,82 +166,8 @@ module ApplicationHelper
     end
   end
 
-  def draw_tree(root, acronym, id = nil, concept_schemes = nil)
-    id = root.children.first.id if id.nil?
-
-    # TODO: handle tree view for obsolete classes, e.g. 'http://purl.obolibrary.org/obo/GO_0030400'
-    raw build_tree(root, '', id, acronym, concept_schemes: concept_schemes)
-  end
-
-  def build_tree(node, string, id, acronym, concept_schemes: nil)
-
-    return string if node.children.nil? || node.children.empty?
-
-    node.children.sort! { |a, b| (main_language_label(a.prefLabel) || a.id).downcase <=> (main_language_label(a.prefLabel) || b.id).downcase }
-    node.children.each do |child|
-      active_style = child.id.eql?(id) ? "active" : ''
-
-      # This fake root will be present at the root of "flat" ontologies, we need to keep the id intact
-
-      if child.id.eql?('bp_fake_root')
-        string << tree_link_to_concept(child: child, ontology_acronym: acronym,
-                                       active_style: active_style, node: node, skos: !concept_schemes.nil?)
-      else
-        string << tree_link_to_concept(child: child, ontology_acronym: acronym,
-                                       active_style: active_style, node: node, skos: !concept_schemes.nil?)
-        if child.hasChildren && !child.expanded?
-          string << tree_link_to_children(child: child, acronym: acronym, concept_schemes: concept_schemes)
-        elsif child.expanded?
-          string << '<ul>'
-          build_tree(child, string, id, acronym, concept_schemes: concept_schemes)
-          string << '</ul>'
-        end
-        string << '</li>'
-      end
-    end
-    string
-  end
-
-  def tree_link_to_concept(child:, ontology_acronym:, active_style:, node: nil, skos: false)
-    language = request_lang
-    li_id = child.id.eql?('bp_fake_root') ? 'bp_fake_root' : short_uuid
-    open = child.expanded? ? "class='open'" : ''
-    #icons = child.relation_icon(node) removed because slow
-    muted_style = skos && Array(child.isInActiveScheme).empty? ? 'text-muted' : nil
-    muted_title = muted_style && !child.obsolete? ? "title='is not in a scheme'" : nil
-    href = ontology_acronym.blank? ? '#' : "/ontologies/#{ontology_acronym}/concepts/?id=#{CGI.escape(child.id)}&language=#{language}"
-
-    if child.prefLabel.nil?
-      pref_label_html = child.id.split('/').last
-    else
-      pref_label_lang, pref_label_html = select_language_label(child.prefLabel)
-      pref_label_lang = pref_label_lang.to_s.upcase
-      tooltip = pref_label_lang.eql?("@NONE") ? "" : "data-controller='tooltip' data-tooltip-position-value='right' title='#{pref_label_lang}'";
-    end
-
-    link = <<-EOS
-        <a id='#{child.id}' data-conceptid='#{child.id}'
-           data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
-           data-collections-value='#{child.memberOf || []}'
-           data-active-collections-value='#{child.isInActiveCollection || []}'
-           data-skos-collection-colors-target='collection'
-           class='#{muted_style} #{active_style}' #{muted_title}'
-           #{tooltip}
-          >
-            #{ pref_label_html }
-        </a>
-    EOS
-    "<li #{open} id='#{li_id}'>#{link}"
-  end
-
-
-  def tree_link_to_children(child:, acronym: ,concept_schemes: nil)
-    language = request_lang
-    li_id = child.id.eql?('bp_fake_root') ? 'bp_fake_root' : short_uuid
-    concept_schemes = "&concept_schemes=#{concept_schemes.map{|x| CGI.escape(x)}.join(',')}" if concept_schemes
-
-    link = "<a id='#{child.id}' href='/ajax_concepts/#{acronym}/?conceptid=#{CGI.escape(child.id)}#{concept_schemes}&callback=children&language=#{language}'>ajax_class</a>"
-    "<ul class='ajax'><li id='#{li_id}'>#{link}</li></ul>"
+  def child_id(child)
+    child.id.to_s.split('/').last
   end
 
   def loading_spinner(padding = false, include_text = true)
@@ -253,11 +179,7 @@ module ApplicationHelper
     end
   end
 
-  # This gives a very hacky short code to use to uniquely represent a class
-  # based on its parent in a tree. Used for unique ids in HTML for the tree view
-  def short_uuid
-    rand(36**8).to_s(36)
-  end
+ 
 
   def help_icon(link, html_attribs = {})
     html_attribs["title"] ||= "Help"
@@ -377,17 +299,7 @@ module ApplicationHelper
     @groups_for_js = @groups_map.to_json
   end
 
-  def metadata_for_select
-    get_metadata
-    return @metadata_for_select
-  end
 
-  def get_metadata
-    @metadata_for_select = []
-    submission_metadata.each do |data|
-      @metadata_for_select << data["attribute"]
-    end
-  end
 
 
   def ontologies_to_acronyms(ontologyIDs)
@@ -402,6 +314,8 @@ module ApplicationHelper
     !@subdomain_filter.nil? && !@subdomain_filter[:active].nil? && @subdomain_filter[:active] == true
   end
 
+
+  # TODO this helper is not used but can be usefully
   def truncate_with_more(text, options = {})
     length ||= options[:length] ||= 30
     trailing_text ||= options[:trailing_text] ||= " ... "
