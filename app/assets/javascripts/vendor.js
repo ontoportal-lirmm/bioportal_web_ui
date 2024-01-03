@@ -17,7 +17,6 @@
 // Other
 //= require jquery.blockUI
 //= require facebox
-//= require thickbox
 //= require jquery.dataTables
 //= require chosen.jquery
 //= require autocomplete
