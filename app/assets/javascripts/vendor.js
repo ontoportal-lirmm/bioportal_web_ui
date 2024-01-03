@@ -15,7 +15,6 @@
 //= require popper
 //= require bootstrap-sprockets
 // Other
-//= require jquery.blockUI
 //= require facebox
 //= require jquery.dataTables
 //= require chosen.jquery
