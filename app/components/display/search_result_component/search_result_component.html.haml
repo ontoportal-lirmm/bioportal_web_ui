@@ -11,15 +11,9 @@
         = details_button
         = visualize_button
         - if subresults?
-            .button.icon-right{'data-action': "click->search-result-component#showSubOntologies"}
-                .text
-                    = "#{subresults.size} more from this ontology"
-                = inline_svg_tag "icons/arrow-down.svg"
+            = reveal_ontologies_button('sub_ontologies')
         - if reuses?
-            .button.icon-right{'data-action': "click->search-result-component#showReuses"}
-                .text
-                    = "Reuses in #{reuses.size} ontologies"
-                = inline_svg_tag "icons/arrow-down.svg"
+            = reveal_ontologies_button('reuses')
     - if subresults?
         .more-from-ontology.d-none{'data-search-result-component-target': 'subOntologies'}
             .vertical-line

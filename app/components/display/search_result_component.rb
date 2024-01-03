@@ -33,6 +33,23 @@ class Display::SearchResultComponent < ViewComponent::Base
           end
         end
     end
+
+    def reveal_ontologies_button(type)
+      if(type.eql?("sub_ontologies"))
+        text = "#{subresults.size} more from this ontology"
+        data_action = "click->search-result-component#showSubOntologies"
+      else
+        text = "Reuses in #{reuses.size} ontologies"
+        data_action = "click->search-result-component#showReuses"
+      end
+      content_tag(:div, class: 'button icon-right', 'data-action': data_action) do
+        concat(content_tag(:div, class: 'text') do
+          text
+        end)
+        concat(inline_svg_tag("icons/arrow-down.svg"))
+      end
+    end
+    
       
       
       
