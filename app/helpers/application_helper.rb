@@ -102,69 +102,6 @@ module ApplicationHelper
     session[:user] && session[:user].admin?
   end
 
-  def draw_note_tree(notes,key)
-    output = ""
-    draw_note_tree_leaves(notes,0,output,key)
-    return output
-  end
-
-  def draw_note_tree_leaves(notes,level,output,key)
-    for note in notes
-      name="Anonymous"
-      unless note.user.nil?
-        name=note.user.username
-      end
-      headertext=""
-      notetext=""
-      if note.note_type.eql?(5)
-        headertext<< "<div class=\"header\" onclick=\"toggleHide('note_body#{note.id}','');compare('#{note.id}')\">"
-        notetext << " <input type=\"hidden\" id=\"note_value#{note.id}\" value=\"#{note.comment}\">
-                  <span class=\"message\" id=\"note_text#{note.id}\">#{note.comment}</span>"
-      else
-        headertext<< "<div onclick=\"toggleHide('note_body#{note.id}','')\">"
-
-        notetext<< "<span class=\"message\" id=\"note_text#{note.id}\">#{simple_format(note.comment)}</span>"
-      end
-
-
-      output << "
-        <div style=\"clear:both;margin-left:#{level*20}px;\">
-        <div  style=\"float:left;width:100%\">
-          #{headertext}
-              <div>
-                <span class=\"sender\" style=\"float:right\">#{name} at #{note.created_at.strftime('%m/%d/%y %H:%M')}</span>
-                <div class=\"header\"><span class=\"notetype\">#{note.type_label.titleize}:</span> #{note.subject}</div>
-                              <div style=\"clear:both\"></div>
-              </div>
-
-          </div>
-
-          <div name=\"hiddenNote\" id=\"note_body#{note.id}\" >
-          <div class=\"messages\">
-            <div>
-              <div>
-               #{notetext}"
-      if session[:user].nil?
-        output << "<div id=\"insert\"><a href=\"\/login?redirect=/visualize/#{@ontology.to_param}/?conceptid=#{@concept.id}#notes\">Reply</a></div>"
-      else
-        if @modal
-          output << "<div id=\"insert\"><a href=\"#\"  onclick =\"document.getElementById('m_noteParent').value='#{note.id}';document.getElementById('m_note_subject#{key}').value='RE:#{note.subject}';jQuery('#modal_form').html(jQuery('#modal_comment').html());return false;\">Reply</a></div>"
-        else
-          output << "<div id=\"insert\"><a href=\"#TB_inline?height=400&width=600&inlineId=commentForm\" class=\"thickbox\" onclick =\"document.getElementById('noteParent').value='#{note.id}';document.getElementById('note_subject#{key}').value='RE:#{note.subject}';\">Reply</a></div>"
-        end
-      end
-      output << "</div>
-            </div>
-          </div>
-
-          </div>
-        </div>
-        </div>"
-      if(!note.children.nil? && note.children.size>0)
-        draw_note_tree_leaves(note.children,level+1,output,key)
-      end
-    end
-  end
 
   def child_id(child)
     child.id.to_s.split('/').last
