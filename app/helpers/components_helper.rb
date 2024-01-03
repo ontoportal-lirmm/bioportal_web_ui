@@ -23,9 +23,7 @@ module ComponentsHelper
     end
   end
 
-  def tree_close_icon
-    content_tag(:i, nil, class: "fas fa-chevron-down text-primary", data:{action:'click->simple-tree#toggleChildren'})
-  end
+
 
 
   def chart_component(title: '', type: , labels: , datasets: , index_axis: 'x', show_legend: false)

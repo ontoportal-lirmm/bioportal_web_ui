@@ -299,17 +299,7 @@ module ApplicationHelper
     @groups_for_js = @groups_map.to_json
   end
 
-  def metadata_for_select
-    get_metadata
-    return @metadata_for_select
-  end
 
-  def get_metadata
-    @metadata_for_select = []
-    submission_metadata.each do |data|
-      @metadata_for_select << data["attribute"]
-    end
-  end
 
 
   def ontologies_to_acronyms(ontologyIDs)
@@ -324,6 +314,8 @@ module ApplicationHelper
     !@subdomain_filter.nil? && !@subdomain_filter[:active].nil? && @subdomain_filter[:active] == true
   end
 
+
+  # TODO this helper is not used but can be usefully
   def truncate_with_more(text, options = {})
     length ||= options[:length] ||= 30
     trailing_text ||= options[:trailing_text] ||= " ... "

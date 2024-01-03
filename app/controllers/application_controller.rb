@@ -430,7 +430,8 @@ class ApplicationController < ActionController::Base
         @root.children = @roots.sort{|x,y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase}
 
         # get the initial concept to display
-        root_child = @root.children.first
+        root_child = @root.children&.first
+        not_found("Missing roots #{@roots.id}") if root_child.nil?
 
         @concept = root_child.explore.self(full: true, lang: lang)
         # Some ontologies have "too many children" at their root. These will not process and are handled here.

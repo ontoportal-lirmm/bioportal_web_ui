@@ -48,11 +48,14 @@ class TreeLinkComponent < ViewComponent::Base
     @child.id.eql?('bp_fake_root') ? 'bp_fake_root' : short_uuid
   end
 
+  def self.tree_close_icon
+    "<i class='fas fa-chevron-down text-primary' data-action='click->simple-tree#toggleChildren'></i>".html_safe
+  end
 
   def open_children_link
     return unless @child.hasChildren
     if @child.expanded?
-      tree_close_icon
+      self.class.tree_close_icon
     else
       content_tag('turbo_frame', id: "#{child_id}_open_link") do
         link_to @children_link,
