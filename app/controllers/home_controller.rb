@@ -141,14 +141,6 @@ class HomeController < ApplicationController
     end
   end
 
-  def annotator_recommender_form
-    if params[:submit_button] == "annotator"
-      redirect_to "/annotator?text=#{params[:text]}"
-    elsif params[:submit_button] == "recommender"
-      redirect_to "/recommender?text=#{params[:text]}"
-    end
-  end
-
   private
 
   # Dr. Musen wants 5 specific groups to appear first, sorted by order of importance.
