@@ -1,29 +1,30 @@
-#mappings.paginate_ajax{:style => "overflow: auto; max-height: 600px; width: 800px;"}
-  #mapping_results
-    = will_paginate @page_results, :update => 'mappings', :params => { :target => params[:target] }
-    - if @mappings.nil? or @mappings.empty?
-      No mappings found
-    - else
-      %table.zebra.w-100
-        %thead
-          %th #{@ontology_name}
-          %th #{@target_ontology_name}
-          %th Source
-        - for map in @mappings
-          %tr
-            - map.classes.each do |cls|
+= render_in_modal do
+  #mappings.paginate_ajax{:style => "overflow: auto; max-height: 600px;"}
+    #mapping_results
+      = will_paginate @page_results, :update => 'mappings', :params => { :target => params[:target] }
+      - if @mappings.nil? or @mappings.empty?
+        No mappings found
+      - else
+        %table.zebra.w-100
+          %thead
+            %th #{@ontology_name}
+            %th #{@target_ontology_name}
+            %th Source
+          - for map in @mappings
+            %tr
+              - map.classes.each do |cls|
+                %td
+                  - if inter_portal_mapping?(cls)
+                    = ajax_to_inter_portal_cls(cls)
+                  - elsif internal_mapping?(cls)
+                    = ajax_to_internal_cls(cls)
+                  - else
+                    = ajax_to_external_cls(cls)
               %td
-                - if inter_portal_mapping?(cls)
-                  = ajax_to_inter_portal_cls(cls)
-                - elsif internal_mapping?(cls)
-                  = ajax_to_internal_cls(cls)
-                - else
-                  = ajax_to_external_cls(cls)
-            %td
-              #{map.source} #{(map.process || {})[:source_name]}
-    = will_paginate @page_results, :update => 'mappings', :params => { :target => params[:target] }
+                #{map.source} #{(map.process || {})[:source_name]}
+      = will_paginate @page_results, :update => 'mappings', :params => { :target => params[:target] }
 
-:javascript
-  jQuery(document).ready(function(){
-    ajax_process_init();  // see bp_ajax_controller.js
-  })
+  :javascript
+    jQuery(document).ready(function(){
+      ajax_process_init();  // see bp_ajax_controller.js
+    })
