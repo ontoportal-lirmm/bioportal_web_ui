@@ -615,7 +615,6 @@ function showOntologiesToggleLinks(problemOnly) {
 jQuery(".admin.index").ready(function() {
   // display ontologies table on load
   displayOntologies({}, DUMMY_ONTOLOGY);
-  displayUsers({});
 
 
   jQuery("div.ontology_nav").html('<span class="toggle-row-display">' + showOntologiesToggleLinks(problemOnly) + '</span><span style="padding-left:30px;">Apply to Selected Rows:&nbsp;&nbsp;&nbsp;&nbsp;<select id="admin_action" name="admin_action"><option value="">Please Select</option><option value="delete">Delete</option><option value="all">Process</option><option value="process_annotator">Annotate</option><option value="diff">Diff</option><option value="index_search">Index</option><option value="run_metrics">Metrics</option></select>&nbsp;&nbsp;&nbsp;&nbsp;<a class="link_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" href="javascript:;" id="admin_action_submit"><span class="ui-button-text">Go</span></a></span>');
@@ -651,9 +650,6 @@ jQuery(".admin.index").ready(function() {
     }
   });
 
-  jQuery('#adminUsers').on('click', '.delete-user', function(event) {
-    DeleteUsers.act(this.dataset.accountName);
-  });
 
 
   // BUTTON onclick actions ---------------------------------------
@@ -664,7 +660,7 @@ jQuery(".admin.index").ready(function() {
   });
 
   // onclick action for "Refresh Report" button
-    jQuery("#refresh_report_action").click(function() {
+  jQuery("#refresh_report_action").click(function() {
         RefreshReport.act();
     });
 
@@ -678,193 +674,3 @@ jQuery(".admin.index").ready(function() {
   //      MANAGEMENT COMMONS
   //==============================================================
 });
-
-
-/* users part */
-function populateUserRows(data) {
-    let users = data['users'];
-    let allRows = [];
-    // let hideFields = ["format", "administeredBy", "date_created", "report_date_updated", "errErrorStatus", "errMissingStatus", "problem", "logFilePath"];
-    users.forEach(user =>{
-        let id = '<a href="'+ user['@id']+'" >' + user['@id'] + '</a>';
-        let email = user['email'];
-        let username = user['username'];
-        let roles = user['role'];
-        let firstname = user['firstName']
-        let lastname = user['lastName']
-        let created = user['created']
-        let actions = [
-            '<a href="/accounts/'+ user['username'] +'"  class="mx-1">Detail</a>' ,
-            '<a href="javascript:;" class="delete-user mx-1" data-account-name="' + username + '">Delete</a>',
-            '<a href="/login_as/'+ username +'" class="mx-1">Login as</a>',
-
-        ]
-        let row = [firstname, lastname, username, email , roles , id , created , actions.join('|')];
-        allRows.push(row);
-    })
-
-    return allRows;
-}
-
-function displayUsers(data) {
-    let ontTable = null;
-    let allRows
-    if (jQuery.fn.dataTable.isDataTable('#adminUsers')) {
-        ontTable = jQuery('#adminUsers').DataTable();
-
-        if (ontology === DUMMY_ONTOLOGY) {
-            // refreshing entire table
-            allRows = populateUserRows(data);
-            ontTable.clear();
-            ontTable.rows.add(allRows);
-            ontTable.draw();
-        } else {
-            // refreshing individual row
-        }
-    } else {
-        ontTable = jQuery("#adminUsers").DataTable({
-            "ajax": {
-                "url": "/admin/users",
-                "contentType": "application/json",
-                "dataSrc": function (json) {
-                    return populateUserRows(json);
-                }
-            },
-            "rowCallback": function(row, data, index) {
-                var acronym = jQuery('td:nth-child(3)', row).text();
-
-                jQuery(row).attr("id", "tr_" + acronym);
-                if (data[data.length - 1] === true) {
-                    jQuery(row).addClass("problem");
-                }
-            },
-            "initComplete": function(settings, json) {
-            },
-            "columnDefs": [
-                {
-                    "targets": 0,
-                    "searchable": true,
-                    "title": "First Name",
-                },
-                {
-                    "targets": 1,
-                    "searchable": true,
-                    "title": "Last Name",
-                },
-                {
-                    "targets": 2,
-                    "searchable": true,
-                    "title": "Username",
-                },
-                {
-                    "targets": 3,
-                    "searchable": true,
-                    "title": "Email",
-                },
-                {
-                    "targets": 4,
-                    "searchable": true,
-                    "title": "Roles",
-                },
-                {
-                    "targets": 5,
-                    "searchable": true,
-                    "orderable": false,
-                    "title": "Id",
-                },
-                {
-                    "targets": 6,
-                    "searchable": true,
-                    "orderable": true,
-                    "title": "Created at",
-                },
-                {
-                    "targets": 7,
-                    "searchable": false,
-                    "orderable": false,
-                    "title": "Actions",
-                    "width": "210px"
-                }
-            ],
-            "autoWidth": false,
-            "lengthChange": false,
-            "searching": true,
-            "language": {
-                "search": "Filter: ",
-                "emptyTable": "No users available"
-            },
-            "info": true,
-            "paging": true,
-            "pageLength": 100,
-            "ordering": true,
-            "responsive": true,
-            "stripeClasses": ["", "alt"],
-        });
-    }
-    return ontTable;
-}
-
-function DeleteUsers(user) {
-  AjaxAction.call(this, "DELETE", "USERS DELETION", "accounts/"+user, false);
-  this.setConfirmMsg('Permanently delete "' + user +'"?');
-}
-
-DeleteUsers.prototype = Object.create(AjaxAction.prototype);
-DeleteUsers.prototype.constructor = DeleteUsers;
-DeleteUsers.prototype.onSuccessAction = function(username) {
-    let ontTable = jQuery('#adminUsers').DataTable();
-    ontTable.row(jQuery("#tr_" + username)).remove().draw();
-};
-
-DeleteUsers.prototype._ajaxCall =  function (username)  {
-    let errors = [];
-    let success = [];
-    let notices = [];
-    jQuery.ajax({
-        method: 'DELETE',
-        url: 'accounts/'+username,
-        data: [],
-        dataType: "json",
-        success: (data, msg) => {
-            success.push('"' + username + '" user successfully deleted')
-            this.onSuccessAction(username)
-            _showStatusMessages(success, errors, notices, false);
-        },
-        error: function(request, textStatus, errorThrown) {
-            console.log('error')
-            errorState = true;
-            errors.push(request.status + ": " + errorThrown);
-            _showStatusMessages(success, errors, notices, false);
-        },
-        complete: function(request, textStatus) {
-
-        }
-    });
-
-}
-
-DeleteUsers.prototype.ajaxCall = function (username){
-    alertify.confirm(this.confirmMsg, (e) => {
-        if (e) {
-            this._ajaxCall(username);
-        }
-    });
-}
-DeleteUsers.act = function(user) {
-    new DeleteUsers(user).ajaxCall(user);
-};
-
-
-/*****************************
- *  COMMON FUNCTIONS
- *****************************/
-function _clearStatusMessages() {
-  jQuery("#progress_message").hide();
-  jQuery("#success_message").hide();
-  jQuery("#error_message").hide();
-  jQuery("#info_message").hide();
-  jQuery("#progress_message").html("");
-  jQuery("#success_message").html("");
-  jQuery("#error_message").html("");
-  jQuery("#info_message").html("");
-}
