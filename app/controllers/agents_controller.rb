@@ -171,7 +171,7 @@ class AgentsController < ApplicationController
           ]
 
         else
-          render alert(type: 'danger') { error }
+          render_turbo_stream alert(type: 'danger') { error }
         end
       end
       format.html { render json: { success: success_text, error: error } }

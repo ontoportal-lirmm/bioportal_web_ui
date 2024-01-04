@@ -756,24 +756,7 @@ jQuery(".admin.index").ready(function() {
   displayUsers({});
   UpdateCheck.act();
 
-  // make sure facebox window is empty before populating it
-  // otherwise ajax requests stack up and you see more than
-  // one ontology's submissions
-  jQuery(document).bind('beforeReveal.facebox', function() {
-    jQuery("#facebox .content").empty();
-  });
 
-  // remove hidden divs for submissions of previously
-  // clicked ontologies
-  jQuery(document).bind('reveal.facebox', function() {
-    jQuery('div[id=facebox]:hidden').remove();
-  });
-
-  // convert facebox window into a modal mode
-  jQuery(document).bind('loading.facebox', function() {
-    jQuery(document).unbind('keydown.facebox');
-    jQuery('#facebox_overlay').unbind('click');
-  });
 
   jQuery("div.ontology_nav").html('<span class="toggle-row-display">' + showOntologiesToggleLinks(problemOnly) + '</span><span style="padding-left:30px;">Apply to Selected Rows:&nbsp;&nbsp;&nbsp;&nbsp;<select id="admin_action" name="admin_action"><option value="">Please Select</option><option value="delete">Delete</option><option value="all">Process</option><option value="process_annotator">Annotate</option><option value="diff">Diff</option><option value="index_search">Index</option><option value="run_metrics">Metrics</option></select>&nbsp;&nbsp;&nbsp;&nbsp;<a class="link_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" href="javascript:;" id="admin_action_submit"><span class="ui-button-text">Go</span></a></span>');
 
@@ -857,71 +840,6 @@ jQuery(".admin.index").ready(function() {
   //==============================================================
   //      MANAGEMENT COMMONS
   //==============================================================
-
-  jQuery(document).on("click", "#facebox a.dismiss-dialog", function (event) {
-    jQuery(document).trigger('close.facebox');
-  });
-
-  jQuery(document).on('ajax:success', "#facebox form.admin-collection-form", (event, response, status, xhr) => {
-    jQuery(document).trigger('close.facebox');
-    if (response && response.success) {
-      _showStatusMessages([response.success], [], [], false);
-    }
-    refreshCollection(event.target.dataset.collection);
-  });
-  jQuery(document).on('ajax:error', "#facebox form.admin-collection-form", (event, xhr, status, error) => {
-    if (xhr.responseJSON) {
-      displayDialogErrorMessages(xhr.responseJSON)
-    } else {
-      displayDialogErrorMessages(status);
-    }
-  });
-
-  function refreshCollection(collectionName) {
-    switch (collectionName) {
-      case "groups":
-        displayGroups({});
-        break;
-      case "categories":
-        displayCategories({});
-        break;
-      default:
-        alertify.alert("Unable to refresh unknown collection '" + collectionName + "'");
-    }
-  }
-
-  function displayDialogErrorMessages(data, settings) {
-    settings ||= {}
-
-    let append = settings.append || false;
-
-    let errorListNode = jQuery("#facebox .alert-box ul");
-
-    if (!append) {
-      errorListNode.empty();
-    }
-
-    let messages = [];
-    if (typeof data == "string" || data instanceof String) {
-      messages.push(data)
-    }
-    if (typeof data == "object" && data.errors) {
-      messages.push.apply(messages, Object.values(data.errors));
-    }
-    if (typeof data == "object" && data.status && data.status / 200 != 1) {
-      messages.push("Request error: " + data.statusText);
-    }
-
-    for (let msg of messages) {
-      errorListNode.append(jQuery("<li></li>").text(msg))
-    }
-
-    if (messages.length == 0) {
-      errorListNode.parents(".alert-box").hide();
-    } else {
-      errorListNode.parents(".alert-box").show();
-    }
-  }
 });
 
 
