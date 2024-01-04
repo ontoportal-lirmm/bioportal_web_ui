@@ -54,10 +54,13 @@
               hide advanced options
     - if @search_results
       .search-page-results-container
+        - number = 0
         - @search_results.each do |result|
           .search-page-result-element
+            - number = number + 1
             - descendants = result[:descendants]
             - reuses = result[:reuses]
+            - result[:root][:number] = number
             = render Display::SearchResultComponent.new(result[:root]) do |c|
               - descendants.each { |d| c.subresult(d.merge(is_sub_component: true))}
               - reuses.each do |r|

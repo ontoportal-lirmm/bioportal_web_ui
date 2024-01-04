@@ -3,17 +3,26 @@ class Display::SearchResultComponent < ViewComponent::Base
     include ModalHelper
     renders_many :subresults, Display::SearchResultComponent
     renders_many :reuses, Display::SearchResultComponent
-    def initialize(title: nil, ontology_acronym: nil ,uri: nil, definition: nil, link: nil,  is_sub_component: false)
+    def initialize(number: 0,title: nil, ontology_acronym: nil ,uri: nil, definition: nil, link: nil,  is_sub_component: false)
         @title = title
         @uri = uri
         @definition = definition
         @link = link
         @is_sub_component = is_sub_component
         @ontology_acronym = ontology_acronym
+        @number = number.to_s
     end
 
     def sub_component_class
         @is_sub_component ? 'sub-component' : ''
+    end
+
+    def sub_ontologies_id 
+      string = @number+'_sub_ontologies'
+    end
+
+    def reuses_id 
+      string = @number+'_reuses'
     end
 
     def details_button
@@ -34,15 +43,8 @@ class Display::SearchResultComponent < ViewComponent::Base
         end
     end
 
-    def reveal_ontologies_button(type)
-      if(type.eql?("sub_ontologies"))
-        text = "#{subresults.size} more from this ontology"
-        data_action = "click->search-result-component#showSubOntologies"
-      else
-        text = "Reuses in #{reuses.size} ontologies"
-        data_action = "click->search-result-component#showReuses"
-      end
-      content_tag(:div, class: 'button icon-right', 'data-action': data_action) do
+    def reveal_ontologies_button(text,id)
+      content_tag(:div, class: 'button icon-right', 'data-action': "click->reveal-by-id#reveal", 'data-id': id) do
         concat(content_tag(:div, class: 'text') do
           text
         end)

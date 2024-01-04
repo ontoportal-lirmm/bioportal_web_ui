@@ -58,6 +58,9 @@ application.register("ontology-viewer-tabs", OntologyViewerTabsController)
 import OntoportalAutocompleteController from "./ontoportal_autocomplete_controller"
 application.register("ontoportal-autocomplete", OntoportalAutocompleteController)
 
+import RevealByIdController from "./reveal_by_id_controller"
+application.register("reveal-by-id", RevealByIdController)
+
 import SearchController from "./search_controller"
 application.register("search", SearchController)
 
