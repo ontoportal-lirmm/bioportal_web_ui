@@ -1,29 +1,5 @@
 - new_record = @group.acronym.nil?
 
-:javascript
-  function validateForm() {
-    var acronymField = document.getElementById('group_acronym');
-    var nameField = document.getElementById('group_name');
-    var errorAcronym = document.getElementById('error-acronym');
-    var errorName = document.getElementById('error-name');
-
-    errorAcronym.innerText = '';
-    errorName.innerText = '';
-
-    var isValid = true; 
-
-    if (acronymField.value.trim() === '') {
-      errorAcronym.innerText = 'Please enter an acronym';
-      isValid = false;
-    }
-
-    if (nameField.value.trim() === '') {
-      errorName.innerText = 'Please enter a name';
-      isValid = false;
-    }
-
-    return isValid;
-  }
 %div
   = render_alerts_container('group')
 %div
@@ -37,7 +13,7 @@
         %span.asterik *
       %td.top
         - if new_record
-          = f.text_field :acronym, class: "form-control", id: "group_acronym"
+          = f.text_field :acronym, class: "form-control", id: "group_acronym", required: true
           %div#error-acronym.groupFormError
         - else
           = f.text_field :acronym, class: "form-control", readonly: true
@@ -46,7 +22,7 @@
         Name
         %span.asterik *
       %td.top
-        = f.text_field :name, class: "form-control", id: "group_name"
+        = f.text_field :name, class: "form-control", id: "group_name", required: true
         %div#error-name.groupFormError
     %tr
       %th
