@@ -64,6 +64,16 @@ Rails.application.routes.draw do
     match 'groups/synchronize_groups' => 'groups#synchronize_groups', via: [:post]
     resources :groups, only: [:index, :create, :new, :edit, :update, :destroy]
     resources :categories, only: [:index, :create, :new, :edit, :update, :destroy]
+    post 'clearcache', to: 'clearcache'
+    post 'resetcache', to: 'resetcache'
+    post 'clear_goo_cache', to: 'clear_goo_cache'
+    post 'clear_http_cache', to: 'clear_http_cache'
+    get 'ontologies_report', to: 'ontologies_report'
+    post 'refresh_ontologies_report', to: 'refresh_ontologies_report'
+    delete 'ontologies', to: 'delete_ontologies'
+    put 'ontologies', to: 'process_ontologies'
+    get 'ontologies/:acronym/log', to: 'admin#parse_log'
+    get 'update_check_enabled', to: 'update_check_enabled'
   end
 
   resources :subscriptions
@@ -178,25 +188,6 @@ Rails.application.routes.draw do
   get '/tab/update/:ontology/:concept' => 'history#update', :as => :update_tab
 
   get 'jambalaya/:ontology/:id' => 'visual#jam', :as => :jam
-
-  # Admin
-  match '/admin/clearcache' => 'admin#clearcache', via: [:post]
-  match '/admin/resetcache' => 'admin#resetcache', via: [:post]
-  match '/admin/clear_goo_cache' => 'admin#clear_goo_cache', via: [:post]
-  match '/admin/clear_http_cache' => 'admin#clear_http_cache', via: [:post]
-  match '/admin/ontologies_report' => 'admin#ontologies_report', via: [:get]
-  match '/admin/refresh_ontologies_report' => 'admin#refresh_ontologies_report', via: [:post]
-  match '/admin/ontologies' => 'admin#delete_ontologies', via: [:delete]
-  match '/admin/ontologies' => 'admin#process_ontologies', via: [:put]
-  match '/admin/ontologies/:acronym/submissions/:id' => 'admin#delete_submission', via: [:delete]
-  match '/admin/ontologies/:acronym/submissions' => 'admin#submissions', via: [:get]
-  match '/admin/ontologies/:acronym/log' => 'admin#parse_log', via: [:get]
-  match '/admin/update_info' => 'admin#update_info', via: [:get]
-  match '/admin/update_check_enabled' => 'admin#update_check_enabled', via: [:get]
-  match '/admin/users' => 'admin#users', via: [:get]
-
-  # Ontolobridge
-  # post '/ontolobridge/:save_new_term_instructions' => 'ontolobridge#save_new_term_instructions'
 
   ###########################################################################################################
   # Install the default route as the lowest priority.
