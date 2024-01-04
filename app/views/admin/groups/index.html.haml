@@ -6,8 +6,7 @@
                       class: "btn btn-default mb-3",
                       data: { show_modal_title_value: "Create a new group"})
 
-    = button_to "Synchronize groups", admin_groups_synchronize_groups_url, method: :post, class: "btn btn-link mb-3",
-                 form: {data: { turbo: true, turbo_confirm: "Are you sure you want to synchronize groups with slices?", turbo_frame: '_top'}}
+    = action_button("Synchronize groups with slices", admin_groups_synchronize_groups_url)
 
   %div.my-1
     = render_alerts_container

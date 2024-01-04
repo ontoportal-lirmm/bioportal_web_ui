@@ -1,5 +1,5 @@
 class Admin::GroupsController < ApplicationController
-  include SubmissionUpdater, TurboHelper
+  include SubmissionUpdater, TurboHelper, AdminHelper
 
   layout :determine_layout
   before_action :unescape_id, only: [:edit, :show, :update, :destroy]

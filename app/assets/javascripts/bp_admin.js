@@ -288,53 +288,6 @@ AjaxAction.prototype.act = function() {
   alert("AjaxAction.act is not implemented");
 };
 
-function ResetMemcacheConnection() {
-  AjaxAction.call(this, "POST", "UI CACHE CONNECTION RESET", "resetcache", false);
-  this.setConfirmMsg('');
-}
-
-ResetMemcacheConnection.prototype = Object.create(AjaxAction.prototype);
-ResetMemcacheConnection.prototype.constructor = ResetMemcacheConnection;
-
-ResetMemcacheConnection.act = function() {
-  new ResetMemcacheConnection().ajaxCall();
-};
-
-function FlushMemcache() {
-  AjaxAction.call(this, "POST", "FLUSHING OF UI CACHE", "clearcache", false);
-  this.setConfirmMsg('');
-}
-
-FlushMemcache.prototype = Object.create(AjaxAction.prototype);
-FlushMemcache.prototype.constructor = FlushMemcache;
-
-FlushMemcache.act = function() {
-  new FlushMemcache().ajaxCall();
-};
-
-function ClearGooCache() {
-  AjaxAction.call(this, "POST", "FLUSHING OF GOO CACHE", "clear_goo_cache", false);
-  this.setConfirmMsg('');
-}
-
-ClearGooCache.prototype = Object.create(AjaxAction.prototype);
-ClearGooCache.prototype.constructor = ClearGooCache;
-
-ClearGooCache.act = function() {
-  new ClearGooCache().ajaxCall();
-};
-
-function ClearHttpCache() {
-  AjaxAction.call(this, "POST", "FLUSHING OF HTTP CACHE", "clear_http_cache", false);
-  this.setConfirmMsg('');
-}
-
-ClearHttpCache.prototype = Object.create(AjaxAction.prototype);
-ClearHttpCache.prototype.constructor = ClearHttpCache;
-
-ClearHttpCache.act = function() {
-  new ClearHttpCache().ajaxCall();
-};
 
 function DeleteSubmission(ontology, submissionId) {
   AjaxAction.call(this, "DELETE", "SUBMISSION DELETION", "ontologies/" + ontology + "/submissions/" + submissionId, false, {ontologies: ontology});
@@ -412,97 +365,6 @@ ProcessOntologies.act = function(action) {
   new ProcessOntologies(action).ajaxCall();
 };
 
-function UpdateCheck(forceCheck) {
-  var params = {};
-
-  if (forceCheck) {
-    params["force_check"] = forceCheck;
-  }
-  AjaxAction.call(this, "GET", "CHECK FOR UPDATE", "update_info", false, params);
-  this.setProgressMessageEnabled(forceCheck);
-  this.setConfirmMsg('');
-}
-
-UpdateCheck.prototype = Object.create(AjaxAction.prototype);
-UpdateCheck.prototype.constructor = UpdateCheck;
-
-UpdateCheck.prototype.onSuccessAction = function(data, ontology, deferredObj) {
-  var self = this;
-  delete data["success"];
-  updateInfo = data["update_info"];
-
-  if (updateInfo["update_check_enabled"]) {
-    var lastCheck = "";
-
-    if (updateInfo["date_checked"]) {
-      var updateDate = parseReportDate(updateInfo["date_checked"]);
-
-      if (updateDate) {
-        lastCheck = "Last update check on: " + updateDate;
-      }
-    }
-
-    if (updateInfo["update_available"]) {
-      // update found - show in all cases
-      data["notices"] = "Update available. You are running the version: " + updateInfo["current_version"] + ". Updated version: " + updateInfo["update_version"] + ".";
-
-      if (lastCheck) {
-        data["notices"] += " " + lastCheck + ".";
-      }
-
-      if (updateInfo["notes"]) {
-        data["notices"] += " Update notes: " + updateInfo["notes"];
-      }
-    } else if (self.params && self.params["force_check"]) {
-      // no update found, but user was checking explicitly - show message
-      data["notices"] = "No update available. You are running the latest version: " + updateInfo["current_version"] + ".";
-
-      if (lastCheck) {
-        data["notices"] += " " + lastCheck + ".";
-      }
-    } else {
-      // no update found, and user wasn't checking,
-      // just a default check on page load - show nothing
-      delete data["notices"];
-    }
-
-    if (updateInfo.hasOwnProperty("appliance_id")) {
-      jQuery("#appliance-id span").text(updateInfo["appliance_id"])
-    }
-  }
-};
-
-UpdateCheck.prototype.onErrorAction = function(errors) {
-  var self = this;
-
-  // hide errors unless user explicitly requested an update check
-  if (!self.params || !self.params["force_check"]) {
-    errors.length = 0;
-  }
-};
-
-UpdateCheck.isUpdateCheckEnabled = false;
-UpdateCheck.act = function(forceCheck) {
-  if (UpdateCheck.isUpdateCheckEnabled) {
-    new UpdateCheck(forceCheck).ajaxCall();
-  } else {
-    jQuery.ajax({
-      url: "/admin/update_check_enabled",
-      success: function (data) {
-        if (data) {
-          jQuery("#update_check").show();
-          jQuery("#site-admin-appliance-id").show();
-          jQuery("#site-admin-update-check").show();
-          new UpdateCheck(forceCheck).ajaxCall();
-          UpdateCheck.isUpdateCheckEnabled = true;
-        }
-      },
-      error: function () {
-        console.log("An error occurred while performing a check for the latest version.");
-      }
-    });
-  }
-};
 
 // end: individual actions classes -----------------------
 
@@ -754,8 +616,6 @@ jQuery(".admin.index").ready(function() {
   // display ontologies table on load
   displayOntologies({}, DUMMY_ONTOLOGY);
   displayUsers({});
-  UpdateCheck.act();
-
 
 
   jQuery("div.ontology_nav").html('<span class="toggle-row-display">' + showOntologiesToggleLinks(problemOnly) + '</span><span style="padding-left:30px;">Apply to Selected Rows:&nbsp;&nbsp;&nbsp;&nbsp;<select id="admin_action" name="admin_action"><option value="">Please Select</option><option value="delete">Delete</option><option value="all">Process</option><option value="process_annotator">Annotate</option><option value="diff">Diff</option><option value="index_search">Index</option><option value="run_metrics">Metrics</option></select>&nbsp;&nbsp;&nbsp;&nbsp;<a class="link_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" href="javascript:;" id="admin_action_submit"><span class="ui-button-text">Go</span></a></span>');
@@ -803,35 +663,12 @@ jQuery(".admin.index").ready(function() {
     performActionOnOntologies();
   });
 
-  // onclick action for "Flush UI Cache" button
-  jQuery("#flush_memcache_action").click(function() {
-    FlushMemcache.act();
-  });
-
-  // onclick action for "Reset Memcache Connection" button
-  jQuery("#reset_memcache_connection_action").click(function() {
-    ResetMemcacheConnection.act();
-  });
-
-  // onclick action for "Flush Goo Cache" button
-  jQuery("#flush_goo_cache_action").click(function() {
-    ClearGooCache.act();
-  });
-
-  // onclick action for "Flush HTTP Cache" button
-  jQuery("#flush_http_cache_action").click(function() {
-    ClearHttpCache.act();
-  });
-
   // onclick action for "Refresh Report" button
     jQuery("#refresh_report_action").click(function() {
         RefreshReport.act();
     });
 
-  // onclick action for "Update Check" button
-  jQuery("#update_check_action").click(function() {
-    UpdateCheck.act(true);
-  });
+
 
   // end: BUTTON onclick actions -----------------------------------
 
