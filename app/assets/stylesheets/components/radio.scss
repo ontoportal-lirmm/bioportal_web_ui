@@ -35,7 +35,6 @@
     right: 50%;
     transform: translate(-46%, 21%) scale(0);
     border-radius: 50%;
-    transition:  300ms ease-in-out 0s;
 }
 
 .radio input[type="radio"]:checked ~ span:after{
