@@ -939,62 +939,6 @@ jQuery(".admin.index").ready(function() {
 
 
   //==============================================================
-  //      CATEGORIES MANAGEMENT
-  //==============================================================
-  displayCategories({});
-
-  // allow selecting of rows, except on link clicks
-  jQuery('#adminCategories tbody').on('click', 'tr', function(event) {
-    if (event.target.tagName.toLowerCase() != 'a') {
-      jQuery(this).toggleClass('selected');
-    }
-  });
-
-  jQuery("div.categories_nav").html(`
-    <span style="padding-left: 30px;">
-        <a class="link_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" id="category_new_action" href="javascript:;">
-      <span class="ui-button-text">New</span>
-    </a>
-    </span>
-    <span style="padding-left:30px;">Apply to Selected Rows:&nbsp;&nbsp;&nbsp;&nbsp;
-      <select id="category_admin_action" name="category_admin_action">
-        <option value="">Please Select</option>        
-        <option value="delete">Delete</option>
-      </select>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <a class="link_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" href="javascript:;" id="category_admin_action_submit">
-        <span class="ui-button-text">Go</span>
-      </a>
-    </span>`);
-
-  jQuery('#category_admin_action_submit').on('click', function(event) {
-    var action = jQuery('#category_admin_action').val();
-
-    if (!action) {
-      alertify.alert("Please choose an action to perform on the selected categories.");
-      return;
-    }
-
-    switch(action) {
-      case "delete":
-        DeleteCategories.act();
-        break;
-    }
-  });
-
-  jQuery('#category_new_action').on('click', function (event) {
-    jQuery.facebox({
-      ajax: "/admin/categories/new?time=" + new Date().getTime()
-    });
-  });
-
-  jQuery('#adminCategories').on('click', 'a.edit-category', function(event) {
-    jQuery.facebox({
-      ajax: "/admin/categories/" + encodeURIComponent(event.target.dataset.categoryName) + "/edit?time=" + new Date().getTime()
-    });
-  });
-
-  //==============================================================
   //      MANAGEMENT COMMONS
   //==============================================================
 
