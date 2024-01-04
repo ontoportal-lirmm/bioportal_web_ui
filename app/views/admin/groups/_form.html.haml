@@ -24,15 +24,9 @@
 
     return isValid;
   }
-%div.alert-box.error{style: @errors.nil? ? 'display: none' : nil }
-  %ul
-    - unless @errors.nil?
-      - for error in @errors
-        %li
-          = error
-%div{:style => "width:500px"}
-  %span.asterik{:style => "float:right;"} * fields are required
-  %h3 #{title_text}
+%div
+  = render_alerts_container('group')
+%div
   %table#group_form.form
     %colgroup
       %col
@@ -71,5 +65,4 @@
         %td.top
           = render SelectInputComponent.new(id: "group_ontologies", name: "group[ontologies]", values: @ontologies_group , selected: @group.ontologies , multiple: true, open_to_add_values: true)
   %div.mt-2
-    %input{type: "submit", value: button_text, class: "btn btn-primary mr-sm-2 group-form-accept", onclick: "return validateForm();"}
-    %a{href: "javascript:;", class: "btn btn-primary dismiss-dialog"} Cancel
+    %input{type: "submit", value: button_text, class: "btn btn-primary mr-sm-2 group-form-accept"}

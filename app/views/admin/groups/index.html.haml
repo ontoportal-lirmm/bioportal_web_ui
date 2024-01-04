@@ -1,0 +1,30 @@
+= turbo_frame_tag 'groups-list' do
+  %div.d-flex
+    = link_to_modal("Create New group",
+                      new_admin_group_path,
+                      id: "new_group_btn",
+                      class: "btn btn-default mb-3",
+                      data: { show_modal_title_value: "Create a new group"})
+
+    = button_to "Synchronize groups", admin_groups_synchronize_groups_url, method: :post, class: "btn btn-link mb-3",
+                 form: {data: { turbo: true, turbo_confirm: "Are you sure you want to synchronize groups with slices?", turbo_frame: '_top'}}
+
+  %div.my-1
+    = render_alerts_container
+  %table#adminGroup.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
+    %thead
+      %tr
+        %th Name
+        %th Description
+        %th Created
+        %th ID
+        %th COUNT
+        %th Actions
+    %tbody#groups_table_content
+      = render partial: 'admin/groups/group', collection: @groups
+      %tr.empty-state
+        %td.text-center{:colspan => "6"} There are currently no  agents.
+  :javascript
+    $.fn.dataTable.ext.errMode = 'none';
+    $("#adminGroup").dataTable()
+
