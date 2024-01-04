@@ -345,11 +345,6 @@ function DeleteSubmission(ontology, submissionId) {
 DeleteSubmission.prototype = Object.create(AjaxAction.prototype);
 DeleteSubmission.prototype.constructor = DeleteSubmission;
 
-DeleteSubmission.prototype.onSuccessAction = function(data, ontology, deferredObj) {
-  jQuery.facebox({
-    ajax: "/admin/ontologies/" + ontology + "/submissions?time=" + new Date().getTime()
-  });
-};
 
 DeleteSubmission.act = function(ontology, submissionId) {
   new DeleteSubmission(ontology, submissionId).ajaxCall();
@@ -548,7 +543,9 @@ function populateOntologyRows(data) {
       bpLinks += "<a href='" + "/admin/ontologies/" + acronym + "/log' target='_blank'>Log</a>&nbsp;&nbsp;|&nbsp;&nbsp;";
     }
     bpLinks += "<a href='" + BP_CONFIG.rest_url + "/ontologies/" + acronym + "?apikey=" + BP_CONFIG.apikey + "&userapikey: " + BP_CONFIG.userapikey + "' target='_blank'>REST</a>&nbsp;&nbsp;|&nbsp;&nbsp;";
-    bpLinks += "<a id='link_submissions_" + acronym + "' href='javascript:;' onclick='showSubmissions(event, \"" + acronym + "\")'>Submissions</a>";
+    let title = `Ontology Submissions for ${acronym}`
+    let link = `<a id='link_submissions_${acronym}' href="/ontologies/${acronym}/submissions?container_id=application_modal_content" data-controller="show-modal" data-show-modal-title-value="${title}" data-action="click->show-modal#show" data-turbo="true" data-turbo-frame="application_modal_content">Submissions</a>`
+    bpLinks += link
 
     var errStatus = ontology["errErrorStatus"] ? ontology["errErrorStatus"].join(", ") : '';
     var missingStatus = ontology["errMissingStatus"] ? ontology["errMissingStatus"].join(", ") : '';
@@ -740,10 +737,7 @@ function displayOntologies(data, ontology) {
   return ontTable;
 }
 
-function showSubmissions(ev, acronym) {
-  ev.preventDefault();
-  jQuery.facebox({ ajax: "/admin/ontologies/" + acronym + "/submissions" });
-}
+
 
 function showOntologiesToggleLinks(problemOnly) {
   var str = 'View Ontologies:&nbsp;&nbsp;&nbsp;&nbsp;';

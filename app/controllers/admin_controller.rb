@@ -64,18 +64,6 @@ class AdminController < ApplicationController
     render :json => enabled
   end
 
-  def submissions
-    @submissions = nil
-    @acronym = params["acronym"]
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params["acronym"]).first
-    begin
-      submissions = @ontology.explore.submissions
-      @submissions = submissions.sort {|a,b| b.submissionId <=> a.submissionId }
-    rescue
-      @submissions = []
-    end
-    render :partial => "layouts/ontology_report_submissions"
-  end
 
   def parse_log
     @acronym = params["acronym"]
