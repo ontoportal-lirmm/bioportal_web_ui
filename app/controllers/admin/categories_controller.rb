@@ -51,7 +51,7 @@ class Admin::CategoriesController < ApplicationController
       success_message = 'New Category added successfully'
       streams = [alert_success(id: 'category') { success_message }]
 
-      streams << prepend('categories_table_content', partial: 'admin/categories/category', locals: { category: category_saved })
+      streams << prepend('admin_categories_table_body', partial: 'admin/categories/category', locals: { category: category_saved })
 
       render_turbo_stream(*streams)
     end

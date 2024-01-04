@@ -10,20 +10,19 @@
 
   %div.my-1
     = render_alerts_container
-  %table#adminGroup.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
-    %thead
-      %tr
-        %th Name
-        %th Description
-        %th Created
-        %th ID
-        %th COUNT
-        %th Actions
-    %tbody#groups_table_content
-      = render partial: 'admin/groups/group', collection: @groups
-      %tr.empty-state
-        %td.text-center{:colspan => "6"} There are currently no  agents.
+  = render TableComponent.new(id: 'admin_groups', custom_class: 'border rounded p-1') do |t|
+    - t.header do |h|
+      - h.th {'Name'}
+      - h.th {'Description'}
+      - h.th {'Created'}
+      - h.th {'ID'}
+      - h.th {'COUNT'}
+      - h.th {'Actions'}
+
+    = render partial: 'admin/groups/group', collection: @groups
+    %tr.empty-state
+      %td.text-center{:colspan => "6"} There are currently no  agents.
   :javascript
     $.fn.dataTable.ext.errMode = 'none';
-    $("#adminGroup").dataTable()
+    $("#admin_groups").dataTable()
 

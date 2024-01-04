@@ -9,13 +9,14 @@
     = raw agent.affiliations.map{|i| display_agent(i)}.join(', ')
   %td
     = agent.agentType
+  %td
+    - count = agent_usages_count(agent)
+    = link_to_modal(nil, "/agents/#{agent.id.split('/').last}/usages", style: 'width: 120px', class: "btn btn-sm btn-#{count.zero? ? 'danger' : 'light'}", data: { show_modal_title_value: "Agent \"#{agent.name}\" usages" }) do
+      = count.zero? ? "Not used" : "See usages (#{count})"
+
   %td{:class => 'delete_mappings_column'}
     - if agent.id && !agent.id.empty? && session[:user] && session[:user].admin?
       %div.d-flex{style: 'width: 250px'}
-        %span.mx-1
-          - count = agent_usages_count(agent)
-          = link_to_modal(nil, "/agents/#{agent.id.split('/').last}/usages", style: 'width: 120px', class: "btn btn-sm btn-#{count.zero? ? 'danger' : 'light'}", data: { show_modal_title_value: "Agent \"#{agent.name}\" usages" }) do
-            = count.zero? ? "Not used" : "See usages (#{count})"
         %span.mx-1
           = link_to_agent_edit_modal(agent)
         %span

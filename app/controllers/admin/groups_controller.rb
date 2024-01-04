@@ -51,7 +51,7 @@ class Admin::GroupsController < ApplicationController
       success_message = 'New Group added successfully'
       streams = [alert_success(id: 'group') { success_message }]
 
-      streams << prepend('groups_table_content', partial: 'admin/groups/group', locals: { group: group_saved })
+      streams << prepend('admin_groups_table_body', partial: 'admin/groups/group', locals: { group: group_saved })
 
       render_turbo_stream(*streams)
     end

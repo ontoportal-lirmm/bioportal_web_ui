@@ -7,19 +7,18 @@
                 data: { show_modal_title_value: "Create a new agent", show_modal_size_value: 'modal-xl' },
                 )
   = render_alerts_container(AgentsController)
-  %table#adminAgents.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
-    %thead
-      %tr
-        %th Name
-        %th Identifiers
-        %th Affiliations
-        %th Type
-        %th{:class => 'delete_mappings_column'} Actions
-    %tbody#agents_table_content
-      = render partial: 'agents/agent' , collection: @agents
-      %tr.empty-state
-        %td.text-center{:colspan => "6"} There are currently no  agents.
+  = render TableComponent.new(id: 'admin_agents', custom_class: 'border rounded p-1') do |t|
+    - t.header do |h|
+      - h.th {'First name'}
+      - h.th {'Identifiers'}
+      - h.th {'Affiliations'}
+      - h.th {'Type'}
+      - h.th {'Usages'}
+      - h.th {'Actions'}
+
+    = render partial: 'agents/agent' , collection: @agents
+    %tr.empty-state
+      %td.text-center{:colspan => "6"} There are currently no  agents.
   :javascript
     $.fn.dataTable.ext.errMode = 'none';
-
-    $("#adminAgents").dataTable()
+    $("#admin_agents").dataTable()
