@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Connects to data-controller="search"
+// Connects to data-controller="reveal-double-button"
 export default class extends Controller {
   static targets = [ "advancedOptions", "hideOptionsButton", "showOptionsButton" ]
   connect() {
