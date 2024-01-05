@@ -44,7 +44,7 @@ class Display::SearchResultComponent < ViewComponent::Base
     end
 
     def reveal_ontologies_button(text,id)
-      content_tag(:div, class: 'button icon-right', 'data-action': "click->reveal-by-id#reveal", 'data-id': id) do
+      content_tag(:div, class: 'button icon-right', 'data-action': "click->reveal-component#toggle", 'data-id': id) do
         concat(content_tag(:div, class: 'text') do
           text
         end)
