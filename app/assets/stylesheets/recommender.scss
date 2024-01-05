@@ -93,25 +93,61 @@
     display: flex;
 }
 
-.show-advanced-options{
+.recommender-page-options .show-advanced-options{
     display: flex;
     align-items: center;
     margin-top: 15px;
 }
-.show-advanced-options:hover{
+.recommender-page-options .show-advanced-options:hover{
     cursor: pointer;
 }
-.show-advanced-options .text{
+.recommender-page-options .show-advanced-options .text{
     margin-right: 10px;
-    color: #3CB371;
+    color: var(--primary-color);
     font-size: 14px;
 }
 
-.show-advanced-options svg path{
+.recommender-page-options .show-advanced-options svg path{
     
     fill: var(--primary-color);
 }
 .recommender-page-button{
     margin-top: 27px;
     width: 630px;
+}
+
+.recommender-advanced-options .title {
+    font-weight: 600;
+    margin-top: 30px;
+}
+.recommender-advanced-options .inputs-container{
+    display: flex;
+    margin-top: 11px;
+    margin-bottom: 17px;
+}
+.recommender-advanced-options .input{
+    width: 100%;
+}
+
+.recommender-advanced-options .input + .input{
+    margin-left: 20px;
+}
+.recommender-advanced-options .hidebutton{
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+}
+
+.recommender-advanced-options .hidebutton:hover{
+    cursor: pointer;
+}
+
+.recommender-advanced-options .hidebutton .text{
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 10px;
+
+}
+.recommender-advanced-options .hidebutton svg path{
+    fill: var(--primary-color);
 }

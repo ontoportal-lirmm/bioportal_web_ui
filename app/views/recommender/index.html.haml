@@ -39,7 +39,32 @@
               Show advanced options
             = inline_svg_tag "icons/arrow-down.svg"
             
-      .advanced-options
+      .recommender-advanced-options
+        .weights-configuration
+          .title 
+            Weights configuration
+          .inputs-container
+            .input
+              = render Input::NumberComponent.new(label: "Converage", name: "converage", value: 0.55)
+            .input
+              = render Input::NumberComponent.new(label: "Acceptance", name: "acceptance", value: 0.15)
+            .input
+              = render Input::NumberComponent.new(label: "Knowledge detail", name: "knowledge-detail", value: 0.15)
+            .input
+              = render Input::NumberComponent.new(label: "Specialization", name: "specialization", value: 0.15)
+        .ontologies-configuration
+          .title 
+            Ontologies configuration
+          .inputs-container
+            .input
+              = render Input::NumberComponent.new(label: "Maximum number of ontologies per set", name: "max-ont-per-set", value: 0.55)
+            .input
+              - get_ontologies_data
+              = render Input::SelectComponent.new(label: "Select ontologies", id: 'ontologies', name: 'ontologies', value: @onts_for_select, multiple: "multiple")
+        .hidebutton
+          = inline_svg_tag 'icons/hide.svg'
+          .text 
+            Hide advanced options
 
       .recommender-page-button
         = render Buttons::RegularButtonComponent.new(id:'recommender', value: "Get recommendations", variant: "primary")
