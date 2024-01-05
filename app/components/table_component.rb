@@ -5,12 +5,13 @@ class TableComponent < ViewComponent::Base
   renders_one :header, TableRowComponent
   renders_many :rows, TableRowComponent
 
-  def initialize(id: '', stripped: true, borderless: false, layout_fixed: false )
+  def initialize(id: '', stripped: true, borderless: false, layout_fixed: false, custom_class: '' )
     super
     @id = id
     @stripped = stripped
     @borderless = borderless
     @layout_fixed = layout_fixed
+    @custom_class = custom_class
   end
 
   def stripped_class

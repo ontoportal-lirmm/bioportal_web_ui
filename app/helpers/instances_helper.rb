@@ -73,7 +73,9 @@ module InstancesHelper
 
   def add_labels_to_print(instance, ontology_acronym)
     instance['labelToPrint'] = instance_label(instance)
-    instance['types'].map!{ |t|  {type:t, labelToPrint:concept_label(ontology_acronym , t)}}
+    instance['types'].reject!{|t| t['NamedIndividual']}
+    instance['types'].map!{ |t|  {type:t, labelToPrint: t}}
+    instance['ontology'] = ontology_acronym
     instance
   end
 

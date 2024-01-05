@@ -1,0 +1,47 @@
+%div.container
+  %div.analytics.my-5
+    %dive.site-admin-page-section.flex-wrap.justify-content-center
+      %div.d-flex.flex-wrap.m-2.justify-content-center.w-100
+        %div.col.card.d-flex.justify-content-center.mr-2.p-2.text-center.container-gradient
+          %div.card-header-2
+            Total Ontologies
+          %div.card-header-1
+            = @ontologies_count
+          %div.card-header-3{data: {controller: 'tooltip'}, title: new_ontologies_created_title}
+            #{@new_ontologies_count.size} new ontology this year
+        %div.col.card.d-flex.justify-content-center.p-2.mr-2.text-center.container-gradient
+          %div.card-header-2
+            Ontologies with errors
+          %div.card-header-1
+            = @ontologies_problems_count
+          %div.card-header-3.py-2.mt-1
+        %div.col.card.d-flex.justify-content-center.mr-2.p-2.text-center.container-gradient
+          %div.card-header-2
+            Total Visits
+          %div.card-header-1
+            = format_number_abbreviated(@page_visits[:visits].sum)
+          %div.card-header-3.py-2.mt-1
+
+        %div.col.card.d-flex.justify-content-center.p-2.text-center.container-gradient
+          %div.card-header-2
+            Active Users
+          %div.card-header-1
+            = @users_visits[:visits].last
+          %div.card-header-3
+            #{ visits_evolution }  users since last month
+      %div.d-flex.flex-wrap.m-2.p-2.justify-content-center.w-100
+        %div.col.card.p-2.mr-2
+          = chart_component(title: 'Ontology visits', type: 'bar',
+                            labels: @ontology_visits[:labels].last(13),
+                            datasets: visits_chart_dataset(@ontology_visits[:visits].last(13)))
+
+        %div.col.card.p-2
+          = chart_component(title: 'Unique Users visits', type: 'line',
+                            labels: @users_visits[:labels].last(13),
+                            datasets: visits_chart_dataset(@users_visits[:visits].last(13)))
+
+        %div.col-12.card.p-2.m-2
+          = chart_component(title: 'Page visits of this month', type: 'bar',
+                            labels: @page_visits[:labels].last(13).reverse,
+                            datasets: visits_chart_dataset(@page_visits[:visits].last(13).reverse),
+                            index_axis: 'y')

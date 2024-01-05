@@ -32,7 +32,8 @@ class InstancesTable extends DataTable {
                             id: x["table"]["@id"],
                             label: x["table"]["label"],
                             prefLabel: x["table"]["prefLabel"],
-                            labelToPrint: x["table"]["labelToPrint"]
+                            labelToPrint: x["table"]["labelToPrint"],
+                            ontology: x["table"]["ontology"]
                         },
                         x["table"]["types"],
                         x["table"]["properties"]
@@ -70,11 +71,6 @@ class InstancesTable extends DataTable {
 
     connectedCallback() {
         super.connectedCallback()
-        this.addEventListener("row-click", (e) => {
-            this.openPopUpDetail(e.detail.data)
-        })
-
-
     }
 
     update(ontologyAcronym, classUri) {
@@ -90,8 +86,8 @@ class InstancesTable extends DataTable {
             "name": "label",
             "title": 'Instance',
             "render": (data) => {
-                const {id, labelToPrint} = data
-                return `<a id="${id}" href="javascript:void(0)" rel="facebox">${labelToPrint}</a>`
+                const {id, labelToPrint, ontology} = data
+                return `<a id="${id}" data-controller="show-modal"  data-turbo="true"  data-show-modal-title-value="${labelToPrint}" data-turbo-frame="application_modal_content" data-action="click->show-modal#show" href="/ontologies/${ontology}/instances/fake_id?id=${encodeURIComponent(id)}">${labelToPrint}</a>`
             }
         }]
 
@@ -103,6 +99,7 @@ class InstancesTable extends DataTable {
                 "render": (data) => data.map(x => {
                     const id = x.type
                     const label = x.labelToPrint
+                    const acronym = x.ontology
                     const href = (id === label ? id : `?p=classes&conceptid=${encodeURIComponent(id)}`)
                     return `<a id="${id}" href="${href}" target="_blank">${label}</a>`
                 })
@@ -123,13 +120,6 @@ class InstancesTable extends DataTable {
 
     isClassURISet() {
         return this.classUri.length > 0
-    }
-
-    openPopUpDetail(data) {
-        let {id} = data[0]
-        const href = `/ontologies/${this.ontologyAcronym}/instances/${encodeURIComponent(id)}`
-        popUpElement({ajax: href})
-
     }
 
 

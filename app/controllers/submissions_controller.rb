@@ -17,7 +17,7 @@ class SubmissionsController < ApplicationController
                             .sort {|a,b| b.submissionId.to_i <=> a.submissionId.to_i } || []
 
     LOG.add :error, "No submissions for ontology: #{@ontology.id}" if @submissions.empty?
-
+    render :index, layout: nil
   end
 
   # When getting "Add submission" form to display

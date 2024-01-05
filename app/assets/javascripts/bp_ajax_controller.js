@@ -111,29 +111,6 @@ var ajax_process_ont = function() {
 
 
 // **************************************************************************************
-// CLASS LABELS
-
-// Note: If we don't query every time, using the array should be faster; it
-//       means the ajax_process_init must be called after all the elements
-//       are created because they will not be detected in a dynamic iteration.
-var ajax_cls_array = [];
-
-var ajax_process_cls_init = function() {
-  ajax_cls_array = jQuery("a.cls4ajax").toArray();
-};
-
-var ajax_process_cls_halt = function () {
-  ajax_cls_array = [];
-  window.clearInterval(ajax_process_cls_interval); // stop the ajax process
-  // Note: might leave faulty href links, but it usually means moving on to entirely different content
-  //       so it's not likely those links will be available for interaction.
-  // clear all the classes and ontologies to be resolved by ajax
-  //jQuery("a.cls4ajax").removeClass('cls4ajax');
-  //jQuery("a.ajax-modified-cls").removeClass('ajax-modified-cls');
-};
-
-
-// **************************************************************************************
 // INTERPORTAL CLASS LABELS
 
 // Note: If we don't query every time, using the array should be faster; it

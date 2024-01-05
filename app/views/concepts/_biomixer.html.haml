@@ -43,25 +43,5 @@
             }
         }
 
-        window.onmessage = function(e) {
-            var iframeHeight = jQuery(window).height() - jQuery("#bd_content .cls-info-container").offset().top - 50;
-            if (e.data === "biomixer_full_screen_request") {
-            if (jQuery(document).data().bp.biomixer_fullscreen.enabled) {
-                // make small
-                jQuery(document).data().bp.biomixer_fullscreen.toggle(jQuery(document).data().bp.biomixer_fullscreen.minimize);
-                jQuery(document).data().bp.biomixer_fullscreen.enabled = false;
-            } else {
-                // make big
-                jQuery(document).data().bp.biomixer_fullscreen.toggle(jQuery(document).data().bp.biomixer_fullscreen.maximize);
-                jQuery(document).data().bp.biomixer_fullscreen.enabled = true;
-            }
-            }
-        };
-
-        jQuery(document).ready(() => {
-            let biomixer = $("#biomixer_iframe")
-            biomixer.attr('src', biomixer.data('src'))
-        })
-
     #biomixer_container(style="padding-left: .5%; width: 99.5%; height: 900px;")
         %iframe#biomixer_iframe(src=original_src data-src=src_url style="min-height: 700px;" height="100%" width="100%" frameborder="0")

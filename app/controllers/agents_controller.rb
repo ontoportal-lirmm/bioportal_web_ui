@@ -56,7 +56,7 @@ class AgentsController < ApplicationController
       success_message = 'New Agent added successfully'
       streams = [alert_success(id: alert_id) { success_message }]
 
-      streams << prepend('agents_table_content', partial: 'agents/show_line', locals: { agent: new_agent })
+      streams << prepend('admin_agents_table_body', partial: 'agents/agent', locals: { agent: new_agent })
       streams << replace_agent_form(new_agent, agent_id: nil, frame_id: params[:id],
                                     parent_id: parent_id, name_prefix: name_prefix,
                                     deletable: deletable
@@ -101,7 +101,7 @@ class AgentsController < ApplicationController
       table_line_id = agent_table_line_id(agent_id(agent))
       agent = LinkedData::Client::Models::Agent.find(agent.id.split('/').last)
       streams = [alert_success(id: alert_id) { success_message },
-                 replace(table_line_id, partial: 'agents/show_line', locals: { agent: agent })
+                 replace(table_line_id, partial: 'agents/agent', locals: { agent: agent })
       ]
 
       streams << replace_agent_form(agent, agent_id: agent_id(agent.id), name_prefix: params[:name_prefix] , parent_id: parent_id, deletable: deletable) if params[:parent_id]
@@ -137,7 +137,7 @@ class AgentsController < ApplicationController
       table_line_id = agent_table_line_id(agent_id(agent))
       agent.usages = new_usages
       streams = [alert_success(id: alert_id) { success_message },
-                 replace(table_line_id, partial: 'agents/show_line', locals: { agent: agent })
+                 replace(table_line_id, partial: 'agents/agent', locals: { agent: agent })
       ]
 
       render_turbo_stream(*streams)
@@ -171,7 +171,7 @@ class AgentsController < ApplicationController
           ]
 
         else
-          render alert(type: 'danger') { error }
+          render_turbo_stream alert(type: 'danger') { error }
         end
       end
       format.html { render json: { success: success_text, error: error } }
