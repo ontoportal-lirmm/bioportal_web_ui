@@ -28,5 +28,6 @@ application.register("search-input", Search_input_component_controller)
 application.register("tabs-container", Tabs_container_component_controller)
 application.register("circle-progress-bar", CircleProgressBarComponentController)
 application.register("alert-component", alert_component_controller)
+
 application.register("progress-pages", Progress_pages_component_controller)
 application.register("reveal-component", Reveal_component_controller)

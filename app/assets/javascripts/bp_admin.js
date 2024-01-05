@@ -197,6 +197,10 @@ AjaxAction.prototype.ajaxCall = function() {
   }
 };
 
+function determineHTTPS(url) {
+  return url.replace("http:", ('https:' == document.location.protocol ? 'https:' : 'http:'));
+}
+
 AjaxAction.prototype.onSuccessAction = function(data, ontology, deferredObj) {
   var self = this;
   if (!self.isLongOperation) {

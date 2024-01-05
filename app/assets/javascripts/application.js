@@ -15,7 +15,6 @@
 //= require bp_ajax_controller
 //= require bp_notes
 //= require bp_form_complete
-//= require bp_search
 //= require bp_mappings
 //= require bp_admin
 //= require bp_recommender

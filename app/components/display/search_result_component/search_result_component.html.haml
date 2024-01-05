@@ -1,0 +1,35 @@
+.search-result-component{class: sub_component_class, 'data-controller': 'reveal-component'}
+    %a.title{href: @link}
+        = @title
+    - if @uri
+        .uri
+            = @uri
+    - if @definition
+        .text
+            = @definition
+    .actions
+        = details_button
+        = visualize_button
+        - if subresults?
+            = reveal_ontologies_button("#{subresults.size} more from this ontology", sub_ontologies_id)
+        - if reuses?
+            = reveal_ontologies_button("Reuses in #{reuses.size} ontologies", reuses_id)
+    - if subresults?
+        .more-from-ontology.d-none{id: sub_ontologies_id}
+            .vertical-line
+            .search-result-sub-components
+                - subresults.each do |result|
+                    .search-result-sub-component
+                        = result
+    - if reuses?
+        .more-from-ontology.reuses.d-none{id: reuses_id}
+            .vertical-line
+            .search-result-sub-components
+                .reuses-title 
+                    = inline_svg_tag 'icons/reuses.svg'
+                    %div Reuses in other ontologies
+                - reuses.each do |reuse|
+                    .search-result-sub-component
+                        = reuse
+    
+    

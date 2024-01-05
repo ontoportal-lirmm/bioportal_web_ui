@@ -1,77 +1,75 @@
-- @title = t("search.title")
+.search-page-container 
+  .search-page-subcontainer{'data-controller': 'reveal-component'}
+    = form_tag(search_path, method: :get, 'data-turbo': true) do
+      .search-page-input-container{'data-controller': 'reveal'}
+        .search-page-input
+          %input{type:"text", placeholder:"Enter a term, e.g. Melanoma", name: "q", value: @search_query}
+          %button.search-page-button{type:'submit'}
+            = inline_svg_tag 'icons/search.svg'
 
-%div.container.mt-5
-  %h1.display-4
-    = t("search.class_search")
+        .search-page-advanced{'data-reveal-component-target': 'item', class: "#{@advanced_options_open ? '' : 'd-none'}"}
+          .left
+            .filter-container
+              .title
+                Search language
+              .field
+                = search_language_selector(name: 'lang', selected: params[:lang])
+                
+            .filter-container
+              .title
+                = t("search.ontologies")
+              .field
+                - get_ontologies_data
+                = render Input::SelectComponent.new(id: 'search-ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected:  params[:ontologies_list])
+          
+          .right 
+            .filter-container
+              .title
+                Include in search
+              .d-flex
+                = render(ChipsComponent.new(name: 'include_properties', label: 'Property values', checked:  params[:include_properties]))
+                = render(ChipsComponent.new(name: 'obsolete', label: 'Obsolete classes', checked:  params[:obsolete]))
+                = render(ChipsComponent.new(name: 'include_views', label: 'Ontology views', checked: params[:include_views]))
 
-  = form_tag("/search", method: "post") do
-    %div.form-group
-      = text_field_tag("search_keywords", nil, class: "form-control", aria: {describedby: "classSearchHelpBlock"})
-      %small#classSearchHelpBlock.form-text.text-muted
-        = t("search.index.search_keywords_placeholder")
-        = link_to(t('help'), Rails.configuration.settings.links[:help_search], id: "search-help",
-                  aria: {label: t('search.view_search_documentation')}, class: "float-right")
-    %div.form-group
-      = link_to(t('search.show_advanced_options'), "javascript:void(0)", id: "advanced_options", data: {text_swap: t('search.hide_advanced_options')}, class: "form-text")
-  
-    -# Advanced search options
-    %div#search_options
-      %div.form-group.row
-        %div.col-sm-2.mb-4 Search language
-        %div.col-sm-10.mb-4
-          %div.w-25
-            = search_language_selector
-        %div.col-sm-2= t("search.include_in_search") + ":"
-        %div.col-sm-10
-          %div.form-check
-            = check_box(:search, :include_properties, class: "form-check-input")
-            = label(:search, :include_properties, t('search.property_values'), class: "form-check-label definition", title: t(".property_definition"))
-          %div.form-check
-            = check_box(:search, :include_obsolete, class: "form-check-input")
-            = label(:search, :include_obsolete,t('search.obsolete_classes'), class: "form-check-label definition", title: t(".obsolete_definition"))
-          %div.form-check
-            = check_box(:search, :include_views, class: "form-check-input")
-            = label(:search, :include_views, t('search.ontology_views'), class: "form-check-label")
+            .filter-container
+              .title
+                Show only
+              .d-flex
+                = render(ChipsComponent.new(name: 'exact_match', label: 'Exact Matches',  checked:  params[:exact_match]))
+                = render(ChipsComponent.new(name: 'require_definition', label: 'Classes with definitions', checked: params[:require_definition]))
 
-        %div.col-sm-2= t("search.narrow_search_to") + ":"
-        %div.col-sm-10
-          %div.form-check
-            = check_box(:search, :exact_match, class: "form-check-input")
-            = label(:search, :exact_match, t("exact_matches"), class: "form-check-label")
-          %div.form-check
-            = check_box(:search, :require_definition, class: "form-check-input")
-            = label(:search, :require_definition, t("search.classes_with_definitions"), class: "form-check-label")
-      %div.form-group
-        %h6{style: "font-size: 10pt !important"}= t("search.categories")
-        = select(:search, :categories, options_for_select(categories_for_select), {}, style: "width: 432px", multiple: "true", data: {placeholder: t("search.index.categories_placeholder")})
-      %div.form-group.mb-5{style: "width:432px"}
-        = render :partial => "shared/ontology_picker", locals: {sel_text: t("search.ontologies")}
-
-    = button_tag(t('search.title'), id: "search_button", class: "btn btn-primary")
-    = content_tag(:span, id: "search_spinner") do
-      %img{src: asset_path('spinners/spinner_000000_16px.gif'), style: "vertical-align: middle;"}
-
-  -# Search results
-  %div.row.mt-4#search_results_container
-    %div.col
-      #result_stats
-      #search_messages
-      #search_results
-
-%div#biomixer{style: "display: none;"}
-
-:javascript
-  // Hash of ontology id => name, acronym for lookup use via JS
-  
-  jQuery(document).ready(function() {
+        .search-page-options
+          - if @search_results
+            .search-page-number-of-results 
+              = "Match in #{@search_results.length} ontologies"
+          .search-page-advanced-button.show-options{class: "#{@advanced_options_open ? 'd-none' : ''}",'data': {'action': 'click->reveal-component#show', 'reveal-component-target': 'showButton'}}
+            .icon
+              =inline_svg_tag 'icons/settings.svg'
+            .text
+              Show advanced options
+          .search-page-advanced-button.hide-options{class: "#{@advanced_options_open ? '' : 'd-none'}", 'data': {'action': 'click->reveal-component#hide', 'reveal-component-target': 'hideButton'}}
+            .icon
+              =inline_svg_tag 'icons/hide.svg'
+            .text
+              hide advanced options
+    - if @search_results
+      .search-page-results-container
+        - number = 0
+        - @search_results.each do |result|
+          .search-page-result-element
+            - number = number + 1
+            - descendants = result[:descendants]
+            - reuses = result[:reuses]
+            - result[:root][:number] = number
+            = render Display::SearchResultComponent.new(result[:root]) do |c|
+              - descendants.each { |d| c.subresult(d.merge(is_sub_component: true))}
+              - reuses.each do |r|
+                - c.reuse(r[:root].merge(is_sub_component: true)) do |b|
+                  - r[:descendants].each { |dd|  b.subresult(dd.merge(is_sub_component: true))}
     
-    jQuery(document).data().bp.ontologies = #{Hash[LinkedData::Client::Models::Ontology.all(include_views: true).map {|o| [o.id, {name: o.name, acronym: o.acronym}]}].to_json.html_safe}
-
-    if (jQuery("#search_keywords").val() !== "") {
-        performSearch();
-    }
-  });
-
-  
-
+    - if @search_results.empty? && !@search_query.empty?
+      .browse-empty-illustration
+        %img{:src => "#{asset_path("empty-box.svg")}"}
+        %p No result was found
+          
 

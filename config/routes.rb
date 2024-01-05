@@ -189,6 +189,8 @@ Rails.application.routes.draw do
 
   get 'jambalaya/:ontology/:id' => 'visual#jam', :as => :jam
 
+  # Search
+  get 'search', to: 'search#index'
   ###########################################################################################################
   # Install the default route as the lowest priority.
   get '/:controller(/:action(/:id))'

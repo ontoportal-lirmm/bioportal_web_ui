@@ -60,6 +60,7 @@ module ApplicationHelper
       end
     end
   end
+  
 
 
   def encode_param(string)
