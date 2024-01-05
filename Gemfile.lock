@@ -182,6 +182,11 @@ GEM
     haml (5.2.2)
       temple (>= 0.8.0)
       tilt
+    haml-rails (2.1.0)
+      actionpack (>= 5.1)
+      activesupport (>= 5.1)
+      haml (>= 4.0.6)
+      railties (>= 5.1)
     hashie (5.0.0)
     highline (2.1.0)
     html2haml (2.3.0)
@@ -569,6 +574,7 @@ DEPENDENCIES
   flamegraph
   graphql-client
   haml (~> 5.1)
+  haml-rails
   html2haml
   i18n
   i18n-tasks

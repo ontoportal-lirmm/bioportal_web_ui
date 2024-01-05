@@ -117,7 +117,7 @@ class MappingsController < ApplicationController
       end
     else
       ontology_acronym = @ontology.acronym
-      @ontology_name = @ontology.name
+      @ontology_name = ontology_acronym
     end
     if @target_ontology.nil?
       if params[:target] == EXTERNAL_MAPPINGS_GRAPH
@@ -129,12 +129,13 @@ class MappingsController < ApplicationController
       end
     else
       target_acronym = @target_ontology.acronym
-      @target_ontology_name = @target_ontology.name
+      @target_ontology_name = target_acronym
     end
 
     ontologies = [ontology_acronym, target_acronym]
 
     @mapping_pages = LinkedData::Client::HTTP.get("#{MAPPINGS_URL}", { page: page, ontologies: ontologies.join(',') })
+    not_found(@mapping_pages.errors) if @mapping_pages.respond_to?(:errors)
     @mappings = @mapping_pages.collection
     @delete_mapping_permission = check_delete_mapping_permission(@mappings)
 
@@ -248,7 +249,7 @@ class MappingsController < ApplicationController
           ]
 
         else
-          render alert(type: 'danger') { error }
+          render_turbo_stream alert(type: 'danger') { error }
         end
       end
       format.html { render json: { success: success_text, error: error } }

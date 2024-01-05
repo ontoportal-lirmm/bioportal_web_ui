@@ -1,6 +1,7 @@
-- @title = "Edit category"
+= render_in_modal do
+  - @title = "Edit category"
 
-%div
-  = form_for :category, url: admin_categories_path + "/" + escape(@category.acronym), method: "PATCH", remote: true, data: { collection: "categories"}, html: {class: "admin-collection-form" } do |f|
-    = render partial: "form", locals: {f: f, title_text: "Edit category",
-                                             button_text: "Save", button_class: "edit-category"}
+  %div
+    = form_for :category, url: admin_categories_path + "/" + escape(@category.acronym), method: "PATCH", remote: true, data: { collection: "category"}, html: {class: "admin-collection-form" } do |f|
+      = render partial: "form", locals: {f: f, title_text: "Edit category",
+                                               button_text: "Save", button_class: "edit-category"}

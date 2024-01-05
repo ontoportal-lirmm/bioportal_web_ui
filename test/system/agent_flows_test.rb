@@ -64,7 +64,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
     sleep 1
     assert_text "New Agent added successfully"
     find('.close').click
-    within "table#adminAgents" do
+    within "table#admin_agents" do
       assert_selector '.human',  count: person_count + organization_count #  all created  agents
       assert_text new_agent.name
       new_agent.identifiers.map{|x| "https://orcid.org/#{x["notation"]}"}.each do |orcid|
@@ -86,7 +86,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
     agent_fill(agent, parent_id: agent.id)
     # assert_text "New Agent added successfully"
     find('.close').click
-    within "table#adminAgents" do
+    within "table#admin_agents" do
       assert_selector '.human',  count: person_count + organization_count # all created  agents
       assert_text agent.name
       agent.identifiers.map{|x| "https://orcid.org/#{x["notation"]}"}.each do |orcid|

@@ -117,6 +117,7 @@ group :development do
   gem 'i18n-tasks'
   gem 'deepl-rb'
   gem 'letter_opener_web', '~> 2.0'
+  gem 'haml-rails'
 end
 
 group :test, :development do

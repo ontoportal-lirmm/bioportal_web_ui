@@ -12,6 +12,8 @@ class DataTable extends HTMLElement{
         super()
         this.tableElem = document.createElement("table")
         this.tableElem.style.width = "100%"
+        this.tableElem.classList.add('table-content')
+        this.tableElem.classList.add('table-content-stripped')
 
         this.container = document.createElement("div")
         this.container.appendChild(this.tableElem)

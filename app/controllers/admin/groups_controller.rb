@@ -1,15 +1,16 @@
 class Admin::GroupsController < ApplicationController
-  include SubmissionUpdater
+  include SubmissionUpdater, TurboHelper, AdminHelper
 
   layout :determine_layout
   before_action :unescape_id, only: [:edit, :show, :update, :destroy]
   before_action :authorize_admin
 
   GROUPS_URL = "#{LinkedData::Client.settings.rest_url}/groups"
+  GROUPS_SYNCHRONIZE_URL = "#{LinkedData::Client.settings.rest_url}/slices/synchronize_groups"
+
 
   def index
-    response = _groups
-    render :json => response
+    @groups = _groups
   end
 
   def new
@@ -30,7 +31,7 @@ class Admin::GroupsController < ApplicationController
   end
 
   def create
-    response = { errors: '', success: '' }
+    response = { errors: nil, success: '' }
     start = Time.now
     begin
       group = LinkedData::Client::Models::Group.new(values: group_params)
@@ -43,18 +44,29 @@ class Admin::GroupsController < ApplicationController
     rescue Exception => e
       response[:errors] = "Problem creating the group  - #{e.message}"
     end
-    render json: response, status: (response[:errors] == '' ? :created : :internal_server_error)
+
+    if response[:errors]
+      render_turbo_stream alert_error(id: 'group') { response[:errors] }
+    else
+      success_message = 'New Group added successfully'
+      streams = [alert_success(id: 'group') { success_message }]
+
+      streams << prepend('admin_groups_table_body', partial: 'admin/groups/group', locals: { group: group_saved })
+
+      render_turbo_stream(*streams)
+    end
 
   end
 
   def update
-    response = { errors: '', success: ''}
+    response = { errors: nil, success: ''}
     start = Time.now
     begin
       group = LinkedData::Client::Models::Group.find_by_acronym(params[:id]).first
       add_ontologies_to_object(group_params[:ontologies],group) if (group_params[:ontologies].present? && group_params[:ontologies].size > 0 && group_params[:ontologies].first != '')
       delete_ontologies_from_object(group_params[:ontologies],group.ontologies,group)
       group.update_from_params(group_params)
+      group.ontologies = Array(group_params[:ontologies])
       group_updated = group.update
       if response_error?(group_updated)
         response[:errors] = response_errors(group_updated)
@@ -64,11 +76,21 @@ class Admin::GroupsController < ApplicationController
     rescue Exception => e
       response[:errors] = "Problem updating the group - #{e.message}"
     end
-    render json: response, status: (response[:errors] == '' ? :ok : :internal_server_error)
+
+    if response[:errors]
+      render_turbo_stream(alert_error(id: 'group') { response[:errors] })
+    else
+
+      streams = [alert_success(id: 'group') { response[:success] },
+                 replace(group.id.split('/').last, partial: 'admin/groups/group', locals: { group: group })
+      ]
+      render_turbo_stream(*streams)
+    end
+
   end
 
   def destroy
-    response = { errors: '', success: ''}
+    response = { errors: nil, success: ''}
     start = Time.now
     begin
       group = LinkedData::Client::Models::Group.find_by_acronym(params[:id]).first
@@ -82,8 +104,50 @@ class Admin::GroupsController < ApplicationController
     rescue Exception => e
       response[:errors] = "Problem deleting the group - #{e.message}"
     end
-    render json: response, status: (response[:errors] == '' ? :ok : :internal_server_error)
+    respond_to do |format|
+      format.turbo_stream do
+        if response[:errors]
+          render_turbo_stream alert(type: 'danger') { response[:errors].to_s }
+        else
+          render turbo_stream: [
+            alert(type: 'success') { response[:success] },
+            turbo_stream.remove(params[:id])
+          ]
+        end
+      end
+    end
   end
+
+  def synchronize_groups
+    response = {}
+
+    begin
+      response_raw = LinkedData::Client::HTTP.get(GROUPS_SYNCHRONIZE_URL, params, raw: true)
+
+      response_json = JSON.parse(response_raw, symbolize_names: true)
+
+      if !response_json.is_a?(Array) && response_json[:errors]
+        _process_errors(response_json[:errors], response, true)
+      else
+        response[:success] = "Synchronization of groups started successfully"
+      end
+    rescue JSON::ParserError => e
+      response[:errors] = "Error parsing JSON response - #{e.class}: #{e.message}"
+    rescue Exception => e
+      response[:errors] = "Problem synchronizing groups - #{e.class}: #{e.message}"
+    end
+
+    respond_to do |format|
+      format.turbo_stream do
+        if response[:errors]
+          render_turbo_stream alert(type: 'danger') { response[:errors].to_s }
+        else
+          render_turbo_stream alert(type: 'success') { response[:success] }
+        end
+      end
+    end
+  end
+
 
   private
 
@@ -96,16 +160,6 @@ class Admin::GroupsController < ApplicationController
   end
 
   def _groups
-    response = { groups: Hash.new, errors: '', success: '' }
-    start = Time.now
-    begin
-      response[:groups] = JSON.parse(LinkedData::Client::HTTP.get(GROUPS_URL, { include: 'all' }, raw: true))
-
-      response[:success] = "groups successfully retrieved in  #{Time.now - start}s"
-      LOG.add :debug, "Groups - retrieved #{response[:groups].length} groups in #{Time.now - start}s"
-    rescue Exception => e
-      response[:errors] = "Problem retrieving groups  - #{e.message}"
-    end
-    response
+    LinkedData::Client::HTTP.get(GROUPS_URL, { include: 'all' })
   end
 end

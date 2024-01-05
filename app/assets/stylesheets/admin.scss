@@ -127,10 +127,7 @@ table.dataTable tbody tr.selected {
   display: none;
 }
 
-/* to fix facebox default sizing in chrome */
-#facebox .body {
-  width: 375px !important;
-}
+
 
 .zebra td {
   padding: 8px 12px 8px 12px !important;

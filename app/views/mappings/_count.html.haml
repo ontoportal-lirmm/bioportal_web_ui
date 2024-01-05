@@ -11,11 +11,8 @@
     - @mapping_counts.each do |mapping_count|
       - t.row do |r|
         - r.td do
-          %a.facebox{href: "/mappings/show_mappings?id=#{@ontology_acronym}&target=#{mapping_count[:target_ontology].id}&height=600&width=800"}= mapping_count[:target_ontology].name
+          - title =  mapping_count[:target_ontology].name
+          = link_to_modal title, mappings_show_mappings_path(id: @ontology_acronym ,target: mapping_count[:target_ontology].id), data: { show_modal_title_value: title, show_modal_size_value: 'modal-xl'}
         - r.td do
           = number_with_delimiter(mapping_count[:count], delimiter: ',')
 
-:javascript
-  $(document).ready(() => {
-    $("#mapping_count_table a.facebox").facebox()
-  })
