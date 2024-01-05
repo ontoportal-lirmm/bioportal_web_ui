@@ -93,22 +93,21 @@
     display: flex;
 }
 
-.recommender-page-options .show-advanced-options{
+.recommender-page-options .advanced-options-button{
     display: flex;
     align-items: center;
     margin-top: 15px;
 }
-.recommender-page-options .show-advanced-options:hover{
+.recommender-page-options .advanced-options-button:hover{
     cursor: pointer;
 }
-.recommender-page-options .show-advanced-options .text{
-    margin-right: 10px;
+.recommender-page-options .advanced-options-button .text{
+    margin-left: 10px;
     color: var(--primary-color);
     font-size: 14px;
 }
 
-.recommender-page-options .show-advanced-options svg path{
-    
+.recommender-page-options .advanced-options-button svg path{
     fill: var(--primary-color);
 }
 .recommender-page-button{

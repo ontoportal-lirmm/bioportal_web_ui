@@ -6,7 +6,7 @@
       .line
     .recommender-page-decription
       Get recommendations for the most relevant ontologies from an excerpt of text or a list of keywords
-    .recommender-page-inputs
+    .recommender-page-inputs{'data-controller': 'reveal-component'}
       .inputs 
         .recommender-page-text-area
           %textarea{rows: "4" , placeholder: 'Enter or past a text to be annotated ...', name: "text"}
@@ -34,12 +34,16 @@
                 = render Input::RadioChipComponent.new(label: 'Ontologies', name: 'output-choice', value: 'text', checked: true)
               .ontology-sets-choice
                 = render Input::RadioChipComponent.new(label: 'Ontology sets', name: 'output-choice', value: 'text')
-          .show-advanced-options
+          .advanced-options-button{'data-action': 'click->reveal-component#show', 'data-reveal-component-target': 'showButton'}
+            = inline_svg_tag "icons/settings.svg"
             .text 
               Show advanced options
-            = inline_svg_tag "icons/arrow-down.svg"
+          .advanced-options-button.d-none{'data-action': 'click->reveal-component#hide', 'data-reveal-component-target': 'hideButton'}
+            = inline_svg_tag 'icons/hide.svg'
+            .text 
+              Hide advanced options
             
-      .recommender-advanced-options
+      .recommender-advanced-options.d-none{'data-reveal-component-target': 'item'}
         .weights-configuration
           .title 
             Weights configuration
@@ -61,10 +65,7 @@
             .input
               - get_ontologies_data
               = render Input::SelectComponent.new(label: "Select ontologies", id: 'ontologies', name: 'ontologies', value: @onts_for_select, multiple: "multiple")
-        .hidebutton
-          = inline_svg_tag 'icons/hide.svg'
-          .text 
-            Hide advanced options
+        
 
       .recommender-page-button
         = render Buttons::RegularButtonComponent.new(id:'recommender', value: "Get recommendations", variant: "primary")
