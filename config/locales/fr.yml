@@ -373,7 +373,6 @@ fr:
   score: Score
   
   search:
-    categories: Catégories
     class_search: Recherche de classe
     classes_with_definitions: Classes avec définitions
     hide_advanced_options: Masquer les options avancées

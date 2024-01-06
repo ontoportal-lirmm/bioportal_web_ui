@@ -1,14 +1,24 @@
 require 'uri'
 
 class SearchController < ApplicationController
-
+  include SearchAggregator
   skip_before_action :verify_authenticity_token
 
   layout :determine_layout
 
   def index
-    @search_query = params[:query].nil? ? params[:q] : params[:query]
-    @search_query ||= ""
+    @search_query = params[:query] || params[:q] || ''
+    @advanced_options_open = false
+    @search_results = []
+
+    return if @search_query.empty?
+
+    params[:pagesize] = "150"
+    params[:ontologies] = params[:ontologies_list]&.join(",")
+    results = LinkedData::Client::Models::Class.search(@search_query, params).collection
+
+    @advanced_options_open = !search_params_empty?
+    @search_results = aggregate_results(@search_query, results)
   end
 
   def json_search
@@ -18,13 +28,18 @@ class SearchController < ApplicationController
     end
     check_params_query(params)
     check_params_ontologies(params)  # Filter on ontology_id
+    if params["id"]&.eql?('All')
+      params.delete("id")
+      params.delete("ontologies")
+    end
     search_page = LinkedData::Client::Models::Class.search(params[:q], params)
     @results = search_page.collection
 
     response = ""
     obsolete_response = ""
     separator = (params[:separator].nil?) ? "~!~" : params[:separator]
-    for result in @results
+
+    for result in Array(@results)
       # TODO_REV: Format the response with type information, target information
       # record_type = format_record_type(result[:recordType], result[:obsolete])
       record_type = ""
@@ -32,20 +47,21 @@ class SearchController < ApplicationController
       target_value = result.prefLabel.select{|x| x.include?( params[:q].delete('*'))}.first || result.prefLabel.first
 
       case params[:target]
-        when "name"
-          target_value = result.prefLabel
-        when "shortid"
-          target_value = result.id
-        when "uri"
-          target_value = result.id
+      when "name"
+        target_value = result.prefLabel
+      when "shortid"
+        target_value = result.id
+      when "uri"
+        target_value = result.id
       end
 
+      acronym =  result.links["ontology"].split('/').last
       json = []
       json << "#{target_value}"
       json << " [obsolete]" if result.obsolete? # used by JS in ontologies/visualize to markup obsolete classes
       json << "|#{result.id}"
       json << "|#{record_type}"
-      json << "|#{result.explore.ontology.acronym}"
+      json << "|#{acronym}"
       json << "|#{result.id}" # Duplicated because we used to have shortId and fullId
       json << "|#{target_value}"
       # This is nasty, but hard to workaround unless we rewrite everything (form_autocomplete, jump_to, crossdomain_autocomplete)
@@ -55,8 +71,8 @@ class SearchController < ApplicationController
       if params[:id] && params[:id].split(",").length == 1
         json << "|#{CGI.escape((result.definition || []).join(". "))}#{separator}"
       else
-        json << "|#{result.explore.ontology.name}"
-        json << "|#{result.explore.ontology.acronym}"
+        json << "|#{acronym}"
+        json << "|#{acronym}"
         json << "|#{CGI.escape((result.definition || []).join(". "))}#{separator}"
       end
 
@@ -104,21 +120,18 @@ class SearchController < ApplicationController
     end
   end
 
-  def format_record_type(record_type, obsolete = false)
-    case record_type
-      when "apreferredname"
-        record_text = "Preferred Name"
-      when "bconceptid"
-        record_text = "Class ID"
-      when "csynonym"
-        record_text = "Synonym"
-      when "dproperty"
-        record_text = "Property"
-      else
-        record_text = ""
-    end
-    record_text = "Obsolete Class" if obsolete
-    record_text
+  def search_params
+    [
+      :ontologies, :categories,
+      :include_properties, :obsolete, :include_views,
+      :exact_match, :require_definition
+    ]
+  end
+
+  def search_params_empty?
+    (params[:lang].nil? || params[:lang].eql?('all')) &&
+      search_params.all?{|key| params[key].nil? || params[key].empty?}
   end
 
 end
+

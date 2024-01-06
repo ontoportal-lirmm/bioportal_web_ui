@@ -1,54 +1,30 @@
 - @title = "Administration"
 
-%div.row
-  %div.col
-    %h3.my-4 Administration Console
+%div
+  %div.container
+    %h3.my-1.py-5 Administration Console
+%div
+  %div.container.my-3
+    = render_alerts_container
+    = render Display::AlertComponent.new(id: 'progress_message', type:'info')
+    = render Display::AlertComponent.new(id: 'success_message', type:'success')
+    = render Display::AlertComponent.new(id: 'error_message', type:'danger')
+    = render Display::AlertComponent.new(id: 'info_message', type:'info')
 
-%div.row
-  %div.col-2
-    %div#progress_message{:class => "alert-box progress_box"}
-    %div#success_message{:class => "alert-box success"}
-    %div#error_message{:class => "alert-box error"}
-    %div#info_message{:class => "alert-box notice"}
-
-%div.row
-  %div.col
-    - sections = ['Site Administration','Ontology Administration',  'Licensing', 'Users', 'Metadata Administration', 'Groups', 'Categories', 'Persons & Organizations']
-    = render TabsContainerComponent.new do |t|
+%div
+  %div.mx-1
+    - sections = ['Analytics', 'Site Administration','Ontology Administration',  'Licensing', 'Users', 'Metadata Administration', 'Groups', 'Categories', 'Persons & Organizations', 'SPARQL']
+    - selected = params[:section] || sections.first.downcase
+    = render TabsContainerComponent.new(url_parameter: 'section') do |t|
       - sections.each do |section_title|
         - t.item(title: section_title,
                      path: '',
-                     selected: section_title.eql?(sections.first),
+                     selected: section_title.downcase.eql?(selected.downcase),
                      page_name: '')
       - t.item_content do
-        %div#site-admin-clear-caches.my-5
-          %div.site-admin-page-header
-            CACHE MANAGEMENT
-          %dive.site-admin-page-section
-            = link_to("Flush UI cache", "#", id: "flush_memcache_action", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
-            = link_to("Reset UI cache connection", "#", id: "reset_memcache_connection_action", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
-            = link_to("Flush GOO cache", "#", id: "flush_goo_cache_action", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
-            = link_to("Flush HTTP cache", "#", id: "flush_http_cache_action", class: "btn btn-outline-secondary btn-sm",  role: "button")
-
-        %div#site-admin-update-check.mb-5
-          %div.site-admin-page-header
-            VERSION MANAGEMENT
-          %dive.site-admin-page-section
-            = link_to("Check for updates", "#", id: "update_check_action", class: "btn btn-outline-secondary btn-sm",  role: "button")
-
-        %div#site-admin-appliance-id.mb-5
-          %div.site-admin-page-header
-            APPLIANCE ID
-          %dive.site-admin-page-section
-            %div#appliance-id
-              %span
-
-        %div#site-admin-clear-caches.my-5
-          %div.site-admin-page-header
-            MONITORING LINKS
-          %dive.site-admin-page-section
-            = link_to("Newrelic", "https://login.newrelic.com/login", target: '_blank', id: "newrelic_link", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
-            = link_to("StatusCake", "https://app.statuscake.com/Login", target: '_blank', id: "statuscake_link", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
+        = render 'analytics'
+      - t.item_content do
+        = render 'main'
       - t.item_content do
         %div.ontologies_list_container.mt-3
           %table{:style => "float:left;"}
@@ -79,21 +55,22 @@
         %div.mb-5#renew-license-form
       - t.item_content do
         %div.ontologies_list_container.mt-3
-          %table#adminUsers.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
+          %div.mx-auto.w-75
+            = render TurboFrameComponent.new(id: 'users-list', src: users_path, loading: 'lazy')
       - t.item_content do
         = render partial: 'ontologies_metadata_curator/metadata_tab'
       - t.item_content do
         %div.ontologies_list_container.mt-3
-          %table#adminGroups.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
-      - t.item_content do
-        %div.ontologies_list_container.mt-3
-          %table#adminCategories.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
+          %div.mx-auto.w-75
+            = render TurboFrameComponent.new(id: 'groups-list', src: admin_groups_path, loading: 'lazy')
       - t.item_content do
         %div.ontologies_list_container.mt-3
           %div.mx-auto.w-75
-            = render TurboFrameComponent.new(id: 'agents-list', src: '/agents', loading: 'lazy')
-
-      -# Groups tab
-      %div.tab-pane.fade{id: "groups", role: "tabpanel", aria: { labelledby: "groups-admin-tab" }}
+            = render TurboFrameComponent.new(id: 'categories-list', src: admin_categories_path, loading: 'lazy')
+      - t.item_content do
         %div.ontologies_list_container.mt-3
-          %table#adminGroups.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
+          %div.mx-auto.w-75
+            = render TurboFrameComponent.new(id: 'agents-list', src: agents_path, loading: 'lazy')
+      - t.item_content do
+        %div.container
+          = sparql_query_container

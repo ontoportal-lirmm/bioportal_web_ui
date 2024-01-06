@@ -24,7 +24,6 @@ Rails.application.routes.draw do
 
   resources :users, path: :accounts, constraints: { id: /[\d\w\.\-\%\+ ]+/ }
 
-  resources :reviews
 
   get '/users/subscribe/:username', to: 'users#subscribe'
   get '/users/un-subscribe/:email', to: 'users#un_subscribe'
@@ -39,8 +38,6 @@ Rails.application.routes.draw do
   delete 'mappings/:id', to: 'mappings#destroy', constraints: { id: /.+/ }
   resources :mappings
   get 'mappings/:id', to: 'mappings#show', constraints: { id: /.+/ }
-
-  resources :margin_notes
 
   resources :concepts
 
@@ -64,8 +61,19 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :licenses, only: [:index, :create, :new]
+    match 'groups/synchronize_groups' => 'groups#synchronize_groups', via: [:post]
     resources :groups, only: [:index, :create, :new, :edit, :update, :destroy]
     resources :categories, only: [:index, :create, :new, :edit, :update, :destroy]
+    post 'clearcache', to: 'clearcache'
+    post 'resetcache', to: 'resetcache'
+    post 'clear_goo_cache', to: 'clear_goo_cache'
+    post 'clear_http_cache', to: 'clear_http_cache'
+    get 'ontologies_report', to: 'ontologies_report'
+    post 'refresh_ontologies_report', to: 'refresh_ontologies_report'
+    delete 'ontologies', to: 'delete_ontologies'
+    put 'ontologies', to: 'process_ontologies'
+    get 'ontologies/:acronym/log', to: 'admin#parse_log'
+    get 'update_check_enabled', to: 'update_check_enabled'
   end
 
   resources :subscriptions
@@ -94,12 +102,15 @@ Rails.application.routes.draw do
     
   get '' => 'home#index'
 
+  match 'sparql_proxy', to: 'admin#sparql_endpoint', via: [:get, :post]
+
   # Top-level pages
   match '/feedback', to: 'home#feedback', via: [:get, :post]
   get '/account' => 'home#account'
   get '/site_config' => 'home#site_config'
   post '/annotator_recommender_form' => 'home#annotator_recommender_form'
   match '/visits', to: 'visits#index', via: :get
+  get 'statistics/index'
 
   # Error pages
   match "/404", to: "errors#not_found", via: :all
@@ -146,6 +157,8 @@ Rails.application.routes.draw do
   get '/ajax/classes/treeview' => 'concepts#show_tree'
   get '/ajax/classes/list' => 'collections#show_members'
   get '/ajax/classes/date_sorted_list' => 'concepts#show_date_sorted_list'
+  get '/ajax/properties/treeview' => 'properties#show_tree'
+  get '/ajax/properties/children' => 'properties#show_children'
   get '/ajax/properties/tree' => 'concepts#property_tree'
   get 'ajax/schemes/label', to: "schemes#show_label"
   get 'ajax/collections/label', to: "collections#show_label"
@@ -176,25 +189,8 @@ Rails.application.routes.draw do
 
   get 'jambalaya/:ontology/:id' => 'visual#jam', :as => :jam
 
-  # Admin
-  match '/admin/clearcache' => 'admin#clearcache', via: [:post]
-  match '/admin/resetcache' => 'admin#resetcache', via: [:post]
-  match '/admin/clear_goo_cache' => 'admin#clear_goo_cache', via: [:post]
-  match '/admin/clear_http_cache' => 'admin#clear_http_cache', via: [:post]
-  match '/admin/ontologies_report' => 'admin#ontologies_report', via: [:get]
-  match '/admin/refresh_ontologies_report' => 'admin#refresh_ontologies_report', via: [:post]
-  match '/admin/ontologies' => 'admin#delete_ontologies', via: [:delete]
-  match '/admin/ontologies' => 'admin#process_ontologies', via: [:put]
-  match '/admin/ontologies/:acronym/submissions/:id' => 'admin#delete_submission', via: [:delete]
-  match '/admin/ontologies/:acronym/submissions' => 'admin#submissions', via: [:get]
-  match '/admin/ontologies/:acronym/log' => 'admin#parse_log', via: [:get]
-  match '/admin/update_info' => 'admin#update_info', via: [:get]
-  match '/admin/update_check_enabled' => 'admin#update_check_enabled', via: [:get]
-  match '/admin/users' => 'admin#users', via: [:get]
-
-  # Ontolobridge
-  # post '/ontolobridge/:save_new_term_instructions' => 'ontolobridge#save_new_term_instructions'
-
+  # Search
+  get 'search', to: 'search#index'
   ###########################################################################################################
   # Install the default route as the lowest priority.
   get '/:controller(/:action(/:id))'

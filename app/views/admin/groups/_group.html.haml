@@ -1,0 +1,25 @@
+%tr.human{:id => group.id.split('/').last}
+  - count = group.ontologies&.size || 0
+  %td
+    %div{style: 'width: 250px'}
+      %div.text-truncate{title: group.name}
+        = group.name
+  %td
+    = group.description
+  %td
+    = group.created
+  %td
+    = group.acronym
+  %td
+    = link_to count , "/ontologies?groups=#{group.id}", target: "_blank"
+  %td{:class => 'delete_mappings_column'}
+    %div.d-flex.align-items-center{style: 'width: 250px'}
+      %span.mx-1
+        = link_to_modal(nil, edit_admin_group_path(group.id.split('/').last), data: {show_modal_title_value:  group.name}) do
+          Edit
+      %span
+        - if count.zero?
+          = button_to "Delete", CGI.unescape(admin_group_path(group.id.split('/').last)), method: :delete, class: 'btn btn-link',  form: {data: { turbo: true, turbo_confirm: "Are you sure?", turbo_frame: '_top'}}
+        - else
+          %span{data: { controller: 'tooltip' }, title: "Can't delete this group because still used"}
+            = link_to "Delete", "", class: 'btn btn-link disabled'

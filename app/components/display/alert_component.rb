@@ -1,10 +1,11 @@
 class Display::AlertComponent < ViewComponent::Base
-    def initialize(message: nil, closable: true, type: "info", auto_close_delay: nil, button: nil)
+    def initialize(id: nil, message: nil, closable: true, type: "info", auto_close_delay: nil, button: nil)
         @message = message
         @closable = closable
         @type = type
         @auto_close_delay =  auto_close_delay
         @button = button
+        @id = id
     end
 
     def closable?

@@ -105,6 +105,9 @@ $ANNOUNCE_LIST = ENV['SUPPORT_EMAIL']
 $SUPPORT_EMAIL = ENV['SUPPORT_EMAIL']
 # Email used to send notifications
 $NOTIFICATION_EMAIL = ENV['SUPPORT_EMAIL']
+
+# Bugsnag is a tool for exceptions tracking https://www.bugsnag.com/
+$BUGSNAG_APIKEY
 # reCAPTCHA
 # In order to use reCAPTCHA on the account creation and feedback submission pages:
 #    1. Obtain a reCAPTCHA v2 key from: https://www.google.com/recaptcha/admin

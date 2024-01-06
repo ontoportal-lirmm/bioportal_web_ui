@@ -1,652 +1,153 @@
 // BioPortal jQuery Namespace
-jQuery.bioportal = {};
+jQuery.bioportal = {}
 
-// Backport function name
-jQuery.curCSS = jQuery.css;
 
 // CSRF protection support
-$(document).ajaxSend(function(e, xhr, options) {
-  var token = $("meta[name='csrf-token']").attr('content');
-  xhr.setRequestHeader('X-CSRF-Token', token);
-});
+$(document).ajaxSend(function (e, xhr, options) {
+  var token = $('meta[name=\'csrf-token\']').attr('content')
+  xhr.setRequestHeader('X-CSRF-Token', token)
+})
 
-// Cache Implementation
-var cache = new Object();
-var que= new Array();
-var queIndex = 0;
-var thread=0;
 
-// Invalidate and Refetch
-  function refreshCache(nodeID){
-    cache[nodeID]=null
-    queData([nodeID],currentOntology)
+
+function BP_queryString () {
+  var a = window.location.search.substr(1).split('&')
+  var b = {}
+  for (var i = 0; i < a.length; ++i) {
+    var p = a[i].split('=')
+    if (p.length != 2) continue
+    b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, ' '))
   }
-
-
-// Cache Getter
-  function getCache(nodeID){
-    if(cache[nodeID]!=null){
-      return cache[nodeID]
-    }else{
-      return null;
-    }
-  }
-// Cache Setter
-  function setCache(nodeID,content){
-    cache[nodeID]=content
-  }
-
-// Starts the prefetching
-  function queData(nodes,ontology){
-    currentOntology = ontology
-    // Disables Cache
-    return false;
-
-    que = nodes.concat(que)
-    // set how many threads you want fetching data
-    queIndex = 0
-    thread++
-    preFetchData(que[queIndex],ontology,thread);
-    //preFetchData(que[1],ontology)
-
-  }
-
-// The prefetching function
-  function preFetchData(node_id,ontology,threadNumber) {
-
-
-      var responseSuccess = function(o)
-      {
-        var respTxt = o.responseText;
-        tabData = respTxt.split("|||")
-        setCache(node_id,tabData)
-        queIndex++
-
-        // makes sure the que isnt complete and makes sure that this thread shouldnt die
-
-        if(queIndex < que.length && thread == threadNumber){
-        preFetchData(que[queIndex],ontology,threadNumber)
-        }else if(queIndex >= que.length){
-          que = new Array();
-        }
-
-      }
-
-      var responseFailure = function(o){
-
-      }
-
-      var callback =
-      {
-        success:responseSuccess,
-        failure:responseFailure
-      };
-
-
-    // see's if item is already in cache, if not it makes the ajax call
-    if(getCache(node_id)==null){
-      YAHOO.util.Connect.asyncRequest('GET','/'+ontology+'/'+node_id+"?callback=load",callback);
-    }else{
-      queIndex++
-      if(queIndex < que.length && thread == threadNumber){
-        preFetchData(que[queIndex],ontology,threadNumber)
-        }else if(queIndex >= que.length){
-          que = new Array();
-        }
-    }
-
-    }
-
-
-
-
-//-------------------------------
-
-
-function toggleHide(id,name_to_hide){
-  toggle = true;
-  element = document.getElementById(id);
-  if(element.style.display==""){
-    toggle = false;
-  }
-
-  if(name_to_hide !=null && name_to_hide != ""){
-    elements = document.getElementsByName(name_to_hide);
-    for( var x = 0; x<elements.length; x++){
-      elements[x].style.display="none";
-    }
-  }
-
-  if(toggle){
-    if (element.style.display=="none"){
-      element.style.display="";
-    }
-  }else{
-      element.style.display="none";
-    }
-
+  return b
 }
 
-
-//helper function for demo only
-function newProposal(string){
-  document.getElementById('subject').value="Proposal For Change";
-  document.getElementById('comment').value=string;
-
-  selectBox = document.getElementById('margin_note_note_type');
-  for(var x =0; x<selectBox.options.length;x++){
-    option = selectBox.options[x]
-    if(option.value!=5){
-      option.disabled=true;
-    }
-    if(option.value==5){
-      option.selected=true;
-    }
-  }
-}
-
-  function newNote(){
-    toggleHide("commentForm","forms")
-  }
-
-
-
-
-  function compare(note_id){
-    oldValue = document.getElementById("oldValue").innerHTML;
-    element = document.getElementById("note_value"+note_id)
-    target = document.getElementById("note_text"+note_id)
-    var d = dmp.diff_main(oldValue, element.value);
-      dmp.diff_cleanupSemantic(d);
-      target.innerHTML=dmp.diff_prettyHtml(d)
-  }
-
-  function hide(id){
-    document.getElementById(id).style.display="none";
-  }
-  function unhide(id){
-    document.getElementById(id).style.display="";
-  }
-
-
-
-function buildWait(){
-   YAHOO.namespace("wait.container");
-  // Initialize the temporary Panel to display while waiting for external content to load
-  YAHOO.wait.container.wait = new YAHOO.widget.Panel("wait",
-        { width:"240px",
-          fixedcenter:true,
-          close:false,
-          draggable:false,
-          zindex:4,
-          modal:true,
-          visible:false
-        }
-      );
-
-  YAHOO.wait.container.wait.setHeader("Loading, please wait...");
-  YAHOO.wait.container.wait.setBody('<img src="http://us.i1.yimg.com/us.yimg.com/i/us/per/gr/gp/rel_interstitial_loading.gif" />');
-  YAHOO.wait.container.wait.render(document.body);
-
-
-
-}
-
-function buildTabWait(){
-   YAHOO.namespace("tabwait.container");
-  // Initialize the temporary Panel to display while waiting for external content to load
-  YAHOO.tabwait.container.wait = new YAHOO.widget.Panel("tabwait",
-        { width:"240px",
-          fixedcenter:true,
-          close:false,
-          draggable:false,
-          zindex:4,
-          modal:true,
-          visible:false
-        }
-      );
-
-  YAHOO.tabwait.container.wait.setHeader("Building Tree, please wait...");
-  YAHOO.tabwait.container.wait.setBody('<img src="http://us.i1.yimg.com/us.yimg.com/i/us/per/gr/gp/rel_interstitial_loading.gif" />');
-  YAHOO.tabwait.container.wait.render(document.body);
-
-
-
-}
-
-
-
-function buildSearchWait(){
-   YAHOO.namespace("wait.container");
-  // Initialize the temporary Panel to display while waiting for external content to load
-  YAHOO.wait.container.wait = new YAHOO.widget.Panel("wait",
-        { width:"240px",
-          fixedcenter:true,
-          close:false,
-          draggable:false,
-          zindex:4,
-          modal:true,
-          visible:false
-        }
-      );
-
-  YAHOO.wait.container.wait.setHeader("Searching, please wait...");
-  YAHOO.wait.container.wait.setBody('<img src="http://us.i1.yimg.com/us.yimg.com/i/us/per/gr/gp/rel_interstitial_loading.gif" />');
-  YAHOO.wait.container.wait.render(document.body);
-
-
-
-}
-
-
-
-// Selects the current clicked node.
-function toggleSelected(node){
-
-  var index=1;
-
-  // can get in endless loop if you jump to a node that is free floating.
-  nullCount = 0;
-  while (nullCount < 20){
-    if(tree.getNodeByIndex(index)!=null){
-      if (tree.getNodeByIndex(index).labelStyle=='ygtvlabel-selected'){
-        tree.getNodeByIndex(index).labelStyle='ygtvlabel'
-        break;
-      }
-    }else{
-      nullCount ++;
-    }
-  index++;
-  }
-  node.labelStyle="ygtvlabel-selected";
-
-}
-var tabs=null;
-  function buildTabs(){
-      tabs = new YAHOO.widget.TabView('tabframe');
-
-    //YAHOO.namespace("feed");
-    //YAHOO.feed.feed = new YAHOO.widget.Panel("feedPanel", { context:["feed","tr","br"], width:"320px", visible:false,draggable:false,constraintoviewport:true  } );
-    //YAHOO.feed.feed.render();
-    //YAHOO.util.Event.addListener("feed", "click", YAHOO.feed.feed.show, YAHOO.feed.feed, true);
-
-    var split = new Ext.SplitBar("dragSpot", "leftbar",
-                     Ext.SplitBar.HORIZONTAL, Ext.SplitBar.LEFT);
-      split.setAdapter(new Ext.SplitBar.AbsoluteLayoutAdapter("container"));
-      split.minSize = 100;
-      split.maxSize = 400;
-      split.animate = true;
-      split.on('moved', splitterMoved);
-  }
-
-  function splitterMoved(splitbar,newSize){
-    var rightSide = Ext.get('centerContent');
-    var tabFrame = Ext.get('tabframe');
-    var leftSide = Ext.get('leftbar');
-
-  }
-
-  function resetNoteForm(uniq){
-    document.getElementById("note_subject"+uniq).value=""
-    document.getElementById("note_comment"+uniq).value=""
-    document.getElementById('noteParent'+uniq).value="";
-  }
-
-
-var myEditor;
-
-
-
-function buildEditor(uniq){
-
-
-
-  var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event;
-
-  myEditor = new YAHOO.widget.SimpleEditor('note_comment'+uniq, {
-    height: '300px',
-    width: '522px',
-    dompath: false //Turns on the bar at the bottom
-});
-myEditor.render();
-}
-
-function saveNote(){
-  myEditor.saveHTML();
-  myEditor.destroy();
-
-}
-
-function destroyEditor(){
-    myEditor.clearEditorDoc();
-    myEditor.destroy();
-
-}
-
-
-
-
-function updateOntologyList(ontology){
-    list = document.getElementById("ontologieslist")
-    if(ontology.checked){
-        var s= document.createElement("LI");
-        var v= document.createElement("INPUT");
-        v.type="hidden"
-        v.value=1
-        v.name=ontology.name
-        v.id="hid_"+ontology.nextSibling.nodeValue;
-        s.id="id_"+ontology.nextSibling.nodeValue;
-        s.innerHTML= ontology.nextSibling.nodeValue
-        list.appendChild(s);
-        list.appendChild(v);
-        ontology.parentNode.innerHTML = ontology.parentNode.innerHTML.replace(">","checked >")
-    }else{
-        list.removeChild(document.getElementById("id_"+ontology.nextSibling.nodeValue))
-        list.removeChild(document.getElementById("hid_"+ontology.nextSibling.nodeValue))
-        ontology.parentNode.innerHTML = ontology.parentNode.innerHTML.replace("checked","")
-    }
-
-
-}
-
-function hover_on_BG(cell){
-    if(!cell.firstChild.checked){
-        cell.style.background="#DFDFDF";
-    }
-}
-
-function hover_off_BG(cell){
-    if(!cell.firstChild.checked){
-        cell.style.background="white";
-    }
-}
-
-var dialog;
-
-function toggleBG(cell,bgcolor){
-
-    if(cell.firstChild.checked){
-        cell.style.backgroundColor=bgcolor;
-    }else{
-        cell.style.backgroundColor=bgcolor;
-    }
-
-
-}
-
-function updateContent(){
-    document.getElementById('ontologies').innerHTML = Dialog.dialog.getContent().innerHTML
-}
-
-//------------------------------------- JQuery Rewrite Functions ---------------------------------
-
-function ajaxForm(form, target, callback) {
-  // let's start the jQuery while I wait.
-  // step 1: onload - capture the submit event on the form.
-
-  // now we're going to capture *all* the fields in the
-  // form and submit it via ajax.
-
-  // :input is a macro that grabs all input types, select boxes
-  // textarea, etc.  Then I'm using the context of the form from
-  // the initial '#contactForm' to narrow down our selector
-  var inputs = [];
-
-  jQuery(form).find(':input').each(function() {
-    if (this.type == "checkbox" || this.type == "radio" && this.checked) {
-      inputs.push(this.name + '=' + escape(this.value));
-    } else if (this.type != "checkbox" && this.type != "radio") {
-      inputs.push(this.name + '=' + escape(this.value));
-    }
-  });
-
-  // now if I join our inputs using '&' we'll have a query string
-  jQuery.post(form.action, inputs.join('&'), function(data) {
-    jQuery(target).html(data);
-
-    if (callback) {
-      callback();
-    }
-
-    tb_init('a.thickbox, area.thickbox, input.thickbox');
-  });
-
-  // by default - we'll always return false so it doesn't redirect the user.
-  return false;
-}
-
-function update_tab(ontology,concept){
-
-
-          jQuery.get("/tab/update/"+ontology+"/"+concept)
-
-
-}
-
-
-function remove_tab(link,ontology,redirect){
-
-      jQuery.get("/tab/remove/"+ontology,function(){
-            if(redirect){
-              window.location="/ontologies"
-            }else{
-              jQuery("#tab"+ontology).remove()
-
-            }
-
-      })
-
-}
-
-function selectTab(id,tab){
-    nav = document.getElementById(id);
-    for(var x=0; x<nav.childNodes.length; x++){
-        nav.childNodes[x].className="";
-    }
-
-    document.getElementById(tab).className="selected";
-
-}
-
-
-// Method for getting parameters from the query string of a URL
-(function($) {
-    $.QueryString = (function(a) {
-        if (a == "") return {};
-        var b = {};
-        for (var i = 0; i < a.length; ++i)
-        {
-            var p=a[i].split('=');
-            if (p.length != 2) continue;
-            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
-        }
-        return b;
-    })(window.location.search.substr(1).split('&'))
-})(jQuery);
-
-function BP_queryString() {
-  var a = window.location.search.substr(1).split('&');
-  var b = {};
-  for (var i = 0; i < a.length; ++i)
-  {
-      var p=a[i].split('=');
-      if (p.length != 2) continue;
-      b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
-  }
-  return b;
-}
-
-function bpPopWindow(e) {
-  e.preventDefault();
-
-  var url = jQuery(e.currentTarget).attr("href");
-  var pop = (url.match(/\?/) != null) ? "&pop=true" : "?pop=true";
-  var popWidth = 800;
-  var popHeight = 600;
-
-  if (typeof e.data !== "undefined") {
+function bpPopWindow (e) {
+  e.preventDefault()
+
+  var url = jQuery(e.currentTarget).attr('href')
+  var pop = (url.match(/\?/) != null) ? '&pop=true' : '?pop=true'
+  var popWidth = 800
+  var popHeight = 600
+
+  if (typeof e.data !== 'undefined') {
     if (e.data.hasOwnProperty('w')) {
-      popWidth = e.data.w;
+      popWidth = e.data.w
     }
     if (e.data.hasOwnProperty('h')) {
-      popHeight = e.data.h;
+      popHeight = e.data.h
     }
   }
 
   // Make sure to insert the query string before the hash
-  url = (url.match(/#/) != null) ? [url.slice(0, url.indexOf("#")), pop, url.slice(url.indexOf("#"))].join('') : url + pop;
+  url = (url.match(/#/) != null) ? [url.slice(0, url.indexOf('#')), pop, url.slice(url.indexOf('#'))].join('') : url + pop
 
   // Fixes dual-screen position                         Most browsers       Firefox
-  var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX;
-  var dualScreenTop = window.screenTop   != undefined ? window.screenTop  : window.screenY;
+  var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX
+  var dualScreenTop = window.screenTop != undefined ? window.screenTop : window.screenY
 
-  var width = window.innerWidth ? window.innerWidth : (document.documentElement.clientWidth ? document.documentElement.clientWidth : window.screen.width);
-  var height = window.innerHeight ? window.innerHeight : (document.documentElement.clientHeight ? document.documentElement.clientHeight : window.screen.height);
+  var width = window.innerWidth ? window.innerWidth : (document.documentElement.clientWidth ? document.documentElement.clientWidth : window.screen.width)
+  var height = window.innerHeight ? window.innerHeight : (document.documentElement.clientHeight ? document.documentElement.clientHeight : window.screen.height)
 
-  var left = ((width / 2) - (popWidth / 2)) + dualScreenLeft;
-  var top = ((height / 2) - (popHeight / 2)) + dualScreenTop;
+  var left = ((width / 2) - (popWidth / 2)) + dualScreenLeft
+  var top = ((height / 2) - (popHeight / 2)) + dualScreenTop
 
-  var newWindow = window.open(url, 'bp_popup_window', 'scrollbars=yes, width=' + popWidth + ', height=' + popHeight + ', top=' + top + ', left=' + left);
+  var newWindow = window.open(url, 'bp_popup_window', 'scrollbars=yes, width=' + popWidth + ', height=' + popHeight + ', top=' + top + ', left=' + left)
   if (window.focus) {
     newWindow.focus()
-  };
+  }
+
 }
-jQuery("#submitFeedbackMenuItem").on("click", { w: "800", h: "600" }, bpPopWindow)
+jQuery('#submitFeedbackMenuItem').on('click', { w: '800', h: '600' }, bpPopWindow)
 
 /**************************************************************
  * Standardized BP modal popups
  **************************************************************/
 
 // Methods for working with standardized BP popups
-var bp_popup_init = function(e) {
-  bp_popup_cleanup();
-  e.preventDefault();
+var bp_popup_init = function (e) {
+  bp_popup_cleanup()
+  e.preventDefault()
   e.stopPropagation()
 
-  var popup = jQuery(e.currentTarget).parents(".popup_container");
-  var popup_list = popup.children(".bp_popup_list");
+  var popup = jQuery(e.currentTarget).parents('.popup_container')
+  var popup_list = popup.children('.bp_popup_list')
 
-  popup.children(".bp_popup_link_container").addClass("bp_popup_shadow");
-  popup.find("a.bp_popup_link").css("z-index", "5000").addClass("bp_popup_link_active");
+  popup.children('.bp_popup_link_container').addClass('bp_popup_shadow')
+  popup.find('a.bp_popup_link').css('z-index', '5000').addClass('bp_popup_link_active')
 
-  popup.children(".bp_popup_list").show();
+  popup.children('.bp_popup_list').show()
 
   // Check for dropping off edge of screen
   if (popup_list.width() + popup_list.offset().left > jQuery(window).width()) {
-    popup_list.css("left", "-250px");
+    popup_list.css('left', '-250px')
   }
 
 }
 
-var bp_popup_cleanup = function() {
-  jQuery(".bp_popup_link_container").removeClass("bp_popup_shadow");
-  jQuery(".bp_popup_link").css("z-index", "").removeClass("bp_popup_link_active");
-  jQuery(".bp_popup_list").hide();
+var bp_popup_cleanup = function () {
+  jQuery('.bp_popup_link_container').removeClass('bp_popup_shadow')
+  jQuery('.bp_popup_link').css('z-index', '').removeClass('bp_popup_link_active')
+  jQuery('.bp_popup_list').hide()
 }
 
-// Sample object for working with pop-ups
-/**
-var filter_matched = {
-  init: function() {
-    jQuery("#filter_matched").bind("click", function(e){bp_popup_init(e)});
-    jQuery(".match_filter").bind("click", function(e){filter_matched.filterMatched(e)});
-    this.cleanup();
-  },
-
-  cleanup: function() {
-    jQuery("html").click(bp_popup_cleanup);
-    jQuery(document).keyup(function(e) {
-      if (e.keyCode == 27) { bp_popup_cleanup(); } // esc
-    });
-  },
-
-  filterMatched: function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    var matchToFilter = jQuery(e.currentTarget);
-    var filterText = matchToFilter.attr("data-bp_filter_match");
-
-    resultsTable.fnFilter(filterText, 1);
-
-    jQuery("#result_stats").html(jQuery(resultsTable).find("tr").length - 1 + " results");
-    bp_popup_cleanup();
-  }
-}
-**/
 
 
 
-jQuery(window).ready(function(){
+jQuery(window).ready(function () {
   // Helper text for advanced search filter
-  jQuery("input[type=text].help_text, textarea.help_text").each(function(){
-    if (jQuery(this).val() == "") {
-      jQuery(this).val(jQuery(this).attr("title"));
-      jQuery(this).addClass("help_text_font");
+  jQuery('input[type=text].help_text, textarea.help_text').each(function () {
+    if (jQuery(this).val() == '') {
+      jQuery(this).val(jQuery(this).attr('title'))
+      jQuery(this).addClass('help_text_font')
     } else {
-      jQuery(this).removeClass("help_text_font");
+      jQuery(this).removeClass('help_text_font')
     }
-  });
+  })
 
-  jQuery("input[type=text].help_text, textarea.help_text").live("focus", (function(){
-    var input = jQuery(this);
-    if (input.attr("title") == input.val()) {
-      input.val("");
-      input.removeClass("help_text_font");
+  jQuery('input[type=text].help_text, textarea.help_text').live('focus', (function () {
+    var input = jQuery(this)
+    if (input.attr('title') == input.val()) {
+      input.val('')
+      input.removeClass('help_text_font')
     }
-  }));
+  }))
 
-  jQuery("input[type=text].help_text, textarea.help_text").live("blur", (function(){
-    var input = jQuery(this);
-    if (input.val() == "") {
-      input.val(input.attr("title"));
-      input.addClass("help_text_font");
+  jQuery('input[type=text].help_text, textarea.help_text').live('blur', (function () {
+    var input = jQuery(this)
+    if (input.val() == '') {
+      input.val(input.attr('title'))
+      input.addClass('help_text_font')
     }
-  }));
-});
+  }))
+})
 
 
 
 // Initialize all link buttons using jQuery UI button widget
-jQuery(document).ready(function(){
-  jQuery("a.link_button, input.link_button").button();
+jQuery(document).ready(function () {
+  jQuery('a.link_button, input.link_button').button()
   // Properly define Chosen select width
-  jQuery(".chzn-container").css("width", "auto");
-  jQuery(".chzn-container").css("min-width", "30em");
-  jQuery("input.default").css("width", "100%");
-  jQuery(".chzn-drop").css({"width": "100%"});
-});
+  jQuery('.chzn-container').css('width', 'auto')
+  jQuery('.chzn-container').css('min-width', '30em')
+  jQuery('input.default').css('width', '100%')
+  jQuery('.chzn-drop').css({ 'width': '100%' })
+})
 
 // Truncate more/less show and hide
-jQuery(document).ready(function(){
-  jQuery("a.truncated_more").live("click", function(){
-    var link = jQuery(this);
-    link.parents("span.more_less_container").find(".truncated_more").hide();
-    link.parents("span.more_less_container").find(".truncated_less").show();
+jQuery(document).ready(function () {
+  jQuery('a.truncated_more').live('click', function () {
+    var link = jQuery(this)
+    link.parents('span.more_less_container').find('.truncated_more').hide()
+    link.parents('span.more_less_container').find('.truncated_less').show()
   })
-  jQuery("a.truncated_less").live("click", function(){
-    var link = jQuery(this);
-    link.parents("span.more_less_container").find(".truncated_less").hide();
-    link.parents("span.more_less_container").find(".truncated_more").show();
+  jQuery('a.truncated_less').live('click', function () {
+    var link = jQuery(this)
+    link.parents('span.more_less_container').find('.truncated_less').hide()
+    link.parents('span.more_less_container').find('.truncated_more').show()
   })
 })
 
-// Invoke a loading animation where dots are added to some load text
-// Call this like: var loadAni = loadingAnimation("#loading");
-// Where: <span id="loading">loading</span>
-// To kill the animation, call clearInterval(loadAni);
-function loadingAnimation(loadId) {
-  var originalText = jQuery(loadId).text(), i = 0;
-  return setInterval(function() {
-    jQuery(loadId).append(".");
-    i++;
-    if(i == 4) {
-        $(loadId).html(originalText);
-        i = 0;
-    }
-  }, 500);
-}
+
 
 // Enable this to see errors in jQuery(document).ready() code
 // var oldReady = jQuery.ready;
@@ -659,110 +160,47 @@ function loadingAnimation(loadId) {
 //   }
 // };
 
-
 // Automatically get ajax content
-jQuery(document).ready(function(){
+jQuery(document).ready(function () {
   // We do this with a delay to avoid queuing ahead of other async requests
-  setTimeout(getAjaxContent, 1000);
-});
+  setTimeout(getAjaxContent, 1000)
+})
 
-function getAjaxContent() {
+function getAjaxContent () {
   // Look for anchors with a get_via_ajax class and replace the parent with the resulting ajax call
-  $(".get_via_ajax").each(function(){
-      let elem = $(this)
-      let parent = elem.parent()
-      $.get(elem.attr("href"), (conceptLabel) => {
-          parent.html(conceptLabel)
-      })
-  });
-  setTimeout(getAjaxContent, 500);
+  $('.get_via_ajax').each(function () {
+    let elem = $(this)
+    let parent = elem.parent()
+    $.get(elem.attr('href'), (conceptLabel) => {
+      parent.html(conceptLabel)
+    })
+  })
+  setTimeout(getAjaxContent, 500)
 }
 
 // Handle will_paginate using ajax
-jQuery(".pagination a").live("click", function(e){
-  var link = jQuery(this);
-  var replaceDiv = link.closest(".paginate_ajax");
-  e.preventDefault();
+jQuery('.pagination a').live('click', function (e) {
+  var link = jQuery(this)
+  var replaceDiv = link.closest('.paginate_ajax')
+  e.preventDefault()
   if (replaceDiv.length > 0) {
-    replaceDiv.load(link.attr("href"));
+    replaceDiv.load(link.attr('href'))
   } else {
-    link.closest("div.pagination").parent().load(link.attr("href"));
+    link.closest('div.pagination').parent().load(link.attr('href'))
   }
-});
+})
 
-// Facebox settings
-jQuery.facebox.settings.closeImage = "<%= asset_path("facebox/closelabel.png") %>";
-jQuery.facebox.settings.loadingImage = "<%= asset_path("facebox/loading.gif") %>";
 
-// Cookie handling
-var BP_setCookie = function(key, value, options) {
-  if (typeof options === "undefined") options = {};
-  var days = options["days"] || null;
-  var seconds = options["seconds"] || null;
-  var expdate = new Date();
-  var expires = "";
 
-  if (seconds !== null) {
-    expdate.setSeconds(expdate.getSeconds() + seconds);
-    expires = " expires=" + expdate.toGMTString();
-  }
-
-  if (days !== null) {
-    expdate.setDate(expdate.getDate() + days);
-    expires = " expires=" + expdate.toGMTString();
-  }
-
-  document.cookie=key + "=" + value + ";" + expires;
-}
-
-var BP_getCookies = function(){
-  var pairs = document.cookie.split(";");
-  var cookies = {};
-  for (var i=0; i<pairs.length; i++){
-    var pair = pairs[i].split("=");
-    cookies[jQuery.trim(pair[0])] = unescape(jQuery.trim(pair[1]));
-  }
-  return cookies;
-}
-
-var BP_getCookie = function(cookie) {
-  return BP_getCookies()[cookie];
-}
-
-var currentPathArray = function() {
-  var path, cleanPath = [];
-  path = window.location.pathname.split('/');
+var currentPathArray = function () {
+  var path, cleanPath = []
+  path = window.location.pathname.split('/')
   for (var i = 0; i < path.length; i++) {
     if (path[i].length > 0)
-      cleanPath.push(path[i]);
+      cleanPath.push(path[i])
   }
-  return cleanPath;
+  return cleanPath
 }
-
-function pageUsesTreeView() {
-  var usesTreeView = true;
-  var path = currentPathArray();
-
-  if (path[0] !== "ontologies") {
-    usesTreeView = false;
-  } else if ((path.length !== 2) || (path[1] === "new")) {
-    /*
-     * Some ontology pages don't use class trees, e.g.:
-     * ontologies/BRO/edit
-     * ontologies/new
-     */  
-    usesTreeView = false;
-  } else {
-    // Metadata only ontologies don't have class trees.
-    var metadataOnly = jQuery(document).data().bp.ont_viewer.metadata_only;
-    if ((metadataOnly != null) && (metadataOnly === "true")) {
-      usesTreeView = false;
-    }
-  }
-
-  return usesTreeView;
-}
-
 
 
 

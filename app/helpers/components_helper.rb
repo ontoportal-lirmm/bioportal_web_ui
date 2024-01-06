@@ -1,4 +1,44 @@
 module ComponentsHelper
+
+  def tree_component(root, selected, target_frame:, sub_tree: false, id: nil, auto_click: false, &child_data_generator)
+    root.children.sort! { |a, b| (a.prefLabel || a.id).downcase <=> (b.prefLabel || b.id).downcase }
+
+    render TreeViewComponent.new(id: id, sub_tree: sub_tree, auto_click: auto_click) do |tree_child|
+      root.children.each do |child|
+        children_link, data, href = child_data_generator.call(child)
+
+        if children_link.nil? || data.nil? || href.nil?
+          raise ArgumentError, "child_data_generator block did not provide all the child arguements"
+        end
+
+        tree_child.child(child: child, href: href,
+                         children_href: children_link, selected: child.id.eql?(selected&.id),
+                         muted: child.isInActiveScheme&.empty?,
+                         target_frame: target_frame,
+                         data: data) do
+          tree_component(child, selected, target_frame: target_frame, sub_tree: true,
+                         id: id, auto_click: auto_click, &child_data_generator)
+        end
+      end
+    end
+  end
+
+
+
+
+  def chart_component(title: '', type: , labels: , datasets: , index_axis: 'x', show_legend: false)
+      data =  {
+        controller: 'load-chart',
+        'load-chart-type-value': type,
+        'load-chart-title-value': title,
+        'load-chart-labels-value': labels,
+        'load-chart-index-axis-value': index_axis,
+        'load-chart-datasets-value': datasets,
+        'load-chart-legend-value': show_legend,
+      }
+      content_tag(:canvas, nil, data: data)
+  end
+
   def info_tooltip(text)
     render Display::InfoTooltipComponent.new(text: text)
   end

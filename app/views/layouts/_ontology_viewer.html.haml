@@ -5,16 +5,6 @@
 = render :partial =>'layouts/header'
 %div#bd.bg-white.ontology-viewer
   :javascript
-    // Javascript History HTML5 API
-    if ( typeof JSON === 'undefined' ) {
-      var
-        url = '/javascripts/history/json2.js',
-        scriptEl = document.createElement('script');
-      scriptEl.type = 'text/javascript';
-      scriptEl.src = url;
-      document.body.appendChild(scriptEl);
-    }
-
     // Ontology viewer vars
     jQuery(document).data().bp.ont_viewer = {};
     jQuery(document).data().bp.ont_viewer.ontology_id = jQuery(document).data().bp.ontology.acronym;
