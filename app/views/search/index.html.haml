@@ -27,15 +27,15 @@
               .title
                 Include in search
               .d-flex
-                = render(ChipsComponent.new(name: 'include_properties', label: 'Property values', checked:  params[:include_properties]))
-                = render(ChipsComponent.new(name: 'obsolete', label: 'Obsolete classes', checked:  params[:obsolete]))
-                = render(ChipsComponent.new(name: 'include_views', label: 'Ontology views', checked: params[:include_views]))
+                = render(ChipsComponent.new(name: 'also_search_properties', label: 'Property values', checked:  params[:also_search_properties]))
+                = render(ChipsComponent.new(name: 'also_search_obsolete', label: 'Obsolete classes', checked:  params[:also_search_obsolete]))
+                = render(ChipsComponent.new(name: 'also_search_views', label: 'Ontology views', checked: params[:also_search_views]))
 
             .filter-container
               .title
                 Show only
               .d-flex
-                = render(ChipsComponent.new(name: 'exact_match', label: 'Exact Matches',  checked:  params[:exact_match]))
+                = render(ChipsComponent.new(name: 'require_exact_match', label: 'Exact Matches',  checked:  params[:require_exact_match]))
                 = render(ChipsComponent.new(name: 'require_definition', label: 'Classes with definitions', checked: params[:require_definition]))
 
         .search-page-options
