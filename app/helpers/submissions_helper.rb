@@ -2,11 +2,54 @@ module SubmissionsHelper
   def metadata_help_link
     content_tag(:div, class: 'edit-ontology-desc') do
       html = content_tag(:div) do
-          content_tag(:div, 'Please fill in basic general information about your ontology.') +
-          content_tag(:span, 'AgroPortal will automatically extract metadata properties declared for the owl:Ontology object in the source file, ') +
-          content_tag(:span, style: 'width: 10px; height: 10px') do
-            link_to(render(ExternalLinkTextComponent.new(text: 'see guidelines and recommendations for metadata here:')), Rails.configuration.settings.links[:metadata_help], target: "_blank")
+          content_tag(:div, 'Edit the metadata of your ontology here.') +
+          content_tag(:span, "Some of these values are used by #{portal_name} functionalities, includng for FAIRness assessment. ") +
+          content_tag(:span) do
+            link_to('See guidelines and recommendations for metadata here.', Rails.configuration.settings.links[:metadata_help], target: "_blank")
           end
+      end
+
+      html.html_safe
+    end
+  end
+
+  def metadata_license_help_link
+    content_tag(:div, class: 'edit-ontology-desc') do
+      html = content_tag(:div) do
+        content_tag(:span, " #{portal_name} requires an URI for the license. If you do not find your choice here, ") +
+        content_tag(:span) do
+          link_to('Please pick up an URI from here.', "https://rdflicense.linkeddata.es/", target: "_blank")
+        end
+      end
+      html.html_safe
+    end
+  end
+  
+  def metadata_deprecated_help
+    content_tag(:div, style: 'edit-ontology-desc') do
+      html = content_tag(:div) do
+          content_tag(:div, " An ontology with status retired shall necessarily be also deprecated, but not the oposite.")
+      end
+      html.html_safe
+    end
+  end
+
+  def metadata_knownUsage_help
+    content_tag(:div, class: 'edit-ontology-desc') do
+      html = content_tag(:div) do
+        content_tag(:span, 'Consider also declaring ') +
+        content_tag(:span, style: 'width: 10px; height: 10px') do
+          link_to('the projects that are using the ontology.', "/projects/new", target: "_blank")
+        end
+      end
+      html.html_safe
+    end
+  end
+
+  def metadata_help_creator
+    content_tag(:div, class: 'edit-ontology-desc') do
+      html = content_tag(:div, style: 'text-align: center; margin-top: 56px;') do
+        content_tag(:span, "The following properties take for value an 'agent' in #{portal_name} (either a person or an organization). These agents are shared over all the ontologies and suggested with autocompletion if they already exist. Editing an agent here will change it to all the ontologies that agent is involved in.")
       end
 
       html.html_safe
@@ -219,6 +262,7 @@ module SubmissionsHelper
         @submission.contact = [] unless @submission.contact && @submission.contact.size > 0
         contact_input(label: 'Contacts', name: '')
       end
+      output += metadata_help_creator
     end
 
     if selected_attribute?('viewingRestriction')
@@ -234,7 +278,7 @@ module SubmissionsHelper
       end
     end
 
-    reject_metadata = %w[abstract description uploadFilePath contact pullLocation hasOntologyLanguage]
+    reject_metadata = %w[abstract description uploadFilePath contact pullLocation hasOntologyLanguage hasLicense bugDatabase knownUsage]
     label = inline_save? ? '' : nil
 
     if selected_attribute?('abstract')
@@ -246,6 +290,25 @@ module SubmissionsHelper
     if selected_attribute?('description')
       output += attribute_form_group_container('description') do
         raw attribute_input('description',long_text: true, label: label)
+      end
+    end
+
+    if selected_attribute?('hasLicense')
+      output += attribute_form_group_container('hasLicense') do
+        raw attribute_input('hasLicense', help: metadata_license_help_link)
+      end
+    end
+
+
+    if selected_attribute?('bugDatabase')
+      output += attribute_form_group_container('bugDatabase') do
+        raw attribute_input('bugDatabase', help: 'Some ontology feedback and notes features are only possible if a GitHub repository is informed.')
+      end
+    end
+
+    if selected_attribute?('knownUsage')
+      output += attribute_form_group_container('knownUsage') do
+        raw attribute_input('knownUsage', help: metadata_knownUsage_help)
       end
     end
 

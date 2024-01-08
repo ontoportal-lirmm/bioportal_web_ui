@@ -52,14 +52,14 @@ module SubmissionInputsHelper
   end
 
   # @param attr_key String
-  def attribute_input(attr_key, long_text: false, label: nil, show_tooltip: true, max_date: nil)
+  def attribute_input(attr_key, long_text: false, label: nil, show_tooltip: true, max_date: nil, help: nil)
     attr = SubmissionMetadataInput.new(attribute_key: attr_key, submission: @submission, label: label,
                                        attr_metadata: attr_metadata(attr_key))
 
 
     if attr.type?('Agent')
       if attr.type?('list')
-        generate_list_agent_input(attr)
+        generate_list_agent_input(attr, helper_text: help)
       else
         generate_agent_input(attr)
       end
@@ -72,20 +72,20 @@ module SubmissionInputsHelper
         generate_date_input(attr, max_date: max_date)
       end
     elsif attr.type?('textarea')
-      generate_textarea_input(attr)
+      generate_textarea_input(attr, helper_text: help)
     elsif enforce_values?(attr)
 
       if attr.type?('list')
-        generate_select_input(attr, multiple: true)
+        generate_select_input(attr, multiple: true, help_text: help)
       elsif attr.type?('boolean')
         generate_boolean_input(attr)
       else
-        generate_select_input(attr)
+        generate_select_input(attr, help_text: help)
       end
     elsif attr.type?('isOntology')
       generate_select_input(attr, multiple: attr['enforce'].include?('list'))
     elsif attr.type?('uri')
-      generate_url_input(attr)
+      generate_url_input(attr, helper_text: help)
     elsif attr.type?('boolean')
       generate_boolean_input(attr)
     else
@@ -93,7 +93,7 @@ module SubmissionInputsHelper
       name = attr.name
       label = attr_header_label(attr, show_tooltip: show_tooltip)
       if attr.type?('list')
-        generate_list_text_input(attr)
+        generate_list_text_input(attr, helper_text: help )
       elsif attr.metadata['attribute'].to_s.eql?('URI')
         url_input(name: name, label: label, value: @submission.URI)
       elsif long_text
@@ -289,8 +289,8 @@ module SubmissionInputsHelper
     end
   end
 
-  def generate_list_agent_input(attr)
-    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.metadata['attribute'])) do
+  def generate_list_agent_input(attr, helper_text: nil)
+    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.metadata['attribute']), helper_text: helper_text) do
       render NestedAgentSearchInputComponent.new(label: attr_header_label(attr),
                                                  agents: attr.values,
                                                  agent_type: agent_type(attr.metadata),
@@ -317,10 +317,10 @@ module SubmissionInputsHelper
 
   def generate_textarea_input(attr)
     text_input(name: attr.name,
-               value: attr.values)
+               value: attr.values, helper_text: nil)
   end
 
-  def generate_select_input(attr, multiple: false)
+  def generate_select_input(attr, multiple: false, help_text: nil)
     name = attr.name
     label = attr_header_label(attr)
     metadata_values, select_values = selected_values(attr, enforced_values(attr))
@@ -332,11 +332,11 @@ module SubmissionInputsHelper
 
     select_input(name: name, label: label, values: select_values,
                  selected: metadata_values, multiple: multiple, required: attr.required?,
-                 open_to_add: open_to_add_metadata?(attr.attr_key))
+                 open_to_add: open_to_add_metadata?(attr.attr_key), help: help_text)
   end
 
-  def generate_list_field_input(attr, name, label, values, &block)
-    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.attr)) do
+  def generate_list_field_input(attr, name, label, values, helper_text: nil, &block)
+    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.attr), helper_text: helper_text) do
       render NestedFormInputsComponent.new do |c|
         c.header do
           label
@@ -359,7 +359,7 @@ module SubmissionInputsHelper
 
   end
 
-  def generate_url_input(attr)
+  def generate_url_input(attr, helper_text: nil)
     label = attr_header_label(attr)
     values = attr.values
     name = attr.name
@@ -369,7 +369,7 @@ module SubmissionInputsHelper
       if is_relation
         generate_ontology_select_input(name, label, values, true)
       else
-        generate_list_field_input(attr, name, label, values) do |value, row_name, id|
+        generate_list_field_input(attr, name, label, values, helper_text: helper_text) do |value, row_name, id|
           url_input(label: '', name: row_name, value: value)
         end
       end
@@ -377,7 +377,7 @@ module SubmissionInputsHelper
       if is_relation
         generate_ontology_select_input(name, label, values, false)
       else
-        url_input(label: label, name: name, value: values)
+        url_input(label: label, name: name, value: values, help: helper_text)
       end
     end
   end
@@ -399,23 +399,22 @@ module SubmissionInputsHelper
                          open_to_add: true)
   end
 
-  def generate_list_text_input(attr)
+  def generate_list_text_input(attr, helper_text: nil)
     label = attr_header_label(attr)
     values = attr.values || ['']
     name = attr.name
-    generate_list_field_input(attr, name, label, values) do |value, row_name, id|
-      text_input(label: '', name: row_name, value: value)
+    generate_list_field_input(attr, name, label, values, helper_text: helper_text) do |value, row_name, id|
+      text_area_tag(row_name, value, class: 'input-field-component', label: '')
     end
   end
 
-  def generate_boolean_input(attr)
+  def generate_boolean_input(attr, help: nil)
     value = attr.values
     value = value.to_s unless value.nil?
     name = attr.name
-    content_tag(:div, class: 'd-flex') do
+    content_tag(:div) do
       switch_input(id: name, name: name, label: attr_header_label(attr), checked: value.eql?('true'), value: value,
-                   boolean_switch: true,
-                   style: 'font-size: 14px;')
+                  boolean_switch: true, style: 'font-size: 14px;', help: metadata_deprecated_help)
     end
   end
 
