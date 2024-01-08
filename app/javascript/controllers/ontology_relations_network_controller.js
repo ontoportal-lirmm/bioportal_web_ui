@@ -111,7 +111,6 @@ export default class extends Controller {
 
         const options = {
             autoResize: true,
-            height: networkHeight,
             groups: {
                 useDefaultGroups: true,
                 myGroupId: {
@@ -174,7 +173,7 @@ export default class extends Controller {
         // Function to toggle full screen mode
         function toggleFullScreen(element) {
             var networkContainer = document.getElementById('networkContainer');
-
+            
             // check to existance of element
             if (networkContainer) {
                 var parentElement = networkContainer.parentNode;
@@ -183,7 +182,8 @@ export default class extends Controller {
                 parentElement.style.backgroundColor = 'white';
             }
             networkContainer.parentNode.classList.toggle('active-fullscreen');
-            //element.children[0].canvas.classList.toggle('active-fullscreen')
+            networkContainer.style.height = "100%";
+            networkContainer.style.width = "100%";
         }
     }
 }
