@@ -409,6 +409,6 @@ en:
   text: Text
   type: Type
   umls_sem_type: UMLS Semantic Type
-  view_fair_scores_definitions: View FAIR scores definitions
+  view_fair_scores_definitions: "You are seeing the FAIRness assessment score for this ontology in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
   visits: Visits
   weights_configuration: Weights configuration
