@@ -22,7 +22,7 @@ class Input::InputFieldComponent < ViewComponent::Base
     end
 
     def help?
-        !@helper_text&.empty?
+        !@helper_text.blank?
     end
 
     def label?

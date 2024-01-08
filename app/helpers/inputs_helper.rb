@@ -25,8 +25,8 @@ module InputsHelper
     end
   end
 
-  def switch_input(id:, name:, label:, checked: false, value: '', boolean_switch: false, style: nil)
-    render SwitchInputComponent.new(id: id, name: name, label: label, checked: checked, value: value, boolean_switch: boolean_switch, style: style)
+  def switch_input(id:, name:, label:, checked: false, value: '', boolean_switch: false, style: nil, help: nil)
+    render SwitchInputComponent.new(id: id, name: name, label: label, checked: checked, value: value, boolean_switch: boolean_switch, style: style, help: help)
   end
 
   def url_input(name:, value:, label: nil, help: nil)
