@@ -11,9 +11,9 @@
         = details_button
         = visualize_button
         - if subresults?
-            = reveal_ontologies_button("#{subresults.size} more from this ontology", sub_ontologies_id)
+            = reveal_ontologies_button("#{subresults.size} #{t('search.result_component.more_from_ontology')}", sub_ontologies_id)
         - if reuses?
-            = reveal_ontologies_button("Reuses in #{reuses.size} ontologies", reuses_id)
+            = reveal_ontologies_button("#{t('search.result_component.reuses_in')} #{reuses.size} ontologies", reuses_id)
     - if subresults?
         .more-from-ontology.d-none{id: sub_ontologies_id}
             .vertical-line
@@ -27,9 +27,9 @@
             .search-result-sub-components
                 .reuses-title 
                     = inline_svg_tag 'icons/reuses.svg'
-                    %div Reuses in other ontologies
+                    %div
+                        = t('search.result_component.reuses_in_other_ontologies')
                 - reuses.each do |reuse|
                     .search-result-sub-component
                         = reuse
-    
     
