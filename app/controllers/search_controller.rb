@@ -8,6 +8,7 @@ class SearchController < ApplicationController
 
   def index
     @search_query = params[:query] || params[:q] || ''
+    params[:query] = nil
     @advanced_options_open = false
     @search_results = []
 
