@@ -192,7 +192,7 @@ module SubmissionFilter
     @formats = [['All formats', ''], 'OBO', 'OWL', 'SKOS', 'UMLS']
     @sorts_options = [
       ['Sort by name', 'ontology_name'],
-      ['Sort by class count', 'metrics_classes'],
+      ['Sort by classes count', 'metrics_classes'],
       ['Sort by instances/concepts count', 'metrics_individuals'],
       ['Sort by submitted date', 'creationDate'],
       ['Sort by creation date', 'released'],
