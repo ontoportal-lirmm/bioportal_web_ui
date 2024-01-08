@@ -3,7 +3,7 @@
     = form_tag(search_path, method: :get, 'data-turbo': true) do
       .search-page-input-container{'data-controller': 'reveal'}
         .search-page-input
-          %input{type:"text", placeholder:"Enter a term, e.g. Melanoma", name: "q", value: @search_query}
+          %input{type:"text", placeholder: t('search.search_place_holder'), name: "q", value: @search_query}
           %button.search-page-button{type:'submit'}
             = inline_svg_tag 'icons/search.svg'
 
@@ -11,13 +11,13 @@
           .left
             .filter-container
               .title
-                Search language
+                = t('search.advanced_options.search_language')
               .field
                 = search_language_selector(name: 'lang', selected: params[:lang])
                 
             .filter-container
               .title
-                = t("search.ontologies")
+                = t("search.advanced_options.ontologies")
               .field
                 - get_ontologies_data
                 = render Input::SelectComponent.new(id: 'search-ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected:  params[:ontologies_list])
@@ -25,33 +25,33 @@
           .right 
             .filter-container
               .title
-                Include in search
+                = t("search.advanced_options.include_in_search_title")
               .d-flex
-                = render(ChipsComponent.new(name: 'include_properties', label: 'Property values', checked:  params[:include_properties]))
-                = render(ChipsComponent.new(name: 'obsolete', label: 'Obsolete classes', checked:  params[:obsolete]))
-                = render(ChipsComponent.new(name: 'include_views', label: 'Ontology views', checked: params[:include_views]))
+                = render(ChipsComponent.new(name: 'also_search_properties', label: t("search.advanced_options.include_in_search_values.property_values"), checked:  params[:also_search_properties]))
+                = render(ChipsComponent.new(name: 'also_search_obsolete', label: t("search.advanced_options.include_in_search_values.obolete_classses"), checked:  params[:also_search_obsolete]))
+                = render(ChipsComponent.new(name: 'also_search_views', label: t("search.advanced_options.include_in_search_values.ontology_views"), checked: params[:also_search_views]))
 
             .filter-container
               .title
-                Show only
+                =t('search.advanced_options.show_only_title')
               .d-flex
-                = render(ChipsComponent.new(name: 'exact_match', label: 'Exact Matches',  checked:  params[:exact_match]))
-                = render(ChipsComponent.new(name: 'require_definition', label: 'Classes with definitions', checked: params[:require_definition]))
+                = render(ChipsComponent.new(name: 'require_exact_match', label: t('search.advanced_options.show_only_values.exact_matches'),  checked:  params[:require_exact_match]))
+                = render(ChipsComponent.new(name: 'require_definition', label: t('search.advanced_options.show_only_values.classes_with_definitions'), checked: params[:require_definition]))
 
         .search-page-options
           - if @search_results
             .search-page-number-of-results 
-              = "Match in #{@search_results.length} ontologies"
+              = "#{t('search.match_in')} #{@search_results.length} #{t('search.ontologies')}"
           .search-page-advanced-button.show-options{class: "#{@advanced_options_open ? 'd-none' : ''}",'data': {'action': 'click->reveal-component#show', 'reveal-component-target': 'showButton'}}
             .icon
               =inline_svg_tag 'icons/settings.svg'
             .text
-              Show advanced options
+              = t('search.show_advanced_options')
           .search-page-advanced-button.hide-options{class: "#{@advanced_options_open ? '' : 'd-none'}", 'data': {'action': 'click->reveal-component#hide', 'reveal-component-target': 'hideButton'}}
             .icon
               =inline_svg_tag 'icons/hide.svg'
             .text
-              hide advanced options
+              = t('search.hide_advanced_options')
     - if @search_results
       .search-page-results-container
         - number = 0
@@ -64,7 +64,8 @@
             = render Display::SearchResultComponent.new(result[:root]) do |c|
               - descendants.each { |d| c.subresult(d.merge(is_sub_component: true))}
               - reuses.each do |r|
-                - c.reuse(r[:root].merge(is_sub_component: true)) do |b|
+                - number = number + 1
+                - c.reuse(r[:root].merge(is_sub_component: true, number: number)) do |b|
                   - r[:descendants].each { |dd|  b.subresult(dd.merge(is_sub_component: true))}
     
     - if @search_results.empty? && !@search_query.empty?
@@ -72,4 +73,3 @@
         %img{:src => "#{asset_path("empty-box.svg")}"}
         %p No result was found
           
-
