@@ -124,8 +124,8 @@ class SearchController < ApplicationController
   def search_params
     [
       :ontologies, :categories,
-      :include_properties, :obsolete, :include_views,
-      :exact_match, :require_definition
+      :also_search_properties, :also_search_obsolete, :also_search_views,
+      :require_exact_match, :require_definition
     ]
   end
 
@@ -135,4 +135,3 @@ class SearchController < ApplicationController
   end
 
 end
-
