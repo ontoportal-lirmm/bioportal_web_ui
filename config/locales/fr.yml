@@ -177,7 +177,7 @@ fr:
       help: Aide
       landscape: Panorama
       login: Connexion
-      logout: Décconnexion
+      logout: Déconnexion
       mappings: Alignements
       publications: Publications
       recommender: Recommendeur
@@ -196,6 +196,7 @@ fr:
       contact_us: Contactez nous
       wiki: Wiki
       documentation: Documentation
+      agro_documentation: Documentation de AgroPortal
       agreements: Juridique
       terms: Termes et Conditions
       privacy_policy: Politique de confidentialité
