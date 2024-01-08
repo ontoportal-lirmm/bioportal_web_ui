@@ -30,15 +30,7 @@
                     .upload-ontology-input-field-container{id: "submissionnotes_from_group_input"}
                       = attribute_input("notes", label: 'Change notes')
                   .upload-ontology-field-container
-                    = render Layout::RevealComponent.new(init_show: @submission.hasOntologyLanguage&.eql?('SKOS'), show_condition: 'SKOS') do |c|
-                      - c.button do
-                        = attribute_input("hasOntologyLanguage")
-                      .upload-ontology-desc
-                        %div
-                          SKOS vocabularies submitted to BioPortal must contain a minimum of one concept scheme and top concept assertion. Please
-                          refer to the NCBO wiki for a more
-                          = link_to ExternalLinkTextComponent.new(text: 'detailed explanation').call, "#seethewiki"
-                          with examples.
+                    = has_ontology_language_input
                   .upload-ontology-field-container.mt-3
                     = render Layout::RevealComponent.new(init_show: @submission.status&.eql?('retired'), show_condition: 'retired') do |c|
                       - c.button do
