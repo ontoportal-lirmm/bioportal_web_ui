@@ -64,7 +64,8 @@
             = render Display::SearchResultComponent.new(result[:root]) do |c|
               - descendants.each { |d| c.subresult(d.merge(is_sub_component: true))}
               - reuses.each do |r|
-                - c.reuse(r[:root].merge(is_sub_component: true)) do |b|
+                - number = number + 1
+                - c.reuse(r[:root].merge(is_sub_component: true, number: number)) do |b|
                   - r[:descendants].each { |dd|  b.subresult(dd.merge(is_sub_component: true))}
     
     - if @search_results.empty? && !@search_query.empty?
