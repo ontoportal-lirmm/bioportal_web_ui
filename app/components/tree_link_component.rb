@@ -16,6 +16,10 @@ class TreeLinkComponent < ViewComponent::Base
       pref_label_lang, @pref_label_html = select_language_label(label)
       pref_label_lang = pref_label_lang.to_s.upcase
       @tooltip = pref_label_lang.eql?("@NONE") ? "" : pref_label_lang
+
+      if child.obsolete?
+        @pref_label_html = "<span class='obsolete_class'>#{@pref_label_html}</span>".html_safe
+      end
     end
     @data ||= { controller: 'tooltip', 'tooltip-position-value': 'right', turbo: true, 'turbo-frame': target_frame, action: 'click->simple-tree#select'}
 
