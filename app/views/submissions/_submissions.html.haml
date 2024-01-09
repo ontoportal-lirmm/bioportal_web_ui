@@ -30,7 +30,7 @@
           - if @ontology.admin?(session[:user])
             - r.td { raw sub.submissionId }
           - r.td do
-            = render SubmissionStatusComponent.new(sub, sub.submissionId==submission_readyId) 
+            = render SubmissionStatusComponent.new(sub, sub.submissionId==submission_ready?(sub)) 
           - r.td {  render DateTimeFieldComponent.new(value: sub.modificationDate) unless sub.modificationDate.nil? }
           - r.td {  render DateTimeFieldComponent.new(value: sub.creationDate) unless sub.creationDate.nil? }
 
