@@ -75,7 +75,7 @@
         %input.d-none{type: "submit", name: "submit_button" ,value: "annotator", id: "annotator_submit"}/
         %input.d-none{type: "submit" , name: "submit_button" ,value: "recommender", id: "recommender_submit"}/
         .home-services-buttons.container
-          .insert-sample-text-button{onclick: "insertSampleText()"}
+          .insert-sample-text-button{onclick: "insertSampleText('#{t('sample_text')}')"}
             %div
               Insert sample text
             = inline_svg_tag 'icons/arrow-curved-up.svg'
@@ -173,7 +173,7 @@
             %h4
               = format_number_abbreviated(@users_count)
             %p Users
-  .home-section
+  -#.home-section
     .home-statistics-container
       .home-support-title
         %p= t('home.support_and_collaborations')
@@ -193,7 +193,7 @@
   }
   let recommenderAnnotatorArea = document.querySelector('.home-recommendations-and-annotations');
   
-  function insertSampleText(){
-    recommenderAnnotatorArea.value = 'Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.';
+  function insertSampleText(sample_text){
+    recommenderAnnotatorArea.value = sample_text;
   }
 
