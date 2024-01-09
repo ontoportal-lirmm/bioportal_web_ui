@@ -9,7 +9,7 @@
     .recommender-page-inputs{'data-controller': 'reveal-component'}
       .inputs 
         .recommender-page-text-area
-          %textarea{rows: "4" , placeholder: 'Enter or past a text to be annotated ...', name: "text"}
+          %textarea#recommender-text-area{rows: "4" , placeholder: 'Enter or past a text to be annotated ...', name: "text", oninput: 'handleInput(event)'}
           .insert-sample-text-button
             .button
               .text
@@ -25,7 +25,7 @@
               .text-choice
                 = render Input::RadioChipComponent.new(label: 'Text', name: 'input-choice', value: 'text', checked: true)
               .keywords-choice
-                = render Input::RadioChipComponent.new(label: 'Keywords (Keywords separated by commas)', name: 'input-choice', value: 'text')
+                = render Input::RadioChipComponent.new(label: 'Keywords', name: 'input-choice', value: 'keywords')
           .output
             .title
               output
@@ -69,3 +69,16 @@
 
       .recommender-page-button
         = render Buttons::RegularButtonComponent.new(id:'recommender', value: "Get recommendations", variant: "primary")
+
+:javascript
+  function handleInput(event) {
+    var selectedInputChoice = document.querySelector('input[name="input-choice"]:checked').value;
+    if (selectedInputChoice === "keywords"){
+      const textarea = document.getElementById('recommender-text-area');
+      const value = textarea.value;
+      const lastCharIsSpace = event.data === ' ';
+      const formattedValue = lastCharIsSpace ? value.trim() + ', ' : value;
+      textarea.value = formattedValue;
+    }
+
+  }
