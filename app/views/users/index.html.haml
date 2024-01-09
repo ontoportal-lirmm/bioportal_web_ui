@@ -1,0 +1,44 @@
+= turbo_frame_tag 'users-list' do
+  %div.my-1
+    = render_alerts_container
+  = render TableComponent.new(id: 'admin_users', custom_class: 'border rounded p-1') do |t|
+    - t.header do |h|
+      - h.th {'First name'}
+      - h.th {'Last name'}
+      - h.th {'Username'}
+      - h.th {'Email'}
+      - h.th {'Roles'}
+      - h.th {'Ontologies'}
+      - h.th {'Project'}
+      - h.th {'Created At'}
+      - h.th {'Actions'}
+    - @users.each do |user|
+      - t.row(id: user.id.split('/').last) do |r|
+        - r.td {user.firstName}
+        - r.td {user.lastName}
+        - r.td {user.username}
+        - r.td {user.email}
+        - r.td {user.role.join(', ')}
+        - r.td {(user.ontologies&.size || 0).to_s}
+        - r.td {(user.projects&.size || 0).to_s}
+        - r.td {Date.parse(user.created).to_s}
+        - r.td do
+          - count = (user.ontologies&.size || 0) +  (user.projects&.size || 0)
+          %div.d-flex.align-items-center{style: 'width: 250px'}
+            %span.mx-1
+              = link_to 'Detail', "/accounts/#{user.username}", {data: {turbo_frame: '_top'}}
+            %span.mx-1
+              - if count.zero?
+                = button_to "Delete", CGI.unescape(user_path(user.id.split('/').last)), method: :delete, class: 'btn btn-link',  form: {data: { turbo: true, turbo_confirm: "Are you sure?", turbo_frame: '_top'}}
+              - else
+                %span{data: { controller: 'tooltip' }, title: "Can't delete this user because still used"}
+                  = link_to "Delete", "", class: 'btn btn-link disabled'
+            %span.mx-1
+              = link_to 'Login as', "login_as/#{user.username}", {data: {turbo_frame: '_top'}}
+    %tr.empty-state
+      %td.text-center{:colspan => "6"} There are currently no  agents.
+
+  :javascript
+    $.fn.dataTable.ext.errMode = 'none';
+    $("#admin_users").dataTable()
+

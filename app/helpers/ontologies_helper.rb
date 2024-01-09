@@ -149,7 +149,7 @@ module OntologiesHelper
 
   def metadata_filled_count(submission = @submission_latest, ontology = @ontology)
     return if submission.nil?
-    
+
     reject = [:csvDump, :dataDump, :openSearchDescription, :metrics, :prefLabelProperty, :definitionProperty,
               :definitionProperty, :synonymProperty, :authorProperty, :hierarchyProperty, :obsoleteProperty,
               :ontology, :endpoint, :submissionId, :submissionStatus, :uploadFilePath, :context, :links, :ontology]
@@ -384,14 +384,23 @@ module OntologiesHelper
   end
 
   def visits_chart_dataset(visits_data)
-    [{
-       label: 'Visits',
-       data: visits_data,
-       backgroundColor: 'rgba(151, 187, 205, 0.2)',
-       borderColor: 'rgba(151, 187, 205, 1)',
-       pointBorderColor: 'rgba(151, 187, 205, 1)',
-       pointBackgroundColor: 'rgba(151, 187, 205, 1)',
-     }].to_json
+    visits_chart_dataset_array({'Visits': visits_data})
+  end
+
+  def visits_chart_dataset_array(visits_data, fill: true)
+    visits_data = visits_data.map do |label , x|
+      {
+        label: label,
+        data: x,
+        borderWidth: 2,
+        borderRadius: 5,
+        borderSkipped: false,
+        cubicInterpolationMode: 'monotone',
+        tension: 0.4,
+        fill: fill
+      }
+    end
+    visits_data.to_json
   end
 
   def submission_ready?(submission)
@@ -406,7 +415,7 @@ module OntologiesHelper
       sections += %w[properties]
       sections += %w[schemes collections] if skos?
       sections += %w[instances] unless skos?
-      sections += %w[notes mappings widgets]
+      sections += %w[notes mappings widgets sparql]
     end
     sections
   end

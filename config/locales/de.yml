@@ -369,32 +369,30 @@ de:
   reproduce_results: Reproduzieren Sie diese Ergebnisse mit der
   score: Ergebnis
   search:
-    categories: Kategorien
-    class_search: Klasse suchen
-    classes_with_definitions: Klassen mit Definitionen
-    hide_advanced_options: Erweiterte Optionen ausblenden
-    include_in_search: In die Suche einbeziehen
-    index:
-      categories_placeholder: Beginnen Sie mit der Eingabe, um Kategorien auszuwählen,
-        oder lassen Sie das Feld leer, um alle zu verwenden
-      obsolete_definition: 'Eine Klasse, die von den Autoren der Ontologie als veraltet
-        gekennzeichnet wurde und deren Verwendung nicht empfohlen wird. Diese Klassen
-        werden oft in Ontologien belassen (anstatt sie ganz zu löschen), damit bestehende
-        Systeme, die von ihnen abhängen, weiterhin funktionieren
-
-        '
-      property_definition: Eine benannte Assoziation zwischen zwei Entitäten. Beispiele
-        sind "Definition" (eine Beziehung zwischen einer Klasse und Text) und "Teil
-        von" (eine Beziehung zwischen zwei Klassen).
-      search_keywords_placeholder: Geben Sie eine Klasse ein, z. B. Melanom
-    narrow_search_to: Suche eingrenzen auf
-    obsolete_classes: Überholte Klassen
-    ontologies: Ontologien
-    ontology_views: Ontologie-Ansichten
-    property_values: Immobilienwerte
+    search_place_holder: Geben Sie einen Begriff ein, z.B. Pflanzenhöhe
+    advanced_options:
+      search_language: Suchsprache
+      ontologies: Ontologien
+      include_in_search_title: In der Suche anzeigen
+      include_in_search_values:
+        property_values: Eigenschaftswerte
+        obolete_classses: Veraltete Klassen
+        ontology_views: Ontologie-Ansichten
+      show_only_title: Nur anzeigen
+      show_only_values:
+        exact_matches: Exakte Treffer
+        classes_with_definitions: Klassen mit Definitionen
     show_advanced_options: Erweiterte Optionen anzeigen
-    title: Suche
-    view_search_documentation: Dokumentation zur Suche anzeigen
+    hide_advanced_options: Erweiterte Optionen ausblenden
+    match_in: Übereinstimmung in
+    ontologies: Ontologien
+    result_component:
+      details: Details
+      visualize: Visualisieren
+      more_from_ontology: Mehr von dieser Ontologie
+      reuses_in: Wiederverwendungen in
+      reuses_in_other_ontologies: Wiederverwendungen in anderen Ontologien
+
   select_from_list: Aus Liste auswählen
   select_ontologies: Beginnen Sie mit der Eingabe, um Ontologien auszuwählen, oder
     lassen Sie sie leer, um alle zu verwenden

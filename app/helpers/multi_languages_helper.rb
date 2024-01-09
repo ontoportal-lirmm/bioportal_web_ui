@@ -56,11 +56,12 @@ module MultiLanguagesHelper
     # top ten spoken languages
     portal_languages.keys + %w[zh es hi ar bn pt ru ur id]
   end
-  def search_language_selector(id: 'search_language', name: 'search_language')
+  def search_language_selector(id: 'search_language', name: 'search_language', selected: nil)
     render Input::LanguageSelectorComponent.new(id: id, name: name, enable_all: true,
                                                 languages: search_languages,
                                                 'data-select-input-searchable-value': false,
-                                                title: search_language_help_text)
+                                                title: search_language_help_text,
+                                                selected: selected&.to_sym)
 
   end
 

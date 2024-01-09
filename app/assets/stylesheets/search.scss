@@ -1,185 +1,90 @@
-form.button-to {
-  float: left;
+.search-page-container {
+  display: flex;
+  justify-content: center;
+}
+.search-page-subcontainer {
+  width: 1248px;
+  padding: 20px 50px;
+}
+.search-page-input-container{
+  width: 100%;
 }
 
-#ontology_picker_head {
-  font-size: 10pt !important;
+.search-page-input{
+  position: relative;
+  padding-bottom: 80px;
 }
-
-.not_visible {
-  position: fixed !important;
-  top: -999999px !important;
-}
-
-#search_results_container #search_results_info {
-  display: none !important;
-}
-
-#search_results_filter {
-  display: none;
-}
-
-#search_spinner {
-  display: inline-block;
-  padding: 8px 4px;
-}
-
-#search_options #ontology_ontologyId {
-  display: none;
-}
-
-.class_details_pop {
-  overflow: auto;
-  width: 750px !important;
-  display: block !important;
-}
-
-table#search_results td {
-  vertical-align: top;
-  padding: 12px 8px 12px 12px;
-}
-
-div.search_result {
-  margin-bottom: 1.5em;
-}
-
-div.class_link a {
+.search-page-input input{
+  position: absolute;
+  border-radius: 100px;
+  box-shadow: rgba(100, 100, 111, 0.1) 0 7px 29px 0;
+  border: none;
+  outline: none;
   font-size: 18px;
+  padding: 15px 25px;
+  width: 100%;
+}
+.search-page-input input:focus{
+  box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;
+}
+.search-page-advanced{
+  display: flex;
+  margin-bottom: 15px;
+}
+.search-page-advanced .left{
+  width: 600px;
+  margin-right: 40px;
+}
+.search-page-advanced .filter-container{
+  margin-bottom: 15px;
+}
+.search-page-advanced .filter-container .title{
+  margin-bottom: 5px;
+  color: #888888;
+  font-size: 14px;
 }
 
-span.class_def {
-  display: block;
-  margin: 3px 0 2px;
-  font-size: 12px;
+
+
+
+.search-page-options{
+  
+}
+.search-page-button{
+  position: absolute;
+  top: 14px;
+  left: 1104px;
+  border: none;
+  background: none;
+}
+.search-page-button svg path{
+  fill: var(--primary-color)
+}
+.search-page-button:hover{
+  cursor: pointer;
+}
+.search-page-options{
+  display: flex;
+  justify-content: space-between;
+}
+.search-page-advanced-button{
+  display: flex;
+}
+.search-page-advanced-button :hover{
+  cursor: pointer;
+}
+.search-page-advanced-button .text{
+  margin-left: 10px;
+  color: var(--primary-color);
 }
 
-.additional_ont_results {
-  padding: 2em;
-  margin: 2em;
-  background-color: rgb(230,230,230);
+.search-page-advanced-button .icon svg path{
+  fill: var(--primary-color);
+}
+.search-page-number-of-results{
+  color: #888888;
 }
 
-.additional_cls_results {
-  padding: 2em;
-  margin: 2em;
-  background-color: rgb(230,230,230);
+.search-page-result-element{
+  margin-top: 40px;
 }
-
-.subordinate_ont_results {
-  padding: 1em;
-  padding-left: 2em;
-  padding-top: 2em;
-  margin: 1em;
-  margin-left: 2em;
-  margin-top: 2em;
-  background-color: rgb(240,240,240);
-}
-
-.subordinate_ont_results_title {
-  color: rgb(100,100,100);
-  background: rgb(200,200,200);
-  padding: 0.5em;
-}
-
-div.search_result_additional {
-  padding-left: 30px;
-  margin: 1em 0 1.2em;
-}
-
-div.search_result_additional .class_link a {
-  font-size: 15px !important;
-}
-
-div.additional_results_link {
-  margin-top: 5px;
-}
-
-.search_result_links a {
-  font-size: 11px !important;
-  color: green;
-}
-
-.hide_link {
-  text-decoration: underline;
-  padding-left: 7px;
-}
-
-.not_underlined {
-  text-decoration: none;
-}
-
-#search_results {
-  display: none;
-}
-
-#search_results_container {
-  margin-top: .5em;
-  clear: both;
-}
-
-div#search_categories_chzn {
-  width: 432px !important;
-}
-
-div#search_categories_chzn .chzn-choices input {
-  font-style: oblique;
-}
-
-div#search_categories_chzn.chzn-container-active input {
-  font-style: normal !important;
-}
-
-div#search_categories_chzn .chzn-drop {
-  width: 432px !important;
-}
-
-#search_messages {
-  font-style: oblique;
-  color: gray;
-  padding-bottom: 7px;
-}
-
-#result_stats a {
-  color: gray;
-}
-
-#ontology_counts {
-  display: none;
-}
-
-.popup_counts {
-  float: right;
-  display: none;
-}
-
-.ontology_counts_tooltip {
-  background-color: #EEEEEE;
-  border: 1px solid black;
-  color: black;
-  font-size: 12px;
-  padding: 10px 15px;
-  text-align: left;
-  z-index: 999;
-  box-shadow: 3px 3px 7px gray;
-}
-
-.definition {
-  cursor: help;
-}
-
-.concept_uri {
-  font-size: 9pt;
-  color: gray;
-}
-
-#search_categories_chosen .chosen-container .chosen-container-multi {
-  width: 432px;
-}
-
-/* Prevents placeholder text in search input from being truncated.
-/* https://github.com/harvesthq/chosen/issues/2029#issuecomment-187442769 */
-#search_options #ontology_ontologyId_chosen .search-field:only-child,
-#search_options #ontology_ontologyId_chosen .search-field:only-child input {
-  width: 100% !important;
-}
-

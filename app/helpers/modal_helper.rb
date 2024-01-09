@@ -21,7 +21,7 @@ module ModalHelper
 
   def render_in_modal(id = 'application_modal', &block)
     render TurboFrameComponent.new(id: "#{id}_content") do
-      block.call.html_safe if block_given?
+      capture(&block).html_safe if block_given?
     end
   end
 
@@ -34,6 +34,7 @@ module ModalHelper
       action: 'click->show-modal#show'
     }
 
+    html_options ||= {data: {}}
     html_options[:data].merge!(new_data) do |_, old, new|
       "#{old} #{new}"
     end
