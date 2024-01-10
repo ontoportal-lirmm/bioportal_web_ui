@@ -20,6 +20,7 @@ import alert_component_controller from "../../components/display/alert_component
 import Progress_pages_component_controller
     from "../../components/layout/progress_pages_component/progress_pages_component_controller";
 import Reveal_component_controller from "../../components/layout/reveal_component/reveal_component_controller";
+import Table_component_controller from "../../components/table_component/table_component_controller";
 
 
 application.register("turbo-modal", TurboModalController)
@@ -33,3 +34,4 @@ application.register("circle-progress-bar", CircleProgressBarComponentController
 application.register("alert-component", alert_component_controller)
 application.register("progress-pages", Progress_pages_component_controller)
 application.register("reveal-component", Reveal_component_controller)
+application.register("table-component", Table_component_controller)

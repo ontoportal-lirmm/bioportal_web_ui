@@ -87,6 +87,3 @@ application.register("turbo-frame", TurboFrameController)
 
 import TurboFrameErrorController from "./turbo_frame_error_controller"
 application.register("turbo-frame-error", TurboFrameErrorController)
-
-import RecommenderController from "./recommender_controller"
-application.register('recommender', RecommenderController)

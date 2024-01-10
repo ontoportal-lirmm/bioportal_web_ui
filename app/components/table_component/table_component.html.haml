@@ -1,7 +1,8 @@
-%table.table-content{id: @id ,class: stripped_class + ' ' + borderless_class + ' ' + layout_fixed_class + ' ' + mini_class + ' ' + outline_class}
-  %thead
-    = header
-  %tbody{id: "#{@id}_table_body"}
-    - rows.each do |row|
-      = row
-    = content
+%div{'data-controller': 'table-component'}
+  %table.table-content{id: @id ,'data-sort': @sort.to_s,class: stripped_class + ' ' + borderless_class + ' ' + layout_fixed_class + ' ' + mini_class + ' ' + outline_class}
+    %thead
+      = header
+    %tbody{id: "#{@id}_table_body"}
+      - rows.each do |row|
+        = row
+      = content
