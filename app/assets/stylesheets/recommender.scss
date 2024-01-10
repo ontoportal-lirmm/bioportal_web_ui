@@ -19,7 +19,7 @@
     border-radius: 10px;
 }
 .recommender-page-decription{
-    font-weight: 600;
+    color: #888888;
     margin-top: 20px;
 }
 .recommender-page-inputs{
@@ -152,4 +152,9 @@
 }
 .recommender-table-container{
     margin-top: 20px;
+}
+.recommender-page-results .title{
+    margin-top: 63px;
+    font-size: 18px;
+    font-weight: 600;
 }

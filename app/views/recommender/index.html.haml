@@ -1,4 +1,4 @@
-.recommender-page-container{'data-controller': "recommender"}
+.recommender-page-container
   .recommender-page-subcontainer
     .recommender-page-title
       .text
@@ -70,8 +70,10 @@
       .recommender-page-button
         = render Buttons::RegularButtonComponent.new(id:'recommender', value: "Get recommendations", variant: "primary")
     .recommender-page-results 
+      .title
+        Recommended ontologies
       .recommender-table-container
-        = render TableComponent.new(id: 'recommender-table', borderless: true, layout_fixed: true, small_text: true, outline: true) do |t|
+        = render TableComponent.new(id: 'recommender-table', borderless: true, layout_fixed: true, small_text: true, outline: true, sort: true) do |t|
           - t.header do |h|
             - @results_table_header.each do |header|
               - h.th do
@@ -79,9 +81,10 @@
 
           - t.row do |r|
             - r.td do
-              = '1'
+              = render Display::ProgressBarComponent.new(progress: '60') 
+
             - r.td do
-              = 'a'
+              = render Display::ProgressBarComponent.new(progress: '10') 
             - r.td do
               = 'a'
             - r.td do
@@ -99,7 +102,7 @@
           
           - t.row do |r|
             - r.td do
-              = '1'
+              = render Display::ProgressBarComponent.new(progress: '50')
             - r.td do
               = 'a'
             - r.td do
