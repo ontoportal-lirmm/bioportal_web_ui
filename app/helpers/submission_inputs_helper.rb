@@ -101,7 +101,7 @@ module SubmissionInputsHelper
                         value: attr.values)
       else
         text_input(name: name, label: label,
-                   value: attr.values)
+                   value: attr.values, help: help)
       end
     end
 

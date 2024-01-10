@@ -56,6 +56,18 @@ module SubmissionsHelper
     end
   end
 
+  def metadata_version_help
+    content_tag(:div, class: 'edit-ontology-desc') do
+      html = content_tag(:div) do
+        content_tag(:span, 'For more information on how to encode versionning information in an ontology, see ') +
+        content_tag(:span, style: 'width: 10px; height: 10px') do
+          link_to('guidelines and recommendations.', "https://hal.science/hal-04094847", target: "_blank")
+        end
+      end
+      html.html_safe
+    end
+  end
+
 
   def ontology_submission_id_label(acronym, submission_id)
     [acronym, submission_id].join('#')
@@ -278,7 +290,7 @@ module SubmissionsHelper
       end
     end
 
-    reject_metadata = %w[abstract description uploadFilePath contact pullLocation hasOntologyLanguage hasLicense bugDatabase knownUsage]
+    reject_metadata = %w[abstract description uploadFilePath contact pullLocation hasOntologyLanguage hasLicense bugDatabase knownUsage version]
     label = inline_save? ? '' : nil
 
     if selected_attribute?('abstract')
@@ -309,6 +321,12 @@ module SubmissionsHelper
     if selected_attribute?('knownUsage')
       output += attribute_form_group_container('knownUsage') do
         raw attribute_input('knownUsage', help: metadata_knownUsage_help)
+      end
+    end
+
+    if selected_attribute?('version')
+      output += attribute_form_group_container('version') do
+        raw attribute_input('version', help: metadata_version_help)
       end
     end
 
