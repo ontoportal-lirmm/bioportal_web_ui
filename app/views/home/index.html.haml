@@ -67,13 +67,13 @@
     %h4
       = t('home.recommender_annotator')
     %hr.home-section-line/
-    .home-card
+    .home-card{'data-controller': 'sample-text'}
       %form{action: "/annotator_recommender_form", method: "post"}
-        %textarea.home-recommendations-and-annotations{rows: "4" , placeholder: t('home.paste_text_prompt'), name: "text"}
+        %textarea.home-recommendations-and-annotations{rows: "4" , placeholder: t('home.paste_text_prompt'), name: "text", 'data-sample-text-target': "input"}
         %input.d-none{type: "submit", name: "submit_button" ,value: "annotator", id: "annotator_submit"}/
         %input.d-none{type: "submit" , name: "submit_button" ,value: "recommender", id: "recommender_submit"}/
         .home-services-buttons.container
-          .insert-sample-text-button{onclick: "insertSampleText('#{t('sample_text')}')"}
+          .insert-sample-text-button{'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("sample_text")}
             %div
               Insert sample text
             = inline_svg_tag 'icons/arrow-curved-up.svg'
@@ -191,10 +191,5 @@
   }
   function submitRecommender(){
   document.getElementById("recommender_submit").click()
-  }
-  let recommenderAnnotatorArea = document.querySelector('.home-recommendations-and-annotations');
-  
-  function insertSampleText(sample_text){
-    recommenderAnnotatorArea.value = sample_text;
   }
 

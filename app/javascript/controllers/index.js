@@ -87,3 +87,6 @@ application.register("turbo-frame", TurboFrameController)
 
 import TurboFrameErrorController from "./turbo_frame_error_controller"
 application.register("turbo-frame-error", TurboFrameErrorController)
+
+import SampleTextController from "./sample_text_controller"
+application.register("sample-text", SampleTextController)
