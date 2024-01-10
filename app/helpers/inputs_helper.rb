@@ -71,4 +71,29 @@ module InputsHelper
   def input_error_message(name)
     attribute_error(method_name(name))
   end
+
+  def table_content(t)
+    headers = 5.times.map { |i| "header #{i}" }
+    rows = 6.times.map { |row| 5.times.map { |i| "line #{row} :#{i} " } }
+
+    t.header do |h|
+      headers.each do |header|
+        h.th { header }
+      end
+      h.th { 'Action' }
+    end
+
+    rows.each do |row|
+      t.row do |r|
+        row.each do |col|
+          r.td { col }
+        end
+
+        r.td do
+          link_to('Edit', '', class: 'mr-3') + link_to('Delete', '')
+        end
+      end
+    end
+
+  end
 end

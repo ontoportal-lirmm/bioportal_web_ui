@@ -5,12 +5,14 @@ class TableComponent < ViewComponent::Base
   renders_one :header, TableRowComponent
   renders_many :rows, TableRowComponent
 
-  def initialize(id: '', stripped: true, borderless: false, layout_fixed: false )
+  def initialize(id: '', stripped: true, borderless: false, layout_fixed: false, small_text: nil, outline: nil)
     super
     @id = id
     @stripped = stripped
     @borderless = borderless
     @layout_fixed = layout_fixed
+    @small_text = small_text
+    @outline = outline
   end
 
   def stripped_class
@@ -27,5 +29,13 @@ class TableComponent < ViewComponent::Base
 
   def add_row(*array, &block)
     self.row.create(*array, &block)
+  end
+
+  def mini_class
+    @small_text ? 'table-mini' : ''
+  end
+
+  def outline_class
+    @outline ? 'table-outline' : ''
   end
 end

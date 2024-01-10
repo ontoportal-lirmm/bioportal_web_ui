@@ -6,6 +6,10 @@ class RecommenderController < ApplicationController
 
   def index
     @text = params[:text]
+    @results_table_header = ['#', 'Ontology', 'Final score', 'Coverage score', 
+                            'Acceptance score', 'Detail score', 'Specialization score',
+                            'Annotations', 'Highlight annotations'
+                            ]
   end
 
   # def create

@@ -1,4 +1,4 @@
-.recommender-page-container 
+.recommender-page-container{'data-controller': "recommender"}
   .recommender-page-subcontainer
     .recommender-page-title
       .text
@@ -69,6 +69,57 @@
 
       .recommender-page-button
         = render Buttons::RegularButtonComponent.new(id:'recommender', value: "Get recommendations", variant: "primary")
+    .recommender-page-results 
+      .recommender-table-container
+        = render TableComponent.new(id: 'recommender-table', borderless: true, layout_fixed: true, small_text: true, outline: true) do |t|
+          - t.header do |h|
+            - @results_table_header.each do |header|
+              - h.th do
+                = header
+
+          - t.row do |r|
+            - r.td do
+              = '1'
+            - r.td do
+              = 'a'
+            - r.td do
+              = 'a'
+            - r.td do
+              = 'a'
+            - r.td do
+              = 'a'
+            - r.td do
+              = 'a'
+            - r.td do
+              = 'a'
+            - r.td do
+              = 'a'
+            - r.td do
+              = 'a'
+          
+          - t.row do |r|
+            - r.td do
+              = '1'
+            - r.td do
+              = 'a'
+            - r.td do
+              = 'a'
+            - r.td do
+              = 'a'
+            - r.td do
+              = 'a'
+            - r.td do
+              = 'a'
+            - r.td do
+              = 'a'
+            - r.td do
+              = 'a'
+            - r.td do
+              = 'a'
+
+
+
+      
 
 :javascript
   function handleInput(event) {
