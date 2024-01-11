@@ -51,15 +51,13 @@
                 -# = raw download_link(sub, @ontology)
                 - if @ontology.admin?(session[:user])
                   %div.d-flex
-                    = link_to("#{@ontology.id}/submissions/#{sub.submissionId}?display=all", target: "_blank",title: 'Go to API') do
-                      = inline_svg_tag('json.svg', "aria-hidden" => "true", style: "margin-left: 0.5rem; width: 17px; margin-top: 9px;")
-                    = link_to("/ontologies/#{@ontology.acronym}/submissions/#{sub.submissionId}/edit", target: "_blank",title: 'Edit') do
-                      = inline_svg_tag('edit.svg', "aria-hidden" => "true", style: "margin-left: 0.5rem; width: 17px; margin-top: 9px;")
+                    %div{style: 'margin-right: 10px;'}
+                      = render IconWithTooltipComponent.new(icon: "json.svg",link: "#{@ontology.id}/submissions/#{sub.submissionId}?display=all", target: '_blank', title: 'Go to API')
+                    = render IconWithTooltipComponent.new(icon: "edit.svg",link: "/ontologies/#{@ontology.acronym}/submissions/#{sub.submissionId}/edit", target: '_blank', title: 'Edit')
                     - unless index.zero?
                       - alert_text = "Are you sure you want to delete submission <span style='color:red;font-weight:bold;'>" + sub.submissionId.to_s + "</span> for ontology <span style='color:red;font-weight:bold;'>" + @ontology.acronym + "</span>?<br/><b>This action CAN NOT be undone!!!</b>"
                       = button_to "/admin/ontologies/#{@ontology.acronym}/submissions/#{sub.submissionId}?turbo_stream=true", method: :delete, class: 'btn btn-sm btn-link', form: {data: { turbo: true, turbo_confirm: alert_text, turbo_frame: '_top'}} do
                         = inline_svg_tag('icons/delete.svg')
-                      
 
       - if @submissions.length > 5
         - t.row(class_css: "show_more_subs") do |r|
