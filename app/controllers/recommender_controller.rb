@@ -6,10 +6,27 @@ class RecommenderController < ApplicationController
 
   def index
     @text = params[:text]
-    @results_table_header = ['#', 'Ontology', 'Final score', 'Coverage score', 
+    @results_table_header = ['Ontology', 'Final score', 'Coverage score', 
                             'Acceptance score', 'Detail score', 'Specialization score',
                             'Annotations', 'Highlight annotations'
                             ]
+    if params[:input] != nil                    
+      recommendations = LinkedData::Client::HTTP.post(RECOMMENDER_URI, params)
+      @results = []
+      recommendations.each do |recommendation|
+        row = {
+          ontologies: recommendation_ontologies(recommendation),
+          final_score: percentage(recommendation.evaluationScore),
+          coverage_score: percentage(recommendation.coverageResult.normalizedScore),
+          acceptance_score: percentage(recommendation.acceptanceResult.normalizedScore),
+          details_score: percentage(recommendation.detailResult.normalizedScore),
+          specialization_score: percentage(recommendation.specializationResult.normalizedScore),
+          annotations: recommendation_annotations(recommendation),
+          highlighted: false,
+        }
+        @results.push(row)
+      end
+    end
   end
 
   # def create
@@ -49,6 +66,35 @@ class RecommenderController < ApplicationController
     recommendations = LinkedData::Client::HTTP.post(RECOMMENDER_URI, form_data, raw: true)
     LOG.add :debug, "Retrieved #{recommendations.length} recommendations: #{Time.now - start}s"
     render json: recommendations
+  end
+
+  def recommendation_ontologies(recommendation)
+    ontologies = []
+    recommendation.ontologies.each do |ontology|
+      ont = {
+        acronym: ontology.acronym,
+        link: ontology.id
+      }
+      ontologies.push(ont)
+    end
+    ontologies
+  end
+
+  def recommendation_annotations(recommendation)
+    annotations = []
+    recommendation.coverageResult.annotations.each do |annotation|
+      ant = {
+        text: annotation.text,
+        link: annotation.annotatedClass.links['self']
+      }
+      annotations.push(ant)
+    end
+    annotations
+  end
+
+  def percentage(string)
+    result = string.to_f * 100
+    result.round(1).to_s
   end
 
 end

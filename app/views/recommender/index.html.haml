@@ -6,119 +6,107 @@
       .line
     .recommender-page-decription
       Get recommendations for the most relevant ontologies from an excerpt of text or a list of keywords
-    .recommender-page-inputs{'data-controller': 'reveal-component'}
-      .inputs 
-        .recommender-page-text-area
-          %textarea#recommender-text-area{rows: "4" , placeholder: 'Enter or past a text to be annotated ...', name: "text", oninput: 'handleInput(event)'}
-          .insert-sample-text-button
-            .button
-              .text
-                Insert sample text
-              = inline_svg_tag 'icons/arrow-curved-up.svg'
-        .recommender-page-options
-          .section-text
-            Options
-          .input
-            .title
-              input
-            .radios
-              .text-choice
-                = render Input::RadioChipComponent.new(label: 'Text', name: 'input-choice', value: 'text', checked: true)
-              .keywords-choice
-                = render Input::RadioChipComponent.new(label: 'Keywords', name: 'input-choice', value: 'keywords')
-          .output
-            .title
-              output
-            .radios
-              .ontologies-choice
-                = render Input::RadioChipComponent.new(label: 'Ontologies', name: 'output-choice', value: 'text', checked: true)
-              .ontology-sets-choice
-                = render Input::RadioChipComponent.new(label: 'Ontology sets', name: 'output-choice', value: 'text')
-          .advanced-options-button{'data-action': 'click->reveal-component#show', 'data-reveal-component-target': 'showButton'}
-            = inline_svg_tag "icons/settings.svg"
-            .text 
-              Show advanced options
-          .advanced-options-button.d-none{'data-action': 'click->reveal-component#hide', 'data-reveal-component-target': 'hideButton'}
-            = inline_svg_tag 'icons/hide.svg'
-            .text 
-              Hide advanced options
-            
-      .recommender-advanced-options.d-none{'data-reveal-component-target': 'item'}
-        .weights-configuration
-          .title 
-            Weights configuration
-          .inputs-container
-            .input
-              = render Input::NumberComponent.new(label: "Converage", name: "converage", value: 0.55)
-            .input
-              = render Input::NumberComponent.new(label: "Acceptance", name: "acceptance", value: 0.15)
-            .input
-              = render Input::NumberComponent.new(label: "Knowledge detail", name: "knowledge-detail", value: 0.15)
-            .input
-              = render Input::NumberComponent.new(label: "Specialization", name: "specialization", value: 0.15)
-        .ontologies-configuration
-          .title 
-            Ontologies configuration
-          .inputs-container
-            .input
-              = render Input::NumberComponent.new(label: "Maximum number of ontologies per set", name: "max-ont-per-set", value: 0.55)
-            .input
-              - get_ontologies_data
-              = render Input::SelectComponent.new(label: "Select ontologies", id: 'ontologies', name: 'ontologies', value: @onts_for_select, multiple: "multiple")
-        
 
-      .recommender-page-button
-        = render Buttons::RegularButtonComponent.new(id:'recommender', value: "Get recommendations", variant: "primary")
-    .recommender-page-results 
-      .title
-        Recommended ontologies
-      .recommender-table-container
-        = render TableComponent.new(id: 'recommender-table', borderless: true, layout_fixed: true, small_text: true, outline: true, sort: true) do |t|
-          - t.header do |h|
-            - @results_table_header.each do |header|
-              - h.th do
-                = header
-
-          - t.row do |r|
-            - r.td do
-              = render Display::ProgressBarComponent.new(progress: '60') 
-
-            - r.td do
-              = render Display::ProgressBarComponent.new(progress: '10') 
-            - r.td do
-              = 'a'
-            - r.td do
-              = 'a'
-            - r.td do
-              = 'a'
-            - r.td do
-              = 'a'
-            - r.td do
-              = 'a'
-            - r.td do
-              = 'a'
-            - r.td do
-              = 'a'
+    = form_tag('/recommender', method: :get, 'data-turbo': true) do
+      .recommender-page-inputs{'data-controller': 'reveal-component'}
+        .inputs 
+          .recommender-page-text-area
+            %textarea#recommender-text-area{rows: "4" , placeholder: 'Enter or past a text to be annotated ...', name: "input", oninput: 'handleInput(event)', value: params[:input]}
+            .insert-sample-text-button
+              .button
+                .text
+                  Insert sample text
+                = inline_svg_tag 'icons/arrow-curved-up.svg'
+          .recommender-page-options
+            .section-text
+              Options
+            .input
+              .title
+                input
+              .radios
+                .text-choice
+                  = render Input::RadioChipComponent.new(label: 'Text', name: 'input_type', value: '1', checked: true)
+                .keywords-choice
+                  = render Input::RadioChipComponent.new(label: 'Keywords', name: 'input_type', value: '2')
+            .output
+              .title
+                output
+              .radios
+                .ontologies-choice
+                  = render Input::RadioChipComponent.new(label: 'Ontologies', name: 'output_type', value: '1', checked: true)
+                .ontology-sets-choice
+                  = render Input::RadioChipComponent.new(label: 'Ontology sets', name: 'output_type', value: '2')
+            .advanced-options-button{'data-action': 'click->reveal-component#show', 'data-reveal-component-target': 'showButton'}
+              = inline_svg_tag "icons/settings.svg"
+              .text 
+                Show advanced options
+            .advanced-options-button.d-none{'data-action': 'click->reveal-component#hide', 'data-reveal-component-target': 'hideButton'}
+              = inline_svg_tag 'icons/hide.svg'
+              .text 
+                Hide advanced options
+              
+        .recommender-advanced-options.d-none{'data-reveal-component-target': 'item'}
+          .weights-configuration
+            .title 
+              Weights configuration
+            .inputs-container
+              .input
+                = render Input::NumberComponent.new(label: "Converage", name: "wc", value: 0.55)
+              .input
+                = render Input::NumberComponent.new(label: "Acceptance", name: "wa", value: 0.15)
+              .input
+                = render Input::NumberComponent.new(label: "Knowledge detail", name: "wd", value: 0.15)
+              .input
+                = render Input::NumberComponent.new(label: "Specialization", name: "ws", value: 0.15)
+          .ontologies-configuration
+            .title 
+              Ontologies configuration
+            .inputs-container
+              .input
+                = render Input::NumberComponent.new(label: "Maximum number of ontologies per set", name: "max_elements_set", value: 3)
+              .input
+                - get_ontologies_data
+                = render Input::SelectComponent.new(label: "Select ontologies", id: 'ontologies', name: 'ontologies', value: @onts_for_select, multiple: "multiple")
           
-          - t.row do |r|
-            - r.td do
-              = render Display::ProgressBarComponent.new(progress: '50')
-            - r.td do
-              = 'a'
-            - r.td do
-              = 'a'
-            - r.td do
-              = 'a'
-            - r.td do
-              = 'a'
-            - r.td do
-              = 'a'
-            - r.td do
-              = 'a'
-            - r.td do
-              = 'a'
-            - r.td do
-              = 'a'
+
+        .recommender-page-button
+          = render Buttons::RegularButtonComponent.new(id:'recommender', value: "Get recommendations", variant: "primary", type: 'submit')
+      
+    - unless @results.nil? || @results.empty?
+      .recommender-page-results 
+        .title
+          Recommended ontologies
+        .recommender-table-container
+          = render TableComponent.new(id: 'recommender-table', borderless: true, layout_fixed: true, small_text: true, outline: true, sort: true) do |t|
+            - t.header do |h|
+              - @results_table_header.each do |header|
+                - h.th do
+                  = header
+            - @results.each do |result|
+              - t.row do |r|
+                - r.td do
+                  = result[:ontologies][0][:acronym]
+                - r.td do
+                  = render Display::ProgressBarComponent.new(progress: result[:final_score])
+                - r.td do
+                  = render Display::ProgressBarComponent.new(progress: result[:coverage_score])
+                - r.td do
+                  = render Display::ProgressBarComponent.new(progress: result[:acceptance_score])
+                - r.td do
+                  = render Display::ProgressBarComponent.new(progress: result[:details_score])
+                - r.td do
+                  = render Display::ProgressBarComponent.new(progress: result[:specialization_score])
+                - r.td do
+                  = result[:annotations].length
+                - r.td do
+                  = 'no'
+
+                    
+                  
+
+
+            
+
 
 
 
