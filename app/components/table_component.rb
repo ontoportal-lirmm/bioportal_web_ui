@@ -5,7 +5,7 @@ class TableComponent < ViewComponent::Base
   renders_one :header, TableRowComponent
   renders_many :rows, TableRowComponent
 
-  def initialize(id: '', stripped: true, borderless: false, layout_fixed: false, small_text: false, outline: false, sort: false)
+  def initialize(id: '', stripped: true, borderless: false, layout_fixed: false, small_text: false, outline: false, sort: false, default_sort_column: '0')
     super
     @id = id
     @stripped = stripped
@@ -14,6 +14,7 @@ class TableComponent < ViewComponent::Base
     @small_text = small_text
     @outline = outline
     @sort = sort
+    @default_sort_column = default_sort_column
   end
 
   def stripped_class

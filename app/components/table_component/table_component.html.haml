@@ -1,5 +1,5 @@
 %div{'data-controller': 'table-component'}
-  %table.table-content{id: @id ,'data-sort': @sort.to_s,class: stripped_class + ' ' + borderless_class + ' ' + layout_fixed_class + ' ' + mini_class + ' ' + outline_class}
+  %table.table-content{id: @id ,'data-sort': @sort.to_s, 'data-defaultSortColumn': @default_sort_column,class: stripped_class + ' ' + borderless_class + ' ' + layout_fixed_class + ' ' + mini_class + ' ' + outline_class}
     %thead
       = header
     %tbody{id: "#{@id}_table_body"}
