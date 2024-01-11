@@ -20,11 +20,5 @@ class SummarySectionComponent < ViewComponent::Base
   def show_icon?
     @show_icon
   end
-  
-  def link_svg(link)
-    link_to(link, target: "_blank", title: 'Go to API') do
-      tag.img(src: asset_path('json.svg'), "aria-hidden" => "true", style: "margin-left: 0.5rem; width: 16px; margin-top: 2px;")
-    end
-  end
- 
+
 end
