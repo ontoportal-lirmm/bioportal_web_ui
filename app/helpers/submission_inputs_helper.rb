@@ -141,16 +141,39 @@ module SubmissionInputsHelper
   end
 
   def has_ontology_language_input(submission = @submission)
-    render Layout::RevealComponent.new(init_show: submission.hasOntologyLanguage&.eql?('SKOS'), show_condition: 'SKOS') do |c|
-      c.button do
+    content_tag(:div, 'data-controller': 'reveal-component') do
+      content_tag(:div, 'data-action': 'change->reveal-component#select', 'data-items': 'has_ontology_language_input') do
         attribute_input("hasOntologyLanguage")
       end
-      content_tag(:div, class: "upload-ontology-desc") do
-        content_tag(:div) do
-          "SKOS vocabularies submitted to BioPortal must contain a minimum of one concept scheme and top concept assertion. Please
-          refer to the NCBO wiki for a more #{link_to(ExternalLinkTextComponent.new(text: 'detailed explanation').call, "#seethewiki")} with examples.".html_safe
-        end
+    end +
+    content_tag(:div, id:'SKOS', class: 'd-none upload-ontology-desc has_ontology_language_input') do
+      content_tag(:span, " SKOS vocabularies submitted to #{portal_name} shall follow a few constraints (e.g., contain a minimum of one skos:ConceptScheme also typed as owl:Ontology) and top concept assertion.  ") +
+      content_tag(:span) do
+        link_to('Please refer to the documentation for more details.', "https://doc.jonquetlab.lirmm.fr/share/618372fb-a852-4f3e-8e9f-8b07ebc053e6", target: "_blank")
       end
+    end +
+
+    content_tag(:div, id:'OBO', class: 'd-none upload-ontology-desc has_ontology_language_input') do
+      content_tag(:span, "OBO ontologies submitted to #{portal_name} will be parsed by the OWL-API which integrates ") +
+      content_tag(:span) do
+        link_to('the OBOinOWL parser.', "#", target: "_blank")
+      end +
+      content_tag(:span, " The resulting RDF triples will then be loaded in #{portal_name} triple-store. ") 
+    end +
+
+    content_tag(:div, id:'UMLS', class: 'd-none upload-ontology-desc has_ontology_language_input') do
+      content_tag(:span, "UMLS-RRF resources are usually produced ") +
+      content_tag(:span) do
+        link_to('by the UMLS2RDF tool.', "#", target: "_blank")
+      end
+    end +
+
+    content_tag(:div, id:'OWL', class: 'd-none upload-ontology-desc has_ontology_language_input') do
+      content_tag(:span, " OWL ontologies submitted to PORTALNALE will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with ") +
+      content_tag(:span) do
+        link_to('the Protégé ', "https://protege.stanford.edu/", target: "_blank")
+      end +
+      content_tag(:span, "software which does use the same component.") 
     end
   end
 
@@ -403,8 +426,14 @@ module SubmissionInputsHelper
     label = attr_header_label(attr)
     values = attr.values || ['']
     name = attr.name
-    generate_list_field_input(attr, name, label, values, helper_text: helper_text) do |value, row_name, id|
-      text_area_tag(row_name, value, class: 'input-field-component', label: '')
+    if selected_attribute?('notes')
+      generate_list_field_input(attr, name, label, values, helper_text: helper_text) do |value, row_name, id|
+        text_area_tag(row_name, value, class: 'input-field-component', label: '')
+      end
+    else
+      generate_list_field_input(attr, name, label, values, helper_text: helper_text) do |value, row_name, id|
+        text_input(label: '', name: row_name, value: value)
+      end
     end
   end
 

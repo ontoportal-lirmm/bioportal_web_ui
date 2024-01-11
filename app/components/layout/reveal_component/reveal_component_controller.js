@@ -8,6 +8,19 @@ export default class extends Controller{
 
     static targets = ["hideButton", "showButton", 'item' ]
 
+    connect(){
+        let element
+        if (
+            this.element.childNodes[0] &&
+            this.element.childNodes[0].childNodes[0] &&
+            this.element.childNodes[0].childNodes[0].childNodes[3]
+          ){
+            element = this.element.childNodes[0].childNodes[0].childNodes[3]
+            if(element.tagName == "SELECT"){
+                document.getElementById(element.value).classList.remove(this.hiddenClassValue)
+            }
+        }
+    }
     toggle(event) {
         if (!this.conditionValue) {
             this.#toggle(event)
@@ -16,6 +29,15 @@ export default class extends Controller{
         } else if (!this.#shown() && this.#conditionChecked(event)) {
             this.#toggle(event)
         }
+    }
+
+    select(event){
+        console.log('woqsfqsdfqsdfrking')
+        let myItems = document.getElementsByClassName(event.target.parentNode.parentNode.getAttribute('data-items'))
+        for(var i = 0; i < myItems.length; i++) {
+            myItems[i].classList.add('d-none');
+        }
+        document.getElementById(event.target.value).classList.remove(this.hiddenClassValue)
     }
 
     show(event){
