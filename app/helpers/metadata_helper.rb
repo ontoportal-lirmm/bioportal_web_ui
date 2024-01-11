@@ -89,13 +89,4 @@ module MetadataHelper
     end
   end
 
-  def generate_link_title
-    inside_color = '#3CB371'
-    outside_color = '#007bff'
-
-    inside_span = content_tag(:span, "#{portal_name}", style: "color: #{inside_color} !important;")
-    outside_span = content_tag(:span, 'outside', style: "color: #{outside_color};")
-
-    link_title = "Relation with other ontologies either in #{inside_span} or #{outside_span}".html_safe
-  end
 end
