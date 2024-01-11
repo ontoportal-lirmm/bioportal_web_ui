@@ -8,7 +8,7 @@ class RecommenderController < ApplicationController
     @text = params[:text]
     @results_table_header = ['Ontology', 'Final score', 'Coverage score', 
                             'Acceptance score', 'Detail score', 'Specialization score',
-                            'Annotations', 'Highlight annotations'
+                            'Annotations'
                             ]
     if params[:input] != nil                    
       recommendations = LinkedData::Client::HTTP.post(RECOMMENDER_URI, params)
@@ -25,6 +25,7 @@ class RecommenderController < ApplicationController
           highlighted: false,
         }
         @results.push(row)
+        @results.max_by { |element| element[:final_score] }[:highlighted] = true
       end
     end
   end
@@ -73,7 +74,7 @@ class RecommenderController < ApplicationController
     recommendation.ontologies.each do |ontology|
       ont = {
         acronym: ontology.acronym,
-        link: ontology.id
+        link: '/ontologies/'+url_endpoint(ontology.id)
       }
       ontologies.push(ont)
     end
@@ -95,6 +96,10 @@ class RecommenderController < ApplicationController
   def percentage(string)
     result = string.to_f * 100
     result.round(1).to_s
+  end
+
+  def url_endpoint(url)
+    url.split('/').last
   end
 
 end
