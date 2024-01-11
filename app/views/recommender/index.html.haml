@@ -10,13 +10,17 @@
     = form_tag('/recommender', method: :get, 'data-turbo': true) do
       .recommender-page-inputs{'data-controller': 'reveal-component'}
         .inputs 
-          .recommender-page-text-area
-            %textarea#recommender-text-area{rows: "4" , placeholder: 'Enter or past a text to be annotated ...', name: "input", oninput: 'handleInput(event)', value: params[:input]}
-            .insert-sample-text-button
-              .button
-                .text
-                  Insert sample text
-                = inline_svg_tag 'icons/arrow-curved-up.svg'
+          %div
+            .recommender-page-text-area.d-none
+              %textarea#recommender-text-area{rows: "4" , placeholder: 'Enter or past a text to be annotated ...', name: "input", oninput: 'handleInput(event)', value: params[:input]}
+              .insert-sample-text-button
+                .button
+                  .text
+                    Insert sample text
+                  = inline_svg_tag 'icons/arrow-curved-up.svg'
+            #recommender-page-result-area.recommender-page-text-area-results
+              .text
+                Melanoma is a malignant tumor of melanocytes which are found predominantly in skin but also in the bowel and the eye.
           .recommender-page-options
             .section-text
               Options
@@ -71,13 +75,17 @@
 
         .recommender-page-button
           = render Buttons::RegularButtonComponent.new(id:'recommender', value: "Get recommendations", variant: "primary", type: 'submit')
+        .recommender-page-button.d-none
+          = render Buttons::RegularButtonComponent.new(id:'edit-recommender', value: "Edit", variant: "primary") do |btn|
+            - btn.icon_left do
+              = inline_svg_tag "edit.svg"
       
     - unless @results.nil? || @results.empty?
       .recommender-page-results 
         .title
           Recommended ontologies
         .recommender-table-container
-          = render TableComponent.new(id: 'recommender-table', borderless: true, layout_fixed: true, small_text: true, outline: true, sort: true) do |t|
+          = render TableComponent.new(id: 'recommender-table', borderless: true, layout_fixed: true, small_text: true, outline: true, sort: true, default_sort_column: '1') do |t|
             - t.header do |h|
               - @results_table_header.each do |header|
                 - h.th do
@@ -85,7 +93,8 @@
             - @results.each do |result|
               - t.row do |r|
                 - r.td do
-                  = result[:ontologies][0][:acronym]
+                  %a.recommender-result-ontology{href: result[:ontologies][0][:link]}
+                    = result[:ontologies][0][:acronym]
                 - r.td do
                   = render Display::ProgressBarComponent.new(progress: result[:final_score])
                 - r.td do
@@ -97,30 +106,41 @@
                 - r.td do
                   = render Display::ProgressBarComponent.new(progress: result[:specialization_score])
                 - r.td do
-                  = result[:annotations].length
-                - r.td do
-                  = 'no'
-
-                    
-                  
-
-
-            
-
-
-
+                  .recommender-result-highlighted
+                    = render Input::RadioChipComponent.new(label: result[:annotations].length.to_s+" annotations", name: 'highlighted_recommendation', value: result[:annotations], checked: result[:highlighted], onchange: 'handleHighlightedChange()')
 
       
 
 :javascript
   function handleInput(event) {
-    var selectedInputChoice = document.querySelector('input[name="input-choice"]:checked').value;
-    if (selectedInputChoice === "keywords"){
+    var selectedInputChoice = document.querySelector('input[name="input_type"]:checked').value;
+    if (selectedInputChoice === "2"){
       const textarea = document.getElementById('recommender-text-area');
       const value = textarea.value;
       const lastCharIsSpace = event.data === ' ';
       const formattedValue = lastCharIsSpace ? value.trim() + ', ' : value;
       textarea.value = formattedValue;
     }
-
   }
+
+  handleHighlightedChange()
+  // here starts the logic of displaying annotations
+  function handleHighlightedChange(){
+    let recommandations_area = document.getElementById('recommender-page-result-area')
+    let jsonString = document.querySelector('input[name="highlighted_recommendation"]:checked').value;
+    let jsonStringModified = jsonString.replace(/:text/g, '"text"').replace(/:link/g, '"link"').replace(/=>/g, ':');
+    let jsonArray = JSON.parse(jsonStringModified);
+    var words = recommandations_area.textContent.split(/\s+/);
+    for (var i = 0; i < words.length; i++) {
+        var word = words[i].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '').toLowerCase(); // Remove punctuation and convert to lowercase
+        var foundItem = jsonArray.find(item => item.text.toLowerCase() === word);
+
+        if (foundItem) {
+          // Replace the word with <a> tag
+          words[i] = '<a href="' + foundItem.link + '">' + words[i] + '</a>';
+        }
+      }
+    recommandations_area.innerHTML = words.join(' ');
+  }
+
+  

@@ -28,12 +28,17 @@
 .recommender-page-inputs .inputs{
     display: flex;
 }
-.recommender-page-text-area{
+.recommender-page-text-area, .recommender-page-text-area-results {
     box-shadow: 2px 30px 60px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     width: 630px;
     margin-right: 30px;
 }
+.recommender-page-text-area-results{
+    padding: 20px;
+    min-height:205px;
+}
+
 .recommender-page-text-area textarea{
     font-size: 16px;
     outline: none;
@@ -157,4 +162,15 @@
     margin-top: 63px;
     font-size: 18px;
     font-weight: 600;
+}
+.recommender-result-ontology{
+    font-size: 16px;
+}
+.recommender-result-highlighted{
+    display: flex;
+    justify-content: end;
+}
+.recommender-page-text-area-results a{
+    font-weight: 600;
+    text-decoration: underline !important;
 }

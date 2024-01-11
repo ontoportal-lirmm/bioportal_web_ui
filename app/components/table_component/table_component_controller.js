@@ -9,8 +9,6 @@ export default class extends Controller {
         table_component = this.element.childNodes[1]
         let default_sort_column
         default_sort_column = parseInt(table_component.dataset.defaultsortcolumn, 10)
-        
-        debugger
         if (table_component.dataset.sort === 'true'){
             let table = new DataTable('#'+table_component.id, {
                 paging: false,
