@@ -174,4 +174,14 @@ class ConceptDetailsComponent < ViewComponent::Base
     end
   end
 
+  def convert_dates(hash)
+    hash.transform_values do |property|
+      if property[:key].to_s.include?("modified") || property[:key].to_s.include?("created")
+        value = property[:values].first
+        property[:values]=[l(Date.parse(value), format: :monthfull_day_year.to_sym)]
+      end
+      property
+    end
+  end
+
 end
