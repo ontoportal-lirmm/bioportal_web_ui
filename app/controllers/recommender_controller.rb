@@ -74,7 +74,7 @@ class RecommenderController < ApplicationController
     recommendation.ontologies.each do |ontology|
       ont = {
         acronym: ontology.acronym,
-        link: '/ontologies/'+url_endpoint(ontology.id)
+        link: url_to_endpoint(ontology.id)
       }
       ontologies.push(ont)
     end
@@ -86,7 +86,7 @@ class RecommenderController < ApplicationController
     recommendation.coverageResult.annotations.each do |annotation|
       ant = {
         text: annotation.text,
-        link: annotation.annotatedClass.links['self']
+        link: url_to_endpoint(annotation.annotatedClass.links['self']) 
       }
       annotations.push(ant)
     end
@@ -98,8 +98,9 @@ class RecommenderController < ApplicationController
     result.round(1).to_s
   end
 
-  def url_endpoint(url)
-    url.split('/').last
+  def url_to_endpoint(url)
+    uri = URI.parse(url)
+    endpoint = uri.path.sub(/^\//, '')
+    endpoint
   end
-
 end

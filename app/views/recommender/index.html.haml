@@ -31,18 +31,20 @@
               .title
                 input
               .radios
+                - check_input = !params[:input_type].eql?('2')
                 .text-choice
-                  = render Input::RadioChipComponent.new(label: 'Text', name: 'input_type', value: '1', checked: true)
+                  = render Input::RadioChipComponent.new(label: 'Text', name: 'input_type', value: '1', checked: check_input)
                 .keywords-choice
-                  = render Input::RadioChipComponent.new(label: 'Keywords', name: 'input_type', value: '2')
+                  = render Input::RadioChipComponent.new(label: 'Keywords', name: 'input_type', value: '2', checked: !check_input)
             .output
               .title
                 output
               .radios
+                - check_output = !params[:output_type].eql?('2')
                 .ontologies-choice
-                  = render Input::RadioChipComponent.new(label: 'Ontologies', name: 'output_type', value: '1', checked: true)
+                  = render Input::RadioChipComponent.new(label: 'Ontologies', name: 'output_type', value: '1', checked: check_output)
                 .ontology-sets-choice
-                  = render Input::RadioChipComponent.new(label: 'Ontology sets', name: 'output_type', value: '2')
+                  = render Input::RadioChipComponent.new(label: 'Ontology sets', name: 'output_type', value: '2', checked: !check_output)
             .advanced-options-button{'data-action': 'click->reveal-component#show', 'data-reveal-component-target': 'showButton'}
               = inline_svg_tag "icons/settings.svg"
               .text 
@@ -58,19 +60,19 @@
               Weights configuration
             .inputs-container
               .input
-                = render Input::NumberComponent.new(label: "Converage", name: "wc", value: 0.55)
+                = render Input::NumberComponent.new(label: "Converage", name: "wc", value: params[:wc] || 0.55)
               .input
-                = render Input::NumberComponent.new(label: "Acceptance", name: "wa", value: 0.15)
+                = render Input::NumberComponent.new(label: "Acceptance", name: "wa", value: params[:wa] || 0.15)
               .input
-                = render Input::NumberComponent.new(label: "Knowledge detail", name: "wd", value: 0.15)
+                = render Input::NumberComponent.new(label: "Knowledge detail", name: "wd", value: params[:wd] || 0.15)
               .input
-                = render Input::NumberComponent.new(label: "Specialization", name: "ws", value: 0.15)
+                = render Input::NumberComponent.new(label: "Specialization", name: "ws", value: params[:ws] || 0.15)
           .ontologies-configuration
             .title 
               Ontologies configuration
             .inputs-container
               .input
-                = render Input::NumberComponent.new(label: "Maximum number of ontologies per set", name: "max_elements_set", value: 3)
+                = render Input::NumberComponent.new(label: "Maximum number of ontologies per set", name: "max_elements_set", value: params[:max_elements_set] || 3)
               .input
                 - get_ontologies_data
                 = render Input::SelectComponent.new(label: "Select ontologies", id: 'ontologies', name: 'ontologies', value: @onts_for_select, multiple: "multiple")
@@ -97,8 +99,10 @@
             - @results.each do |result|
               - t.row do |r|
                 - r.td do
-                  %a.recommender-result-ontology{href: result[:ontologies][0][:link]}
-                    = result[:ontologies][0][:acronym]
+                  - ontologies = ""
+                  - result[:ontologies].each do |ontology|
+                    %a.recommender-result-ontology{href: ontology[:link]}
+                      = ontology[:acronym]
                 - r.td do
                   = render Display::ProgressBarComponent.new(progress: result[:final_score])
                 - r.td do
@@ -110,8 +114,8 @@
                 - r.td do
                   = render Display::ProgressBarComponent.new(progress: result[:specialization_score])
                 - r.td do
-                  .recommender-result-highlighted
-                    = render Input::RadioChipComponent.new(label: result[:annotations].length.to_s+" annotations", name: 'highlighted_recommendation', value: result[:annotations], checked: result[:highlighted], onchange: 'handleHighlightedChange()')
+                  .recommender-result-highlighted{'data-action': 'change->recommender#handleHighlightedChange'}
+                    = render Input::RadioChipComponent.new(label: result[:annotations].length.to_s+" annotations", name: 'highlighted_recommendation', value: result[:annotations], checked: result[:highlighted])
 
       
 
@@ -125,26 +129,6 @@
       const formattedValue = lastCharIsSpace ? value.trim() + ', ' : value;
       textarea.value = formattedValue;
     }
-  }
-
-  handleHighlightedChange()
-  // here starts the logic of displaying annotations
-  function handleHighlightedChange(){
-    let recommandations_area = document.getElementById('recommender-page-result-area')
-    let jsonString = document.querySelector('input[name="highlighted_recommendation"]:checked').value;
-    let jsonStringModified = jsonString.replace(/:text/g, '"text"').replace(/:link/g, '"link"').replace(/=>/g, ':');
-    let jsonArray = JSON.parse(jsonStringModified);
-    var words = recommandations_area.textContent.split(/\s+/);
-    for (var i = 0; i < words.length; i++) {
-        var word = words[i].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '').toLowerCase(); // Remove punctuation and convert to lowercase
-        var foundItem = jsonArray.find(item => item.text.toLowerCase() === word);
-
-        if (foundItem) {
-          // Replace the word with <a> tag
-          words[i] = '<a href="' + foundItem.link + '">' + words[i] + '</a>';
-        }
-      }
-    recommandations_area.innerHTML = words.join(' ');
   }
 
   
