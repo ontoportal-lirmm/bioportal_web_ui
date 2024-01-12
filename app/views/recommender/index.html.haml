@@ -39,9 +39,9 @@
             .output
               .title
                 output
-              .radios
+              .radios{'data-action': 'change->recommender#togglesets'}
                 - check_output = !params[:output_type].eql?('2')
-                .ontologies-choice
+                .ontologies-choice{'data-recommender-target': 'ontologieschoice'}
                   = render Input::RadioChipComponent.new(label: 'Ontologies', name: 'output_type', value: '1', checked: check_output)
                 .ontology-sets-choice
                   = render Input::RadioChipComponent.new(label: 'Ontology sets', name: 'output_type', value: '2', checked: !check_output)
@@ -59,24 +59,24 @@
             .title 
               Weights configuration
             .inputs-container
-              .input
+              .ninput
                 = render Input::NumberComponent.new(label: "Converage", name: "wc", value: params[:wc] || 0.55)
-              .input
+              .ninput
                 = render Input::NumberComponent.new(label: "Acceptance", name: "wa", value: params[:wa] || 0.15)
-              .input
+              .ninput
                 = render Input::NumberComponent.new(label: "Knowledge detail", name: "wd", value: params[:wd] || 0.15)
-              .input
+              .ninput
                 = render Input::NumberComponent.new(label: "Specialization", name: "ws", value: params[:ws] || 0.15)
           .ontologies-configuration
             .title 
               Ontologies configuration
             .inputs-container
-              .input
+              .maxsets.input.d-none{'data-recommender-target': 'maxset'}
                 = render Input::NumberComponent.new(label: "Maximum number of ontologies per set", name: "max_elements_set", value: params[:max_elements_set] || 3)
-              .input
+              .ontologies.input
                 - get_ontologies_data
-                = render Input::SelectComponent.new(label: "Select ontologies", id: 'ontologies', name: 'ontologies', value: @onts_for_select, multiple: "multiple")
-          
+                = render Input::SelectComponent.new(label: "Select ontologies", id: 'ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected: params[:ontologies_list])
+              .input{'data-recommender-target': 'empty'}
 
         .recommender-page-button#get_recommendations_button{class: is_input ?  "" : "d-none", 'data-recommender-target': 'button'}
           = render Buttons::RegularButtonComponent.new(id:'recommender', value: "Get recommendations", variant: "primary", type: 'submit')

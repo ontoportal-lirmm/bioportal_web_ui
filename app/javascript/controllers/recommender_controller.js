@@ -2,18 +2,29 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="recommender"
 export default class extends Controller {
-  static targets = ['button', 'input', 'result']
+  static targets = ['button', 'input', 'result', 'maxset', 'empty', 'ontologieschoice']
 
   connect(){
-    this.handleHighlightedChange()
+    if(document.querySelector('input[name="highlighted_recommendation"]:checked') !== null){
+      this.handleHighlightedChange()
+    }  
+
+    let ontologies_choice = this.ontologieschoiceTarget.childNodes[1].childNodes[1]
+    if(!ontologies_choice.checked){
+      //debugger
+      this.#toggle(this.maxsetTarget)
+      this.#toggle(this.emptyTarget)
+    }
   }
   edit(event){
-    console.log('working a chikh')
     this.#toggle(this.buttonTarget)
     this.#toggle(event.currentTarget)
     this.#toggle(this.inputTarget)
     this.#toggle(this.resultTarget)
-    
+  }
+  togglesets(){
+    this.#toggle(this.maxsetTarget)
+    this.#toggle(this.emptyTarget)
   }
 
   handleHighlightedChange(){

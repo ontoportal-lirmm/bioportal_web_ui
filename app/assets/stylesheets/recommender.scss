@@ -129,12 +129,16 @@
     margin-top: 11px;
     margin-bottom: 17px;
 }
-.recommender-advanced-options .input{
+.recommender-advanced-options .input, .recommender-advanced-options .ninput{
     width: 100%;
 }
 
-.recommender-advanced-options .input + .input{
+.recommender-advanced-options .ninput + .ninput{
     margin-left: 20px;
+}
+
+.recommender-advanced-options .maxsets{
+    margin-right: 20px;
 }
 .recommender-advanced-options .hidebutton{
     color: var(--primary-color);

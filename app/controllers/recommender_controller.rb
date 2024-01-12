@@ -10,7 +10,8 @@ class RecommenderController < ApplicationController
                             'Acceptance score', 'Detail score', 'Specialization score',
                             'Annotations'
                             ]
-    if params[:input] != nil                    
+    if params[:input] != nil   
+      params[:ontologies] = params[:ontologies_list]&.join(',') || ''
       recommendations = LinkedData::Client::HTTP.post(RECOMMENDER_URI, params)
       @results = []
       recommendations.each do |recommendation|
