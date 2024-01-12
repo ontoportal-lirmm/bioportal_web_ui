@@ -3,4 +3,5 @@
   = beta_badge
 %span
   = render Display::InfoTooltipComponent.new(text: t("view_fair_scores_definitions"))
-  = fairness_link
+%span{style: 'vertical-align: bottom; margin-left: -5px;'}
+  = fairness_link('vertical-align: middle;')

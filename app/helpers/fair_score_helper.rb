@@ -126,8 +126,9 @@ module FairScoreHelper
     number_with_precision(score, precision: 2, strip_insignificant_zeros: true)
   end
 
-  def fairness_link
-    render IconWithTooltipComponent.new(icon: "json.svg",link: get_fairness_service_url, target: '_blank', title: 'Go to API', size:'small', style: 'line-height: 0;margin-left: 6px;')  
+  def fairness_link(style = '')
+    custom_style = "font-size: 50px; line-height: 0.5; margin-left: 6px; #{style}".strip
+    render IconWithTooltipComponent.new(icon: "json.svg",link: get_fairness_service_url, target: '_blank', title: 'Go to API', size:'small', style: custom_style)  
   end
 end
 
