@@ -1,4 +1,4 @@
-.recommender-page-container
+.recommender-page-container{'data-controller': 'recommender'}
   .recommender-page-subcontainer
     .recommender-page-title
       .text
@@ -11,16 +11,19 @@
       .recommender-page-inputs{'data-controller': 'reveal-component'}
         .inputs 
           %div
-            .recommender-page-text-area.d-none
-              %textarea#recommender-text-area{rows: "4" , placeholder: 'Enter or past a text to be annotated ...', name: "input", oninput: 'handleInput(event)', value: params[:input]}
+            - is_input = @results.nil? || @results.empty?
+            .recommender-page-text-area{class: is_input ?  "" : "d-none", 'data-recommender-target': 'input'}
+              %textarea#recommender-text-area{rows: "4" , placeholder: 'Enter or past a text to be annotated ...', name: "input", oninput: 'handleInput(event)'}
+                = params[:input]
               .insert-sample-text-button
                 .button
                   .text
                     Insert sample text
                   = inline_svg_tag 'icons/arrow-curved-up.svg'
-            #recommender-page-result-area.recommender-page-text-area-results
+
+            #recommender-page-result-area.recommender-page-text-area-results{class: is_input ? "d-none" : "", 'data-recommender-target': 'result'}
               .text
-                Melanoma is a malignant tumor of melanocytes which are found predominantly in skin but also in the bowel and the eye.
+                = params[:input]
           .recommender-page-options
             .section-text
               Options
@@ -73,9 +76,10 @@
                 = render Input::SelectComponent.new(label: "Select ontologies", id: 'ontologies', name: 'ontologies', value: @onts_for_select, multiple: "multiple")
           
 
-        .recommender-page-button
+        .recommender-page-button#get_recommendations_button{class: is_input ?  "" : "d-none", 'data-recommender-target': 'button'}
           = render Buttons::RegularButtonComponent.new(id:'recommender', value: "Get recommendations", variant: "primary", type: 'submit')
-        .recommender-page-button.d-none
+
+        .recommender-page-button{class: is_input ? "d-none" : "", 'data-action': 'click->recommender#edit'}
           = render Buttons::RegularButtonComponent.new(id:'edit-recommender', value: "Edit", variant: "primary") do |btn|
             - btn.icon_left do
               = inline_svg_tag "edit.svg"
