@@ -3,13 +3,12 @@
 class SummarySectionComponent < ViewComponent::Base
   renders_many :action_links
 
-  def initialize(title: , link: nil, link_title: nil, show_card:  true, show_icon: false, service_link: nil)
+  def initialize(title: , link: nil, link_title: nil, show_card:  true, service_link: nil)
     super
     @title = title
     @link = link
     @link_title = link_title
     @show_card = show_card
-    @show_icon = show_icon
     @service_link = service_link
   end
 
@@ -18,7 +17,7 @@ class SummarySectionComponent < ViewComponent::Base
   end
 
   def show_icon?
-    @show_icon
+    !@service_link.nil?
   end
 
 end
