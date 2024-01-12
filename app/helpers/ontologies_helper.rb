@@ -666,6 +666,15 @@ module OntologiesHelper
     link_title = "Relation with other ontologies either in #{inside_span} or #{outside_span}".html_safe
   end
 
+
+  def edit_button(link:, title: )
+    render IconWithTooltipComponent.new(icon: "edit.svg",link: link, target: '_blank', title: title)
+  end
+
+  def service_button(link:, title: )
+    render IconWithTooltipComponent.new(icon: "json.svg",link: link, target: '_blank', title: title)
+  end
+
   private
 
   def submission_languages(submission = @submission)
