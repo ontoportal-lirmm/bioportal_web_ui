@@ -4,6 +4,7 @@ import { HistoryService } from "../mixins/useHistory";
 // Connects to data-controller="history"
 export default class extends Controller {
     connect() {
+        console.log('hello world')
         this.history = new HistoryService()
     }
     updateURL(event) {

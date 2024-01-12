@@ -138,8 +138,7 @@ $FRONT_NOTICE = ''
 # Site notice appears on all pages and remains closed indefinitely. Stored below as a hash with a unique key and a string message
 # EX: $SITE_NOTICE = { :unique_key => 'Put your message here (can include <a href="/link">html</a> if you use single quotes).' }
 $SITE_NOTICE = {}
-$HOME_PAGE_LOGOS = {
-  supported_by: [
+$HOME_PAGE_LOGOS = [
     {
       img_src: 'logos/supports/numev.png',
       url: 'http://www.lirmm.fr/numev',
@@ -154,9 +153,7 @@ $HOME_PAGE_LOGOS = {
       img_src: 'logos/supports/eu.png',
       url: 'https://commission.europa.eu/research-and-innovation_en',
       target: '_blank'
-    }
-  ],
-  with_the_collaboration_of: [
+    },
     {
       img_src: 'logos/collaboration/d2kab.png',
       url: 'http://d2kab.mystrikingly.com',
@@ -177,8 +174,8 @@ $HOME_PAGE_LOGOS = {
       url: 'https://www.stanford.edu',
       target: '_blank'
     }
-  ]
-}
+]
+
 
 $FOOTER_LINKS = {
   social: [

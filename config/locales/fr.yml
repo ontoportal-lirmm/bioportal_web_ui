@@ -116,12 +116,13 @@ fr:
     ontology_upload: Voulez-vous charger une ontologie ?
     ontology_upload_benefits: 'En chargeant et partageant votre ontologie sur %{site}, vous pouvez :'
     ontology_upload_button: Charger une ontologie
+    discover_ontologies_button: Découvrez les ontologies
     ontology_upload_desc: Charger une ontologie ou un autre type d'artefact sémantique (vocabulaire, terminologie, thésaurus, ...) est un moyen de partager vos connaissances avec d'autres.
     paste_text_prompt: Collez un paragraphe de texte ou quelques mots-clés...
     recommender_annotator: Recommandeur et Annotateur
-    supported_by: Avec le soutien de
+    support_and_collaborations: Support & Collaborations
     twitter_news: Actualités
-    with_collaboration: Une collaboration de
+
   
   input: Entrée
   insert_sample_text: Insérez un exemple de texte
@@ -409,3 +410,4 @@ fr:
   view_fair_scores_definitions: Voir les définition des scores de FAIRness
   visits: Visites
   weights_configuration: Configuration des poids
+  sample_text: Le mélanome est une tumeur maligne des mélanocytes, se trouvant principalement dans la peau, mais aussi dans l'intestin et l'œil.
