@@ -116,12 +116,13 @@ fr:
     ontology_upload: Voulez-vous charger une ontologie ?
     ontology_upload_benefits: 'En chargeant et partageant votre ontologie sur %{site}, vous pouvez :'
     ontology_upload_button: Charger une ontologie
+    discover_ontologies_button: Découvrez les ontologies
     ontology_upload_desc: Charger une ontologie ou un autre type d'artefact sémantique (vocabulaire, terminologie, thésaurus, ...) est un moyen de partager vos connaissances avec d'autres.
     paste_text_prompt: Collez un paragraphe de texte ou quelques mots-clés...
     recommender_annotator: Recommandeur et Annotateur
-    supported_by: Avec le soutien de
+    support_and_collaborations: Support & Collaborations
     twitter_news: Actualités
-    with_collaboration: Une collaboration de
+
   
   input: Entrée
   insert_sample_text: Insérez un exemple de texte
@@ -371,34 +372,32 @@ fr:
   
   reproduce_results: 'Reproduisez ces résultats en utilisant le '
   score: Score
-  
   search:
-    categories: Catégories
-    class_search: Recherche de classe
-    classes_with_definitions: Classes avec définitions
-    hide_advanced_options: Masquer les options avancées
-    include_in_search: Inclure dans la recherche
-    index:
-      categories_placeholder: Commencez à taper pour sélectionner des catégories ou
-        laissez vide pour tout utiliser
-      obsolete_definition: 'Une classe que les auteurs de l''ontologie ont signalée
-        comme étant obsolète et qu''ils recommandent de ne pas utiliser. Ces classes
-        sont souvent laissées dans des ontologies (plutôt que de les supprimer entièrement)
-        afin que les systèmes existants qui en dépendent continuent à fonctionner.
-
-        '
-      property_definition: Association nommée entre deux entités. Les exemples sont
-        "définition" (une relation entre une classe et du texte) et "partie de" (une
-        relation entre deux classes).
-      search_keywords_placeholder: Entrez un terme, e.g., leaf area
-    narrow_search_to: Réduire la recherche à
-    obsolete_classes: Classes obsolètes
-    ontologies: Ontologies
-    ontology_views: Vues d'ontologie
-    property_values: Valeurs de propriété
+    search_place_holder: Entrer un terme, par exemple la hauteur de la plante
+    advanced_options:
+      search_language: Langue de recherche
+      ontologies: Ontologies
+      include_in_search_title: Inclure dans la recherche
+      include_in_search_values:
+        property_values: Valeurs de propriété
+        obolete_classses: Classes obsolètes
+        ontology_views: Vues d'ontologie
+      show_only_title: Afficher uniquement
+      show_only_values:
+        exact_matches: Correspondances exactes
+        classes_with_definitions: Classes avec définitions
     show_advanced_options: Afficher les options avancées
-    title: Rechercher
-    view_search_documentation: Voir la documentation de recherche
+    hide_advanced_options: Masquer les options avancées
+    match_in: Correspondre dans
+    ontologies: ontologies
+    result_component:
+      details: Détails
+      visualize: Visualiser
+      more_from_ontology: Plus de cette ontologie
+      reuses_in: Réutilisations dans
+      reuses_in_other_ontologies: Réutilisations dans d'autres ontologies
+
+    
   select_from_list: Sélectionner dans la liste
   select_ontologies: Commencez à taper pour sélectionner des ontologies ou laissez vide pour toutes les utiliser 
   select_ontologies_list: Sélectionnez les ontologies
@@ -411,3 +410,4 @@ fr:
   view_fair_scores_definitions: Voir les définition des scores de FAIRness
   visits: Visites
   weights_configuration: Configuration des poids
+  sample_text: Le mélanome est une tumeur maligne des mélanocytes, se trouvant principalement dans la peau, mais aussi dans l'intestin et l'œil.

@@ -580,7 +580,7 @@ tr.mainresource td {
 }
 
 .obsolete_class {
-  color: rgb(100,100,100);
+  color: rgb(100,100,100)!important;
   cursor: help;
   font-style: oblique;
 }

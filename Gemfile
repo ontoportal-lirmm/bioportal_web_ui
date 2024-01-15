@@ -117,6 +117,7 @@ group :development do
   gem 'i18n-tasks'
   gem 'deepl-rb'
   gem 'letter_opener_web', '~> 2.0'
+  gem 'haml-rails'
 end
 
 group :test, :development do
@@ -137,3 +138,5 @@ gem "net-ftp", "~> 0.2.0", require: false
 gem "net-http", "~> 0.3.2"
 
 
+
+gem "bugsnag", "~> 6.26"

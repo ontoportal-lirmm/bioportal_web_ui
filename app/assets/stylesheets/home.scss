@@ -226,9 +226,16 @@ i.fa.fa-caret-square-o-down {
 .home-upload-benifits div img{
   margin-top: 3px
 }
-.home-upload-ontology-button{
+.home-ontologies-actions{
+  display: flex;
+  align-items: center;
   margin-top: 30px;
+
+}
+.home-upload-ontology-button{
+  
   width: fit-content;
+  margin-right: 20px;
 }
 
 .home-upload-icon {
@@ -249,10 +256,34 @@ i.fa.fa-caret-square-o-down {
 .home-services-buttons{
   background-color: white;
   border-radius: 8px;
-  padding: 20px;
+  padding: 0;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+.home-services-buttons.container{
+  padding: 0 30px 30px 0;
+}
+.home-services-buttons .insert-sample-text-button{
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+.home-services-buttons .insert-sample-text-button:hover{
+  cursor: pointer;
+}
+.home-services-buttons .insert-sample-text-button div{
+  color: var(--primary-color);
+  margin-right: 5px;
+  font-weight: 500;
+}
+.home-services-buttons .insert-sample-text-button svg{
+  width: 18px;
+  height: 18px;
+}
+.home-services-buttons .insert-sample-text-button svg path{
+  fill: var(--primary-color);
+ 
 }
 .home-card{
   border-radius: 8px;
@@ -292,6 +323,9 @@ i.fa.fa-caret-square-o-down {
 .home-get-recommendations:hover{
   color: white !important;
   background-color: var(--primary-color);
+}
+.home-get-recommendations svg path{
+  fill: var(--primary-color)
 }
 .home-get-recommendations:hover .home-play-icon path{
   fill: white;

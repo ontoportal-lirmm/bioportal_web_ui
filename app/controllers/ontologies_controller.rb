@@ -398,7 +398,6 @@ class OntologiesController < ApplicationController
     end
   end
 
-
   def show_additional_metadata
     @metadata = submission_metadata
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first

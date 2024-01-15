@@ -1,6 +1,6 @@
-= turbo_frame_tag 'instances' do
+= render TurboFrameComponent.new(id: "instances", data: {"turbo-frame-target": "frame"} ) do
   %div.ontologies_list_container.mt-3
-    %instances-table.zebra{id: id, style:"width:100%; position:relative" , 'ontology-acronym': @ontology.acronym ,'class-uri': @instances_concept_id}
+    %instances-table{id: id, style:"width:100%; position:relative" , 'ontology-acronym': @ontology.acronym ,'class-uri': @instances_concept_id}
 
   :javascript
     $(document).ready(function() {

@@ -5,6 +5,21 @@ class UsersController < ApplicationController
   before_action :authorize_admin, only: [:index,:subscribe, :un_subscribe]
   layout :determine_layout
 
+  include TurboHelper
+
+
+  def index
+
+    onts = LinkedData::Client::Models::Ontology.all(include: 'administeredBy')
+    projects = LinkedData::Client::Models::Project.all(include: 'creator')
+
+    @users =  LinkedData::Client::Models::User.all(include: 'all')
+    @users.each do |user|
+      user.ontologies = onts.select {|o| o.administeredBy.include? user.id }
+      user.project = projects.select {|p| p.creator.include? user.id }
+    end
+
+  end
 
   # GET /users/1
   # GET /users/1.xml
@@ -112,7 +127,7 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    response = {errors: '', success: ''}
+    response = {errors: nil, success: ''}
     @user = LinkedData::Client::Models::User.find(params[:id])
     @user = LinkedData::Client::Models::User.find_by_username(params[:id]).first if @user.nil?
     if(session[:user].admin?)
@@ -123,7 +138,18 @@ class UsersController < ApplicationController
       response[:errors] << 'Not permitted '
     end
 
-    render json: response
+    respond_to do |format|
+      format.turbo_stream do
+        if response[:errors]
+          render_turbo_stream alert(type: 'danger') { response[:errors].to_s }
+        else
+          render turbo_stream: [
+            alert(type: 'success') { response[:success] },
+            turbo_stream.remove(params[:id])
+          ]
+        end
+      end
+    end
   end
 
   def custom_ontologies

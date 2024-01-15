@@ -3,20 +3,14 @@
     %div.site-admin-page-header
       CACHE MANAGEMENT
     %dive.site-admin-page-section
-      = link_to("Flush UI cache", "#", id: "flush_memcache_action", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
-      = link_to("Reset UI cache connection", "#", id: "reset_memcache_connection_action", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
-      = link_to("Flush GOO cache", "#", id: "flush_goo_cache_action", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
-      = link_to("Flush HTTP cache", "#", id: "flush_http_cache_action", class: "btn btn-outline-secondary btn-sm",  role: "button")
+      = action_button("Flush UI cache", admin_clearcache_path, class_style: 'btn btn-primary mx-1')
+      = action_button("Reset UI cache connection", admin_resetcache_path, class_style: 'btn btn-primary mx-1')
+      = action_button("Flush GOO cache", admin_clear_goo_cache_path, class_style: 'btn btn-primary mx-1')
+      = action_button("Flush HTTP cache", admin_clear_http_cache_path, class_style: 'btn btn-primary mx-1')
 
-  %div#site-admin-update-check.mb-5
+  %div.mb-5
     %div.site-admin-page-header
       VERSION MANAGEMENT
     %dive.site-admin-page-section
-      = link_to("Check for updates", "#", id: "update_check_action", class: "btn btn-outline-secondary btn-sm",  role: "button")
-
-  %div#site-admin-appliance-id.mb-5
-    %div.site-admin-page-header
-      APPLIANCE ID
-    %dive.site-admin-page-section
-      %div#appliance-id
-        %span
+      = render TurboFrameComponent.new(id: 'update_check_frame', src: '/admin/update_check_enabled') do |c|
+        - c.loader { 'Checking for updates ...' }

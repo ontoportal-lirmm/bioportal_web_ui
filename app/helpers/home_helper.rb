@@ -23,4 +23,12 @@ module HomeHelper
     end
   end  
 
+  def discover_ontologies_button
+    render Buttons::RegularButtonComponent.new(id: 'discover-ontologies-button', value: t('home.discover_ontologies_button'), variant: "secondary", state: "regular", href: "/ontologies") do |btn|
+      btn.icon_right do
+        inline_svg_tag "arrow-right.svg"
+      end
+    end
+  end
+
 end

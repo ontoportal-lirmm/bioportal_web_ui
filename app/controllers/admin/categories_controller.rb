@@ -1,5 +1,6 @@
 class Admin::CategoriesController < ApplicationController
-  include SubmissionUpdater
+  include SubmissionUpdater, TurboHelper
+
 
   layout :determine_layout
   before_action :unescape_id, only: [:edit, :show, :update, :destroy]
@@ -9,8 +10,7 @@ class Admin::CategoriesController < ApplicationController
   ATTRIBUTE_TO_INCLUDE = 'name,acronym,created,description,parentCategory,ontologies'
 
   def index
-    response = _categories
-    render :json => response
+    @categories = _categories
   end
 
   def new
@@ -22,7 +22,8 @@ class Admin::CategoriesController < ApplicationController
   end
 
   def edit
-    @category = LinkedData::Client::Models::Category.find_by_acronym(params[:id], include:'name,acronym,created,description,parentCategory,ontologies' ).first
+    @category = _category
+    @acronyms = @category.ontologies.map { |url| url.match(/\/([^\/]+)$/)[1] }
     @ontologies_category = LinkedData::Client::Models::Ontology.all(include: 'acronym').map {|o|[o.acronym, o.id] }
     respond_to do |format|
       format.html { render "edit", :layout => false }
@@ -30,7 +31,7 @@ class Admin::CategoriesController < ApplicationController
   end
 
   def create
-    response = { errors: '', success: '' }
+    response = { errors: nil, success: '' }
     start = Time.now
     begin
       category = LinkedData::Client::Models::Category.new(values: category_params)
@@ -43,35 +44,55 @@ class Admin::CategoriesController < ApplicationController
     rescue Exception => e
       response[:errors] = "Problem creating the category  - #{e.message}"
     end
-    render json: response, status: (response[:errors] == '' ? :created : :internal_server_error)
+
+    if response[:errors]
+      render_turbo_stream alert_error(id: 'category') { response[:errors] }
+    else
+      success_message = 'New Category added successfully'
+      streams = [alert_success(id: 'category') { success_message }]
+
+      streams << prepend('admin_categories_table_body', partial: 'admin/categories/category', locals: { category: category_saved })
+
+      render_turbo_stream(*streams)
+    end
 
   end
 
   def update
-    response = { errors: '', success: ''}
+    response = { errors: nil, success: ''}
     start = Time.now
     begin
-      category = LinkedData::Client::Models::Category.find_by_acronym(params[:id], include: ATTRIBUTE_TO_INCLUDE ).first
+      category = _category
       add_ontologies_to_object(category_params[:ontologies],category) if (category_params[:ontologies].present? && category_params[:ontologies].size > 0 && category_params[:ontologies].first != '')
-      delete_ontologies_from_object(category_params[:ontologies],category.ontologies,category) 
+      delete_ontologies_from_object(category_params[:ontologies], category.ontologies,category)
       category.update_from_params(category_params)
-      category_update = category.update
-      if response_error?(category_update)
-        response[:errors] = response_errors(category_update)
+      category.ontologies = Array(category_params[:ontologies])
+      category_updated = category.update
+      if response_error?(category_updated)
+        response[:errors] = response_errors(category_updated)
       else
         response[:success] = "category successfully updated in  #{Time.now - start}s"
       end
     rescue Exception => e
       response[:errors] = "Problem updating the category - #{e.message}"
     end
-    render json: response, status: (response[:errors] == '' ? :ok : :internal_server_error)
+
+    if response[:errors]
+      render_turbo_stream(alert_error(id: 'category') { response[:errors] })
+    else
+      streams = [alert_success(id: 'category') { response[:success] },
+                 replace(category.id.split('/').last, partial: 'admin/categories/category', locals: { category: category })
+      ]
+      render_turbo_stream(*streams)
+    end
+
   end
 
   def destroy
-    response = { errors: '', success: ''}
+    response = { errors: nil, success: ''}
     start = Time.now
     begin
-      category = LinkedData::Client::Models::Category.find_by_acronym(params[:id]).first
+      category = _category
       error_response = category.delete
 
       if response_error?(error_response)
@@ -82,9 +103,19 @@ class Admin::CategoriesController < ApplicationController
     rescue Exception => e
       response[:errors] = "Problem deleting the category - #{e.message}"
     end
-    render json: response, status: (response[:errors] == '' ? :ok : :internal_server_error)
+    respond_to do |format|
+      format.turbo_stream do
+        if response[:errors]
+          render_turbo_stream alert(type: 'danger') { response[:errors].to_s }
+        else
+          render turbo_stream: [
+            alert(type: 'success') { response[:success] },
+            turbo_stream.remove(params[:id])
+          ]
+        end
+      end
+    end
   end
-
   private
 
   def unescape_id
@@ -96,16 +127,10 @@ class Admin::CategoriesController < ApplicationController
   end
 
   def _categories
-    response = { categories: Hash.new, errors: '', success: '' }
-    start = Time.now
-    begin
-      response[:categories] = JSON.parse(LinkedData::Client::HTTP.get(CATEGORIES_URL, { include: ATTRIBUTE_TO_INCLUDE }, raw: true))
+    LinkedData::Client::HTTP.get(CATEGORIES_URL, { include: ATTRIBUTE_TO_INCLUDE })
+  end
 
-      response[:success] = "categories successfully retrieved in  #{Time.now - start}s"
-      LOG.add :debug, "Categories - retrieved #{response[:categories].length} groups in #{Time.now - start}s"
-    rescue Exception => e
-      response[:errors] = "Problem retrieving categories  - #{e.message}"
-    end
-    response
+  def _category(id = params[:id])
+    LinkedData::Client::HTTP.get(CATEGORIES_URL+ "/#{id.split('/').last}", { include: ATTRIBUTE_TO_INCLUDE })
   end
 end
