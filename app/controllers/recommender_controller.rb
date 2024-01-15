@@ -8,8 +8,9 @@ class RecommenderController < ApplicationController
     @text = params[:text]
     @results_table_header = ['Ontology', 'Final score', 'Coverage score', 
                             'Acceptance score', 'Detail score', 'Specialization score',
-                            'Annotations'
+                            'Annotations', 'links'
                             ]
+                  
     if params[:input] != nil   
       params[:ontologies] = params[:ontologies_list]&.join(',') || ''
       recommendations = LinkedData::Client::HTTP.post(RECOMMENDER_URI, params)

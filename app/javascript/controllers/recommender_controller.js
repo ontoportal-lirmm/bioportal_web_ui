@@ -11,9 +11,7 @@ export default class extends Controller {
 
     let ontologies_choice = this.ontologieschoiceTarget.childNodes[1].childNodes[1]
     if(!ontologies_choice.checked){
-      //debugger
-      this.#toggle(this.maxsetTarget)
-      this.#toggle(this.emptyTarget)
+      this.togglesets()
     }
   }
   edit(event){
