@@ -13,7 +13,7 @@
           %div
             - is_input = @results.nil? || @results.empty?
             .recommender-page-text-area{class: is_input ?  "" : "d-none", 'data-recommender-target': 'input'}
-              %textarea#recommender-text-area{rows: "4" , placeholder: 'Enter or past a text to be annotated ...', name: "input", oninput: 'handleInput(event)'}
+              %textarea#recommender-text-area{rows: "4" , placeholder: 'Enter or past a text to be annotated ...', name: "input", oninput: 'handleInput(event)',  maxlength: "500"}
                 = params[:input]
               .insert-sample-text-button
                 .button
