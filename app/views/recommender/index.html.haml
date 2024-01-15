@@ -122,7 +122,10 @@
                 - r.td do
                   %a.recommender-result-ontology{href: '#'}
                     Get annotations
-      
+        .cite-us-button
+          = render Buttons::RegularButtonComponent.new(id:'regular-button', value: "Cite", variant: "secondary", href: "#", size: "slim") do |btn|
+            - btn.icon_left do
+              = inline_svg_tag "icons/cite.svg"
 
 :javascript
   function handleInput(event) {
