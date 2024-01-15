@@ -121,7 +121,7 @@
                     = render Input::RadioChipComponent.new(label: result[:annotations].length.to_s+' annotations', name: 'highlighted_recommendation', value: result[:annotations], checked: result[:highlighted])
 
         .cite-us-button
-          = render Buttons::RegularButtonComponent.new(id:'regular-button', value: "Cite", variant: "secondary", href: "#", size: "slim") do |btn|
+          = render Buttons::RegularButtonComponent.new(id:'regular-button', value: "Cite", variant: "secondary", href: "https://doi.org/10.1186/s13326-017-0128-y", size: "slim", target: '_blank', state: "regular") do |btn|
             - btn.icon_left do
               = inline_svg_tag "icons/cite.svg"
 
