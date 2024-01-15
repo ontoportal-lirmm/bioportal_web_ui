@@ -12,11 +12,11 @@
         .inputs 
           %div
             - is_input = @results.nil? || @results.empty?
-            .recommender-page-text-area{class: is_input ?  "" : "d-none", 'data-recommender-target': 'input'}
-              %textarea#recommender-text-area{rows: "4" , placeholder: 'Enter or past a text to be annotated ...', name: "input", oninput: 'handleInput(event)',  maxlength: "500"}
+            .recommender-page-text-area{class: is_input ?  "" : "d-none", 'data-recommender-target': 'input', 'data-controller': 'sample-text'}
+              %textarea#recommender-text-area{rows: "4" , placeholder: 'Enter or past a text to be annotated ...', name: "input", oninput: 'handleInput(event)',  maxlength: "500", 'data-sample-text-target': "input"}
                 = params[:input]
               .insert-sample-text-button
-                .button
+                .button{'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("sample_text")}
                   .text
                     Insert sample text
                   = inline_svg_tag 'icons/arrow-curved-up.svg'
