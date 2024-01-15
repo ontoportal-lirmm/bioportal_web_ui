@@ -8,7 +8,7 @@ class RecommenderController < ApplicationController
     @text = params[:text]
     @results_table_header = ['Ontology', 'Final score', 'Coverage score', 
                             'Acceptance score', 'Detail score', 'Specialization score',
-                            'Annotations', 'links'
+                            'Annotations'
                             ]
                   
     if params[:input] != nil   
