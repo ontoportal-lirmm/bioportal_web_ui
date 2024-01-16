@@ -6,9 +6,10 @@ class RecommenderController < ApplicationController
 
   def index
     @text = params[:text]
-    @results_table_header = ['Ontology', 'Final score', 'Coverage score', 
-                            'Acceptance score', 'Detail score', 'Specialization score',
-                            'Annotations'
+    @results_table_header = [t('recommender.results_table.ontology'), t('recommender.results_table.final_score'), 
+                              t('recommender.results_table.coverage_score'), t('recommender.results_table.acceptance_score'),
+                              t('recommender.results_table.detail_score'), t('recommender.results_table.specialization_score'),
+                              t('recommender.results_table.annotations')
                             ]
                   
     if params[:input] != nil   
