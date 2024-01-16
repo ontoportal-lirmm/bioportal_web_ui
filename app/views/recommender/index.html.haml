@@ -42,10 +42,11 @@
                   = render Input::RadioChipComponent.new(label: t('recommender.ontologies'), name: 'output_type', value: '1', checked: check_output)
                 .ontology-sets-choice
                   = render Input::RadioChipComponent.new(label: t('recommender.ontology_sets'), name: 'output_type', value: '2', checked: !check_output)
-            = show_advanced_options_button(t('show_advanced_options'))
-            = hide_advanced_options_button(t('hide_advanced_options'))
+
+            = show_advanced_options_button(text: t('show_advanced_options'), init: @advanced_options_open)
+            = hide_advanced_options_button(text: t('hide_advanced_options'), init: @advanced_options_open)
               
-        .recommender-advanced-options.d-none{'data-reveal-component-target': 'item'}
+        .recommender-advanced-options{'data-reveal-component-target': 'item', class: "#{@advanced_options_open ? '' : 'd-none'}"}
           .weights-configuration
             .title 
               = t('recommender.weights_configuration')

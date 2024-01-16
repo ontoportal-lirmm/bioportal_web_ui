@@ -11,10 +11,11 @@ class RecommenderController < ApplicationController
                               t('recommender.results_table.detail_score'), t('recommender.results_table.specialization_score'),
                               t('recommender.results_table.annotations')
                             ]
-                  
+    @advanced_options_open = false              
     if params[:input] != nil   
       params[:ontologies] = params[:ontologies_list]&.join(',') || ''
       recommendations = LinkedData::Client::HTTP.post(RECOMMENDER_URI, params)
+      @advanced_options_open = !recommender_params_empty?
       @results = []
       recommendations.each do |recommendation|
         row = {
@@ -89,5 +90,9 @@ class RecommenderController < ApplicationController
     uri = URI.parse(url)
     endpoint = uri.path.sub(/^\//, '')
     endpoint
+  end
+
+  def recommender_params_empty?
+    (params[:wc].eql?('0.55') && params[:wa].eql?('0.15') && params[:wd].eql?('0.15') && params[:ws].eql?('0.15') && params[:max_elements_set].eql?('3') && params[:ontologies_list].nil?)
   end
 end
