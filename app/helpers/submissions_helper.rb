@@ -290,7 +290,7 @@ module SubmissionsHelper
       end
     end
 
-    reject_metadata = %w[abstract description uploadFilePath contact pullLocation hasOntologyLanguage hasLicense bugDatabase knownUsage version]
+    reject_metadata = %w[abstract description uploadFilePath contact pullLocation hasOntologyLanguage hasLicense bugDatabase knownUsage version notes]
     label = inline_save? ? '' : nil
 
     if selected_attribute?('abstract')
@@ -327,6 +327,12 @@ module SubmissionsHelper
     if selected_attribute?('version')
       output += attribute_form_group_container('version') do
         raw attribute_input('version', help: metadata_version_help)
+      end
+    end
+
+    if selected_attribute?('notes')
+      output += attribute_form_group_container('notes') do
+        raw attribute_input('notes', long_text: true)
       end
     end
 

@@ -28,7 +28,7 @@
                     = attribute_input('description', long_text: true)
                   - if @is_update_ontology
                     .upload-ontology-input-field-container{id: "submissionnotes_from_group_input"}
-                      = attribute_input("notes", label: 'Change notes')
+                      = attribute_input("notes", label: 'Change notes', long_text: true)
                   .upload-ontology-field-container
                     = has_ontology_language_input
                   .upload-ontology-field-container.mt-3

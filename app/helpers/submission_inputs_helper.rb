@@ -93,7 +93,7 @@ module SubmissionInputsHelper
       name = attr.name
       label = attr_header_label(attr, show_tooltip: show_tooltip)
       if attr.type?('list')
-        generate_list_text_input(attr, helper_text: help )
+        generate_list_text_input(attr, helper_text: help, long_text: long_text)
       elsif attr.metadata['attribute'].to_s.eql?('URI')
         url_input(name: name, label: label, value: @submission.URI)
       elsif long_text
@@ -451,16 +451,15 @@ module SubmissionInputsHelper
                          open_to_add: true)
   end
 
-  def generate_list_text_input(attr, helper_text: nil)
+  def generate_list_text_input(attr, helper_text: nil, long_text: false)
     label = attr_header_label(attr)
     values = attr.values || ['']
     name = attr.name
-    if selected_attribute?('notes')
-      generate_list_field_input(attr, name, label, values, helper_text: helper_text) do |value, row_name, id|
+
+    generate_list_field_input(attr, name, label, values, helper_text: helper_text) do |value, row_name, id|
+      if long_text
         text_area_tag(row_name, value, class: 'input-field-component', label: '')
-      end
-    else
-      generate_list_field_input(attr, name, label, values, helper_text: helper_text) do |value, row_name, id|
+      else
         text_input(label: '', name: row_name, value: value)
       end
     end
