@@ -657,7 +657,7 @@ module OntologiesHelper
   end
 
   def generate_link_title
-    inside_color = '#3CB371'
+    inside_color = 'var(--primary-color)'
     outside_color = '#007bff'
 
     inside_span = content_tag(:span, "#{portal_name}", style: "color: #{inside_color} !important;")
