@@ -140,40 +140,64 @@ module SubmissionInputsHelper
     end
   end
 
+  def ontology_skos_language_help
+    content_tag(:div, class: 'upload-ontology-desc has_ontology_language_input') do
+      link = link_to('Please refer to the documentation for more details.', "https://doc.jonquetlab.lirmm.fr/share/618372fb-a852-4f3e-8e9f-8b07ebc053e6", target: "_blank")
+      text = <<-EOS
+            SKOS vocabularies submitted to #{portal_name} shall follow a few constraints (e.g., contain a minimum of one skos:ConceptScheme also typed as owl:Ontology) 
+            and top concept assertion. #{link}
+      EOS
+      text.html_safe
+    end
+  end
+
+  def ontology_obo_language_help
+    content_tag(:div, class: 'upload-ontology-desc has_ontology_language_input') do
+      link = link_to('the OBOinOWL parser.', "#", target: "_blank")
+      text = <<-EOS
+        OBO ontologies submitted to #{portal_name} will be parsed by the OWL-API which integrates #{link} 
+        The resulting RDF triples will then be loaded in #{portal_name} triple-store. 
+      EOS
+      text.html_safe
+    end
+  end
+
+  def ontology_owl_language_help
+    content_tag(:div, class: 'upload-ontology-desc has_ontology_language_input') do
+      link = link_to('the Protégé ', "https://protege.stanford.edu/", target: "_blank")
+      text = <<-EOS
+        OWL ontologies submitted to #{portal_name} will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with
+        #{link}
+        software which does use the same component.
+      EOS
+      text.html_safe
+    end
+  end
+
+  def ontology_umls_language_help
+    content_tag(:div, class: 'upload-ontology-desc has_ontology_language_input') do
+      link = link_to('by the UMLS2RDF tool.', "#", target: "_blank")
+      text = <<-EOS
+        UMLS-RRF resources are usually produced #{link}
+      EOS
+      text.html_safe
+    end
+  end
+
   def has_ontology_language_input(submission = @submission)
-    content_tag(:div, 'data-controller': 'reveal-component') do
-      content_tag(:div, 'data-action': 'change->reveal-component#select', 'data-items': 'has_ontology_language_input') do
+    render(Layout::RevealComponent.new(possible_values: %w[SKOS OBO UMLS OWL], selected: @submission.hasOntologyLanguage)) do |c|
+      c.button do
         attribute_input("hasOntologyLanguage")
       end
-    end +
-    content_tag(:div, id:'SKOS', class: 'd-none upload-ontology-desc has_ontology_language_input') do
-      content_tag(:span, " SKOS vocabularies submitted to #{portal_name} shall follow a few constraints (e.g., contain a minimum of one skos:ConceptScheme also typed as owl:Ontology) and top concept assertion.  ") +
-      content_tag(:span) do
-        link_to('Please refer to the documentation for more details.', "https://doc.jonquetlab.lirmm.fr/share/618372fb-a852-4f3e-8e9f-8b07ebc053e6", target: "_blank")
-      end
-    end +
 
-    content_tag(:div, id:'OBO', class: 'd-none upload-ontology-desc has_ontology_language_input') do
-      content_tag(:span, "OBO ontologies submitted to #{portal_name} will be parsed by the OWL-API which integrates ") +
-      content_tag(:span) do
-        link_to('the OBOinOWL parser.', "#", target: "_blank")
-      end +
-      content_tag(:span, " The resulting RDF triples will then be loaded in #{portal_name} triple-store. ") 
-    end +
+      c.container { ontology_skos_language_help }
 
-    content_tag(:div, id:'UMLS', class: 'd-none upload-ontology-desc has_ontology_language_input') do
-      content_tag(:span, "UMLS-RRF resources are usually produced ") +
-      content_tag(:span) do
-        link_to('by the UMLS2RDF tool.', "#", target: "_blank")
-      end
-    end +
+      c.container { ontology_obo_language_help }
 
-    content_tag(:div, id:'OWL', class: 'd-none upload-ontology-desc has_ontology_language_input') do
-      content_tag(:span, " OWL ontologies submitted to PORTALNALE will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with ") +
-      content_tag(:span) do
-        link_to('the Protégé ', "https://protege.stanford.edu/", target: "_blank")
-      end +
-      content_tag(:span, "software which does use the same component.") 
+      c.container { ontology_umls_language_help }
+
+      c.container { ontology_owl_language_help }
+
     end
   end
 
@@ -198,28 +222,33 @@ module SubmissionInputsHelper
       @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
     end
 
-    render(Layout::RevealComponent.new(init_show: ontology.viewingRestriction&.eql?('private'), show_condition: 'private')) do |c|
+    render(Layout::RevealComponent.new(possible_values: %w[private public], selected: ontology.viewingRestriction)) do |c|
       c.button do
         select_input(label: "Visibility", name: "ontology[viewingRestriction]", required: true,
                      values: %w[public private],
                      selected: ontology.viewingRestriction)
       end
-      content_tag(:div, class: 'upload-ontology-input-field-container') do
-        select_input(label: "Add or remove accounts that are allowed to see this ontology in #{portal_name}.", name: "ontology[acl]", values: @user_select_list, selected: ontology.acl, multiple: true)
+
+      c.container do
+        content_tag(:div, class: 'upload-ontology-input-field-container') do
+          select_input(label: "Add or remove accounts that are allowed to see this ontology in #{portal_name}.", name: "ontology[acl]", values: @user_select_list, selected: ontology.acl, multiple: true)
+        end
       end
     end
   end
 
   def ontology_view_of_input(ontology = @ontology)
-    render Layout::RevealComponent.new(init_show: ontology.view?) do |c|
+    render Layout::RevealComponent.new(selected: !ontology.view?, toggle: true) do |c|
       c.button do
         content_tag(:span, class: 'd-flex') do
           switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is this ontology a view of another ontology?', checked: ontology.view?, style: 'font-size: 14px;')
         end
-      end
 
-      content_tag(:div) do
-        render partial: "shared/ontology_picker_single", locals: { placeholder: "", field_name: "viewOf", selected: ontology.viewOf }
+        c.container do
+          content_tag(:div) do
+            render partial: "shared/ontology_picker_single", locals: { placeholder: "", field_name: "viewOf", selected: ontology.viewOf }
+          end
+        end
       end
     end
   end
@@ -443,7 +472,7 @@ module SubmissionInputsHelper
     name = attr.name
     content_tag(:div) do
       switch_input(id: name, name: name, label: attr_header_label(attr), checked: value.eql?('true'), value: value,
-                  boolean_switch: true, style: 'font-size: 14px;', help: metadata_deprecated_help)
+                   boolean_switch: true, style: 'font-size: 14px;', help: metadata_deprecated_help)
     end
   end
 
