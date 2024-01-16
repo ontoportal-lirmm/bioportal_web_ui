@@ -164,11 +164,11 @@ class ConceptDetailsComponent < ViewComponent::Base
 
     unless string.nil?
       strings = string.split(":")
-      if strings.size<2
-        #return string.titleize
+      if strings.size < 2
+        # return string.titleize
         return string
       else
-        #return strings[1].titleize
+        # return strings[1].titleize
         return strings[1]
       end
     end
@@ -178,7 +178,8 @@ class ConceptDetailsComponent < ViewComponent::Base
     hash.transform_values do |property|
       if property[:key].to_s.include?("modified") || property[:key].to_s.include?("created")
         value = property[:values].first
-        property[:values]=[l(Date.parse(value), format: :monthfull_day_year.to_sym)]
+        parsed_date = l(Date.parse(value), format: :monthfull_day_year.to_sym) rescue value
+        property[:values] = [parsed_date]
       end
       property
     end
