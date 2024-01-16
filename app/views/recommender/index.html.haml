@@ -1,121 +1,130 @@
-- @title=  t('recommender.title')
-%div.container
-  %h2.mt-5= t('recommender.ontology_recommender')
-  %p
-    = t('recommender.intro').html_safe
-    = link_to(Rails.configuration.settings.links[:help_recommender], id: "recommender-help",
-              "aria-label": "View ontology recommender help") do
-      %i.fas.fa-question-circle.fa-lg{"aria-hidden": "true"}
+- @title = t('recommender.title')
+.recommender-page-container{'data-controller': 'recommender'}
+  .recommender-page-subcontainer
+    .recommender-page-title
+      .text
+        = t('recommender.title')
+      .line
+    .recommender-page-decription
+      = t('recommender.intro')
 
+    = form_tag('/recommender', method: :get, 'data-turbo': true, novalidate: true) do
+      .recommender-page-inputs{'data-controller': 'reveal-component'}
+        .inputs 
+          %div
+            - is_input = @results.nil? || @results.empty?
+            .recommender-page-text-area{class: is_input ?  "" : "d-none", 'data-recommender-target': 'input', 'data-controller': 'sample-text'}
+              %textarea#recommender-text-area{rows: "4" , placeholder: t('recommender.hint'), name: "input", oninput: 'handleInput(event)',  maxlength: "500", 'data-sample-text-target': "input"}
+                = params[:input]
+              = insert_sample_text_button(t('recommender.insert_sample_text'))
 
-  %form
-    = hidden_field_tag :recommender_sample_text, "Melanoma is a malignant tumor of melanocytes which are found predominantly in skin but also in the bowel and the eye."
-    = hidden_field_tag :recommender_sample_keywords,"Backpain, White blood cell, Carcinoma, Cavity of stomach, Ductal Carcinoma in Situ, Adjuvant chemotherapy, Axillary lymph node staging, Mastectomy, tamoxifen, serotonin reuptake inhibitors, Invasive Breast Cancer, hormone receptor positive breast cancer, ovarian ablation, premenopausal women, surgical management, biopsy of breast tumor, Fine needle aspiration, entinel lymph node, breast preservation, adjuvant radiation therapy, prechemotherapy, Inflammatory Breast Cancer, ovarian failure, Bone scan, lumpectomy, brain metastases, pericardial effusion, aromatase inhibitor, postmenopausal, Palliative care, Guidelines, Stage IV breast cancer disease, Trastuzumab, Breast MRI examination"
-    
-    -# Specify input format
-    %h5= t('input')
-    %div.form-check.form-check-inline
-      %input#radioItText.form-check-input{name: "input_type", type: "radio", value: "1", checked: "checked"}
-      %label.form-check-label{for: "radioItText"}= t('text')
-    %div.form-check.form-check-inline
-      %input#radioItKeywords.form-check-input{name: "input_type", type: "radio", value: "2"} 
-      %label.form-check-label{for: "radioItKeywords"}= t('keywords') + " ( " + t('keywords_separated_by_commas') + " ) "
-    
-    -# Specify output format
-    %h5.pt-3= t('output')
-    %div.form-check.form-check-inline
-      %input#radioOtSingle.form-check-input{name: "output_type", type: "radio", value: "1", checked: "checked"} 
-      %label.form-check-label{for: "radioOtSingle"}= t('ontologies.self')
-    %div.form-check.form-check-inline
-      %input#radioOtSets.form-check-input{name: "output_type", type: "radio", value: "2"} 
-      %label.form-check-label{for: "radioOtSets"}= t('ontology_sets')
-    
-    -# Input text or keywords
-    %div.form-group.mt-4
-      = text_area_tag("inputText", @text, rows: 10, class: "form-control default", placeholder: t('recommender.paste_text_recommendations'), aria: {describedby: "inputTextHelpBlock"})
-      %div.card#inputTextHighlighted
-        %div.card-body
-      %small#inputTextHelpBlock.form-text
-        %a#insertInputLink{href: "javascript:void(0);"}= t('insert_sample_text')
+            .recommender-page-text-area-results{class: is_input ? "d-none" : "", 'data-recommender-target': 'result'}
+              .text
+                = params[:input]
+          .recommender-page-options
+            .section-text
+              = t('recommender.options')
+            .input
+              .title
+                = t('recommender.options')
+              .radios
+                - check_input = !params[:input_type].eql?('2')
+                .text-choice
+                  = render Input::RadioChipComponent.new(label: t('recommender.text'), name: 'input_type', value: '1', checked: check_input)
+                .keywords-choice
+                  = render Input::RadioChipComponent.new(label: t('recommender.keywords'), name: 'input_type', value: '2', checked: !check_input)
+            .output
+              .title
+                = t('recommender.output')
+              .radios{'data-action': 'change->recommender#togglesets'}
+                - check_output = !params[:output_type].eql?('2')
+                .ontologies-choice{'data-recommender-target': 'ontologieschoice'}
+                  = render Input::RadioChipComponent.new(label: t('recommender.ontologies'), name: 'output_type', value: '1', checked: check_output)
+                .ontology-sets-choice
+                  = render Input::RadioChipComponent.new(label: t('recommender.ontology_sets'), name: 'output_type', value: '2', checked: !check_output)
 
-    %a#advancedOptionsLink{:href => "javascript:void(0);"}= t('show_advanced_options') + " >>"
+            = show_advanced_options_button(text: t('show_advanced_options'), init: @advanced_options_open)
+            = hide_advanced_options_button(text: t('hide_advanced_options'), init: @advanced_options_open)
+              
+        .recommender-advanced-options{'data-reveal-component-target': 'item', class: "#{@advanced_options_open ? '' : 'd-none'}"}
+          .weights-configuration
+            .title 
+              = t('recommender.weights_configuration')
+            .inputs-container
+              .ninput
+                = render Input::NumberComponent.new(label: t('recommender.converage'), name: "wc", value: params[:wc] || 0.55, min: '0', max: '1', step: '0.01')
+              .ninput
+                = render Input::NumberComponent.new(label: t('recommender.acceptance'), name: "wa", value: params[:wa] || 0.15, min: '0', max: '1', step: '0.01')
+              .ninput
+                = render Input::NumberComponent.new(label: t('recommender.knowledge_detail'), name: "wd", value: params[:wd] || 0.15, min: '0', max: '1', step: '0.01')
+              .ninput
+                = render Input::NumberComponent.new(label: t('recommender.specialization'), name: "ws", value: params[:ws] || 0.15, min: '0', max: '1', step: '0.01')
+          .ontologies-configuration
+            .title 
+              = t('recommender.ontologies_configuration')
+            .inputs-container
+              .maxsets.input.d-none{'data-recommender-target': 'maxset'}
+                = render Input::NumberComponent.new(label: t('recommender.max_ont_set'), name: "max_elements_set", value: params[:max_elements_set] || 3)
+              .ontologies.input
+                - get_ontologies_data
+                = render Input::SelectComponent.new(label: t('recommender.select_ontologies'), id: 'ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected: params[:ontologies_list])
+              .input{'data-recommender-target': 'empty'}
 
-    -# Advanced options
-    %div#advancedOptions.optionsBox
-      -# Specify weights
-      %h6= t('weights_configuration')
-      %div.form-row
-        %div.form-group.col-md-2
-          %label{for: "input_wc"}= t('coverage')
-          = number_field_tag("input_wc", "0.55", min: "0", step: "1", class: "form-control")
-        %div.form-group.col-md-2
-          %label{for: "input_wa"}= t('acceptance')
-          = number_field_tag("input_wa", "0.15", min: "0", step: "1", class: "form-control")
-        %div.form-group.col-md-2
-          %label{for: "input_wd"}= t('knowledge_detail')
-          = number_field_tag("input_wd", "0.15", min: "0", step: "1", class: "form-control")
-        %div.form-group.col-md-2
-          %label{for: "input_ws"}= t('specialization')
-          = number_field_tag("input_ws", "0.15", min: "0", step: "1", class: "form-control")
-      -# Specify ontology set size
-      %h6= t('max_ontologies_per_set')
-      %div.form-row
-        %div.form-group.col-md-2
-          = number_field_tag("input_max_ontologies", "3", in: 2...5, class: "form-control")
-      -# Specify ontologies
-      %div#ontologyPicker
-        = render(partial: "shared/ontology_picker")
+        .recommender-page-button#get_recommendations_button{class: is_input ?  "" : "d-none", 'data-recommender-target': 'button'}
+          = render Buttons::RegularButtonComponent.new(id:'recommender', value: t('recommender.get_recommendations'), variant: "primary", type: 'submit')
 
-    %div.my-4
-      = submit_tag(t('get_recommendations'), id: "recommenderButton", type: "button", class: "btn btn-primary")
-      = submit_tag("Edit Input", id: "editButton", type: "button", style: "display: none;", class: "btn btn-primary")
-      = content_tag(:span, class: "recommenderSpinner") do
-        = image_tag("spinners/spinner_000000_16px.gif", style: "vertical-align: middle;")
+        .recommender-page-button{class: is_input ? "d-none" : "", 'data-action': 'click->recommender#edit'}
+          = render Buttons::RegularButtonComponent.new(id:'edit-recommender', value: t('recommender.edit'), variant: "primary") do |btn|
+            - btn.icon_left do
+              = inline_svg_tag "edit.svg"
+    - if @results && @results.empty?
+      = empty_state(t('no_result_was_found'))
+    - unless @results.nil? || @results.empty?
+      .recommender-page-results 
+        .title
+          = t('recommender.results_title')
+        .recommender-table-container
+          = render TableComponent.new(id: 'recommender-table', borderless: true, layout_fixed: true, small_text: true, outline: true, sort: true, default_sort_column: '1') do |t|
+            - t.header do |h|
+              - @results_table_header.each do |header|
+                - h.th do
+                  = header
+            - @results.each do |result|
+              - t.row do |r|
+                - r.td do
+                  - ontologies = ""
+                  - result[:ontologies].each do |ontology|
+                    %a.recommender-result-ontology{href: ontology[:link]}
+                      = ontology[:acronym]
+                - r.td do
+                  = render Display::ProgressBarComponent.new(progress: result[:final_score])
+                - r.td do
+                  = render Display::ProgressBarComponent.new(progress: result[:coverage_score])
+                - r.td do
+                  = render Display::ProgressBarComponent.new(progress: result[:acceptance_score])
+                - r.td do
+                  = render Display::ProgressBarComponent.new(progress: result[:details_score])
+                - r.td do
+                  = render Display::ProgressBarComponent.new(progress: result[:specialization_score])
+                - r.td do
+                  .recommender-result-highlighted{'data-action': 'change->recommender#handleHighlightedChange'}
+                    = render Input::RadioChipComponent.new(label: result[:annotations].length.to_s+' annotations', name: 'highlighted_recommendation', value: result[:annotations], checked: result[:highlighted])
 
-  %div.row#recommenderErrorsDisplay.mb-4
-    %div.col
-      %span.notTextError
-        = t('recommender.ontology_recommendation_input')
-        %br/
-      %span.sumWeightsError
-        = t('recommender.weight_sum_greater_than_zero')
-        %br/
-      %span.rangeWeightsError
-        = t('recommender.weights_greater_than_zero')
-        %br/
-      %span.invalidWeightsError
-        = t('recommender.valid_numeric_weights')
-        %br/
-      %span.invalidMaxOntError
-        = t('recommender.valid_integer_max_ontologies_per_set')
-        %br/
-      %span.maxOntologiesError
-        = t('recommender.valid_max_ontologies_per_set_range')
-        %br/
-      %span.generalError
-        = t('recommender.recommendation_error')
-        %br/
-      %span#noResults
-        = t('recommender.no_recommendations')
-        %br/
-      %span#noResultsSets
-        = t('recommender.no_sets_recommended')
-        %br/
-      %span.inputSizeError
-        = t('recommender.text_length_limit')
-
-  %div.row#resultsDisplay
-    %div.col
-      %h5#resultsHeader
-      %div#recommender-results.mb-5
+        .cite-us-button
+          = render Buttons::RegularButtonComponent.new(id:'regular-button', value: "Cite", variant: "secondary", href: "https://doi.org/10.1186/s13326-017-0128-y", size: "slim", target: '_blank', state: "regular") do |btn|
+            - btn.icon_left do
+              = inline_svg_tag "icons/cite.svg"
 
 :javascript
-  window.addEventListener("load", function() {
-    const value = document.getElementById("inputText").value
-    document.getElementById("inputText").click();
-    document.getElementById("inputText").value = value
-    if(document.getElementById("inputText").value != ''){
-      document.getElementById("recommenderButton").click()
-      window.scrollBy(0, 1080);
+  function handleInput(event) {
+    var selectedInputChoice = document.querySelector('input[name="input_type"]:checked').value;
+    if (selectedInputChoice === "2"){
+      const textarea = document.getElementById('recommender-text-area');
+      const value = textarea.value;
+      const lastCharIsSpace = event.data === ' ';
+      const formattedValue = lastCharIsSpace ? value.trim() + ', ' : value;
+      textarea.value = formattedValue;
     }
-  });
+  }
+
+  

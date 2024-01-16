@@ -1,37 +1,185 @@
-.optionsBox {
-  margin-top: 15px;
+.recommender-page-container{
+    display:flex;
+    justify-content:center;
+}
+.recommender-page-subcontainer{
+    width: 1248px;
+    padding: 20px 50px;
 }
 
-#inputTextHighlighted {
-  display:none;
-  background-color: #e2ebf0;
+.recommender-page-title .text{
+    font-size: 25px;
+    font-weight: 700;
 }
 
-.generalError, .invalidMaxOntError, .invalidWeightsError, .notTextError, .sumWeightsError, .rangeWeightsError, .maxOntologiesError, .inputSizeError {
-  display: none;
-  color: red;
+.recommender-page-title .line{
+    height: 2px;
+    width: 57px;
+    background-color: var(--primary-color);
+    border-radius: 10px;
+}
+.recommender-page-decription{
+    color: #888888;
+    margin-top: 20px;
+}
+.recommender-page-inputs{
+    margin-top: 20px;
+}
+.recommender-page-inputs .inputs{
+    display: flex;
+}
+.recommender-page-text-area, .recommender-page-text-area-results {
+    box-shadow: 2px 30px 60px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 630px;
+    margin-right: 30px;
+}
+.recommender-page-text-area-results{
+    padding: 20px;
+    min-height:205px;
 }
 
-#resultsDisplay {
-  background-color: white !important;
-  margin-bottom: 35px;
+.recommender-page-text-area textarea{
+    font-size: 16px;
+    outline: none;
+    padding: 20px;
+    width: 630px;
+    resize: none;
+    border: none;
+    margin-right: 30px;
+}
+.recommender-page-options{
+    width: 100%;
+}
+.recommender-page-text-area .insert-sample-text-button{
+    display: flex;
+    justify-content: end;
+    padding: 20px;
+}
+.recommender-page-text-area .insert-sample-text-button .button{
+    display: flex;
+    align-items: center;
+}
+.recommender-page-text-area .insert-sample-text-button .button:hover{
+    cursor: pointer;
+}
+.recommender-page-text-area .insert-sample-text-button .button .text{
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--primary-color);
+    margin-right: 10px;
+}
+.recommender-page-text-area .insert-sample-text-button .button svg{
+    width: 16px;
+    height: 16px;
+}
+.recommender-page-text-area .insert-sample-text-button .button svg path{
+    fill: var(--primary-color);
+}
+.recommender-page-options .section-text{
+    font-weight: 600;
+    
+}
+.recommender-page-options .title{
+    margin-top: 10px;
+    color: #888888;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 5px; 
 }
 
-.result-scores {
-  background-color: #8cabd6;
-  border: 1px solid #3e76b6;
+.recommender-page-options .chips{
+    display: flex;
+}
+.recommender-page-options input{
+    accent-color: var(--primary-color) revert;
+}
+.recommender-page-options .radios{
+    display: flex;
 }
 
-.final-score {
-  color: #ccc;
-  background-color: #234979;
-  border: 1px solid #234979;
+.recommender-page-options .advanced-options-button{
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+.recommender-page-options .advanced-options-button:hover{
+    cursor: pointer;
+}
+.recommender-page-options .advanced-options-button .text{
+    margin-left: 10px;
+    color: var(--primary-color);
+    font-size: 14px;
 }
 
-.score-number {
-  margin-left: 3px;
+.recommender-page-options .advanced-options-button svg path{
+    fill: var(--primary-color);
+}
+.recommender-page-button{
+    margin-top: 27px;
+    width: 630px;
 }
 
-#recommender-help i {
-  margin-left: .25em;
+.recommender-advanced-options .title {
+    font-weight: 600;
+    margin-top: 30px;
+}
+.recommender-advanced-options .inputs-container{
+    display: flex;
+    margin-top: 11px;
+    margin-bottom: 17px;
+}
+.recommender-advanced-options .input, .recommender-advanced-options .ninput{
+    width: 100%;
+}
+
+.recommender-advanced-options .ninput + .ninput{
+    margin-left: 20px;
+}
+
+.recommender-advanced-options .maxsets{
+    margin-right: 20px;
+}
+.recommender-advanced-options .hidebutton{
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+}
+
+.recommender-advanced-options .hidebutton:hover{
+    cursor: pointer;
+}
+
+.recommender-advanced-options .hidebutton .text{
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 10px;
+
+}
+.recommender-advanced-options .hidebutton svg path{
+    fill: var(--primary-color);
+}
+.recommender-table-container{
+    margin-top: 20px;
+}
+.recommender-page-results .title{
+    margin-top: 63px;
+    font-size: 18px;
+    font-weight: 600;
+}
+.recommender-result-ontology{
+    font-size: 16px;
+    display: block;
+}
+.recommender-result-highlighted{
+    display: flex;
+    justify-content: end;
+}
+.recommender-page-text-area-results a{
+    font-weight: 600;
+    text-decoration: underline !important;
+}
+.cite-us-button{
+    display: inline-block;
+    margin-top: 20px;
 }

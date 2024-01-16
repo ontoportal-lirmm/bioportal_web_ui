@@ -69,7 +69,7 @@
     %hr.home-section-line/
     .home-card{'data-controller': 'sample-text'}
       %form{action: "/annotator_recommender_form", method: "post"}
-        %textarea.home-recommendations-and-annotations{rows: "4" , placeholder: t('home.paste_text_prompt'), name: "text", 'data-sample-text-target': "input"}
+        %textarea.home-recommendations-and-annotations{rows: "4" , placeholder: t('home.paste_text_prompt'), name: "input", 'data-sample-text-target': "input"}
         %input.d-none{type: "submit", name: "submit_button" ,value: "annotator", id: "annotator_submit"}/
         %input.d-none{type: "submit" , name: "submit_button" ,value: "recommender", id: "recommender_submit"}/
         .home-services-buttons.container
