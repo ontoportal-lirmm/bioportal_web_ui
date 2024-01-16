@@ -1,5 +1,5 @@
-%div{'data-controller': 'table-component'}
-  %table.table-content{id: @id ,'data-sort': @sort.to_s, 'data-defaultSortColumn': @default_sort_column,class: stripped_class + ' ' + borderless_class + ' ' + layout_fixed_class + ' ' + mini_class + ' ' + outline_class}
+%div{'data-controller': 'table-component', 'data-table-component-sort-value': @sort.to_s, 'data-table-component-defaultsortcolumn-value': @default_sort_column, 'data-table-component-paging-value': @paging.to_s, 'data-table-component-searching-value': @searching.to_s}
+  %table.table-content{id: @id ,class: stripped_class + ' ' + borderless_class + ' ' + layout_fixed_class + ' ' + mini_class + ' ' + outline_class}
     %thead
       = header
     %tbody{id: "#{@id}_table_body"}
