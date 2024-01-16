@@ -21,45 +21,43 @@
           = attr_label("creationDate", "Submitted", show_tooltip: false)
         - unless @ont_restricted
           - header.th do
-            %div.align-middle
-              Downloads
-        - if @ontology.admin?(session[:user])
-          - header.th do
-            %div.align-middle
+            %div.align-middle{style: 'text-align: center; margin-right: 33px;'}
               Actions
 
       - @submissions.each_with_index do |sub, index|
         - hidden_row_class = index >= 5 ? "hidden_ont hidden_select" : ""
         - t.row(id:"submission_#{sub.submissionId}" , class_css: hidden_row_class) do |r|
-
           - if @ontology.admin?(session[:user])
             - r.td { raw sub.submissionId }
           - r.td do
-            = render SubmissionStatusComponent.new(sub, submission_ready?(sub))
-          - r.td {  xmldatetime_to_date(sub.modificationDate) unless sub.modificationDate.nil? }
-          - r.td {  xmldatetime_to_date(sub.creationDate) unless sub.creationDate.nil? }
+            = render SubmissionStatusComponent.new(sub, sub.submissionId==submission_ready?(sub)) 
+          - r.td {  render DateTimeFieldComponent.new(value: sub.modificationDate) unless sub.modificationDate.nil? }
+          - r.td {  render DateTimeFieldComponent.new(value: sub.creationDate) unless sub.creationDate.nil? }
+
 
           - unless @ont_restricted
             - r.td do
-              %div.dropdown
-                %button.btn.btn-outline-primary.rounded-pill.dropdown-toggle{type:"button", 'data-toggle':"dropdown", 'aria-expanded': "false", style:'white-space: nowrap'}
-                  Download
-                  %span.sr-only Toggle Dropdown
-                .dropdown-menu
-                  - links = download_link(sub,@ontology)
-                  - links.each do |value|
-                    - link,label = value.values               
-                    %a.dropdown-item{ href: link }= label
-                
-              -# = raw download_link(sub, @ontology)
-          - if @ontology.admin?(session[:user])
-            - r.td do
               %div.d-flex
-                %a.btn.btn-sm.btn-link{:href => "/ontologies/#{@ontology.acronym}/submissions/#{sub.submissionId}/edit", 'data-turbo-frame':"_top"}
-                  %span Edit
-                - unless index.zero?
-                  - alert_text = "Are you sure you want to delete submission <span style='color:red;font-weight:bold;'>" + sub.submissionId.to_s + "</span> for ontology <span style='color:red;font-weight:bold;'>" + @ontology.acronym + "</span>?<br/><b>This action CAN NOT be undone!!!</b>"
-                  = button_to "Delete", "/admin/ontologies/#{@ontology.acronym}/submissions/#{sub.submissionId}?turbo_stream=true", method: :delete, class:'btn btn-sm btn-link',  form: {data: { turbo: true, turbo_confirm: alert_text, turbo_frame: '_top'}}
+                %div.dropdown
+                  %button.btn.btn-outline-primary.rounded-pill.dropdown-toggle{type:"button", 'data-toggle':"dropdown", 'aria-expanded': "false", style:'white-space: nowrap; width: 94%;font-size: small;'}
+                    Download
+                    %span.sr-only Toggle Dropdown
+                  .dropdown-menu
+                    - links = download_link(sub,@ontology)
+                    - links.each do |value|
+                      - link,label = value.values               
+                      %a.dropdown-item{ href: link }= label
+                 
+                -# = raw download_link(sub, @ontology)
+                - if @ontology.admin?(session[:user])
+                  %div.d-flex
+                    %div{style: 'margin-right: 10px;'}
+                      = service_button(link: "#{@ontology.id}/submissions/#{sub.submissionId}?display=all", title: 'Go to API')
+                    = edit_button(link: "/ontologies/#{@ontology.acronym}/submissions/#{sub.submissionId}/edit", title: "Edit")
+                    - unless index.zero?
+                      - alert_text = "Are you sure you want to delete submission <span style='color:red;font-weight:bold;'>" + sub.submissionId.to_s + "</span> for ontology <span style='color:red;font-weight:bold;'>" + @ontology.acronym + "</span>?<br/><b>This action CAN NOT be undone!!!</b>"
+                      = button_to "/admin/ontologies/#{@ontology.acronym}/submissions/#{sub.submissionId}?turbo_stream=true", method: :delete, class: 'btn btn-sm btn-link', form: {data: { turbo: true, turbo_confirm: alert_text, turbo_frame: '_top'}} do
+                        = inline_svg_tag('icons/delete.svg')
 
       - if @submissions.length > 5
         - t.row(class_css: "show_more_subs") do |r|

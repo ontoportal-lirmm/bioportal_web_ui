@@ -3,7 +3,7 @@
 class SwitchInputComponent < ViewComponent::Base
 
 
-  def initialize(id:, name: , label: '', value: '', checked: false, boolean_switch: false, style: nil)
+  def initialize(id:, name: , label: '', value: '', checked: false, boolean_switch: false, style: nil, help: nil)
     super
     @id = id
     @name = name
@@ -12,6 +12,7 @@ class SwitchInputComponent < ViewComponent::Base
     @checked = checked
     @boolean_switch = boolean_switch
     @style = style
+    @help = help
   end
 
   def boolean_switch_action

@@ -573,6 +573,7 @@ module ApplicationHelper
     modified_properties
   end
 
+
   def prefix_property_url(key_string, key = nil)
     namespace_key, _ = RESOLVE_NAMESPACE.find { |_, value| key_string.include?(value) }
 

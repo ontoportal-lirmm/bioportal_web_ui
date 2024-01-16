@@ -104,8 +104,8 @@ module ComponentsHelper
     end
   end
 
-  def properties_dropdown(id, title, tooltip, properties, &block)
-    render DropdownContainerComponent.new(title: title, id: id, tooltip: tooltip) do |d|
+  def properties_dropdown(id, title, tooltip, properties, is_open: false, &block)
+    render DropdownContainerComponent.new(title: title, id: id, tooltip: tooltip, is_open: is_open) do |d|
       d.empty_state do
         properties_string = properties.keys[0..4].map { |key| "<b>#{attr_label(key, attr_metadata: attr_metadata(key), show_tooltip: false)}</b>" }.join(', ') + '... ' if properties
         empty_state_message "The fields #{properties_string} are empty"

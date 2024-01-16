@@ -26,10 +26,10 @@
           - count = (user.ontologies&.size || 0) +  (user.projects&.size || 0)
           %div.d-flex.align-items-center{style: 'width: 250px'}
             %span.mx-1
-              = link_to 'Detail', "/accounts/#{user.username}", {data: {turbo_frame: '_top'}}
+              = link_to 'Detail', user_path(CGI.escape(user.id.split('/').last)), {data: {turbo_frame: '_top'}}
             %span.mx-1
               - if count.zero?
-                = button_to "Delete", CGI.unescape(user_path(user.id.split('/').last)), method: :delete, class: 'btn btn-link',  form: {data: { turbo: true, turbo_confirm: "Are you sure?", turbo_frame: '_top'}}
+                = button_to "Delete", user_path(CGI.escape(user.id.split('/').last)), method: :delete, class: 'btn btn-link',  form: {data: { turbo: true, turbo_confirm: "Are you sure?", turbo_frame: '_top'}}
               - else
                 %span{data: { controller: 'tooltip' }, title: "Can't delete this user because still used"}
                   = link_to "Delete", "", class: 'btn btn-link disabled'

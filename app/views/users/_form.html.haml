@@ -52,6 +52,6 @@
     .d-flex
       %input#user_register_mail_list{:checked => "checked", :name => "user[register_mail_list]", :type => "checkbox", :value => "1"}/
       %p#register-check-text 
-        = t('register.mailing_list')
+        = t('register.mailing_list', site: portal_name)
     .register-button-container
       = render Buttons::RegularButtonComponent.new(id: 'register-button', value: "Register", type:'submit')

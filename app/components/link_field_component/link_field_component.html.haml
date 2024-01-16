@@ -1,6 +1,6 @@
 - if internal_link?
   = render ChipButtonComponent.new(url: @value.to_s.sub("data.", ""), text: @raw ? @value : @value.to_s.split("/").last, type: "clickable")
 - elsif @value.to_s =~ /\A#{URI::regexp(%w[http https])}\z/
-  = render ChipButtonComponent.new(url: @value.to_s, text:  @value.to_s, type: "clickable")
+  = render ChipButtonComponent.new(url: @value.to_s, text:  @value.to_s, type: "clickable", target: "_blank")
 - else
   = render ChipButtonComponent.new( text:  @value.to_s, type: "static")

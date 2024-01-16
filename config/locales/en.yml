@@ -180,9 +180,9 @@ en:
       logout: Logout
       mappings: Mappings
       publications: Publications
-      release_notes: Release notes
+      release_notes: Release Notes
       search_prompt: Search in %{portal_name} ...
-      submit_feedback: Send feedback
+      submit_feedback: Send Feedback
       support: Support
       cite_us: Cite Us
     footer:
@@ -195,6 +195,7 @@ en:
       contact_us: Contact Us
       wiki: Wiki
       documentation: Documentation
+      agro_documentation: AgroPortal documentation
       agreements: Legal
       terms: Terms and Conditions
       privacy_policy: Privacy Policy
@@ -407,7 +408,7 @@ en:
   text: Text
   type: Type
   umls_sem_type: UMLS Semantic Type
-  view_fair_scores_definitions: View FAIR scores definitions
+  view_fair_scores_definitions: "You are seeing the FAIRness assessment score for this ontology in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
   visits: Visits
   weights_configuration: Weights configuration
   sample_text: Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.

@@ -56,7 +56,7 @@ class OntologiesController < ApplicationController
       end
     ] + update_filters_counts
 
-    streams =if params[:page].nil?
+    streams = if params[:page].nil?
                 [
                   prepend('ontologies_list_container', partial: 'ontologies/browser/ontologies'),
                   prepend('ontologies_list_container') {
@@ -157,6 +157,7 @@ class OntologiesController < ApplicationController
   def new
     @ontology = LinkedData::Client::Models::Ontology.new
     @submission = LinkedData::Client::Models::OntologySubmission.new
+    @submission.hasOntologyLanguage = 'OWL'
     @ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym', include_views: true, display_links: false, display_context: false)
     @categories = LinkedData::Client::Models::Category.all
     @groups = LinkedData::Client::Models::Group.all
@@ -209,7 +210,6 @@ class OntologiesController < ApplicationController
     end
   end
 
-
   def sparql
     if request.xhr?
       render partial: 'ontologies/sections/sparql', layout: false
@@ -217,6 +217,7 @@ class OntologiesController < ApplicationController
       render partial: 'ontologies/sections/sparql', layout: 'ontology_viewer'
     end
   end
+
   # GET /ontologies/ACRONYM
   # GET /ontologies/1.xml
   def show
@@ -262,8 +263,7 @@ class OntologiesController < ApplicationController
 
     # Get the latest submission (not necessarily the latest 'ready' submission)
 
-    @submission_latest = @ontology.explore.latest_submission(include: 'all', invalidate_cache: invalidate_cache?)  rescue @ontology.explore.latest_submission(include: '')
-
+    @submission_latest = @ontology.explore.latest_submission(include: 'all', invalidate_cache: invalidate_cache?) rescue @ontology.explore.latest_submission(include: '')
 
     if !helpers.submission_ready?(@submission_latest) && params[:p].present? && data_pages.include?(params[:p].to_s)
       redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
@@ -280,15 +280,15 @@ class OntologiesController < ApplicationController
       params[:p] = 'classes'
       redirect_to "/ontologies/#{params[:ontology]}#{params_string_for_redirect(params)}", status: :moved_permanently
     when 'classes'
-      self.classes #rescue self.summary
+      self.classes # rescue self.summary
     when 'mappings'
-      self.mappings #rescue self.summary
+      self.mappings # rescue self.summary
     when 'notes'
-      self.notes #rescue self.summary
+      self.notes # rescue self.summary
     when 'widgets'
-      self.widgets #rescue self.summary
+      self.widgets # rescue self.summary
     when 'properties'
-      self.properties #rescue self.summary
+      self.properties # rescue self.summary
     when 'summary'
       self.summary
     when 'instances'
@@ -326,7 +326,7 @@ class OntologiesController < ApplicationController
     @view_decorators = @views.map { |view| ViewDecorator.new(view, view_context) }
     @ontology_relations_data = ontology_relations_data
 
-    category_attributes = submission_metadata.group_by{|x| x['category']}.transform_values{|x| x.map{|attr| attr['attribute']} }
+    category_attributes = submission_metadata.group_by { |x| x['category'] }.transform_values { |x| x.map { |attr| attr['attribute'] } }
     @relations_array_display = @relations_array.map do |relation|
       attr = relation.split(':').last
       ["#{helpers.attr_label(attr, attr_metadata: helpers.attr_metadata(attr), show_tooltip: false)}(#{relation})",
@@ -377,8 +377,8 @@ class OntologiesController < ApplicationController
     end
 
     count = helpers.count_subscriptions(params[:ontology_id])
-    render inline:  helpers.turbo_frame_tag('subscribe_button') {
-      render_to_string(OntologySubscribeButtonComponent.new(id: '', ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: link),  layout: nil)
+    render inline: helpers.turbo_frame_tag('subscribe_button') {
+      render_to_string(OntologySubscribeButtonComponent.new(id: '', ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: link), layout: nil)
     }
   end
 
@@ -409,18 +409,16 @@ class OntologiesController < ApplicationController
 
     @metadata = submission_metadata
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    @licenses= %w[hasLicense morePermissions copyrightHolder useGuidelines]
+    @licenses = %w[hasLicense morePermissions copyrightHolder useGuidelines]
     @submission_latest = @ontology.explore.latest_submission(include: @licenses.join(","))
     render partial: 'ontologies/sections/licenses'
   end
-  def ajax_ontologies
 
+  def ajax_ontologies
 
     render json: LinkedData::Client::Models::Ontology.all(include_views: true,
                                                           display: 'acronym,name', display_links: false, display_context: false)
   end
-
- 
 
   def metrics
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
@@ -435,7 +433,7 @@ class OntologiesController < ApplicationController
 
     # Retrieve submissions in descending submissionId order (should be reverse chronological order)
     @submissions = @ontology.explore.submissions({ include: "metrics" })
-                            .sort { |a, b| a.submissionId.to_i <=> b.submissionId.to_i  }.reverse || []
+                            .sort { |a, b| a.submissionId.to_i <=> b.submissionId.to_i }.reverse || []
 
     metrics = @submissions.map { |s| s.metrics }
 
@@ -447,10 +445,11 @@ class OntologiesController < ApplicationController
   end
 
   private
+
   def get_views(ontology)
     views = ontology.explore.views || []
-    views.select!{ |view| view.access?(session[:user]) }
-    views.sort{ |a,b| a.acronym.downcase <=> b.acronym.downcase }
+    views.select! { |view| view.access?(session[:user]) }
+    views.sort { |a, b| a.acronym.downcase <=> b.acronym.downcase }
   end
 
   def ontology_relations_data(sub = @submission_latest)
@@ -458,7 +457,7 @@ class OntologiesController < ApplicationController
     @relations_array = ["omv:useImports", "door:isAlignedTo", "door:ontologyRelatedTo", "omv:isBackwardCompatibleWith", "omv:isIncompatibleWith", "door:comesFromTheSameDomain", "door:similarTo",
                         "door:explanationEvolution", "voaf:generalizes", "door:hasDisparateModelling", "dct:hasPart", "voaf:usedBy", "schema:workTranslation", "schema:translationOfWork"]
 
-    return  if sub.nil?
+    return if sub.nil?
 
     ont = sub.ontology
     # Get ontology relations between each other (ex: STY isAlignedTo GO)
@@ -475,9 +474,13 @@ class OntologiesController < ApplicationController
         target_in_portal = false
         target_ont = nil
         # if we find our portal URL in the ontology URL, then we just keep the ACRONYM to try to get the ontology.
-        if relation_value.include?(portal_name)
+        if relation_value.include?(helpers.portal_name.downcase)
           relation_value = relation_value.split('/').last
           target_ont = LinkedData::Client::Models::Ontology.find_by_acronym(relation_value).first
+        end
+
+        # Use acronym to get ontology from the portal
+        if target_ont
           target_id = target_ont.acronym
           target_in_portal = true
         end
@@ -488,6 +491,7 @@ class OntologiesController < ApplicationController
 
     ontology_relations_array
   end
+
   def properties_hash_values(properties, sub: @submission_latest, custom_labels: {})
     return {} if sub.nil?
 
@@ -498,7 +502,7 @@ class OntologiesController < ApplicationController
     metrics_hash = {}
     # TODO: Metrics do not return for views on the backend, need to enable include_views param there
     @metrics = LinkedData::Client::Models::Metrics.all(include_views: true)
-    @metrics.each {|m| metrics_hash[m.links['ontology']] = m }
+    @metrics.each { |m| metrics_hash[m.links['ontology']] = m }
     return metrics_hash
   end
 

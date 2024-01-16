@@ -1,61 +1,63 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from '@hotwired/stimulus'
 
-export default class extends Controller{
-    static values = {
-        condition: String,
-        hiddenClass : {type: String, default: "d-none"}
-    }
+export default class extends Controller {
+  static values = {
+    hiddenClass: { type: String, default: 'd-none' }
+  }
 
-    static targets = ["hideButton", "showButton", 'item' ]
+  static targets = ['hideButton', 'showButton', 'item']
 
-    toggle(event) {
-        if (!this.conditionValue) {
-            this.#toggle(event)
-        } else if (this.#shown() && !this.#conditionChecked(event)) {
-            this.#toggle(event)
-        } else if (!this.#shown() && this.#conditionChecked(event)) {
-            this.#toggle(event)
-        }
-    }
+  /*
+      Toggle all the items
+   */
+  toggle (event) {
+    this.#getItems(event).forEach((s) => {
+      s.classList.toggle(this.hiddenClassValue)
+    })
+  }
 
-    show(event){
-        this.#getItems(event).classList.remove(this.hiddenClassValue)
-        this.hideButtonTarget.classList.remove(this.hiddenClassValue)
-        this.showButtonTarget.classList.add(this.hiddenClassValue)
-    }
-    hide(event){
-        this.#getItems(event).classList.add(this.hiddenClassValue)
-        this.hideButtonTarget.classList.add(this.hiddenClassValue)
-        this.showButtonTarget.classList.remove(this.hiddenClassValue)
-    }
-    
+  /*
+      Hide all the items except the selected one
+   */
+  select (event) {
+    let selectedValue = event.target.value
+    let items = this.#getItems(event)
+    items.forEach((s) => {
+      s.classList.add(this.hiddenClassValue)
+    })
 
-    #conditionChecked(event) {
-        return this.conditionValue === event.target.value
-    }
+    items.forEach((s) => {
+      if (selectedValue === s.dataset.value) {
+        s.classList.remove(this.hiddenClassValue)
+      }
+    })
+  }
 
-    #shown() {
-        return !this.itemTargets[0].classList.contains(this.class);
-    }
+  show (event) {
+    this.#getItems(event).forEach((s) => s.classList.remove(this.hiddenClassValue))
+    this.hideButtonTarget.classList.remove(this.hiddenClassValue)
+    this.showButtonTarget.classList.add(this.hiddenClassValue)
+  }
 
-    #toggle(event) {        
-        this.#getItems(event).forEach((s) => {
-          s.classList.toggle(this.hiddenClassValue);
-        });
-    }
+  hide (event) {
+    this.#getItems(event).forEach((s) => s.classList.add(this.hiddenClassValue))
+    this.hideButtonTarget.classList.add(this.hiddenClassValue)
+    this.showButtonTarget.classList.remove(this.hiddenClassValue)
+  }
 
-    #ItemById(event){
-        let button = event.target.closest("[data-id]");
-        return document.getElementById(button.dataset.id);
+  #ItemById (event) {
+    let button = event.target.closest('[data-id]')
+    return document.getElementById(button.dataset.id)
+  }
+
+  #getItems (event) {
+    let items
+    if (this.hasItemTarget) {
+      items = this.itemTargets
+    } else {
+      items = [this.#ItemById(event)]
     }
-    #getItems(event){
-        let items
-        if(this.hasItemTarget){
-            items = this.itemTarget
-        } else {
-            items = [this.#ItemById(event)]
-        }
-        return items
-    }
+    return items
+  }
 
 }

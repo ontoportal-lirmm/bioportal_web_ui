@@ -32,11 +32,6 @@ module FairScoreHelper
     get_fairness_json(ontologies_acronyms, apikey)['combinedScores']
   end
 
-  def fairness_link
-    link_to(get_fairness_service_url, id: "fairness-service-url", target: "_blank", "aria-label": t("get_json_version"), title: t("get_json_version")) do
-      tag.img(src: asset_path('json.svg'), "aria-hidden" => "true", style: "margin-left: 0.5rem; width: 18px; margin-bottom: 4px;")
-    end
-  end
   
 
   def create_fair_scores_data(fair_scores, count = nil)
@@ -129,6 +124,11 @@ module FairScoreHelper
 
   def print_score(score)
     number_with_precision(score, precision: 2, strip_insignificant_zeros: true)
+  end
+
+  def fairness_link(style = '')
+    custom_style = "font-size: 50px; line-height: 0.5; margin-left: 6px; #{style}".strip
+    render IconWithTooltipComponent.new(icon: "json.svg",link: get_fairness_service_url, target: '_blank', title: 'Go to API', size:'small', style: custom_style)  
   end
 end
 

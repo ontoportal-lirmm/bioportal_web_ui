@@ -529,7 +529,7 @@ module OntologiesHelper
 
       content_tag(:span, data: {controller:"tooltip" } , title:  title) do
         link_to(inline_svg("#{icon}.svg", width: "32", height: '32'),
-                Array(value).first || '', link_options)
+                Array(value).first || '', link_options.merge(target: '_blank'))
       end
     end.join.html_safe
   end
@@ -654,6 +654,25 @@ module OntologiesHelper
 
   def ontology_pull_location?
     !(@submission.pullLocation.nil? || @submission.pullLocation.empty?)
+  end
+
+  def generate_link_title
+    inside_color = 'var(--primary-color)'
+    outside_color = '#007bff'
+
+    inside_span = content_tag(:span, "#{portal_name}", style: "color: #{inside_color} !important;")
+    outside_span = content_tag(:span, 'outside', style: "color: #{outside_color};")
+
+    link_title = "Relation with other ontologies either in #{inside_span} or #{outside_span}".html_safe
+  end
+
+
+  def edit_button(link:, title: )
+    render IconWithTooltipComponent.new(icon: "edit.svg",link: link, target: '_blank', title: title)
+  end
+
+  def service_button(link:, title: )
+    render IconWithTooltipComponent.new(icon: "json.svg",link: link, target: '_blank', title: title)
   end
 
   private
