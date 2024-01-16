@@ -72,27 +72,11 @@ class RecommenderController < ApplicationController
   end
 
   def recommendation_ontologies(recommendation)
-    ontologies = []
-    recommendation.ontologies.each do |ontology|
-      ont = {
-        acronym: ontology.acronym,
-        link: url_to_endpoint(ontology.id)
-      }
-      ontologies.push(ont)
-    end
-    ontologies
+    recommendation.ontologies.map { |ont| { acronym: ont.acronym, link: ont.id } }
   end
 
   def recommendation_annotations(recommendation)
-    annotations = []
-    recommendation.coverageResult.annotations.each do |annotation|
-      ant = {
-        text: annotation.text,
-        link: url_to_endpoint(annotation.annotatedClass.links['self']) 
-      }
-      annotations.push(ant)
-    end
-    annotations
+    recommendation.coverageResult.annotations.map{|annotation| {text: annotation.text, link:  url_to_endpoint(annotation.annotatedClass.links['self'])}}
   end
 
   def percentage(string)

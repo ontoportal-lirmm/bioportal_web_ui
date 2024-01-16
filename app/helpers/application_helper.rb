@@ -584,4 +584,27 @@ module ApplicationHelper
        nil
     end
   end
+
+  def show_advanced_options_button
+    content_tag(:div, class: 'advanced-options-button', 'data-action': 'click->reveal-component#show', 'data-reveal-component-target': 'showButton') do
+      inline_svg_tag('icons/settings.svg') +
+      content_tag(:div, 'Show advanced options', class: 'text')
+    end
+  end
+
+  def hide_advanced_options_button
+    content_tag(:div, class: 'advanced-options-button d-none', 'data-action': 'click->reveal-component#hide', 'data-reveal-component-target': 'hideButton') do
+      inline_svg_tag('icons/hide.svg') +
+      content_tag(:div, 'Hide advanced options', class: 'text')
+    end
+  end
+
+  def insert_sample_text_button
+    content_tag(:div, class:'insert-sample-text-button') do
+      content_tag(:div, class: 'button', 'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("sample_text")) do
+        content_tag(:div, 'Insert sample text', class: 'text') +
+        inline_svg_tag('icons/arrow-curved-up.svg')
+      end
+    end
+  end
 end

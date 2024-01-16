@@ -16,13 +16,9 @@
             .recommender-page-text-area{class: is_input ?  "" : "d-none", 'data-recommender-target': 'input', 'data-controller': 'sample-text'}
               %textarea#recommender-text-area{rows: "4" , placeholder: 'Enter or past a text to be annotated ...', name: "input", oninput: 'handleInput(event)',  maxlength: "500", 'data-sample-text-target': "input"}
                 = params[:input]
-              .insert-sample-text-button
-                .button{'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("sample_text")}
-                  .text
-                    Insert sample text
-                  = inline_svg_tag 'icons/arrow-curved-up.svg'
+              = insert_sample_text_button
 
-            #recommender-page-result-area.recommender-page-text-area-results{class: is_input ? "d-none" : "", 'data-recommender-target': 'result'}
+            .recommender-page-text-area-results{class: is_input ? "d-none" : "", 'data-recommender-target': 'result'}
               .text
                 = params[:input]
           .recommender-page-options
@@ -46,14 +42,8 @@
                   = render Input::RadioChipComponent.new(label: 'Ontologies', name: 'output_type', value: '1', checked: check_output)
                 .ontology-sets-choice
                   = render Input::RadioChipComponent.new(label: 'Ontology sets', name: 'output_type', value: '2', checked: !check_output)
-            .advanced-options-button{'data-action': 'click->reveal-component#show', 'data-reveal-component-target': 'showButton'}
-              = inline_svg_tag "icons/settings.svg"
-              .text 
-                Show advanced options
-            .advanced-options-button.d-none{'data-action': 'click->reveal-component#hide', 'data-reveal-component-target': 'hideButton'}
-              = inline_svg_tag 'icons/hide.svg'
-              .text 
-                Hide advanced options
+            = show_advanced_options_button
+            = hide_advanced_options_button
               
         .recommender-advanced-options.d-none{'data-reveal-component-target': 'item'}
           .weights-configuration

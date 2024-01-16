@@ -26,7 +26,7 @@ export default class extends Controller {
   }
 
   handleHighlightedChange(){
-    let recommandations_area = document.getElementById('recommender-page-result-area')
+    let recommandations_area = this.resultTarget
     let jsonString = document.querySelector('input[name="highlighted_recommendation"]:checked').value;
     let jsonStringModified = jsonString.replace(/:text/g, '"text"').replace(/:link/g, '"link"').replace(/=>/g, ':');
     let jsonArray = JSON.parse(jsonStringModified);
@@ -46,9 +46,4 @@ export default class extends Controller {
   #toggle(element){
     element.classList.toggle('d-none')
   }
-
-  
-
-
-
 }

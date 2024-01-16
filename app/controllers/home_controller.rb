@@ -137,7 +137,7 @@ class HomeController < ApplicationController
     if params[:submit_button] == "annotator"
       redirect_to "/annotator?text=#{params[:text]}"
     elsif params[:submit_button] == "recommender"
-      redirect_to "/recommender?text=#{params[:text]}"
+      redirect_to "/recommender?input=#{params[:input]}"
     end
   end
 
