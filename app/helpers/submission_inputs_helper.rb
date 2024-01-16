@@ -56,7 +56,6 @@ module SubmissionInputsHelper
     attr = SubmissionMetadataInput.new(attribute_key: attr_key, submission: @submission, label: label,
                                        attr_metadata: attr_metadata(attr_key))
 
-
     if attr.type?('Agent')
       if attr.type?('list')
         generate_list_agent_input(attr, helper_text: help)
@@ -72,13 +71,13 @@ module SubmissionInputsHelper
         generate_date_input(attr, max_date: max_date)
       end
     elsif attr.type?('textarea')
-      generate_textarea_input(attr, helper_text: help)
+      generate_textarea_input(attr)
     elsif enforce_values?(attr)
 
       if attr.type?('list')
         generate_select_input(attr, multiple: true, help_text: help)
       elsif attr.type?('boolean')
-        generate_boolean_input(attr)
+        generate_boolean_input(attr, help: help)
       else
         generate_select_input(attr, help_text: help)
       end
@@ -87,7 +86,7 @@ module SubmissionInputsHelper
     elsif attr.type?('uri')
       generate_url_input(attr, helper_text: help)
     elsif attr.type?('boolean')
-      generate_boolean_input(attr)
+      generate_boolean_input(attr, help: help)
     else
       # If input a simple text
       name = attr.name
@@ -471,7 +470,7 @@ module SubmissionInputsHelper
     name = attr.name
     content_tag(:div) do
       switch_input(id: name, name: name, label: attr_header_label(attr), checked: value.eql?('true'), value: value,
-                   boolean_switch: true, style: 'font-size: 14px;', help: metadata_deprecated_help)
+                   boolean_switch: true, style: 'font-size: 14px;', help: help)
     end
   end
 

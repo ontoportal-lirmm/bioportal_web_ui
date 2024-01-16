@@ -2,7 +2,7 @@ module SubmissionsHelper
   def metadata_help_link
     content_tag(:div, class: 'edit-ontology-desc') do
       html = content_tag(:div) do
-          content_tag(:div, 'Edit the metadata of your ontology here.') +
+        content_tag(:div, 'Edit the metadata of your ontology here.') +
           content_tag(:span, "Some of these values are used by #{portal_name} functionalities, includng for FAIRness assessment. ") +
           content_tag(:span) do
             link_to('See guidelines and recommendations for metadata here.', Rails.configuration.settings.links[:metadata_help], target: "_blank")
@@ -17,18 +17,18 @@ module SubmissionsHelper
     content_tag(:div, class: 'edit-ontology-desc') do
       html = content_tag(:div) do
         content_tag(:span, " #{portal_name} requires an URI for the license. If you do not find your choice here, ") +
-        content_tag(:span) do
-          link_to('Please pick up an URI from here.', "https://rdflicense.linkeddata.es/", target: "_blank")
-        end
+          content_tag(:span) do
+            link_to('Please pick up an URI from here.', "https://rdflicense.linkeddata.es/", target: "_blank")
+          end
       end
       html.html_safe
     end
   end
-  
+
   def metadata_deprecated_help
     content_tag(:div, style: 'edit-ontology-desc') do
       html = content_tag(:div) do
-          content_tag(:div, " An ontology with status retired shall necessarily be also deprecated, but not the oposite.")
+        content_tag(:div, " An ontology with status retired shall necessarily be also deprecated, but not the opposite.")
       end
       html.html_safe
     end
@@ -38,9 +38,9 @@ module SubmissionsHelper
     content_tag(:div, class: 'edit-ontology-desc') do
       html = content_tag(:div) do
         content_tag(:span, 'Consider also declaring ') +
-        content_tag(:span, style: 'width: 10px; height: 10px') do
-          link_to('the projects that are using the ontology.', "/projects/new", target: "_blank")
-        end
+          content_tag(:span, style: 'width: 10px; height: 10px') do
+            link_to('the projects that are using the ontology.', "/projects/new", target: "_blank")
+          end
       end
       html.html_safe
     end
@@ -60,14 +60,13 @@ module SubmissionsHelper
     content_tag(:div, class: 'edit-ontology-desc') do
       html = content_tag(:div) do
         content_tag(:span, 'For more information on how to encode versionning information in an ontology, see ') +
-        content_tag(:span, style: 'width: 10px; height: 10px') do
-          link_to('guidelines and recommendations.', "https://hal.science/hal-04094847", target: "_blank")
-        end
+          content_tag(:span, style: 'width: 10px; height: 10px') do
+            link_to('guidelines and recommendations.', "https://hal.science/hal-04094847", target: "_blank")
+          end
       end
       html.html_safe
     end
   end
-
 
   def ontology_submission_id_label(acronym, submission_id)
     [acronym, submission_id].join('#')
@@ -219,10 +218,8 @@ module SubmissionsHelper
     end
   end
 
-
-
   def attribute_infos(attr_label)
-    submission_metadata.select{ |attr_hash| attr_hash["attribute"].to_s.eql?(attr_label) }.first
+    submission_metadata.select { |attr_hash| attr_hash["attribute"].to_s.eql?(attr_label) }.first
   end
 
   def object_name(acronym = @ontology.acronym, submissionId = @submission.submissionId)
@@ -245,19 +242,17 @@ module SubmissionsHelper
       output += ontology_name_input
     end
 
-
     if selected_attribute?('hasOntologyLanguage')
       output += has_ontology_language_input
     end
 
     if selected_attribute?('categories')
-      output +=  ontology_categories_input
+      output += ontology_categories_input
     end
 
     if selected_attribute?('groups')
-      output +=  ontology_groups_input
+      output += ontology_groups_input
     end
-
 
     if selected_attribute?('administeredBy')
       output += ontology_administered_by_input
@@ -283,25 +278,24 @@ module SubmissionsHelper
       end
     end
 
-
     if selected_attribute?('viewOf')
       output += attribute_form_group_container('viewOf') do
         ontology_view_of_input
       end
     end
 
-    reject_metadata = %w[abstract description uploadFilePath contact pullLocation hasOntologyLanguage hasLicense bugDatabase knownUsage version notes]
+    reject_metadata = %w[abstract description uploadFilePath contact pullLocation hasOntologyLanguage hasLicense bugDatabase knownUsage version notes deprecated status]
     label = inline_save? ? '' : nil
 
     if selected_attribute?('abstract')
       output += attribute_form_group_container('abstract') do
-        raw attribute_input('abstract',long_text: true, label: label)
+        raw attribute_input('abstract', long_text: true, label: label)
       end
     end
 
     if selected_attribute?('description')
       output += attribute_form_group_container('description') do
-        raw attribute_input('description',long_text: true, label: label)
+        raw attribute_input('description', long_text: true, label: label)
       end
     end
 
@@ -310,7 +304,6 @@ module SubmissionsHelper
         raw attribute_input('hasLicense', help: metadata_license_help_link)
       end
     end
-
 
     if selected_attribute?('bugDatabase')
       output += attribute_form_group_container('bugDatabase') do
@@ -336,14 +329,23 @@ module SubmissionsHelper
       end
     end
 
+    if selected_attribute?('status')
+      output += attribute_form_group_container('status') do
+        raw attribute_input('status')
+      end
+    end
+
+    if selected_attribute?('deprecated')
+      output += attribute_form_group_container('deprecated') do
+        raw attribute_input('deprecated', help: metadata_deprecated_help)
+      end
+    end
+
     submission_metadata.reject { |attr| reject_metadata.include?(attr['attribute']) || !selected_attribute?(attr['attribute']) }.each do |attr|
       output += attribute_form_group_container(attr['attribute']) do
         raw attribute_input(attr['attribute'], label: label)
       end
     end
-
-
-
 
     render TurboFrameComponent.new(id: frame_id) do
       output.html_safe
