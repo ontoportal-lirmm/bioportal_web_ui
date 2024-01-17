@@ -30,6 +30,8 @@ class AnnotatorController < ApplicationController
     end
     @annotator_ontologies = LinkedData::Client::Models::Ontology.all
     @text = params[:text]
+
+    binding.pry
   end
 
 

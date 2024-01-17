@@ -1,78 +1,29 @@
-div#semanticTypes_chzn.chzn-container input.default {
-  font-style: oblique !important;
+.recommender-page-options .chips{
+  display: flex;
+  flex-wrap: wrap;
 }
-
-div#semanticTypes_chzn.chzn-container-active input.default {
-  font-style: normal !important;
+.recommender-page-options .select-ontologies{
+  margin: 10px 0;
 }
-
-div#annotations_filter, div#annotations_info {
-  display: none;
+.recommender-page-options .preftitle{
+  font-size: 14px;
+  color: #666666;
+  margin-bottom: 5px;
 }
-
-.result_count {
-  font-weight: bold;
+.advanced-options-button{
+  color: var(--primary-color);
+  font-size: 14px;
+  margin-top: 5px !important;
 }
-
-#annotations th {
-	padding-right: 6px;
+.advanced-options-button:hover{
+  cursor: pointer;
 }
-
-#annotations span[class="popup_container"] {
-  padding-left: 1.7em;
+.advanced-options-button svg{
+  margin-left: 5px;
 }
-
-#annotator_parameters {
-  color: gray; 
-  font-weight: bold;
+.advanced-options-button svg path{
+  fill: var(--primary-color);
 }
-
-#annotations_container {
-  display: none; 
-  margin-top: 10px; 
-  margin-bottom: 25px;
-}
-
-#annotations_container #result_counts {
-  float: right; 
-  font-style: oblique; 
-  color: gray;
-}
-
-#annotator-help i {
-  margin-left: .25em;
-}
-
-/* AnnotatorPlus */
-
-.annotatorplus {
-
-  #annotator-help > i.fa.fa-question-circle {
-    margin-left: .25em;
-    vertical-align: middle;
-  }
-
-  #download_links {
-    margin-top: 1.5em;
-  }
-
-  #annotator_parameters {
-    font-weight: normal;
-  }
-
-  .annotator_spinner {
-    display: none;
-    
-    img {
-      margin-left: 3px;
-      vertical-align: middle;
-    }
-  }
-
-  .annotator_error {
-    color: red;
-    font-style: italic;
-    margin-left: 3px;
-    vertical-align: middle;
-  }
+.advanced-options-button.hide-button svg{
+  transform: scaleY(-1);
 }
