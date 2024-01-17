@@ -2,7 +2,7 @@ class Buttons::RegularButtonComponent < ViewComponent::Base
   renders_one :icon_left
   renders_one :icon_right
 
-  def initialize(id: , value:, variant: "primary", color: "normal", href: "", size: "normal", state: "animate", type: 'button')
+  def initialize(id: , value:, variant: "primary", color: "normal", href: "", size: "normal", state: "animate", type: 'button', target: nil)
     @id = id
     @value = value
     @variant = variant
@@ -11,6 +11,7 @@ class Buttons::RegularButtonComponent < ViewComponent::Base
     @size = size
     @state = state
     @type = type
+    @target = target
   end
 
   def button_label
@@ -28,7 +29,7 @@ class Buttons::RegularButtonComponent < ViewComponent::Base
     on_click_event =  load_animation? ?  "displayAnimation(this, '#{@id}-loading-animation')" : ''
 
     if link?
-      link_to(@href, class: class_style, onclick: on_click_event, id: @id) do
+      link_to(@href, class: class_style, onclick: on_click_event, id: @id, target: @target) do
         button_label
       end
     else

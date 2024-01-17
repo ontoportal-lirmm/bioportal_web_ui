@@ -1,7 +1,8 @@
-%table.table-content{id: @id, class: stripped_class + ' ' + borderless_class + ' ' + layout_fixed_class + @custom_class}
-  %thead
-    = header
-  %tbody{id: "#{@id}_table_body"}
-    - rows.each do |row|
-      = row
-    = content
+%div{'data-controller': 'table-component', 'data-table-component-sort-value': @sort, 'data-table-component-defaultsortcolumn-value': @default_sort_column, 'data-table-component-paging-value': @paging, 'data-table-component-searching-value': @searching}
+  %table.table-content{id: @id ,class: @custom_class + ' ' + stripped_class + ' ' + borderless_class + ' ' + layout_fixed_class + ' ' + mini_class + ' ' + outline_class}
+    %thead
+      = header
+    %tbody{id: "#{@id}_table_body"}
+      - rows.each do |row|
+        = row
+      = content

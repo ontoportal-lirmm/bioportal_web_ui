@@ -58,6 +58,9 @@ application.register("ontology-viewer-tabs", OntologyViewerTabsController)
 import OntoportalAutocompleteController from "./ontoportal_autocomplete_controller"
 application.register("ontoportal-autocomplete", OntoportalAutocompleteController)
 
+import RecommenderController from "./recommender_controller"
+application.register("recommender", RecommenderController)
+
 import ShowFilterCountController from "./show_filter_count_controller"
 application.register("show-filter-count", ShowFilterCountController)
 

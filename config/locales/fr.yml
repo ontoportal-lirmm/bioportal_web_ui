@@ -343,20 +343,36 @@ fr:
     view_projects_help: Aide à la visualisation des projets
  
   recommender:
-    intro: Obtenez des recommandations d'ontologies les plus pertinentes à partir d'un extrait d'un texte ou d'une liste de mots-clés
-    no_recommendations: Aucune recommandation trouvée
-    no_sets_recommended: Il n'y a pas d'ensembles d'ontologies recommandés pour l'entrée fournie. Veuillez essayer la sortie 'Ontologies'.
-    ontology_recommendation_input: Saisissez un paragraphe de texte ou quelques mots-clés pour calculer les recommandations d'ontologie.
-    ontology_recommender: Recommandeur
-    paste_text_recommendations: Collez un paragraphe de texte ou quelques mots-clés séparés par des virgules à utiliser pour calculer les recommandations d'ontologie
-    recommendation_error: Problème lors du calcul des recommandations, veuillez réessayer.
-    text_length_limit: Veuillez utiliser moins de 500 mots. Si vous devez annoter de plus grands morceaux de texte, vous pouvez utiliser le service Web de recommandation.
     title: Recommandeur
-    valid_integer_max_ontologies_per_set: Le nombre maximum d'ontologies par ensemble doit être une valeur entière valide
-    valid_max_ontologies_per_set_range: Le nombre maximum d'ontologies par ensemble doit être un nombre entre 2 et 4
-    valid_numeric_weights: Tous les poids doivent être des valeurs numériques valides
-    weight_sum_greater_than_zero: La somme des poids doit être supérieure à zéro
-    weights_greater_than_zero: Tous les poids doivent être supérieurs ou égaux à zéro
+    intro: Obtenez des recommandations pour les ontologies les plus pertinentes à partir d'un extrait de texte ou d'une liste de mots-clés
+    options: Options
+    input: Entrée
+    text: Texte
+    keywords: Mots-clés
+    output: Sortie
+    ontologies: Ontologies
+    ontology_sets: Ensembles d'ontologies
+    hint: Collez un paragraphe de texte ou quelques mots-clés ...
+    weights_configuration: Configuration des poids
+    converage: Couverture
+    acceptance: Acceptation
+    knowledge_detail: Détail des connaissances
+    specialization: Spécialisation
+    ontologies_configuration: Configuration des ontologies
+    max_ont_set: Nombre maximum d'ontologies par ensemble
+    select_ontologies: Sélectionner des ontologies
+    get_recommendations: Obtenir des recommandations
+    edit: Modifier
+    results_title: Ontologies recommandées
+    results_table:
+        ontology: Ontologie
+        final_score: Score final
+        coverage_score: Score de couverture
+        acceptance_score: Score d'acceptation
+        detail_score: Score de détail
+        specialization_score: Score de spécialisation
+        annotations: Annotations
+
   
   register:
     account_errors: 'Erreurs lors de la création de votre compte :'
@@ -412,3 +428,7 @@ fr:
   visits: Visites
   weights_configuration: Configuration des poids
   sample_text: Le mélanome est une tumeur maligne des mélanocytes, se trouvant principalement dans la peau, mais aussi dans l'intestin et l'œil.
+  insert_sample_text: Insérer un texte d'exemple
+  show_advanced_options: Afficher les options avancées
+  hide_advanced_options: Masquer les options avancées
+  no_result_was_found: Aucun résultat n'a été trouvé
