@@ -41,7 +41,7 @@ module ApplicationHelper
           if uri.to_s.include?(response['location'].chomp('/'))
             uri = URI.parse(uri.scheme + '://' + uri.host + '/' + response['location'])
           else
-          uri = URI.parse(response['location'])
+            uri = URI.parse(response['location'])
           end
           redirect_count += 1
         end
@@ -77,7 +77,7 @@ module ApplicationHelper
   end
 
   def check_resolvability_container(url)
-    turbo_frame_tag("#{escape(url)}_container", src: "/check_resolvability?url=#{escape(url)}", loading: "lazy") do
+    turbo_frame_tag("#{escape(url)}_container", src: "/check_resolvability?url=#{escape(url)}", loading: "lazy", class: 'd-inline-block') do
       content_tag(:div, class: 'p-1', data: { controller: 'tooltip' }, title: 'checking resolvability...') do
         render LoaderComponent.new(small: true)
       end
@@ -649,14 +649,14 @@ module ApplicationHelper
   def show_advanced_options_button(text: nil, init: nil)
     content_tag(:div, class: "#{init ? 'd-none' : ''} advanced-options-button", 'data-action': 'click->reveal-component#show', 'data-reveal-component-target': 'showButton') do
       inline_svg_tag('icons/settings.svg') +
-      content_tag(:div, text, class: 'text')
+        content_tag(:div, text, class: 'text')
     end
   end
 
   def hide_advanced_options_button(text: nil, init: nil)
     content_tag(:div, class: "#{init ? '' : 'd-none'} advanced-options-button", 'data-action': 'click->reveal-component#hide', 'data-reveal-component-target': 'hideButton') do
       inline_svg_tag('icons/hide.svg') +
-      content_tag(:div, text, class: 'text')
+        content_tag(:div, text, class: 'text')
     end
   end
   
