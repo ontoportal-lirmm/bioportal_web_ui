@@ -23,6 +23,66 @@ module ApplicationHelper
                        :oboInOwl => "http://www.geneontology.org/formats/oboInOwl#", :idot => "http://identifiers.org/idot/", :sd => "http://www.w3.org/ns/sparql-service-description#",
                        :cclicense => "http://creativecommons.org/licenses/"}
 
+  def check_resolvability_helper(url, negotiation_formats = %w[application/rdf+xml application/xml text/turtle application/ld+json application/json text/n3 text/html application/xhtml+xml text/plain], timeout_seconds = 30)
+    begin
+      uri = URI.parse(url)
+
+      # Follow redirects
+      response = nil
+      redirect_limit = 5 # Set a limit to prevent infinite loops
+      redirect_count = 0
+
+      until (!response.nil? && !response.is_a?(Net::HTTPRedirection)) || redirect_count >= redirect_limit
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = (uri.scheme == 'https')
+        http.open_timeout = timeout_seconds
+        response = Timeout.timeout(timeout_seconds) { http.request_head(uri.path) }
+        if response.is_a?(Net::HTTPRedirection)
+          if uri.to_s.include?(response['location'].chomp('/'))
+            uri = URI.parse(uri.scheme + '://' + uri.host + '/' + response['location'])
+          else
+          uri = URI.parse(response['location'])
+          end
+          redirect_count += 1
+        end
+      end
+
+      # Check if the final response indicates successful dereferencing
+      if response && response.is_a?(Net::HTTPSuccess)
+        # Check if content negotiation is supported for any of the formats
+        supported_format = negotiation_formats.find_all do |format|
+          begin
+            test_response = Timeout.timeout(timeout_seconds) do
+              http.head(uri.path, 'Accept' => format)
+            end
+            test_response.is_a?(Net::HTTPSuccess) && test_response.content_type.include?(format)
+          rescue
+            false
+          end
+        end
+
+        if supported_format.size > 1
+          return { result: 2, status: response.code, allowed_format: supported_format }
+        else
+          return { result: 1, status: response.code, allowed_format: Array(supported_format) }
+        end
+      else
+        return { result: 0, status: response ? response.code : nil, allowed_format: [] }
+      end
+    rescue Timeout::Error || Net::OpenTimeout
+      return { result: 0, status: 'Timeout', allowed_format: [] }
+    rescue StandardError => e
+      return { result: 0, status: e.message, allowed_format: [] }
+    end
+  end
+
+  def check_resolvability_container(url)
+    turbo_frame_tag("#{escape(url)}_container", src: "/check_resolvability?url=#{escape(url)}", loading: "lazy") do
+      content_tag(:div, class: 'p-1', data: { controller: 'tooltip' }, title: 'checking resolvability...') do
+        render LoaderComponent.new(small: true)
+      end
+    end
+  end
 
   def ontologies_analytics
     data = LinkedData::Client::Analytics.last_month.onts

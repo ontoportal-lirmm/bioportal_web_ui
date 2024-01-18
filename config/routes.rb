@@ -43,7 +43,7 @@ Rails.application.routes.draw do
 
   get 'ontologies/:ontology_id/concepts', to: 'concepts#show_concept'
   resources :ontologies do
-    resources :submissions do 
+    resources :submissions do
       get 'edit_properties'
     end
 
@@ -99,7 +99,7 @@ Rails.application.routes.draw do
     get '/:ontology/submissions/:submission_id/attributes/:attribute', to: 'ontologies_metadata_curator#show_metadata_value'
     get '/:ontology/submissions/:submission_id', to: 'ontologies_metadata_curator#show_metadata_by_ontology'
   end
-    
+
   get '' => 'home#index'
 
   match 'sparql_proxy', to: 'admin#sparql_endpoint', via: [:get, :post]
@@ -122,7 +122,7 @@ Rails.application.routes.draw do
   # Ontologies
   get '/ontologies/view/edit/:id' => 'ontologies#edit_view', :constraints => { id: /[^\/?]+/ }
   get '/ontologies/view/new/:id' => 'ontologies#new_view'
-  
+
   get '/ontologies/virtual/:ontology' => 'ontologies#virtual', :as => :ontology_virtual
   get '/ontologies/success/:id' => 'ontologies#submit_success'
   match '/ontologies/:acronym' => 'ontologies#update', via: [:get, :post]
@@ -191,6 +191,9 @@ Rails.application.routes.draw do
 
   # Search
   get 'search', to: 'search#index'
+
+  get 'check_resolvability' => 'ontologies#check_resolvability'
+
   ###########################################################################################################
   # Install the default route as the lowest priority.
   get '/:controller(/:action(/:id))'
