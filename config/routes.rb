@@ -193,6 +193,7 @@ Rails.application.routes.draw do
   get 'search', to: 'search#index'
 
   get 'check_resolvability' => 'ontologies#check_resolvability'
+  get 'check_url_resolvability' => 'ontologies#check_resolvability'
 
   ###########################################################################################################
   # Install the default route as the lowest priority.

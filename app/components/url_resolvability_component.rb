@@ -2,7 +2,7 @@
 
 class UrlResolvabilityComponent < ViewComponent::Base
 
-  include OntologiesHelper
+  include OntologiesHelper, CheckResolvabilityHelper
 
   def initialize(resolvable: false, supported_formats: [], status: nil)
     @resolvable = resolvable
@@ -11,12 +11,14 @@ class UrlResolvabilityComponent < ViewComponent::Base
   end
 
   def call
+    text = check_resolvability_message(@resolvable, @supported_formats, @status)
     if @resolvable && @supported_formats.size > 1
-      render Display::InfoTooltipComponent.new(text: "The URL is resolvable and support the following formats: #{@supported_formats.join(', ')}", icon: status_icons(ok: true))
+      icon = status_icons(ok: true)
     elsif @resolvable
-      render Display::InfoTooltipComponent.new(text: "The URL resolvable but not content negotiable, support only: #{@supported_formats.join(', ')}", icon: status_icons(warning: true))
+      icon = status_icons(warning: true)
     else
-      render Display::InfoTooltipComponent.new(text: "The URL is not resolvable and not content negotiable (returns #{@status})", icon: status_icons(error: true))
+      icon = status_icons(error: true)
     end
+    render Display::InfoTooltipComponent.new(text: text, icon: icon)
   end
 end
