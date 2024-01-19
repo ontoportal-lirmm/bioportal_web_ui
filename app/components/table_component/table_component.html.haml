@@ -1,4 +1,4 @@
-%div{'data-controller': 'table-component', 'data-table-component-sort-value': @sort, 'data-table-component-defaultsortcolumn-value': @default_sort_column, 'data-table-component-paging-value': @paging, 'data-table-component-searching-value': @searching}
+%div{'data-controller': 'table-component', 'data-table-component-sort-value': @sort, 'data-table-component-defaultsortcolumn-value': @default_sort_column, 'data-table-component-paging-value': @paging, 'data-table-component-searching-value': @searching, 'data-table-component-init-value': @no_init_sort}
   %table.table-content{id: @id ,class: stripped_class + ' ' + borderless_class + ' ' + layout_fixed_class + ' ' + mini_class + ' ' + outline_class}
     %thead
       = header

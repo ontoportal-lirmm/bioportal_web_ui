@@ -30,8 +30,48 @@ class AnnotatorController < ApplicationController
     end
     @annotator_ontologies = LinkedData::Client::Models::Ontology.all
     @text = params[:text]
-
-    binding.pry
+    
+    if params[:text]
+      text_to_annotate = params[:text].strip.gsub("\r\n", " ").gsub("\n", " ")
+      @results_table_header = [
+        "Class", "Ontology", "Type", "Matched class", "Matched ontology"
+      ]
+      annotations = LinkedData::Client::HTTP.get(ANNOTATOR_URI, params)
+      @ontologies = get_simplified_ontologies_hash
+      @semantic_types = get_semantic_types 
+      @results = []
+      match_type_translation = {
+          mgrep: "direct",
+          mapping: "mapping",
+          closure: "ancestor"
+      }
+      annotations.each do |annotation|
+        if annotation.annotations.length.eql?(0)
+          row = {
+            class: annotation_class_info(annotation.annotatedClass),
+            ontology: annotation_ontology_info(annotation.annotatedClass.links),
+            match_type: "",
+            matched_class: annotation_class_info(annotation.annotatedClass),
+            matched_ontology: annotation_ontology_info(annotation.annotatedClass.links["ontology"]),
+          }
+          @results.push(row)
+        else
+          annotation.annotations.each do |a|
+            row = {
+              class: annotation_class_info(annotation.annotatedClass),
+              ontology: annotation_ontology_info(annotation.annotatedClass.links["ontology"]),
+              match_type: "Direct",
+              matched_class: annotation_class_info(annotation.annotatedClass),
+              matched_ontology: annotation_ontology_info(annotation.annotatedClass.links["ontology"]),
+            }
+            @results.push(row)
+          end
+        end
+      end
+      #binding.pry
+    end
+    
+    
   end
 
 
@@ -212,6 +252,19 @@ class AnnotatorController < ApplicationController
       classes_simple[c[:id]] = c
     end
     return classes_simple
+  end
+
+  def annotation_class_info(cls)
+    return {
+      text: cls.prefLabel,
+      link: cls.links["self"]
+    }
+  end
+  def annotation_ontology_info(ontology_url)
+    return {
+      text: @ontologies[ontology_url][:name],
+      link: ontology_url
+    }
   end
 
 end

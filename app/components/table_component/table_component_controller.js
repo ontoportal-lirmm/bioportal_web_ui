@@ -8,7 +8,8 @@ export default class extends Controller {
         sort: Boolean,
         defaultsortcolumn: String,
         paging: Boolean,
-        searching: Boolean
+        searching: Boolean,
+        init: Boolean
     }
     connect(){    
         let table_component
@@ -21,7 +22,7 @@ export default class extends Controller {
                 info: false,
                 searching: this.searchingValue,
                 autoWidth: true,
-                order: [[default_sort_column, 'desc']]
+                order: this.initValue ? [] : [[default_sort_column, 'desc']]
             });
         }
     }
