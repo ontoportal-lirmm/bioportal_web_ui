@@ -12,8 +12,8 @@
         .inputs
           %div
             .recommender-page-text-area{'data-controller': 'sample-text'}
-              %textarea{rows: "6" , placeholder: "Enter or past a text to be annotated ...", name: "text",  maxlength: "500", 'data-sample-text-target': "input"}
-                = params[:input]
+              %textarea#annotator-text-area{rows: "6" , placeholder: "Enter or past a text to be annotated ...", name: "text",  maxlength: "500", 'data-sample-text-target': "input"}
+                = params[:text]
               = insert_sample_text_button(t('recommender.insert_sample_text'))
           .recommender-page-options
             .section-text
@@ -44,7 +44,7 @@
         .title
           Annotations
           .recommender-table-container
-            = render TableComponent.new(id: 'annotator-table', borderless: true, layout_fixed: true, small_text: true, outline: true, sort: true, no_init_sort: true) do |t|
+            = render TableComponent.new(id: 'annotator-table', borderless: true, layout_fixed: true, small_text: true, outline: true, sort: true, no_init_sort: true, auto_layout: true) do |t|
               - t.header do |h|
                 - @results_table_header.each do |header|
                   - h.th do
@@ -58,7 +58,10 @@
                     %a{href: result[:ontology][:link]}
                       = result[:ontology][:text]
                   - r.td do
-                    = result[:match_type]
+                    .annotator-match-type
+                      = result[:match_type]
+                  - r.td do
+                    .annotation-context{'data-from': result[:context][:from], 'data-to': result[:context][:to]}
                   - r.td do
                     %a{href: result[:matched_class][:link]}
                       = result[:matched_class][:text]

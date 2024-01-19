@@ -34,7 +34,7 @@ class AnnotatorController < ApplicationController
     if params[:text]
       text_to_annotate = params[:text].strip.gsub("\r\n", " ").gsub("\n", " ")
       @results_table_header = [
-        "Class", "Ontology", "Type", "Matched class", "Matched ontology"
+        "Class", "Ontology", "Type", "Context", "Matched class", "Matched ontology"
       ]
       annotations = LinkedData::Client::HTTP.get(ANNOTATOR_URI, params)
       @ontologies = get_simplified_ontologies_hash
@@ -51,17 +51,18 @@ class AnnotatorController < ApplicationController
             class: annotation_class_info(annotation.annotatedClass),
             ontology: annotation_ontology_info(annotation.annotatedClass.links),
             match_type: "",
+            context: "",
             matched_class: annotation_class_info(annotation.annotatedClass),
             matched_ontology: annotation_ontology_info(annotation.annotatedClass.links["ontology"]),
           }
           @results.push(row)
         else
           annotation.annotations.each do |a|
-            #binding.pry
             row = {
               class: annotation_class_info(annotation.annotatedClass),
               ontology: annotation_ontology_info(annotation.annotatedClass.links["ontology"]),
               match_type: match_type_translation[a.matchType.capitalize.downcase] || 'Direct',
+              context: a,
               matched_class: annotation_class_info(annotation.annotatedClass),
               matched_ontology: annotation_ontology_info(annotation.annotatedClass.links["ontology"]),
             }
@@ -69,7 +70,6 @@ class AnnotatorController < ApplicationController
           end
         end
       end
-      #binding.pry
     end
     
     

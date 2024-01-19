@@ -5,7 +5,7 @@ class TableComponent < ViewComponent::Base
   renders_one :header, TableRowComponent
   renders_many :rows, TableRowComponent
 
-  def initialize(id: '', stripped: true, borderless: false, layout_fixed: false, small_text: false, outline: false, sort: false, default_sort_column: '0', paging: false, searching: false, no_init_sort: false)
+  def initialize(id: '', stripped: true, borderless: false, layout_fixed: false, small_text: false, outline: false, sort: false, default_sort_column: '0', paging: false, searching: false, no_init_sort: false, auto_layout: false)
     super
     @id = id
     @stripped = stripped
@@ -18,6 +18,7 @@ class TableComponent < ViewComponent::Base
     @paging = paging
     @searching =searching
     @no_init_sort = no_init_sort
+    @auto_layout = auto_layout
   end
 
   def stripped_class
@@ -42,5 +43,9 @@ class TableComponent < ViewComponent::Base
 
   def outline_class
     @outline ? 'table-outline' : ''
+  end
+
+  def auto_layout_class
+    @auto_layout ? 'table-auto-layout' : ''
   end
 end
