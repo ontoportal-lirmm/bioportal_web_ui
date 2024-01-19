@@ -192,7 +192,7 @@ Rails.application.routes.draw do
   # Search
   get 'search', to: 'search#index'
 
-  get 'check_resolvability' => 'ontologies#check_resolvability'
+  get 'check_resolvability' => 'check_resolvability#index'
   get 'check_url_resolvability' => 'ontologies#check_resolvability'
 
   ###########################################################################################################
