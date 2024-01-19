@@ -40,31 +40,34 @@
         .recommender-page-button
           = render Buttons::RegularButtonComponent.new(id:'annotator', value: 'Get annotations', variant: "primary", type: 'submit')
     - unless @results.nil? || @results.empty?
-      .recommender-page-results
-        .title
-          Annotations
-          .recommender-table-container
-            = render TableComponent.new(id: 'annotator-table', borderless: true, layout_fixed: true, small_text: true, outline: true, sort: true, no_init_sort: true, auto_layout: true) do |t|
-              - t.header do |h|
-                - @results_table_header.each do |header|
-                  - h.th do
-                    = header
-              - @results.each do |result|
-                - t.row do |r|
-                  - r.td do
-                    %a{href: result[:class][:link]}
-                      = result[:class][:text]
-                  - r.td do
-                    %a{href: result[:ontology][:link]}
-                      = result[:ontology][:text]
-                  - r.td do
-                    .annotator-match-type
-                      = result[:match_type]
-                  - r.td do
-                    .annotation-context{'data-from': result[:context][:from], 'data-to': result[:context][:to]}
-                  - r.td do
-                    %a{href: result[:matched_class][:link]}
-                      = result[:matched_class][:text]
-                  - r.td do
-                    %a{href: result[:matched_ontology][:link]}
-                      = result[:matched_ontology][:text]
+      .annotator-page-results
+        .cont
+          .title
+            Annotations
+          .details
+            = "Total results #{@results.length} (direct 17 / ancestor 0 / mapping 0)"
+        .recommender-table-container
+          = render TableComponent.new(id: 'annotator-table', borderless: true, layout_fixed: true, small_text: true, outline: true, sort: true, no_init_sort: true, auto_layout: true) do |t|
+            - t.header do |h|
+              - @results_table_header.each do |header|
+                - h.th do
+                  = header
+            - @results.each do |result|
+              - t.row do |r|
+                - r.td do
+                  %a{href: result[:class][:link]}
+                    = result[:class][:text]
+                - r.td do
+                  %a{href: result[:ontology][:link]}
+                    = result[:ontology][:text]
+                - r.td do
+                  .annotator-match-type
+                    = result[:match_type]
+                - r.td do
+                  .annotation-context{'data-from': result[:context][:from], 'data-to': result[:context][:to]}
+                - r.td do
+                  %a{href: result[:matched_class][:link]}
+                    = result[:matched_class][:text]
+                - r.td do
+                  %a{href: result[:matched_ontology][:link]}
+                    = result[:matched_ontology][:text]
