@@ -41,9 +41,9 @@ class AnnotatorController < ApplicationController
       @semantic_types = get_semantic_types 
       @results = []
       match_type_translation = {
-          mgrep: "direct",
-          mapping: "mapping",
-          closure: "ancestor"
+          mgrep: "Direct",
+          mapping: "Mapping",
+          closure: "Ancestor"
       }
       annotations.each do |annotation|
         if annotation.annotations.length.eql?(0)
@@ -57,10 +57,11 @@ class AnnotatorController < ApplicationController
           @results.push(row)
         else
           annotation.annotations.each do |a|
+            #binding.pry
             row = {
               class: annotation_class_info(annotation.annotatedClass),
               ontology: annotation_ontology_info(annotation.annotatedClass.links["ontology"]),
-              match_type: "Direct",
+              match_type: match_type_translation[a.matchType.capitalize.downcase] || 'Direct',
               matched_class: annotation_class_info(annotation.annotatedClass),
               matched_ontology: annotation_ontology_info(annotation.annotatedClass.links["ontology"]),
             }
