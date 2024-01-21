@@ -7,11 +7,7 @@ export default class extends Controller {
     hiddenCss: { type: String, default: 'd-none' },
     successDuration: { type: Number, default: 2000 }
   }
-
-  connect () {
-    console.log('Hello, Stimulus!', this.element)
-  }
-
+  
   copy () {
     const text = this.contentTarget.innerHTML || this.contentTarget.value
     navigator.clipboard.writeText(text).then(() => {

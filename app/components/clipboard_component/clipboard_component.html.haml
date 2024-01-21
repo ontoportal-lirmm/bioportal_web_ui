@@ -1,5 +1,5 @@
 %div.clipboard.d-flex.align-items-center{data:{controller: 'clipboard'}}
-  %div{data: {'clipboard-target': 'content'}}
+  %div{data: {'clipboard-target': 'content'}, class: @show_content ? '' : 'd-none'}
     = @message || content
   %div.ml-2
     %div.copy{data: {controller:'tooltip', action: 'click->clipboard#copy', 'clipboard-target': 'copy'}, title: 'Copy'}

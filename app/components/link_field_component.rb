@@ -4,11 +4,12 @@ class LinkFieldComponent < ViewComponent::Base
 
   include ApplicationHelper, Turbo::FramesHelper
 
-  def initialize(value:, raw: false, check_resolvability: false)
+  def initialize(value:, raw: false, check_resolvability: false, enable_copy: false)
     super
     @value = value
     @raw = raw
     @check_resolvability = check_resolvability
+    @enable_copy = enable_copy
   end
 
   def internal_link?
@@ -26,11 +27,24 @@ class LinkFieldComponent < ViewComponent::Base
       target = "_blank"
     end
 
-    if @check_resolvability
-      link_to(text, url, target: target) + content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;')
-    else
-      link_to(text, url, target: target)
-    end
+    tag = link_to(text, url, target: target)
 
+    tag = tag + copy_link_to_clipboard(url) if @enable_copy
+
+    tag = tag + resolvability_check_tag(url) if @check_resolvability
+    
+    tag
+  end
+
+  private
+
+  def resolvability_check_tag(url)
+    content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;')
+  end
+
+  def copy_link_to_clipboard(url)
+    content_tag(:span, style: 'display: inline-block;') do
+      render ClipboardComponent.new(message: url)
+    end
   end
 end
