@@ -1,5 +1,24 @@
 module ComponentsHelper
 
+  def resolvability_check_tag(url)
+    content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;')
+  end
+
+  def copy_link_to_clipboard(url, show_content: false)
+    content_tag(:span, style: 'display: inline-block;') do
+      render ClipboardComponent.new(message: url, show_content: show_content)
+    end
+  end
+
+  def link_to_with_actions(link_to_tag, url: nil, copy: true, check_resolvability: true)
+    tag = link_to_tag
+    url = link_to_tag if url.nil?
+    tag = tag + copy_link_to_clipboard(url) if copy
+
+    tag = tag + resolvability_check_tag(url) if check_resolvability
+    tag.html_safe
+  end
+
   def tree_component(root, selected, target_frame:, sub_tree: false, id: nil, auto_click: false, &child_data_generator)
     root.children.sort! { |a, b| (a.prefLabel || a.id).downcase <=> (b.prefLabel || b.id).downcase }
 
@@ -23,20 +42,17 @@ module ComponentsHelper
     end
   end
 
-
-
-
-  def chart_component(title: '', type: , labels: , datasets: , index_axis: 'x', show_legend: false)
-      data =  {
-        controller: 'load-chart',
-        'load-chart-type-value': type,
-        'load-chart-title-value': title,
-        'load-chart-labels-value': labels,
-        'load-chart-index-axis-value': index_axis,
-        'load-chart-datasets-value': datasets,
-        'load-chart-legend-value': show_legend,
-      }
-      content_tag(:canvas, nil, data: data)
+  def chart_component(title: '', type:, labels:, datasets:, index_axis: 'x', show_legend: false)
+    data = {
+      controller: 'load-chart',
+      'load-chart-type-value': type,
+      'load-chart-title-value': title,
+      'load-chart-labels-value': labels,
+      'load-chart-index-axis-value': index_axis,
+      'load-chart-datasets-value': datasets,
+      'load-chart-legend-value': show_legend,
+    }
+    content_tag(:canvas, nil, data: data)
   end
 
   def info_tooltip(text)
@@ -65,7 +81,6 @@ module ComponentsHelper
     end
 
   end
-
 
   def horizontal_list_container(values, &block)
     return if Array(values).empty?
@@ -122,7 +137,7 @@ module ComponentsHelper
   end
 
   def form_save_button
-    render Buttons::RegularButtonComponent.new(id:'save-button', value: "Save", variant: "primary", size: "slim", type: "submit") do |btn|
+    render Buttons::RegularButtonComponent.new(id: 'save-button', value: "Save", variant: "primary", size: "slim", type: "submit") do |btn|
       btn.icon_left do
         inline_svg_tag "check.svg"
       end
@@ -130,13 +145,12 @@ module ComponentsHelper
   end
 
   def form_cancel_button
-    render Buttons::RegularButtonComponent.new(id:'cancel-button', value: "Cancel", variant: "secondary", size: "slim") do |btn|
+    render Buttons::RegularButtonComponent.new(id: 'cancel-button', value: "Cancel", variant: "secondary", size: "slim") do |btn|
       btn.icon_left do
-         inline_svg_tag "x.svg", width: "20", height: "20"
+        inline_svg_tag "x.svg", width: "20", height: "20"
 
       end
     end
   end
-
 
 end

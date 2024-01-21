@@ -2,9 +2,9 @@
 
 class LinkFieldComponent < ViewComponent::Base
 
-  include ApplicationHelper, Turbo::FramesHelper
+  include ApplicationHelper, Turbo::FramesHelper, ComponentsHelper
 
-  def initialize(value:, raw: false, check_resolvability: false, enable_copy: false)
+  def initialize(value:, raw: false, check_resolvability: false, enable_copy: true)
     super
     @value = value
     @raw = raw
@@ -28,23 +28,7 @@ class LinkFieldComponent < ViewComponent::Base
     end
 
     tag = link_to(text, url, target: target)
-
-    tag = tag + copy_link_to_clipboard(url) if @enable_copy
-
-    tag = tag + resolvability_check_tag(url) if @check_resolvability
-    
-    tag
+    link_to_with_actions(tag, url: url, copy: @enable_copy, check_resolvability: @check_resolvability)
   end
 
-  private
-
-  def resolvability_check_tag(url)
-    content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;')
-  end
-
-  def copy_link_to_clipboard(url)
-    content_tag(:span, style: 'display: inline-block;') do
-      render ClipboardComponent.new(message: url)
-    end
-  end
 end

@@ -62,24 +62,30 @@
           - else
             = render Display::AlertComponent.new(type:'danger') do
               = text
-        %div.mt-2
-          = render TableComponent.new(stripped: true) do |t|
-            - t.add_row({th: 'Redirection path'})
-            - @results[:redirections].each_with_index  do |r, index|
-              - t.row do |row|
-                - row.td do
-                  = link_to r.to_s, r.to_s
-                  - if !index.eql?(@results[:redirections].length - 1)
-                    - color = 'text-warning bg-warning-light'
-                    - status = '302'
-                  - else
-                    - status = @results[:status]
-                    - color = status.eql?('200') ? '' : 'bg-danger-light text-danger'
+        %div.p-1
+          - count = 0
+          - @results[:redirections].each do |format, result|
+            - count += 1
+            - title = content_tag(:span, format, class: result[:result].eql?(2) ? 'text-primary' : 'text-danger')
+            = render DropdownContainerComponent.new(id: "format#{count}" , title: "#{title} redirection path".html_safe) do
+              = render TableComponent.new(stripped: true) do |t|
+                - result[:redirections].each_with_index do |redirection, index|
+                  - t.row do |row|
+                    - row.td do
+                      = link_to redirection.to_s, redirection.to_s
+                      - if !index.eql?(result[:redirections].length - 1)
+                        - color = 'text-warning bg-warning-light'
+                        - status = '302'
+                        - format_badge = nil
+                      - else
+                        - status = result[:status]
+                        - color = status.eql?('200') ? '' : 'bg-danger-light text-danger'
+                        - format_badge = render ChipButtonComponent.new(class: "mx-1", text: result[:allowed_format].first.blank? ? 'Format not specified': result[:allowed_format].first)
+                      = render ChipButtonComponent.new(class: "mx-1 #{color}", type: 'clickable', text: status)
+                      = format_badge
 
-                  - returned_format = !index.eql?(@results[:redirections].length - 1) ? nil : @results[:returned_formats]
-                  = render ChipButtonComponent.new(class: "mx-1 #{color}", type: 'clickable', text: status)
-                  - Array(returned_format).uniq.each do |format|
-                    = render ChipButtonComponent.new(class: "mx-1", text: format.blank? ? 'Format not specified': format)
+
+
 
 
 
