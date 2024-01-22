@@ -30,7 +30,8 @@ class AnnotatorController < ApplicationController
     end
     @annotator_ontologies = LinkedData::Client::Models::Ontology.all
     @text = params[:text]
-    
+    @ancestors_levels = ['None', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'All']
+    @include_score = ['None', 'Old', 'Cvalue', 'Cvalueh']
     if params[:text]
       text_to_annotate = params[:text].strip.gsub("\r\n", " ").gsub("\n", " ")
       @results_table_header = [

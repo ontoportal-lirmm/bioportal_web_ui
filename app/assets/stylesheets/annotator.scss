@@ -48,3 +48,21 @@
 .annotator-page-results .details{
   color: #888888;
 }
+.more-advanced-options{
+  margin-top: 20px;
+}
+.more-advanced-options .filters_line{
+  display: flex;
+  margin-top: 20px;
+}
+.more-advanced-options .filters_line div{
+  width: 100%;
+}
+
+.more-advanced-options .filters_line > :not(:first-child) {
+  margin-left: 20px;
+}
+.more-advanced-options .chips{
+  display: flex;
+  margin-top: 20px;
+}

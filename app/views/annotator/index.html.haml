@@ -36,7 +36,18 @@
                 Hide more advanced options
                 = inline_svg_tag 'icons/arrow-down.svg'
         .more-advanced-options.d-none{'data-reveal-component-target': 'item'}
-          Here we put more advanced options
+          .filters_line
+            = render Input::SelectComponent.new(label: 'Select UMLS semantic types', id: 'umls_semantic_types', name: 'umls_semantic_types', value: @semantic_types_for_select, multiple: true)
+            = render Input::SelectComponent.new(label: 'Select UMLS semantic groupes', id: 'umls_semantic_groups', name: 'umls_semantic_groups', value: @semantic_groups_for_select, multiple: true)
+            = render Input::SelectComponent.new(label: 'Include ancestors up to level', id: 'ancestors_level', name: 'ancestors_level', value: @ancestors_levels)
+          .filters_line
+            - include_score_helper = 'Score annotations following previous NCBO 2009 measure (old) or Score annotations following C-Value measure (cvalue) or Score annotations following C-Value measure with hierarchy expansion (cvalueh).'
+            = render Input::SelectComponent.new(label: 'Include score', id: 'include_score', name: 'include_score', value: @include_score, helper_text: include_score_helper)
+            = render Input::NumberComponent.new(label: 'Filter by score threshold', name: "score_threshold", value: 0, helper_text: 'Specify minimum score value for annotations.')
+            = render Input::NumberComponent.new(label: 'Filter confidence threshold', name: 'confidence_threshold', value: 0, helper_text: 'Specify the minimum position in the score distribution (between 1 and 100).')
+          .chips
+            = render(ChipsComponent.new(name: 'FastContext', label: 'FastContext'))
+            = render(ChipsComponent.new(name: 'Lemmatize', label: 'Lemmatize'))
         .recommender-page-button
           = render Buttons::RegularButtonComponent.new(id:'annotator', value: 'Get annotations', variant: "primary", type: 'submit')
     - unless @results.nil? || @results.empty?
