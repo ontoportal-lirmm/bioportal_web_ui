@@ -27,7 +27,7 @@ class LinkFieldComponent < ViewComponent::Base
       target = "_blank"
     end
 
-    tag = link_to(text, url, target: target)
+    tag = link_to(text, url, target: target, class: 'text-truncate', style: "max-width: 330px; display: inline-flex;")
     link_to_with_actions(tag, url: url, copy: @enable_copy, check_resolvability: @check_resolvability)
   end
 
