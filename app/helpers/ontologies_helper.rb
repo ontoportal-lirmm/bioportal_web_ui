@@ -263,12 +263,24 @@ module OntologiesHelper
 
   def submission_status_icons(status)
     if submission_status_ok?(status)
-      "success-icon.svg"
+      status_icons(ok: true)
     elsif submission_status_error?(status)
-      'error-icon.svg'
+      status_icons(error: true)
     elsif status == '(Archived)'
       'archive.svg'
     elsif submission_status_warning?(status)
+      status_icons(warning: true)
+    else
+      "info.svg"
+    end
+  end
+
+  def status_icons(ok: false, error: false, warning: false)
+    if ok
+      "success-icon.svg"
+    elsif error
+      'error-icon.svg'
+    elsif warning
       "alert-triangle.svg"
     else
       "info.svg"

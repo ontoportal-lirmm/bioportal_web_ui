@@ -24,6 +24,7 @@ module ApplicationHelper
                        :cclicense => "http://creativecommons.org/licenses/"}
 
 
+
   def ontologies_analytics
     data = LinkedData::Client::Analytics.last_month.onts
     data.map{|x| [x[:ont].to_s, x[:views]]}.to_h
@@ -589,14 +590,14 @@ module ApplicationHelper
   def show_advanced_options_button(text: nil, init: nil)
     content_tag(:div, class: "#{init ? 'd-none' : ''} advanced-options-button", 'data-action': 'click->reveal-component#show', 'data-reveal-component-target': 'showButton') do
       inline_svg_tag('icons/settings.svg') +
-      content_tag(:div, text, class: 'text')
+        content_tag(:div, text, class: 'text')
     end
   end
 
   def hide_advanced_options_button(text: nil, init: nil)
     content_tag(:div, class: "#{init ? '' : 'd-none'} advanced-options-button", 'data-action': 'click->reveal-component#hide', 'data-reveal-component-target': 'hideButton') do
       inline_svg_tag('icons/hide.svg') +
-      content_tag(:div, text, class: 'text')
+        content_tag(:div, text, class: 'text')
     end
   end
   
