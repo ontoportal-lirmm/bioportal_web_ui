@@ -63,11 +63,11 @@
             .title 
               = t('recommender.ontologies_configuration')
             .inputs-container
-              .maxsets.input.d-none{'data-recommender-target': 'maxset'}
-                = render Input::NumberComponent.new(label: t('recommender.max_ont_set'), name: "max_elements_set", value: params[:max_elements_set] || 3)
               .ontologies.input
                 - get_ontologies_data
                 = render Input::SelectComponent.new(label: t('recommender.select_ontologies'), id: 'ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected: params[:ontologies_list])
+              .maxsets.input.d-none{'data-recommender-target': 'maxset'}
+                = render Input::NumberComponent.new(label: t('recommender.max_ont_set'), name: "max_elements_set", value: params[:max_elements_set] || 3)
               .input{'data-recommender-target': 'empty'}
 
         .recommender-page-button#get_recommendations_button{class: is_input ?  "" : "d-none", 'data-recommender-target': 'button'}
