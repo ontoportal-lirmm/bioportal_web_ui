@@ -1,5 +1,13 @@
 module ComponentsHelper
 
+  def check_resolvability_container(url)
+    turbo_frame_tag("#{escape(url)}_container", src: "/check_url_resolvability?url=#{escape(url)}", loading: "lazy", class: 'd-inline-block') do
+      content_tag(:div, class: 'p-1', data: { controller: 'tooltip' }, title: 'checking resolvability...') do
+        render LoaderComponent.new(small: true)
+      end
+    end
+  end
+
   def resolvability_check_tag(url)
     content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;')
   end
