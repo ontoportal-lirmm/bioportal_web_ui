@@ -109,6 +109,8 @@ GEM
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
     brakeman (5.4.1)
+    bugsnag (6.26.3)
+      concurrent-ruby (~> 1.0)
     builder (3.2.4)
     capistrano (3.18.0)
       airbrussh (>= 1.0.0)
@@ -308,6 +310,8 @@ GEM
     newrelic_rpm (9.6.0)
       base64
     nio4r (2.7.0)
+    nokogiri (1.15.5-x86_64-darwin)
+      racc (~> 1.4)
     nokogiri (1.15.5-x86_64-linux)
       racc (~> 1.4)
     oauth2 (1.4.11)
@@ -545,6 +549,7 @@ GEM
     zeitwerk (2.6.12)
 
 PLATFORMS
+  x86_64-darwin-23
   x86_64-linux
 
 DEPENDENCIES
@@ -552,6 +557,7 @@ DEPENDENCIES
   bootsnap
   bootstrap (~> 4.2.0)
   brakeman
+  bugsnag (~> 6.26)
   capistrano (~> 3.11)
   capistrano-bundler
   capistrano-locally
