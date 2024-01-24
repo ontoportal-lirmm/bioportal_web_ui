@@ -43,10 +43,10 @@
                 .ontology-sets-choice
                   = render Input::RadioChipComponent.new(label: t('recommender.ontology_sets'), name: 'output_type', value: '2', checked: !check_output)
 
-            = show_advanced_options_button(text: t('show_advanced_options'), init: @advanced_options_open)
-            = hide_advanced_options_button(text: t('hide_advanced_options'), init: @advanced_options_open)
+            = show_advanced_options_button(text: t('show_advanced_options'), init: @advanced_options_open || @not_valid_max_num_set)
+            = hide_advanced_options_button(text: t('hide_advanced_options'), init: @advanced_options_open || @not_valid_max_num_set)
               
-        .recommender-advanced-options{'data-reveal-component-target': 'item', class: "#{@advanced_options_open ? '' : 'd-none'}"}
+        .recommender-advanced-options{'data-reveal-component-target': 'item', class: "#{@advanced_options_open || @not_valid_max_num_set ? '' : 'd-none'}"}
           .weights-configuration
             .title 
               = t('recommender.weights_configuration')
@@ -68,7 +68,7 @@
                 - get_ontologies_data
                 = render Input::SelectComponent.new(label: t('recommender.select_ontologies'), id: 'ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected: params[:ontologies_list])
               .maxsets.input.d-none{'data-recommender-target': 'maxset'}
-                = render Input::NumberComponent.new(label: t('recommender.max_ont_set'), name: "max_elements_set", value: params[:max_elements_set] || 3)
+                = render Input::NumberComponent.new(label: t('recommender.max_ont_set'), name: "max_elements_set", value: params[:max_elements_set] || 3, min: '2', max: '4', step: '1', error_message: "#{@not_valid_max_num_set ? 'Valid values are: 2, 3, 4' : ''}")
               .input{'data-recommender-target': 'empty'}
 
         .recommender-page-button#get_recommendations_button{class: is_input ?  "" : "d-none", 'data-recommender-target': 'button'}

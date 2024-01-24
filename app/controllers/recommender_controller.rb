@@ -11,8 +11,11 @@ class RecommenderController < ApplicationController
                               t('recommender.results_table.detail_score'), t('recommender.results_table.specialization_score'),
                               t('recommender.results_table.annotations')
                             ]
-    @advanced_options_open = false              
-    if params[:input] != nil   
+    @advanced_options_open = false 
+    if params[:max_elements_set]
+      @not_valid_max_num_set = (params[:max_elements_set] < '2') || (params[:max_elements_set] > '4')
+    end
+    unless params[:input].nil?  ||  params[:input].empty? || @not_valid_max_num_set
       params[:ontologies] = params[:ontologies_list]&.join(',') || ''
       recommendations = LinkedData::Client::HTTP.post(RECOMMENDER_URI, params)
       @advanced_options_open = !recommender_params_empty?
