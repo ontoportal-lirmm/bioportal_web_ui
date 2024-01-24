@@ -178,7 +178,14 @@
     font-weight: 600;
     text-decoration: underline !important;
 }
-.cite-us-button{
-    display: inline-block;
+
+.recommender-bottom-actions{
     margin-top: 20px;
+    display: flex;
+}
+.recommender-bottom-actions div{
+    display: inline-block;
+}
+.recommender-bottom-actions div + div{
+    margin-left: 20px;
 }
