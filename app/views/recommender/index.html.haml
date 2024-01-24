@@ -14,7 +14,7 @@
           %div
             - is_input = @results.nil? || @results.empty?
             .recommender-page-text-area{class: is_input ?  "" : "d-none", 'data-recommender-target': 'input', 'data-controller': 'sample-text'}
-              %textarea#recommender-text-area{rows: "4" , placeholder: t('recommender.hint'), name: "input", oninput: 'handleInput(event)',  maxlength: "9678", 'data-sample-text-target': "input"}
+              %textarea#recommender-text-area{rows: "4" , placeholder: t('recommender.hint'), name: "input", 'data-action': "input->recommender#handleInput",  maxlength: "9678", 'data-sample-text-target': "input"}
                 = params[:input]
               = insert_sample_text_button(t('recommender.insert_sample_text'))
 
@@ -51,14 +51,15 @@
             .title 
               = t('recommender.weights_configuration')
             .inputs-container
+              -#binding.pry
               .ninput
-                = render Input::NumberComponent.new(label: t('recommender.converage'), name: "wc", value: params[:wc] || 0.55, min: '0', max: '1', step: '0.01')
+                = render Input::RangeSliderComponent.new(label: t('recommender.converage'), name: "wc", value: params[:wc] || 0.55, min: '0', max: '1', step: '0.01')
               .ninput
-                = render Input::NumberComponent.new(label: t('recommender.acceptance'), name: "wa", value: params[:wa] || 0.15, min: '0', max: '1', step: '0.01')
+                = render Input::RangeSliderComponent.new(label: t('recommender.acceptance'), name: "wa", value: params[:wa] || 0.15, min: '0', max: '1', step: '0.01')
               .ninput
-                = render Input::NumberComponent.new(label: t('recommender.knowledge_detail'), name: "wd", value: params[:wd] || 0.15, min: '0', max: '1', step: '0.01')
+                = render Input::RangeSliderComponent.new(label: t('recommender.knowledge_detail'), name: "wd", value: params[:wd] || 0.15, min: '0', max: '1', step: '0.01')
               .ninput
-                = render Input::NumberComponent.new(label: t('recommender.specialization'), name: "ws", value: params[:ws] || 0.15, min: '0', max: '1', step: '0.01')
+                = render Input::RangeSliderComponent.new(label: t('recommender.specialization'), name: "ws", value: params[:ws] || 0.15, min: '0', max: '1', step: '0.01')
           .ontologies-configuration
             .title 
               = t('recommender.ontologies_configuration')
@@ -114,17 +115,5 @@
           = render Buttons::RegularButtonComponent.new(id:'regular-button', value: "Cite", variant: "secondary", href: "https://doi.org/10.1186/s13326-017-0128-y", size: "slim", target: '_blank', state: "regular") do |btn|
             - btn.icon_left do
               = inline_svg_tag "icons/cite.svg"
-
-:javascript
-  function handleInput(event) {
-    var selectedInputChoice = document.querySelector('input[name="input_type"]:checked').value;
-    if (selectedInputChoice === "2"){
-      const textarea = document.getElementById('recommender-text-area');
-      const value = textarea.value;
-      const lastCharIsSpace = event.data === ' ';
-      const formattedValue = lastCharIsSpace ? value.trim() + ', ' : value;
-      textarea.value = formattedValue;
-    }
-  }
 
   
