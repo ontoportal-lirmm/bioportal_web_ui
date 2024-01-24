@@ -32,8 +32,7 @@ class LoginController < ApplicationController
           redirect = CGI.unescape(session[:redirect])
         end
 
-
-        redirect_to redirect
+        redirect_to redirect, allow_other_host: true
       else
         @errors << "Invalid account name/password combination"
         render :action => 'index'
