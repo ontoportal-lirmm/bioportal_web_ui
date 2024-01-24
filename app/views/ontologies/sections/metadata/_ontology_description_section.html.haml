@@ -15,7 +15,7 @@
               .creation_text
                 = render TextAreaFieldComponent.new(value: @submission_latest&.description)
 
-        - unless @submission_latest&.logo.nil?
+        - unless @submission_latest&.logo.nil? || !link?(@submission_latest&.logo)
           = image_tag(@submission_latest&.logo, class: 'description_img', width: '145px')
 
 
