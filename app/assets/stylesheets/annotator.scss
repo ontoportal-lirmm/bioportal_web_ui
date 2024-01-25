@@ -66,3 +66,24 @@
   display: flex;
   margin-top: 20px;
 }
+.annotation-parent{
+  display: flex;
+}
+.annotation-parent div,a{
+  margin-right: 11px;
+}
+.annotation-parent .text{
+  margin-right: 8px;
+}
+
+.annotation-parent a{
+  text-decoration: underline !important;
+}
+
+.annotation-parent .level{
+  font-weight: 600;
+  color: var(--primary-color);
+}
+.annotation-parent .gray{
+  color: #888888;
+}

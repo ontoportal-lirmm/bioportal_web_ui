@@ -35,7 +35,7 @@ class AnnotatorController < ApplicationController
     if params[:text]
       text_to_annotate = params[:text].strip.gsub("\r\n", " ").gsub("\n", " ")
       @results_table_header = [
-        "Class", "Ontology", "Type", "Context", "Matched class", "Matched ontology"
+        "Class", "Ontology", "Context"
       ]
       annotations = LinkedData::Client::HTTP.get(ANNOTATOR_URI, params)
       @ontologies = get_simplified_ontologies_hash
@@ -51,10 +51,8 @@ class AnnotatorController < ApplicationController
           row = {
             class: annotation_class_info(annotation.annotatedClass),
             ontology: annotation_ontology_info(annotation.annotatedClass.links),
-            match_type: "",
             context: "",
-            matched_class: annotation_class_info(annotation.annotatedClass),
-            matched_ontology: annotation_ontology_info(annotation.annotatedClass.links["ontology"]),
+            type: 'direct'
           }
           @results.push(row)
         else
@@ -62,13 +60,20 @@ class AnnotatorController < ApplicationController
             row = {
               class: annotation_class_info(annotation.annotatedClass),
               ontology: annotation_ontology_info(annotation.annotatedClass.links["ontology"]),
-              match_type: match_type_translation[a.matchType.capitalize.downcase] || 'Direct',
               context: a,
-              matched_class: annotation_class_info(annotation.annotatedClass),
-              matched_ontology: annotation_ontology_info(annotation.annotatedClass.links["ontology"]),
+              type: 'direct'
             }
             @results.push(row)
           end
+        end
+        annotation.hierarchy.each do |parent|
+            row = {
+              class: annotation_class_info(parent.annotatedClass),
+              ontology: annotation_ontology_info(parent.annotatedClass.links["ontology"]),
+              context: {child: annotation_class_info(annotation.annotatedClass), level: parent.distance},
+              type: 'parent'
+            }
+            @results.push(row)
         end
       end
     end
@@ -259,14 +264,19 @@ class AnnotatorController < ApplicationController
   def annotation_class_info(cls)
     return {
       text: cls.prefLabel,
-      link: cls.links["self"]
+      link: url_to_endpoint(cls.links["self"])
     }
   end
   def annotation_ontology_info(ontology_url)
     return {
       text: @ontologies[ontology_url][:name],
-      link: ontology_url
+      link: url_to_endpoint(ontology_url)
     }
+  end
+  def url_to_endpoint(url)
+    uri = URI.parse(url)
+    endpoint = uri.path.sub(/^\//, '')
+    endpoint
   end
 
 end
