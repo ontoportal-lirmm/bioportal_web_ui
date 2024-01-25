@@ -45,8 +45,8 @@ class OntologiesMetadataCuratorController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
     @submission = @ontology.explore.submissions({ display: "#{attribute},submissionId" }, submission_id)
     id = attribute_input_frame_id(acronym, submission_id, attribute)
-    render_turbo_stream replace(id, partial: 'ontologies_metadata_curator/attribute_inline', locals: { id: id, attribute: attribute,
-                                                                                                       submission: @submission, ontology: @ontology })
+    render_turbo_stream replace(id, partial: 'ontologies_metadata_curator/attribute', locals: { id: id, attribute: attribute,
+                                                                                                submission: @submission, ontology: @ontology })
   end
 
   def edit
@@ -90,7 +90,7 @@ class OntologiesMetadataCuratorController < ApplicationController
           streams = [alert_success { 'Submissions were successfully updated' }]
           @submissions.each do |submission|
             submission.ontology = OpenStruct.new({acronym: submission.ontology})
-            streams << replace("#{ontology_submission_id_label(submission.ontology.acronym, submission.submissionId)}_row", partial: 'ontologies_metadata_curator/metadata_table_row', locals: {submission: submission, attributes: @all_metadata })
+            streams << replace("#{ontology_submission_id_label(submission.ontology.acronym, submission.submissionId)}_row", partial: 'ontologies_metadata_curator/submission', locals: { submission: submission, attributes: @all_metadata })
           end
           render_turbo_stream(*streams)
         end

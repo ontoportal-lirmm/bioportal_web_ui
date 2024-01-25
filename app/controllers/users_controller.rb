@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
-  
-  before_action :unescape_id, only: [:edit, :show, :update]
+
   before_action :verify_owner, only: [:edit, :show, :subscribe, :un_subscribe]
   before_action :authorize_admin, only: [:index,:subscribe, :un_subscribe]
   layout :determine_layout
@@ -52,8 +51,8 @@ class UsersController < ApplicationController
 
   # GET /users/1;edit
   def edit
-    @user = LinkedData::Client::Models::User.find(params[:id])
-    @user ||= LinkedData::Client::Models::User.find_by_username(params[:id]).first
+    @user = LinkedData::Client::Models::User.find(helpers.escape(params[:id]), include: 'all')
+    @user ||= LinkedData::Client::Models::User.find_by_username(helpers.escape(params[:id]), include: 'all').first
 
     if (params[:password].eql?("true"))
       @user.validate_password = true
@@ -90,8 +89,8 @@ class UsersController < ApplicationController
   # PUT /users/1
   # PUT /users/1.xml
   def update
-    @user = LinkedData::Client::Models::User.find(params[:id])
-    @user = LinkedData::Client::Models::User.find_by_username(params[:id]).first if @user.nil?
+    @user = LinkedData::Client::Models::User.find(helpers.escape(params[:id]), include: 'all')
+    @user = LinkedData::Client::Models::User.find_by_username(helpers.escape(params[:id]), include: 'all').first if @user.nil?
     @errors = validate_update(user_params)
     if @errors.size < 1
 
@@ -153,8 +152,8 @@ class UsersController < ApplicationController
   end
 
   def custom_ontologies
-    @user = LinkedData::Client::Models::User.find(params[:id])
-    @user = LinkedData::Client::Models::User.find_by_username(params[:id]).first if @user.nil?
+    @user = LinkedData::Client::Models::User.find(params[:id], include: 'all')
+    @user = LinkedData::Client::Models::User.find_by_username(params[:id], include: 'all').first if @user.nil?
 
     custom_ontologies = params[:ontology] ? params[:ontology][:ontologyId] : []
     custom_ontologies.reject!(&:blank?)
@@ -182,7 +181,7 @@ class UsersController < ApplicationController
   end
 
   def un_subscribe
-    @email = params[:email] 
+    @email = params[:email]
     deliver "unsubscribe", SubscribeMailer.unregister_for_announce_list(@email)
   end
 
@@ -207,10 +206,10 @@ class UsersController < ApplicationController
                                      :password_confirmation, :register_mail_list, :admin)
     p.to_h
   end
-  
+
   def extract_id_from_url(url, pattern)
     if url && url.include?(pattern)
-      url.split('/').last 
+      url.split('/').last
     else
       url
     end

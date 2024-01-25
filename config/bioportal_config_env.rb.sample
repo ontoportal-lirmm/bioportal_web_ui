@@ -38,6 +38,8 @@ $ANNOUNCE_LIST ||= 'users-list@test'
 # Where "ncbo" is the namespace used as key in the interportal_hash
 $INTERPORTAL_HASH = {}
 $NOT_DOWNLOADABLE = {}
+# Bugsnag API key for monitoring exception
+#$BUGSNAG_API_KEY=
 # OAuth2 authentication
 $OMNIAUTH_PROVIDERS = {
   github: {

@@ -6,5 +6,5 @@
     = hidden_field object_name(acronym, submission_id), :ontology, value: acronym
     = hidden_field object_name(acronym, submission_id), :id, value: submission_id
     = hidden_field_tag :attribute, attribute
-    = render partial: "ontologies_metadata_curator/attribute_inline", locals: { id: id, attribute: attribute,
+    = render partial: "ontologies_metadata_curator/attribute", locals: { id: id, attribute: attribute,
                     submission: submission , ontology: ontology}

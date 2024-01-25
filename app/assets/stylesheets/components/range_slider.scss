@@ -1,0 +1,59 @@
+.range-slider{
+    position: relative;
+    width: 100%;
+
+}
+.range-slider input{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #dbdbdb;
+    width: 100%;
+    position: absolute;
+    cursor: pointer;
+    height: 7px;
+    top: 4px;
+    border-radius: 5px;
+}
+.range-slider input::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    position: relative;
+    z-index: 3;
+}
+
+.range-slider .selector{
+    position: absolute;
+    z-index: 2;
+    left: 52%;
+}
+.range-slider .selector .select-button{
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    position: absolute;
+    background-color: var(--primary-color);
+}
+.range-slider .select-range{
+    width: 53%;
+    position: absolute;
+    z-index: 1;
+    background-color: gray;
+    border-radius: 3px 0 0 3px;
+    height: 7px;
+    top: 4px;
+    background-color: var(--primary-color);
+}
+
+.range-slider-container .selection{
+    background: var(--primary-color);
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 5px;
+    color: white;
+    padding: 1px 8px;
+}
+
+

@@ -24,11 +24,10 @@ Rails.application.routes.draw do
 
   resources :users, path: :accounts, constraints: { id: /[\d\w\.\-\%\+ ]+/ }
 
-
   get '/users/subscribe/:username', to: 'users#subscribe'
   get '/users/un-subscribe/:email', to: 'users#un_subscribe'
 
-  get '/mappings/loader' , to: 'mappings#loader'
+  get '/mappings/loader', to: 'mappings#loader'
   post '/mappings/loader', to: 'mappings#loader_process'
   get 'mappings/count/:id', to: 'mappings#count', constraints: { id: /.+/ }
   get 'mappings/show_mappings', to: 'mappings#show_mappings'
@@ -43,7 +42,7 @@ Rails.application.routes.draw do
 
   get 'ontologies/:ontology_id/concepts', to: 'concepts#show_concept'
   resources :ontologies do
-    resources :submissions do 
+    resources :submissions do
       get 'edit_properties'
     end
 
@@ -99,7 +98,7 @@ Rails.application.routes.draw do
     get '/:ontology/submissions/:submission_id/attributes/:attribute', to: 'ontologies_metadata_curator#show_metadata_value'
     get '/:ontology/submissions/:submission_id', to: 'ontologies_metadata_curator#show_metadata_by_ontology'
   end
-    
+
   get '' => 'home#index'
 
   match 'sparql_proxy', to: 'admin#sparql_endpoint', via: [:get, :post]
@@ -122,7 +121,7 @@ Rails.application.routes.draw do
   # Ontologies
   get '/ontologies/view/edit/:id' => 'ontologies#edit_view', :constraints => { id: /[^\/?]+/ }
   get '/ontologies/view/new/:id' => 'ontologies#new_view'
-  
+
   get '/ontologies/virtual/:ontology' => 'ontologies#virtual', :as => :ontology_virtual
   get '/ontologies/success/:id' => 'ontologies#submit_success'
   match '/ontologies/:acronym' => 'ontologies#update', via: [:get, :post]
@@ -133,10 +132,9 @@ Rails.application.routes.draw do
   get '/ontologies/:acronym/classes/:purl_conceptid', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
   get '/ontologies/:acronym/: f', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
   match '/ontologies/:acronym/submissions/:id/edit_metadata' => 'submissions#edit_metadata', via: [:get, :post]
-  get '/ontologies_filter', to:  'ontologies#ontologies_filter'
+  get '/ontologies_filter', to: 'ontologies#ontologies_filter'
 
   get '/ontologies/:acronym/properties/show', to: 'properties#show'
-
 
   # Notes
   get 'ontologies/:ontology/notes/:noteid', to: 'notes#virtual_show', as: :note_virtual, noteid: /.+/
@@ -171,8 +169,8 @@ Rails.application.routes.draw do
   get '/ajax/fair_score/json' => 'fair_score#details_json'
   get '/ajax/:ontology/instances' => 'instances#index_by_ontology'
   get '/ajax/:ontology/classes/:conceptid/instances' => 'instances#index_by_class', :constraints => { conceptid: /[^\/?]+/ }
-  get '/ajax/ontologies' , to:"ontologies#ajax_ontologies"
-  get '/ajax/agents' , to:"agents#ajax_agents"
+  get '/ajax/ontologies', to: "ontologies#ajax_ontologies"
+  get '/ajax/agents', to: "agents#ajax_agents"
   get '/ajax/images/show' => 'application#show_image_modal'
   # User
   get '/logout' => 'login#destroy', :as => :logout
@@ -180,7 +178,7 @@ Rails.application.routes.draw do
   get '/lost_pass_success' => 'login#lost_password_success'
   get '/reset_password' => 'login#reset_password'
   post '/accounts/:id/custom_ontologies' => 'users#custom_ontologies', :as => :custom_ontologies
-  get '/login_as/:login_as' => 'login#login_as' , constraints: { login_as:  /[\d\w\.\-\%\+ ]+/ }
+  get '/login_as/:login_as' => 'login#login_as', constraints: { login_as: /[\d\w\.\-\%\+ ]+/ }
   post '/login/send_pass', to: 'login#send_pass'
 
   # History
@@ -191,6 +189,10 @@ Rails.application.routes.draw do
 
   # Search
   get 'search', to: 'search#index'
+
+  get 'check_resolvability' => 'check_resolvability#index'
+  get 'check_url_resolvability' => 'check_resolvability#check_resolvability'
+
   ###########################################################################################################
   # Install the default route as the lowest priority.
   get '/:controller(/:action(/:id))'
