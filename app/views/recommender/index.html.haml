@@ -14,7 +14,7 @@
           %div
             - is_input = @results.nil? || @results.empty?
             .recommender-page-text-area{class: is_input ?  "" : "d-none", 'data-recommender-target': 'input', 'data-controller': 'sample-text'}
-              %textarea#recommender-text-area{rows: "4" , placeholder: t('recommender.hint'), name: "input", oninput: 'handleInput(event)',  maxlength: "500", 'data-sample-text-target': "input"}
+              %textarea#recommender-text-area{rows: "4" , placeholder: t('recommender.hint'), name: "input", 'data-action': "input->recommender#handleInput",  maxlength: "9678", 'data-sample-text-target': "input"}
                 = params[:input]
               = insert_sample_text_button(t('recommender.insert_sample_text'))
 
@@ -43,31 +43,32 @@
                 .ontology-sets-choice
                   = render Input::RadioChipComponent.new(label: t('recommender.ontology_sets'), name: 'output_type', value: '2', checked: !check_output)
 
-            = show_advanced_options_button(text: t('show_advanced_options'), init: @advanced_options_open)
-            = hide_advanced_options_button(text: t('hide_advanced_options'), init: @advanced_options_open)
+            = show_advanced_options_button(text: t('show_advanced_options'), init: @advanced_options_open || @not_valid_max_num_set)
+            = hide_advanced_options_button(text: t('hide_advanced_options'), init: @advanced_options_open || @not_valid_max_num_set)
               
-        .recommender-advanced-options{'data-reveal-component-target': 'item', class: "#{@advanced_options_open ? '' : 'd-none'}"}
+        .recommender-advanced-options{'data-reveal-component-target': 'item', class: "#{@advanced_options_open || @not_valid_max_num_set ? '' : 'd-none'}"}
           .weights-configuration
             .title 
               = t('recommender.weights_configuration')
             .inputs-container
+              -#binding.pry
               .ninput
-                = render Input::NumberComponent.new(label: t('recommender.converage'), name: "wc", value: params[:wc] || 0.55, min: '0', max: '1', step: '0.01')
+                = render Input::RangeSliderComponent.new(label: t('recommender.converage'), name: "wc", value: params[:wc] || 0.55, min: '0', max: '1', step: '0.01')
               .ninput
-                = render Input::NumberComponent.new(label: t('recommender.acceptance'), name: "wa", value: params[:wa] || 0.15, min: '0', max: '1', step: '0.01')
+                = render Input::RangeSliderComponent.new(label: t('recommender.acceptance'), name: "wa", value: params[:wa] || 0.15, min: '0', max: '1', step: '0.01')
               .ninput
-                = render Input::NumberComponent.new(label: t('recommender.knowledge_detail'), name: "wd", value: params[:wd] || 0.15, min: '0', max: '1', step: '0.01')
+                = render Input::RangeSliderComponent.new(label: t('recommender.knowledge_detail'), name: "wd", value: params[:wd] || 0.15, min: '0', max: '1', step: '0.01')
               .ninput
-                = render Input::NumberComponent.new(label: t('recommender.specialization'), name: "ws", value: params[:ws] || 0.15, min: '0', max: '1', step: '0.01')
+                = render Input::RangeSliderComponent.new(label: t('recommender.specialization'), name: "ws", value: params[:ws] || 0.15, min: '0', max: '1', step: '0.01')
           .ontologies-configuration
             .title 
               = t('recommender.ontologies_configuration')
             .inputs-container
-              .maxsets.input.d-none{'data-recommender-target': 'maxset'}
-                = render Input::NumberComponent.new(label: t('recommender.max_ont_set'), name: "max_elements_set", value: params[:max_elements_set] || 3)
               .ontologies.input
                 - get_ontologies_data
                 = render Input::SelectComponent.new(label: t('recommender.select_ontologies'), id: 'ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected: params[:ontologies_list])
+              .maxsets.input.d-none{'data-recommender-target': 'maxset'}
+                = render Input::NumberComponent.new(label: t('recommender.max_ont_set'), name: "max_elements_set", value: params[:max_elements_set] || 3, min: '2', max: '4', step: '1', error_message: "#{@not_valid_max_num_set ? 'Valid values are: 2, 3, 4' : ''}")
               .input{'data-recommender-target': 'empty'}
 
         .recommender-page-button#get_recommendations_button{class: is_input ?  "" : "d-none", 'data-recommender-target': 'button'}
@@ -109,22 +110,18 @@
                 - r.td do
                   .recommender-result-highlighted{'data-action': 'change->recommender#handleHighlightedChange'}
                     = render Input::RadioChipComponent.new(label: result[:annotations].length.to_s+' annotations', name: 'highlighted_recommendation', value: result[:annotations], checked: result[:highlighted])
-
-        .cite-us-button
-          = render Buttons::RegularButtonComponent.new(id:'regular-button', value: "Cite", variant: "secondary", href: "https://doi.org/10.1186/s13326-017-0128-y", size: "slim", target: '_blank', state: "regular") do |btn|
-            - btn.icon_left do
-              = inline_svg_tag "icons/cite.svg"
-
-:javascript
-  function handleInput(event) {
-    var selectedInputChoice = document.querySelector('input[name="input_type"]:checked').value;
-    if (selectedInputChoice === "2"){
-      const textarea = document.getElementById('recommender-text-area');
-      const value = textarea.value;
-      const lastCharIsSpace = event.data === ' ';
-      const formattedValue = lastCharIsSpace ? value.trim() + ', ' : value;
-      textarea.value = formattedValue;
-    }
-  }
+        .recommender-bottom-actions
+          .json-button
+            = render Buttons::RegularButtonComponent.new(id:'recommender_cite_json', value: "JSON", variant: "secondary", href: @json_link, size: "slim", target: '_blank', state: "regular") do |btn|
+              - btn.icon_left do
+                = inline_svg_tag "json.svg"
+          .cite-us-button
+            = render Buttons::RegularButtonComponent.new(id:'recommender_cite_us', value: "Cite", variant: "secondary", href: "https://doi.org/10.1186/s13326-017-0128-y", size: "slim", target: '_blank', state: "regular") do |btn|
+              - btn.icon_left do
+                = inline_svg_tag "icons/cite.svg"
+          .go-to-annotator
+            = render Buttons::RegularButtonComponent.new(id:'recommender_go_annotator', value: "Get results from annotator", variant: "secondary", href: "/annotator?text=#{params[:input]}&ontologies=#{params[:ontologies]}", size: "slim", target: '_blank', state: "regular") do |btn|
+              - btn.icon_right do
+                = inline_svg_tag "arrow-right-outlined.svg"
 
   

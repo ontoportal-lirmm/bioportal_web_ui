@@ -43,6 +43,17 @@ export default class extends Controller {
     recommandations_area.innerHTML = words.join(' ');
   }
 
+  handleInput(event){
+    var selectedInputChoice = document.querySelector('input[name="input_type"]:checked').value;
+    if (selectedInputChoice === "2"){
+      const textarea = event.currentTarget
+      const value = textarea.value;
+      const lastCharIsSpace = event.data === ' ';
+      const formattedValue = lastCharIsSpace ? value.trim() + ', ' : value;
+      textarea.value = formattedValue;
+    }
+  }
+
   #toggle(element){
     element.classList.toggle('d-none')
   }

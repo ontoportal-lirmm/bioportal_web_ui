@@ -23,6 +23,7 @@ import Progress_pages_component_controller
 import Reveal_component_controller from '../../components/layout/reveal_component/reveal_component_controller'
 import Table_component_controller from '../../components/table_component/table_component_controller'
 import clipboard_component_controller from '../../components/clipboard_component/clipboard_component_controller'
+import range_slider_component_controller from '../../components/input/range_slider_component/range_slider_component_controller'
 
 application.register('turbo-modal', TurboModalController)
 application.register('file-input', FileInputLoaderController)
@@ -38,3 +39,4 @@ application.register('progress-pages', Progress_pages_component_controller)
 application.register('reveal-component', Reveal_component_controller)
 application.register('table-component', Table_component_controller)
 application.register('clipboard', clipboard_component_controller)
+application.register('range-slider', range_slider_component_controller)
