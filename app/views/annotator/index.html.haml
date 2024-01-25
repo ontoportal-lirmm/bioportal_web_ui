@@ -42,7 +42,7 @@
             = render Input::SelectComponent.new(label: 'Include ancestors up to level', id: 'ancestors_level', name: 'class_hierarchy_max_level', value: @ancestors_levels, selected: params[:class_hierarchy_max_level])
           .filters_line
             - include_score_helper = 'Score annotations following previous NCBO 2009 measure (old) or Score annotations following C-Value measure (cvalue) or Score annotations following C-Value measure with hierarchy expansion (cvalueh).'
-            = render Input::SelectComponent.new(label: 'Include score', id: 'include_score', name: 'include_score', value: @include_score, helper_text: include_score_helper)
+            = render Input::SelectComponent.new(label: 'Include score', id: 'include_score', name: 'score', value: @include_score, helper_text: include_score_helper)
             = render Input::NumberComponent.new(label: 'Filter by score threshold', name: "score_threshold", value: 0, helper_text: 'Specify minimum score value for annotations.')
             = render Input::NumberComponent.new(label: 'Filter confidence threshold', name: 'confidence_threshold', value: 0, helper_text: 'Specify the minimum position in the score distribution (between 1 and 100).')
           .chips
@@ -58,7 +58,7 @@
           .details
             = "Total results #{@results.length} (direct 17 / ancestor 0 / mapping 0)"
         .recommender-table-container
-          = render TableComponent.new(id: 'annotator-table', borderless: true, layout_fixed: true, outline: true, sort: true, no_init_sort: true) do |t|
+          = render TableComponent.new(id: 'annotator-table', borderless: true, layout_fixed: true, outline: true, sort: true, no_init_sort: true, auto_layout: true) do |t|
             - t.header do |h|
               - @results_table_header.each do |header|
                 - h.th do
@@ -66,8 +66,9 @@
             - @results.each do |result|
               - t.row do |r|
                 - r.td do
-                  %a{href: result[:class][:link]}
-                    = result[:class][:text]
+                  .class
+                    %a{href: result[:class][:link]}
+                      = result[:class][:text]
                 - r.td do
                   %a{href: result[:ontology][:link]}
                     = result[:ontology][:text]
@@ -86,3 +87,6 @@
                         Level:
                       .level
                         = result[:context][:level]
+                - if !params[:score].nil? && !params[:score].eql?('none')
+                  - r.td do
+                    = result[:score]                

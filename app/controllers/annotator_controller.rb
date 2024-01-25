@@ -31,12 +31,19 @@ class AnnotatorController < ApplicationController
     @annotator_ontologies = LinkedData::Client::Models::Ontology.all
     @text = params[:text]
     @ancestors_levels = ['None', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'All']
-    @include_score = ['None', 'Old', 'Cvalue', 'Cvalueh']
+    @include_score = ['none', 'old', 'cvalue', 'cvalueh']
     if params[:text]
       text_to_annotate = params[:text].strip.gsub("\r\n", " ").gsub("\n", " ")
       @results_table_header = [
         "Class", "Ontology", "Context"
       ]
+
+      if params[:score].nil? || params[:score].eql?('none')
+        params[:score] = nil
+      else
+        @results_table_header.push('Score')
+      end
+      
       annotations = LinkedData::Client::HTTP.get(ANNOTATOR_URI, params)
       @ontologies = get_simplified_ontologies_hash
       @semantic_types = get_semantic_types 
@@ -54,6 +61,9 @@ class AnnotatorController < ApplicationController
             context: "",
             type: 'direct'
           }
+          unless params[:score].eql?('none')
+            row[:score] = annotation.score.nil? ? '' : sprintf("%.2f", annotation.score)
+          end
           @results.push(row)
         else
           annotation.annotations.each do |a|
@@ -63,6 +73,9 @@ class AnnotatorController < ApplicationController
               context: a,
               type: 'direct'
             }
+            unless params[:score].eql?('none')
+              row[:score] = annotation.score.nil? ? '' : sprintf("%.2f", annotation.score)
+            end
             @results.push(row)
           end
         end
@@ -73,6 +86,9 @@ class AnnotatorController < ApplicationController
               context: {child: annotation_class_info(annotation.annotatedClass), level: parent.distance},
               type: 'parent'
             }
+            unless params[:score].eql?('none')
+              row[:score] = parent.score.nil? ? '' : sprintf("%.2f", parent.score)
+            end
             @results.push(row)
         end
       end

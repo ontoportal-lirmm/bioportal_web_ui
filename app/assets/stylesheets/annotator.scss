@@ -68,6 +68,7 @@
 }
 .annotation-parent{
   display: flex;
+  white-space: nowrap;
 }
 .annotation-parent div,a{
   margin-right: 11px;
@@ -86,4 +87,7 @@
 }
 .annotation-parent .gray{
   color: #888888;
+}
+.recommender-table-container .class{
+  width: 250px;
 }
