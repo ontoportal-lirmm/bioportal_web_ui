@@ -24,6 +24,7 @@
             .prefrences
               .preftitle Prefrences
               .chips
+                = render(ChipsComponent.new(name: 'whole_word_only', label: 'Whole word only', checked: params[:whole_word_only] || true))
                 = render(ChipsComponent.new(name: 'also_search_properties', label: 'Match longest only'))
                 = render(ChipsComponent.new(name: 'also_search_obsolete', label: 'Recognize partial words'))
                 = render(ChipsComponent.new(name: 'also_search_views', label: 'Include mappings'))
@@ -74,7 +75,8 @@
                     = result[:ontology][:text]
                 - r.td do
                   - if result[:type].eql?('direct')
-                    .annotation-context{'data-from': result[:context][:from], 'data-to': result[:context][:to]}
+                    - result[:context].each do |context|
+                      .annotation-context{'data-from': context[:from], 'data-to': context[:to]}
                   - else
                     .annotation-parent
                       .text

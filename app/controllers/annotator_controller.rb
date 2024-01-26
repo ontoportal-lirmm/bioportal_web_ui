@@ -35,7 +35,7 @@ class AnnotatorController < ApplicationController
     if params[:text]
       text_to_annotate = params[:text].strip.gsub("\r\n", " ").gsub("\n", " ")
       @results_table_header = [
-        "Class", "Ontology", "Context"
+        "Class", "Ontology", "Contexts"
       ]
 
       if params[:score].nil? || params[:score].eql?('none')
@@ -66,18 +66,19 @@ class AnnotatorController < ApplicationController
           end
           @results.push(row)
         else
-          annotation.annotations.each do |a|
-            row = {
+          row = {
               class: annotation_class_info(annotation.annotatedClass),
               ontology: annotation_ontology_info(annotation.annotatedClass.links["ontology"]),
-              context: a,
+              context: [],
               type: 'direct'
-            }
-            unless params[:score].eql?('none')
-              row[:score] = annotation.score.nil? ? '' : sprintf("%.2f", annotation.score)
-            end
-            @results.push(row)
+          }
+          unless params[:score].eql?('none')
+            row[:score] = annotation.score.nil? ? '' : sprintf("%.2f", annotation.score)
           end
+          annotation.annotations.each do |a|
+            row[:context].push(a)
+          end
+          @results.push(row)
         end
         annotation.hierarchy.each do |parent|
             row = {
