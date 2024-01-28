@@ -1,204 +1,206 @@
-import {Controller} from "@hotwired/stimulus"
+import { Controller } from '@hotwired/stimulus'
+import * as jsonld from 'jsonld'
+import hljs from 'highlight.js/lib/core'
+import xml from 'highlight.js/lib/languages/xml'
+import json from 'highlight.js/lib/languages/json'
 
 // Connects to data-controller="metadata-downloader"
 export default class extends Controller {
-    connect() {
+
+  static targets = ['content', 'loader']
+  static values = {
+    metadata: Object,
+    context: Object,
+    namespaces: Object,
+    format: { type: String, default: 'xml' }
+  }
+
+  connect () {
+    this.formatedData = this.#formatData()
+    switch (this.formatValue) {
+      case 'xml':
+        hljs.registerLanguage('xml', xml)
+        this.showXML()
+        break
+      case 'json':
+        hljs.registerLanguage('json', json)
+        this.showJSONLD()
+        break
+      case 'triples':
+        hljs.registerLanguage('xml', xml)
+        this.showNTriples()
+        break
+    }
+  }
+
+  download () {
+    switch (this.formatValue) {
+      case 'xml':
+        this.downloadXML()
+        break
+      case 'json':
+        this.downloadJsonLd()
+        break
+      case 'triples':
+        this.downloadNQuads()
+        break
+      case 'csv':
+        this.downloadCSV()
+    }
+  }
+
+  showNTriples () {
+    this.#toggleLoader()
+    this.#toNTriples(this.formatedData).then((nquads) => {
+      this.contentTarget.innerHTML = hljs.highlight(nquads, { language: 'xml' }).value
+      this.#toggleLoader()
+    })
+  }
+
+  showXML () {
+    this.#toggleLoader()
+    this.contentTarget.innerHTML = hljs.highlight(
+      this.#toXML(this.formatedData, this.contextValue),
+      { language: 'xml' }
+    ).value
+    this.#toggleLoader()
+  }
+
+  showJSONLD () {
+    this.#toggleLoader()
+    this.#toJSONLD().then((jsonld) => {
+      this.contentTarget.innerHTML = hljs.highlight(JSON.stringify(jsonld, null, '  '), { language: 'json' }).value
+      this.#toggleLoader()
+    })
+  }
+
+  #toggleLoader () {
+    this.loaderTarget.classList.toggle('d-none')
+  }
+
+  downloadNQuads () {
+    this.#toNTriples(this.formatedData).then((nquads) => {
+      this.#generateDownloadFile(nquads, 'nt')
+    })
+  }
+
+  downloadJsonLd () {
+    this.#toJSONLD().then((jsonld) => {
+      this.#generateDownloadFile(JSON.stringify(jsonld, null, '  '), 'nt')
+    })
+  }
+
+  downloadXML () {
+    this.#generateDownloadFile(this.#toXML(this.formatedData, this.submissionValue['context']), 'rdf')
+  }
+
+  downloadCSV () {
+    this.#generateDownloadFile(this.#toCSV(), 'csv')
+  }
+
+  #formatData () {
+    const jsonldObject = {}
+
+    const subJson = this.metadataValue
+    const ontJson = subJson
+    const fullContext = this.contextValue
+
+    // Remove links, context and metrics from json
+    delete subJson['links']
+    delete subJson['context']
+    delete subJson['metrics']
+
+    // Add ontology properties to context and subJson
+    subJson['viewOf'] = ontJson['viewOf']
+    subJson['group'] = ontJson['group']
+    subJson['hasDomain'] = ontJson['hasDomain']
+
+    // Don't add null value and empty arrays
+    for (const [attr, value] of Object.entries(subJson)) {
+      if (value === null || value === undefined || (Array.isArray(value) && value.length === 0)) {
+        continue
+      }
+
+      if (fullContext.hasOwnProperty(attr)) {
+        jsonldObject[fullContext[attr]] = value
+      }
     }
 
-    downloadNQuads() {
-        this.#downloadMetadata("nquads")
+    // Add id and type
+    if (subJson['URI'] !== null) {
+      jsonldObject['@id'] = subJson['URI']
+    } else {
+      jsonldObject['@id'] = ontJson['id']
     }
+    jsonldObject['@type'] = 'http://www.w3.org/2002/07/owl#Ontology'
 
-    downloadJsonLd() {
-        this.#downloadMetadata("jsonld")
-    }
+    return jsonldObject
+  }
 
-    downloadXML() {
-        this.#downloadMetadata("xml");
-    }
+  #toNTriples (data) {
+    return jsonld.toRDF(data, { format: 'application/n-quads' })
+  }
 
-    /**
-     * Format submission metadata to be downloaded
-     * @param format
-     */
-    #downloadMetadata(format) {
+  #toCSV () {
+    return Object.entries(this.formatedData).map(([key, value]) => `${key},${value}`).join('\r\n')
+  }
 
-        jQuery.get(
-            // Get the submission metadata infos
-            jQuery(document).data().bp.config.rest_url + "/submission_metadata?apikey=" + jQuery(document).data().bp.config.apikey,
-            (subMetadataArray) => {
-                var subMetadataHash = {};
-                // Convert submission metadata array to a hash to be faster
-                for (var i = 0; i < subMetadataArray.length; i++) {
-                    subMetadataHash[subMetadataArray[i]["attribute"]] = subMetadataArray[i];
-                }
-                var jsonldObject = {}
-                var added_props = {}
+  #toJSONLD () {
+    return jsonld.compact(this.formatedData, this.contextValue)
+  }
 
-                var subJson = jQuery.extend(true, {}, jQuery(document).data().bp.submission_latest);
-                var ontJson = jQuery(document).data().bp.ontology;
-                var fullContext = jQuery(document).data().bp.submission_latest["context"];
+  #toXML () {
+    const data = this.formatedData
+    const resolveNamespace = this.namespacesValue
+    let namespaces = {}
+    let xmlString = ""
 
-                // Remove links, context and metrics from json
-                delete subJson["links"];
-                delete subJson["context"];
-                delete subJson["metrics"];
+    delete data['@id']
+    delete data['@type']
 
-                // Special case for publication and released that don't have namespace (so value generated to undefined)
-                fullContext["publication"] = "http://omv.ontoware.org/2005/05/ontology#reference";
-                fullContext["released"] = "http://purl.org/dc/terms/date";
-
-                // Add ontology properties to context and subJson
-                subJson["viewOf"] = ontJson["viewOf"];
-                fullContext["viewOf"] = "http://data.bioontology.org/metadata/viewOf";
-
-                subJson["group"] = ontJson["group"];
-                fullContext["group"] = "http://data.bioontology.org/metadata/group";
-                if (subJson["hasDomain"] == null) {
-                    subJson["hasDomain"] = ontJson["hasDomain"];
-                } else {
-                    subJson["hasDomain"] = subJson["hasDomain"].join(', ').split(", ").concat(ontJson["hasDomain"]);
-                    /* make the array unique:
-                     var unique = arr.filter(function(elem, index, self) {
-                     return index == self.indexOf(elem);
-                     })
-                     */
-                }
+    for (let prop in data) {
+      const attr_uri = prop
 
 
-                // Don't add null value and empty arrays
-                for (var attr in subJson) {
-                    if (subJson[attr] === null || subJson[attr] === undefined) {
-                        continue;
-                    } else if (subJson[attr] instanceof Array && subJson[attr].length < 1) {
-                        continue;
-                    }
-                    // Keep only metadata that have been extracted, are metrics or are in the metadata array below
-                    var metadata_in_rdf = ["acronym", "name", "hasOntologyLanguage", "creationDate", "released", "group", "viewOf"]
-                    if (subMetadataHash[attr] != undefined && subMetadataHash[attr]["extracted"] !== true && subMetadataHash[attr]["display"] !== "metrics"
-                        && !metadata_in_rdf.indexOf(attr)) {
-
-                        continue;
-                    }
-
-                    if (fullContext[attr] !== undefined) {
-                        // Add attr value to future jsonld object and keep track of the attr we added to build context
-                        if (subMetadataHash[attr] != undefined) {
-                            added_props[attr] = subMetadataHash[attr]["namespace"] + ":" + attr;
-                        } else {
-                            added_props[attr] = "bpm:" + attr;
-                        }
-                        jsonldObject[fullContext[attr]] = subJson[attr];
-                    }
-                }
-
-                // Add id and type
-                if (subJson["URI"] !== null) {
-                    jsonldObject["@id"] = subJson["URI"];
-                } else {
-                    jsonldObject["@id"] = ontJson["id"];
-                }
-                jsonldObject["@type"] = "http://www.w3.org/2002/07/owl#Ontology";
-
-                // Get only context from returned properties
-                let context = {};
-                for (let prop in added_props) {
-                    context[prop] = fullContext[prop];
-                    if (context[prop] == undefined) {
-                        // If property URI not defined then we create it with bioontology.org URI
-                        context[prop] = "http://data.bioontology.org/metadata/" + prop;
-                    }
-                }
-
-                let responseString = "Error while generating the RDF"
-                if (format === "nquads") {
-                    jsonld.toRDF(jsonldObject, {format: 'application/nquads'},  (err, nquads) => {
-                        this.#generateDownloadFile(nquads, "nt")
-                    });
-                } else if (format === "jsonld") {
-                    // Generate proper jsonld
-                    jsonld.compact(jsonldObject, context,  (err, compacted) => {
-                        this.#generateDownloadFile(JSON.stringify(compacted, null, 2), "json");
-                    });
-                } else if (format === "xml") {
-                    // Generate RDF/XML
-                    this.#generateDownloadFile(this.#generateRdfXml(jsonldObject, subMetadataHash), "rdf");
-                }
-            }
-        );
-    }
-
-    /**
-     * Generate the RDF/XML string from the jsonldObject and context. Do it manually since no good lib
-     * @param jsonldObject
-     * @param context
-     */
-    #generateRdfXml(jsonldObject, metadataDetails) {
-
-        // Get hash to resolve namespace
-        var resolveNamespace = jQuery(document).data().bp.config.resolve_namespace;
-
-        var xmlString = `<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:owl="http://www.w3.org/2002/07/owl#">
-  <rdf:Description rdf:about="` + jsonldObject["@id"] + `">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>`;
-
-        delete jsonldObject["@id"];
-        delete jsonldObject["@type"];
-
-        for (var prop in jsonldObject) {
-            var attr_uri = prop;
-            var attr = prop;
-            // Here we replace the full URI by namespace:attr
-            for (var ns in resolveNamespace) {
-                if (prop.indexOf(resolveNamespace[ns]) == 0) {
-                    prop = prop.replace(resolveNamespace[ns], ns + ":");
-                    attr = attr.replace(resolveNamespace[ns], "");
-                    break;
-                }
-            }
-
-            // Check if the value is an URI using simple regex
-            var prop_values = jsonldObject[attr_uri];
-            if (!(prop_values instanceof Array)) {
-                prop_values = [prop_values];
-            }
-
-            for (var i in prop_values) {
-                var prop_value = prop_values[i];
-                if ((prop_value.toString().match(/https?:\/\//g) || []).length === 1 && prop_value.toString().indexOf(" ") === -1) {
-                    xmlString = xmlString.concat(`
-    <` + prop + ` rdf:resource="` + prop_value + `"/>`);
-                } else {
-                    xmlString = xmlString.concat(`
-    <` + prop + `/>` + jsonldObject[attr_uri] + `<` + prop + `/>`);
-                }
-            }
-
+      // Replace the full URI by namespace:attr
+      for (const ns in resolveNamespace) {
+        if (prop.startsWith(resolveNamespace[ns])) {
+          namespaces[ns] = resolveNamespace[ns]
+          prop = prop.replace(resolveNamespace[ns], ns + ':')
+          break
         }
+      }
 
-        xmlString = xmlString.concat(`
-  </rdf:Description>
-</rdf:RDF>`);
+      // Check if the value is an URI using simple regex
+      let prop_values = Array.isArray(data[attr_uri]) ? data[attr_uri] : [data[attr_uri]]
 
-        return xmlString;
+      prop_values.forEach(prop_value => {
+        const isUri = prop_value.toString().match(/https?:\/\//) && prop_value.toString().indexOf(' ') === -1
+        const value = isUri ? '' : `${prop_value} <${prop}/> `
+        xmlString = xmlString.concat(`    <${prop}${isUri ? ` rdf:resource="${prop_value}"/>` : '>'} ${value}\n`)
+      })
     }
 
-    /**
-     * Generate the file with metadata to be downloaded, given the file content
-     * @param content
-     * @param fileExtension
-     */
-    #generateDownloadFile(content, fileExtension) {
-        var element = document.createElement('a');
-        // TODO: change MIME type?
-        element.setAttribute('href', 'data:application/rdf+json;charset=utf-8,' + encodeURIComponent(content));
-        element.setAttribute('download', jQuery(document).data().bp.ontology.acronym + "_metadata." + fileExtension);
+    let prefix = Object.entries(namespaces).map(([k, v]) => `xmlns:${k}="${v}"`).join(' ')
+    return `<rdf:RDF ${prefix}>\n<rdf:Description rdf:about="${data['URI'] || data['@id']}">\n    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>${xmlString}</rdf:Description>\n</rdf:RDF>`
+  }
 
-        element.style.display = 'none';
-        document.body.appendChild(element);
-        element.click();
-        document.body.removeChild(element);
-    }
+  /**
+   * Generate the file with metadata to be downloaded, given the file content
+   * @param content
+   * @param fileExtension
+   */
+  #generateDownloadFile (content, fileExtension) {
+    var element = document.createElement('a')
+    // TODO: change MIME type?
+    element.setAttribute('href', 'data:application/rdf+json;charset=utf-8,' + encodeURIComponent(content))
+    element.setAttribute('download', jQuery(document).data().bp.ontology.acronym + '_metadata.' + fileExtension)
+
+    element.style.display = 'none'
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
+  }
 }
 
 
