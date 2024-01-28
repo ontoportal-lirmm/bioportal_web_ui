@@ -556,24 +556,6 @@ module OntologiesHelper
     end
   end
 
-  def metadata_formats_buttons
-    render SummarySectionComponent.new(title: 'Download metadata (profile/syntax)', show_card: false) do
-      content_tag :div, data: { controller: 'metadata-downloader' } do
-        horizontal_list_container([
-                                    ['NQuads', 'MOD/n-triple'],
-                                    ['JsonLd', 'MOD/json-ld'],
-                                    ['XML', 'MOD/rdf-xml']
-                                  ]) do |format, label|
-          render ChipButtonComponent.new(type: 'clickable', 'data-action': "click->metadata-downloader#download#{format}") do
-            concat content_tag(:span, label)
-            concat content_tag(:span, inline_svg("summary/download.svg", width: '15px', height: '15px'))
-          end
-        end
-      end
-    end
-
-  end
-
   def count_subscriptions(ontology_id)
     ontology_id = ontology_id.split('/').last
     users = LinkedData::Client::Models::User.all(include: 'subscription', display_context: false, display_links: false)

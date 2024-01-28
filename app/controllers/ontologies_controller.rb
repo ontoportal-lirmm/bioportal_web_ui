@@ -398,13 +398,6 @@ class OntologiesController < ApplicationController
     end
   end
 
-  def show_additional_metadata
-    @metadata = submission_metadata
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    @submission_latest = @ontology.explore.latest_submission(include: 'all', display_context: false, display_links: false)
-    render partial: 'ontologies/sections/additional_metadata'
-  end
-
   def show_licenses
 
     @metadata = submission_metadata
