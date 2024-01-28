@@ -262,7 +262,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     end
 
     # Assert relations
-    click_on "See all metadata"
+    click_on "Export all metadata"
     sleep 1
     # TODO put again when the sell all metadata popup, have the option to search all the metadata
     # within "#application_modal_content" do

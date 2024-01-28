@@ -17,7 +17,7 @@
     - selected = params[:section] || sections.first.downcase
     = render TabsContainerComponent.new(url_parameter: 'section') do |t|
       - sections.each do |section_title|
-        - t.item(title: section_title,
+        - t.item(title: section_title.humanize,
                      path: '',
                      selected: section_title.downcase.eql?(selected.downcase),
                      page_name: '')
