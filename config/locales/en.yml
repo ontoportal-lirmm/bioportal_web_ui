@@ -22,6 +22,7 @@ en:
     licenses:
       create:
         success: License renewed successfully!
+    label_close: Close
   
   all: All
   
@@ -339,6 +340,40 @@ en:
     self: Projects
     title: Projects List
     view_projects_help: View projects help
+
+    show:
+      title: Project %{name}
+      edit_project: Edit Project
+      description:  "Description:"
+      institution: "Institution:"
+      contacts: "Contacts:"
+      home_page: "Home Page:"
+      ontologies_used: Ontologies Used
+      no_ontologies_associated: No ontologies are currently associated with this project
+
+    form:
+      errors_on_form: Errors On Form
+      name: "Name: *"
+      acronym: "Acronym: *"
+      administrators: "Administrators: *"
+      home_page: "Homepage: *"
+      example: "Example:"
+      description: "Description:*"
+      select_ontologies: Select Ontologies Used
+      select_administrators: Select administrators
+    
+    edit:
+      title: Editing Project %{name}
+      editing_project: Editing project
+      cancel: Cancel
+      update_project: Update Project
+    
+    new:
+      title: Add your project
+      new_project: New project
+      create_project: Create Project
+
+
   
   recommender:
     title: Recommender
@@ -429,4 +464,3 @@ en:
   show_advanced_options: Show advanced options
   hide_advanced_options: Hide advanced options
   no_result_was_found: No result was found
-  
