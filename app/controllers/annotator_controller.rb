@@ -9,29 +9,8 @@ class AnnotatorController < ApplicationController
   ANNOTATOR_URI = $ANNOTATOR_URL
 
   def index
-    @semantic_types_for_select = []
-    @semantic_groups_for_select = []
-    @semantic_types ||= get_semantic_types
-    @sem_type_ont = LinkedData::Client::Models::Ontology.find_by_acronym('STY').first
-    @semantic_groups ||= {"ACTI" => "Activities & Behaviors", "ANAT" => "Anatomy", "CHEM" => "Chemicals & Drugs","CONC" => "Concepts & Ideas","DEVI" => "Devices", "DISO" => "Disorders", "GENE" => "Genes & Molecular Sequences", "GEOG" => "Geographic Areas", "LIVB" => "Living Beings","OBJC" => "Objects", "OCCU" => "Occupations", "ORGA" => "Organizations", "PHEN" => "Phenomena", "PHYS" => "Physiology","PROC" => "Procedures"}
-    @semantic_types.each_pair do |code, label|
-      @semantic_types_for_select << ["#{label} (#{code})", code]
-    end
-    @semantic_groups.each_pair do |group, label|
-        @semantic_groups_for_select << ["#{label} (#{group})", group]
-    end 
-    @semantic_types_for_select.sort! {|a,b| a[0] <=> b[0]}
-    @semantic_groups_for_select.sort! {|a,b| a[0] <=> b[0]}
-    if !$MULTIPLE_RECOGNIZERS.nil? && $MULTIPLE_RECOGNIZERS == true
-      # Get recognizers from ontologies_api only if asked
-      @recognizers = parse_json(REST_URI + "/annotator/recognizers")
-    else
-      @recognizers = []
-    end
+    initalize_option
     @annotator_ontologies = LinkedData::Client::Models::Ontology.all
-    @text = params[:text]
-    @ancestors_levels = ['None', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'All']
-    @include_score = ['none', 'old', 'cvalue', 'cvalueh']
     if params[:text]
       text_to_annotate = params[:text].strip.gsub("\r\n", " ").gsub("\n", " ")
       @results_table_header = [
@@ -230,6 +209,30 @@ class AnnotatorController < ApplicationController
     uri = URI.parse(url)
     endpoint = uri.path.sub(/^\//, '')
     endpoint
+  end
+
+  def initalize_option
+    @semantic_types_for_select = []
+    @semantic_groups_for_select = []
+    @semantic_types ||= get_semantic_types
+    @sem_type_ont = LinkedData::Client::Models::Ontology.find_by_acronym('STY').first
+    @semantic_groups ||= {"ACTI" => "Activities & Behaviors", "ANAT" => "Anatomy", "CHEM" => "Chemicals & Drugs","CONC" => "Concepts & Ideas","DEVI" => "Devices", "DISO" => "Disorders", "GENE" => "Genes & Molecular Sequences", "GEOG" => "Geographic Areas", "LIVB" => "Living Beings","OBJC" => "Objects", "OCCU" => "Occupations", "ORGA" => "Organizations", "PHEN" => "Phenomena", "PHYS" => "Physiology","PROC" => "Procedures"}
+    @semantic_types.each_pair do |code, label|
+      @semantic_types_for_select << ["#{label} (#{code})", code]
+    end
+    @semantic_groups.each_pair do |group, label|
+        @semantic_groups_for_select << ["#{label} (#{group})", group]
+    end 
+    @semantic_types_for_select.sort! {|a,b| a[0] <=> b[0]}
+    @semantic_groups_for_select.sort! {|a,b| a[0] <=> b[0]}
+    if !$MULTIPLE_RECOGNIZERS.nil? && $MULTIPLE_RECOGNIZERS == true
+      # Get recognizers from ontologies_api only if asked
+      @recognizers = parse_json(REST_URI + "/annotator/recognizers")
+    else
+      @recognizers = []
+    end
+    @ancestors_levels = ['None', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'All']
+    @include_score = ['none', 'old', 'cvalue', 'cvalueh']
   end
 
 end
