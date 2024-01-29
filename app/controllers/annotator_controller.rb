@@ -16,7 +16,8 @@ class AnnotatorController < ApplicationController
       @results_table_header = [
         "Class", "Ontology", "Contexts"
       ]
-
+      @direct_results = 0
+      @parents_results = 0
       if params[:score].nil? || params[:score].eql?('none')
         params[:score] = nil
       else
@@ -43,6 +44,7 @@ class AnnotatorController < ApplicationController
           unless params[:score].eql?('none')
             row[:score] = annotation.score.nil? ? '' : sprintf("%.2f", annotation.score)
           end
+          @direct_results = @direct_results + 1
           @results.push(row)
         else
           row = {
@@ -63,6 +65,7 @@ class AnnotatorController < ApplicationController
           else
             @results.push(row)
           end
+          @direct_results = @direct_results + 1
         end
         annotation.hierarchy.each do |parent|
             row = {
@@ -80,6 +83,7 @@ class AnnotatorController < ApplicationController
             else
               @results.push(row)
             end
+            @parents_results = @parents_results + 1
         end
       end
     end
