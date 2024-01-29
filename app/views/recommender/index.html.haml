@@ -31,7 +31,7 @@
                 - check_input = !params[:input_type].eql?('2')
                 .text-choice
                   = render Input::RadioChipComponent.new(label: t('recommender.text'), name: 'input_type', value: '1', checked: check_input)
-                .keywords-choice
+                .keywords-choice{'data-controller':' tooltip', title: 'Keywords separated by commas'}
                   = render Input::RadioChipComponent.new(label: t('recommender.keywords'), name: 'input_type', value: '2', checked: !check_input)
             .output
               .title
@@ -120,7 +120,7 @@
               - btn.icon_left do
                 = inline_svg_tag "icons/cite.svg"
           .go-to-annotator
-            = render Buttons::RegularButtonComponent.new(id:'recommender_go_annotator', value: "Get results from annotator", variant: "secondary", href: "/annotator?text=#{params[:input]}&ontologies=#{params[:ontologies]}", size: "slim", target: '_blank', state: "regular") do |btn|
+            = render Buttons::RegularButtonComponent.new(id:'recommender_go_annotator', value: "Call Annotator with the same input", variant: "secondary", href: "/annotator?text=#{params[:input]}&ontologies=#{params[:ontologies]}", size: "slim", target: '_blank', state: "regular") do |btn|
               - btn.icon_right do
                 = inline_svg_tag "arrow-right-outlined.svg"
 
