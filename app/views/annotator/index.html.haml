@@ -12,7 +12,7 @@
         .inputs
           %div
             .recommender-page-text-area{'data-controller': 'sample-text'}
-              %textarea#annotator-text-area{rows: "6" , placeholder: "Enter or past a text to be annotated ...", name: "text",  maxlength: "500", 'data-sample-text-target': "input"}
+              %textarea#annotator-text-area{rows: "6" , placeholder: "Enter or past a text to be annotated ...", name: "text",  maxlength: "500", 'data-sample-text-target': "input", 'data-annotator-target': 'input'}
                 = params[:text]
               = insert_sample_text_button(t('recommender.insert_sample_text'))
           .recommender-page-options

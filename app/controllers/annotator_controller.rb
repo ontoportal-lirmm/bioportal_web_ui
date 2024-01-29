@@ -33,7 +33,7 @@ class AnnotatorController < ApplicationController
           closure: "Ancestor"
       }
       annotations.each do |annotation|
-        if annotation.annotations.length.eql?(0)
+        if annotation.annotations.empty?
           row = {
             class: annotation_class_info(annotation.annotatedClass),
             ontology: annotation_ontology_info(annotation.annotatedClass.links),
