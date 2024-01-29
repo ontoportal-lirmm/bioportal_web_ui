@@ -1,4 +1,4 @@
-- @title = t("home.index.title", site: "#{$SITE}")
+- @title = t("home.index.title", site: $SITE)
 
 - unless $FRONT_NOTICE.nil? || $FRONT_NOTICE.empty? || cookies[:front_page_notice_closed].eql?("true")
   :javascript
@@ -75,7 +75,7 @@
         .home-services-buttons.container
           .insert-sample-text-button{'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("sample_text")}
             %div
-              Insert sample text
+              = t('home.insert_sample_text')
             = inline_svg_tag 'icons/arrow-curved-up.svg'
           .home-get-recommendations{onclick: "submitRecommender()"}
             %p= t('home.get_recommendations')
@@ -89,23 +89,23 @@
       .home-sub-section-left
         %div.align-items
           %h4.margin-items= t('home.fairness')
-          = render Display::InfoTooltipComponent.new(text: "You are seing the average scores for all the public ontologies in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness")
+          = render Display::InfoTooltipComponent.new(text: t('home.info_tooltip_text') )
           = fairness_link('margin-bottom: 6px; vertical-align: top;')
         %hr.home-section-line/
         .home-card.home-fair-scores
           %div.fair-scores-badge-section
             %h2.p-2.badge.badge-secondary.fair-scores-badge-margin
-              Average
+              = t('home.average')
               %span.badge.badge-light
                 %span#fair-score-average
                   0 (0%)
             %h2.p-2.badge.badge-secondary.fair-scores-badge-margin
-              Min
+              = t('home.min')
               %span.badge.badge-light
                 %span#fair-score-min
                   0 (0%)
             %h2.p-2.badge.badge-secondary.fair-scores-badge-margin
-              Max
+              = t('home.max')
               %span.badge.badge-light
                 %span#fair-score-max
                   0 (0%)
@@ -134,43 +134,43 @@
           %div
             %h4
               = format_number_abbreviated(@ont_count)
-            %p Ontologies
+            %p= t("home.ontologies")
         .home-statistics-item
           %hr/
           %div
             %h4
               = format_number_abbreviated(@cls_count)
-            %p Classes
+            %p= t("home.classes")
         .home-statistics-item
           %hr/
           %div
             %h4
               = format_number_abbreviated(@individuals_count)
-            %p Individuals
+            %p= t("home.individuals")
         .home-statistics-item
           %hr/
           %div
             %h4
               = format_number_abbreviated(@prop_count)
-            %p Properties
+            %p= t("home.properties")
         .home-statistics-item
           %hr/
           %div
             %h4
               = format_number_abbreviated(@projects_count)
-            %p Projects
+            %p= t("home.projects")
         .home-statistics-item
           %hr/
           %div
             %h4
               = format_number_abbreviated(@map_count)
-            %p Mappings
+            %p= t("home.mappings")
         .home-statistics-item
           %hr/
           %div
             %h4
               = format_number_abbreviated(@users_count)
-            %p Users
+            %p= t("home.users")
       .home-statistics-link.justify-content-end
         = link_to 'See details','/statistics', target: "_blank"
 
