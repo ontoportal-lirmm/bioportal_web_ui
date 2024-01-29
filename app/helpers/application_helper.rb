@@ -73,11 +73,11 @@ module ApplicationHelper
   end
 
   def escape(string)
-    CGI.escape(string)
+    CGI.escape(string) if string
   end
 
   def unescape(string)
-    CGI.unescape(string)
+    CGI.unescape(string) if string
   end
 
   def clean(string)
