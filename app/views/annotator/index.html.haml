@@ -1,21 +1,21 @@
 - @title= t('annotator.title')
-.recommender-page-container{'data-controller': 'annotator'}
-  .recommender-page-subcontainer
-    .recommender-page-title
+.annotator-page-container{'data-controller': 'annotator'}
+  .annotator-page-subcontainer
+    .annotator-page-title
       .text
         Annotator
       .line
-    .recommender-page-decription
+    .annotator-page-decription
       Get annotations for text with ontology classes
     = form_tag('/annotator', method: :get, 'data-turbo': true, novalidate: true) do
-      .recommender-page-inputs{'data-controller': 'reveal-component'}
+      .annotator-page-inputs{'data-controller': 'reveal-component'}
         .inputs
           %div
-            .recommender-page-text-area{'data-controller': 'sample-text'}
-              %textarea#annotator-text-area{rows: "6" , placeholder: "Enter or past a text to be annotated ...", name: "text",  maxlength: "500", 'data-sample-text-target': "input", 'data-annotator-target': 'input'}
+            .annotator-page-text-area{'data-controller': 'sample-text'}
+              %textarea{rows: "6" , placeholder: "Enter or past a text to be annotated ...", name: "text",  maxlength: "500", 'data-sample-text-target': "input", 'data-annotator-target': 'input'}
                 = params[:text]
               = insert_sample_text_button(t('recommender.insert_sample_text'))
-          .recommender-page-options
+          .annotator-page-options
             .section-text
               Advanced options
             .select-ontologies
@@ -49,7 +49,7 @@
           .chips
             = render(ChipsComponent.new(name: 'FastContext', label: 'FastContext'))
             = render(ChipsComponent.new(name: 'Lemmatize', label: 'Lemmatize'))
-        .recommender-page-button
+        .annotator-page-button
           = render Buttons::RegularButtonComponent.new(id:'annotator', value: 'Get annotations', variant: "primary", type: 'submit')
     - unless @results.nil? || @results.empty?
       .annotator-page-results
@@ -58,7 +58,7 @@
             Annotations
           .details
             = "Total results #{@results.length} (direct 17 / ancestor 0 / mapping 0)"
-        .recommender-table-container
+        .annotator-table-container
           = render TableComponent.new(id: 'annotator-table', borderless: true, layout_fixed: true, outline: true, sort: true, no_init_sort: true, auto_layout: true) do |t|
             - t.header do |h|
               - @results_table_header.each do |header|

@@ -1,37 +1,152 @@
-.recommender-page-options .chips{
+.annotator-page-container{
+  display:flex;
+  justify-content:center;
+}
+.annotator-page-subcontainer{
+  width: 1248px;
+  padding: 20px 50px;
+}
+.annotator-page-title{
+  font-size: 25px;
+  font-weight: 700;
+}
+.annotator-page-title .line{
+  height: 2px;
+  width: 57px;
+  background-color: var(--primary-color);
+  border-radius: 10px;
+}
+.annotator-page-decription{
+  color: #888888;
+  margin-top: 20px;
+}
+.annotator-page-inputs{
+  margin-top: 20px;
+}
+.annotator-page-inputs .inputs{
+  display: flex;
+}
+.annotator-page-text-area{
+  box-shadow: 2px 30px 60px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 630px;
+  margin-right: 30px;
+}
+.annotator-page-text-area textarea{
+  font-size: 16px;
+  outline: none;
+  padding: 20px;
+  width: 630px;
+  border: none;
+  margin-right: 30px;
+}
+.annotator-page-text-area .insert-sample-text-button{
+  display: flex;
+  justify-content: end;
+  padding: 20px;
+}
+.annotator-page-text-area .insert-sample-text-button .button{
+  display: flex;
+  align-items: center;
+}
+.annotator-page-text-area .insert-sample-text-button .button:hover{
+  cursor: pointer;
+}
+.annotator-page-text-area .insert-sample-text-button .button .text{
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primary-color);
+  margin-right: 10px;
+}
+.annotator-page-text-area .insert-sample-text-button .button svg{
+  width: 16px;
+  height: 16px;
+}
+.annotator-page-text-area .insert-sample-text-button .button svg path{
+  fill: var(--primary-color);
+}
+.annotator-page-options{
+  width: 100%;
+}
+
+.annotator-page-options .section-text{
+  font-weight: 600;
+  
+}
+.annotator-page-options .title{
+  margin-top: 10px;
+  color: #888888;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 5px; 
+}
+
+.annotator-page-options .chips{
+  display: flex;
+}
+.annotator-page-options input{
+  accent-color: var(--primary-color) revert;
+}
+.annotator-page-options .radios{
+  display: flex;
+}
+
+.annotator-page-options .advanced-options-button{
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+}
+.annotator-page-options .advanced-options-button:hover{
+  cursor: pointer;
+}
+.annotator-page-options .advanced-options-button .text{
+  margin-left: 10px;
+  color: var(--primary-color);
+  font-size: 14px;
+}
+
+.annotator-page-options .advanced-options-button svg path{
+  fill: var(--primary-color);
+}
+.annotator-page-button{
+  margin-top: 27px;
+  width: 630px;
+}
+
+.annotator-page-options .chips{
   display: flex;
   flex-wrap: wrap;
 }
-.recommender-page-options .select-ontologies{
+.annotator-page-options .select-ontologies{
   margin: 10px 0;
 }
-.recommender-page-options .preftitle{
+.annotator-page-options .preftitle{
   font-size: 14px;
   color: #666666;
   margin-bottom: 5px;
 }
-.advanced-options-button{
+.annotator-page-container .advanced-options-button{
   color: var(--primary-color);
   font-size: 14px;
   margin-top: 5px !important;
 }
-.advanced-options-button:hover{
+.annotator-page-container .advanced-options-button:hover{
   cursor: pointer;
 }
-.advanced-options-button svg{
+.annotator-page-container .advanced-options-button svg{
   margin-left: 5px;
 }
-.advanced-options-button svg path{
+.annotator-page-container .advanced-options-button svg path{
   fill: var(--primary-color);
 }
-.advanced-options-button.hide-button svg{
+.annotator-page-container .advanced-options-button.hide-button svg{
   transform: scaleY(-1);
 }
 .annotation-context{
   color: gray;
   font-weight: 400;
 }
-.highlighted-annotation{
+.annotator-page-container .highlighted-annotation{
   color: black;
   font-weight: 600;
 }
@@ -48,21 +163,21 @@
 .annotator-page-results .details{
   color: #888888;
 }
-.more-advanced-options{
+.annotator-page-container .more-advanced-options{
   margin-top: 20px;
 }
-.more-advanced-options .filters_line{
+.annotator-page-container .more-advanced-options .filters_line{
   display: flex;
   margin-top: 20px;
 }
-.more-advanced-options .filters_line div{
+.annotator-page-container .more-advanced-options .filters_line div{
   width: 100%;
 }
 
-.more-advanced-options .filters_line > :not(:first-child) {
+.annotator-page-container .more-advanced-options .filters_line > :not(:first-child) {
   margin-left: 20px;
 }
-.more-advanced-options .chips{
+.annotator-page-container .more-advanced-options .chips{
   display: flex;
   margin-top: 20px;
 }
@@ -88,7 +203,10 @@
 .annotation-parent .gray{
   color: #888888;
 }
-.recommender-table-container .class{
+.annotator-table-container{
+  margin-top: 20px;
+}
+.annotator-table-container .class{
   width: 250px;
 }
 .annotation-parent + div{
