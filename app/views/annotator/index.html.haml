@@ -74,21 +74,21 @@
                   %a{href: result[:ontology][:link]}
                     = result[:ontology][:text]
                 - r.td do
-                  - if result[:type].eql?('direct')
-                    - result[:context].each do |context|
+                  - result[:context].each do |context|
+                    - if !context[:child]
                       .annotation-context{'data-from': context[:from], 'data-to': context[:to]}
-                  - else
-                    .annotation-parent
-                      .text
-                        Parent of: 
-                      %a{href: result[:context][:child][:link]}
-                        = result[:context][:child][:text]
-                      .gray
-                        |
-                      .text
-                        Level:
-                      .level
-                        = result[:context][:level]
+                    - else
+                      .annotation-parent
+                        .text
+                          Parent of: 
+                        %a{href: context[:child][:link]}
+                          = context[:child][:text]
+                        .gray
+                          |
+                        .text
+                          Level:
+                        .level
+                          = context[:level]
                 - if !params[:score].nil? && !params[:score].eql?('none')
                   - r.td do
                     = result[:score]                

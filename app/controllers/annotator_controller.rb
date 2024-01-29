@@ -78,19 +78,29 @@ class AnnotatorController < ApplicationController
           annotation.annotations.each do |a|
             row[:context].push(a)
           end
-          @results.push(row)
+          index = @results.find_index { |result| result[:class] == row[:class] }
+          if index
+            @results[index][:context].unshift(*row[:context])
+          else
+            @results.push(row)
+          end
         end
         annotation.hierarchy.each do |parent|
             row = {
               class: annotation_class_info(parent.annotatedClass),
               ontology: annotation_ontology_info(parent.annotatedClass.links["ontology"]),
-              context: {child: annotation_class_info(annotation.annotatedClass), level: parent.distance},
+              context: [{child: annotation_class_info(annotation.annotatedClass), level: parent.distance}],
               type: 'parent'
             }
             unless params[:score].eql?('none')
               row[:score] = parent.score.nil? ? '' : sprintf("%.2f", parent.score)
             end
-            @results.push(row)
+            index = @results.find_index { |result| result[:class] == row[:class] }
+            if index
+              @results[index][:context] += row[:context]
+            else
+              @results.push(row)
+            end
         end
       end
     end
