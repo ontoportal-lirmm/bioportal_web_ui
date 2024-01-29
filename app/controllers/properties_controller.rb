@@ -12,7 +12,7 @@ class PropertiesController < ApplicationController
     ontology_not_found(params[:ontology]) if @ontology.nil?
 
 
-    if params[:propertyid]
+    if !params[:propertyid].blank?
       @root = OpenStruct.new({ children: property_tree(params[:propertyid], params[:ontology]) })
       not_found(@root.children.errors.join) if @root.children.respond_to?(:errors)
 
