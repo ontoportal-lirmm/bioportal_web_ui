@@ -1,5 +1,5 @@
 - if @views.empty?
-  = empty_state_message "No views of #{@ontology.acronym} available"
+  = empty_state_message t("ontologies.no_views", acronym: @ontology.acronym)
 - else
   %div.border-top
     %dl
