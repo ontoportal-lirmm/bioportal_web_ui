@@ -10,6 +10,8 @@
     "debounce": "^1.2.1",
     "esbuild": "^0.14.41",
     "flatpickr": "^4.6.13",
+    "highlight.js": "^11.9.0",
+    "jsonld": "^8.3.2",
     "split.js": "^1.6.5",
     "stimulus-flatpickr": "^3.0.0-0",
     "stimulus-rails-nested-form": "^4.0.0",
