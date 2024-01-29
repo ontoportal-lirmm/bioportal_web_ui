@@ -31,7 +31,7 @@
                 - check_input = !params[:input_type].eql?('2')
                 .text-choice
                   = render Input::RadioChipComponent.new(label: t('recommender.text'), name: 'input_type', value: '1', checked: check_input)
-                .keywords-choice
+                .keywords-choice{'data-controller':' tooltip', title: 'Keywords separated by commas'}
                   = render Input::RadioChipComponent.new(label: t('recommender.keywords'), name: 'input_type', value: '2', checked: !check_input)
             .output
               .title
