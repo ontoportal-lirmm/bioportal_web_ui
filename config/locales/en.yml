@@ -19,6 +19,31 @@ en:
   acceptance: Acceptance
   additional_parameters: 'Additional parameters explained at '
   admin:
+    groups:
+      edit: Edit
+      delete: Delete
+      info_error_delete: "Can't delete this group because still used"
+      turbo_confirm: Are you sure?
+      form:
+        acronym: Acronym
+        name: Name
+        description: Description
+        created: Created
+        ontologies: Ontologies
+      new:
+        create_new_group: Create new group
+        create_group: Create group
+      index:
+        Create_a_new_group: Create a new group
+        synchronize_groups_slices: Synchronize groups with slices
+        id: ID
+        count: COUNT
+        actions: Actions
+        no_agents: There are currently no agents.
+      edit: 
+        edit_group: Edit group
+        save: Save
+
     licenses:
       create:
         success: License renewed successfully!
