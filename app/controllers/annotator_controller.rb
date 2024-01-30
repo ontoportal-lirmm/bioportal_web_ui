@@ -13,6 +13,7 @@ class AnnotatorController < ApplicationController
     @annotator_ontologies = LinkedData::Client::Models::Ontology.all
     if params[:text]
       params[:ontologies] = params[:ontologies_list]&.join(',') || ''
+      params[:semantic_types] = params[:semantic_types_list]&.join(',') || ''
       text_to_annotate = params[:text].strip.gsub("\r\n", " ").gsub("\n", " ")
       @results_table_header = [
         "Class", "Ontology", "Contexts"

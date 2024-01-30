@@ -38,12 +38,12 @@
                 = inline_svg_tag 'icons/arrow-down.svg'
         .more-advanced-options.d-none{'data-reveal-component-target': 'item'}
           .filters_line
-            = render Input::SelectComponent.new(label: 'Select UMLS semantic types', id: 'umls_semantic_types', name: 'umls_semantic_types', value: @semantic_types_for_select, multiple: true)
+            = render Input::SelectComponent.new(label: 'Select UMLS semantic types', id: 'umls_semantic_types', name: 'semantic_types_list[]', value: @semantic_types_for_select, multiple: true, selected: params[:semantic_types_list])
             = render Input::SelectComponent.new(label: 'Select UMLS semantic groupes', id: 'umls_semantic_groups', name: 'umls_semantic_groups', value: @semantic_groups_for_select, multiple: true)
             = render Input::SelectComponent.new(label: 'Include ancestors up to level', id: 'ancestors_level', name: 'class_hierarchy_max_level', value: @ancestors_levels, selected: params[:class_hierarchy_max_level])
           .filters_line
             - include_score_helper = 'Score annotations following previous NCBO 2009 measure (old) or Score annotations following C-Value measure (cvalue) or Score annotations following C-Value measure with hierarchy expansion (cvalueh).'
-            = render Input::SelectComponent.new(label: 'Include score', id: 'include_score', name: 'score', value: @include_score, helper_text: include_score_helper)
+            = render Input::SelectComponent.new(label: 'Include score', id: 'include_score', name: 'score', value: @include_score, helper_text: include_score_helper, selected: params[:score])
             = render Input::NumberComponent.new(label: 'Filter by score threshold', name: "score_threshold", value: 0, helper_text: 'Specify minimum score value for annotations.')
             = render Input::NumberComponent.new(label: 'Filter confidence threshold', name: 'confidence_threshold', value: 0, helper_text: 'Specify the minimum position in the score distribution (between 1 and 100).')
           .chips
