@@ -62,6 +62,7 @@ class AnnotatorController < ApplicationController
           index = @results.find_index { |result| result[:class] == row[:class] }
           if index
             @results[index][:context].unshift(*row[:context])
+            @results[index][:score] = @results[index][:score].to_i + row[:score].to_i
           else
             @results.push(row)
           end
@@ -80,6 +81,7 @@ class AnnotatorController < ApplicationController
             index = @results.find_index { |result| result[:class] == row[:class] }
             if index
               @results[index][:context] += row[:context]
+              @results[index][:score] = @results[index][:score].to_i + row[:score].to_i
             else
               @results.push(row)
             end
