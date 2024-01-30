@@ -1,7 +1,7 @@
 = render_in_modal do
-  - @title = "Edit group"
+  - @title = t('admin.groups.edit.edit_group')
 
   %div
     = form_for :group, url: admin_groups_path + "/" + escape(@group.acronym), method: "PATCH", remote: true, data: { collection: "groups"}, html: {class: "admin-collection-form" } do |f|
-      = render partial: "form", locals: {f: f, title_text: "Edit group",
-                                               button_text: "Save", button_class: "edit-group"}
+      = render partial: "form", locals: {f: f, title_text: t('admin.groups.edit.edit_group'),
+                                               button_text: t('admin.groups.edit.save'), button_class: "edit-group"}
