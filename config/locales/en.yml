@@ -612,7 +612,7 @@ en:
     notification_message: "When your ontology is ready for viewing, you will receive an email notification and it will be available here:"
     contact_support: "If you have any questions or problems, please email the %{site} support team at:"
     collecting_data_message: We are still collecting data for %{acronym}
-    submit_new_ontology: Submit New Ontology
+    submit_new_ontology: Submit new ontology
     add_new_submission: "Add new submission for ontology %{acronym}"
     details: Details
     general_information: General information
