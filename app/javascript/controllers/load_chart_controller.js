@@ -9,7 +9,8 @@ export default class extends Controller {
     datasets: Array,
     type: { type: String, default: 'line' },
     title: String,
-    indexAxis: { type: String, default: 'x' }
+    indexAxis: { type: String, default: 'x' },
+    legend: { type: Boolean, default: false }
   }
 
   connect () {
@@ -34,7 +35,7 @@ export default class extends Controller {
             text: this.titleValue
           },
           legend: {
-            display: false
+            display: this.legendValue
           }
         },
         responsive: true,

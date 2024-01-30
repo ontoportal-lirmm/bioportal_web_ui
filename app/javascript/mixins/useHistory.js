@@ -1,18 +1,20 @@
 export class HistoryService {
 
-    unWantedData = ['turbo', 'controller', 'target', 'value']
+    unWantedData = ['turbo', 'controller', 'target', 'value', 'action']
 
 
     constructor() {
-        this.history = History
+        this.history = window.history
+        this.state  = {data: {}}
     }
 
     pushState(data, title, url) {
         this.history.pushState(data, title, url)
+        this.state = {data: data}
     }
 
     getState() {
-        return this.history.getState()
+        return this.state
     }
 
     updateHistory(currentUrl, newData) {

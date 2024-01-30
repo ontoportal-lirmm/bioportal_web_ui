@@ -1,5 +1,5 @@
 class Input::InputFieldComponent < ViewComponent::Base
-    def initialize(label: "" , name:, value: '', type: 'text', placeholder: "", error_message: "", helper_text: "", disabled: false, data: nil, id: '')
+    def initialize(label: "" , name:, value: '', type: 'text', placeholder: "", error_message: "", helper_text: "", disabled: false, data: nil, id: '', min: '', max: '', step: '')
         @label = label
         @name = name
         @placeholder  = placeholder
@@ -10,6 +10,9 @@ class Input::InputFieldComponent < ViewComponent::Base
         @disabled = disabled
         @id = id
         @data = data
+        @min = min
+        @max = max
+        @step = step
     end
 
 
@@ -22,7 +25,7 @@ class Input::InputFieldComponent < ViewComponent::Base
     end
 
     def help?
-        !@helper_text&.empty?
+        !@helper_text.blank?
     end
 
     def label?

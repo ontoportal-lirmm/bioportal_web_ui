@@ -3,7 +3,7 @@
     = render Display::HeaderComponent.new(text: @title, tooltip: @tooltip)
     = image_tag("summary/arrow-down.svg", class: 'ml-2')
 
-  .collapse{id: @id}
+  .collapse{id: @id, class: open_class}
     - if content && !content.empty?
       = content
     - else

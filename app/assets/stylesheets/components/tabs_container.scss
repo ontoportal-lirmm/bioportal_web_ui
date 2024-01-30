@@ -25,7 +25,7 @@
   font-size: 16px;
   font-weight: 400;
   color: #5e5e5e;
-  margin-right: 50px;
+  margin-right: 30px;
   cursor: pointer;
   opacity: 60%;
   transition: opacity 0.3s ease;
@@ -54,4 +54,7 @@
   display: block;
   border: 1px solid var(--primary-color);
   opacity: 100%;
+}
+.container{
+  overflow-x: auto;
 }

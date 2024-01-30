@@ -161,7 +161,33 @@
   text-align: right;
 }
 
+#networkContainer{
+      transition: transform 0.3s;
+    }
 
+.active-fullscreen {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: #ffffff;
+  z-index: 9999;
+}
+#fullscreen-button {
+  background-color: var(--primary-color);
+  -webkit-mask-image: url(asset-path('icons/full-screen.svg'));
+  mask-image: url(asset-path('icons/full-screen.svg'));
+  float: right;
+  position: relative;
+  bottom: 79px;
+  width: 32px;
+  height: 31px;
+  background-repeat: no-repeat!important;
+  background-position: 2px 2px;
+  right: 58px;
+  cursor: pointer;
+  }
 
 div.vis-network div.vis-navigation {
   div.vis-button.vis-up{

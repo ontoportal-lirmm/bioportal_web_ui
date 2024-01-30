@@ -13,24 +13,16 @@
 //= require bioportal
 //= require admin/licenses
 //= require bp_ajax_controller
-//= require bp_reviews
 //= require bp_notes
-//= require bp_ontolobridge
 //= require bp_form_complete
-//= require bp_analytics
-//= require bp_search
 //= require bp_mappings
 //= require bp_admin
-//= require bp_recommender
-//= require bp_property_tree
 //= require concepts
-//= require home
-//= require_tree ./helpers
 //= require_tree ./components
 //= require projects
 //= require application_esbuild
-customElements.define('data-table-loader', DataTableLoader );
-customElements.define('data-table', DataTable );
-customElements.define('instances-table', InstancesTable );
+customElements.define('data-table-loader', DataTableLoader)
+customElements.define('data-table', DataTable)
+customElements.define('instances-table', InstancesTable)
 
 

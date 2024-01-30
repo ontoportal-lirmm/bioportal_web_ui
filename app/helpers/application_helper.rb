@@ -24,6 +24,11 @@ module ApplicationHelper
                        :cclicense => "http://creativecommons.org/licenses/"}
 
 
+
+
+  def resolve_namespaces
+    RESOLVE_NAMESPACE
+  end
   def ontologies_analytics
     data = LinkedData::Client::Analytics.last_month.onts
     data.map{|x| [x[:ont].to_s, x[:views]]}.to_h
@@ -73,6 +78,7 @@ module ApplicationHelper
       end
     end
   end
+  
 
 
   def encode_param(string)
@@ -80,11 +86,11 @@ module ApplicationHelper
   end
 
   def escape(string)
-    CGI.escape(string)
+    CGI.escape(string) if string
   end
 
   def unescape(string)
-    CGI.unescape(string)
+    CGI.unescape(string) if string
   end
 
   def clean(string)
@@ -115,146 +121,9 @@ module ApplicationHelper
     session[:user] && session[:user].admin?
   end
 
-  def draw_note_tree(notes,key)
-    output = ""
-    draw_note_tree_leaves(notes,0,output,key)
-    return output
-  end
 
-  def draw_note_tree_leaves(notes,level,output,key)
-    for note in notes
-      name="Anonymous"
-      unless note.user.nil?
-        name=note.user.username
-      end
-      headertext=""
-      notetext=""
-      if note.note_type.eql?(5)
-        headertext<< "<div class=\"header\" onclick=\"toggleHide('note_body#{note.id}','');compare('#{note.id}')\">"
-        notetext << " <input type=\"hidden\" id=\"note_value#{note.id}\" value=\"#{note.comment}\">
-                  <span class=\"message\" id=\"note_text#{note.id}\">#{note.comment}</span>"
-      else
-        headertext<< "<div onclick=\"toggleHide('note_body#{note.id}','')\">"
-
-        notetext<< "<span class=\"message\" id=\"note_text#{note.id}\">#{simple_format(note.comment)}</span>"
-      end
-
-
-      output << "
-        <div style=\"clear:both;margin-left:#{level*20}px;\">
-        <div  style=\"float:left;width:100%\">
-          #{headertext}
-              <div>
-                <span class=\"sender\" style=\"float:right\">#{name} at #{note.created_at.strftime('%m/%d/%y %H:%M')}</span>
-                <div class=\"header\"><span class=\"notetype\">#{note.type_label.titleize}:</span> #{note.subject}</div>
-                              <div style=\"clear:both\"></div>
-              </div>
-
-          </div>
-
-          <div name=\"hiddenNote\" id=\"note_body#{note.id}\" >
-          <div class=\"messages\">
-            <div>
-              <div>
-               #{notetext}"
-      if session[:user].nil?
-        output << "<div id=\"insert\"><a href=\"\/login?redirect=/visualize/#{@ontology.to_param}/?conceptid=#{@concept.id}#notes\">Reply</a></div>"
-      else
-        if @modal
-          output << "<div id=\"insert\"><a href=\"#\"  onclick =\"document.getElementById('m_noteParent').value='#{note.id}';document.getElementById('m_note_subject#{key}').value='RE:#{note.subject}';jQuery('#modal_form').html(jQuery('#modal_comment').html());return false;\">Reply</a></div>"
-        else
-          output << "<div id=\"insert\"><a href=\"#TB_inline?height=400&width=600&inlineId=commentForm\" class=\"thickbox\" onclick =\"document.getElementById('noteParent').value='#{note.id}';document.getElementById('note_subject#{key}').value='RE:#{note.subject}';\">Reply</a></div>"
-        end
-      end
-      output << "</div>
-            </div>
-          </div>
-
-          </div>
-        </div>
-        </div>"
-      if(!note.children.nil? && note.children.size>0)
-        draw_note_tree_leaves(note.children,level+1,output,key)
-      end
-    end
-  end
-
-  def draw_tree(root, acronym, id = nil, concept_schemes = nil)
-    id = root.children.first.id if id.nil?
-
-    # TODO: handle tree view for obsolete classes, e.g. 'http://purl.obolibrary.org/obo/GO_0030400'
-    raw build_tree(root, '', id, acronym, concept_schemes: concept_schemes)
-  end
-
-  def build_tree(node, string, id, acronym, concept_schemes: nil)
-
-    return string if node.children.nil? || node.children.empty?
-
-    node.children.sort! { |a, b| (main_language_label(a.prefLabel) || a.id).downcase <=> (main_language_label(a.prefLabel) || b.id).downcase }
-    node.children.each do |child|
-      active_style = child.id.eql?(id) ? "active" : ''
-
-      # This fake root will be present at the root of "flat" ontologies, we need to keep the id intact
-
-      if child.id.eql?('bp_fake_root')
-        string << tree_link_to_concept(child: child, ontology_acronym: acronym,
-                                       active_style: active_style, node: node, skos: !concept_schemes.nil?)
-      else
-        string << tree_link_to_concept(child: child, ontology_acronym: acronym,
-                                       active_style: active_style, node: node, skos: !concept_schemes.nil?)
-        if child.hasChildren && !child.expanded?
-          string << tree_link_to_children(child: child, acronym: acronym, concept_schemes: concept_schemes)
-        elsif child.expanded?
-          string << '<ul>'
-          build_tree(child, string, id, acronym, concept_schemes: concept_schemes)
-          string << '</ul>'
-        end
-        string << '</li>'
-      end
-    end
-    string
-  end
-
-  def tree_link_to_concept(child:, ontology_acronym:, active_style:, node: nil, skos: false)
-    language = request_lang
-    li_id = child.id.eql?('bp_fake_root') ? 'bp_fake_root' : short_uuid
-    open = child.expanded? ? "class='open'" : ''
-    #icons = child.relation_icon(node) removed because slow
-    muted_style = skos && Array(child.isInActiveScheme).empty? ? 'text-muted' : nil
-    muted_title = muted_style && !child.obsolete? ? "title='is not in a scheme'" : nil
-    href = ontology_acronym.blank? ? '#' : "/ontologies/#{ontology_acronym}/concepts/?id=#{CGI.escape(child.id)}&language=#{language}"
-
-    if child.prefLabel.nil?
-      pref_label_html = child.id.split('/').last
-    else
-      pref_label_lang, pref_label_html = select_language_label(child.prefLabel)
-      pref_label_lang = pref_label_lang.to_s.upcase
-      tooltip = pref_label_lang.eql?("@NONE") ? "" : "data-controller='tooltip' data-tooltip-position-value='right' title='#{pref_label_lang}'";
-    end
-
-    link = <<-EOS
-        <a id='#{child.id}' data-conceptid='#{child.id}'
-           data-turbo=true data-turbo-frame='concept_show' href='#{href}' 
-           data-collections-value='#{child.memberOf || []}'
-           data-active-collections-value='#{child.isInActiveCollection || []}'
-           data-skos-collection-colors-target='collection'
-           class='#{muted_style} #{active_style}' #{muted_title}'
-           #{tooltip}
-          >
-            #{ pref_label_html }
-        </a>
-    EOS
-    "<li #{open} id='#{li_id}'>#{link}"
-  end
-
-
-  def tree_link_to_children(child:, acronym: ,concept_schemes: nil)
-    language = request_lang
-    li_id = child.id.eql?('bp_fake_root') ? 'bp_fake_root' : short_uuid
-    concept_schemes = "&concept_schemes=#{concept_schemes.map{|x| CGI.escape(x)}.join(',')}" if concept_schemes
-
-    link = "<a id='#{child.id}' href='/ajax_concepts/#{acronym}/?conceptid=#{CGI.escape(child.id)}#{concept_schemes}&callback=children&language=#{language}'>ajax_class</a>"
-    "<ul class='ajax'><li id='#{li_id}'>#{link}</li></ul>"
+  def child_id(child)
+    child.id.to_s.split('/').last
   end
 
   def loading_spinner(padding = false, include_text = true)
@@ -266,11 +135,7 @@ module ApplicationHelper
     end
   end
 
-  # This gives a very hacky short code to use to uniquely represent a class
-  # based on its parent in a tree. Used for unique ids in HTML for the tree view
-  def short_uuid
-    rand(36**8).to_s(36)
-  end
+ 
 
   def help_icon(link, html_attribs = {})
     html_attribs["title"] ||= "Help"
@@ -390,17 +255,7 @@ module ApplicationHelper
     @groups_for_js = @groups_map.to_json
   end
 
-  def metadata_for_select
-    get_metadata
-    return @metadata_for_select
-  end
 
-  def get_metadata
-    @metadata_for_select = []
-    submission_metadata.each do |data|
-      @metadata_for_select << data["attribute"]
-    end
-  end
 
 
   def ontologies_to_acronyms(ontologyIDs)
@@ -415,6 +270,8 @@ module ApplicationHelper
     !@subdomain_filter.nil? && !@subdomain_filter[:active].nil? && @subdomain_filter[:active] == true
   end
 
+
+  # TODO this helper is not used but can be usefully
   def truncate_with_more(text, options = {})
     length ||= options[:length] ||= 30
     trailing_text ||= options[:trailing_text] ||= " ... "
@@ -734,6 +591,7 @@ module ApplicationHelper
     modified_properties
   end
 
+
   def prefix_property_url(key_string, key = nil)
     namespace_key, _ = RESOLVE_NAMESPACE.find { |_, value| key_string.include?(value) }
 
@@ -743,6 +601,36 @@ module ApplicationHelper
       namespace_key
     else # we don't try to guess the prefix
        nil
+    end
+  end
+
+  def show_advanced_options_button(text: nil, init: nil)
+    content_tag(:div, class: "#{init ? 'd-none' : ''} advanced-options-button", 'data-action': 'click->reveal-component#show', 'data-reveal-component-target': 'showButton') do
+      inline_svg_tag('icons/settings.svg') +
+        content_tag(:div, text, class: 'text')
+    end
+  end
+
+  def hide_advanced_options_button(text: nil, init: nil)
+    content_tag(:div, class: "#{init ? '' : 'd-none'} advanced-options-button", 'data-action': 'click->reveal-component#hide', 'data-reveal-component-target': 'hideButton') do
+      inline_svg_tag('icons/hide.svg') +
+        content_tag(:div, text, class: 'text')
+    end
+  end
+  
+  def insert_sample_text_button(text)
+    content_tag(:div, class:'insert-sample-text-button') do
+      content_tag(:div, class: 'button', 'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("sample_text")) do
+        content_tag(:div, text, class: 'text') +
+        inline_svg_tag('icons/arrow-curved-up.svg')
+      end
+    end
+  end
+
+  def empty_state(text)
+    content_tag(:div, class:'browse-empty-illustration') do
+      inline_svg_tag('empty-box.svg') + 
+      content_tag(:p, text)
     end
   end
 end

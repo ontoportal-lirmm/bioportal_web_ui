@@ -10,7 +10,6 @@ export default class extends Controller {
         itemLinkBase: String,
         idKey: String,
         cache: {type: Boolean, default: true},
-        scrollDown: {type: Boolean, default: true}
     }
 
     connect() {
@@ -39,35 +38,7 @@ export default class extends Controller {
     #useCache() {
         return this.cacheValue
     }
-    #scrollDownEnabled(){
-        return this.scrollDownValue
-    }
 
-    #scrollDown(currentScroll) {
-        const startPosition = window.pageYOffset;
-        const distance = 300 - currentScroll;
-        const duration = 1000;
-        let start = null;
-
-        function scrollAnimation(timestamp) {
-            if (!start) start = timestamp;
-            const progress = timestamp - start;
-            const scrollPosition = startPosition + easeInOutCubic(progress, 0, distance, duration);
-            window.scrollTo(0, scrollPosition);
-            if (progress < duration) {
-                window.requestAnimationFrame(scrollAnimation);
-            }
-        }
-
-        function easeInOutCubic(t, b, c, d) {
-            t /= d / 2;
-            if (t < 1) return c / 2 * t * t * t + b;
-            t -= 2;
-            return c / 2 * (t * t * t + 2) + b;
-        }
-
-        window.requestAnimationFrame(scrollAnimation);
-    }
 
     #fetchItems() {
         if (this.items.length !== 0 && this.#useCache()) {
@@ -130,9 +101,7 @@ export default class extends Controller {
             this.dropDown.style.display = "block";
 
             this.input.classList.add("home-dropdown-active");
-            if ((window.scrollY < 300) && this.#scrollDownEnabled()) {
-                this.#scrollDown(window.scrollY);
-            }
+
 
         } else {
             this.dropDown.style.display = "none";

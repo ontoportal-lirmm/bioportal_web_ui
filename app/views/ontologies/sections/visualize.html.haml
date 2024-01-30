@@ -17,15 +17,6 @@
   - else
     = render Display::AlertComponent.new(type: 'danger') do
       =  @concept.nil? ? 'No class/concept found' : @error
-  :javascript
-    $(document).ready(function() {
-    const ontology_acronym = "#{@ontology.acronym}"
-    let data = #{raw @instance_details.to_json} || null
-
-    if(data && Object.keys(data).length !== 0){
-    $.facebox({ajax: `/ontologies/${ontology_acronym}/instances/${encodeURIComponent(data["@id"])}`})
-    }
-    })
 
 
 

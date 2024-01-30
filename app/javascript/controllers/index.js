@@ -58,6 +58,9 @@ application.register("ontology-viewer-tabs", OntologyViewerTabsController)
 import OntoportalAutocompleteController from "./ontoportal_autocomplete_controller"
 application.register("ontoportal-autocomplete", OntoportalAutocompleteController)
 
+import RecommenderController from "./recommender_controller"
+application.register("recommender", RecommenderController)
+
 import ShowFilterCountController from "./show_filter_count_controller"
 application.register("show-filter-count", ShowFilterCountController)
 
@@ -69,6 +72,9 @@ application.register("simple-tree", SimpleTreeController)
 
 import SkosCollectionColorsController from "./skos_collection_colors_controller"
 application.register("skos-collection-colors", SkosCollectionColorsController)
+
+import SparqlController from "./sparql_controller"
+application.register("sparql", SparqlController)
 
 import TextTruncateController from "./text_truncate_controller"
 application.register("text-truncate", TextTruncateController)
@@ -84,3 +90,6 @@ application.register("turbo-frame", TurboFrameController)
 
 import TurboFrameErrorController from "./turbo_frame_error_controller"
 application.register("turbo-frame-error", TurboFrameErrorController)
+
+import SampleTextController from "./sample_text_controller"
+application.register("sample-text", SampleTextController)

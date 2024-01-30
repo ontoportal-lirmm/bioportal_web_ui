@@ -57,20 +57,26 @@
           %img{:src => asset_path("check-outlined.svg")}/
           %p
             = benefit
-
-    %div.home-upload-ontology-button
-      = upload_ontology_button
+    .home-ontologies-actions
+      .home-upload-ontology-button
+        = upload_ontology_button
+      .discover-ontologies
+        = discover_ontologies_button
 
   .home-section
     %h4
       = t('home.recommender_annotator')
     %hr.home-section-line/
-    .home-card
+    .home-card{'data-controller': 'sample-text'}
       %form{action: "/annotator_recommender_form", method: "post"}
-        %textarea.home-recommendations-and-annotations{rows: "6" , placeholder: t('home.paste_text_prompt'), name: "text"}
+        %textarea.home-recommendations-and-annotations{rows: "4" , placeholder: t('home.paste_text_prompt'), name: "input", 'data-sample-text-target': "input"}
         %input.d-none{type: "submit", name: "submit_button" ,value: "annotator", id: "annotator_submit"}/
         %input.d-none{type: "submit" , name: "submit_button" ,value: "recommender", id: "recommender_submit"}/
-        .home-services-buttons
+        .home-services-buttons.container
+          .insert-sample-text-button{'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("sample_text")}
+            %div
+              Insert sample text
+            = inline_svg_tag 'icons/arrow-curved-up.svg'
           .home-get-recommendations{onclick: "submitRecommender()"}
             %p= t('home.get_recommendations')
             = inline_svg_tag "play.svg", class: "home-play-icon"
@@ -84,7 +90,7 @@
         %div.align-items
           %h4.margin-items= t('home.fairness')
           = render Display::InfoTooltipComponent.new(text: "You are seing the average scores for all the public ontologies in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness")
-          = fairness_link
+          = fairness_link('margin-bottom: 6px; vertical-align: top;')
         %hr.home-section-line/
         .home-card.home-fair-scores
           %div.fair-scores-badge-section
@@ -165,23 +171,18 @@
             %h4
               = format_number_abbreviated(@users_count)
             %p Users
+      .home-statistics-link.justify-content-end
+        = link_to 'See details','/statistics', target: "_blank"
+
   .home-section
     .home-statistics-container
       .home-support-title
-        %p= t('home.supported_by')
+        %p= t('home.support_and_collaborations')
         %hr.home-section-line/
       .home-support-items
-        - $HOME_PAGE_LOGOS[:supported_by].each do |logo|
+        - $HOME_PAGE_LOGOS.each do |logo|
           %a{href:logo[:url], target: "_blanc"}
             %img{src: asset_path(logo[:img_src])}
-      .home-support-title
-        %p= t('home.with_collaboration')
-        %hr.home-section-line/
-      .home-support-items
-        - $HOME_PAGE_LOGOS[:with_the_collaboration_of].each do |logo|
-          %a{href:logo[:url], target: "_blanc"}
-            %img{src: asset_path(logo[:img_src]), class: 'custom-logo-class'}
-
 
 
 :javascript

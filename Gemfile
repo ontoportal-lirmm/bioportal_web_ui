@@ -13,10 +13,9 @@ gem 'terser' #ugilifer replacent
 # gem 'duktape'
 
 gem 'bootstrap', '~> 4.2.0'
-gem 'chart-js-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'select2-rails'
+
 
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
@@ -118,6 +117,7 @@ group :development do
   gem 'i18n-tasks'
   gem 'deepl-rb'
   gem 'letter_opener_web', '~> 2.0'
+  gem 'haml-rails'
 end
 
 group :test, :development do

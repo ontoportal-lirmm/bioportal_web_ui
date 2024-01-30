@@ -52,14 +52,13 @@ module SubmissionInputsHelper
   end
 
   # @param attr_key String
-  def attribute_input(attr_key, long_text: false, label: nil, show_tooltip: true, max_date: nil)
+  def attribute_input(attr_key, long_text: false, label: nil, show_tooltip: true, max_date: nil, help: nil)
     attr = SubmissionMetadataInput.new(attribute_key: attr_key, submission: @submission, label: label,
                                        attr_metadata: attr_metadata(attr_key))
 
-
     if attr.type?('Agent')
       if attr.type?('list')
-        generate_list_agent_input(attr)
+        generate_list_agent_input(attr, helper_text: help)
       else
         generate_agent_input(attr)
       end
@@ -76,24 +75,24 @@ module SubmissionInputsHelper
     elsif enforce_values?(attr)
 
       if attr.type?('list')
-        generate_select_input(attr, multiple: true)
+        generate_select_input(attr, multiple: true, help_text: help)
       elsif attr.type?('boolean')
-        generate_boolean_input(attr)
+        generate_boolean_input(attr, help: help)
       else
-        generate_select_input(attr)
+        generate_select_input(attr, help_text: help)
       end
     elsif attr.type?('isOntology')
       generate_select_input(attr, multiple: attr['enforce'].include?('list'))
     elsif attr.type?('uri')
-      generate_url_input(attr)
+      generate_url_input(attr, helper_text: help)
     elsif attr.type?('boolean')
-      generate_boolean_input(attr)
+      generate_boolean_input(attr, help: help)
     else
       # If input a simple text
       name = attr.name
       label = attr_header_label(attr, show_tooltip: show_tooltip)
       if attr.type?('list')
-        generate_list_text_input(attr)
+        generate_list_text_input(attr, helper_text: help, long_text: long_text)
       elsif attr.metadata['attribute'].to_s.eql?('URI')
         url_input(name: name, label: label, value: @submission.URI)
       elsif long_text
@@ -101,7 +100,7 @@ module SubmissionInputsHelper
                         value: attr.values)
       else
         text_input(name: name, label: label,
-                   value: attr.values)
+                   value: attr.values, help: help)
       end
     end
 
@@ -140,17 +139,64 @@ module SubmissionInputsHelper
     end
   end
 
+  def ontology_skos_language_help
+    content_tag(:div, class: 'upload-ontology-desc has_ontology_language_input') do
+      link = link_to('Please refer to the documentation for more details.', "https://doc.jonquetlab.lirmm.fr/share/618372fb-a852-4f3e-8e9f-8b07ebc053e6", target: "_blank")
+      text = <<-EOS
+            SKOS vocabularies submitted to #{portal_name} shall follow a few constraints (e.g., contain a minimum of one skos:ConceptScheme also typed as owl:Ontology) 
+            and top concept assertion. #{link}
+      EOS
+      text.html_safe
+    end
+  end
+
+  def ontology_obo_language_help
+    content_tag(:div, class: 'upload-ontology-desc has_ontology_language_input') do
+      link = link_to('the OBOinOWL parser.', "#", target: "_blank")
+      text = <<-EOS
+        OBO ontologies submitted to #{portal_name} will be parsed by the OWL-API which integrates #{link} 
+        The resulting RDF triples will then be loaded in #{portal_name} triple-store. 
+      EOS
+      text.html_safe
+    end
+  end
+
+  def ontology_owl_language_help
+    content_tag(:div, class: 'upload-ontology-desc has_ontology_language_input') do
+      link = link_to('the Protégé ', "https://protege.stanford.edu/", target: "_blank")
+      text = <<-EOS
+        OWL ontologies submitted to #{portal_name} will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with
+        #{link}
+        software which does use the same component.
+      EOS
+      text.html_safe
+    end
+  end
+
+  def ontology_umls_language_help
+    content_tag(:div, class: 'upload-ontology-desc has_ontology_language_input') do
+      link = link_to('by the UMLS2RDF tool.', "#", target: "_blank")
+      text = <<-EOS
+        UMLS-RRF resources are usually produced #{link}
+      EOS
+      text.html_safe
+    end
+  end
+
   def has_ontology_language_input(submission = @submission)
-    render Layout::RevealComponent.new(init_show: submission.hasOntologyLanguage&.eql?('SKOS'), show_condition: 'SKOS') do |c|
+    render(Layout::RevealComponent.new(possible_values: %w[SKOS OBO UMLS OWL], selected: @submission.hasOntologyLanguage)) do |c|
       c.button do
         attribute_input("hasOntologyLanguage")
       end
-      content_tag(:div, class: "upload-ontology-desc") do
-        content_tag(:div) do
-          "SKOS vocabularies submitted to BioPortal must contain a minimum of one concept scheme and top concept assertion. Please
-          refer to the NCBO wiki for a more #{link_to(ExternalLinkTextComponent.new(text: 'detailed explanation').call, "#seethewiki")} with examples.".html_safe
-        end
-      end
+
+      c.container { ontology_skos_language_help }
+
+      c.container { ontology_obo_language_help }
+
+      c.container { ontology_umls_language_help }
+
+      c.container { ontology_owl_language_help }
+
     end
   end
 
@@ -175,28 +221,33 @@ module SubmissionInputsHelper
       @user_select_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
     end
 
-    render(Layout::RevealComponent.new(init_show: ontology.viewingRestriction&.eql?('private'), show_condition: 'private')) do |c|
+    render(Layout::RevealComponent.new(possible_values: %w[private public], selected: ontology.viewingRestriction)) do |c|
       c.button do
         select_input(label: "Visibility", name: "ontology[viewingRestriction]", required: true,
                      values: %w[public private],
                      selected: ontology.viewingRestriction)
       end
-      content_tag(:div, class: 'upload-ontology-input-field-container') do
-        select_input(label: "Add or remove accounts that are allowed to see this ontology in #{portal_name}.", name: "ontology[acl]", values: @user_select_list, selected: ontology.acl, multiple: true)
+
+      c.container do
+        content_tag(:div, class: 'upload-ontology-input-field-container') do
+          select_input(label: "Add or remove accounts that are allowed to see this ontology in #{portal_name}.", name: "ontology[acl]", values: @user_select_list, selected: ontology.acl, multiple: true)
+        end
       end
     end
   end
 
   def ontology_view_of_input(ontology = @ontology)
-    render Layout::RevealComponent.new(init_show: ontology.view?) do |c|
+    render Layout::RevealComponent.new(selected: !ontology.view?, toggle: true) do |c|
       c.button do
         content_tag(:span, class: 'd-flex') do
           switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is this ontology a view of another ontology?', checked: ontology.view?, style: 'font-size: 14px;')
         end
-      end
 
-      content_tag(:div) do
-        render partial: "shared/ontology_picker_single", locals: { placeholder: "", field_name: "viewOf", selected: ontology.viewOf }
+        c.container do
+          content_tag(:div) do
+            render partial: "shared/ontology_picker_single", locals: { placeholder: "", field_name: "viewOf", selected: ontology.viewOf }
+          end
+        end
       end
     end
   end
@@ -289,8 +340,8 @@ module SubmissionInputsHelper
     end
   end
 
-  def generate_list_agent_input(attr)
-    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.metadata['attribute'])) do
+  def generate_list_agent_input(attr, helper_text: nil)
+    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.metadata['attribute']), helper_text: helper_text) do
       render NestedAgentSearchInputComponent.new(label: attr_header_label(attr),
                                                  agents: attr.values,
                                                  agent_type: agent_type(attr.metadata),
@@ -317,10 +368,10 @@ module SubmissionInputsHelper
 
   def generate_textarea_input(attr)
     text_input(name: attr.name,
-               value: attr.values)
+               value: attr.values, helper_text: nil)
   end
 
-  def generate_select_input(attr, multiple: false)
+  def generate_select_input(attr, multiple: false, help_text: nil)
     name = attr.name
     label = attr_header_label(attr)
     metadata_values, select_values = selected_values(attr, enforced_values(attr))
@@ -332,11 +383,11 @@ module SubmissionInputsHelper
 
     select_input(name: name, label: label, values: select_values,
                  selected: metadata_values, multiple: multiple, required: attr.required?,
-                 open_to_add: open_to_add_metadata?(attr.attr_key))
+                 open_to_add: open_to_add_metadata?(attr.attr_key), help: help_text)
   end
 
-  def generate_list_field_input(attr, name, label, values, &block)
-    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.attr)) do
+  def generate_list_field_input(attr, name, label, values, helper_text: nil, &block)
+    render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.attr), helper_text: helper_text) do
       render NestedFormInputsComponent.new do |c|
         c.header do
           label
@@ -359,7 +410,7 @@ module SubmissionInputsHelper
 
   end
 
-  def generate_url_input(attr)
+  def generate_url_input(attr, helper_text: nil)
     label = attr_header_label(attr)
     values = attr.values
     name = attr.name
@@ -369,7 +420,7 @@ module SubmissionInputsHelper
       if is_relation
         generate_ontology_select_input(name, label, values, true)
       else
-        generate_list_field_input(attr, name, label, values) do |value, row_name, id|
+        generate_list_field_input(attr, name, label, values, helper_text: helper_text) do |value, row_name, id|
           url_input(label: '', name: row_name, value: value)
         end
       end
@@ -377,7 +428,7 @@ module SubmissionInputsHelper
       if is_relation
         generate_ontology_select_input(name, label, values, false)
       else
-        url_input(label: label, name: name, value: values)
+        url_input(label: label, name: name, value: values, help: helper_text)
       end
     end
   end
@@ -399,23 +450,27 @@ module SubmissionInputsHelper
                          open_to_add: true)
   end
 
-  def generate_list_text_input(attr)
+  def generate_list_text_input(attr, helper_text: nil, long_text: false)
     label = attr_header_label(attr)
     values = attr.values || ['']
     name = attr.name
-    generate_list_field_input(attr, name, label, values) do |value, row_name, id|
-      text_input(label: '', name: row_name, value: value)
+
+    generate_list_field_input(attr, name, label, values, helper_text: helper_text) do |value, row_name, id|
+      if long_text
+        text_area_tag(row_name, value, class: 'input-field-component', label: '')
+      else
+        text_input(label: '', name: row_name, value: value)
+      end
     end
   end
 
-  def generate_boolean_input(attr)
+  def generate_boolean_input(attr, help: nil)
     value = attr.values
     value = value.to_s unless value.nil?
     name = attr.name
-    content_tag(:div, class: 'd-flex') do
+    content_tag(:div) do
       switch_input(id: name, name: name, label: attr_header_label(attr), checked: value.eql?('true'), value: value,
-                   boolean_switch: true,
-                   style: 'font-size: 14px;')
+                   boolean_switch: true, style: 'font-size: 14px;', help: help)
     end
   end
 

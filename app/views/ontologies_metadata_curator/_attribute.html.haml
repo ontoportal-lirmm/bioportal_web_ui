@@ -1,0 +1,36 @@
+- acronym = ontology ? ontology.acronym : submission.id.split('/')[-3]
+= render TurboFrameComponent.new(id: id) do
+  %div.d-flex.justify-content-between.align-items-center
+    %div.d-flex.justify-content-between
+      %div
+        - equivalents = equivalent_properties(attribute)
+        - equivalents.each do |attr|
+          %div.d-flex
+            - if equivalents.size > 1
+              %span= "#{attr}: "
+            %div
+              %div
+                = error_message_alert
+              %div
+                - if attribute == "contact"
+                  = raw submission.contact.map {|c| [c["name"], c["email"]].join(", ") if c.member?(:name) && c.member?(:email)}.join("<br/>")
+                - elsif attribute == "naturalLanguage"
+                  - submission.send(attribute).each do |lang|
+                    = render LanguageFieldComponent.new(value: lang)
+                - elsif attribute == "ontology"
+                  = acronym
+                - else
+                  - values = submission.instance_values[attribute.to_s]
+                  - if values.is_a?(String) && %w[http https].include?(values[0..3])
+                    = render LinkFieldComponent.new(value: values, raw: true, check_resolvability: true)
+                  - else
+                    - Array(values).each do |value|
+                      - if value.is_a?(LinkedData::Client::Models::Agent)
+                        %div
+                          = display_agent(value, link: false)
+                      - else
+                        %p
+                          = value
+            %div
+              = edit_submission_property_link(acronym, submission.submissionId, attribute) do
+                %i.far.fa-edit

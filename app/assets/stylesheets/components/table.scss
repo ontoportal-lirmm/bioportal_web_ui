@@ -34,4 +34,19 @@
   font-weight: 400;
 }
 
+table.dataTable thead td, table.dataTable thead th{
+  padding: 20px 10px;
+}
+
+
+.table-mini{
+  font-size: 14px;
+}
+
+.table-outline{
+  border: 1px solid #C7C7C7 !important;
+  border-radius: 8px;
+  padding: 10px;
+}
+
 

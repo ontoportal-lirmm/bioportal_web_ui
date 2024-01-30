@@ -1,16 +1,68 @@
 module ComponentsHelper
 
-  def chart_component(title: '', type: , labels: , datasets: , index_axis: 'x')
-      data =  {
-        controller: 'load-chart',
-        'load-chart-type-value': type,
-        'load-chart-title-value': title,
-        'load-chart-labels-value': labels,
-        'load-chart-index-axis-value': index_axis,
-        'load-chart-datasets-value': datasets
-      }
-      content_tag(:canvas, nil, data: data)
+  def check_resolvability_container(url)
+    turbo_frame_tag("#{escape(url)}_container", src: "/check_url_resolvability?url=#{escape(url)}", loading: "lazy", class: 'd-inline-block') do
+      content_tag(:div, class: 'p-1', data: { controller: 'tooltip' }, title: 'checking resolvability...') do
+        render LoaderComponent.new(small: true)
+      end
+    end
   end
+
+  def resolvability_check_tag(url)
+    content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;')
+  end
+
+  def copy_link_to_clipboard(url, show_content: false)
+    content_tag(:span, style: 'display: inline-block;') do
+      render ClipboardComponent.new(message: url, show_content: show_content)
+    end
+  end
+
+  def link_to_with_actions(link_to_tag, url: nil, copy: true, check_resolvability: true)
+    tag = link_to_tag
+    url = link_to_tag if url.nil?
+    tag = tag + copy_link_to_clipboard(url) if copy
+
+    tag = tag + resolvability_check_tag(url) if check_resolvability
+    tag.html_safe
+  end
+
+  def tree_component(root, selected, target_frame:, sub_tree: false, id: nil, auto_click: false, &child_data_generator)
+    root.children.sort! { |a, b| (a.prefLabel || a.id).downcase <=> (b.prefLabel || b.id).downcase }
+
+    render TreeViewComponent.new(id: id, sub_tree: sub_tree, auto_click: auto_click) do |tree_child|
+      root.children.each do |child|
+        children_link, data, href = child_data_generator.call(child)
+
+        if children_link.nil? || data.nil? || href.nil?
+          raise ArgumentError, "child_data_generator block did not provide all the child arguements"
+        end
+
+        tree_child.child(child: child, href: href,
+                         children_href: children_link, selected: child.id.eql?(selected&.id),
+                         muted: child.isInActiveScheme&.empty?,
+                         target_frame: target_frame,
+                         data: data) do
+          tree_component(child, selected, target_frame: target_frame, sub_tree: true,
+                         id: id, auto_click: auto_click, &child_data_generator)
+        end
+      end
+    end
+  end
+
+  def chart_component(title: '', type:, labels:, datasets:, index_axis: 'x', show_legend: false)
+    data = {
+      controller: 'load-chart',
+      'load-chart-type-value': type,
+      'load-chart-title-value': title,
+      'load-chart-labels-value': labels,
+      'load-chart-index-axis-value': index_axis,
+      'load-chart-datasets-value': datasets,
+      'load-chart-legend-value': show_legend,
+    }
+    content_tag(:canvas, nil, data: data)
+  end
+
   def info_tooltip(text)
     render Display::InfoTooltipComponent.new(text: text)
   end
@@ -37,7 +89,6 @@ module ComponentsHelper
     end
 
   end
-
 
   def horizontal_list_container(values, &block)
     return if Array(values).empty?
@@ -76,8 +127,8 @@ module ComponentsHelper
     end
   end
 
-  def properties_dropdown(id, title, tooltip, properties, &block)
-    render DropdownContainerComponent.new(title: title, id: id, tooltip: tooltip) do |d|
+  def properties_dropdown(id, title, tooltip, properties, is_open: false, &block)
+    render DropdownContainerComponent.new(title: title, id: id, tooltip: tooltip, is_open: is_open) do |d|
       d.empty_state do
         properties_string = properties.keys[0..4].map { |key| "<b>#{attr_label(key, attr_metadata: attr_metadata(key), show_tooltip: false)}</b>" }.join(', ') + '... ' if properties
         empty_state_message "The fields #{properties_string} are empty"
@@ -94,7 +145,7 @@ module ComponentsHelper
   end
 
   def form_save_button
-    render Buttons::RegularButtonComponent.new(id:'save-button', value: "Save", variant: "primary", size: "slim", type: "submit") do |btn|
+    render Buttons::RegularButtonComponent.new(id: 'save-button', value: "Save", variant: "primary", size: "slim", type: "submit") do |btn|
       btn.icon_left do
         inline_svg_tag "check.svg"
       end
@@ -102,13 +153,12 @@ module ComponentsHelper
   end
 
   def form_cancel_button
-    render Buttons::RegularButtonComponent.new(id:'cancel-button', value: "Cancel", variant: "secondary", size: "slim") do |btn|
+    render Buttons::RegularButtonComponent.new(id: 'cancel-button', value: "Cancel", variant: "secondary", size: "slim") do |btn|
       btn.icon_left do
-         inline_svg_tag "x.svg", width: "20", height: "20"
+        inline_svg_tag "x.svg", width: "20", height: "20"
 
       end
     end
   end
-
 
 end

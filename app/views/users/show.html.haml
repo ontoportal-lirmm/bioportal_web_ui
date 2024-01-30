@@ -39,7 +39,7 @@
               %h4.account-page-card-title Mailing List Subscription
               %p.account-page-card-desc="Register to the #{portal_name} announcements mailing list."
             - subscribed = false
-            - if subscribed 
+            - if subscribed
               %a.account-page-subscribe-button{:href =>"mailto:#{$ANNOUNCE_SERVICE_HOST}?Subject=unsubscribe%20#{$ANNOUNCE_LIST}"}
                 Unsubscribe
             - else
@@ -51,14 +51,12 @@
               %h4.account-page-card-title API Key
               %p.account-page-card-desc
                 = "Your API Key can be used to access #{portal_name} Web services"
-              %p.apikey
-                = session[:user].apikey
-            %a{:href => "javascript:navigator.clipboard.writeText('"+session[:user].apikey+"');"}
-              = render partial: "shared/svgs/copy_icon"
-        .account-page-api-documentation-link
-          %a{href: "#{$REST_URL}/documentation", target: "_blank"}
-            API documentation
-            = render partial: "shared/svgs/external_link_icon"
+              %div.apikey
+                = render ClipboardComponent.new(message: session[:user].apikey)
+          .account-page-api-documentation-link
+            %a{href: "#{$REST_URL}/documentation", target: "_blank"}
+              API documentation
+              = render partial: "shared/svgs/external_link_icon"
         .account-page-card
           %h4.account-page-card-title
             Custom Semantic Resource Set

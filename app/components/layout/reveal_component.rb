@@ -2,19 +2,19 @@
 
 class Layout::RevealComponent < ViewComponent::Base
   renders_one :button
+  renders_many :containers
 
-  def initialize(init_show: false, show_condition: nil,hidden_class: 'd-none')
+  def initialize(selected: nil, possible_values: [], hidden_class: 'd-none', toggle: false)
     @hidden_class = hidden_class
-    @init_show = init_show
-    @show_condition = show_condition
+    @possible_values = possible_values
+    @selected = selected
+    @toggle = toggle
   end
 
   def container_data
-    out = {
+    {
       controller: 'reveal-component',
       'reveal-component-hidden-class': @hidden_class
     }
-    out['reveal-component-condition-value'] = @show_condition if @show_condition
-    out
   end
 end

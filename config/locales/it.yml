@@ -115,13 +115,14 @@ it:
     ontology_upload: Volete caricare un'ontologia?
     ontology_upload_benefits: 'Caricando la propria ontologia su %{site}, è possibile:'
     ontology_upload_button: Caricare l'ontologia
+    discover_ontologies_button: Scopri le ontologie
     ontology_upload_desc: Caricare un'ontologia è un modo per condividere la propria
       conoscenza del dominio con altri.
     paste_text_prompt: Incollare un paragrafo di testo o alcune parole chiave ...
     recommender_annotator: Raccomandatore e annotatore
-    supported_by: Supportato da
+    support_and_collaborations: Supporto e collaborazioni
     twitter_news: Notizie
-    with_collaboration: Con la collaborazione di
+    
   input: Ingresso
   insert_sample_text: Inserire un testo di esempio
   keywords: Parole chiave
@@ -361,32 +362,30 @@ it:
   reproduce_results: Riprodurre questi risultati utilizzando il metodo
   score: Punteggio
   search:
-    categories: Categorie
-    class_search: Ricerca di classe
-    classes_with_definitions: Classi con definizioni
-    hide_advanced_options: Nascondere le opzioni avanzate
-    include_in_search: Includere nella ricerca
-    index:
-      categories_placeholder: Iniziare a digitare per selezionare le categorie o lasciare
-        vuoto per utilizzare tutte le categorie
-      obsolete_definition: 'Una classe che gli autori dell''ontologia hanno segnalato
-        come obsoleta e che raccomandano di non usare. Spesso queste classi vengono
-        lasciate nelle ontologie (invece di essere eliminate del tutto) in modo che
-        i sistemi esistenti che dipendono da esse continuino a funzionare"
-
-        '
-      property_definition: Un'associazione nominativa tra due entità. Esempi sono
-        "definizione" (una relazione tra una classe e un testo) e "parte di" (una
-        relazione tra due classi).
-      search_keywords_placeholder: Inserire una classe, ad es. Melanoma
-    narrow_search_to: Restringere la ricerca a
-    obsolete_classes: Classi obsolete
-    ontologies: Ontologie
-    ontology_views: Viste ontologiche
-    property_values: Valori della proprietà
+    search_place_holder: Inserisci un termine, ad esempio altezza della pianta
+    advanced_options:
+      search_language: Lingua di ricerca
+      ontologies: Ontologie
+      include_in_search_title: Includi nella ricerca
+      include_in_search_values:
+        property_values: Valori di proprietà
+        obolete_classses: Classi obsolete
+        ontology_views: Viste ontologiche
+      show_only_title: Mostra solo
+      show_only_values:
+        exact_matches: Corrispondenze esatte
+        classes_with_definitions: Classi con definizioni
     show_advanced_options: Mostra opzioni avanzate
-    title: Ricerca
-    view_search_documentation: Visualizza la documentazione della ricerca
+    hide_advanced_options: Nascondi opzioni avanzate
+    match_in: Corrispondi in
+    ontologies: ontologie
+    result_component:
+      details: Dettagli
+      visualize: Visualizza
+      more_from_ontology: Altro da questa ontologia
+      reuses_in: Riutilizzi in
+      reuses_in_other_ontologies: Riutilizzi in altre ontologie
+
   select_from_list: Selezionare dall'elenco
   select_ontologies: Iniziare a digitare per selezionare le ontologie o lasciare vuoto
     per utilizzarle tutte

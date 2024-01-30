@@ -1,30 +1,63 @@
-import Reveal from 'stimulus-reveal-controller'
+import { Controller } from '@hotwired/stimulus'
 
-export default class extends Reveal {
-    static values = {
-        condition: String
-    }
+export default class extends Controller {
+  static values = {
+    hiddenClass: { type: String, default: 'd-none' }
+  }
 
-    connect() {
-        super.connect()
-    }
+  static targets = ['hideButton', 'showButton', 'item']
 
-    toggle(event) {
-        if (!this.conditionValue) {
-            super.toggle()
-        } else if (this.#shown() && !this.#conditionChecked(event)) {
-            super.toggle()
-        } else if (!this.#shown() && this.#conditionChecked(event)) {
-            super.toggle()
-        }
-    }
+  /*
+      Toggle all the items
+   */
+  toggle (event) {
+    this.#getItems(event).forEach((s) => {
+      s.classList.toggle(this.hiddenClassValue)
+    })
+  }
 
-    #conditionChecked(event) {
-        return this.conditionValue === event.target.value
-    }
+  /*
+      Hide all the items except the selected one
+   */
+  select (event) {
+    let selectedValue = event.target.value
+    let items = this.#getItems(event)
+    items.forEach((s) => {
+      s.classList.add(this.hiddenClassValue)
+    })
 
-    #shown() {
-        return !this.itemTargets[0].classList.contains(this.class);
+    items.forEach((s) => {
+      if (selectedValue === s.dataset.value) {
+        s.classList.remove(this.hiddenClassValue)
+      }
+    })
+  }
+
+  show (event) {
+    this.#getItems(event).forEach((s) => s.classList.remove(this.hiddenClassValue))
+    this.hideButtonTarget.classList.remove(this.hiddenClassValue)
+    this.showButtonTarget.classList.add(this.hiddenClassValue)
+  }
+
+  hide (event) {
+    this.#getItems(event).forEach((s) => s.classList.add(this.hiddenClassValue))
+    this.hideButtonTarget.classList.add(this.hiddenClassValue)
+    this.showButtonTarget.classList.remove(this.hiddenClassValue)
+  }
+
+  #ItemById (event) {
+    let button = event.target.closest('[data-id]')
+    return document.getElementById(button.dataset.id)
+  }
+
+  #getItems (event) {
+    let items
+    if (this.hasItemTarget) {
+      items = this.itemTargets
+    } else {
+      items = [this.#ItemById(event)]
     }
+    return items
+  }
 
 }

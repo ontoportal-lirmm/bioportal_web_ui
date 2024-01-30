@@ -115,12 +115,13 @@ en:
     ontology_upload: Do you want to share an ontology?
     ontology_upload_benefits: 'By uploading and sharing your ontology to %{site}, you can:'
     ontology_upload_button: Submit ontology
+    discover_ontologies_button: Discover ontologies
     ontology_upload_desc: Uploading an ontology or another type of semantic artefact (vocabulary, terminology, thesaurus, ...) is a way of sharing your knowledge with others.
     paste_text_prompt: Enter a paragraph of text or some keywords...
     recommender_annotator: Recommender and Annotator
-    supported_by: Supported by
+    support_and_collaborations: Support & Collaborations
     twitter_news: News
-    with_collaboration: With the collaboration of
+    
   
   input: Input
   insert_sample_text: Insert sample text
@@ -179,9 +180,9 @@ en:
       logout: Logout
       mappings: Mappings
       publications: Publications
-      release_notes: Release notes
+      release_notes: Release Notes
       search_prompt: Search in %{portal_name} ...
-      submit_feedback: Send feedback
+      submit_feedback: Send Feedback
       support: Support
       cite_us: Cite Us
     footer:
@@ -194,6 +195,7 @@ en:
       contact_us: Contact Us
       wiki: Wiki
       documentation: Documentation
+      agro_documentation: AgroPortal documentation
       agreements: Legal
       terms: Terms and Conditions
       privacy_policy: Privacy Policy
@@ -339,23 +341,36 @@ en:
     view_projects_help: View projects help
   
   recommender:
-    intro: Get recommendations for the most relevant ontologies from an excerpt of text or a list of keywords
-    no_recommendations: No recommendations found
-    no_sets_recommended: There are no recommended ontology sets for the provided input. Please try the 'Ontologies' output.
-    ontology_recommendation_input: Please paste a paragraph of text or some keywords to compute ontology recommendations.
-    ontology_recommender: Recommender
-    paste_text_recommendations: Paste a paragraph of text or some keywords separated by commas to compute ontology recommendations
-    recommendation_error: Problem computing recommendations, please try again.
-    text_length_limit: Please use less than 500 words. If you need to annotate longer pieces of text, you can use the recommendation wWb service.
     title: Recommender
-    valid_integer_max_ontologies_per_set: Max ontologies per set must be a valid integer
-      value
-    valid_max_ontologies_per_set_range: Max ontologies per set must be a number between
-      2 and 4
-    valid_numeric_weights: All weights must be valid numeric values
-    weight_sum_greater_than_zero: The sum of weights must be greater than zero
-    weights_greater_than_zero: All weights must be greater than or equal to zero
-  
+    intro: Get recommendations for the most relevant ontologies from an excerpt of text or a list of keywords
+    options: Options
+    input: Input
+    text: Text
+    keywords: Keywords
+    output: Output
+    ontologies: Ontologies
+    ontology_sets: Ontology sets
+    hint: Paste a paragraph of text or some keywords ...
+    weights_configuration: Weights configuration
+    converage: Converage
+    acceptance: Acceptance
+    knowledge_detail: Knowledge detail
+    specialization: Specialization
+    ontologies_configuration: Ontologies configuration
+    max_ont_set: Maximum number of ontologies per set
+    select_ontologies: Select ontologies
+    get_recommendations: Get recommendations
+    edit: Edit
+    results_title: Recommended ontologies
+    results_table:
+      ontology: Ontology
+      final_score: Final score
+      coverage_score: Coverage score
+      acceptance_score: Acceptance score
+      detail_score: Detail score
+      specialization_score: Specialization score
+      annotations: Annotations
+    
   register:
     account_errors: 'Errors creating your account:'
     confirm_password: Confirm password
@@ -373,33 +388,30 @@ en:
   score: Score
   
   search:
-    categories: Categories
-    class_search: Class Search
-    classes_with_definitions: Classes with definitions
-    hide_advanced_options: Hide advanced pptions
-    include_in_search: Include in search
-    index:
-      categories_placeholder: Start typing to select categories or leave blank to
-        use all
-      obsolete_definition: 'A class that the ontology authors have flagged as obsolete
-        and recommend not to use. These classes are often left in ontologies (rather
-        than being deleted entirely) so that existing systems that depend on them
-        continue to function."
-
-        '
-      property_definition: A named association between two entities. Examples are
-        'definition' (a relationship between a class and text) and 'part of' (a relationship
-        between two classes).
-      search_keywords_placeholder: Enter a term, e.g. Melanoma
-    narrow_search_to: Narrow search to
-    obsolete_classes: Obsolete classes
-    ontologies: Ontologies
-    ontology_views: Ontology views
-    property_values: Property values
+    search_place_holder: Enter a term, e.g. plant height
+    advanced_options:
+      search_language: Search language
+      ontologies: Ontologies
+      include_in_search_title: Include in search
+      include_in_search_values:
+        property_values: Property values
+        obolete_classses: Obsolet classes
+        ontology_views: Ontology views
+      show_only_title: Show only
+      show_only_values:
+        exact_matches: Exact matches
+        classes_with_definitions: Classes with definitions
     show_advanced_options: Show advanced options
-    title: Search
-    view_search_documentation: View search documentation
-  
+    hide_advanced_options: Hide advanced options
+    match_in: Match in
+    ontologies: ontologies
+    result_component:
+      details: Details
+      visualize: Vizualize
+      more_from_ontology: more from this ontology
+      reuses_in: Reuses in
+      reuses_in_other_ontologies: Reuses in other ontologies
+    
   select_from_list: Select from list
   select_ontologies: Start typing to select ontologies or leave blank to use them all
   select_ontologies_list: Select ontologies
@@ -409,6 +421,12 @@ en:
   text: Text
   type: Type
   umls_sem_type: UMLS Semantic Type
-  view_fair_scores_definitions: View FAIR scores definitions
+  view_fair_scores_definitions: "You are seeing the FAIRness assessment score for this ontology in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
   visits: Visits
   weights_configuration: Weights configuration
+  sample_text: Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.
+  insert_sample_text: Insert sample text
+  show_advanced_options: Show advanced options
+  hide_advanced_options: Hide advanced options
+  no_result_was_found: No result was found
+  
