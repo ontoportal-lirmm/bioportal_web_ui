@@ -12,6 +12,7 @@ class AnnotatorController < ApplicationController
     initalize_option
     @annotator_ontologies = LinkedData::Client::Models::Ontology.all
     if params[:text]
+      params[:ontologies] = params[:ontologies_list]&.join(',') || ''
       text_to_annotate = params[:text].strip.gsub("\r\n", " ").gsub("\n", " ")
       @results_table_header = [
         "Class", "Ontology", "Contexts"
