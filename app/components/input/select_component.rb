@@ -4,7 +4,7 @@ class Input::SelectComponent < Input::InputFieldComponent
 
   def initialize(id: nil, label: '', name:, value: [], selected: '', placeholder: '', error_message: '', helper_text: '', multiple: false, open_to_add_values: false, required: false,  data: {}, tooltip: nil)
     super(label: label, name: name, value: value, placeholder: placeholder, error_message: error_message,
-          helper_text: helper_text, data: data)
+          helper_text: helper_text, data: data, tooltip: tooltip)
     @values = value
     @selected = selected
     @open_to_add_values = open_to_add_values
@@ -14,7 +14,7 @@ class Input::SelectComponent < Input::InputFieldComponent
   end
 
   def call
-    render Input::InputFieldComponent.new(name: @name, error_message: @error_message, helper_text: @helper_text, label: @label) do
+    render Input::InputFieldComponent.new(name: @name, error_message: @error_message, helper_text: @helper_text, label: @label, tooltip: @tooltip) do
       render SelectInputComponent.new(id: @id, name: @name, values: @values, selected: @selected,
                                       placeholder: @placeholder, required: @required,
                                       multiple: @multiple, open_to_add_values: @open_to_add_values,
