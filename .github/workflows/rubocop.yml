@@ -21,6 +21,8 @@ jobs:
       uses: ruby/setup-ruby@55283cc23133118229fd3f97f9336ee23a179fcf # v1.146.0
       with:
         ruby-version: 2.7.8
+        bundler-cache: true
+
 
     # This step is not necessary if you add the gem to your Gemfile
     - name: Install Code Scanning integration
