@@ -32,4 +32,4 @@ jobs:
       run: bundle install
 
     - name: Rubocop run
-      run: rubocop --format github
+      run: bundle exec rubocop --parallel
