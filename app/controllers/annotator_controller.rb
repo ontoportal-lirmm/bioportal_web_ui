@@ -11,13 +11,22 @@ class AnnotatorController < ApplicationController
   def index
     initalize_option
     @annotator_ontologies = LinkedData::Client::Models::Ontology.all
-    if params[:text]
+    if params[:text] && !params[:text].empty?
+      #binding.pry
       params[:ontologies] = params[:ontologies_list]&.join(',') || ''
       params[:semantic_types] = params[:semantic_types_list]&.join(',') || ''
       text_to_annotate = params[:text].strip.gsub("\r\n", " ").gsub("\n", " ")
       @results_table_header = [
         "Class", "Ontology", "Contexts"
       ]
+
+      if params[:fast_context]
+        params[:certainty] == true
+        params[:temporality] == true
+        params[:experiencer] == true
+        params[:negation] == true
+        @results_table_header += ['Negation', 'Experiencer', 'Temporality', 'Certainty']
+      end
       @direct_results = 0
       @parents_results = 0
       if params[:score].nil? || params[:score].eql?('none')
@@ -30,11 +39,6 @@ class AnnotatorController < ApplicationController
       @ontologies = get_simplified_ontologies_hash
       @semantic_types = get_semantic_types 
       @results = []
-      match_type_translation = {
-          mgrep: "Direct",
-          mapping: "Mapping",
-          closure: "Ancestor"
-      }
       annotations.each do |annotation|
         if annotation.annotations.empty?
           row = {
@@ -60,6 +64,12 @@ class AnnotatorController < ApplicationController
           end
           annotation.annotations.each do |a|
             row[:context].push(a)
+            if params[:fast_context]
+              row[:negation] = a.negationContext
+              row[:experiencer] = a.experiencerContext
+              row[:temporality] = a.temporalityContext
+              row[:certainty] = a.certaintyContext
+            end
           end
           index = @results.find_index { |result| result[:class] == row[:class] }
           if index
@@ -85,6 +95,12 @@ class AnnotatorController < ApplicationController
               @results[index][:context] += row[:context]
               @results[index][:score] = @results[index][:score].to_i + row[:score].to_i
             else
+              if params[:fast_context]
+                row[:negation] = annotation.annotations[0].negationContext
+                row[:experiencer] = annotation.annotations[0].experiencerContext
+                row[:temporality] = annotation.annotations[0].temporalityContext
+                row[:certainty] = annotation.annotations[0].certaintyContext
+              end
               @results.push(row)
             end
             @parents_results = @parents_results + 1

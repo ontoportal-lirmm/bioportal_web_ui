@@ -42,10 +42,10 @@
             - include_score_helper = 'Score annotations following previous NCBO 2009 measure (old) or Score annotations following C-Value measure (cvalue) or Score annotations following C-Value measure with hierarchy expansion (cvalueh).'
             = render Input::SelectComponent.new(label: 'Include score', id: 'include_score', name: 'score', value: @include_score, tooltip: include_score_helper, selected: params[:score])
             = render Input::NumberComponent.new(label: 'Filter by score threshold', name: "score_threshold", value: params[:score_threshold] || 0, tooltip: 'Specify minimum score value for annotations.')
-            = render Input::NumberComponent.new(label: 'Filter confidence threshold', name: 'confidence_threshold', value: params[:confidence_threshold], tooltip: 'Specify the minimum position in the score distribution (between 1 and 100).')
+            = render Input::NumberComponent.new(label: 'Filter confidence threshold', name: 'confidence_threshold', value: params[:confidence_threshold] || 0, tooltip: 'Specify the minimum position in the score distribution (between 1 and 100).')
           .chips
-            = render(ChipsComponent.new(name: 'FastContext', label: 'FastContext'))
-            = render(ChipsComponent.new(name: 'Lemmatize', label: 'Lemmatize'))
+            = render(ChipsComponent.new(name: 'fast_context', label: 'FastContext', checked: params[:fast_context]))
+            = render(ChipsComponent.new(name: 'lemmatize', label: 'Lemmatize', checked: params[:lemmatize]))
         .annotator-page-button
           = render Buttons::RegularButtonComponent.new(id:'annotator', value: 'Get annotations', variant: "primary", type: 'submit')
     - if @results && @results.empty?
@@ -88,6 +88,15 @@
                           Level:
                         .level
                           = context[:level]
-                - if !params[:score].nil? && !params[:score].eql?('none')
+                - if params[:fast_context]
                   - r.td do
-                    = result[:score]                
+                    = result[:negation]
+                  - r.td do
+                    = result[:experiencer]
+                  - r.td do
+                    = result[:temporality]
+                  - r.td do
+                    = result[:certainty]
+                - if params[:score] && !params[:score].eql?('none')
+                  - r.td do
+                    = result[:score] 
