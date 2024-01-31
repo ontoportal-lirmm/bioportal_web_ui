@@ -1,27 +1,24 @@
 name: RuboCop linting
 
-on:
-  push:
-  pull_request:
-    types: [ opened, reopened ]
+on: [push, pull_request]
+
+permissions:
+  contents: read
 
 jobs:
-  rubocop:
+  build:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
+    env:
+      BUNDLE_ONLY: rubocop
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-    # If running on a self-hosted runner, check it meets the requirements
-    # listed at https://github.com/ruby/setup-ruby#using-self-hosted-runners
-    - name: Set up Ruby
+    - name: Set up Ruby 3.3
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.1.0
+        ruby-version: 3.3
         bundler-cache: true
 
-    - name: Rubocop run
+    - name: Run RuboCop
       run: bundle exec rubocop --parallel
