@@ -2,14 +2,9 @@ name: RuboCop linting
 
 on: [push, pull_request]
 
-permissions:
-  contents: read
-
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      BUNDLE_ONLY: rubocop
 
     steps:
     - uses: actions/checkout@v4
