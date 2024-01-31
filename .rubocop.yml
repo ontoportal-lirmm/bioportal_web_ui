@@ -1,0 +1,64 @@
+AllCops:
+  Exclude:
+    - db/migrate/**/*
+    - db/schema.rb
+    - config/**/*
+    - script/**/*
+    - bin/**/*
+    - test/**/*
+    - app/admin/**/*
+    - app/channels/**/*
+    - app/jobs/**/*
+    - node_modules/**/*
+    - Gemfile
+    - Rakefile
+    - config.ru
+
+require:
+  - rubocop-rails
+
+Style/Encoding:
+  Enabled: false
+
+Style/Documentation:
+  Description: 'Document classes and non-namespace modules.'
+  Enabled: false
+
+Style/InlineComment:
+  Description: 'Avoid inline comments.'
+  Enabled: false
+
+Layout/LineLength:
+  Description: 'Limit lines to 100 characters. (Default is 80)'
+  Max: 100
+
+Style/FrozenStringLiteralComment:
+  Description: To help transition from Ruby 2.3.0 to Ruby 3.0.
+  Enabled: false
+
+Style/WordArray:
+  Description: 'Use %w or %W for arrays of words.'
+  Enabled: false
+
+# Defaults all strings to double quotes. Less performant, but
+# nicer for consistency, and for adding interpolation later.
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+# Prettier hashes.
+Layout/HashAlignment:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
+
+# No auto-correct for unused block arguments,
+# but will still warn.
+Lint/UnusedBlockArgument:
+  AutoCorrect: false
+
+# No auto-correct for unused method arguments,
+# but will still warn.
+Lint/UnusedMethodArgument:
+  AutoCorrect: false
+
+Rails/HasAndBelongsToMany:
+  Enabled: false
