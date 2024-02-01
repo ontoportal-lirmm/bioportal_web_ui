@@ -8,6 +8,7 @@ class AnnotatorController < ApplicationController
   #ANNOTATOR_URI = REST_URI + "/annotator"
   ANNOTATOR_URI = $ANNOTATOR_URL
   ANNOTATOR_PLUS_URI = $ANNOTATOR_URL+"/annotatorplus"
+  NCBO_ANNOTATOR_PLUS_URI = $NCBO_ANNOTATOR_URL
 
   def index
     initalize_options
@@ -21,6 +22,14 @@ class AnnotatorController < ApplicationController
     @form_url = '/annotatorplus'
     @page_name = 'Annotator +'
     annotator_results(ANNOTATOR_PLUS_URI)
+    render 'index'
+  end
+
+  def ncbo_annotator_plus
+    initalize_options
+    @form_url = '/ncbo_annotatorplus'
+    @page_name = 'NCBO Annotator +'
+    annotator_results(NCBO_ANNOTATOR_PLUS_URI)
     render 'index'
   end
 
