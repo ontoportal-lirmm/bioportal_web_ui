@@ -5,8 +5,9 @@
         .uri
             = @uri
     - if @definition
-        .text
-            = @definition
+        - @definition.each do |definition|
+            .definition
+                = definition
     .actions
         = details_button
         = visualize_button
