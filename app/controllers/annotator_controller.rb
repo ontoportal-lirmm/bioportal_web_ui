@@ -35,9 +35,9 @@ class AnnotatorController < ApplicationController
 
   private
   def annotator_results(uri)
+    @advanced_options_open = false
     @annotator_ontologies = LinkedData::Client::Models::Ontology.all
     if params[:text] && !params[:text].empty?
-      #binding.pry
       params[:ontologies] = params[:ontologies_list]&.join(',') || ''
       params[:semantic_types] = params[:semantic_types_list]&.join(',') || ''
       text_to_annotate = params[:text].strip.gsub("\r\n", " ").gsub("\n", " ")
@@ -131,6 +131,7 @@ class AnnotatorController < ApplicationController
             @parents_results = @parents_results + 1
         end
       end
+      @advanced_options_open = !empty_advanced_options
     end
   end
 
@@ -181,6 +182,10 @@ class AnnotatorController < ApplicationController
     @semantic_groups_for_select.sort! {|a,b| a[0] <=> b[0]}
     @ancestors_levels = ['None', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'All']
     @include_score = ['none', 'old', 'cvalue', 'cvalueh']
+  end
+
+  def empty_advanced_options
+    !params[:semantic_types_list] && !params[:semantic_groups_list] && params[:class_hierarchy_max_level].eql?('None') && (!params[:score] || params[:score].eql?('none')) && params[:score_threshold].eql?('0') && params[:confidence_threshold].eql?('0') && !params[:fast_context] && !params[:lemmatize]
   end
 
 end

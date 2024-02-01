@@ -34,10 +34,10 @@
               = show_advanced_options_button(text: t('show_advanced_options'), init: @advanced_options_open)
               = hide_advanced_options_button(text: t('hide_advanced_options'), init: @advanced_options_open)
                 
-        .more-advanced-options.d-none{'data-reveal-component-target': 'item'}
+        .more-advanced-options{'data-reveal-component-target': 'item', class: "#{@advanced_options_open ? '' : 'd-none'}"}
           .filters_line
             = render Input::SelectComponent.new(label: t('annotator.select_umls_sementic_types'), id: 'umls_semantic_types', name: 'semantic_types_list[]', value: @semantic_types_for_select, multiple: true, selected: params[:semantic_types_list])
-            = render Input::SelectComponent.new(label: t('annotator.select_umls_sementic_groupes'), id: 'umls_semantic_groups', name: 'umls_semantic_groups', value: @semantic_groups_for_select, multiple: true)
+            = render Input::SelectComponent.new(label: t('annotator.select_umls_sementic_groupes'), id: 'umls_semantic_groups', name: 'semantic_groups_list[]', value: @semantic_groups_for_select, multiple: true, selected: params[:semantic_groups_list])
             = render Input::SelectComponent.new(label: t('annotator.include_ancentors'), id: 'ancestors_level', name: 'class_hierarchy_max_level', value: @ancestors_levels, selected: params[:class_hierarchy_max_level])
           .filters_line
             - include_score_helper = 'Score annotations following previous NCBO 2009 measure (old) or Score annotations following C-Value measure (cvalue) or Score annotations following C-Value measure with hierarchy expansion (cvalueh).'
