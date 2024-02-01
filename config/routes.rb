@@ -79,7 +79,8 @@ Rails.application.routes.draw do
 
   resources :recommender
 
-  resources :annotator
+  get '/annotator', to: 'annotator#index'
+  get '/annotatorplus', to: 'annotator#annotator_plus'
 
   resources :annotatorplus
 

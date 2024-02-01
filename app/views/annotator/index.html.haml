@@ -3,11 +3,11 @@
   .annotator-page-subcontainer
     .annotator-page-title
       .text
-        Annotator
+        = @page_name
       .line
     .annotator-page-decription
       Get annotations for text with ontology classes
-    = form_tag('/annotator', method: :get, 'data-turbo': true, novalidate: true) do
+    = form_tag(@form_url, method: :get, 'data-turbo': true, novalidate: true) do
       .annotator-page-inputs{'data-controller': 'reveal-component'}
         .inputs
           %div

@@ -7,9 +7,25 @@ class AnnotatorController < ApplicationController
   # REST_URI is defined in application_controller.rb
   #ANNOTATOR_URI = REST_URI + "/annotator"
   ANNOTATOR_URI = $ANNOTATOR_URL
+  ANNOTATOR_PLUS_URI = $ANNOTATOR_URL+"/annotatorplus"
 
   def index
-    initalize_option
+    initalize_options
+    @form_url = '/annotator'
+    @page_name = 'Annotator'
+    annotator_results(ANNOTATOR_URI)
+  end
+  
+  def annotator_plus
+    initalize_options
+    @form_url = '/annotatorplus'
+    @page_name = 'Annotator +'
+    annotator_results(ANNOTATOR_PLUS_URI)
+    render 'index'
+  end
+
+  private
+  def annotator_results(uri)
     @annotator_ontologies = LinkedData::Client::Models::Ontology.all
     if params[:text] && !params[:text].empty?
       #binding.pry
@@ -35,7 +51,7 @@ class AnnotatorController < ApplicationController
         @results_table_header.push('Score')
       end
       
-      annotations = LinkedData::Client::HTTP.get(ANNOTATOR_URI, params)
+      annotations = LinkedData::Client::HTTP.get(uri, params)
       @ontologies = get_simplified_ontologies_hash
       @semantic_types = get_semantic_types 
       @results = []
@@ -107,11 +123,7 @@ class AnnotatorController < ApplicationController
         end
       end
     end
-    
-    
   end
-
-  private
 
   def get_semantic_types
     semantic_types = {}
@@ -235,7 +247,7 @@ class AnnotatorController < ApplicationController
     endpoint
   end
 
-  def initalize_option
+  def initalize_options
     @semantic_types_for_select = []
     @semantic_groups_for_select = []
     @semantic_types ||= get_semantic_types
