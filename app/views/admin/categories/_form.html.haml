@@ -10,7 +10,7 @@
         %col{style: "width: 100%"}
       %tr
         %th
-          Acronym
+          = t('admin.categories.form.acronym')
           %span.asterik *
         %td.top
           - if new_record
@@ -20,25 +20,25 @@
             = f.text_field :acronym, class: "form-control", readonly: true
       %tr
         %th
-          Name
+          = t('admin.categories.form.name')
           %span.asterik *
         %td.top
           = f.text_field :name, class: "form-control", id: "category_name", required: true
           %div#error-category-name.groupFormError
       %tr
         %th
-          Description
+          = t('admin.categories.form.description')
         %td.top
           = f.text_area :description, class: "form-control"
       - unless new_record
         %tr
           %th
-            Created
+            = t('admin.categories.form.created')
           %td.top
             = f.text_field :created, readonly: true, class: "form-control"
         %tr
           %th
-            Ontologies
+            = t('admin.categories.form.ontologies')
           %td.top
             = render SelectInputComponent.new(id: "category_ontologies", name: "category[ontologies]", values: @ontologies_category, selected: @category.ontologies, multiple: true, open_to_add_values: true)
             %div.d-flex.mt-1{:style => "display: none;"}
