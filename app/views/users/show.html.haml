@@ -1,6 +1,6 @@
 .account-page-center
   .account-page-container
-    %h3.account-page-title My account
+    %h3.account-page-title= t('users.show.my_account')
     %hr#account-page-title-line/
     .account-page-sub-container
       .account-page-first-row
@@ -10,68 +10,67 @@
             %a.account-page-rounded-button{:href => edit_user_path(url_encode(@user.username))}
               = render partial: "shared/svgs/edit_icon"
           .account-page-info-column
-            %p.title First name:
+            %p.title= t('users.show.first_name')
             %p.info
               = @user.firstName
           .account-page-info-column
-            %p.title Last name:
+            %p.title= t('users.show.last_name')
             %p.info
               = @user.lastName
           .account-page-info-column
-            %p.title Email:
+            %p.title= t('users.show.email')
             %p.info
               = @user.email
           .account-page-info-column
-            %p.title Username:
+            %p.title= t('users.show.username')
             %p.info
               = @user.username
           .account-page-info-column
-            %p.title ORCID ID:
+            %p.title= t('users.show.orcid_id')
             %p.info
               =@user.orcidId
           .account-page-info-column
-            %p.title GitHub ID:
+            %p.title= t('users.show.github_id')
             %p.info
               =@user.githubId
         .account-page-card
           .account-page-card-container
             .account-page-card-sub-container
-              %h4.account-page-card-title Mailing List Subscription
-              %p.account-page-card-desc="Register to the #{portal_name} announcements mailing list."
+              %h4.account-page-card-title= t('users.show.mailing_list_subscription')
+              %p.account-page-card-desc= t('users.show.mailing_list_description', portal: portal_name)
             - subscribed = false
             - if subscribed
               %a.account-page-subscribe-button{:href =>"mailto:#{$ANNOUNCE_SERVICE_HOST}?Subject=unsubscribe%20#{$ANNOUNCE_LIST}"}
-                Unsubscribe
+                = t('users.show.unsubscribe')
             - else
               %a.account-page-subscribe-button{:href => "mailto:#{$ANNOUNCE_SERVICE_HOST}?Subject=subscribe%20#{$ANNOUNCE_LIST}%20#{@user.firstName}%20#{@user.lastName}"}
-                Subscribe
+                = t('users.show.subscribe')
         .account-page-card
           .account-page-card-container
             .account-page-card-sub-container
               %h4.account-page-card-title API Key
               %p.account-page-card-desc
-                = "Your API Key can be used to access #{portal_name} Web services"
+                = t('users.show.api_key_description', portal: portal_name)
               %div.apikey
                 = render ClipboardComponent.new(message: session[:user].apikey)
           .account-page-api-documentation-link
             %a{href: "#{$REST_URL}/documentation", target: "_blank"}
-              API documentation
+              = t('users.show.api_documentation')
               = render partial: "shared/svgs/external_link_icon"
         .account-page-card
           %h4.account-page-card-title
-            Custom Semantic Resource Set
+            = t('users.show.custom_semantic_resource')
           #custom_ontologies.enable-lists
             - if at_slice?
               %p{style: "padding-left: 7px; font-size: 10pt; margin: -3px 0 7px;"}
-                Please
-                %a{href: "#{$UI_URL}/account"} visit the main site
-                to modify your Custom Semantic Resource Set.
+                = t('users.show.please')
+                %a{href: "#{$UI_URL}/account"}= t('users.show.modify_custom_semantic_resource')
             - else
               %p.account-page-card-desc
-                Customize your #{portal_name} display: Pick the semantic resources that you want to see on #{portal_name} will hide all other semantic resources.
+                = t('users.show.customize_portal_display', portal: portal_name)
               %p
                 %span{style: "font-weight: normal; font-size: 9pt; padding-left: 7px;"}
-                  %a#edit_custom_ontologies{href: "javascript:void(0);"} Select semantic resources 
+                  %a#edit_custom_ontologies{href: "javascript:void(0);"}= t('users.show.select_semantic_resources')
               - if @user_ontologies && !@user_ontologies.empty?
                 %ul
                   - @user_ontologies.each do |ont|
@@ -79,19 +78,19 @@
                     %li
                       #{ont.name} (#{ont.acronym})
               - else
-                %p{style: "padding-left: 7px;"} You haven't picked any semantic resources yet
-          %p.account-page-card-desc Note: this feature works only when you are logged in.
+                %p{style: "padding-left: 7px;"}= t('users.show.no_semantic_resources')
+          %p.account-page-card-desc= t('users.show.note_feature_logged_in')
           #custom_ontologies_picker{style: "left: -9999px; position: absolute;"}
             = form_tag custom_ontologies_path(url_encode(@user.username)) do
               - selected = @user.customOntology.map {|o| LinkedData::Client::Models::Ontology.get(o).acronym}
-              - locals = { custom_ontologies: @all_ontologies, selected_ontologies: selected, sel_text: "Select Custom Semantic Resources" }
+              - locals = { custom_ontologies: @all_ontologies, selected_ontologies: selected, sel_text: t('users.show.select_custom_semantic_resources')}
               = render partial: "shared/ontology_picker", locals: locals
-              = submit_tag "Save Custom Semantic Resources", class: "link_button"
+              = submit_tag t('users.show.save_custom_semantic_resources'), class: "link_button"
       .account-page-second-row
         .account-page-card
-          %h4.account-page-card-title Subscriptions
+          %h4.account-page-card-title= t('users.show.subscriptions')
           - if @user.subscription.nil? || @user.subscription.empty?
-            Not subscribed to any semantic resource
+            = t('users.show.not_subscribed')
           - else
             - @user.subscription.each do |subscription|
               - ont_id = subscription[:ontology]
@@ -101,18 +100,18 @@
                 %a{:href => "/ontologies/#{ont}?p=notes"}= ont
                 %div
                   - if type == "notes"
-                    %a.notes{:href => "/ontologies/#{ont}?p=notes"} Notes
+                    %a.notes{:href => "/ontologies/#{ont}?p=notes"}= t('users.show.notes')
                   - else
                     = type
                   = subscribe_button(ont_id)
         .account-page-card
-          %h4.account-page-card-title Submitted Semantic Resources
+          %h4.account-page-card-title= t('users.show.submitted_semantic_resources')
           .account-page-small-cards-container
             - if @admin_ontologies.nil? || @admin_ontologies.empty?
               .account-page-no-ontology.w-100
                 %img{:src => "#{asset_path("empty-box.svg")}"}/
-                %p You didn't upload any semantic resource yet
-                %a.account-page-upload-ontology-button{href: "/ontologies/new"} Upload semantic resource
+                %p= t('users.show.no_uploaded_resources')
+                %a.account-page-upload-ontology-button{href: "/ontologies/new"}= t('users.show.upload_semantic_resources')
             - else
               - @admin_ontologies.each do |ont|
                 .account-page-submitted-ontology{data: {controller: 'tooltip'}, title: ont.name}
@@ -123,10 +122,10 @@
                       %a{href: "/ontologies/#{view.match(/\/([^\/]+)$/)[1]}"}= view.match(/\/([^\/]+)$/)[1]
 
         .account-page-card
-          %h4.account-page-card-title Projects Created
+          %h4.account-page-card-title= t('users.show.projects_created')
           .account-page-small-cards-container
             - if @user_projects.nil? || @user_projects.empty?
-              No project created
+              = t('users.show.no_project_created')
             - else
               - @user_projects.each do |project|
                 .account-page-submitted-ontology
