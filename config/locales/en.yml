@@ -430,3 +430,35 @@ en:
   hide_advanced_options: Hide advanced options
   no_result_was_found: No result was found
   
+  notes:
+    new_comment: 
+      subject: Subject
+      comment: Comment
+      save: Save
+    new_proposal:
+      reason_for_change: Reason for change
+      new_target: New target
+      old_target: Old target
+      relationship_type: Relationship type
+      property_id: Property id
+      new_value: New value
+      old_value: Old value
+      class_id: Class id
+      label: Label
+      synonym: Synonym
+      definition: Definition
+      parent: Parent
+      Save: save
+    note_line:
+      alert_text: "Are you sure you want to delete the note <span style='color:red;font-weight:bold;'> ''%{subject}''</span> created by <span style='color:red;font-weight:bold;'>%{creator}</span>?<br/><b>This action CAN NOT be undone!!!</b>"
+      delete: Delete
+      archived: archived
+      comment: Comment
+    thread:
+      submitted_by: submitted by
+    reply:
+      about_note_decorator: about %{note_decorator}
+      Comment: Comment
+      save: save
+      cancel: cancel
+    
