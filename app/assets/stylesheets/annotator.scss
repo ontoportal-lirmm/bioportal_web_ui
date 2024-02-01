@@ -2,6 +2,9 @@
   display:flex;
   justify-content:center;
 }
+.annotator-page-container a{
+  color: var(--primary-color) !important;
+}
 .annotator-page-subcontainer{
   width: 1248px;
   padding: 20px 50px;
