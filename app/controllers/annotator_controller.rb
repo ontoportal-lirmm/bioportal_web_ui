@@ -147,97 +147,6 @@ class AnnotatorController < ApplicationController
     semantic_types
   end
 
-
-  def massage_annotated_classes(annotations, options)
-    # Get the class details required for display, assume this is necessary
-    # for every element of the annotations array because the API returns a set.
-    # Use the batch REST API to get all the annotated class prefLabels.
-    start = Time.now
-    semantic_types = options[:semantic_types] || []
-    class_details = get_annotated_classes(annotations, semantic_types)
-    simplify_annotated_classes(annotations, class_details)
-    # repeat the simplification for any annotation hierarchy or mappings.
-    hierarchy = annotations.map {|a| a if a.keys.include? 'hierarchy' }.compact
-    hierarchy.each do |a|
-      simplify_annotated_classes(a['hierarchy'], class_details) if not a['hierarchy'].empty?
-    end
-    mappings = annotations.map {|a| a if a.keys.include? 'mappings' }.compact
-    mappings.each do |a|
-      simplify_annotated_classes(a['mappings'], class_details) if not a['mappings'].empty?
-    end
-    LOG.add :debug, "Completed massage for annotated classes: #{Time.now - start}s"
-  end
-
-  def simplify_annotated_classes(annotations, class_details)
-    annotations2delete = []
-    annotations.each do |a|
-      cls_id = a['annotatedClass']['@id']
-      details = class_details[cls_id]
-      if details.nil?
-        LOG.add :debug, "Failed to get class details for: #{a['annotatedClass']['links']['self']}"
-        annotations2delete.push(cls_id)
-      else
-        # Replace the annotated class with simplified details.
-        a['annotatedClass'] = details
-      end
-    end
-    # Remove any annotations that fail to resolve details.
-    annotations.delete_if { |a| annotations2delete.include? a['annotatedClass']['@id'] }
-  end
-
-  def get_annotated_class_hash(a)
-    return {
-        :class => a['annotatedClass']['@id'],
-        :ontology => a['annotatedClass']['links']['ontology']
-    }
-  end
-
-  def get_annotated_classes(annotations, semantic_types=[])
-    # Use batch service to get class prefLabels
-    class_list = []
-    annotations.each {|a| class_list << get_annotated_class_hash(a) }
-    hierarchy = annotations.map {|a| a if a.keys.include? 'hierarchy' }.compact
-    hierarchy.each do |a|
-      a['hierarchy'].each {|h| class_list << get_annotated_class_hash(h) }
-    end
-    mappings = annotations.map {|a| a if a.keys.include? 'mappings' }.compact
-    mappings.each do |a|
-      a['mappings'].each {|m| class_list << get_annotated_class_hash(m) }
-    end
-    classes_simple = {}
-    return classes_simple if class_list.empty?
-    # remove duplicates
-    class_set = class_list.to_set # get unique class:ontology set
-    class_list = class_set.to_a   # collection requires a list in batch call
-    # make the batch call
-    properties = 'prefLabel'
-    properties = 'prefLabel,semanticType' if not semantic_types.empty?
-    call_params = {'http://www.w3.org/2002/07/owl#Class'=>{'collection'=>class_list, 'include'=>properties}}
-    classes_json = get_batch_results(call_params)
-    # Simplify the response data for the UI
-    @ontologies_hash ||= get_simplified_ontologies_hash # application_controller
-    classes_data = JSON.parse(classes_json)
-    classes_data["http://www.w3.org/2002/07/owl#Class"].each do |cls|
-      c = simplify_class_model(cls)
-      ont_details = @ontologies_hash[ c[:ontology] ]
-      next if ont_details.nil? # NO DISPLAY FOR ANNOTATIONS ON ANY CLASS OUTSIDE THE BIOPORTAL ONTOLOGY SET.
-      c[:ontology] = ont_details
-      unless semantic_types.empty? || cls['semanticType'].nil?
-        @semantic_types ||= get_semantic_types   # application_controller
-        # Extract the semantic type descriptions that are requested.
-        semanticTypeURI = 'http://bioportal.bioontology.org/ontologies/umls/sty/'
-        semanticCodes = cls['semanticType'].map {|t| t.sub( semanticTypeURI, '') }
-        requestedCodes = semanticCodes.map {|code| (semantic_types.include? code and code) || nil }.compact
-        requestedDescriptions = requestedCodes.map {|code| @semantic_types[code] }.compact
-        c[:semantic_types] = requestedDescriptions
-      else
-        c[:semantic_types] = []
-      end
-      classes_simple[c[:id]] = c
-    end
-    return classes_simple
-  end
-
   def annotation_class_info(cls)
     return {
       text: cls.prefLabel,
@@ -270,12 +179,6 @@ class AnnotatorController < ApplicationController
     end 
     @semantic_types_for_select.sort! {|a,b| a[0] <=> b[0]}
     @semantic_groups_for_select.sort! {|a,b| a[0] <=> b[0]}
-    if !$MULTIPLE_RECOGNIZERS.nil? && $MULTIPLE_RECOGNIZERS == true
-      # Get recognizers from ontologies_api only if asked
-      @recognizers = parse_json(REST_URI + "/annotator/recognizers")
-    else
-      @recognizers = []
-    end
     @ancestors_levels = ['None', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'All']
     @include_score = ['none', 'old', 'cvalue', 'cvalueh']
   end
