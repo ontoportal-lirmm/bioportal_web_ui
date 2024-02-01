@@ -82,8 +82,6 @@ Rails.application.routes.draw do
   get '/annotator', to: 'annotator#index'
   get '/annotatorplus', to: 'annotator#annotator_plus'
 
-  resources :annotatorplus
-
   resources :ncbo_annotatorplus
 
   resources :virtual_appliance
