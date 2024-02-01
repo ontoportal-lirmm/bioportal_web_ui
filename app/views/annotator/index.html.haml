@@ -76,7 +76,7 @@
                 - r.td do
                   - result[:context].each do |context|
                     - if !context[:child]
-                      .annotation-context{'data-from': context[:from], 'data-to': context[:to]}
+                      .annotation-context{'data-from': context[:from], 'data-to': context[:to], 'data-annotator-target': 'context'}
                     - else
                       .annotation-parent
                         .text
