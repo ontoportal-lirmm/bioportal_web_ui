@@ -42,12 +42,13 @@ class Display::SearchResultComponent < ViewComponent::Base
       end
   end
 
-  def reveal_ontologies_button(text,id)
+  def reveal_ontologies_button(text,id,icon)
     content_tag(:div, class: 'button icon-right', 'data-action': "click->reveal-component#toggle", 'data-id': id) do
-      concat(content_tag(:div, class: 'text') do
+      inline_svg_tag(icon) +
+      content_tag(:div, class: 'text') do
         text
-      end)
-      concat(inline_svg_tag("icons/arrow-down.svg"))
+      end +
+      inline_svg_tag("icons/arrow-down.svg")
     end
   end
 end
