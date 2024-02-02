@@ -16,4 +16,24 @@ jobs:
         bundler-cache: true
 
     - name: Run RuboCop
-      run: bundle exec rubocop --parallel
+      run: |
+        bundle exec rubocop --parallel
+
+        AllCops:
+          NewCops: enable
+        Gemspec/DeprecatedAttributeAssignment:
+          Enabled: true
+        Gemspec/DevelopmentDependencies:
+          Enabled: true
+        Gemspec/RequireMFA:
+          Enabled: true
+        Layout/LineContinuationLeadingSpace:
+          Enabled: true
+        Layout/LineContinuationSpacing:
+          Enabled: true
+        Layout/LineEndStringConcatenationIndentation:
+          Enabled: true
+        Layout/SpaceBeforeBrackets:
+          Enabled: true
+        Lint/AmbiguousAssignment:
+          Enabled: true
