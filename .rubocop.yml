@@ -1,4 +1,5 @@
 AllCops:
+  NewCops: disable
   Exclude:
     - db/migrate/**/*
     - db/schema.rb
@@ -62,3 +63,13 @@ Lint/UnusedMethodArgument:
 
 Rails/HasAndBelongsToMany:
   Enabled: false
+
+Layout/HeredocIndentation:
+  Enabled: false
+
+Style/MissingRespondToMissing:
+  Enabled: false
+
+Lint/MissingSuper:
+  Enabled: true
+
