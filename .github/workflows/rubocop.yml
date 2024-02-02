@@ -1,39 +1,17 @@
-name: RuboCop linting
+name: Code style
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
-  build:
+  lint:
+    name: all linters
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
     steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Ruby 3.0
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 3.2.0
-        bundler-cache: true
-
-    - name: Run RuboCop
-      run: |
-        bundle exec rubocop --parallel
-
-        AllCops:
-          NewCops: enable
-        Gemspec/DeprecatedAttributeAssignment:
-          Enabled: true
-        Gemspec/DevelopmentDependencies:
-          Enabled: true
-        Gemspec/RequireMFA:
-          Enabled: true
-        Layout/LineContinuationLeadingSpace:
-          Enabled: true
-        Layout/LineContinuationSpacing:
-          Enabled: true
-        Layout/LineEndStringConcatenationIndentation:
-          Enabled: true
-        Layout/SpaceBeforeBrackets:
-          Enabled: true
-        Lint/AmbiguousAssignment:
-          Enabled: true
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: rubocop
+        run: bundle exec rubocop --parallel
