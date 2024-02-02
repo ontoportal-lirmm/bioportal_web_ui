@@ -395,14 +395,14 @@ en:
       include_in_search_title: Include in search
       include_in_search_values:
         property_values: Property values
-        obolete_classses: Obsolet classes
+        obolete_classses: Obsolete classes
         ontology_views: Ontology views
       show_only_title: Show only
       show_only_values:
         exact_matches: Exact matches
         classes_with_definitions: Classes with definitions
-    show_advanced_options: Show advanced options
-    hide_advanced_options: Hide advanced options
+    show_advanced_options: Show options
+    hide_advanced_options: Hide options
     match_in: Match in
     ontologies: ontologies
     result_component:
