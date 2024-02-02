@@ -101,3 +101,20 @@
                 - if params[:score] && !params[:score].eql?('none')
                   - r.td do
                     = result[:score] 
+        .annotator-bottom-actions
+          .json-button
+            = render Buttons::RegularButtonComponent.new(id:'annotator_json', value: "JSON", variant: "secondary", href: @json_link, size: "slim", target: '_blank', state: "regular") do |btn|
+              - btn.icon_left do
+                = inline_svg_tag "json.svg"
+          .rdf-button
+            = render Buttons::RegularButtonComponent.new(id:'annotator_rdf', value: "RDF", variant: "secondary", href: @rdf_link, size: "slim", target: '_blank', state: "regular") do |btn|
+              - btn.icon_left do
+                = inline_svg_tag "icons/rdf.svg"
+          .cite-us-button
+            = render Buttons::RegularButtonComponent.new(id:'annotator_cite_us', value: "Cite", variant: "secondary", href: "https://www.lirmm.fr/~jonquet/publications/documents/Demo-ISWC09-Jonquet.pdf", size: "slim", target: '_blank', state: "regular") do |btn|
+              - btn.icon_left do
+                = inline_svg_tag "icons/cite.svg"
+          .annotator-doc
+            = render Buttons::RegularButtonComponent.new(id:'annotator_api_doc', value: "Annotator API documentation", variant: "secondary", href: "https://data.agroportal.lirmm.fr/documentation#nav_annotator", size: "slim", target: '_blank', state: "regular") do |btn|
+              - btn.icon_left do
+                = inline_svg_tag "summary/documentation.svg"

@@ -14,6 +14,8 @@ class AnnotatorController < ApplicationController
     initalize_options
     @form_url = '/annotator'
     @page_name = 'Annotator'
+    @json_link = json_link(ANNOTATOR_URI)
+    @rdf_link = "#{@json_link}&format=rdf"
     annotator_results(ANNOTATOR_URI)
   end
   
@@ -21,6 +23,8 @@ class AnnotatorController < ApplicationController
     initalize_options
     @form_url = '/annotatorplus'
     @page_name = 'Annotator +'
+    @json_link = json_link(ANNOTATOR_PLUS_URI)
+    @rdf_link = "#{@json_link}&format=rdf"
     annotator_results(ANNOTATOR_PLUS_URI)
     render 'index'
   end
@@ -29,6 +33,8 @@ class AnnotatorController < ApplicationController
     initalize_options
     @form_url = '/ncbo_annotatorplus'
     @page_name = 'NCBO Annotator +'
+    @json_link = json_link(NCBO_ANNOTATOR_PLUS_URI)
+    @rdf_link = "#{@json_link}&format=rdf"
     annotator_results(NCBO_ANNOTATOR_PLUS_URI)
     render 'index'
   end
@@ -186,6 +192,30 @@ class AnnotatorController < ApplicationController
 
   def empty_advanced_options
     !params[:semantic_types_list] && !params[:semantic_groups_list] && params[:class_hierarchy_max_level].eql?('None') && (!params[:score] || params[:score].eql?('none')) && params[:score_threshold].eql?('0') && params[:confidence_threshold].eql?('0') && !params[:fast_context] && !params[:lemmatize]
+  end
+
+  def json_link(url)
+    base_url = "#{url}?text=#{params[:text]}&"
+    optional_params = {
+      "ontologies" => params[:ontologies],
+      "whole_word_only" => params[:whole_word_only],
+      "longest_only" => params[:longest_only],
+      "expand_mappings" => params[:expand_mappings],
+      "exclude_numbers" => params[:exclude_numbers],
+      "exclude_synonyms" => params[:exclude_synonyms],
+      "semantic_types" => params[:semantic_types],
+      "semantic_groups" => params[:semantic_groups],
+      "class_hierarchy_max_level" => params[:class_hierarchy_max_level],
+      "score" => params[:score],
+      "score_threshold" => params[:score_threshold],
+      "confidence_threshold" => params[:confidence_threshold],
+      "fast_context" => params[:fast_context],
+      "lemmatize" => params[:lemmatize]
+    }
+    
+    filtered_params = optional_params.reject { |_, value| value.nil? }
+    optional_params_str = filtered_params.map { |param, value| "#{param}=#{value}" }.join("&")
+    return base_url + optional_params_str + '&apikey=1de0a270-29c5-4dda-b043-7c3580628cd5'
   end
 
 end

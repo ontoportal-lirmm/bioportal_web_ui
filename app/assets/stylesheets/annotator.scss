@@ -215,3 +215,16 @@
 .annotation-parent + div{
   margin-top: 5px;
 }
+.annotator-bottom-actions{
+  margin-top: 20px;
+  display: flex;
+}
+.annotator-bottom-actions div{
+  display: inline-block;
+}
+.annotator-bottom-actions div + div{
+  margin-left: 20px;
+}
+.annotator-bottom-actions .rdf-button svg, .annotator-doc svg{
+  width: 21px;
+}
