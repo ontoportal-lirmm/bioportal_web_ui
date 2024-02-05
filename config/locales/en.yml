@@ -168,7 +168,7 @@ en:
     paste_text_prompt: Enter a paragraph of text or some keywords...
     recommender_annotator: Recommender and Annotator
     support_and_collaborations: Support & Collaborations
-    insert_sample_text: Insert sample text
+    see_details: See details
     info_tooltip_text: "You are seing the average scores for all the public ontologies in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
     average: Average
     min: Min
@@ -181,6 +181,26 @@ en:
     mappings: Mappings
     users: Users
     twitter_news: News
+    feedback:
+      error_on_form: Errors On Form
+      leave_your_feedback: Leave your feedback
+      feedback_hi_text: Hi
+      feedback_info_text: you can use the form below or email us directly at
+      email: Email
+      name: Name
+      proposition_url_page: Error/Proposition page URL
+      feedback: Feedback
+      tags: Tags
+      bug: Bug
+      proposition: Proposition
+      question: Question
+      ontology_submissions_request: Ontology submissions request
+      optional: (optional)
+      send: Send
+      feedback_complete:
+        title: Feedback sent successfully
+        message: Thank you for taking the time to share your feedback with us. Our support team will review your message and get back to you as soon as possible with a response. We value your opinion and appreciate your help in improving our services. Thank you for your support!
+
     feedback:
       error_on_form: Errors On Form
       leave_your_feedback: Leave your feedback
@@ -623,7 +643,6 @@ en:
   show_advanced_options: Show advanced options
   hide_advanced_options: Hide advanced options
   no_result_was_found: No result was found
-
   notes:
     new_comment: 
       subject: Subject
