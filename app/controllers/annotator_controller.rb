@@ -206,16 +206,18 @@ class AnnotatorController < ApplicationController
       "semantic_types" => params[:semantic_types],
       "semantic_groups" => params[:semantic_groups],
       "class_hierarchy_max_level" => params[:class_hierarchy_max_level],
-      "score" => params[:score],
       "score_threshold" => params[:score_threshold],
       "confidence_threshold" => params[:confidence_threshold],
       "fast_context" => params[:fast_context],
       "lemmatize" => params[:lemmatize]
     }
+    unless params[:score] == 'none'
+      optional_params[:score] = params[:score]
+    end
     
     filtered_params = optional_params.reject { |_, value| value.nil? }
     optional_params_str = filtered_params.map { |param, value| "#{param}=#{value}" }.join("&")
-    return base_url + optional_params_str + '&apikey=1de0a270-29c5-4dda-b043-7c3580628cd5'
+    return base_url + optional_params_str + "&apikey=#{$API_KEY}"
   end
 
 end
