@@ -1,29 +1,29 @@
-- @title = "Project #{@project.name}"
+- @title = t('projects.show.title', name: @project.name)
 
 %div.container
 
   %div{:style => "padding: 1em;"}
     %h1{:style => "font-size: xx-large;"}= @project.name
     - if session[:user] && (@project.creator.include?(session[:user].id) || session[:user].admin?)
-      = link_to "Edit Project", edit_project_path(@project.acronym)
+      = link_to t('projects.show.edit_project'), edit_project_path(@project.acronym)
     %br/
     %br/
     %p{:style => "margin-bottom: 5px;"}
-      %strong Description:
+      %strong= t('projects.show.description')
       = @project.description
     %p{:style => "margin-bottom: 5px;"}
-      %strong Institution:
+      %strong= t('projects.show.institution')
       = @project.institution
     %p{:style => "margin-bottom: 5px;"}
-      %strong Contacts:
+      %strong= t('projects.show.contacts')
       = @project.contacts
     %p
-      %strong Home Page:
+      %strong= t('projects.show.home_page')
       - if @project.homePage
         = link_to @project.homePage, @project.homePage, rel: "nofollow"
-    %h2{:style => "padding-top: 1em;"} Ontologies Used
+    %h2{:style => "padding-top: 1em;"}= t('projects.show.ontologies_used')
     - if @ontologies_used.empty?
-      No ontologies are currently associated with this project
+      = t('projects.show.no_ontologies_associated')
     %table.zebra{:cellpadding => "0", :cellspacing => "0", :width => "70%"}
       %ul
         - for ontology in @ontologies_used
