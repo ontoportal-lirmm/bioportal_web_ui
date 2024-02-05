@@ -47,6 +47,7 @@ class AnnotatorController < ApplicationController
     if params[:text] && !params[:text].empty?
       params[:ontologies] = params[:ontologies_list]&.join(',') || ''
       params[:semantic_types] = params[:semantic_types_list]&.join(',') || ''
+      params[:semantic_groups] = params[:semantic_groups_list]&.join(',') || ''
       text_to_annotate = params[:text].strip.gsub("\r\n", " ").gsub("\n", " ")
       @results_table_header = [
         "Class", "Ontology", "Contexts"
