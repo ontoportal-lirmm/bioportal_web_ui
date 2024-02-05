@@ -295,7 +295,25 @@ en:
     register: Register
     title: Login
     username_or_email: Username
+    login_with_provider: Login with %{provider}
+    reset_password_message: A password reset email has been sent to your email address, please follow the instructions to reset your password.
+    back_home_button: Back home
+    recover_password: Recover password
+    email: Email
+    user: user
+    email_address_associated: Enter the email address associated with your account and we will send an email with instructions to reset your password.
+    email_placeholder: Enter the email
+    send_instructions: Send instructions
   
+  statistics:
+    title: "%{portal} Statistics"
+    lead: (last %{last_years} years)
+    ontologies: Ontologies
+    users: Users
+    projects: Projects
+    date: Date
+    ontology_visits: Ontology visits
+
   mappings:
     find_mappings: Find mappings of a class/concept
     intro: Find all the mappings of an ontology
