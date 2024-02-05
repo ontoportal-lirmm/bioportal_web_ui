@@ -1,27 +1,27 @@
 = turbo_frame_tag 'groups-list' do
   %div.d-flex
-    = link_to_modal("Create New group",
+    = link_to_modal(t('admin.groups.new.create_new_group'),
                       new_admin_group_path,
                       id: "new_group_btn",
                       class: "btn btn-default mb-3",
-                      data: { show_modal_title_value: "Create a new group"})
+                      data: { show_modal_title_value: t('admin.groups.index.create_a_new_group')})
 
-    = action_button("Synchronize groups with slices", admin_groups_synchronize_groups_url)
+    = action_button(t('admin.groups.index.synchronize_groups_slices'), admin_groups_synchronize_groups_url)
 
   %div.my-1
     = render_alerts_container
   = render TableComponent.new(id: 'admin_groups', custom_class: 'border rounded p-1') do |t|
     - t.header do |h|
-      - h.th {'Name'}
-      - h.th {'Description'}
-      - h.th {'Created'}
-      - h.th {'ID'}
-      - h.th {'COUNT'}
-      - h.th {'Actions'}
+      - h.th {t('admin.groups.form.name')}
+      - h.th {t('admin.groups.form.description')}
+      - h.th {t('admin.groups.form.created')}
+      - h.th {t('admin.groups.index.id')}
+      - h.th {t('admin.groups.index.count')}
+      - h.th {t('admin.groups.index.actions')}
 
     = render partial: 'admin/groups/group', collection: @groups
     %tr.empty-state
-      %td.text-center{:colspan => "6"} There are currently no  agents.
+      %td.text-center{:colspan => "6"}=t('admin.groups.index.no_agents')
   :javascript
     $.fn.dataTable.ext.errMode = 'none';
     $("#admin_groups").dataTable()
