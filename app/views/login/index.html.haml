@@ -24,7 +24,7 @@
       - omniauth_providers_info.each do |provider, config|
         - if config[:enable]
           = button_to  "/auth/#{config[:name] || config[:strategy] || provider}",
-                      class: 'btn btn-lg',disabled: !config[:enable] ,style:'width: 70px', title: "Login with #{provider.to_s.humanize}", 'data-turbo': false do; 
+                      class: 'btn btn-lg',disabled: !config[:enable] ,style:'width: 70px', title: t('login.login_with_provider', provider: provider.to_s.humanize), 'data-turbo': false do; 
             - if config[:icon]
               = inline_svg "icons/#{config[:icon]}", class: 'login-active-sso'
             - else 
