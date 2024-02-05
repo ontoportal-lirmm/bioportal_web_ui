@@ -6,7 +6,7 @@
           %div
             %h2
               %button.btn.btn-link{"data-target" => "#collapseOne", "data-toggle" => "collapse", :type => "button"}
-                See an example of a valid a file
+                = t("mappings.bulk_loader.loader.example_of_valid_file")
           #collapseOne.collapse
             .card-body
               %pre
@@ -16,4 +16,4 @@
           %div
             = render Input::FileInputComponent.new(name: :file)
           %button.btn.btn-secondary.btn-block.mt-2{type:'submit'}
-            Save
+            = t("mappings.bulk_loader.loader.save")
