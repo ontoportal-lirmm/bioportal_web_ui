@@ -16,7 +16,7 @@
     %div.d-flex.align-items-center{style: 'width: 250px'}
       %span.mx-1
         = link_to_modal(nil, edit_admin_group_path(group.id.split('/').last), data: {show_modal_title_value:  group.name}) do
-          = t('admin.groups.edit')
+          = t('admin.groups.edit_button')
       %span
         - if count.zero?
           = button_to t('admin.groups.delete'), CGI.unescape(admin_group_path(group.id.split('/').last)), method: :delete, class: 'btn btn-link',  form: {data: { turbo: true, turbo_confirm: t('admin.groups.turbo_confirm'), turbo_frame: '_top'}}

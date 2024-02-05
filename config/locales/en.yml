@@ -20,7 +20,7 @@ en:
   additional_parameters: 'Additional parameters explained at '
   admin:
     groups:
-      edit: Edit
+      edit_button: Edit
       delete: Delete
       info_error_delete: "Can't delete this group because still used"
       turbo_confirm: Are you sure?
@@ -41,9 +41,31 @@ en:
         actions: Actions
         no_agents: There are currently no agents.
       edit: 
-        edit_group: Edit group
+        edit_group: Edit category
         save: Save
-
+    categories:
+      edit_button: "Edit"
+      delete: Delete
+      info_error_delete: Can't delete this category because still used
+      turbo_confirm: Are you sure?
+      form:
+        acronym: Acronym
+        name: Name
+        description: Description
+        created: Created
+        ontologies: Ontologies
+      edit: 
+        edit_category: Edit category
+        save: Save
+      new:
+        create_new_category: Create new category
+        create_category: Create category
+      index:
+        Create_a_new_category: Create a new category
+        id: ID
+        count: COUNT
+        actions: Actions
+        no_categories: There are currently no categories.
     licenses:
       create:
         success: License renewed successfully!
@@ -520,7 +542,6 @@ en:
   show_advanced_options: Show advanced options
   hide_advanced_options: Hide advanced options
   no_result_was_found: No result was found
-
 
   notifier:
     name: "Name: %{name}"
