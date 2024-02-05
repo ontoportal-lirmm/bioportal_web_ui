@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+%html{xmlns:"http://www.w3.org/1999/xhtml", 'xml:lang':I18n.locale, lang: I18n.locale}
+%head
+  = render partial: 'ga_tracking'
+  %meta{'http-equiv':"content-type", content:"text/html;charset=UTF-8"}
+  %meta{name:"turbo-cache-control", content:"no-cache"}
+  = csrf_meta_tag
+
+  %title
+    - if @title.nil?
+      = $ORG_SITE
+    - else
+      = "#{@title} | #{$ORG_SITE}"
+
+  %link{rel:"shortcut icon", href:"/fav.ico",type:"image/x-icon"}
+
+  %link{href: '//fonts.googleapis.com/css?family=Droid+Sans:400', rel:'stylesheet', type:'text/css'}
+
+  = stylesheet_link_tag "https://use.fontawesome.com/releases/v5.2.0/css/all.css", integrity: "sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ", crossorigin: "anonymous"
+  = stylesheet_link_tag "application"
+
+  = javascript_include_tag "vendor"
+  :javascript
+    jQuery(document).data({bp: {config: {ui_url: ''}, user: {}}});
+    jQuery(document).data().bp.ont_viewer = {};
+    jQuery(document).data().bp.ont_chart = {};
+
+%body{class: " #{controller_name} #{action_name}", style: 'background-color: var(--light-color);'}
+  %div
+    .flex-grow-1
+      = render partial: 'layouts/notices'
+    = modal_frame_container
+
+    %div.p-5
+      %a.d-flex.flex-column.container-gradient.mx-auto.d-flex.justify-content-center.align-items-center{href: "/", style: 'width: 200px; height: 200px; border-radius: 100px;'}
+        %img{:src => asset_path("logo-white.svg"), style: 'width: 100px; height: 100px'}
+        %p.text-white.h3
+          = portal_name
+    = yield
+
+
+= javascript_include_tag "application"

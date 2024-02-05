@@ -31,7 +31,7 @@ class TabItemComponent < ViewComponent::Base
   end
 
   def title
-    @title&.humanize
+    @title
   end
 
   def active_class

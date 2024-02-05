@@ -10,7 +10,7 @@
                 exclude_keys: schemes_keys + label_xl_set + ['inScheme', 'narrower']) do |c|
 
     - c.header(stripped: true) do |t|
-      - t.add_row({th: t('ontology_details.concept.id')}, {td:@concept.id})
+      - t.add_row({th: t('ontology_details.concept.id')}, {td:link_to_with_actions(@concept.id)})
       - t.add_row({th: t('ontology_details.concept.preferred_name')}) do |h|
         - h.td do
           = display_in_multiple_languages(@concept.prefLabel)
