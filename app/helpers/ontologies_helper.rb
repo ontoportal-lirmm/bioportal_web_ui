@@ -539,9 +539,15 @@ module OntologiesHelper
         title = label + '<br>' + link_to(Array(value).first)
       end
 
+
+      url = Array(value).first || ''
+      if url.include?(rest_hostname)
+        url = url['?'] ? "#{url}&apikey=#{get_apikey}" : "#{url}?apikey=#{get_apikey}"
+      end
+      
       content_tag(:span, data: {controller:"tooltip" } , title:  title) do
         link_to(inline_svg("#{icon}.svg", width: "32", height: '32'),
-                Array(value).first || '', link_options.merge(target: '_blank'))
+                url, link_options)
       end
     end.join.html_safe
   end

@@ -403,8 +403,8 @@ fr:
       show_only_values:
         exact_matches: Correspondances exactes
         classes_with_definitions: Classes avec définitions
-    show_advanced_options: Afficher les options avancées
-    hide_advanced_options: Masquer les options avancées
+    show_advanced_options: Afficher les options
+    hide_advanced_options: Masquer les options
     match_in: Correspondre dans
     ontologies: ontologies
     result_component:
