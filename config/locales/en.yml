@@ -19,9 +19,57 @@ en:
   acceptance: Acceptance
   additional_parameters: 'Additional parameters explained at '
   admin:
+    groups:
+      edit_button: Edit
+      delete: Delete
+      info_error_delete: "Can't delete this group because still used"
+      turbo_confirm: Are you sure?
+      form:
+        acronym: Acronym
+        name: Name
+        description: Description
+        created: Created
+        ontologies: Ontologies
+      new:
+        create_new_group: Create new group
+        create_group: Create group
+      index:
+        Create_a_new_group: Create a new group
+        synchronize_groups_slices: Synchronize groups with slices
+        id: ID
+        count: COUNT
+        actions: Actions
+        no_agents: There are currently no agents.
+      edit: 
+        edit_group: Edit category
+        save: Save
+    categories:
+      edit_button: "Edit"
+      delete: Delete
+      info_error_delete: Can't delete this category because still used
+      turbo_confirm: Are you sure?
+      form:
+        acronym: Acronym
+        name: Name
+        description: Description
+        created: Created
+        ontologies: Ontologies
+      edit: 
+        edit_category: Edit category
+        save: Save
+      new:
+        create_new_category: Create new category
+        create_category: Create category
+      index:
+        Create_a_new_category: Create a new category
+        id: ID
+        count: COUNT
+        actions: Actions
+        no_categories: There are currently no categories.
     licenses:
       create:
         success: License renewed successfully!
+    label_close: Close
   
   all: All
   
@@ -153,6 +201,26 @@ en:
         title: Feedback sent successfully
         message: Thank you for taking the time to share your feedback with us. Our support team will review your message and get back to you as soon as possible with a response. We value your opinion and appreciate your help in improving our services. Thank you for your support!
 
+    feedback:
+      error_on_form: Errors On Form
+      leave_your_feedback: Leave your feedback
+      feedback_hi_text: Hi
+      feedback_info_text: you can use the form below or email us directly at
+      email: Email
+      name: Name
+      proposition_url_page: Error/Proposition page URL
+      feedback: Feedback
+      tags: Tags
+      bug: Bug
+      proposition: Proposition
+      question: Question
+      ontology_submissions_request: Ontology submissions request
+      optional: (optional)
+      send: Send
+      feedback_complete:
+        title: Feedback sent successfully
+        message: Thank you for taking the time to share your feedback with us. Our support team will review your message and get back to you as soon as possible with a response. We value your opinion and appreciate your help in improving our services. Thank you for your support!
+
   
   input: Input
   insert_sample_text: Insert sample text
@@ -247,7 +315,25 @@ en:
     register: Register
     title: Login
     username_or_email: Username
+    login_with_provider: Login with %{provider}
+    reset_password_message: A password reset email has been sent to your email address, please follow the instructions to reset your password.
+    back_home_button: Back home
+    recover_password: Recover password
+    email: Email
+    user: user
+    email_address_associated: Enter the email address associated with your account and we will send an email with instructions to reset your password.
+    email_placeholder: Enter the email
+    send_instructions: Send instructions
   
+  statistics:
+    title: "%{portal} Statistics"
+    lead: (last %{last_years} years)
+    ontologies: Ontologies
+    users: Users
+    projects: Projects
+    date: Date
+    ontology_visits: Ontology visits
+
   mappings:
     find_mappings: Find mappings of a class/concept
     intro: Find all the mappings of an ontology
@@ -370,6 +456,40 @@ en:
     self: Projects
     title: Projects List
     view_projects_help: View projects help
+
+    show:
+      title: Project %{name}
+      edit_project: Edit Project
+      description:  "Description:"
+      institution: "Institution:"
+      contacts: "Contacts:"
+      home_page: "Home Page:"
+      ontologies_used: Ontologies Used
+      no_ontologies_associated: No ontologies are currently associated with this project
+
+    form:
+      errors_on_form: Errors On Form
+      name: "Name: *"
+      acronym: "Acronym: *"
+      administrators: "Administrators: *"
+      home_page: "Homepage: *"
+      example: "Example:"
+      description: "Description:*"
+      select_ontologies: Select Ontologies Used
+      select_administrators: Select administrators
+    
+    edit:
+      title: Editing Project %{name}
+      editing_project: Editing project
+      cancel: Cancel
+      update_project: Update Project
+    
+    new:
+      title: Add your project
+      new_project: New project
+      create_project: Create Project
+
+
   
   recommender:
     title: Recommender
@@ -414,7 +534,70 @@ en:
     password: Password
     title: Register
     username: Username
-  
+  users:
+    index:
+      first_name: First name
+      last_name: Last name
+      username: Username
+      email: Email
+      roles: Roles
+      ontologies: Ontologies
+      project: Project
+      created: Created At
+      actions: Actions
+      detail: Detail
+      delete: Delete
+      login_as: Login as
+      error_delete_message: Can't delete this user because still used
+      turbo_confirm: Are you sure?
+    edit:
+      user_to_admin: Are you sure you want to make this user an admin?
+      admin_privileges: Are you sure you want to revoke admin privileges for this user?
+      errors_creating_account: "Errors creating your account:"
+      edit_information: Edit personal information
+      first_name: First name
+      last_name: Last name
+      username: Username
+      email: Email
+      orcid_id: ORCID ID
+      github_id: Github ID
+      new_password: New password
+      confirm_password: Confirm password
+      change_password: Change password
+    show:
+      my_account: My account
+      first_name: "First name:"
+      last_name: "Last name:"
+      username: "Username:"
+      email: "Email:"
+      orcid_id: "ORCID ID:"
+      github_id: "Github ID:"
+      mailing_list_subscription: Mailing list subscription
+      mailing_list_description: Register to the %{portal} announcements mailing list.
+      api_key_description: Your API Key can be used to access  %{portal} Web services
+      api_documentation: API documentation
+      custom_semantic_resource: Custom semantic resource set
+      please: Please
+      modify_custom_semantic_resource: |
+        visit the main site
+        to modify your Custom Semantic Resource Set.
+      customize_portal_display: "Customize your %{portal} display: Pick the semantic resources that you want to see on %{portal} will hide all other semantic resources."
+      select_semantic_resources : Select semantic resources 
+      no_semantic_resources: You haven't picked any semantic resources yet
+      note_feature_logged_in: "Note: this feature works only when you are logged in."
+      select_custom_semantic_resources: Select custom semantic resources
+      save_custom_semantic_resources: Save custom semantic resources
+      not_subscribed: Not subscribed to any semantic resource
+      submitted_semantic_resources: Submitted semantic resources 
+      upload_semantic_resources: Upload semantic resources 
+      projects_created: Projects created
+      no_project_created: No project created
+      unsubscribe: Unsubscribe
+      subscribe: Subscribe
+      subscriptions: Subscriptions
+      no_uploaded_resources: You didn't upload any semantic resource yet
+      notes: Notes
+
   reproduce_results: 'Reproduce these results using the '
   score: Score
   
@@ -426,14 +609,14 @@ en:
       include_in_search_title: Include in search
       include_in_search_values:
         property_values: Property values
-        obolete_classses: Obsolet classes
+        obolete_classses: Obsolete classes
         ontology_views: Ontology views
       show_only_title: Show only
       show_only_values:
         exact_matches: Exact matches
         classes_with_definitions: Classes with definitions
-    show_advanced_options: Show advanced options
-    hide_advanced_options: Hide advanced options
+    show_advanced_options: Show options
+    hide_advanced_options: Hide options
     match_in: Match in
     ontologies: ontologies
     result_component:
@@ -460,8 +643,38 @@ en:
   show_advanced_options: Show advanced options
   hide_advanced_options: Hide advanced options
   no_result_was_found: No result was found
-
-
+  notes:
+    new_comment: 
+      subject: Subject
+      comment: Comment
+      save: Save
+    new_proposal:
+      reason_for_change: Reason for change
+      new_target: New target
+      old_target: Old target
+      relationship_type: Relationship type
+      property_id: Property id
+      new_value: New value
+      old_value: Old value
+      class_id: Class id
+      label: Label
+      synonym: Synonym
+      definition: Definition
+      parent: Parent
+      Save: save
+    note_line:
+      alert_text: "Are you sure you want to delete the note <span style='color:red;font-weight:bold;'> ''%{subject}''</span> created by <span style='color:red;font-weight:bold;'>%{creator}</span>?<br/><b>This action CAN NOT be undone!!!</b>"
+      delete: Delete
+      archived: archived
+      comment: Comment
+    thread:
+      submitted_by: submitted by
+    reply:
+      about_note_decorator: about %{note_decorator}
+      Comment: Comment
+      save: save
+      cancel: cancel
+    
 
   notifier:
     name: "Name: %{name}"
@@ -739,6 +952,6 @@ en:
         keywords_and_classes: Keywords and classes
         languages: Languages
         pull_location: Pull location
-        see_all_metadata: See all metadata...
+        export_metadata: Export metadata
         abstract: Abstract
         description: Description

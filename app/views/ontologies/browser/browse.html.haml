@@ -7,7 +7,7 @@
             %span.d-flex.align-items-center
               %svg{:fill => "none", :height => "11", :viewbox => "0 0 11 11", :width => "11", :xmlns => "http://www.w3.org/2000/svg"}
                 %circle{:cx => "5.5", :cy => "5.5", :fill => 'var(--admin-color)', :r => "5.5"}
-              %p{style: "margin: 10px"} Welcome admin,this coloring indicates admin-only features
+              %p{style: "margin: 10px"}= t("ontologies.browser.admin_welcome")
     .browse-submit-new-ontology-and-you-are-admin-container
     %a#back_top_btn.btn.btn-primary.btn-floating.btn-lg
       %i.fas.fa-arrow-up.text-white
@@ -41,12 +41,12 @@
             - if session[:user]&.admin?
               %div.browse-filter.admin-border
                 = render SwitchInputComponent.new(id:'filter-private', name:'private_only', checked: @show_private_only) do
-                  Show private ontology only
+                  = t("ontologies.browser.show_private_ontology")
             %div.browse-filter
               = render SwitchInputComponent.new(id:'filter-views', name:'views', checked: @show_views) do
-                Show ontology views
+                = t("ontologies.browser.show_ontology_views")
               = render SwitchInputComponent.new(id:'filter-retired', name:'retired',checked: @show_retired) do
-                Show retired ontologies
+                = t("ontologies.browser.show_retired_ontologies")
 
             - @filters.each do |key, values|
               - if session[:user]&.admin? ||  key != :missingStatus
@@ -71,7 +71,7 @@
         .browse-second-row
           .browse-search-bar
             .browse-search-container
-              %input{:name => "search", :placeholder => "Start typing to filter ontologies, e.g., AGROVOC...", :type => "text", :value => @search, data: {action: "input->browse-filters#dispatchInputEvent"}}
+              %input{:name => "search", :placeholder => t("ontologies.browser.search_placeholder"), :type => "text", :value => @search, data: {action: "input->browse-filters#dispatchInputEvent"}}
               .browse-search-filters
                 %select#format.browse-format-filter{:name => "format"}
                   = options_for_select(@formats, @selected_format)

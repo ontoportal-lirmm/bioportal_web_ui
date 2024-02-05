@@ -44,7 +44,6 @@
     outline: none;
     padding: 20px;
     width: 630px;
-    resize: none;
     border: none;
     margin-right: 30px;
 }
@@ -137,7 +136,7 @@
     margin-left: 20px;
 }
 
-.recommender-advanced-options .maxsets{
+.recommender-advanced-options .ontologies{
     margin-right: 20px;
 }
 .recommender-advanced-options .hidebutton{
@@ -179,7 +178,14 @@
     font-weight: 600;
     text-decoration: underline !important;
 }
-.cite-us-button{
-    display: inline-block;
+
+.recommender-bottom-actions{
     margin-top: 20px;
+    display: flex;
+}
+.recommender-bottom-actions div{
+    display: inline-block;
+}
+.recommender-bottom-actions div + div{
+    margin-left: 20px;
 }

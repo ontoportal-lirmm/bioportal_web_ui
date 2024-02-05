@@ -9,23 +9,23 @@
       = render partial: 'ontologies/sections/metadata/ontology_metrics_section'
     .summary-page-second-row
       = ontology_depiction_card
-      = properties_card('Identifiers','Principal identifiers of the ontology.', @identifiers) do |values|
+      = properties_card('Identifiers',t("ontologies.sections.identifiers"), @identifiers) do |values|
         = horizontal_list_container(values) do |v|
-          = render LinkFieldComponent.new(value: v)
+          = render LinkFieldComponent.new(value: v, check_resolvability: true)
 
-      = properties_dropdown('dates','Dates','', @dates_properties) do |values|
+      = properties_dropdown('dates',t("ontologies.sections.dates"),'', @dates_properties) do |values|
         - Array(values).sort.map do |v|
           %div
             = render DateTimeFieldComponent.new(value: v)
 
-      = properties_dropdown('person_and_organization','Persons and organizations','', @agents_properties) do |values|
+      = properties_dropdown('person_and_organization',t("ontologies.sections.person_and_organization"),'', @agents_properties) do |values|
         = horizontal_list_container(values) do |v|
           = agent_chip_component(v)
             
-      = properties_dropdown('link','Other links','Metadata properties that highlight the links enabling access to datasets, downloading semantic resources, etc', @links_properties) do |values|
+      = properties_dropdown('link',t("ontologies.sections.other_links"), t("ontologies.sections.info_tooltip_links") , @links_properties) do |values|
         = horizontal_list_container(values) do |v|
           = render LinkFieldComponent.new(value: v, raw: true)
-      = properties_dropdown('projects_section','Projects and usage information','Details pertaining to the utilization of the ontology.', nil) do |c|
+      = properties_dropdown('projects_section',t("ontologies.sections.projects_and_usage_information"),t("ontologies.sections.info_tooltip_projects"), nil) do |c|
         - c.row do
           = projects_field(@projects)
         - properties_list_component(c, @projects_properties)
@@ -34,16 +34,16 @@
         if (projectsUrl ==  "#projects_section"){
             document.querySelector("[data-target='#projects_section']")?.click()
         }
-      = properties_dropdown('methodology','Methodology and provenance', 'Metadata properties primarily encompass the design, methods, and actions to create the ontology. This includes elements such as the tools and software employed by the creator of the ontology during its configuration.', @methodology_properties)
-      = properties_dropdown('community','Community', 'Metadata properties primarily encompass the design, methods, and actions to create the ontology. This includes elements such as the tools and software employed by the creator of the ontology during its configuration.', nil ) do |c|
+      = properties_dropdown('methodology',t("ontologies.sections.methodology_and_provenance"), t("ontologies.sections.info_tooltip_properties_dropdown"), @methodology_properties)
+      = properties_dropdown('community',t("ontologies.sections.community"), t("ontologies.sections.info_tooltip_properties_dropdown"), nil ) do |c|
         - properties_list_component(c, @community_properties)
         - unless Array(@ontology.group).empty?
           - c.row do
-            = render FieldContainerComponent.new(label: 'Groups') do
+            = render FieldContainerComponent.new(label: t("ontologies.sections.label_groups")) do
               = horizontal_list_container(@ontology.group) do |v|
                 = render ChipButtonComponent.new(text: show_group_name(v), type: "static")
 
-      = properties_dropdown('content','Content', 'Metadata properties primarily encompass the design, methods, and actions to create the ontology. This includes elements such as the tools and software employed by the creator of the ontology during its configuration.', nil) do |c|
+      = properties_dropdown('content',t("ontologies.sections.content"), t("ontologies.sections.info_tooltip_properties_dropdown"), nil) do |c|
         - properties_list_component(c, @content_properties.reject{|k, v| %w[keyClasses metadataVoc].include?(k.to_s)})
         - c.row do
           = render FieldContainerComponent.new(label: attr_label('metadataVoc', attr_metadata: attr_metadata("metadataVoc"), show_tooltip: false)) do
@@ -51,9 +51,9 @@
       = render Layout::CardComponent.new do |c|
         - c.header do  |h|
           - h.text do
-            Visits
+            = t("ontologies.sections.visits")
             - if visits_data(@ontology)
-              = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", title: "Download as CSV") do
+              = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", title: t("ontologies.sections.download_as_csv")) do
                 = inline_svg("summary/download.svg", width: '30px', height: '20px')
 
         = render Layout::ListComponent.new do |l|
@@ -64,15 +64,12 @@
         = render Layout::CardComponent.new do |d|
           - d.header do |h|
             - h.text do
-              Views of #{@ontology.acronym}
-              = new_element_link('Create new view', new_view_path(@ontology.id))
+              = t("ontologies.sections.views", acronym: @ontology.acronym)
+              = new_element_link(t("ontologies.sections.create_new_view"), new_view_path(@ontology.id))
           = render Layout::ListComponent.new do |l|
             - l.row do
               = render partial: 'ontology_views'
 
-      - unless @submission_latest.nil?
-        = javascript_include_tag("jsonld")
-        = metadata_formats_buttons
 
       = admin_block do
-        = properties_dropdown('configuration','Configuration metadata', 'Regroup all the metadata properties used by the portal to configure the behavior of the resource', @config_properties)
+        = properties_dropdown('configuration',t("ontologies.sections.configuration_metadata"), t("ontologies.sections.info_tooltip_configuration"), @config_properties)
