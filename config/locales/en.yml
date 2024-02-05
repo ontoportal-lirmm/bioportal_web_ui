@@ -225,6 +225,64 @@ en:
     no_mappings_available: No mappings available
     title: Mappings
     upload_mappings: Upload mappings
+    count:
+      ontology: Ontology
+      mappings: Mappings
+      no_mappings: There are no mappings to or from this ontology
+    form:
+      source_class: Source class
+      mapping_name: Mapping description (name)
+      contact_info: Contact info
+      mapping_source_name: Source name (Mapping set id)
+      mapping_comment: Comment
+      mapping_relation: Mapping relation type
+      save: Save
+    mapping_table:
+      mapping_to: Mapping to
+      relations: Relations
+      source: Source
+      type: Type
+      actions: Actions
+      no_mappings: There are currently no  mappings for this class.
+    mapping_type_selector:
+      mapping_type: Mapping type
+      internal:  Internal
+      interportal: InterPortal
+      external: External
+      target_class: Target class
+      details: Details
+      ontology_acronym: Ontology (acronym)
+      class: Class
+      ontology_acronym_placeholder: Enter the ontology ACRONYM
+      class_uri_placeholder: Enter the class URI
+      ontology_uri_placeholder: Enter the ontology URI
+    show_line:
+      edit_modal: Edit
+      delete_button: Delete
+      turbo_confirm: Are you sure?
+      edit_mapping: Edit mapping for %{preflabel}
+    show:
+      no_mappings_found: No mappings found
+    bulk_loader:
+      loader:
+        example_of_valid_file: See an example of a valid a file
+        save: Save
+      loaded_mappings:
+        mappings_created: "%{size} mappings created successfully"
+        id: Id
+        source: Source
+        target: Target
+        relation: Relation
+        properties: Properties
+        actions: Actions
+        see_other_properties: See other properties
+        
+
+
+
+
+
+
   
   matched_class: Matched class
   matched_ontology: matched ontology
