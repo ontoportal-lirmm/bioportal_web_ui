@@ -2,7 +2,10 @@ import {Controller} from "@hotwired/stimulus"
 export default class extends Controller {
     static targets = ['input', 'context']
     connect(){
-        let annotation_contexts = this.contextTargets;
+      this.#display_annotations_contexts()
+    }
+    #display_annotations_contexts(){
+      let annotation_contexts = this.contextTargets;
         let textarea = this.inputTarget
         for (var i = 0; i < annotation_contexts.length; i++) {
           var context = annotation_contexts[i];
