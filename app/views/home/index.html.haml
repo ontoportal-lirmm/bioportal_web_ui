@@ -75,7 +75,7 @@
         .home-services-buttons.container
           .insert-sample-text-button{'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("sample_text")}
             %div
-              = t('home.insert_sample_text')
+              = t('insert_sample_text')
             = inline_svg_tag 'icons/arrow-curved-up.svg'
           .home-get-recommendations{onclick: "submitRecommender()"}
             %p= t('home.get_recommendations')
@@ -172,7 +172,7 @@
               = format_number_abbreviated(@users_count)
             %p= t("home.users")
       .home-statistics-link.justify-content-end
-        = link_to 'See details','/statistics', target: "_blank"
+        = link_to t("home.see_details"),'/statistics', target: "_blank"
 
   .home-section
     .home-statistics-container

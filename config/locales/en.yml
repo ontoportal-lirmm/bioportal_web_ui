@@ -120,7 +120,7 @@ en:
     paste_text_prompt: Enter a paragraph of text or some keywords...
     recommender_annotator: Recommender and Annotator
     support_and_collaborations: Support & Collaborations
-    insert_sample_text: Insert sample text
+    see_details: See details
     info_tooltip_text: "You are seing the average scores for all the public ontologies in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
     average: Average
     min: Min
