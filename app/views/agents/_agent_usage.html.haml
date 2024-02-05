@@ -9,4 +9,4 @@
         - selected = usages.select{|x, v| v.any?{|uri| uri[attr]}}.keys.map{|x| x.to_s.split('/')[-3]}
         = select_input(id: attr, name: attr, label: attr_header_label(attr_metadata), values: @ontology_acronyms, selected: selected, multiple: true)
     %div.mt-2.d-flex.justify-content-end
-      = submit_tag 'Save', class: "btn btn-primary mr-sm-2 group-form-accept"
+      = submit_tag t("agents.save"), class: "btn btn-primary mr-sm-2 group-form-accept"
