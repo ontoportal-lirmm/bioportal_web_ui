@@ -739,6 +739,6 @@ en:
         keywords_and_classes: Keywords and classes
         languages: Languages
         pull_location: Pull location
-        see_all_metadata: See all metadata...
+        export_metadata: Export metadata
         abstract: Abstract
         description: Description
