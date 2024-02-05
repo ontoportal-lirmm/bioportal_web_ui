@@ -3,6 +3,7 @@ require 'cgi'
 
 class AnnotatorController < ApplicationController
   layout :determine_layout
+  include ApplicationHelper
 
   # REST_URI is defined in application_controller.rb
   #ANNOTATOR_URI = REST_URI + "/annotator"
@@ -165,11 +166,6 @@ class AnnotatorController < ApplicationController
       text: @ontologies[ontology_url][:name],
       link: url_to_endpoint(ontology_url)
     }
-  end
-  def url_to_endpoint(url)
-    uri = URI.parse(url)
-    endpoint = uri.path.sub(/^\//, '')
-    endpoint
   end
 
   def initalize_options

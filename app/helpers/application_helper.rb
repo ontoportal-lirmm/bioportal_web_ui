@@ -22,8 +22,11 @@ module ApplicationHelper
                        :wdrs => "http://www.w3.org/2007/05/powder-s#", :cito => "http://purl.org/spar/cito/", :pav => "http://purl.org/pav/", :nkos => "http://w3id.org/nkos/nkostype#",
                        :oboInOwl => "http://www.geneontology.org/formats/oboInOwl#", :idot => "http://identifiers.org/idot/", :sd => "http://www.w3.org/ns/sparql-service-description#",
                        :cclicense => "http://creativecommons.org/licenses/"}
-
-
+  def url_to_endpoint(url)
+    uri = URI.parse(url)
+    endpoint = uri.path.sub(/^\//, '')
+    endpoint
+  end
 
   def ontologies_analytics
     data = LinkedData::Client::Analytics.last_month.onts
@@ -616,4 +619,6 @@ module ApplicationHelper
       content_tag(:p, text)
     end
   end
+
+
 end
