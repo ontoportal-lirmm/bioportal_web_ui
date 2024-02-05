@@ -4,5 +4,5 @@
       = render SubmissionMetadataComponent.new(submission: @submission_latest, submission_metadata: submission_metadata) unless @submission_latest.nil?
     %div.scroll-message.text-center.py-3.bg-light.text-primary
       %p.scroll-text.mb-0
-        Scroll down to see more
+        = t("ontologies.sections.scroll_down_to_see_more")
       %i.scroll-icon.fa.fa-chevron-down
