@@ -20,10 +20,11 @@
                 - elsif attribute == "ontology"
                   = acronym
                 - else
-                  - if submission.instance_values[attribute.to_s].is_a?(String) && %w[http https].include?(submission.instance_values[attribute.to_s][0..3])
-                    %a{:href=> ""+ submission.instance_values[attribute.to_s] +""}= submission.instance_values[attribute.to_s]
+                  - values = submission.instance_values[attribute.to_s]
+                  - if values.is_a?(String) && %w[http https].include?(values[0..3])
+                    = render LinkFieldComponent.new(value: values, raw: true, check_resolvability: true)
                   - else
-                    - Array(submission.instance_values[attribute.to_s]).each do |value|
+                    - Array(values).each do |value|
                       - if value.is_a?(LinkedData::Client::Models::Agent)
                         %div
                           = display_agent(value, link: false)

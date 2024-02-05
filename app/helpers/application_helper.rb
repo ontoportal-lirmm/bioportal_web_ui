@@ -24,6 +24,11 @@ module ApplicationHelper
                        :cclicense => "http://creativecommons.org/licenses/"}
 
 
+
+
+  def resolve_namespaces
+    RESOLVE_NAMESPACE
+  end
   def ontologies_analytics
     data = LinkedData::Client::Analytics.last_month.onts
     data.map{|x| [x[:ont].to_s, x[:views]]}.to_h
@@ -34,6 +39,19 @@ module ApplicationHelper
       return session[:user].apikey
     else
       return LinkedData::Client.settings.apikey
+    end
+  end
+
+  def rest_hostname
+    extract_hostname(REST_URI)
+  end
+
+  def extract_hostname(url)
+    begin
+      uri = URI.parse(url)
+      uri.hostname
+    rescue URI::InvalidURIError
+      url
     end
   end
 
@@ -68,11 +86,11 @@ module ApplicationHelper
   end
 
   def escape(string)
-    CGI.escape(string)
+    CGI.escape(string) if string
   end
 
   def unescape(string)
-    CGI.unescape(string)
+    CGI.unescape(string) if string
   end
 
   def clean(string)
@@ -589,14 +607,14 @@ module ApplicationHelper
   def show_advanced_options_button(text: nil, init: nil)
     content_tag(:div, class: "#{init ? 'd-none' : ''} advanced-options-button", 'data-action': 'click->reveal-component#show', 'data-reveal-component-target': 'showButton') do
       inline_svg_tag('icons/settings.svg') +
-      content_tag(:div, text, class: 'text')
+        content_tag(:div, text, class: 'text')
     end
   end
 
   def hide_advanced_options_button(text: nil, init: nil)
     content_tag(:div, class: "#{init ? '' : 'd-none'} advanced-options-button", 'data-action': 'click->reveal-component#hide', 'data-reveal-component-target': 'hideButton') do
       inline_svg_tag('icons/hide.svg') +
-      content_tag(:div, text, class: 'text')
+        content_tag(:div, text, class: 'text')
     end
   end
   

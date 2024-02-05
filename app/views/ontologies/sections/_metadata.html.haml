@@ -11,7 +11,7 @@
       = ontology_depiction_card
       = properties_card('Identifiers',t("ontologies.sections.identifiers"), @identifiers) do |values|
         = horizontal_list_container(values) do |v|
-          = render LinkFieldComponent.new(value: v)
+          = render LinkFieldComponent.new(value: v, check_resolvability: true)
 
       = properties_dropdown('dates',t("ontologies.sections.dates"),'', @dates_properties) do |values|
         - Array(values).sort.map do |v|
@@ -70,9 +70,6 @@
             - l.row do
               = render partial: 'ontology_views'
 
-      - unless @submission_latest.nil?
-        = javascript_include_tag("jsonld")
-        = metadata_formats_buttons
 
       = admin_block do
         = properties_dropdown('configuration',t("ontologies.sections.configuration_metadata"), t("ontologies.sections.info_tooltip_configuration"), @config_properties)

@@ -3,7 +3,7 @@ module OntologiesHelper
 
   REST_URI = $REST_URL
   API_KEY = $API_KEY
-  LANGUAGE_FILTERABLE_SECTIONS = %w[classes schemes collections instances]
+  LANGUAGE_FILTERABLE_SECTIONS = %w[classes schemes collections instances properties].freeze
 
 
   def ontology_retired?(submission)
@@ -263,12 +263,24 @@ module OntologiesHelper
 
   def submission_status_icons(status)
     if submission_status_ok?(status)
-      "success-icon.svg"
+      status_icons(ok: true)
     elsif submission_status_error?(status)
-      'error-icon.svg'
+      status_icons(error: true)
     elsif status == '(Archived)'
       'archive.svg'
     elsif submission_status_warning?(status)
+      status_icons(warning: true)
+    else
+      "info.svg"
+    end
+  end
+
+  def status_icons(ok: false, error: false, warning: false)
+    if ok
+      "success-icon.svg"
+    elsif error
+      'error-icon.svg'
+    elsif warning
       "alert-triangle.svg"
     else
       "info.svg"
@@ -527,9 +539,15 @@ module OntologiesHelper
         title = label + '<br>' + link_to(Array(value).first)
       end
 
+
+      url = Array(value).first || ''
+      if url.include?(rest_hostname)
+        url = url['?'] ? "#{url}&apikey=#{get_apikey}" : "#{url}?apikey=#{get_apikey}"
+      end
+      
       content_tag(:span, data: {controller:"tooltip" } , title:  title) do
         link_to(inline_svg("#{icon}.svg", width: "32", height: '32'),
-                Array(value).first || '', link_options.merge(target: '_blank'))
+                url, link_options)
       end
     end.join.html_safe
   end
@@ -542,24 +560,6 @@ module OntologiesHelper
         render Display::ImageComponent.new(src: depiction_url)
       end
     end
-  end
-
-  def metadata_formats_buttons
-    render SummarySectionComponent.new(title: 'Download metadata (profile/syntax)', show_card: false) do
-      content_tag :div, data: { controller: 'metadata-downloader' } do
-        horizontal_list_container([
-                                    ['NQuads', 'MOD/n-triple'],
-                                    ['JsonLd', 'MOD/json-ld'],
-                                    ['XML', 'MOD/rdf-xml']
-                                  ]) do |format, label|
-          render ChipButtonComponent.new(type: 'clickable', 'data-action': "click->metadata-downloader#download#{format}") do
-            concat content_tag(:span, label)
-            concat content_tag(:span, inline_svg("summary/download.svg", width: '15px', height: '15px'))
-          end
-        end
-      end
-    end
-
   end
 
   def count_subscriptions(ontology_id)

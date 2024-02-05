@@ -1,5 +1,5 @@
 = render Layout::CardComponent.new do |c|
-  - c.header(text: 'General information')
+  - c.header(text: t("ontologies.sections.metadata.general_information"))
   = render Layout::ListComponent.new do |l|
     - l.row do
       .d-flex.align-items-center
@@ -8,37 +8,37 @@
             .creation_text
               = render TextAreaFieldComponent.new(value: @submission_latest&.description)
           - else
-            = render FieldContainerComponent.new(label: 'Abstract') do
+            = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.abstract")) do
               .creation_text
                 = render TextAreaFieldComponent.new(value: @submission_latest&.abstract)
-            = render FieldContainerComponent.new(label: 'Description') do
+            = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.description")) do
               .creation_text
                 = render TextAreaFieldComponent.new(value: @submission_latest&.description)
 
-        - unless @submission_latest&.logo.nil?
+        - unless @submission_latest&.logo.nil? || !link?(@submission_latest&.logo)
           = image_tag(@submission_latest&.logo, class: 'description_img', width: '145px')
 
 
     - l.row do
       %div.creation_text
         - if @submission_latest&.released
-          Initial created on
+          = t("ontologies.sections.metadata.initial_created_on")
           %span.date_creation_text= l(Date.parse(@submission_latest.released), format: :monthfull_day_year) + '.'
         - if @submission_latest&.contact
-          For additional information, contact
+          = t("ontologies.sections.metadata.additional_information")
           %span
             #{display_contact(@submission_latest.contact).html_safe}.
 
     - unless Array(@submission_latest&.naturalLanguage).empty?
       - l.row do
-        = render FieldContainerComponent.new(label: 'Languages') do
+        = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.languages")) do
           = horizontal_list_container(Array(@submission_latest&.naturalLanguage)) do |v|
             = render LanguageFieldComponent.new(value: v)
 
 
     - unless  Array(@submission_latest&.keywords).empty? && Array(@submission_latest&.keyClasses).empty?
       - l.row do
-        = render FieldContainerComponent.new(label: 'Keywords and classes') do
+        = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.keywords_and_classes")) do
           - values = (Array(@submission_latest&.keywords) + Array(@submission_latest&.keyClasses))
           - values =  values.map{|x| x.split(',')}.flatten
           = horizontal_list_container(values) do |v|
@@ -49,14 +49,14 @@
     - domains = Array(@ontology&.hasDomain) + Array(@submission_latest&.hasDomain)
     - unless domains.empty?
       - l.row do
-        = render FieldContainerComponent.new(label: 'Categories and subjects') do
+        = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.categories_and_subjects")) do
           = horizontal_list_container(domains.uniq) do |v|
             = render ChipButtonComponent.new(text: show_category_name(v), type: "static")
 
     - if  @submission_latest&.pullLocation
       - l.row do
         = admin_block(class_css: '') do
-          = render FieldContainerComponent.new(label: 'Pull location') do
+          = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.pull_location") ) do
             = horizontal_list_container([@submission_latest&.pullLocation]) do |v|
               %span.admin-background
                 = render LinkFieldComponent.new(value: v)
@@ -65,4 +65,6 @@
     = ontology_icon_links(@ontology_icon_links, @submission_latest)
   %hr.w-100.my-3
   %div.text-center.pb-3
-    = link_to_modal('See all metadata...', "/ajax/submission/show_additional_metadata/#{@ontology.acronym}",data: { show_modal_title_value: metadata_filled_count, show_modal_size_value: 'modal-xl' })
+    = link_to_modal(nil, metadata_export_index_path(ontology: @ontology.acronym), {data: {show_modal_title_value: metadata_filled_count, show_modal_size_value: 'modal-xl' }}) do
+      = t("ontologies.sections.metadata.export_metadata")
+      

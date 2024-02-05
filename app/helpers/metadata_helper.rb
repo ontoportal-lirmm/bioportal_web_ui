@@ -53,6 +53,18 @@ module MetadataHelper
     attrs.include?(attr_key.to_sym)
   end
 
+  def content_metadata_attributes(all_metadata = submission_metadata)
+    metadata_list = {}
+    # Get extracted metadata and put them in a hash with their label, if one, as value
+    all_metadata.each do |metadata|
+      metadata_list[metadata["attribute"]] = metadata["label"]
+    end
+    reject = [:csvDump, :dataDump, :openSearchDescription, :metrics, :prefLabelProperty, :definitionProperty,
+              :definitionProperty, :synonymProperty, :authorProperty, :hierarchyProperty, :obsoleteProperty,
+              :ontology, :endpoint, :submissionId, :submissionStatus, :uploadFilePath, :diffFilePath]
+    metadata_list.reject{|k,v| reject.include?(k.to_sym)}.sort
+  end
+
   def attr_uri?(attr_label)
     input_type?(attr_metadata(attr_label), "uri")
   end

@@ -99,7 +99,7 @@ class AgentsController < ApplicationController
     else
       success_message = 'Agent successfully updated'
       table_line_id = agent_table_line_id(agent_id(agent))
-      agent = LinkedData::Client::Models::Agent.find(agent.id.split('/').last)
+      agent = find_agent_display_all(agent.id.split('/').last)
       streams = [alert_success(id: alert_id) { success_message },
                  replace(table_line_id, partial: 'agents/agent', locals: { agent: agent })
       ]
