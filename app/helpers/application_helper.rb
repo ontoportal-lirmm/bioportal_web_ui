@@ -42,6 +42,19 @@ module ApplicationHelper
     end
   end
 
+  def rest_hostname
+    extract_hostname(REST_URI)
+  end
+
+  def extract_hostname(url)
+    begin
+      uri = URI.parse(url)
+      uri.hostname
+    rescue URI::InvalidURIError
+      url
+    end
+  end
+
   def omniauth_providers_info
     $OMNIAUTH_PROVIDERS
   end

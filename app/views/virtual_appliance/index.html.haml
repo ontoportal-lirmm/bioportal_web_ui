@@ -1,23 +1,19 @@
--@title = "OntoPortal Virtual Appliance Download"
+-@title = t("ontoportal_virtual_appliance.title")
 
 %div{:style => "padding: 13px; max-width: 800px;", :class => "enable-lists"}
-  %h1 OntoPortal Virtual Appliance Download
-  %p
-    OntoPortal Virtual Appliance distribution contains a pre-installed,
-    pre-configured version of commonly-used open source NCBO software running
-    on a Linux operating system.
-  %p The following software is included on the image:
+  %h1= t("ontoportal_virtual_appliance.title")
+  %p= t("ontoportal_virtual_appliance.intro_paragraph.main")
+  %p= t("ontoportal_virtual_appliance.included_software")
   %ul
-    %li Ontologies API (REST service)
-    %li Annotator
-    %li Recommender
-    %li BioPortal Web User Interface (including ontology visualization, widgets, and Annotator UI)
+    %li= t("ontoportal_virtual_appliance.ontologies_api")
+    %li= t("ontoportal_virtual_appliance.annotator")
+    %li= t("ontoportal_virtual_appliance.recommender")
+    %li= t("ontoportal_virtual_appliance.web_user_interface")
   %p
-    Please see our
+    = t("ontoportal_virtual_appliance.see_documentation")
     =link_to 'documentation', 'https://ontoportal.github.io/administration/steps/getting_started/', target: '_blank'
-    for more information on working with the Appliance.
-  %h2 Download Latest OntoPortal
-  %ul
+    = t("ontoportal_virtual_appliance.more_information")
+  %h2= t("ontoportal_virtual_appliance.download_button_text")
     %li
       Version 3.1.1
       <a href="https://www.bioontology.org/ontoportal-appliance/ontoportal_appliance-vmware-3.1.1.ova"> OVA</a>
@@ -55,33 +51,30 @@
       <a href="https://ontoportal.github.io/administration/steps/getting_started/#amazon-aws-ami"> Amazon EC2</a>
 
   -if @virtual_appliance_access
-    %h3 Archives
-    %p
-      The OntoPortal 2.5 Virtual Appliance is not longer offered for new
-      users. This archival distribution is available only as a backup for
-      those who registered for the Appliance before June 2020
+    %h3= t("ontoportal_virtual_appliance.archives.title")
+    %p= t("ontoportal_virtual_appliance.archives.archival_distribution")
     %ul
       %li
-        Version 2.5
+        = t("ontoportal_virtual_appliance.archives.version")
         =link_to 'OVF', 'https://www.bioontology.org/ontoportal-appliance/ontoportal-2.5.zip'
 
   -if @user.admin?
     %div{:style => "margin: 2em 0 0; padding: 1em 1em; border: solid thin gray; background-color: lightGray;"}
-      %h1{:style => "margin-bottom: 15px;"} Admin: Add Users
+      %h1{:style => "margin-bottom: 15px;"}= t("ontoportal_virtual_appliance.admin_add_users.title")
       =form_for :appliance_user do |f|
-        = f.label :user_id, "Account Name: "
+        = f.label :user_id, t("ontoportal_virtual_appliance.admin_add_users.label_account_name")
         = f.text_field :user_id
         &nbsp;&nbsp;
-        = f.submit "Add User"
+        = f.submit t("ontoportal_virtual_appliance.admin_add_users.add_user_button")
 
       %h2{:style => "margin-top: 1em;"}
-        Accounts with access
+        = t("ontoportal_virtual_appliance.admin_add_users.accounts_with_access")
         %a#export{href: "#", style: "margin-left: 2em; margin-top: -1em; font-size: 11px;"}
-          Export Appliance Users As CSV
+          = t("ontoportal_virtual_appliance.admin_add_users.export_users_link")
       %table#user_table.zebra{style: "border: thin lightGray solid; background-color: white;"}
         %thead
           %tr
-            %th BioPortal User ID
+            %th= t("ontoportal_virtual_appliance.admin_add_users.bioportal_user")
         %tbody
         -@va_users.each do |u|
           %tr
