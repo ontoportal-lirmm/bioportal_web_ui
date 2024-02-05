@@ -85,7 +85,7 @@
         .title
           = t('recommender.results_title')
         .recommender-table-container
-          = render TableComponent.new(id: 'recommender-table', borderless: true, layout_fixed: true, small_text: true, outline: true, sort: true, default_sort_column: '1') do |t|
+          = render TableComponent.new(id: 'recommender-table', borderless: true, layout_fixed: true, small_text: true, outline: true, sort_column: '1') do |t|
             - t.header do |h|
               - @results_table_header.each do |header|
                 - h.th do

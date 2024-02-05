@@ -5,24 +5,23 @@ import DataTable from 'datatables.net-dt';
 // Connects to data-controller="table-component"
 export default class extends Controller {
     static values = {
-        sort: Boolean,
-        defaultsortcolumn: String,
+        sortcolumn: String,
         paging: Boolean,
         searching: Boolean,
-        init: Boolean
+        noinitsort: Boolean
     }
     connect(){    
         let table_component
         table_component = this.element.childNodes[1]
         let default_sort_column
-        default_sort_column = parseInt(this.defaultsortcolumnValue, 10)
-        if (this.sortValue || this.searchingValue){
+        default_sort_column = parseInt(this.sortcolumnValue, 10)
+        if (this.sortcolumnValue || this.searchingValue){
             let table = new DataTable('#'+table_component.id, {
                 paging: this.pagingValue,
                 info: false,
                 searching: this.searchingValue,
                 autoWidth: true,
-                order: this.initValue ? [] : [[default_sort_column, 'desc']]
+                order: this.noinitsortValue ? [] : [[default_sort_column, 'desc']]
             });
         }
     }

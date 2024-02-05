@@ -59,7 +59,7 @@
           .details
             = "#{t('annotator.total_results')} #{@results.length} (direct: #{@direct_results} / parents: #{@parents_results})"
         .annotator-table-container
-          = render TableComponent.new(id: 'annotator-table', borderless: true, layout_fixed: true, outline: true, sort: true, no_init_sort: true, auto_layout: true) do |t|
+          = render TableComponent.new(id: 'annotator-table', borderless: true, layout_fixed: false, outline: true, sort_column: '0', no_init_sort: true) do |t|
             - t.header do |h|
               - @results_table_header.each do |header|
                 - h.th do
