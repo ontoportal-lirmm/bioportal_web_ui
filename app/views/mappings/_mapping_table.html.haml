@@ -15,18 +15,18 @@
   %table#concept_mappings_table.zebra{width: "100%", style:'word-break: break-word'}
     %thead
       %tr
-        %th Mapping To
-        %th{width: "30%"} Ontology
-        %th Relations
-        %th Source
-        %th Type
+        %th= t("mappings.mapping_table.mapping_to")
+        %th{width: "30%"}= t("mappings.count.ontology")
+        %th= t("mappings.mapping_table.relations")
+        %th= t("mappings.mapping_table.source")
+        %th= t("mappings.mapping_table.type")
         - if current_user_admin?
-          %th{:class => 'delete_mappings_column'} Actions
+          %th{:class => 'delete_mappings_column'}= t("mappings.mapping_table.actions")
     %tbody#concept_mappings_table_content
       - @mappings.each do |map|
         = render partial: 'mappings/show_line' , locals: {map: map, concept: @concept}
       %tr.empty-state
-        %td.text-center{:colspan => "6"} There are currently no  mappings for this class.
+        %td.text-center{:colspan => "6"}= t("mappings.mapping_table.no_mappings")
 :javascript
   jQuery(document).ready(function(){
     ajax_process_init();
