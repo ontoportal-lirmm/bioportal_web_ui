@@ -514,7 +514,70 @@ en:
     password: Password
     title: Register
     username: Username
-  
+  users:
+    index:
+      first_name: First name
+      last_name: Last name
+      username: Username
+      email: Email
+      roles: Roles
+      ontologies: Ontologies
+      project: Project
+      created: Created At
+      actions: Actions
+      detail: Detail
+      delete: Delete
+      login_as: Login as
+      error_delete_message: Can't delete this user because still used
+      turbo_confirm: Are you sure?
+    edit:
+      user_to_admin: Are you sure you want to make this user an admin?
+      admin_privileges: Are you sure you want to revoke admin privileges for this user?
+      errors_creating_account: "Errors creating your account:"
+      edit_information: Edit personal information
+      first_name: First name
+      last_name: Last name
+      username: Username
+      email: Email
+      orcid_id: ORCID ID
+      github_id: Github ID
+      new_password: New password
+      confirm_password: Confirm password
+      change_password: Change password
+    show:
+      my_account: My account
+      first_name: "First name:"
+      last_name: "Last name:"
+      username: "Username:"
+      email: "Email:"
+      orcid_id: "ORCID ID:"
+      github_id: "Github ID:"
+      mailing_list_subscription: Mailing list subscription
+      mailing_list_description: Register to the %{portal} announcements mailing list.
+      api_key_description: Your API Key can be used to access  %{portal} Web services
+      api_documentation: API documentation
+      custom_semantic_resource: Custom semantic resource set
+      please: Please
+      modify_custom_semantic_resource: |
+        visit the main site
+        to modify your Custom Semantic Resource Set.
+      customize_portal_display: "Customize your %{portal} display: Pick the semantic resources that you want to see on %{portal} will hide all other semantic resources."
+      select_semantic_resources : Select semantic resources 
+      no_semantic_resources: You haven't picked any semantic resources yet
+      note_feature_logged_in: "Note: this feature works only when you are logged in."
+      select_custom_semantic_resources: Select custom semantic resources
+      save_custom_semantic_resources: Save custom semantic resources
+      not_subscribed: Not subscribed to any semantic resource
+      submitted_semantic_resources: Submitted semantic resources 
+      upload_semantic_resources: Upload semantic resources 
+      projects_created: Projects created
+      no_project_created: No project created
+      unsubscribe: Unsubscribe
+      subscribe: Subscribe
+      subscriptions: Subscriptions
+      no_uploaded_resources: You didn't upload any semantic resource yet
+      notes: Notes
+
   reproduce_results: 'Reproduce these results using the '
   score: Score
   
