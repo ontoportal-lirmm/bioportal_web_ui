@@ -393,14 +393,32 @@ en:
         properties: Properties
         actions: Actions
         see_other_properties: See other properties
-        
+  agents:
+    save: Save
+    not_used: Not used
+    see_usages_count: See usages (%{count})
+    delete_button: Delete
+    delete_error: "Can't delete this %{agent} because still used"
+    turbo_confirm: Are you sure?
+    modal_title: "Agent \"%{name}\" usages"
+    form:
+      type: Type
+      person: Person
+      organization: Organization
+      name: Name
+      email: Email
+      acronym: Acronym
+      homepage: Homepage
+      creator: Creator
+      identifiers: Identifiers
+      affiliations: Affiliations
+    index:
+      create_new_agent: Create new agent
+      first_name: First name
+      usages: Usages
+      actions: Actions
+      no_agents: There are currently no  agents.
 
-
-
-
-
-
-  
   matched_class: Matched class
   matched_ontology: matched ontology
   max_ontologies_per_set: Maximum number of ontologies per set
