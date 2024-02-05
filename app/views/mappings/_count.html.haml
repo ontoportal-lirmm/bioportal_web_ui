@@ -1,11 +1,11 @@
 = render TableComponent.new(id: 'mapping_count_table') do |t|
   - t.header do |h|
-    - h.th {'Ontology'}
-    - h.th {'Mappings'}
+    - h.th {t("mappings.count.ontology")}
+    - h.th {t("mappings.count.mappings")}
 
   - if @mapping_counts.blank?
     - t.row do |r|
-      - r.td {'There are no mappings to or from this ontology'}
+      - r.td {t("mappings.count.no_mappings")}
       - r.td {'&nbsp;'}
   - else
     - @mapping_counts.each do |mapping_count|
