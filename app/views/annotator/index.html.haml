@@ -68,11 +68,9 @@
               - t.row do |r|
                 - r.td do
                   .class
-                    %a{href: result[:class][:link]}
-                      = result[:class][:text]
+                    = link_to result[:class][:text], result[:class][:link]
                 - r.td do
-                  %a{href: result[:ontology][:link]}
-                    = result[:ontology][:text]
+                  = link_to result[:ontology][:text], result[:ontology][:link]
                 - r.td do
                   - result[:context].each do |context|
                     - if !context[:child]
@@ -81,8 +79,7 @@
                       .annotation-parent
                         .text
                           Parent of: 
-                        %a{href: context[:child][:link]}
-                          = context[:child][:text]
+                        = link_to context[:child][:text], href: context[:child][:link]
                         .gray
                           |
                         .text
