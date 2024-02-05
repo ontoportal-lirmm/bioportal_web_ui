@@ -11,8 +11,8 @@
     = agent.agentType
   %td
     - count = agent_usages_count(agent)
-    = link_to_modal(nil, "/agents/#{agent.id.split('/').last}/usages", style: 'width: 120px', class: "btn btn-sm btn-#{count.zero? ? 'danger' : 'light'}", data: { show_modal_title_value: "Agent \"#{agent.name}\" usages" }) do
-      = count.zero? ? "Not used" : "See usages (#{count})"
+    = link_to_modal(nil, "/agents/#{agent.id.split('/').last}/usages", style: 'width: 120px', class: "btn btn-sm btn-#{count.zero? ? 'danger' : 'light'}", data: { show_modal_title_value:t("agents.modal_title", agent: agent.name)}) do
+      = count.zero? ? t("agents.not_used") : t("agents.see_usages_count", count: count)
 
   %td{:class => 'delete_mappings_column'}
     - if agent.id && !agent.id.empty? && session[:user] && session[:user].admin?
@@ -21,7 +21,7 @@
           = link_to_agent_edit_modal(agent)
         %span
           - if count.zero?
-            = button_to "Delete", CGI.unescape(agent_path(agent.id.split('/').last)), method: :delete, class: 'btn btn-link',  form: {data: { turbo: true, turbo_confirm: "Are you sure?", turbo_frame: '_top'}}
+            = button_to t("agents.delete"), CGI.unescape(agent_path(agent.id.split('/').last)), method: :delete, class: 'btn btn-link',  form: {data: { turbo: true, turbo_confirm: t("agents.turbo_confirm"), turbo_frame: '_top'}}
           - else
-            %span{data: { controller: 'tooltip' }, title: "Can't delete this #{agent.agentType} because still used"}
-              = link_to "Delete", "", class: 'btn btn-link disabled'
+            %span{data: { controller: 'tooltip' }, title: t("agents.delete_error", agent: agent.agentType)}
+              = link_to t("agents.delete"), "", class: 'btn btn-link disabled'

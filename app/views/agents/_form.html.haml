@@ -14,7 +14,7 @@
   - else
     %tr
       %th
-        Type
+        = t("agents.form.type")
         %span.asterik *
       %td.top
         %div.d-flex
@@ -26,35 +26,35 @@
             = label_tag :agentType_organization, "Organization",  class: 'custom-control-label'
   %tr
     %th
-      Name
+      = t("agents.form.name")
       %span.asterik *
     %td.top
       = text_field_tag agent_field_name(:name, name_prefix), agent.name, class: "form-control"
   %tr{'data-form-options-display-target':"option1",  class: affiliation?(agent) && 'd-none'}
     %th
-      Email
+      = t("agents.form.email")
       %span.asterik
     %td.top
       = email_field_tag agent_field_name(:email, name_prefix), agent.email, class: "form-control"
   %tr{'data-form-options-display-target':"option2",  class: !affiliation?(agent) && 'd-none'}
     %th
-      Acronym
+      = t("agents.form.acronym")
       %span.asterik
     %td.top
       = text_field_tag agent_field_name(:acronym, name_prefix), agent.acronym,class: "form-control"
   %tr{'data-form-options-display-target':"option2",  class: !affiliation?(agent) && 'd-none'}
     %th
-      Homepage
+      = t("agents.form.homepage")
     %td.top
       = url_field_tag agent_field_name(:homepage, name_prefix), agent.homepage, class: "form-control"
   %tr.d-none
     %th
-      Creator
+      = t("agents.form.creator")
     %td.top
       = text_field_tag  agent_field_name(:creator, name_prefix), agent.creator,  class: "form-control"
   %tr
     %th
-      Identifiers
+      = t("agents.form.identifiers")
     %td.top
       %div.agents-identifiers
         = render NestedFormInputsComponent.new do |c|
@@ -80,11 +80,11 @@
   - if show_affiliations
     %tr
       %th
-        Affiliations
+        = t("agents.form.affiliations")
       %td.top.agents-affiliations.agents-inputs
         = render NestedAgentSearchInputComponent.new(agents: agent.affiliations, agent_type: 'organization',
                                                      name_prefix: '[affiliations]',
                                                      parent_id:  agent_id(agent),
                                                      show_affiliations: false)
 %div.mt-2
-  = submit_tag 'Save', class: "btn btn-primary mr-sm-2 group-form-accept"
+  = submit_tag t("agents.save"), class: "btn btn-primary mr-sm-2 group-form-accept"
