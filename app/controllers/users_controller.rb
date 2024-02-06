@@ -187,7 +187,7 @@ class UsersController < ApplicationController
     @user = LinkedData::Client::Models::User.find(helpers.escape(id), include: 'all')
     @user ||= LinkedData::Client::Models::User.find_by_username(helpers.escape(id), include: 'all').first
 
-    not_found("User with id #{params[:id]} not found") if @user.nil?
+    not_found("User with id #{id} not found") if @user.nil?
 
     @user
   end
@@ -255,7 +255,9 @@ class UsersController < ApplicationController
         errors << "Please fill in the proper text from the supplied image"
       end
     end
-    if ((!params[:orcidId].match(/^\d{4}+(-\d{4})+$/)) || (params[:orcidId].length != 19)) && !(params[:orcidId].nil? || params[:orcidId].length < 1)
+
+
+    if ((!params[:orcidId]&.match(/^\d{4}+(-\d{4})+$/)) || (params[:orcidId].length != 19)) && !(params[:orcidId].nil? || params[:orcidId].length < 1)
       errors << "Please enter a valid ORCID."
     end
 

@@ -33,11 +33,11 @@ class LoginFlowsTest < ActionDispatch::IntegrationTest
 
     post users_path, params: {
       user: {
-        firstName: new_user.first_name,
-        lastName: new_user.last_name,
+        firstName: new_user.firstName,
+        lastName: new_user.lastName,
         username: new_user.username,
-        orcidId: new_user.orcid_id,
-        githubId: new_user.github_id,
+        orcidId: new_user.orcidId,
+        githubId: new_user.githubId,
         email: new_user.email,
         password: new_user.password,
         password_confirmation: new_user.password
