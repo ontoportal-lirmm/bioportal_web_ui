@@ -24,16 +24,13 @@ class UsersController < ApplicationController
   # GET /users/1.xml
   def show
     @user = if session[:user].admin? && params.has_key?(:id)
-              LinkedData::Client::Models::User.find_by_username(params[:id]).first
+              find_user(params[:id])
             else
-              LinkedData::Client::Models::User.find(session[:user].id)
+              find_user(session[:user].id)
             end
 
     @all_ontologies = LinkedData::Client::Models::Ontology.all(ignore_custom_ontologies: true)
 
-    logger.info 'user show'
-    logger.info @user.bring_remaining
-    logger.info @user
     @user_ontologies = @user.customOntology
 
     ## Copied from home controller , account action
@@ -51,10 +48,9 @@ class UsersController < ApplicationController
 
   # GET /users/1;edit
   def edit
-    @user = LinkedData::Client::Models::User.find(helpers.escape(params[:id]), include: 'all')
-    @user ||= LinkedData::Client::Models::User.find_by_username(helpers.escape(params[:id]), include: 'all').first
+    @user = find_user
 
-    if (params[:password].eql?("true"))
+    if params[:password].eql?("true")
       @user.validate_password = true
     end
   end
@@ -89,8 +85,7 @@ class UsersController < ApplicationController
   # PUT /users/1
   # PUT /users/1.xml
   def update
-    @user = LinkedData::Client::Models::User.find(helpers.escape(params[:id]), include: 'all')
-    @user = LinkedData::Client::Models::User.find_by_username(helpers.escape(params[:id]), include: 'all').first if @user.nil?
+    @user = find_user
     @errors = validate_update(user_params)
     if @errors.size < 1
 
@@ -127,12 +122,11 @@ class UsersController < ApplicationController
   # DELETE /users/1
   def destroy
     response = {errors: nil, success: ''}
-    @user = LinkedData::Client::Models::User.find(params[:id])
-    @user = LinkedData::Client::Models::User.find_by_username(params[:id]).first if @user.nil?
-    if(session[:user].admin?)
+    @user = find_user
+
+    if session[:user].admin?
       @user.delete
       response[:success] << 'User deleted successfully '
-
     else
       response[:errors] << 'Not permitted '
     end
@@ -152,8 +146,7 @@ class UsersController < ApplicationController
   end
 
   def custom_ontologies
-    @user = LinkedData::Client::Models::User.find(params[:id], include: 'all')
-    @user = LinkedData::Client::Models::User.find_by_username(params[:id], include: 'all').first if @user.nil?
+    @user = find_user
 
     custom_ontologies = params[:ontology] ? params[:ontology][:ontologyId] : []
     custom_ontologies.reject!(&:blank?)
@@ -176,9 +169,10 @@ class UsersController < ApplicationController
 
   
   def subscribe
-    @user = LinkedData::Client::Models::User.find_by_username(params[:username]).first
+    @user = find_user
     deliver "subscribe", SubscribeMailer.register_for_announce_list(@user.email,@user.firstName,@user.lastName)
   end
+
 
   def un_subscribe
     @email = params[:email]
@@ -187,6 +181,16 @@ class UsersController < ApplicationController
 
   
   private
+
+  def find_user(id = params[:id])
+    id = helpers.unescape(id)
+    @user = LinkedData::Client::Models::User.find(helpers.escape(id), include: 'all')
+    @user ||= LinkedData::Client::Models::User.find_by_username(helpers.escape(id), include: 'all').first
+
+    not_found("User with id #{id} not found") if @user.nil?
+
+    @user
+  end
 
   def deliver(action,job)
     begin
@@ -251,7 +255,9 @@ class UsersController < ApplicationController
         errors << "Please fill in the proper text from the supplied image"
       end
     end
-    if ((!params[:orcidId].match(/^\d{4}+(-\d{4})+$/)) || (params[:orcidId].length != 19)) && !(params[:orcidId].nil? || params[:orcidId].length < 1)
+
+
+    if ((!params[:orcidId]&.match(/^\d{4}+(-\d{4})+$/)) || (params[:orcidId].length != 19)) && !(params[:orcidId].nil? || params[:orcidId].length < 1)
       errors << "Please enter a valid ORCID."
     end
 
