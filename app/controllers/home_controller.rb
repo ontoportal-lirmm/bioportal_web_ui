@@ -48,17 +48,17 @@ class HomeController < ApplicationController
     @individuals_count = LinkedData::Client::Models::Metrics.all.map {|m| m.individuals.to_i}.sum
     @prop_count = 36286
     @map_count = total_mapping_count
-    @analytics = LinkedData::Client::Analytics.last_month
+    #@analytics = LinkedData::Client::Analytics.last_month
 
     @ontology_names = @ontologies.map { |ont| ["#{ont.name} (#{ont.acronym})", ont.acronym] }
 
     @anal_ont_names = {}
     @anal_ont_numbers = []
-    @analytics.onts[0..4].each do |visits|
-      ont = @ontologies_hash[visits[:ont].to_s]
-      @anal_ont_names[ont.acronym] = ont.name
-      @anal_ont_numbers << visits[:views]
-    end
+    # @analytics.onts[0..4].each do |visits|
+    #   ont = @ontologies_hash[visits[:ont].to_s]
+    #   @anal_ont_names[ont.acronym] = ont.name
+    #   @anal_ont_numbers << visits[:views]
+    # end
 
 
   end
