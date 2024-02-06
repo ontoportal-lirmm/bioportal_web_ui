@@ -8,15 +8,7 @@ class SubmissionMetadataComponent < ViewComponent::Base
     @submission = submission
 
     @json_metadata = submission_metadata
-    metadata_list = {}
-    # Get extracted metadata and put them in a hash with their label, if one, as value
-    @json_metadata.each do |metadata|
-      metadata_list[metadata["attribute"]] = metadata["label"]
-    end
-    reject = [:csvDump, :dataDump, :openSearchDescription, :metrics, :prefLabelProperty, :definitionProperty,
-              :definitionProperty, :synonymProperty, :authorProperty, :hierarchyProperty, :obsoleteProperty,
-              :ontology, :endpoint, :submissionId, :submissionStatus, :uploadFilePath]
-    @metadata_list = metadata_list.reject{|k,v| reject.include?(k.to_sym)}.sort
+    @metadata_list = content_metadata_attributes(submission_metadata)
   end
 
   def display_attributes(metadata)

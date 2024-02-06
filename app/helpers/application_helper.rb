@@ -28,6 +28,10 @@ module ApplicationHelper
     endpoint
   end
 
+
+  def resolve_namespaces
+    RESOLVE_NAMESPACE
+  end
   def ontologies_analytics
     data = LinkedData::Client::Analytics.last_month.onts
     data.map{|x| [x[:ont].to_s, x[:views]]}.to_h
@@ -38,6 +42,19 @@ module ApplicationHelper
       return session[:user].apikey
     else
       return LinkedData::Client.settings.apikey
+    end
+  end
+
+  def rest_hostname
+    extract_hostname(REST_URI)
+  end
+
+  def extract_hostname(url)
+    begin
+      uri = URI.parse(url)
+      uri.hostname
+    rescue URI::InvalidURIError
+      url
     end
   end
 
@@ -72,11 +89,11 @@ module ApplicationHelper
   end
 
   def escape(string)
-    CGI.escape(string)
+    CGI.escape(string) if string
   end
 
   def unescape(string)
-    CGI.unescape(string)
+    CGI.unescape(string) if string
   end
 
   def clean(string)

@@ -56,7 +56,7 @@ module SearchAggregator
       title: title.empty? ? label : "#{label} - #{title}",
       ontology_acronym: ontology_acronym,
       link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{class_object.id}",
-      definition: Array(class_object.definition).join(' ')
+      definition: Array(class_object.definition)
     }
   end
 
