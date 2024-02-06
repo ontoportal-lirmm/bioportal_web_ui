@@ -18,7 +18,53 @@ en:
   
   acceptance: Acceptance
   additional_parameters: 'Additional parameters explained at '
+  application:
+    powered_by: Powered by BioPortal
+    projects: Projects
   admin:
+    analytics:
+      total_ontologies: Total Ontologies
+      ontologies_count: "%{size} new ontology this year"
+      ontologies_with_errors: Ontologies with errors
+      total_visits: Total visits
+      active_users: Active users
+      visit_users: "%{ visits } users since last month"
+      ontology_visits: Ontology visits
+      unique_users_visits: Unique users visits
+      page_visits: Page visits of this month
+    main:
+      cache_management: CACHE MANAGEMENT
+      clear_cache: Flush UI cache
+      reset_cache: Reset UI cache connection
+      clear_goo_cache: Flush GOO cache
+      clear_http_cache: Flush HTTP cache
+      version_management: VERSION MANAGEMENT
+      checking_for_updates: Checking for updates ...
+    memcache:
+      title: Memcache stats
+    parse_log:
+      title: Parse Log for %{acronym}
+      log_file: "Log file: %{path}"
+    index:
+      title: Administration
+      administration_console: Administration console
+      analytics: Analytics
+      site_administration: Site Administration
+      ontology_administration: Ontology Administration 
+      licensing: Licensing
+      users: Users
+      metadata_administration: Metadata Administration
+      groups: Groups
+      categories: Categories
+      persons_and_organizations: Persons & Organizations
+      sparql: SPARQL
+      report_generated_on: "Report generated on:"
+      licensed_to: Licensed to
+      appliance_id: Appliance ID
+      valid_till: Valid till
+      days_remaining: Days remaining
+      renew_license: Renew license
+
     groups:
       edit_button: Edit
       delete: Delete
