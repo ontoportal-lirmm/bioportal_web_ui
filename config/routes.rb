@@ -181,12 +181,6 @@ Rails.application.routes.draw do
   get '/login_as/:login_as' => 'login#login_as', constraints: { login_as: /[\d\w\.\-\%\+ ]+/ }
   post '/login/send_pass', to: 'login#send_pass'
 
-  # History
-  get '/tab/remove/:ontology' => 'history#remove', :as => :remove_tab
-  get '/tab/update/:ontology/:concept' => 'history#update', :as => :update_tab
-
-  get 'jambalaya/:ontology/:id' => 'visual#jam', :as => :jam
-
   # Search
   get 'search', to: 'search#index'
 

@@ -14,7 +14,7 @@ module FairScoreHelper
   def get_fairness_json(ontologies_acronyms, apikey = user_apikey)
     begin
       conn = Faraday.new do |conn|
-        conn.options.timeout = 1
+        conn.options.timeout = 30
       end
       response = conn.get(get_fairness_service_url(apikey) + "&ontologies=#{ontologies_acronyms}&combined")
       MultiJson.load(response.body.force_encoding('ISO-8859-1').encode('UTF-8'))

@@ -12,10 +12,20 @@ class AdminController < ApplicationController
 
   def sparql_endpoint
     graph = params["named-graph-uri"]
-    if !session[:user]&.admin? && !graph.blank?
+    apikey = params["apikey"]
+    user_name = params["username"]
+
+    unless user_name.blank?
+      user = LinkedData::Client::Models::User.find(user_name, {include: 'all', apikey: apikey})
+      render(inline: 'Query not permitted') && return if user.nil?
+    end
+
+    render(inline: 'Query not permitted') && return if graph.blank? && !user&.admin?
+
+    unless graph.blank?
       acronym = graph.split('/')[-3]
-      @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
-      render(inline: 'Query not permitted') && return  if @ontology.nil? || @ontology.errors
+      @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym, {apikey: apikey}).first
+      render(inline: 'Query not permitted') && return if @ontology.nil? || @ontology.errors
     end
 
     response = helpers.ontology_sparql_query(params[:query], graph)

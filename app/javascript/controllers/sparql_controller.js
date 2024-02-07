@@ -5,6 +5,8 @@ import { getYasgui } from '../mixins/useYasgui'
 export default class extends Controller {
   static  values = {
     proxy: String,
+    username: String,
+    apikey: String,
     graph: String,
   }
   connect () {
@@ -14,12 +16,16 @@ export default class extends Controller {
         corsProxy: this.proxyValue,
         copyEndpointOnNewTab: true,
         requestConfig: {
-          endpoint: this.proxyValue,
+          endpoint: this.#proxyUrl(),
           acceptHeaderGraph: false,
           acceptHeaderUpdate: false,
           namedGraphs: [this.graphValue],
         }
       })
 
+  }
+
+  #proxyUrl(){
+    return `${this.proxyValue}?apikey=${this.apikeyValue}&username=${this.usernameValue}`
   }
 }
