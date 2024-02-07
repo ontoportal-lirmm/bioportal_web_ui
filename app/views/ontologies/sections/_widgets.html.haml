@@ -9,7 +9,7 @@
       %h5.p-4
         Add #{@ontology.acronym} Web Widgets to your site
       %div
-        = render WidgetBlockComponent.new(id:'jump-to', title: 'Jump To', description: "Type a class name from #{@ontology.acronym} and jump to it in #{$SITE}") do |c|
+        = render WidgetBlockComponent.new(id:'jump-to-widget', title: 'Jump To', description: "Type a class name from #{@ontology.acronym} and jump to it in #{$SITE}") do |c|
           - c.widget do
             #bp_quick_jump
               :javascript
@@ -60,7 +60,7 @@
                 For more help visit
                 %a{:href => "http://bioontology.org/wiki/index.php/NCBO_Widgets#How_to_use_NCBO_Widgets", :target => "_blank"} NCBO Widget Wiki
       %div
-        = render WidgetBlockComponent.new(id:'form-autocomplete', title: 'Autocomplete', description: "Fill your form fields with classes from #{@ontology.acronym}") do |c|
+        = render WidgetBlockComponent.new(id:'form-autocomplete-widget', title: 'Autocomplete', description: "Fill your form fields with classes from #{@ontology.acronym}") do |c|
           - c.widget do
             %div.py-3.px-1
               %p.card-text
@@ -146,7 +146,7 @@
 
 
       %div
-        =  render WidgetBlockComponent.new(id: 'visualization', title: 'Visualization', description: "Display a visualization for a given class in #{@ontology.acronym}") do |c|
+        =  render WidgetBlockComponent.new(id: 'visualization-widget', title: 'Visualization', description: "Display a visualization for a given class in #{@ontology.acronym}") do |c|
           - c.widget do
             #bp_vis_container
             - rest_domain = $REST_URL.sub(/https?:\/\//, "")
@@ -166,7 +166,7 @@
 
       - unless @ontology.flat?
         %div
-          =  render WidgetBlockComponent.new(id: 'tree', title: 'Tree Widget', description: "Display a class tree with a search field for #{@ontology.acronym}") do |c|
+          =  render WidgetBlockComponent.new(id: 'tree-widget', title: 'Tree Widget', description: "Display a class tree with a search field for #{@ontology.acronym}") do |c|
             - c.widget do
               %link{rel:"stylesheet", type:"text/css", href:"/widgets/jquery.ncbo.tree.css"}
               #widget_tree
