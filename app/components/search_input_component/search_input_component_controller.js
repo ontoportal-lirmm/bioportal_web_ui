@@ -10,6 +10,7 @@ export default class extends Controller {
         itemLinkBase: String,
         idKey: String,
         cache: {type: Boolean, default: true},
+        selectedItem: Number
     }
 
     connect() {
@@ -20,6 +21,7 @@ export default class extends Controller {
     }
 
     search() {
+        this.selectedItemValue = 0
         this.#searchInput()
     }
 
@@ -30,7 +32,32 @@ export default class extends Controller {
         this.dropDown.style.display = "none";
         this.input.classList.remove("home-dropdown-active");
     }
-
+    arrow_up(){
+        if (this.selectedItemValue > 1){
+            this.selectedItemValue--
+            this.dropDownTarget.querySelectorAll('.search-content')[this.selectedItemValue-1].style.backgroundColor = "rgba(0, 0, 0, 0.03)";
+            this.dropDownTarget.querySelectorAll('.search-content')[this.selectedItemValue].style.background = 'white'
+        }
+    }
+    arrow_down(){
+        if(this.selectedItemValue<this.dropDownTarget.querySelectorAll('.search-content').length){
+            this.selectedItemValue++
+        }
+        this.dropDownTarget.querySelectorAll('.search-content')[this.selectedItemValue-1].style.backgroundColor = "rgba(0, 0, 0, 0.03)";
+        if(this.selectedItemValue > 1){
+            this.dropDownTarget.querySelectorAll('.search-content')[this.selectedItemValue-2].style.background = 'white'
+        } 
+    }
+    enter_key(){
+        if(this.inputTarget.value != ''){
+            let results = this.dropDownTarget.querySelectorAll('.search-content')
+            if(this.selectedItemValue === 0 || this.dropDownTarget.style.display === 'none'){
+                results[results.length - 2].click()
+            } else {
+                results[this.selectedItemValue-1].click()
+            }
+        }        
+    }
     #inputValue() {
         return this.input.value.trim()
     }
