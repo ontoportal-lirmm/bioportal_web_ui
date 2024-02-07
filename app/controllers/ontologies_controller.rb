@@ -54,8 +54,8 @@ display_context: false, include: browse_attributes)
     @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
     @groups_hash = Hash[@groups.map {|g| [g.id, g] }]
 
-    analytics = LinkedData::Client::Analytics.last_month
-    @analytics = Hash[analytics.onts.map {|o| [o[:ont].to_s, o[:views]]}]
+    #analytics = LinkedData::Client::Analytics.last_month
+    #@analytics = Hash[analytics.onts.map {|o| [o[:ont].to_s, o[:views]]}]
 
     reviews = {}
     LinkedData::Client::Models::Review.all(display_links: false, display_context: false).each do |r|
@@ -93,7 +93,7 @@ display_context: false, include: browse_attributes)
       o[:review_count]     = ont.reviews.length
       o[:project_count]    = ont.projects.length
       o[:private]          = ont.private?
-      o[:popularity]       = @analytics[ont.acronym] || 0
+      #o[:popularity]       = @analytics[ont.acronym] || 0
       o[:submissionStatus] = []
       o[:administeredBy]   = ont.administeredBy
       o[:name]             = ont.name
