@@ -103,15 +103,20 @@ module CheckResolvabilityHelper
     url_resolvable?(result) || url_content_negotiable?(result)
   end
 
-  def check_resolvability_message(resolvable, allowed_formats, status)
+  def check_resolvability_message(resolvable, allowed_formats, status, url = nil)
     supported_format = Array(allowed_formats).compact
     supported_format = allowed_formats.empty? ? 'Format not specified' : supported_format.join(', ')
+
     if resolvable && (supported_format.size > 1)
-      "The URL is resolvable and support the following formats: #{supported_format}"
+      text =  "The URL is resolvable and support the following formats: #{supported_format}"
     elsif resolvable
-      "The URL resolvable but is not content negotiable, support only: #{supported_format}"
+      text = "The URL resolvable but is not content negotiable, support only: #{supported_format}"
     else
-      "The URL is not resolvable and not content negotiable (returns #{status})."
+      text = "The URL is not resolvable and not content negotiable (returns #{status})"
     end
+
+
+    text = text + link_to(' See details', check_resolvability_path(url: url), target: '_blank') if url
+    text
   end
 end
