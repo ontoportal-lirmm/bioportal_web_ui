@@ -119,6 +119,25 @@ en:
   class: Class
   clear_selection: Clear selection
   concepts:
+    date_sorted_list_error: The Classes/Concepts didn't define <strong>creation</strong> or <strong>modifications</strong> dates with dcterms
+    list_error: The Collection didn't define any member
+    permanent_link_class:  Permanent link to this class
+    close: Close
+    request_terms_instructions: |
+      The text below is displayed to the user as the instructions on how to request new terms for your ontology.
+      You can change this text for %{acronym} ontology by clicking anywhere on the existing text to 
+      bring up the editing dialog.
+      Click 'Submit Changes' to save or 'Cancel' to discard your changes.
+    submit_changes: Submit Changes
+    cancel: Cancel
+    request_new_term: Request New Term
+    use_jump_to: Use the "Jump To" to find a class and display details, visualization, notes, and mappings
+    instances: Instances
+    notes: Notes
+    details: Details
+    visualization: Visualization
+    new_term_requests: New Term Requests
+    permanent_link_class: Get a permanent link to this class
     request_term:
       new_term_instructions: |
         <p>This ontology integrates with OntoloBridge, allowing community users to suggest additions to the public ontology. Complete the template below to submit a term request directly to the Ontology Manager.</p>
@@ -758,7 +777,23 @@ en:
     location: "Location: %{location}"
     tags: "Tags:"
     feedback: "Feedback:"
-  
+
+  submissions:
+    save_button: Save
+    id: ID
+    version: Version
+    actions: Actions
+    modified: Modified
+    submitted: Submitted
+    download: Download
+    toggle_dropdown: Toggle Dropdown
+    go_to_api: Go to API
+    edit_button: Edit
+    delete_submission_alert: 
+      content_1: "Are you sure you want to delete submission <span style='color:red;font-weight:bold;'>"
+      content_2: "</span> for ontology <span style='color:red;font-weight:bold;'>"
+      content_3: "</span>?<br/><b>This action CAN NOT be undone!!!</b>"
+
   ontoportal_virtual_appliance:
     title: OntoPortal Virtual Appliance Download
     intro_paragraph:
