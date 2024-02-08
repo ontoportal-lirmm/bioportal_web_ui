@@ -1,0 +1,63 @@
+.d-flex.align-items-center.justify-content-center
+    .ontologies-selector-container
+        .ontologies-selector-input
+            %input{type: 'text', placeholder: 'Filter ontologies ...'}
+            = inline_svg_tag 'icons/search.svg'
+        .ontologies-selector-options
+            .switch-filters 
+                .show-ontology-views 
+                .show-retired-ontologies
+            - formats = @formats.drop(1)
+            = render TabsContainerComponent.new do |c|         
+                = c.item(title: 'Format', selected: true)
+                = c.item_content do
+                    .chips
+                        - formats.each do |item|
+                            = render ChipsComponent.new(label: item, name: item)
+
+                = c.item(title: 'Categories')
+                = c.item_content do
+                    .chips
+                        - @filters[:categories][0].each do |item|
+                            = render ChipsComponent.new(label: item.acronym, name: item.acronym, tooltip: item.name)
+
+                = c.item(title: 'Groups')
+                = c.item_content do
+                    .chips
+                        - @filters[:groups][0].each do |item|
+                            = render ChipsComponent.new(label: item.acronym, name: item.acronym, tooltip: item.name)
+                
+                = c.item(title: 'Natural languages')
+                = c.item_content do
+                    .chips
+                        - @filters[:naturalLanguage][0].each do |item|
+                            = render ChipsComponent.new(label: item["acronym"], name: item["acronym"])
+                
+                = c.item(title: 'Formality levels')
+                = c.item_content do
+                    .chips
+                        - @filters[:hasFormalityLevel][0].each do |item|
+                            = render ChipsComponent.new(label: item["name"], name: item["value"])
+                
+                = c.item(title: 'Ontology types')
+                = c.item_content do
+                    .chips
+                        - @filters[:isOfType][0].each do |item|
+                            = render ChipsComponent.new(label: item["name"], name: item["value"])
+        .ontologies-selector-results
+            .horizontal-line                    
+            .results-number
+            .ontologies
+                - @ontologies.each do |ontology|
+                    = render ChipsComponent.new(label: "#{ontology.name} (#{ontology.acronym})", name: ontology.acronym)
+            .horizontal-line                    
+                                
+
+
+                
+                
+                
+                
+                
+
+            
