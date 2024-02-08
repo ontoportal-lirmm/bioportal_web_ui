@@ -58,7 +58,8 @@
                                         <script src="quick_jump.js" type="text/javascript" charset="utf-8"></script>
               %p
                 = t("ontologies.sections.help_visit")
-                %a{:href => "http://bioontology.org/wiki/index.php/NCBO_Widgets#How_to_use_NCBO_Widgets", :target => "_blank"}= t("ontologies.sections.ncbo_widget_wiki")
+                %a{:href => "http://bioontology.org/wiki/index.php/NCBO_Widgets#How_to_use_NCBO_Widgets", :target => "_blank"}
+                  = t("ontologies.sections.ncbo_widget_wiki")
       %div
         = render WidgetBlockComponent.new(id:'form-autocomplete', title: t("ontologies.sections.widget_block_component_title_2") , description: t("ontologies.sections.widget_block_component_description_2", acronym: @ontology.acronym)) do |c|
           - c.widget do
@@ -146,7 +147,7 @@
 
 
       %div
-        =  render WidgetBlockComponent.new(id: 'visualization', title: t("ontologies.sections.widget_block_component_title_3"), description: description: t("ontologies.sections.widget_block_component_description_3", acronym: @ontology.acronym)) do |c|
+        =  render WidgetBlockComponent.new(id: 'visualization', title: t("ontologies.sections.widget_block_component_title_3"), description: t("ontologies.sections.widget_block_component_description_3", acronym: @ontology.acronym)) do |c|
           - c.widget do
             #bp_vis_container
             - rest_domain = $REST_URL.sub(/https?:\/\//, "")
@@ -166,7 +167,7 @@
 
       - unless @ontology.flat?
         %div
-          =  render WidgetBlockComponent.new(id: 'tree', title: t("ontologies.sections.widget_block_component_title_4"), description: description: t("ontologies.sections.widget_block_component_description_4", acronym: @ontology.acronym)) do |c|
+          =  render WidgetBlockComponent.new(id: 'tree', title: t("ontologies.sections.widget_block_component_title_4"), description: t("ontologies.sections.widget_block_component_description_4", acronym: @ontology.acronym)) do |c|
             - c.widget do
               %link{rel:"stylesheet", type:"text/css", href:"/widgets/jquery.ncbo.tree.css"}
               #widget_tree
@@ -198,8 +199,10 @@
 
               %p
                 = t("ontologies.sections.can_also_view")
-                %a{href: "/widgets/ncbo_tree.html", target: '_blank'}= t("ontologies.sections.detailed_demonstration")
+                %a{href: "/widgets/ncbo_tree.html", target: '_blank'}
+                  = t("ontologies.sections.detailed_demonstration")
               %p
                 = t("ontologies.sections.more_help_visit")
-                %a{:href => "http://bioontology.org/wiki/index.php/NCBO_Widgets#How_to_use_NCBO_Widgets", :target => "_blank"}= t("ontologies.sections.ncbo_widget_wiki")
+                %a{:href => "http://bioontology.org/wiki/index.php/NCBO_Widgets#How_to_use_NCBO_Widgets", :target => "_blank"}
+                  = t("ontologies.sections.ncbo_widget_wiki")
 
