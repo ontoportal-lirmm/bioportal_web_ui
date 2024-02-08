@@ -5,8 +5,6 @@ class AnnotatorController < ApplicationController
   layout :determine_layout
   include ApplicationHelper
 
-  # REST_URI is defined in application_controller.rb
-  #ANNOTATOR_URI = REST_URI + "/annotator"
   ANNOTATOR_URI = $ANNOTATOR_URL
   ANNOTATOR_PLUS_URI = $ANNOTATOR_URL+"/annotatorplus"
   NCBO_ANNOTATOR_PLUS_URI = $NCBO_ANNOTATOR_URL
@@ -22,6 +20,7 @@ class AnnotatorController < ApplicationController
   end
 
   def ncbo_annotator_plus
+    params[:apikey] = $NCBO_API_KEY
     set_annotator_info('/ncbo_annotatorplus', 'NCBO Annotator +', NCBO_ANNOTATOR_PLUS_URI)
     render 'index'
   end
