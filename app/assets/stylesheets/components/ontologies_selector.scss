@@ -38,3 +38,29 @@
 .ontologies-selector-options .tab-link{
     padding: 0 10px;
 }
+.ontologies-selector-options .chips{
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.horizontal-line{
+    margin: 10px 0;
+    width: 100%;
+    height: 1px;
+    background-color: #d7d7d7;
+    border-radius: 100%;
+}
+
+.ontologies-selector-results .chips-container div label > span{
+    font-size: 18px;
+    padding: 15px 20px;
+}
+.ontologies-selector-results label{
+    width: 100%
+}
+.ontologies-selector-results .chips-container > div{
+    margin-right: 0;
+}
+.ontologies-selector-results svg{
+    display: none !important;
+}
