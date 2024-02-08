@@ -441,6 +441,7 @@ class OntologiesController < ApplicationController
     @categories = LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
     @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
     @filters = ontology_filters_init(@categories, @groups)
+    @ontologies = LinkedData::Client::Models::Ontology.all
   end
 
   private

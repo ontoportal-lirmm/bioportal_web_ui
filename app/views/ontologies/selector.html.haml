@@ -48,9 +48,9 @@
             .horizontal-line                    
             .results-number
             .ontologies
-                - binding.pry
-                = render ChipsComponent.new(label: 'Agrovoc', name: 'agrovoc')
-                                
+                - @ontologies.each do |ontology|
+                    = render ChipsComponent.new(label: "#{ontology.name} (#{ontology.acronym})", name: ontology.acronym)
+            .horizontal-line                    
                                 
 
 
