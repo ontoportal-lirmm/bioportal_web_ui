@@ -21,7 +21,6 @@
               .field
                 - get_ontologies_data
                 = render Input::SelectComponent.new(id: 'search-ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected:  params[:ontologies_list])
-          
           .right 
             .filter-container
               .title

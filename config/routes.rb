@@ -136,6 +136,7 @@ Rails.application.routes.draw do
   get '/ontologies_filter', to: 'ontologies#ontologies_filter'
 
   get '/ontologies/:acronym/properties/show', to: 'properties#show'
+  get 'ontologies_selector', to: 'ontologies#selector'
 
   # Notes
   get 'ontologies/:ontology/notes/:noteid', to: 'notes#virtual_show', as: :note_virtual, noteid: /.+/

@@ -437,6 +437,10 @@ class OntologiesController < ApplicationController
     render partial: 'ontologies/sections/metadata/metrics_evolution_graph', locals: { data: data }
   end
 
+  def selector
+    
+  end
+
   private
 
   def get_views(ontology)

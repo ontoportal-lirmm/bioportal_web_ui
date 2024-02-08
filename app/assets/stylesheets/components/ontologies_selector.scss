@@ -1,0 +1,40 @@
+.ontologies-selector-container{
+    width: 800px;
+    padding: 33px;
+    
+}
+.ontologies-selector-input{
+    position: relative;
+    padding-bottom: 100px;
+}
+.ontologies-selector-input input{
+    width: 100%;
+    font-size: 15px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: 1px solid #DCDCDC;
+    outline: none;
+    position: absolute;
+}
+.ontologies-selector-input input:focus{
+    border: 1px solid #a6a6a6;
+}
+.ontologies-selector-input svg{
+    position: absolute;
+    top: 17px;
+    right: 20px;
+}
+.ontologies-selector-input svg path{
+    fill: #a6a6a6;
+}
+
+.ontologies-selector-options .nav-item{
+    margin-right: 0px !important;
+}
+.ontologies-selector-options .tab-items{
+    width: 100%;
+    justify-content: space-between;
+}
+.ontologies-selector-options .tab-link{
+    padding: 0 10px;
+}
