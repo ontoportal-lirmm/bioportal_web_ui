@@ -59,7 +59,7 @@ class AnnotatorController < ApplicationController
       else
         @results_table_header.push('Score')
       end
-      
+      # You can check all the params we are passing by looking to the function json_link
       annotations = LinkedData::Client::HTTP.get(uri, params)
       @ontologies = get_simplified_ontologies_hash
       @semantic_types = get_semantic_types 
