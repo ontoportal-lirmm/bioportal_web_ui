@@ -11,36 +11,29 @@ class AnnotatorController < ApplicationController
   ANNOTATOR_PLUS_URI = $ANNOTATOR_URL+"/annotatorplus"
   NCBO_ANNOTATOR_PLUS_URI = $NCBO_ANNOTATOR_URL
 
+  before_action :initialize_options, only: [:index, :annotator_plus, :ncbo_annotator_plus]
   def index
-    initalize_options
-    @form_url = '/annotator'
-    @page_name = 'Annotator'
-    @json_link = json_link(ANNOTATOR_URI)
-    @rdf_link = "#{@json_link}&format=rdf"
-    annotator_results(ANNOTATOR_URI)
+    set_annotator_info('/annotator', 'Annotator', ANNOTATOR_URI)
   end
-  
+
   def annotator_plus
-    initalize_options
-    @form_url = '/annotatorplus'
-    @page_name = 'Annotator +'
-    @json_link = json_link(ANNOTATOR_PLUS_URI)
-    @rdf_link = "#{@json_link}&format=rdf"
-    annotator_results(ANNOTATOR_PLUS_URI)
+    set_annotator_info('/annotatorplus', 'Annotator +', ANNOTATOR_PLUS_URI)
     render 'index'
   end
 
   def ncbo_annotator_plus
-    initalize_options
-    @form_url = '/ncbo_annotatorplus'
-    @page_name = 'NCBO Annotator +'
-    @json_link = json_link(NCBO_ANNOTATOR_PLUS_URI)
-    @rdf_link = "#{@json_link}&format=rdf"
-    annotator_results(NCBO_ANNOTATOR_PLUS_URI)
+    set_annotator_info('/ncbo_annotatorplus', 'NCBO Annotator +', NCBO_ANNOTATOR_PLUS_URI)
     render 'index'
   end
 
   private
+  def set_annotator_info(url, page_name, uri)
+    @form_url = url
+    @page_name = page_name
+    @json_link = json_link(uri)
+    @rdf_link = "#{@json_link}&format=rdf"
+    annotator_results(uri)
+  end
   def annotator_results(uri)
     @advanced_options_open = false
     @annotator_ontologies = LinkedData::Client::Models::Ontology.all
@@ -169,7 +162,7 @@ class AnnotatorController < ApplicationController
     }
   end
 
-  def initalize_options
+  def initialize_options
     @semantic_types_for_select = []
     @semantic_groups_for_select = []
     @semantic_types ||= get_semantic_types
@@ -188,8 +181,16 @@ class AnnotatorController < ApplicationController
   end
 
   def empty_advanced_options
-    !params[:semantic_types_list] && !params[:semantic_groups_list] && params[:class_hierarchy_max_level].eql?('None') && (!params[:score] || params[:score].eql?('none')) && params[:score_threshold].eql?('0') && params[:confidence_threshold].eql?('0') && !params[:fast_context] && !params[:lemmatize]
+    params[:semantic_types_list].nil? &&
+      params[:semantic_groups_list].nil? &&
+      params[:class_hierarchy_max_level] == 'None' &&
+      (params[:score].nil? || params[:score] == 'none') &&
+      params[:score_threshold] == '0' &&
+      params[:confidence_threshold] == '0' &&
+      params[:fast_context].nil? &&
+      params[:lemmatize].nil?
   end
+  
 
   def json_link(url)
     base_url = "#{url}?text=#{params[:text]}&"
