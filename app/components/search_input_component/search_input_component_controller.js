@@ -3,7 +3,7 @@ import useAjax from "../../javascript/mixins/useAjax";
 
 // Connects to data-controller="search-input"
 export default class extends Controller {
-    static targets = ["input", "dropDown", "actionLink", "template"]
+    static targets = ["input", "dropDown", "actionLink", "template", "button"]
     static values = {
         items: Array,
         ajaxUrl: String,
@@ -91,7 +91,7 @@ export default class extends Controller {
         const inputValue = this.#inputValue();
         let results_list = []
         if (inputValue.length > 0) {
-
+            this.buttonTarget.href = `/search?q=${inputValue}`;
             this.actionLinks.forEach(action => {
                 const content = action.querySelector('p')
                 content.innerHTML = inputValue
