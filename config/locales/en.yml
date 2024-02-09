@@ -1031,3 +1031,39 @@ en:
         export_metadata: Export metadata
         abstract: Abstract
         description: Description
+
+  components:
+    name_identifiers: NAME (IDENTIFIERS)
+    type: TYPE
+    name_acronym: NAME(ACRONYM)
+    file_input_message: Drop your file here or, browse files on your device.
+    all_languages: All languages
+    select_anguage: Select a language
+    back: Back
+    next: Next
+    finish: Finish
+    creative_commons_license: Creative Commons License
+    open_source_license: Open Source License
+    show_more: "+ Show more ..."
+    show_less: "- Show less ..."
+    fair_score: FAIR score
+    details_details: FAIR details ...
+    projects: projects
+    notes: notes
+    concepts: concepts
+    instances: instances
+    classes: classes
+    submitted: Submitted
+    creation_date: Creation date %{date}
+    view_of_the_ontology: "View of the ontology %{ontology}"
+    view: View
+    debug: Debug
+    loading: Loading
+    unwatch: UnWatch
+    watch: Watch
+    resource: "%{sub_text} this resource"
+    notified_of_all_updates: Be the first to watch this resource and  be notified of all its updates
+    join_the_count: Join the %{count} users, watching this resource and  be notified of all its updates
+    see_more: See more...
+    see_less: See less...
+    
