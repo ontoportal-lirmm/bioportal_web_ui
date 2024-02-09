@@ -14,8 +14,8 @@ a i {
 
 
 .btn-info, .btn-outline-primary:hover, .btn-primary ,  .nav-pills .nav-link.active{
-  background-color: $color-primary !important;
-  border-color: $color-primary !important;
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
   color: #fff !important;
 }
 .btn-outline-primary{

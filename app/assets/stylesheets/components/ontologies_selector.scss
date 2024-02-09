@@ -1,6 +1,6 @@
 .ontologies-selector-container{
     width: 800px;
-    padding: 33px;
+    padding: 0 10px;
     
 }
 .ontologies-selector-input{
@@ -104,4 +104,19 @@
 }
 .ontologies-selector-results  .results-number span{
     color: var(--primary-color);
+}
+.ontologies-selector-button{
+    display: flex;
+    justify-content: end;
+}
+.ontologies-selector-button a{
+    color: var(--primary-color) !important;
+    margin-top: 5px;
+    font-size: 15px;
+}
+.ontologies-selector-button a svg{
+    display: none;
+}
+.ontologies-selector-button a span{
+    display: none;
 }
