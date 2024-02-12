@@ -637,5 +637,9 @@ module ApplicationHelper
     end
   end
 
+  def list_to_string(list)
+    list&.join(',') || ''
+  end
+
 
 end

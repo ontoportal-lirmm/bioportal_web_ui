@@ -29,27 +29,39 @@ class AnnotatorController < ApplicationController
   def set_annotator_info(url, page_name, uri)
     @form_url = url
     @page_name = page_name
-    @json_link = json_link(uri)
-    @rdf_link = "#{@json_link}&format=rdf"
     annotator_results(uri)
   end
   def annotator_results(uri)
     @advanced_options_open = false
     @annotator_ontologies = LinkedData::Client::Models::Ontology.all
     if params[:text] && !params[:text].empty?
-      params[:ontologies] = params[:ontologies_list]&.join(',') || ''
-      params[:semantic_types] = params[:semantic_types_list]&.join(',') || ''
-      params[:semantic_groups] = params[:semantic_groups_list]&.join(',') || ''
-      text_to_annotate = params[:text].strip.gsub("\r\n", " ").gsub("\n", " ")
+      api_params = {
+        text: params[:text],
+        ontologies: list_to_string(params[:ontologies_list]),
+        sementic_types: list_to_string(params[:semantic_types_list]),
+        semantic_groups: list_to_string(params[:semantic_groups_list]),
+        whole_word_only: params[:whole_word_only],
+        longest_only: params[:longest_only],
+        expand_mappings: params[:expand_mappings],
+        exclude_numbers: params[:exclude_numbers],
+        exclude_synonyms: params[:exclude_synonyms],
+        semantic_types: params[:semantic_types],
+        semantic_groups: params[:semantic_groups],
+        class_hierarchy_max_level: params[:class_hierarchy_max_level],
+        score_threshold: params[:score_threshold],
+        confidence_threshold: params[:confidence_threshold],
+        fast_context: params[:fast_context],
+        lemmatize: params[:lemmatize]
+      }
+      unless params[:score].eql?('none')
+        api_params[:score] = params[:score]
+      end
+      @json_link = json_link(uri, api_params)
+      @rdf_link = "#{@json_link}&format=rdf"
       @results_table_header = [
         "Class", "Ontology", "Contexts"
       ]
-
       if params[:fast_context]
-        params[:certainty] == true
-        params[:temporality] == true
-        params[:experiencer] == true
-        params[:negation] == true
         @results_table_header += ['Negation', 'Experiencer', 'Temporality', 'Certainty']
       end
       @direct_results = 0
@@ -59,8 +71,7 @@ class AnnotatorController < ApplicationController
       else
         @results_table_header.push('Score')
       end
-      # You can check all the params we are passing by looking to the function json_link
-      annotations = LinkedData::Client::HTTP.get(uri, params)
+      annotations = LinkedData::Client::HTTP.get(uri, api_params)
       @ontologies = get_simplified_ontologies_hash
       @semantic_types = get_semantic_types 
       @results = []
@@ -191,27 +202,8 @@ class AnnotatorController < ApplicationController
   end
   
 
-  def json_link(url)
+  def json_link(url, optional_params)
     base_url = "#{url}?text=#{params[:text]}&"
-    optional_params = {
-      "ontologies" => params[:ontologies],
-      "whole_word_only" => params[:whole_word_only],
-      "longest_only" => params[:longest_only],
-      "expand_mappings" => params[:expand_mappings],
-      "exclude_numbers" => params[:exclude_numbers],
-      "exclude_synonyms" => params[:exclude_synonyms],
-      "semantic_types" => params[:semantic_types],
-      "semantic_groups" => params[:semantic_groups],
-      "class_hierarchy_max_level" => params[:class_hierarchy_max_level],
-      "score_threshold" => params[:score_threshold],
-      "confidence_threshold" => params[:confidence_threshold],
-      "fast_context" => params[:fast_context],
-      "lemmatize" => params[:lemmatize]
-    }
-    unless params[:score] == 'none'
-      optional_params[:score] = params[:score]
-    end
-    
     filtered_params = optional_params.reject { |_, value| value.nil? }
     optional_params_str = filtered_params.map { |param, value| "#{param}=#{value}" }.join("&")
     return base_url + optional_params_str + "&apikey=#{$API_KEY}"
