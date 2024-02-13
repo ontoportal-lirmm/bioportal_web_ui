@@ -1,0 +1,17 @@
+= turbo_frame_tag 'selector_results_frame' do
+    .ontologies-selector-results
+        .horizontal-line                  
+        .results-number
+            Showing 130 of 159 
+            %span
+                select all
+        .ontologies
+            - @ontologies.each do |ontology|
+                = render ChipsComponent.new(label: "#{ontology.name} (#{ontology.acronym})", name: ontology.acronym)
+        .horizontal-line                    
+        .action-buttons
+            .button
+                = render Buttons::RegularButtonComponent.new(id:'rqsdf', value: "Cancel", variant: "secondary")
+            .button
+                = render Buttons::RegularButtonComponent.new(id:'regulqsdfon', value: "Apply", variant: "primary") 
+
