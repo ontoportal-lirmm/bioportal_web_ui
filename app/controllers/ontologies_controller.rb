@@ -441,8 +441,15 @@ class OntologiesController < ApplicationController
     @categories = LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
     @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
     @filters = ontology_filters_init(@categories, @groups)
+    render 'ontologies/selector/selector' , layout: false
+  end
+
+  def selector_results
     @ontologies = LinkedData::Client::Models::Ontology.all
-    render 'selector' , layout: false
+    @input = params[:input] || ''
+    @ontologies = @ontologies.select { |ontology| ontology.name.downcase.include?(@input.downcase) || ontology.acronym.downcase.include?(@input.downcase)}
+    #binding.pry
+    render 'ontologies/selector/selector_results'
   end
 
   private
