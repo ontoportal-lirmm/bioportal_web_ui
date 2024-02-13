@@ -56,7 +56,7 @@
                 .results-number
                     Showing 130 of 159 
                     %span
-                        (1 selected)  
+                        select all
                 .ontologies
                     - @ontologies.each do |ontology|
                         = render ChipsComponent.new(label: "#{ontology.name} (#{ontology.acronym})", name: ontology.acronym)
