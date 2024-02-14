@@ -11,7 +11,12 @@
         .horizontal-line                    
         .action-buttons
             .button
-                = render Buttons::RegularButtonComponent.new(id:'rqsdf', value: "Cancel", variant: "secondary")
+                = render Buttons::RegularButtonComponent.new(id:'cancel-selector', value: "Cancel", variant: "secondary", state:'regular') do |btn|
+                    = btn.icon_left do
+                        = inline_svg_tag 'icons/cancel.svg'
             .button
-                = render Buttons::RegularButtonComponent.new(id:'regulqsdfon', value: "Apply", variant: "primary") 
+                = render Buttons::RegularButtonComponent.new(id:'apply-selector', value: "Apply", variant: "primary", state: 'regular') do |btn|
+                    = btn.icon_right do
+                        = inline_svg_tag "check.svg"
+
 
