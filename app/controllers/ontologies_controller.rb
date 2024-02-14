@@ -448,8 +448,16 @@ class OntologiesController < ApplicationController
     @ontologies = LinkedData::Client::Models::Ontology.all
     @total_ontologies_number = @ontologies.length
     @input = params[:input] || ''
+    #Filter by input according to ontology's name + ontology's acronym
     @ontologies = @ontologies.select { |ontology| ontology.name.downcase.include?(@input.downcase) || ontology.acronym.downcase.include?(@input.downcase)}
-    binding.pry
+    #Filter by groups
+    if params[:groups] 
+      @ontologies = @ontologies.select do |ontology|
+        (ontology.group & params[:groups]).any?
+      end
+    end
+    
+    
     render 'ontologies/selector/selector_results'
   end
 
