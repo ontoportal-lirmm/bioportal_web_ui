@@ -446,9 +446,10 @@ class OntologiesController < ApplicationController
 
   def selector_results
     @ontologies = LinkedData::Client::Models::Ontology.all
+    @total_ontologies_number = @ontologies.length
     @input = params[:input] || ''
     @ontologies = @ontologies.select { |ontology| ontology.name.downcase.include?(@input.downcase) || ontology.acronym.downcase.include?(@input.downcase)}
-    #binding.pry
+    binding.pry
     render 'ontologies/selector/selector_results'
   end
 
