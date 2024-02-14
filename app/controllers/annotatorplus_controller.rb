@@ -134,7 +134,7 @@ class AnnotatorplusController < ApplicationController
     mappings.each do |a|
       simplify_annotated_classes(a['mappings'], class_details) if not a['mappings'].empty?
     end
-    LOG.add :debug, "Completed massage for annotated classes: #{Time.now - start}s"
+    LOG.add :debug, t('annotator.completed_massage', time: Time.now - start)
   end
 
   def simplify_annotated_classes(annotations, class_details)
@@ -143,7 +143,7 @@ class AnnotatorplusController < ApplicationController
       cls_id = a['annotatedClass']['@id']
       details = class_details[cls_id]
       if details.nil?
-        LOG.add :debug, "Failed to get class details for: #{a['annotatedClass']['links']['self']}"
+        LOG.add :debug, t('annotator.failed_to_get_class_details', details: a['annotatedClass']['links']['self'])
         annotations2delete.push(cls_id)
       else
         # Replace the annotated class with simplified details.
