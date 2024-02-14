@@ -77,8 +77,8 @@ class NcboAnnotatorplusController < ApplicationController
 
     annotations = parse_json(query) # See application_controller.rb
     #annotations = LinkedData::Client::HTTP.get(query)
-    LOG.add :debug, "Query: #{query}"
-    LOG.add :debug, "Retrieved #{annotations.length} annotations: #{Time.now - start}s"
+    LOG.add :debug, t('annotator_plus.query', query: query)
+    LOG.add :debug, t('annotator_plus.retrieved_annotations', annotations: annotations.length, time: Time.now - start)
     if annotations.empty? || params[:raw] == "true"
       # TODO: if params contains select ontologies and/or semantic types, only return those selected.
       response = {
@@ -130,7 +130,7 @@ class NcboAnnotatorplusController < ApplicationController
     mappings.each do |a|
       simplify_annotated_classes(a['mappings'], class_details) if not a['mappings'].empty?
     end
-    LOG.add :debug, "Completed massage for annotated classes: #{Time.now - start}s"
+    LOG.add :debug, t('annotator_plus.completed_massage_for_annotated', time: Time.now - start) 
   end
 
   def simplify_annotated_classes(annotations, class_details)
@@ -139,7 +139,7 @@ class NcboAnnotatorplusController < ApplicationController
       cls_id = a['annotatedClass']['@id']
       details = class_details[cls_id]
       if details.nil?
-        LOG.add :debug, "Failed to get class details for: #{a['annotatedClass']['links']['self']}"
+        LOG.add :debug, t('annotator_plus.failed_get_class_details', details: a['annotatedClass']['links']['self']) 
         annotations2delete.push(cls_id)
       else
         # Replace the annotated class with simplified details.
@@ -218,7 +218,7 @@ class NcboAnnotatorplusController < ApplicationController
   protected
   
   def check_ncbo_annotatorplus_enabled
-    raise ActionController::RoutingError.new('Not Found') unless $NCBO_ANNOTATORPLUS_ENABLED == true
+    raise ActionController::RoutingError.new(t('annotator_plus.not_found')) unless $NCBO_ANNOTATORPLUS_ENABLED == true
   end
 
 end
