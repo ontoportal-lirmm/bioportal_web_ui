@@ -61,7 +61,7 @@
 .ontologies-selector-results .chips-container > div{
     margin-right: 0;
 }
-.ontologies-selector-results svg{
+.ontologies-selector-results .ontologies svg{
     display: none !important;
 }
 .ontologies-selector-results .ontologies{
@@ -119,4 +119,17 @@
 }
 .ontologies-selector-button a span{
     display: none;
+}
+
+.ontologies-selector-loding{
+    display: flex;
+    justify-content: center;
+}
+
+.lds-ellipsis.ontologies-selector{
+    transform: scale(1);
+}
+
+.lds-ellipsis.ontologies-selector div{
+    background: var(--primary-color);
 }

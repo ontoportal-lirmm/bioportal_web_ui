@@ -462,8 +462,6 @@ class OntologiesController < ApplicationController
         (ontology.hasDomain & params[:categories]).any?
       end
     end
-    
-    
     render 'ontologies/selector/selector_results'
   end
 

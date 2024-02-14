@@ -54,8 +54,12 @@
                                 - @filters[:isOfType][0].each do |item|
                                     = render ChipsComponent.new(label: item["name"], name: item["value"])
                 %input.d-none{type: 'submit', 'data-ontologies-selector-target': 'submit'}
-                = turbo_frame_tag 'selector_results_frame', src: '/ontologies_selector/results'
+                = turbo_frame_tag 'selector_results_frame', src: '/ontologies_selector/results' do
+                    .ontologies-selector-loding
+                        = content_tag(:div, class: "lds-ellipsis ontologies-selector") do
+                            = 4.times.map { content_tag(:div) }.join.html_safe
 
+                        
                     
                 
                 
