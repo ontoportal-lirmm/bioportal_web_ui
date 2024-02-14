@@ -27,7 +27,7 @@
                         = c.item_content do
                             .chips
                                 - @filters[:categories][0].each do |item|
-                                    = render ChipsComponent.new(label: item.acronym, name: item.acronym, tooltip: item.name)
+                                    = render ChipsComponent.new(label: item.acronym, id: item.acronym, value: item.id, name: 'categories[]', tooltip: item.name)
 
                         = c.item(title: 'Groups')
                         = c.item_content do
