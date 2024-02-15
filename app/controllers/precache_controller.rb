@@ -8,7 +8,7 @@ class PrecacheController < ApplicationController
 
   def self.precache_all(delete_cache = false)
     if delete_cache
-      p "Deleting general cache info"
+      p t('precache.delete_general_cache_info')
       CACHE.delete("act_ont_list")
       CACHE.delete("ont_list")
       CACHE.delete("ontology_acronyms")
@@ -39,7 +39,7 @@ class PrecacheController < ApplicationController
     ontologies = DataAccess.getOntologyList
     ontologies.each do |ont|
       if delete_cache
-        p "Deleting cache for #{ont.displayLabel}"
+        p t('precache.delete_cache_ontology', ont: ont.displayLabel)
         CACHE.delete("#{ont.ontologyId}::_latest")
         CACHE.delete("#{ont.ontologyId}::_versions")
         CACHE.delete("#{ont.ontologyId}::_details")
@@ -85,9 +85,9 @@ class PrecacheController < ApplicationController
         path = uri.path.empty? ? "/" : uri.path
         con.get(path)
       }
-      p "Retrieved in #{(Time.now - timer).to_f.round(2)}s"
+      p t('precache.retrieved_time', time: (Time.now - timer).to_f.round(2))
     rescue Exception => e
-      p "Failed to get #{url}: #{e.message}"
+      p t('precache.failed_to_get_url', url: url, message: e.message)
     end
 
     res.body
