@@ -16,11 +16,11 @@ module OntologiesHelper
     render ChipButtonComponent.new(class: "text-nowrap chip_button_small #{no_license && 'disabled-link'}", type: no_license ? 'static' : 'clickable') do
       if no_license
         content_tag(:span) do
-          content_tag(:span, "No license", class: "mx-1") + inline_svg_tag('icons/law.svg', width: "15px")
+          content_tag(:span, t('ontologies.no_license'), class: "mx-1") + inline_svg_tag('icons/law.svg', width: "15px")
         end
       else
-        link_to_modal(nil, "/ajax/submission/show_licenses/#{acronym}",data: { show_modal_title_value: "Additional license a access rights information"}) do
-          content_tag(:span, "View license", class: "mx-1") + inline_svg_tag('icons/law.svg')
+        link_to_modal(nil, "/ajax/submission/show_licenses/#{acronym}",data: { show_modal_title_value: t('ontologies.access_rights_information')}) do
+          content_tag(:span, t('ontologies.view_license'), class: "mx-1") + inline_svg_tag('icons/law.svg')
         end
       end
 
@@ -39,7 +39,7 @@ module OntologiesHelper
     return unless alt_labels.present?
 
     content_tag(:div, class: 'creation_text') do
-      concat("It can also be referred to as ")
+      concat(t('ontologies.referred_to'))
       concat(content_tag(:span, class: 'date_creation_text') do
         if alt_labels.length > 1
           concat("#{alt_labels[0..-2].join(', ')} or #{alt_labels.last}.")
@@ -50,13 +50,13 @@ module OntologiesHelper
     end
   end
   def private_ontology_icon(is_private)
-    raw(content_tag(:i, '', class: 'fas fa-key', title: "Private Ontology")) if is_private
+    raw(content_tag(:i, '', class: 'fas fa-key', title: t('ontologies.private_ontology'))) if is_private
   end
   def browse_filter_section_label(key)
     labels = {
-      hasFormalityLevel: 'Formality levels',
-      isOfType: 'Ontology types',
-      naturalLanguage: 'Natural languages'
+      hasFormalityLevel: t('ontologies.formality_levels'),
+      isOfType: t('ontologies.ontology_types'),
+      naturalLanguage: t('ontologies.natural_languages')
     }
 
     labels[key] || key.to_s.underscore.humanize.capitalize
@@ -65,7 +65,7 @@ module OntologiesHelper
   def browser_counter_loader
     content_tag(:div, class: "browse-desc-text", style: "margin-bottom: 15px;") do
       content_tag(:div, class: "d-flex align-items-center") do
-        str = content_tag(:span, "Showing")
+        str = content_tag(:span, t('ontologies.showing'))
         str += content_tag(:span, "", class: "p-1 p-2", style: "color: #a7a7a7;") do
           render LoaderComponent.new(small: true)
         end
@@ -158,7 +158,7 @@ module OntologiesHelper
     content_tag(:div, class: 'd-flex align-items-center justify-content-center') do
       content_tag(:span, style:'width: 50px; height: 50px', data: {controller: 'tooltip'}, title: "#{count} of #{sub_values.size}") do
         render CircleProgressBarComponent.new(count: count , max:  sub_values.size )
-      end  +  content_tag(:span, class: 'mx-1') { "of #{ontology.acronym}  metadata properties are filled"}
+      end  +  content_tag(:span, class: 'mx-1') { t('ontologies.metadata_properties', acronym: ontology.acronym)}
     end.html_safe
   end
 
@@ -168,10 +168,10 @@ module OntologiesHelper
     links = []
     if ontology.summaryOnly
       if submission.homepage.nil?
-        links << { href: '', label: 'N/A - metadata only' }
+        links << { href: '', label: t('ontologies.metadata_only') }
       else
         uri = submission.homepage
-        links << { href: uri, label: 'Home Page' }
+        links << { href: uri, label: t('ontologies.home_page') }
       end
     else
       uri = submission.id + "/download?apikey=#{get_apikey}"
@@ -439,20 +439,20 @@ module OntologiesHelper
       message = nil
       if submission_status_error?(status)
         type = 'danger'
-        message = "The ontology processing failed, with the current statuses: #{status}"
+        message = t('ontologies.ontology_processing_failed', status: status)
       elsif submission_status_warning?(status)
-        message = "The ontology parsing succeeded, but some processing steps failed, here are the current statuses: #{status}"
+        message = t('ontologies.ontology_parsing_succeeded', status: status)
         type = 'warning'
 
       elsif !submission_ready?(submission)
         type = 'info'
         if submission.nil?
-          message = "Upload an ontology. Sections such as #{ontology_data_sections.join(', ')} will be available once done."
+          message = t('ontologies.upload_an_ontology', ontology: ontology_data_sections.join(', '))
         else
-          message = "The ontology is processing. Sections such as #{ontology_data_sections.join(', ')} will be available once processing is complete."
+          message = t('ontologies.ontology_is_processing', ontology: ontology_data_sections.join(', '))
         end
       end
-      render Display::AlertComponent.new(message: message, type: type, button: Buttons::RegularButtonComponent.new(id:'regular-button', value: "Contact support", variant: "primary", href: "/feedback", color: type, size: "slim")) if type
+      render Display::AlertComponent.new(message: message, type: type, button: Buttons::RegularButtonComponent.new(id:'regular-button', value: t('ontologies.contact_support'), variant: "primary", href: "/feedback", color: type, size: "slim")) if type
     end
   end
 
@@ -473,9 +473,9 @@ module OntologiesHelper
 
     link = edit_ontology_submission_path(ontology.acronym, submission.submissionId, properties: 'naturalLanguage', container_id: 'application_modal_content')
     link_to_modal(nil,  link, class: "btn", id:'fair-details-link',
-                  data: { show_modal_title_value: "Edit natural languages of #{ontology.acronym}", show_modal_size_value: 'modal-md' }) do
+                  data: { show_modal_title_value: t('ontologies.edit_natural_languages', acronym: ontology.acronym), show_modal_size_value: 'modal-md' }) do
       render ChipButtonComponent.new(type: 'clickable', class: 'admin-background chip_button_small' ) do
-        ("Click here to edit available languages" + content_tag(:i, "", class: "fas fa-lg fa-edit")).html_safe
+        (t('ontologies.edit_available_languages') + content_tag(:i, "", class: "fas fa-lg fa-edit")).html_safe
       end
     end
   end
@@ -571,14 +571,14 @@ module OntologiesHelper
   def new_submission_button
     return unless @ontology.admin?(session[:user])
     render RoundedButtonComponent.new(link: new_ontology_submission_path(@ontology.acronym), icon: 'icons/plus.svg',
-                                      size: 'medium', title: 'Add new submission')
+                                      size: 'medium', title: t('ontologies.add_new_submission'))
   end
 
   def ontology_edit_button
     return unless @ontology.admin?(session[:user])
     render RoundedButtonComponent.new(link: edit_ontology_submission_path(ontology_id: @ontology.acronym, id: @submission_latest.id.split('/').last), icon: 'edit.svg',
                                       size: 'medium',
-                                      title: 'Edit metadata')
+                                      title: t('ontologies.edit_metadata'))
   end
 
   def upload_ontology_button
@@ -601,19 +601,19 @@ module OntologiesHelper
     render RoundedButtonComponent.new(link: "#{(@submission_latest || @ontology).id}?display=all",
                                       target: '_blank',
                                       size: 'medium',
-                                      title: 'Go to API')
+                                      title: t('ontologies.go_to_api'))
   end
 
 
   def projects_field(projects, ontology_acronym = @ontology.acronym)
     render FieldContainerComponent.new do |f|
       f.label do
-        concat "Projects using #{ontology_acronym}"
-        concat new_element_link('Create new project', new_project_path)
+        concat t('ontologies.projects_using_ontology', acronym: ontology_acronym)
+        concat new_element_link(t('ontologies.create_new_project'), new_project_path)
       end
 
       if projects.empty?
-        empty_state_message("No projects using #{ontology_acronym}")
+        empty_state_message(t('ontologies.no_projects_using_ontology', acronym: ontology_acronym))
       else
         horizontal_list_container(projects) do |project|
           render ChipButtonComponent.new(url: project_path(project.acronym), text: project.name, type: "clickable")
@@ -661,9 +661,9 @@ module OntologiesHelper
     outside_color = '#007bff'
 
     inside_span = content_tag(:span, "#{portal_name}", style: "color: #{inside_color} !important;")
-    outside_span = content_tag(:span, 'outside', style: "color: #{outside_color};")
+    outside_span = content_tag(:span, t('ontologies.outside'), style: "color: #{outside_color};")
 
-    link_title = "Relation with other ontologies either in #{inside_span} or #{outside_span}".html_safe
+    link_title = t('ontologies.relation_with_other_ontologies', inside: inside_span, outside: outside_span).html_safe
   end
 
 
