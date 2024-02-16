@@ -861,6 +861,7 @@ en:
       annotator_api_documentation: Annotator API documentation
 
   collections:
+    no_collections_alert: "%{acronym} does not contain collections (skos:Collection)"
     id: ID
     preferred_name: Preferred name
     members_count: Members count
