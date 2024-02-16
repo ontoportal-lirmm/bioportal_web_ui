@@ -20,6 +20,10 @@ en:
   additional_parameters: 'Additional parameters explained at '
   language:
     translation_not_available: "%{language} translation not available"
+    portal_language_help_text: Indicate the language in which the interfaces should appear
+    search_language_help_text: Indicate the language on which to perform the search, restricting text matching exclusively to terms with that language
+    content_language_help_text_1: Indicate the language  on which the content of this resource will be displayed.
+    content_language_help_text_2: The available languages are specified by the resource admin.
   admin:
     groups:
       edit_button: Edit
