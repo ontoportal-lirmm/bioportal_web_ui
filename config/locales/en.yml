@@ -10,6 +10,13 @@ en:
               no_appliance_id_for_comparison: Could not be validated. Unable to retrieve virtual appliance ID.
               appliance_id_mismatch: is an appliance id mismatch.
 
+  components:
+    check_resolvability: checking resolvability...
+    error_block: child_data_generator block did not provide all the child arguements
+    empty_field: The fields %{properties} are empty
+    save_button: Save
+    cancel_button: Cancel
+
   date:
     formats:
       year_month_day_concise: "%Y-%m-%d" # 2017-03-01
@@ -19,6 +26,8 @@ en:
   acceptance: Acceptance
   additional_parameters: 'Additional parameters explained at '
   admin:
+    new_ontologies_created_title: "The following ontologies: %{count} were created in this year"
+    turbo_confirm: "Are you sure you want to %{name}?"
     groups:
       edit_button: Edit
       delete: Delete
@@ -335,6 +344,7 @@ en:
     ontology_visits: Ontology visits
 
   mappings:
+    mapping_issue: "Mapping issue with '%{mapping}' : %{message}"
     find_mappings: Find mappings of a class/concept
     intro: Find all the mappings of an ontology
     loading_mappings: Loading mappings...
@@ -394,6 +404,7 @@ en:
         actions: Actions
         see_other_properties: See other properties
   agents:
+    ontology_not_valid: "ontology is not valid, here are the errors: "
     save: Save
     not_used: Not used
     see_usages_count: See usages (%{count})
@@ -491,6 +502,33 @@ en:
   none: none
  
   ontologies:
+    no_license: No license
+    view_license: View license
+    access_rights_information: Additional license a access rights information
+    referred_to: It can also be referred to as
+    private_ontology: Private Ontology
+    formality_levels: Formality levels
+    ontology_types: Ontology types
+    natural_languages: Natural languages
+    showing: Showing
+    metadata_properties: of %{acronym}  metadata properties are filled
+    metadata_only: N/A - metadata only
+    home_page: Home Page
+    ontology_processing_failed: "The ontology processing failed, with the current statuses: %{status}"
+    ontology_parsing_succeeded: "The ontology parsing succeeded, but some processing steps failed, here are the current statuses: %{status}"
+    upload_an_ontology: Upload an ontology. Sections such as %{ontology} will be available once done.
+    ontology_is_processing: The ontology is processing. Sections such as %{ontology} will be available once processing is complete.
+    contact_support: Contact support
+    edit_natural_languages: Edit natural languages of %{acronym}
+    edit_available_languages: Click here to edit available languages
+    add_new_submission: Add new submission
+    edit_metadata: Edit metadata
+    go_to_api: Go to API
+    projects_using_ontology: Projects using %{acronym}
+    create_new_project: Create new project
+    no_projects_using_ontology: No projects using %{acronym}
+    outside: outside
+    relation_with_other_ontologies: Relation with other ontologies either in %{inside} or %{outside}
     ontology_search_prompt: 'Search an ontology or a term (e.g., plant height)'
     self: Ontologies
   
@@ -720,6 +758,10 @@ en:
   hide_advanced_options: Hide advanced options
   no_result_was_found: No result was found
   notes:
+    comment: Comment
+    new_class_proposal: New Class Proposal
+    new_relationship_proposal: New Relationship Proposal
+    change_property_value_proposal: Change Property Value Proposal
     new_comment: 
       subject: Subject
       comment: Comment
@@ -854,11 +896,53 @@ en:
       additional_parameters_explained: Additional parameters explained at
       annotator_api_documentation: Annotator API documentation
 
+  submission_inputs:
+    administrators: Administrators
+    ontology_skos_language_link: Please refer to the documentation for more details.
+    ontology_skos_language_help: |
+      <<-EOS
+      SKOS vocabularies submitted to %{portal_name} shall follow a few constraints (e.g., contain a minimum of one skos:ConceptScheme also typed as owl:Ontology) 
+      and top concept assertion. %{link}
+      EOS
+    ontology_obo_language_link: the OBOinOWL parser.
+    ontology_obo_language_help: |
+      <<-EOS
+        OBO ontologies submitted to %{portal_name} will be parsed by the OWL-API which integrates %{link} 
+        The resulting RDF triples will then be loaded in %{portal_name} triple-store. 
+      EOS
+    ontology_owl_language_link: the Protégé
+    ontology_owl_language_help: |
+      <<-EOS
+        OWL ontologies submitted to %{portal_name} will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with
+        %{link}
+        software which does use the same component.
+      EOS
+    ontology_umls_language_link: by the UMLS2RDF tool.
+    ontology_umls_language_help: |
+      <<-EOS
+        UMLS-RRF resources are usually produced %{link}
+      EOS
+    groups: Groups
+    visibility: Visibility
+    accounts_allowed: Add or remove accounts that are allowed to see this ontology in %{portal_name}.
+    ontology_view_of_another_ontology: Is this ontology a view of another ontology?
+    contact: Contact
+    equivalents: Equivalents
+    validators: Validators
+    help_text: Help text
+    contact_name: "%{name} Name"
+    contact_email: "%{name} Email"
+
   schemes:
+    no_main_scheme_alert: no main scheme defined in the URI attribute
+    no_schemes_alert: "%{acronym} does not contain schemes (skos:ConceptScheme)"
+
     id: ID
     preferred_name: Preferred Name
     type: Type
   fair_score:
+    fairness_unreachable_warning: FAIRness service issue unreachable
+    go_to_api: Go to API
     mod_link: MOD1.4
     see_the_used_properties: see the used properties
     metadata_properties: Metadata properties listed in the following are picked from %{mod_link}.
