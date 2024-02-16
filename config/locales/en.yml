@@ -866,6 +866,7 @@ en:
     members_count: Members count
     type: Type
   change_requests:
+    change_request_success_message: Your change request was successfully submitted! View the %{url} on GitHub.
     label: Label
     type: Type
     comment: Comment
