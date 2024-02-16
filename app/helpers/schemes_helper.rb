@@ -62,12 +62,12 @@ module SchemesHelper
 
   def no_main_scheme_alert
     render Display::AlertComponent.new do
-      'no main scheme defined in the URI attribute'
+      t('schemes.no_main_scheme_alert')
     end
   end
   def no_schemes_alert
     render Display::AlertComponent.new do
-      "#{@ontology.acronym} does not contain schemes (skos:ConceptScheme)"
+      t('schemes.no_schemes_alert', acronym: @ontology.acronym)
     end
   end
 
