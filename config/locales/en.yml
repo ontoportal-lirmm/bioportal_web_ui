@@ -873,6 +873,9 @@ en:
     submit: Submit
 
   check_resolvability:
+    check_resolvability_message_1: "The URL is resolvable and support the following formats: %{supported_format}"
+    check_resolvability_message_2: "The URL resolvable but is not content negotiable, support only: %{supported_format}"
+    check_resolvability_message_3: The URL is not resolvable and not content negotiable (returns %{status}).
     uri_placeholder: Type a URI to test its resolvability
     show_help: Show help
     format_not_specified: Format not specified

@@ -107,11 +107,11 @@ module CheckResolvabilityHelper
     supported_format = Array(allowed_formats).compact
     supported_format = allowed_formats.empty? ? 'Format not specified' : supported_format.join(', ')
     if resolvable && (supported_format.size > 1)
-      "The URL is resolvable and support the following formats: #{supported_format}"
+      t('check_resolvability.check_resolvability_message_1', supported_format: supported_format)
     elsif resolvable
-      "The URL resolvable but is not content negotiable, support only: #{supported_format}"
+      t('check_resolvability.check_resolvability_message_2', supported_format: supported_format)
     else
-      "The URL is not resolvable and not content negotiable (returns #{status})."
+      t('check_resolvability.check_resolvability_message_3', status: status)
     end
   end
 end
