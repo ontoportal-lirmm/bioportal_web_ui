@@ -7,7 +7,7 @@ module AdminHelper
 
   def new_ontologies_created_title
     content_tag(:div,
-                "The following ontologies: #{@new_ontologies_count.join(', ')} were created in this year",
+                t('admin.new_ontologies_created_title', count: @new_ontologies_count.join(', ')),
                 style: 'width: 400px; max-height: 300px')
   end
 
@@ -19,7 +19,7 @@ module AdminHelper
 
   def action_button(name, link, method: :post, class_style: 'btn btn-link mb-3')
     button_to name, link, method: method, class: class_style,
-                form: {data: { turbo: true, turbo_confirm: "Are you sure you want to #{name}?", turbo_frame: '_top'}}
+                form: {data: { turbo: true, turbo_confirm: t('admin.turbo_confirm', name: name), turbo_frame: '_top'}}
 
   end
 end
