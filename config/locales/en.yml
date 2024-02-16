@@ -24,6 +24,16 @@ en:
     error_valid_concept: "Error: You must provide a valid concept id"
     missing_roots: Missing roots
   application:
+    loading: loading...
+    errors_in_fields: Errors in fields %{errors}
+    add_comment: Add comment
+    add_new_comment: Add a new comment
+    reply: Reply
+    add_proposal: Add proposal
+    add_new_proposal: Add a new proposal
+    watching: Watching
+    beta_badge_text: beta
+    beta_badge_tooltip: This feature is experimental and may have issues
     ontology_not_found: Ontology %{acronym} not found
     concept_not_found: Concept %{concept} not found
     error_load: "Error: load failed"
