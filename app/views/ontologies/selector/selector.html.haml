@@ -10,11 +10,11 @@
                         .show-ontology-views
                             .text
                                 Show ontology views
-                            = render SwitchInputComponent.new(id: 'show-ontology-views', name: 'show-ontology-views')
+                            = render SwitchInputComponent.new(id: 'show-ontology-views', name: 'showOntologyViews')
                         .show-retired-ontologies
                             .text
-                                Show retired ontologies
-                            = render SwitchInputComponent.new(id: 'show-retired-ontologies', name: 'showRetiredOntologies', checked: true)
+                                Hide retired ontologies
+                            = render SwitchInputComponent.new(id: 'show-retired-ontologies', name: 'showRetiredOntologies')
                     - formats = @formats.drop(1)
                     = render TabsContainerComponent.new do |c|         
                     

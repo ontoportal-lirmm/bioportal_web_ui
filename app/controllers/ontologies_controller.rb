@@ -445,7 +445,11 @@ class OntologiesController < ApplicationController
   end
 
   def selector_results
-    @ontologies = LinkedData::Client::Models::Ontology.all
+    api_params = {}
+    if params[:showOntologyViews]
+      api_params[:include_views] = 'true'
+    end
+    @ontologies = LinkedData::Client::HTTP.get('/ontologies', api_params)
     @total_ontologies_number = @ontologies.length
     @input = params[:input] || ''
     @ontologies = @ontologies.select { |ontology| ontology.name.downcase.include?(@input.downcase) || ontology.acronym.downcase.include?(@input.downcase)}
@@ -462,8 +466,13 @@ class OntologiesController < ApplicationController
       end
     end
 
-    if params[:formats] || params[:naturalLanguage] || params[:formalityLevel] || params[:isOfType]
-      submissions = LinkedData::Client::HTTP.get('/submissions', {'display': 'all'})
+    if params[:formats] || params[:naturalLanguage] || params[:formalityLevel] || params[:isOfType] || params[:showRetiredOntologies]
+      api_params = {'display': 'all'}
+      if params[:showOntologyViews]
+        api_params[:include_views] = 'true'
+      end
+      submissions = LinkedData::Client::HTTP.get('/submissions', api_params)
+      #binding.pry
       if params[:formats]
         submissions = submissions.select { |submission| params[:formats].include?(submission.hasOntologyLanguage)}
       end
@@ -477,6 +486,9 @@ class OntologiesController < ApplicationController
       end
       if params[:isOfType]
         submissions = submissions.select { |submission| params[:isOfType].include?(submission.isOfType)}
+      end
+      if params[:showRetiredOntologies]
+        submissions = submissions.reject { |submission| submission.status.eql?('retired')}
       end
       @ontologies = @ontologies.select do |ontology|
         submissions.any? { |submission| submission.ontology.id == ontology.id }
