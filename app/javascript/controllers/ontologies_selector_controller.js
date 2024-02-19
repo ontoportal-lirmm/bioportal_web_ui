@@ -9,46 +9,35 @@ export default class extends Controller {
         this.submitTarget.click()
         this.#updateTableNumbers(event)
     }
-    selectall(event){
-        if (event.target.innerHTML == '\nselect all\n'){
-            for (var i = 0; i < this.ontologyTargets.length; i++) {
-                this.ontologyTargets[i].querySelector('input').checked = true
-            }
-            event.target.innerHTML = '\nunselect all\n'
-        } else {
-            for (var i = 0; i < this.ontologyTargets.length; i++) {
-                this.ontologyTargets[i].querySelector('input').checked = false
-            }
-            event.target.innerHTML = '\nselect all\n'
+    selectall(event) {
+        const selectText = '\nselect all\n';
+        const unselectText = '\nunselect all\n';
+        const isChecked = event.target.innerHTML === unselectText;
+        const newInnerHTML = isChecked ? selectText : unselectText;
+        for (const target of this.ontologyTargets) {
+            target.querySelector('input').checked = !isChecked;
         }
-        
+        event.target.innerHTML = newInnerHTML;
     }
-    #updateTableNumbers(){
-        let navItems = this.tableTarget.querySelectorAll('.nav-item')
-        for (var i = 0; i < navItems.length; i++) {
-            this.#updateNavItemCount(navItems[i])
-        }        
+    #updateTableNumbers() {
+        const navItems = Array.from(this.tableTarget.querySelectorAll('.nav-item'));
+        navItems.forEach(item => this.#updateNavItemCount(item));
     }
-    #updateNavItemCount(navItem){
-        let tabPane = this.tableTarget.querySelector('.tab-pane'+navItem.getAttribute('data-target'))
-        let inputs = tabPane.querySelectorAll('input')
-        let count = 0
-        for (var i = 0; i < inputs.length; i++) {
-            if (inputs[i].checked){
-                count++;
-            }
-        } 
-        let itemTitle = navItem.querySelector('a').innerHTML 
-        let regex = /\(\d+\)/;
-        if (itemTitle.endsWith(")")){
-            
-            navItem.querySelector('a').innerHTML = itemTitle.replace(regex, '(' + count + ')');
+    
+    #updateNavItemCount(navItem) {
+        const tabPane = this.tableTarget.querySelector(`.tab-pane${navItem.getAttribute('data-target')}`);
+        const inputs = tabPane.querySelectorAll('input');
+        const count = Array.from(inputs).filter(input => input.checked).length;
+        const itemTitleElement = navItem.querySelector('a');
+        let itemTitle = itemTitleElement.innerHTML.trim();
+        const regex = /\(\d+\)/;
+        if (itemTitle.endsWith(")")) {
+            itemTitleElement.innerHTML = itemTitle.replace(regex, `(${count})`);
         } else {
-            navItem.querySelector('a').innerHTML = `${itemTitle} (${count})`;
+            itemTitleElement.innerHTML = `${itemTitle} (${count})`;
         }
-
-        if (count==0){
-            navItem.querySelector('a').innerHTML = itemTitle.replace(regex, '').trim();
+        if (count === 0) {
+            itemTitleElement.innerHTML = itemTitle.replace(regex, '').trim();
         }
-    }    
+    }  
 }
