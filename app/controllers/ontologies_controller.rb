@@ -448,7 +448,6 @@ class OntologiesController < ApplicationController
     @ontologies = LinkedData::Client::Models::Ontology.all
     @total_ontologies_number = @ontologies.length
     @input = params[:input] || ''
-
     @ontologies = @ontologies.select { |ontology| ontology.name.downcase.include?(@input.downcase) || ontology.acronym.downcase.include?(@input.downcase)}
 
     if params[:groups] 
@@ -460,6 +459,27 @@ class OntologiesController < ApplicationController
     if params[:categories]
       @ontologies = @ontologies.select do |ontology|
         (ontology.hasDomain & params[:categories]).any?
+      end
+    end
+
+    if params[:formats] || params[:naturalLanguage] || params[:formalityLevel] || params[:isOfType]
+      submissions = LinkedData::Client::HTTP.get('/submissions', {'display': 'all'})
+      if params[:formats]
+        submissions = submissions.select { |submission| params[:formats].include?(submission.hasOntologyLanguage)}
+      end
+      if params[:naturalLanguage]
+        submissions = submissions.select do |submission|
+          (submission.naturalLanguage & params[:naturalLanguage]).any?
+        end
+      end
+      if params[:formalityLevel]
+        submissions = submissions.select { |submission| params[:formalityLevel].include?(submission.hasFormalityLevel)}
+      end
+      if params[:isOfType]
+        submissions = submissions.select { |submission| params[:isOfType].include?(submission.isOfType)}
+      end
+      @ontologies = @ontologies.select do |ontology|
+        submissions.any? { |submission| submission.ontology.id == ontology.id }
       end
     end
     render 'ontologies/selector/selector_results'

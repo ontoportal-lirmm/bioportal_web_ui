@@ -14,16 +14,11 @@
                         .show-retired-ontologies
                             .text
                                 Show retired ontologies
-                            = render SwitchInputComponent.new(id: 'show-retired-ontologies', name: 'show-retired-ontologies')
+                            = render SwitchInputComponent.new(id: 'show-retired-ontologies', name: 'showRetiredOntologies', checked: true)
                     - formats = @formats.drop(1)
                     = render TabsContainerComponent.new do |c|         
-                        = c.item(title: 'Format', selected: true)
-                        = c.item_content do
-                            .chips
-                                - formats.each do |item|
-                                    = render ChipsComponent.new(label: item, id: item, name: 'formats[]', value: item)
-
-                        = c.item(title: 'Categories')
+                    
+                        = c.item(title: 'Categories', selected: true)
                         = c.item_content do
                             .chips
                                 - @filters[:categories][0].each do |item|
@@ -35,24 +30,30 @@
                                 - @filters[:groups][0].each do |item|
 
                                     = render ChipsComponent.new(label: item.acronym, id: item.acronym, value: item.id, name: 'groups[]', tooltip: item.name)
-                        
+
+                        = c.item(title: 'Format')
+                        = c.item_content do
+                            .chips
+                                - formats.each do |item|
+                                    = render ChipsComponent.new(label: item, id: item, name: 'formats[]', value: item)
+
                         = c.item(title: 'Natural languages')
                         = c.item_content do
                             .chips
                                 - @filters[:naturalLanguage][0].each do |item|
-                                    = render ChipsComponent.new(label: item["acronym"], name: item["acronym"])
+                                    = render ChipsComponent.new(label: item["acronym"], id: item["acronym"], name: 'naturalLanguage[]', value: item['id'])
                         
                         = c.item(title: 'Formality levels')
                         = c.item_content do
                             .chips
                                 - @filters[:hasFormalityLevel][0].each do |item|
-                                    = render ChipsComponent.new(label: item["name"], name: item["value"])
+                                    = render ChipsComponent.new(label: item["name"],id: item["acronym"], name: 'formalityLevel[]', value: item["id"])
                         
                         = c.item(title: 'Ontology types')
                         = c.item_content do
                             .chips
                                 - @filters[:isOfType][0].each do |item|
-                                    = render ChipsComponent.new(label: item["name"], name: item["value"])
+                                    = render ChipsComponent.new(label: item["name"],id: item["acronym"], name: 'isOfType[]', value: item["id"])
                 %input.d-none{type: 'submit', 'data-ontologies-selector-target': 'submit'}
                 = turbo_frame_tag 'selector_results_frame', src: '/ontologies_selector/results' do
                     .ontologies-selector-loding
