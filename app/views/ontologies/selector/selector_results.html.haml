@@ -11,7 +11,7 @@
                     = render ChipsComponent.new(label: "#{ontology.name} (#{ontology.acronym})", name: ontology.acronym)
         .horizontal-line                    
         .action-buttons
-            .button
+            .button{'data-action': "turbo-modal#hide"}
                 = render Buttons::RegularButtonComponent.new(id:'cancel-selector', value: "Cancel", variant: "secondary", state:'regular') do |btn|
                     = btn.icon_left do
                         = inline_svg_tag 'icons/cancel.svg'
