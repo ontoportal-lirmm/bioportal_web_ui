@@ -8,9 +8,18 @@ export default class extends Controller {
     change(){
         this.submitTarget.click()
     }
-    selectall(){
-        for (var i = 0; i < this.ontologyTargets.length; i++) {
-            this.ontologyTargets[i].querySelector('input').checked = true
+    selectall(event){
+        if (event.target.innerHTML == '\nselect all\n'){
+            for (var i = 0; i < this.ontologyTargets.length; i++) {
+                this.ontologyTargets[i].querySelector('input').checked = true
+            }
+            event.target.innerHTML = '\nunselect all\n'
+        } else {
+            for (var i = 0; i < this.ontologyTargets.length; i++) {
+                this.ontologyTargets[i].querySelector('input').checked = false
+            }
+            event.target.innerHTML = '\nselect all\n'
         }
+        
     }
 }
