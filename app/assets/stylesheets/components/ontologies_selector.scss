@@ -133,3 +133,6 @@
 .lds-ellipsis.ontologies-selector div{
     background: var(--primary-color);
 }
+.ontologies-selector-results .select-all{
+    cursor: pointer;
+}

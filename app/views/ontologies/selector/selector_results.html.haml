@@ -3,11 +3,12 @@
         .horizontal-line                  
         .results-number
             = "Showing #{@ontologies.length} of #{@total_ontologies_number}" 
-            %span
+            %span.select-all{'data-action': 'click->ontologies-selector#selectall'}
                 select all
         .ontologies
             - @ontologies.each do |ontology|
-                = render ChipsComponent.new(label: "#{ontology.name} (#{ontology.acronym})", name: ontology.acronym)
+                .ontology{'data-ontologies-selector-target': 'ontology'}
+                    = render ChipsComponent.new(label: "#{ontology.name} (#{ontology.acronym})", name: ontology.acronym)
         .horizontal-line                    
         .action-buttons
             .button
