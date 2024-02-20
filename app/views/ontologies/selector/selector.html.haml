@@ -1,6 +1,6 @@
 = render_in_modal do
     = form_tag('/ontologies_selector/results', method: :get, novalidate: true, data: {turbo_frame: 'selector_results_frame'}) do
-        .d-flex.align-items-center.justify-content-center{'data-controller': 'ontologies-selector'}
+        .d-flex.align-items-center.justify-content-center{'data-controller': 'ontologies-selector', 'data-ontologies-selector-id-value': @select_id}
             .ontologies-selector-container
                 .ontologies-selector-input
                     %input{type: 'text', placeholder: 'Filter ontologies ...', name: 'input', 'data-action': 'input->ontologies-selector#input'}
