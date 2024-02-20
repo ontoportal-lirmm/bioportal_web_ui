@@ -1,7 +1,14 @@
 import {Controller} from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ['submit', 'ontology', 'table']
+    static targets = ['submit', 'ontology', 'table', 'exit']
+    static values = {
+        id: String,
+      }
+    connect(){
+        const ontologies_select = document.getElementById(`select_${this.idValue}-ts-control`)
+        ontologies_select.click()
+    }
     input(){
         this.submitTarget.click()
     }
@@ -19,6 +26,24 @@ export default class extends Controller {
         }
         event.target.innerHTML = newInnerHTML;
     }
+    apply() {
+        const select = document.getElementById(`select_${this.idValue}`);
+        const tsControl = document.getElementById(`select_${this.idValue}-ts-control`);
+        const values = this.#selectedOntologies(this.ontologyTargets);
+        for (const value of values) {
+            tsControl.value = value;
+            tsControl.dispatchEvent(new Event('input', { bubbles: true }));
+            select.parentNode.querySelector(`div[data-value="${value}"]`).click();
+        }
+        this.exitTarget.click();
+    }
+    
+    #selectedOntologies(ontologies) {
+        return ontologies
+            .filter(ontology => ontology.querySelector('input').checked)
+            .map(ontology => ontology.querySelector('input').name);
+    }
+    
     #updateTableNumbers() {
         const navItems = Array.from(this.tableTarget.querySelectorAll('.nav-item'));
         navItems.forEach(item => this.#updateNavItemCount(item));

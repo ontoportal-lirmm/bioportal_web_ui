@@ -11,11 +11,11 @@
                     = render ChipsComponent.new(label: "#{ontology.name} (#{ontology.acronym})", name: ontology.acronym)
         .horizontal-line                    
         .action-buttons
-            .button{'data-action': "click->turbo-modal#hide"}
+            .button{'data-action': "click->turbo-modal#hide", 'data-ontologies-selector-target': 'exit'}
                 = render Buttons::RegularButtonComponent.new(id:'cancel-selector', value: "Cancel", variant: "secondary", state:'regular') do |btn|
                     = btn.icon_left do
                         = inline_svg_tag 'icons/cancel.svg'
-            .button
+            .button{'data-action': "click->ontologies-selector#apply"}
                 = render Buttons::RegularButtonComponent.new(id:'apply-selector', value: "Apply", variant: "primary", state: 'regular') do |btn|
                     = btn.icon_right do
                         = inline_svg_tag "check.svg"
