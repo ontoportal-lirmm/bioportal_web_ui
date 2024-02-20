@@ -20,14 +20,10 @@
                 = t("search.advanced_options.ontologies")
               .field
                 - get_ontologies_data
-                = render Input::SelectComponent.new(id: 'search-ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected:  params[:ontologies_list])
+                = render Input::SelectComponent.new(id: 'search-page-ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected:  params[:ontologies_list])
                 .ontologies-selector-button
-                  = link_to_modal 'Ontologies advanced selection' , "/ontologies_selector",
+                  = link_to_modal 'Ontologies advanced selection' , "/ontologies_selector?id=search-page-ontologies",
                     data: { show_modal_title_value: 'Ontologies advanced selection'}
-
-
-
-
 
 
           .right 

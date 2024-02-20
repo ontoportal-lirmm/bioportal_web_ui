@@ -1,4 +1,4 @@
-= turbo_frame_tag 'selector_results_frame' do
+= render TurboFrameComponent.new(id:'selector_results_frame') do |container|
     .ontologies-selector-results
         .horizontal-line                  
         .results-number
@@ -11,7 +11,7 @@
                     = render ChipsComponent.new(label: "#{ontology.name} (#{ontology.acronym})", name: ontology.acronym)
         .horizontal-line                    
         .action-buttons
-            .button{'data-action': "turbo-modal#hide"}
+            .button{'data-action': "click->turbo-modal#hide"}
                 = render Buttons::RegularButtonComponent.new(id:'cancel-selector', value: "Cancel", variant: "secondary", state:'regular') do |btn|
                     = btn.icon_left do
                         = inline_svg_tag 'icons/cancel.svg'
@@ -21,3 +21,7 @@
                         = inline_svg_tag "check.svg"
 
 
+    - container.loader do
+        .ontologies-selector-loding
+            = content_tag(:div, class: "lds-ellipsis ontologies-selector") do
+                = 4.times.map { content_tag(:div) }.join.html_safe
