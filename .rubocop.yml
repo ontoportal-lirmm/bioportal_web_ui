@@ -17,6 +17,9 @@ AllCops:
 
 require:
   - rubocop-rails
+  - ./lib/lint/non_localized_string.rb
+Lint/NonLocalizedString:
+  Enabled: true
 
 Style/Encoding:
   Enabled: false
