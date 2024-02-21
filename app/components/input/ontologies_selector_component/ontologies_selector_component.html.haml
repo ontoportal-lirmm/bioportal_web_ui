@@ -1,0 +1,6 @@
+= render Input::SelectComponent.new(id: @id, name: @name, value: @ontologies, multiple: "multiple", selected: @selected) 
+.ontologies-selector-button{'data-controller': 'ontologies-selector', 'data-ontologies-selector-id-value': 'search_page_ontologies'}
+    .clear-selection{'data-action': 'click->ontologies-selector#clear'}
+        Clear selection
+    = link_to_modal 'Ontologies advanced selection' , "/ontologies_selector?id=search_page_ontologies",
+        data: { show_modal_title_value: 'Ontologies advanced selection'}
