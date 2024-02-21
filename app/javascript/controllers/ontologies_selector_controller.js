@@ -37,6 +37,12 @@ export default class extends Controller {
         }
         this.exitTarget.click();
     }
+    clear() {
+        const selectedItems = document.getElementById(`select_${this.idValue}`).parentNode.querySelectorAll('a');
+        selectedItems.forEach(item => {
+            item.click();
+        });
+    }
     
     #selectedOntologies(ontologies) {
         return ontologies
