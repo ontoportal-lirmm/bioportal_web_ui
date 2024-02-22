@@ -528,7 +528,8 @@ module ApplicationHelper
              ["/mappings", t('layout.header.mappings')],
              ["/recommender", t("layout.header.recommender")],
              ["/annotator", t("layout.header.annotator")],
-             ["/landscape", t("layout.header.landscape")]]
+             ["/landscape", t("layout.header.landscape")],
+             ["/content_finder", t("layout.header.content-finder")]]
   end
 
 

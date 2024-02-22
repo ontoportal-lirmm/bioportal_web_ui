@@ -1,0 +1,20 @@
+- @title = "Content Finder"
+= form_tag('/content_finder', method: :get, 'data-turbo': true, novalidate: true) do
+    .content-finder-container
+        %div
+            .content-finder-logo
+                = inline_svg_tag "logos/ontoportal.svg"
+            .inputs
+                #graph_url 
+                    = render Input::UrlComponent.new(name: "acronym", placeholder: "Graph URL", value: params[:acronym])
+                #uri
+                    = render Input::UrlComponent.new(name: "uri", placeholder: "URI", value: params[:uri])
+                #output_format
+                    = render Input::SelectComponent.new(name: "output_format", value: ['json', 'xml', 'ntriples', 'turtle'], selected: params[:output_format], multiple: false)
+                #submit_button
+                    = render Buttons::RegularButtonComponent.new(id:'regular-button', value: "Fetch", variant: "primary", size: "slim", type:"submit")
+
+- if @result
+    .content-finder-result{data: {controller: 'content-finder', 'content-finder-result-value': @result, 'content-finder-format-value': @format }}
+        %pre.mb-0
+            %code.d-block{style: 'text-wrap: pretty; word-break: break-all', data: {'content-finder-target': 'content'}}
