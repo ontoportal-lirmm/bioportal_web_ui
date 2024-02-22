@@ -446,11 +446,7 @@ class OntologiesController < ApplicationController
   end
 
   def selector_results
-    api_params = {}
-    if params[:showOntologyViews]
-      api_params[:include_views] = 'true'
-    end
-    @ontologies = LinkedData::Client::HTTP.get('/ontologies', api_params)
+    @ontologies = LinkedData::Client::Models::Ontology.all(include_views: params[:showOntologyViews])
     @total_ontologies_number = @ontologies.length
     @input = params[:input] || ''
     @ontologies = @ontologies.select { |ontology| ontology.name.downcase.include?(@input.downcase) || ontology.acronym.downcase.include?(@input.downcase)}
