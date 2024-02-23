@@ -464,11 +464,9 @@ class OntologiesController < ApplicationController
     end
 
     if params[:formats] || params[:naturalLanguage] || params[:formalityLevel] || params[:isOfType] || params[:showRetiredOntologies]
-      api_params = {'display': 'all'}
-      if params[:showOntologyViews]
-        api_params[:include_views] = 'true'
+      submissions = Rails.cache.fetch('all_submissions') do
+        LinkedData::Client::Models::OntologySubmission.all('display': 'all', 'also_include_views': 'true')
       end
-      submissions = LinkedData::Client::HTTP.get('/submissions', api_params)
       #binding.pry
       if params[:formats]
         submissions = submissions.select { |submission| params[:formats].include?(submission.hasOntologyLanguage)}
