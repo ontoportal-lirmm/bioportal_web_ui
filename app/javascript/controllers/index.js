@@ -96,3 +96,7 @@ application.register("sample-text", SampleTextController)
 
 import ontologiesSelector from "./ontologies_selector_controller"
 application.register("ontologies-selector", ontologiesSelector)
+
+import AnnotatorController from "./annotator_controller"
+application.register('annotator', AnnotatorController)
+
