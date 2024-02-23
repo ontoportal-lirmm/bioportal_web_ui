@@ -4,7 +4,11 @@ class ContentFinderController < ApplicationController
   
     def index
         if params[:acronym] && params[:uri]
+            @acronym = params[:acronym]
+            ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:acronym]).first
+            sub = ontology.explore.latest_submission({ include: 'submissionId' })
             params[:output_format] = params[:output_format].presence || 'json'
+            params[:acronym] = sub.id.gsub(REST_URI, 'http://data.bioontology.org/')
             if params[:output_format] == 'html'
                 params[:output_format] = 'json'
             end

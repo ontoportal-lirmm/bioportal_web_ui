@@ -5,8 +5,9 @@
             .content-finder-logo
                 = inline_svg_tag "logos/ontoportal.svg"
             .inputs
-                #graph_url 
-                    = render Input::UrlComponent.new(name: "acronym", placeholder: "Graph URL", value: params[:acronym])
+                #graph_url
+                    - get_ontologies_data
+                    = render Input::SelectComponent.new(id: 'search-ontologies', name: 'acronym', value: @onts_for_select, selected: @acronym || '', placeholder: "Graph URL")
                 #uri
                     = render Input::UrlComponent.new(name: "uri", placeholder: "URI", value: params[:uri])
                 #output_format
