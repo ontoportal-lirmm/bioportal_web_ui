@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '7.0.7'
 
 gem 'jsbundling-rails'
-
+gem 'chart-js-rails'
 gem 'sassc-rails' #sass-rails replacent
 gem 'terser' #ugilifer replacent
 

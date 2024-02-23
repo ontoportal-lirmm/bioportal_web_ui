@@ -20,6 +20,7 @@
 //= require concepts
 //= require_tree ./components
 //= require projects
+//= require Chart.min
 //= require application_esbuild
 customElements.define('data-table-loader', DataTableLoader)
 customElements.define('data-table', DataTable)
