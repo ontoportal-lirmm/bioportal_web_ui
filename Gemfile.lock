@@ -178,7 +178,8 @@ GEM
     flamegraph (0.9.5)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    graphql (2.2.9)
+    graphql (2.2.10)
+      base64
     graphql-client (0.20.0)
       activesupport (>= 3.0)
       graphql (>= 1.13.0)
@@ -368,7 +369,7 @@ GEM
     puma (5.6.8)
       nio4r (~> 2.0)
     racc (1.7.3)
-    rack (2.2.8)
+    rack (2.2.8.1)
     rack-accept (0.4.5)
       rack (>= 0.4)
     rack-mini-profiler (3.3.1)
@@ -527,7 +528,7 @@ GEM
     time (0.3.0)
       date
     timeout (0.4.1)
-    turbo-rails (2.0.3)
+    turbo-rails (2.0.4)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
       railties (>= 6.0.0)
