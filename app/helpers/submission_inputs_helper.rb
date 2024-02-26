@@ -237,17 +237,15 @@ module SubmissionInputsHelper
   end
 
   def ontology_view_of_input(ontology = @ontology)
-    is_view_open = !params[:ontology]&.[](:viewOf).nil?
-    pre_selected_ontology = params[:ontology]&.[](:viewOf)
-    render Layout::RevealComponent.new(selected: is_view_open, toggle: true, possible_values: is_view_open ? [is_view_open] : []) do |c|
+    render Layout::RevealComponent.new(selected: ontology.view?, toggle: true) do |c|
       c.button do
         content_tag(:span, class: 'd-flex mb-2') do
-          switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is this ontology a view of another ontology?', checked: is_view_open, style: 'font-size: 14px;')
+          switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is this ontology a view of another ontology?', checked: ontology.view?, style: 'font-size: 14px;')
         end
       end
       c.container do
         content_tag(:div) do
-          render partial: "shared/ontology_picker_single", locals: { placeholder: "", field_name: "viewOf", selected: pre_selected_ontology}
+          render partial: "shared/ontology_picker_single", locals: { placeholder: "", field_name: "viewOf", selected: ontology.viewOf}
         end
       end
     end
