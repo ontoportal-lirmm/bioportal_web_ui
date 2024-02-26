@@ -395,7 +395,7 @@ en:
       identifiers: Identifiers
       affiliations: Affiliations
     index:
-      create_new_agent: Create new agent
+      create_new_agent: Create New Agent
       first_name: First name
       usages: Usages
       actions: Actions
@@ -629,7 +629,7 @@ en:
       username: "Username:"
       email: "Email:"
       orcid_id: "ORCID ID:"
-      github_id: "Github ID:"
+      github_id: "GitHub ID:"
       mailing_list_subscription: Mailing list subscription
       mailing_list_description: Register to the %{portal} announcements mailing list.
       api_key_description: Your API Key can be used to access  %{portal} Web services
@@ -646,9 +646,9 @@ en:
       select_custom_semantic_resources: Select custom semantic resources
       save_custom_semantic_resources: Save custom semantic resources
       not_subscribed: Not subscribed to any semantic resource
-      submitted_semantic_resources: Submitted semantic resources 
+      submitted_semantic_resources: Submitted Semantic Resources
       upload_semantic_resources: Upload semantic resources 
-      projects_created: Projects created
+      projects_created: Projects Created
       no_project_created: No project created
       unsubscribe: Unsubscribe
       subscribe: Subscribe
@@ -1010,6 +1010,6 @@ en:
         keywords_and_classes: Keywords and classes
         languages: Languages
         pull_location: Pull location
-        export_metadata: Export metadata
+        export_metadata: Export all metadata
         abstract: Abstract
         description: Description
