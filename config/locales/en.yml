@@ -395,7 +395,7 @@ en:
       identifiers: Identifiers
       affiliations: Affiliations
     index:
-      create_new_agent: Create new agent
+      create_new_agent: Create New Agent
       first_name: First name
       usages: Usages
       actions: Actions
