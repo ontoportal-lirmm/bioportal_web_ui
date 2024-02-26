@@ -361,7 +361,7 @@ module SubmissionInputsHelper
 
   def generate_date_input(attr, max_date: nil)
     date_input(label: attr_header_label(attr), name: attr.name,
-               value: attr.values,
+               value: (Date.parse(attr.values).to_s rescue attr.values),
                max_date: max_date)
   end
 
