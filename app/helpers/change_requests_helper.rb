@@ -3,7 +3,7 @@
 module ChangeRequestsHelper
   def change_request_success_message
     url = link_to 'details', @issue['url'], target: '_blank', class: 'alert-link'
-    "Your change request was successfully submitted! View the #{url} on GitHub.".html_safe
+    t('change_requests.change_request_success_message',url: url).html_safe
   end
 
   def change_request_alert_context

@@ -31,12 +31,14 @@
 %div{:style => "clear: both;"}
 #views_content
   %h2{:style => "margin: 2em 0 0"}
-    %span{:style => "font-size: x-large; margin-right: 1.5em;"} Views
+    %span{:style => "font-size: x-large; margin-right: 1.5em;"}= t('ontologies.views')
     - ont_id_esc = CGI.escape(@ontology.id)
     - if session[:user].nil?
-      %a{:href => "/login?redirect=#{escape("/ontologies/new?ontology[viewOf]=#{ont_id_esc}")}"} Create new view
+      %a{:href => "/login?redirect=#{escape("/ontologies/new?ontology[viewOf]=#{ont_id_esc}")}"}
+        = t('ontologies.create_new_view')
     - else
-      %a{:href => "/ontologies/new?ontology[viewOf]=#{ont_id_esc}"} Create new view
+      %a{:href => "/ontologies/new?ontology[viewOf]=#{ont_id_esc}"}
+        = t('ontologies.create_new_view')
 
   %div{:style => "float:left;"}
     - if @views.empty? || @views.length < 1
@@ -55,9 +57,9 @@
         }
 
       %h4{:style => "margin-top: .5em;"}
-        %a#expand_views{:href => "javascript:void(0);"} Expand All
+        %a#expand_views{:href => "javascript:void(0);"}= t('ontologies.expand_all')
         |
-        %a#collapse_views{:href => "javascript:void(0);"} Collapse All
+        %a#collapse_views{:href => "javascript:void(0);"}= t('ontologies.collapse_all')
 
       - @views.each_with_index do |view, index|
         - next unless view.access?(session[:user])
@@ -91,15 +93,16 @@
               - if viewAdmin
                 - viewSubmitURL = "/ontologies/#{view.acronym}/submissions/new" # submit new view
                 %li
-                  %span.lead Administrator:
-                  %a{:href => viewSubmitURL} create new view submission
+                  %span.lead= t('ontologies.administrator')
+                  %a{:href => viewSubmitURL}
+                    = t('ontologies.create_new_view_submission')
               - unless view_description.nil?
                 %li
-                  %span.lead Description:
+                  %span.lead= t('ontologies.description')
                   = view_description
               - unless view_definition.nil?
                 %li
-                  %span.lead Definition:
+                  %span.lead= t('ontologies.definition')
                   = view_definition
               -# unless view_language.nil?
                 %li
@@ -107,7 +110,7 @@
                   = view_language
               - unless view_contacts.nil?
                 %li
-                  %span.lead Created By:
+                  %span.lead= t('ontologies.created_by')
                   = view_contacts
           / Display view submissions data (if any)
           - unless view_submissions.empty?
@@ -115,12 +118,12 @@
             %table.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
               %thead
                 %tr
-                  %th Submission
-                  %th Release Date
-                  %th Upload Date
-                  %th Downloads
+                  %th= t('ontologies.submission')
+                  %th= t('ontologies.release_date')
+                  %th= t('ontologies.upload_date')
+                  %th= t('ontologies.downloads')
                   - if viewAdmin
-                    %th Admin Links
+                    %th= t('ontologies.admin_links')
 
               - view_sub_latestId = -1
               - view_sub_latestId = view_sub_latest.submissionId unless view_sub_latest.nil?
@@ -137,7 +140,7 @@
                   - if (view_index == 0) && viewAdmin
                     %td
                       - viewEditURL = "/ontologies/#{view.acronym}/submissions/#{view_sub.submissionId}/edit"
-                      #{link_to "Edit", viewEditURL}
+                      #{link_to t('ontologies.edit_link'), viewEditURL}
             / view submission table
         / collapsible div
         / title div

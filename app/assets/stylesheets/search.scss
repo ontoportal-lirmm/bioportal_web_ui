@@ -11,12 +11,11 @@
 }
 
 .search-page-input{
-  position: relative;
-  padding-bottom: 80px;
+  display: flex;
+  margin-bottom: 25px;
 }
 .search-page-input input{
-  position: absolute;
-  border-radius: 100px;
+  border-radius: 8px;
   box-shadow: rgba(100, 100, 111, 0.1) 0 7px 29px 0;
   border: none;
   outline: none;
@@ -43,26 +42,15 @@
   color: #888888;
   font-size: 14px;
 }
-
-
-
-
-.search-page-options{
-  
-}
 .search-page-button{
-  position: absolute;
-  top: 14px;
-  left: 1104px;
-  border: none;
-  background: none;
+  width: 120px;
+  margin-left: 20px;
 }
-.search-page-button svg path{
-  fill: var(--primary-color)
+
+.search-page-button svg{
+  width: 14px;
 }
-.search-page-button:hover{
-  cursor: pointer;
-}
+
 .search-page-options{
   display: flex;
   justify-content: space-between;
