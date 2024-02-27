@@ -94,5 +94,8 @@ application.register("turbo-frame-error", TurboFrameErrorController)
 import SampleTextController from "./sample_text_controller"
 application.register("sample-text", SampleTextController)
 
+import AnnotatorController from "./annotator_controller"
+application.register('annotator', AnnotatorController)
+
 import ontologiesSelector from "./ontologies_selector_controller"
 application.register("ontologies-selector", ontologiesSelector)

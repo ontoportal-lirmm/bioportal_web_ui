@@ -26,46 +26,28 @@ fr:
   all: Tout
   
   annotator:
-    annotate_text_prompt: Saisissez ou collez le texte à annoter
-    annotations_result: Annotations
-    fast_context: FastContext
-    filters:
-      confidence_threshold: Seuil de confiance
-      confidence_threshold_help: Spécifiez la position minimale dans la distribution
-        des scores (entre 1 et 100).
-      exclude_numbers: Exclure les nombres
-      exclude_synonyms: Exclure les synonymes
-      include_mappings: Inclure les alignements
-      match_longest_only: Reconnaître les mots les plus long uniquement
-      match_partial_words: Reconnaître les mots partiels
-      max_hierarchy_level: Inclure les ancêtres jusqu'au niveau
-      score: Inclure le score
-      score_help: Score des annoations suivant la mesure originale NCBO 2009 (ancienne)
-        ou Score des annoations suivant la mesure C-Value (cvalue) ou Score des annoations
-         suivant la mesure C-Value avec expansion de la hiérarchie (cvalueh).
-      score_threshold: Seuil de score
-      score_threshold_help: Spécifiez la valeur de score minimum pour les annotations.
-    get_annotator: Obtenir les annotations
-    index:
-      fast_context:
-        tooltip: 'Activez FastContext pour détecter : si un concept est négatif (affirmé,
-          nié), qui a vécu le concept trouvé (patient, autre), quand le concept annoté
-          s''est-il produit (récent, historique, hypothétique), et/ou si le concept annoté
-          est incertain (certain, incertain).'
-      intro: Obtenez des annotations avec des classes des ontologies
-      lemmatize:
-        tooltip: Activez Lemmatize pour lemmatiser le texte soumis et utiliser un
-          dictionnaire lemmatisé pour les annotations
-      sample_text: Le mélanome est une tumeur maligne des mélanocytes qui se trouvent
-        principalement dans la peau mais aussi dans l'intestin et l'œil.
-    lemmatize: Lemmatiser
-    results_filtered_by: Les résultats sont filtrés par
-    select: Sélectionnez %{name}
-    start_typing_to_select: Commencez à taper pour sélectionner %{type} ou laissez vide pour tout utiliser
     title: Annotateur
-    umls:
-      semantic_groups: Groupes sémantiques UMLS
-      semantic_types: Types sémantiques UMLS
+    description: Obtenez des annotations pour le texte avec des classes d'ontologie
+    input_hint: Entrez ou collez un texte à annoter...
+    options: Options
+    preferences: Préférences
+    whole_word_only: Mot entier seulement
+    match_longest_only: Correspondance uniquement avec le plus long
+    recognize_partial_words: Reconnaître les mots partiels
+    include_mappings: Inclure les mappings
+    exclude_numbers: Exclure les chiffres
+    exclude_synonyms: Exclure les synonymes
+    select_umls_semantic_types: Sélectionner les types sémantiques UMLS
+    select_umls_semantic_groups: Sélectionner les groupes sémantiques UMLS
+    include_ancestors: Inclure les ancêtres jusqu'au niveau
+    include_score: Inclure le score
+    score_threshold: Filtrer par seuil de score
+    confidence_threshold: Filtrer par seuil de confiance
+    fastcontext: FastContext
+    lemmatize: Lématiser
+    get_annotation: Obtenir des annotations
+    total_results: Résultats totaux
+
   
   certainty: Certitude
   class: Classe
