@@ -1,9 +1,9 @@
 class NotesController < ApplicationController
   include TurboHelper
-  include ActionView::Helpers::TranslationHelper
   layout 'ontology'
+ 
   NOTES_PROPOSAL_TYPES = {
-    ProposalNewClass: t('notes.new_class_proposal'),
+    ProposalNewClass:  t('notes.new_class_proposal'),
     ProposalChangeHierarchy: t('notes.new_relationship_proposal'),
     ProposalChangeProperty: t('notes.change_property_value_proposal')
   }
@@ -26,6 +26,7 @@ class NotesController < ApplicationController
   end
 
   def new_proposal
+    binding.pry
     types = NOTES_PROPOSAL_TYPES.map { |x, y| [y, x.to_s] }
     render partial: 'new_proposal', locals: { parent_id: params[:parent_id], type: params[:proposal_type],
                                               parent_type: params[:parent_type], user_id: session[:user].id,
