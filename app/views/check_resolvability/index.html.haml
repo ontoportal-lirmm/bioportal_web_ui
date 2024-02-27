@@ -3,7 +3,7 @@
     = form_tag(check_resolvability_path, method: :get, 'data-turbo': true) do
       .search-page-input-container{'data-controller': 'reveal'}
         .search-page-input
-          %input{type:"url", placeholder:'Type a URI to test its resolvability', name: "url", value: @url}
+          %input{type:"url", placeholder: t("check_resolvability.uri_placeholder"), name: "url", value: @url}
           %button.search-page-button{type:'submit'}
             = inline_svg_tag 'icons/search.svg'
 
@@ -14,40 +14,26 @@
               .icon
                 = inline_svg_tag 'icons/settings.svg'
               .text
-                Show help
+                = t("check_resolvability.show_help")
 
         - c.container do
           %div.mt-2.mx-auto
             = render Display::AlertComponent.new(type:'info') do
-              %h4 How it works
+              %h4= t("check_resolvability.how_it_works.title")
               %p
-                The check resolvability tool allows you to test if a given URL is resolvable. It is based on the HTTP HEAD method.
-                We check the resolvability of a URL by sending a HEAD request to the URL and checking if the response status code is 200 (OK) and
-                the returned content type is equal to one of the following #{resolvability_formats.join(', ')}.
+                = t("check_resolvability.how_it_works.content_1", resolvability_formats: resolvability_formats.join(', ')) 
               %p
-                We have a timeout set to #{resolvability_timeout} seconds, so if the URL is not resolvable within that time, the check will fail.
-                And a max redirections set to #{resolvability_max_redirections}, so if the URL is not resolvable within that number of redirections, the check will fail.
+                = t("check_resolvability.how_it_works.content_2", resolvability_timeout: resolvability_timeout, resolvability_max_redirections: resolvability_max_redirections) 
             = render Display::AlertComponent.new(type:'info') do
               %h4
-                Resolving a URI
+                = t("check_resolvability.resolving_uri.title")
               %p
-                In the context of web semantics, dereferencing refers to the process of resolving and obtaining the actual data associated with a Uniform Resource Identifier (URI). In simpler terms, it involves following a link represented by a URI/IRI to retrieve information or resources linked to that identifier.
-                In the Semantic Web, URIs are used to uniquely identify resources, and dereferencing allows systems to access and retrieve data related to those resources. When a URI/IRI is dereferenced, it typically leads to the retrieval of RDF (Resource Description Framework) data or other structured information that describes the resource in a machine-readable format. This enables systems to understand and process the meaning of the linked data, facilitating the exchange and integration of information on the web.
+                = t("check_resolvability.resolving_uri.content")
 
               %h4
-                Content negotiation
+                = t("check_resolvability.content_negotiation.title")
               %p
-                Content negotiation in the context of the Semantic Web refers to the mechanism by which two communicating parties, such as a client and a server, agree on the most suitable representation of a resource during the process of dereferencing a URI or IRI. This negotiation aims to ensure effective communication between different systems that may prefer different data formats or languages.
-                In other words, when a client requests a resource by dereferencing a URI, it indicates its preferences for the format or language of the response data through HTTP headers or other negotiation mechanisms. The server, in turn, examines these preferences and selects the most appropriate representation of the resource based on what is available.
-                different formats can be agreed upon between a client and server when accessing linked data. Common formats include:
-
-                RDF/XML: XML-based representation of Resource Description Framework data.
-                Turtle: Human-readable serialization format for RDF.
-                JSON-LD: JSON-based format for linked data.
-                N-Triples and N-Quads: Text formats for expressing RDF triples and quads.
-                HTML: Markup language for web pages, also used to embed RDF data.
-                RDFa: Embedding RDF data in HTML or XML using attributes.
-                SPARQL Query Results XML and JSON: Formats for representing SPARQL query results.
+                = t("check_resolvability.content_negotiation.content")
 
     - if @results
       %div.bg-white.mt-3.border.rounded
@@ -80,7 +66,7 @@
                       - else
                         - status = result[:status]
                         - color = status.eql?('200') ? '' : 'bg-danger-light text-danger'
-                        - format_badge = render ChipButtonComponent.new(class: "mx-1", text: result[:allowed_format].first.blank? ? 'Format not specified': result[:allowed_format].first)
+                        - format_badge = render ChipButtonComponent.new(class: "mx-1", text: result[:allowed_format].first.blank? ? t("check_resolvability.format_not_specified"): result[:allowed_format].first)
                       = render ChipButtonComponent.new(class: "mx-1 #{color}", type: 'clickable', text: status)
                       = format_badge
 
