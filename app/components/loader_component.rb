@@ -16,10 +16,10 @@ class LoaderComponent < ViewComponent::Base
     content_tag(:div, class: 'd-flex align-items-center flex-column') do
       content_tag(:div, class: "spinner-border #{small_class}") do
         content_tag(:span) do
-          'Loading'
+          t('components.loading')
         end
         content_tag(:div, class: 'spinner-text my-2') do
-          'Loading'
+          t('components.loading')
         end
       end
     end

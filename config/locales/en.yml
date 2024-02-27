@@ -10,6 +10,13 @@ en:
               no_appliance_id_for_comparison: Could not be validated. Unable to retrieve virtual appliance ID.
               appliance_id_mismatch: is an appliance id mismatch.
 
+  components:
+    check_resolvability: checking resolvability...
+    error_block: child_data_generator block did not provide all the child arguements
+    empty_field: The fields %{properties} are empty
+    save_button: Save
+    cancel_button: Cancel
+
   date:
     formats:
       year_month_day_concise: "%Y-%m-%d" # 2017-03-01
@@ -81,6 +88,54 @@ en:
     ontology_process_success: "Ontology %{ont} %{success_keyword} successfully,"
     ontology_not_found_system: "Ontology %{ont} was not found in the system, "
     ontology_process_error: "Problem %{error_keyword} ontology %{ont} - %{class}: %{message},"
+  application:
+    powered_by: Powered by BioPortal
+    projects: Projects
+  admin:
+    new_ontologies_created_title: "The following ontologies: %{count} were created in this year"
+    turbo_confirm: "Are you sure you want to %{name}?"
+    analytics:
+      total_ontologies: Total Ontologies
+      ontologies_count: "%{size} new ontology this year"
+      ontologies_with_errors: Ontologies with errors
+      total_visits: Total visits
+      active_users: Active users
+      visit_users: "%{ visits } users since last month"
+      ontology_visits: Ontology visits
+      unique_users_visits: Unique users visits
+      page_visits: Page visits of this month
+    main:
+      cache_management: CACHE MANAGEMENT
+      clear_cache: Flush UI cache
+      reset_cache: Reset UI cache connection
+      clear_goo_cache: Flush GOO cache
+      clear_http_cache: Flush HTTP cache
+      version_management: VERSION MANAGEMENT
+      checking_for_updates: Checking for updates ...
+    memcache:
+      title: Memcache stats
+    parse_log:
+      title: Parse Log for %{acronym}
+      log_file: "Log file: %{path}"
+    index:
+      title: Administration
+      administration_console: Administration console
+      analytics: Analytics
+      site_administration: Site Administration
+      ontology_administration: Ontology Administration 
+      licensing: Licensing
+      users: Users
+      metadata_administration: Metadata Administration
+      groups: Groups
+      categories: Categories
+      persons_and_organizations: Persons & Organizations
+      sparql: SPARQL
+      report_generated_on: "Report generated on:"
+      licensed_to: Licensed to
+      appliance_id: Appliance ID
+      valid_till: Valid till
+      days_remaining: Days remaining
+      renew_license: Renew license
 
     groups:
       group_created: group successfully created in %{time}s
@@ -149,7 +204,13 @@ en:
     licenses:
       create:
         success: License renewed successfully!
-    label_close: Close
+      label_close: Close
+      form:
+        license_from_being_saved: "prohibited this license from being saved:"
+        paste_your_license: Paste your license key into the text area
+        submit: Submit
+
+
   
   all: All
   
@@ -181,6 +242,25 @@ en:
   class: Class
   clear_selection: Clear selection
   concepts:
+    date_sorted_list_error: The Classes/Concepts didn't define <strong>creation</strong> or <strong>modifications</strong> dates with dcterms
+    list_error: The Collection didn't define any member
+    permanent_link_class:  Permanent link to this class
+    close: Close
+    request_terms_instructions: |
+      The text below is displayed to the user as the instructions on how to request new terms for your ontology.
+      You can change this text for %{acronym} ontology by clicking anywhere on the existing text to 
+      bring up the editing dialog.
+      Click 'Submit Changes' to save or 'Cancel' to discard your changes.
+    submit_changes: Submit Changes
+    cancel: Cancel
+    request_new_term: Request New Term
+    use_jump_to: Use the "Jump To" to find a class and display details, visualization, notes, and mappings
+    instances: Instances
+    notes: Notes
+    details: Details
+    visualization: Visualization
+    new_term_requests: New Term Requests
+    permanent_link_class: Get a permanent link to this class
     request_term:
       new_term_instructions: |
         <p>This ontology integrates with OntoloBridge, allowing community users to suggest additions to the public ontology. Complete the template below to submit a term request directly to the Ontology Manager.</p>
@@ -329,11 +409,14 @@ en:
     number_of_ontologies_in_catalog: Number of ontologies in this catalog
     number_of_ontologies: Number of ontologies
     number_of_ontologies_with_class_count_in_range: Number of ontologies with a class count in this range
+    average: Average
+    fairness_interface_introduction: This interface shows how an ontology or a group responded successfully to O’FAIRe FAIRness assessment questions
+    fairness_interface_details: See details for each ontologies on the specific ontology summary pages
+    fairness_interface_hover_instruction: hover on a principle to see details
     average_metrics: Average metrics
     category: category
     filter_network: Filter network
-    funding_endorsing_organizations: Organizations funding and endorsing the most
-      ontologies
+    funding_endorsing_organizations: Organizations funding and endorsing the most ontologies
     group: group
     groups_and_categories: Groups and Categories
     intro: Visualize the panorama of ontologies and other semantic resources of %{site} via metadata aggregation.
@@ -403,7 +486,11 @@ en:
       about: About
       about_us: About Us
       projects: D2KAB
-      team: Team   
+      team: Team
+    notices:
+      slice: Slice
+      at: at
+      visit_the_site: visit the full site
 
   login:
     enter_email: Enter your username
@@ -435,6 +522,7 @@ en:
     ontology_visits: Ontology visits
 
   mappings:
+    mapping_issue: "Mapping issue with '%{mapping}' : %{message}"
     find_mappings: Find mappings of a class/concept
     intro: Find all the mappings of an ontology
     loading_mappings: Loading mappings...
@@ -500,6 +588,7 @@ en:
     agent_usages_updated: Agent usages successfully updated
     agent_already_deleted: Agent %{id} already deleted
     agent_deleted_successfully: Agent %{id} deleted successfully
+    ontology_not_valid: "ontology is not valid, here are the errors: "
     save: Save
     not_used: Not used
     see_usages_count: See usages (%{count})
@@ -597,6 +686,33 @@ en:
   none: none
  
   ontologies:
+    no_license: No license
+    view_license: View license
+    access_rights_information: Additional license a access rights information
+    referred_to: It can also be referred to as
+    private_ontology: Private Ontology
+    formality_levels: Formality levels
+    ontology_types: Ontology types
+    natural_languages: Natural languages
+    showing: Showing
+    metadata_properties: of %{acronym}  metadata properties are filled
+    metadata_only: N/A - metadata only
+    home_page: Home Page
+    ontology_processing_failed: "The ontology processing failed, with the current statuses: %{status}"
+    ontology_parsing_succeeded: "The ontology parsing succeeded, but some processing steps failed, here are the current statuses: %{status}"
+    upload_an_ontology: Upload an ontology. Sections such as %{ontology} will be available once done.
+    ontology_is_processing: The ontology is processing. Sections such as %{ontology} will be available once processing is complete.
+    contact_support: Contact support
+    edit_natural_languages: Edit natural languages of %{acronym}
+    edit_available_languages: Click here to edit available languages
+    add_new_submission: Add new submission
+    edit_metadata: Edit metadata
+    go_to_api: Go to API
+    projects_using_ontology: Projects using %{acronym}
+    create_new_project: Create new project
+    no_projects_using_ontology: No projects using %{acronym}
+    outside: outside
+    relation_with_other_ontologies: Relation with other ontologies either in %{inside} or %{outside}
     ontology_search_prompt: 'Search an ontology or a term (e.g., plant height)'
     self: Ontologies
   
@@ -826,6 +942,10 @@ en:
   hide_advanced_options: Hide advanced options
   no_result_was_found: No result was found
   notes:
+    comment: Comment
+    new_class_proposal: New Class Proposal
+    new_relationship_proposal: New Relationship Proposal
+    change_property_value_proposal: Change Property Value Proposal
     new_comment: 
       subject: Subject
       comment: Comment
@@ -864,7 +984,25 @@ en:
     location: "Location: %{location}"
     tags: "Tags:"
     feedback: "Feedback:"
-  
+
+  submissions:
+    no_submissions_for_ontology: "No submissions for ontology: %{ontology}"
+    submission_updated_successfully: Submission updated successfully
+    save_button: Save
+    id: ID
+    version: Version
+    actions: Actions
+    modified: Modified
+    submitted: Submitted
+    download: Download
+    toggle_dropdown: Toggle Dropdown
+    go_to_api: Go to API
+    edit_button: Edit
+    delete_submission_alert: 
+      content_1: "Are you sure you want to delete submission <span style='color:red;font-weight:bold;'>"
+      content_2: "</span> for ontology <span style='color:red;font-weight:bold;'>"
+      content_3: "</span>?<br/><b>This action CAN NOT be undone!!!</b>"
+
   ontoportal_virtual_appliance:
     title: OntoPortal Virtual Appliance Download
     intro_paragraph:
@@ -960,11 +1098,110 @@ en:
       additional_parameters_explained: Additional parameters explained at
       annotator_api_documentation: Annotator API documentation
 
-  schemes:
+  submission_inputs:
+    administrators: Administrators
+    ontology_skos_language_link: Please refer to the documentation for more details.
+    ontology_skos_language_help: |
+      <<-EOS
+      SKOS vocabularies submitted to %{portal_name} shall follow a few constraints (e.g., contain a minimum of one skos:ConceptScheme also typed as owl:Ontology) 
+      and top concept assertion. %{link}
+      EOS
+    ontology_obo_language_link: the OBOinOWL parser.
+    ontology_obo_language_help: |
+      <<-EOS
+        OBO ontologies submitted to %{portal_name} will be parsed by the OWL-API which integrates %{link} 
+        The resulting RDF triples will then be loaded in %{portal_name} triple-store. 
+      EOS
+    ontology_owl_language_link: the Protégé
+    ontology_owl_language_help: |
+      <<-EOS
+        OWL ontologies submitted to %{portal_name} will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with
+        %{link}
+        software which does use the same component.
+      EOS
+    ontology_umls_language_link: by the UMLS2RDF tool.
+    ontology_umls_language_help: |
+      <<-EOS
+        UMLS-RRF resources are usually produced %{link}
+      EOS
+    groups: Groups
+    visibility: Visibility
+    accounts_allowed: Add or remove accounts that are allowed to see this ontology in %{portal_name}.
+    ontology_view_of_another_ontology: Is this ontology a view of another ontology?
+    contact: Contact
+    equivalents: Equivalents
+    validators: Validators
+    help_text: Help text
+    contact_name: "%{name} Name"
+    contact_email: "%{name} Email"
+
+  collections:
+    no_collections_alert: "%{acronym} does not contain collections (skos:Collection)"
     id: ID
-    preferred_name: Preferred Name
+    preferred_name: Preferred name
+    members_count: Members count
+    type: Type
+  change_requests:
+    change_request_success_message: Your change request was successfully submitted! View the %{url} on GitHub.
+    label: Label
+    type: Type
+    comment: Comment
+    close: Close
+    submit: Submit
+
+  check_resolvability:
+    check_resolvability_message_1: "The URL is resolvable and support the following formats: %{supported_format}"
+    check_resolvability_message_2: "The URL resolvable but is not content negotiable, support only: %{supported_format}"
+    check_resolvability_message_3: The URL is not resolvable and not content negotiable (returns %{status}).
+    uri_placeholder: Type a URI to test its resolvability
+    show_help: Show help
+    format_not_specified: Format not specified
+    how_it_works:
+      title: How it works
+      content_1: |
+        The check resolvability tool allows you to test if a given URL is resolvable. It is based on the HTTP HEAD method.
+        We check the resolvability of a URL by sending a HEAD request to the URL and checking if the response status code is 200 (OK) and
+        the returned content type is equal to one of the following %{resolvability_formats}.
+      content_2: |
+        We have a timeout set to %{resolvability_timeout} seconds, so if the URL is not resolvable within that time, the check will fail.
+        And a max redirections set to %{resolvability_max_redirections}, so if the URL is not resolvable within that number of redirections, the check will fail.
+    resolving_uri:
+      title: Resolving a URI
+      content: |
+        In the context of web semantics, dereferencing refers to the process of resolving and obtaining the actual data associated with a Uniform Resource Identifier (URI). In simpler terms, it involves following a link represented by a URI/IRI to retrieve information or resources linked to that identifier.
+        In the Semantic Web, URIs are used to uniquely identify resources, and dereferencing allows systems to access and retrieve data related to those resources. When a URI/IRI is dereferenced, it typically leads to the retrieval of RDF (Resource Description Framework) data or other structured information that describes the resource in a machine-readable format. This enables systems to understand and process the meaning of the linked data, facilitating the exchange and integration of information on the web.
+    content_negotiation:
+      title: Content negotiation
+      content: |
+        Content negotiation in the context of the Semantic Web refers to the mechanism by which two communicating parties, such as a client and a server, agree on the most suitable representation of a resource during the process of dereferencing a URI or IRI. This negotiation aims to ensure effective communication between different systems that may prefer different data formats or languages.
+        In other words, when a client requests a resource by dereferencing a URI, it indicates its preferences for the format or language of the response data through HTTP headers or other negotiation mechanisms. The server, in turn, examines these preferences and selects the most appropriate representation of the resource based on what is available.
+        different formats can be agreed upon between a client and server when accessing linked data. Common formats include:
+
+        RDF/XML: XML-based representation of Resource Description Framework data.
+        Turtle: Human-readable serialization format for RDF.
+        JSON-LD: JSON-based format for linked data.
+        N-Triples and N-Quads: Text formats for expressing RDF triples and quads.
+        HTML: Markup language for web pages, also used to embed RDF data.
+        RDFa: Embedding RDF data in HTML or XML using attributes.
+        SPARQL Query Results XML and JSON: Formats for representing SPARQL query results.
+
+  errors:
+    error_message: We're sorry but something has gone wrong.
+    notification_error: We have been notified of this error.
+    go_home_button: Go home
+    send_feedback_button: Send a feedback
+    not_found_page: Page not found
+  
+  schemes:
+    no_main_scheme_alert: no main scheme defined in the URI attribute
+    no_schemes_alert: "%{acronym} does not contain schemes (skos:ConceptScheme)"
+
+    id: ID
+    preferred_name: Preferred name
     type: Type
   fair_score:
+    fairness_unreachable_warning: FAIRness service issue unreachable
+    go_to_api: Go to API
     mod_link: MOD1.4
     see_the_used_properties: see the used properties
     metadata_properties: Metadata properties listed in the following are picked from %{mod_link}.
@@ -982,6 +1219,22 @@ en:
     update_the_current_displayed_content: "will update the current displayed content to all the following submissions:"
     save: Save
   ontologies:
+    views:  Views
+    create_new_view: Create new view
+    expand_all: Expand All
+    collapse_all: Collapse All
+    administrator: "Administrator:"
+    create_new_view_submission: create new view submission
+    description: "Description:"
+    definition: "Definition:"
+    created_by: "Created By:"
+    submission: Submission
+    release_date: Release Date
+    upload_date: Upload Date
+    downloads: Downloads
+    admin_links: Admin Links
+    edit_link: Edit
+
     no_views: No views available for %{acronym}.
     fairness_assessment_questions: O'FAIRe FAIRness assessment questions
     see_details: See details
@@ -1137,3 +1390,49 @@ en:
         export_metadata: Export all metadata
         abstract: Abstract
         description: Description
+
+  components:
+    name_identifiers: NAME (IDENTIFIERS)
+    type: TYPE
+    name_acronym: NAME(ACRONYM)
+    file_input_message: Drop your file here or, browse files on your device.
+    all_languages: All languages
+    select_anguage: Select a language
+    back: Back
+    next: Next
+    finish: Finish
+    creative_commons_license: Creative Commons License
+    open_source_license: Open Source License
+    show_more: "+ Show more ..."
+    show_less: "- Show less ..."
+    fair_score: FAIR score
+    details_details: FAIR details ...
+    projects: projects
+    notes: notes
+    concepts: concepts
+    instances: instances
+    classes: classes
+    submitted: Submitted
+    creation_date: Creation date %{date}
+    view_of_the_ontology: "View of the ontology %{ontology}"
+    view: View
+    debug: Debug
+    loading: Loading
+    unwatch: UnWatch
+    watch: Watch
+    resource: "%{sub_text} this resource"
+    notified_of_all_updates: Be the first to watch this resource and  be notified of all its updates
+    join_the_count: Join the %{count} users, watching this resource and  be notified of all its updates
+    see_more: See more...
+    see_less: See less...
+
+  properties:
+    id: ID
+    preferred_name: Preferred name
+    definitions: Definitions
+    parent: Parent
+  visits:
+    ontology_visits: Ontology visits
+    name: name
+    visits: visits
+

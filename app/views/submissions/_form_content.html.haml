@@ -6,7 +6,7 @@
       %hr#edit-ontology-actions-devider
       .edit-ontology-actions
         .save-button
-          = render Buttons::RegularButtonComponent.new(id:'save-button', value: "Save", variant: "primary", size: "slim", type: "submit") do |btn|
+          = render Buttons::RegularButtonComponent.new(id:'save-button', value: t('submissions.save_button'), variant: "primary", size: "slim", type: "submit") do |btn|
             - btn.icon_left do
               - inline_svg_tag "check.svg"
 

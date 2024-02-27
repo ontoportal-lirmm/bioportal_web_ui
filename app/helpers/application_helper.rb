@@ -81,7 +81,7 @@ module ApplicationHelper
       end
     end
   end
-  
+
 
 
   def encode_param(string)
@@ -138,7 +138,7 @@ module ApplicationHelper
     end
   end
 
- 
+
 
   def help_icon(link, html_attribs = {})
     html_attribs["title"] ||= "Help"
@@ -330,7 +330,7 @@ module ApplicationHelper
   def link?(str)
     # Regular expression to match strings starting with "http://" or "https://"
     link_pattern = /\Ahttps?:\/\//
-
+    str = str&.strip
     # Check if the string matches the pattern
     !!(str =~ link_pattern)
   end
@@ -496,7 +496,7 @@ module ApplicationHelper
     else
       link_to(link,'', {data: data[:data], class: 'btn btn-sm btn-light', target: '_blank'})
     end
-     
+
 
   end
 
@@ -620,7 +620,7 @@ module ApplicationHelper
       content_tag(:div, text, class: 'text')
     end
   end
-  
+
   def insert_sample_text_button(text)
     content_tag(:div, class:'insert-sample-text-button') do
       content_tag(:div, class: 'button', 'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("sample_text")) do
@@ -632,7 +632,7 @@ module ApplicationHelper
 
   def empty_state(text)
     content_tag(:div, class:'browse-empty-illustration') do
-      inline_svg_tag('empty-box.svg') + 
+      inline_svg_tag('empty-box.svg') +
       content_tag(:p, text)
     end
   end
