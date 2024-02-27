@@ -1,5 +1,6 @@
 class NotesController < ApplicationController
   include TurboHelper
+  include ActionView::Helpers::TranslationHelper
   layout 'ontology'
   NOTES_PROPOSAL_TYPES = {
     ProposalNewClass: t('notes.new_class_proposal'),
