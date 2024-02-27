@@ -282,6 +282,10 @@ en:
   knowledge_detail: Knowledge detail
   
   landscape:
+    average: Average
+    fairness_interface_introduction: This interface shows how an ontology or a group responded successfully to O’FAIRe FAIRness assessment questions
+    fairness_interface_details: See details for each ontologies on the specific ontology summary pages
+    fairness_interface_hover_instruction: hover on a principle to see details
     average_metrics: Average metrics
     category: category
     filter_network: Filter network
@@ -356,7 +360,11 @@ en:
       about: About
       about_us: About Us
       projects: D2KAB
-      team: Team   
+      team: Team
+    notices:
+      slice: Slice
+      at: at
+      visit_the_site: visit the full site
 
   login:
     enter_email: Enter your username
@@ -1004,6 +1012,22 @@ en:
     update_the_current_displayed_content: "will update the current displayed content to all the following submissions:"
     save: Save
   ontologies:
+    views:  Views
+    create_new_view: Create new view
+    expand_all: Expand All
+    collapse_all: Collapse All
+    administrator: "Administrator:"
+    create_new_view_submission: create new view submission
+    description: "Description:"
+    definition: "Definition:"
+    created_by: "Created By:"
+    submission: Submission
+    release_date: Release Date
+    upload_date: Upload Date
+    downloads: Downloads
+    admin_links: Admin Links
+    edit_link: Edit
+
     no_views: No views available for %{acronym}.
     fairness_assessment_questions: O'FAIRe FAIRness assessment questions
     see_details: See details
@@ -1159,3 +1183,12 @@ en:
         export_metadata: Export all metadata
         abstract: Abstract
         description: Description
+  properties:
+    id: ID
+    preferred_name: Preferred name
+    definitions: Definitions
+    parent: Parent
+  visits:
+    ontology_visits: Ontology visits
+    name: name
+    visits: visits

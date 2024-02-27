@@ -58,7 +58,8 @@
                                         <script src="quick_jump.js" type="text/javascript" charset="utf-8"></script>
               %p
                 = t("ontologies.sections.help_visit")
-                %a{:href => "http://bioontology.org/wiki/index.php/NCBO_Widgets#How_to_use_NCBO_Widgets", :target => "_blank"}= t("ontologies.sections.ncbo_widget_wiki")
+                %a{:href => "http://bioontology.org/wiki/index.php/NCBO_Widgets#How_to_use_NCBO_Widgets", :target => "_blank"}
+                  = t("ontologies.sections.ncbo_widget_wiki")
       %div
         = render WidgetBlockComponent.new(id:'form-autocomplete-widget', title: t("ontologies.sections.widget_block_component_title_2") , description: t("ontologies.sections.widget_block_component_description_2", acronym: @ontology.acronym)) do |c|
           - c.widget do
@@ -198,8 +199,10 @@
 
               %p
                 = t("ontologies.sections.can_also_view")
-                %a{href: "/widgets/ncbo_tree.html", target: '_blank'}= t("ontologies.sections.detailed_demonstration")
+                %a{href: "/widgets/ncbo_tree.html", target: '_blank'}
+                  = t("ontologies.sections.detailed_demonstration")
               %p
                 = t("ontologies.sections.more_help_visit")
-                %a{:href => "http://bioontology.org/wiki/index.php/NCBO_Widgets#How_to_use_NCBO_Widgets", :target => "_blank"}= t("ontologies.sections.ncbo_widget_wiki")
+                %a{:href => "http://bioontology.org/wiki/index.php/NCBO_Widgets#How_to_use_NCBO_Widgets", :target => "_blank"}
+                  = t("ontologies.sections.ncbo_widget_wiki")
 
