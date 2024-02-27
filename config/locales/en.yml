@@ -736,6 +736,12 @@ en:
   output: Output
   
   projects:
+    project_not_found: "Project not found: %{id}"
+    project_successfully_created: Project successfully created
+    error_unique_acronym: Project with acronym %{acronym} already exists.  Please enter a unique acronym.
+    project_successfully_updated: Project successfully updated
+    error_delete_project: "Project delete failed: %{errors}"
+    project_successfully_deleted: Project successfully deleted
     contacts: Contacts
     create_new_project: Create new project
     created: Created
@@ -833,6 +839,24 @@ en:
     title: Register
     username: Username
   users:
+    account_successfully_created: Account was successfully created
+    account_successfully_updated: Account was successfully updated
+    user_deleted_successfully: User deleted successfully
+    not_permitted: Not permitted
+    error_saving_custom_ontologies: Error saving Custom Ontologies, please try again
+    custom_ontologies_cleared: Custom Ontologies were cleared
+    custom_ontologies_saved: Custom Ontologies were saved
+    subscribe_flash_message: "You have successfully  %{action} %{to_or_from} our user mailing list: %{list}"
+    error_subscribe: Something went wrong ...
+    validate_email_address: Please enter an email address
+    validate_password: Please enter a password
+    validate_password_confirmation: Your Password and Password Confirmation do not match
+    recaptcha_validation: Please fill in the proper text from the supplied image
+    validate_orcid: Please enter a valid ORCID.
+    validate_username: please enter a valid username
+    valid_email_adresse: Please enter a valid email adresse
+    first_name_required: First name field is required
+    last_name_required: Last name field is required
     index:
       first_name: First name
       last_name: Last name
@@ -900,6 +924,7 @@ en:
   score: Score
   
   search:
+    no_search_class_provided: No search class provided
     search_place_holder: Enter a term, e.g. plant height
     advanced_options:
       search_language: Search language
@@ -976,7 +1001,11 @@ en:
       Comment: Comment
       save: save
       cancel: cancel
-    
+
+  ontolobridge:
+    problem_of_creating_new_term: "Problem creating a new term %{endpoint}: %{class} - %{message}"
+    new_term_instructions_saved: New term request instructions for %{acronym} saved
+    error_saving_new_term_instructions: Unable to save new term instructions for %{acronym} due to a server error
 
   notifier:
     name: "Name: %{name}"
@@ -1004,6 +1033,8 @@ en:
       content_3: "</span>?<br/><b>This action CAN NOT be undone!!!</b>"
 
   ontoportal_virtual_appliance:
+    problem_adding_account: "Problem adding account <strong>%{id}</strong>: account does not exist"
+    require_login: You must be logged in to access this section
     title: OntoPortal Virtual Appliance Download
     intro_paragraph:
       main: |
@@ -1193,9 +1224,9 @@ en:
     not_found_page: Page not found
   
   schemes:
+    error_valid_scheme_id: "Error: You must provide a valid scheme id"
     no_main_scheme_alert: no main scheme defined in the URI attribute
     no_schemes_alert: "%{acronym} does not contain schemes (skos:ConceptScheme)"
-
     id: ID
     preferred_name: Preferred name
     type: Type
@@ -1211,6 +1242,10 @@ en:
     not_found: not found
     null: "null"
   ontologies_metadata_curator:
+    bulk_edit: Start bulk edit
+    use_the_bulk_edit: To use the bulk edit select in the table submissions (the rows) and metadata properties (the columns) for which you want to edit
+    start_the_bulk_edit: Select in the table submissions (rows) and metadata properties (columns) to start the bulk edit
+    alert_success_submissions: Submissions were successfully updated
     ontologies: Ontologies
     get_values: Get values
     select_ontologies_and_metadata: select ontologies and the metadata properties
@@ -1390,7 +1425,11 @@ en:
         export_metadata: Export all metadata
         abstract: Abstract
         description: Description
-
+  precache:
+    delete_general_cache_info: Deleting general cache info
+    delete_cache_ontology: Deleting cache for %{ont}
+    retrieved_time: Retrieved in %{time}s
+    failed_to_get_url: "Failed to get %{url}: %{message}"
   components:
     name_identifiers: NAME (IDENTIFIERS)
     type: TYPE
@@ -1425,7 +1464,6 @@ en:
     join_the_count: Join the %{count} users, watching this resource and  be notified of all its updates
     see_more: See more...
     see_less: See less...
-
   properties:
     id: ID
     preferred_name: Preferred name
