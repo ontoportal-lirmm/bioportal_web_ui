@@ -144,7 +144,7 @@ module AgentHelper
     content_tag(:div) do
       errors.map do |ont, message|
         content_tag(:p) do
-          (content_tag(:strong, ont) + ' ontology is not valid, here are the errors: ' + agent_usage_error_display(message[:error])).html_safe
+          (content_tag(:strong, ont) + t('agents.ontology_not_valid') + agent_usage_error_display(message[:error])).html_safe
         end
       end.join.html_safe
     end

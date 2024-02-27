@@ -19,7 +19,7 @@ module FairScoreHelper
       response = conn.get(get_fairness_service_url(apikey) + "&ontologies=#{ontologies_acronyms}&combined")
       MultiJson.load(response.body.force_encoding('ISO-8859-1').encode('UTF-8'))
     rescue
-      Rails.logger.warn "FAIRness service issue unreachable"
+      Rails.logger.warn t('fair_score.fairness_unreachable_warning')
       {}
     end
   end
@@ -128,7 +128,7 @@ module FairScoreHelper
 
   def fairness_link(style = '')
     custom_style = "font-size: 50px; line-height: 0.5; margin-left: 6px; #{style}".strip
-    render IconWithTooltipComponent.new(icon: "json.svg",link: get_fairness_service_url, target: '_blank', title: 'Go to API', size:'small', style: custom_style)  
+    render IconWithTooltipComponent.new(icon: "json.svg",link: get_fairness_service_url, target: '_blank', title: t('fair_score.go_to_api'), size:'small', style: custom_style)  
   end
 end
 
