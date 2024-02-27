@@ -73,7 +73,7 @@ class UsersController < ApplicationController
           SubscribeMailer.register_for_announce_list(@user.email,@user.firstName,@user.lastName).deliver rescue nil
         end
 
-        flash[:notice] = 'Account was successfully created'
+        flash[:notice] = t('users.account_successfully_created')
         session[:user] = LinkedData::Client::Models::User.authenticate(@user.username, @user.password)
         redirect_to_browse
       end
@@ -107,7 +107,7 @@ class UsersController < ApplicationController
         # @errors = {acronym: "Username already exists, please use another"} if error_response.status == 409
         render action: "edit"
       else
-        flash[:notice] = 'Account was successfully updated'
+        flash[:notice] = t('users.account_successfully_updated')
 
         if session[:user].username == @user.username
           session[:user].update_from_params(user_params)
@@ -126,9 +126,10 @@ class UsersController < ApplicationController
 
     if session[:user].admin?
       @user.delete
-      response[:success] << 'User deleted successfully '
+      response[:success] << t('users.user_deleted_successfully')
+
     else
-      response[:errors] << 'Not permitted '
+      response[:errors] << t('users.not_permitted')
     end
 
     respond_to do |format|
@@ -154,14 +155,14 @@ class UsersController < ApplicationController
     error_response = !@user.update
 
     if error_response
-      flash[:notice] = 'Error saving Custom Ontologies, please try again'
+      flash[:notice] = t('users.error_saving_custom_ontologies')
     else
       updated_user = LinkedData::Client::Models::User.find(@user.id)
       session[:user].update_from_params(customOntology: updated_user.customOntology)
       flash[:notice] = if updated_user.customOntology.empty?
-                         'Custom Ontologies were cleared'
+                        t('users.custom_ontologies_cleared')
                        else
-                         'Custom Ontologies were saved'
+                        t('users.custom_ontologies_saved')
                        end
     end
     redirect_to user_path(@user.username)
@@ -196,9 +197,9 @@ class UsersController < ApplicationController
     begin
       job.deliver
       to_or_from = action.eql?("subscribe") ? "to" : "from"
-      flash[:success] = "You have successfully  #{action} #{to_or_from} our user mailing list: #{$ANNOUNCE_LIST}"
+      flash[:success] = t('users.subscribe_flash_message', action: action, to_or_from: to_or_from, list: $ANNOUNCE_LIST)
     rescue => exception
-      flash[:error] = "Something went wrong ..."
+      flash[:error] = t('users.error_subscribe')
     end
     redirect_to '/account'
   end
@@ -242,27 +243,27 @@ class UsersController < ApplicationController
   def validate(params)
     errors = []
     if params[:email].nil? || params[:email].length < 1 || !params[:email].match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)
-      errors << "Please enter an email address"
+      errors << t('users.validate_email_address')
     end
     if params[:password].nil? || params[:password].length < 1
-      errors << "Please enter a password"
+      errors << t('users.validate_password')
     end
     if !params[:password].eql?(params[:password_confirmation])
-      errors << "Your Password and Password Confirmation do not match"
+      errors << t('users.validate_password_confirmation')
     end
     if using_captcha?
       if !verify_recaptcha
-        errors << "Please fill in the proper text from the supplied image"
+        errors << t('users.recaptcha_validation')
       end
     end
 
 
-    if ((!params[:orcidId]&.match(/^\d{4}+(-\d{4})+$/)) || (params[:orcidId].length != 19)) && !(params[:orcidId].nil? || params[:orcidId].length < 1)
-      errors << "Please enter a valid ORCID."
+    if ((!params[:orcidId].match(/^\d{4}+(-\d{4})+$/)) || (params[:orcidId].length != 19)) && !(params[:orcidId].nil? || params[:orcidId].length < 1)
+      errors << t('users.validate_orcid')
     end
 
     if params[:username].nil? || params[:username].length < 1 || !params[:username].match(/^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$/)
-      errors << "please enter a valid username"
+      errors << t('users.validate_username')
     end
     return errors
   end
@@ -270,22 +271,22 @@ class UsersController < ApplicationController
   def validate_update(params)
     errors = []
     if params[:email].nil? || params[:email].length < 1 || !params[:email].match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i)
-      errors << "Please enter a valid email adresse"
+      errors << t('users.valid_email_adresse')
     end
     if params[:firstName].nil? || params[:firstName].length < 1
-      errors << "First name field is required"
+      errors << t('users.first_name_required')
     end
     if params[:lastName].nil? || params[:lastName].length < 1
-      errors << "Last name field is required"
+      errors << t('users.last_name_required')
     end
     if params[:username].nil? || params[:username].length < 1
-      errors << "Last name field is required"
+      errors << t('users.last_name_required')
     end
     if params[:orcidId].present? && ((!params[:orcidId].match(/^\d{4}-\d{4}-\d{4}-\d{4}$/)) || (params[:orcidId].length != 19))
-      errors << "Please enter a valid ORCID."
+      errors << t('users.validate_orcid')
     end
     if !params[:password].eql?(params[:password_confirmation])
-      errors << "Your Password and Password Confirmation do not match"
+      errors << t('users.validate_password_confirmation')
     end
 
     return errors
