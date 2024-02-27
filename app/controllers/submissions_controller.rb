@@ -16,7 +16,7 @@ class SubmissionsController < ApplicationController
     @submissions = @ontology.explore.submissions({include: "submissionId,creationDate,released,modificationDate,submissionStatus,hasOntologyLanguage,version,diffFilePath,ontology", invalidate_cache: invalidate_cache?})
                             .sort {|a,b| b.submissionId.to_i <=> a.submissionId.to_i } || []
 
-    LOG.add :error, "No submissions for ontology: #{@ontology.id}" if @submissions.empty?
+    LOG.add :error, t('submissions.no_submissions_for_ontology', ontology: @ontology.id) if @submissions.empty?
     render :index, layout: nil
   end
 
@@ -98,7 +98,7 @@ class SubmissionsController < ApplicationController
 
     if params[:submission].nil?
       return redirect_to "/ontologies/#{acronym}",
-                         notice: 'Submission updated successfully'
+                         notice: t('submissions.submission_updated_successfully')
     end
 
     @submission, response = update_submission(update_submission_hash(acronym), submission_id, @ontology)
@@ -107,7 +107,7 @@ class SubmissionsController < ApplicationController
         show_new_errors(response, partial: 'submissions/form_content', id: 'test')
       else
         redirect_to "/ontologies/#{acronym}",
-                    notice: 'Submission updated successfully', status: :see_other
+                    notice: t('submissions.submission_updated_successfully'), status: :see_other
       end
     else
       @errors = response_errors(response) if response_error?(response)
