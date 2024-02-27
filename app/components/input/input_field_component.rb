@@ -1,5 +1,5 @@
 class Input::InputFieldComponent < ViewComponent::Base
-    def initialize(label: "" , name:, value: '', type: 'text', placeholder: "", error_message: "", helper_text: "", disabled: false, data: nil, id: '', min: '', max: '', step: '')
+    def initialize(label: "" , name:, value: '', type: 'text', placeholder: "", error_message: "", helper_text: "", disabled: false, data: nil, id: '', min: '', max: '', step: '', tooltip: nil)
         @label = label
         @name = name
         @placeholder  = placeholder
@@ -13,6 +13,7 @@ class Input::InputFieldComponent < ViewComponent::Base
         @min = min
         @max = max
         @step = step
+        @tooltip = tooltip
     end
 
 
