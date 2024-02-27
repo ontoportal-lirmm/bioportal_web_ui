@@ -26,7 +26,6 @@ class NotesController < ApplicationController
   end
 
   def new_proposal
-    binding.pry
     types = NOTES_PROPOSAL_TYPES.map { |x, y| [y, x.to_s] }
     render partial: 'new_proposal', locals: { parent_id: params[:parent_id], type: params[:proposal_type],
                                               parent_type: params[:parent_type], user_id: session[:user].id,
