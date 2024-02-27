@@ -25,6 +25,69 @@ en:
   
   acceptance: Acceptance
   additional_parameters: 'Additional parameters explained at '
+  collections:
+    error_valid_collection: "Error: You must provide a valid collection id"
+  concepts:
+    error_valid_concept: "Error: You must provide a valid concept id"
+    missing_roots: Missing roots
+  application:
+    loading: loading...
+    errors_in_fields: Errors in fields %{errors}
+    add_comment: Add comment
+    add_new_comment: Add a new comment
+    reply: Reply
+    add_proposal: Add proposal
+    add_new_proposal: Add a new proposal
+    watching: Watching
+    beta_badge_text: beta
+    beta_badge_tooltip: This feature is experimental and may have issues
+    ontology_not_found: Ontology %{acronym} not found
+    concept_not_found: Concept %{concept} not found
+    error_load: "Error: load failed"
+    not_found_message: Not Found
+    try_again: There was an error, please try again
+    provide_ontology_or_concept: Please provide an ontology id or concept id with an ontology id.
+    search_for_class: Please search for a class using the Jump To field above
+    missing_roots_for_ontology: Missing @roots for %{acronym}
+    missing_roots: Missing roots %{id}
+    missing_class: Missing class %{root_child}
+    missing_class_ontology: Missing class %{acronym} / %{concept_id}
+    error_simplify_class: "Failure to simplify class: %{cls}"
+    no_cache: "No cache or expired cache for ontology: %{id}"
+    incomplete_simple_ontology: "Incomplete simple ontology: %{id}, %{ont}"
+  label_xl:
+    error_valid_label_xl: "Error: You must provide a valid label_xl id"
+  admin:
+    query_not_permitted: Query not permitted
+    update_info_successfully: Update info successfully retrieved
+    error_update_info: Problem retrieving update info - %{message}
+    current_version: "Current version: %{version}"
+    appliance_id: "Appliance ID: %{id}"
+    no_record_exists: No record exists for ontology %{acronym}
+    cache_flush_success: UI cache successfully flushed
+    cache_flush_error: "Problem flushing the UI cache - %{class}: %{message}"
+    no_flush_command: "The UI cache does not respond to the 'flush_all' command"
+    cache_reset_success: UI cache connection successfully reset
+    cache_reset_error: Problem resetting the UI cache connection - %{message}
+    no_reset_command: The UI cache does not respond to the 'reset' command
+    clear_goo_cache_success: Goo cache successfully flushed
+    clear_goo_cache_error: "Problem flushing the Goo cache - %{class}: %{message}"
+    clear_http_cache_success: HTTP cache successfully flushed
+    clear_http_cache_error: "Problem flushing the HTTP cache - %{class}: %{message}"
+    refresh_report_without_ontologies: Refresh of ontologies report started successfully
+    refresh_report_with_ontologies: "Refresh of report for ontologies: %{ontologies} started successfully"
+    submission_deleted_successfully: Submission %{id} for ontology %{ont} was deleted successfully
+    submission_not_found: Submission %{id} for ontology %{ont} was not found in the system
+    ontology_not_found: Ontology %{ont} was not found in the system
+    problem_deleting_submission: "Problem deleting submission %{id} for ontology %{ont} - %{class}: %{message}"
+    problem_refreshing_report: "Problem refreshing report - %{class}: %{message}"
+    report_successfully_regenerated: Report successfully regenerated on %{report_date_generated}
+    ontologies_report_retrieved: Ontologies Report - retrieved %{ontologies} ontologies in %{time}s"
+    problem_retrieving_ontologies: Problem retrieving ontologies report - %{message}
+    no_ontologies_parameter_passed: "No ontologies parameter passed. Syntax: ?ontologies=ONT1,ONT2,...,ONTN"
+    ontology_process_success: "Ontology %{ont} %{success_keyword} successfully,"
+    ontology_not_found_system: "Ontology %{ont} was not found in the system, "
+    ontology_process_error: "Problem %{error_keyword} ontology %{ont} - %{class}: %{message},"
   application:
     powered_by: Powered by BioPortal
     projects: Projects
@@ -75,6 +138,16 @@ en:
       renew_license: Renew license
 
     groups:
+      group_created: group successfully created in %{time}s
+      group_error_creation: Problem creating the group  - %{message}
+      group_added_successfully: New Group added successfully
+      group_updated_successfully: group successfully updated in %{time}s
+      problem_of_updating: Problem updating the group - %{message}
+      group_deleted_successfully: group successfully deleted in in %{time}s
+      problem_of_deleting: Problem deleting the group - %{message}
+      synchronization_of_groups: Synchronization of groups started successfully
+      error_parsing: "Error parsing JSON response - %{class}: %{message}"
+      problem_synchronizing_groups: "Problem synchronizing groups - %{class}: %{message}"
       edit_button: Edit
       delete: Delete
       info_error_delete: "Can't delete this group because still used"
@@ -99,6 +172,13 @@ en:
         edit_group: Edit category
         save: Save
     categories:
+      category_created: category successfully created in  %{time}s
+      category_error_creation: Problem creating the category  - %{message}
+      category_added_successfully: New Category added successfully
+      category_updated_successfully: category successfully updated in %{time}s
+      problem_of_updating: Problem updating the category - %{message}
+      category_deleted_successfully: category successfully deleted in %{time}s
+      problem_of_deleting: Problem deleting the category - %{message}
       edit_button: "Edit"
       delete: Delete
       info_error_delete: Can't delete this category because still used
@@ -208,6 +288,16 @@ en:
   help: Help
 
   home:
+    bug: Bug
+    proposition: Proposition
+    question: Question
+    ontology_submissions_request: Ontology submissions request
+    include_name: Please include your name
+    include_email: Please include your email
+    include_comment: Please include your comment
+    fill_text: Please fill in the proper text from the supplied image
+    notice_feedback: Feedback has been sent
+    account_title: Account Information
     agroportal_figures: "%{site} in figures"
     benefit1: Discover new insights and knowledge by exploring other ontologies or smeantic resources in the repository.
     benefit2: Contribute to knowledge sharing and semantic interoperability in your domain.
@@ -291,6 +381,34 @@ en:
   knowledge_detail: Knowledge detail
   
   landscape:
+    classes: Number of classes
+    individuals: Number of individuals
+    properties: Number of properties
+    max_depth: Max depth
+    max_child_count: Max child count
+    average_child_count: Average child count
+    classes_with_one_child: Classes with one child
+    classes_with_more_than_25_children: Classes with more than 25 children
+    classes_with_no_definition: Classes with no definition
+    number_of_xioms_triples: Number of axioms (triples)
+    projects_count: "%{count} projects"
+    notes_count: "%{count} notes"
+    reviews_count: "%{count} reviews"
+    projects_count: "%{count} projects"
+    as_contact_count: "%{count} as contact"
+    as_contributor_count: "%{count} as contributor"
+    as_creator_count: "%{count} as creator"
+    as_curator_count: "%{count} as curator"
+    contributions: "Contributions: %{title}"
+    published_ontologies: published %{count} ontologies
+    funded_ontologies: funded %{count} ontologies
+    endorsed_ontologies: endorsed %{count} ontologies
+    number_of_ontologies_using_format: Number of ontologies using this format
+    number_of_ontologies_of_type: Number of ontologies of this ontology type
+    number_of_ontologies_of_formality_level: Number of ontologies of this formality level
+    number_of_ontologies_in_catalog: Number of ontologies in this catalog
+    number_of_ontologies: Number of ontologies
+    number_of_ontologies_with_class_count_in_range: Number of ontologies with a class count in this range
     average: Average
     fairness_interface_introduction: This interface shows how an ontology or a group responded successfully to O’FAIRe FAIRness assessment questions
     fairness_interface_details: See details for each ontologies on the specific ontology summary pages
@@ -298,8 +416,7 @@ en:
     average_metrics: Average metrics
     category: category
     filter_network: Filter network
-    funding_endorsing_organizations: Organizations funding and endorsing the most
-      ontologies
+    funding_endorsing_organizations: Organizations funding and endorsing the most ontologies
     group: group
     groups_and_categories: Groups and Categories
     intro: Visualize the panorama of ontologies and other semantic resources of %{site} via metadata aggregation.
@@ -465,6 +582,12 @@ en:
         actions: Actions
         see_other_properties: See other properties
   agents:
+    not_found_agent: Agent with id %{id}
+    add_agent: New Agent added successfully
+    update_agent: Agent successfully updated
+    agent_usages_updated: Agent usages successfully updated
+    agent_already_deleted: Agent %{id} already deleted
+    agent_deleted_successfully: Agent %{id} deleted successfully
     ontology_not_valid: "ontology is not valid, here are the errors: "
     save: Save
     not_used: Not used

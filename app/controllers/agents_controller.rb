@@ -9,7 +9,7 @@ class AgentsController < ApplicationController
   def show
     # we use :agent_id not :id
     @agent = LinkedData::Client::Models::Agent.find(params[:agent_id].split('/').last)
-    not_found("Agent with id #{params[:agent_id]}") if @agent.nil?
+    not_found(t('agents.not_found_agent', id: params[:agent_id])) if @agent.nil?
 
     @agent_id = params[:id] || agent_id(@agent)
     @name_prefix = params[:name_prefix]
@@ -53,7 +53,7 @@ class AgentsController < ApplicationController
     if new_agent.errors
       render_turbo_stream alert_error(id: alert_id) { JSON.pretty_generate(response_errors(new_agent)) }
     else
-      success_message = 'New Agent added successfully'
+      success_message = t('agents.add_agent')
       streams = [alert_success(id: alert_id) { success_message }]
 
       streams << prepend('admin_agents_table_body', partial: 'agents/agent', locals: { agent: new_agent })
@@ -97,7 +97,7 @@ class AgentsController < ApplicationController
     if response_error?(agent_update)
       render_turbo_stream(alert_error(id: alert_id) { JSON.pretty_generate(response_errors(agent_update)) })
     else
-      success_message = 'Agent successfully updated'
+      success_message = t('agents.update_agent')
       table_line_id = agent_table_line_id(agent_id(agent))
       agent = find_agent_display_all(agent.id.split('/').last)
       streams = [alert_success(id: alert_id) { success_message },
@@ -113,7 +113,7 @@ class AgentsController < ApplicationController
   def agent_usages
     @agent = find_agent_display_all
     @ontology_acronyms = LinkedData::Client::Models::Ontology.all(include: 'acronym', display_links: false, display_context: false, include_views: true).map(&:acronym)
-    not_found("Agent with id #{@agent.id}") if @agent.nil?
+    not_found(t('agents.not_found_agent', id: @agent.id)) if @agent.nil?
     render partial: 'agents/agent_usage'
   end
 
@@ -133,7 +133,7 @@ class AgentsController < ApplicationController
       render_turbo_stream(alert_error(id: alert_id) { helpers.agent_usage_errors_display(errors) })
     else
 
-      success_message = 'Agent usages successfully updated'
+      success_message = t('agents.agent_usages_updated')
       table_line_id = agent_table_line_id(agent_id(agent))
       agent.usages = new_usages
       streams = [alert_success(id: alert_id) { success_message },
@@ -151,14 +151,14 @@ class AgentsController < ApplicationController
     success_text = ''
 
     if @agent.nil?
-      success_text = "Agent #{params[:id]} already deleted"
+      success_text = t('agents.agent_already_deleted', id: params[:id])
     else
       error_response = @agent.delete
 
       if response_error?(error_response)
         error = response_errors(error_response)
       else
-        success_text = "Agent #{params[:id]} deleted successfully"
+        success_text = t('agents.agent_deleted_successfully', id: params[:id])
       end
     end
 
