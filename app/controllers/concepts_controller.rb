@@ -11,7 +11,7 @@ class ConceptsController < ApplicationController
     params[:id] = params[:id] ? params[:id] : params[:conceptid]
 
     if params[:id].nil? || params[:id].empty?
-      render :text => "Error: You must provide a valid concept id"
+      render :text => t('concepts.error_valid_concept')
       return
     end
 
@@ -35,7 +35,7 @@ class ConceptsController < ApplicationController
     params[:id] = params[:id] ? params[:id] : params[:conceptid]
 
     if params[:id].nil? || params[:id].empty?
-      render :text => "Error: You must provide a valid concept id"
+      render :text => t('concepts.error_valid_concept')
       return
     end
 
@@ -100,7 +100,7 @@ class ConceptsController < ApplicationController
     else
       get_class(params) #application_controller
       
-      not_found("Missing roots") if @root.nil?
+      not_found(t('concepts.missing_roots')) if @root.nil?
 
       render inline: helpers.concepts_tree_component(@root, @concept,
                                       @ontology.acronym, Array(params[:concept_schemes]&.split(',')), request_lang,
