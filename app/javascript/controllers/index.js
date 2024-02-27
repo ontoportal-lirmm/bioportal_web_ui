@@ -93,3 +93,6 @@ application.register("turbo-frame-error", TurboFrameErrorController)
 
 import SampleTextController from "./sample_text_controller"
 application.register("sample-text", SampleTextController)
+
+import AnnotatorController from "./annotator_controller"
+application.register('annotator', AnnotatorController)

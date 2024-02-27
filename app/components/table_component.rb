@@ -5,7 +5,7 @@ class TableComponent < ViewComponent::Base
   renders_one :header, TableRowComponent
   renders_many :rows, TableRowComponent
 
-  def initialize(id: '', stripped: true, borderless: false, layout_fixed: false, small_text: false, custom_class: '', outline: false, sort: false, default_sort_column: '0', paging: false, searching: false)
+  def initialize(id: '', stripped: true, borderless: false, custom_class: '', layout_fixed: false, small_text: false, outline: false, sort_column: nil, paging: false, searching: false, no_init_sort: false)
     super
     @id = id
     @stripped = stripped
@@ -13,11 +13,11 @@ class TableComponent < ViewComponent::Base
     @layout_fixed = layout_fixed
     @small_text = small_text
     @outline = outline
-    @sort = sort
-    @default_sort_column = default_sort_column
-    @paging = paging
+    @sort_column = sort_column
     @searching = searching
-    @custom_class = custom_class
+    @paging = paging
+    @no_init_sort = no_init_sort
+    @custom_class =custom_class
   end
 
   def stripped_class
@@ -29,7 +29,7 @@ class TableComponent < ViewComponent::Base
   end
 
   def layout_fixed_class
-    @layout_fixed ? 'table-layout-fixed' : ''
+    @layout_fixed ? 'table-layout-fixed' : 'table-auto-layout'
   end
 
   def add_row(*array, &block)
