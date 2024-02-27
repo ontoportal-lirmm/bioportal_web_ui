@@ -237,7 +237,7 @@ module SubmissionInputsHelper
   end
 
   def ontology_view_of_input(ontology = @ontology)
-    render Layout::RevealComponent.new(selected: !ontology.view?, toggle: true) do |c|
+    render Layout::RevealComponent.new(selected: ontology.view?, toggle: true) do |c|
       c.button do
         content_tag(:span, class: 'd-flex mb-2') do
           switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is this ontology a view of another ontology?', checked: ontology.view?, style: 'font-size: 14px;')
