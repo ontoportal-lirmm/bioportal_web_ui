@@ -120,13 +120,13 @@ module NotesHelper
   def get_note_type_text(note_type)
     case note_type
     when "Comment"
-      return "Comment"
+      return t('notes.comment')
     when "ProposalNewClass"
-      return "New Class Proposal"
+      return t('notes.new_class_proposal')
     when "ProposalChangeHierarchy"
-      return "New Relationship Proposal"
+      return t('notes.new_relationship_proposal')
     when "ProposalChangeProperty"
-      return "Change Property Value Proposal"
+      return t('notes.change_property_value_proposal')
     end
   end
   

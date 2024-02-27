@@ -2,7 +2,7 @@ module ComponentsHelper
 
   def check_resolvability_container(url)
     turbo_frame_tag("#{escape(url)}_container", src: "/check_url_resolvability?url=#{escape(url)}", loading: "lazy", class: 'd-inline-block') do
-      content_tag(:div, class: 'p-1', data: { controller: 'tooltip' }, title: 'checking resolvability...') do
+      content_tag(:div, class: 'p-1', data: { controller: 'tooltip' }, title: t('components.check_resolvability')) do
         render LoaderComponent.new(small: true)
       end
     end
@@ -35,7 +35,7 @@ module ComponentsHelper
         children_link, data, href = child_data_generator.call(child)
 
         if children_link.nil? || data.nil? || href.nil?
-          raise ArgumentError, "child_data_generator block did not provide all the child arguements"
+          raise ArgumentError, t('components.error_block')
         end
 
         tree_child.child(child: child, href: href,
@@ -131,7 +131,7 @@ module ComponentsHelper
     render DropdownContainerComponent.new(title: title, id: id, tooltip: tooltip, is_open: is_open) do |d|
       d.empty_state do
         properties_string = properties.keys[0..4].map { |key| "<b>#{attr_label(key, attr_metadata: attr_metadata(key), show_tooltip: false)}</b>" }.join(', ') + '... ' if properties
-        empty_state_message "The fields #{properties_string} are empty"
+        empty_state_message t('components.empty_field', properties: properties_string)
       end
 
       render Layout::ListComponent.new do |c|
@@ -145,7 +145,7 @@ module ComponentsHelper
   end
 
   def form_save_button
-    render Buttons::RegularButtonComponent.new(id: 'save-button', value: "Save", variant: "primary", size: "slim", type: "submit") do |btn|
+    render Buttons::RegularButtonComponent.new(id: 'save-button', value: t('components.save_button'), variant: "primary", size: "slim", type: "submit") do |btn|
       btn.icon_left do
         inline_svg_tag "check.svg"
       end
@@ -153,7 +153,7 @@ module ComponentsHelper
   end
 
   def form_cancel_button
-    render Buttons::RegularButtonComponent.new(id: 'cancel-button', value: "Cancel", variant: "secondary", size: "slim") do |btn|
+    render Buttons::RegularButtonComponent.new(id: 'cancel-button', value: t('components.cancel_button'), variant: "secondary", size: "slim") do |btn|
       btn.icon_left do
         inline_svg_tag "x.svg", width: "20", height: "20"
 
