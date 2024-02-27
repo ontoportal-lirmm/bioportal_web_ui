@@ -39,16 +39,16 @@ class Admin::CategoriesController < ApplicationController
       if response_error?(category_saved)
         response[:errors] = response_errors(category_saved)
       else
-        response[:success] = "category successfully created in  #{Time.now - start}s"
+        response[:success] = t('admin.categories.category_created', time: Time.now - start)
       end
     rescue Exception => e
-      response[:errors] = "Problem creating the category  - #{e.message}"
+      response[:errors] = t('admin.categories.category_error_creation', message: e.message)
     end
 
     if response[:errors]
       render_turbo_stream alert_error(id: 'category') { response[:errors] }
     else
-      success_message = 'New Category added successfully'
+      success_message = t('admin.categories.category_added_successfully')
       streams = [alert_success(id: 'category') { success_message }]
 
       streams << prepend('admin_categories_table_body', partial: 'admin/categories/category', locals: { category: category_saved })
@@ -71,10 +71,10 @@ class Admin::CategoriesController < ApplicationController
       if response_error?(category_updated)
         response[:errors] = response_errors(category_updated)
       else
-        response[:success] = "category successfully updated in  #{Time.now - start}s"
+        response[:success] = t('admin.categories.category_updated_successfully', time: Time.now - start)
       end
     rescue Exception => e
-      response[:errors] = "Problem updating the category - #{e.message}"
+      response[:errors] = t('admin.categories.problem_of_updating', message: e.message)
     end
 
     if response[:errors]
@@ -98,10 +98,10 @@ class Admin::CategoriesController < ApplicationController
       if response_error?(error_response)
         response[:errors] = response_errors(error_response)
       else
-        response[:success] = "category successfully deleted in  #{Time.now - start}s"
+        response[:success] = t('admin.categories.category_deleted_successfully', time: Time.now - start)
       end
     rescue Exception => e
-      response[:errors] = "Problem deleting the category - #{e.message}"
+      response[:errors] = t('admin.categories.problem_of_deleting', message: e.message)
     end
     respond_to do |format|
       format.turbo_stream do
