@@ -11,7 +11,7 @@
     = agent.agentType
   %td
     - count = agent_usages_count(agent)
-    = link_to_modal(nil, "/agents/#{agent.id.split('/').last}/usages", style: 'width: 120px', class: "btn btn-sm btn-#{count.zero? ? 'danger' : 'light'}", data: { show_modal_title_value:t("agents.modal_title", agent: agent.name)}) do
+    = link_to_modal(nil, "/agents/#{agent.id.split('/').last}/usages", style: 'width: 120px', class: "btn btn-sm btn-#{count.zero? ? 'danger' : 'light'}", data: { show_modal_title_value:t("agents.modal_title", name: agent.name)}) do
       = count.zero? ? t("agents.not_used") : t("agents.see_usages_count", count: count)
 
   %td{:class => 'delete_mappings_column'}
