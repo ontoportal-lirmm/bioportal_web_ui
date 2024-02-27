@@ -71,15 +71,15 @@ module ComponentsHelper
     content_tag(:p, message.html_safe, class: 'font-italic field-description_text')
   end
 
-  def properties_list_component(c, properties, &block)
+  def properties_list_component(c, properties, truncate: true, &block)
     properties.each do |k, value|
       values, label = value
       c.row do
         content = if block_given?
                     capture(values, &block)
                   else
-                    if link?(Array(values).first)
-                      horizontal_list_container(values) { |v| link?(v) ? render(LinkFieldComponent.new(value: v)) : v }
+                    if Array(values).any?{|v| link?(v)}
+                      horizontal_list_container(values, truncate: truncate) { |v| link?(v) ? render(LinkFieldComponent.new(value: v)) : v }
                     else
                       Array(values).join(', ')
                     end
@@ -90,10 +90,10 @@ module ComponentsHelper
 
   end
 
-  def horizontal_list_container(values, &block)
+  def horizontal_list_container(values, truncate: true, &block)
     return if Array(values).empty?
 
-    render Layout::HorizontalListComponent.new do |l|
+    render Layout::HorizontalListComponent.new(truncate: truncate) do |l|
       Array(values).each do |v|
         l.element do
           capture(v, &block)

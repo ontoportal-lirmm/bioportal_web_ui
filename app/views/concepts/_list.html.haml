@@ -11,6 +11,5 @@
           children_href: '#', selected: concept.id.eql?(concepts.first.id) && c.auto_click?,
           target_frame: 'concept_show', data: data)
   - c.error do
-    The Collection didn't define any member
-
+    = t('concepts.list_error')
 
