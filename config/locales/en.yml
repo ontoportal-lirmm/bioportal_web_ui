@@ -74,46 +74,28 @@ en:
   all: All
   
   annotator:
-    annotate_text_prompt: Enter or paste text to be annotated
-    annotations_result: Annotations
-    fast_context: FastContext
-    filters:
-      confidence_threshold: Filter confidence threshold
-      confidence_threshold_help: Specify the minimum position in the score distribution
-        (between 1 and 100).
-      exclude_numbers: Exclude numbers
-      exclude_synonyms: Exclude synonyms
-      include_mappings: Include mappings
-      match_longest_only: Match longest only
-      match_partial_words: Recognize partial words
-      max_hierarchy_level: Include ancestors up to level
-      score: Include score
-      score_help: Score annotations following previous NCBO 2009 measure (old) or
-        Score annotations following C-Value measure (cvalue) or Score annotations
-        following C-Value measure with hierarchy expansion (cvalueh).
-      score_threshold: Filter by score threshold
-      score_threshold_help: Specify minimum score value for annotations.
-    get_annotator: Get annotations
-    index:
-      fast_context:
-        tooltip: 'Enable FastContext to detect: if a concept is denied (affirmed,
-          denied), who experienced the found concept (patient, other), when the annotated
-          concept occurred (recent, historical, hypothetical), and/ or if the annotated
-          concept is uncertain (certain, uncertain).'
-      intro: Get annotations for text with ontology classes
-      lemmatize:
-        tooltip: Enable Lemmatize to lemmatize submitted text and use a lemmatized
-          dictionary for annotations
-      sample_text: Melanoma is a malignant tumor of melanocytes found mainly in the
-        skin but also in the intestine and the eye.
-    lemmatize: Lemmatize
-    results_filtered_by: Results are filtered by
-    select: Select %{name}
-    start_typing_to_select: Start typing to select %{type} or leave blank to use all
     title: Annotator
-    umls:
-      semantic_groups: UMLS Semantic Groups
-      semantic_types: UMLS Semantic Types
+    description: Get annotations for text with ontology classes
+    input_hint: Enter or past a text to be annotated ...
+    options: Options
+    prefrences: Prefrences
+    whole_word_only: Whole word only
+    match_longest_only: Match longest only
+    recognize_partial_words: Recognize partial words
+    include_mappings: Include mappings
+    exclude_numbers: Exclude numbers
+    exclude_synonyms: Exclude synonyms
+    select_umls_sementic_types: Select UMLS semantic types
+    select_umls_sementic_groupes: Select UMLS semantic groupes
+    include_ancentors: Include ancentors up to level
+    include_score: Include score
+    score_threshold: Filter by score threshold
+    confidence_threshold: Filter by confidence threshold
+    fastcontext: FastContext
+    lemmatize: Lemmatize
+    get_annotation: Get annotations
+    total_results: Total results
+
   
   certainty: Certainty
   class: Class
@@ -413,7 +395,7 @@ en:
       identifiers: Identifiers
       affiliations: Affiliations
     index:
-      create_new_agent: Create new agent
+      create_new_agent: Create New Agent
       first_name: First name
       usages: Usages
       actions: Actions
@@ -671,7 +653,7 @@ en:
       username: "Username:"
       email: "Email:"
       orcid_id: "ORCID ID:"
-      github_id: "Github ID:"
+      github_id: "GitHub ID:"
       mailing_list_subscription: Mailing list subscription
       mailing_list_description: Register to the %{portal} announcements mailing list.
       api_key_description: Your API Key can be used to access  %{portal} Web services
@@ -688,9 +670,9 @@ en:
       select_custom_semantic_resources: Select custom semantic resources
       save_custom_semantic_resources: Save custom semantic resources
       not_subscribed: Not subscribed to any semantic resource
-      submitted_semantic_resources: Submitted semantic resources 
+      submitted_semantic_resources: Submitted Semantic Resources
       upload_semantic_resources: Upload semantic resources 
-      projects_created: Projects created
+      projects_created: Projects Created
       no_project_created: No project created
       unsubscribe: Unsubscribe
       subscribe: Subscribe
@@ -1064,7 +1046,7 @@ en:
         keywords_and_classes: Keywords and classes
         languages: Languages
         pull_location: Pull location
-        export_metadata: Export metadata
+        export_metadata: Export all metadata
         abstract: Abstract
         description: Description
   precache:

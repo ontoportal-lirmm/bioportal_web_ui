@@ -705,7 +705,7 @@ class ApplicationController < ActionController::Base
   
   # Get the submission metadata from the REST API.
   def submission_metadata
-    @metadata ||= JSON.parse(Net::HTTP.get(URI.parse("#{REST_URI}/submission_metadata?apikey=#{API_KEY}")))
+    @metadata ||= JSON.parse(LinkedData::Client::HTTP.get("#{REST_URI}/submission_metadata", {}, raw: true))
   end
   helper_method :submission_metadata
 
