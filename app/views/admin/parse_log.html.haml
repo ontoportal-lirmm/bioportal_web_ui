@@ -1,6 +1,6 @@
-- @title = "Parse Log for #{@acronym}"
-%h1.tab_header Parse Log for #{@acronym}
+- @title = t('admin.parse_log.title', acronym: @acronym)
+%h1.tab_header= t('admin.parse_log.title', acronym: @acronym)
 %br
-%h2{:style => "padding:5px 0 10px 13px;"} Log file: #{@log_file_path}
+%h2{:style => "padding:5px 0 10px 13px;"}= t('admin.parse_log.log_file', path: @log_file_path)
 %pre{:style => "padding:0 13px 20px 13px;"}
   #{@parse_log}
