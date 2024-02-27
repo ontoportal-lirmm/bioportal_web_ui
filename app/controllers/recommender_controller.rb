@@ -1,6 +1,6 @@
 class RecommenderController < ApplicationController
   layout :determine_layout
-
+  include ApplicationHelper
   # REST_URI is defined in application_controller.rb
   RECOMMENDER_URI = "/recommender"
 
@@ -43,18 +43,12 @@ class RecommenderController < ApplicationController
   end
 
   def recommendation_annotations(recommendation)
-    recommendation.coverageResult.annotations.map{|annotation| {text: annotation.text, link:  url_to_endpoint(annotation.annotatedClass.links['self'])}}
+    recommendation.coverageResult.annotations.map{|annotation| {text: annotation.text, link: url_to_endpoint(annotation.annotatedClass.links['self'])}}
   end
 
   def percentage(string)
     result = string.to_f * 100
     result.round(1).to_s
-  end
-
-  def url_to_endpoint(url)
-    uri = URI.parse(url)
-    endpoint = uri.path.sub(/^\//, '')
-    endpoint
   end
 
   def recommender_params_empty?

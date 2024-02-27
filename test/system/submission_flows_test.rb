@@ -328,7 +328,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_equal existent_submission.pullLocation, find_field('submission[pullLocation]').value
 
     click_button 'Next'
-
+    
     assert_equal Date.parse(existent_submission.modificationDate).to_s, find('[name="submission[modificationDate]"]', visible: false).value
     assert_equal existent_submission.contact.map(&:values).flatten.sort, all('[name^="submission[contact]"]').map(&:value).sort
 

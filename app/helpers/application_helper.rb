@@ -22,8 +22,11 @@ module ApplicationHelper
                        :wdrs => "http://www.w3.org/2007/05/powder-s#", :cito => "http://purl.org/spar/cito/", :pav => "http://purl.org/pav/", :nkos => "http://w3id.org/nkos/nkostype#",
                        :oboInOwl => "http://www.geneontology.org/formats/oboInOwl#", :idot => "http://identifiers.org/idot/", :sd => "http://www.w3.org/ns/sparql-service-description#",
                        :cclicense => "http://creativecommons.org/licenses/"}
-
-
+  def url_to_endpoint(url)
+    uri = URI.parse(url)
+    endpoint = uri.path.sub(/^\//, '')
+    endpoint
+  end
 
 
   def resolve_namespaces
@@ -607,14 +610,14 @@ module ApplicationHelper
   def show_advanced_options_button(text: nil, init: nil)
     content_tag(:div, class: "#{init ? 'd-none' : ''} advanced-options-button", 'data-action': 'click->reveal-component#show', 'data-reveal-component-target': 'showButton') do
       inline_svg_tag('icons/settings.svg') +
-        content_tag(:div, text, class: 'text')
+      content_tag(:div, text, class: 'text')
     end
   end
 
   def hide_advanced_options_button(text: nil, init: nil)
     content_tag(:div, class: "#{init ? '' : 'd-none'} advanced-options-button", 'data-action': 'click->reveal-component#hide', 'data-reveal-component-target': 'hideButton') do
       inline_svg_tag('icons/hide.svg') +
-        content_tag(:div, text, class: 'text')
+      content_tag(:div, text, class: 'text')
     end
   end
   
@@ -633,4 +636,10 @@ module ApplicationHelper
       content_tag(:p, text)
     end
   end
+
+  def list_to_string(list)
+    list&.join(',') || ''
+  end
+
+
 end
