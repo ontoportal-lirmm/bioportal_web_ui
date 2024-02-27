@@ -69,7 +69,13 @@ en:
     licenses:
       create:
         success: License renewed successfully!
-    label_close: Close
+      label_close: Close
+      form:
+        license_from_being_saved: "prohibited this license from being saved:"
+        paste_your_license: Paste your license key into the text area
+        submit: Submit
+
+
   
   all: All
   
@@ -836,9 +842,66 @@ en:
       additional_parameters_explained: Additional parameters explained at
       annotator_api_documentation: Annotator API documentation
 
+  collections:
+    no_collections_alert: "%{acronym} does not contain collections (skos:Collection)"
+    id: ID
+    preferred_name: Preferred name
+    members_count: Members count
+    type: Type
+  change_requests:
+    change_request_success_message: Your change request was successfully submitted! View the %{url} on GitHub.
+    label: Label
+    type: Type
+    comment: Comment
+    close: Close
+    submit: Submit
+
+  check_resolvability:
+    check_resolvability_message_1: "The URL is resolvable and support the following formats: %{supported_format}"
+    check_resolvability_message_2: "The URL resolvable but is not content negotiable, support only: %{supported_format}"
+    check_resolvability_message_3: The URL is not resolvable and not content negotiable (returns %{status}).
+    uri_placeholder: Type a URI to test its resolvability
+    show_help: Show help
+    format_not_specified: Format not specified
+    how_it_works:
+      title: How it works
+      content_1: |
+        The check resolvability tool allows you to test if a given URL is resolvable. It is based on the HTTP HEAD method.
+        We check the resolvability of a URL by sending a HEAD request to the URL and checking if the response status code is 200 (OK) and
+        the returned content type is equal to one of the following %{resolvability_formats}.
+      content_2: |
+        We have a timeout set to %{resolvability_timeout} seconds, so if the URL is not resolvable within that time, the check will fail.
+        And a max redirections set to %{resolvability_max_redirections}, so if the URL is not resolvable within that number of redirections, the check will fail.
+    resolving_uri:
+      title: Resolving a URI
+      content: |
+        In the context of web semantics, dereferencing refers to the process of resolving and obtaining the actual data associated with a Uniform Resource Identifier (URI). In simpler terms, it involves following a link represented by a URI/IRI to retrieve information or resources linked to that identifier.
+        In the Semantic Web, URIs are used to uniquely identify resources, and dereferencing allows systems to access and retrieve data related to those resources. When a URI/IRI is dereferenced, it typically leads to the retrieval of RDF (Resource Description Framework) data or other structured information that describes the resource in a machine-readable format. This enables systems to understand and process the meaning of the linked data, facilitating the exchange and integration of information on the web.
+    content_negotiation:
+      title: Content negotiation
+      content: |
+        Content negotiation in the context of the Semantic Web refers to the mechanism by which two communicating parties, such as a client and a server, agree on the most suitable representation of a resource during the process of dereferencing a URI or IRI. This negotiation aims to ensure effective communication between different systems that may prefer different data formats or languages.
+        In other words, when a client requests a resource by dereferencing a URI, it indicates its preferences for the format or language of the response data through HTTP headers or other negotiation mechanisms. The server, in turn, examines these preferences and selects the most appropriate representation of the resource based on what is available.
+        different formats can be agreed upon between a client and server when accessing linked data. Common formats include:
+
+        RDF/XML: XML-based representation of Resource Description Framework data.
+        Turtle: Human-readable serialization format for RDF.
+        JSON-LD: JSON-based format for linked data.
+        N-Triples and N-Quads: Text formats for expressing RDF triples and quads.
+        HTML: Markup language for web pages, also used to embed RDF data.
+        RDFa: Embedding RDF data in HTML or XML using attributes.
+        SPARQL Query Results XML and JSON: Formats for representing SPARQL query results.
+
+  errors:
+    error_message: We're sorry but something has gone wrong.
+    notification_error: We have been notified of this error.
+    go_home_button: Go home
+    send_feedback_button: Send a feedback
+    not_found_page: Page not found
+  
   schemes:
     id: ID
-    preferred_name: Preferred Name
+    preferred_name: Preferred name
     type: Type
   fair_score:
     mod_link: MOD1.4
