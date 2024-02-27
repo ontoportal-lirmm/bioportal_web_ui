@@ -60,6 +60,7 @@ module ApplicationTestHelpers
 
     def delete_ontologies(ontologies = @ontologies)
       Array(ontologies).each do |o|
+        next unless o.acronym
         LinkedData::Client::Models::Ontology.find_by_acronym(o.acronym).first&.delete
       end
     end
