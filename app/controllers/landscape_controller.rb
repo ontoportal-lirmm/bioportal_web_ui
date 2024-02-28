@@ -542,7 +542,7 @@ class LandscapeController < ApplicationController
       groups_info_hash[group.acronym][:name] = group.name
       groups_info_hash[group.acronym][:description] = []
       # Slice the description in 6 words string to avoid too long sentence in the bar chart tooltip in js
-      group.description.split(" ").each_slice(6) {|slice| groups_info_hash[group.acronym][:description].push(slice.join(" ")) }
+      group.description.split(" ").each_slice(6) {|slice| groups_info_hash[group.acronym][:description].push(slice.join(" ")) } if group.description
     end
 
     domains_info_hash = {}
@@ -552,7 +552,7 @@ class LandscapeController < ApplicationController
       domains_info_hash[domain.acronym][:name] = domain.name
       domains_info_hash[domain.acronym][:description] = []
       # Slice the description in 6 words string to avoid too long sentence in the bar chart tooltip in js
-      domain.description.split(" ").each_slice(6) {|slice| domains_info_hash[domain.acronym][:description].push(slice.join(" ")) }
+      domain.description.split(" ").each_slice(6) {|slice| domains_info_hash[domain.acronym][:description].push(slice.join(" ")) } if domain.description
     end
 
     @landscape_data = {
