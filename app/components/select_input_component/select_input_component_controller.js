@@ -29,6 +29,8 @@ export default class SelectInput extends Controller {
         }
       }
     }
+    
+    myOptions['maxOptions'] = Infinity
 
     if(!this.searchableValue){
       myOptions['controlInput'] = null
