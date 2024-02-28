@@ -9,7 +9,7 @@ module MultiLanguagesHelper
   end
 
   def portal_language_help_text
-    "Indicate the language in which the interfaces should appear"
+    t('language.portal_language_help_text')
   end
   def portal_languages
     {
@@ -49,7 +49,7 @@ module MultiLanguagesHelper
 
   def search_language_help_text
     content_tag(:div, style: 'width: 300px; text-align: center') do
-      "Indicate the language on which to perform the search, restricting text matching exclusively to terms with that language"
+      t('language.search_language_help_text')
     end
   end
   def search_languages
@@ -80,9 +80,9 @@ module MultiLanguagesHelper
   end
   def content_language_help_text
     content_tag(:div, style: 'width: 350px;') do
-      concat content_tag(:div, "Indicate the language  on which the content of this resource will be displayed.")
+      concat content_tag(:div, t('language.content_language_help_text_1'))
       concat(content_tag(:div, class: "mt-1" ) do
-        content_tag(:span, "The available languages are specified by the resource admin.") + edit_sub_languages_button
+        content_tag(:span, t('language.content_language_help_text_2')) + edit_sub_languages_button
       end)
     end
   end

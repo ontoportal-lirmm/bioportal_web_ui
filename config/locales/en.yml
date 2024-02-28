@@ -25,6 +25,12 @@ en:
   
   acceptance: Acceptance
   additional_parameters: 'Additional parameters explained at '
+  language:
+    translation_not_available: "%{language} translation not available"
+    portal_language_help_text: Indicate the language in which the interfaces should appear
+    search_language_help_text: Indicate the language on which to perform the search, restricting text matching exclusively to terms with that language
+    content_language_help_text_1: Indicate the language  on which the content of this resource will be displayed.
+    content_language_help_text_2: The available languages are specified by the resource admin.
   collections:
     error_valid_collection: "Error: You must provide a valid collection id"
   concepts:
@@ -493,6 +499,16 @@ en:
       visit_the_site: visit the full site
 
   login:
+    invalid_account_combination: "Invalid account name/password combination"
+    authentication_failed: "%{provider} authentication failed"
+    admin_logged_out: Logged out <b>%{old_user}</b>, returned to <b>%{user}</b>
+    user_logged_out: You have successfully logged out
+    try_again_notice: ". Please try again."
+    reset_password_again: ". Please reset your password again."
+    custom_ontology_set: "The display is now based on your <a href='/account#custom_ontology_set'>Custom Ontology Set</a>."
+    welcome: "Welcome <b>"
+    error_account_name: Please enter an account name
+    error_password: Please enter a password
     enter_email: Enter your username
     enter_password: Enter your password
     forgot_password: Forgot password?
@@ -522,6 +538,16 @@ en:
     ontology_visits: Ontology visits
 
   mappings:
+    external_mappings: "External Mappings (%{number_with_delimiter})"
+    interportal_mappings: "Interportal Mappings - %{acronym} (%{number_with_delimiter})"
+    test_bulk_load: This is the mappings produced to test the bulk load
+    external_mappings: External Mappings
+    interportal_mappings: Interportal - %{acronym} (%{number_with_delimiter})
+    mapping_created: Mapping created
+    mapping_updated: Mapping updated
+    mapping_deleted: "%{map_id} deleted successfully"
+    mapping_not_found: "Mapping %{id} not found"
+    error_of_source_and_target: Source and target concepts need to be specified
     mapping_issue: "Mapping issue with '%{mapping}' : %{message}"
     find_mappings: Find mappings of a class/concept
     intro: Find all the mappings of an ontology
@@ -967,10 +993,13 @@ en:
   hide_advanced_options: Hide advanced options
   no_result_was_found: No result was found
   notes:
-    comment: Comment
     new_class_proposal: New Class Proposal
     new_relationship_proposal: New Relationship Proposal
     change_property_value_proposal: Change Property Value Proposal
+    new_comment_added: New comment added successfully
+    note_deleted_successfully: Note %{note_id}  was deleted successfully
+    note_not_found: Note %{note_id}  was not found in the system
+    comment: Comment
     new_comment: 
       subject: Subject
       comment: Comment
@@ -1065,6 +1094,11 @@ en:
       bioportal_user:  BioPortal User ID
 
   annotator_plus:
+    query: "Query: %{query}"
+    retrieved_annotations: "Retrieved %{annotations} annotations: %{time}s"
+    completed_massage_for_annotated: "Completed massage for annotated classes: %{time}s"
+    failed_get_class_details: "Failed to get class details for: %{details}"
+    not_found_message: Not Found
     title: Annotator Plus
     annotator: Annotator &plus;
     intro: Get annotations for text with ontology classes
