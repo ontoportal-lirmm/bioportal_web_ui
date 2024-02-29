@@ -96,3 +96,6 @@ application.register("sample-text", SampleTextController)
 
 import AnnotatorController from "./annotator_controller"
 application.register('annotator', AnnotatorController)
+
+import MappingsController from "./mappings_controller"
+application.register('mappings', MappingsController)
