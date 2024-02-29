@@ -63,6 +63,9 @@ en:
     incomplete_simple_ontology: "Incomplete simple ontology: %{id}, %{ont}"
   label_xl:
     error_valid_label_xl: "Error: You must provide a valid label_xl id"
+  application:
+    powered_by: Powered by BioPortal
+    projects: Projects
   admin:
     query_not_permitted: Query not permitted
     update_info_successfully: Update info successfully retrieved
@@ -94,10 +97,6 @@ en:
     ontology_process_success: "Ontology %{ont} %{success_keyword} successfully,"
     ontology_not_found_system: "Ontology %{ont} was not found in the system, "
     ontology_process_error: "Problem %{error_keyword} ontology %{ont} - %{class}: %{message},"
-  application:
-    powered_by: Powered by BioPortal
-    projects: Projects
-  admin:
     new_ontologies_created_title: "The following ontologies: %{count} were created in this year"
     turbo_confirm: "Are you sure you want to %{name}?"
     analytics:
@@ -168,7 +167,7 @@ en:
         create_new_group: Create new group
         create_group: Create group
       index:
-        Create_a_new_group: Create a new group
+        create_a_new_group: Create a new group
         synchronize_groups_slices: Synchronize groups with slices
         id: ID
         count: COUNT
@@ -202,7 +201,7 @@ en:
         create_new_category: Create new category
         create_category: Create category
       index:
-        Create_a_new_category: Create a new category
+        create_a_new_category: Create a new category
         id: ID
         count: COUNT
         actions: Actions
@@ -711,37 +710,6 @@ en:
   negation: negation
   none: none
  
-  ontologies:
-    no_license: No license
-    view_license: View license
-    access_rights_information: Additional license a access rights information
-    referred_to: It can also be referred to as
-    private_ontology: Private Ontology
-    formality_levels: Formality levels
-    ontology_types: Ontology types
-    natural_languages: Natural languages
-    showing: Showing
-    metadata_properties: of %{acronym}  metadata properties are filled
-    metadata_only: N/A - metadata only
-    home_page: Home Page
-    ontology_processing_failed: "The ontology processing failed, with the current statuses: %{status}"
-    ontology_parsing_succeeded: "The ontology parsing succeeded, but some processing steps failed, here are the current statuses: %{status}"
-    upload_an_ontology: Upload an ontology. Sections such as %{ontology} will be available once done.
-    ontology_is_processing: The ontology is processing. Sections such as %{ontology} will be available once processing is complete.
-    contact_support: Contact support
-    edit_natural_languages: Edit natural languages of %{acronym}
-    edit_available_languages: Click here to edit available languages
-    add_new_submission: Add new submission
-    edit_metadata: Edit metadata
-    go_to_api: Go to API
-    projects_using_ontology: Projects using %{acronym}
-    create_new_project: Create new project
-    no_projects_using_ontology: No projects using %{acronym}
-    outside: outside
-    relation_with_other_ontologies: Relation with other ontologies either in %{inside} or %{outside}
-    ontology_search_prompt: 'Search an ontology or a term (e.g., plant height)'
-    self: Ontologies
-  
   ontology: Ontology
   ontology_details:
     concept:
@@ -1288,6 +1256,35 @@ en:
     update_the_current_displayed_content: "will update the current displayed content to all the following submissions:"
     save: Save
   ontologies:
+    no_license: No license
+    view_license: View license
+    access_rights_information: Additional license a access rights information
+    referred_to: It can also be referred to as
+    private_ontology: Private Ontology
+    formality_levels: Formality levels
+    ontology_types: Ontology types
+    natural_languages: Natural languages
+    showing: Showing
+    metadata_properties: of %{acronym}  metadata properties are filled
+    metadata_only: N/A - metadata only
+    home_page: Home Page
+    ontology_processing_failed: "The ontology processing failed, with the current statuses: %{status}"
+    ontology_parsing_succeeded: "The ontology parsing succeeded, but some processing steps failed, here are the current statuses: %{status}"
+    upload_an_ontology: Upload an ontology. Sections such as %{ontology} will be available once done.
+    ontology_is_processing: The ontology is processing. Sections such as %{ontology} will be available once processing is complete.
+    contact_support: Contact support
+    edit_natural_languages: Edit natural languages of %{acronym}
+    edit_available_languages: Click here to edit available languages
+    add_new_submission: Add new submission
+    edit_metadata: Edit metadata
+    go_to_api: Go to API
+    projects_using_ontology: Projects using %{acronym}
+    create_new_project: Create new project
+    no_projects_using_ontology: No projects using %{acronym}
+    outside: outside
+    relation_with_other_ontologies: Relation with other ontologies either in %{inside} or %{outside}
+    ontology_search_prompt: 'Search an ontology or a term (e.g., plant height)'
+    self: Ontologies
     views:  Views
     create_new_view: Create new view
     expand_all: Expand All
@@ -1330,7 +1327,6 @@ en:
     contact_support: "If you have any questions or problems, please email the %{site} support team at:"
     collecting_data_message: We are still collecting data for %{acronym}
     submit_new_ontology: Submit new ontology
-    add_new_submission: "Add new submission for ontology %{acronym}"
     details: Details
     general_information: General information
     dates_and_contacts: Dates and contacts
@@ -1362,10 +1358,9 @@ en:
       classes_with_a_single_child: Classes with a single child
       classes_with_more_than_25_children: Classes with more than 25 children
       classes_with_no_definition: Classes with no definition
-
       identifiers: Principal identifiers of the ontology.
       dates: Dates
-      persons_and_organizations: Persons and organizations
+      person_and_organization: Persons and organizations
       other_links: Other links
       info_tooltip_links: Metadata properties that highlight the links enabling access to datasets, downloading semantic resources, etc
       projects_and_usage_information: Projects and usage information
