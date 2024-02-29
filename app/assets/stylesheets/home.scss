@@ -122,12 +122,23 @@ i.fa.fa-caret-square-o-down {
 .home-header-title .search-inputs input:focus{
   box-shadow: 2px 30px 60px rgba(0, 0, 0, 0.15);
 }
-
+.home-twitter-loader{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.home-statistics-link a{
+  color: var(--primary-color) !important;
+}
 
 .home-body-container{
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.home-body-container svg path{
+  fill: var(--primary-color);
 }
 .home-section{
   padding: 0 50px;
@@ -341,6 +352,7 @@ i.fa.fa-caret-square-o-down {
 .home-sub-section-left{
   width: 550px;
 }
+
 .home-sub-section-right{
   width: 550px;
 }

@@ -676,13 +676,15 @@ div.tree_error {
   a.tree-link {
     display: inline-block;
     padding: 5px;
+    color: var(--primary-color) !important;
   }
 
   a.tree-link.active {
     cursor: default;
     background-color: var(--light-color);
     font-weight: bold;
-    border-radius: 2px;
+    border-radius: 3px;
+    padding: 7px 5px;
   }
 
   .tree-border-left{

@@ -106,7 +106,7 @@
 }
 
 .browse-ontology-title {
-  color: var(--primary-color);
+  color: var(--primary-color) !important;
   font-weight: 600;
   font-size: 18px;
 }
@@ -178,7 +178,7 @@
 .browse-fair-details {
   font-size: 14px;
   font-weight: 400;
-  color: var(--primary-color);
+  color: var(--primary-color) !important;
 }
 
 .browse-uploaded {
@@ -217,7 +217,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: var(--primary-color);
+  color: var(--primary-color) !important;
 }
 
 .browse-card-number {
