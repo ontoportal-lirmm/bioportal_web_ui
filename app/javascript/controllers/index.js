@@ -102,3 +102,7 @@ application.register('form-url', FormUrlController)
 
 import OntologiesSelector from "./ontologies_selector_controller"
 application.register("ontologies-selector", OntologiesSelector)
+
+
+import MappingsController from "./mappings_controller"
+application.register('mappings', MappingsController)
