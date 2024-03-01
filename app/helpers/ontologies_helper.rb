@@ -450,7 +450,7 @@ module OntologiesHelper
           message = t('ontologies.ontology_is_processing', ontology: ontology_data_sections.join(', '))
         end
       end
-      render Display::AlertComponent.new(message: message, type: type, button: Buttons::RegularButtonComponent.new(id:'regular-button', value: t('ontologies.contact_support'), variant: "primary", href: "/feedback", color: type, size: "slim")) if type
+      render Display::AlertComponent.new(message: message, type: type, button: Buttons::RegularButtonComponent.new(id:'regular-button', value: t('ontologies.contact_support', site: "#{$SITE}"), variant: "primary", href: "/feedback", color: type, size: "slim")) if type
     end
   end
 
