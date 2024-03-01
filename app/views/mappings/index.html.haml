@@ -1,4 +1,12 @@
-.mappigs-page-container{'data-controller': 'mappings'}
-  #mappings-bubbles-view
-
-
+.mappigs-page-container{'data-controller': 'mappings', 
+                        'data-mappings-mappings-list-value': "#{@ontologies_mapping_count.to_h.to_json}",
+                        'data-mappings-zoom-ratio-value': 1
+                        }
+  .mappings-bubble-view-container
+    .mappings-bubble-view-frame{'data-mappings-target': 'frame'}
+      #mappings-bubbles-view{'data-mappings-target': 'bubbles'}
+    .mappings-zoom-buttons
+      .in{'data-action': 'click->mappings#zoomIn'}
+        = inline_svg_tag 'icons/zoom-in.svg'
+      .out{'data-action': 'click->mappings#zoomOut'}
+        = inline_svg_tag 'icons/zoom-out.svg'
