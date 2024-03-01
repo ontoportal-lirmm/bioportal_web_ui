@@ -10,12 +10,6 @@ fr:
               no_appliance_id_for_comparison: n'a pas pu être validé. Impossible de récupérer l'ID de l'appliance virtuelle.
               appliance_id_mismatch: ne correspond pas à l'ID de l'appliance virtuelle.
 
-  components:
-    check_resolvability: vérification de la résolvabilité...
-    error_block: le bloc child_data_generator n'a pas fourni tous les arguments enfants
-    empty_field: Les champs %{properties} sont vides
-    save_button: Sauvegarder
-    cancel_button: Annuler
 
   date:
     formats:
@@ -475,7 +469,7 @@ fr:
       release_notes: Notes de version
       api: API
       sparql: SPARQL
-      support: support
+      support: Support
       contact_us: Contactez-nous
       wiki: Wiki
       documentation: Documentation
@@ -704,6 +698,15 @@ fr:
  
   ontology: Ontologie
   ontology_details:
+    sections:
+      classes: Classes
+      summary: Résumé
+      properties: Propriétés
+      instances: Instances
+      notes: Remarques
+      mappings: Mappages
+      widgets: Widgets
+      sparql: Sparql
     concept:
       definitions: Définitions
       id: ID
@@ -953,6 +956,8 @@ fr:
   hide_advanced_options: Cacher les options avancées
   no_result_was_found: Aucun résultat trouvé
   notes:
+    no_notes: Aucune note à afficher
+    filter_hide_archived: Masquer les archivés
     new_class_proposal: Proposition de Nouvelle Classe
     new_relationship_proposal: Proposition de Nouvelle Relation
     change_property_value_proposal: Proposition de Changement de Valeur de Propriété
@@ -1005,6 +1010,17 @@ fr:
 
 
   submissions:
+    filter:
+      all_formats: Tous les formats
+      sort_by_name: Trier par nom
+      sort_by_classes: Trier par nombre de classes
+      sort_by_instances_concepts: Trier par nombre d'instances/concepts
+      sort_by_submitted_date: Trier par date de soumission
+      sort_by_creation_date: Trier par date de création
+      sort_by_fair_score: Trier par score FAIR
+      sort_by_popularity: Trier par popularité
+      sort_by_notes: Trier par notes
+      sort_by_projects: Trier par projets
     no_submissions_for_ontology: "Aucune soumission pour l'ontologie : %{ontology}"
     submission_updated_successfully: Soumission mise à jour avec succès
     save_button: Sauvegarder
@@ -1249,6 +1265,8 @@ fr:
     update_the_current_displayed_content: "mettra à jour le contenu actuellement affiché pour toutes les soumissions suivantes :"
     save: Sauvegarder
   ontologies:
+    showing_ontologies_size: "Affichage de %{ontologies_size} sur %{analytics_size}"
+    filters: Filtres
     no_license: Pas de licence
     view_license: Voir la licence
     access_rights_information: Informations supplémentaires sur la licence et les droits d'accès
@@ -1408,7 +1426,7 @@ fr:
       name: nom
       class_uri_description: "Mettez l'URI complet de la classe (par exemple,"
       class_uri_example: 'mettez l’URI complet de la classe (par exemple, %{link})'
-      class_shortid_description: mettez l'identifiant court de la classe, tel qu'utilisé dans %{SITE} (par exemple, "Common_Neoplasm");
+      class_shortid_description: mettez l'identifiant court de la classe, tel qu'utilisé dans %{site} (par exemple, "Common_Neoplasm");
       class_name_description: mettez le nom préféré de la classe (par exemple, "Common Neoplasm");
       hidden_elements_description: "En plus de l'élément de saisie que vous avez défini, quatre éléments de formulaire cachés sont créés puis définis lorsque l'utilisateur sélectionne une classe dans la liste. Par exemple, si vous créez un champ avec ce code :"
       hidden_elements_example: "L'attribut 'name' est utilisé pour créer les quatre champs suivants (notez comment le 'a' de l'attribut name est ajouté à l'attribut id) :"
@@ -1456,6 +1474,13 @@ fr:
     retrieved_time: Récupéré en %{time}s
     failed_to_get_url: "Échec de l'obtention de %{url} : %{message}"
   components:
+    check_resolvability: vérification de la résolvabilité...
+    error_block: le bloc child_data_generator n'a pas fourni tous les arguments enfants
+    empty_field: Les champs %{properties} sont vides
+    save_button: Sauvegarder
+    cancel_button: Annuler
+    go_to_api: Aller à l'API
+    the_content: Voici le contenu
     name_identifiers: NOM (IDENTIFIANTS)
     type: TYPE
     name_acronym: NOM(ACRONYME)
@@ -1477,6 +1502,7 @@ fr:
     instances: instances
     classes: classes
     submitted: Soumis
+    by: par
     creation_date: Date de création %{date}
     view_of_the_ontology: "Vue de l'ontologie %{ontology}"
     view: Vue
