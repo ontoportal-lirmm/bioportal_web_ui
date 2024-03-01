@@ -5,3 +5,26 @@
 .mappings-bubble{
   cursor: pointer;
 }
+.mappings-bubble-view-frame{
+  width: 800px;
+  height: 800px;
+  overflow: scroll;
+}
+
+.mappings-zoom-buttons{
+  display: flex;
+  margin-top: 20px;
+  justify-content: center;
+}
+.mappings-zoom-buttons svg{
+  width: 40px;
+  margin-right: 40px;
+  cursor: pointer;
+  path{
+    fill: var(--primary-color)
+  }
+  &:hover path{
+    fill: var(--hover-color)
+  }
+}
+

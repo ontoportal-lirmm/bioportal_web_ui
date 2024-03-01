@@ -15,39 +15,7 @@ class MappingsController < ApplicationController
   INTERPORTAL_HASH = $INTERPORTAL_HASH ||= {}
 
   def index
-    ontology_list = LinkedData::Client::Models::Ontology.all.select { |o| !o.summaryOnly }
-    ontologies_mapping_count = LinkedData::Client::HTTP.get("#{MAPPINGS_URL}/statistics/ontologies")
-    ontologies_hash = {}
-    ontology_list.each do |ontology|
-      ontologies_hash[ontology.acronym] = ontology
-    end
-
-    # TODO_REV: Views support for mappings
-    # views_list.each do |view|
-    #   ontologies_hash[view.ontologyId] = view
-    # end
-
-    @options = {}
-    ontologies_mapping_count&.members&.each do |ontology_acronym|
-      # Adding external and interportal mappings to the dropdown list
-      if ontology_acronym.to_s == EXTERNAL_MAPPINGS_GRAPH
-        mapping_count = ontologies_mapping_count[ontology_acronym.to_s] || 0
-        select_text = t('mappings.external_mappings', number_with_delimiter: number_with_delimiter(mapping_count, delimiter: ',')) if mapping_count >= 0
-        ontology_acronym = EXTERNAL_URL_PARAM_STR
-      elsif ontology_acronym.to_s.start_with?(INTERPORTAL_MAPPINGS_GRAPH)
-        mapping_count = ontologies_mapping_count[ontology_acronym.to_s] || 0
-        select_text = t('mappings.interportal_mappings', acronym: ontology_acronym.to_s.split("/")[-1].upcase, number_with_delimiter: number_with_delimiter(mapping_count, delimiter: ',')) if mapping_count >= 0
-        ontology_acronym = INTERPORTAL_URL_PARAM_STR + ontology_acronym.to_s.split("/")[-1]
-      else
-        ontology = ontologies_hash[ontology_acronym.to_s]
-        mapping_count = ontologies_mapping_count[ontology_acronym] || 0
-        next unless ontology && mapping_count > 0
-        select_text = "#{ontology.name} - #{ontology.acronym} (#{number_with_delimiter(mapping_count, delimiter: ',')})"
-      end
-      @options[select_text] = ontology_acronym
-    end
-
-    @options = @options.sort
+    @ontologies_mapping_count = LinkedData::Client::HTTP.get("#{MAPPINGS_URL}/statistics/ontologies")
   end
 
   def count
