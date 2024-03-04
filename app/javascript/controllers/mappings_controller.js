@@ -59,7 +59,7 @@ export default class extends Controller {
     const circle = node.append("circle")
       .attr("r", d => d.r)
       .style("fill", "var(--primary-color)");
-
+    // force gravitationnel
     circle.append("title")
       .text(d => `${d.data.ontology_name}\n${d.value}`);
 
@@ -69,6 +69,7 @@ export default class extends Controller {
       .style("text-anchor", "middle")
       .style("font-size", "16px")
       .style("fill", "white")
+      .style("font-weight", "600")
       .text(d => (d.r > d.data.ontology_name.length*5 && d.r > 20) ? d.data.ontology_name : "");
 
     // Display number of mappings in 12px white below ontology names
@@ -92,9 +93,13 @@ export default class extends Controller {
 
   #hash_to_list(data){
     return Object.keys(data).map(key => ({
-      ontology_name: key,
+      ontology_name: this.#getLastPartOfUrl(key),
       ontology_mappings: data[key],
     }));
+  }
+  #getLastPartOfUrl(url) {
+    var parts = url.split('/');
+    return parts[parts.length - 1];
   }
 
   #center_scroll(frame){
