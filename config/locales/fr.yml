@@ -466,6 +466,7 @@ fr:
       login: Connexion
       logout: Déconnexion
       mappings: Mappages
+      recommender: Recommandeur
       publications: Publications
       release_notes: Notes de version
       search_prompt: Rechercher dans %{portal_name} ...
