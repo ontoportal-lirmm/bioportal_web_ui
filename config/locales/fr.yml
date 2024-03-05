@@ -11,6 +11,15 @@ fr:
               appliance_id_mismatch: ne correspond pas à l'ID de l'appliance virtuelle.
 
 
+  
+  resource_term:
+    ontology: ontologie
+    ontology_plural: ontologies
+    single_ontology: une ontologie
+
+    semantic_resource: ressource sémantique
+    semantic_resource_plural: ressources sémantiques
+    single_semantic_resource: une ressource sémantique
   date:
     formats:
       year_month_day_concise: "%Y-%m-%d" # 2017-03-01

@@ -10,7 +10,14 @@ en:
               no_appliance_id_for_comparison: Could not be validated. Unable to retrieve virtual appliance ID.
               appliance_id_mismatch: is an appliance id mismatch.
 
+  resource_term:
+    ontology: ontology
+    ontology_plural: ontologies
+    ontology_single: an ontology
 
+    semantic_resource: semantic resource
+    semantic_resource_plural: semantic resources
+    semantic_resource_single: a semantic resource
   date:
     formats:
       year_month_day_concise: "%Y-%m-%d" # 2017-03-01
@@ -460,6 +467,7 @@ en:
       login: Login
       logout: Logout
       mappings: Mappings
+      recommender: Recommender
       publications: Publications
       release_notes: Release Notes
       search_prompt: Search in %{portal_name} ...
