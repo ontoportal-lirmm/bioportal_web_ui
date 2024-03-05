@@ -9,6 +9,15 @@ de:
               invalid_license_key: is an invalid license key
               no_appliance_id_for_comparison: Could not be validated. Unable to retrieve virtual appliance ID.
               appliance_id_mismatch: is an appliance id mismatch
+  
+  resource_term:
+    ontology: Ontologie
+    ontology_plural: Ontologien
+    ontology_single: eine Ontologie
+
+    semantic_resource: semantische Ressource
+    semantic_resource_plural: semantische Ressourcen
+    semantic_resource_single: eine semantische Ressource
 
   date:
     formats:
