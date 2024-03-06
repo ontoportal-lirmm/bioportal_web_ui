@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class OntologySubscribeButtonComponent < ViewComponent::Base
+  include ApplicationHelper
   def initialize(id: '', ontology_id:, subscribed:, user_id:, count: 0, link: 'javascript:void(0);')
     super
     @id = id
@@ -19,7 +20,7 @@ class OntologySubscribeButtonComponent < ViewComponent::Base
       title: title
     }
   end
-  
+
   def title
     if @subscribed
       t('components.resource', sub_text: @sub_text)

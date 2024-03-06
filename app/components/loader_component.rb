@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class LoaderComponent < ViewComponent::Base
+  include ApplicationHelper
   include ActionView::Helpers::TagHelper
 
   def initialize(small: false)
