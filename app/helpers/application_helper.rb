@@ -644,9 +644,9 @@ module ApplicationHelper
 
   def t(*args)
     translation = I18n.t(*args).downcase
-    term =  "ontology"
-    plural_term = "ontologies"
-    single_term = "an ontology"
+    term = I18n.t("resource_term.ontology")
+    plural_term = I18n.t("resource_term.ontology_plural")
+    single_term = I18n.t("resource_term.ontology_single")
     resource = I18n.t("resource_term.#{$RESOURCE_TERM}")
     resources = I18n.t("resource_term.#{$RESOURCE_TERM}_plural")
     a_resource = I18n.t("resource_term.#{$RESOURCE_TERM}_single")
