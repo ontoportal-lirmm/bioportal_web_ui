@@ -5,10 +5,6 @@ export default class extends Controller {
     static values = {
         id: String,
       }
-    connect(){
-        const ontologies_select = document.getElementById(`select_${this.idValue}-ts-control`)
-        ontologies_select.click()
-    }
     input(){
         this.submitTarget.click()
     }

@@ -4,7 +4,7 @@
       %div
         %div.mx-1.pt-3
           - init_ontology_picker(nil, @ontologies_ids)
-          = select_input(label: t("ontologies_metadata_curator.ontologies"), name: "ontology[ontologyId]", values: @onts_for_select, selected: @ontologies_ids, multiple: true, data: {placeholder: t("select_ontologies")})
+          = render Input::OntologiesSelectorComponent.new(id:'annotator_page_ontologies',label: t("ontologies_metadata_curator.ontologies") ,ontologies: @onts_for_select ,name: 'ontology[ontologyId]', selected: @ontologies_ids)   
       %div.d-flex.align-items-center.mb-5
         %div.mx-1{style: 'width: 65%'}
           = submission_metadata_selector

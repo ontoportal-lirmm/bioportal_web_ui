@@ -57,4 +57,6 @@
   %div#ontology_picker_project{style: "padding-top: 2em;"}
     - selected_ontologies = @project.ontologyUsed && @project.ontologyUsed.map {|id| id.split('/').last } || []
     - locals = { sel_text: t('projects.form.select_ontologies'), selected_ontologies: selected_ontologies, form_object: :project, form_attribute: "ontologyUsed" }
-    = render :partial => "shared/ontology_picker", locals: locals
+    - get_ontologies_data
+    = render Input::OntologiesSelectorComponent.new(id:'projects_page_ontologies_selector', ontologies: @onts_for_select ,name: 'ontologies')                
+

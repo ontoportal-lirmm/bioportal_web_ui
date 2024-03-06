@@ -83,8 +83,8 @@
           #custom_ontologies_picker{style: "left: -9999px; position: absolute;"}
             = form_tag custom_ontologies_path(url_encode(@user.username)) do
               - selected = @user.customOntology.map {|o| LinkedData::Client::Models::Ontology.get(o).acronym}
-              - locals = { custom_ontologies: @all_ontologies, selected_ontologies: selected, sel_text: t('users.show.select_custom_semantic_resources')}
-              = render partial: "shared/ontology_picker", locals: locals
+              - get_ontologies_data
+              = render Input::OntologiesSelectorComponent.new(id:'account_page_ontologies_selector', ontologies: @onts_for_select ,name: 'ontologies', selected: selected)                
               = submit_tag t('users.show.save_custom_semantic_resources'), class: "link_button"
       .account-page-second-row
         .account-page-card
