@@ -18,6 +18,18 @@ de:
     semantic_resource: semantische Ressource
     semantic_resource_plural: semantische Ressourcen
     semantic_resource_single: eine semantische Ressource
+  
+    vocabulary: Vokabular
+    vocabulary_plural: Vokabulare
+    vocabulary_single: ein Vokabular
+
+    terminology: Terminologie
+    terminology_plural: Terminologien
+    terminology_single: eine Terminologie
+
+    semantic_artefact: semantisches Artefakt
+    semantic_artefact_plural: semantische Artefakte
+    semantic_artefact_single: ein semantisches Artefakt
 
   date:
     formats:

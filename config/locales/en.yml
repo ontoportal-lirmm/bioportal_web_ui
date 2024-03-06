@@ -18,6 +18,19 @@ en:
     semantic_resource: semantic resource
     semantic_resource_plural: semantic resources
     semantic_resource_single: a semantic resource
+
+    vocabulary: vocabulary
+    vocabulary_plural: vocabularies
+    vocabulary_single: a vocabulary
+
+    terminology: terminology
+    terminology_plural: terminologies
+    terminology_single: a terminology
+
+    semantic_artefact: semantic artefact
+    semantic_artefact_plural: semantic artefacts
+    semantic_artefact_single: a semantic artefact
+
   date:
     formats:
       year_month_day_concise: "%Y-%m-%d" # 2017-03-01

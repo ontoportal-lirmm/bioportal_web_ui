@@ -18,6 +18,18 @@ it:
     semantic_resource_plural: risorse semantiche
     semantic_resource_single: una risorsa semantica
 
+    vocabulary: vocabolario
+    vocabulary_plural: vocabolari
+    vocabulary_single: un vocabolario
+
+    terminology: terminologia
+    terminology_plural: terminologie
+    terminology_single: una terminologia
+
+    semantic_artefact: artefatto semantico
+    semantic_artefact_plural: artefatti semantici
+    semantic_artefact_single: un artefatto semantico
+
   date:
     formats:
       year_month_day_concise: "%Y-%m-%d" # 2017-03-01
