@@ -177,15 +177,6 @@ module ApplicationHelper
     end
   end
 
-
-  def render_advanced_picker(custom_ontologies = nil, selected_ontologies = [], groups = nil, categories= nil,  align_to_dom_id = nil)
-    selected_ontologies ||= []
-    init_ontology_picker(custom_ontologies, selected_ontologies, groups, categories)
-    render :partial => "shared/ontology_picker_advanced", :locals => {
-      :custom_ontologies => custom_ontologies, :selected_ontologies => selected_ontologies, :align_to_dom_id => align_to_dom_id
-    }
-  end
-
   def init_ontology_picker(ontologies = nil, selected_ontologies = [], groups = nil, categories = nil)
     get_ontologies_data(ontologies)
     get_groups_data(groups)
