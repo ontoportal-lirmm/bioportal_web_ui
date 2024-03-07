@@ -2,12 +2,32 @@
   display: flex;
   justify-content: center;
 }
+.mappings-page-subcontainer{
+  width: 1248px;
+  padding: 20px 50px;
+}
+
+.mappings-page-title{
+  font-size: 25px;
+  font-weight: 700;
+}
+.mappings-page-title .line{
+  height: 2px;
+  width: 57px;
+  background-color: var(--primary-color);
+  border-radius: 10px;
+}
+.mappings-page-decription{
+  color: #888888;
+  margin: 20px 0;
+}
+
 .mappings-bubble{
   cursor: pointer;
 }
 .mappings-bubble-view-frame{
-  width: 800px;
-  height: 800px;
+  width: 600px;
+  height: 600px;
   overflow: scroll;
 }
 
@@ -27,4 +47,10 @@
     fill: var(--hover-color)
   }
 }
+.mappings-bubble-view-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 
