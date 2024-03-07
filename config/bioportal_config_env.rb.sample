@@ -178,6 +178,53 @@ $HOME_PAGE_LOGOS = [
     }
 ]
 
+$PORTALS_LOGOS = [
+  {
+      img_src: 'logos/portals/agroportal-logo.png',
+      url: 'https://agroportal.lirmm.fr/',
+      target: '_blank'
+    },
+   {
+      img_src: 'logos/portals/bioportal-logo.png',
+      url: 'https://bioportal.bioontology.org/',
+      target: '_blank'
+    },
+    {
+      img_src: 'logos/portals/biodivportal-logo.png',
+      url: 'https://biodivportal.gfbio.org//',
+      target: '_blank'
+    },
+    {
+      img_src: 'logos/portals/ecoportal-logo.png',
+      url: 'https://ecoportal.lifewatch.eu/',
+      target: '_blank'
+    },
+    {
+      img_src: 'logos/portals/medportal-logo.png',
+      url: 'http://medportal.bmicc.cn/',
+      target: '_blank'
+    },
+    {
+      img_src: 'logos/portals/matportal-logo.png',
+      url: 'https://matportal.org/',
+      target: '_blank'
+    },
+    {
+      img_src: 'logos/portals/industryportal-logo.png',
+      url: 'https://industryportal.enit.fr/',
+      target: '_blank'
+    },
+    {
+      img_src: 'logos/portals/sifrportal-logo.png',
+      url: 'https://bioportal.lirmm.fr/',
+      target: '_blank'
+    },
+    {
+      img_src: 'logos/portals/earthportal-logo.png',
+      url: 'https://earthportal.eu/',
+      target: '_blank'
+    }
+]
 
 $FOOTER_LINKS = {
   social: [
