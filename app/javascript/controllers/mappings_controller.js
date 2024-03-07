@@ -30,8 +30,8 @@ export default class extends Controller {
 
   #draw_bubbles(mappingsList, zoomRatio){
     const data = this.#hash_to_list(mappingsList)
-    const width = 800*zoomRatio;
-    const height = 800*zoomRatio;
+    const width = 600*zoomRatio;
+    const height = 600*zoomRatio;
     const margin = 1;
 
     const pack = d3.pack()
