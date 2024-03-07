@@ -2,11 +2,27 @@
                         'data-mappings-mappings-list-value': "#{@ontologies_mapping_count.to_h.to_json}",
                         'data-mappings-zoom-ratio-value': 1
                         }
-  .mappings-bubble-view-container
-    .mappings-bubble-view-frame{'data-mappings-target': 'frame'}
-      #mappings-bubbles-view{'data-mappings-target': 'bubbles'}
-    .mappings-zoom-buttons
-      .in{'data-action': 'click->mappings#zoomIn'}
-        = inline_svg_tag 'icons/zoom-in.svg'
-      .out{'data-action': 'click->mappings#zoomOut'}
-        = inline_svg_tag 'icons/zoom-out.svg'
+  .mappings-page-subcontainer
+    .mappings-page-title
+      .text
+        Mappings
+      .line
+    .mappings-page-decription
+      Dive into an overview of the mappings in the bubble view, or efficiently locate a specific ontology or upload your own mappings using the tab view.
+    = render TabsContainerComponent.new do |c|
+      - c.item(title: 'Bubbles view', selected: true)
+      - c.item_content do
+        .mappings-bubble-view-container
+          .mappings-bubble-view-frame{'data-mappings-target': 'frame'}
+            #mappings-bubbles-view{'data-mappings-target': 'bubbles'}
+          .mappings-zoom-buttons
+            .in{'data-action': 'click->mappings#zoomIn'}
+              = inline_svg_tag 'icons/zoom-in.svg'
+            .out{'data-action': 'click->mappings#zoomOut'}
+              = inline_svg_tag 'icons/zoom-out.svg'
+      - c.item(title: 'Table view')
+      - c.item_content do
+        .mappings-table-view-container
+          .mappings-ontologies-select
+            = render SelectInputComponent.new(id:'mappings_ontologies_selector', name:'ontologies_selector', values: @selector_ontologies_count, selected: 'AGROVOC')
+        

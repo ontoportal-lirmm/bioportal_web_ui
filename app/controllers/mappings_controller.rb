@@ -16,6 +16,14 @@ class MappingsController < ApplicationController
 
   def index
     @ontologies_mapping_count = LinkedData::Client::HTTP.get("#{MAPPINGS_URL}/statistics/ontologies")
+    ontologies = LinkedData::Client::Models::Ontology.all(
+      include: 'acronym,name,summaryOnly',
+      display_links: false,
+      display_context: false
+    )
+    @selector_ontologies_count = ontologies.map do |ontology|
+      "#{ontology.name} - #{ontology.acronym} (#{@ontologies_mapping_count[ontology.acronym]})"
+    end
   end
 
   def count
