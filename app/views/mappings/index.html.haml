@@ -24,5 +24,9 @@
       - c.item_content do
         .mappings-table-view-container
           .mappings-ontologies-select
-            = render SelectInputComponent.new(id:'mappings_ontologies_selector', name:'ontologies_selector', values: @selector_ontologies_count, selected: 'AGROVOC')
-        
+            = render Input::SelectComponent.new(label: 'Find all the mappings of an ontology', id:'mappings_ontologies_selector', name:'ontologies_selector', value: ['Select ontologies']+@selector_ontologies_count, selected: 'AGROVOC')
+          .mappings-or
+            .line
+            OR
+            .line
+          = render Input::FileInputComponent.new(name: "new-mapping")
