@@ -188,8 +188,10 @@
   display: flex;
   white-space: nowrap;
 }
-.annotation-parent div, .annotation-parent a{
-  margin-right: 11px;
+.annotation-parent{
+  div,a{
+    margin-right: 11px;
+  }
 }
 .annotation-parent .text{
   margin-right: 8px;
