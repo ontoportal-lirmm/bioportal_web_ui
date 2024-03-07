@@ -26,6 +26,11 @@ class MappingsController < ApplicationController
     end
   end
 
+  def show_table
+
+    render "mappings/mapping_table"
+  end
+
   def count
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
     @ontology_acronym = @ontology&.acronym || params[:id]

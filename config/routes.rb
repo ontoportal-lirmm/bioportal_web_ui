@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   delete 'mappings/:id', to: 'mappings#destroy', constraints: { id: /.+/ }
   resources :mappings
   get 'mappings/:id', to: 'mappings#show', constraints: { id: /.+/ }
+  get '/mappings_table', to: 'mappings#show_table'
 
   resources :concepts
 
