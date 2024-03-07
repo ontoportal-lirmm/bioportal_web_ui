@@ -378,7 +378,7 @@
 
 .browse-ontology-deprecated {
   background-color: #EB433521;
-  color: #EB4335;
+  color:  var(--error-color);
   padding: 10px;
   font-size: 14px;
   border-radius: 8px;
@@ -417,7 +417,7 @@
 
 .browse-ontology-deprecated {
   background-color: #EB433521;
-  color: #EB4335;
+  color: var(--error-color);
   padding: 10px;
   font-size: 14px;
   border-radius: 8px;
