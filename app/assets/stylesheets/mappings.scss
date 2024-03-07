@@ -1,6 +1,9 @@
 .mappigs-page-container{
   display: flex;
   justify-content: center;
+  .file_uploader{
+    width: 700px;
+  }
 }
 .mappings-page-subcontainer{
   width: 1248px;
@@ -28,7 +31,7 @@
 .mappings-bubble-view-frame{
   width: 600px;
   height: 600px;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .mappings-zoom-buttons{
@@ -54,11 +57,24 @@
 }
 .mappings-table-view-container{
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   margin: 20px 0;
 }
 .mappings-ontologies-select{
   width: 700px;
 }
-
+.mappings-or{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+.mappings-or .line{
+  height: 1px;
+  width: 121px;
+  background-color: #B7B7B7;
+  border-radius: 10px;
+  margin: 0 10px;
+}
 
