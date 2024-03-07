@@ -183,6 +183,16 @@
         - $HOME_PAGE_LOGOS.each do |logo|
           %a{href:logo[:url], target: "_blanc"}
             %img{src: asset_path(logo[:img_src])}
+  
+  .home-section
+    .home-statistics-container
+      .home-support-title
+        %p= t('home.ontoportal_instances')
+        %hr.home-section-line/
+      .home-support-items
+        - $PORTALS_LOGOS.each do |logo|
+          %a{href:logo[:url], target: "_blanc"}
+            %img{src: asset_path(logo[:img_src])}
 
 
 :javascript
