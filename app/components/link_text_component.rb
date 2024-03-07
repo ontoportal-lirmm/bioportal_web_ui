@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class LinkTextComponent < ViewComponent::Base
-  include ApplicationHelper
+  include InternationalisationHelper
 
   def initialize(text:, icon: nil, target: nil)
     @text = text

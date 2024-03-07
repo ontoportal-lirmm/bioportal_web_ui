@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Input::LanguageSelectorComponent < ViewComponent::Base
-  include ApplicationHelper
+  include InternationalisationHelper
   def initialize(languages:, selected: nil,  id: '', name: '' , enable_all: false, **html_options)
     super
     @languages = languages
