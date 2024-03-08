@@ -1,19 +1,21 @@
-= turbo_frame_tag 'mappings_table' do
-  = render TableComponent.new(id: 'annotator-table', borderless: true, layout_fixed: false, outline: true, sort_column: '0', no_init_sort: true) do |t|
-    - t.header do |h|
-      - h.th do
-        Ontology
-      - h.th do
-        Mappings count
-      - h.th do
-        Show mappings
-    - @mapping_counts.each do |mapping|
-      - t.row do |r|
-        - r.td do
-          = mapping[:target_ontology].name
-        - r.td do
-          = mapping[:count]
-        - r.td do
-          - title =  mapping[:target_ontology].name
-          = link_to_modal "", mappings_show_mappings_path(id: mapping[:target_ontology].acronym ,target: mapping[:target_ontology].id), data: { show_modal_title_value: title, show_modal_size_value: 'modal-xl'}
-        
+= render TurboFrameComponent.new(id: 'mappings_table') do
+  .mappings-table-container
+    = render TableComponent.new(id: 'annotator-table', borderless: true, layout_fixed: false, outline: true, sort_column: '0', no_init_sort: true) do |t|
+      - t.header do |h|
+        - h.th do
+          Ontology
+        - h.th do
+          Mappings count
+        - h.th do
+          Show mappings
+      - @mapping_counts.each do |mapping|
+        - t.row do |r|
+          - r.td do
+            .mappings-table-ontology-name
+              = mapping[:target_ontology].name
+          - r.td do
+            = mapping[:count]
+          - r.td do
+            - title =  mapping[:target_ontology].name
+            = link_to_modal "", mappings_show_mappings_path(id: mapping[:target_ontology].acronym ,target: mapping[:target_ontology].id), data: { show_modal_title_value: title, show_modal_size_value: 'modal-xl'}
+          
