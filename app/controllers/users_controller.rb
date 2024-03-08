@@ -202,6 +202,7 @@ class UsersController < ApplicationController
   def user_params
     params[:user]["orcidId"] = extract_id_from_url(params[:user]["orcidId"], 'orcid.org')
     params[:user]["githubId"] = extract_id_from_url(params[:user]["githubId"], 'github.com')
+    params[:user][:username] = params[:user][:username].downcase
     p = params.require(:user).permit(:firstName, :lastName, :username, :orcidId, :githubId, :email, :email_confirmation, :password,
                                      :password_confirmation, :register_mail_list, :admin)
     p.to_h
