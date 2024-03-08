@@ -16,6 +16,7 @@ class LoginController < ApplicationController
 
   # logs in a user
   def create
+    params[:user][:username] = params[:user][:username].downcase
     if is_email(params[:user][:username])
       username = LinkedData::Client::Models::User.find_by_email(params[:user][:username]).first.username
     else
