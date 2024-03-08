@@ -24,9 +24,10 @@
       - c.item_content do
         .mappings-table-view-container
           .mappings-ontologies-select
-            = form_tag('/mappings_table', method: :get, novalidate: true, data: { turbo_frame: 'mappings_table' }) do
-              = render Input::SelectComponent.new(label: 'Find all the mappings of an ontology', id: 'mappings_ontologies_selector', name: 'ontology', value: @selector_ontologies_count)              
-              %input{ type: 'submit', value: 'Search' }
+            = form_tag('/mappings_table', method: :get, novalidate: true, data: { turbo: true, turbo_frame: 'mappings_table' }) do
+              .mappings-selector{'data-action': 'change->mappings#submit'}
+                = render Input::SelectComponent.new(label: 'Find all the mappings of an ontology', id: 'mappings_ontologies_selector', name: 'ontology', value: @selector_ontologies_count)              
+              %input.d-none{ type: 'submit', 'data-mappings-target': 'submit'}
               %div
                 = turbo_frame_tag 'mappings_table'
                   
