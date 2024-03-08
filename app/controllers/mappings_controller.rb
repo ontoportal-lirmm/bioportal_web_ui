@@ -22,12 +22,14 @@ class MappingsController < ApplicationController
       display_context: false
     )
     @selector_ontologies_count = ontologies.map do |ontology|
-      "#{ontology.name} - #{ontology.acronym} (#{@ontologies_mapping_count[ontology.acronym]})"
+      "#{ontology.name} - #{ontology.acronym} (#{@ontologies_mapping_count[ontology.acronym]})" if @ontologies_mapping_count[ontology.acronym]
     end
   end
 
   def show_table
-
+    ontology_acronym = params[:ontology].split("-").last.split('(').first.gsub(" ", "")
+    @mapping_counts = mapping_counts(ontology_acronym)
+    binding.pry
     render "mappings/mapping_table"
   end
 
