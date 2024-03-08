@@ -29,7 +29,6 @@ class MappingsController < ApplicationController
   def show_table
     ontology_acronym = params[:ontology].split("-").last.split('(').first.gsub(" ", "")
     @mapping_counts = mapping_counts(ontology_acronym)
-    binding.pry
     render "mappings/mapping_table"
   end
 
@@ -89,7 +88,6 @@ class MappingsController < ApplicationController
     page = params[:page] || 1
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
     @target_ontology = LinkedData::Client::Models::Ontology.find(params[:target])
-
     # Cases if ontology or target are interportal or external
     if @ontology.nil?
       ontology_acronym = params[:id]
