@@ -641,5 +641,10 @@ module ApplicationHelper
     list&.join(',') || ''
   end
 
+  def render_rounded_button_with_style(style, link)
+    content_tag(:span, style: style) do
+      render(RoundedButtonComponent.new(link: link, target: '_blank',size: 'small',title: t("components.go_to_api")))
+    end
+  end
 
 end
