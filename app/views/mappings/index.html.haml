@@ -25,11 +25,11 @@
         .mappings-table-view-container
           .mappings-ontologies-select
             = form_tag('/mappings_table', method: :get, novalidate: true, data: { turbo_frame: 'mappings_table' }) do
-              = render Input::SelectComponent.new(label: 'Find all the mappings of an ontology', id: 'mappings_ontologies_selector', name: 'ontologies_selector', value: ['Select ontologies'] + @selector_ontologies_count)              
-              -#%input{ type: 'submit', value: 'Search' }
-              -#%div
-                = turbo_frame_tag 'mappings_table' do
-                  = link_to 'bilel', 'mappings_table'
+              = render Input::SelectComponent.new(label: 'Find all the mappings of an ontology', id: 'mappings_ontologies_selector', name: 'ontology', value: @selector_ontologies_count)              
+              %input{ type: 'submit', value: 'Search' }
+              %div
+                = turbo_frame_tag 'mappings_table'
+                  
 
           .mappings-or
             .line
