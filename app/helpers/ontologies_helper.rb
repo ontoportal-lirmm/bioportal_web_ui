@@ -534,18 +534,16 @@ module OntologiesHelper
         link_options[:disabled] = 'disabled'
         title = label
       else
-        title = label + '<br>' + link_to(Array(value).first)
+        title = label + '<br>' + link_to(Array(value).first, target: '_blank')
       end
-
 
       url = Array(value).first || ''
       if url.include?(rest_hostname)
         url = url['?'] ? "#{url}&apikey=#{get_apikey}" : "#{url}?apikey=#{get_apikey}"
       end
 
-      content_tag(:span, data: {controller:"tooltip" } , title:  title) do
-        link_to(inline_svg("#{icon}.svg", width: "32", height: '32'),
-                url, link_options)
+      content_tag(:span, data: {controller: "tooltip" }, title: title) do
+        link_to(inline_svg("#{icon}.svg", width: "32", height: '32'), url, link_options.merge(target: '_blank'))
       end
     end.join.html_safe
   end
