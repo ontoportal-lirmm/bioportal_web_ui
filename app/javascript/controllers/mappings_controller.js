@@ -6,11 +6,14 @@ export default class extends Controller {
     mappingsList: Object,
     zoomRatio: Number
   }
-  static targets = ['frame', 'bubbles']
+  static targets = ['frame', 'bubbles', 'submit']
 
   connect() {
     this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue)
     this.#center_scroll(this.frameTarget)
+  }
+  submit(){
+    this.submitTarget.click()
   }
 
   zoomIn(){
