@@ -156,7 +156,7 @@ it:
       maggior numero di ontologie
     group: Gruppo
     groups_and_categories: Gruppi e categorie
-    intro: Visualizzare i dati recuperati dalle ontologie memorizzate nel portale
+    intro: Visualizza il panorama di tutte le ontologie su %{site} tramite l'aggregazione dei metadati.
     more_properties_charts: Altri grafici delle proprietà
     most_active_ontologies: Le ontologie più attive
     most_active_organizations: Le organizzazioni più attive

@@ -438,7 +438,7 @@ en:
     funding_endorsing_organizations: Organizations funding and endorsing the most ontologies
     group: group
     groups_and_categories: Groups and Categories
-    intro: Visualize the panorama of ontologies and other semantic resources of %{site} via metadata aggregation.
+    intro: Visualize the panorama of all ontologies on %{site} via metadata aggregation.
     more_properties_charts: More properties charts
     most_active_ontologies: Most active ontologies
     most_active_organizations: Most active organizations
@@ -916,26 +916,26 @@ en:
       mailing_list_description: Register to the %{portal} announcements mailing list.
       api_key_description: Your API Key can be used to access  %{portal} Web services
       api_documentation: API documentation
-      custom_semantic_resource: Custom semantic resource set
+      custom_semantic_resource: Custom ontology set
       please: Please
       modify_custom_semantic_resource: |
         visit the main site
-        to modify your Custom Semantic Resource Set.
-      customize_portal_display: "Customize your %{portal} display: Pick the semantic resources that you want to see on %{portal} will hide all other semantic resources."
-      select_semantic_resources : Select semantic resources 
-      no_semantic_resources: You haven't picked any semantic resources yet
+        to modify your Custom Ontology Set.
+      customize_portal_display: "Customize your %{portal} display: Pick the ontologies that you want to see on %{portal} will hide all other ontologies."
+      select_semantic_resources : Select ontologies 
+      no_semantic_resources: You haven't picked any ontologies yet
       note_feature_logged_in: "Note: this feature works only when you are logged in."
-      select_custom_semantic_resources: Select custom semantic resources
-      save_custom_semantic_resources: Save custom semantic resources
-      not_subscribed: Not subscribed to any semantic resource
-      submitted_semantic_resources: Submitted Semantic Resources
-      upload_semantic_resources: Upload semantic resources 
+      select_custom_semantic_resources: Select custom ontologies
+      save_custom_semantic_resources: Save custom ontologies
+      not_subscribed: Not subscribed to any ontology
+      submitted_semantic_resources: Submitted Ontologies 
+      upload_semantic_resources: Upload Ontologies
       projects_created: Projects Created
       no_project_created: No project created
       unsubscribe: Unsubscribe
       subscribe: Subscribe
       subscriptions: Subscriptions
-      no_uploaded_resources: You didn't upload any semantic resource yet
+      no_uploaded_resources: You didn't upload any ontology yet
       notes: Notes
 
   reproduce_results: 'Reproduce these results using the '
@@ -1401,7 +1401,7 @@ en:
       dates: Dates
       person_and_organization: Persons and organizations
       other_links: Other links
-      info_tooltip_links: Metadata properties that highlight the links enabling access to datasets, downloading semantic resources, etc
+      info_tooltip_links: Metadata properties that highlight the links enabling access to datasets, downloading ontologies, etc
       projects_and_usage_information: Projects and usage information
       info_tooltip_projects: Details pertaining to the utilization of the ontology.
       methodology_and_provenance: Methodology and provenance

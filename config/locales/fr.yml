@@ -437,7 +437,7 @@ fr:
     funding_endorsing_organizations: Organisations finançant et approuvant le plus d'ontologies
     group: groupe
     groups_and_categories: Groupes et Catégories
-    intro: Visualisez le panorama des ontologies et autres ressources sémantiques de %{site} via l'agrégation de métadonnées.
+    intro: Visualiser le panorama de toutes les ontologies sur %{site} via l'agrégation des métadonnées.
     more_properties_charts: Plus de graphiques de propriétés
     most_active_ontologies: Ontologies les plus actives
     most_active_organizations: Organisations les plus actives
@@ -910,26 +910,26 @@ fr:
       mailing_list_description: S'inscrire à la liste de diffusion des annonces de %{portal}.
       api_key_description: Votre clé API peut être utilisée pour accéder aux services Web de %{portal}
       api_documentation: Documentation de l'API
-      custom_semantic_resource: Ensemble de ressources sémantiques personnalisées
+      custom_semantic_resource: Ensemble d'ontologies personnalisées
       please: Veuillez
       modify_custom_semantic_resource: |
         visiter le site principal
-        pour modifier votre Ensemble de Ressources Sémantiques Personnalisées.
-      customize_portal_display: "Personnalisez votre affichage sur %{portal} : Choisissez les ressources sémantiques que vous souhaitez voir sur %{portal}, les autres ressources sémantiques seront cachées."
-      select_semantic_resources : Sélectionner des ressources sémantiques
-      no_semantic_resources: Vous n'avez encore sélectionné aucune ressource sémantique
+        pour modifier votre Ensemble d'ontologies Personnalisées.
+      customize_portal_display: "Personnalisez votre affichage sur %{portal} : Choisissez les ontologies que vous souhaitez voir sur %{portal}, les autres ontologies seront cachées."
+      select_semantic_resources : Sélectionner des ontologies
+      no_semantic_resources: Vous n'avez encore sélectionné aucune ontologie
       note_feature_logged_in: "Note : cette fonctionnalité ne fonctionne que lorsque vous êtes connecté."
-      select_custom_semantic_resources: Sélectionner des ressources sémantiques personnalisées
-      save_custom_semantic_resources: Sauvegarder les ressources sémantiques personnalisées
-      not_subscribed: Non abonné à aucune ressource sémantique
-      submitted_semantic_resources: Ressources Sémantiques Soumises
-      upload_semantic_resources: Télécharger des ressources sémantiques
+      select_custom_semantic_resources: Sélectionner des ontologies personnalisées
+      save_custom_semantic_resources: Sauvegarder les ontologies personnalisées
+      not_subscribed: Non abonné à aucune ontologie
+      submitted_semantic_resources: Ressources Ontologies
+      upload_semantic_resources: Télécharger ontologies
       projects_created: Projets Créés
       no_project_created: Aucun projet créé
       unsubscribe: Se désabonner
       subscribe: S'abonner
       subscriptions: Abonnements
-      no_uploaded_resources: Vous n'avez encore téléchargé aucune ressource sémantique
+      no_uploaded_resources: Vous n'avez encore téléchargé aucune ontologie
       notes: Notes
 
   reproduce_results: 'Reproduisez ces résultats en utilisant le '
