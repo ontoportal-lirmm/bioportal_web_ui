@@ -45,7 +45,7 @@
             %span.mr-1= t('components.submitted')
             %span.browse-uploaded-date{data:{controller: 'timeago', 'timeago-datetime-value': ontology[:creationDate], 'timeago-add-suffix-value': 'true'}}
             - if ontology[:contact]
-              %span.mx-1t= t('components.by')
+              %span.mx-1= t('components.by')
               %span.browse-uploaded-date.text-truncate
                 = ontology[:contact].humanize
 
