@@ -16,5 +16,5 @@
             %h4
               = @metrics.send(metric)
             %p
-              = render PopupLinkTextComponent.new(text: metric.humanize)
+              = render PopupLinkTextComponent.new(text: t("ontologies.sections.#{metric}"))
 

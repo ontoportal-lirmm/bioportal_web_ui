@@ -37,7 +37,7 @@
           %div.pt-1
             = upload_ontology_button
           %div{style:'margin-top: 30px'}
-            %p.browse-filters-title Filters
+            %p.browse-filters-title= t("ontologies.filters")
             - if session[:user]&.admin?
               %div.browse-filter.admin-border
                 = render SwitchInputComponent.new(id:'filter-private', name:'private_only', checked: @show_private_only) do
