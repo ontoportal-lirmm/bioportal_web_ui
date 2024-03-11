@@ -178,52 +178,52 @@ $HOME_PAGE_LOGOS = [
     }
 ]
 
-$PORTALS_LOGOS = [
+$PORTALS_INSTANCES = [
   {
-      img_src: 'logos/portals/agroportal-logo.png',
-      url: 'https://agroportal.lirmm.fr/',
-      target: '_blank'
-    },
-   {
-      img_src: 'logos/portals/bioportal-logo.png',
-      url: 'https://bioportal.bioontology.org/',
-      target: '_blank'
-    },
-    {
-      img_src: 'logos/portals/biodivportal-logo.png',
-      url: 'https://biodivportal.gfbio.org//',
-      target: '_blank'
-    },
-    {
-      img_src: 'logos/portals/ecoportal-logo.png',
-      url: 'https://ecoportal.lifewatch.eu/',
-      target: '_blank'
-    },
-    {
-      img_src: 'logos/portals/medportal-logo.png',
-      url: 'http://medportal.bmicc.cn/',
-      target: '_blank'
-    },
-    {
-      img_src: 'logos/portals/matportal-logo.png',
-      url: 'https://matportal.org/',
-      target: '_blank'
-    },
-    {
-      img_src: 'logos/portals/industryportal-logo.png',
-      url: 'https://industryportal.enit.fr/',
-      target: '_blank'
-    },
-    {
-      img_src: 'logos/portals/sifrportal-logo.png',
-      url: 'https://bioportal.lirmm.fr/',
-      target: '_blank'
-    },
-    {
-      img_src: 'logos/portals/earthportal-logo.png',
-      url: 'https://earthportal.eu/',
-      target: '_blank'
-    }
+    color: '#31b403',
+    portal: 'AgroPortal',
+    link: 'https://agroportal.lirmm.fr/'
+  },
+  {
+    color: '#234979',
+    portal: 'BioPortal',
+    link: 'https://bioportal.bioontology.org/'
+  },
+  {
+    color: '#74a9cb',
+    portal: 'SIFR BioPortal',
+    link: 'https://bioportal.lirmm.fr/'
+  },
+  {
+    color: '#0d508a',
+    portal: 'EcoPortal',
+    link: 'https://ecoportal.lifewatch.eu/'
+  },
+  {
+    color: '#234979',
+    portal: 'MedPortal',
+    link: 'http://medportal.bmicc.cn/'
+  },
+  {
+    color: '#009574',
+    portal: 'MatPortal',
+    link: 'https://matportal.org/'
+  },
+  {
+    color: '#1c0f5d',
+    portal: 'IndustryPortal',
+    link: 'http://industryportal.enit.fr'
+  },
+  {
+    color: '#1e2251',
+    portal: 'EarthPortal',
+    link: 'https://earthportal.eu/'
+  },
+  {
+    color: '#33691B',
+    portal: 'BiodivPortal',
+    link: 'https://biodivportal.gfbio.org/'
+  }
 ]
 
 $FOOTER_LINKS = {
