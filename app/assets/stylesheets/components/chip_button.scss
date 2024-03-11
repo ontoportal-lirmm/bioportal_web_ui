@@ -20,9 +20,12 @@
   line-height: 44px;
   padding: 10px;
   border-radius: 5px;
-  color: var(--primary-color);
+  color: var(--primary-color) !important;
   font-weight: 500;
   font-size: 15px;
   cursor: grab;
   display: inline;
+}
+.chip_button_container_clickable a{
+  color: var(--primary-color) !important;
 }

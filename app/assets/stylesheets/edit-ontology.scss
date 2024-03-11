@@ -8,6 +8,9 @@
   padding: 0 50px;
   width: 1248px
 }
+.edit-ontology-container a{
+  color: var(--primary-color) !important;
+}
 
 .edit-ontology-title {
   font-size: 18px;
@@ -96,9 +99,6 @@
   width: 100%;
   margin-top: 20px;
 }
-
-
-
 
 .edit-ontology-field div {
   font-size: 11px;
