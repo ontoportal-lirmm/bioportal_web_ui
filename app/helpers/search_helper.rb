@@ -61,7 +61,7 @@ module SearchHelper
     ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', also_include_views: true)
     selected_onto = []
 
-    q  = query.split(' ').first
+    q = query.split(' ').first
     selected_onto += ontologies.select { |x| x.acronym.downcase.eql?(q.downcase) }
 
     selected_onto.uniq!
@@ -82,8 +82,6 @@ module SearchHelper
       query = "*#{query}*"
     end
 
-
-
     result = LinkedData::Client::HTTP.get('search/ontologies/content', { q: query, qf: qf.join(' '), page: page, pagesize: page_size, ontologies: acronyms.first })
 
     [result, ontologies, selected_onto, query]
@@ -101,7 +99,7 @@ module SearchHelper
 
     json += selected_onto.map do |x|
       {
-        id:  ontology_path(id: x.acronym, p: 'summary'),
+        id: ontology_path(id: x.acronym, p: 'summary'),
         name: x.name,
         acronym: x.acronym,
         type: 'Ontology',
@@ -112,9 +110,10 @@ module SearchHelper
     changed_query.gsub!('*', '')
 
     json += results.collection.map do |x|
-      label = nil
+      next nil unless x.ontology_t
 
-      label_props = [
+      label = nil
+      [
         "http___www.w3.org_2000_01_rdf-schema_label_t",
         "http___www.w3.org_2000_01_rdf-schema_label_txt",
         "http___www.w3.org_2004_02_skos_core_prefLabel_t",
@@ -126,19 +125,54 @@ module SearchHelper
         label ||= v&.first
       end
 
-      type = x.type_t
-      type ||= x.type_txt&.map { |x| helpers.link_last_part(x) }
 
-      type = Array(type).reject{|x| x.eql?("NamedIndividual")}.first if (Array(type).size > 1)
-
+      type = id_type(x.type_t, x.type_txt)
       {
-        id: x.id,
+        id: link_by_type(x.resource_id, x.ontology_t, type),
         name: x.resource_id,
         acronym: x.ontology_t,
         type: type || '',
         label: label
       }
-    end
+    end.compact
+
     json
   end
+
+
+
+  def supported_types
+    %w[Concept Class Ontology ConceptScheme Collection NamedIndividual AnnotationProperty ObjectProperty DatatypeProperty]
+  end
+
+  def id_type(type_t, type_txt)
+
+    type = (Array(type_t) + Array(type_txt)).map { |x| helpers.link_last_part(x) }
+                                            .select{|x| supported_types.include?(x)}
+
+    type = Array(type).reject { |x| x.eql?("NamedIndividual") } if (Array(type).size > 1)
+
+    type.first
+  end
+
+  def link_by_type(id, ontology, type)
+    case type
+    when 'Concept', 'Class'
+      ontology_path(id: ontology, p: 'classes', conceptid: id)
+    when 'Ontology'
+      ontology_path(id: ontology, p: 'summary')
+    when 'ConceptScheme'
+      ontology_path(id: ontology, p: 'schemes', schemeid: id)
+    when 'Collection'
+      ontology_path(id: ontology, p: 'collections', collectionid: id)
+    when 'NamedIndividual'
+      ontology_path(id: ontology, p: 'instances', instanceid: id)
+    when 'AnnotationProperty', 'ObjectProperty', 'DatatypeProperty'
+      ontology_path(id: ontology, p: 'properties', instanceid: id)
+    else
+      #"/content_finder?acronym=#{x.ontology_t}&uri=#{helpers.escape(x.resource_id)}&output_format=xml"
+      ontology_path(id: ontology, p: 'summary')
+    end
+  end
+
 end
