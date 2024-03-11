@@ -100,6 +100,55 @@ class SearchController < ApplicationController
   end
 
 
+
+
+  def json_ontology_content_search
+    query = params[:search] || '*'
+    page = (params[:page] || 1).to_i
+    acronyms = params[:acronyms] || []
+    page_size = (params[:page_size] || 10).to_i
+
+    @results, @ontologies,selected_onto, changed_query = search_ontologies_content(query: query,
+                                         page: page,
+                                         page_size: page_size,
+                                         filter_by_ontologies: acronyms)
+    @count = @results.totalCount
+    @acronyms = acronyms&.first&.split(',')
+    @filters = {
+      page: @results.nextPage,
+      search: query,
+      page_size: page_size,
+      acronyms: acronyms
+    }
+    puts "Found #{@count}"
+
+    json = search_result_to_json(query , changed_query, @results, @ontologies, selected_onto)
+    render json: json
+  end
+
+  def agent_search
+    @query = params[:search]
+    @type = params[:agentType].blank? ? nil : params[:agentType]
+  end
+
+  def agent_search_result
+    @filters = params.permit(:agentType, :search, :page, :page_size).to_h
+
+    query = params[:search].blank? ? '*' : @query = params[:search]
+    agent_type = params[:agentType]
+    page = params[:page]
+    page_size = params[:page_size].blank? ? 10 : params[:page_size].to_i
+    @results = LinkedData::Client::HTTP.get('search/agents',
+                                            { query: query,
+                                              page: page, pagesize: page_size,
+                                              agentType: agent_type
+                                            }.reject { |k, v| v.blank? })
+
+    @filters["page"] = @results.nextPage
+
+    render partial: "search/agent_search_results", layout: false
+  end
+
   private
 
   def check_params_query(params)
