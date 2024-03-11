@@ -149,7 +149,7 @@ export default class extends Controller {
                 value  = value.toString().split('/').slice(-1)
             }
             const regex = new RegExp('\\b' + key + '\\b', 'gi');
-            string =  string.replace(regex, value.toString())
+            string =  string.replace(regex, value ? value.toString() : "")
         })
 
         return new DOMParser().parseFromString(string, "text/html").body.firstElementChild
