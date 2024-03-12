@@ -633,27 +633,12 @@ module ApplicationHelper
   end
 
   def ontologies_selector(id:, label: nil, name: nil, selected: nil)
-    - get_ontologies_data
+    get_ontologies_data
     content_tag(:div) do
       render(Input::SelectComponent.new(id: id, label: label, name: name, value: @onts_for_select, multiple: "multiple", selected: selected)) +
       content_tag(:div, class: 'ontologies-selector-button', 'data-controller': 'ontologies-selector', 'data-ontologies-selector-id-value': id) do
         content_tag(:div, t('ontologies_selector.clear_selection'), class: 'clear-selection', 'data-action': 'click->ontologies-selector#clear') +
         link_to_modal(t('ontologies_selector.ontologies_advanced_selection'), "/ontologies_selector?id=#{id}", data: { show_modal_title_value: t('ontologies_selector.ontologies_advanced_selection')})
-      end
-    end
-  end
-
-  def save_and_cancel_buttons(save_html_options: nil , cancel_html_options: nil)
-    content_tag(:div, class: 'save-cancel-buttons') do
-      content_tag(:div, class: 'button', **save_html_options) do
-        render Buttons::RegularButtonComponent.new(id: 'cancel-selector', value: t('ontologies_selector.cancel'), variant: "secondary", state: 'regular') do |btn|
-          btn.icon_left { inline_svg_tag 'x.svg' }
-        end
-      end +
-      content_tag(:div, class: 'button', **cancel_html_options) do
-        render Buttons::RegularButtonComponent.new(id: 'apply-selector', value: t('ontologies_selector.apply'), variant: "primary", state: 'regular') do |btn|
-          btn.icon_right { inline_svg_tag "check.svg" }
-        end
       end
     end
   end
