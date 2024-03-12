@@ -1,15 +1,36 @@
-name: Code style
+name: Linters
 
-on: [ pull_request ]
+on: [push, pull_request]
 
 jobs:
-  lint:
-    name: all linters
+  rubocop:
+    name: RuboCop
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-      - name: rubocop
-        run: bin/ontoportal run bundle exec rubocop --parallel
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.0
+
+      - name: Install dependencies
+        run: gem install rubocop rubocop-rails rubocop-i18n
+
+
+      - name: Run RuboCop
+        run: rubocop  --parallel --format github
+
+  haml-lint:
+    name: HamlLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install HamlLint
+        run: gem install  haml-lint
+
+      - name: Run HamlLint
+        run: haml-lint -r github

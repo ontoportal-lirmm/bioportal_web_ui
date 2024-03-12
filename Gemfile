@@ -119,6 +119,8 @@ group :development do
   gem 'deepl-rb'
   gem 'letter_opener_web', '~> 2.0'
   gem 'haml-rails'
+  gem "rubocop-i18n", "~> 3.0"
+  gem 'haml_lint', require: false
 end
 
 group :test, :development do

@@ -18,6 +18,7 @@ AllCops:
 require:
   - rubocop-rails
   - ./lib/lint/non_localized_string.rb
+  - rubocop-i18n
 Lint/NonLocalizedString:
   Enabled: true
 
@@ -76,3 +77,6 @@ Style/MissingRespondToMissing:
 Lint/MissingSuper:
   Enabled: true
 
+
+Rails/I18nLocaleTexts:
+  Enabled: true
