@@ -414,3 +414,22 @@ fr:
   show_advanced_options: Afficher les options avancées
   hide_advanced_options: Masquer les options avancées
   no_result_was_found: Aucun résultat n'a été trouvé
+
+  ontologies_selector:
+    clear_selection: Effacer la sélection
+    ontologies_advanced_selection: Sélection avancée des ontologies
+    search_hint: Filtrer les ontologies...
+    show_ontology_view: Afficher les vues d'ontologie
+    hide_retired_ontologies: Masquer les ontologies retirées
+    tabs_title:
+      categories: Catégories
+      groups: Groupes
+      format: Format
+      natural_languages: Langues naturelles
+      formality_levels: Niveaux de formalité
+      ontology_types: Types d'ontologie
+    select_all: Tout sélectionner
+    cancel: Annuler
+    apply: Appliquer
+    select_all: Tout sélectionner
+    unselect_all: Tout désélectionner

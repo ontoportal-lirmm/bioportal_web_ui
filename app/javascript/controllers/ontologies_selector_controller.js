@@ -4,6 +4,8 @@ export default class extends Controller {
     static targets = ['submit', 'ontology', 'table', 'exit']
     static values = {
         id: String,
+        selectAll: String,
+        unselectAll: String
       }
     input(){
         this.submitTarget.click()
@@ -13,8 +15,8 @@ export default class extends Controller {
         this.#updateTableNumbers(event)
     }
     selectall(event) {
-        const selectText = '\nselect all\n';
-        const unselectText = '\nunselect all\n';
+        const selectText = `\n${this.selectAllValue}\n`;
+        const unselectText = `\n${this.unselectAllValue}\n`;
         const isChecked = event.target.innerHTML === unselectText;
         const newInnerHTML = isChecked ? selectText : unselectText;
         for (const target of this.ontologyTargets) {

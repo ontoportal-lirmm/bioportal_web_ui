@@ -1013,3 +1013,22 @@ en:
         export_metadata: Export all metadata
         abstract: Abstract
         description: Description
+  
+  ontologies_selector:
+    clear_selection: Clear selection
+    ontologies_advanced_selection: Ontologies advanced selection
+    search_hint: Filter ontologies ...
+    show_ontology_view: Show ontology views
+    hide_retired_ontologies: Hide retired ontologies
+    tabs_title:
+      categories: Categories
+      groups: Groups
+      format: Format
+      natural_languages: Natural languages
+      formality_levels: Formality levels
+      ontology_types: Ontology types
+    select_all: select all
+    cancel: Cancel
+    apply: Apply
+    select_all: select all
+    unselect_all: unselect all
