@@ -437,15 +437,15 @@ class OntologiesController < ApplicationController
     render partial: 'ontologies/sections/metadata/metrics_evolution_graph', locals: { data: data }
   end
 
-  def selector
+  def ontologies_selector
     @categories = LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
     @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
     @filters = ontology_filters_init(@categories, @groups)
     @select_id = params[:id]
-    render 'ontologies/selector/selector' , layout: false
+    render 'ontologies/ontologies_selector/ontologies_selector' , layout: false
   end
 
-  def selector_results
+  def ontologies_selector_results
     @ontologies = LinkedData::Client::Models::Ontology.all(include_views: params[:showOntologyViews])
     @total_ontologies_number = @ontologies.length
     @input = params[:input] || ''
@@ -489,7 +489,7 @@ class OntologiesController < ApplicationController
         submissions.any? { |submission| submission.ontology.id == ontology.id }
       end
     end
-    render 'ontologies/selector/selector_results'
+    render 'ontologies/ontologies_selector/ontologies_selector_results'
   end
 
   private
