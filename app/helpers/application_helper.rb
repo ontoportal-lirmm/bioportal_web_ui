@@ -632,5 +632,15 @@ module ApplicationHelper
     list&.join(',') || ''
   end
 
+  def ontologies_selector(id:, label: nil, name: nil, selected: nil)
+    - get_ontologies_data
+    content_tag(:div) do
+      render(Input::SelectComponent.new(id: id, label: label, name: name, value: @onts_for_select, multiple: "multiple", selected: selected)) +
+      content_tag(:div, class: 'ontologies-selector-button', 'data-controller': 'ontologies-selector', 'data-ontologies-selector-id-value': id) do
+        content_tag(:div, 'Clear selection', class: 'clear-selection', 'data-action': 'click->ontologies-selector#clear') +
+        link_to_modal('Ontologies advanced selection', "/ontologies_selector?id=#{id}", data: { show_modal_title_value: 'Ontologies advanced selection' })
+      end
+    end
+  end
 
 end
