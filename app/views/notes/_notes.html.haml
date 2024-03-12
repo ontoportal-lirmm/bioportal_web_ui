@@ -9,7 +9,7 @@
   %div.ont_notes_filter.my-1.d-flex.justify-content-end.align-items-baseline
     Filter:
     %input#hide_archived_ont.mx-1{:checked => "true", :name => "hide_archived_ont", :type => "checkbox"}
-    %label{:for => "hide_archived_ont"} Hide Archived
+    %label{:for => "hide_archived_ont"}= t('notes.filter_hide_archived')
 
   = render_alerts_container("notes_#{parent_type}_list_table_alerts")
 
@@ -23,7 +23,7 @@
         - t.row do |row|
           - row.td(colspan: colspan) do
             %div.text-center
-              No notes to display
+              = t('notes.no_notes')
 
       - else
         - @notes.each do |note|

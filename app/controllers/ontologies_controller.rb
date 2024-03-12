@@ -52,7 +52,7 @@ class OntologiesController < ApplicationController
 
     count_streams = [
       replace('ontologies_filter_count_request') do
-        helpers.content_tag(:p, class: "browse-desc-text", style: "margin-bottom: 12px !important;") { "Showing #{@ontologies.size} of #{@analytics.keys.size}" }
+        helpers.content_tag(:p, class: "browse-desc-text", style: "margin-bottom: 12px !important;") { t("ontologies.showing_ontologies_size", ontologies_size: @ontologies.size, analytics_size: @analytics.keys.size)}
       end
     ] + update_filters_counts
 

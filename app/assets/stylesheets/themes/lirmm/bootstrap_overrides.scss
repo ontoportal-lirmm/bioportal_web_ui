@@ -6,10 +6,10 @@ a {
   color: $color-links !important;
 }
 a i {
-  color: $color-primary;
+  color: var(--primary-color);
 }
 .text-primary {
-  color: $color-primary !important;
+  color: var(--primary-color) !important;
 }
 
 
@@ -19,8 +19,8 @@ a i {
   color: #fff !important;
 }
 .btn-outline-primary{
-  border-color: $color-primary !important;
-  color:  $color-primary !important;
+  border-color: var(--primary-color) !important;
+  color:  var(--primary-color) !important;
 }
 .btn-danger {
   color: #fff !important;
@@ -31,7 +31,7 @@ a i {
 }
 
 .btn-link {
-  color:  $color-primary !important;
+  color:  var(--primary-color) !important;
 }
 .card-header.bg-success {
   font-weight: bold;

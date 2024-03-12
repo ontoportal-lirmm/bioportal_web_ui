@@ -191,7 +191,7 @@
 }
 
 .account-page-subscription div .subscribe_to_notes {
-  color: #EB4335 !important;
+  color: var(--error-color) !important;
   font-weight: 400 !important;
   border: unset !important;
   background-color: unset !important;
