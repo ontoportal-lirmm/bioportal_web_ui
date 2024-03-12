@@ -643,4 +643,19 @@ module ApplicationHelper
     end
   end
 
+  def save_and_cancel_buttons(save_html_options: nil , cancel_html_options: nil)
+    content_tag(:div, class: 'save-cancel-buttons') do
+      content_tag(:div, class: 'button', **save_html_options) do
+        render Buttons::RegularButtonComponent.new(id: 'cancel-selector', value: t('ontologies_selector.cancel'), variant: "secondary", state: 'regular') do |btn|
+          btn.icon_left { inline_svg_tag 'x.svg' }
+        end
+      end +
+      content_tag(:div, class: 'button', **cancel_html_options) do
+        render Buttons::RegularButtonComponent.new(id: 'apply-selector', value: t('ontologies_selector.apply'), variant: "primary", state: 'regular') do |btn|
+          btn.icon_right { inline_svg_tag "check.svg" }
+        end
+      end
+    end
+  end
+
 end

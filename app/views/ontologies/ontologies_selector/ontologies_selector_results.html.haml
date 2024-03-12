@@ -10,15 +10,7 @@
                 .ontology{'data-ontologies-selector-target': 'ontology'}
                     = render ChipsComponent.new(label: "#{ontology.name} (#{ontology.acronym})", name: ontology.acronym)
         .horizontal-line                    
-        .action-buttons
-            .button{'data-action': "click->turbo-modal#hide", 'data-ontologies-selector-target': 'exit'}
-                = render Buttons::RegularButtonComponent.new(id:'cancel-selector', value: t('ontologies_selector.cancel'), variant: "secondary", state:'regular') do |btn|
-                    = btn.icon_left do
-                        = inline_svg_tag 'x.svg'
-            .button{'data-action': "click->ontologies-selector#apply"}
-                = render Buttons::RegularButtonComponent.new(id:'apply-selector', value: t('ontologies_selector.apply'), variant: "primary", state: 'regular') do |btn|
-                    = btn.icon_right do
-                        = inline_svg_tag "check.svg"
+        = save_and_cancel_buttons(save_html_options: {data: { action: "click->turbo-modal#hide", ontologies_selector_target: "exit" }} ,cancel_html_options: {data:{action:"click->ontologies-selector#apply"}})
 
 
     - container.loader do
