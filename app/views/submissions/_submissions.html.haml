@@ -16,9 +16,9 @@
           %div.align-middle
             = t('submissions.version')
         - header.th do
-          = attr_label("modificationDate", "Modified", show_tooltip: false)
+          = attr_label("modificationDate", t('submissions.modified'), show_tooltip: false)
         - header.th do
-          = attr_label("creationDate", "Submitted", show_tooltip: false)
+          = attr_label("creationDate", t('submissions.submitted'), show_tooltip: false)
         - unless @ont_restricted
           - header.th do
             %div.align-middle{style: 'text-align: center; margin-right: 33px;'}

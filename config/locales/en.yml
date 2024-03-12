@@ -10,12 +10,6 @@ en:
               no_appliance_id_for_comparison: Could not be validated. Unable to retrieve virtual appliance ID.
               appliance_id_mismatch: is an appliance id mismatch.
 
-  components:
-    check_resolvability: checking resolvability...
-    error_block: child_data_generator block did not provide all the child arguements
-    empty_field: The fields %{properties} are empty
-    save_button: Save
-    cancel_button: Cancel
 
   date:
     formats:
@@ -63,6 +57,9 @@ en:
     incomplete_simple_ontology: "Incomplete simple ontology: %{id}, %{ont}"
   label_xl:
     error_valid_label_xl: "Error: You must provide a valid label_xl id"
+  application:
+    powered_by: Powered by BioPortal
+    projects: Projects
   admin:
     query_not_permitted: Query not permitted
     update_info_successfully: Update info successfully retrieved
@@ -94,10 +91,6 @@ en:
     ontology_process_success: "Ontology %{ont} %{success_keyword} successfully,"
     ontology_not_found_system: "Ontology %{ont} was not found in the system, "
     ontology_process_error: "Problem %{error_keyword} ontology %{ont} - %{class}: %{message},"
-  application:
-    powered_by: Powered by BioPortal
-    projects: Projects
-  admin:
     new_ontologies_created_title: "The following ontologies: %{count} were created in this year"
     turbo_confirm: "Are you sure you want to %{name}?"
     analytics:
@@ -168,7 +161,7 @@ en:
         create_new_group: Create new group
         create_group: Create group
       index:
-        Create_a_new_group: Create a new group
+        create_a_new_group: Create a new group
         synchronize_groups_slices: Synchronize groups with slices
         id: ID
         count: COUNT
@@ -202,7 +195,7 @@ en:
         create_new_category: Create new category
         create_category: Create category
       index:
-        Create_a_new_category: Create a new category
+        create_a_new_category: Create a new category
         id: ID
         count: COUNT
         actions: Actions
@@ -480,7 +473,7 @@ en:
       release_notes: Release Notes
       api: API
       sparql: SPARQL
-      support: support
+      support: Support
       contact_us: Contact Us
       wiki: Wiki
       documentation: Documentation
@@ -712,39 +705,17 @@ en:
   negation: negation
   none: none
  
-  ontologies:
-    no_license: No license
-    view_license: View license
-    access_rights_information: Additional license a access rights information
-    referred_to: It can also be referred to as
-    private_ontology: Private Ontology
-    formality_levels: Formality levels
-    ontology_types: Ontology types
-    natural_languages: Natural languages
-    showing: Showing
-    metadata_properties: of %{acronym}  metadata properties are filled
-    metadata_only: N/A - metadata only
-    home_page: Home Page
-    ontology_processing_failed: "The ontology processing failed, with the current statuses: %{status}"
-    ontology_parsing_succeeded: "The ontology parsing succeeded, but some processing steps failed, here are the current statuses: %{status}"
-    upload_an_ontology: Upload an ontology. Sections such as %{ontology} will be available once done.
-    ontology_is_processing: The ontology is processing. Sections such as %{ontology} will be available once processing is complete.
-    contact_support: Contact support
-    edit_natural_languages: Edit natural languages of %{acronym}
-    edit_available_languages: Click here to edit available languages
-    add_new_submission: Add new submission
-    edit_metadata: Edit metadata
-    go_to_api: Go to API
-    projects_using_ontology: Projects using %{acronym}
-    create_new_project: Create new project
-    no_projects_using_ontology: No projects using %{acronym}
-    outside: outside
-    relation_with_other_ontologies: Relation with other ontologies either in %{inside} or %{outside}
-    ontology_search_prompt: 'Search an ontology or a term (e.g., plant height)'
-    self: Ontologies
-  
   ontology: Ontology
   ontology_details:
+    sections:
+      classes: Classes
+      summary: Summary
+      properties: Properties
+      instances: Instances
+      notes: Notes
+      mappings: Mappings
+      widgets: Widgets
+      sparql: Sparql
     concept:
       definitions: Definitions
       id: ID
@@ -994,6 +965,8 @@ en:
   hide_advanced_options: Hide advanced options
   no_result_was_found: No result was found
   notes:
+    no_notes: No notes to display
+    filter_hide_archived: Hide Archived
     new_class_proposal: New Class Proposal
     new_relationship_proposal: New Relationship Proposal
     change_property_value_proposal: Change Property Value Proposal
@@ -1045,6 +1018,17 @@ en:
     feedback: "Feedback:"
 
   submissions:
+    filter:
+      all_formats: All formats
+      sort_by_name: Sort by name
+      sort_by_classes: Sort by classes count
+      sort_by_instances_concepts: Sort by instances/concepts count
+      sort_by_submitted_date: Sort by submitted date
+      sort_by_creation_date: Sort by creation date
+      sort_by_fair_score: Sort by FAIR score
+      sort_by_popularity: Sort by popularity
+      sort_by_notes: Sort by notes
+      sort_by_projects: Sort by projects
     no_submissions_for_ontology: "No submissions for ontology: %{ontology}"
     submission_updated_successfully: Submission updated successfully
     save_button: Save
@@ -1289,6 +1273,37 @@ en:
     update_the_current_displayed_content: "will update the current displayed content to all the following submissions:"
     save: Save
   ontologies:
+    showing_ontologies_size: "Showing %{ontologies_size} of %{analytics_size}"
+    filters: Filters
+    no_license: No license
+    view_license: View license
+    access_rights_information: Additional license a access rights information
+    referred_to: It can also be referred to as
+    private_ontology: Private Ontology
+    formality_levels: Formality levels
+    ontology_types: Ontology types
+    natural_languages: Natural languages
+    showing: Showing
+    metadata_properties: of %{acronym}  metadata properties are filled
+    metadata_only: N/A - metadata only
+    home_page: Home Page
+    ontology_processing_failed: "The ontology processing failed, with the current statuses: %{status}"
+    ontology_parsing_succeeded: "The ontology parsing succeeded, but some processing steps failed, here are the current statuses: %{status}"
+    upload_an_ontology: Upload an ontology. Sections such as %{ontology} will be available once done.
+    ontology_is_processing: The ontology is processing. Sections such as %{ontology} will be available once processing is complete.
+    contact_support: Contact support
+    edit_natural_languages: Edit natural languages of %{acronym}
+    edit_available_languages: Click here to edit available languages
+    add_new_submission: Add new submission
+    edit_metadata: Edit metadata
+    go_to_api: Go to API
+    projects_using_ontology: Projects using %{acronym}
+    create_new_project: Create new project
+    no_projects_using_ontology: No projects using %{acronym}
+    outside: outside
+    relation_with_other_ontologies: Relation with other ontologies either in %{inside} or %{outside}
+    ontology_search_prompt: 'Search an ontology or a term (e.g., plant height)'
+    self: Ontologies
     views:  Views
     create_new_view: Create new view
     expand_all: Expand All
@@ -1331,7 +1346,6 @@ en:
     contact_support: "If you have any questions or problems, please email the %{site} support team at:"
     collecting_data_message: We are still collecting data for %{acronym}
     submit_new_ontology: Submit new ontology
-    add_new_submission: "Add new submission for ontology %{acronym}"
     details: Details
     general_information: General information
     dates_and_contacts: Dates and contacts
@@ -1363,10 +1377,9 @@ en:
       classes_with_a_single_child: Classes with a single child
       classes_with_more_than_25_children: Classes with more than 25 children
       classes_with_no_definition: Classes with no definition
-
       identifiers: Principal identifiers of the ontology.
       dates: Dates
-      persons_and_organizations: Persons and organizations
+      person_and_organization: Persons and organizations
       other_links: Other links
       info_tooltip_links: Metadata properties that highlight the links enabling access to datasets, downloading semantic resources, etc
       projects_and_usage_information: Projects and usage information
@@ -1418,7 +1431,7 @@ en:
       name: name
       class_uri_description: "Put the complete URI of the class (e.g.,"
       class_uri_example: 'put the complete URI of the class (e.g., %{link})'
-      class_shortid_description: put the short id of the class, as used in %{$SITE} (e.g., "Common_Neoplasm");
+      class_shortid_description: put the short id of the class, as used in %{site} (e.g., "Common_Neoplasm");
       class_name_description: put the preferred name of the class (e.g., "Common Neoplasm");
       hidden_elements_description: "In addition to the input element you defined, there are four hidden form elements that are created and then set when a user selects a class from the list. For example, if you create a field with this code:"
       hidden_elements_example: "The 'name' attribute is used to create the four following fields (note how the 'a' from the name attribute is appended to the id attribute):"
@@ -1466,6 +1479,13 @@ en:
     retrieved_time: Retrieved in %{time}s
     failed_to_get_url: "Failed to get %{url}: %{message}"
   components:
+    check_resolvability: checking resolvability...
+    error_block: child_data_generator block did not provide all the child arguements
+    empty_field: The fields %{properties} are empty
+    save_button: Save
+    cancel_button: Cancel
+    go_to_api: Go to API
+    the_content: here is the content
     name_identifiers: NAME (IDENTIFIERS)
     type: TYPE
     name_acronym: NAME(ACRONYM)
@@ -1487,6 +1507,7 @@ en:
     instances: instances
     classes: classes
     submitted: Submitted
+    by: by
     creation_date: Creation date %{date}
     view_of_the_ontology: "View of the ontology %{ontology}"
     view: View

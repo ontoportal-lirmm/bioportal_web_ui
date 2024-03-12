@@ -7,17 +7,13 @@
             --hover-color: #41C67C;
             --secondary-color: #ffc107;
             --light-color: #F1F6FA;
-            --admin-color: #145FF4;
-            --error-color: #EB4335;
         }
     <% when "stageportal" %>
         :root{
-            --primary-color: #3CB371;
-            --hover-color: #41C67C;
+            --primary-color: #37AEA0;
+            --hover-color: #3BBDAE;
             --secondary-color: #ffc107;
-            --admin-color: #145FF4;
-            --light-color: #F1F6FA;
-            --error-color: #EB4335;
+            --light-color: #ECF7F6;
         }
     <% when "bioportal" %>
         :root{
@@ -25,7 +21,6 @@
             --hover-color: #6B96B7;
             --secondary-color: #ffc107;
             --light-color: #F0F5F6;
-            --admin-color: #145FF4;
         }
     
     <% when "ontoportal" , "testportal" %>
@@ -33,9 +28,7 @@
             --primary-color: #5499a4;
             --hover-color: #6B96B7;
             --secondary-color: #ffc107;
-            --admin-color: #145FF4;
             --light-color: #F1F6FA;
-            --error-color: #EB4335;
         }
     <%# Here to add a new theme ... %>
     <% end %>
@@ -45,6 +38,11 @@
 
 // common variables
 :root{
+    --error-color: #EB4335;
+    --warning-color: #e48c11;
+    --gray-color: #888888;
+    --success-color: #2DC54E;
+    --admin-color: #145FF4;
     --container-max-width: 1248px;
     --bg-info-light-color: rgba(59, 130, 246, 0.1);
     --bg-danger-light-color: rgba(239, 68, 68, 0.1);
