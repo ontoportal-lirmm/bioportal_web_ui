@@ -26,8 +26,7 @@
               0 (0%)
     %div.p-3
       %div#detailedFilter.row.text-left
-        - get_ontologies_data
-        = render Input::OntologiesSelectorComponent.new(id:'landscape_ontologies_selector', ontologies: @onts_for_select ,name: 'ontologies')                
+        = ontologies_selector(id:'landscape_ontologies_selector',name: 'ontologies')
       %div
         This interface shows how an ontology or a group responded successfully to O’FAIRe FAIRness assessment questions
       %div

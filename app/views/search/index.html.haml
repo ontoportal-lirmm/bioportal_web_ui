@@ -19,8 +19,7 @@
               .title
                 = t("search.advanced_options.ontologies")
               .field
-                - get_ontologies_data
-                = render Input::OntologiesSelectorComponent.new(id:'search_page_ontologies', ontologies: @onts_for_select ,name: 'ontologies_list[]', selected: params[:ontologies_list])                
+                = ontologies_selector(id:'search_page_ontologies' ,name: 'ontologies_list[]', selected: params[:ontologies_list])
 
 
           .right 
