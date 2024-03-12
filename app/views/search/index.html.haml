@@ -1,6 +1,6 @@
-.search-page-container 
+.search-page-container{'data-controller': 'form-url', 'data-form-url-options-value': ['ontologies']}
   .search-page-subcontainer{'data-controller': 'reveal-component'}
-    = form_tag(search_path, method: :get, 'data-turbo': true) do
+    = form_tag(search_path, method: :get, 'data-turbo': true, 'data-action': 'submit->form-url#submit') do
       .search-page-input-container{'data-controller': 'reveal'}
         .search-page-input
           %input{type:"text", placeholder: t('search.search_place_holder'), name: "q", value: @search_query}
@@ -23,7 +23,7 @@
                 = t("search.advanced_options.ontologies")
               .field
                 - get_ontologies_data
-                = render Input::SelectComponent.new(id: 'search-ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected:  params[:ontologies_list])
+                = render Input::SelectComponent.new(id: 'search-ontologies', name: 'ontologies[]', value: @onts_for_select, multiple: "multiple", selected:  params[:ontologies]&.split(','))
           
           .right 
             .filter-container
