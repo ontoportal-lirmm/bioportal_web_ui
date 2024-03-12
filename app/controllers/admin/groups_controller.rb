@@ -23,7 +23,7 @@ class Admin::GroupsController < ApplicationController
 
   def edit
     @group = LinkedData::Client::Models::Group.find_by_acronym(params[:id]).first
-    @acronyms = @group.ontologies.map { |url| url.match(/\/([^\/]+)$/)[1] }
+    @acronyms = @group&.ontologies&.map { |url| url.match(/\/([^\/]+)$/)[1] }
     @ontologies_group = LinkedData::Client::Models::Ontology.all(include: 'acronym').map {|o|[o.acronym, o.id] }
     respond_to do |format|
       format.html { render "edit", :layout => false }
@@ -39,16 +39,16 @@ class Admin::GroupsController < ApplicationController
       if response_error?(group_saved)
         response[:errors] = response_errors(group_saved)
       else
-        response[:success] = "group successfully created in  #{Time.now - start}s"
+        response[:success] = t('admin.groups.group_created', time: Time.now - start)
       end
     rescue Exception => e
-      response[:errors] = "Problem creating the group  - #{e.message}"
+      response[:errors] = t('admin.groups.group_error_creation', message: e.message)
     end
 
     if response[:errors]
       render_turbo_stream alert_error(id: 'group') { response[:errors] }
     else
-      success_message = 'New Group added successfully'
+      success_message = t('admin.groups.group_added_successfully')
       streams = [alert_success(id: 'group') { success_message }]
 
       streams << prepend('admin_groups_table_body', partial: 'admin/groups/group', locals: { group: group_saved })
@@ -71,10 +71,10 @@ class Admin::GroupsController < ApplicationController
       if response_error?(group_updated)
         response[:errors] = response_errors(group_updated)
       else
-        response[:success] = "group successfully updated in  #{Time.now - start}s"
+        response[:success] = t('admin.groups.group_updated_successfully', time: Time.now - start)
       end
     rescue Exception => e
-      response[:errors] = "Problem updating the group - #{e.message}"
+      response[:errors] = t('admin.groups.problem_of_updating', message: e.message)
     end
 
     if response[:errors]
@@ -99,10 +99,10 @@ class Admin::GroupsController < ApplicationController
       if response_error?(error_response)
         response[:errors] = response_errors(error_response)
       else
-        response[:success] = "group successfully deleted in  #{Time.now - start}s"
+        response[:success] = t('admin.groups.group_deleted_successfully', time: Time.now - start)
       end
     rescue Exception => e
-      response[:errors] = "Problem deleting the group - #{e.message}"
+      response[:errors] = t('admin.groups.problem_of_deleting', message: e.message)
     end
     respond_to do |format|
       format.turbo_stream do
@@ -129,12 +129,12 @@ class Admin::GroupsController < ApplicationController
       if !response_json.is_a?(Array) && response_json[:errors]
         _process_errors(response_json[:errors], response, true)
       else
-        response[:success] = "Synchronization of groups started successfully"
+        response[:success] = t('admin.groups.synchronization_of_groups')
       end
     rescue JSON::ParserError => e
-      response[:errors] = "Error parsing JSON response - #{e.class}: #{e.message}"
+      response[:errors] = t('admin.groups.error_parsing', class: e.class, message: e.message)
     rescue Exception => e
-      response[:errors] = "Problem synchronizing groups - #{e.class}: #{e.message}"
+      response[:errors] = t('admin.groups.problem_synchronizing_groups', class: e.class, message: e.message)
     end
 
     respond_to do |format|

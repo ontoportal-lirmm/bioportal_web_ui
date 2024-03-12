@@ -4,8 +4,11 @@
       .search-page-input-container{'data-controller': 'reveal'}
         .search-page-input
           %input{type:"text", placeholder: t('search.search_place_holder'), name: "q", value: @search_query}
-          %button.search-page-button{type:'submit'}
-            = inline_svg_tag 'icons/search.svg'
+          .search-page-button
+            = render Buttons::RegularButtonComponent.new(id:'search-page-button', value: "Search", variant: "primary", type: "submit") do |btn|
+              = btn.icon_right do
+                = inline_svg_tag "icons/search.svg"
+            
 
         .search-page-advanced{'data-reveal-component-target': 'item', class: "#{@advanced_options_open ? '' : 'd-none'}"}
           .left

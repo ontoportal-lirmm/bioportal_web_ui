@@ -15,7 +15,7 @@ require 'ontologies_api_client'
 class ApplicationController < ActionController::Base
   
   before_action :set_locale
-
+  
   # Sets the locale based on the locale cookie or the value returned by detect_locale.
   def set_locale    
     I18n.locale = cookies[:locale] || detect_locale
@@ -137,20 +137,20 @@ class ApplicationController < ActionController::Base
 
 
   def ontology_not_found(ontology_acronym)
-    not_found("Ontology #{ontology_acronym} not found")
+    not_found(t('application.ontology_not_found',acronym: ontology_acronym))
   end
 
   def concept_not_found(concept_id)
-    not_found("Concept #{concept_id} not found")
+    not_found(t('application.concept_not_found',concept: concept_id))
   end
 
   def not_found(message = '')
     if request.xhr?
-      render plain: message || "Error: load failed"
+      render plain: message || t('application.error_load')
       return
     end
 
-    raise ActiveRecord::RecordNotFound.new(message || 'Not Found')
+    raise ActiveRecord::RecordNotFound.new(message || t('application.not_found_message'))
   end
 
   NOTIFICATION_TYPES = { :notes => "CREATE_NOTE_NOTIFICATION", :all => "ALL_NOTIFICATION" }
@@ -241,7 +241,7 @@ class ApplicationController < ActionController::Base
   def response_errors(error_response)
     error_struct = parse_response_body(error_response)
 
-    errors = {error: "There was an error, please try again"}
+    errors = {error: t('application.try_again')}
     return errors unless error_struct
     return errors unless error_struct.respond_to?(:errors)
     errors = {}
@@ -296,7 +296,7 @@ class ApplicationController < ActionController::Base
     params[:ontology] = params[:ontology].nil? ? params[:ontologyid] : params[:ontology]
     # Error checking
     if params[:ontology].nil? || params[:id] && params[:ontology].nil?
-      @error = "Please provide an ontology id or concept id with an ontology id."
+      @error = t('application.provide_ontology_or_concept')
       return
     end
     acronym = BpidResolver.id_to_acronym(params[:ontology])
@@ -394,7 +394,7 @@ class ApplicationController < ActionController::Base
       if ignore_concept_param
         # Don't display any classes in the tree
         @concept = LinkedData::Client::Models::Class.new
-        @concept.prefLabel = "Please search for a class using the Jump To field above"
+        @concept.prefLabel = t('application.search_for_class')
         @concept.obsolete = false
         @concept.id = "bp_fake_root"
         @concept.properties = {}
@@ -419,7 +419,7 @@ class ApplicationController < ActionController::Base
         # TODO_REV: Support views? Replace old view call: @ontology.top_level_classes(view)
         @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
         if @roots.nil? || @roots.empty?
-          LOG.add :debug, "Missing @roots for #{@ontology.acronym}"
+          LOG.add :debug, t('application.missing_roots_for_ontology', acronym: @ontology.acronym)
           classes = @ontology.explore.classes.collection
           @concept = classes.first.explore.self(full: true) if classes.first
           return
@@ -430,20 +430,20 @@ class ApplicationController < ActionController::Base
 
         # get the initial concept to display
         root_child = @root.children&.first
-        not_found("Missing roots #{@roots.id}") if root_child.nil?
+        not_found(t('application.missing_roots', id: @roots.id)) if root_child.nil?
 
         @concept = root_child.explore.self(full: true, lang: lang)
         # Some ontologies have "too many children" at their root. These will not process and are handled here.
         if @concept.nil?
-          LOG.add :debug, "Missing class #{root_child.links.self}"
-          not_found("Missing class #{root_child.links.self}")
+          LOG.add :debug, t('application.missing_class', root_child: root_child.links.self)
+          not_found(t('application.missing_class', root_child: root_child.links.self))
         end
       else
         # if the id is coming from a param, use that to get concept
         @concept = @ontology.explore.single_class({full: true, lang: lang}, params[:conceptid])
         if @concept.nil? || @concept.errors
-          LOG.add :debug, "Missing class #{@ontology.acronym} / #{params[:conceptid]}"
-          not_found("Missing class #{@ontology.acronym} / #{params[:conceptid]}")
+          LOG.add :debug, t('application.missing_class_ontology', acronym: @ontology.acronym, concept_id: params[:conceptid])
+          not_found(t('application.missing_class_ontology', acronym: @ontology.acronym, concept_id: params[:conceptid]))
         end
 
         # Create the tree
@@ -451,7 +451,7 @@ class ApplicationController < ActionController::Base
         if rootNode.nil? || rootNode.empty?
           @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
           if @roots.nil? || @roots.empty?
-            LOG.add :debug, "Missing @roots for #{@ontology.acronym}"
+            LOG.add :debug, t('application.missing_roots_for_ontology', acronym: @ontology.acronym)
             @concept = @ontology.explore.classes.collection.first.explore.self(full: true)
             return
           end
@@ -554,7 +554,7 @@ class ApplicationController < ActionController::Base
       end
     rescue Exception => e
       LOG.add :error, e.message
-      LOG.add :error, "Failure to simplify class: #{cls}"
+      LOG.add :error, t('application.error_simplify_class', cls: cls)
     end
     return cls
   end
@@ -569,7 +569,7 @@ class ApplicationController < ActionController::Base
     ont = Rails.cache.read(id)
     return ont unless ont.nil?
     # No cache or it has expired
-    LOG.add :debug, "No cache or expired cache for ontology: #{id}"
+    LOG.add :debug, t('application.no_cache', id: id)
     ont = {}
     ont[:id] = id
     ont[:uri] = id
@@ -586,7 +586,7 @@ class ApplicationController < ActionController::Base
     end
     # Only cache a complete representation of a simplified ontology
     if ont[:id].nil? || ont[:uri].nil? || ont[:acronym].nil? || ont[:name].nil? || ont[:ui].nil?
-      raise "Incomplete simple ontology: #{id}, #{ont}"
+      raise t('application.incomplete_simple_ontology', id: id, ont: ont)
     else
       Rails.cache.write(ont[:id], ont, expires_in: EXPIRY_ONTOLOGY_SIMPLIFIED)
     end
@@ -712,6 +712,11 @@ class ApplicationController < ActionController::Base
   def request_lang
     helpers.request_lang
   end
+
+  def self.t(*args)
+    I18n.t(*args)
+  end
+
   private
   def not_found_record(exception)
     @error_message = exception.message

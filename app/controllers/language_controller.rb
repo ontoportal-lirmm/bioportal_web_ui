@@ -10,7 +10,7 @@ class LanguageController < ApplicationController
                  cookies.permanent[:locale] = language
             else
                 # in case we want to show a message if the language is not available
-                flash.now[:notice] = "#{language} translation not available"
+                flash.now[:notice] = t('language.translation_not_available', language: language)
                 logger.error flash.now[:notice]
             end
         end

@@ -15,7 +15,7 @@ class AdminController < ApplicationController
     if !session[:user]&.admin? && !graph.blank?
       acronym = graph.split('/')[-3]
       @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
-      render(inline: 'Query not permitted') && return  if @ontology.nil? || @ontology.errors
+      render(inline: t('admin.query_not_permitted')) && return  if @ontology.nil? || @ontology.errors
     end
 
     response = helpers.ontology_sparql_query(params[:query], graph)
@@ -53,10 +53,10 @@ class AdminController < ApplicationController
         else
           response[:update_info] = update_info
           response[:notices] = update_info["notes"] if update_info["notes"]
-          response[:success] = "Update info successfully retrieved"
+          response[:success] = t('admin.update_info_successfully')
         end
       rescue Exception => e
-        response[:errors] = "Problem retrieving update info - #{e.message}"
+        response[:errors] = t('admin.error_update_info', message: e.message)
       end
 
       if response[:errors]
@@ -66,8 +66,8 @@ class AdminController < ApplicationController
 
         output << response[:update_info]["notes"]  if response[:update_info]["update_available"]
 
-        output <<  "Current version: #{response[:update_info]['current_version']}"
-        output <<  "Appliance ID: #{response[:update_info]['appliance_id']}"
+        output << t('admin.current_version', version: response[:update_info]['current_version'])
+        output << t('admin.appliance_id', id: response[:update_info]['appliance_id'])
 
 
         render_turbo_stream *output.map{|message|   alert(id: 'update_check_frame', type: 'info') {message} }
@@ -91,7 +91,7 @@ class AdminController < ApplicationController
       full_log_file_path = ontology[:logFilePath]
       @log_file_path = /#{params["acronym"]}\/\d+\/[-a-zA-Z0-9_]+\.log$/.match(full_log_file_path)
     else
-      @parse_log = "No record exists for ontology #{params["acronym"]}"
+      @parse_log = t('admin.no_record_exists', acronym: params["acronym"])
       @log_file_path = "None"
     end
     render action: "parse_log"
@@ -103,12 +103,12 @@ class AdminController < ApplicationController
     if @cache.respond_to?(:flush_all)
       begin
         @cache.flush_all
-        response[:success] = "UI cache successfully flushed"
+        response[:success] = t('admin.cache_flush_success')
       rescue Exception => e
-        response[:errors] = "Problem flushing the UI cache - #{e.class}: #{e.message}"
+        response[:errors] = t('admin.cache_flush_error', class: e.class, message: e.message)
       end
     else
-      response[:errors] = "The UI cache does not respond to the 'flush_all' command"
+      response[:errors] = t('admin.no_flush_command')
     end
 
     respond_to do |format|
@@ -129,12 +129,12 @@ class AdminController < ApplicationController
     if @cache.respond_to?(:reset)
       begin
         @cache.reset
-        response[:success] = "UI cache connection successfully reset"
+        response[:success] = t('admin.cache_reset_success')
       rescue Exception => e
-        response[:errors] = "Problem resetting the UI cache connection - #{e.message}"
+        response[:errors] = t('admin.cache_reset_error', message: e.message)
       end
     else
-      response[:errors] = "The UI cache does not respond to the 'reset' command"
+      response[:errors] =  t('admin.no_reset_command')
     end
 
     respond_to do |format|
@@ -153,9 +153,9 @@ class AdminController < ApplicationController
 
     begin
       response_raw = LinkedData::Client::HTTP.post("#{ADMIN_URL}clear_goo_cache", params, raw: true)
-      response[:success] = "Goo cache successfully flushed"
+      response[:success] = t('admin.clear_goo_cache_success')
     rescue Exception => e
-      response[:errors] = "Problem flushing the Goo cache - #{e.class}: #{e.message}"
+      response[:errors] = t('admin.clear_goo_cache_error', class: e.class, message: e.message)
     end
 
     respond_to do |format|
@@ -175,9 +175,9 @@ class AdminController < ApplicationController
 
     begin
       response_raw = LinkedData::Client::HTTP.post("#{ADMIN_URL}clear_http_cache", params, raw: true)
-      response[:success] = "HTTP cache successfully flushed"
+      response[:success] = t('admin.clear_http_cache_success')
     rescue Exception => e
-      response[:errors] = "Problem flushing the HTTP cache - #{e.class}: #{e.message}"
+      response[:errors] = t('admin.clear_http_cache_error', class: e.class, message: e.message)
     end
 
     respond_to do |format|
@@ -209,14 +209,14 @@ class AdminController < ApplicationController
         response = response_json
 
         if params["ontologies"].nil? || params["ontologies"].empty?
-          response[:success] = "Refresh of ontologies report started successfully";
+          response[:success] = t('admin.refresh_report_without_ontologies')
         else
           ontologies = params["ontologies"].split(",").map {|o| o.strip}
-          response[:success] = "Refresh of report for ontologies: #{ontologies.join(", ")} started successfully";
+          response[:success] = t('admin.refresh_report_with_ontologies', ontologies: ontologies.join(", "))
         end
       end
     rescue Exception => e
-      response[:errors] = "Problem refreshing report - #{e.class}: #{e.message}"
+      response[:errors] = t('admin.problem_refreshing_report', class: e.class, message: e.message)
       # puts "#{e.class}: #{e.message}\n#{e.backtrace.join("\n\t")}"
     end
     render :json => response
@@ -247,16 +247,16 @@ class AdminController < ApplicationController
             errors = response_errors(error_response)
             _process_errors(errors, response, true)
           else
-            response[:success] << "Submission #{params["id"]} for ontology #{ont} was deleted successfully"
+            response[:success] << t('admin.submission_deleted_successfully', id: params["id"], ont: ont)
           end
         else
-          response[:errors] << "Submission #{params["id"]} for ontology #{ont} was not found in the system"
+          response[:errors] << t('admin.submission_not_found', id: params["id"], ont: ont)
         end
       else
-        response[:errors] << "Ontology #{ont} was not found in the system"
+        response[:errors] << t('admin.ontology_not_found', ont: ont)
       end
     rescue Exception => e
-      response[:errors] << "Problem deleting submission #{params["id"]} for ontology #{ont} - #{e.class}: #{e.message}"
+      response[:errors] << t('admin.problem_deleting_submission', id: params["id"], ont: ont, class: e.class, message: e.message )
     end
 
     if params[:turbo_stream]
@@ -291,11 +291,11 @@ class AdminController < ApplicationController
         _process_errors(ontologies_data_parsed[:errors], response, true)
       else
         response.merge!(ontologies_data_parsed)
-        response[:success] = "Report successfully regenerated on #{ontologies_data_parsed[:report_date_generated]}"
-        LOG.add :debug, "Ontologies Report - retrieved #{response[:ontologies].length} ontologies in #{Time.now - start}s"
+        response[:success] = t('admin.report_successfully_regenerated', report_date_generated: ontologies_data_parsed[:report_date_generated])
+        LOG.add :debug, t('admin.ontologies_report_retrieved', ontologies: response[:ontologies].length, time: Time.now - start)
       end
     rescue Exception => e
-      response[:errors] = "Problem retrieving ontologies report - #{e.message}"
+      response[:errors] = t('admin.problem_retrieving_ontologies', message: e.message)
     end
     response
   end
@@ -329,7 +329,7 @@ class AdminController < ApplicationController
     response = {errors: '', success: ''}
 
     if params["ontologies"].nil? || params["ontologies"].empty?
-      response[:errors] = "No ontologies parameter passed. Syntax: ?ontologies=ONT1,ONT2,...,ONTN"
+      response[:errors] = t('admin.no_ontologies_parameter_passed')
     else
       ontologies = params["ontologies"].split(",").map {|o| o.strip}
 
@@ -343,13 +343,13 @@ class AdminController < ApplicationController
               errors = response_errors(error_response) # see application_controller::response_errors
               _process_errors(errors, response, false)
             else
-              response[:success] << "Ontology #{ont} #{success_keyword} successfully, "
+              response[:success] << t('admin.ontology_process_success', ont: ont, success_keyword: success_keyword)
             end
           else
-            response[:errors] << "Ontology #{ont} was not found in the system, "
+            response[:errors] << t('admin.ontology_not_found_system', ont: ont)
           end
         rescue Exception => e
-          response[:errors] << "Problem #{error_keyword} ontology #{ont} - #{e.class}: #{e.message}, "
+          response[:errors] << t('admin.ontology_process_error', error_keyword: error_keyword, ont: ont, class: e.class, message: e.message)
         end
       end
       response[:success] = response[:success][0...-2] unless response[:success].empty?
