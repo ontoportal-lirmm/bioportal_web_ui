@@ -9,6 +9,8 @@ it:
               invalid_license_key: is an invalid license key
               no_appliance_id_for_comparison: Could not be validated. Unable to retrieve virtual appliance ID.
               appliance_id_mismatch: is an appliance id mismatch
+  
+  # Configurare il termine di risorsa 'ontology' nell'intero portale in modo che possa essere sostituito da alternative come 'semantic_resource', 'vocabulary', 'terminology', o 'semantic_artefact'
   resource_term:
     ontology: ontologia
     ontology_plural: ontologie

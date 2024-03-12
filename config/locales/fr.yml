@@ -11,7 +11,7 @@ fr:
               appliance_id_mismatch: ne correspond pas à l'ID de l'appliance virtuelle.
 
 
-  
+  # Rendre le terme de ressource 'ontologie' configurable dans tout le portail, permettant de le remplacer par des termes alternatifs tels que 'semantic_resource', 'vocabulary', 'terminology', ou 'semantic_artefact'
   resource_term:
     ontology: ontologie
     ontology_plural: ontologies
