@@ -1,13 +1,13 @@
 - @title= t('annotator.title')
 .annotator-page-container{'data-controller': 'annotator'}
-  .annotator-page-subcontainer
+  .annotator-page-subcontainer{'data-controller': 'form-url', 'data-form-url-options-value': ['ontologies', 'semantic_types', 'semantic_groups']}
     .annotator-page-title
       .text
         = @page_name
       .line
     .annotator-page-decription
       = t('annotator.description')
-    = form_tag(@form_url, method: :get, 'data-turbo': true, novalidate: true) do
+    = form_tag(@form_url, method: :get, 'data-turbo': true, novalidate: true, 'data-action': 'submit->form-url#submit') do
       .annotator-page-inputs{'data-controller': 'reveal-component'}
         .inputs
           %div
@@ -20,7 +20,7 @@
               = t('annotator.options')
             .select-ontologies
               - get_ontologies_data
-              = render Input::SelectComponent.new(label: t('recommender.select_ontologies'), id: 'ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected: params[:ontologies_list])
+              = render Input::SelectComponent.new(label: t('recommender.select_ontologies'), id: 'ontologies', name: 'ontologies[]', value: @onts_for_select, multiple: "multiple", selected: params[:ontologies]&.split(','))
             .prefrences
               .preftitle
                 = t('annotator.prefrences')
@@ -35,8 +35,8 @@
                 
         .more-advanced-options{'data-reveal-component-target': 'item', class: "#{@advanced_options_open ? '' : 'd-none'}"}
           .filters_line
-            = render Input::SelectComponent.new(label: t('annotator.select_umls_sementic_types'), id: 'umls_semantic_types', name: 'semantic_types_list[]', value: @semantic_types_for_select, multiple: true, selected: params[:semantic_types_list])
-            = render Input::SelectComponent.new(label: t('annotator.select_umls_sementic_groupes'), id: 'umls_semantic_groups', name: 'semantic_groups_list[]', value: @semantic_groups_for_select, multiple: true, selected: params[:semantic_groups_list])
+            = render Input::SelectComponent.new(label: t('annotator.select_umls_sementic_types'), id: 'umls_semantic_types', name: 'semantic_types[]', value: @semantic_types_for_select, multiple: true, selected: params[:semantic_types]&.split(','))
+            = render Input::SelectComponent.new(label: t('annotator.select_umls_sementic_groupes'), id: 'umls_semantic_groups', name: 'semantic_groups[]', value: @semantic_groups_for_select, multiple: true, selected: params[:semantic_groups]&.split(','))
             = render Input::SelectComponent.new(label: t('annotator.include_ancentors'), id: 'ancestors_level', name: 'class_hierarchy_max_level', value: @ancestors_levels, selected: params[:class_hierarchy_max_level])
           .filters_line
             - include_score_helper = 'Score annotations following previous NCBO 2009 measure (old) or Score annotations following C-Value measure (cvalue) or Score annotations following C-Value measure with hierarchy expansion (cvalueh).'
