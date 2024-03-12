@@ -1,5 +1,6 @@
 module InternationalisationHelper
 
+  #Implement logic to make the term 'ontology' configurable throughout the portal, allowing it to be replaced with the variable $RESOURCE_TERM
   def t(*args)
     translation = I18n.t(*args).downcase
     term = I18n.t("resource_term.ontology")
