@@ -9,7 +9,7 @@ export default class extends Controller {
   static targets = ['frame', 'bubbles', 'submit']
 
   connect() {
-    this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue)
+    this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue, this.#normalization_ratio(this.mappingsListValue))
     this.#center_scroll(this.frameTarget)
   }
   submit(){
@@ -31,11 +31,12 @@ export default class extends Controller {
     }
   }
 
-  #draw_bubbles(mappingsList, zoomRatio){
+  #draw_bubbles(mappingsList, zoomRatio, normalization_ratio){
     const data = this.#hash_to_list(mappingsList)
     const width = 600*zoomRatio;
     const height = 600*zoomRatio;
     const margin = 1;
+    const logScaleFactor = 10;
 
     const pack = d3.pack()
       .size([width - margin, height - margin])
@@ -44,7 +45,7 @@ export default class extends Controller {
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     const root = d3.hierarchy({ children: data })
-      .sum(d => d.ontology_mappings);
+      .sum(d => d.ontology_mappings/normalization_ratio + Math.log(d.ontology_mappings + 1) / logScaleFactor);
 
     const svg = d3.select("#mappings-bubbles-view")
       .append("svg")
@@ -86,7 +87,7 @@ export default class extends Controller {
     // Display ontology names in tooltips on hover
     circle.on("mouseover", function (event, d) {
       d3.select(this).append("title")
-        .text(`${d.data.ontology_name}\n${d.value}`);
+        .text(`${d.data.ontology_name}\n${d.data.ontology_mappings}`);
     }).on("mouseout", function (event, d) {
       d3.select(this).select("title").remove();
     });
@@ -108,5 +109,17 @@ export default class extends Controller {
   #center_scroll(frame){
     frame.scrollTop = frame.scrollHeight / 2 - frame.clientHeight / 2;
     frame.scrollLeft = frame.scrollWidth / 2 - frame.clientWidth / 2;
+  }
+
+  #normalization_ratio(ontologies_hash){
+    let maxValue = -Infinity
+    for (const value of Object.values(ontologies_hash)) {
+      maxValue = (maxValue < value) ? value : maxValue
+    }
+    let normalization_ratio = 1
+    while((maxValue / normalization_ratio)>10){
+      normalization_ratio *= 10
+    }
+    return normalization_ratio
   }
 }
