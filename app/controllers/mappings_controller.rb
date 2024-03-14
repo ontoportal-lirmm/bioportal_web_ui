@@ -28,6 +28,7 @@ class MappingsController < ApplicationController
 
   def show_table
     ontology_acronym = params[:ontology].split("-").last.split('(').first.gsub(" ", "")
+    @acronym = ontology_acronym 
     @mapping_counts = mapping_counts(ontology_acronym)
     render "mappings/mapping_table"
   end
@@ -40,7 +41,7 @@ class MappingsController < ApplicationController
 
   def count
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    @ontology_acronym = @ontology&.acronym || params[:id]
+    @ontology_acronym = @ontology&.acronym || params[:ontology]
     @mapping_counts = mapping_counts(@ontology_acronym)
     render partial: 'count'
   end
