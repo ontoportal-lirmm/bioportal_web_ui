@@ -16,6 +16,36 @@ export default class extends Controller {
     this.submitTarget.click()
   }
 
+  select_bubble(event){
+    const acronym = event.currentTarget.getAttribute('data-acronym')
+    let url = 'mappings/ontology_mappings/' + acronym
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok');
+            }
+            return response.json(); // assuming response is JSON
+        })
+        .then(data => {
+            let mappings_list = []
+            for(let i=0; i<data.length; i++){
+                mappings_list.push(data[i]['target_ontology']['acronym'])
+            }
+            const bubblesContainer = document.getElementById('mappings-bubbles-view')
+            const leafs = bubblesContainer.querySelectorAll('.leaf')
+            for(let i=0; i<leafs.length; i++){
+                const circle = leafs[i].querySelector('circle')
+                const acronym = leafs[i].getAttribute('data-acronym')
+                circle.style.fill = mappings_list.includes(acronym) ? 'red' : 'var(--primary-color)'
+            }
+            debugger
+        })
+        .catch(error => {
+            // Handle errors here
+            console.error('There was a problem with the fetch operation:', error);
+        });
+  }
+
   zoomIn(){
     this.zoomRatioValue++
     this.bubblesTarget.innerHTML = ''
@@ -58,7 +88,9 @@ export default class extends Controller {
       .data(pack(root).descendants().slice(1)) // Exclude the root node
       .enter().append("g")
       .attr("class", d => d.children ? "node mappings-bubble" : "leaf mappings-bubble")
-      .attr("transform", d => `translate(${d.x},${d.y})`);
+      .attr("transform", d => `translate(${d.x},${d.y})`)
+      .attr('data-action', 'click->mappings#select_bubble')
+      .attr('data-acronym', d => d.data.ontology_name);
 
     const circle = node.append("circle")
       .attr("r", d => d.r)
