@@ -23,13 +23,15 @@ export default class extends Controller {
     const leafs = bubblesContainer.querySelectorAll('.leaf')
     const acronym = selected_bubble.getAttribute('data-acronym')
     let url = 'mappings/ontology_mappings/' + acronym
+    if(selected_bubble.getAttribute('data-enabled') == 'false'){
+      return
+    }
     if(selected_bubble.getAttribute('data-selected') == 'true'){
         selected_bubble.setAttribute('data-selected', 'false')
         selected_circle.style.fill = 'var(--primary-color)'
         for(let i = 0; i<leafs.length; i++){
             const circle = leafs[i].querySelector('circle')
             circle.style.fill = 'var(--primary-color)'
-            debugger
         }
         return
     }
@@ -52,8 +54,12 @@ export default class extends Controller {
                 const circle = leafs[i].querySelector('circle')
                 const acronym = leafs[i].getAttribute('data-acronym')
                 circle.style.fill = mappings_list.includes(acronym) ? 'var(--primary-color)' : 'var(--light-color)'
+                if(!mappings_list.includes(acronym)){
+                  leafs[i].setAttribute('data-enabled', 'false')
+                }
             }
             const selected_leaf = bubblesContainer.querySelector('[data-selected="true"]')
+            selected_leaf.setAttribute('data-enabled', 'true')
             const selected_circle = selected_leaf.querySelector('circle')
             selected_circle.style.fill = 'var(--secondary-color)'
         })
@@ -107,7 +113,8 @@ export default class extends Controller {
       .attr("class", d => d.children ? "node mappings-bubble" : "leaf mappings-bubble")
       .attr("transform", d => `translate(${d.x},${d.y})`)
       .attr('data-action', 'click->mappings#select_bubble')
-      .attr('data-acronym', d => d.data.ontology_name);
+      .attr('data-acronym', d => d.data.ontology_name)
+      .attr('data-enabled', d=> 'true');
 
     const circle = node.append("circle")
       .attr("r", d => d.r)
