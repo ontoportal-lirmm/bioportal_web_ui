@@ -17,5 +17,4 @@
             = mapping[:count]
           - r.td do
             - title =  mapping[:target_ontology].name
-            = link_to_modal "", mappings_show_mappings_path(id: mapping[:target_ontology].acronym ,target: mapping[:target_ontology].id), data: { show_modal_title_value: title, show_modal_size_value: 'modal-xl'}
-          
+            = link_to_modal "", mappings_show_mappings_path(id: @acronym ,target: mapping[:target_ontology].id), data: { show_modal_title_value: title, show_modal_size_value: 'modal-xl'}

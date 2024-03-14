@@ -6,7 +6,7 @@ export default class extends Controller {
     mappingsList: Object,
     zoomRatio: Number
   }
-  static targets = ['frame', 'bubbles', 'submit']
+  static targets = ['frame', 'bubbles', 'submit', 'modal']
 
   connect() {
     this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue, this.#normalization_ratio(this.mappingsListValue))
@@ -23,6 +23,14 @@ export default class extends Controller {
     const leafs = bubblesContainer.querySelectorAll('.leaf')
     const acronym = selected_bubble.getAttribute('data-acronym')
     let url = 'mappings/ontology_mappings/' + acronym
+    if(selected_bubble.getAttribute('data-highlighted') == 'true'){
+      const selected_leaf = bubblesContainer.querySelector('[data-selected="true"]')
+      const acronym = selected_leaf.getAttribute('data-acronym')
+      const target_acronym = selected_bubble.getAttribute('data-acronym')
+      debugger
+      this.modalTarget.querySelector('a').click()
+      return
+    }
     if(selected_bubble.getAttribute('data-enabled') == 'false'){
       return
     }
@@ -32,6 +40,8 @@ export default class extends Controller {
         for(let i = 0; i<leafs.length; i++){
             const circle = leafs[i].querySelector('circle')
             circle.style.fill = 'var(--primary-color)'
+            leafs[i].setAttribute('data-enabled', 'true')
+            leafs[i].setAttribute('data-highlighted', 'false')
         }
         return
     }
@@ -54,7 +64,9 @@ export default class extends Controller {
                 const circle = leafs[i].querySelector('circle')
                 const acronym = leafs[i].getAttribute('data-acronym')
                 circle.style.fill = mappings_list.includes(acronym) ? 'var(--primary-color)' : 'var(--light-color)'
-                if(!mappings_list.includes(acronym)){
+                if(mappings_list.includes(acronym)){
+                  leafs[i].setAttribute('data-highlighted', 'true')
+                } else {
                   leafs[i].setAttribute('data-enabled', 'false')
                 }
             }
