@@ -17,8 +17,23 @@ export default class extends Controller {
   }
 
   select_bubble(event){
-    const acronym = event.currentTarget.getAttribute('data-acronym')
+    const selected_bubble = event.currentTarget
+    const selected_circle = selected_bubble.querySelector('circle')
+    const bubblesContainer = document.getElementById('mappings-bubbles-view')
+    const leafs = bubblesContainer.querySelectorAll('.leaf')
+    const acronym = selected_bubble.getAttribute('data-acronym')
     let url = 'mappings/ontology_mappings/' + acronym
+    if(selected_bubble.getAttribute('data-selected') == 'true'){
+        selected_bubble.setAttribute('data-selected', 'false')
+        selected_circle.style.fill = 'var(--primary-color)'
+        for(let i = 0; i<leafs.length; i++){
+            const circle = leafs[i].querySelector('circle')
+            circle.style.fill = 'var(--primary-color)'
+            debugger
+        }
+        return
+    }
+    selected_bubble.setAttribute('data-selected', 'true')
     fetch(url)
         .then(response => {
             if (!response.ok) {
@@ -36,9 +51,11 @@ export default class extends Controller {
             for(let i=0; i<leafs.length; i++){
                 const circle = leafs[i].querySelector('circle')
                 const acronym = leafs[i].getAttribute('data-acronym')
-                circle.style.fill = mappings_list.includes(acronym) ? 'red' : 'var(--primary-color)'
+                circle.style.fill = mappings_list.includes(acronym) ? 'var(--primary-color)' : 'var(--light-color)'
             }
-            debugger
+            const selected_leaf = bubblesContainer.querySelector('[data-selected="true"]')
+            const selected_circle = selected_leaf.querySelector('circle')
+            selected_circle.style.fill = 'var(--secondary-color)'
         })
         .catch(error => {
             // Handle errors here
