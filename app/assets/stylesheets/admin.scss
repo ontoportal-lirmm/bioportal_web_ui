@@ -167,4 +167,10 @@ div.groupFormError {
 
 .rounded-json-button svg path {
   fill: var(--primary-color);
+   
+}
+.rounded-json-button {
+    display: flex;
+    clear: both;
+    justify-content: end ;
 }
