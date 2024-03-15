@@ -1,6 +1,6 @@
 %div.mt-5.d-flex
   .rounded-json-button
-    = render_rounded_button_with_style('display: flex; justify-content: end; right: 162px; position: absolute; top: -17px;', "#{$REST_URL}/submissions?display=all")
+    = render_rounded_button_with_style('display: flex; justify-content: end; right: 162px; position: absolute; top: -17px;', "#{$REST_URL}/submissions?display=all&apikey=#{get_apikey}")
   %div.mx-auto.w-75
     = form_tag("/ontologies_metadata_curator/result", method: "post", data: { turbo: true, turbo_frame: 'selection_metadata_form'}) do
       %div

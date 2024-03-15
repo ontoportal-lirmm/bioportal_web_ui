@@ -1,6 +1,6 @@
 = turbo_frame_tag 'agents-list' do
   .rounded-json-button
-    = render_rounded_button_with_style('display: flex; justify-content: end; right: 168px; position: absolute; top: 31px;', "#{$REST_URL}/agents?display=all")
+    = render_rounded_button_with_style('display: flex; justify-content: end; right: 168px; position: absolute; top: 31px;', "#{$REST_URL}/agents?display=all&apikey=#{get_apikey}")
   = link_to_modal(t("agents.index.create_new_agent"),
                 new_agent_path,
                 id: "new_agent_btn",
