@@ -190,9 +190,7 @@ module OntologiesHelper
     links
   end
 
-  def link?(string)
-    string.to_s.start_with?('http://') || string.to_s.start_with?('https://')
-  end
+
 
   def mappings_link(ontology, count)
     return '0' if ontology.summaryOnly || count.nil? || count.zero?
@@ -544,7 +542,7 @@ module OntologiesHelper
       if url.include?(rest_hostname)
         url = url['?'] ? "#{url}&apikey=#{get_apikey}" : "#{url}?apikey=#{get_apikey}"
       end
-      
+
       content_tag(:span, data: {controller:"tooltip" } , title:  title) do
         link_to(inline_svg("#{icon}.svg", width: "32", height: '32'),
                 url, link_options)
@@ -681,4 +679,3 @@ module OntologiesHelper
     Array(submission&.naturalLanguage).map { |natural_language| natural_language["iso639"] && natural_language.split('/').last }.compact
   end
 end
-

@@ -5,7 +5,7 @@ class OntologySubscribeButtonComponent < ViewComponent::Base
     super
     @id = id
     @subscribed = subscribed
-    @sub_text = subscribed ? 'UnWatch' : 'Watch'
+    @sub_text = subscribed ? t('components.unwatch') : t('components.watch')
     @link = link
     @count = count
     @controller_params = {
@@ -22,11 +22,11 @@ class OntologySubscribeButtonComponent < ViewComponent::Base
   
   def title
     if @subscribed
-      "#{@sub_text} this resource"
+      t('components.resource', sub_text: @sub_text)
     elsif @count.zero?
-      "Be the first to watch this resource and  be notified of all its updates"
+      t('components.notified_of_all_updates')
     else
-      "Join the #{@count} users, watching this resource and  be notified of all its updates"
+      t('components.join_the_count', count: @count)
     end
   end
 end

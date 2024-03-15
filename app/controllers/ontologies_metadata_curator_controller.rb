@@ -22,8 +22,8 @@ class OntologiesMetadataCuratorController < ApplicationController
         replace("selection_metadata_form", partial: "ontologies_metadata_curator/metadata_table"),
         replace('edit_metadata_btn') do
           "
-           #{helpers.button_tag("Start bulk edit", onclick: 'showEditForm(event)', class: "btn btn-outline-primary mx-1 w-100")}
-           #{raw helpers.help_tooltip('To use the bulk edit select in the table submissions (the rows) and metadata properties (the columns) for which you want to edit')}
+           #{helpers.button_tag(t('ontologies_metadata_curator.bulk_edit'), onclick: 'showEditForm(event)', class: "btn btn-outline-primary mx-1 w-100")}
+           #{raw helpers.help_tooltip(t('ontologies_metadata_curator.use_the_bulk_edit'))}
           ".html_safe
         end
       ]}
@@ -52,7 +52,7 @@ class OntologiesMetadataCuratorController < ApplicationController
   def edit
 
     if params[:selected_acronyms].nil? || params[:selected_metadata].nil?
-      render_turbo_stream alert_error(id: 'application_modal_content') {'Select in the table submissions (rows) and metadata properties (columns) to start the bulk edit'}
+      render_turbo_stream alert_error(id: 'application_modal_content') {t('ontologies_metadata_curator.start_the_bulk_edit')}
       return
     end
 
@@ -87,7 +87,7 @@ class OntologiesMetadataCuratorController < ApplicationController
         if errors
           render_turbo_stream(alert_error { errors.map { |e| e[:error] }.join(',') })
         else
-          streams = [alert_success { 'Submissions were successfully updated' }]
+          streams = [alert_success { t('ontologies_metadata_curator.alert_success_submissions') }]
           @submissions.each do |submission|
             submission.ontology = OpenStruct.new({acronym: submission.ontology})
             streams << replace("#{ontology_submission_id_label(submission.ontology.acronym, submission.submissionId)}_row", partial: 'ontologies_metadata_curator/submission', locals: { submission: submission, attributes: @all_metadata })

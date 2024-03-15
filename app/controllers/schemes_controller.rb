@@ -20,7 +20,7 @@ class SchemesController < ApplicationController
     params[:ontology_id] = params[:ontology_id] ? params[:ontology_id] : params[:ontology]
 
     if params[:id].nil? || params[:id].empty?
-      render :text => "Error: You must provide a valid scheme id"
+      render :text => t('schemes.error_valid_scheme_id')
       return
     end
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first

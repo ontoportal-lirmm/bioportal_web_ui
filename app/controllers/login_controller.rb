@@ -34,7 +34,7 @@ class LoginController < ApplicationController
 
         redirect_to redirect, allow_other_host: true
       else
-        @errors << "Invalid account name/password combination"
+        @errors << t('login.invalid_account_combination')
         render :action => 'index'
       end
     else
@@ -59,7 +59,7 @@ class LoginController < ApplicationController
 
       redirect_to redirect
     else
-      @errors =  ["#{params[:provider]} authentication failed"]
+      @errors =  [t('login.authentication_failed', provider: params[:provider])]
       render :action => 'index'
     end
   end
@@ -90,10 +90,10 @@ class LoginController < ApplicationController
       old_user = session[:user]
       session[:user] = session[:admin_user]
       session.delete(:admin_user)
-      flash[:success] = "Logged out <b>#{old_user.username}</b>, returned to <b>#{session[:user].username}</b>".html_safe
+      flash[:success] = t('login.admin_logged_out', old_user: old_user.username, user: session[:user].username).html_safe
     else
       session[:user] = nil
-      flash[:success] = "You have successfully logged out"
+      flash[:success] = t('login.user_logged_out')
     end
     redirect_to request.referer || "/"
   end
@@ -114,7 +114,7 @@ class LoginController < ApplicationController
     if resp.nil?
       redirect_to "/lost_pass_success"
     else
-      flash[:notice] = resp.errors.first + ". Please try again."
+      flash[:notice] = resp.errors.first + t('login.try_again_notice')
       redirect_to "/lost_pass"
     end
   end
@@ -129,7 +129,7 @@ class LoginController < ApplicationController
       login(@user)
       render "users/edit"
     else
-      flash[:notice] = @user.errors.first + ". Please reset your password again."
+      flash[:notice] = @user.errors.first + t('login.reset_password_again')
       redirect_to "/lost_pass"
     end
   end
@@ -139,8 +139,8 @@ class LoginController < ApplicationController
   def login(user)
     return unless user
     session[:user] = user
-    custom_ontologies_text = session[:user].customOntology && !session[:user].customOntology.empty? ? "The display is now based on your <a href='/account#custom_ontology_set'>Custom Ontology Set</a>." : ""
-    notice = "Welcome <b>" + user.username.to_s + "</b>! " + custom_ontologies_text
+    custom_ontologies_text = session[:user].customOntology && !session[:user].customOntology.empty? ? t('login.custom_ontology_set') : ""
+    notice = t('login.welcome') + user.username.to_s + "</b>! " + custom_ontologies_text
     flash[:success] = notice.html_safe
   end
 
@@ -148,10 +148,10 @@ class LoginController < ApplicationController
     errors=[]
 
     if params[:username].nil? || params[:username].length <1
-      errors << "Please enter an account name"
+      errors << t('login.error_account_name')
     end
     if params[:password].nil? || params[:password].length <1
-      errors << "Please enter a password"
+      errors << t('login.error_password')
     end
 
     return errors
