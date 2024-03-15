@@ -98,72 +98,83 @@ export default class extends Controller {
     }
   }
 
-  #draw_bubbles(mappingsList, zoomRatio, normalization_ratio){
-    const data = this.#hash_to_list(mappingsList)
-    const width = 600*zoomRatio;
-    const height = 600*zoomRatio;
+  #draw_bubbles(mappingsList, zoomRatio, normalization_ratio) {
+    const data = this.#hash_to_list(mappingsList);
+    const width = 600 * zoomRatio;
+    const height = 600 * zoomRatio;
     const margin = 1;
     const logScaleFactor = 10;
 
     const pack = d3.pack()
-      .size([width - margin, height - margin])
-      .padding(3);
+        .size([width - margin, height - margin])
+        .padding(3);
 
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     const root = d3.hierarchy({ children: data })
-      .sum(d => d.ontology_mappings/normalization_ratio + Math.log(d.ontology_mappings + 1) / logScaleFactor);
+        .sum(d => d.ontology_mappings / normalization_ratio + Math.log(d.ontology_mappings + 1) / logScaleFactor);
 
     const svg = d3.select("#mappings-bubbles-view")
-      .append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .append("g")
-      .attr("transform", `translate(${margin}, ${margin})`);
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .append("g")
+        .attr("transform", `translate(${margin}, ${margin})`);
 
     const node = svg.selectAll(".node")
-      .data(pack(root).descendants().slice(1)) // Exclude the root node
-      .enter().append("g")
-      .attr("class", d => d.children ? "node mappings-bubble" : "leaf mappings-bubble")
-      .attr("transform", d => `translate(${d.x},${d.y})`)
-      .attr('data-action', 'click->mappings#select_bubble')
-      .attr('data-acronym', d => d.data.ontology_name)
-      .attr('data-enabled', d=> 'true');
+        .data(pack(root).descendants().slice(1)) // Exclude the root node
+        .enter().append("g")
+        .attr("class", d => d.children ? "node mappings-bubble" : "leaf mappings-bubble")
+        .attr("transform", d => `translate(${d.x},${d.y})`)
+        .attr('data-action', 'click->mappings#select_bubble')
+        .attr('data-acronym', d => d.data.ontology_name)
+        .attr('data-enabled', d => 'true');
 
     const circle = node.append("circle")
-      .attr("r", d => d.r)
-      .style("fill", "var(--primary-color)");
-    // force gravitationnel
-    circle.append("title")
-      .text(d => `${d.data.ontology_name}\n${d.value}`);
+        .attr("r", d => d.r)
+        .style("fill", "var(--primary-color)");
 
     // Display ontology names in 16px white
     const textOntology = node.append("text")
-      .attr("dy", ".35em")
-      .style("text-anchor", "middle")
-      .style("font-size", "16px")
-      .style("fill", "white")
-      .style("font-weight", "600")
-      .text(d => (d.r > d.data.ontology_name.length*5 && d.r > 20) ? d.data.ontology_name : "");
+        .attr("dy", ".35em")
+        .style("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("fill", "white")
+        .style("font-weight", "600")
+        .text(d => (d.r > d.data.ontology_name.length * 5 && d.r > 20) ? d.data.ontology_name : "");
 
     // Display number of mappings in 12px white below ontology names
     const textMappings = node.append("text")
-      .attr("dy", "1.5em")
-      .style("text-anchor", "middle")
-      .style("font-size", "12px")
-      .style("fill", "white")
-      .text(d => (d.r > d.data.ontology_name.length*5 && d.r > 20) ? d.data.ontology_mappings : "");
+        .attr("dy", "1.5em")
+        .style("text-anchor", "middle")
+        .style("font-size", "12px")
+        .style("fill", "white")
+        .text(d => (d.r > d.data.ontology_name.length * 5 && d.r > 20) ? d.data.ontology_mappings : "");
 
-    // Display ontology names in tooltips on hover
+    // Display ontology names in bubble tooltips on hover
     circle.on("mouseover", function (event, d) {
-      d3.select(this).append("title")
-        .text(`${d.data.ontology_name}\n${d.data.ontology_mappings}`);
+      if (!(d.r > d.data.ontology_name.length * 5 && d.r > 20)) {
+          // Remove existing tooltip
+          d3.selectAll(".bubble-tooltip").remove();
+
+          // Calculate tooltip position based on mouse coordinates
+          const tooltip = d3.select("body")
+              .append("div")
+              .attr("class", "bubble-tooltip")
+              .style("left", `${event.pageX + 10}px`) // Adjust position relative to mouse pointer
+              .style("top", `${event.pageY + 10}px`) // Adjust position relative to mouse pointer
+              .html(`<strong>${d.data.ontology_name}</strong><br>${d.data.ontology_mappings}`);
+      }
     }).on("mouseout", function (event, d) {
-      d3.select(this).select("title").remove();
+        // Remove tooltip on mouseout
+        d3.selectAll(".bubble-tooltip").remove();
     });
+
 
     this.svg = svg;
   }
+
+
 
   #hash_to_list(data){
     return Object.keys(data).map(key => ({
