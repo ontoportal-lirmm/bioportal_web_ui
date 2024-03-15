@@ -75,11 +75,11 @@
       });
 
       document.getElementById('concept_tabs_container').addEventListener("click", function(event) {
-        const baseClassUrl = `#{@ontology.id}/classes/#{escape(@concept.id)}?`;
+        const baseClassUrl = `#{@ontology.id}/classes/#{escape(@concept.id)}`;
         const apikey = `apikey=#{get_apikey}`;
         const tabsList = document.querySelectorAll('#concept_tabs_container .nav-item');
         const links = {
-            details_tab: `${baseClassUrl}${apikey}&display=all`,
+            details_tab: `${baseClassUrl}?${apikey}&display=all`,
             instances_tab: `${baseClassUrl}/instances?${apikey}`,
             notes_tab: `${baseClassUrl}/notes?${apikey}`,
             mappings_tab: `${baseClassUrl}/mappings?${apikey}`,
