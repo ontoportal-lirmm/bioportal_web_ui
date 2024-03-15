@@ -1,13 +1,13 @@
 - @title= t('annotator.title')
 .annotator-page-container{'data-controller': 'annotator'}
-  .annotator-page-subcontainer{'data-controller': 'form-url', 'data-form-url-options-value': ['ontologies', 'semantic_types', 'semantic_groups']}
+  .annotator-page-subcontainer
     .annotator-page-title
       .text
         = @page_name
       .line
     .annotator-page-decription
       = t('annotator.description')
-    = form_tag(@form_url, method: :get, 'data-turbo': true, novalidate: true, 'data-action': 'submit->form-url#submit') do
+    = form_tag(@form_url, method: :get, 'data-turbo': true, novalidate: true,'data-controller': 'form-url', 'data-action': 'submit->form-url#submit') do
       .annotator-page-inputs{'data-controller': 'reveal-component'}
         .inputs
           %div

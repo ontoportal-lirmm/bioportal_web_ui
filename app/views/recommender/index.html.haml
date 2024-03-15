@@ -1,6 +1,6 @@
 - @title = t('recommender.title')
 .recommender-page-container{'data-controller': 'recommender'}
-  .recommender-page-subcontainer{'data-controller': 'form-url', 'data-form-url-options-value': ['ontologies']}
+  .recommender-page-subcontainer
     .recommender-page-title
       .text
         = t('recommender.title')
@@ -8,7 +8,7 @@
     .recommender-page-decription
       = t('recommender.intro')
 
-    = form_tag('/recommender', method: :get, 'data-turbo': true, novalidate: true, 'data-action': 'submit->form-url#submit') do
+    = form_tag('/recommender', method: :get, 'data-turbo': true, novalidate: true, 'data-action': 'submit->form-url#submit', 'data-controller': 'form-url') do
       .recommender-page-inputs{'data-controller': 'reveal-component'}
         .inputs 
           %div
