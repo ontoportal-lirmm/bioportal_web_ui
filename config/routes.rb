@@ -71,10 +71,11 @@ Rails.application.routes.draw do
     get 'ontologies_report', to: 'ontologies_report'
     post 'refresh_ontologies_report', to: 'refresh_ontologies_report'
     delete 'ontologies', to: 'delete_ontologies'
-    put 'ontologies', to: 'process_ontologies'
     get 'ontologies/:acronym/log', to: 'admin#parse_log'
     get 'update_check_enabled', to: 'update_check_enabled'
   end
+
+  put 'admin/ontologies', to: 'admin#process_ontologies'
 
   resources :subscriptions
 
