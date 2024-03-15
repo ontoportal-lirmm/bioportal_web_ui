@@ -143,6 +143,7 @@ it:
     paste_text_prompt: Incollare un paragrafo di testo o alcune parole chiave ...
     recommender_annotator: Raccomandatore e annotatore
     support_and_collaborations: Supporto e collaborazioni
+    ontoportal_instances: Istanze di Ontoportal
     twitter_news: Notizie
     
   input: Ingresso

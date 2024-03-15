@@ -1,5 +1,4 @@
 .pill-button {
-    color: var(--primary-color);
     font-size: 15px;
     display: flex;
     align-items: center;
@@ -12,6 +11,9 @@
     background-color: transparent;
     &:focus{
         outline: none;
+    }
+    a{
+        color: var(--primary-color) !important;
     }
 }
 
