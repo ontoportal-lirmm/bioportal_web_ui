@@ -22,7 +22,7 @@
             %input
         - else
           .nav-search-container
-            = render OntologySearchInputComponent.new(placeholder:  t('layout.header.search_prompt', portal_name: portal_name ), scroll_down: false)
+            = render OntologySearchInputComponent.new(placeholder:  t('layout.header.search_prompt', portal_name: portal_name ), scroll_down: false, search_icon_type: 'nav')
 
         - if session[:user].nil?
           %a.nav-a{:href => "/login"}= t('layout.header.login')

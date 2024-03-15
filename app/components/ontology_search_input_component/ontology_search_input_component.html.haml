@@ -1,4 +1,4 @@
-= render SearchInputComponent.new(placeholder: @placeholder,
+= render SearchInputComponent.new(placeholder: @placeholder, search_icon_type: @search_icon_type,
           name:  @name, scroll_down: @scroll_down,  ajax_url: '/ajax/ontologies?acronym=',
           item_base_url: '/ontologies/', id_key:'acronym',
           actions_links: {search_ontology_content: "/search?query=o",  browse_all_ontologies: "/ontologies?search=o"}) do |s|
