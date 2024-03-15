@@ -28,6 +28,8 @@ export default class extends Controller {
       const acronym = selected_leaf.getAttribute('data-acronym')
       const target_acronym = selected_bubble.getAttribute('data-acronym')
       debugger
+      const modal_link = `/mappings/show_mappings?data%5Bshow_modal_size_value%5D=modal-xl&amp;data%5Bshow_modal_title_value%5D=bilel&amp;id=${acronym}&amp;target=https%3A%2F%2Fdata.agroportal.lirmm.fr%2Fontologies%2F${target_acronym}`
+      this.modalTarget.querySelector('a').href = modal_link
       this.modalTarget.querySelector('a').click()
       return
     }
