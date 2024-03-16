@@ -46,6 +46,73 @@ module SubmissionFilter
 
   private
 
+  def filter_using_index(query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
+    helpers.search_ontologies(
+      query: query,
+      status: status,
+      show_views: show_views,
+      private_only: private_only,
+      languages: languages,
+      page_size: page_size,
+      formality_level: formality_level,
+      is_of_type: is_of_type,
+      groups: groups, categories: categories,
+      formats: formats
+    )
+
+  end
+
+  def filter_using_data(query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
+    submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: show_views, display_links: false, display_context: false)
+    submissions.select do |s|
+      out = !s.ontology.nil?
+      out = out && ((s.ontology.viewingRestriction.eql?('public') && !private_only) || private_only && s.ontology.viewingRestriction.eql?('private'))
+      out = out && (query.blank? || [s.description, s.ontology.name, s.ontology.acronym].any? { |x| x.downcase.include?(query.downcase) })
+      out = out && (groups.blank? || (s.ontology.group.map { |x| x.split('/').last } & groups.split(',')).any?)
+      out = out && (categories.blank? || (s.ontology.hasDomain.map { |x| x.split('/').last } & categories.split(',')).any?)
+      out = out && (status.blank? || status.split(',').include?(s.status))
+      out = out && (formats.blank? || formats.split(',').any? { |f| s.hasOntologyLanguages.eql?(f) })
+      out = out && (is_of_type.blank? || is_of_type.split(',').any? { |f| s.isOfType.split('/').last.eql?(f) })
+      out = out && (formality_level.blank? || formality_level.split(',').any? { |f| s.hasFormalityLevel.split('/').last.eql?(f) })
+      out = out && (languages.blank? || languages.split(',').any? { |f| s.naturalLanguage.split('/').last.eql?(f) })
+      out
+    end
+  end
+
+  def paginate_submissions(all_submissions, page, size)
+    current_page = page
+    page_size = size
+
+    start_index = (current_page - 1) * page_size
+    end_index = start_index + page_size - 1
+    next_page = current_page * page_size < all_submissions.size ? current_page + 1 : nil
+    OpenStruct.new(page: current_page, nextPage: next_page, totalCount: all_submissions.size,
+                   collection: all_submissions[start_index..end_index])
+  end
+
+  def sort_submission_by(submissions, sort_by)
+    if sort_by.eql?('visits')
+      submissions = submissions.sort_by { |x| -x[:popularity] }
+    elsif sort_by.eql?('fair')
+      submissions = submissions.sort_by { |x| -x[:fairScore] }
+    elsif sort_by.eql?('notes')
+      submissions = submissions.sort_by { |x| -x[:note_count] }
+    elsif sort_by.eql?('projects')
+      submissions = submissions.sort_by { |x| -x[:project_count] }
+    elsif sort_by.eql?('metrics_classes')
+      submissions = submissions.sort_by { |x| -x[:class_count] }
+    elsif sort_by.eql?('metrics_individuals')
+      submissions = submissions.sort_by { |x| -x[:individual_count] }
+    elsif sort_by.eql?('creationDate')
+      submissions = submissions.sort_by { |x| -x[:creationDate] }
+    elsif sort_by.eql?('released')
+      submissions = submissions.sort_by { |x| -x[:released] }
+    elsif sort_by.eql?('ontology_name')
+      submissions = submissions.sort_by { |x| -x[:name] }
+    end
+    submissions
+  end
+
   def filters_params(params, includes: BROWSE_ATTRIBUTES.join(','), page: 1, pagesize: 5)
     request_params = { display_links: false, display_context: false,
                        include: includes, include_status: 'RDF' }
