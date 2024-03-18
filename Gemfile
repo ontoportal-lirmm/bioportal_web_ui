@@ -72,7 +72,8 @@ gem 'view_component', '~> 2.72'
 gem 'turnout'
 gem 'will_paginate', '~> 3.0'
 
-gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'master'
+gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', ref: 'dc6ede131fc614b10cd1080bda7d905fe3cd6228'
+
 
 
 group :staging, :production, :appliance do
