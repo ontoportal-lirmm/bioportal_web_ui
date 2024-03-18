@@ -5,7 +5,9 @@
   border-radius: 14px;
   max-width: 439px;
 }
-
+.login-form a{
+    color: var(--primary-color) !important;
+}
 .login-input{
     box-sizing: border-box;
     outline: none;

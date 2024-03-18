@@ -81,7 +81,7 @@ module ApplicationHelper
       end
     end
   end
-  
+
 
 
   def encode_param(string)
@@ -130,7 +130,7 @@ module ApplicationHelper
   end
 
   def loading_spinner(padding = false, include_text = true)
-    loading_text = include_text ? " loading..." : ""
+    loading_text = include_text ? t('application.loading') : ""
     if padding
       raw('<div style="padding: 1em;">' + image_tag("spinners/spinner_000000_16px.gif", style: "vertical-align: text-bottom;") + loading_text + '</div>')
     else
@@ -138,7 +138,7 @@ module ApplicationHelper
     end
   end
 
- 
+
 
   def help_icon(link, html_attribs = {})
     html_attribs["title"] ||= "Help"
@@ -166,7 +166,7 @@ module ApplicationHelper
   def error_message_text
     return @errors if @errors.is_a?(String)
     @errors = @errors[:error] if @errors && @errors[:error]
-    "Errors in fields #{@errors.keys.join(', ')}"
+    t('application.errors_in_fields', errors: @errors.keys.join(', '))
   end
 
   def error_message_alert
@@ -175,15 +175,6 @@ module ApplicationHelper
     content_tag(:div, class: 'my-1') do
       render Display::AlertComponent.new(message: error_message_text, type: 'danger', closable: false)
     end
-  end
-
-
-  def render_advanced_picker(custom_ontologies = nil, selected_ontologies = [], groups = nil, categories= nil,  align_to_dom_id = nil)
-    selected_ontologies ||= []
-    init_ontology_picker(custom_ontologies, selected_ontologies, groups, categories)
-    render :partial => "shared/ontology_picker_advanced", :locals => {
-      :custom_ontologies => custom_ontologies, :selected_ontologies => selected_ontologies, :align_to_dom_id => align_to_dom_id
-    }
   end
 
   def init_ontology_picker(ontologies = nil, selected_ontologies = [], groups = nil, categories = nil)
@@ -303,34 +294,34 @@ module ApplicationHelper
 
   def add_comment_button(parent_id, parent_type)
     if session[:user].nil?
-      link_to "Add comment",  login_index_path(redirect: request.url), class: "link_button"
+      link_to t('application.add_comment'),  login_index_path(redirect: request.url), class: "link_button"
     else
-      link_to_modal "Add comment", notes_new_comment_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
-                    class: "add_comment btn btn-primary", data: { show_modal_title_value: "Add a new comment"}
+      link_to_modal t('application.add_comment'), notes_new_comment_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
+                    class: "add_comment btn btn-primary", data: { show_modal_title_value: t('application.add_new_comment')}
     end
   end
 
   def add_reply_button(parent_id)
     if session[:user].nil?
-      link_to "Reply", login_index_path, 'data-turbo': false
+      link_to t('application.reply'), login_index_path, 'data-turbo': false
     else
-      link_to 'Reply', notes_new_reply_path(parent_id: parent_id ), "data-turbo-frame": "#{parent_id}_new_reply"
+      link_to t('application.reply'), notes_new_reply_path(parent_id: parent_id ), "data-turbo-frame": "#{parent_id}_new_reply"
     end
   end
 
 
   def add_proposal_button(parent_id, parent_type)
     if session[:user].nil?
-        link_to "Add proposal",  login_index_path(redirect: request.url), class: "link_button"
+        link_to t('application.add_proposal'),  login_index_path(redirect: request.url), class: "link_button"
     else
-      link_to_modal "Add proposal", notes_new_proposal_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
-                    class: "add_proposal btn btn-primary", data: { show_modal_title_value: "Add a new proposal"}
+      link_to_modal t('application.add_proposal'), notes_new_proposal_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
+                    class: "add_proposal btn btn-primary", data: { show_modal_title_value: t('application.add_new_proposal')}
     end
   end
   def link?(str)
     # Regular expression to match strings starting with "http://" or "https://"
     link_pattern = /\Ahttps?:\/\//
-
+    str = str&.strip
     # Check if the string matches the pattern
     !!(str =~ link_pattern)
   end
@@ -341,7 +332,7 @@ module ApplicationHelper
       t.loader do
         content_tag(:div, style: 'margin-left: 10px;') do
           render PillButtonComponent.new do
-            (content_tag(:span, 'Watching', class: 'ml-1') + render(LoaderComponent.new(small: true))).html_safe
+            (content_tag(:span, t('application.watching'), class: 'ml-1') + render(LoaderComponent.new(small: true))).html_safe
           end
         end
       end
@@ -496,7 +487,7 @@ module ApplicationHelper
     else
       link_to(link,'', {data: data[:data], class: 'btn btn-sm btn-light', target: '_blank'})
     end
-     
+
 
   end
 
@@ -569,7 +560,7 @@ module ApplicationHelper
   end
 
 
-  def beta_badge(text = 'beta', tooltip: 'This feature is experimental and may have issues')
+  def beta_badge(text = t('application.beta_badge_text'), tooltip: t('application.beta_badge_tooltip'))
     return unless text
     content_tag(:span, text, data: { controller: 'tooltip' }, title: tooltip, class: 'badge badge-pill bg-secondary text-white')
   end
@@ -620,7 +611,7 @@ module ApplicationHelper
       content_tag(:div, text, class: 'text')
     end
   end
-  
+
   def insert_sample_text_button(text)
     content_tag(:div, class:'insert-sample-text-button') do
       content_tag(:div, class: 'button', 'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("sample_text")) do
@@ -632,7 +623,7 @@ module ApplicationHelper
 
   def empty_state(text)
     content_tag(:div, class:'browse-empty-illustration') do
-      inline_svg_tag('empty-box.svg') + 
+      inline_svg_tag('empty-box.svg') +
       content_tag(:p, text)
     end
   end
@@ -641,5 +632,15 @@ module ApplicationHelper
     list&.join(',') || ''
   end
 
+  def ontologies_selector(id:, label: nil, name: nil, selected: nil)
+    get_ontologies_data
+    content_tag(:div) do
+      render(Input::SelectComponent.new(id: id, label: label, name: name, value: @onts_for_select, multiple: "multiple", selected: selected)) +
+      content_tag(:div, class: 'ontologies-selector-button', 'data-controller': 'ontologies-selector', 'data-ontologies-selector-id-value': id) do
+        content_tag(:div, t('ontologies_selector.clear_selection'), class: 'clear-selection', 'data-action': 'click->ontologies-selector#clear') +
+        link_to_modal(t('ontologies_selector.ontologies_advanced_selection'), "/ontologies_selector?id=#{id}", data: { show_modal_title_value: t('ontologies_selector.ontologies_advanced_selection')})
+      end
+    end
+  end
 
 end

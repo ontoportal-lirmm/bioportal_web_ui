@@ -129,7 +129,7 @@ module MappingsHelper
         ont = mapping.classes[0].explore.ontology
         ont.errors && ont.errors.grep(/Access denied/).any?
       rescue => e
-        Rails.logger.warn "Mapping issue with '#{mapping.inspect}' : #{e.message}"
+        Rails.logger.warn t('mappings.mapping_issue', mapping: mapping.inspect, message: e.message)
         false
       end
     end

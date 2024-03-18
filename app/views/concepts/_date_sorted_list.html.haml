@@ -3,4 +3,4 @@
                                     current_page: @page.page, next_page: @page.nextPage) do |c|
   = render_concepts_by_dates(auto_click: @page.page.eql?(1))
   - c.error do
-    The Classes/Concepts didn't define <strong>creation</strong> or <strong>modifications</strong> dates with dcterms
+    = t('concepts.date_sorted_list_error')

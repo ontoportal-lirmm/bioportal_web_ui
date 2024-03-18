@@ -15,7 +15,6 @@ class SearchController < ApplicationController
     return if @search_query.empty?
 
     params[:pagesize] = "150"
-    params[:ontologies] = params[:ontologies_list]&.join(",")
     results = LinkedData::Client::Models::Class.search(@search_query, params).collection
 
     @advanced_options_open = !search_params_empty?
@@ -24,7 +23,7 @@ class SearchController < ApplicationController
 
   def json_search
     if params[:q].nil?
-      render :text => "No search class provided"
+      render :text => t('search.no_search_class_provided')
       return
     end
     check_params_query(params)

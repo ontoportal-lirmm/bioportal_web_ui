@@ -1,11 +1,14 @@
-.search-page-container 
+.search-page-container
   .search-page-subcontainer{'data-controller': 'reveal-component'}
-    = form_tag(search_path, method: :get, 'data-turbo': true) do
+    = form_tag(search_path, method: :get,data:{turbo: true, controller: 'form-url', action: 'submit->form-url#submit'}) do
       .search-page-input-container{'data-controller': 'reveal'}
         .search-page-input
           %input{type:"text", placeholder: t('search.search_place_holder'), name: "q", value: @search_query}
-          %button.search-page-button{type:'submit'}
-            = inline_svg_tag 'icons/search.svg'
+          .search-page-button
+            = render Buttons::RegularButtonComponent.new(id:'search-page-button', value: "Search", variant: "primary", type: "submit") do |btn|
+              = btn.icon_right do
+                = inline_svg_tag "icons/search.svg"
+            
 
         .search-page-advanced{'data-reveal-component-target': 'item', class: "#{@advanced_options_open ? '' : 'd-none'}"}
           .left
@@ -19,10 +22,7 @@
               .title
                 = t("search.advanced_options.ontologies")
               .field
-                - get_ontologies_data
-                = render Input::OntologiesSelectorComponent.new(id:'search_page_ontologies', ontologies: @onts_for_select ,name: 'ontologies_list[]', selected: params[:ontologies_list])                
-
-
+                = ontologies_selector(id:'search_page_ontologies' ,name: 'ontologies_list[]', selected: params[:ontologies_list])
           .right 
             .filter-container
               .title

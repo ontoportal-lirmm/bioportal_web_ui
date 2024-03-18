@@ -68,7 +68,7 @@
     max-height: 300px;
     overflow-y: scroll;
 }
-.ontologies-selector-results .action-buttons{
+.save-cancel-buttons{
     display: flex;
     justify-content: center;
     margin-top: 20px;
@@ -143,4 +143,7 @@
 }
 .ontologies-selector-results .select-all{
     cursor: pointer;
+}
+.ontologies-selector-button a{
+    margin-right: 0;
 }

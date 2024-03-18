@@ -4,19 +4,19 @@
         .results-number
             = "Showing #{@ontologies.length} of #{@total_ontologies_number}" 
             %span.select-all{'data-action': 'click->ontologies-selector#selectall'}
-                select all
+                = t('ontologies_selector.select_all')
         .ontologies
             - @ontologies.each do |ontology|
                 .ontology{'data-ontologies-selector-target': 'ontology'}
                     = render ChipsComponent.new(label: "#{ontology.name} (#{ontology.acronym})", name: ontology.acronym)
         .horizontal-line                    
-        .action-buttons
+        .save-cancel-buttons
             .button{'data-action': "click->turbo-modal#hide", 'data-ontologies-selector-target': 'exit'}
-                = render Buttons::RegularButtonComponent.new(id:'cancel-selector', value: "Cancel", variant: "secondary", state:'regular') do |btn|
+                = render Buttons::RegularButtonComponent.new(id:'cancel-selector', value: t('ontologies_selector.cancel'), variant: "secondary", state:'regular') do |btn|
                     = btn.icon_left do
                         = inline_svg_tag 'x.svg'
             .button{'data-action': "click->ontologies-selector#apply"}
-                = render Buttons::RegularButtonComponent.new(id:'apply-selector', value: "Apply", variant: "primary", state: 'regular') do |btn|
+                = render Buttons::RegularButtonComponent.new(id:'apply-selector', value: t('ontologies_selector.apply'), variant: "primary", state: 'regular') do |btn|
                     = btn.icon_right do
                         = inline_svg_tag "check.svg"
 

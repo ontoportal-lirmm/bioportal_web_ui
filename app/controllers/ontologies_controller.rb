@@ -52,7 +52,7 @@ class OntologiesController < ApplicationController
 
     count_streams = [
       replace('ontologies_filter_count_request') do
-        helpers.content_tag(:p, class: "browse-desc-text", style: "margin-bottom: 12px !important;") { "Showing #{@ontologies.size} of #{@analytics.keys.size}" }
+        helpers.content_tag(:p, class: "browse-desc-text", style: "margin-bottom: 12px !important;") { t("ontologies.showing_ontologies_size", ontologies_size: @ontologies.size, analytics_size: @analytics.keys.size)}
       end
     ] + update_filters_counts
 
@@ -156,6 +156,7 @@ class OntologiesController < ApplicationController
 
   def new
     @ontology = LinkedData::Client::Models::Ontology.new
+    @ontology.viewOf = params.dig(:ontology, :viewOf)
     @submission = LinkedData::Client::Models::OntologySubmission.new
     @submission.hasOntologyLanguage = 'OWL'
     @ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym', include_views: true, display_links: false, display_context: false)
@@ -437,15 +438,15 @@ class OntologiesController < ApplicationController
     render partial: 'ontologies/sections/metadata/metrics_evolution_graph', locals: { data: data }
   end
 
-  def selector
+  def ontologies_selector
     @categories = LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
     @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
     @filters = ontology_filters_init(@categories, @groups)
     @select_id = params[:id]
-    render 'ontologies/selector/selector' , layout: false
+    render 'ontologies/ontologies_selector/ontologies_selector' , layout: false
   end
 
-  def selector_results
+  def ontologies_selector_results
     @ontologies = LinkedData::Client::Models::Ontology.all(include_views: params[:showOntologyViews])
     @total_ontologies_number = @ontologies.length
     @input = params[:input] || ''
@@ -464,10 +465,7 @@ class OntologiesController < ApplicationController
     end
 
     if params[:formats] || params[:naturalLanguage] || params[:formalityLevel] || params[:isOfType] || params[:showRetiredOntologies]
-      submissions = Rails.cache.fetch('all_submissions') do
-        LinkedData::Client::Models::OntologySubmission.all('display': 'all', 'also_include_views': 'true')
-      end
-      #binding.pry
+      submissions = LinkedData::Client::HTTP.get('/submissions', {'display': 'all', 'also_include_views': 'true'})
       if params[:formats]
         submissions = submissions.select { |submission| params[:formats].include?(submission.hasOntologyLanguage)}
       end
@@ -489,7 +487,7 @@ class OntologiesController < ApplicationController
         submissions.any? { |submission| submission.ontology.id == ontology.id }
       end
     end
-    render 'ontologies/selector/selector_results'
+    render 'ontologies/ontologies_selector/ontologies_selector_results'
   end
 
   private

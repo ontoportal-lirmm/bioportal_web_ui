@@ -19,7 +19,7 @@ class VirtualApplianceController < ApplicationController
     user = LinkedData::Client::Models::User.find_by_username(params[:appliance_user][:user_id]).first
 
     if user.nil?
-      flash[:error] = "Problem adding account <strong>#{params[:appliance_user][:user_id]}</strong>: account does not exist".html_safe
+      flash[:error] = t('ontoportal_virtual_appliance.problem_adding_account', id: params[:appliance_user][:user_id]).html_safe
       redirect_to action: 'index' and return
     end
 
@@ -38,7 +38,7 @@ class VirtualApplianceController < ApplicationController
   def require_login
     return if session[:user]
 
-    flash[:error] = 'You must be logged in to access this section'
+    flash[:error] = t('ontoportal_virtual_appliance.require_login')
     redirect_to login_index_path(redirect: virtual_appliance_index_path)
   end
 end

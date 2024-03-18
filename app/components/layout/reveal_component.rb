@@ -6,7 +6,7 @@ class Layout::RevealComponent < ViewComponent::Base
 
   def initialize(selected: nil, possible_values: [], hidden_class: 'd-none', toggle: false)
     @hidden_class = hidden_class
-    @possible_values = possible_values
+    @possible_values = toggle && possible_values.empty? ? [true] : possible_values
     @selected = selected
     @toggle = toggle
   end

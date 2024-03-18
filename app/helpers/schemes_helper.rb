@@ -44,8 +44,7 @@ module SchemesHelper
 
   def section_name(section)
     section = concept_label_to_show(submission: @submission_latest || @submission) if section.eql?('classes')
-    section.humanize
-    #t("ontology_details.sections.#{section}" , section)
+    t("ontology_details.sections.#{section}")
   end
 
   def scheme_path(scheme_id = '', language = '')
@@ -62,12 +61,12 @@ module SchemesHelper
 
   def no_main_scheme_alert
     render Display::AlertComponent.new do
-      'no main scheme defined in the URI attribute'
+      t('schemes.no_main_scheme_alert')
     end
   end
   def no_schemes_alert
     render Display::AlertComponent.new do
-      "#{@ontology.acronym} does not contain schemes (skos:ConceptScheme)"
+      t('schemes.no_schemes_alert', acronym: @ontology.acronym)
     end
   end
 
@@ -114,4 +113,3 @@ module SchemesHelper
     end
   end
 end
-

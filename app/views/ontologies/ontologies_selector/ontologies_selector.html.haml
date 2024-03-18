@@ -1,55 +1,55 @@
 = render_in_modal do
     = form_tag('/ontologies_selector/results', method: :get, novalidate: true, data: {turbo_frame: 'selector_results_frame'}) do
-        .d-flex.align-items-center.justify-content-center{'data-controller': 'ontologies-selector', 'data-ontologies-selector-id-value': @select_id}
+        .d-flex.align-items-center.justify-content-center{'data-controller': 'ontologies-selector', 'data-ontologies-selector-id-value': @select_id, 'data-ontologies-selector-select-all-value': t('ontologies_selector.select_all'), 'data-ontologies-selector-unselect-all-value': t('ontologies_selector.unselect_all')}
             .ontologies-selector-container
                 .ontologies-selector-input
-                    %input{type: 'text', placeholder: 'Filter ontologies ...', name: 'input', 'data-action': 'input->ontologies-selector#input'}
+                    %input{type: 'text', placeholder: t('ontologies_selector.search_hint'), name: 'input', 'data-action': 'input->ontologies-selector#input'}
                     = inline_svg_tag 'icons/search.svg'
                 .ontologies-selector-options{'data-action': 'change->ontologies-selector#change'}
                     .switch-filters 
                         .show-ontology-views
                             .text
-                                Show ontology views
+                                = t('ontologies_selector.show_ontology_view')
                             = render SwitchInputComponent.new(id: 'show-ontology-views', name: 'showOntologyViews')
                         .show-retired-ontologies
                             .text
-                                Hide retired ontologies
+                                = t('ontologies_selector.hide_retired_ontologies')
                             = render SwitchInputComponent.new(id: 'show-retired-ontologies', name: 'showRetiredOntologies')
                     - formats = @formats.drop(1)
                     %div{'data-ontologies-selector-target': 'table'}
                         = render TabsContainerComponent.new do |c|         
-                            = c.item(title: 'Categories', selected: true)
+                            = c.item(title: t('ontologies_selector.tabs_title.categories'), selected: true)
                             = c.item_content do
                                 .chips.categories
                                     - @filters[:categories][0].each do |item|
                                         = render ChipsComponent.new(label: item.acronym, id: item.acronym, value: item.id, name: 'categories[]', tooltip: item.name)
 
-                            = c.item(title: 'Groups')
+                            = c.item(title: t('ontologies_selector.tabs_title.groups'))
                             = c.item_content do
                                 .chips.groups
                                     - @filters[:groups][0].each do |item|
 
                                         = render ChipsComponent.new(label: item.acronym, id: item.acronym, value: item.id, name: 'groups[]', tooltip: item.name)
 
-                            = c.item(title: 'Format')
+                            = c.item(title: t('ontologies_selector.tabs_title.format'))
                             = c.item_content do
                                 .chips.format
                                     - formats.each do |item|
                                         = render ChipsComponent.new(label: item, id: item, name: 'formats[]', value: item)
 
-                            = c.item(title: 'Natural languages')
+                            = c.item(title: t('ontologies_selector.tabs_title.natural_languages'))
                             = c.item_content do
                                 .chips.natural-language
                                     - @filters[:naturalLanguage][0].each do |item|
                                         = render ChipsComponent.new(label: item["acronym"], id: item["acronym"], name: 'naturalLanguage[]', value: item['id'])
                             
-                            = c.item(title: 'Formality levels')
+                            = c.item(title: t('ontologies_selector.tabs_title.formality_levels'))
                             = c.item_content do
                                 .chips
                                     - @filters[:hasFormalityLevel][0].each do |item|
                                         = render ChipsComponent.new(label: item["name"],id: item["acronym"], name: 'formalityLevel[]', value: item["id"])
                             
-                            = c.item(title: 'Ontology types')
+                            = c.item(title: t('ontologies_selector.tabs_title.ontology_types'))
                             = c.item_content do
                                 .chips
                                     - @filters[:isOfType][0].each do |item|
