@@ -22,6 +22,4 @@
 
 
     - container.loader do
-        .ontologies-selector-loding
-            = content_tag(:div, class: "lds-ellipsis ontologies-selector") do
-                = 4.times.map { content_tag(:div) }.join.html_safe
+        = render LoaderComponent.new(type: '2') 

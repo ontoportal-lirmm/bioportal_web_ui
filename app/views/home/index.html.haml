@@ -122,7 +122,7 @@
         .home-card.home-twitter-news
           %a.twitter-timeline{"data-height" => "360", :href => "https://twitter.com/lagroportal?ref_src=twsrc%5Etfw"}
             .home-twitter-loader 
-              = render LoaderComponent.new
+              = render LoaderComponent.new(type: '2')
           %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
 
   .home-section
