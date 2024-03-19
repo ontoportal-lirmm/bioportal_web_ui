@@ -108,6 +108,7 @@ group :development do
   # static code analysis
   gem 'brakeman', require: false
   gem 'rubocop', require: false
+  gem 'rubocop-rails'
   # gem 'i18n-debug'
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[ mri mingw x64_mingw ]
@@ -118,6 +119,8 @@ group :development do
   gem 'deepl-rb'
   gem 'letter_opener_web', '~> 2.0'
   gem 'haml-rails'
+  gem "rubocop-i18n", "~> 3.0"
+  gem 'haml_lint', require: false
 end
 
 group :test, :development do
