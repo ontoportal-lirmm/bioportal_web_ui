@@ -22,7 +22,7 @@
               .title
                 = t("search.advanced_options.ontologies")
               .field
-                = ontologies_selector(id:'search_page_ontologies' ,name: 'ontologies_list[]', selected: params[:ontologies_list])
+                = ontologies_selector(id:'search_page_ontologies' ,name: 'ontologies[]', selected:  params[:ontologies]&.split(','))
 
 
           .right 
