@@ -37,9 +37,9 @@ class AnnotatorController < ApplicationController
     if params[:text] && !params[:text].empty?
       api_params = {
         text: params[:text],
-        ontologies: list_to_string(params[:ontologies_list]),
-        sementic_types: list_to_string(params[:semantic_types_list]),
-        semantic_groups: list_to_string(params[:semantic_groups_list]),
+        ontologies: params[:ontologies],
+        semantic_types: params[:semantic_types],
+        semantic_groups: params[:semantic_groups],
         whole_word_only: params[:whole_word_only],
         longest_only: params[:longest_only],
         expand_mappings: params[:expand_mappings],
@@ -191,8 +191,8 @@ class AnnotatorController < ApplicationController
   end
 
   def empty_advanced_options
-    params[:semantic_types_list].nil? &&
-      params[:semantic_groups_list].nil? &&
+    params[:semantic_types].nil? &&
+      params[:semantic_groups].nil? &&
       params[:class_hierarchy_max_level] == 'None' &&
       (params[:score].nil? || params[:score] == 'none') &&
       params[:score_threshold] == '0' &&

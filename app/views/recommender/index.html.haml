@@ -8,7 +8,7 @@
     .recommender-page-decription
       = t('recommender.intro')
 
-    = form_tag('/recommender', method: :get, 'data-turbo': true, novalidate: true) do
+    = form_tag('/recommender', method: :get, 'data-turbo': true, novalidate: true, 'data-action': 'submit->form-url#submit', 'data-controller': 'form-url') do
       .recommender-page-inputs{'data-controller': 'reveal-component'}
         .inputs 
           %div
