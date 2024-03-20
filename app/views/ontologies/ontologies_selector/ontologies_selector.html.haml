@@ -3,7 +3,7 @@
         .d-flex.align-items-center.justify-content-center{'data-controller': 'ontologies-selector', 'data-ontologies-selector-id-value': @select_id, 'data-ontologies-selector-select-all-value': t('ontologies_selector.select_all'), 'data-ontologies-selector-unselect-all-value': t('ontologies_selector.unselect_all')}
             .ontologies-selector-container
                 .ontologies-selector-input
-                    %input{type: 'text', placeholder: t('ontologies_selector.search_hint'), name: 'input', 'data-action': 'input->ontologies-selector#input'}
+                    = text_input(label: '', placeholder: t('ontologies_selector.search_hint'), name: 'input', data: {action: 'input->ontologies-selector#input'})
                     = inline_svg_tag 'icons/search.svg'
                 .ontologies-selector-options{'data-action': 'change->ontologies-selector#change'}
                     .switch-filters 
