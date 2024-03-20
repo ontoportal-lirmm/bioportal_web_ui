@@ -129,18 +129,6 @@
     display: none;
 }
 
-.ontologies-selector-loding{
-    display: flex;
-    justify-content: center;
-}
-
-.lds-ellipsis.ontologies-selector{
-    transform: scale(1);
-}
-
-.lds-ellipsis.ontologies-selector div{
-    background: var(--primary-color);
-}
 .ontologies-selector-results .select-all{
     cursor: pointer;
 }
