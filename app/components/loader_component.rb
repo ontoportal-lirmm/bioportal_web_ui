@@ -14,7 +14,7 @@ class LoaderComponent < ViewComponent::Base
   end
 
   def type
-    !@type.eql?('2')
+    !@type.eql?('pulsing')
   end
 
   def call

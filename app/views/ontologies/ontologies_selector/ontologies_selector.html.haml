@@ -57,7 +57,7 @@
                 %input.d-none{type: 'submit', 'data-ontologies-selector-target': 'submit'}
                 = render TurboFrameComponent.new(id: 'selector_results_frame', src: '/ontologies_selector/results') do |container|
                     - container.loader do
-                        = render LoaderComponent.new(type: '2') 
+                        = render LoaderComponent.new(type: 'pulsing') 
                         
                     
                 
