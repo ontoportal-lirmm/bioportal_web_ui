@@ -1,0 +1,5 @@
+= render TurboFrameComponent.new(id:"resource_content_frame_#{@format}") do
+    - if @result
+        .content-finder-result{data: {controller: 'content-finder', 'content-finder-result-value': @result, 'content-finder-format-value': @format }}
+            %pre.mb-0
+                %code.d-block{style: 'text-wrap: pretty; word-break: break-all', data: {'content-finder-target': 'content'}}

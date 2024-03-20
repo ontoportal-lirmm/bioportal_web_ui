@@ -4,22 +4,48 @@
   %div.my-3
   %div.raw-table
     - if @bottom_keys.present?
-      = render DropdownContainerComponent.new(title: 'Raw data', id: "accordion-#{@id}") do
-        - top_set, leftover_set, bottom_set = filter_properties(@top_keys, @bottom_keys, @exclude_keys, prefix_properties(@concept_properties))
-        - leftover_set = convert_dates(leftover_set)
-        = render TableComponent.new(stripped: true) do |t|
+      %h2.card_title
+        %span.mr-2
+          Raw Data
+      .concepts-content-format
+        = render TabsContainerComponent.new(type: 'outline') do |c|
+          - c.item(title: "HTML", selected: true)
+          - c.item_content do
+            - top_set, leftover_set, bottom_set = filter_properties(@top_keys, @bottom_keys, @exclude_keys, prefix_properties(@concept_properties))
+            - leftover_set = convert_dates(leftover_set)
+            = render TableComponent.new(stripped: true) do |t|
 
-          - row_hash_properties(top_set, @acronym).each do |row|
-            - t.add_row(*row)
+              - row_hash_properties(top_set, @acronym).each do |row|
+                - t.add_row(*row)
 
-          - row_hash_properties(leftover_set, @acronym).each do |row|
-            - t.add_row(*row)
-
-
-          - sections.each do |section|
-            - t.row do
-              = section
+              - row_hash_properties(leftover_set, @acronym).each do |row|
+                - t.add_row(*row)
 
 
-          - row_hash_properties(bottom_set, @acronym).each do |row|
-            - t.add_row(*row)
+              - sections.each do |section|
+                - t.row do
+                  = section
+
+
+              - row_hash_properties(bottom_set, @acronym).each do |row|
+                - t.add_row(*row)
+
+          - if @concept_id
+            - uri_parameter= CGI.escape(@concept_id)
+            - finder_params = "?acronym=#{@acronym}&uri=#{uri_parameter}"
+            
+            - c.item(title: "JSON")
+            - c.item_content do
+              = render TurboFrameComponent.new(id:'resource_content_frame_json',src: "/content_finder#{finder_params}&output_format=json", loading:"lazy")
+            
+            - c.item(title: "XML")
+            - c.item_content do
+              = render TurboFrameComponent.new(id:'resource_content_frame_xml',src: "/content_finder#{finder_params}&output_format=xml", loading:"lazy")
+            
+            - c.item(title: "NTRIPLES")
+            - c.item_content do
+              = render TurboFrameComponent.new(id:'resource_content_frame_ntriples',src: "/content_finder#{finder_params}&output_format=ntriples", loading:"lazy")
+            
+            - c.item(title: "TURTLE")
+            - c.item_content do
+              = render TurboFrameComponent.new(id:'resource_content_frame_turtle',src: "/content_finder#{finder_params}&output_format=turtle", loading:"lazy")
