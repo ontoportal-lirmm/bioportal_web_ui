@@ -610,4 +610,24 @@ module ApplicationHelper
     end
   end
 
+  def save_button_component(class_name: nil, id: , value:, data: nil)
+    content_tag(:div, data: data, class: class_name) do
+      render Buttons::RegularButtonComponent.new(id:id, value: value, variant: "primary", state: 'regular') do |btn|
+        btn.icon_right do
+          inline_svg_tag "check.svg"
+        end
+      end
+    end
+  end
+
+  def cancel_button_component(class_name: nil, id: , value:, data: nil)
+    content_tag(:div, data: data, class: class_name) do
+      render Buttons::RegularButtonComponent.new(id:id, value: value, variant: "secondary", state: 'regular') do |btn|
+        btn.icon_left do
+          inline_svg_tag "x.svg"
+        end
+      end
+    end
+  end
+
 end
