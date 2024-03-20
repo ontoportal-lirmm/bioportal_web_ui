@@ -177,51 +177,19 @@ module ApplicationHelper
     end
   end
 
-  def init_ontology_picker(ontologies = nil, selected_ontologies = [], groups = nil, categories = nil)
-    get_ontologies_data(ontologies)
-    get_groups_data(groups)
-    get_categories_data(categories)
-    # merge group and category ontologies into a json array
-    onts_in_gp_or_cat = @groups_map.values.flatten.to_set
-    onts_in_gp_or_cat.merge @categories_map.values.flatten.to_set
-    @onts_in_gp_or_cat_for_js = onts_in_gp_or_cat.sort.to_json
-  end
-
-  def init_ontology_picker_single
-    get_ontologies_data
-  end
-
-  def get_ontologies_data(ontologies = nil)
+  def onts_for_select
     ontologies ||= LinkedData::Client::Models::Ontology.all(include: "acronym,name")
-    @onts_for_select = []
-    @onts_acronym_map = {}
-    @onts_uri2acronym_map = {}
+    onts_for_select = []
     ontologies.each do |ont|
-      # TODO: ontologies parameter may be a list of ontology models (not ontology submission models):
-      # ont.acronym instead of ont.ontology.acronym
-      # ont.name instead of ont.ontology.name
-      # ont.id instead of ont.ontology.id
-      # TODO: annotator passes in 'custom_ontologies' to the ontologies parameter.
       next if ( ont.acronym.nil? or ont.acronym.empty? )
       acronym = ont.acronym
       name = ont.name
-      #id = ont.id # ontology URI
       abbreviation = acronym.empty? ? "" : "(#{acronym})"
       ont_label = "#{name.strip} #{abbreviation}"
-      #@onts_for_select << [ont_label, id]  # using the URI crashes the UI checkbox selection behavior.
-      @onts_for_select << [ont_label, acronym]
-      @onts_acronym_map[ont_label] = acronym
-      @onts_uri2acronym_map[ont.id] = acronym  # required in ontologies_to_acronyms
+      onts_for_select << [ont_label, acronym]
     end
-    @onts_for_select.sort! { |a,b| a[0].downcase <=> b[0].downcase }
-    @onts_for_js = @onts_acronym_map.to_json
-  end
-
-  def categories_for_select
-    # This method is called in the search index page.
-    get_ontologies_data
-    get_categories_data
-    return @categories_for_select
+    onts_for_select.sort! { |a,b| a[0].downcase <=> b[0].downcase }
+    onts_for_select
   end
 
   def get_categories_data(categories = nil)
@@ -633,9 +601,8 @@ module ApplicationHelper
   end
 
   def ontologies_selector(id:, label: nil, name: nil, selected: nil)
-    get_ontologies_data
     content_tag(:div) do
-      render(Input::SelectComponent.new(id: id, label: label, name: name, value: @onts_for_select, multiple: "multiple", selected: selected)) +
+      render(Input::SelectComponent.new(id: id, label: label, name: name, value: onts_for_select, multiple: "multiple", selected: selected)) +
       content_tag(:div, class: 'ontologies-selector-button', 'data-controller': 'ontologies-selector', 'data-ontologies-selector-id-value': id) do
         content_tag(:div, t('ontologies_selector.clear_selection'), class: 'clear-selection', 'data-action': 'click->ontologies-selector#clear') +
         link_to_modal(t('ontologies_selector.ontologies_advanced_selection'), "/ontologies_selector?id=#{id}", data: { show_modal_title_value: t('ontologies_selector.ontologies_advanced_selection')})
