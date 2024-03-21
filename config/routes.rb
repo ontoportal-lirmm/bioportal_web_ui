@@ -58,6 +58,7 @@ Rails.application.routes.draw do
   end
 
   get 'instances/:ontology', to: 'instances#index'
+  get 'properties/:ontology', to: 'properties#index'
 
   resources :login
 
@@ -170,7 +171,7 @@ Rails.application.routes.draw do
   get '/ajax/classes/treeview' => 'concepts#show_tree'
   get '/ajax/classes/list' => 'collections#show_members'
   get '/ajax/classes/date_sorted_list' => 'concepts#show_date_sorted_list'
-  get '/ajax/properties/treeview' => 'properties#show_tree'
+  get '/ajax/properties/treeview' => 'properties#index'
   get '/ajax/properties/children' => 'properties#show_children'
   get '/ajax/properties/tree' => 'concepts#property_tree'
   get 'ajax/schemes/label', to: "schemes#show_label"
