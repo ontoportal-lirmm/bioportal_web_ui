@@ -1,5 +1,26 @@
 class SchemesController < ApplicationController
-  include SchemesHelper
+  include SchemesHelper, SearchHelper
+
+
+  def index
+    acronym = params[:ontology]
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
+    ontology_not_found(acronym) if @ontology.nil?
+    @submission_latest = @ontology.explore.latest_submission(include: 'all', invalidate_cache: invalidate_cache?) rescue @ontology.explore.latest_submission(include: '')
+
+    @schemes = get_schemes(@ontology)
+
+    if params[:search].blank?
+      render partial: 'schemes/tree_view'
+    else
+      render_search_paginated_list(container_id: 'schemes_sorted_list',
+                            types: ['ConceptScheme'],
+                            next_page_url: "/schemes/#{@ontology.acronym}",
+                            child_url: "/ontologies/#{@ontology.acronym}/schemes/show",
+                            child_param: :schemeid,
+                            child_turbo_frame: 'scheme')
+    end
+  end
 
   def show
     @scheme = get_request_scheme

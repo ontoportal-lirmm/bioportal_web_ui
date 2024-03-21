@@ -4,7 +4,11 @@
       - if no_schemes?
         = no_schemes_alert
       - else
-        = render partial: 'schemes/tree_view'
+        = tree_container_component(id: "schemes_sorted_list_view-page-1",
+                                 placeholder:"Search an scheme in #{@ontology.acronym}",
+                                 frame_url:  "/schemes/#{@ontology.acronym}?#{request.original_url.split('?')[1]}",
+                                 tree_url: "/schemes/#{@ontology.acronym}?#{request.original_url.split('?')[1]}")
+
     %div#scheme_contents.pl-3{data:{'container-splitter-target': 'container'}}
       = render TurboFrameComponent.new(id:'scheme') do
         = render partial: 'schemes/scheme', locals: {scheme: @scheme}
