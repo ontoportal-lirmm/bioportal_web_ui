@@ -19,8 +19,12 @@ module ModalHelper
     render TurboModalComponent.new(id: id)
   end
 
-  def render_in_modal(id = 'application_modal', &block)
-    render TurboFrameComponent.new(id: "#{id}_content") do
+  def modal_frame_id(id = 'application_modal')
+    "#{id}_content"
+  end
+
+  def render_in_modal(id = modal_frame_id, &block)
+    render TurboFrameComponent.new(id: id) do
       capture(&block).html_safe if block_given?
     end
   end

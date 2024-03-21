@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 class TreeLinkComponent < ViewComponent::Base
-  include MultiLanguagesHelper
-  def initialize(child:, href:, children_href: , selected: false , data: {}, muted: false, target_frame: nil)
+  include MultiLanguagesHelper, ModalHelper
+  def initialize(child:, href:, children_href: , selected: false , data: {}, muted: false, target_frame: nil, open_in_modal: false)
     @child = child
     @active_style = selected ? 'active' : ''
     #@icons = child.relation_icon(node)
     @muted_style = muted ? 'text-muted' : ''
     @href = href
     @children_link = children_href
-    label = @child.prefLabel rescue @child.id
+    label = (@child.prefLabel || @child.label) rescue @child.id
     if label.nil?
       @pref_label_html = child.id.split('/').last
     else
@@ -26,6 +26,8 @@ class TreeLinkComponent < ViewComponent::Base
     @data.merge!(data) do |_, old, new|
       "#{old} #{new}"
     end
+
+    @open_in_modal = open_in_modal
   end
 
 
