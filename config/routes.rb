@@ -47,6 +47,8 @@ Rails.application.routes.draw do
       get 'edit_properties'
     end
 
+    get 'instances/show', to: 'instances#show'
+
     get 'instances/:instance_id', to: 'instances#show', constraints: { instance_id: /[^\/?]+/ }
     get 'schemes/show_scheme', to: 'schemes#show'
     get 'collections/show'
@@ -54,6 +56,8 @@ Rails.application.routes.draw do
     get 'metrics_evolution'
     get 'subscriptions'
   end
+
+  get 'instances/:ontology', to: 'instances#index'
 
   resources :login
 

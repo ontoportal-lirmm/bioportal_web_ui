@@ -169,6 +169,17 @@ class OntologiesController < ApplicationController
   end
 
   def instances
+    page = params[:page].presence ||  1
+    page_size = params[:pagesize].presence ||  100
+
+    @page = @ontology.explore.instances(page: page, pagesize: page_size)
+    @concepts = @page.collection
+    if params[:instanceid]
+      @instance = helpers.get_instance_details_json(@ontology.acronym, params[:instanceid], {include: 'all'})
+    else
+      @instance = @concepts.first
+    end
+
     if request.xhr?
       render partial: 'instances/instances', locals: { id: 'instances-data-table' }, layout: false
     else

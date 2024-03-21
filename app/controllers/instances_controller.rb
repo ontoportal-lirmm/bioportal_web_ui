@@ -1,5 +1,21 @@
 class InstancesController < ApplicationController
-  include InstancesHelper
+  include InstancesHelper, SearchHelper
+
+  def index
+    concept_type = params[:type].to_s || 'NamedIndividual'
+
+    is_concept_instance = !params[:type].blank?
+    get_ontology(params)
+
+    render_search_paginated_list(container_id: (is_concept_instance ? 'concept_' : '') + 'instances_sorted_list',
+                                 types: Array(concept_type),
+                                 next_page_url: "/instances/#{@ontology.acronym}?type=#{helpers.escape(params[:type])}",
+                                 child_url: "/ontologies/#{@ontology.acronym}/instances/show?modal=#{is_concept_instance.to_s}",
+                                 child_param: :instanceid,
+                                 child_turbo_frame: 'instance_show',
+                                 show_count: is_concept_instance)
+  end
+
   def index_by_ontology
     get_ontology(params)
     instances = get_instances_by_ontology_json(@ontology, get_query_parameters)
@@ -15,7 +31,8 @@ class InstancesController < ApplicationController
   def show
     get_ontology(params)
     @instance = get_instance_details_json(params[:ontology_id], params[:id] || params[:instance_id], {include: 'all'})
-    render partial: 'instances/instance_details', layout: nil
+
+    render partial: 'instances/details', layout: nil
   end
 
   private
