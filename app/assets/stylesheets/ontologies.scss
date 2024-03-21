@@ -182,7 +182,8 @@ $widget-table-border-color: #EFEFEF;
 .tree-container {
   overflow-x: auto;
   min-width: 35%;
-  height: 70vh;
+  min-height: 70vh;
+  max-height: 90vh;
   font: small/1.231 arial,helvetica,clean,sans-serif;
 }
 
