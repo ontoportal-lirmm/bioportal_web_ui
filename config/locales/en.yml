@@ -1356,6 +1356,7 @@ en:
     see_less: See less...
   properties:
     id: ID
+    type: Type
     preferred_name: Preferred name
     definitions: Definitions
     parent: Parent
