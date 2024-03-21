@@ -176,3 +176,37 @@ div.synonym-change-request button {
     top: 5px;
   }
 }
+
+
+.hljs-custom-prefixes{
+  color: grey;
+}
+.hljs-custom-symbol{
+  color: red;
+}
+
+.hljs-custom-concepts{
+  color: #770088;
+}
+
+
+.content-finder-logo svg {
+  width: 100px;
+  height: 100px;
+}
+.content-finder-logo svg path{
+  fill: var(--primary-color)
+}
+
+.hljs-subject{
+  color: green;
+}
+
+.hljs-predicate{
+  color: #770088;
+}
+
+.parse_button{
+  display: flex;
+  justify-content: center;
+}
