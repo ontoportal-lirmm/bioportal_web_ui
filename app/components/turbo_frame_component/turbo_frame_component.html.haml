@@ -7,6 +7,6 @@
       = loader
     - else
       %div.p-3
-        = render LoaderComponent.new
+        = render LoaderComponent.new(type: 'pulsing')
   %div{'data-turbo-frame-error-target': 'errorMessage', style:'display: none; width: 100%'}
     = render Display::AlertComponent.new(type:'danger')

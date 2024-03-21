@@ -1063,27 +1063,6 @@ button.fg-button-menu, button.fg-button {
   border: none;
 }
 
-#ontology_picker_container div.chzn-container {
-  width: 432px !important;
-}
-
-#ontology_picker_container div.chzn-container-active ul.chzn-choices li.search-field input {
-  font-style: normal !important;
-}
-
-#ontology_picker_container div.chzn-container ul.chzn-choices {
-  max-height: 110px;
-  overflow: auto !important;
-}
-
-#ontology_picker_container div.chzn-container li.search-field input {
-  font-style: oblique;
-}
-
-#ontology_picker_container div.chzn-drop {
-  display: none;
-}
-
 .no_right_border {
   border-right: none !important;
 }

@@ -64,17 +64,18 @@ Rails.application.routes.draw do
     match 'groups/synchronize_groups' => 'groups#synchronize_groups', via: [:post]
     resources :groups, only: [:index, :create, :new, :edit, :update, :destroy]
     resources :categories, only: [:index, :create, :new, :edit, :update, :destroy]
-    post 'clearcache', to: 'clearcache'
-    post 'resetcache', to: 'resetcache'
-    post 'clear_goo_cache', to: 'clear_goo_cache'
-    post 'clear_http_cache', to: 'clear_http_cache'
-    get 'ontologies_report', to: 'ontologies_report'
-    post 'refresh_ontologies_report', to: 'refresh_ontologies_report'
-    delete 'ontologies', to: 'delete_ontologies'
-    put 'ontologies', to: 'process_ontologies'
-    get 'ontologies/:acronym/log', to: 'admin#parse_log'
-    get 'update_check_enabled', to: 'update_check_enabled'
   end
+
+  post 'admin/clearcache', to: 'admin#clearcache'
+  post 'admin/resetcache', to: 'admin#resetcache'
+  post 'admin/clear_goo_cache', to: 'admin#clear_goo_cache'
+  post 'admin/clear_http_cache', to: 'admin#clear_http_cache'
+  get 'admin/ontologies_report', to: 'admin#ontologies_report'
+  post 'admin/refresh_ontologies_report', to: 'admin#refresh_ontologies_report'
+  delete 'admin/ontologies', to: 'admin#delete_ontologies'
+  put 'admin/ontologies', to: 'admin#process_ontologies'
+  get 'admin/update_check_enabled', to: 'admin#update_check_enabled'
+  get 'admin/ontologies/:acronym/log', to: 'admin#parse_log'
 
   resources :subscriptions
 
@@ -135,7 +136,8 @@ Rails.application.routes.draw do
   get '/ontologies_filter', to: 'ontologies#ontologies_filter'
 
   get '/ontologies/:acronym/properties/show', to: 'properties#show'
-
+  get 'ontologies_selector', to: 'ontologies#ontologies_selector'
+  get 'ontologies_selector/results', to: 'ontologies#ontologies_selector_results'
   # Notes
   get 'ontologies/:ontology/notes/:noteid', to: 'notes#virtual_show', as: :note_virtual, noteid: /.+/
   get 'ontologies/:ontology/notes', to: 'notes#virtual_show'

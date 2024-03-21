@@ -96,3 +96,9 @@ application.register("sample-text", SampleTextController)
 
 import AnnotatorController from "./annotator_controller"
 application.register('annotator', AnnotatorController)
+
+import FormUrlController from "./form_url_controller"
+application.register('form-url', FormUrlController)
+
+import ontologiesSelector from "./ontologies_selector_controller"
+application.register("ontologies-selector", ontologiesSelector)
