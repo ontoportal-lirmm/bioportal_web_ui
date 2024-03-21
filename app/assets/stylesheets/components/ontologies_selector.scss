@@ -1,0 +1,137 @@
+.ontologies-selector-container{
+    width: 800px;
+    padding: 0 10px;
+    
+}
+.ontologies-selector-input{
+    position: relative;
+    padding-bottom: 70px;
+}
+.ontologies-selector-input input{
+    width: 100%;
+    font-size: 15px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: 1px solid #DCDCDC;
+    outline: none;
+    position: absolute;
+}
+.ontologies-selector-input input:focus{
+    border: 1px solid #a6a6a6;
+}
+.ontologies-selector-input svg{
+    position: absolute;
+    top: 17px;
+    right: 20px;
+}
+.ontologies-selector-input svg path{
+    fill: #a6a6a6;
+}
+
+.ontologies-selector-options .nav-item{
+    margin-right: 0px !important;
+}
+.ontologies-selector-options .tab-items{
+    width: 100%;
+    justify-content: space-between;
+}
+.ontologies-selector-options .tab-link{
+    padding: 0 10px;
+}
+.ontologies-selector-options .chips{
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.horizontal-line{
+    margin: 10px 0;
+    width: 100%;
+    height: 1px;
+    background-color: #d7d7d7;
+    border-radius: 100%;
+}
+
+.ontologies-selector-results .chips-container div label > span{
+    font-size: 16px;
+    padding: 10px 15px;
+}
+.ontologies-selector-results label{
+    width: 100%
+}
+.ontologies-selector-results .chips-container > div{
+    margin-right: 0;
+}
+.ontologies-selector-results .ontologies svg{
+    display: none !important;
+}
+.ontologies-selector-results .ontologies{
+    max-height: 300px;
+    overflow-y: scroll;
+}
+.save-cancel-buttons{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.ontologies-selector-results .button{
+    width: 200px;
+}
+.ontologies-selector-results .button + .button{
+    margin-left: 20px
+}
+.switch-filters {
+    display: flex;
+}
+.switch-filters > div{
+    display: flex;
+    padding: 15px 20px;
+    border: 1px solid #d7d7d7;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    color: #666666;
+}
+.switch-filters > div + div{
+    margin-left: 20px;
+}
+
+.switch-filters .text{
+    margin-right: 20px
+}
+
+.ontologies-selector-results .results-number{
+    color: #A1A1A1;
+    margin: 10px 0;
+}
+.ontologies-selector-results  .results-number span{
+    color: var(--primary-color);
+}
+.ontologies-selector-button{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+.ontologies-selector-button .clear-selection{
+    margin-top: 5px;
+    font-size: 15px;
+    color: var(--primary-color);
+    margin-right: 20px;
+    cursor: pointer;
+}
+.ontologies-selector-button a{
+    color: var(--primary-color) !important;
+    margin-top: 5px;
+    font-size: 15px;
+}
+.ontologies-selector-button a svg{
+    display: none;
+}
+.ontologies-selector-button a span{
+    display: none;
+}
+
+.ontologies-selector-results .select-all{
+    cursor: pointer;
+}
+.ontologies-selector-button a{
+    margin-right: 0;
+}
