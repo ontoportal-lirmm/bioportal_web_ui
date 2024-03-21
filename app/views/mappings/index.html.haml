@@ -8,7 +8,7 @@
         Mappings
       .line
     .mappings-page-decription
-      Dive into an overview of the mappings in the bubble view, or efficiently locate a specific ontology or upload your own mappings using the tab view.
+      Dive into an overview of the mappings in the bubble view, efficiently locate a specific ontology in the table view or upload your own mappings.
     = render TabsContainerComponent.new do |c|
       - c.item(title: 'Bubbles view', selected: true)
       - c.item_content do
@@ -33,12 +33,16 @@
               %input.d-none{ type: 'submit', 'data-mappings-target': 'submit'}
               %div
                 = render TurboFrameComponent.new(id:"mappings_table")
-                
-          .mappings-or
-            .line
-            OR
-            .line
-          .upload-mappings
-            .title
-              Upload mappings
-            = render Input::FileInputComponent.new(name: "new-mapping")
+      - c.item(title: 'Upload mappings')
+      - c.item_content do    
+        .upload-mappings
+          .card.upload-mappings-example
+            %div
+              %button.btn.btn-link{"data-target" => "#collapseOne", "data-toggle" => "collapse", :type => "button"}
+                = t("mappings.bulk_loader.loader.example_of_valid_file")
+            #collapseOne.collapse
+              .card-body
+                %pre
+                  %code
+                    = JSON.pretty_generate @example_code
+          = render Input::FileInputComponent.new(name: "new-mapping")
