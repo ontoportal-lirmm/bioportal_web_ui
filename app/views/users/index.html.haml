@@ -2,7 +2,7 @@
   %div.my-1
     = render_alerts_container
     .rounded-json-button
-      = render_rounded_button_with_style('right: 100px; top: 24px;', "#{$REST_URL}/users?display=all&apikey=#{get_apikey}")
+      = rounded_button_component("#{$REST_URL}/users?display=all&apikey=#{get_apikey}")
   = render TableComponent.new(id: 'admin_users', custom_class: 'border rounded p-1') do |t|
     - t.header do |h|
       - h.th {t('users.index.first_name')}
