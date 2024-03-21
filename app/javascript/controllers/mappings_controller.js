@@ -6,16 +6,36 @@ export default class extends Controller {
     mappingsList: Object,
     zoomRatio: Number
   }
-  static targets = ['frame', 'bubbles', 'submit', 'modal']
+  static targets = ['frame', 'bubbles', 'submit', 'modal', 'selector']
 
   connect() {
     this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue, this.#normalization_ratio(this.mappingsListValue))
     this.#center_scroll(this.frameTarget)
   }
-  submit(){
+  submit(event){
+    if (event.currentTarget.querySelector('.item') == null){
+      return
+    }
     this.submitTarget.click()
+    const selectValue = event.currentTarget.querySelector('select').value
+    const selectAcronym = this.#get_acronym(selectValue)
+    const bubblesContainer = document.getElementById('mappings-bubbles-view')
+    const selected_bubble = bubblesContainer.querySelector('[data-selected="true"]')
+    const currentBubble = bubblesContainer.querySelector(`[data-acronym="${selectAcronym}"]`)
+    if (selected_bubble && selected_bubble.dataset.acronym === selectAcronym) {
+      console.log('entered here')
+      return;
+    }
+    let clickEvent = new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+      view: window
+    });
+    if(currentBubble.getAttribute('data-enabled') == 'false' || currentBubble.getAttribute('data-highlighted') == 'true'){
+      selected_bubble.dispatchEvent(clickEvent)
+    }
+    currentBubble.dispatchEvent(clickEvent);
   }
-
   select_bubble(event){
     const selected_bubble = event.currentTarget
     const selected_circle = selected_bubble.querySelector('circle')
@@ -48,12 +68,13 @@ export default class extends Controller {
         return
     }
     selected_bubble.setAttribute('data-selected', 'true')
+    this.#init_select(selected_bubble.getAttribute('data-acronym'))
     fetch(url)
         .then(response => {
             if (!response.ok) {
             throw new Error('Network response was not ok');
             }
-            return response.json(); // assuming response is JSON
+            return response.json();
         })
         .then(data => {
             let mappings_list = []
@@ -173,9 +194,6 @@ export default class extends Controller {
 
     this.svg = svg;
   }
-
-
-
   #hash_to_list(data){
     return Object.keys(data).map(key => ({
       ontology_name: this.#getLastPartOfUrl(key),
@@ -186,12 +204,10 @@ export default class extends Controller {
     var parts = url.split('/');
     return parts[parts.length - 1];
   }
-
   #center_scroll(frame){
     frame.scrollTop = frame.scrollHeight / 2 - frame.clientHeight / 2;
     frame.scrollLeft = frame.scrollWidth / 2 - frame.clientWidth / 2;
   }
-
   #normalization_ratio(ontologies_hash){
     let maxValue = -Infinity
     for (const value of Object.values(ontologies_hash)) {
@@ -202,5 +218,22 @@ export default class extends Controller {
       normalization_ratio *= 10
     }
     return normalization_ratio
+  }
+  #init_select(acronym){
+    let input = this.selectorTarget.querySelector('input')
+    input.value = acronym
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    for(let i = 0; i<this.selectorTarget.querySelectorAll('.option').length; i++){
+      const selectValue = this.selectorTarget.querySelectorAll('.option')[i]
+      const selectAcronym = this.#get_acronym(selectValue.getAttribute('data-value'))
+      if(selectAcronym == acronym){
+        selectValue.click()
+      }
+    }
+  }
+  #get_acronym(selectValue){
+    acronym = selectValue.split('-')
+    acronym.shift()
+    return acronym.join('-').split('(')[0].replace(/\s/g, '')
   }
 }

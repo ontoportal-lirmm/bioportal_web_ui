@@ -22,19 +22,18 @@
               = inline_svg_tag 'icons/zoom-out.svg'
           .d-none{'data-mappings-target': 'modal'}
             = link_to_modal "bilel", mappings_show_mappings_path(id: "AGROVOC" ,target: "https://data.agroportal.lirmm.fr/ontologies/AGRO", data: { show_modal_title_value: "bilel", show_modal_size_value: 'modal-xl'})
+  
       - c.item(title: 'Table view')
       - c.item_content do
         .mappings-table-view-container
           .mappings-ontologies-select
             = form_tag('/mappings_table', method: :get, novalidate: true, data: { turbo: true, turbo_frame: 'mappings_table' }) do
-              .mappings-selector{'data-action': 'change->mappings#submit'}
+              .mappings-selector{data: {action: 'change->mappings#submit', 'mappings-target': 'selector'}}
                 = render Input::SelectComponent.new(label: 'Find all the mappings of an ontology', id: 'mappings_ontologies_selector', name: 'ontology', value: @selector_ontologies_count)              
               %input.d-none{ type: 'submit', 'data-mappings-target': 'submit'}
               %div
                 = render TurboFrameComponent.new(id:"mappings_table")
                 
-                  
-
           .mappings-or
             .line
             OR
