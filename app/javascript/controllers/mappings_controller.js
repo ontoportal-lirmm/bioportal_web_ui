@@ -47,7 +47,6 @@ export default class extends Controller {
       const selected_leaf = bubblesContainer.querySelector('[data-selected="true"]')
       const acronym = selected_leaf.getAttribute('data-acronym')
       const target_acronym = selected_bubble.getAttribute('data-acronym')
-      debugger
       const modal_link = `/mappings/show_mappings?data%5Bshow_modal_size_value%5D=modal-xl&amp;data%5Bshow_modal_title_value%5D=bilel&amp;id=${acronym}&amp;target=https%3A%2F%2Fdata.agroportal.lirmm.fr%2Fontologies%2F${target_acronym}`
       this.modalTarget.querySelector('a').href = modal_link
       this.modalTarget.querySelector('a').click()
@@ -62,6 +61,7 @@ export default class extends Controller {
         for(let i = 0; i<leafs.length; i++){
             const circle = leafs[i].querySelector('circle')
             circle.style.fill = 'var(--primary-color)'
+            circle.style.opacity = '1'
             leafs[i].setAttribute('data-enabled', 'true')
             leafs[i].setAttribute('data-highlighted', 'false')
         }
@@ -79,18 +79,24 @@ export default class extends Controller {
         .then(data => {
             let mappings_list = []
             for(let i=0; i<data.length; i++){
-                mappings_list.push(data[i]['target_ontology']['acronym'])
+                let list_item = {acronym: data[i]['target_ontology']['acronym'], count: data[i]['count']}
+                mappings_list.push(list_item)
             }
             const bubblesContainer = document.getElementById('mappings-bubbles-view')
             const leafs = bubblesContainer.querySelectorAll('.leaf')
+            const max_mappings_count = mappings_list.reduce((max, item) => Math.max(max, item.count), -Infinity);
             for(let i=0; i<leafs.length; i++){
                 const circle = leafs[i].querySelector('circle')
                 const acronym = leafs[i].getAttribute('data-acronym')
-                circle.style.fill = mappings_list.includes(acronym) ? 'var(--primary-color)' : 'var(--light-color)'
-                if(mappings_list.includes(acronym)){
+                if(mappings_list.some(item => item.acronym === acronym)){
                   leafs[i].setAttribute('data-highlighted', 'true')
+                  circle.style.fill = 'var(--primary-color)'
+                  const elem = mappings_list.find(item => item.acronym === acronym);
+                  const opacity = (elem["count"] / max_mappings_count + Math.log( elem["count"] + 1)) / 10 + 0.5
+                  circle.style.opacity = `${opacity}`
                 } else {
                   leafs[i].setAttribute('data-enabled', 'false')
+                  circle.style.fill = 'var(--light-color)'
                 }
             }
             const selected_leaf = bubblesContainer.querySelector('[data-selected="true"]')
