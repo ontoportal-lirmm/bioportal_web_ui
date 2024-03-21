@@ -106,7 +106,7 @@
 }
 
 .browse-ontology-title {
-  color: var(--primary-color);
+  color: var(--primary-color) !important;
   font-weight: 600;
   font-size: 18px;
 }
@@ -178,7 +178,7 @@
 .browse-fair-details {
   font-size: 14px;
   font-weight: 400;
-  color: var(--primary-color);
+  color: var(--primary-color) !important;
 }
 
 .browse-uploaded {
@@ -217,7 +217,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: var(--primary-color);
+  color: var(--primary-color) !important;
 }
 
 .browse-card-number {
@@ -378,7 +378,7 @@
 
 .browse-ontology-deprecated {
   background-color: #EB433521;
-  color: #EB4335;
+  color:  var(--error-color);
   padding: 10px;
   font-size: 14px;
   border-radius: 8px;
@@ -417,7 +417,7 @@
 
 .browse-ontology-deprecated {
   background-color: #EB433521;
-  color: #EB4335;
+  color: var(--error-color);
   padding: 10px;
   font-size: 14px;
   border-radius: 8px;
