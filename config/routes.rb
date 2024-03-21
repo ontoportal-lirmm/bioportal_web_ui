@@ -48,6 +48,7 @@ Rails.application.routes.draw do
     end
 
     get 'instances/show', to: 'instances#show'
+    get 'collections/show', to: 'collections#show'
 
     get 'instances/:instance_id', to: 'instances#show', constraints: { instance_id: /[^\/?]+/ }
     get 'schemes/show_scheme', to: 'schemes#show'
@@ -59,6 +60,7 @@ Rails.application.routes.draw do
 
   get 'instances/:ontology', to: 'instances#index'
   get 'properties/:ontology', to: 'properties#index'
+  get 'collections/:ontology', to: 'collections#index'
 
   resources :login
 

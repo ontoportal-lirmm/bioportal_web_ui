@@ -1,15 +1,16 @@
-- collections_labels, selected_collection = get_collections_labels(@collections, params[:collectionid])
-- selected_collection_id = selected_collection.nil? ? collections_labels.first["@id"] : selected_collection["@id"]
-- if collections_labels.empty?
-  %div
-    no collections detected
-- else
-  %div
-    = render TreeViewComponent.new(id: nil,  auto_click: true) do |tree_child|
-      - sort_collections_label(collections_labels).each do |collection|
-        - scheme = OpenStruct.new(collection)
-        - scheme.prefLabel = Array(get_collection_label(collection)).last
-        - scheme.id = scheme['@id']
-        - tree_child.child(child: scheme, href: collection_path(collection['@id'], request_lang),
-                         children_href: '#', selected: scheme.id.eql?(selected_collection_id),
-                         target_frame: 'collection', data: {collectionid: collection['@id']})
+= turbo_frame_tag "collections_sorted_list_view-page-1" do
+  - collections_labels, selected_collection = get_collections_labels(@collections, params[:collectionid])
+  - selected_collection_id = selected_collection.nil? ? collections_labels.first["@id"] : selected_collection["@id"]
+  - if collections_labels.empty?
+    %div
+      no collections detected
+  - else
+    %div
+      = render TreeViewComponent.new(id: nil,  auto_click: true) do |tree_child|
+        - sort_collections_label(collections_labels).each do |collection|
+          - scheme = OpenStruct.new(collection)
+          - scheme.prefLabel = Array(get_collection_label(collection)).last
+          - scheme.id = scheme['@id']
+          - tree_child.child(child: scheme, href: collection_path(collection['@id'], request_lang),
+                           children_href: '#', selected: scheme.id.eql?(selected_collection_id),
+                           target_frame: 'collection', data: {collectionid: collection['@id']})

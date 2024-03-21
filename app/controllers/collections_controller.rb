@@ -1,5 +1,30 @@
 class CollectionsController < ApplicationController
-  include CollectionsHelper
+  include CollectionsHelper,SearchHelper
+
+
+  def index
+    acronym = params[:ontology]
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
+    ontology_not_found(acronym) if @ontology.nil?
+
+    @collections = get_collections(@ontology)
+    collection_id = params[:collection_id]
+    @collection = get_collection(@ontology, collection_id) if collection_id
+
+
+    if params[:search].blank?
+      render partial: 'collections/list_view'
+    else
+
+      render_search_paginated_list(container_id: 'collections_sorted_list',
+                                   types: ['Collection'],
+                                   next_page_url: "/collections/#{@ontology.acronym}",
+                                   child_url: "/ontologies/#{@ontology.acronym}/collections/show",
+                                   child_param: :collectionid,
+                                   child_turbo_frame: 'collection')
+    end
+  end
+
   def show
     @collection = get_request_collection
   end
