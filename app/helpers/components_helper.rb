@@ -12,6 +12,46 @@ module ComponentsHelper
     end
   end
 
+  def paginated_list_component(id:, results:, next_page_url:, child_url:, child_turbo_frame:, child_param:, open_in_modal: false)
+    render(TreeInfiniteScrollComponent.new(
+      id:  id,
+      collection: results.collection,
+      next_url: next_page_url,
+      current_page: results.page,
+      next_page: results.nextPage
+    )) do |c|
+      if results.page.eql?(1)
+        concat(content_tag(:div, class: 'ontologies-selector-results') do
+          content_tag(:div, class: 'results-number small ml-2') do
+            "Showing #{results.totalCount}".html_safe
+          end
+        end)
+      end
+
+      concepts = c.collection
+      if concepts && !concepts.empty?
+        concepts.each do |concept|
+          concept.id = concept["@id"] unless concept.id
+          data = {  child_param => concept.id }
+          href = child_url.include?('?') ? "#{child_url}&id=#{escape(concept.id)}" : "#{child_url}?id=#{escape(concept.id)}"
+          concat(render(TreeLinkComponent.new(
+            child: concept,
+            href: href,
+            children_href: '#',
+            selected: concept.id.eql?(concepts.first.id) && c.auto_click?,
+            target_frame: child_turbo_frame,
+            data: data,
+            open_in_modal: open_in_modal
+          )))
+        end
+      end
+      c.error do
+        "No result found"
+      end
+    end
+  end
+
+
   def resolvability_check_tag(url)
     content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;')
   end

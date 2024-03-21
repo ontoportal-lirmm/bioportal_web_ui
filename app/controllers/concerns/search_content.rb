@@ -47,9 +47,10 @@ module SearchContent
     end
   end
 
-  def search_ontologies_content(query:, page: 1, page_size: 10, filter_by_ontologies: [])
+  def search_ontologies_content(query:, page: 1, page_size: 10, filter_by_ontologies: [], filter_by_types: [])
     acronyms = filter_by_ontologies
     original_query = query
+    types = filter_by_types
     query = query.gsub(':', '\:').gsub('/', '\/') if page.eql?(1)
 
     qf = [
@@ -63,7 +64,7 @@ module SearchContent
     selected_onto = []
 
     q = query.split(' ').first || ''
-    selected_onto += ontologies.select { |x| x.acronym.downcase.eql?(q.downcase) }
+    selected_onto += ontologies.select { |x| (acronyms.empty? && x.acronym.downcase.eql?(q.downcase)) || acronyms.include?(x.acronym) }
 
     selected_onto.uniq!
     [selected_onto.first].compact.each do |o|
@@ -74,17 +75,62 @@ module SearchContent
       query.gsub!('-', " ")
     end
 
-    query = query.strip
+    query = query
     if query.blank?
       query = "*"
     elsif query.split(' ').size > 1
-      query = "#{query}*"
+      query = "^#{query}*"
     else
       query = "*#{query}*"
     end
 
-    results = LinkedData::Client::HTTP.get('search/ontologies/content', { q: query, qf: qf.join(' '), page: page, pagesize: page_size, ontologies: acronyms.first })
+    result = LinkedData::Client::HTTP.get('search/ontologies/content', { q: query, qf: qf.join(' '), page: page, pagesize: page_size, ontologies: acronyms.first, types: types.join(',') })
     search_content_result_to_json(original_query , query, results, ontologies, selected_onto)
+  end
+
+  def search_agents
+    # TODO
+  end
+
+  def render_search_paginated_list(container_id:, types:, next_page_url:, child_url:, child_turbo_frame:, child_param:, show_count: nil, lang: request_lang)
+    acronym = @ontology.acronym
+    query = params[:search].presence || '*'
+    page = (params[:page] || 1).to_i
+    page_size = (params[:page_size] || 100).to_i
+
+    @results, @ontologies, selected_onto, changed_query = search_ontologies_content(query: query,
+                                                                                    page: page,
+                                                                                    page_size: page_size,
+                                                                                    filter_by_ontologies: [acronym],
+                                                                                    filter_by_types: types)
+
+    json = search_result_to_json(query, changed_query, @results, @ontologies, selected_onto)
+    @results.collection = json.map { |x| o = OpenStruct.new(x); o.id = x[:name]; o }
+    @results.collection = @results.collection.drop(1) # remove ontology
+    @search = query
+
+    next_page_link = next_page_url.include?('?') ? "#{next_page_url}&lang=#{lang}&page=#{@results.nextPage}&search=#{@search}" : "#{next_page_url}?page=#{@results.nextPage}&search=#{@search}&lang=#{lang}"
+
+    if show_count && page.eql?(1)
+      render turbo_stream: [
+        helpers.replace("#{container_id}_count", render_to_string(inline: helpers.content_tag(:span, @results.totalCount))),
+        helpers.prepend("#{container_id}_view-page-1", helpers.paginated_list_component(id: container_id,
+                                                                                        results: @results,
+                                                                                        next_page_url: next_page_link,
+                                                                                        child_url: child_url.include?('?') ? "#{child_url}&lang=#{lang}" : "#{child_url}?lang=#{lang}",
+                                                                                        child_param: child_param,
+                                                                                        child_turbo_frame: child_turbo_frame,
+                                                                                        open_in_modal: show_count))
+      ]
+    else
+      render inline: helpers.paginated_list_component(id: container_id,
+                                                      results: @results,
+                                                      next_page_url: next_page_link,
+                                                      child_url: child_url.include?('?') ? "#{child_url}&lang=#{lang}" : "#{child_url}?lang=#{lang}",
+                                                      child_param: child_param,
+                                                      child_turbo_frame: child_turbo_frame, open_in_modal: show_count)
+    end
+
   end
 
   private
