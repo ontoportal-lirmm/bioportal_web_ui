@@ -676,4 +676,8 @@ module OntologiesHelper
   def submission_languages(submission = @submission)
     Array(submission&.naturalLanguage).map { |natural_language| natural_language["iso639"] && natural_language.split('/').last }.compact
   end
+
+  def id_to_acronym(id)
+    id.split('/').last
+  end
 end
