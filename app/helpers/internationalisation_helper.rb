@@ -10,7 +10,7 @@ module InternationalisationHelper
     resources = I18n.t("resource_term.#{$RESOURCE_TERM}_plural")
     a_resource = I18n.t("resource_term.#{$RESOURCE_TERM}_single")
 
-    if translation.include?(term)
+    if translation.include?(term) && resource
       replacement = resource.capitalize
       replacement = resource if translation.include?(term)
       if translation.include?(single_term)
@@ -19,7 +19,7 @@ module InternationalisationHelper
       end
       translation.gsub(term, replacement)
 
-    elsif translation.include?(plural_term)
+    elsif translation.include?(plural_term) && resources
       replacement = resources.capitalize
       replacement = resources if translation.include?(plural_term)
       translation.gsub(plural_term, replacement)

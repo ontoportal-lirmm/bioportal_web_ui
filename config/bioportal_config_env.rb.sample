@@ -275,4 +275,4 @@ $ANNOTATOR_API_DOC = 'https://data.agroportal.lirmm.fr/documentation#nav_annotat
 $CITE_RECOMMENDER = 'https://doi.org/10.1186/s13326-017-0128-y' 
 
 # Resource term
-$RESOURCE_TERM = ENV['RESOURCE_TERM']
+$RESOURCE_TERM = ENV['RESOURCE_TERM'] || 'ontology'

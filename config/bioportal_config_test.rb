@@ -222,3 +222,5 @@ $UI_THEME = :stageportal
 if File.exist?('config/bioportal_config_development_testportal.lirmm.fr.rb')
   require_relative 'bioportal_config_development_testportal.lirmm.fr' # local credentials
 end
+
+$RESOURCE_TERM = ENV['RESOURCE_TERM'] || 'ontology'
