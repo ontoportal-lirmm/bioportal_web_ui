@@ -9,12 +9,29 @@ class OntologiesMetadataCuratorController < ApplicationController
     @metadata_sel = params[:search] ? params[:search][:metadata] : []
     @show_submissions = !params[:show_submissions].nil?
     @submissions = []
-
+    @ontologies = []
     display_attribute = equivalent_properties(@metadata_sel) + %w[submissionId]
 
-    @submissions = LinkedData::Client::Models::OntologySubmission.all(acronym: @ontologies_ids.join('|'), display_links: false, display_context: false, include: display_attribute.join(','), include_status: 'RDF')
-    @submissions.reject!{|x| !@ontologies_ids.include?(x.id.split('/')[-3])} unless @ontologies_ids.empty?
-    @submissions.sort_by!{|x| x.id}
+    if @show_submissions
+      if @ontologies_ids.nil? || @ontologies_ids.empty?
+        @ontologies = LinkedData::Client::Models::Ontology.all
+      else
+        @ontologies_ids.each do |data|
+          @ontologies << LinkedData::Client::Models::Ontology.find_by_acronym(data).first
+        end
+      end
+      @ontologies.each do |ont|
+        submissions = ont.explore.submissions({ include: display_attribute.join(',') })
+        submissions.each { |sub| append_submission(ont, sub) }
+      end
+    else
+      @submissions = LinkedData::Client::Models::OntologySubmission.all(acronym: @ontologies_ids.join('|'), display_links: false, display_context: false, include: display_attribute.join(','))
+      @submissions.reject! { |x| !@ontologies_ids.include?(x.id.split('/')[-3]) } unless @ontologies_ids.empty?
+      @submissions.sort_by! { |x| x.id }
+    end
+
+
+
 
     respond_to do |format|
       format.html { redirect_to admin_index_path }
