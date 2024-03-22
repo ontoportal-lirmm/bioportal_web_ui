@@ -6,10 +6,29 @@ export default class extends Controller {
     mappingsList: Object,
     zoomRatio: Number
   }
-  static targets = ['frame', 'bubbles', 'submit', 'modal', 'selector']
+  static targets = ['frame', 'bubbles', 'submit', 'modal', 'selector', 'ontologies']
 
   connect() {
     this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue, this.#normalization_ratio(this.mappingsListValue))
+    this.#center_scroll(this.frameTarget)
+  }
+  filter_ontologies(){
+    const selectOptions = this.ontologiesTarget.querySelector('select').selectedOptions
+    if (selectOptions.length == 0){
+      this.bubblesTarget.innerHTML = ''
+      this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue, this.#normalization_ratio(this.mappingsListValue))
+      this.#center_scroll(this.frameTarget)
+      return
+    }
+    let acronyms = []
+    for(let i=0; i<selectOptions.length; i++){
+      acronyms.push(selectOptions[i].value)
+    }
+    const filteredList = Object.fromEntries(
+      Object.entries(this.mappingsListValue).filter(([key]) => acronyms.includes(key))
+    );
+    this.bubblesTarget.innerHTML = ''
+    this.#draw_bubbles(filteredList, this.zoomRatioValue, this.#normalization_ratio(filteredList))
     this.#center_scroll(this.frameTarget)
   }
   submit(event){
@@ -92,7 +111,7 @@ export default class extends Controller {
                   leafs[i].setAttribute('data-highlighted', 'true')
                   circle.style.fill = 'var(--primary-color)'
                   const elem = mappings_list.find(item => item.acronym === acronym);
-                  const opacity = (elem["count"] / max_mappings_count + Math.log( elem["count"] + 1)) / 10 + 0.5
+                  const opacity = (elem["count"] / max_mappings_count + Math.log( elem["count"] + 1)) / 10 + 0.3
                   circle.style.opacity = `${opacity}`
                 } else {
                   leafs[i].setAttribute('data-enabled', 'false')
@@ -113,14 +132,14 @@ export default class extends Controller {
   zoomIn(){
     this.zoomRatioValue++
     this.bubblesTarget.innerHTML = ''
-    this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue)
+    this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue, this.#normalization_ratio(this.mappingsListValue))
     this.#center_scroll(this.frameTarget)
   }
   zoomOut(){
     if (this.zoomRatioValue>1){
       this.zoomRatioValue--
       this.bubblesTarget.innerHTML = ''
-      this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue)
+      this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue, this.#normalization_ratio(this.mappingsListValue))
       this.#center_scroll(this.frameTarget)
     }
   }

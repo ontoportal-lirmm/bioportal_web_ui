@@ -96,6 +96,18 @@
   width: 700px;
   margin-bottom: 20px;
 }
+.upload-mappings-example.ontologies{
+  width: 600px;
+}
+
+.mappings-page-ontologies-selector{
+  width: 100%;
+  padding: 0 30px 30px 30px;
+}
+
+.mappings-page-ontologies-selector .selector-button{
+  margin-top: 20px;
+}
 
 .upload-mappings-example .title-bar{
   display: flex;
@@ -104,8 +116,11 @@
   cursor: pointer;
   padding: 15px;
   color: var(--primary-color);
+  align-items: center;
 }
-
+.upload-mappings-example .title-bar svg{
+  margin-right: 10px;
+}
 
 @media (min-width: 1000px)  {
   #mappings_container{
