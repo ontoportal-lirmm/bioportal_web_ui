@@ -33,6 +33,15 @@ class Display::SearchResultComponent < ViewComponent::Base
       end
   end
 
+  def mappings_button
+    link_to_modal(nil, "/ajax/mappings/get_concept_table?ontologyid=#{@ontology_acronym}&conceptid=#{CGI.escape(@uri)}&type=modal", data: { show_modal_title_value: @title, show_modal_size_value: 'modal-xl' }) do
+        content_tag(:div, class: 'button') do
+          concat inline_svg_tag('icons/ontology.svg')
+          concat content_tag(:div, class: 'text') { "mappings" }
+        end
+    end
+  end
+
   def visualize_button
       link_to_modal(nil, "/ajax/biomixer/?ontology=#{@ontology_acronym}&conceptid=#{@uri}", data: { show_modal_title_value: @title, show_modal_size_value: 'modal-xl' }) do
         content_tag(:div, class: 'button') do

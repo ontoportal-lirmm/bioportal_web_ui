@@ -95,3 +95,79 @@
 .upload-mappings-example{
   width: 700px;
 }
+
+@media (min-width: 1000px)  {
+  #mappings_container{
+    max-width: 1140px;
+  }
+}
+
+p#mappings_select {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+p#display_options {
+  padding-left: 10px;
+  margin-bottom: 0;
+}
+
+#mappings-help > i.fas.fa-question-circle {
+  margin-left: .25em;
+  vertical-align: middle;
+}
+
+div#mapping_load {
+  padding: 1em 1em 0;
+  margin-bottom: -1em;
+  display: none;
+
+  img {
+    vertical-align: text-bottom;
+  }
+}
+
+div#mappingCount {
+  text-align: center;
+  overflow: hidden;
+  padding-top: 10px;
+}
+
+#mapping_count_table {
+  width: 100%;
+}
+
+/* Create New Mapping dialog */
+
+div#map_from_picker_container, div#map_to_picker_container {
+  margin-bottom: 7px;
+}
+
+div#map_from_picker_chosen, div#map_to_picker_chosen {
+  width: 100% !important;
+}
+
+div#map_from_concept_details_table, div#map_to_concept_details_table {
+  border: thin solid lightgray;
+  height: 200px;
+  overflow: auto;
+}
+
+#map_to_picker {
+  width: 100% !important;
+}
+
+#create_mapping_error {
+  color: red;
+}
+
+#create_mapping_spinner {
+  display: none;
+}
+
+/* Concept mappings table */
+
+#concept_mappings_table {
+  width: 100%;
+}
