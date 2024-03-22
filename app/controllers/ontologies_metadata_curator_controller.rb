@@ -36,14 +36,15 @@ class OntologiesMetadataCuratorController < ApplicationController
     respond_to do |format|
       format.html { redirect_to admin_index_path }
       format.turbo_stream { render turbo_stream: [
-        replace("selection_metadata_form", partial: "ontologies_metadata_curator/metadata_table"),
-        replace('edit_metadata_btn') do
-          "
-           #{helpers.button_tag(t('ontologies_metadata_curator.bulk_edit'), onclick: 'showEditForm(event)', class: "btn btn-outline-primary mx-1 w-100")}
-           #{raw helpers.help_tooltip(t('ontologies_metadata_curator.use_the_bulk_edit'))}
-          ".html_safe
-        end
-      ]}
+        replace("selection_metadata_form", partial: "ontologies_metadata_curator/metadata_table")
+      # TODO put again when bulk edit fixed
+      # replace('edit_metadata_btn') do
+      #     "
+      #      #{helpers.button_tag(t('ontologies_metadata_curator.bulk_edit'), onclick: 'showEditForm(event)', class: "btn btn-outline-primary mx-1 w-100")}
+      #      #{raw helpers.help_tooltip(t('ontologies_metadata_curator.use_the_bulk_edit'))}
+      #     ".html_safe
+      #   end
+      ] }
     end
   end
 
@@ -69,7 +70,7 @@ class OntologiesMetadataCuratorController < ApplicationController
   def edit
 
     if params[:selected_acronyms].nil? || params[:selected_metadata].nil?
-      render_turbo_stream alert_error(id: 'application_modal_content') {t('ontologies_metadata_curator.start_the_bulk_edit')}
+      render_turbo_stream alert_error(id: 'application_modal_content') { t('ontologies_metadata_curator.start_the_bulk_edit') }
       return
     end
 
@@ -84,7 +85,7 @@ class OntologiesMetadataCuratorController < ApplicationController
     @active_ontology = ontology_and_submission_id(params[:active_ontology])
     @all_metadata = params[:all_metadata]&.split
     error_responses = []
-    @submissions =  []
+    @submissions = []
     active_submission_data = params['submission']["#{@active_ontology[0]}_#{@active_ontology[1]}"]
 
     @selected_ontologies.each do |onto, sub_i|
@@ -106,7 +107,7 @@ class OntologiesMetadataCuratorController < ApplicationController
         else
           streams = [alert_success { t('ontologies_metadata_curator.alert_success_submissions') }]
           @submissions.each do |submission|
-            submission.ontology = OpenStruct.new({acronym: submission.ontology})
+            submission.ontology = OpenStruct.new({ acronym: submission.ontology })
             streams << replace("#{ontology_submission_id_label(submission.ontology.acronym, submission.submissionId)}_row", partial: 'ontologies_metadata_curator/submission', locals: { submission: submission, attributes: @all_metadata })
           end
           render_turbo_stream(*streams)
