@@ -1,11 +1,14 @@
 = turbo_frame_tag 'agents-list' do
-  = link_to_modal(t("agents.index.create_new_agent"),
-                new_agent_path,
-                id: "new_agent_btn",
-                role: "button",
-                class: "btn btn-default mb-3",
-                data: { show_modal_title_value: t("agents.index.create_new_agent"), show_modal_size_value: 'modal-xl' },
-                )
+  .d-flex
+    = link_to_modal(t("agents.index.create_new_agent"),
+                  new_agent_path,
+                  id: "new_agent_btn",
+                  role: "button",
+                  class: "btn btn-default mb-3",
+                  data: { show_modal_title_value: t("agents.index.create_new_agent"), show_modal_size_value: 'modal-xl' },
+                  )
+    = rounded_button_component("#{$REST_URL}/agents?display=all&apikey=#{get_apikey}")
+
   = render_alerts_container(AgentsController)
   = render TableComponent.new(id: 'admin_agents', custom_class: 'border rounded p-1') do |t|
     - t.header do |h|

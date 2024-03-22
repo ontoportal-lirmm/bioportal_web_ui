@@ -12,6 +12,10 @@ module ComponentsHelper
     content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;')
   end
 
+  def rounded_button_component(link)
+    render RoundedButtonComponent.new(link: link, target: '_blank',size: 'small',title: t("components.go_to_api"))
+  end
+
   def copy_link_to_clipboard(url, show_content: false)
     content_tag(:span, style: 'display: inline-block;') do
       render ClipboardComponent.new(message: url, show_content: show_content)
