@@ -610,9 +610,9 @@ module ApplicationHelper
     end
   end
 
-  def save_button_component(class_name: nil, id: , value:, data: nil)
+  def save_button_component(class_name: nil, id: , value:, data: nil, size: nil, type: nil)
     content_tag(:div, data: data, class: class_name) do
-      render Buttons::RegularButtonComponent.new(id:id, value: value, variant: "primary", state: 'regular') do |btn|
+      render Buttons::RegularButtonComponent.new(id:id, value: value, variant: "primary", state: 'regular', size: size, type: type) do |btn|
         btn.icon_right do
           inline_svg_tag "check.svg"
         end

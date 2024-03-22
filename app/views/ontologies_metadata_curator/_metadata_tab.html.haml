@@ -1,20 +1,20 @@
 %div.mt-5
-  .rounded-json-button
-    = rounded_button_component("#{$REST_URL}/submissions?display=all&apikey=#{get_apikey}")
+
   %div.mx-auto.w-75
     = form_tag("/ontologies_metadata_curator/result", method: "post", data: { turbo: true, turbo_frame: 'selection_metadata_form'}) do
       %div
         %div.mx-1.pt-3
-          = ontologies_selector(id:'metadata_curator_ontologies_selector', label: t("ontologies_metadata_curator.ontologies") ,name: 'ontology[ontologyId]', selected: @ontologies_ids)
+          = ontologies_selector(id:'metadata_curator_ontologies_selector', label: t("ontologies_metadata_curator.ontologies") ,name: 'ontology[ontologyId][]', selected: @ontologies_ids)
       %div.d-flex.align-items-center.mb-5
         %div.mx-1{style: 'width: 65%'}
           = submission_metadata_selector
         %div.mx-1.mt-3{style: 'width: 15%'}
           = render SwitchInputComponent.new(id:"show_submissions", name: "show_submissions", label: t("ontologies_metadata_curator.include_all_submissions"))
         %div.mt-3.flex-shrink-0
-          %button{type: "submit", class: "btn btn-success"}
-            = t("ontologies_metadata_curator.get_values")
+          = save_button_component(type: 'submit', id: 'curator-save-btn', value: t("ontologies_metadata_curator.get_values"), size: 'slim')
         %div.mt-3.flex-shrink-0.flex-fill.d-flex.align-items-center
+          .mx-2
+            = rounded_button_component("#{$REST_URL}/submissions?display=all&apikey=#{get_apikey}")
           = turbo_frame_tag "edit_metadata_btn"
 
 = render TurboFrameComponent.new(id: 'selection_metadata_form') do
