@@ -37,9 +37,8 @@
       - c.item_content do    
         .upload-mappings
           .card.upload-mappings-example
-            %div
-              %button.btn.btn-link{"data-target" => "#collapseOne", "data-toggle" => "collapse", :type => "button"}
-                = t("mappings.bulk_loader.loader.example_of_valid_file")
+            .title-bar{"data-target" => "#collapseOne", "data-toggle" => "collapse"}
+              = t("mappings.bulk_loader.loader.example_of_valid_file")
             #collapseOne.collapse
               .card-body
                 %pre
