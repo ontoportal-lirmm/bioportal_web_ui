@@ -189,17 +189,17 @@ module SubmissionFilter
       { 'id' => id, 'name' => name, 'acronym' => name.camelize(:lower), 'value' => name.delete(' ') }
     end
 
-    @formats = [['All formats', ''], 'OBO', 'OWL', 'SKOS', 'UMLS']
+    @formats = [[t("submissions.filter.all_formats"), ''], 'OBO', 'OWL', 'SKOS', 'UMLS']
     @sorts_options = [
-      ['Sort by name', 'ontology_name'],
-      ['Sort by classes count', 'metrics_classes'],
-      ['Sort by instances/concepts count', 'metrics_individuals'],
-      ['Sort by submitted date', 'creationDate'],
-      ['Sort by creation date', 'released'],
-      ['Sort by FAIR score', 'fair'],
-      ['Sort by popularity', 'visits'],
-      ['Sort by notes', 'notes'],
-      ['Sort by projects', 'projects'],
+      [t("submissions.filter.sort_by_name"), 'ontology_name'],
+      [t("submissions.filter.sort_by_classes"), 'metrics_classes'],
+      [t("submissions.filter.sort_by_instances_concepts"), 'metrics_individuals'],
+      [t("submissions.filter.sort_by_submitted_date"), 'creationDate'],
+      [t("submissions.filter.sort_by_creation_date"), 'released'],
+      [t("submissions.filter.sort_by_fair_score"), 'fair'],
+      [t("submissions.filter.sort_by_popularity"), 'visits'],
+      [t("submissions.filter.sort_by_notes"), 'notes'],
+      [t("submissions.filter.sort_by_projects"), 'projects'],
     ]
 
     init_filters(params)

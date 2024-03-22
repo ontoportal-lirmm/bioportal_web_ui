@@ -99,3 +99,9 @@ application.register('annotator', AnnotatorController)
 
 import MappingsController from "./mappings_controller"
 application.register('mappings', MappingsController)
+
+import FormUrlController from "./form_url_controller"
+application.register('form-url', FormUrlController)
+
+import ontologiesSelector from "./ontologies_selector_controller"
+application.register("ontologies-selector", ontologiesSelector)

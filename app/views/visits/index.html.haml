@@ -1,6 +1,6 @@
 %div.px-3.py-3.pt-md-5.pb-md-4.text-center
   %h1.display-4 
-    Ontology Visits
+    = t('visits.ontology_visits')
   %p.lead (#{@analytics.date.strftime("%B %Y")})
 
 %div.container.pb-3.pb-md-4
@@ -9,8 +9,8 @@
       %thead.thead-light
         %tr 
           %th #
-          %th name
-          %th # visits
+          %th= t('visits.name')
+          %th= t('visits.visits')
       %tbody
         - count = 0
         - @analytics.onts.each do |visits|

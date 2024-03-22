@@ -3,10 +3,10 @@
   %div.modal-dialog.modal-dialog-centered.modal-lg{role: "document"}
     %div.modal-content
       %div.modal-header
-        %h5#classPermalinkLabel.modal-title Permanent link to this class
+        %h5#classPermalinkLabel.modal-title= t('concepts.permanent_link_class')
         %button.close{type: "button", "data-dismiss": "modal", "aria-label": "Close"}
           %span{"aria-hidden": "true"} &times;
       %div.modal-body
         = text_field_tag("purl_input", nil, class: "form-control")
       %div.modal-footer
-        %button.btn.btn-secondary{"data-dismiss": "modal"} Close
+        %button.btn.btn-secondary{"data-dismiss": "modal"}= t('concepts.close')

@@ -46,7 +46,7 @@
 .annotator-page-text-area .insert-sample-text-button{
   display: flex;
   justify-content: end;
-  padding: 20px;
+  padding: 10px 20px 20px 20px;
 }
 .annotator-page-text-area .insert-sample-text-button .button{
   display: flex;
@@ -199,6 +199,9 @@
 
 .annotation-parent a{
   text-decoration: underline !important;
+}
+.annotator-page-options .prefrences{
+  margin-top: 10px;
 }
 
 .annotation-parent .level{

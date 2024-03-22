@@ -43,3 +43,30 @@
 .searched-elements{
   margin-bottom: 0;
 }
+.search-inputs{
+  position: relative;
+}
+
+.home-search-button{
+  position: absolute;
+  top: 42px;
+  right: 20px;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+.home-search-button path{
+  fill: var(--primary-color);
+}
+.home-search-button.search-input-nav-icon{
+  position: absolute;
+  top: 11px;
+  right: 8px;
+  width: 11px;
+  height: 11px;
+  cursor: pointer;
+  z-index: 99;
+}
+.home-search-button.search-input-nav-icon path{
+  fill: white;
+}
