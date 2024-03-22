@@ -233,7 +233,7 @@ module SubmissionInputsHelper
       end
       c.container do
         content_tag(:div) do
-          render partial: "shared/ontology_picker_single", locals: { placeholder: "", field_name: "viewOf", selected: ontology.viewOf}
+          render SelectInputComponent.new(id: 'viewOfSelect', values: onts_for_select, name: 'ontology[viewOf]', selected: ontology.viewOf)
         end
       end
     end

@@ -5,8 +5,7 @@
     = form_tag("/ontologies_metadata_curator/result", method: "post", data: { turbo: true, turbo_frame: 'selection_metadata_form'}) do
       %div
         %div.mx-1.pt-3
-          - init_ontology_picker(nil, @ontologies_ids)
-          = select_input(label: t("ontologies_metadata_curator.ontologies"), name: "ontology[ontologyId]", values: @onts_for_select, selected: @ontologies_ids, multiple: true, data: {placeholder: t("select_ontologies")})
+          = ontologies_selector(id:'metadata_curator_ontologies_selector', label: t("ontologies_metadata_curator.ontologies") ,name: 'ontology[ontologyId]', selected: @ontologies_ids)
       %div.d-flex.align-items-center.mb-5
         %div.mx-1{style: 'width: 65%'}
           = submission_metadata_selector
