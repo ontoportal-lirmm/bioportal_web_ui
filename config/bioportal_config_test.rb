@@ -11,6 +11,9 @@ $BIOMIXER_URL = ENV['BIOMIXER_URL']
 $ANNOTATOR_URL = $PROXY_URL = ENV['ANNOTATOR_URL']
 $FAIRNESS_URL = ENV['FAIRNESS_URL']
 
+# Resource term
+$RESOURCE_TERM = ENV['RESOURCE_TERM']
+
 # config/initializers/omniauth_providers.rb
 $OMNIAUTH_PROVIDERS = {
   github: {
@@ -219,3 +222,5 @@ $UI_THEME = :stageportal
 if File.exist?('config/bioportal_config_development_testportal.lirmm.fr.rb')
   require_relative 'bioportal_config_development_testportal.lirmm.fr' # local credentials
 end
+
+$RESOURCE_TERM = ENV['RESOURCE_TERM'] || 'ontology'

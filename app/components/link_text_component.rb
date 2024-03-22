@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class LinkTextComponent < ViewComponent::Base
+  include InternationalisationHelper
 
   def initialize(text:, icon: nil, target: nil)
     @text = text
@@ -12,5 +13,5 @@ class LinkTextComponent < ViewComponent::Base
     svg_icon = !@icon&.empty? ? inline_svg(@icon) : ''
     extra_span = @text == t('mappings.upload_mappings') ? '' : "<span class='mx-1'>#{svg_icon}</span>"
     "#{@text}#{extra_span}".html_safe
-  end  
+  end
 end

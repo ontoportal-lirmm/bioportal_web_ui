@@ -1,5 +1,6 @@
 class Display::SearchResultComponent < ViewComponent::Base
   include ModalHelper
+
   renders_many :subresults, Display::SearchResultComponent
   renders_many :reuses, Display::SearchResultComponent
   def initialize(number: 0,title: nil, ontology_acronym: nil ,uri: nil, definition: nil, link: nil,  is_sub_component: false)
@@ -16,11 +17,11 @@ class Display::SearchResultComponent < ViewComponent::Base
       @is_sub_component ? 'sub-component' : ''
   end
 
-  def sub_ontologies_id 
+  def sub_ontologies_id
     string = @number+'_sub_ontologies'
   end
 
-  def reuses_id 
+  def reuses_id
     string = @number+'_reuses'
   end
 

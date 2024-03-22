@@ -9,6 +9,27 @@ de:
               invalid_license_key: is an invalid license key
               no_appliance_id_for_comparison: Could not be validated. Unable to retrieve virtual appliance ID.
               appliance_id_mismatch: is an appliance id mismatch
+  # Konfigurieren Sie den Ressourcenbegriff 'ontology' im gesamten Portal so, dass er durch alternative Begriffe wie 'semantic_resource', 'vocabulary', 'terminology' oder 'semantic_artefact' ersetzt werden kann.
+  resource_term:
+    ontology: Ontologie
+    ontology_plural: Ontologien
+    ontology_single: eine Ontologie
+
+    semantic_resource: semantische Ressource
+    semantic_resource_plural: semantische Ressourcen
+    semantic_resource_single: eine semantische Ressource
+  
+    vocabulary: Vokabular
+    vocabulary_plural: Vokabulare
+    vocabulary_single: ein Vokabular
+
+    terminology: Terminologie
+    terminology_plural: Terminologien
+    terminology_single: eine Terminologie
+
+    semantic_artefact: semantisches Artefakt
+    semantic_artefact_plural: semantische Artefakte
+    semantic_artefact_single: ein semantisches Artefakt
 
   date:
     formats:
@@ -140,8 +161,7 @@ de:
       und befürworten
     group: Gruppe
     groups_and_categories: Gruppen und Kategorien
-    intro: Visualisierung von Daten, die aus im Portal gespeicherten Ontologien abgerufen
-      werden
+    intro: Visualisieren Sie das Panorama aller Ontologien auf %{site} durch die Aggregation von Metadaten.
     more_properties_charts: Weitere Eigenschaftsdiagramme
     most_active_ontologies: Die aktivsten Ontologien
     most_active_organizations: Die aktivsten Organisationen
