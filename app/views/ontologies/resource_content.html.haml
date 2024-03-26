@@ -1,5 +1,7 @@
 = render TurboFrameComponent.new(id:"resource_content_frame_#{@format}") do
     - if @result
+        .clipboard-component-resource-content{style: 'position: absolute; right: 2%; top: 5px;'}
+            = render ClipboardComponent.new(message: @result.to_s, show_content: false)
         .content-finder-result{data: {controller: 'content-finder', 'content-finder-result-value': @result, 'content-finder-format-value': @format }}
             %pre.mb-0
                 %code.d-block{style: 'text-wrap: pretty; word-break: break-all', data: {'content-finder-target': 'content'}}
