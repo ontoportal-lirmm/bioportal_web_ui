@@ -13,3 +13,15 @@
           - t.add_row({th: t('properties.preferred_name')}, {td: display_in_multiple_languages(c.concept_properties[:label][:values])}) if  c.concept_properties[:label][:values].present?
           - t.add_row({th: t('properties.definitions')}, {td: display_in_multiple_languages(c.concept_properties[:definition][:values])}) if c.concept_properties[:definition][:values].present?
           - t.add_row({th: t('properties.parent')}, {td: display_in_multiple_languages(c.concept_properties[:parents][:values])}) if c.concept_properties[:parents][:values].present?
+
+      .property-content-format
+        - property = OpenStruct.new(LinkedData::Client::Models::Property.properties_to_hash(@property).first)
+
+        = render TabsContainerComponent.new(type: 'outline') do |c|
+          - uri_parameter= CGI.escape(property.id)
+          - finder_params = "?acronym=#{@acronym}&uri=#{uri_parameter}"
+          %h4= finder_params
+          - ['json', 'xml', 'ntriples', 'turtle'].each do |format|
+            - c.item(title: format, selected: (format == 'json'))
+            - c.item_content do
+              = render TurboFrameComponent.new(id: "resource_content_frame_#{format}", src: "/content_finder#{finder_params}&output_format=#{format}", loading: "lazy")
