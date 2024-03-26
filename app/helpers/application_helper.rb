@@ -596,9 +596,6 @@ module ApplicationHelper
     end
   end
 
-  def list_to_string(list)
-    list&.join(',') || ''
-  end
 
   def ontologies_selector(id:, label: nil, name: nil, selected: nil)
     content_tag(:div) do
