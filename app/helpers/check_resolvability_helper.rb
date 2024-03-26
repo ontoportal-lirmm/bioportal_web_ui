@@ -108,11 +108,11 @@ module CheckResolvabilityHelper
     supported_format = allowed_formats.empty? ? 'Format not specified' : supported_format.join(', ')
 
     if resolvable && (supported_format.size > 1)
-      t('check_resolvability.check_resolvability_message_1', supported_format: supported_format)
+      text = t('check_resolvability.check_resolvability_message_1', supported_format: supported_format)
     elsif resolvable
-      t('check_resolvability.check_resolvability_message_2', supported_format: supported_format)
+      text = t('check_resolvability.check_resolvability_message_2', supported_format: supported_format)
     else
-      t('check_resolvability.check_resolvability_message_3', status: status)
+      text = t('check_resolvability.check_resolvability_message_3', status: status)
     end
 
 
