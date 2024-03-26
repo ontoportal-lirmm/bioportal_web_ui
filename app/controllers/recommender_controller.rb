@@ -1,7 +1,7 @@
 class RecommenderController < ApplicationController
   layout :determine_layout
   include ApplicationHelper
-  include InternationalisationHelper
+
   # REST_URI is defined in application_controller.rb
   RECOMMENDER_URI = "/recommender"
 

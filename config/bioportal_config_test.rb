@@ -12,7 +12,7 @@ $ANNOTATOR_URL = $PROXY_URL = ENV['ANNOTATOR_URL']
 $FAIRNESS_URL = ENV['FAIRNESS_URL']
 
 # Resource term
-$RESOURCE_TERM = ENV['RESOURCE_TERM']
+$RESOURCE_TERM = ENV['RESOURCE_TERM'] || 'ontology'
 
 # config/initializers/omniauth_providers.rb
 $OMNIAUTH_PROVIDERS = {
@@ -222,5 +222,3 @@ $UI_THEME = :stageportal
 if File.exist?('config/bioportal_config_development_testportal.lirmm.fr.rb')
   require_relative 'bioportal_config_development_testportal.lirmm.fr' # local credentials
 end
-
-$RESOURCE_TERM = ENV['RESOURCE_TERM'] || 'ontology'

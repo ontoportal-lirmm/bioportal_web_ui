@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class OntologySubscribeButtonComponent < ViewComponent::Base
-  include ApplicationHelper
+  include InternationalisationHelper
   def initialize(id: '', ontology_id:, subscribed:, user_id:, count: 0, link: 'javascript:void(0);')
     super
     @id = id
