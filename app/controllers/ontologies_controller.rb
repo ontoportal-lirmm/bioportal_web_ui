@@ -221,19 +221,30 @@ class OntologiesController < ApplicationController
 
   def content_finder
     if params[:acronym] && params[:uri]
-        @acronym = params[:acronym]
-        ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:acronym]).first
-        sub = ontology.explore.latest_submission({ include: 'submissionId' })
-        params[:output_format] = params[:output_format].presence || 'json'
-        params[:acronym] = sub.id.gsub(REST_URI, 'http://data.bioontology.org/')
-        if params[:output_format] == 'html'
-            params[:output_format] = 'json'
-        end
         @format = params[:output_format]
-        if params[:output_format] == 'json'
-            @result = LinkedData::Client::HTTP.post("/dereference_resource", params).to_h.to_json
+
+        url = URI.parse("#{REST_URI}ontologies/#{params[:acronym]}/resolve/#{CGI.escape(params[:uri])}")
+        http = Net::HTTP.new(url.host, url.port)
+        http.use_ssl = true if url.scheme == 'https'
+        request = Net::HTTP::Get.new(url)
+        request.body = "apikey=#{API_KEY}"
+
+        case params[:output_format]
+        when 'json'
+          request['Accept'] = "application/json"
+        when 'xml'
+          request['Accept'] = "application/xml"
+        when 'ntriples'
+          request['Accept'] = "application/n-triples"
+        when 'turtle'
+          request['Accept'] = "text/turtle"
+        end
+
+        response = http.request(request)
+        if response.code == '200'
+          @result = response.body
         else
-            @result = LinkedData::Client::HTTP.post("/dereference_resource", params)
+          raise "Request failed with status code: #{response.code}"
         end
     end
     render 'ontologies/resource_content'
