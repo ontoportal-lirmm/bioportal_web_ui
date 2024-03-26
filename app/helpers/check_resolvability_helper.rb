@@ -108,19 +108,11 @@ module CheckResolvabilityHelper
     supported_format = allowed_formats.empty? ? 'Format not specified' : supported_format.join(', ')
 
     if resolvable && (supported_format.size > 1)
-<<<<<<< HEAD
-      text =  "The URL is resolvable and support the following formats: #{supported_format}"
-    elsif resolvable
-      text = "The URL resolvable but is not content negotiable, support only: #{supported_format}"
-    else
-      text = "The URL is not resolvable and not content negotiable (returns #{status})"
-=======
       t('check_resolvability.check_resolvability_message_1', supported_format: supported_format)
     elsif resolvable
       t('check_resolvability.check_resolvability_message_2', supported_format: supported_format)
     else
       t('check_resolvability.check_resolvability_message_3', status: status)
->>>>>>> 436ac62f6 (Feature : internationalization part 15 - licenses, change_request, check_resolvability, errors and collection pages + change request, collections and check resolvability heplers (#491))
     end
 
 
