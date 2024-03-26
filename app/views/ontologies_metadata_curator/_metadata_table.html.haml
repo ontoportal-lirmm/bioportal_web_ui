@@ -15,7 +15,6 @@
         - @metadata_sel.each do |meta|
           - h.th do
             %div
-              = render SwitchInputComponent.new(id: meta, name: 'selected_metadata[]', value: meta) do
-                %h6{style:'margin-top: 0.2rem'}=attr_label(meta, attr_metadata: attr_metadata(meta))
+              %h6{style:'margin-top: 0.2rem'}=attr_label(meta, attr_metadata: attr_metadata(meta))
 
       = render partial: 'submission', collection: @submissions, locals: {attributes: @metadata_sel}
