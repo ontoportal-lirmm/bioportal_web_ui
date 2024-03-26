@@ -714,10 +714,6 @@ class ApplicationController < ActionController::Base
     helpers.request_lang
   end
 
-  def self.t(*args)
-    I18n.t(*args)
-  end
-
   private
   def not_found_record(exception)
     @error_message = exception.message
