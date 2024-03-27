@@ -15,21 +15,6 @@ export default class extends Controller {
     })
   }
   
-  copy_concept_content () {
-    const activeTab = document.querySelector('.concepts-content-format .tab-content .tab-pane.active');
-    if(activeTab.id != 'html_content'){
-      let resource_content = activeTab.querySelector('.content-finder-result').getAttribute('data-content-finder-result-value')
-      navigator.clipboard.writeText(resource_content).then(() => {
-          this.#copied();
-      })
-    }else{
-      navigator.clipboard.writeText("").then(() => {
-        this.#copied()
-      })
-    }
-    
-  }
-
   #copied () {
     if (this.timeout) {
       clearTimeout(this.timeout)
