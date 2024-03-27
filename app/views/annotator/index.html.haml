@@ -14,7 +14,7 @@
             .annotator-page-text-area{'data-controller': 'sample-text'}
               %textarea{rows: "7" , placeholder: t('annotator.input_hint'), name: "text",  maxlength: "500", 'data-sample-text-target': "input", 'data-annotator-target': 'input'}
                 = params[:text]
-              = insert_sample_text_button(t('recommender.insert_sample_text'))
+              = insert_sample_text_button(t('annotator.insert_sample_text'))
           .annotator-page-options
             .section-text
               = t('annotator.options')
@@ -24,7 +24,7 @@
                 = render(ChipsComponent.new(name: 'longest_only', label: t('annotator.match_longest_only'), checked: params[:longest_only]))
                 = render(ChipsComponent.new(name: 'expand_mappings', label: t('annotator.include_mappings'), checked: params[:expand_mappings]))
                 = render(ChipsComponent.new(name: 'exclude_numbers', label: t('annotator.exclude_numbers'), checked: params[:exclude_numbers]))
-                = render(ChipsComponent.new(name: 'exclude_synonyms', label: t('annotator.excclude_synonyms'), checked: params[:exclude_synonyms]))
+                = render(ChipsComponent.new(name: 'exclude_synonyms', label: t('annotator.exclude_synonyms'), checked: params[:exclude_synonyms]))
               
             .select-ontologies
               = ontologies_selector(id:'annotator_page_ontologies', label: 'Select ontologies' ,name: 'ontologies[]', selected: params[:ontologies]&.split(','))
@@ -33,8 +33,8 @@
         .more-advanced-options{'data-reveal-component-target': 'item', class: "#{@advanced_options_open ? '' : 'd-none'}"}
           .filters_line
             = render Input::SelectComponent.new(label: t('annotator.select_umls_sementic_types'), id: 'umls_semantic_types', name: 'semantic_types[]', value: @semantic_types_for_select, multiple: true, selected: params[:semantic_types]&.split(','))
-            = render Input::SelectComponent.new(label: t('annotator.select_umls_sementic_groupes'), id: 'umls_semantic_groups', name: 'semantic_groups[]', value: @semantic_groups_for_select, multiple: true, selected: params[:semantic_groups]&.split(','))
-            = render Input::SelectComponent.new(label: t('annotator.include_ancentors'), id: 'ancestors_level', name: 'class_hierarchy_max_level', value: @ancestors_levels, selected: params[:class_hierarchy_max_level])
+            = render Input::SelectComponent.new(label: t('annotator.select_umls_sementic_groups'), id: 'umls_semantic_groups', name: 'semantic_groups[]', value: @semantic_groups_for_select, multiple: true, selected: params[:semantic_groups]&.split(','))
+            = render Input::SelectComponent.new(label: t('annotator.include_ancestors'), id: 'ancestors_level', name: 'class_hierarchy_max_level', value: @ancestors_levels, selected: params[:class_hierarchy_max_level])
           .filters_line
             - include_score_helper = 'Score annotations following previous NCBO 2009 measure (old) or Score annotations following C-Value measure (cvalue) or Score annotations following C-Value measure with hierarchy expansion (cvalueh).'
             = render Input::SelectComponent.new(label: t('annotator.include_score'), id: 'include_score', name: 'score', value: @include_score, tooltip: include_score_helper, selected: params[:score])

@@ -582,7 +582,7 @@ module ApplicationHelper
 
   def insert_sample_text_button(text)
     content_tag(:div, class:'insert-sample-text-button') do
-      content_tag(:div, class: 'button', 'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("sample_text")) do
+      content_tag(:div, class: 'button', 'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("annotator.sample_text")) do
         content_tag(:div, text, class: 'text') +
         inline_svg_tag('icons/arrow-curved-up.svg')
       end
@@ -596,9 +596,6 @@ module ApplicationHelper
     end
   end
 
-  def list_to_string(list)
-    list&.join(',') || ''
-  end
 
   def ontologies_selector(id:, label: nil, name: nil, selected: nil)
     content_tag(:div) do

@@ -31,7 +31,7 @@
         - for project in @projects
           %tr
             / Project name, home page, and controls for editors
-            %td{:style => "vertical-align:top;", :width => "30%"}
+            %td{:style => "vertical-align:top;"}
               %strong= link_to(project.name, project_path(project.acronym))
               %br/
               %span{:style => "font-size:75%; vertical-align:bottom;"}
@@ -39,13 +39,13 @@
                 %span.ui-icon.ui-icon-extlink{:style => "display: inline-block; vertical-align: text-bottom;"}
                 \&nbsp;&nbsp;
                 - if session[:user] && (project.creator == session[:user].id || session[:user].admin?)
-                  = link_to(t("projects.edit"), edit_project_path(project.acronym))
+                  = link_to(t("projects.edit_text"), edit_project_path(project.acronym))
                   / TODO_REV: Enable delete project for admins
                 - if current_user_admin?
                   &nbsp;&nbsp;
                   = link_to(t("projects.delete_admin_only"), project_path(project.acronym), :method => :delete, :confirm => t("projects.delete_confirm"))
             / Project description (may be truncated with a dialog)
-            %td{:style => "vertical-align:top;", :width => "50%"}
+            %td{:style => "vertical-align:top;"}
               - if ! project.description.nil?
                 - descLength = 250
                 - if project.description.length < descLength
@@ -55,13 +55,13 @@
                   %span{:style => "cursor:help;", :title => project.description}
                     = descShort
             / Contacts
-            %td{:style => "vertical-align:top;", :width => "10%"}
+            %td{:style => "vertical-align:top;"}
               = raw project.contacts
             / Institutions
-            %td{:style => "vertical-align:top;", :width => "8%"}
+            %td{:style => "vertical-align:top;"}
               = raw project.institution
             / Ontologies
-            %td{:style => "vertical-align:top;", :width => "2%"}
+            %td{:style => "vertical-align:top;"}
               - ontologyCount = 0
               - ontologyLabels = ""
               - for ontology in project.ontologyUsed

@@ -48,7 +48,8 @@
         %div#toolCloudChart{:style => "width: 100%; height: 500px;"}
 
       %div#chartTooltip{:style => "width: auto; display: none;"}
-        %span#chartTooltipValue= t("none")
+        %span#chartTooltipValue
+          None
 
     %button#propertiesBtn{:style => "margin-top: 1em;", :type => "button", :class => "btn btn-success", :onclick => "toggleDiv('properties')"}= t("landscape.more_properties_charts")
 

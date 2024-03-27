@@ -10,7 +10,8 @@ export default class extends Controller {
         itemLinkBase: String,
         idKey: String,
         cache: {type: Boolean, default: true},
-        selectedItem: Number
+        selectedItem: Number,
+        searchEndpoint: {type: String, default: '/search'}
     }
 
     connect() {
@@ -91,7 +92,7 @@ export default class extends Controller {
         const inputValue = this.#inputValue();
         let results_list = []
         if (inputValue.length > 0) {
-            this.buttonTarget.href = `/search?q=${inputValue}`;
+            this.buttonTarget.href = `${this.searchEndpointValue}?q=${inputValue}`;
             this.actionLinks.forEach(action => {
                 const content = action.querySelector('p')
                 content.innerHTML = inputValue

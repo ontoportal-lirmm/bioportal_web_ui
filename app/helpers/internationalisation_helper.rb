@@ -1,8 +1,16 @@
 module InternationalisationHelper
 
-  #Implement logic to make the term 'ontology' configurable throughout the portal, allowing it to be replaced with the variable $RESOURCE_TERM
-  def t(*args)
-    translation = I18n.t(*args).downcase
+  # Implement logic to make the term 'ontology' configurable throughout the portal,
+  # allowing it to be replaced with the variable $RESOURCE_TERM
+  def self.t(*args)
+    return I18n.t(*args) unless $RESOURCE_TERM
+
+    begin
+      translation = I18n.t(*args).downcase
+    rescue
+      return "Missing translation for #{args.first}"
+    end
+
     term = I18n.t("resource_term.ontology")
     plural_term = I18n.t("resource_term.ontology_plural")
     single_term = I18n.t("resource_term.ontology_single")
@@ -26,6 +34,10 @@ module InternationalisationHelper
     else
       I18n.t(*args)
     end
+  end
+
+  def t(*args)
+    InternationalisationHelper.t(*args)
   end
 
 end
