@@ -128,7 +128,7 @@ module FairScoreHelper
 
   def fairness_link(style = '')
     custom_style = "font-size: 50px; line-height: 0.5; margin-left: 6px; #{style}".strip
-    render IconWithTooltipComponent.new(icon: "json.svg",link: get_fairness_service_url, target: '_blank', title: t('fair_score.go_to_api'), size:'small', style: custom_style)  
+    render IconWithTooltipComponent.new(icon: "json.svg",link: "#{get_fairness_service_url}&ontologies=all&combined=true", target: '_blank', title: t('fair_score.go_to_api'), size:'small', style: custom_style)  
   end
 end
 
