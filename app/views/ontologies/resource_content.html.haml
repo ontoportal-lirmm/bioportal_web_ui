@@ -2,6 +2,8 @@
     - if @result
         .clipboard-component-resource-content{style: 'position: absolute; right: 2%; top: 5px;'}
             = render ClipboardComponent.new(message: @result.to_s, show_content: false)
-        .content-finder-result{data: {controller: 'content-finder', 'content-finder-result-value': @result, 'content-finder-format-value': @format }}
+        .content-finder-result{data: {controller: 'metadata-downloader', 'metadata-downloader-result-value': @result, 'metadata-downloader-format-value': @format }}
             %pre.mb-0
-                %code.d-block{style: 'text-wrap: pretty; word-break: break-all', data: {'content-finder-target': 'content'}}
+                %code.d-block{style: 'text-wrap: pretty; word-break: break-all', data: {'metadata-downloader-target': 'content'}}
+        
+            %div.d-none{data: {'metadata-downloader-target': 'loader'}}

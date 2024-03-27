@@ -12,11 +12,14 @@ export default class extends Controller {
     metadata: Object,
     context: Object,
     namespaces: Object,
+    result: String,
     format: { type: String, default: 'xml' }
   }
 
   connect () {
-    this.formatedData = this.#formatData()
+    if(this.formatedData){
+      this.formatedData = this.#formatData()
+    }
     switch (this.formatValue) {
       case 'xml':
         hljs.registerLanguage('xml', xml)
@@ -29,6 +32,71 @@ export default class extends Controller {
       case 'triples':
         hljs.registerLanguage('xml', xml)
         this.showNTriples()
+        break
+      case 'ntriples':
+        hljs.registerLanguage('ntriples', function (hljs) {
+          var URL_PATTERN = /<[^>]+>/; // Regex pattern for matching URLs in angle brackets
+          return {
+            case_insensitive: true,
+            contains: [
+              {
+                className: 'subject',
+                begin: /^<[^>]+>/,
+              },
+              {
+                className: 'predicate',
+                begin: /<[^>]+>/,
+              },
+              {
+                className: 'object',
+                begin: /\s([^\s]+)\s\./,
+              },
+              hljs.COMMENT('^#', '$')
+            ]
+          };
+        });
+        this.showNTriples()
+        break
+      case 'turtle':
+        hljs.registerLanguage('turtle', function (hljs) {
+          var URL_PATTERN = /(?:<[^>]*>)|(?:https?:\/\/[^\s]+)/;
+
+          return {
+            case_insensitive: true,
+            contains: [
+              {
+                className: 'custom-prefixes',
+                begin: '@prefix',
+                relevance: 10
+              },
+              {
+                className: 'meta',
+                begin: /@base/,
+                end: /[\r\n]|$/,
+                relevance: 10
+              },
+              {
+                className: 'variable',
+                begin: /\?[\w\d]+/
+              },
+              {
+                className: 'custom-symbol',
+                begin: /@?[A-Za-z_][A-Za-z0-9_]*(?= *:)/,
+                relevance: 10
+              },
+              {
+                className: 'custom-concepts',
+                begin: /:\s*(\w+)/,
+                relevance: 10
+              },
+              {
+                className: 'string',
+                begin: URL_PATTERN
+              }
+            ]
+          };
+        });
+        this.showTURTLE()
         break
     }
   }
@@ -50,28 +118,45 @@ export default class extends Controller {
   }
 
   showNTriples () {
-    this.#toggleLoader()
-    this.#toNTriples(this.formatedData).then((nquads) => {
-      this.contentTarget.innerHTML = hljs.highlight(nquads, { language: 'xml' }).value
+    if(this.resultValue){
+      this.contentTarget.innerHTML = hljs.highlight(this.resultValue, { language: 'ntriples' }).value
+    }else{
       this.#toggleLoader()
-    })
+      this.#toNTriples(this.formatedData).then((nquads) => {
+        this.contentTarget.innerHTML = hljs.highlight(nquads, { language: 'xml' }).value
+        this.#toggleLoader()
+      })
+    }
   }
 
   showXML () {
-    this.#toggleLoader()
-    this.contentTarget.innerHTML = hljs.highlight(
-      this.#toXML(this.formatedData, this.contextValue),
-      { language: 'xml' }
-    ).value
-    this.#toggleLoader()
+    if(this.resultValue){
+      this.contentTarget.innerHTML = hljs.highlight(this.resultValue, { language: 'xml' }).value
+    }else{
+      this.#toggleLoader()
+      this.contentTarget.innerHTML = hljs.highlight(
+        this.#toXML(this.formatedData, this.contextValue),
+        { language: 'xml' }
+      ).value
+      this.#toggleLoader()
+    }
   }
 
   showJSONLD () {
-    this.#toggleLoader()
-    this.#toJSONLD().then((jsonld) => {
-      this.contentTarget.innerHTML = hljs.highlight(JSON.stringify(jsonld, null, '  '), { language: 'json' }).value
+    if(this.resultValue){
+      this.contentTarget.innerHTML = hljs.highlight(JSON.stringify(JSON.parse(this.resultValue), null, "  "), { language: 'json' }).value
+    }else{
       this.#toggleLoader()
-    })
+      this.#toJSONLD().then((jsonld) => {
+        this.contentTarget.innerHTML = hljs.highlight(JSON.stringify(jsonld, null, '  '), { language: 'json' }).value
+        this.#toggleLoader()
+      })
+    }
+  }
+
+
+  showTURTLE() {
+    this.contentTarget.innerHTML = hljs.highlight(this.resultValue, { language: 'turtle' }).value
   }
 
   #toggleLoader () {
