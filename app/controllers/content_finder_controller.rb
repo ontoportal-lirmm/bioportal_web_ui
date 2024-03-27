@@ -7,7 +7,7 @@ class ContentFinderController < ApplicationController
             @acronym = params[:acronym]
             @format = params[:output_format]
 
-            url = URI.parse("#{REST_URI}ontologies/#{params[:acronym].strip}/resolve/#{CGI.escape(params[:uri].strip)}")
+            url = URI.parse("#{rest_url}/ontologies/#{params[:acronym].strip}/resolve/#{helpers.escape(params[:uri].strip)}")
             http = Net::HTTP.new(url.host, url.port)
             http.use_ssl = true if url.scheme == 'https'
             request = Net::HTTP::Get.new(url)
