@@ -6,8 +6,7 @@
                 = inline_svg_tag "logos/ontoportal.svg"
             .inputs
                 #graph_url
-                    - get_ontologies_data
-                    = render Input::SelectComponent.new(id: 'search-ontologies', name: 'acronym', value: @onts_for_select, selected: @acronym || '', placeholder: "Graph URL")
+                    = ontologies_selector(id: 'search-ontologies', name: 'acronym', selected: @acronym || '', placeholder: "Graph URL", multiple: false)
                 #uri
                     = render Input::UrlComponent.new(name: "uri", placeholder: "URI", value: params[:uri])
                 #output_format
