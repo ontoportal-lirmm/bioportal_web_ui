@@ -7,7 +7,6 @@ import json from 'highlight.js/lib/languages/json'
 export default class extends Controller {
   static targets = ["content"]
   static values = {
-    result: String,
     format: String
   }
   connect() {
@@ -83,25 +82,24 @@ export default class extends Controller {
             ]
           };
         });
-        //hljs.registerLanguage('turtle', hljsDefineTurtle)
         this.showTURTLE()
         break
     }
   }
 
   showJSON() {
-    this.contentTarget.innerHTML = hljs.highlight(JSON.stringify(JSON.parse(this.resultValue), null, "  "), { language: 'json' }).value
+    this.contentTarget.innerHTML = hljs.highlight(JSON.stringify(JSON.parse(this.element.textContent), null, "  "), { language: 'json' }).value
   }
 
   showXML() {
-    this.contentTarget.innerHTML = hljs.highlight(this.resultValue, { language: 'xml' }).value
+    this.contentTarget.innerHTML = hljs.highlight(this.element.textContent, { language: 'xml' }).value
   }
 
   showNTriples() {
-    this.contentTarget.innerHTML = hljs.highlight(this.resultValue, { language: 'ntriples' }).value
+    this.contentTarget.innerHTML = hljs.highlight(this.element.textContent, { language: 'ntriples' }).value
   }
 
   showTURTLE() {
-    this.contentTarget.innerHTML = hljs.highlight(this.resultValue, { language: 'turtle' }).value
+    this.contentTarget.innerHTML = hljs.highlight(this.element.textContent, { language: 'turtle' }).value
   }
 }

@@ -15,6 +15,7 @@
                     = render Buttons::RegularButtonComponent.new(id:'regular-button', value: "Fetch", variant: "primary", size: "slim", type:"submit")
 
 - if @result
-    .content-finder-result{data: {controller: 'content-finder', 'content-finder-result-value': @result, 'content-finder-format-value': @format }}
+    .content-finder-result{data: {controller: 'content-finder', 'content-finder-format-value': @format }}
         %pre.mb-0
             %code.d-block{style: 'text-wrap: pretty; word-break: break-all', data: {'content-finder-target': 'content'}}
+                = @result
