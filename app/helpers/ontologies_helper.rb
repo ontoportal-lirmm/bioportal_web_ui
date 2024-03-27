@@ -302,10 +302,18 @@ module OntologiesHelper
 
   def show_category_name(domain)
     return domain unless link?(domain)
-
     acronym = domain.split('/').last.upcase.strip
     category = LinkedData::Client::Models::Category.find(acronym)
-    category ? category.name : acronym.titleize
+    category.name ? category.name : acronym.titleize
+  end
+
+  def fix_array_format(array)
+    if array.length == 1 && array[0].include?(',')
+      fixed_array = array[0].split(',').map(&:strip)
+      return fixed_array
+    else
+      return array
+    end
   end
 
   def show_group_name(domain)

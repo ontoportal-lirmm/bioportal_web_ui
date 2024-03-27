@@ -52,6 +52,7 @@
     - domains = Array(@ontology&.hasDomain) + Array(@submission_latest&.hasDomain)
     - unless domains.empty?
       - l.row do
+        - domains = fix_array_format(domains)
         = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.categories_and_subjects")) do
           = horizontal_list_container(domains.uniq) do |v|
             = render ChipButtonComponent.new(text: show_category_name(v), type: "static")
