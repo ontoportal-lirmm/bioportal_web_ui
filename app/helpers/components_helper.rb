@@ -159,8 +159,7 @@ module ComponentsHelper
   def form_cancel_button
     render Buttons::RegularButtonComponent.new(id: 'cancel-button', value: t('components.cancel_button'), variant: "secondary", size: "slim") do |btn|
       btn.icon_left do
-        inline_svg_tag "x.svg", width: "20", height: "20"
-
+        inline_svg_tag "x.svg", width: "9", height: "9"
       end
     end
   end
