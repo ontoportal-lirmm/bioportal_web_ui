@@ -770,7 +770,7 @@ en:
     delete_confirm: Are you sure?
     description: Description
     description_text: Description text
-    edit: Edit
+    edit_text: Edit
     home_page: Home page
     index:
       intro: Browse a selection of projects that use %{site} ontologies
