@@ -18,10 +18,4 @@
         - property = OpenStruct.new(LinkedData::Client::Models::Property.properties_to_hash(@property).first)
 
         = render TabsContainerComponent.new(type: 'outline') do |c|
-          - uri_parameter= CGI.escape(property.id)
-          - finder_params = "?acronym=#{@acronym}&uri=#{uri_parameter}"
-          %h4= finder_params
-          - ['json', 'xml', 'ntriples', 'turtle'].each do |format|
-            - c.item(title: format, selected: (format == 'json'))
-            - c.item_content do
-              = render TurboFrameComponent.new(id: "resource_content_frame_#{format}", src: "/content_finder#{finder_params}&output_format=#{format}", loading: "lazy")
+          = content_formats(concept_id: property.id, acronym: @acronym, c: c, selected_format: 'json')
