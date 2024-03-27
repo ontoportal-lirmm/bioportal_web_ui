@@ -6,10 +6,10 @@
   .ontology-details-path
     %a{href: "/ontologies"} ontologies
     - if @ontology.viewOf
-      %img{src: asset_path("arrow-right-outlined.svg")}/
+      = inline_svg_tag 'arrow-right-outlined.svg'
       %div
         = @ontology.viewOf.split('/').last
-    %img{src: asset_path("arrow-right-outlined.svg")}/
+    = inline_svg_tag 'arrow-right-outlined.svg'
     %div
       = @ontology.acronym
   .ontology-details-header-sub-container

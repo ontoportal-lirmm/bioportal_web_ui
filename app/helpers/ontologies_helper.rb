@@ -517,7 +517,7 @@ module OntologiesHelper
     end
 
     link_to(link, title: title, class: "mx-1") do
-      inline_svg_tag("icons/plus.svg", width: '15px', height: '15px')
+      inline_svg_tag("icons/plus.svg", width: '15px', height: '15px', class: 'add-views-plus-icon')
     end
   end
 
