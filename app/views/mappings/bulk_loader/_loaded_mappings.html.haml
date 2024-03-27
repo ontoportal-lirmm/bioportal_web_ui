@@ -44,7 +44,7 @@
                 %div.accordion{id: "accordion-#{map_id}"}
                   %div
                     %button.btn.btn-link.btn-sm{"data-target" => "#collapse-#{map_id}", "data-toggle" => "collapse", :type => "button"}
-                      = t("mappings.bulk_loader.loaded_mappings.actisee_other_propertiesons")
+                      = t("mappings.bulk_loader.loaded_mappings.see_other_properties")
                   %div.collapse{id: "collapse-#{map_id}", "data-parent": "#accordion-#{map_id}"}
                     %ul.list-group.list-group
                       - process.to_h.except(*except_prop).each do |key,val|

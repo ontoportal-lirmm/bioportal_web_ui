@@ -13,7 +13,7 @@
       - else
         - @options.unshift(['',''])
         %div{onchange: "loadMappings(event.target.value)"}
-          = select_input(name: 'search[ontologies]', id: 'search_ontologies', label: '', values: @options, placeholder:  t('select_ontologies_list'))
+          = select_input(name: 'search[ontologies]', id: 'search_ontologies', label: '', values: @options, placeholder:  t('mappings.select_ontologies_list'))
         #mapping_load
           %img{src: asset_path("jquery.simple.tree/spinner.gif")}/
           = t('mappings.loading_mappings')

@@ -73,9 +73,9 @@
         %input.d-none{type: "submit", name: "submit_button" ,value: "annotator", id: "annotator_submit"}/
         %input.d-none{type: "submit" , name: "submit_button" ,value: "recommender", id: "recommender_submit"}/
         .home-services-buttons.container
-          .insert-sample-text-button{'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("sample_text")}
+          .insert-sample-text-button{'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("annotator.sample_text")}
             %div
-              = t('insert_sample_text')
+              = t('annotator.insert_sample_text')
             = inline_svg_tag 'icons/arrow-curved-up.svg'
           .home-get-recommendations{onclick: "submitRecommender()"}
             %p= t('home.get_recommendations')
