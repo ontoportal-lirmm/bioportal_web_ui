@@ -54,7 +54,7 @@
     .home-upload-benifits
       - @upload_benefits.each do |benefit|
         %div
-          %img{:src => asset_path("check-outlined.svg")}/
+          = inline_svg_tag 'check-outlined.svg'
           %p
             = benefit
     .home-ontologies-actions

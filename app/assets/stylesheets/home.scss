@@ -398,7 +398,13 @@ i.fa.fa-caret-square-o-down {
 .home-logos img{
   margin-left: 60px;
 }
-
+.home-upload-benifits svg{
+  width: 33px;
+  margin-top: 3px;
+}
+.home-upload-benifits svg path{
+  fill: var(--gray-color);
+}
 
 .home-support-title{
   display: flex;
