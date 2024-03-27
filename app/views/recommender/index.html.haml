@@ -16,7 +16,7 @@
             .recommender-page-text-area{class: is_input ?  "" : "d-none", 'data-recommender-target': 'input', 'data-controller': 'sample-text'}
               %textarea#recommender-text-area{rows: "4" , placeholder: t('recommender.hint'), name: "input", 'data-action': "input->recommender#handleInput",  maxlength: "9678", 'data-sample-text-target': "input"}
                 = params[:input]
-              = insert_sample_text_button(t('recommender.insert_sample_text'))
+              = insert_sample_text_button(t('insert_sample_text'))
 
             .recommender-page-text-area-results{class: is_input ? "d-none" : "", 'data-recommender-target': 'result'}
               .text

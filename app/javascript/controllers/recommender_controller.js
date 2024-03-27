@@ -37,7 +37,7 @@ export default class extends Controller {
 
         if (foundItem) {
           // Replace the word with <a> tag
-          words[i] = '<a href="' + foundItem.link + '">' + words[i] + '</a>';
+          words[i] = '<a style="color:var(--primary-color) !important;" href="' + foundItem.link + '">' + words[i] + '</a>';
         }
       }
     recommandations_area.innerHTML = words.join(' ');

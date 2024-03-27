@@ -1,6 +1,6 @@
-$color-primary: #3CB371;
+$color-primary: var(--primary-color);
 $color-secondary: #EFFFEF;
-$color-links: #3CB371;
+$color-links: var(--primary-color);
 $color-warning: #ffc107;
 @import "../lirmm/main";
 @import "search";
