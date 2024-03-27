@@ -5,7 +5,12 @@ module InternationalisationHelper
   def self.t(*args)
     return I18n.t(*args) unless $RESOURCE_TERM
 
-    translation = I18n.t(*args).downcase
+    begin
+      translation = I18n.t(*args).downcase
+    rescue
+      return "Missing translation for #{args.first}"
+    end
+
     term = I18n.t("resource_term.ontology")
     plural_term = I18n.t("resource_term.ontology_plural")
     single_term = I18n.t("resource_term.ontology_single")
