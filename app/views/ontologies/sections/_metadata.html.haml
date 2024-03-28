@@ -41,7 +41,7 @@
           - c.row do
             = render FieldContainerComponent.new(label: t("ontologies.sections.label_groups")) do
               = horizontal_list_container(@ontology.group) do |v|
-                = render ChipButtonComponent.new(text: show_group_name(v), type: "static")
+                = render ChipButtonComponent.new(text: show_group_name(v), type: "static", tooltip: show_group_name(v))
 
       = properties_dropdown('content',t("ontologies.sections.content"), t("ontologies.sections.info_tooltip_properties_dropdown"), nil) do |c|
         - properties_list_component(c, @content_properties.reject{|k, v| %w[keyClasses metadataVoc].include?(k.to_s)})
