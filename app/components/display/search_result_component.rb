@@ -35,10 +35,16 @@ class Display::SearchResultComponent < ViewComponent::Base
 
   def mappings_button
     link_to_modal(nil, "/ajax/mappings/get_concept_table?ontologyid=#{@ontology_acronym}&conceptid=#{CGI.escape(@uri)}&type=modal", data: { show_modal_title_value: @title, show_modal_size_value: 'modal-xl' }) do
-        content_tag(:div, class: 'button') do
-          concat inline_svg_tag('icons/ontology.svg')
-          concat content_tag(:div, class: 'text') { "mappings" }
+      content_tag(:div, class: 'button') do
+        inline_svg_tag('icons/ontology.svg') +
+        content_tag(:div, class: 'text d-flex') do
+          render(TurboFrameComponent.new(id: 'mapping_count', src: "/ajax/mappings/get_concept_table?ontologyid=#{@ontology_acronym}&conceptid=#{CGI.escape(@uri)}", loading: "lazy")) do |t|
+            t.loader do
+             render LoaderComponent.new(small: true)
+            end
+          end + content_tag(:div, 'mappings', class: 'ml-1')
         end
+      end
     end
   end
 
