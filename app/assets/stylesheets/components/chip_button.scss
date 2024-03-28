@@ -9,6 +9,10 @@
   display: inline;
 }
 
+.chip-button-component-container svg path{
+  fill: var(--primary-color);
+}
+
 .chip_button_small {
   font-size: 12px !important;
   padding: 5px !important;
