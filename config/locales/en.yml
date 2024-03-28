@@ -52,6 +52,8 @@ en:
     error_valid_concept: "Error: You must provide a valid concept id"
     missing_roots: Missing roots
   application:
+    powered_by: Powered by BioPortal
+    projects: Projects
     loading: loading...
     errors_in_fields: Errors in fields %{errors}
     add_comment: Add comment
@@ -78,9 +80,7 @@ en:
     incomplete_simple_ontology: "Incomplete simple ontology: %{id}, %{ont}"
   label_xl:
     error_valid_label_xl: "Error: You must provide a valid label_xl id"
-  application:
-    powered_by: Powered by BioPortal
-    projects: Projects
+
   admin:
     query_not_permitted: Query not permitted
     update_info_successfully: Update info successfully retrieved

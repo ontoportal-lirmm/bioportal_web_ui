@@ -53,6 +53,8 @@ fr:
     error_valid_concept: "Erreur : Vous devez fournir un identifiant de concept valide"
     missing_roots: Racines manquantes
   application:
+    powered_by: Propulsé par BioPortal
+    projects: Projets
     loading: chargement...
     errors_in_fields: Erreurs dans les champs %{errors}
     add_comment: Ajouter un commentaire
@@ -80,9 +82,6 @@ fr:
   label_xl:
     error_valid_label_xl: "Erreur : Vous devez fournir un identifiant de label_xl valide"
     
-  application:
-    powered_by: Propulsé par BioPortal
-    projects: Projets
   admin:
     query_not_permitted: Requête non autorisée
     update_info_successfully: Informations de mise à jour récupérées avec succès
