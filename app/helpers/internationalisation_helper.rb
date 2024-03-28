@@ -6,9 +6,10 @@ module InternationalisationHelper
     return I18n.t(*args) unless $RESOURCE_TERM
 
     begin
-      translation = I18n.t(*args).downcase
+      original_translation = I18n.t(*args)
+      downcase_translation = original_translation.downcase
     rescue
-      return "Missing translation for #{args.first}"
+      return "Missing downcase_translation for #{args.first}"
     end
 
     term = I18n.t("resource_term.ontology")
@@ -18,19 +19,18 @@ module InternationalisationHelper
     resources = I18n.t("resource_term.#{$RESOURCE_TERM}_plural")
     a_resource = I18n.t("resource_term.#{$RESOURCE_TERM}_single")
 
-    if translation.include?(term) && resource
+    if downcase_translation.include?(term) && resource
       replacement = resource.capitalize
-      replacement = resource if translation.include?(term)
-      if translation.include?(single_term)
+      replacement = resource if downcase_translation.include?(term)
+      if downcase_translation.include?(single_term)
         term = single_term
         replacement = a_resource
       end
-      translation.gsub(term, replacement)
-
-    elsif translation.include?(plural_term) && resources
+      original_translation.gsub(term, replacement)
+    elsif downcase_translation.include?(plural_term) && resources
       replacement = resources.capitalize
-      replacement = resources if translation.include?(plural_term)
-      translation.gsub(plural_term, replacement)
+      replacement = resources if downcase_translation.include?(plural_term)
+      original_translation.gsub(plural_term, replacement)
     else
       I18n.t(*args)
     end
