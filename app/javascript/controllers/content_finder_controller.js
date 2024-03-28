@@ -88,18 +88,18 @@ export default class extends Controller {
   }
 
   showJSON() {
-    this.contentTarget.innerHTML = hljs.highlight(JSON.stringify(JSON.parse(this.element.textContent), null, "  "), { language: 'json' }).value
+    this.contentTarget.innerHTML = hljs.highlight(JSON.stringify(JSON.parse(this.contentTarget.textContent), null, "  "), { language: 'json' }).value
   }
 
   showXML() {
-    this.contentTarget.innerHTML = hljs.highlight(this.element.textContent, { language: 'xml' }).value
+    this.contentTarget.innerHTML = hljs.highlight(this.contentTarget.textContent, { language: 'xml' }).value
   }
 
   showNTriples() {
-    this.contentTarget.innerHTML = hljs.highlight(this.element.textContent, { language: 'ntriples' }).value
+    this.contentTarget.innerHTML = hljs.highlight(this.contentTarget.textContent, { language: 'ntriples' }).value
   }
 
   showTURTLE() {
-    this.contentTarget.innerHTML = hljs.highlight(this.element.textContent, { language: 'turtle' }).value
+    this.contentTarget.innerHTML = hljs.highlight(this.contentTarget.textContent, { language: 'turtle' }).value
   }
 }

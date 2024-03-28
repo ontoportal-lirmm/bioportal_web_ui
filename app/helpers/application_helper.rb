@@ -520,9 +520,11 @@ module ApplicationHelper
     config[:ncbo_slice] = @subdomain_filter[:acronym] if (@subdomain_filter[:active] && !@subdomain_filter[:acronym].empty?)
     config.to_json
   end
+
   def portal_name
     $SITE
-    end
+  end
+
   def navitems
     items = [["/ontologies", t('layout.header.browse')],
              ["/mappings", t('layout.header.mappings')],
