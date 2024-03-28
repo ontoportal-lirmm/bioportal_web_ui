@@ -1,6 +1,6 @@
 = render TableRowComponent.new(id: "#{note.id}_tr_#{parent_type}") do |row|
-  - row.td do
-    - if current_user_admin?
+  - if current_user_admin?
+    - row.td do
       - alert_text = t('notes.note_line.alert_text', subject: note.subject || '', creator: note.creator.split('/')[-1])
       = button_to t('notes.note_line.delete'), notes_path(noteid: note.id, parent_type: parent_type), method: :delete, class:'btn btn-sm btn-link',  form: {data: { turbo: true, turbo_confirm: alert_text, turbo_frame: '_top'}}
   - row.td do
