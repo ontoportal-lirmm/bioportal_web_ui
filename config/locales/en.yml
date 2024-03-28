@@ -56,7 +56,7 @@ en:
     add_proposal: Add proposal
     add_new_proposal: Add a new proposal
     watching: Watching
-    beta_badge_text: beta
+    beta_badge_text: Beta
     beta_badge_tooltip: This feature is experimental and may have issues
     ontology_not_found: Ontology %{acronym} not found
     concept_not_found: Concept %{concept} not found
@@ -150,10 +150,10 @@ en:
       days_remaining: Days remaining
       renew_license: Renew license
     groups:
-      group_created: group successfully created in %{time}s
+      group_created: Group successfully created in %{time}s
       group_error_creation: Problem creating the group  - %{message}
       group_added_successfully: New Group added successfully
-      group_updated_successfully: group successfully updated in %{time}s
+      group_updated_successfully: Group successfully updated in %{time}s
       problem_of_updating: Problem updating the group - %{message}
       group_deleted_successfully: group successfully deleted in in %{time}s
       problem_of_deleting: Problem deleting the group - %{message}
@@ -184,12 +184,12 @@ en:
         edit_group: Edit category
         save: Save
     categories:
-      category_created: category successfully created in  %{time}s
+      category_created: Category successfully created in  %{time}s
       category_error_creation: Problem creating the category  - %{message}
       category_added_successfully: New Category added successfully
-      category_updated_successfully: category successfully updated in %{time}s
+      category_updated_successfully: Category successfully updated in %{time}s
       problem_of_updating: Problem updating the category - %{message}
-      category_deleted_successfully: category successfully deleted in %{time}s
+      category_deleted_successfully: Category successfully deleted in %{time}s
       problem_of_deleting: Problem deleting the category - %{message}
       edit_button: "Edit"
       delete: Delete
@@ -286,6 +286,7 @@ en:
     notes: Notes
     details: Details
     visualization: Visualization
+    mappings: Mappings
     new_term_requests: New Term Requests
     permanent_link_class: Get a permanent link to this class
     request_term:
@@ -509,7 +510,7 @@ en:
     back_home_button: Back home
     recover_password: Recover password
     email: Email
-    user: user
+    user: User
     email_address_associated: Enter the email address associated with your account and we will send an email with instructions to reset your password.
     email_placeholder: Enter the email
     send_instructions: Send instructions
@@ -959,29 +960,23 @@ en:
   submission_inputs:
     administrators: Administrators
     ontology_skos_language_link: Please refer to the documentation for more details.
-    ontology_skos_language_help: |
-      <<-EOS
+    ontology_skos_language_help: >
       SKOS vocabularies submitted to %{portal_name} shall follow a few constraints (e.g., contain a minimum of one skos:ConceptScheme also typed as owl:Ontology) 
       and top concept assertion. %{link}
-      EOS
     ontology_obo_language_link: the OBOinOWL parser.
-    ontology_obo_language_help: |
-      <<-EOS
+    ontology_obo_language_help: >
         OBO ontologies submitted to %{portal_name} will be parsed by the OWL-API which integrates %{link} 
-        The resulting RDF triples will then be loaded in %{portal_name} triple-store. 
-      EOS
+        The resulting RDF triples will then be loaded in %{portal_name} triple-store.
     ontology_owl_language_link: the Protégé
-    ontology_owl_language_help: |
-      <<-EOS
+    ontology_owl_language_help: >
         OWL ontologies submitted to %{portal_name} will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with
         %{link}
         software which does use the same component.
-      EOS
+
     ontology_umls_language_link: by the UMLS2RDF tool.
-    ontology_umls_language_help: |
-      <<-EOS
+    ontology_umls_language_help: >
         UMLS-RRF resources are usually produced %{link}
-      EOS
+
     groups: Groups
     visibility: Visibility
     accounts_allowed: Add or remove accounts that are allowed to see this ontology in %{portal_name}.
@@ -1084,7 +1079,7 @@ en:
     filters: Filters
     no_license: No license
     view_license: View license
-    access_rights_information: Additional license a access rights information
+    access_rights_information: Additional license and access rights information
     referred_to: It can also be referred to as
     private_ontology: Private Ontology
     formality_levels: Formality levels

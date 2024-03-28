@@ -291,6 +291,7 @@ fr:
     notes: Notes
     details: Détails
     visualization: Visualisation
+    mappings: Mappages
     new_term_requests: Nouvelles demandes de termes
     permanent_link_class: Obtenir un lien permanent vers cette classe
     request_term:
@@ -986,29 +987,22 @@ fr:
   submission_inputs:
     administrators: Administrateurs
     ontology_skos_language_link: Veuillez vous référer à la documentation pour plus de détails.
-    ontology_skos_language_help: |
-      <<-EOS
+    ontology_skos_language_help: >
       Les vocabulaires SKOS soumis à %{portal_name} doivent suivre quelques contraintes (par exemple, contenir au minimum un skos:ConceptScheme également typé comme owl:Ontology)
       et assertion de concept principal. %{link}
-      EOS
     ontology_obo_language_link: le parser OBOinOWL.
-    ontology_obo_language_help: |
-      <<-EOS
+    ontology_obo_language_help: >
         Les ontologies OBO soumises à %{portal_name} seront analysées par l'OWL-API qui intègre %{link}
         Les triplets RDF résultants seront ensuite chargés dans le triple-store de %{portal_name}.
-      EOS
+
     ontology_owl_language_link: le Protégé
-    ontology_owl_language_help: |
-      <<-EOS
+    ontology_owl_language_help: >
         Les ontologies OWL soumises à %{portal_name} seront analysées par l'OWL-API. Une manière simple de vérifier si votre ontologie sera analysée est de l'ouvrir avec
         %{link}
         logiciel qui utilise le même composant.
-      EOS
     ontology_umls_language_link: par l'outil UMLS2RDF.
-    ontology_umls_language_help: |
-      <<-EOS
+    ontology_umls_language_help: >
         Les ressources UMLS-RRF sont généralement produites %{link}
-      EOS
     groups: Groupes
     visibility: Visibilité
     accounts_allowed: Ajouter ou supprimer des comptes autorisés à voir cette ontologie dans %{portal_name}.
