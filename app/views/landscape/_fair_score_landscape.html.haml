@@ -1,4 +1,4 @@
-%div.card.mb-3
+%div.card.mb-3{'data-controller': 'fair-score-landscape'}
   %div.card-header
     %div.d-flex.align-items-end.justify-content-between
       %span
@@ -26,7 +26,8 @@
               0 (0%)
     %div.p-3
       %div#detailedFilter.row.text-left
-        = ontologies_selector(id:'landscape_ontologies_selector',name: 'ontologies')
+        .landscape_ontologies_selector{'data-action': 'change->fair-score-landscape#update'}
+          = ontologies_selector(id:'landscape_ontologies_selector',name: 'ontology[ontologyId][]')
       %div
         = t('landscape.fairness_interface_introduction')
       %div

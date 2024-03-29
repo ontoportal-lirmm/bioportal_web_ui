@@ -4,4 +4,4 @@
 %span
   = render Display::InfoTooltipComponent.new(text: t("view_fair_scores_definitions"))
 %span{style: 'vertical-align: bottom; margin-left: -5px;'}
-  = fairness_link(style: 'vertical-align: middle;', ontology: @ontology.acronym)
+  = fairness_link(style: 'vertical-align: middle;', ontology: @ontology&.acronym)
