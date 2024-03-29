@@ -8,8 +8,8 @@ module InternationalisationHelper
     begin
       original_translation = I18n.t(*args)
       downcase_translation = original_translation.downcase
-    rescue
-      return "Missing downcase_translation for #{args.first}"
+    rescue StandardError => e
+      return e.message
     end
 
     term = I18n.t("resource_term.ontology")

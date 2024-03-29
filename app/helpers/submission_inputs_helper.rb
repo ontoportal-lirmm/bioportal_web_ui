@@ -246,7 +246,7 @@ module SubmissionInputsHelper
 
       render NestedFormInputsComponent.new(object_name: 'contact', default_empty_row: true) do |c|
         c.header do
-          content_tag(:div, t('submission_inputs.contact_name', name: name), class: 'w-50') + content_tag(:div, t('submission_inputs.contact_email', name: name), class: 'w-50')
+          content_tag(:div, name.blank? ? '' : t('submission_inputs.contact_name', name: name), class: 'w-50') + content_tag(:div, name.blank? ? '' : t('submission_inputs.contact_email', name: name), class: 'w-50')
         end
 
         c.template do

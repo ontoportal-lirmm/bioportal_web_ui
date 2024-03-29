@@ -54,6 +54,8 @@ module OntologiesHelper
   end
   def browse_filter_section_label(key)
     labels = {
+      categories: t('ontologies.categories'),
+      groups: t('ontologies.groups'),
       hasFormalityLevel: t('ontologies.formality_levels'),
       isOfType: t('ontologies.ontology_types'),
       naturalLanguage: t('ontologies.natural_languages')

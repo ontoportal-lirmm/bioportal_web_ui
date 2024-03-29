@@ -104,10 +104,10 @@
               - btn.icon_left do
                 = inline_svg_tag "summary/sparql.svg"
           .cite-us-button
-            = render Buttons::RegularButtonComponent.new(id:'annotator_cite_us', value: "Cite", variant: "secondary", href: $CITE_ANNOTATOR, size: "slim", target: '_blank', state: "regular") do |btn|
+            = render Buttons::RegularButtonComponent.new(id:'annotator_cite_us', value: t('recommender.cite'), variant: "secondary", href: $CITE_ANNOTATOR, size: "slim", target: '_blank', state: "regular") do |btn|
               - btn.icon_left do
                 = inline_svg_tag "icons/cite.svg"
           .annotator-doc
-            = render Buttons::RegularButtonComponent.new(id:'annotator_api_doc', value: "Annotator API documentation", variant: "secondary", href: $ANNOTATOR_API_DOC, size: "slim", target: '_blank', state: "regular") do |btn|
+            = render Buttons::RegularButtonComponent.new(id:'annotator_api_doc', value: t('annotator.api_documentation'), variant: "secondary", href: $ANNOTATOR_API_DOC, size: "slim", target: '_blank', state: "regular") do |btn|
               - btn.icon_left do
                 = inline_svg_tag "summary/documentation.svg"

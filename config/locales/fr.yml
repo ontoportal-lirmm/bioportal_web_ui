@@ -267,6 +267,7 @@ fr:
     temporality: "Temporalité"
     experiencer: Experiencer
     score: Score
+    api_documentation: "Documentation de l'API de l'annotateur"
     get_annotation: Obtenir des annotations
     total_results: Résultats totaux
     insert_sample_text: Insérer un texte d'exemple
@@ -451,7 +452,7 @@ fr:
     title: "Paysage"
     ontologies_properties: Propriétés des ontologies
 
-    layout:
+  layout:
     header:
       account_setting: Paramètres du compte
       annotator: Annotateur
@@ -643,12 +644,12 @@ fr:
       summary: Résumé
       properties: Propriétés
       instances: Instances
-      notes: Remarques
+      notes: Notes
       mappings: Alignements
       widgets: Widgets
-      sparql: Sparql
-      concepts: Conceptes
-      schemes: Schemes
+      sparql: SPARQL
+      concepts: Concepts
+      schemes: Schémas
       collections: Collections
     concept:
       definitions: Définitions
@@ -745,6 +746,8 @@ fr:
     get_recommendations: Obtenir des recommandations
     edit: Éditer
     results_title: Ontologies recommandées
+    call_annotator: Appeler l'annotateur avec la même entrée
+    cite: Citer
     results_table:
       ontology: Ontologie
       final_score: Score final
@@ -870,8 +873,8 @@ fr:
     result_component:
       details: Détails
       visualize: Visualiser
-      more_from_ontology: plus de cette ontologie
-      reuses_in: Réutilisations dans
+      more_from_ontology: de plus de cette ontologie
+      reuses_in: Réutiliser dans
 
   notes:
     no_notes: Aucune note à afficher
@@ -981,6 +984,9 @@ fr:
       bioportal_user: ID utilisateur BioPortal
 
   submission_inputs:
+    edit_ontology_title: Edition de l'ontologie
+    metadata_selector_label: "Filtrer les propriétés à afficher"
+    metadata_selector_placeholder: "Commencez à taper pour sélectionner les propriétés"
     administrators: Administrateurs
     ontology_skos_language_link: Veuillez vous référer à la documentation pour plus de détails.
     ontology_skos_language_help: >
@@ -990,7 +996,6 @@ fr:
     ontology_obo_language_help: >
       Les ontologies OBO soumises à %{portal_name} seront analysées par l'OWL-API qui intègre %{link}
       Les triplets RDF résultants seront ensuite chargés dans le triple-store de %{portal_name}.
-
     ontology_owl_language_link: le Protégé
     ontology_owl_language_help: >
       Les ontologies OWL soumises à %{portal_name} seront analysées par l'OWL-API. Une manière simple de vérifier si votre ontologie sera analysée est de l'ouvrir avec
@@ -999,17 +1004,26 @@ fr:
     ontology_umls_language_link: par l'outil UMLS2RDF.
     ontology_umls_language_help: >
       Les ressources UMLS-RRF sont généralement produites %{link}
-  groups: Groupes
-  visibility: Visibilité
-  accounts_allowed: Ajouter ou supprimer des comptes autorisés à voir cette ontologie dans %{portal_name}.
-  ontology_view_of_another_ontology: Cette ontologie est-elle une vue d'une autre ontologie ?
-  contact: Contact
-  equivalents: Équivalents
-  validators: Validateurs
-  help_text: Texte d'aide
-  contact_name: "Nom du %{name}"
-  contact_email: "Email du %{name}"
-
+    groups: Groupes
+    visibility: Visibilité
+    accounts_allowed: Ajouter ou supprimer des comptes autorisés à voir cette ontologie dans %{portal_name}.
+    ontology_view_of_another_ontology: Cette ontologie est-elle une vue d'une autre ontologie ?
+    contact: Contact
+    equivalents: Équivalents
+    validators: Validateurs
+    help_text: Texte d'aide
+    contact_name: "Nom du %{name}"
+    contact_email: "Email du %{name}"
+    edit_metadata_instruction: "Modifiez les métadonnées de votre ontologie ici. Certaines de ces valeurs sont utilisées par les fonctionnalités de %{portal_name}, notamment pour l'évaluation de la FAIRness. %{link}"
+    edit_metadata_instruction_link: "Consultez ici les lignes directrices et recommandations pour les métadonnées."
+    license_help: "%{portal_name} nécessite une URI pour la licence. Si vous ne trouvez pas votre choix ici, %{link}"
+    license_help_link: "Veuillez choisir une URI à partir d'ici."
+    deprecated_help: "Une ontologie avec le statut 'retired' doit nécessairement être également dépréciée, mais pas l'inverse."
+    known_usage_help: "Considérez également de déclarer %{metadata_knownUsage_help}"
+    known_usage_help_link: "les projets utilisant l'ontologie"
+    help_creator: "Les propriétés suivantes prennent pour valeur un 'agent' dans %{portal_name} (soit une personne, soit une organisation). Ces agents sont partagés sur toutes les ontologies et sont suggérés avec l'autocomplétion s'ils existent déjà. Modifier un agent ici le modifiera pour toutes les ontologies auxquelles cet agent est impliqué."
+    version_help: "Pour plus d'informations sur la manière d'encoder les informations de version dans une ontologie, consultez %{link}"
+    version_helper_link: "les lignes directrices et recommandations."
   collections:
     error_valid_collection: "Erreur : Vous devez fournir un identifiant de collection valide"
     no_collections_alert: "%{acronym} ne contient pas de collections (skos:Collection)"
@@ -1112,6 +1126,8 @@ fr:
     referred_to: Peut également être désigné comme
     private_ontology: Ontologie Privée
     formality_levels: Niveaux de formalité
+    categories: Catégories
+    groups: Groupes
     ontology_types: Types d'ontologies
     natural_languages: Langues naturelles
     showing: Affichage
@@ -1191,7 +1207,7 @@ fr:
       admin_welcome: Bienvenue admin, cette coloration indique les fonctionnalités réservées aux administrateurs
       show_private_ontology: Afficher uniquement les ontologies privées
       show_ontology_views: Afficher les vues d'ontologie
-      show_retired_ontologies: Afficher les ontologies retirées
+      show_retired_ontologies: Afficher les ontologies abandonner
       search_placeholder: Commencez à taper pour filtrer les ontologies, par ex., AGROVOC...
     sections:
       classes: Classes
@@ -1203,8 +1219,8 @@ fr:
       classes_with_a_single_child: Classes avec un seul enfant
       classes_with_more_than_25_children: Classes avec plus de 25 enfants
       classes_with_no_definition: Classes sans définition
-
-      identifiers: Identifiants principaux de l'ontologie.
+      identifiers: Identifiants
+      identifiers_tooltip: Identifiants principaux de l'ontologie.
       dates: Dates
       person_and_organization: Personnes et organisations
       other_links: Autres liens
@@ -1223,7 +1239,6 @@ fr:
       label_groups: Groupes
       download_as_csv: Télécharger en CSV
       scroll_down_to_see_more: Faites défiler vers le bas pour en voir plus
-
       widgets: Les widgets ne sont disponibles que pour les ontologies stockées dans %{site}.
       add_acronym_widgets: Ajouter des widgets web %{acronym} à votre site
       widget_block_component_title_1: Aller à
@@ -1273,32 +1288,32 @@ fr:
       ncbo_widget_wiki: Wiki des Widgets NCBO
       file: fichier.
       no_class_concept_found: Aucune classe/concept trouvé
-    metadata:
-      fair_score_title: Score FAIR
-      total_score: "Score total : %{score} ( %{normalized_score}%)"
+      metadata:
+        fair_score_title: Score FAIR
+        total_score: "Score total : %{score} ( %{normalized_score}%)"
 
-      metrics: Métriques
-      metrics_link_title: Informations et diagrammes d'évolution sur les métriques et autres mesures de l'ontologie.
-      see_all_metrics: Voir toutes les métriques de %{acronym}
-      show_modal_title_1: Toutes les métriques de %{acronym}
-      not_calculated_metrics: Nous n'avons pas encore calculé de métriques pour %{acronym}
-      show_modal_title_2: "Évolution du nombre de %{metric} dans %{acronym} par soumissions."
+        metrics: Métriques
+        metrics_link_title: Informations et diagrammes d'évolution sur les métriques et autres mesures de l'ontologie.
+        see_all_metrics: Voir toutes les métriques de %{acronym}
+        show_modal_title_1: Toutes les métriques de %{acronym}
+        not_calculated_metrics: Nous n'avons pas encore calculé de métriques pour %{acronym}
+        show_modal_title_2: "Évolution du nombre de %{metric} dans %{acronym} par soumissions."
 
-      submissions: Soumissions
-      submissions_link_title: Ensemble de tous les fichiers qui ont été soumis à %{site}. Chaque enregistrement de métadonnées précédent est accessible mais seul le contenu du dernier fichier analysé est accessible via les services de %{site}
+        submissions: Soumissions
+        submissions_link_title: Ensemble de tous les fichiers qui ont été soumis à %{site}. Chaque enregistrement de métadonnées précédent est accessible mais seul le contenu du dernier fichier analysé est accessible via les services de %{site}
 
-      relations_network: Réseau de relations des ontologies
+        relations_network: Réseau de relations des ontologies
 
-      general_information: Informations générales
-      initial_created_on: Créé initialement le
-      additional_information: Pour des informations supplémentaires, contactez
-      categories_and_subjects: Catégories et sujets
-      keywords_and_classes: Mots-clés et classes
-      languages: Langues
-      pull_location: Emplacement de tirage
-      export_metadata: Exporter toutes les métadonnées
-      abstract: Résumé
-      description: Description
+        general_information: Informations générales
+        initial_created_on: Créé initialement le
+        additional_information: Pour des informations supplémentaires, contactez
+        categories_and_subjects: Catégories et sujets
+        keywords_and_classes: Mots-clés et classes
+        languages: Langues
+        pull_location: Emplacement de tirage
+        export_metadata: Exporter toutes les métadonnées
+        abstract: Résumé
+        description: Description
 
 
   components:
@@ -1356,7 +1371,7 @@ fr:
     ontologies_advanced_selection: Sélection avancée des ontologies
     search_hint: Filtrer les ontologies...
     show_ontology_view: Afficher les vues d'ontologie
-    hide_retired_ontologies: Masquer les ontologies retirées
+    hide_retired_ontologies: Masquer les ontologies abandonner
     tabs_title:
       categories: Catégories
       groups: Groupes
