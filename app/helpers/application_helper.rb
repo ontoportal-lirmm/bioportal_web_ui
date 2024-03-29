@@ -540,7 +540,7 @@ module ApplicationHelper
   def prefix_properties(concept_properties)
     modified_properties = {}
 
-    concept_properties.each do |key, value|
+    concept_properties&.each do |key, value|
       if value.is_a?(Hash) && value.key?(:key)
         key_string = value[:key].to_s
         next if key_string.include?('metadata')
@@ -582,7 +582,7 @@ module ApplicationHelper
 
   def insert_sample_text_button(text)
     content_tag(:div, class:'insert-sample-text-button') do
-      content_tag(:div, class: 'button', 'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("sample_text")) do
+      content_tag(:div, class: 'button', 'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("annotator.sample_text")) do
         content_tag(:div, text, class: 'text') +
         inline_svg_tag('icons/arrow-curved-up.svg')
       end
@@ -596,9 +596,6 @@ module ApplicationHelper
     end
   end
 
-  def list_to_string(list)
-    list&.join(',') || ''
-  end
 
   def ontologies_selector(id:, label: nil, name: nil, selected: nil)
     content_tag(:div) do

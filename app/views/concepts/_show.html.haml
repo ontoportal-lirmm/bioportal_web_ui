@@ -32,7 +32,8 @@
           )
 
       - c.item(id: 'mappings', path: '#mappings') do
-        #{concept_label_to_show(submission: @submission).humanize} Mappings (
+        #{t('concepts.mappings')}
+        (
         %span#mapping_count= 'loading'
         )
 

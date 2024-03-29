@@ -16,7 +16,11 @@ class ApplicationController < ActionController::Base
   include InternationalisationHelper
 
   before_action :set_locale
-  
+
+  def self.t(*args)
+    InternationalisationHelper.t(*args)
+  end
+
   # Sets the locale based on the locale cookie or the value returned by detect_locale.
   def set_locale    
     I18n.locale = cookies[:locale] || detect_locale
@@ -712,10 +716,6 @@ class ApplicationController < ActionController::Base
 
   def request_lang
     helpers.request_lang
-  end
-
-  def self.t(*args)
-    I18n.t(*args)
   end
 
   private

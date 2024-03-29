@@ -16,7 +16,7 @@
             .recommender-page-text-area{class: is_input ?  "" : "d-none", 'data-recommender-target': 'input', 'data-controller': 'sample-text'}
               %textarea#recommender-text-area{rows: "4" , placeholder: t('recommender.hint'), name: "input", 'data-action': "input->recommender#handleInput",  maxlength: "9678", 'data-sample-text-target': "input"}
                 = params[:input]
-              = insert_sample_text_button(t('recommender.insert_sample_text'))
+              = insert_sample_text_button(t('annotator.insert_sample_text'))
 
             .recommender-page-text-area-results{class: is_input ? "d-none" : "", 'data-recommender-target': 'result'}
               .text
@@ -26,7 +26,7 @@
               = t('recommender.options')
             .input
               .title
-                = t('recommender.options')
+                = t('recommender.input')
               .radios
                 - check_input = !params[:input_type].eql?('2')
                 .text-choice
@@ -53,7 +53,7 @@
             .inputs-container
               -#binding.pry
               .ninput
-                = render Input::RangeSliderComponent.new(label: t('recommender.converage'), name: "wc", value: params[:wc] || 0.55, min: '0', max: '1', step: '0.01')
+                = render Input::RangeSliderComponent.new(label: t('recommender.coverage'), name: "wc", value: params[:wc] || 0.55, min: '0', max: '1', step: '0.01')
               .ninput
                 = render Input::RangeSliderComponent.new(label: t('recommender.acceptance'), name: "wa", value: params[:wa] || 0.15, min: '0', max: '1', step: '0.01')
               .ninput
@@ -115,11 +115,11 @@
               - btn.icon_left do
                 = inline_svg_tag "json.svg"
           .cite-us-button
-            = render Buttons::RegularButtonComponent.new(id:'recommender_cite_us', value: "Cite", variant: "secondary", href: $CITE_RECOMMENDER, size: "slim", target: '_blank', state: "regular") do |btn|
+            = render Buttons::RegularButtonComponent.new(id:'recommender_cite_us', value: t('recommender.cite'), variant: "secondary", href: $CITE_RECOMMENDER, size: "slim", target: '_blank', state: "regular") do |btn|
               - btn.icon_left do
                 = inline_svg_tag "icons/cite.svg"
           .go-to-annotator
-            = render Buttons::RegularButtonComponent.new(id:'recommender_go_annotator', value: "Call Annotator with the same input", variant: "secondary", href: "/annotator?text=#{params[:input]}&ontologies=#{params[:ontologies]}", size: "slim", target: '_blank', state: "regular") do |btn|
+            = render Buttons::RegularButtonComponent.new(id:'recommender_go_annotator', value: t('recommender.call_annotator'), variant: "secondary", href: "/annotator?text=#{params[:input]}&ontologies=#{params[:ontologies]}", size: "slim", target: '_blank', state: "regular") do |btn|
               - btn.icon_right do
                 = inline_svg_tag "arrow-right-outlined.svg"
 
