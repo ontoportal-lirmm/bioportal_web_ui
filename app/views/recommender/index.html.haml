@@ -115,11 +115,11 @@
               - btn.icon_left do
                 = inline_svg_tag "json.svg"
           .cite-us-button
-            = render Buttons::RegularButtonComponent.new(id:'recommender_cite_us', value: "Cite", variant: "secondary", href: $CITE_RECOMMENDER, size: "slim", target: '_blank', state: "regular") do |btn|
+            = render Buttons::RegularButtonComponent.new(id:'recommender_cite_us', value: t('recommender.cite'), variant: "secondary", href: $CITE_RECOMMENDER, size: "slim", target: '_blank', state: "regular") do |btn|
               - btn.icon_left do
                 = inline_svg_tag "icons/cite.svg"
           .go-to-annotator
-            = render Buttons::RegularButtonComponent.new(id:'recommender_go_annotator', value: "Call Annotator with the same input", variant: "secondary", href: "/annotator?text=#{params[:input]}&ontologies=#{params[:ontologies]}", size: "slim", target: '_blank', state: "regular") do |btn|
+            = render Buttons::RegularButtonComponent.new(id:'recommender_go_annotator', value: t('recommender.call_annotator'), variant: "secondary", href: "/annotator?text=#{params[:input]}&ontologies=#{params[:ontologies]}", size: "slim", target: '_blank', state: "regular") do |btn|
               - btn.icon_right do
                 = inline_svg_tag "arrow-right-outlined.svg"
 

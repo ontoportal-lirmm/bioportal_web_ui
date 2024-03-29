@@ -540,7 +540,7 @@ module ApplicationHelper
   def prefix_properties(concept_properties)
     modified_properties = {}
 
-    concept_properties.each do |key, value|
+    concept_properties&.each do |key, value|
       if value.is_a?(Hash) && value.key?(:key)
         key_string = value[:key].to_s
         next if key_string.include?('metadata')

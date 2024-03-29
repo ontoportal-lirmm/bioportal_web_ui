@@ -56,7 +56,7 @@ en:
     add_proposal: Add proposal
     add_new_proposal: Add a new proposal
     watching: Watching
-    beta_badge_text: beta
+    beta_badge_text: Beta
     beta_badge_tooltip: This feature is experimental and may have issues
     ontology_not_found: Ontology %{acronym} not found
     concept_not_found: Concept %{concept} not found
@@ -150,10 +150,10 @@ en:
       days_remaining: Days remaining
       renew_license: Renew license
     groups:
-      group_created: group successfully created in %{time}s
+      group_created: Group successfully created in %{time}s
       group_error_creation: Problem creating the group  - %{message}
       group_added_successfully: New Group added successfully
-      group_updated_successfully: group successfully updated in %{time}s
+      group_updated_successfully: Group successfully updated in %{time}s
       problem_of_updating: Problem updating the group - %{message}
       group_deleted_successfully: group successfully deleted in in %{time}s
       problem_of_deleting: Problem deleting the group - %{message}
@@ -184,12 +184,12 @@ en:
         edit_group: Edit category
         save: Save
     categories:
-      category_created: category successfully created in  %{time}s
+      category_created: Category successfully created in  %{time}s
       category_error_creation: Problem creating the category  - %{message}
       category_added_successfully: New Category added successfully
-      category_updated_successfully: category successfully updated in %{time}s
+      category_updated_successfully: Category successfully updated in %{time}s
       problem_of_updating: Problem updating the category - %{message}
-      category_deleted_successfully: category successfully deleted in %{time}s
+      category_deleted_successfully: Category successfully deleted in %{time}s
       problem_of_deleting: Problem deleting the category - %{message}
       edit_button: "Edit"
       delete: Delete
@@ -265,6 +265,7 @@ en:
     temporality: Temporality
     experiencer: Experiencer
     score: Score
+    api_documentation: "Annotator API documentation"
     insert_sample_text: Insert sample text
     sample_text: Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.
   concepts:
@@ -286,6 +287,7 @@ en:
     notes: Notes
     details: Details
     visualization: Visualization
+    mappings: Mappings
     new_term_requests: New Term Requests
     permanent_link_class: Get a permanent link to this class
     request_term:
@@ -509,7 +511,7 @@ en:
     back_home_button: Back home
     recover_password: Recover password
     email: Email
-    user: user
+    user: User
     email_address_associated: Enter the email address associated with your account and we will send an email with instructions to reset your password.
     email_placeholder: Enter the email
     send_instructions: Send instructions
@@ -729,6 +731,8 @@ en:
     get_recommendations: Get recommendations
     edit: Edit
     results_title: Recommended ontologies
+    call_annotator: Call Annotator with the same input
+    cite: Cite
     results_table:
       ontology: Ontology
       final_score: Final score
@@ -957,31 +961,28 @@ en:
       export_users_link: "Export Appliance Users As CSV"
       bioportal_user: BioPortal User ID
   submission_inputs:
+    edit_ontology_title: Edit ontology
+    metadata_selector_label: "Filter properties to show"
+    metadata_selector_placeholder: "Start typing to select properties"
     administrators: Administrators
     ontology_skos_language_link: Please refer to the documentation for more details.
-    ontology_skos_language_help: |
-      <<-EOS
+    ontology_skos_language_help: >
       SKOS vocabularies submitted to %{portal_name} shall follow a few constraints (e.g., contain a minimum of one skos:ConceptScheme also typed as owl:Ontology) 
       and top concept assertion. %{link}
-      EOS
     ontology_obo_language_link: the OBOinOWL parser.
-    ontology_obo_language_help: |
-      <<-EOS
+    ontology_obo_language_help: >
         OBO ontologies submitted to %{portal_name} will be parsed by the OWL-API which integrates %{link} 
-        The resulting RDF triples will then be loaded in %{portal_name} triple-store. 
-      EOS
+        The resulting RDF triples will then be loaded in %{portal_name} triple-store.
     ontology_owl_language_link: the Protégé
-    ontology_owl_language_help: |
-      <<-EOS
+    ontology_owl_language_help: >
         OWL ontologies submitted to %{portal_name} will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with
         %{link}
         software which does use the same component.
-      EOS
+
     ontology_umls_language_link: by the UMLS2RDF tool.
-    ontology_umls_language_help: |
-      <<-EOS
+    ontology_umls_language_help: >
         UMLS-RRF resources are usually produced %{link}
-      EOS
+
     groups: Groups
     visibility: Visibility
     accounts_allowed: Add or remove accounts that are allowed to see this ontology in %{portal_name}.
@@ -992,6 +993,16 @@ en:
     help_text: Help text
     contact_name: "%{name} Name"
     contact_email: "%{name} Email"
+    edit_metadata_instruction: "Edit the metadata of your ontology here. Some of these values are used by %{portal_name} functionalities, including for FAIRness assessment. %{link)"
+    edit_metadata_instruction_link: "See guidelines and recommendations for metadata here."
+    license_help: "%{portal_name} requires an URI for the license. If you do not find your choice here, %{link}"
+    license_help_link: "Please pick up an URI from here."
+    deprecated_help: "An ontology with status retired shall necessarily be also deprecated, but not the opposite."
+    known_usage_help: "Consider also declaring %{metadata_knownUsage_help}"
+    known_usage_help_link: "the projects that are using the ontology"
+    help_creator: "The following properties take for value an 'agent' in %{portal_name} (either a person or an organization). These agents are shared over all the ontologies and suggested with autocompletion if they already exist. Editing an agent here will change it to all the ontologies that agent is involved in."
+    version_help: "For more information on how to encode versioning information in an ontology, see %{link}"
+    version_helper_link: "guidelines and recommendations."
   collections:
     error_valid_collection: "Error: You must provide a valid collection id"
     no_collections_alert: "%{acronym} does not contain collections (skos:Collection)"
@@ -1084,10 +1095,12 @@ en:
     filters: Filters
     no_license: No license
     view_license: View license
-    access_rights_information: Additional license a access rights information
+    access_rights_information: Additional license and access rights information
     referred_to: It can also be referred to as
     private_ontology: Private Ontology
     formality_levels: Formality levels
+    categories: Categories
+    groups: Groups
     ontology_types: Ontology types
     natural_languages: Natural languages
     showing: Showing
@@ -1179,7 +1192,8 @@ en:
       classes_with_a_single_child: Classes with a single child
       classes_with_more_than_25_children: Classes with more than 25 children
       classes_with_no_definition: Classes with no definition
-      identifiers: Principal identifiers of the ontology.
+      identifiers: Identifiers
+      identifiers_tooltip: Principal identifiers of the ontology.
       dates: Dates
       person_and_organization: Persons and organizations
       other_links: Other links
@@ -1252,19 +1266,15 @@ en:
       metadata:
         fair_score_title: FAIR score
         total_score: "Total score : %{score} ( %{normalized_score}%)"
-
         metrics: Metrics
         metrics_link_title: Information and evolution diagrams about metrics and other measurements of the ontology.
         see_all_metrics: See all the metrics of %{acronym}
         show_modal_title_1: All the metrics of %{acronym}
         not_calculated_metrics: We have not yet calculated metrics for %{acronym}
         show_modal_title_2: "Evolution of the number of %{metric} in %{acronym} per submissions."
-
         submissions: Submissions
         submissions_link_title: Set of all the files that have been submitted to %{site}. Each previous metadata record is accessible but only the content of the latest parsed file is accessible via %{site} services
-
         relations_network: Ontology relations network
-
         general_information: General information
         initial_created_on: Initial created on
         additional_information: For additional information, contact
