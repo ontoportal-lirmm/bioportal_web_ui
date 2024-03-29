@@ -122,6 +122,11 @@
   margin-right: 10px;
 }
 
+.summary-mappigs-page-container{
+  display: flex;
+  justify-content: center;
+}
+
 @media (min-width: 1000px)  {
   #mappings_container{
     max-width: 1140px;

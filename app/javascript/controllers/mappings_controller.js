@@ -4,13 +4,29 @@ import * as d3 from 'd3';
 export default class extends Controller {
   static values = {
     mappingsList: Object,
-    zoomRatio: Number
+    zoomRatio: Number,
+    type: String,
+    acronym: String
   }
   static targets = ['frame', 'bubbles', 'submit', 'modal', 'selector', 'ontologies']
 
   connect() {
     this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue, this.#normalization_ratio(this.mappingsListValue))
     this.#center_scroll(this.frameTarget)
+    if(this.typeValue == 'partial'){
+      this.typeValue = 'disable'
+      var acronym = this.acronymValue
+      var bubbles = this.bubblesTarget 
+      setTimeout(function() {
+        const currentBubble = bubbles.querySelector(`[data-acronym="${acronym}"]`)
+        var clickEvent = new MouseEvent("click", {
+          bubbles: true,
+          cancelable: true,
+          view: window
+        });
+        currentBubble.dispatchEvent(clickEvent)
+      }, 100); 
+    }
   }
   filter_ontologies(){
     const selectOptions = this.ontologiesTarget.querySelector('select').selectedOptions
@@ -75,6 +91,9 @@ export default class extends Controller {
       return
     }
     if(selected_bubble.getAttribute('data-selected') == 'true'){
+        if (this.typeValue == 'disable'){
+          return
+        }
         selected_bubble.setAttribute('data-selected', 'false')
         selected_circle.style.fill = 'var(--primary-color)'
         for(let i = 0; i<leafs.length; i++){
@@ -87,7 +106,11 @@ export default class extends Controller {
         return
     }
     selected_bubble.setAttribute('data-selected', 'true')
-    this.#init_select(selected_bubble.getAttribute('data-acronym'))
+    if (this.typeValue != 'disable'){
+      this.#init_select(selected_bubble.getAttribute('data-acronym'))
+    } else {
+      url = '../'+url
+    }
     fetch(url)
         .then(response => {
             if (!response.ok) {
