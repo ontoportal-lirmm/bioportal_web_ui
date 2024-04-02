@@ -690,4 +690,17 @@ module OntologiesHelper
   def id_to_acronym(id)
     id.split('/').last
   end
+
+  def content_formats(concept_id: nil, acronym: nil, c: nil, selected_format: nil)   
+    if concept_id && acronym
+      finder_params = "?acronym=#{acronym}&uri=#{CGI.escape(concept_id)}"
+      ['json', 'xml', 'ntriples', 'turtle'].each do |format|
+        c.item(title: format, selected: (format.eql?(selected_format)))
+        c.item_content do
+          render TurboFrameComponent.new(id: "resource_content_frame_#{format}", src: "/content_finder#{finder_params}&output_format=#{format}", loading: "lazy")
+        end
+      end
+    end
+  end
+  
 end

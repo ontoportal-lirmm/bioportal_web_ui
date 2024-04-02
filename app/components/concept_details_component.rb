@@ -2,6 +2,7 @@
 
 class ConceptDetailsComponent < ViewComponent::Base
   include ApplicationHelper
+  include OntologiesHelper
   include MultiLanguagesHelper
 
   renders_one :header, TableComponent
