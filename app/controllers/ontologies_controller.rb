@@ -221,31 +221,31 @@ class OntologiesController < ApplicationController
 
   def content_finder
     if params[:acronym] && params[:uri]
-        @format = params[:output_format]
+      @acronym = params[:acronym]
+      @format = params[:output_format]
+      case params[:output_format]
+      when 'json'
+        accept_header = "application/json"
+      when 'xml'
+        accept_header = "application/xml"
+      when 'ntriples'
+        accept_header = "application/n-triples"
+      when 'turtle'
+        accept_header = "text/turtle"
+      end
 
-        url = URI.parse("#{REST_URI}ontologies/#{params[:acronym]}/resolve/#{CGI.escape(params[:uri])}")
-        http = Net::HTTP.new(url.host, url.port)
-        http.use_ssl = true if url.scheme == 'https'
-        request = Net::HTTP::Get.new(url)
-        request.body = "apikey=#{API_KEY}"
-
-        case params[:output_format]
-        when 'json'
-          request['Accept'] = "application/json"
-        when 'xml'
-          request['Accept'] = "application/xml"
-        when 'ntriples'
-          request['Accept'] = "application/n-triples"
-        when 'turtle'
-          request['Accept'] = "text/turtle"
-        end
-
-        response = http.request(request)
-        if response.code == '200'
-          @result = response.body
-        else
-          raise "Request failed with status code: #{response.code}"
-        end
+      url = URI.parse("#{rest_url}/ontologies/#{params[:acronym].strip}/resolve/#{helpers.escape(params[:uri].strip)}")
+      conn = Faraday.new(url: url) do |faraday|
+        faraday.headers['Accept'] = accept_header
+        faraday.adapter Faraday.default_adapter
+        faraday.headers['Authorization'] = "apikey token=#{API_KEY}"
+      end
+      
+      response = conn.get
+      @result=""
+      if response.success?
+          @result = response.body.force_encoding(Encoding::UTF_8)
+      end
     end
     render 'ontologies/resource_content'
   end
