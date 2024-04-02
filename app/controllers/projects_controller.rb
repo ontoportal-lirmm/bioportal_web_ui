@@ -160,8 +160,9 @@ class ProjectsController < ApplicationController
   def project_params
     p = params.require(:project).permit(:name, :acronym, :institution, :contacts, { creator:[] }, :homePage,
                                         :description, { ontologyUsed:[] })
-    p[:creator].reject!(&:blank?)
-    p[:ontologyUsed].reject!(&:blank?)
+
+    p[:creator]&.reject!(&:blank?)
+    p[:ontologyUsed]&.reject!(&:blank?)
     p.to_h
   end
 

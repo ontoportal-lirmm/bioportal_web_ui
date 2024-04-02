@@ -22,7 +22,7 @@
           %label.custom-control-label{for: "interportal_form_radio"}= t("mappings.mapping_type_selector.interportal")
         %div.custom-control.custom-radio.custom-control-inline
           = radio_button_tag "mapping_type", "external", type?('external'), {id: 'external_form_radio', class:'mapping_radio custom-control-input', data: {target:"#external_form"}, disabled: disabled}
-          %label.custom-control-label{for: "external_form_radio"}= t("mappings.mapping_type_selector.External")
+          %label.custom-control-label{for: "external_form_radio"}= t("mappings.mapping_type_selector.external")
 
 
     %div#internal_form.mapping_form{style: "display: #{type?('internal') ? 'block':'none'}"}

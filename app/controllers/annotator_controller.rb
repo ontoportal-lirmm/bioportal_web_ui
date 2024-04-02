@@ -60,17 +60,17 @@ class AnnotatorController < ApplicationController
       @json_link = json_link(uri, api_params)
       @rdf_link = "#{@json_link}&format=rdf"
       @results_table_header = [
-        "Class", "Ontology", "Contexts"
+        t('annotator.class'), t('annotator.ontology'), t('annotator.context')
       ]
       if params[:fast_context]
-        @results_table_header += ['Negation', 'Experiencer', 'Temporality', 'Certainty']
+        @results_table_header += [t('annotator.negation'), t('annotator.experiencer'), t('annotator.temporality'), t('annotator.certainty')]
       end
       @direct_results = 0
       @parents_results = 0
       if params[:score].nil? || params[:score].eql?('none')
         params[:score] = nil
       else
-        @results_table_header.push('Score')
+        @results_table_header.push(t('annotator.score'))
       end
       annotations = LinkedData::Client::HTTP.get(uri, api_params)
       @ontologies = get_simplified_ontologies_hash

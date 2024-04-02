@@ -9,7 +9,7 @@
       = render partial: 'ontologies/sections/metadata/ontology_metrics_section'
     .summary-page-second-row
       = ontology_depiction_card
-      = properties_card('Identifiers',t("ontologies.sections.identifiers"), @identifiers) do |values|
+      = properties_card(t('ontologies.sections.identifiers'),t("ontologies.sections.identifiers"), @identifiers) do |values|
         = horizontal_list_container(values) do |v|
           = render LinkFieldComponent.new(value: v, check_resolvability: true)
 

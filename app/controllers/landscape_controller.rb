@@ -237,7 +237,7 @@ class LandscapeController < ApplicationController
           organizations_list = Array(sub.send(org_attr.to_s))
 
           organizations_list.each do |org|
-            org_str = org.name || org.to_s
+            org_str = org.name || org.to_s rescue org.to_s
             org_uri = nil
             # Check if the organization is actually an URL
             if org_str =~ /\A#{URI::regexp}\z/

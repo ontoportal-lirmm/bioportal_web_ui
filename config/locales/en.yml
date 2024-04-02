@@ -1,5 +1,9 @@
 ---
 en:
+  show_advanced_options: Show advanced options
+  hide_advanced_options: Hide advanced options
+  no_result_was_found: No result was found
+
   activaterecord:
     errors:
       models:
@@ -9,7 +13,6 @@ en:
               invalid_license_key: is an invalid license key.
               no_appliance_id_for_comparison: Could not be validated. Unable to retrieve virtual appliance ID.
               appliance_id_mismatch: is an appliance id mismatch.
-  
   # Make the resource_term 'ontology' configurable throughout the portal, allowing it to be replaced by alternative terms such as 'semantic_resource', 'vocabulary', 'terminology', or 'semantic_artefact'
   resource_term:
     ontology: ontology
@@ -31,26 +34,17 @@ en:
     semantic_artefact: semantic artefact
     semantic_artefact_plural: semantic artefacts
     semantic_artefact_single: a semantic artefact
-
   date:
     formats:
       year_month_day_concise: "%Y-%m-%d" # 2017-03-01
       month_day_year: "%b %-d, %Y" # Mar 1, 2017
       monthfull_day_year: "%B %-d, %Y" # March 1, 2017
-  
-  acceptance: Acceptance
-  additional_parameters: 'Additional parameters explained at '
   language:
     translation_not_available: "%{language} translation not available"
     portal_language_help_text: Indicate the language in which the interfaces should appear
     search_language_help_text: Indicate the language on which to perform the search, restricting text matching exclusively to terms with that language
     content_language_help_text_1: Indicate the language  on which the content of this resource will be displayed.
     content_language_help_text_2: The available languages are specified by the resource admin.
-  collections:
-    error_valid_collection: "Error: You must provide a valid collection id"
-  concepts:
-    error_valid_concept: "Error: You must provide a valid concept id"
-    missing_roots: Missing roots
   application:
     powered_by: Powered by BioPortal
     projects: Projects
@@ -62,7 +56,7 @@ en:
     add_proposal: Add proposal
     add_new_proposal: Add a new proposal
     watching: Watching
-    beta_badge_text: beta
+    beta_badge_text: Beta
     beta_badge_tooltip: This feature is experimental and may have issues
     ontology_not_found: Ontology %{acronym} not found
     concept_not_found: Concept %{concept} not found
@@ -142,7 +136,7 @@ en:
       administration_console: Administration console
       analytics: Analytics
       site_administration: Site Administration
-      ontology_administration: Ontology Administration 
+      ontology_administration: Ontology Administration
       licensing: Licensing
       users: Users
       metadata_administration: Metadata Administration
@@ -156,12 +150,11 @@ en:
       valid_till: Valid till
       days_remaining: Days remaining
       renew_license: Renew license
-
     groups:
-      group_created: group successfully created in %{time}s
+      group_created: Group successfully created in %{time}s
       group_error_creation: Problem creating the group  - %{message}
       group_added_successfully: New Group added successfully
-      group_updated_successfully: group successfully updated in %{time}s
+      group_updated_successfully: Group successfully updated in %{time}s
       problem_of_updating: Problem updating the group - %{message}
       group_deleted_successfully: group successfully deleted in in %{time}s
       problem_of_deleting: Problem deleting the group - %{message}
@@ -188,16 +181,16 @@ en:
         count: COUNT
         actions: Actions
         no_agents: There are currently no agents.
-      edit: 
+      edit:
         edit_group: Edit category
         save: Save
     categories:
-      category_created: category successfully created in  %{time}s
+      category_created: Category successfully created in  %{time}s
       category_error_creation: Problem creating the category  - %{message}
       category_added_successfully: New Category added successfully
-      category_updated_successfully: category successfully updated in %{time}s
+      category_updated_successfully: Category successfully updated in %{time}s
       problem_of_updating: Problem updating the category - %{message}
-      category_deleted_successfully: category successfully deleted in %{time}s
+      category_deleted_successfully: Category successfully deleted in %{time}s
       problem_of_deleting: Problem deleting the category - %{message}
       edit_button: "Edit"
       delete: Delete
@@ -209,7 +202,7 @@ en:
         description: Description
         created: Created
         ontologies: Ontologies
-      edit: 
+      edit:
         edit_category: Edit category
         save: Save
       new:
@@ -222,6 +215,22 @@ en:
         actions: Actions
         no_categories: There are currently no categories.
     licenses:
+      license_notification:
+        license_contact: >
+          For more information, email <a href="mailto:support@ontoportal.org">support@ontoportal.org</a> or 
+          visit <a href="https://ontoportal.org/licensing" target="_blank">https://ontoportal.org/licensing</a>.
+        license_obtain: >
+          If you are the owner of this OntoPortal installation, you can visit 
+          <a href="https://license.ontoportal.org" target="_blank">https://license.ontoportal.org</a> to obtain a license.
+        license_expired: >
+          We're sorry, but the license for this OntoPortal installation has expired. If you are the owner of this OntoPortal installation, 
+          please visit <a href="https://license.ontoportal.org" target="_blank">https://license.ontoportal.org</a> to renew your license.
+        license_trial:
+          one:
+            This installation of the OntoPortal Appliance is a trial license, which will expire in 1 day.
+          other:
+            This installation of the OntoPortal Appliance is a trial license, which will expire in %{count} days.
+
       create:
         success: License renewed successfully!
       label_close: Close
@@ -229,26 +238,19 @@ en:
         license_from_being_saved: "prohibited this license from being saved:"
         paste_your_license: Paste your license key into the text area
         submit: Submit
-
-
-  
-  all: All
-  
   annotator:
     title: Annotator
     description: Get annotations for text with ontology classes
     input_hint: Enter or past a text to be annotated ...
     options: Options
-    prefrences: Prefrences
     whole_word_only: Whole word only
     match_longest_only: Match longest only
-    recognize_partial_words: Recognize partial words
     include_mappings: Include mappings
     exclude_numbers: Exclude numbers
     exclude_synonyms: Exclude synonyms
     select_umls_sementic_types: Select UMLS semantic types
-    select_umls_sementic_groupes: Select UMLS semantic groupes
-    include_ancentors: Include ancentors up to level
+    select_umls_sementic_groups: Select UMLS semantic groups
+    include_ancestors: Include ancestors up to level
     include_score: Include score
     score_threshold: Filter by score threshold
     confidence_threshold: Filter by confidence threshold
@@ -256,15 +258,22 @@ en:
     lemmatize: Lemmatize
     get_annotation: Get annotations
     total_results: Total results
-
-  
-  certainty: Certainty
-  class: Class
-  clear_selection: Clear selection
+    context: Context
+    certainty: Certainty
+    class: Class
+    ontology: Ontology
+    negation: Negation
+    temporality: Temporality
+    experiencer: Experiencer
+    score: Score
+    api_documentation: "Annotator API documentation"
+    insert_sample_text: Insert sample text
+    sample_text: Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.
   concepts:
+    error_valid_concept: "Error: You must provide a valid concept id"
+    missing_roots: Missing roots
     date_sorted_list_error: The Classes/Concepts didn't define <strong>creation</strong> or <strong>modifications</strong> dates with dcterms
     list_error: The Collection didn't define any member
-    permanent_link_class:  Permanent link to this class
     close: Close
     request_terms_instructions: |
       The text below is displayed to the user as the instructions on how to request new terms for your ontology.
@@ -279,6 +288,7 @@ en:
     notes: Notes
     details: Details
     visualization: Visualization
+    mappings: Mappings
     new_term_requests: New Term Requests
     permanent_link_class: Get a permanent link to this class
     request_term:
@@ -299,14 +309,6 @@ en:
           <blockquote>
             <p>Justification (optional)<br>Provide here any additional information about the requested term.</p>
           </blockquote>
-  context: Context
-  coverage: Coverage
-  filter: Filter
-  format_results: 'Format results as '
-  get_json_version: Get the json version
-  get_recommendations: Get recommendations
-  help: Help
-
   home:
     bug: Bug
     proposition: Proposition
@@ -373,35 +375,8 @@ en:
       feedback_complete:
         title: Feedback sent successfully
         message: Thank you for taking the time to share your feedback with us. Our support team will review your message and get back to you as soon as possible with a response. We value your opinion and appreciate your help in improving our services. Thank you for your support!
-
-    feedback:
-      error_on_form: Errors On Form
-      leave_your_feedback: Leave your feedback
-      feedback_hi_text: Hi
-      feedback_info_text: you can use the form below or email us directly at
-      email: Email
-      name: Name
-      proposition_url_page: Error/Proposition page URL
-      feedback: Feedback
-      tags: Tags
-      bug: Bug
-      proposition: Proposition
-      question: Question
-      ontology_submissions_request: Ontology submissions request
-      optional: (optional)
-      send: Send
-      feedback_complete:
-        title: Feedback sent successfully
-        message: Thank you for taking the time to share your feedback with us. Our support team will review your message and get back to you as soon as possible with a response. We value your opinion and appreciate your help in improving our services. Thank you for your support!
-
-  
-  input: Input
-  insert_sample_text: Insert sample text
-  keywords: Keywords
-  keywords_separated_by_commas: Keywords separated by commas
-  knowledge_detail: Knowledge detail
-  
   landscape:
+    #select_ontologies: Start typing to select ontologies or leave blank to use them all
     classes: Number of classes
     individuals: Number of individuals
     properties: Number of properties
@@ -415,7 +390,6 @@ en:
     projects_count: "%{count} projects"
     notes_count: "%{count} notes"
     reviews_count: "%{count} reviews"
-    projects_count: "%{count} projects"
     as_contact_count: "%{count} as contact"
     as_contributor_count: "%{count} as contributor"
     as_creator_count: "%{count} as creator"
@@ -470,7 +444,7 @@ en:
     relations_between_stored_ontologies: Set of relationships between %{site} ontologies as captured by metadata. Green ontologies are stored in the repository while those in blue are external resources.
     size: size
     title: "Landscape"
-  
+    ontologies_properties: Ontologies properties
   layout:
     header:
       account_setting: Account settings
@@ -513,7 +487,6 @@ en:
       slice: Slice
       at: at
       visit_the_site: visit the full site
-
   login:
     invalid_account_combination: "Invalid account name/password combination"
     authentication_failed: "%{provider} authentication failed"
@@ -539,11 +512,10 @@ en:
     back_home_button: Back home
     recover_password: Recover password
     email: Email
-    user: user
+    user: User
     email_address_associated: Enter the email address associated with your account and we will send an email with instructions to reset your password.
     email_placeholder: Enter the email
     send_instructions: Send instructions
-  
   statistics:
     title: "%{portal} Statistics"
     lead: (last %{last_years} years)
@@ -552,13 +524,11 @@ en:
     projects: Projects
     date: Date
     ontology_visits: Ontology visits
-
   mappings:
+    all: All
     external_mappings: "External Mappings (%{number_with_delimiter})"
     interportal_mappings: "Interportal Mappings - %{acronym} (%{number_with_delimiter})"
     test_bulk_load: This is the mappings produced to test the bulk load
-    external_mappings: External Mappings
-    interportal_mappings: Interportal - %{acronym} (%{number_with_delimiter})
     mapping_created: Mapping created
     mapping_updated: Mapping updated
     mapping_deleted: "%{map_id} deleted successfully"
@@ -572,6 +542,7 @@ en:
     no_mappings_available: No mappings available
     title: Mappings
     upload_mappings: Upload mappings
+    select_ontologies_list: Select ontologies
     count:
       ontology: Ontology
       mappings: Mappings
@@ -593,7 +564,7 @@ en:
       no_mappings: There are currently no  mappings for this class.
     mapping_type_selector:
       mapping_type: Mapping type
-      internal:  Internal
+      internal: Internal
       interportal: InterPortal
       external: External
       target_class: Target class
@@ -634,7 +605,7 @@ en:
     save: Save
     not_used: Not used
     see_usages_count: See usages (%{count})
-    delete_button: Delete
+    delete: Delete
     delete_error: "Can't delete this %{agent} because still used"
     turbo_confirm: Are you sure?
     modal_title: "Agent \"%{name}\" usages"
@@ -655,79 +626,6 @@ en:
       usages: Usages
       actions: Actions
       no_agents: There are currently no  agents.
-
-  matched_class: Matched class
-  matched_ontology: matched ontology
-  max_ontologies_per_set: Maximum number of ontologies per set
-  
-  nbco_annotatosplus:
-    annotations: Annotations
-    enter_paste_text_to_annotate: 'Enter or paste the text to annotate'
-    exclude_numbers: Exclude numbers
-    exclude_synonyms: Exclude synonyms
-    fast_context:
-      help: 'Activate FastContext to detect: if a concept has been negated (affirmed,
-        negated), who experienced the concept found (patient, other), when the annotated
-        concept occurred (recent, historical, hypothetical), and/or if the annotated
-        concept is uncertain (certain, uncertain).'
-      title: FastContext
-    filters:
-      additional_parameters_explained_at: 'Additional parameters are explained on
-        the page:'
-      by:
-        certainty: Certainty
-        class: Class
-        experiencer: Experiencer
-        filter: Filter
-        match_context: Context
-        match_type: Type
-        matched_class: Associated Class
-        matched_ontology: Associated Ontology
-        negation: Negation
-        ontology: Ontology
-        score: Score
-        temporality: Temporality
-        title: Results are filtered by
-        umls_sem_type: UMLS Semantic Type
-      confidence_threshold: Filter confidence threshold
-      confidence_threshold_help: Specify the minimum position in the scores distribution (between 1 and 100)
-      format_results_as: 'Format results as:'
-      reproduce_results_using: Reproduce these results using the
-      score_threshold: Filter by score threshold
-      score_threshold_help: Specify the minimum score value for annotations
-    include_ancestors_up_to_level: Include ancestors up to level
-    include_mappings: Include mappings
-    include_score: Include score
-    index:
-      intro: |
-        The NCBO Annotator+ is a proxy calling the NCBO Annotator web service on the NCBO BioPortal.
-           <br/><br/>
-           Tchechmedjiev, A., Abdaoui, A., Emonet, V., Melzi, S., Jonnagaddala, J., & Jonquet, C. (2018). <a href="https://doi.org/10.1093/bioinformatics/bty009" target="_blank">Enhanced features for annotating and indexing clinical text with NCBO Annotator+</a>. Bioinformatics, 34(11), 1962-1965.
-           </br><br/>
-           If you are using the API, please provide a valid NCBO BioPortal API key and access the service at <a href="http://services.bioportal.lirmm.fr/ncbo_annotatorplus">http://services.bioportal.lirmm. en/ncbo_annotatorplus </a></br>
-           Text submitted to NCBO Annotator+ must be in English.
-      sample_text: Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.
-      title: NCBO Annotator +
-    insert_sample_text: Insert sample text
-    match_longest_only: Match longest only
-    match_partial_words: Match partial words
-    recognizer: Entity recognition
-    score_help: Score annotations following previous NCBO 2009 measure (old) or Score
-      annotations following C-Value measure (cvalue) or Score annotations following
-      C-Value measure with hierarchy expansion (cvalueh)
-    select: Select %{name}
-    select_ontologies: Start typing to select ontologies or leave blank to use all
-      ontologies
-    select_ontologies_list: Select ontologies
-    show_advanced_options: Show advanced options
-    start_typing_to_select: Start typing to select %{type} or leave blank to use all
-    umls:
-      semantic_groups: UMLS Semantic Groups
-      semantic_types: UMLS Semantic Types
-  negation: negation
-  none: none
- 
-  ontology: Ontology
   ontology_details:
     sections:
       classes: Classes
@@ -738,6 +636,9 @@ en:
       mappings: Mappings
       widgets: Widgets
       sparql: Sparql
+      concepts: Concepts
+      schemes: Schemes
+      collections: Collections
     concept:
       definitions: Definitions
       id: ID
@@ -752,9 +653,6 @@ en:
       additional_metadata: Additional Metadata
     header:
       last_submission_date: Last submission date
-  ontology_sets: Ontology sets
-  output: Output
-  
   projects:
     project_not_found: "Project not found: %{id}"
     project_successfully_created: Project successfully created
@@ -770,7 +668,7 @@ en:
     delete_confirm: Are you sure?
     description: Description
     description_text: Description text
-    edit: Edit
+    edit_text: Edit
     home_page: Home page
     index:
       intro: Browse a selection of projects that use %{site} ontologies
@@ -784,7 +682,7 @@ en:
     show:
       title: Project %{name}
       edit_project: Edit Project
-      description:  "Description:"
+      description: "Description:"
       institution: "Institution:"
       contacts: "Contacts:"
       home_page: "Home Page:"
@@ -812,9 +710,6 @@ en:
       title: Add your project
       new_project: New project
       create_project: Create Project
-
-
-  
   recommender:
     title: Recommender
     intro: Get recommendations for the most relevant ontologies from an excerpt of text or a list of keywords
@@ -827,7 +722,7 @@ en:
     ontology_sets: Ontology sets
     hint: Paste a paragraph of text or some keywords ...
     weights_configuration: Weights configuration
-    converage: Converage
+    coverage: Coverage
     acceptance: Acceptance
     knowledge_detail: Knowledge detail
     specialization: Specialization
@@ -837,6 +732,8 @@ en:
     get_recommendations: Get recommendations
     edit: Edit
     results_title: Recommended ontologies
+    call_annotator: Call Annotator with the same input
+    cite: Cite
     results_table:
       ontology: Ontology
       final_score: Final score
@@ -845,7 +742,6 @@ en:
       detail_score: Detail score
       specialization_score: Specialization score
       annotations: Annotations
-    
   register:
     account_errors: 'Errors creating your account:'
     confirm_password: Confirm password
@@ -924,13 +820,12 @@ en:
         visit the main site
         to modify your Custom Ontology Set.
       customize_portal_display: "Customize your %{portal} display: Pick the ontologies that you want to see on %{portal} will hide all other ontologies."
-      select_semantic_resources : Select ontologies 
+      select_semantic_resources: Select ontologies
       no_semantic_resources: You haven't picked any ontologies yet
       note_feature_logged_in: "Note: this feature works only when you are logged in."
-      select_custom_semantic_resources: Select custom ontologies
       save_custom_semantic_resources: Save custom ontologies
       not_subscribed: Not subscribed to any ontology
-      submitted_semantic_resources: Submitted Ontologies 
+      submitted_semantic_resources: Submitted Ontologies
       upload_semantic_resources: Upload Ontologies
       projects_created: Projects Created
       no_project_created: No project created
@@ -939,10 +834,6 @@ en:
       subscriptions: Subscriptions
       no_uploaded_resources: You didn't upload any ontology yet
       notes: Notes
-
-  reproduce_results: 'Reproduce these results using the '
-  score: Score
-  
   search:
     no_search_class_provided: No search class provided
     search_place_holder: Enter a term, e.g. plant height
@@ -967,25 +858,6 @@ en:
       visualize: Vizualize
       more_from_ontology: more from this ontology
       reuses_in: Reuses in
-      reuses_in_other_ontologies: Reuses in other ontologies
-    
-  select_from_list: Select from list
-  select_ontologies: Start typing to select ontologies or leave blank to use them all
-  select_ontologies_list: Select ontologies
-  show_advanced_options: Show advanced options
-  specialization: Specialization
-  temporality: Temporality
-  text: Text
-  type: Type
-  umls_sem_type: UMLS Semantic Type
-  view_fair_scores_definitions: "You are seeing the FAIRness assessment score for this ontology in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
-  visits: Visits
-  weights_configuration: Weights configuration
-  sample_text: Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.
-  insert_sample_text: Insert sample text
-  show_advanced_options: Show advanced options
-  hide_advanced_options: Hide advanced options
-  no_result_was_found: No result was found
   notes:
     no_notes: No notes to display
     filter_hide_archived: Hide Archived
@@ -996,7 +868,7 @@ en:
     note_deleted_successfully: Note %{note_id}  was deleted successfully
     note_not_found: Note %{note_id}  was not found in the system
     comment: Comment
-    new_comment: 
+    new_comment:
       subject: Subject
       comment: Comment
       save: Save
@@ -1013,7 +885,7 @@ en:
       synonym: Synonym
       definition: Definition
       parent: Parent
-      Save: save
+      save: save
     note_line:
       alert_text: "Are you sure you want to delete the note <span style='color:red;font-weight:bold;'> ''%{subject}''</span> created by <span style='color:red;font-weight:bold;'>%{creator}</span>?<br/><b>This action CAN NOT be undone!!!</b>"
       delete: Delete
@@ -1023,22 +895,13 @@ en:
       submitted_by: submitted by
     reply:
       about_note_decorator: about %{note_decorator}
-      Comment: Comment
+      comment: Comment
       save: save
       cancel: cancel
-
   ontolobridge:
     problem_of_creating_new_term: "Problem creating a new term %{endpoint}: %{class} - %{message}"
     new_term_instructions_saved: New term request instructions for %{acronym} saved
     error_saving_new_term_instructions: Unable to save new term instructions for %{acronym} due to a server error
-
-  notifier:
-    name: "Name: %{name}"
-    email: "Email: %{email}"
-    location: "Location: %{location}"
-    tags: "Tags:"
-    feedback: "Feedback:"
-
   submissions:
     filter:
       all_formats: All formats
@@ -1063,11 +926,10 @@ en:
     toggle_dropdown: Toggle Dropdown
     go_to_api: Go to API
     edit_button: Edit
-    delete_submission_alert: 
+    delete_submission_alert:
       content_1: "Are you sure you want to delete submission <span style='color:red;font-weight:bold;'>"
       content_2: "</span> for ontology <span style='color:red;font-weight:bold;'>"
       content_3: "</span>?<br/><b>This action CAN NOT be undone!!!</b>"
-
   ontoportal_virtual_appliance:
     problem_adding_account: "Problem adding account <strong>%{id}</strong>: account does not exist"
     require_login: You must be logged in to access this section
@@ -1098,104 +960,30 @@ en:
       add_user_button: Add User
       accounts_with_access: "Accounts with access"
       export_users_link: "Export Appliance Users As CSV"
-      bioportal_user:  BioPortal User ID
-
-  annotator_plus:
-    query: "Query: %{query}"
-    retrieved_annotations: "Retrieved %{annotations} annotations: %{time}s"
-    completed_massage_for_annotated: "Completed massage for annotated classes: %{time}s"
-    failed_get_class_details: "Failed to get class details for: %{details}"
-    not_found_message: Not Found
-    title: Annotator Plus
-    annotator: Annotator &plus;
-    intro: Get annotations for text with ontology classes
-    help_label: View annotator help
-    annotate_text_prompt: Enter or paste text to be annotated
-    insert_sample_text: Insert sample text
-    show_advanced_options: Show advanced options
-    match_longest_only: Match longest only
-    include_mappings: Include mappings
-    match_partial_words: Recognize partial words
-    exclude_numbers: Exclude numbers
-    exclude_synonyms: Exclude synonyms
-    ontologies:
-      select_label: Select ontologies
-      select_help_block: Start typing to select ontologies or leave blank to use all ontologies
-    umls_semantic_types:
-      select_label: Select UMLS semantic types
-      select_help_block: Start typing to select UMLS semantic types or leave blank to use all
-    umls_semantic_groups:
-      select_label: Select UMLS semantic groups
-      select_help_block: Start typing to select UMLS semantic groups or leave blank to use all
-    class_hierarchy_max_level:
-      label: "Include ancestors up to level:"
-    include_score:
-      label: "Include score:"
-      help_block: Score annotations following the previous 2009 NCBO measure (old) or the C-Value measure (cvalue). If hierarchy expansion is used, then prefer cvalueh. 
-    score_threshold:
-      label: "Filter by score threshold:"
-      help_block: Specify the minimum score value for annotations 
-    confidence_threshold:
-      label:  "Filter confidence threshold:"
-      help_block: Specify the minimum position in the scoring distribution (between 1 and 100)
-    recognizer:
-      label: "Entity recognizer:"
-    negation:
-      label: Detect negation
-      help_block: Detect if a concept has been negated (affirmed, negated, possible)
-    experiencer:
-      label: Detect experiencer
-      help_block: Detect who experienced the each identified concept (patient, other)
-    temporality:
-      label: Detect temporality
-      help_block: Detect when the annotated concept occurred (recent, historical, hypothetical)
-    get_annotations_button: Get annotations
-    annotations:
-      title: Annotations
-      filter_results_by: "Results are filtered by:"
-      class_header: Class
-      filter: filter
-      ontology_header: Ontology
-      type_header: Type
-      umls_sem_type_header: UMLS Sem Type
-      context_header: Context
-      matched_class_header: Matched Class
-      matched_ontology_header: Matched Ontology
-      score_header: Score
-      negation_header: Negation
-      experiencer_header: Experiencer
-      temporality_header: Temporality
-      format_results_as: "Format results as:"
-      reproduce_results_using: Reproduce these results using the
-      additional_parameters_explained: Additional parameters explained at
-      annotator_api_documentation: Annotator API documentation
-
+      bioportal_user: BioPortal User ID
   submission_inputs:
+    edit_ontology_title: Edit ontology
+    metadata_selector_label: "Filter properties to show"
+    metadata_selector_placeholder: "Start typing to select properties"
     administrators: Administrators
     ontology_skos_language_link: Please refer to the documentation for more details.
-    ontology_skos_language_help: |
-      <<-EOS
+    ontology_skos_language_help: >
       SKOS vocabularies submitted to %{portal_name} shall follow a few constraints (e.g., contain a minimum of one skos:ConceptScheme also typed as owl:Ontology) 
       and top concept assertion. %{link}
-      EOS
     ontology_obo_language_link: the OBOinOWL parser.
-    ontology_obo_language_help: |
-      <<-EOS
+    ontology_obo_language_help: >
         OBO ontologies submitted to %{portal_name} will be parsed by the OWL-API which integrates %{link} 
-        The resulting RDF triples will then be loaded in %{portal_name} triple-store. 
-      EOS
+        The resulting RDF triples will then be loaded in %{portal_name} triple-store.
     ontology_owl_language_link: the Protégé
-    ontology_owl_language_help: |
-      <<-EOS
+    ontology_owl_language_help: >
         OWL ontologies submitted to %{portal_name} will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with
         %{link}
         software which does use the same component.
-      EOS
+
     ontology_umls_language_link: by the UMLS2RDF tool.
-    ontology_umls_language_help: |
-      <<-EOS
+    ontology_umls_language_help: >
         UMLS-RRF resources are usually produced %{link}
-      EOS
+
     groups: Groups
     visibility: Visibility
     accounts_allowed: Add or remove accounts that are allowed to see this ontology in %{portal_name}.
@@ -1206,8 +994,18 @@ en:
     help_text: Help text
     contact_name: "%{name} Name"
     contact_email: "%{name} Email"
-
+    edit_metadata_instruction: "Edit the metadata of your ontology here. Some of these values are used by %{portal_name} functionalities, including for FAIRness assessment. %{link)"
+    edit_metadata_instruction_link: "See guidelines and recommendations for metadata here."
+    license_help: "%{portal_name} requires an URI for the license. If you do not find your choice here, %{link}"
+    license_help_link: "Please pick up an URI from here."
+    deprecated_help: "An ontology with status retired shall necessarily be also deprecated, but not the opposite."
+    known_usage_help: "Consider also declaring %{metadata_knownUsage_help}"
+    known_usage_help_link: "the projects that are using the ontology"
+    help_creator: "The following properties take for value an 'agent' in %{portal_name} (either a person or an organization). These agents are shared over all the ontologies and suggested with autocompletion if they already exist. Editing an agent here will change it to all the ontologies that agent is involved in."
+    version_help: "For more information on how to encode versioning information in an ontology, see %{link}"
+    version_helper_link: "guidelines and recommendations."
   collections:
+    error_valid_collection: "Error: You must provide a valid collection id"
     no_collections_alert: "%{acronym} does not contain collections (skos:Collection)"
     id: ID
     preferred_name: Preferred name
@@ -1220,7 +1018,6 @@ en:
     comment: Comment
     close: Close
     submit: Submit
-
   check_resolvability:
     check_resolvability_message_1: "The URL is resolvable and support the following formats: %{supported_format}"
     check_resolvability_message_2: "The URL resolvable but is not content negotiable, support only: %{supported_format}"
@@ -1263,7 +1060,6 @@ en:
     go_home_button: Go home
     send_feedback_button: Send a feedback
     not_found_page: Page not found
-  
   schemes:
     error_valid_scheme_id: "Error: You must provide a valid scheme id"
     no_main_scheme_alert: no main scheme defined in the URI attribute
@@ -1281,10 +1077,11 @@ en:
     see_possible_credits: See possible credits
     see_metadata_used_properties: See metadata used properties
     not_found: not found
-    null: "null"
+    "null": "null"
+    view_fair_scores_definitions: "You are seeing the FAIRness assessment score for this ontology in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
   ontologies_metadata_curator:
-    bulk_edit: Start bulk edit
-    use_the_bulk_edit: To use the bulk edit select in the table submissions (the rows) and metadata properties (the columns) for which you want to edit
+    #bulk_edit: Start bulk edit
+    #use_the_bulk_edit: To use the bulk edit select in the table submissions (the rows) and metadata properties (the columns) for which you want to edit
     start_the_bulk_edit: Select in the table submissions (rows) and metadata properties (columns) to start the bulk edit
     alert_success_submissions: Submissions were successfully updated
     ontologies: Ontologies
@@ -1299,15 +1096,16 @@ en:
     filters: Filters
     no_license: No license
     view_license: View license
-    access_rights_information: Additional license a access rights information
+    access_rights_information: Additional license and access rights information
     referred_to: It can also be referred to as
     private_ontology: Private Ontology
     formality_levels: Formality levels
+    categories: Categories
+    groups: Groups
     ontology_types: Ontology types
     natural_languages: Natural languages
     showing: Showing
     metadata_properties: of %{acronym}  metadata properties are filled
-    metadata_only: N/A - metadata only
     home_page: Home Page
     ontology_processing_failed: "The ontology processing failed, with the current statuses: %{status}"
     ontology_parsing_succeeded: "The ontology parsing succeeded, but some processing steps failed, here are the current statuses: %{status}"
@@ -1325,8 +1123,7 @@ en:
     outside: outside
     relation_with_other_ontologies: Relation with other ontologies either in %{inside} or %{outside}
     ontology_search_prompt: 'Search an ontology or a term (e.g., plant height)'
-    self: Ontologies
-    views:  Views
+    views: Views
     create_new_view: Create new view
     expand_all: Expand All
     collapse_all: Collapse All
@@ -1341,7 +1138,6 @@ en:
     downloads: Downloads
     admin_links: Admin Links
     edit_link: Edit
-
     no_views: No views available for %{acronym}.
     fairness_assessment_questions: O'FAIRe FAIRness assessment questions
     see_details: See details
@@ -1353,10 +1149,9 @@ en:
     new_versions_loaded: New versions loaded on a nightly basis.
     upload_local_file: Upload local file
     ontology_submitted: Ontology submitted successfully!
-    submitting_metadata_only: Thank you for submitting your metadata-only ontology to %{site}.
     users_can_see: Users can now see
     your_ontology: your ontology
-    exploring_and_searching: | 
+    exploring_and_searching: |
       in our ontology list but they cannot explore or search it. To enable exploring and searching,
       please upload a full version of your ontology.
     submitting_ontology_view: Thank you for submitting your ontology view to %{site}.
@@ -1365,7 +1160,7 @@ en:
       We will now put your ontology in the queue to be processed. Please keep in mind that it may take up to several
       hours before %{site} users will be able to explore and search your ontology.
     notification_message: "When your ontology is ready for viewing, you will receive an email notification and it will be available here:"
-    contact_support: "If you have any questions or problems, please email the %{site} support team at:"
+    contact_support_at: "If you have any questions or problems, please email the %{site} support team at:"
     collecting_data_message: We are still collecting data for %{acronym}
     submit_new_ontology: Submit new ontology
     details: Details
@@ -1375,8 +1170,7 @@ en:
     change_notes: Change notes
     modification_date: Modification date
     date_of_original_creation: Date of original creation
-
-    concepts_browsers: 
+    concepts_browsers:
       select_scheme: Please select a scheme to display
       missing_roots: Missing roots for %{acronym} (skos:topConceptOf)
       select_collection: Please select a collection to display
@@ -1399,7 +1193,8 @@ en:
       classes_with_a_single_child: Classes with a single child
       classes_with_more_than_25_children: Classes with more than 25 children
       classes_with_no_definition: Classes with no definition
-      identifiers: Principal identifiers of the ontology.
+      identifiers: Identifiers
+      identifiers_tooltip: Principal identifiers of the ontology.
       dates: Dates
       person_and_organization: Persons and organizations
       other_links: Other links
@@ -1472,19 +1267,15 @@ en:
       metadata:
         fair_score_title: FAIR score
         total_score: "Total score : %{score} ( %{normalized_score}%)"
-
         metrics: Metrics
         metrics_link_title: Information and evolution diagrams about metrics and other measurements of the ontology.
         see_all_metrics: See all the metrics of %{acronym}
         show_modal_title_1: All the metrics of %{acronym}
         not_calculated_metrics: We have not yet calculated metrics for %{acronym}
         show_modal_title_2: "Evolution of the number of %{metric} in %{acronym} per submissions."
-
         submissions: Submissions
         submissions_link_title: Set of all the files that have been submitted to %{site}. Each previous metadata record is accessible but only the content of the latest parsed file is accessible via %{site} services
-
         relations_network: Ontology relations network
-
         general_information: General information
         initial_created_on: Initial created on
         additional_information: For additional information, contact
@@ -1495,11 +1286,6 @@ en:
         export_metadata: Export all metadata
         abstract: Abstract
         description: Description
-  precache:
-    delete_general_cache_info: Deleting general cache info
-    delete_cache_ontology: Deleting cache for %{ont}
-    retrieved_time: Retrieved in %{time}s
-    failed_to_get_url: "Failed to get %{url}: %{message}"
   components:
     check_resolvability: checking resolvability...
     error_block: child_data_generator block did not provide all the child arguements
@@ -1507,10 +1293,6 @@ en:
     save_button: Save
     cancel_button: Cancel
     go_to_api: Go to API
-    the_content: here is the content
-    name_identifiers: NAME (IDENTIFIERS)
-    type: TYPE
-    name_acronym: NAME(ACRONYM)
     file_input_message: Drop your file here or, browse files on your device.
     all_languages: All languages
     select_anguage: Select a language
@@ -1551,9 +1333,6 @@ en:
     ontology_visits: Ontology visits
     name: name
     visits: visits
-
-
-  
   ontologies_selector:
     clear_selection: Clear selection
     ontologies_advanced_selection: Ontologies advanced selection
@@ -1567,8 +1346,7 @@ en:
       natural_languages: Natural languages
       formality_levels: Formality levels
       ontology_types: Ontology types
-    select_all: select all
+    select_all: Select all
     cancel: Cancel
     apply: Apply
-    select_all: select all
-    unselect_all: unselect all
+    unselect_all: Unselect all
