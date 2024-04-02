@@ -20,7 +20,7 @@ class RecommenderController < ApplicationController
       recommendations = LinkedData::Client::HTTP.post(RECOMMENDER_URI, params)
       @advanced_options_open = !recommender_params_empty?
       @results = []
-      @json_link = "#{$REST_URL}recommender?input=#{params[:input]}&apikey=#{$API_KEY}&ontologies=#{params[:ontologies]}&max_elements_set=#{params[:max_elements_set]}&input_type=#{params[:input_type]}&output_type=#{params[:output_type]}&wc=#{params[:wc]}&wa=#{params[:wa]}&wd=#{params[:wd]}&ws=#{params[:ws]}"
+      @json_link = "#{$REST_URL}/recommender?input=#{params[:input]}&apikey=#{$API_KEY}&ontologies=#{params[:ontologies]}&max_elements_set=#{params[:max_elements_set]}&input_type=#{params[:input_type]}&output_type=#{params[:output_type]}&wc=#{params[:wc]}&wa=#{params[:wa]}&wd=#{params[:wd]}&ws=#{params[:ws]}"
       recommendations.each do |recommendation|
         row = {
           ontologies: recommendation_ontologies(recommendation),

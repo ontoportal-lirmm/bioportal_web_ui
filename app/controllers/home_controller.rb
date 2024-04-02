@@ -135,9 +135,9 @@ class HomeController < ApplicationController
 
   def annotator_recommender_form
     if params[:submit_button] == "annotator"
-      redirect_to "/annotator?text=#{CGI.escape(params[:text])}"
+      redirect_to "/annotator?text=#{helpers.escape(params[:text])}"
     elsif params[:submit_button] == "recommender"
-      redirect_to "/recommender?input=#{CGI.escape(params[:input])}"
+      redirect_to "/recommender?input=#{helpers.escape(params[:input])}"
     end
   end
 
