@@ -17,9 +17,7 @@ export default class extends Controller {
   }
 
   connect () {
-    if(this.formatedData){
-      this.formatedData = this.#formatData()
-    }
+    this.formatedData = this.#formatData()
     switch (this.formatValue) {
       case 'xml':
         hljs.registerLanguage('xml', xml)
