@@ -27,9 +27,9 @@
                       class: 'btn btn-lg',disabled: !config[:enable] ,style:'width: 70px', title: t('login.login_with_provider', provider: provider.to_s.humanize), 'data-turbo': false do; 
             - if config[:icon]
               = inline_svg "icons/#{config[:icon]}", class: 'login-active-sso'
-            - else 
+            - else
               = provider.to_s.humanize
         - else
           .disabled-login-sso
-            = render Display::InfoTooltipComponent.new(text: "#{provider.to_s.humanize} is disabled", icon: config[:icon])
-          
+            = render Display::InfoTooltipComponent.new(text: "#{provider.to_s.humanize} is disabled") do
+              = inline_svg "icons/#{config[:icon]}", width: "40", height: "40"
