@@ -304,10 +304,18 @@ module OntologiesHelper
 
   def show_category_name(domain)
     return domain unless link?(domain)
-
     acronym = domain.split('/').last.upcase.strip
     category = LinkedData::Client::Models::Category.find(acronym)
-    category ? category.name : acronym.titleize
+    category.name ? category.name : acronym.titleize
+  end
+
+
+  def show_ontology_domains(domains)
+    if domains.length == 1 && domains[0].include?(',')
+      domains[0].split(',').map(&:strip)
+    else
+      domains
+    end
   end
 
   def show_group_name(domain)
@@ -519,7 +527,7 @@ module OntologiesHelper
     end
 
     link_to(link, title: title, class: "mx-1") do
-      inline_svg_tag("icons/plus.svg", width: '15px', height: '15px')
+      inline_svg_tag("icons/plus.svg", width: '15px', height: '15px', class: 'add-views-plus-icon')
     end
   end
 

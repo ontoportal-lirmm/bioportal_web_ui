@@ -20,7 +20,7 @@
               = t('annotator.options')
             .prefrences
               .chips
-                = render(ChipsComponent.new(name: 'whole_word_only', label: t('annotator.whole_word_only'), checked: params[:whole_word_only] || true))
+                = render(ChipsComponent.new(name: 'whole_word_only', label: t('annotator.whole_word_only'), checked: @init_whole_word_only.nil? || params[:whole_word_only]))
                 = render(ChipsComponent.new(name: 'longest_only', label: t('annotator.match_longest_only'), checked: params[:longest_only]))
                 = render(ChipsComponent.new(name: 'expand_mappings', label: t('annotator.include_mappings'), checked: params[:expand_mappings]))
                 = render(ChipsComponent.new(name: 'exclude_numbers', label: t('annotator.exclude_numbers'), checked: params[:exclude_numbers]))
@@ -75,7 +75,7 @@
                       .annotation-parent
                         .text
                           Parent of: 
-                        = link_to context[:child][:text], href: context[:child][:link]
+                        = link_to context[:child][:text], context[:child][:link]
                         .gray
                           |
                         .text

@@ -35,6 +35,7 @@ class AnnotatorController < ApplicationController
     @advanced_options_open = false
     @annotator_ontologies = LinkedData::Client::Models::Ontology.all
     if params[:text] && !params[:text].empty?
+      @init_whole_word_only = true
       api_params = {
         text: escape(params[:text]),
         ontologies: params[:ontologies],
