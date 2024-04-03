@@ -40,10 +40,10 @@
               %p.account-page-card-desc= t('users.show.mailing_list_description', portal: portal_name)
             - subscribed = false
             - if subscribed
-              %a.account-page-subscribe-button{:href =>"mailto:#{$ANNOUNCE_SERVICE_HOST}?Subject=unsubscribe%20#{$ANNOUNCE_LIST}"}
+              %a.account-page-subscribe-button{:href =>"mailto:#{$ANNOUNCE_SERVICE_HOST}?subject=unsubscribe%20#{$ANNOUNCE_LIST}"}
                 = t('users.show.unsubscribe')
             - else
-              %a.account-page-subscribe-button{:href => "mailto:#{$ANNOUNCE_SERVICE_HOST}?Subject=subscribe%20#{$ANNOUNCE_LIST}%20#{@user.firstName}%20#{@user.lastName}"}
+              %a.account-page-subscribe-button{:href => "mailto:#{$ANNOUNCE_SERVICE_HOST}?subject=subscribe%20#{$ANNOUNCE_LIST}%20#{@user.firstName}%20#{@user.lastName}"}
                 = t('users.show.subscribe')
         .account-page-card
           .account-page-card-container

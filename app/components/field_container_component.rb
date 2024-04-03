@@ -3,7 +3,7 @@
 class FieldContainerComponent < ViewComponent::Base
 
   renders_one :label
-  def initialize(label: nil, value: nil, truncate: false)
+  def initialize(label: nil, value: nil)
     super
     @label = label
     @value = value

@@ -1,6 +1,6 @@
 = render_in_modal do
   :javascript
-    var scrollY = window.getScrollTop()
+    var scrollY = window.scrollY || window.pageYOffset;
     $(document).ready(function(){
       $("#fair-details-content").scrollspy({
           target: "#fair-navbar",

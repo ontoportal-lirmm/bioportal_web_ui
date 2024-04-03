@@ -11,7 +11,7 @@
   %td
     = group.acronym
   %td
-    = link_to count , "/ontologies?groups=#{group.id}", target: "_blank"
+    = link_to count , "/ontologies?groups=#{group.id.split('/').last}", target: "_blank"
   %td{:class => 'delete_mappings_column'}
     %div.d-flex.align-items-center{style: 'width: 250px'}
       %span.mx-1

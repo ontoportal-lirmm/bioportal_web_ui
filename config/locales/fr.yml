@@ -79,7 +79,7 @@ fr:
     incomplete_simple_ontology: "Ontologie simple incomplète : %{id}, %{ont}"
   label_xl:
     error_valid_label_xl: "Erreur : Vous devez fournir un identifiant de label_xl valide"
-
+    
   admin:
     query_not_permitted: Requête non autorisée
     update_info_successfully: Informations de mise à jour récupérées avec succès

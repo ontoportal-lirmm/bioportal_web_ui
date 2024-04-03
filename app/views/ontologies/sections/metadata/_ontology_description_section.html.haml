@@ -53,7 +53,7 @@
     - unless domains.empty?
       - l.row do
         = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.categories_and_subjects")) do
-          = horizontal_list_container(domains.uniq) do |v|
+          = horizontal_list_container(show_ontology_domains(domains).uniq) do |v|
             = render ChipButtonComponent.new(text: show_category_name(v), type: "static")
 
     - if  @submission_latest&.pullLocation

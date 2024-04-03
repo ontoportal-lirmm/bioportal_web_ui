@@ -214,6 +214,9 @@
 }
 .annotator-table-container .class{
   width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .annotation-parent + div{
   margin-top: 5px;
