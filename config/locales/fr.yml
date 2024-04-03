@@ -53,7 +53,7 @@ fr:
   application:
     powered_by: Propulsé par BioPortal
     projects: Projets
-    loading: chargement...
+    loading: Chargement en cours...
     errors_in_fields: Erreurs dans les champs %{errors}
     add_comment: Ajouter un commentaire
     add_new_comment: Ajouter un nouveau commentaire

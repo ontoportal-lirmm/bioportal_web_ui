@@ -46,7 +46,7 @@ en:
     content_language_help_text_1: Indicate the language  on which the content of this resource will be displayed.
     content_language_help_text_2: The available languages are specified by the resource admin.
   application:
-    powered_by: Powered by BioPortal
+    powered_by: Powered by Ontoportal
     projects: Projects
     loading: loading...
     errors_in_fields: Errors in fields %{errors}
