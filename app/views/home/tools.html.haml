@@ -1,6 +1,6 @@
 %div.d-flex.px-5.py-3.rounded.tools-container
   - @tools.each_value do |tool|
-    = link_to tool[:link], class: "mx-2" do
+    = link_to tool[:link], class: "mx-2 d-block", style: "width: 35%" do
       = render Layout::CardComponent.new do |c|
         - c.header do |h|
           - h.text do

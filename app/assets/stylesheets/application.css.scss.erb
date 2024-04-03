@@ -56,13 +56,14 @@
 @import "ontology_details_header";
 @import "ontology_viewer";
 @import "browse";
-@import "tools";
 @import "agent_tooltip";
+@import "content_finder";
+@import "tools";
+
 /* Bootstrap and Font Awesome */
 @import "bootstrap";
 @import "bootstrap_overrides";
-@import "agent_tooltip";
-@import "content_finder";
+
 
 <% if (ui_theme = $UI_THEME.to_s.parameterize).present? && File.exists?(Rails.root.join('app', 'assets', 'stylesheets', 'themes', ui_theme)) %>
   @import "themes/<%= ui_theme %>/main";
