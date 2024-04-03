@@ -153,7 +153,7 @@ class AnnotatorController < ApplicationController
     return semantic_types if sty_ont.nil?
     # The first 500 items should be more than sufficient to get all semantic types.
     sty_classes = sty_ont.explore.classes({'pagesize'=>500, include: 'prefLabel'})
-    sty_classes.collection.each do |cls|
+    Array(sty_classes.collection).each do |cls|
       code = cls.id.split("/").last
       semantic_types[ code ] = cls.prefLabel
     end
