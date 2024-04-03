@@ -309,12 +309,12 @@ module OntologiesHelper
     category.name ? category.name : acronym.titleize
   end
 
-  def fix_array_format(array)
-    if array.length == 1 && array[0].include?(',')
-      fixed_array = array[0].split(',').map(&:strip)
-      return fixed_array
+
+  def show_ontology_domains(domains)
+    if domains.length == 1 && domains[0].include?(',')
+      domains[0].split(',').map(&:strip)
     else
-      return array
+      domains
     end
   end
 
