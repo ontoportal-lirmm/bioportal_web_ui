@@ -36,7 +36,7 @@ class OntolobridgeController < ApplicationController
       response["error"] = e.message
     rescue Exception => e
       code = 500
-      response["error"] = "Problem creating a new term #{endpoint}: #{e.class} - #{e.message}"
+      response["error"] = t('ontolobridge.problem_of_creating_new_term', endpoint: endpoint, class: e.class, message: e.message)
     end
 
     render json: [response, code], status: code
@@ -45,7 +45,7 @@ class OntolobridgeController < ApplicationController
   def save_new_term_instructions
     code = 200
     response = {error: '', success: ''}
-    response[:success] = "New term request instructions for #{params['acronym']} saved"
+    response[:success] = t('ontolobridge.new_term_instructions_saved', acronym: params['acronym'])
     ont_data = Ontology.find_by(acronym: params['acronym'])
     ont_data ||= Ontology.new
     ont_data.acronym = params['acronym']
@@ -55,7 +55,7 @@ class OntolobridgeController < ApplicationController
       ont_data.save
     rescue Exception => e
       code = 500
-      response[:error] = "Unable to save new term instructions for #{params['acronym']} due to a server error"
+      response[:error] = t('ontolobridge.error_saving_new_term_instructions', acronym: params['acronym'])
     end
     sleep(1)
     render json: [response, code], status: code

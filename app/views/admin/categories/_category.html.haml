@@ -11,15 +11,15 @@
   %td
     = category.acronym
   %td
-    = link_to count , "/ontologies?categories=#{category.id}", target: "_blank"
+    = link_to count , "/ontologies?categories=#{category.id.split('/').last}", target: "_blank"
   %td
     %div.d-flex.align-items-center{style: 'width: 250px'}
       %span.mx-1
         = link_to_modal(nil, edit_admin_category_path(category.id.split('/').last), data: {show_modal_title_value:  category.name}) do
-          Edit
+          = t('admin.categories.edit_button')
       %span
         - if count.zero?
-          = button_to "Delete", CGI.unescape(admin_category_path(category.id.split('/').last)), method: :delete, class: 'btn btn-link',  form: {data: { turbo: true, turbo_confirm: "Are you sure?", turbo_frame: '_top'}}
+          = button_to t('admin.categories.delete'), CGI.unescape(admin_category_path(category.id.split('/').last)), method: :delete, class: 'btn btn-link',  form: {data: { turbo: true, turbo_confirm: t('admin.categories.turbo_confirm'), turbo_frame: '_top'}}
         - else
-          %span{data: { controller: 'tooltip' }, title: "Can't delete this category because still used"}
-            = link_to "Delete", "", class: 'btn btn-link disabled'
+          %span{data: { controller: 'tooltip' }, title: t('admin.categories.info_error_delete')}
+            = link_to t('admin.categories.delete'), "", class: 'btn btn-link disabled'

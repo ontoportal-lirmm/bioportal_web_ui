@@ -11,6 +11,9 @@ $BIOMIXER_URL = ENV['BIOMIXER_URL']
 $ANNOTATOR_URL = $PROXY_URL = ENV['ANNOTATOR_URL']
 $FAIRNESS_URL = ENV['FAIRNESS_URL']
 
+# Resource term
+$RESOURCE_TERM = ENV['RESOURCE_TERM'] || 'ontology'
+
 # config/initializers/omniauth_providers.rb
 $OMNIAUTH_PROVIDERS = {
   github: {
@@ -166,6 +169,54 @@ $FOOTER_LINKS = {
     }
   }
 }
+
+$PORTALS_INSTANCES = [
+  {
+    color: '#31b403',
+    portal: 'AgroPortal',
+    link: 'https://agroportal.lirmm.fr/'
+  },
+  {
+    color: '#234979',
+    portal: 'BioPortal',
+    link: 'https://bioportal.bioontology.org/'
+  },
+  {
+    color: '#74a9cb',
+    portal: 'SIFR BioPortal',
+    link: 'https://bioportal.lirmm.fr/'
+  },
+  {
+    color: '#0d508a',
+    portal: 'EcoPortal',
+    link: 'https://ecoportal.lifewatch.eu/'
+  },
+  {
+    color: '#234979',
+    portal: 'MedPortal',
+    link: 'http://medportal.bmicc.cn/'
+  },
+  {
+    color: '#009574',
+    portal: 'MatPortal',
+    link: 'https://matportal.org/'
+  },
+  {
+    color: '#1c0f5d',
+    portal: 'IndustryPortal',
+    link: 'http://industryportal.enit.fr'
+  },
+  {
+    color: '#1e2251',
+    portal: 'EarthPortal',
+    link: 'https://earthportal.eu/'
+  },
+  {
+    color: '#33691B',
+    portal: 'BiodivPortal',
+    link: 'https://biodivportal.gfbio.org/'
+  }
+]
 
 $UI_THEME = :stageportal
 if File.exist?('config/bioportal_config_development_testportal.lirmm.fr.rb')

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Input::LanguageSelectorComponent < ViewComponent::Base
-
+  include InternationalisationHelper
   def initialize(languages:, selected: nil,  id: '', name: '' , enable_all: false, **html_options)
     super
     @languages = languages
@@ -15,7 +15,7 @@ class Input::LanguageSelectorComponent < ViewComponent::Base
 
   def languages
     values = []
-    values = [["<div>#{render(LanguageFieldComponent.new(label: 'All languages', icon: 'icons/earth.svg', value: 'en'))}</div>", 'all']] if @enable_all
+    values = [["<div>#{render(LanguageFieldComponent.new(label: t('components.all_languages'), icon: 'icons/earth.svg', value: 'en'))}</div>", 'all']] if @enable_all
 
     @languages.each do |key, label|
       option = "<div>#{render(LanguageFieldComponent.new(value: key.to_s.downcase, label: label, auto_label: true))}</div>"
@@ -30,6 +30,6 @@ class Input::LanguageSelectorComponent < ViewComponent::Base
                                     data: @data,
                                     required: true,
                                     open_to_add_values: false,
-                                    placeholder: 'Select a language', **@html_options)
+                                    placeholder: t('components.select_anguage'), **@html_options)
   end
 end

@@ -11,18 +11,18 @@
         - if @ontology.admin?(session[:user])
           - header.th do
             %div.align-middle
-              ID
+              = t('submissions.id')
         - header.th do
           %div.align-middle
-            Version
+            = t('submissions.version')
         - header.th do
-          = attr_label("modificationDate", "Modified", show_tooltip: false)
+          = attr_label("modificationDate", t('submissions.modified'), show_tooltip: false)
         - header.th do
-          = attr_label("creationDate", "Submitted", show_tooltip: false)
+          = attr_label("creationDate", t('submissions.submitted'), show_tooltip: false)
         - unless @ont_restricted
           - header.th do
             %div.align-middle{style: 'text-align: center; margin-right: 33px;'}
-              Actions
+              = t('submissions.actions')
 
       - @submissions.each_with_index do |sub, index|
         - hidden_row_class = index >= 5 ? "hidden_ont hidden_select" : ""
@@ -40,8 +40,8 @@
               %div.d-flex
                 %div.dropdown
                   %button.btn.btn-outline-primary.rounded-pill.dropdown-toggle{type:"button", 'data-toggle':"dropdown", 'aria-expanded': "false", style:'white-space: nowrap; width: 94%;font-size: small;'}
-                    Download
-                    %span.sr-only Toggle Dropdown
+                    = t('submissions.download')
+                    %span.sr-only= t('submissions.toggle_dropdown')
                   .dropdown-menu
                     - links = download_link(sub,@ontology)
                     - links.each do |value|
@@ -52,10 +52,10 @@
                 - if @ontology.admin?(session[:user])
                   %div.d-flex
                     %div{style: 'margin-right: 10px;'}
-                      = service_button(link: "#{@ontology.id}/submissions/#{sub.submissionId}?display=all", title: 'Go to API')
-                    = edit_button(link: "/ontologies/#{@ontology.acronym}/submissions/#{sub.submissionId}/edit", title: "Edit")
+                      = service_button(link: "#{@ontology.id}/submissions/#{sub.submissionId}?display=all", title: t('submissions.go_to_api'))
+                    = edit_button(link: "/ontologies/#{@ontology.acronym}/submissions/#{sub.submissionId}/edit", title: t('submissions.edit_button'))
                     - unless index.zero?
-                      - alert_text = "Are you sure you want to delete submission <span style='color:red;font-weight:bold;'>" + sub.submissionId.to_s + "</span> for ontology <span style='color:red;font-weight:bold;'>" + @ontology.acronym + "</span>?<br/><b>This action CAN NOT be undone!!!</b>"
+                      - alert_text = t('submissions.delete_submission_alert.content_1') + sub.submissionId.to_s + t('submissions.delete_submission_alert.content_2') + @ontology.acronym + t('submissions.delete_submission_alert.content_3')
                       = button_to "/admin/ontologies/#{@ontology.acronym}/submissions/#{sub.submissionId}?turbo_stream=true", method: :delete, class: 'btn btn-sm btn-link', form: {data: { turbo: true, turbo_confirm: alert_text, turbo_frame: '_top'}} do
                         = inline_svg_tag('icons/delete.svg')
 

@@ -1,5 +1,6 @@
 class Display::SearchResultComponent < ViewComponent::Base
   include ModalHelper
+
   renders_many :subresults, Display::SearchResultComponent
   renders_many :reuses, Display::SearchResultComponent
   def initialize(number: 0,title: nil, ontology_acronym: nil ,uri: nil, definition: nil, link: nil,  is_sub_component: false)
@@ -16,11 +17,11 @@ class Display::SearchResultComponent < ViewComponent::Base
       @is_sub_component ? 'sub-component' : ''
   end
 
-  def sub_ontologies_id 
+  def sub_ontologies_id
     string = @number+'_sub_ontologies'
   end
 
-  def reuses_id 
+  def reuses_id
     string = @number+'_reuses'
   end
 
@@ -42,12 +43,13 @@ class Display::SearchResultComponent < ViewComponent::Base
       end
   end
 
-  def reveal_ontologies_button(text,id)
+  def reveal_ontologies_button(text,id,icon)
     content_tag(:div, class: 'button icon-right', 'data-action': "click->reveal-component#toggle", 'data-id': id) do
-      concat(content_tag(:div, class: 'text') do
+      inline_svg_tag(icon) +
+      content_tag(:div, class: 'text') do
         text
-      end)
-      concat(inline_svg_tag("icons/arrow-down.svg"))
+      end +
+      inline_svg_tag("icons/arrow-down.svg")
     end
   end
 end

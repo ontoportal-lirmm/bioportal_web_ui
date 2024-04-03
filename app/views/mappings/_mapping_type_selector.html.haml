@@ -11,50 +11,50 @@
     = hidden_field_tag :map_to_external_class, @map_to_external_class
 
   %div.form-group
-    %lable Mapping type
+    %lable= t("mappings.mapping_type_selector.mapping_type")
     %div#display_options.mb-3
       %div.form-group
         %div.custom-control.custom-radio.custom-control-inline
           = radio_button_tag "mapping_type", "internal", type?('internal'), {id: 'internal_form_radio', class:'mapping_radio custom-control-input',data: {target:"#internal_form"}, disabled: disabled}
-          %label.custom-control-label{for: "internal_form_radio"} Internal
+          %label.custom-control-label{for: "internal_form_radio"}= t("mappings.mapping_type_selector.internal")
         %div.custom-control.custom-radio.custom-control-inline
           = radio_button_tag "mapping_type", "interportal", type?('interportal'), {id: 'interportal_form_radio', class:'mapping_radio custom-control-input',data: {target:"#interportal_form"}, disabled: disabled}
-          %label.custom-control-label{for: "interportal_form_radio"} Interportal
+          %label.custom-control-label{for: "interportal_form_radio"}= t("mappings.mapping_type_selector.interportal")
         %div.custom-control.custom-radio.custom-control-inline
           = radio_button_tag "mapping_type", "external", type?('external'), {id: 'external_form_radio', class:'mapping_radio custom-control-input', data: {target:"#external_form"}, disabled: disabled}
-          %label.custom-control-label{for: "external_form_radio"} External
+          %label.custom-control-label{for: "external_form_radio"}= t("mappings.mapping_type_selector.external")
 
 
     %div#internal_form.mapping_form{style: "display: #{type?('internal') ? 'block':'none'}"}
       %div.form-group
-        %label{for: "map_to"} Target class
+        %label{for: "map_to"}= t("mappings.mapping_type_selector.target_class")
         - if disabled
           = text_field_tag('', concept_to.id, class: "form-control", disabled: true)
         - else
           = render partial: 'shared/concept_picker', locals: {name: :map_to, concept_label: concept_to&.label, ontology_acronym: 'all' , include_definition: true}
       %div.form-group
-        %label{for: "map_to_concept_details_table"} Details
+        %label{for: "map_to_concept_details_table"}= t("mappings.mapping_type_selector.details")
         %div#map_to_concept_details_table.form-control
           = render TurboFrameComponent.new(id:'concept_details')
     %div#interportal_form.mapping_form{style: "display: #{type?('interportal') ? 'block':'none'}"}
       %div.form-group
-        %label{for: :map_to_interportal} InterPortal
+        %label{for: :map_to_interportal}= t("mappings.mapping_type_selector.interportal")
         - options = interportal_options
         = select_tag :map_to_interportal, options_for_select(options, @map_to_interportal), class: "form-control", disabled: disabled
       %div.form-group
-        %label{for:  :map_to_interportal_ontology} Ontology (acronym)
-        = text_field_tag :map_to_interportal_ontology, @map_to_interportal_ontology, placeholder: 'Enter the ontology ACRONYM', class: "form-control", disabled: disabled
+        %label{for:  :map_to_interportal_ontology}= t("mappings.mapping_type_selector.ontology_acronym")
+        = text_field_tag :map_to_interportal_ontology, @map_to_interportal_ontology, placeholder: t("mappings.mapping_type_selector.ontology_acronym_placeholder"), class: "form-control", disabled: disabled
       %div.form-group
-        %label{for:  :map_to_interportal_class} Class
-        = text_field_tag :map_to_interportal_class, @map_to_interportal_class, placeholder: 'Enter the class URI', class: "form-control", disabled: disabled
+        %label{for:  :map_to_interportal_class}= t("mappings.mapping_type_selector.class")
+        = text_field_tag :map_to_interportal_class, @map_to_interportal_class, placeholder: t("mappings.mapping_type_selector.class_uri_placeholder"), class: "form-control", disabled: disabled
 
     %div#external_form.mapping_form{style: "display: #{type?('external') ? 'block':'none'}"}
       %div.form-group
-        %label{for: :map_to_external_ontology} Ontology
-        = text_field_tag :map_to_external_ontology, @map_to_external_ontology, placeholder: 'Enter the ontology URI', class: "form-control", disabled: disabled
+        %label{for: :map_to_external_ontology}= t("mappings.count.ontology")
+        = text_field_tag :map_to_external_ontology, @map_to_external_ontology, placeholder: t("mappings.mapping_type_selector.ontology_uri_placeholder"), class: "form-control", disabled: disabled
       %div.form-group
-        %label{for: :map_to_external_class} Class
-        = text_field_tag :map_to_external_class, @map_to_external_class, placeholder: 'Enter the class URI', class: "form-control", disabled: disabled
+        %label{for: :map_to_external_class}= t("mappings.mapping_type_selector.class")
+        = text_field_tag :map_to_external_class, @map_to_external_class, placeholder: t("mappings.mapping_type_selector.class_uri_placeholder"), class: "form-control", disabled: disabled
 
 :javascript
     jQuery(document).ready(() => {

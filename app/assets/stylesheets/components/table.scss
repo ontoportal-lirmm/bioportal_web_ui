@@ -2,6 +2,10 @@
   border-collapse: collapse;
   width: 100%;
   border-spacing: 0;
+  
+}
+.table-auto-layout{
+  table-layout: auto !important;
 }
 
 .table-layout-fixed{
@@ -48,5 +52,4 @@ table.dataTable thead td, table.dataTable thead th{
   border-radius: 8px;
   padding: 10px;
 }
-
 

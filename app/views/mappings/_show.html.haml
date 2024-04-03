@@ -3,7 +3,7 @@
     #mapping_results
       = will_paginate @page_results, :update => 'mappings', :params => { :target => params[:target] }
       - if @mappings.nil? or @mappings.empty?
-        No mappings found
+        = t("mappings.show.no_mappings_found")
       - else
         %table.zebra.w-100
           %thead

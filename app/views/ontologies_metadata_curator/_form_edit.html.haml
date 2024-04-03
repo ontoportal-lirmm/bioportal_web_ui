@@ -24,8 +24,8 @@
                 = ontology_submission_id_label(onto, sub_i)
       %div#change_all_warning_container
         = render Display::AlertComponent.new(type: 'warning') do
-          %strong Apply the change for all
-          will update the current displayed content to all the following submissions:
+          %strong= t("ontologies_metadata_curator.apply_the_change_for_all")
+          = t("ontologies_metadata_curator.update_the_current_displayed_content")
           - @selected_ontologies.map{|x| ontology_submission_id_label(*x)}.each do |onto|
             %span.badge.badge-primary
               = onto
@@ -36,4 +36,4 @@
           .tab-pane{id: "pills-"+ onto+sub_i, class: index.zero? ? 'active' : ''}
             = render TurboFrameComponent.new(id: 'metadata_by_ontology', src: "ontologies_metadata_curator/#{onto}/submissions/#{sub_i}"+"?properties=#{@selected_metadata.join(',')}&form_id=metadata_by_ontology", loading:"lazy")
 
-      = submit_tag "Save", class: "btn btn-primary btn-block"
+      = submit_tag t("ontologies_metadata_curator.save"), class: "btn btn-primary btn-block"

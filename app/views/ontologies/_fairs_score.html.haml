@@ -5,15 +5,15 @@
     %div.w-50
       = render partial: "shared/fair_score_bars" , locals: {data: @fair_scores_data}
   %div.text-center
-    - text = " <span> See details</span>"
+    - text = " <span>#{t("ontologies.see_details")}</span>"
     = link_to_modal(text.html_safe,
                   "/ajax/fair_score/html/?ontologies=#{@ontology.acronym}",
                   class: "btn",
                   id:'fair-details-link',
-                  data: { show_modal_title_value: "O'FAIRe FAIRness assessment questions", show_modal_size_value: 'modal-xl' },
+                  data: { show_modal_title_value: t("ontologies.fairness_assessment_questions"), show_modal_size_value: 'modal-xl' },
                   )
 - else
-  %p.font-italic= "We are still collecting data for #{@ontology.acronym}"
+  %p.font-italic= t("ontologies.collecting_data", acronym: @ontology.acronym)
 
 
 :javascript

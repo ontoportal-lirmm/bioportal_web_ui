@@ -71,8 +71,6 @@ jQuery(document).ready(function(){
   updateMappingCount();
   updateMappingDeletePermissions();
 
-  jQuery("#search_ontologies").chosen({search_contains: true, width:"100%"});
-
   // Handle visualization changes
   jQuery("#display_options input").on("click", function(e, button){
     var selectedOnt = jQuery("#search_ontologies").val();

@@ -1,7 +1,7 @@
 %div{data:{controller: 'turbo-frame',
                                 'turbo-frame': {
                                       'url-value': "/ajax/classes/list?ontology_id=#{@ontology.acronym}&language=#{request_lang}",
-                                      'place-holder-value': "Please select a collection to display"
+                                      'place-holder-value': t("ontologies.concepts_browsers.select_collection")
                                       }}}
   %div.pb-2
     %div.mb-1
@@ -12,6 +12,12 @@
                    locals: {multiple: false, id: 'collections_select',
                    data: {action: 'changed->turbo-frame#updateFrame'}}
 
-  %div#sd_content.card.p-1{style: 'overflow-y: scroll; height: 60vh;'}
-    = render TurboFrameComponent.new(id: 'concepts_list_view-page-1', data: {'turbo-frame-target': 'frame'}, src:params[:concept_collections] ? "/ajax/classes/list?ontology_id=#{@ontology.acronym}&collection_id=#{params[:concept_collections]}" : '') do
-      Please select a collection to display
+  - unless no_collections?
+    %div#sd_content.card.p-1{style: 'overflow-y: auto; height: 60vh;'}
+      = render TurboFrameComponent.new(id: 'concepts_list_view-page-1', data: {'turbo-frame-target': 'frame'}, src:params[:concept_collections] ? "/ajax/classes/list?ontology_id=#{@ontology.acronym}&collection_id=#{params[:concept_collections]}" : '') do
+        .select-collection-placeholder
+          = t("ontologies.concepts_browsers.select_collection") 
+
+
+
+        

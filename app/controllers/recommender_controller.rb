@@ -1,5 +1,6 @@
 class RecommenderController < ApplicationController
   layout :determine_layout
+  include ApplicationHelper
 
   # REST_URI is defined in application_controller.rb
   RECOMMENDER_URI = "/recommender"
@@ -16,7 +17,6 @@ class RecommenderController < ApplicationController
       @not_valid_max_num_set = (params[:max_elements_set] < '2') || (params[:max_elements_set] > '4')
     end
     unless params[:input].nil?  ||  params[:input].empty? || @not_valid_max_num_set
-      params[:ontologies] = params[:ontologies_list]&.join(',') || ''
       recommendations = LinkedData::Client::HTTP.post(RECOMMENDER_URI, params)
       @advanced_options_open = !recommender_params_empty?
       @results = []
@@ -43,7 +43,7 @@ class RecommenderController < ApplicationController
   end
 
   def recommendation_annotations(recommendation)
-    recommendation.coverageResult.annotations.map{|annotation| {text: annotation.text, link:  url_to_endpoint(annotation.annotatedClass.links['self'])}}
+    recommendation.coverageResult.annotations.map{|annotation| {text: annotation.text, link: url_to_endpoint(annotation.annotatedClass.links['self'])}}
   end
 
   def percentage(string)
@@ -51,13 +51,7 @@ class RecommenderController < ApplicationController
     result.round(1).to_s
   end
 
-  def url_to_endpoint(url)
-    uri = URI.parse(url)
-    endpoint = uri.path.sub(/^\//, '')
-    endpoint
-  end
-
   def recommender_params_empty?
-    (params[:wc].eql?('0.55') && params[:wa].eql?('0.15') && params[:wd].eql?('0.15') && params[:ws].eql?('0.15') && params[:max_elements_set].eql?('3') && params[:ontologies_list].nil?)
+    (params[:wc].eql?('0.55') && params[:wa].eql?('0.15') && params[:wd].eql?('0.15') && params[:ws].eql?('0.15') && params[:max_elements_set].eql?('3') && params[:ontologies].nil?)
   end
 end

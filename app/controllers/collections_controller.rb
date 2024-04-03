@@ -33,7 +33,7 @@ class CollectionsController < ApplicationController
     params[:id] = request_collection_id
 
     if params[:id].nil? || params[:id].empty?
-      render plain: 'Error: You must provide a valid collection id'
+      render plain: t('collections.error_valid_collection')
       return
     end
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id] || params[:ontology]).first

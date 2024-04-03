@@ -178,35 +178,84 @@ $HOME_PAGE_LOGOS = [
     }
 ]
 
+$PORTALS_INSTANCES = [
+  {
+    color: '#31b403',
+    portal: 'AgroPortal',
+    link: 'https://agroportal.lirmm.fr/'
+  },
+  {
+    color: '#234979',
+    portal: 'BioPortal',
+    link: 'https://bioportal.bioontology.org/'
+  },
+  {
+    color: '#74a9cb',
+    portal: 'SIFR BioPortal',
+    link: 'https://bioportal.lirmm.fr/'
+  },
+  {
+    color: '#0d508a',
+    portal: 'EcoPortal',
+    link: 'https://ecoportal.lifewatch.eu/'
+  },
+  {
+    color: '#234979',
+    portal: 'MedPortal',
+    link: 'http://medportal.bmicc.cn/'
+  },
+  {
+    color: '#009574',
+    portal: 'MatPortal',
+    link: 'https://matportal.org/'
+  },
+  {
+    color: '#1c0f5d',
+    portal: 'IndustryPortal',
+    link: 'http://industryportal.enit.fr'
+  },
+  {
+    color: '#1e2251',
+    portal: 'EarthPortal',
+    link: 'https://earthportal.eu/'
+  },
+  {
+    color: '#33691B',
+    portal: 'BiodivPortal',
+    link: 'https://biodivportal.gfbio.org/'
+  }
+]
 
 $FOOTER_LINKS = {
   social: [
-    { logo: 'social/people.svg', link: 'https://github.com/orgs/agroportal/people' },
-    { logo: 'social/github.svg', link: 'https://github.com/agroportal' },
-    { logo: 'social/twitter.svg', link: 'https://twitter.com/lagroportal' }
+    { logo: "social/people.svg", link: "https://github.com/orgs/agroportal/people" },
+    { logo: "social/github.svg", link: "https://github.com/agroportal" },
+    { logo: "social/twitter.svg", link: "https://twitter.com/lagroportal" },
+    { logo: "json.svg", link: $REST_URL },
+    { logo: "summary/sparql.svg", link: "#{$SPARQL_URL}"},
+    { logo: "social/email.svg", link: "mailto:#{$ANNOUNCE_LIST}" },
   ],
   sections: {
     products: {
-      ontoportal: 'https://ontoportal.org/',
-      release_notes: 'https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/release-notes-btKjZk5tU2',
-      api: 'https://data.agroportal.lirmm.fr/',
-      sparql: 'https://sparql.agroportal.lirmm.fr/test/'
+      release_notes: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/release-notes-btKjZk5tU2",
+      api: "https://data.agroportal.lirmm.fr/",
+      sparql: "https://sparql.agroportal.lirmm.fr/test/",
+      ontoportal: "https://ontoportal.org/"
     },
     support: {
-      contact_us: 'https://agroportal.lirmm.fr/feedback',
-      wiki: 'https://www.bioontology.org/wiki/',
-      documentation: 'https://ontoportal.github.io/documentation/'
+      contact_us: "https://#{$SITE}.lirmm.fr/feedback",
+      documentation: "https://ontoportal.github.io/documentation/",
+      agro_documentation: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/public-documentation-QMpsC9aVBb"
     },
     agreements: {
-      terms: '',
-      privacy_policy: '',
-      cite_us: '',
-      acknowledgments: ''
+      terms: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/terms-and-conditions-naDsDo2Zxq",
+      privacy_policy: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/privacy-policy-wsJtxnwHmo",
     },
     about: {
-      about_us: 'https://github.com/agroportal/project-management',
-      projects: 'https://d2kab.mystrikingly.com/',
-      team: 'https://github.com/orgs/agroportal/people'
+      about_us: "https://github.com/agroportal/project-management",
+      team: "https://github.com/orgs/agroportal/people",
+      cite_us: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/publications-and-references-87tEoeoGKy",
+      acknowledgments: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/acknowledgments-15GdRXLQdm"
     }
   }
 }
@@ -222,3 +271,10 @@ if $HOSTNAME
     require_relative "bioportal_config_development_#{$HOSTNAME}"
   end
 end
+$CITE_ANNOTATOR = 'https://hal.science/hal-00492024'
+$ANNOTATOR_API_DOC = 'https://data.agroportal.lirmm.fr/documentation#nav_annotator'
+
+$CITE_RECOMMENDER = 'https://doi.org/10.1186/s13326-017-0128-y' 
+
+# Resource term
+$RESOURCE_TERM = ENV['RESOURCE_TERM'] || 'ontology'

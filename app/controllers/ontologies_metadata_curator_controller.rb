@@ -9,24 +9,42 @@ class OntologiesMetadataCuratorController < ApplicationController
     @metadata_sel = params[:search] ? params[:search][:metadata] : []
     @show_submissions = !params[:show_submissions].nil?
     @submissions = []
-
+    @ontologies = []
     display_attribute = equivalent_properties(@metadata_sel) + %w[submissionId]
 
-    @submissions = LinkedData::Client::Models::OntologySubmission.all(acronym: @ontologies_ids.join('|'), display_links: false, display_context: false, include: display_attribute.join(','), include_status: 'RDF')
-    @submissions.reject!{|x| !@ontologies_ids.include?(x.id.split('/')[-3])} unless @ontologies_ids.empty?
-    @submissions.sort_by!{|x| x.id}
+    if @show_submissions
+      if @ontologies_ids.nil? || @ontologies_ids.empty?
+        @ontologies = LinkedData::Client::Models::Ontology.all
+      else
+        @ontologies_ids.each do |data|
+          @ontologies << LinkedData::Client::Models::Ontology.find_by_acronym(data).first
+        end
+      end
+      @ontologies.each do |ont|
+        submissions = ont.explore.submissions({ include: display_attribute.join(',') })
+        submissions.each { |sub| append_submission(ont, sub) }
+      end
+    else
+      @submissions = LinkedData::Client::Models::OntologySubmission.all(acronym: @ontologies_ids.join('|'), display_links: false, display_context: false, include: display_attribute.join(','))
+      @submissions.reject! { |x| !@ontologies_ids.include?(x.id.split('/')[-3]) } unless @ontologies_ids.empty?
+      @submissions.sort_by! { |x| x.id }
+    end
+
+
+
 
     respond_to do |format|
       format.html { redirect_to admin_index_path }
       format.turbo_stream { render turbo_stream: [
-        replace("selection_metadata_form", partial: "ontologies_metadata_curator/metadata_table"),
-        replace('edit_metadata_btn') do
-          "
-           #{helpers.button_tag("Start bulk edit", onclick: 'showEditForm(event)', class: "btn btn-outline-primary mx-1 w-100")}
-           #{raw helpers.help_tooltip('To use the bulk edit select in the table submissions (the rows) and metadata properties (the columns) for which you want to edit')}
-          ".html_safe
-        end
-      ]}
+        replace("selection_metadata_form", partial: "ontologies_metadata_curator/metadata_table")
+      # TODO put again when bulk edit fixed
+      # replace('edit_metadata_btn') do
+      #     "
+      #      #{helpers.button_tag(t('ontologies_metadata_curator.bulk_edit'), onclick: 'showEditForm(event)', class: "btn btn-outline-primary mx-1 w-100")}
+      #      #{raw helpers.help_tooltip(t('ontologies_metadata_curator.use_the_bulk_edit'))}
+      #     ".html_safe
+      #   end
+      ] }
     end
   end
 
@@ -52,7 +70,7 @@ class OntologiesMetadataCuratorController < ApplicationController
   def edit
 
     if params[:selected_acronyms].nil? || params[:selected_metadata].nil?
-      render_turbo_stream alert_error(id: 'application_modal_content') {'Select in the table submissions (rows) and metadata properties (columns) to start the bulk edit'}
+      render_turbo_stream alert_error(id: 'application_modal_content') { t('ontologies_metadata_curator.start_the_bulk_edit') }
       return
     end
 
@@ -67,7 +85,7 @@ class OntologiesMetadataCuratorController < ApplicationController
     @active_ontology = ontology_and_submission_id(params[:active_ontology])
     @all_metadata = params[:all_metadata]&.split
     error_responses = []
-    @submissions =  []
+    @submissions = []
     active_submission_data = params['submission']["#{@active_ontology[0]}_#{@active_ontology[1]}"]
 
     @selected_ontologies.each do |onto, sub_i|
@@ -87,9 +105,9 @@ class OntologiesMetadataCuratorController < ApplicationController
         if errors
           render_turbo_stream(alert_error { errors.map { |e| e[:error] }.join(',') })
         else
-          streams = [alert_success { 'Submissions were successfully updated' }]
+          streams = [alert_success { t('ontologies_metadata_curator.alert_success_submissions') }]
           @submissions.each do |submission|
-            submission.ontology = OpenStruct.new({acronym: submission.ontology})
+            submission.ontology = OpenStruct.new({ acronym: submission.ontology })
             streams << replace("#{ontology_submission_id_label(submission.ontology.acronym, submission.submissionId)}_row", partial: 'ontologies_metadata_curator/submission', locals: { submission: submission, attributes: @all_metadata })
           end
           render_turbo_stream(*streams)

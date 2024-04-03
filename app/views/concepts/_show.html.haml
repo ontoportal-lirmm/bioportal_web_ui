@@ -1,43 +1,44 @@
 = render TurboFrameComponent.new(id: 'concept_show', data: {controller:'labels-ajax-container', 'action': 'turbo:before-fetch-request->labels-ajax-container#abortAll', 'labels-ajax-container-label-ajax-outlet': '#concept_show a[data-controller="label-ajax"]'}) do
   - if @concept.id.eql?("bp_fake_root")
     = render Display::AlertComponent.new do
-      Use the "Jump To" to find a class and display details, visualization, notes, and mappings
+      = t('concepts.use_jump_to')
   - else
     = render TabsContainerComponent.new(type:'outline') do |c|
 
       - c.pinned_right do
         - if $PURL_ENABLED
           %div.mx-1
-            = link_to("#classPermalinkModal", class: "class-permalink nav-link", title: "Get a permanent link to this class", aria: {label: "Get a permanent link to this class"}, data: {toggle: "modal", current_purl: "#{@current_purl}"}) do
+            = link_to("#classPermalinkModal", class: "class-permalink nav-link", title: t('concepts.permanent_link_class'), aria: {label: t('concepts.permanent_link_class')}, data: {toggle: "modal", current_purl: "#{@current_purl}"}) do
               %i{class: "fas fa-link", aria: {hidden: "true"}}
         %div
           = render RoundedButtonComponent.new(link: "#{@ontology.id}/classes/#{escape(@concept.id)}?display=all&apikey=#{get_apikey}", target:'_blank')
 
-      - c.item(title: 'Details', path: '#details', selected: true)
+      - c.item(title: t('concepts.details'), path: '#details', selected: true)
 
       - unless skos?
         - c.item(id: 'instances', path: '#instances') do
-          Instances
+          = t('concepts.instances')
           (
           %span#instances_count
           )
 
-      - c.item(title: 'Visualization', path: '#visualization')
+      - c.item(title: t('concepts.visualization'), path: '#visualization')
 
       - c.item(id: 'notes', path: '#notes') do
-        Notes
+        = t('concepts.notes')
         %span#note_count_wrapper
           (
           %span#note_count= @notes.length
           )
 
       - c.item(id: 'mappings', path: '#mappings') do
-        #{concept_label_to_show(submission: @submission).humanize} Mappings (
+        #{t('concepts.mappings')}
+        (
         %span#mapping_count= 'loading'
         )
 
       - if @enable_ontolobridge
-        - c.item(title: ' New Term Requests', path: '#request_term')
+        - c.item(title: t('concepts.new_term_requests'), path: '#request_term')
 
       - c.item_content do
         = render :partial =>'/concepts/details'

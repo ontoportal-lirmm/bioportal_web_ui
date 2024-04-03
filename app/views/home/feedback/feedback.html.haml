@@ -2,7 +2,7 @@
   - pop = true
 - unless @errors.nil?
   %div{:style => "color:red;margin-bottom:1em;"}
-    Errors On Form
+    = t("home.feedback.error_on_form")
     %ul
       - for error in @errors
         %li= error
@@ -14,45 +14,45 @@
     .feedback-form
       .feedback-title-container
         %h2.feedback-title
-          Leave your feedback
+          = t("home.feedback.leave_your_feedback")
         %hr#feedback-title-line/
       - unless session[:user].nil?
         %p.feedback-text
-          Hi
+          = t("home.feedback.feedback_hi_text")
           %font 
             = session[:user].username
             ,
       %p.feedback-email
-        you can use the form below or email us directly at:
+        = t("home.feedback.feedback_info_text")
         %a{:href => "mailto: #{$SUPPORT_EMAIL}"}= $SUPPORT_EMAIL
       - if session[:user].nil?
         %p.feedback-input-title
-          Email
+          = t("home.feedback.email")
           %font{:color => "red"} *
         %input.feedback-input{:name => "email", :type => "email"}/
         %p.feedback-input-title
-          Name
-          %font.register-optional (optional)
+          = t("home.feedback.name")
+          %font.register-optional= t("home.feedback.optional")
         %input.feedback-input{:name => "name", :type => "text"}/
       - else
         = hidden_field_tag "name", session[:user].username
         = hidden_field_tag "email", session[:user].email
       %p.feedback-input-title
-        Error/Proposition page URL
-        %font.register-optional (optional)
+        = t("home.feedback.proposition_url_page")
+        %font.register-optional= t("home.feedback.optional")
       %input.feedback-input{:name => "location", :type => "text", :value => unescape(params[:location] || '')}
       %p.feedback-input-title
-        Feedback
+        = t("home.feedback.feedback")
         %font{:color => "red"} *
       %textarea.feedback-input{:name => "comment", :rows => "6"}
       %p.feedback-input-title
-        Tags
-        %font.register-optional (optional)
+        = t("home.feedback.tags")
+        %font.register-optional= t("home.feedback.optional")
       .feedback-checks
-        = render(ChipsComponent.new(name:"bug", value: "Bug"))
-        = render(ChipsComponent.new(name:"proposition", value: "Proposition"))
-        = render(ChipsComponent.new(name:"question", value: "Question"))
-        = render(ChipsComponent.new(name:"ontology_submissions_request", value: "Ontology submissions request"))
+        = render(ChipsComponent.new(name:"bug", value: t("home.feedback.bug")))
+        = render(ChipsComponent.new(name:"proposition", value: t("home.feedback.proposition")))
+        = render(ChipsComponent.new(name:"question", value: t("home.feedback.question")))
+        = render(ChipsComponent.new(name:"ontology_submissions_request", value: t("home.feedback.ontology_submissions_request")))
       - if using_captcha?
         = recaptcha_tags  
-      %input.feedback-button{:type => "submit", :value => "Send"}/
+      %input.feedback-button{:type => "submit", :value => t("home.feedback.send")}/

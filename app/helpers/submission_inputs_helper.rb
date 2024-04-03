@@ -121,7 +121,7 @@ module SubmissionInputsHelper
       users_list = LinkedData::Client::Models::User.all(include: "username").map { |u| [u.username, u.id] }
       users_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
     end
-    select_input(label: "Administrators", name: "ontology[administeredBy]", values: users_list, selected: ontology.administeredBy || session[:user].id, multiple: true)
+    select_input(label: t('submission_inputs.administrators'), name: "ontology[administeredBy]", values: users_list, selected: ontology.administeredBy || session[:user].id, multiple: true)
   end
 
   def ontology_categories_input(ontology = @ontology, categories = @categories)
@@ -141,44 +141,32 @@ module SubmissionInputsHelper
 
   def ontology_skos_language_help
     content_tag(:div, class: 'upload-ontology-desc has_ontology_language_input') do
-      link = link_to('Please refer to the documentation for more details.', "https://doc.jonquetlab.lirmm.fr/share/618372fb-a852-4f3e-8e9f-8b07ebc053e6", target: "_blank")
-      text = <<-EOS
-            SKOS vocabularies submitted to #{portal_name} shall follow a few constraints (e.g., contain a minimum of one skos:ConceptScheme also typed as owl:Ontology) 
-            and top concept assertion. #{link}
-      EOS
+      link = link_to(t('submission_inputs.ontology_skos_language_link'), "https://doc.jonquetlab.lirmm.fr/share/618372fb-a852-4f3e-8e9f-8b07ebc053e6", target: "_blank")
+      text = t('submission_inputs.ontology_skos_language_help', portal_name: portal_name, link: link)
       text.html_safe
     end
   end
 
   def ontology_obo_language_help
     content_tag(:div, class: 'upload-ontology-desc has_ontology_language_input') do
-      link = link_to('the OBOinOWL parser.', "#", target: "_blank")
-      text = <<-EOS
-        OBO ontologies submitted to #{portal_name} will be parsed by the OWL-API which integrates #{link} 
-        The resulting RDF triples will then be loaded in #{portal_name} triple-store. 
-      EOS
+      link = link_to(t('submission_inputs.ontology_obo_language_link'), "#", target: "_blank")
+      text = t('submission_inputs.ontology_obo_language_help', portal_name: portal_name, link: link)
       text.html_safe
     end
   end
 
   def ontology_owl_language_help
     content_tag(:div, class: 'upload-ontology-desc has_ontology_language_input') do
-      link = link_to('the Protégé ', "https://protege.stanford.edu/", target: "_blank")
-      text = <<-EOS
-        OWL ontologies submitted to #{portal_name} will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with
-        #{link}
-        software which does use the same component.
-      EOS
+      link = link_to(t('submission_inputs.ontology_owl_language_link'), "https://protege.stanford.edu/", target: "_blank")
+      text = t('submission_inputs.ontology_owl_language_help', portal_name: portal_name, link: link)
       text.html_safe
     end
   end
 
   def ontology_umls_language_help
     content_tag(:div, class: 'upload-ontology-desc has_ontology_language_input') do
-      link = link_to('by the UMLS2RDF tool.', "#", target: "_blank")
-      text = <<-EOS
-        UMLS-RRF resources are usually produced #{link}
-      EOS
+      link = link_to(t('submission_inputs.ontology_umls_language_link'), "#", target: "_blank")
+      text = t('submission_inputs.ontology_umls_language_help', link: link)
       text.html_safe
     end
   end
@@ -203,7 +191,7 @@ module SubmissionInputsHelper
   def ontology_groups_input(ontology = @ontology, groups = @groups)
     groups ||= LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
 
-    render Input::InputFieldComponent.new(name: '', label: 'Groups') do
+    render Input::InputFieldComponent.new(name: '', label: t('submission_inputs.groups')) do
       content_tag(:div, class: 'upload-ontology-chips-container') do
         hidden_field_tag('ontology[group][]') +
           groups.map do |group|
@@ -223,42 +211,42 @@ module SubmissionInputsHelper
 
     render(Layout::RevealComponent.new(possible_values: %w[private public], selected: ontology.viewingRestriction)) do |c|
       c.button do
-        select_input(label: "Visibility", name: "ontology[viewingRestriction]", required: true,
+        select_input(label: t('submission_inputs.visibility'), name: "ontology[viewingRestriction]", required: true,
                      values: %w[public private],
                      selected: ontology.viewingRestriction)
       end
 
       c.container do
         content_tag(:div, class: 'upload-ontology-input-field-container') do
-          select_input(label: "Add or remove accounts that are allowed to see this ontology in #{portal_name}.", name: "ontology[acl]", values: @user_select_list, selected: ontology.acl, multiple: true)
+          select_input(label: t('submission_inputs.accounts_allowed', portal_name: portal_name), name: "ontology[acl]", values: @user_select_list, selected: ontology.acl, multiple: true)
         end
       end
     end
   end
 
   def ontology_view_of_input(ontology = @ontology)
-    render Layout::RevealComponent.new(selected: !ontology.view?, toggle: true) do |c|
+    render Layout::RevealComponent.new(selected: ontology.view?, toggle: true) do |c|
       c.button do
-        content_tag(:span, class: 'd-flex mb-2') do
-          switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: 'Is this ontology a view of another ontology?', checked: ontology.view?, style: 'font-size: 14px;')
+        content_tag(:span, class: 'd-flex') do
+          switch_input(id: 'ontology_isView', name: 'ontology[isView]', label: t('submission_inputs.ontology_view_of_another_ontology'), checked: ontology.view?, style: 'font-size: 14px;')
         end
       end
       c.container do
         content_tag(:div) do
-          render partial: "shared/ontology_picker_single", locals: { placeholder: "", field_name: "viewOf", selected: ontology.viewOf }
+          render SelectInputComponent.new(id: 'viewOfSelect', values: onts_for_select, name: 'ontology[viewOf]', selected: ontology.viewOf)
         end
       end
     end
   end
 
-  def contact_input(label: '', name: 'Contact', show_help: true)
+  def contact_input(label: '', name: t('submission_inputs.contact'), show_help: true)
     attr = SubmissionMetadataInput.new(attribute_key: 'contact', attr_metadata: attr_metadata('contact'))
     render Input::InputFieldComponent.new(name: '', label: attr_header_label(attr, label, show_tooltip: show_help),
                                           error_message: attribute_error(:contact)) do
 
       render NestedFormInputsComponent.new(object_name: 'contact', default_empty_row: true) do |c|
         c.header do
-          content_tag(:div, "#{name} Name", class: 'w-50') + content_tag(:div, "#{name} Email", class: 'w-50')
+          content_tag(:div, name.blank? ? '' : t('submission_inputs.contact_name', name: name), class: 'w-50') + content_tag(:div, name.blank? ? '' : t('submission_inputs.contact_email', name: name), class: 'w-50')
         end
 
         c.template do
@@ -361,7 +349,7 @@ module SubmissionInputsHelper
 
   def generate_date_input(attr, max_date: nil)
     date_input(label: attr_header_label(attr), name: attr.name,
-               value: attr.values,
+               value: (Date.parse(attr.values).to_s rescue attr.values),
                max_date: max_date)
   end
 
@@ -523,17 +511,17 @@ module SubmissionInputsHelper
     render SummarySectionComponent.new(title: title, show_card: false) do
       help_text = ''
       unless attr['metadataMappings'].nil?
-        help_text += render(FieldContainerComponent.new(label: 'Equivalents', value: attr['metadataMappings'].join(', ')))
+        help_text += render(FieldContainerComponent.new(label: t('submission_inputs.equivalents'), value: attr['metadataMappings'].join(', ')))
       end
 
       unless attr['enforce'].nil? || attr['enforce'].empty?
-        help_text += render(FieldContainerComponent.new(label: 'Validators', value: attr['enforce'].map do |x|
+        help_text += render(FieldContainerComponent.new(label: t('submission_inputs.validators'), value: attr['enforce'].map do |x|
           content_tag(:span, x.humanize, class: 'badge badge-primary mx-1')
         end.join.html_safe))
       end
 
       unless attr['helpText'].nil?
-        help_text += render(FieldContainerComponent.new(label: 'Help text ', value: help.html_safe))
+        help_text += render(FieldContainerComponent.new(label: t('submission_inputs.help_text'), value: help.html_safe))
       end
 
       help_text

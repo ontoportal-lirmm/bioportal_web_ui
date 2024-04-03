@@ -61,32 +61,32 @@ class HomeController < ApplicationController
 
     @tags = []
     unless params[:bug].nil? || params[:bug].empty?
-      @tags << "Bug"
+      @tags << t('home.bug')
     end
     unless params[:proposition].nil? || params[:proposition].empty?
-      @tags << "Proposition"
+      @tags << t('home.proposition')
     end
     unless params[:question].nil? || params[:question].empty?
-      @tags << "Question"
+      @tags << t('home.question')
     end
     unless params[:ontology_submissions_request].nil? || params[:ontology_submissions_request].empty?
-      @tags << "Ontology submissions request"
+      @tags << t('home.ontology_submissions_request')
     end
 
     @errors = []
 
     if params[:name].nil? || params[:name].empty?
-      @errors << 'Please include your name'
+      @errors << t('home.include_name')
     end
     if params[:email].nil? || params[:email].length < 1 || !params[:email].match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i)
-      @errors << 'Please include your email'
+      @errors << t('home.include_email')
     end
     if params[:comment].nil? || params[:comment].empty?
-      @errors << 'Please include your comment'
+      @errors << t('home.include_comment')
     end
     if using_captcha? && !session[:user]
       unless verify_recaptcha
-        @errors << 'Please fill in the proper text from the supplied image'
+        @errors << t('home.fill_text')
       end
     end
 
@@ -100,7 +100,7 @@ class HomeController < ApplicationController
     if params[:pop].eql?('true')
       render 'home/feedback/feedback_complete', layout: 'popup'
     else
-      flash[:notice] = 'Feedback has been sent'
+      flash[:notice] = t('home.notice_feedback')
       redirect_to_home
     end
   end
@@ -111,7 +111,7 @@ class HomeController < ApplicationController
   end
 
   def account
-    @title = 'Account Information'
+    @title = t('home.account_title')
     if session[:user].nil?
       redirect_to controller: 'login', action: 'index', redirect: '/account'
       return
@@ -135,9 +135,9 @@ class HomeController < ApplicationController
 
   def annotator_recommender_form
     if params[:submit_button] == "annotator"
-      redirect_to "/annotator?text=#{params[:text]}"
+      redirect_to "/annotator?text=#{helpers.escape(params[:text])}"
     elsif params[:submit_button] == "recommender"
-      redirect_to "/recommender?input=#{params[:input]}"
+      redirect_to "/recommender?input=#{helpers.escape(params[:input])}"
     end
   end
 

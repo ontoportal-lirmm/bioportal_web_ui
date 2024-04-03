@@ -43,16 +43,16 @@ class LandscapeController < ApplicationController
 
     ontologyFormatsCount = {"OWL" => 0, "SKOS" => 0, "UMLS" => 0, "OBO" => 0}
 
-    @metrics_average = [{attr: "classes", label: "Number of classes", array: []},
-                        {attr: "individuals", label: "Number of individuals", array: []},
-                        {attr: "properties", label: "Number of properties", array: []},
-                        {attr: "maxDepth", label: "Max depth", array: []},
-                        {attr: "maxChildCount", label: "Max child count", array: []},
-                        {attr: "averageChildCount", label: "Average child count", array: []},
-                        {attr: "classesWithOneChild", label: "Classes with one child", array: []},
-                        {attr: "classesWithMoreThan25Children", label: "Classes with more than 25 children", array: []},
-                        {attr: "classesWithNoDefinition", label: "Classes with no definition	", array: []},
-                        {attr: "numberOfAxioms", label: "Number of axioms (triples)", array: []}]
+    @metrics_average = [{attr: "classes", label: t('landscape.classes'), array: []},
+                        {attr: "individuals", label: t('landscape.individuals'), array: []},
+                        {attr: "properties", label: t('landscape.properties'), array: []},
+                        {attr: "maxDepth", label: t('landscape.max_depth'), array: []},
+                        {attr: "maxChildCount", label: t('landscape.max_child_count'), array: []},
+                        {attr: "averageChildCount", label: t('landscape.average_child_count'), array: []},
+                        {attr: "classesWithOneChild", label: t('landscape.classes_with_one_child'), array: []},
+                        {attr: "classesWithMoreThan25Children", label: t('landscape.classes_with_more_than_25_children'), array: []},
+                        {attr: "classesWithNoDefinition", label: t('landscape.classes_with_no_definition'), array: []},
+                        {attr: "numberOfAxioms", label: t('landscape.number_of_xioms_triples'), array: []}]
 
     # Attributes to include. To avoid to get everything and make it faster
     # They are also used to get the value of each property later in the controller
@@ -237,7 +237,7 @@ class LandscapeController < ApplicationController
           organizations_list = Array(sub.send(org_attr.to_s))
 
           organizations_list.each do |org|
-            org_str = org.name || org.to_s
+            org_str = org.name || org.to_s rescue org.to_s
             org_uri = nil
             # Check if the organization is actually an URL
             if org_str =~ /\A#{URI::regexp}\z/
@@ -334,15 +334,15 @@ class LandscapeController < ApplicationController
       title_array = []
       total_count = 0
       if hash_counts.has_key?(:projects)
-        title_array.push("#{hash_counts[:projects]} projects")
+        title_array.push(t('landscape.projects_count', count: hash_counts[:projects]))
         total_count += hash_counts[:projects]
       end
       if hash_counts.has_key?(:notes)
-        title_array.push("#{hash_counts[:notes]} notes")
+        title_array.push(t('landscape.notes_count', count: hash_counts[:notes]))
         total_count += hash_counts[:notes]
       end
       if hash_counts.has_key?(:reviews)
-        title_array.push("#{hash_counts[:reviews]} reviews")
+        title_array.push(t('landscape.reviews_count', count: hash_counts[:reviews]))
         total_count += hash_counts[:reviews]
       end
       if total_count > 0
@@ -356,15 +356,15 @@ class LandscapeController < ApplicationController
       title_array = []
       total_count = 0
       if hash_counts.has_key?(:projects)
-        title_array.push("#{hash_counts[:projects]} projects")
+        title_array.push(t('landscape.projects_count', count: hash_counts[:projects]))
         total_count += hash_counts[:projects]
       end
       if hash_counts.has_key?(:notes)
-        title_array.push("#{hash_counts[:notes]} notes")
+        title_array.push(t('landscape.notes_count', count: hash_counts[:notes]))
         total_count += hash_counts[:notes]
       end
       if hash_counts.has_key?(:reviews)
-        title_array.push("#{hash_counts[:reviews]} reviews")
+        title_array.push(t('landscape.reviews_count', count: hash_counts[:reviews]))
         total_count += hash_counts[:reviews]
       end
       if total_count > 0
@@ -389,22 +389,22 @@ class LandscapeController < ApplicationController
       title_array = []
       total_count = 0
       if hash_count[:contact] > 0
-        title_array.push("#{hash_count[:contact]} as contact")
+        title_array.push(t('landscape.as_contact_count', count: hash_count[:contact]))
         total_count += hash_count[:contact]
       end
       if hash_count[:hasContributor] > 0
-        title_array.push("#{hash_count[:hasContributor]} as contributor")
+        title_array.push(t('landscape.as_contributor_count', count: hash_count[:hasContributor]))
         total_count += hash_count[:hasContributor]
       end
       if hash_count[:hasCreator] > 0
-        title_array.push("#{hash_count[:hasCreator]} as creator")
+        title_array.push(t('landscape.as_creator_count', count: hash_count[:hasCreator]))
         total_count += hash_count[:hasCreator]
       end
       if hash_count[:curatedBy] > 0
-        title_array.push("#{hash_count[:curatedBy]} as curator")
+        title_array.push(t('landscape.as_curator_count', count: hash_count[:curatedBy]))
         total_count += hash_count[:curatedBy]
       end
-      title_str = "Contributions: #{title_array.join(", ")}"
+      title_str = t('landscape.contributions', title: title_array.join(", "))
 
       if total_count > 1
         if people_count_emails[people.to_s].nil?
@@ -422,18 +422,18 @@ class LandscapeController < ApplicationController
       title_array = []
       total_count = 0
       if hash_count[:publisher] > 0
-        title_array.push("published #{hash_count[:publisher]} ontologies")
+        title_array.push(t('landscape.published_ontologies', count: hash_count[:publisher]))
         total_count += hash_count[:publisher]
       end
       if hash_count[:fundedBy] > 0
-        title_array.push("funded #{hash_count[:fundedBy]} ontologies")
+        title_array.push( t('landscape.funded_ontologies', count: hash_count[:fundedBy]))
         total_count += hash_count[:fundedBy]
       end
       if hash_count[:endorsedBy] > 0
-        title_array.push("endorsed #{hash_count[:endorsedBy]} ontologies")
+        title_array.push( t('landscape.endorsed_ontologies', count: hash_count[:endorsedBy]))
         total_count += hash_count[:endorsedBy]
       end
-      title_str = "Contributions: #{title_array.join(", ")}"
+      title_str = t('landscape.contributions', title: title_array.join(", "))
 
       if total_count > 1
         if hash_count.has_key?(:uri)
@@ -498,36 +498,36 @@ class LandscapeController < ApplicationController
 
     # Format the ontologyFormatsCount hash as the JSON needed to generate the chart
     ontologyFormatsChartJson = { labels: ontologyFormatsCount.keys,
-                                 datasets: [{ label: "Number of ontologies using this format",
+                                 datasets: [{ label: t('landscape.number_of_ontologies_using_format'),
                                                  data: ontologyFormatsCount.values,
                                                  backgroundColor: pie_colors_array[3]}] }
 
     isOfTypeChartJson = { labels: isOfTypeCount.keys,
-                          datasets: [{ label: "Number of ontologies of this ontology type",
+                          datasets: [{ label: t('landscape.number_of_ontologies_of_type'),
                                           data: isOfTypeCount.values,
                                           backgroundColor: pie_colors_array[0]}] }
 
     formalityLevelChartJson = { labels: formalityLevelCount.keys,
-                                datasets: [{ label: "Number of ontologies of this formality level",
+                                datasets: [{ label: t('landscape.number_of_ontologies_of_formality_level'),
                                                 data: formalityLevelCount.values,
                                                 backgroundColor: pie_colors_array[2]}] }
 
     dataCatalogChartJson = { labels: dataCatalog_count_hash.keys,
-                             datasets: [{ label: "Number of ontologies in this catalog", data: dataCatalog_count_hash.values,
+                             datasets: [{ label: t('landscape.number_of_ontologies_in_catalog'), data: dataCatalog_count_hash.values,
                                                 backgroundColor: pie_colors_array[5]}] }
 
     # Format the groupOntologiesCount hash as the JSON needed to generate the chart
     groupCountChartJson = { labels: groups_count_hash.keys,
-                            datasets: [{ label: "Number of ontologies", data: groups_count_hash.values,
+                            datasets: [{ label: t('landscape.number_of_ontologies'), data: groups_count_hash.values,
                                                   backgroundColor: pie_colors_array[3]}] }
 
     domainCountChartJson = { labels: domains_count_hash.keys,
-                             datasets: [{ label: "Number of ontologies", data: domains_count_hash.values,
+                             datasets: [{ label: t('landscape.number_of_ontologies'), data: domains_count_hash.values,
                                              backgroundColor: pie_colors_array[4]}] }
 
     # Format the groupOntologiesCount hash as the JSON needed to generate the chart
     sizeSlicesChartJson = { labels: size_slices_hash.keys,
-                            datasets: [{ label: "Number of ontologies with a class count in this range",
+                            datasets: [{ label: t('landscape.number_of_ontologies_with_class_count_in_range'),
                                             data: size_slices_hash.values,
                                             backgroundColor: pie_colors_array[2]}] }
 

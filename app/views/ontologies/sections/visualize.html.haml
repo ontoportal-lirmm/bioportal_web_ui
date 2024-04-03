@@ -16,7 +16,6 @@
       = hidden_field :search, :keyword, :value=>"",:id=>"search_keyword"
   - else
     = render Display::AlertComponent.new(type: 'danger') do
-      =  @concept.nil? ? 'No class/concept found' : @error
-
+      =  @concept.nil? ? t("ontologies.sections.no_class_concept_found") : @error
 
 

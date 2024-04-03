@@ -1,11 +1,11 @@
-%div.card.mb-3
+%div.card.mb-3{'data-controller': 'fair-score-landscape'}
   %div.card-header
     %div.d-flex.align-items-end.justify-content-between
       %span
         = render partial: "fair_score/fair_service_header"
       %span
         %span.p-2.badge.badge-secondary
-          Average
+          = t('landscape.average')
           %span.badge.badge-light
             %span#fair-score-average
               0 (0%)
@@ -26,15 +26,16 @@
               0 (0%)
     %div.p-3
       %div#detailedFilter.row.text-left
-        = render :partial => "shared/ontology_picker", locals: {sel_text: ""}
+        .landscape_ontologies_selector{'data-action': 'change->fair-score-landscape#update'}
+          = ontologies_selector(id:'landscape_ontologies_selector',name: 'ontology[ontologyId][]')
       %div
-        This interface shows how an ontology or a group responded successfully to O’FAIRe FAIRness assessment questions
+        = t('landscape.fairness_interface_introduction')
       %div
-        See details for each ontologies on the specific ontology summary pages
+        = t('landscape.fairness_interface_details')
   %div.card-body{data:{controller:"fair-score-landscape"}}
     %div#fair-score-charts-container.row
       %div.col
         %span.text-secondary.mt-4
-          hover on a principle to see details
+          = t('landscape.fairness_interface_hover_instruction')
         = render partial: "fair_score_criteria_bars" , locals: {data: nil }
       %div#chartjs-tooltip-container.col{style: "height :700px ; position: relative"}

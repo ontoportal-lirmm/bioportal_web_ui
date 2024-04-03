@@ -6,10 +6,11 @@
 
 .ontology-details-path{
     display: flex;
+    align-items: center;
     color: #888888;
     margin-bottom: 20px;
 }
-.ontology-details-path img{
+.ontology-details-path svg{
     margin: 0 12px;
 }
 .ontology-details-path a{
@@ -58,6 +59,7 @@
     align-items: center;
     font-size: 14px;
     color: #888888;
+    margin-top: 12px;
 }
 .ontology-details-last-update img{
     margin-right: 10px;

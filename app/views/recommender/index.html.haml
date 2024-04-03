@@ -8,7 +8,7 @@
     .recommender-page-decription
       = t('recommender.intro')
 
-    = form_tag('/recommender', method: :get, 'data-turbo': true, novalidate: true) do
+    = form_tag('/recommender', method: :get, 'data-turbo': true, novalidate: true, 'data-action': 'submit->form-url#submit', 'data-controller': 'form-url') do
       .recommender-page-inputs{'data-controller': 'reveal-component'}
         .inputs 
           %div
@@ -16,7 +16,7 @@
             .recommender-page-text-area{class: is_input ?  "" : "d-none", 'data-recommender-target': 'input', 'data-controller': 'sample-text'}
               %textarea#recommender-text-area{rows: "4" , placeholder: t('recommender.hint'), name: "input", 'data-action': "input->recommender#handleInput",  maxlength: "9678", 'data-sample-text-target': "input"}
                 = params[:input]
-              = insert_sample_text_button(t('recommender.insert_sample_text'))
+              = insert_sample_text_button(t('annotator.insert_sample_text'))
 
             .recommender-page-text-area-results{class: is_input ? "d-none" : "", 'data-recommender-target': 'result'}
               .text
@@ -26,7 +26,7 @@
               = t('recommender.options')
             .input
               .title
-                = t('recommender.options')
+                = t('recommender.input')
               .radios
                 - check_input = !params[:input_type].eql?('2')
                 .text-choice
@@ -53,7 +53,7 @@
             .inputs-container
               -#binding.pry
               .ninput
-                = render Input::RangeSliderComponent.new(label: t('recommender.converage'), name: "wc", value: params[:wc] || 0.55, min: '0', max: '1', step: '0.01')
+                = render Input::RangeSliderComponent.new(label: t('recommender.coverage'), name: "wc", value: params[:wc] || 0.55, min: '0', max: '1', step: '0.01')
               .ninput
                 = render Input::RangeSliderComponent.new(label: t('recommender.acceptance'), name: "wa", value: params[:wa] || 0.15, min: '0', max: '1', step: '0.01')
               .ninput
@@ -65,8 +65,7 @@
               = t('recommender.ontologies_configuration')
             .inputs-container
               .ontologies.input
-                - get_ontologies_data
-                = render Input::SelectComponent.new(label: t('recommender.select_ontologies'), id: 'ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected: params[:ontologies_list])
+                = ontologies_selector(id:'recommender_page_ontologies', label: t('recommender.select_ontologies') ,name: 'ontologies[]', selected:  params[:ontologies]&.split(','))
               .maxsets.input.d-none{'data-recommender-target': 'maxset'}
                 = render Input::NumberComponent.new(label: t('recommender.max_ont_set'), name: "max_elements_set", value: params[:max_elements_set] || 3, min: '2', max: '4', step: '1', error_message: "#{@not_valid_max_num_set ? 'Valid values are: 2, 3, 4' : ''}")
               .input{'data-recommender-target': 'empty'}
@@ -85,7 +84,7 @@
         .title
           = t('recommender.results_title')
         .recommender-table-container
-          = render TableComponent.new(id: 'recommender-table', borderless: true, layout_fixed: true, small_text: true, outline: true, sort: true, default_sort_column: '1') do |t|
+          = render TableComponent.new(id: 'recommender-table', borderless: true, layout_fixed: true, small_text: true, outline: true, sort_column: '1') do |t|
             - t.header do |h|
               - @results_table_header.each do |header|
                 - h.th do
@@ -116,11 +115,11 @@
               - btn.icon_left do
                 = inline_svg_tag "json.svg"
           .cite-us-button
-            = render Buttons::RegularButtonComponent.new(id:'recommender_cite_us', value: "Cite", variant: "secondary", href: "https://doi.org/10.1186/s13326-017-0128-y", size: "slim", target: '_blank', state: "regular") do |btn|
+            = render Buttons::RegularButtonComponent.new(id:'recommender_cite_us', value: t('recommender.cite'), variant: "secondary", href: $CITE_RECOMMENDER, size: "slim", target: '_blank', state: "regular") do |btn|
               - btn.icon_left do
                 = inline_svg_tag "icons/cite.svg"
           .go-to-annotator
-            = render Buttons::RegularButtonComponent.new(id:'recommender_go_annotator', value: "Call Annotator with the same input", variant: "secondary", href: "/annotator?text=#{params[:input]}&ontologies=#{params[:ontologies]}", size: "slim", target: '_blank', state: "regular") do |btn|
+            = render Buttons::RegularButtonComponent.new(id:'recommender_go_annotator', value: t('recommender.call_annotator'), variant: "secondary", href: "/annotator?text=#{params[:input]}&ontologies=#{params[:ontologies]}", size: "slim", target: '_blank', state: "regular") do |btn|
               - btn.icon_right do
                 = inline_svg_tag "arrow-right-outlined.svg"
 
