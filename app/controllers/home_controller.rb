@@ -44,31 +44,24 @@ class HomeController < ApplicationController
       search: {
         link: "search/ontologies/content",
         icon: "icons/search.svg",
-        title: "Search content (coming)",
-        description: "This tool/service enables users to search for any Resource Description Framework (RDF) element within the portal.
-           Users can search by either the unique identifier (URI) associated with the RDF element or by its label.
-        It facilitates efficient navigation and retrieval of specific RDF elements, enhancing user experience and productivity within the portal.
-        ",
+        title: t('tools.search.title'),
+        description: t('tools.search.description'),
       },
       converter: {
         link: "/content_finder",
         icon: "icons/settings.svg",
-        title: "Content converter (coming)",
-        description: "The Content Converter tool/service offers the capability to convert any RDF element into various formats such as RDF/XML, Turtle, Ntriples, or JSON.
-          This functionality allows users to transform RDF data into formats suitable for different purposes or compatible with various systems and applications.
-          It promotes interoperability and flexibility in handling RDF data within the portal ecosystem."
+        title: t('tools.converter.title'),
+        description: t('tools.converter.description'),
       },
       url_checker: {
         link: check_resolvability_path,
         icon: "check.svg",
-        title: "URI resolvability checker",
-        description: "This tool/service verifies the resolvability of Uniform Resource Identifiers (URIs) and their content negotiability.
-          It checks whether a given URI is accessible and whether the content associated with it can be negotiated based on the client's preferences.
-          This functionality ensures the reliability and accessibility of linked resources within the RDF ecosystem, aiding in maintaining data integrity and facilitating seamless integration with external resources."
+        title: t('tools.url_checker.title'),
+        description: t('tools.url_checker.description')
       }
     }
 
-    @title = "#{helpers.portal_name} tools"
+    @title = "#{helpers.portal_name} #{t('layout.footer.tools')}"
     render 'tools', layout: 'tool'
   end
 

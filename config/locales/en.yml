@@ -468,6 +468,7 @@ en:
       ontoportal: OntoPortal
       release_notes: Release Notes
       api: API
+      tools: Tools
       sparql: SPARQL
       support: Support
       contact_us: Contact Us
@@ -972,17 +973,17 @@ en:
       and top concept assertion. %{link}
     ontology_obo_language_link: the OBOinOWL parser.
     ontology_obo_language_help: >
-        OBO ontologies submitted to %{portal_name} will be parsed by the OWL-API which integrates %{link} 
-        The resulting RDF triples will then be loaded in %{portal_name} triple-store.
+      OBO ontologies submitted to %{portal_name} will be parsed by the OWL-API which integrates %{link} 
+      The resulting RDF triples will then be loaded in %{portal_name} triple-store.
     ontology_owl_language_link: the Protégé
     ontology_owl_language_help: >
-        OWL ontologies submitted to %{portal_name} will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with
-        %{link}
-        software which does use the same component.
+      OWL ontologies submitted to %{portal_name} will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with
+      %{link}
+      software which does use the same component.
 
     ontology_umls_language_link: by the UMLS2RDF tool.
     ontology_umls_language_help: >
-        UMLS-RRF resources are usually produced %{link}
+      UMLS-RRF resources are usually produced %{link}
 
     groups: Groups
     visibility: Visibility
@@ -1350,3 +1351,22 @@ en:
     cancel: Cancel
     apply: Apply
     unselect_all: Unselect all
+  tools:
+    search:
+      title: "Search content (coming)"
+      description: >
+        This tool/service enables users to search for any Resource Description Framework (RDF) element within the portal.
+        Users can search by either the unique identifier (URI) associated with the RDF element or by its label.
+        It facilitates efficient navigation and retrieval of specific RDF elements, enhancing user experience and productivity within the portal.
+    converter:
+      title: "Content converter (coming)"
+      description: >
+        The Content Converter tool/service offers the capability to convert any RDF element into various formats such as RDF/XML, Turtle, Ntriples, or JSON.
+        This functionality allows users to transform RDF data into formats suitable for different purposes or compatible with various systems and applications.
+        It promotes interoperability and flexibility in handling RDF data within the portal ecosystem.
+    url_checker:
+      title: "URI resolvability checker"
+      description: >
+        This tool/service verifies the resolvability of Uniform Resource Identifiers (URIs) and their content negotiability.
+        It checks whether a given URI is accessible and whether the content associated with it can be negotiated based on the client's preferences.
+        This functionality ensures the reliability and accessibility of linked resources within the RDF ecosystem, aiding in maintaining data integrity and facilitating seamless integration with external resources.
