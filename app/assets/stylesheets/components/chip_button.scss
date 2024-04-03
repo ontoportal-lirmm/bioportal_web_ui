@@ -8,7 +8,9 @@
   line-height: 44px;
   display: inline;
 }
-
+.chip-button-component-container {
+  display: inline-block;
+}
 .chip-button-component-container svg path{
   fill: var(--primary-color);
 }
