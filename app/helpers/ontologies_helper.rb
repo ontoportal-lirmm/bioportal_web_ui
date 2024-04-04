@@ -691,15 +691,21 @@ module OntologiesHelper
     id.split('/').last
   end
 
-  def content_formats(concept_id: nil, acronym: nil, c: nil, selected_format: nil)   
-    if concept_id && acronym
-      finder_params = "?acronym=#{acronym}&uri=#{CGI.escape(concept_id)}"
-      ['json', 'xml', 'ntriples', 'turtle'].each do |format|
-        c.item(title: format, selected: (format.eql?(selected_format)))
-        c.item_content do
-          render TurboFrameComponent.new(id: "resource_content_frame_#{format}", src: "/content_finder#{finder_params}&output_format=#{format}", loading: "lazy")
-        end
-      end
+
+  def content_finder_url(acronym, uri)
+    URI.parse("#{rest_url}/ontologies/#{acronym.strip}/resolve/#{helpers.escape(uri.strip)}")
+  end
+
+  def content_finder_accept_header(output_format)
+    case output_format
+    when 'json'
+      accept_header = "application/json"
+    when 'xml'
+      accept_header = "application/xml"
+    when 'ntriples'
+      accept_header = "application/n-triples"
+    when 'turtle'
+      accept_header = "text/turtle"
     end
   end
   
