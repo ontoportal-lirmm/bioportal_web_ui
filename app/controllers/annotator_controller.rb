@@ -37,7 +37,7 @@ class AnnotatorController < ApplicationController
     if params[:text] && !params[:text].empty?
       @init_whole_word_only = true
       api_params = {
-        text: params[:text],
+        text: remove_special_chars(params[:text]),
         ontologies: params[:ontologies],
         semantic_types: params[:semantic_types],
         semantic_groups: params[:semantic_groups],
@@ -208,6 +208,14 @@ class AnnotatorController < ApplicationController
     filtered_params = optional_params.reject { |_, value| value.nil? }
     optional_params_str = filtered_params.map { |param, value| "#{param}=#{value}" }.join("&")
     return base_url + optional_params_str + "&apikey=#{$API_KEY}"
+  end
+
+  def remove_special_chars(input)
+    regex = /^[a-zA-Z0-9\s]*$/
+    unless input.match?(regex)
+      input.gsub!(/[^\w\s]/, '')
+    end
+    input
   end
 
 end
