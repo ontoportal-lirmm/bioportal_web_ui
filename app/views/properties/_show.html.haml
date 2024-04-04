@@ -3,7 +3,7 @@
     - if @property.errors
       = render Display::AlertComponent.new(type:'info', message: @property.errors.join)
     - else
-      = render ConceptDetailsComponent.new(id:'property-details', acronym: @acronym,
+      = render ConceptDetailsComponent.new(id:'property-details', acronym: @acronym, concept_id: @property.id,
                       properties: OpenStruct.new(LinkedData::Client::Models::Property.properties_to_hash(@property).first),
                       top_keys: [],
                       bottom_keys: [],
@@ -13,9 +13,3 @@
           - t.add_row({th: t('properties.preferred_name')}, {td: display_in_multiple_languages(c.concept_properties[:label][:values])}) if  c.concept_properties[:label][:values].present?
           - t.add_row({th: t('properties.definitions')}, {td: display_in_multiple_languages(c.concept_properties[:definition][:values])}) if c.concept_properties[:definition][:values].present?
           - t.add_row({th: t('properties.parent')}, {td: display_in_multiple_languages(c.concept_properties[:parents][:values])}) if c.concept_properties[:parents][:values].present?
-
-      .property-content-format
-        - property = OpenStruct.new(LinkedData::Client::Models::Property.properties_to_hash(@property).first)
-
-        = render TabsContainerComponent.new(type: 'outline') do |c|
-          = content_formats(concept_id: property.id, acronym: @acronym, c: c, selected_format: 'json')

@@ -33,7 +33,6 @@ export default class extends Controller {
         break
       case 'ntriples':
         hljs.registerLanguage('ntriples', function (hljs) {
-          var URL_PATTERN = /<[^>]+>/; // Regex pattern for matching URLs in angle brackets
           return {
             case_insensitive: true,
             contains: [
@@ -57,7 +56,7 @@ export default class extends Controller {
         break
       case 'turtle':
         hljs.registerLanguage('turtle', function (hljs) {
-          var URL_PATTERN = /(?:<[^>]*>)|(?:https?:\/\/[^\s]+)/;
+          let URL_PATTERN = /(?:<[^>]*>)|(?:https?:\/\/[^\s]+)/;
 
           return {
             case_insensitive: true,

@@ -3,29 +3,30 @@
     = header
   %div.my-3
   %div.raw-table
-    - if @bottom_keys.present?          
-      .concepts-content-format
+    = render TabsContainerComponent.new(type: 'outline') do |c|
+      - if @bottom_keys.present?          
+        - c.item(title: "Raw Data", selected: true)
+        - c.item_content do
+          - top_set, leftover_set, bottom_set = filter_properties(@top_keys, @bottom_keys, @exclude_keys, prefix_properties(@concept_properties))
+          - leftover_set = convert_dates(leftover_set)
+          = render TableComponent.new(stripped: true) do |t|
 
-        = render TabsContainerComponent.new(type: 'outline') do |c|
-          - c.item(title: "Raw Data", selected: true)
+            - row_hash_properties(top_set, @acronym).each do |row|
+              - t.add_row(*row)
+
+            - row_hash_properties(leftover_set, @acronym).each do |row|
+              - t.add_row(*row)
+
+
+            - sections.each do |section|
+              - t.row do
+                = section
+
+
+            - row_hash_properties(bottom_set, @acronym).each do |row|
+              - t.add_row(*row)
+      - if @concept_id
+        - ['json', 'xml', 'ntriples', 'turtle'].each do |format|
+          - c.item(title: format, selected: (format=="json" && @bottom_keys.empty?))
           - c.item_content do
-            - top_set, leftover_set, bottom_set = filter_properties(@top_keys, @bottom_keys, @exclude_keys, prefix_properties(@concept_properties))
-            - leftover_set = convert_dates(leftover_set)
-            = render TableComponent.new(stripped: true) do |t|
-
-              - row_hash_properties(top_set, @acronym).each do |row|
-                - t.add_row(*row)
-
-              - row_hash_properties(leftover_set, @acronym).each do |row|
-                - t.add_row(*row)
-
-
-              - sections.each do |section|
-                - t.row do
-                  = section
-
-
-              - row_hash_properties(bottom_set, @acronym).each do |row|
-                - t.add_row(*row)
-          
-          = content_formats(concept_id: @concept_id, acronym: @acronym, c: c)
+            = render TurboFrameComponent.new(id: "resource_content_frame_#{format}", src: "/ontologies/#{@acronym}/#{CGI.escape(@concept_id)}/serialize/#{format}", loading: "lazy")
