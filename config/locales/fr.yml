@@ -315,7 +315,7 @@ fr:
           </blockquote>
         
   home:
-    ontoportal_instances: "Instances d'Ontoportal"
+    ontoportal_instances: "Autres installations d’OntoPortal"
     bug: Bug
     proposition: Proposition
     question: Question
