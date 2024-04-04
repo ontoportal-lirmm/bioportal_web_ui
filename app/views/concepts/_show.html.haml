@@ -32,10 +32,15 @@
           )
 
       - c.item(id: 'mappings', path: '#mappings') do
-        #{t('concepts.mappings')}
-        (
-        %span#mapping_count= 'loading'
-        )
+        .d-flex
+          #{t('concepts.mappings')}
+          (
+          %span#mapping_count
+            .concepts-mapping-count.ml-1.mr-1
+              = render(TurboFrameComponent.new(id: 'mapping_count', src: "/ajax/mappings/get_concept_table?ontologyid=#{'AGROVOC'}&conceptid=#{escape(@concept.id)}", loading: "lazy")) do |t|
+                - t.loader do
+                  = render LoaderComponent.new(small: true)
+          )
 
       - if @enable_ontolobridge
         - c.item(title: t('concepts.new_term_requests'), path: '#request_term')
