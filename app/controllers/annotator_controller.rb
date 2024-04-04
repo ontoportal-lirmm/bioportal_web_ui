@@ -37,7 +37,7 @@ class AnnotatorController < ApplicationController
     if params[:text] && !params[:text].empty?
       @init_whole_word_only = true
       api_params = {
-        text: escape(params[:text]),
+        text: params[:text],
         ontologies: params[:ontologies],
         semantic_types: params[:semantic_types],
         semantic_groups: params[:semantic_groups],
