@@ -8,7 +8,7 @@ export default class extends Controller {
     type: String,
     acronym: String
   }
-  static targets = ['frame', 'bubbles', 'submit', 'modal', 'selector', 'ontologies']
+  static targets = ['frame', 'bubbles', 'submit', 'modal', 'selector', 'ontologies', 'loader']
 
   connect() {
     this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue, this.#normalization_ratio(this.mappingsListValue))
@@ -72,6 +72,7 @@ export default class extends Controller {
     currentBubble.dispatchEvent(clickEvent);
   }
   select_bubble(event){
+    this.#loading_animation()
     const selected_bubble = event.currentTarget
     const selected_circle = selected_bubble.querySelector('circle')
     const bubblesContainer = document.getElementById('mappings-bubbles-view')
@@ -85,13 +86,16 @@ export default class extends Controller {
       const modal_link = `/mappings/show_mappings?data%5Bshow_modal_size_value%5D=modal-xl&amp;data%5Bshow_modal_title_value%5D=bilel&amp;id=${acronym}&amp;target=https%3A%2F%2Fdata.agroportal.lirmm.fr%2Fontologies%2F${target_acronym}`
       this.modalTarget.querySelector('a').href = modal_link
       this.modalTarget.querySelector('a').click()
+      this.#loading_animation()
       return
     }
     if(selected_bubble.getAttribute('data-enabled') == 'false'){
+      this.#loading_animation()
       return
     }
     if(selected_bubble.getAttribute('data-selected') == 'true'){
         if (this.typeValue == 'disable'){
+          this.#loading_animation()
           return
         }
         selected_bubble.setAttribute('data-selected', 'false')
@@ -103,6 +107,7 @@ export default class extends Controller {
             leafs[i].setAttribute('data-enabled', 'true')
             leafs[i].setAttribute('data-highlighted', 'false')
         }
+        this.#loading_animation()
         return
     }
     selected_bubble.setAttribute('data-selected', 'true')
@@ -145,6 +150,7 @@ export default class extends Controller {
             selected_leaf.setAttribute('data-enabled', 'true')
             const selected_circle = selected_leaf.querySelector('circle')
             selected_circle.style.fill = 'var(--secondary-color)'
+            this.#loading_animation()
         })
         .catch(error => {
             // Handle errors here
@@ -283,5 +289,9 @@ export default class extends Controller {
     acronym = selectValue.split('-')
     acronym.shift()
     return acronym.join('-').split('(')[0].replace(/\s/g, '')
+  }
+  #loading_animation(){
+    this.loaderTarget.classList.toggle('d-none')
+    this.bubblesTarget.classList.toggle('d-none')
   }
 }

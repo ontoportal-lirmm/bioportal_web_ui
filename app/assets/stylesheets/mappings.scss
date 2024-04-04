@@ -126,6 +126,12 @@
   display: flex;
   justify-content: center;
 }
+.mapping-bubbles-loader{
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 @media (min-width: 1000px)  {
   #mappings_container{

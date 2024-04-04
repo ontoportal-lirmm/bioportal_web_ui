@@ -6,6 +6,8 @@
                     }
   .mappings-bubble-view-frame{'data-mappings-target': 'frame'}
     #mappings-bubbles-view{'data-mappings-target': 'bubbles'}
+    .mapping-bubbles-loader.d-none{'data-mappings-target': 'loader'}
+      = render LoaderComponent.new(type: 'pulsing')
   .d-none{'data-mappings-target': 'modal'}
     = link_to_modal "bilel", mappings_show_mappings_path(id: "AGROVOC" ,target: "https://data.agroportal.lirmm.fr/ontologies/AGRO", data: { show_modal_title_value: "bilel", show_modal_size_value: 'modal-xl'})
 = render TableComponent.new(id: 'mapping_count_table') do |t|
