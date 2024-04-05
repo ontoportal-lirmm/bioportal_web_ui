@@ -13,54 +13,11 @@
     = render TabsContainerComponent.new do |c|
       - c.item(title: 'Bubbles view', selected: true)
       - c.item_content do
-        .mappings-bubble-view-container
-          .upload-mappings
-            .card.upload-mappings-example.ontologies
-              .title-bar{"data-target" => "#collaps_selector", "data-toggle" => "collapse"}
-                = inline_svg_tag 'icons/settings.svg'
-                Filter ontologies in the bubble view
-
-              #collaps_selector.mappings-page-ontologies-selector.collapse{'data-mappings-target': 'ontologies'}
-                = ontologies_selector(id:'mappings_page_ontologies_selector')
-                .selector-button{'data-action': 'click->mappings#filter_ontologies'}
-                  = render Buttons::RegularButtonComponent.new(id:'filter-bubbles', value: "Filter bubbles", variant: "secondary", state: "regular", size: "slim")
-          .mappings-bubble-view-frame{'data-mappings-target': 'frame'}
-            #mappings-bubbles-view{'data-mappings-target': 'bubbles'}
-            .mapping-bubbles-loader.d-none{'data-mappings-target': 'loader'}
-              = render LoaderComponent.new(type: 'pulsing')
-          .mappings-zoom-buttons
-            .in{'data-action': 'click->mappings#zoomIn'}
-              = inline_svg_tag 'icons/zoom-in.svg'
-            .out{'data-action': 'click->mappings#zoomOut'}
-              = inline_svg_tag 'icons/zoom-out.svg'
-          .d-none{'data-mappings-target': 'modal'}
-            = link_to_modal "bilel", mappings_show_mappings_path(id: "AGROVOC" ,target: "https://data.agroportal.lirmm.fr/ontologies/AGRO", data: { show_modal_title_value: "bilel", show_modal_size_value: 'modal-xl'})
+        = render partial: '/mappings/tab_sections/bubble_view'
 
       - c.item(title: 'Table view')
       - c.item_content do
-        .mappings-table-view-container
-          .mappings-ontologies-select
-            = form_tag('/mappings_table', method: :get, novalidate: true, data: { turbo: true, turbo_frame: 'mappings_table' }) do
-              .mappings-selector{data: {action: 'change->mappings#submit', 'mappings-target': 'selector'}}
-                = render Input::SelectComponent.new(label: 'Find all the mappings of an ontology', id: 'mappings_ontologies_selector', name: 'ontology', value: @selector_ontologies_count)              
-              %input.d-none{ type: 'submit', 'data-mappings-target': 'submit'}
-              %div
-                = render TurboFrameComponent.new(id:"mappings_table")
+        = render partial: '/mappings/tab_sections/table_view'
       - c.item(title: 'Upload mappings')
       - c.item_content do    
-        .upload-mappings
-          .card.upload-mappings-example
-            .title-bar{"data-target" => "#collapseOne", "data-toggle" => "collapse"}
-              = t("mappings.bulk_loader.loader.example_of_valid_file")
-            #collapseOne.collapse
-              .card-body
-                %pre
-                  %code
-                    = JSON.pretty_generate @example_code
-          
-          = form_with url: '/mappings/loader', method: :post, multipart: true, data: { turbo: true, turbo_frame: 'file_loader_result'} do
-            %div.mb-3
-              = render Input::FileInputComponent.new(name: :file)
-            = render Buttons::RegularButtonComponent.new(id:'upload-mappings-button', value: "Save", variant: "primary", size: 'slim', type:'submit', state: "regular")
-            .mt-3
-              = render TurboFrameComponent.new(id: 'file_loader_result')
+        = render partial: '/mappings/tab_sections/upload_mappings'
