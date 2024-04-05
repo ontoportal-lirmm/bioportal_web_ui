@@ -19,6 +19,11 @@ class SearchController < ApplicationController
 
     @advanced_options_open = !search_params_empty?
     @search_results = aggregate_results(@search_query, results)
+    api_params = {}
+    params.each do |key, value|
+      api_params[key] = value
+    end
+    @json_url = json_link("#{$REST_URL}/search",api_params)
   end
 
   def json_search
