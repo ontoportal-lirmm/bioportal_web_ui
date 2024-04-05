@@ -11,6 +11,7 @@ class SearchController < ApplicationController
     params[:query] = nil
     @advanced_options_open = false
     @search_results = []
+    @json_url = json_link("#{rest_url}/search", {})
 
     return if @search_query.empty?
 
@@ -23,7 +24,7 @@ class SearchController < ApplicationController
     params.each do |key, value|
       api_params[key] = value
     end
-    @json_url = json_link("#{$REST_URL}/search",api_params)
+    @json_url = json_link("#{rest_url}/search", api_params)
   end
 
   def json_search

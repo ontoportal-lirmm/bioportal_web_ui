@@ -57,6 +57,7 @@
 }
 .search-page-advanced-button{
   display: flex;
+  align-items: center;
 }
 .search-page-advanced-button :hover{
   cursor: pointer;
@@ -75,12 +76,4 @@
 
 .search-page-result-element{
   margin-top: 40px;
-}
-
-.search-page-json{
-  margin-left: 15px;
-}
-
-.search-page-json span{
-  margin-left: 0;
 }
