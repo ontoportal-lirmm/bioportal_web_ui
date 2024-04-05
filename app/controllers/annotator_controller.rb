@@ -201,14 +201,6 @@ class AnnotatorController < ApplicationController
       params[:fast_context].nil? &&
       params[:lemmatize].nil?
   end
-  
-
-  def json_link(url, optional_params)
-    base_url = "#{url}?"
-    filtered_params = optional_params.reject { |_, value| value.nil? }
-    optional_params_str = filtered_params.map { |param, value| "#{param}=#{value}" }.join("&")
-    return base_url + optional_params_str + "&apikey=#{$API_KEY}"
-  end
 
   def remove_special_chars(input)
     regex = /^[a-zA-Z0-9\s]*$/
