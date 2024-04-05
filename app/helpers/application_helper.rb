@@ -28,6 +28,10 @@ module ApplicationHelper
     endpoint
   end
 
+  def search_json_link(link = @json_url, style: '')
+    custom_style = "font-size: 50px; line-height: 0.5; margin-left: 6px; #{style}".strip
+    render IconWithTooltipComponent.new(icon: "json.svg",link: link, target: '_blank', title: t('fair_score.go_to_api'), size:'small', style: custom_style)
+  end
 
   def resolve_namespaces
     RESOLVE_NAMESPACE
