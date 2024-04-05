@@ -8,6 +8,12 @@
             = render Buttons::RegularButtonComponent.new(id:'search-page-button', value: "Search", variant: "primary", type: "submit") do |btn|
               = btn.icon_right do
                 = inline_svg_tag "icons/search.svg"
+          - unless @search_results.empty?
+            .search-page-json
+              = render Buttons::RegularButtonComponent.new(id:'search-page-button', value: "", variant: "secondary", href: @json_url, state: 'regular') do |btn|
+                = btn.icon_right do
+                  = inline_svg_tag "json.svg"
+            
             
 
         .search-page-advanced{'data-reveal-component-target': 'item', class: "#{@advanced_options_open ? '' : 'd-none'}"}
@@ -41,7 +47,7 @@
                 = render(ChipsComponent.new(name: 'require_definition', label: t('search.advanced_options.show_only_values.classes_with_definitions'), checked: params[:require_definition]))
 
         .search-page-options
-          - if @search_results
+          - unless @search_results.empty?
             .search-page-number-of-results 
               = "#{t('search.match_in')} #{@search_results.length} #{t('search.ontologies')}"
           .search-page-advanced-button.show-options{class: "#{@advanced_options_open ? 'd-none' : ''}",'data': {'action': 'click->reveal-component#show', 'reveal-component-target': 'showButton'}}
