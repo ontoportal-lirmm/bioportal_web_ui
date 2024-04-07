@@ -13,15 +13,15 @@ class InstancesController < ApplicationController
   end
 
   def show
+    get_ontology(params)
     @instance = get_instance_details_json(params[:ontology_id], params[:id] || params[:instance_id], {include: 'all'})
-
     render partial: 'instances/instance_details', layout: nil
   end
 
   private
 
   def get_ontology(params)
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology] || params[:acronym] || params[:ontology_id]).first
     ontology_not_found(params[:ontology]) if @ontology.nil?
   end
   # json render + adding next and prev pages links

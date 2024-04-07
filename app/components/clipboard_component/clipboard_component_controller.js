@@ -14,7 +14,7 @@ export default class extends Controller {
       this.#copied()
     })
   }
-
+  
   #copied () {
     if (this.timeout) {
       clearTimeout(this.timeout)
