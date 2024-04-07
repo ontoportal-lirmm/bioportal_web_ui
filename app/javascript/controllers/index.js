@@ -46,8 +46,8 @@ application.register("language-change", LanguageChangeController)
 import LoadChartController from "./load_chart_controller"
 application.register("load-chart", LoadChartController)
 
-import MetadataDownloaderController from "./metadata_downloader_controller"
-application.register("metadata-downloader", MetadataDownloaderController)
+import RDFHighlighter from "./rdf_highlighter_controller"
+application.register("rdf-highlighter", RDFHighlighter)
 
 import OntologyRelationsNetworkController from "./ontology_relations_network_controller"
 application.register("ontology-relations-network", OntologyRelationsNetworkController)

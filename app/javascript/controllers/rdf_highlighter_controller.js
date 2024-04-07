@@ -4,7 +4,7 @@ import hljs from 'highlight.js/lib/core'
 import xml from 'highlight.js/lib/languages/xml'
 import json from 'highlight.js/lib/languages/json'
 
-// Connects to data-controller="metadata-downloader"
+// Connects to data-controller="rdf-highlighter"
 export default class extends Controller {
 
   static targets = ['content', 'loader']
@@ -12,7 +12,6 @@ export default class extends Controller {
     metadata: Object,
     context: Object,
     namespaces: Object,
-    result: String,
     format: { type: String, default: 'xml' }
   }
 
@@ -115,8 +114,8 @@ export default class extends Controller {
   }
 
   showNTriples () {
-    if(this.resultValue){
-      this.contentTarget.innerHTML = hljs.highlight(this.resultValue, { language: 'ntriples' }).value
+    if(!this.hasMetadataValue){
+      this.contentTarget.innerHTML = hljs.highlight(this.contentTarget.textContent, { language: 'ntriples' }).value
     }else{
       this.#toggleLoader()
       this.#toNTriples(this.formatedData).then((nquads) => {
@@ -127,8 +126,8 @@ export default class extends Controller {
   }
 
   showXML () {
-    if(this.resultValue){
-      this.contentTarget.innerHTML = hljs.highlight(this.resultValue, { language: 'xml' }).value
+    if(!this.hasMetadataValue){
+      this.contentTarget.innerHTML = hljs.highlight(this.contentTarget.textContent, { language: 'xml' }).value
     }else{
       this.#toggleLoader()
       this.contentTarget.innerHTML = hljs.highlight(
@@ -140,8 +139,8 @@ export default class extends Controller {
   }
 
   showJSONLD () {
-    if(this.resultValue){
-      this.contentTarget.innerHTML = hljs.highlight(JSON.stringify(JSON.parse(this.resultValue), null, "  "), { language: 'json' }).value
+    if(!this.hasMetadataValue){
+      this.contentTarget.innerHTML = hljs.highlight(JSON.stringify(JSON.parse(this.contentTarget.textContent), null, "  "), { language: 'json' }).value
     }else{
       this.#toggleLoader()
       this.#toJSONLD().then((jsonld) => {
@@ -153,7 +152,7 @@ export default class extends Controller {
 
 
   showTURTLE() {
-    this.contentTarget.innerHTML = hljs.highlight(this.resultValue, { language: 'turtle' }).value
+    this.contentTarget.innerHTML = hljs.highlight(this.contentTarget.textContent, { language: 'turtle' }).value
   }
 
   #toggleLoader () {
