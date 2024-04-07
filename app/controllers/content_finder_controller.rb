@@ -1,8 +1,6 @@
 require 'faraday'
 class ContentFinderController < ApplicationController
 
-    layout :determine_layout
-  
     def index
         if params[:acronym] && params[:uri]
             @acronym = params[:acronym]
@@ -31,6 +29,6 @@ class ContentFinderController < ApplicationController
                 @result = response.body.force_encoding(Encoding::UTF_8)
             end
         end
-        render 'content_finder/index'
+        render 'content_finder/index', layout: 'tool'
     end
 end

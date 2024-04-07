@@ -2,8 +2,6 @@
 = form_tag('/content_finder', method: :get, 'data-turbo': true, novalidate: true) do
     .content-finder-container
         %div
-            .content-finder-logo
-                = inline_svg_tag "logos/ontoportal.svg"
             .inputs
                 #graph_url
                     = ontologies_selector(id: 'search-ontologies', name: 'acronym', selected: @acronym || '', placeholder: "Graph URL", multiple: false)
@@ -21,7 +19,7 @@
                 = @result
 
 - if params[:output_format] == "html"
-    .content-finder-html-result
+    .content-finder-html-result.bg-white.p-2.card
         = render TurboFrameComponent.new(id:"concept_details" , src: "/ajax/class_details?&ontology=#{@acronym}&conceptid=#{CGI.escape(params[:uri])}&styled=false", loading: "lazy")
     
                     
