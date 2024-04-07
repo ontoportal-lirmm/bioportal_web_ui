@@ -102,6 +102,3 @@ application.register('form-url', FormUrlController)
 
 import OntologiesSelector from "./ontologies_selector_controller"
 application.register("ontologies-selector", OntologiesSelector)
-
-//import ContentFinderController from "./content_finder_controller"
-//application.register("content-finder", ContentFinderController)

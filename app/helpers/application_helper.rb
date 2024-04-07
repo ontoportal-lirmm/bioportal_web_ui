@@ -183,7 +183,7 @@ module ApplicationHelper
 
   def onts_for_select
     ontologies ||= LinkedData::Client::Models::Ontology.all(include: "acronym,name")
-    onts_for_select = []
+    onts_for_select = [['', '']]
     ontologies.each do |ont|
       next if ( ont.acronym.nil? or ont.acronym.empty? )
       acronym = ont.acronym
@@ -520,9 +520,11 @@ module ApplicationHelper
     config[:ncbo_slice] = @subdomain_filter[:acronym] if (@subdomain_filter[:active] && !@subdomain_filter[:acronym].empty?)
     config.to_json
   end
+
   def portal_name
     $SITE
-    end
+  end
+
   def navitems
     items = [["/ontologies", t('layout.header.browse')],
              ["/mappings", t('layout.header.mappings')],
@@ -601,9 +603,9 @@ module ApplicationHelper
   end
 
 
-  def ontologies_selector(id:, label: nil, name: nil, selected: nil)
+  def ontologies_selector(id:, label: nil, name: nil, selected: nil, placeholder: nil, multiple: true)
     content_tag(:div) do
-      render(Input::SelectComponent.new(id: id, label: label, name: name, value: onts_for_select, multiple: "multiple", selected: selected)) +
+      render(Input::SelectComponent.new(id: id, label: label, name: name, value: onts_for_select, multiple: multiple, selected: selected, placeholder: placeholder)) +
       content_tag(:div, class: 'ontologies-selector-button', 'data-controller': 'ontologies-selector', 'data-ontologies-selector-id-value': id) do
         content_tag(:div, t('ontologies_selector.clear_selection'), class: 'clear-selection', 'data-action': 'click->ontologies-selector#clear') +
         link_to_modal(t('ontologies_selector.ontologies_advanced_selection'), "/ontologies_selector?id=#{id}", data: { show_modal_title_value: t('ontologies_selector.ontologies_advanced_selection')})
