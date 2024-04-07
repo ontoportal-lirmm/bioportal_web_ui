@@ -150,7 +150,6 @@ export default class extends Controller {
     }
   }
 
-
   showTURTLE() {
     this.contentTarget.innerHTML = hljs.highlight(this.contentTarget.textContent, { language: 'turtle' }).value
   }
