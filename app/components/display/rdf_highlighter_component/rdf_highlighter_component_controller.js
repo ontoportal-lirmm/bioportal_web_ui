@@ -1,8 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import * as jsonld from 'jsonld'
-import hljs from 'highlight.js/lib/core'
-import xml from 'highlight.js/lib/languages/xml'
-import json from 'highlight.js/lib/languages/json'
+import { useHighLighter } from '../../../javascript/mixins/useHighLight'
 
 // Connects to data-controller="rdf-highlighter"
 export default class extends Controller {
@@ -17,81 +15,22 @@ export default class extends Controller {
 
   connect () {
     this.formatedData = this.#formatData()
+    this.highlighter = useHighLighter(this.formatValue)
+
     switch (this.formatValue) {
       case 'xml':
-        hljs.registerLanguage('xml', xml)
         this.showXML()
         break
       case 'json':
-        hljs.registerLanguage('json', json)
         this.showJSONLD()
         break
       case 'triples':
-        hljs.registerLanguage('xml', xml)
         this.showNTriples()
         break
       case 'ntriples':
-        hljs.registerLanguage('ntriples', function (hljs) {
-          return {
-            case_insensitive: true,
-            contains: [
-              {
-                className: 'subject',
-                begin: /^<[^>]+>/,
-              },
-              {
-                className: 'predicate',
-                begin: /<[^>]+>/,
-              },
-              {
-                className: 'object',
-                begin: /\s([^\s]+)\s\./,
-              },
-              hljs.COMMENT('^#', '$')
-            ]
-          };
-        });
         this.showNTriples()
         break
       case 'turtle':
-        hljs.registerLanguage('turtle', function (hljs) {
-          let URL_PATTERN = /(?:<[^>]*>)|(?:https?:\/\/[^\s]+)/;
-
-          return {
-            case_insensitive: true,
-            contains: [
-              {
-                className: 'custom-prefixes',
-                begin: '@prefix',
-                relevance: 10
-              },
-              {
-                className: 'meta',
-                begin: /@base/,
-                end: /[\r\n]|$/,
-                relevance: 10
-              },
-              {
-                className: 'variable',
-                begin: /\?[\w\d]+/
-              },
-              {
-                className: 'custom-symbol',
-                begin: /@?[A-Za-z_][A-Za-z0-9_]*(?= *:)/,
-                relevance: 10
-              },
-              {
-                className: 'custom-concepts',
-                begin: /:\s*(\w+)/,
-                relevance: 10
-              },
-              {
-                className: 'string',
-                begin: URL_PATTERN
-              }
-            ]
-          };
-        });
         this.showTURTLE()
         break
     }
@@ -114,44 +53,42 @@ export default class extends Controller {
   }
 
   showNTriples () {
-    if(!this.hasMetadataValue){
-      this.contentTarget.innerHTML = hljs.highlight(this.contentTarget.textContent, { language: 'ntriples' }).value
-    }else{
+    if (!this.hasMetadataValue) {
+      this.contentTarget.innerHTML = this.highlighter.highlight(this.contentTarget.textContent, 'ntriples')
+    } else {
       this.#toggleLoader()
       this.#toNTriples(this.formatedData).then((nquads) => {
-        this.contentTarget.innerHTML = hljs.highlight(nquads, { language: 'xml' }).value
+        this.contentTarget.innerHTML = this.highlighter.highlight(nquads, 'ntriples')
         this.#toggleLoader()
       })
     }
   }
 
   showXML () {
-    if(!this.hasMetadataValue){
-      this.contentTarget.innerHTML = hljs.highlight(this.contentTarget.textContent, { language: 'xml' }).value
-    }else{
+    if (!this.hasMetadataValue) {
+      this.contentTarget.innerHTML = this.highlighter.highlight(this.contentTarget.textContent, 'xml')
+    } else {
       this.#toggleLoader()
-      this.contentTarget.innerHTML = hljs.highlight(
-        this.#toXML(this.formatedData, this.contextValue),
-        { language: 'xml' }
-      ).value
+      const xml = this.#toXML(this.formatedData, this.contextValue)
+      this.contentTarget.innerHTML = this.highlighter.highlight(xml, 'xml')
       this.#toggleLoader()
     }
   }
 
   showJSONLD () {
-    if(!this.hasMetadataValue){
-      this.contentTarget.innerHTML = hljs.highlight(JSON.stringify(JSON.parse(this.contentTarget.textContent), null, "  "), { language: 'json' }).value
-    }else{
+    if (!this.hasMetadataValue) {
+      this.contentTarget.innerHTML = this.highlighter.highlight(JSON.stringify(JSON.parse(this.contentTarget.textContent), null, '  '), 'json')
+    } else {
       this.#toggleLoader()
       this.#toJSONLD().then((jsonld) => {
-        this.contentTarget.innerHTML = hljs.highlight(JSON.stringify(jsonld, null, '  '), { language: 'json' }).value
+        this.contentTarget.innerHTML = this.highlighter.highlight(JSON.stringify(jsonld, null, '  '), 'json')
         this.#toggleLoader()
       })
     }
   }
 
-  showTURTLE() {
-    this.contentTarget.innerHTML = hljs.highlight(this.contentTarget.textContent, { language: 'turtle' }).value
+  showTURTLE () {
+    this.contentTarget.innerHTML = this.highlighter.highlight(this.contentTarget.textContent, 'turtle')
   }
 
   #toggleLoader () {
@@ -233,14 +170,13 @@ export default class extends Controller {
     const data = this.formatedData
     const resolveNamespace = this.namespacesValue
     let namespaces = {}
-    let xmlString = ""
+    let xmlString = ''
 
     delete data['@id']
     delete data['@type']
 
     for (let prop in data) {
       const attr_uri = prop
-
 
       // Replace the full URI by namespace:attr
       for (const ns in resolveNamespace) {
