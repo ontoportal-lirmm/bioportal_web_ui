@@ -4,12 +4,6 @@
     margin-bottom: 6px;
 }
 
-.content-finder-logo{
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
-}
-
 .content-finder-container .inputs > div{
     margin:10px 0;
     text-align: center;
@@ -39,24 +33,10 @@
     color: #770088;
 }
 
-
-.content-finder-logo svg {
-    width: 100px;
-    height: 100px;
-}
-.content-finder-logo svg path{
-    fill: var(--primary-color)
-}
-
 .hljs-subject{
     color: green;
 }
 
 .hljs-predicate{
     color: #770088;
-}
-
-.parse_button{
-    display: flex;
-    justify-content: center;
 }
