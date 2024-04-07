@@ -10,7 +10,7 @@ class ConceptDetailsComponent < ViewComponent::Base
 
   attr_reader :concept_properties
 
-  def initialize(id:, acronym:, concept_id: nil , properties:, top_keys:, bottom_keys:, exclude_keys:)
+  def initialize(id:, acronym:, concept_id: nil , properties: nil, top_keys: [], bottom_keys: [], exclude_keys: [])
     @acronym = acronym
     @properties = properties
     @top_keys = top_keys
