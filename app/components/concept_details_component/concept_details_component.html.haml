@@ -29,5 +29,4 @@
               %div.d-flex.justify-content-center.p-2
                 - [["json","json-ld-file"], ["xml","rdf-xml-file"] , ["ntriples","ntriples-file"], ["turtle","turtle-file"]].each do |format, icon|
                   %div.mx-4{data: {controller: "tooltip"}, title: "Export in #{format.upcase}"}
-                    = link_to_modal(nil, "/ontologies/#{@acronym}/#{CGI.escape(@concept_id)}/serialize/#{format}", data: {show_modal_title_value: @concept_id, show_modal_size_value: 'modal-xl'}) do
-                      = inline_svg("icons/#{icon}.svg", width: '50px', height: '50px')
+                    = link_to_format_modal(format, icon)
