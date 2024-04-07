@@ -691,22 +691,5 @@ module OntologiesHelper
     id.split('/').last
   end
 
-
-  def content_finder_url(acronym, uri)
-    URI.parse("#{rest_url}/ontologies/#{acronym.strip}/resolve/#{helpers.escape(uri.strip)}")
-  end
-
-  def content_finder_accept_header(output_format)
-    case output_format
-    when 'json'
-      accept_header = "application/json"
-    when 'xml'
-      accept_header = "application/xml"
-    when 'ntriples'
-      accept_header = "application/n-triples"
-    when 'turtle'
-      accept_header = "text/turtle"
-    end
-  end
   
 end

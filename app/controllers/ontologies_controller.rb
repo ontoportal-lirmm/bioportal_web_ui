@@ -12,6 +12,7 @@ class OntologiesController < ApplicationController
   include TurboHelper
   include SparqlHelper
   include SubmissionFilter
+  include OntologyContentSerializer
 
   require 'multi_json'
   require 'cgi'
@@ -52,7 +53,7 @@ class OntologiesController < ApplicationController
 
     count_streams = [
       replace('ontologies_filter_count_request') do
-        helpers.content_tag(:p, class: "browse-desc-text", style: "margin-bottom: 12px !important;") { t("ontologies.showing_ontologies_size", ontologies_size: @ontologies.size, analytics_size: @analytics.keys.size)}
+        helpers.content_tag(:p, class: "browse-desc-text", style: "margin-bottom: 12px !important;") { t("ontologies.showing_ontologies_size", ontologies_size: @ontologies.size, analytics_size: @analytics.keys.size) }
       end
     ] + update_filters_counts
 
@@ -219,24 +220,12 @@ class OntologiesController < ApplicationController
     end
   end
 
-  def content_finder
-    if params[:acronym] && params[:id]
-      @format = params[:output_format]
-      @result= ""
+  def content_serializer
+    @result = serialize_content(ontology_acronym: params[:acronym],
+                      concept_id: params[:id],
+                      format: params[:output_format])
 
-      url = content_finder_url(params[:acronym], params[:id])
-      accept_header = content_finder_accept_header(@format)
-      conn = Faraday.new(url: url) do |faraday|
-        faraday.headers['Accept'] = accept_header
-        faraday.adapter Faraday.default_adapter
-        faraday.headers['Authorization'] = "apikey token=#{API_KEY}"
-      end
-      response = conn.get
-      if response.success?
-          @result = response.body.force_encoding(Encoding::UTF_8)
-      end
-    end
-    render 'ontologies/resource_content', layout: nil
+    render 'ontologies/content_serializer', layout: nil
   end
 
   # GET /ontologies/ACRONYM
@@ -463,16 +452,16 @@ class OntologiesController < ApplicationController
     @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
     @filters = ontology_filters_init(@categories, @groups)
     @select_id = params[:id]
-    render 'ontologies/ontologies_selector/ontologies_selector' , layout: false
+    render 'ontologies/ontologies_selector/ontologies_selector', layout: false
   end
 
   def ontologies_selector_results
     @ontologies = LinkedData::Client::Models::Ontology.all(include_views: params[:showOntologyViews])
     @total_ontologies_number = @ontologies.length
     @input = params[:input] || ''
-    @ontologies = @ontologies.select { |ontology| ontology.name.downcase.include?(@input.downcase) || ontology.acronym.downcase.include?(@input.downcase)}
+    @ontologies = @ontologies.select { |ontology| ontology.name.downcase.include?(@input.downcase) || ontology.acronym.downcase.include?(@input.downcase) }
 
-    if params[:groups] 
+    if params[:groups]
       @ontologies = @ontologies.select do |ontology|
         (ontology.group & params[:groups]).any?
       end
@@ -485,9 +474,9 @@ class OntologiesController < ApplicationController
     end
 
     if params[:formats] || params[:naturalLanguage] || params[:formalityLevel] || params[:isOfType] || params[:showRetiredOntologies]
-      submissions = LinkedData::Client::Models::OntologySubmission.all({also_include_views: 'true'})
+      submissions = LinkedData::Client::Models::OntologySubmission.all({ also_include_views: 'true' })
       if params[:formats]
-        submissions = submissions.select { |submission| params[:formats].include?(submission.hasOntologyLanguage)}
+        submissions = submissions.select { |submission| params[:formats].include?(submission.hasOntologyLanguage) }
       end
       if params[:naturalLanguage]
         submissions = submissions.select do |submission|
@@ -495,13 +484,13 @@ class OntologiesController < ApplicationController
         end
       end
       if params[:formalityLevel]
-        submissions = submissions.select { |submission| params[:formalityLevel].include?(submission.hasFormalityLevel)}
+        submissions = submissions.select { |submission| params[:formalityLevel].include?(submission.hasFormalityLevel) }
       end
       if params[:isOfType]
-        submissions = submissions.select { |submission| params[:isOfType].include?(submission.isOfType)}
+        submissions = submissions.select { |submission| params[:isOfType].include?(submission.isOfType) }
       end
       if params[:showRetiredOntologies]
-        submissions = submissions.reject { |submission| submission.status.eql?('retired')}
+        submissions = submissions.reject { |submission| submission.status.eql?('retired') }
       end
       @ontologies = @ontologies.select do |ontology|
         submissions.any? { |submission| submission.ontology.id == ontology.id }
