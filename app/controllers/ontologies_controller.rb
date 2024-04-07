@@ -222,7 +222,8 @@ class OntologiesController < ApplicationController
   def content_finder
     if params[:acronym] && params[:id]
       @format = params[:output_format]
-      @result=""
+      @result= ""
+
       url = content_finder_url(params[:acronym], params[:id])
       accept_header = content_finder_accept_header(@format)
       conn = Faraday.new(url: url) do |faraday|
@@ -235,7 +236,7 @@ class OntologiesController < ApplicationController
           @result = response.body.force_encoding(Encoding::UTF_8)
       end
     end
-    render 'ontologies/resource_content'
+    render 'ontologies/resource_content', layout: nil
   end
 
   # GET /ontologies/ACRONYM

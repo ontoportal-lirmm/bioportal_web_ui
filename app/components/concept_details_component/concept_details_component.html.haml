@@ -3,30 +3,31 @@
     = header
   %div.my-3
   %div.raw-table
-    = render TabsContainerComponent.new(type: 'outline') do |c|
-      - if @bottom_keys.present?          
-        - c.item(title: "Raw Data", selected: true)
-        - c.item_content do
+    = render DropdownContainerComponent.new(title: 'Raw data', id: "accordion-#{@id}") do
+      = render TableComponent.new(stripped: true) do |t|
+        - if @bottom_keys.present?
           - top_set, leftover_set, bottom_set = filter_properties(@top_keys, @bottom_keys, @exclude_keys, prefix_properties(@concept_properties))
           - leftover_set = convert_dates(leftover_set)
-          = render TableComponent.new(stripped: true) do |t|
+          - row_hash_properties(top_set, @acronym).each do |row|
+            - t.add_row(*row)
 
-            - row_hash_properties(top_set, @acronym).each do |row|
-              - t.add_row(*row)
-
-            - row_hash_properties(leftover_set, @acronym).each do |row|
-              - t.add_row(*row)
+          - row_hash_properties(leftover_set, @acronym).each do |row|
+            - t.add_row(*row)
 
 
-            - sections.each do |section|
-              - t.row do
-                = section
+          - sections.each do |section|
+            - t.row do
+              = section
 
 
-            - row_hash_properties(bottom_set, @acronym).each do |row|
-              - t.add_row(*row)
-      - if @concept_id
-        - ['json', 'xml', 'ntriples', 'turtle'].each do |format|
-          - c.item(title: format, selected: (format=="json" && @bottom_keys.empty?))
-          - c.item_content do
-            = render TurboFrameComponent.new(id: "resource_content_frame_#{format}", src: "/ontologies/#{@acronym}/#{CGI.escape(@concept_id)}/serialize/#{format}", loading: "lazy")
+          - row_hash_properties(bottom_set, @acronym).each do |row|
+            - t.add_row(*row)
+
+        - if @concept_id
+          - t.row do |r|
+            - r.td(colspan: 2) do
+              %div.d-flex.justify-content-center.p-2
+                - [["json","json-ld-file"], ["xml","rdf-xml-file"] , ["ntriples","ntriples-file"], ["turtle","turtle-file"]].each do |format, icon|
+                  %div.mx-4{data: {controller: "tooltip"}, title: "Export in #{format.upcase}"}
+                    = link_to_modal(nil, "/ontologies/#{@acronym}/#{CGI.escape(@concept_id)}/serialize/#{format}", data: {show_modal_title_value: @concept_id, show_modal_size_value: 'modal-xl'}) do
+                      = inline_svg("icons/#{icon}.svg", width: '50px', height: '50px')
