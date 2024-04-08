@@ -2,6 +2,7 @@
 
 class ConceptDetailsComponent < ViewComponent::Base
   include ApplicationHelper
+  include OntologiesHelper
   include MultiLanguagesHelper
 
   renders_one :header, TableComponent
@@ -9,13 +10,14 @@ class ConceptDetailsComponent < ViewComponent::Base
 
   attr_reader :concept_properties
 
-  def initialize(id:, acronym:, properties:, top_keys:, bottom_keys:, exclude_keys:)
+  def initialize(id:, acronym:, concept_id: nil , properties: nil, top_keys: [], bottom_keys: [], exclude_keys: [])
     @acronym = acronym
     @properties = properties
     @top_keys = top_keys
     @bottom_keys = bottom_keys
     @exclude_keys = exclude_keys
     @id = id
+    @concept_id=concept_id
 
     @concept_properties = concept_properties2hash(@properties) if @properties
   end
@@ -76,6 +78,12 @@ class ConceptDetailsComponent < ViewComponent::Base
   end
 
   private
+
+  def link_to_format_modal(format, icon)
+    link_to_modal(nil, "/ontologies/#{@acronym}/#{escape(@concept_id)}/serialize/#{format}", data: {show_modal_title_value: @concept_id, show_modal_size_value: 'modal-xl'}) do
+      inline_svg("icons/#{icon}.svg", width: '50px', height: '50px')
+    end
+  end
 
   def concept_properties2hash(properties)
     # NOTE: example properties

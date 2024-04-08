@@ -1,5 +1,5 @@
 = turbo_frame_tag 'collection' do
-  = render ConceptDetailsComponent.new(id:'collection-label', acronym: @ontology.acronym,
+  = render ConceptDetailsComponent.new(id:'collection-label', acronym: @ontology.acronym, concept_id: collection.id,
                 properties: collection.properties,
                 top_keys: %w[created modified comment note],
                 bottom_keys: [],

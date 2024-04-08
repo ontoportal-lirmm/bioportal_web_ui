@@ -690,4 +690,6 @@ module OntologiesHelper
   def id_to_acronym(id)
     id.split('/').last
   end
+
+  
 end

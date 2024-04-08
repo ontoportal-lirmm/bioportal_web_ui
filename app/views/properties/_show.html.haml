@@ -3,7 +3,7 @@
     - if @property.errors
       = render Display::AlertComponent.new(type:'info', message: @property.errors.join)
     - else
-      = render ConceptDetailsComponent.new(id:'property-details', acronym: @acronym,
+      = render ConceptDetailsComponent.new(id:'property-details', acronym: @acronym, concept_id: @property.id,
                       properties: OpenStruct.new(LinkedData::Client::Models::Property.properties_to_hash(@property).first),
                       top_keys: [],
                       bottom_keys: [],

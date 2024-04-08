@@ -718,6 +718,13 @@ class ApplicationController < ActionController::Base
     helpers.request_lang
   end
 
+  def json_link(url, optional_params)
+    base_url = "#{url}?"
+    filtered_params = optional_params.reject { |_, value| value.nil? }
+    optional_params_str = filtered_params.map { |param, value| "#{param}=#{value}" }.join("&")
+    return base_url + optional_params_str + "&apikey=#{$API_KEY}"
+  end
+
   private
   def not_found_record(exception)
     @error_message = exception.message

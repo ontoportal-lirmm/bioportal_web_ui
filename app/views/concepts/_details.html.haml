@@ -3,7 +3,7 @@
   - label_xl_set = %w[skos-xl#prefLabel skos-xl#altLabel skos-xl#hiddenLabel]
 
 
-  = render ConceptDetailsComponent.new(id:'concept-details', acronym: @ontology.acronym,
+  = render ConceptDetailsComponent.new(id:'concept-details', acronym: @ontology.acronym, concept_id: @concept.id,
                 properties: @concept.properties,
                 top_keys: %w[description comment],
                 bottom_keys: %w[disjoint subclass is_a has_part],
