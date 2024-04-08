@@ -1,8 +1,6 @@
 - @title = t('admin.index.title')
 
-%div
-  %div.container
-    %h3.my-1.py-5= t('admin.index.administration_console')
+
 %div
   %div.container.my-3
     = render_alerts_container
@@ -15,18 +13,13 @@
   %div.mx-1
     - sections = [t('admin.index.analytics'), t('admin.index.site_administration'),t('admin.index.ontology_administration'),  t('admin.index.licensing'), t('admin.index.users'), t('admin.index.metadata_administration'), t('admin.index.groups'), t('admin.index.categories'), t('admin.index.persons_and_organizations'), t('admin.index.sparql')]
     - selected = params[:section] || sections.first.downcase
-    = render TabsContainerComponent.new(url_parameter: 'section') do |t|
-      - sections.each do |section_title|
-        - t.item(title: section_title.humanize,
-                     path: '',
-                     selected: section_title.downcase.eql?(selected.downcase),
-                     page_name: '')
+    = render Layout::VerticalTabsComponent.new(header:  t('admin.index.administration_console'), titles: sections, selected: selected) do |t|
       - t.item_content do
         = render 'analytics'
       - t.item_content do
         = render 'main'
       - t.item_content do
-        %div.ontologies_list_container.mt-3
+        %div
           %table{:style => "float:left;"}
             %tr
               %td{:style => "white-space:nowrap;"}
@@ -36,7 +29,7 @@
                 %a#refresh_report_action{:href => "javascript:;", :class => "link_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only", :style => "margin-left:11px;"}
                   %span.ui-button-text{:class => "report_date_generated_button"}
           %p.tab_description{:style => "clear:both;"}
-          %table#adminOntologies.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
+          %table#adminOntologies.border.rounded.p-1
       - t.item_content do
         %div#renew-license-notice
           %table.table.table-sm.table-bordered.mt-5#license-table
@@ -53,23 +46,14 @@
 
         %div.mb-5#renew-license-form
       - t.item_content do
-        %div.ontologies_list_container.mt-3
-          %div.mx-auto.w-75
-            = render TurboFrameComponent.new(id: 'users-list', src: users_path, loading: 'lazy')
+        = render TurboFrameComponent.new(id: 'users-list', src: users_path, loading: 'lazy')
       - t.item_content do
         = render partial: 'ontologies_metadata_curator/metadata_tab'
       - t.item_content do
-        %div.ontologies_list_container.mt-3
-          %div.mx-auto.w-75
-            = render TurboFrameComponent.new(id: 'groups-list', src: admin_groups_path, loading: 'lazy')
+        = render TurboFrameComponent.new(id: 'groups-list', src: admin_groups_path, loading: 'lazy')
       - t.item_content do
-        %div.ontologies_list_container.mt-3
-          %div.mx-auto.w-75
-            = render TurboFrameComponent.new(id: 'categories-list', src: admin_categories_path, loading: 'lazy')
+        = render TurboFrameComponent.new(id: 'categories-list', src: admin_categories_path, loading: 'lazy')
       - t.item_content do
-        %div.ontologies_list_container.mt-3
-          %div.mx-auto.w-75
-            = render TurboFrameComponent.new(id: 'agents-list', src: agents_path, loading: 'lazy')
+        = render TurboFrameComponent.new(id: 'agents-list', src: agents_path, loading: 'lazy')
       - t.item_content do
-        %div.container
-          = sparql_query_container
+        = sparql_query_container

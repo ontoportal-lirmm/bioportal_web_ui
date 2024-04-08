@@ -406,11 +406,11 @@ function populateOntologyRows(data) {
     var ontologyDateCreated = parseReportDate(ontology["date_created"]);
 
     if (ontology["logFilePath"] != '') {
-      bpLinks += "<a href='" + "/admin/ontologies/" + acronym + "/log' target='_blank'>Log</a>&nbsp;&nbsp;|&nbsp;&nbsp;";
+      bpLinks += "<div><a href='" + "/admin/ontologies/" + acronym + "/log' target='_blank'>Log</a> </div>";
     }
-    bpLinks += "<a href='" + BP_CONFIG.rest_url + "/ontologies/" + acronym + "?apikey=" + BP_CONFIG.apikey + "&userapikey: " + BP_CONFIG.userapikey + "' target='_blank'>REST</a>&nbsp;&nbsp;|&nbsp;&nbsp;";
+    bpLinks += "<div><a href='" + BP_CONFIG.rest_url + "/ontologies/" + acronym + "?apikey=" + BP_CONFIG.apikey + "&userapikey: " + BP_CONFIG.userapikey + "' target='_blank'>REST</a></div>";
     let title = `Ontology Submissions for ${acronym}`
-    let link = `<a id='link_submissions_${acronym}' href="/ontologies/${acronym}/submissions?container_id=application_modal_content" data-controller="show-modal" data-show-modal-title-value="${title}" data-action="click->show-modal#show" data-turbo="true" data-turbo-frame="application_modal_content">Submissions</a>`
+    let link = `<div><a id='link_submissions_${acronym}' href="/ontologies/${acronym}/submissions?container_id=application_modal_content" data-controller="show-modal" data-show-modal-title-value="${title}" data-action="click->show-modal#show" data-turbo="true" data-turbo-frame="application_modal_content">Submissions</a></div>`
     bpLinks += link
 
     var errStatus = ontology["errErrorStatus"] ? ontology["errErrorStatus"].join(", ") : '';
@@ -525,53 +525,45 @@ function displayOntologies(data, ontology) {
         {
           "targets": 0,
           "searchable": true,
-          "title": "Ontology",
-          "width": "160px"
+          "title": "Ontology"
         },
         {
           "targets": 1,
           "searchable": true,
           "title": "Admin",
-          "width": "160px"
         },
         {
           "targets": 2,
           "searchable": true,
           "title": "Format",
-          "width": "55px"
         },
         {
           "targets": 3,
           "searchable": true,
           "title": "Date Created",
           "type": "date",
-          "width": "170px"
         },
         {
           "targets": 4,
           "searchable": true,
           "title": "Report Date",
           "type": "date",
-          "width": "170px"
         },
         {
           "targets": 5,
           "searchable": false,
           "orderable": false,
           "title": "URL",
-          "width": "140px"
         },
         {
           "targets": 6,
           "searchable": true,
           "title": "Error Status",
-          "width": "130px"
         },
         {
           "targets": 7,
           "searchable": true,
           "title": "Missing Status",
-          "width": "130px"
         },
         {
           "targets": 8,
@@ -584,8 +576,8 @@ function displayOntologies(data, ontology) {
           "visible": false
         }
       ],
-      "autoWidth": false,
-      "lengthChange": false,
+      "autoWidth": true,
+      "lengthChange": true,
       "searching": true,
       "language": {
         "search": "Filter: ",

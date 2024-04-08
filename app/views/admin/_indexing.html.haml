@@ -1,0 +1,16 @@
+%div.container
+  %div#site-admin-clear-caches.my-5
+    %div.site-admin-page-header
+      CACHE MANAGEMENT
+    %dive.site-admin-page-section.d-flex.mb-3
+      = action_button("Flush UI cache", admin_clearcache_path, class_style: 'btn btn-primary mx-1')
+      = action_button("Reset UI cache connection", admin_resetcache_path, class_style: 'btn btn-primary mx-1')
+      = action_button("Flush GOO cache", admin_clear_goo_cache_path, class_style: 'btn btn-primary mx-1')
+      = action_button("Flush HTTP cache", admin_clear_http_cache_path, class_style: 'btn btn-primary mx-1')
+
+  %div.mb-5
+    %div.site-admin-page-header
+      VERSION MANAGEMENT
+    %dive.site-admin-page-section
+      = render TurboFrameComponent.new(id: 'update_check_frame', src: '/admin/indexer/collections') do |c|
+        - c.loader { 'Checking for updates ...' }
