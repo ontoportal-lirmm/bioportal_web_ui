@@ -74,7 +74,7 @@ export default class extends Controller {
         } else {
             useAjax({
                 type: "GET",
-                url: this.ajaxUrlValue + this.#inputValue(),
+                url: this.ajaxUrlValue + encodeURIComponent(this.#inputValue()),
                 dataType: "json",
                 success: (data) => {
                     this.items = data.map(x => { return {...x, link: (this.itemLinkBaseValue + x[this.idKeyValue])}} )
@@ -112,9 +112,8 @@ export default class extends Controller {
 
                 let text =  Object.values(item).reduce((acc, value) => acc + value, "")
 
-
                 // Check if the item contains the substring
-                if (text.toLowerCase().includes(inputValue.toLowerCase())) {
+                if (!this.cacheValue || text.toLowerCase().includes(inputValue.toLowerCase())) {
                     results_list.push(item);
                     breaker = breaker + 1
                 }

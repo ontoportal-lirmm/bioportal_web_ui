@@ -1,7 +1,7 @@
 require 'uri'
 
 class SearchController < ApplicationController
-  include SearchAggregator
+  include SearchAggregator, SubmissionFilter, SearchHelper
   skip_before_action :verify_authenticity_token
 
   layout :determine_layout
