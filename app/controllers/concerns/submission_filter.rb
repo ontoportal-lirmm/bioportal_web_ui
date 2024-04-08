@@ -10,34 +10,56 @@ module SubmissionFilter
     @show_private_only = params[:private_only]&.eql?('true')
     @show_retired = params[:show_retired]&.eql?('true')
     @selected_format = params[:format]
-    @selected_sort_by = params[:sort_by].blank? ? 'visits' : params[:sort_by]
+    @sort_by = params[:sort_by].blank? ? 'visits' : params[:sort_by]
     @search = params[:search]
   end
 
   def submissions_paginate_filter(params)
-    request_params = filters_params(params, page: nil)
+    request_params = filters_params(params, page: params[:page], pagesize: 10)
+    filter_params = params.permit(@filters.keys).to_h
     init_filters(params)
-    # pagination disabled because is not supported by 4store,
-    # see  https://github.com/ontoportal-lirmm/ontologies_api/issues/25
-    # @page = LinkedData::Client::Models::OntologySubmission.all(request_params)
-    @page = OpenStruct.new(page: 1, next_page: nil)
-    submissions = LinkedData::Client::Models::OntologySubmission.all(request_params)
-    @analytics =  helpers.ontologies_analytics
+
+    @analytics = Rails.cache.fetch("ontologies_analytics-#{Time.now.year}-#{Time.now.month}") do
+      helpers.ontologies_analytics
+    end
+    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'notes,projects', also_include_views: @show_views, display_links: false, display_context: false)
 
     # get fair scores of all ontologies
     @fair_scores = fairness_service_enabled? ? get_fair_score('all') : nil
-    submissions = submissions.reject { |sub| sub.ontology.nil? }.map { |sub| ontology_hash(sub) }
 
-    if @selected_sort_by.eql?('visits')
-      submissions = submissions.sort_by { |x| -x[:popularity] }
-    elsif @selected_sort_by.eql?('fair')
-      submissions = submissions.sort_by { |x| -x[:fairScore] }
-    elsif @selected_sort_by.eql?('notes')
-      submissions = submissions.sort_by { |x| -x[:note_count] }
-    elsif @selected_sort_by.eql?('projects')
-      submissions = submissions.sort_by { |x| -x[:project_count] }
+    @total_ontologies = @ontologies.size
+    search_backend = params[:search_backend]
+    params = { query: @search,
+               status: request_params[:status],
+               show_views: @show_views,
+               private_only: @show_private_only,
+               languages: request_params[:naturalLanguage],
+               page_size: @total_ontologies,
+               formality_level: request_params[:hasFormalityLevel],
+               is_of_type: request_params[:isOfType],
+               groups: request_params[:group], categories: request_params[:hasDomain],
+               formats: request_params[:hasOntologyLanguage] }
+    submissions = []
+
+    @time = Benchmark.realtime do
+      if search_backend.eql?('api') || search_backend.eql?('0')
+        submissions = filter_using_data(**params)
+      else
+        submissions = filter_using_index(**params)
+      end
     end
-    submissions
+
+    submissions = submissions.reject { |sub| sub.ontology.nil? }.map { |sub| ontology_hash(sub, @ontologies) }
+
+
+    submissions = sort_submission_by(submissions, @sort_by)   if @search.blank?
+
+
+    @page = paginate_submissions(submissions, request_params[:page].to_i, request_params[:pagesize].to_i)
+
+    count = @page.page.eql?(1) ? count_objects(submissions) : {}
+
+    [@page.collection, @page.totalCount, count, filter_params]
   end
 
   def ontologies_filter_url(filters, page: 1, count: false)
@@ -63,7 +85,7 @@ module SubmissionFilter
   end
 
   def filter_using_data(query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
-    submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: show_views, display_links: false, display_context: false)
+    submissions = LinkedData::Client::Models::OntologySubmission.all(include: 'all', also_include_views: show_views, display_links: false, display_context: false)
     submissions.select do |s|
       out = !s.ontology.nil?
       out = out && ((s.ontology.viewingRestriction.eql?('public') && !private_only) || private_only && s.ontology.viewingRestriction.eql?('private'))
@@ -116,7 +138,7 @@ module SubmissionFilter
   def filters_params(params, includes: BROWSE_ATTRIBUTES.join(','), page: 1, pagesize: 5)
     request_params = { display_links: false, display_context: false,
                        include: includes, include_status: 'RDF' }
-    request_params.merge!(page: page, pagesize: pagesize) if page
+    request_params.merge!(page: page.to_i, pagesize: pagesize.to_i) if page
     filters_values_map = {
       categories: :hasDomain,
       groups: :group,
@@ -150,7 +172,6 @@ module SubmissionFilter
       @filters[:show_retired] = 'true'
     end
 
-
     filters_values_map.each do |filter, api_key|
       next if params[filter].nil? || params[filter].empty?
 
@@ -160,13 +181,23 @@ module SubmissionFilter
       end
     end
 
+    unless params[:sort_by].blank?
+      @filters[:sort_by] = params[:sort_by]
+    end
+
+    unless params[:search].blank?
+      @filters[:search] = params[:search]
+    end
+
     request_params.delete(:order_by) if %w[visits fair].include?(request_params[:sort_by].to_s)
     request_params
   end
 
-  def ontology_hash(sub)
+  def ontology_hash(sub, ontologies)
     o = {}
     ont = sub.ontology
+    ont.notes = ontologies.select { |x| x.acronym.eql?(sub.ontology.acronym) }.first&.notes || []
+    ont.projects = ontologies.select { |x| x.acronym.eql?(sub.ontology.acronym) }.first&.projects || []
 
     add_ontology_attributes(o, ont)
     add_submission_attributes(o, sub)
@@ -211,12 +242,12 @@ module SubmissionFilter
     ont_hash[:hasFormalityLevel] = sub.hasFormalityLevel
     ont_hash[:isOfType] = sub.isOfType
     ont_hash[:submissionStatusFormatted] = submission_status2string(sub).gsub(/\(|\)/, '')
-    ont_hash[:format] = sub.hasOntologyLanguage
-    ont_hash[:contact] = sub.contact.map(&:name).first unless sub.contact.nil?
+    ont_hash[:format] = sub.hasOntologyLanguage&.split('/').last
+    ont_hash[:contact] = sub.contact.map { |c| c.is_a?(String) ? c.split('|').first : c.name }.first unless sub.contact.nil?
   end
 
   def add_ontology_attributes(ont_hash, ont)
-    return  if ont.nil?
+    return if ont.nil?
 
     ont_hash[:id] = ont.id
     ont_hash[:type] = ont.viewOf.nil? ? 'ontology' : 'ontology_view'
@@ -249,7 +280,7 @@ module SubmissionFilter
     end
 
     @formalityLevel = submission_metadata.select { |x| x['@id']['hasFormalityLevel'] }.first['enforcedValues'].map do |id, name|
-      { 'id' => id, 'name' => name, 'acronym' => name.camelize(:lower), 'value' => name.delete(' ')}
+      { 'id' => id, 'name' => name, 'acronym' => name.camelize(:lower), 'value' => name.delete(' ') }
     end
 
     @isOfType = submission_metadata.select { |x| x['@id']['isOfType'] }.first['enforcedValues'].map do |id, name|
@@ -284,10 +315,10 @@ module SubmissionFilter
     {
       categories: object_filter(categories, :categories),
       groups: object_filter(groups, :groups),
-      naturalLanguage: object_filter(@languages, :naturalLanguage),
+      naturalLanguage: object_filter(@languages, :naturalLanguage, "value"),
       hasFormalityLevel: object_filter(@formalityLevel, :hasFormalityLevel),
       isOfType: object_filter(@isOfType, :isOfType),
-      #missingStatus: object_filter(@missingStatus, :missingStatus)
+      # missingStatus: object_filter(@missingStatus, :missingStatus)
     }
   end
 
@@ -296,12 +327,9 @@ module SubmissionFilter
     selected_category.first && selected_category.first['id']
   end
 
-  def object_checks(key)
-    params[key]&.split(',')
-  end
 
   def object_filter(objects, object_name, name_key = 'acronym')
-    checks = object_checks(object_name) || []
+    checks = params[object_name]&.split(',') || []
     checks = checks.map { |x| check_id(x, objects, name_key) }.compact
 
     ids = objects.map { |x| x['id'] }
@@ -313,9 +341,9 @@ module SubmissionFilter
     objects_count = {}
     @categories = LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
     @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
+
     @filters = ontology_filters_init(@categories, @groups)
     object_names = @filters.keys
-
 
     @filters.each do |filter, values|
       objects = values.first
@@ -326,6 +354,8 @@ module SubmissionFilter
       object_names.each do |name|
         values = Array(ontology[name])
         values.each do |v|
+          v.gsub!('http://data.bioontology.org', rest_url)
+
           objects_count[name] = {} unless objects_count[name]
           objects_count[name][v] = (objects_count[name][v] || 0) + 1
         end
