@@ -17,7 +17,7 @@ module AdminHelper
     @users_visits[:visits].last - @users_visits[:visits][-2]
   end
 
-  def action_button(name, link, method: :post, class_style: 'btn btn-link mb-3')
+  def action_button(name, link, method: :post, class_style: 'btn btn-link')
     button_to name, link, method: method, class: class_style,
                 form: {data: { turbo: true, turbo_confirm: t('admin.turbo_confirm', name: name), turbo_frame: '_top'}}
 
