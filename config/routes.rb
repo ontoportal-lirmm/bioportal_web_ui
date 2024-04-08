@@ -64,6 +64,14 @@ Rails.application.routes.draw do
     match 'groups/synchronize_groups' => 'groups#synchronize_groups', via: [:post]
     resources :groups, only: [:index, :create, :new, :edit, :update, :destroy]
     resources :categories, only: [:index, :create, :new, :edit, :update, :destroy]
+    scope :search do
+      get '/', to: 'search#index'
+      post 'index_batch', to: 'search#index_batch'
+      post ':collection/init_schema', to: 'search#init_schema'
+      get ':collection/schema', to: 'search#show'
+      get ':collection/data', to: 'search#search'
+    end
+
   end
 
   post 'admin/clearcache', to: 'admin#clearcache'
@@ -185,6 +193,9 @@ Rails.application.routes.draw do
 
   # Search
   get 'search', to: 'search#index'
+  get 'ajax/search/ontologies/content', to: 'search#json_ontology_content_search'
+  get 'search/agents', to: 'search#agent_search'
+  get 'search/agents/results', to: 'search#agent_search_result'
 
   get 'check_resolvability' => 'check_resolvability#index'
   get 'check_url_resolvability' => 'check_resolvability#check_resolvability'

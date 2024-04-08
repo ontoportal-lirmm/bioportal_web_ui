@@ -1,0 +1,33 @@
+= turbo_frame_tag 'search-admin' do
+  = render_alerts_container
+  %div#site-admin-clear-caches.my-5
+    %div.site-admin-page-header
+      INDEX DATA 
+    %dive.site-admin-page-section
+      = form_with url: admin_index_batch_path, method: 'post', data:{turbo: true} do
+        %div.d-flex.p-2
+          %div.mx-2{style: 'width: 250px'}
+            = select_input(name: "model_name", values: [['Select a model to index' ,''],["Ontology", 'ontology'], 'Agent', ['Ontology submission', 'ontology_submission']], label: '')
+          = form_save_button
+
+  %div.mb-5
+    %div.site-admin-page-header
+      COLLECTIONS MANAGEMENT
+    %dive.site-admin-page-section
+      = render TableComponent.new(id: 'search_collections', custom_class: 'border rounded my-2 mx-3') do |t|
+        - t.header do |h|
+          - h.th {"Name"}
+          - h.th {"Actions"}
+        - @collections.each do |c|
+          - t.row do |r|
+            - r.td{ c }
+            - r.td do
+              .d-flex.align-items-center
+                %span
+                  = action_button("Generate schema", "/admin/search/#{c}/init_schema")
+                %span.mx-1
+                  |
+                  = link_to_modal("See schema", "/admin/search/#{c}/schema")
+                %span.mx-1
+                  |
+                  = link_to_modal("See indexed data", "/admin/search/#{c}/data",  data: { show_modal_size_value: 'modal-xl' } )
