@@ -23,7 +23,7 @@ module UriRedirection
           type = id_type(result[:collection][0][:type_t], result[:collection][0][:type_txt])
           resource_id = result[:collection][0][:resource_id]
         end
-        [type, result[:collection][0][:resource_id]]
+        [type, resource_id]
     end
 
     def find_type_by_metadata(id, acronym)

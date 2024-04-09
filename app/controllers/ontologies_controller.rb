@@ -323,7 +323,6 @@ class OntologiesController < ApplicationController
 
   # GET /ontologies/:acronym/:id
   def show_redirection
-    binding.pry
     return not_found unless params[:acronym] && params[:id]
     
     type, resource_id  = find_type_by_id(params[:id], params[:acronym])
