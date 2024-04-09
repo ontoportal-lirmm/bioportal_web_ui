@@ -1,6 +1,8 @@
 = turbo_frame_tag 'users-list' do
   %div.my-1
     = render_alerts_container
+  .d-flex.justify-content-end.my-1
+    = rounded_button_component("#{$REST_URL}/users?display=all&apikey=#{get_apikey}")
 
   = render TableComponent.new(id: 'admin_users', custom_class: 'border rounded p-1', searching: true, paging: true, sort_column: '7') do |t|
     - t.header do |h|
