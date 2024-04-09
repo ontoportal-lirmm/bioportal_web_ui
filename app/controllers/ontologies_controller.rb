@@ -13,6 +13,7 @@ class OntologiesController < ApplicationController
   include SparqlHelper
   include SubmissionFilter
   include OntologyContentSerializer
+  include UriRedirection
 
   require 'multi_json'
   require 'cgi'
@@ -318,6 +319,24 @@ class OntologiesController < ApplicationController
   def submit_success
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
     render 'submit_success'
+  end
+
+  # GET /ontologies/:acronym/:id
+  def show_redirection
+    binding.pry
+    return not_found unless params[:acronym] && params[:id]
+    
+    type, resource_id  = find_type_by_id(params[:id], params[:acronym])
+    if type.nil?
+      @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:acronym]).first
+      if @ontology.nil? || @ontology.errors
+        ontology_not_found(params[:acronym]) 
+      else
+        redirect_to(ontology_path(id: params[:acronym], p: 'summary'))
+      end
+    else
+      redirect_to(link_by_type(resource_id, params[:acronym], type))
+    end
   end
 
   # Main ontology description page (with metadata): /ontologies/ACRONYM
