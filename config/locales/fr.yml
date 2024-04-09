@@ -241,6 +241,34 @@ fr:
         license_from_being_saved: "a empêché cette licence d'être sauvegardée :"
         paste_your_license: Collez votre clé de licence dans la zone de texte
         submit: Soumettre
+    search:
+      index:
+        index_data: "DONNÉES INDEXES"
+        collections_management: "GESTION DES COLLECTIONS"
+        name: "Nom"
+        actions: "Actions"
+        select_model: "Sélectionnez un modèle à indexer"
+        ontology: "Ontologie"
+        agent: "Agent"
+        ontology_submission: "Soumission"
+        generate_schema: "Générer le schéma"
+        see_schema: "Voir le schéma"
+        see_indexed_data: "Voir les données indexées"
+      show:
+        field_name: "Nom du champ"
+        type: "Type"
+        multi_valued: "Multivalué"
+        indexed: "Indexé"
+        stored: "Stocké"
+      search:
+        search_query: "Requête de recherche"
+        page: "Page"
+        page_size: "Taille de la page"
+        found_documents: "Trouvé %{count} documents"
+        id: "ID"
+        properties: "Propriétés"
+        show_more: "+ Afficher plus ..."
+        show_less: "- Afficher moins ..."
 
   annotator:
     title: Annotateur

@@ -239,6 +239,35 @@ en:
         license_from_being_saved: "prohibited this license from being saved:"
         paste_your_license: Paste your license key into the text area
         submit: Submit
+    search:
+      index:
+        index_data: "INDEX DATA"
+        collections_management: "COLLECTIONS MANAGEMENT"
+        name: "Name"
+        actions: "Actions"
+        ontology: "Ontology"
+        agent: "Agent"
+        ontology_submission: "Ontology submission"
+        select_model: "Select a model to index"
+        generate_schema: "Generate schema"
+        see_schema: "See schema"
+        see_indexed_data: "See indexed data"
+      show:
+        field_name: "Field name"
+        type: "Type"
+        multi_valued: "Multi valued"
+        indexed: "Indexed"
+        stored: "Stored"
+      search:
+        search_query: "Search query"
+        page: "Page"
+        page_size: "Page size"
+        found_documents: "Found %{count} documents"
+        id: "ID"
+        properties: "Properties"
+        show_more: "+ Show more ..."
+        show_less: "- Show less ..."
+
   annotator:
     title: Annotator
     description: Get annotations for text with ontology classes
@@ -973,17 +1002,17 @@ en:
       and top concept assertion. %{link}
     ontology_obo_language_link: the OBOinOWL parser.
     ontology_obo_language_help: >
-        OBO ontologies submitted to %{portal_name} will be parsed by the OWL-API which integrates %{link} 
-        The resulting RDF triples will then be loaded in %{portal_name} triple-store.
+      OBO ontologies submitted to %{portal_name} will be parsed by the OWL-API which integrates %{link} 
+      The resulting RDF triples will then be loaded in %{portal_name} triple-store.
     ontology_owl_language_link: the Protégé
     ontology_owl_language_help: >
-        OWL ontologies submitted to %{portal_name} will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with
-        %{link}
-        software which does use the same component.
+      OWL ontologies submitted to %{portal_name} will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with
+      %{link}
+      software which does use the same component.
 
     ontology_umls_language_link: by the UMLS2RDF tool.
     ontology_umls_language_help: >
-        UMLS-RRF resources are usually produced %{link}
+      UMLS-RRF resources are usually produced %{link}
 
     groups: Groups
     visibility: Visibility
