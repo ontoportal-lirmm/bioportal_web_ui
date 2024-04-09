@@ -1383,3 +1383,5 @@ fr:
     cancel: Annuler
     apply: Appliquer
     unselect_all: Tout désélectionner
+  copy_original_uri: Copier l'URI originale
+  copy_portal_uri: Copier l'URI de %{portal_name}
