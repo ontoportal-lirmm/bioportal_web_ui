@@ -11,9 +11,8 @@
     .actions
         = details_button
         = visualize_button
-        = mappings_button
         - if subresults?
-            = reveal_ontologies_button("#{subresults.size} #{t('search.result_component.more_from_ontology')}", sub_ontologies_id, 'icons/three-dots.svg')
+            = reveal_ontologies_button("#{subresults.size} #{t('search.result_component.more_from_ontology')}", sub_ontologies_id, 'icons/ontology.svg')
         - if reuses?
             = reveal_ontologies_button("#{t('search.result_component.reuses_in')} #{reuses.size} ontologies", reuses_id, 'icons/reuses.svg')
     - if subresults?
@@ -30,3 +29,4 @@
                 - reuses.each do |reuse|
                     .search-result-sub-component
                         = reuse
+    

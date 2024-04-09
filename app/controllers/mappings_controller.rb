@@ -166,9 +166,13 @@ class MappingsController < ApplicationController
     @concept = @ontology.explore.single_class({ full: true }, params[:conceptid])
 
     @mappings = @concept.explore.mappings
-    @type = params[:type]
+
     @delete_mapping_permission = check_delete_mapping_permission(@mappings)
-    render partial: 'mappings/concept_mappings', layout: false
+    render turbo_stream: [
+      replace('mapping_count') { "#{@mappings.size}" },
+      replace('concept_mappings', partial: 'mappings/concept_mappings')
+    ]
+
   end
 
   def new

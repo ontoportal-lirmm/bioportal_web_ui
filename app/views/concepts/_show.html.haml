@@ -30,12 +30,12 @@
           (
           %span#note_count= @notes.length
           )
+
       - c.item(id: 'mappings', path: '#mappings') do
-        .d-flex
-          #{t('concepts.mappings')}
-          (
-          = concept_mappings_loader(ontology_acronym: @ontology.acronym, concept_id: @concept.id)
-          )
+        #{t('concepts.mappings')}
+        (
+        %span#mapping_count= 'loading'
+        )
 
       - if @enable_ontolobridge
         - c.item(title: t('concepts.new_term_requests'), path: '#request_term')
