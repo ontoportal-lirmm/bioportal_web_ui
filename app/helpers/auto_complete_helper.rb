@@ -18,12 +18,4 @@ module AutoCompleteHelper
       end
     end
   end
-
-  def agents_autocomplete(id, type, parent_id: '', name_prefix: '', edit_on_modal: false, deletable: true)
-    render AgentSearchInputComponent.new(id: id, agent_type: type,
-                                         parent_id: parent_id,
-                                         edit_on_modal: edit_on_modal,
-                                         name_prefix: name_prefix,
-                                         deletable: deletable)
-  end
 end

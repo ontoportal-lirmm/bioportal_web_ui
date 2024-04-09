@@ -1,7 +1,7 @@
 require 'uri'
 
 class SearchController < ApplicationController
-  include SearchAggregator, SubmissionFilter, SearchHelper
+  include SearchAggregator, SearchHelper
   skip_before_action :verify_authenticity_token
 
   layout :determine_layout
@@ -99,9 +99,6 @@ class SearchController < ApplicationController
     render plain: response, content_type: content_type
   end
 
-
-
-
   def json_ontology_content_search
     query = params[:search] || '*'
     page = (params[:page] || 1).to_i
@@ -120,33 +117,9 @@ class SearchController < ApplicationController
       page_size: page_size,
       acronyms: acronyms
     }
-    puts "Found #{@count}"
 
     json = search_result_to_json(query , changed_query, @results, @ontologies, selected_onto)
     render json: json
-  end
-
-  def agent_search
-    @query = params[:search]
-    @type = params[:agentType].blank? ? nil : params[:agentType]
-  end
-
-  def agent_search_result
-    @filters = params.permit(:agentType, :search, :page, :page_size).to_h
-
-    query = params[:search].blank? ? '*' : @query = params[:search]
-    agent_type = params[:agentType]
-    page = params[:page]
-    page_size = params[:page_size].blank? ? 10 : params[:page_size].to_i
-    @results = LinkedData::Client::HTTP.get('search/agents',
-                                            { query: query,
-                                              page: page, pagesize: page_size,
-                                              agentType: agent_type
-                                            }.reject { |k, v| v.blank? })
-
-    @filters["page"] = @results.nextPage
-
-    render partial: "search/agent_search_results", layout: false
   end
 
   private
