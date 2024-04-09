@@ -1324,6 +1324,8 @@ en:
     join_the_count: Join the %{count} users, watching this resource and  be notified of all its updates
     see_more: See more...
     see_less: See less...
+    copy_original_uri: Copy original URI
+    copy_portal_uri: Copy %{portal_name} URI
   properties:
     id: ID
     preferred_name: Preferred name
@@ -1350,5 +1352,3 @@ en:
     cancel: Cancel
     apply: Apply
     unselect_all: Unselect all
-  copy_original_uri: Copy original URI
-  copy_portal_uri: Copy %{portal_name} URI
