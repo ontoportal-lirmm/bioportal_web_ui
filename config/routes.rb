@@ -64,6 +64,14 @@ Rails.application.routes.draw do
     match 'groups/synchronize_groups' => 'groups#synchronize_groups', via: [:post]
     resources :groups, only: [:index, :create, :new, :edit, :update, :destroy]
     resources :categories, only: [:index, :create, :new, :edit, :update, :destroy]
+    scope :search do
+      get '/', to: 'search#index'
+      post 'index_batch', to: 'search#index_batch'
+      post ':collection/init_schema', to: 'search#init_schema'
+      get ':collection/schema', to: 'search#show'
+      get ':collection/data', to: 'search#search'
+    end
+
   end
 
   post 'admin/clearcache', to: 'admin#clearcache'
