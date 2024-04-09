@@ -147,8 +147,9 @@ fr:
       metadata_administration: Administration des métadonnées
       groups: Groupes
       categories: Catégories
-      persons_and_organizations: Personnes & Organisations
+      persons_and_organizations: Personnes et Organisations
       sparql: SPARQL
+      search: Recherche et Indexation
       report_generated_on: "Rapport généré le :"
       licensed_to: Licencié à
       appliance_id: ID de l'appareil
