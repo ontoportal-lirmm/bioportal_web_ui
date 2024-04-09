@@ -43,11 +43,11 @@ class MappingsController < ApplicationController
                      }]
   end
 
-  def show_table
+  def mappings_ontologies_table
     ontology_acronym = params[:ontology].split("-").last.split('(').first.gsub(" ", "")
     @acronym = ontology_acronym 
     @mapping_counts = mapping_counts(ontology_acronym)
-    render "mappings/mapping_table"
+    render "mappings/mappings_ontologies_table"
   end
 
 
