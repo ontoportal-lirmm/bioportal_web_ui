@@ -52,7 +52,7 @@
               %p.account-page-card-desc
                 = t('users.show.api_key_description', portal: portal_name)
               %div.apikey
-                = render ClipboardComponent.new(message: session[:user].apikey)
+                = render ClipboardComponent.new('icons/copy.svg', title: "Copy", message: session[:user].apikey)
           .account-page-api-documentation-link
             %a{href: "#{$REST_URL}/documentation", target: "_blank"}
               = t('users.show.api_documentation')
