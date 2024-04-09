@@ -4,11 +4,11 @@
       %div=@header
       %hr
 
-.d-flex
+.d-flex{data: {controller:'tabs-container'}}
   .tabs-left-column
     %div.nav.nav-pills.flex-column
       - @titles.each_with_index  do |key|
-        %a.vertical-tab-item.d-block{href: "##{key.parameterize}-tab", "data-toggle" => "pill", class:  @selected.eql?(key.parameterize) ? 'active show' : ''}
+        %a.vertical-tab-item.d-block{href: "##{key.parameterize}-tab", "data-toggle" => "pill", class:  @selected.eql?(key.parameterize) ? 'active show' : '', data: {'tab-id': key.parameterize,  'tab-title': key.titleize, 'url-parameter': @url_parameter, action: 'click->tabs-container#selectTab'}}
           = key.humanize
 
   .tabs-right-column.w-100

@@ -13,7 +13,7 @@
   %div.mx-1
     - sections = [t('admin.index.analytics'), t('admin.index.site_administration'),t('admin.index.ontology_administration'),  t('admin.index.licensing'), t('admin.index.users'), t('admin.index.metadata_administration'), t('admin.index.groups'), t('admin.index.categories'), t('admin.index.persons_and_organizations'), t('admin.index.sparql')]
     - selected = params[:section] || sections.first.downcase
-    = render Layout::VerticalTabsComponent.new(header:  t('admin.index.administration_console'), titles: sections, selected: selected) do |t|
+    = render Layout::VerticalTabsComponent.new(header:  t('admin.index.administration_console'), titles: sections, selected: selected, url_parameter: 'section') do |t|
       - t.item_content do
         = render 'analytics'
       - t.item_content do
