@@ -22,6 +22,12 @@ module InputsHelper
                                       data: data)
   end
 
+  def number_input(name: , label: '', value: )
+    render Input::NumberComponent.new(label:label,
+                                      name: name,
+                                      value: value)
+  end
+
   def check_input(id:, name:, value:, label: '', checked: false, &block)
     render ChipsComponent.new(name: name, id: id, label: label, value: value, checked: checked) do |c|
       if block_given?
