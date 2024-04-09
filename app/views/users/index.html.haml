@@ -32,7 +32,7 @@
               = link_to t('users.index.detail'), user_path(user.id.split('/').last), {data: {turbo_frame: '_top'}}
             %span
               - if count.zero?
-                = button_to t('users.index.delete'), user_path(CGI.escape(user.id.split('/').last)), method: :delete, class: 'btn btn-link',  form: {data: { turbo: true, turbo_confirm: t('users.index.turbo_confirm'), turbo_frame: '_top'}}
+                = button_to t('users.index.delete'), user_path(user.id.split('/').last), method: :delete, class: 'btn btn-link',  form: {data: { turbo: true, turbo_confirm: t('users.index.turbo_confirm'), turbo_frame: '_top'}}
               - else
                 %span{data: { controller: 'tooltip' }, title:t('users.index.error_delete_message')}
                   = link_to t('users.index.delete'), "", class: 'btn btn-link disabled'
