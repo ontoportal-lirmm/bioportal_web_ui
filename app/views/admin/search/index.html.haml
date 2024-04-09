@@ -4,7 +4,7 @@
     %div.site-admin-page-header
       INDEX DATA 
     %dive.site-admin-page-section
-      = form_with url: admin_index_batch_path, method: 'post', data:{turbo: true} do
+      = form_with url: admin_index_batch_path, method: 'post', data:{turbo: true, turbo_frame: '_top'} do
         %div.d-flex.p-2
           %div.mx-2{style: 'width: 250px'}
             = select_input(name: "model_name", values: [['Select a model to index' ,''],["Ontology", 'ontology'], 'Agent', ['Ontology submission', 'ontology_submission']], label: '')
