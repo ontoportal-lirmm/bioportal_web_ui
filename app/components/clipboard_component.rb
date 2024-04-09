@@ -2,7 +2,7 @@
 
 class ClipboardComponent < ViewComponent::Base
 
-  def initialize(icon, title: nil, message: nil, show_content: true)
+  def initialize(icon: "icons/copy.svg", title: "Copy", message: nil, show_content: true)
     @icon = icon
     @title = title
     @message = message

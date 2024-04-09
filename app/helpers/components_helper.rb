@@ -22,15 +22,14 @@ module ComponentsHelper
 
   def copy_link_to_clipboard(url, show_content: false)
     content_tag(:span, style: 'display: inline-block;') do
-      render ClipboardComponent.new('icons/copy.svg', title: "Copy ID", message: url, show_content: show_content)
+      render ClipboardComponent.new(title: "Copy ID", message: url, show_content: show_content)
     end
   end
 
-  def generated_link_to_clipboard(url, acronym)
-    last_part = url.match(/[^\/#]+$/)[0]
-    url = "#{ENV["UI_URL"]}/ontologies/#{acronym}/#{last_part}"
+  def generated_link_to_clipboard(url, acronym) 
+    url = "#{$UI_URL}/ontologies/#{acronym}/#{link_last_part(url)}"
     content_tag(:span, style: 'display: inline-block;') do
-      render ClipboardComponent.new('icons/copy_link.svg', title: "Copy Agroportal ID", message: url, show_content: false)
+      render ClipboardComponent.new(icon: 'icons/copy_link.svg', title: "Copy Agroportal ID", message: url, show_content: false)
     end
   end
 
