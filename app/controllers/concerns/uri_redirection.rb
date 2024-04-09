@@ -60,7 +60,7 @@ module UriRedirection
         when 'AnnotationProperty', 'ObjectProperty', 'DatatypeProperty'
           ontology_path(id: ontology, p: 'properties', instanceid: id)
         else
-          ontology_path(id: ontology, p: 'summary')
+          "/content_finder?acronym=#{ontology}&uri=#{escape(id)}&output_format=json"
         end
     end
     
