@@ -1,3 +1,4 @@
+- @title= t('mappings.title')
 .mappigs-page-container{'data-controller': 'mappings', 
                         'data-mappings-mappings-list-value': "#{@ontologies_mapping_count.to_h.to_json}",
                         'data-mappings-zoom-ratio-value': 1,
@@ -6,18 +7,18 @@
   .mappings-page-subcontainer
     .mappings-page-title
       .text
-        Mappings
+        = @title= t('mappings.title')
       .line
     .mappings-page-decription
-      Dive into an overview of the mappings in the bubble view, efficiently locate a specific ontology in the table view or upload your own mappings.
+      = t('mappings.description')
     = render TabsContainerComponent.new do |c|
-      - c.item(title: 'Bubbles view', selected: true)
+      - c.item(title: t('mappings.tabs.bubble_view'), selected: true)
       - c.item_content do
         = render partial: '/mappings/tab_sections/bubble_view'
 
-      - c.item(title: 'Table view')
+      - c.item(title: t('mappings.tabs.table_view'))
       - c.item_content do
         = render partial: '/mappings/tab_sections/table_view'
-      - c.item(title: 'Upload mappings')
+      - c.item(title: t('mappings.tabs.upload_mappings'))
       - c.item_content do    
         = render partial: '/mappings/tab_sections/upload_mappings'

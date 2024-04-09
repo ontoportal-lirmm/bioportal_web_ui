@@ -3,12 +3,12 @@
     .card.upload-mappings-example.ontologies
       .title-bar{"data-target" => "#collaps_selector", "data-toggle" => "collapse"}
         = inline_svg_tag 'icons/settings.svg'
-        Filter ontologies in the bubble view
+        = t('mappings.filter_ontologies')
 
       #collaps_selector.mappings-page-ontologies-selector.collapse{'data-mappings-target': 'ontologies'}
         = ontologies_selector(id:'mappings_page_ontologies' ,name: 'ontologies[]')
         .selector-button{'data-action': 'click->mappings#filter_ontologies'}
-          = render Buttons::RegularButtonComponent.new(id:'filter-bubbles', value: "Filter bubbles", variant: "secondary", state: "regular", size: "slim")
+          = render Buttons::RegularButtonComponent.new(id:'filter-bubbles', value: t('mappings.filter_bubbles'), variant: "secondary", state: "regular", size: "slim")
   
   .mappings-bubble-view-frame{'data-mappings-target': 'frame'}
     #mappings-bubbles-view{'data-mappings-target': 'bubbles'}
