@@ -119,7 +119,7 @@ fr:
       ontologies_with_errors: Ontologies avec erreurs
       total_visits: Visites totales
       active_users: Utilisateurs actifs
-      visit_users: "%{ visits } utilisateurs depuis le mois dernier"
+      visit_users: "%{visits} utilisateurs depuis le mois dernier"
       ontology_visits: Visites d'ontologies
       unique_users_visits: Visites d'utilisateurs uniques
       page_visits: Visites de page de ce mois
