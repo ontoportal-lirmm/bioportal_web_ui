@@ -1,6 +1,6 @@
 = turbo_frame_tag 'scheme' do
   - if @scheme && !@scheme.empty?
-    = render ConceptDetailsComponent.new(id:'scheme-label', acronym: @ontology.acronym,
+    = render ConceptDetailsComponent.new(id:'scheme-label', acronym: @ontology.acronym, concept_id: @scheme.id,
                 properties: scheme.properties,
                 top_keys: %w[description comment],
                 bottom_keys: %w[disjoint subclass is_a has_part],

@@ -5,9 +5,9 @@
       = t('statistics.lead', last_years: Date.today.year - Date.parse(@merged_data[:labels].first).year)
 %div.container
   %div
-    = chart_component(title: nil, type: 'line', show_legend: true,
-                              labels: @merged_data[:labels],
-                              datasets: visits_chart_dataset_array({ t('statistics.ontologies'): @merged_data[:visits][2] ,t('statistics.users'): @merged_data[:visits][0], t('statistics.projects'): @merged_data[:visits][1]}, fill: false))
+    = chart_component(title: nil, type: 'line', show_legend: true, 
+                      labels: @merged_data[:labels], datasets: visits_chart_dataset_array({ t('statistics.ontologies') => @merged_data[:visits][2], 
+                      t('statistics.users') => @merged_data[:visits][0], t('statistics.projects') => @merged_data[:visits][1] }, fill: false))
 
   %div.pb-3.pb-md-4
     - size = @merged_data[:labels].size - 1

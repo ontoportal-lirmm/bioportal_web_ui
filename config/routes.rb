@@ -124,6 +124,7 @@ Rails.application.routes.draw do
   # Ontologies
   get '/ontologies/view/edit/:id' => 'ontologies#edit_view', :constraints => { id: /[^\/?]+/ }
   get '/ontologies/view/new/:id' => 'ontologies#new_view'
+  get '/ontologies/:acronym/:id/serialize/:output_format' => 'ontologies#content_serializer', :id => /.+/
 
   get '/ontologies/virtual/:ontology' => 'ontologies#virtual', :as => :ontology_virtual
   get '/ontologies/success/:id' => 'ontologies#submit_success'
