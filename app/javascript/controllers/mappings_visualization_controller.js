@@ -11,6 +11,7 @@ export default class extends Controller {
   static targets = ['frame', 'bubbles', 'submit', 'modal', 'selector', 'ontologies', 'loader']
 
   connect() {
+    console.log('working')
     this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue, this.#normalization_ratio(this.mappingsListValue))
     this.#center_scroll(this.frameTarget)
     if(this.typeValue == 'partial'){
