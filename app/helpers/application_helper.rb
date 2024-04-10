@@ -197,6 +197,8 @@ module ApplicationHelper
   end
 
   def link_last_part(url)
+    return "" if url.nil?
+
     if url.include?('#')
       url.split('#').last
     else
