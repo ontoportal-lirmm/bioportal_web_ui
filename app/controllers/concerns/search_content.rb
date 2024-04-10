@@ -84,7 +84,7 @@ module SearchContent
       query = "*#{query}*"
     end
 
-    result = LinkedData::Client::HTTP.get('search/ontologies/content', { q: query, qf: qf.join(' '), page: page, pagesize: page_size, ontologies: acronyms.first, types: types.join(',') })
+    results = LinkedData::Client::HTTP.get('search/ontologies/content', { q: query, qf: qf.join(' '), page: page, pagesize: page_size, ontologies: acronyms.first, types: types.join(',') })
     search_content_result_to_json(original_query , query, results, ontologies, selected_onto)
   end
 
