@@ -12,9 +12,9 @@ module OntologyContentSerializer
       return @result if format.eql?('html')
 
       url = content_finder_url(ontology_acronym, concept_id)
-      accept_header = content_finder_accept_header(@format)
+      @accept_header = content_finder_accept_header(@format)
       conn = Faraday.new(url: url) do |faraday|
-        faraday.headers['Accept'] = accept_header
+        faraday.headers['Accept'] = @accept_header
         faraday.adapter Faraday.default_adapter
         faraday.headers['Authorization'] = "apikey token=#{get_apikey}"
       end
@@ -32,14 +32,16 @@ module OntologyContentSerializer
 
   def content_finder_accept_header(output_format)
     case output_format
-    when 'json'
-      "application/json"
-    when 'xml'
-      "application/xml"
-    when 'ntriples'
-      "application/n-triples"
-    when 'turtle'
-      "text/turtle"
+    when 'json', 'application/json', 'application/ld+json', 'application/*'
+      'application/ld+json'
+    when 'xml', 'text/xml', 'text/rdf+xml',  'application/rdf+xml', 'application/xml'
+      'application/rdf+xml'
+    when 'ntriples', 'application/n-triples', '*/*', 'text/*'
+      'application/n-triples'
+    when 'turtle', 'text/turtle'
+      'text/turtle'
+    else
+      output_format
     end
   end
 
