@@ -1,7 +1,8 @@
 require 'uri'
 
 class SearchController < ApplicationController
-  include SearchAggregator, SearchHelper
+  include SearchAggregator, SearchContent
+
   skip_before_action :verify_authenticity_token
 
   layout :determine_layout
@@ -105,21 +106,12 @@ class SearchController < ApplicationController
     acronyms = params[:acronyms] || []
     page_size = (params[:page_size] || 10).to_i
 
-    @results, @ontologies,selected_onto, changed_query = search_ontologies_content(query: query,
+    results = search_ontologies_content(query: query,
                                          page: page,
                                          page_size: page_size,
                                          filter_by_ontologies: acronyms)
-    @count = @results.totalCount
-    @acronyms = acronyms&.first&.split(',')
-    @filters = {
-      page: @results.nextPage,
-      search: query,
-      page_size: page_size,
-      acronyms: acronyms
-    }
 
-    json = search_result_to_json(query , changed_query, @results, @ontologies, selected_onto)
-    render json: json
+    render json: results
   end
 
   private

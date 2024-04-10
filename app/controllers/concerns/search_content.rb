@@ -1,5 +1,5 @@
-module SearchHelper
-
+module SearchContent
+  extend ActiveSupport::Concern
   def search_ontologies(query: '*', groups: [], categories: [], languages: [], private_only: false, formats: [],
                         is_of_type: [], formality_level: [],
                         show_views: false, status: 'alpha,beta,production',
@@ -49,6 +49,7 @@ module SearchHelper
 
   def search_ontologies_content(query:, page: 1, page_size: 10, filter_by_ontologies: [])
     acronyms = filter_by_ontologies
+    original_query = query
     query = query.gsub(':', '\:').gsub('/', '\/') if page.eql?(1)
 
     qf = [
@@ -82,18 +83,13 @@ module SearchHelper
       query = "*#{query}*"
     end
 
-    result = LinkedData::Client::HTTP.get('search/ontologies/content', { q: query, qf: qf.join(' '), page: page, pagesize: page_size, ontologies: acronyms.first })
-
-    [result, ontologies, selected_onto, query]
-  end
-
-  def search_agents
-    # TODO
+    results = LinkedData::Client::HTTP.get('search/ontologies/content', { q: query, qf: qf.join(' '), page: page, pagesize: page_size, ontologies: acronyms.first })
+    search_content_result_to_json(original_query , query, results, ontologies, selected_onto)
   end
 
   private
 
-  def search_result_to_json(query, changed_query, results, ontologies, selected_onto = [])
+  def search_content_result_to_json(query, changed_query, results, ontologies, selected_onto = [])
     json = []
     selected_onto = selected_onto.empty? ? ontologies.select { |x| x.acronym.downcase.include?(query.downcase) } : selected_onto
 
@@ -139,8 +135,6 @@ module SearchHelper
     json
   end
 
-
-
   def supported_types
     %w[Concept Class Ontology ConceptScheme Collection NamedIndividual AnnotationProperty ObjectProperty DatatypeProperty]
   end
@@ -174,5 +168,5 @@ module SearchHelper
       ontology_path(id: ontology, p: 'summary')
     end
   end
-
 end
+

@@ -6,7 +6,7 @@ module AutoCompleteHelper
 
   def ontologies_content_autocomplete(id: '', name: '')
     render SearchInputComponent.new(id: id, name: name, ajax_url: ajax_search_ontologies_content_path(search: ''),
-                                    item_base_url: "", id_key: 'id', placeholder: "Search everywhere anything",
+                                    item_base_url: "", id_key: 'id', placeholder: t("ontologies.ontology_search_prompt"),
                                     use_cache: false,
                                     actions_links: { search_ontology_content: "/search?query=o", browse_all_ontologies: "/ontologies?search=o" }) do |s|
       s.template do
