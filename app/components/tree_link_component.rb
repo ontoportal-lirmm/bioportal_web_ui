@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TreeLinkComponent < ViewComponent::Base
-  include MultiLanguagesHelper, ModalHelper
+  include MultiLanguagesHelper, ModalHelper, ApplicationHelper
   def initialize(child:, href:, children_href: , selected: false , data: {}, muted: false, target_frame: nil, open_in_modal: false)
     @child = child
     @active_style = selected ? 'active' : ''
@@ -11,7 +11,7 @@ class TreeLinkComponent < ViewComponent::Base
     @children_link = children_href
     label = (@child.prefLabel || @child.label) rescue @child.id
     if label.nil?
-      @pref_label_html = child.id.split('/').last
+      @pref_label_html = link_last_part(child.id)
     else
       pref_label_lang, @pref_label_html = select_language_label(label)
       pref_label_lang = pref_label_lang.to_s.upcase
