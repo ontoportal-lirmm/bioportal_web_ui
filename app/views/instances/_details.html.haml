@@ -3,7 +3,7 @@
     - ontology_acronym = params[:ontology_id] || @ontology.acronym
     - filter_properties = ["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"]
 
-    =  render ConceptDetailsComponent.new(id:'instance-details', acronym: ontology_acronym) do |c|
+    =  render ConceptDetailsComponent.new(id:'instance-details', acronym: ontology_acronym, concept_id: @instance["@id"]) do |c|
       - c.header(stripped: true) do |t|
         - t.add_row({th: t("collections.id")}, {td: link_to_with_actions(@instance["@id"]) })
 
