@@ -55,24 +55,40 @@
 
 .home-search-button{
   position: absolute;
-  top: 42px;
-  right: 20px;
+  top: 38px;
+  right: 12px;
+}
+
+.home-search-button svg{
   width: 15px;
   height: 15px;
   cursor: pointer;
 }
-.home-search-button path{
+.home-search-button svg path{
   fill: var(--primary-color);
 }
 .home-search-button.search-input-nav-icon{
   position: absolute;
-  top: 11px;
-  right: 8px;
+  top: 4px;
+  right: 6px;
+  z-index: 99;
+}
+.home-search-button.search-input-nav-icon svg{
   width: 11px;
   height: 11px;
   cursor: pointer;
-  z-index: 99;
 }
-.home-search-button.search-input-nav-icon path{
+
+.home-search-button.search-input-nav-icon svg path{
   fill: white;
+}
+.search-component-loader{
+  padding-top: 4px;
+  padding-right: 2px;
+  color: var(--primary-color); 
+}
+.home-search-button.search-input-nav-icon .search-component-loader{
+  margin-top: 0;
+  padding-right: 0;
+  color: white;
 }

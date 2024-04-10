@@ -1,9 +1,10 @@
 import {Controller} from "@hotwired/stimulus"
 import useAjax from "../../javascript/mixins/useAjax";
+import debounce from 'debounce'
 
 // Connects to data-controller="search-input"
 export default class extends Controller {
-    static targets = ["input", "dropDown", "actionLink", "template", "button"]
+    static targets = ["input", "dropDown", "actionLink", "template", "button", "loader"]
     static values = {
         items: Array,
         ajaxUrl: String,
@@ -19,11 +20,18 @@ export default class extends Controller {
         this.dropDown = this.dropDownTarget
         this.actionLinks = this.actionLinkTargets
         this.items = this.itemsValue
+        this.search = debounce(this.search.bind(this), 100);
     }
 
     search() {
         this.selectedItemValue = 0
-        this.#searchInput()
+        this.loaderTarget.classList.remove("d-none")
+        this.buttonTarget.classList.add("d-none")
+        this.searchInput()
+    }
+
+    searchInput() {
+        this.#fetchItems()
     }
 
     prevent(event){
@@ -89,6 +97,8 @@ export default class extends Controller {
     }
 
     #renderLines() {
+        this.loaderTarget.classList.add("d-none")
+        this.buttonTarget.classList.remove("d-none")
         const inputValue = this.#inputValue();
         let results_list = []
         if (inputValue.length > 0) {
@@ -152,9 +162,5 @@ export default class extends Controller {
         })
 
         return new DOMParser().parseFromString(string, "text/html").body.firstElementChild
-    }
-
-    #searchInput() {
-        this.#fetchItems()
     }
 }

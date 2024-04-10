@@ -22,7 +22,7 @@
             %input
         - else
           .nav-search-container
-            = ontologies_content_autocomplete
+            = ontologies_content_autocomplete(search_icon_type: 'nav')
 
         - if session[:user].nil?
           %a.nav-a{:href => "/login"}= t('layout.header.login')

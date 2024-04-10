@@ -62,7 +62,7 @@ module SearchContent
     ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', also_include_views: true)
     selected_onto = []
 
-    q = query.split(' ').first
+    q = query.split(' ').first || ''
     selected_onto += ontologies.select { |x| x.acronym.downcase.eql?(q.downcase) }
 
     selected_onto.uniq!
