@@ -196,6 +196,14 @@ module ApplicationHelper
     onts_for_select
   end
 
+  def link_last_part(url)
+    if url.include?('#')
+      url.split('#').last
+    else
+      url.split('/').last
+    end
+  end
+
   def get_categories_data(categories = nil)
     @categories_for_select = []
     @categories_map = {}

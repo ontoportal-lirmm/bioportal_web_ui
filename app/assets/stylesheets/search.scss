@@ -11,8 +11,11 @@
 }
 
 .search-page-input{
-  display: flex;
-  margin-bottom: 25px;
+  position: relative;
+  padding-bottom: 80px;
+  .search-container{
+    top:65px;
+  }
 }
 .search-page-input input{
   border-radius: 8px;

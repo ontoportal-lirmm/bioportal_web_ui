@@ -52,7 +52,7 @@
 }
 .recommender-page-text-area .insert-sample-text-button{
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     padding: 20px;
 }
 .recommender-page-text-area .insert-sample-text-button .button{
@@ -176,7 +176,7 @@
 }
 .recommender-result-highlighted{
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 .recommender-page-text-area-results a{
     font-weight: 600;
