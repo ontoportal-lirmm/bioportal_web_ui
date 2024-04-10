@@ -1,5 +1,6 @@
 module SearchContent
   extend ActiveSupport::Concern
+
   def search_ontologies(query: '*', groups: [], categories: [], languages: [], private_only: false, formats: [],
                         is_of_type: [], formality_level: [],
                         show_views: false, status: 'alpha,beta,production',
@@ -54,11 +55,11 @@ module SearchContent
     query = query.gsub(':', '\:').gsub('/', '\/') if page.eql?(1)
 
     qf = [
-      "ontology_t^100 resource_id^50",
+      "ontology_t^100 resource_id^10",
       "http___www.w3.org_2004_02_skos_core_prefLabel_txt^30",
       "http___www.w3.org_2004_02_skos_core_prefLabel_t^30",
       "http___www.w3.org_2000_01_rdf-schema_label_txt^30",
-      "http___www.w3.org_2000_01_rdf-schema_label_t^30"
+      "http___www.w3.org_2000_01_rdf-schema_label_t^30",
     ]
     ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', also_include_views: true)
     selected_onto = []
@@ -85,7 +86,7 @@ module SearchContent
     end
 
     results = LinkedData::Client::HTTP.get('search/ontologies/content', { q: query, qf: qf.join(' '), page: page, pagesize: page_size, ontologies: acronyms.first, types: types.join(',') })
-    search_content_result_to_json(original_query , query, results, ontologies, selected_onto)
+    [search_content_result_to_json(original_query, query, results, ontologies, selected_onto), results.page,results.nextPage, results.totalCount]
   end
 
   def search_agents
@@ -98,18 +99,23 @@ module SearchContent
     page = (params[:page] || 1).to_i
     page_size = (params[:page_size] || 100).to_i
 
-    @results, @ontologies, selected_onto, changed_query = search_ontologies_content(query: query,
-                                                                                    page: page,
-                                                                                    page_size: page_size,
-                                                                                    filter_by_ontologies: [acronym],
-                                                                                    filter_by_types: types)
 
-    json = search_result_to_json(query, changed_query, @results, @ontologies, selected_onto)
+    json, page, next_page, total_count = search_ontologies_content(query: query,
+                                     page: page,
+                                     page_size: page_size,
+                                     filter_by_ontologies: [acronym],
+                                     filter_by_types: types)
+    @results = OpenStruct.new
+    @results.nextPage = next_page
+    @results.page = page
+    @results.totalCount = total_count
     @results.collection = json.map { |x| o = OpenStruct.new(x); o.id = x[:name]; o }
     @results.collection = @results.collection.drop(1) # remove ontology
     @search = query
 
-    next_page_link = next_page_url.include?('?') ? "#{next_page_url}&lang=#{lang}&page=#{@results.nextPage}&search=#{@search}" : "#{next_page_url}?page=#{@results.nextPage}&search=#{@search}&lang=#{lang}"
+    next_page_link = next_page_url.include?('?') ? "#{next_page_url}&page=#{@results.nextPage}&search=#{@search}" : "#{next_page_url}?page=#{@results.nextPage}&search=#{@search}"
+    next_page_link = "#{next_page_link}&lang=#{lang}"
+    next_page_link = "#{next_page_link}&#{child_param}=#{helpers.escape(params[child_param.to_sym])}"
 
     if show_count && page.eql?(1)
       render turbo_stream: [

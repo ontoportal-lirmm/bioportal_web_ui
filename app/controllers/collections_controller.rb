@@ -1,5 +1,5 @@
 class CollectionsController < ApplicationController
-  include CollectionsHelper,SearchHelper
+  include CollectionsHelper,SearchContent
 
 
   def index
