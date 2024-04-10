@@ -120,7 +120,8 @@ module SearchContent
                                                                                         child_url: child_url.include?('?') ? "#{child_url}&lang=#{lang}" : "#{child_url}?lang=#{lang}",
                                                                                         child_param: child_param,
                                                                                         child_turbo_frame: child_turbo_frame,
-                                                                                        open_in_modal: show_count))
+                                                                                        open_in_modal: show_count,
+                                                                                        selected: params[child_param.to_sym]))
       ]
     else
       render inline: helpers.paginated_list_component(id: container_id,
@@ -128,7 +129,9 @@ module SearchContent
                                                       next_page_url: next_page_link,
                                                       child_url: child_url.include?('?') ? "#{child_url}&lang=#{lang}" : "#{child_url}?lang=#{lang}",
                                                       child_param: child_param,
-                                                      child_turbo_frame: child_turbo_frame, open_in_modal: show_count)
+                                                      child_turbo_frame: child_turbo_frame,
+                                                      open_in_modal: show_count,
+                                                      selected: params[child_param.to_sym])
     end
 
   end

@@ -1,5 +1,5 @@
 class InstancesController < ApplicationController
-  include InstancesHelper, SearchHelper
+  include InstancesHelper, SearchContent
 
   def index
     concept_type = params[:type].to_s || 'NamedIndividual'

@@ -1,5 +1,5 @@
 class SchemesController < ApplicationController
-  include SchemesHelper, SearchHelper
+  include SchemesHelper, SearchContent
 
 
   def index

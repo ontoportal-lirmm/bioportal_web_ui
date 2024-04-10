@@ -108,7 +108,7 @@ class SearchController < ApplicationController
     type = params[:types]&.split(',') || []
 
 
-    results = search_ontologies_content(query: query,
+    results, page, next_page, total_count = search_ontologies_content(query: query,
                                          page: page,
                                          page_size: page_size,
                                          filter_by_ontologies: acronyms,

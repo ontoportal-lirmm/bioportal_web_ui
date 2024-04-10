@@ -1,5 +1,5 @@
 class PropertiesController < ApplicationController
-  include TurboHelper, SearchHelper
+  include TurboHelper, SearchContent
 
   def index
     acronym = params[:ontology]

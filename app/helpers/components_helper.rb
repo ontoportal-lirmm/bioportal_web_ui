@@ -12,7 +12,7 @@ module ComponentsHelper
     end
   end
 
-  def paginated_list_component(id:, results:, next_page_url:, child_url:, child_turbo_frame:, child_param:, open_in_modal: false)
+  def paginated_list_component(id:, results:, next_page_url:, child_url:, child_turbo_frame:, child_param:, open_in_modal: false , selected: nil)
     render(TreeInfiniteScrollComponent.new(
       id:  id,
       collection: results.collection,
@@ -38,7 +38,7 @@ module ComponentsHelper
             child: concept,
             href: href,
             children_href: '#',
-            selected: concept.id.eql?(concepts.first.id) && c.auto_click?,
+            selected: concept.id.eql?(selected) || (concept.id.eql?(concepts.first.id) && c.auto_click?),
             target_frame: child_turbo_frame,
             data: data,
             open_in_modal: open_in_modal
