@@ -85,18 +85,19 @@ module SubmissionFilter
   end
 
   def filter_using_data(query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
-    submissions = LinkedData::Client::Models::OntologySubmission.all(include: 'all', also_include_views: show_views, display_links: false, display_context: false)
+    submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: show_views, display_links: false, display_context: false)
+
     submissions.select do |s|
       out = !s.ontology.nil?
       out = out && ((s.ontology.viewingRestriction.eql?('public') && !private_only) || private_only && s.ontology.viewingRestriction.eql?('private'))
       out = out && (query.blank? || [s.description, s.ontology.name, s.ontology.acronym].any? { |x| x.downcase.include?(query.downcase) })
-      out = out && (groups.blank? || (s.ontology.group.map { |x| x.split('/').last } & groups.split(',')).any?)
-      out = out && (categories.blank? || (s.ontology.hasDomain.map { |x| x.split('/').last } & categories.split(',')).any?)
+      out = out && (groups.blank? || (s.ontology.group.map { |x| helpers.link_last_part(x) } & groups.split(',')).any?)
+      out = out && (categories.blank? || (s.ontology.hasDomain.map { |x| helpers.link_last_part(x) } & categories.split(',')).any?)
       out = out && (status.blank? || status.split(',').include?(s.status))
-      out = out && (formats.blank? || formats.split(',').any? { |f| s.hasOntologyLanguages.eql?(f) })
-      out = out && (is_of_type.blank? || is_of_type.split(',').any? { |f| s.isOfType.split('/').last.eql?(f) })
-      out = out && (formality_level.blank? || formality_level.split(',').any? { |f| s.hasFormalityLevel.split('/').last.eql?(f) })
-      out = out && (languages.blank? || languages.split(',').any? { |f| s.naturalLanguage.split('/').last.eql?(f) })
+      out = out && (formats.blank? || formats.split(',').any? { |f| s.hasOntologyLanguage.eql?(f) })
+      out = out && (is_of_type.blank? || is_of_type.split(',').any? { |f| helpers.link_last_part(s.isOfType).eql?(f) })
+      out = out && (formality_level.blank? || formality_level.split(',').any? { |f| helpers.link_last_part(s.hasFormalityLevel).eql?(f) })
+      out = out && (languages.blank? || languages.split(',').any? { |f| s.naturalLanguage.any? { |n| helpers.link_last_part(n).eql?(f) } })
       out
     end
   end
@@ -280,11 +281,11 @@ module SubmissionFilter
     end
 
     @formalityLevel = submission_metadata.select { |x| x['@id']['hasFormalityLevel'] }.first['enforcedValues'].map do |id, name|
-      { 'id' => id, 'name' => name, 'acronym' => name.camelize(:lower), 'value' => name.delete(' ') }
+      { 'id' => id, 'name' => helpers.link_last_part(id), 'acronym' => name, 'value' => helpers.link_last_part(id) }
     end
 
     @isOfType = submission_metadata.select { |x| x['@id']['isOfType'] }.first['enforcedValues'].map do |id, name|
-      { 'id' => id, 'name' => name, 'acronym' => name.camelize(:lower), 'value' => name.delete(' ') }
+      { 'id' => id, 'name' => helpers.link_last_part(id), 'acronym' => name, 'value' => helpers.link_last_part(id) }
     end
 
     @formats = [[t("submissions.filter.all_formats"), ''], 'OBO', 'OWL', 'SKOS', 'UMLS']
