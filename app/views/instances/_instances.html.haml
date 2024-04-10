@@ -1,6 +1,6 @@
 = render TurboFrameComponent.new(id: "instances", data: {"turbo-frame-target": "frame"} ) do
   %div.ont-properties{data: {controller: (@instance ? 'container-splitter turbo-frame': ''), 'turbo-frame': { 'url-value': "/ontologies/#{@ontology.acronym}/instances/show"}}}
-    %div.sidebar.w-100.position-relative.card.pt-2{data: {'container-splitter-target': 'container', action: 'change->turbo-frame#updateFrame'}}
+    %div.sidebar.w-100.position-relative.card{data: {'container-splitter-target': 'container', action: 'change->turbo-frame#updateFrame'}}
       = tree_container_component(id: "#{@instance ? '' : 'concept_'}instances_sorted_list_view-page-1",
                                  placeholder:"Search an Instance in #{@ontology.acronym}",
                                  frame_url:  "/instances/#{@ontology.acronym}#{@concept ? '?type=' + escape(@concept.id) : ''}",
