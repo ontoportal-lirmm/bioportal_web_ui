@@ -1,6 +1,8 @@
 module SubmissionFilter
   extend ActiveSupport::Concern
 
+  include SearchContent
+
   BROWSE_ATTRIBUTES = ['ontology', 'submissionStatus', 'description', 'pullLocation', 'creationDate',
                        'contact', 'released', 'naturalLanguage', 'hasOntologyLanguage',
                        'hasFormalityLevel', 'isOfType', 'deprecated', 'status', 'metrics']
@@ -41,12 +43,10 @@ module SubmissionFilter
                formats: request_params[:hasOntologyLanguage] }
     submissions = []
 
-    @time = Benchmark.realtime do
-      if search_backend.eql?('api') || search_backend.eql?('0')
-        submissions = filter_using_data(**params)
-      else
-        submissions = filter_using_index(**params)
-      end
+    if search_backend.eql?('index')
+      submissions = filter_using_index(**params)
+    else
+      submissions = filter_using_data(**params)
     end
 
     submissions = submissions.reject { |sub| sub.ontology.nil? }.map { |sub| ontology_hash(sub, @ontologies) }
@@ -69,7 +69,7 @@ module SubmissionFilter
   private
 
   def filter_using_index(query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
-    helpers.search_ontologies(
+    search_ontologies(
       query: query,
       status: status,
       show_views: show_views,

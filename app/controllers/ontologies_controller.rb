@@ -32,14 +32,17 @@ class OntologiesController < ApplicationController
   def index
     @categories = LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
     @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
-    
+
     @filters = ontology_filters_init(@categories, @groups)
     init_filters(params)
     render 'ontologies/browser/browse'
   end
 
   def ontologies_filter
-    @ontologies, @count, @count_objects, @request_params = submissions_paginate_filter(params)
+    @time = Benchmark.realtime do
+      @ontologies, @count, @count_objects, @request_params = submissions_paginate_filter(params)
+    end
+
     if @page.page.eql?(1)
       streams = [prepend("ontologies_list_view-page-#{@page.page}", partial: 'ontologies/browser/ontologies')]
       streams += @count_objects.map do |section, values_count|
@@ -207,8 +210,8 @@ class OntologiesController < ApplicationController
 
   def content_serializer
     @result = serialize_content(ontology_acronym: params[:acronym],
-                      concept_id: params[:id],
-                      format: params[:output_format])
+                                concept_id: params[:id],
+                                format: params[:output_format])
 
     render 'ontologies/content_serializer', layout: nil
   end
