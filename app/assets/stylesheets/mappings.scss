@@ -123,14 +123,21 @@
 }
 
 .summary-mappigs-page-container{
-  display: flex;
-  justify-content: center;
+  margin-left: 90px;
 }
 .mapping-bubbles-loader{
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.summary-mappings-tab{
+  display: flex;
+  margin-top: 5px;
+}
+.summary-mappings-tab-table{
+  width: 400px;
 }
 
 @media (min-width: 1000px)  {
