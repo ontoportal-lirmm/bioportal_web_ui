@@ -140,6 +140,10 @@
   width: 400px;
 }
 
+.mappings-table-pagination a, .mappings-table-pagination em{
+  margin-left: 10px;
+}
+
 @media (min-width: 1000px)  {
   #mappings_container{
     max-width: 1140px;
