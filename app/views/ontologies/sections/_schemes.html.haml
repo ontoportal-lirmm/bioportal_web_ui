@@ -9,7 +9,7 @@
                                  frame_url:  "/ontologies/#{@ontology.acronym}/schemes?#{request.original_url.split('?')[1]}",
                                  tree_url: "/ontologies/#{@ontology.acronym}/schemes?#{request.original_url.split('?')[1]}")
 
-    %div#scheme_contents.pl-3{data:{'container-splitter-target': 'container'}}
+    %div#scheme_contents{data:{'container-splitter-target': 'container'}}
       = render TurboFrameComponent.new(id:'scheme') do
         = render partial: 'schemes/scheme', locals: {scheme: @scheme}
 
