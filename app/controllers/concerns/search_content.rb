@@ -89,9 +89,6 @@ module SearchContent
     [search_content_result_to_json(original_query, query, results, ontologies, selected_onto), results.page,results.nextPage, results.totalCount]
   end
 
-  def search_agents
-    # TODO
-  end
 
   def render_search_paginated_list(container_id:, types:, next_page_url:, child_url:, child_turbo_frame:, child_param:, show_count: nil, lang: request_lang)
     acronym = @ontology.acronym
