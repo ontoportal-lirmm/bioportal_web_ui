@@ -4,10 +4,10 @@
             = t("mappings.bulk_loader.loader.example_of_valid_file")
         #collapseOne.collapse
             .card-body
-            %pre
-                %code
-                = JSON.pretty_generate @example_code
-        
+                %pre
+                    %code
+                        = JSON.pretty_generate @example_code
+            
     = form_with url: '/mappings/loader', method: :post, multipart: true, data: { turbo: true, turbo_frame: 'file_loader_result'} do
         %div.mb-3
             = render Input::FileInputComponent.new(name: :file)
