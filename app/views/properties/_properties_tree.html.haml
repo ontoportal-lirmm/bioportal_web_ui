@@ -1,4 +1,0 @@
-%div#propTree
-  = render TurboFrameComponent.new(id: 'properties_tree_view',
-                                       src: "/ajax/properties/treeview?propertyid=#{escape(params[:propertyid])}&ontology=#{@ontology.acronym}&auto_click=false&language=#{request_lang}",
-                                       data: {'turbo-frame-target': 'frame'})

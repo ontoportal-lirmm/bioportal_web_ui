@@ -169,35 +169,28 @@ class OntologiesController < ApplicationController
   end
 
   def instances
-    if request.xhr?
-      render partial: 'instances/instances', locals: { id: 'instances-data-table' }, layout: false
-    else
-      render partial: 'instances/instances', locals: { id: 'instances-data-table' }, layout: 'ontology_viewer'
+
+    if params[:instanceid]
+      @instance = helpers.get_instance_details_json(@ontology.acronym, params[:instanceid], {include: 'all'})
     end
+
+    render partial: 'instances/instances', locals: { id: 'instances-data-table' }, layout: 'ontology_viewer'
   end
 
   def schemes
     @schemes = get_schemes(@ontology)
-    scheme_id = params[:scheme_id] || @submission_latest.URI || nil
+    scheme_id = params[:schemeid] || @submission_latest.URI || nil
     @scheme = get_scheme(@ontology, scheme_id) if scheme_id
 
-    if request.xhr?
-      render partial: 'ontologies/sections/schemes', layout: false
-    else
-      render partial: 'ontologies/sections/schemes', layout: 'ontology_viewer'
-    end
+    render partial: 'ontologies/sections/schemes', layout: 'ontology_viewer'
   end
 
   def collections
     @collections = get_collections(@ontology)
-    collection_id = params[:collection_id]
-    @collection = get_collection(@ontology, collection_id) if collection_id
+    collection_id = params[:collectionid]
+    @collection = collection_id ? get_collection(@ontology, collection_id) : @collections.first
 
-    if request.xhr?
-      render partial: 'ontologies/sections/collections', layout: false
-    else
-      render partial: 'ontologies/sections/collections', layout: 'ontology_viewer'
-    end
+    render partial: 'ontologies/sections/collections', layout: 'ontology_viewer'
   end
 
   def sparql

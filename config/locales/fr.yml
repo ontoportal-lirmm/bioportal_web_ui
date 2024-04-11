@@ -1318,6 +1318,11 @@ fr:
       ncbo_widget_wiki: Wiki des Widgets NCBO
       file: fichier.
       no_class_concept_found: Aucune classe/concept trouvé
+      instances_search_placeholder: Rechercher une instance dans %{acronym}
+      properties_search_placeholder: Rechercher une propriété dans %{acronym}
+      schemes_search_placeholder: Rechercher un schéma dans %{acronym}
+      collections_search_placeholder: Rechercher une collection dans %{acronym}
+
       metadata:
         fair_score_title: Score FAIR
         total_score: "Score total : %{score} ( %{normalized_score}%)"
@@ -1384,9 +1389,10 @@ fr:
     join_the_count: Rejoignez les %{count} utilisateurs, surveillant cette ressource et soyez informé de toutes ses mises à jour
     see_more: Voir plus...
     see_less: Voir moins...
-
+    tree_view_empty: Pas de résultat
   properties:
     id: ID
+    type: Type
     preferred_name: Nom préféré
     definitions: Définitions
     parent: Parent

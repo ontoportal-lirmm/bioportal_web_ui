@@ -1,5 +1,6 @@
 module SearchContent
   extend ActiveSupport::Concern
+
   def search_ontologies(query: '*', groups: [], categories: [], languages: [], private_only: false, formats: [],
                         is_of_type: [], formality_level: [],
                         show_views: false, status: 'alpha,beta,production',
@@ -47,23 +48,24 @@ module SearchContent
     end
   end
 
-  def search_ontologies_content(query:, page: 1, page_size: 10, filter_by_ontologies: [])
+  def search_ontologies_content(query:, page: 1, page_size: 10, filter_by_ontologies: [], filter_by_types: [])
     acronyms = filter_by_ontologies
     original_query = query
+    types = filter_by_types
     query = query.gsub(':', '\:').gsub('/', '\/') if page.eql?(1)
 
     qf = [
-      "ontology_t^100 resource_id^50",
+      "ontology_t^100 resource_id^10",
       "http___www.w3.org_2004_02_skos_core_prefLabel_txt^30",
       "http___www.w3.org_2004_02_skos_core_prefLabel_t^30",
       "http___www.w3.org_2000_01_rdf-schema_label_txt^30",
-      "http___www.w3.org_2000_01_rdf-schema_label_t^30"
+      "http___www.w3.org_2000_01_rdf-schema_label_t^30",
     ]
     ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', also_include_views: true)
     selected_onto = []
 
     q = query.split(' ').first || ''
-    selected_onto += ontologies.select { |x| x.acronym.downcase.eql?(q.downcase) }
+    selected_onto += ontologies.select { |x| (acronyms.empty? && x.acronym.downcase.eql?(q.downcase)) || acronyms.include?(x.acronym) }
 
     selected_onto.uniq!
     [selected_onto.first].compact.each do |o|
@@ -74,18 +76,21 @@ module SearchContent
       query.gsub!('-', " ")
     end
 
-    query = query.strip
+    query = query
     if query.blank?
       query = "*"
     elsif query.split(' ').size > 1
-      query = "#{query}*"
+      query = "^#{query}*"
     else
       query = "*#{query}*"
     end
 
-    results = LinkedData::Client::HTTP.get('search/ontologies/content', { q: query, qf: qf.join(' '), page: page, pagesize: page_size, ontologies: acronyms.first })
-    search_content_result_to_json(original_query , query, results, ontologies, selected_onto)
+    results = LinkedData::Client::HTTP.get('search/ontologies/content', { q: query, qf: qf.join(' '), page: page, pagesize: page_size, ontologies: acronyms.first, types: types.join(',') })
+    [search_content_result_to_json(original_query, query, results, ontologies, selected_onto), results.page,results.nextPage, results.totalCount]
   end
+
+
+
 
   private
 

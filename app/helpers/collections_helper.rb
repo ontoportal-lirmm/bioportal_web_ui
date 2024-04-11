@@ -53,7 +53,7 @@ module CollectionsHelper
   end
 
   def request_collection_id
-    params[:id] || params[:collection_id] || params[:concept_collection]
+    params[:id] || params[:collectionid] || params[:concept_collection]
   end
 
   def sort_collections_label(collections_labels)

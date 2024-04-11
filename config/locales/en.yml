@@ -1294,6 +1294,10 @@ en:
       ncbo_widget_wiki: NCBO Widget Wiki
       file: file.
       no_class_concept_found: No class/concept found
+      instances_search_placeholder: Search an Instance in %{acronym}
+      properties_search_placeholder: Search a property in %{acronym}
+      schemes_search_placeholder: Search a scheme in %{acronym}
+      collections_search_placeholder: Search a collection in %{acronym}
 
       metadata:
         fair_score_title: FAIR score
@@ -1355,8 +1359,10 @@ en:
     join_the_count: Join the %{count} users, watching this resource and  be notified of all its updates
     see_more: See more...
     see_less: See less...
+    tree_view_empty: No result found
   properties:
     id: ID
+    type: Type
     preferred_name: Preferred name
     definitions: Definitions
     parent: Parent

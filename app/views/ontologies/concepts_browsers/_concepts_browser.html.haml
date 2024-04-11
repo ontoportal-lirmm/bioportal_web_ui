@@ -1,4 +1,4 @@
-%div#concept_browser
+%div#concept_browser.tree-container
   = render TabsContainerComponent.new(type:'outline') do |c|
     - c.item(id: 'tree-tab', selected: default_sub_menu?) do
       %span{title: 'Hierarchy view', 'data-controller': "tooltip"}
