@@ -1386,6 +1386,7 @@ fr:
 
   properties:
     id: ID
+    type: Type
     preferred_name: Nom préféré
     definitions: Définitions
     parent: Parent
