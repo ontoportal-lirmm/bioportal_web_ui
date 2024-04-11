@@ -90,8 +90,7 @@ module SearchContent
   end
 
 
-  def render_search_paginated_list(container_id:, types:, next_page_url:, child_url:, child_turbo_frame:, child_param:, show_count: nil, lang: request_lang)
-    acronym = @ontology.acronym
+  def render_search_paginated_list(container_id:, acronym: @ontology.acronym, types:, next_page_url:, child_url:, child_turbo_frame:, child_param:, show_count: nil, lang: request_lang, auto_click: false)
     query = params[:search].presence || '*'
     page = (params[:page] || 1).to_i
     page_size = (params[:page_size] || 100).to_i
@@ -134,7 +133,8 @@ module SearchContent
                                                       child_param: child_param,
                                                       child_turbo_frame: child_turbo_frame,
                                                       open_in_modal: show_count,
-                                                      selected: params[child_param.to_sym])
+                                                      selected: params[child_param.to_sym],
+                                                      auto_click: auto_click)
     end
 
   end

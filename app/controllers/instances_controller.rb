@@ -13,7 +13,8 @@ class InstancesController < ApplicationController
                                  child_url: "/ontologies/#{@ontology.acronym}/instances/show?modal=#{is_concept_instance.to_s}",
                                  child_param: :instanceid,
                                  child_turbo_frame: 'instance_show',
-                                 show_count: is_concept_instance)
+                                 show_count: is_concept_instance,
+                                 auto_click: params[:instanceid].blank?)
   end
 
   def index_by_ontology
@@ -30,7 +31,7 @@ class InstancesController < ApplicationController
 
   def show
     get_ontology(params)
-    @instance = get_instance_details_json(params[:ontology_id], params[:id] || params[:instance_id], {include: 'all'})
+    @instance = get_instance_details_json(params[:ontology], params[:id] || params[:instanceid], {include: 'all'})
 
     render partial: 'instances/details', layout: nil
   end

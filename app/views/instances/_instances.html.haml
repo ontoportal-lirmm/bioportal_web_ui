@@ -1,13 +1,13 @@
 = render TurboFrameComponent.new(id: "instances", data: {"turbo-frame-target": "frame"} ) do
-  %div.ont-properties{data: {controller: (@instance ? 'container-splitter turbo-frame': ''), 'turbo-frame': { 'url-value': "/ontologies/#{@ontology.acronym}/instances/show"}}}
+  %div.ont-properties{data: {controller: ( params[:p].eql?('instances') ? 'container-splitter turbo-frame': 'container-splitter'), 'turbo-frame': { 'url-value': "/ontologies/#{@ontology.acronym}/instances/show"}}}
     %div.sidebar.w-100.position-relative.card{data: {'container-splitter-target': 'container', action: 'change->turbo-frame#updateFrame'}}
-      = tree_container_component(id: "#{@instance ? '' : 'concept_'}instances_sorted_list_view-page-1",
+      = tree_container_component(id: "#{params[:p].eql?('instances') ? '' : 'concept_'}instances_sorted_list_view-page-1",
                                  placeholder:"Search an Instance in #{@ontology.acronym}",
                                  frame_url:  "/ontologies/#{@ontology.acronym}/instances#{@concept ? '?type=' + escape(@concept.id) : ''}",
                                  tree_url: "/ontologies/#{@ontology.acronym}/instances?page=1#{@concept ? '&type=' + escape(@concept.id) : ''}&#{request.original_url.split('?')[1]}")
-    - if @instance
-      %div#prop_contents.pl-3{data: {'container-splitter-target': 'container'}}
-        = render partial: 'instances/details'
+
+    %div#prop_contents{data: {'container-splitter-target': 'container'}}
+      = render partial: 'instances/details'
 
 
 

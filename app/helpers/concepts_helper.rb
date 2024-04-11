@@ -145,7 +145,7 @@ module ConceptsHelper
   end
 
   def concept_list_url(page = 1, collection_id, acronym)
-    "/ajax/classes/list?ontology_id=#{acronym}&collection_id=#{collection_id}&page=#{page}"
+    "/ajax/classes/list?ontology_id=#{acronym}&collectionid=#{collection_id}&page=#{page}"
   end
 
 

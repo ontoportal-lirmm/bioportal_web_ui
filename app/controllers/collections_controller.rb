@@ -8,7 +8,7 @@ class CollectionsController < ApplicationController
     ontology_not_found(acronym) if @ontology.nil?
 
     @collections = get_collections(@ontology)
-    collection_id = params[:collection_id]
+    collection_id = params[:collectionid]
     @collection = get_collection(@ontology, collection_id) if collection_id
 
 

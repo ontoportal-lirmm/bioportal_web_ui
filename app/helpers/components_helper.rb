@@ -12,13 +12,14 @@ module ComponentsHelper
     end
   end
 
-  def paginated_list_component(id:, results:, next_page_url:, child_url:, child_turbo_frame:, child_param:, open_in_modal: false , selected: nil)
+  def paginated_list_component(id:, results:, next_page_url:, child_url:, child_turbo_frame:, child_param:, open_in_modal: false , selected: nil, auto_click: false)
     render(TreeInfiniteScrollComponent.new(
       id:  id,
       collection: results.collection,
       next_url: next_page_url,
       current_page: results.page,
-      next_page: results.nextPage
+      next_page: results.nextPage,
+      auto_click: auto_click,
     )) do |c|
       if results.page.eql?(1)
         concat(content_tag(:div, class: 'ontologies-selector-results') do
@@ -38,7 +39,7 @@ module ComponentsHelper
             child: concept,
             href: href,
             children_href: '#',
-            selected: concept.id.eql?(selected) || (concept.id.eql?(concepts.first.id) && c.auto_click?),
+            selected: selected.blank? ? concept.id.eql?(concepts.first.id) : concept.id.eql?(selected) ,
             target_frame: child_turbo_frame,
             data: data,
             open_in_modal: open_in_modal

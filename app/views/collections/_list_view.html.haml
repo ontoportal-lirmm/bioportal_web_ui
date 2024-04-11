@@ -3,10 +3,10 @@
   - selected_collection_id = selected_collection.nil? ? collections_labels.first["@id"] : selected_collection["@id"]
   - if collections_labels.empty?
     %div
-      no collections detected
+      = no_collections_alert
   - else
     %div
-      = render TreeViewComponent.new(id: nil,  auto_click: true) do |tree_child|
+      = render TreeViewComponent.new(id: nil,  auto_click: false) do |tree_child|
         - sort_collections_label(collections_labels).each do |collection|
           - scheme = OpenStruct.new(collection)
           - scheme.prefLabel = Array(get_collection_label(collection)).last

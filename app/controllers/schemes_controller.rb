@@ -37,7 +37,7 @@ class SchemesController < ApplicationController
   private
 
   def get_request_scheme
-    params[:id] = params[:id] ? params[:id] : params[:scheme_id]
+    params[:id] = params[:id] ? params[:id] : params[:schemeid]
     params[:ontology_id] = params[:ontology_id] ? params[:ontology_id] : params[:ontology]
 
     if params[:id].nil? || params[:id].empty?
