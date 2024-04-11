@@ -3,7 +3,7 @@
     = no_collections_alert
   - else
     %div.ont-collections{data:{controller: 'container-splitter'}}
-      %div#collectionsTree.card.sidebar.pt-2{data:{'container-splitter-target': 'container'}}
+      %div#collectionsTree.card.sidebar{data:{'container-splitter-target': 'container'}}
         = tree_container_component(id: "collections_sorted_list_view-page-1",
                                  placeholder:"Search an collection in #{@ontology.acronym}",
                                  frame_url:  "/collections/#{@ontology.acronym}",
