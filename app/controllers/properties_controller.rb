@@ -9,12 +9,21 @@ class PropertiesController < ApplicationController
     if params[:search].blank?
       index_tree('properties_sorted_list_view-page-1')
     else
-      render_search_paginated_list(container_id: 'properties_sorted_list',
-                                   types: %w[AnnotationProperty ObjectProperty DatatypeProperty],
-                                   next_page_url: "/ontologies/#{@ontology.acronym}/properties",
-                                   child_url: "/ontologies/#{@ontology.acronym}/properties/show",
-                                   child_param: :propertyid,
-                                   child_turbo_frame: 'property_show')
+      query, page, page_size = helpers.search_content_params
+
+      results, _, next_page, total_count = search_ontologies_content(query: query,
+                                                                     page: page,
+                                                                     page_size: page_size,
+                                                                     filter_by_ontologies: [acronym],
+                                                                     filter_by_types: %w[AnnotationProperty ObjectProperty DatatypeProperty])
+
+
+      render inline: helpers.render_search_paginated_list(container_id: 'properties_sorted_list',
+                                                          next_page_url: "/ontologies/#{@ontology.acronym}/properties",
+                                                          child_url: "/ontologies/#{@ontology.acronym}/properties/show",
+                                                          child_turbo_frame: 'property_show',
+                                                          child_param: :propertyid,
+                                                          results:  results, next_page:  next_page, total_count: total_count)
     end
   end
 
