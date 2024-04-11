@@ -24,7 +24,7 @@ module ComponentsHelper
       if results.page.eql?(1)
         concat(content_tag(:div, class: 'ontologies-selector-results') do
           content_tag(:div, class: 'results-number small ml-2') do
-            "Showing #{results.totalCount}".html_safe
+            "#{t('ontologies.showing')} #{results.totalCount}".html_safe
           end
         end)
       end
@@ -47,7 +47,7 @@ module ComponentsHelper
         end
       end
       c.error do
-        "No result found"
+        t('components.tree_view_empty')
       end
     end
   end

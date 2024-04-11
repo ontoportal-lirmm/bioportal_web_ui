@@ -5,7 +5,7 @@
         = no_schemes_alert
       - else
         = tree_container_component(id: "schemes_sorted_list_view-page-1",
-                                 placeholder:"Search an scheme in #{@ontology.acronym}",
+                                 placeholder: t('ontologies.sections.schemes_search_placeholder',  acronym: @ontology.acronym),
                                  frame_url:  "/ontologies/#{@ontology.acronym}/schemes?#{request.original_url.split('?')[1]}",
                                  tree_url: "/ontologies/#{@ontology.acronym}/schemes?#{request.original_url.split('?')[1]}")
 

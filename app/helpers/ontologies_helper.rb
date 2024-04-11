@@ -7,7 +7,7 @@ module OntologiesHelper
 
   def concept_search_input(placeholder)
     content_tag(:div, class: 'search-inputs p-1') do
-      concat link_to('/search', ){ inline_svg_tag 'icons/search.svg', class: "home-search-button concepts-search-button"}
+      concat link_to('/search'){ inline_svg_tag 'icons/search.svg', class: "home-search-button concepts-search-button"}
       concat text_input(placeholder: placeholder, label: '', name: "search", value: '', data: { action: "input->browse-filters#dispatchInputEvent" })
     end
   end
