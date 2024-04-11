@@ -1,6 +1,6 @@
 class Display::SearchResultComponent < ViewComponent::Base
+  include UrlsHelper
   include ModalHelper
-
   renders_many :subresults, Display::SearchResultComponent
   renders_many :reuses, Display::SearchResultComponent
   def initialize(number: 0,title: nil, ontology_acronym: nil ,uri: nil, definition: nil, link: nil,  is_sub_component: false)
@@ -35,11 +35,11 @@ class Display::SearchResultComponent < ViewComponent::Base
   end
 
   def mappings_button
-    link_to_modal(nil, "/ajax/mappings/get_concept_table?ontologyid=#{@ontology_acronym}&conceptid=#{CGI.escape(@uri)}&type=modal", data: { show_modal_title_value: @title, show_modal_size_value: 'modal-xl' }) do
+    link_to_modal(nil, "/ajax/mappings/get_concept_table?ontologyid=#{@ontology_acronym}&conceptid=#{escape(@uri)}&type=modal", data: { show_modal_title_value: @title, show_modal_size_value: 'modal-xl' }) do
       content_tag(:div, class: 'button') do
         inline_svg_tag('icons/ontology.svg') +
         content_tag(:div, class: 'text d-flex') do
-          render(TurboFrameComponent.new(id: 'mapping_count', src: "/ajax/mappings/get_concept_table?ontologyid=#{@ontology_acronym}&conceptid=#{CGI.escape(@uri)}", loading: "lazy")) do |t|
+          render(TurboFrameComponent.new(id: 'mapping_count', src: "/ajax/mappings/get_concept_table?ontologyid=#{@ontology_acronym}&conceptid=#{escape(@uri)}", loading: "lazy")) do |t|
             t.loader do
              render LoaderComponent.new(small: true)
             end
