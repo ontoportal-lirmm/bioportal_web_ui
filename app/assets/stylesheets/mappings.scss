@@ -75,4 +75,7 @@ div#map_from_concept_details_table, div#map_to_concept_details_table {
 #concept_mappings_table {
   width: 100%;
 }
+#concept_mappings_table .chip_button_container_clickable{
+  white-space: nowrap;
+}
 
