@@ -1,8 +1,3 @@
--# NOTES on control over mapping deletion:
--# deleteMappings() is a callback that is called by "#delete_mappings_button" created below.
--# The appearance of that button is controlled by updateMappingDeletePermissions(), which
--# relies on @delete_mapping_permission in /app/views/mappings/_mapping_table.html.haml; which,
--# in turn, is set by /app/controllers/application_controller.check_delete_mapping_permission()
 = turbo_frame_tag 'mapping_count' do
   = "#{@mappings.size}"
 
