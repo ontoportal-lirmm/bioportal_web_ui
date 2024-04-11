@@ -15,7 +15,7 @@ class SchemesController < ApplicationController
     else
       render_search_paginated_list(container_id: 'schemes_sorted_list',
                             types: ['ConceptScheme'],
-                            next_page_url: "/schemes/#{@ontology.acronym}",
+                            next_page_url: "/ontologies/#{@ontology.acronym}/schemes",
                             child_url: "/ontologies/#{@ontology.acronym}/schemes/show",
                             child_param: :schemeid,
                             child_turbo_frame: 'scheme')

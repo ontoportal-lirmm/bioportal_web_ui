@@ -9,7 +9,7 @@ class InstancesController < ApplicationController
 
     render_search_paginated_list(container_id: (is_concept_instance ? 'concept_' : '') + 'instances_sorted_list',
                                  types: Array(concept_type),
-                                 next_page_url: "/instances/#{@ontology.acronym}?type=#{helpers.escape(params[:type])}",
+                                 next_page_url: "/ontologies/#{@ontology.acronym}/instances?type=#{helpers.escape(params[:type])}",
                                  child_url: "/ontologies/#{@ontology.acronym}/instances/show?modal=#{is_concept_instance.to_s}",
                                  child_param: :instanceid,
                                  child_turbo_frame: 'instance_show',

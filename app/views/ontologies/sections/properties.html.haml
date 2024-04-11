@@ -3,8 +3,8 @@
     %div.sidebar.position-relative.card{data: {'container-splitter-target': 'container', action: 'change->turbo-frame#updateFrame'}}
       = tree_container_component(id: 'properties_sorted_list_view-page-1',
                                  placeholder:"Search a property in #{@ontology.acronym}",
-                                 frame_url: "/properties/#{@ontology.acronym}",
-                                 tree_url:  "/ajax/properties/treeview?propertyid=#{escape(params[:propertyid])}&ontology=#{@ontology.acronym}&auto_click=false&language=#{request_lang}")
+                                 frame_url: "/ontologies/#{@ontology.acronym}/properties",
+                                 tree_url:  "/ontologies/#{@ontology.acronym}/properties?propertyid=#{escape(params[:propertyid])}&ontology=#{@ontology.acronym}&auto_click=false&language=#{request_lang}")
 
     %div#prop_contents.pl-3{data: {'container-splitter-target': 'container'}}
       = render partial: 'properties/show' 

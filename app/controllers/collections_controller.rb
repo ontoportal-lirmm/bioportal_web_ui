@@ -18,7 +18,7 @@ class CollectionsController < ApplicationController
 
       render_search_paginated_list(container_id: 'collections_sorted_list',
                                    types: ['Collection'],
-                                   next_page_url: "/collections/#{@ontology.acronym}",
+                                   next_page_url: "/ontologies/#{@ontology.acronym}/collections",
                                    child_url: "/ontologies/#{@ontology.acronym}/collections/show",
                                    child_param: :collectionid,
                                    child_turbo_frame: 'collection')

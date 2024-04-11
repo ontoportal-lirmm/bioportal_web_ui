@@ -11,7 +11,7 @@ class PropertiesController < ApplicationController
     else
       render_search_paginated_list(container_id: 'properties_sorted_list',
                                    types: %w[AnnotationProperty ObjectProperty DatatypeProperty],
-                                   next_page_url: "/properties/#{@ontology.acronym}",
+                                   next_page_url: "/ontologies/#{@ontology.acronym}/properties",
                                    child_url: "/ontologies/#{@ontology.acronym}/properties/show",
                                    child_param: :propertyid,
                                    child_turbo_frame: 'property_show')
@@ -20,8 +20,8 @@ class PropertiesController < ApplicationController
 
 
   def show
-    @property = get_property(params[:id], include: 'all')
-    @acronym = params[:acronym]
+    @acronym = params[:ontology]
+    @property = get_property(params[:id],  @acronym, include: 'all')
     render partial: 'show'
   end
 

@@ -6,8 +6,8 @@
       - else
         = tree_container_component(id: "schemes_sorted_list_view-page-1",
                                  placeholder:"Search an scheme in #{@ontology.acronym}",
-                                 frame_url:  "/schemes/#{@ontology.acronym}?#{request.original_url.split('?')[1]}",
-                                 tree_url: "/schemes/#{@ontology.acronym}?#{request.original_url.split('?')[1]}")
+                                 frame_url:  "/ontologies/#{@ontology.acronym}/schemes?#{request.original_url.split('?')[1]}",
+                                 tree_url: "/ontologies/#{@ontology.acronym}/schemes?#{request.original_url.split('?')[1]}")
 
     %div#scheme_contents.pl-3{data:{'container-splitter-target': 'container'}}
       = render TurboFrameComponent.new(id:'scheme') do

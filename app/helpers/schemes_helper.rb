@@ -48,7 +48,7 @@ module SchemesHelper
   end
 
   def scheme_path(scheme_id = '', language = '')
-    "/ontologies/#{@ontology.acronym}/schemes/show_scheme?id=#{escape(scheme_id)}&lang=#{language}"
+    "/ontologies/#{@ontology.acronym}/schemes/show?id=#{escape(scheme_id)}&lang=#{language}"
   end
 
   def no_main_scheme?
