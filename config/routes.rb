@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root to: 'home#index'
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
+  get'/tools', to: 'home#tools'
   get 'auth/:provider/callback', to: 'login#create_omniauth'
   get 'locale/:language', to: 'language#set_locale_language'
   get 'metadata_export/index'

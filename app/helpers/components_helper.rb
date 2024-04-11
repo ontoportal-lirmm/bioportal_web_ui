@@ -11,6 +11,23 @@ module ComponentsHelper
       end
     end
   end
+  
+  def search_page_input_component(name:, value: nil, placeholder: , button_icon: 'icons/search.svg', type: 'text', &block)
+    content_tag :div, class: 'search-page-input-container', data: { controller: 'reveal' } do
+      search_input = content_tag :div, class: 'search-page-input' do
+        concat text_field_tag(name, value, type: type, placeholder: placeholder)
+        concat(content_tag(:div, class: 'search-page-button') do
+          render Buttons::RegularButtonComponent.new(id:'search-page-button', value: "Search", variant: "primary", type: "submit") do |btn|
+            btn.icon_right { inline_svg_tag button_icon}
+          end
+        end)
+      end
+
+      options = block_given? ?  capture(&block) : ''
+
+      (search_input + options).html_safe
+    end
+  end
 
   def resolvability_check_tag(url)
     content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;')

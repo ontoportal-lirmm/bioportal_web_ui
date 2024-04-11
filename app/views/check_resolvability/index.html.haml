@@ -1,11 +1,8 @@
 .search-page-container
   .search-page-subcontainer{'data-controller': 'reveal-component'}
     = form_tag(check_resolvability_path, method: :get, 'data-turbo': true) do
-      .search-page-input-container{'data-controller': 'reveal'}
-        .search-page-input
-          %input{type:"url", placeholder: t("check_resolvability.uri_placeholder"), name: "url", value: @url}
-          %button.search-page-button{type:'submit'}
-            = inline_svg_tag 'icons/search.svg'
+      = search_page_input_component(name: 'url', value: @url, placeholder: t("check_resolvability.uri_placeholder"), type: "url")
+
 
       = render(Layout::RevealComponent.new(toggle: true, selected: false)) do |c|
         - c.button do

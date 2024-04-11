@@ -79,7 +79,7 @@ fr:
     incomplete_simple_ontology: "Ontologie simple incomplète : %{id}, %{ont}"
   label_xl:
     error_valid_label_xl: "Erreur : Vous devez fournir un identifiant de label_xl valide"
-    
+
   admin:
     query_not_permitted: Requête non autorisée
     update_info_successfully: Informations de mise à jour récupérées avec succès
@@ -342,7 +342,7 @@ fr:
           <blockquote>
             <p>Justification (optionnel)<br>Fournissez ici toute information supplémentaire concernant le terme demandé.</p>
           </blockquote>
-        
+
   home:
     ontoportal_instances: "Autres installations d’OntoPortal"
     bug: Bug
@@ -504,6 +504,7 @@ fr:
       ontoportal: OntoPortal
       release_notes: Notes de version
       api: API
+      tools: Outils
       sparql: SPARQL
       support: Aides
       contact_us: Contactez-nous
@@ -1412,3 +1413,25 @@ fr:
     cancel: Annuler
     apply: Appliquer
     unselect_all: Tout désélectionner
+
+  tools:
+    search:
+      title: "Rechercher du contenu (à venir)"
+      description: >
+        Cet outil/service permet aux utilisateurs de rechercher n'importe quel élément du Cadre de Description des Ressources (RDF) dans le portail.
+        Les utilisateurs peuvent rechercher soit par l'identifiant unique (URI) associé à l'élément RDF, soit par son libellé.
+        Il facilite la navigation efficace et la récupération d'éléments RDF spécifiques, améliorant ainsi l'expérience utilisateur et la productivité au sein du portail.
+
+    converter:
+      title: "Convertisseur de contenu (à venir)"
+      description: >
+        L'outil/service de conversion de contenu offre la possibilité de convertir n'importe quel élément RDF en divers formats tels que RDF/XML, Turtle, Ntriples ou JSON.
+        Cette fonctionnalité permet aux utilisateurs de transformer les données RDF en formats adaptés à différents usages ou compatibles avec divers systèmes et applications.
+        Il favorise l'interopérabilité et la flexibilité dans la manipulation des données RDF au sein de l'écosystème du portail.
+
+    url_checker:
+      title: "Vérificateur de résolvabilité d'URI"
+      description: >
+        Cet outil/service vérifie la résolvabilité des Identifiants Uniformes de Ressource (URI) et leur négociabilité de contenu.
+        Il vérifie si un URI donné est accessible et si le contenu associé peut être négocié en fonction des préférences du client.
+        Cette fonctionnalité garantit la fiabilité et l'accessibilité des ressources liées dans l'écosystème RDF, aidant ainsi à maintenir l'intégrité des données et facilitant l'intégration transparente avec des ressources externes.
