@@ -15,39 +15,45 @@ class MappingsController < ApplicationController
   INTERPORTAL_HASH = $INTERPORTAL_HASH ||= {}
 
   def index
-    ontology_list = LinkedData::Client::Models::Ontology.all.select { |o| !o.summaryOnly }
-    ontologies_mapping_count = LinkedData::Client::HTTP.get("#{MAPPINGS_URL}/statistics/ontologies")
-    ontologies_hash = {}
-    ontology_list.each do |ontology|
-      ontologies_hash[ontology.acronym] = ontology
+    @ontologies_mapping_count = LinkedData::Client::HTTP.get("#{MAPPINGS_URL}/statistics/ontologies")
+    ontologies = LinkedData::Client::Models::Ontology.all(
+      include: 'acronym,name,summaryOnly',
+      display_links: false,
+      display_context: false
+    )
+    @selector_ontologies_count = ontologies.map do |ontology|
+      "#{ontology.name} - #{ontology.acronym} (#{@ontologies_mapping_count[ontology.acronym]})" if @ontologies_mapping_count[ontology.acronym]
     end
 
-    # TODO_REV: Views support for mappings
-    # views_list.each do |view|
-    #   ontologies_hash[view.ontologyId] = view
-    # end
+    @example_code = [{
+                       "classes": ["http://bioontology.org/ontologies/BiomedicalResourceOntology.owl#Image_Algorithm",
+                                   "http://purl.org/incf/ontology/Computational_Neurosciences/cno_alpha.owl#cno_0000202"],
 
-    @options = {}
-    ontologies_mapping_count&.members&.each do |ontology_acronym|
-      # Adding external and interportal mappings to the dropdown list
-      if ontology_acronym.to_s == EXTERNAL_MAPPINGS_GRAPH
-        mapping_count = ontologies_mapping_count[ontology_acronym.to_s] || 0
-        select_text = t('mappings.external_mappings', number_with_delimiter: number_with_delimiter(mapping_count, delimiter: ',')) if mapping_count >= 0
-        ontology_acronym = EXTERNAL_URL_PARAM_STR
-      elsif ontology_acronym.to_s.start_with?(INTERPORTAL_MAPPINGS_GRAPH)
-        mapping_count = ontologies_mapping_count[ontology_acronym.to_s] || 0
-        select_text = t('mappings.interportal_mappings', acronym: ontology_acronym.to_s.split("/")[-1].upcase, number_with_delimiter: number_with_delimiter(mapping_count, delimiter: ',')) if mapping_count >= 0
-        ontology_acronym = INTERPORTAL_URL_PARAM_STR + ontology_acronym.to_s.split("/")[-1]
-      else
-        ontology = ontologies_hash[ontology_acronym.to_s]
-        mapping_count = ontologies_mapping_count[ontology_acronym] || 0
-        next unless ontology && mapping_count > 0
-        select_text = "#{ontology.name} - #{ontology.acronym} (#{number_with_delimiter(mapping_count, delimiter: ',')})"
-      end
-      @options[select_text] = ontology_acronym
-    end
+                       "name": t('mappings.test_bulk_load'),
+                       "source": 'https://w3id.org/semapv/LexicalMatching',
+                       "comment": 'mock data',
+                       "relation": [
+                         'http://www.w3.org/2002/07/owl#subClassOf'
+                       ],
+                       "subject_source_id": 'http://bioontology.org/ontologies/BiomedicalResources.owl',
+                       "object_source_id": 'http://purl.org/incf/ontology/Computational_Neurosciences/cno_alpha.owl',
+                       "source_name": 'https://w3id.org/sssom/mapping/tests/data/basic.tsv',
+                       "source_contact_info": 'orcid:1234,orcid:5678',
+                       "date": '2020-05-30'
+                     }]
+  end
 
-    @options = @options.sort
+  def mappings_ontologies_table
+    ontology_acronym = params[:ontology].split("-").last.split('(').first.gsub(" ", "")
+    @acronym = ontology_acronym 
+    @mapping_counts = mapping_counts(ontology_acronym)
+    render "mappings/mappings_ontologies_table"
+  end
+
+
+  def ontology_mappings
+    acronym = params[:acronym]
+    render json: mapping_counts(acronym)
   end
 
   def count
@@ -106,7 +112,6 @@ class MappingsController < ApplicationController
     page = params[:page] || 1
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
     @target_ontology = LinkedData::Client::Models::Ontology.find(params[:target])
-
     # Cases if ontology or target are interportal or external
     if @ontology.nil?
       ontology_acronym = params[:id]
@@ -277,7 +282,7 @@ class MappingsController < ApplicationController
     else
       mapping = LinkedData::Client::Models::Mapping.new
       @ontology_from = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_from].split('/').last).first
-      @ontology_to = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_to]&.split('/')&.last).first
+      @ontology_to = params[:ontology_to].present? ? LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_to].split('/').last).first : nil
       @concept_from = @ontology_from.explore.single_class({ full: true }, params[:conceptid_from]) if @ontology_from
       if @ontology_to
         @concept_to = @ontology_to.explore.single_class({ full: true }, params[:conceptid_to])
