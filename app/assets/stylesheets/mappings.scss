@@ -134,7 +134,7 @@
 
 .summary-mappings-tab{
   display: flex;
-  margin-top: 5px;
+  margin-top: 10px;
 }
 .summary-mappings-tab-table{
   width: 400px;
@@ -218,4 +218,17 @@ div#map_from_concept_details_table, div#map_to_concept_details_table {
 
 #concept_mappings_table {
   width: 100%;
+}
+
+.summary-mappings-tab-table label{
+  font-size: 0;
+}
+
+.summary-mappings-tab-table label input[type="search"] {
+  font-size: 16px; 
+  width: 420px;
+  margin-right: -21px;
+  border-radius: 8px;
+  padding: 10px;
+  outline: none;
 }
