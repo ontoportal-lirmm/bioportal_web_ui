@@ -15,7 +15,7 @@ export default class extends Controller {
         table_component = this.element.childNodes[1]
         let default_sort_column
         default_sort_column = parseInt(this.sortcolumnValue, 10)
-        if (this.sortcolumnValue || this.searchingValue){
+        if (this.sortcolumnValue || this.searchingValue || this.pagingValue){
             let table = new DataTable('#'+table_component.id, {
                 paging: this.pagingValue,
                 info: false,

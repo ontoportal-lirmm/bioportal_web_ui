@@ -11,6 +11,64 @@ module ComponentsHelper
       end
     end
   end
+  
+  def search_page_input_component(name:, value: nil, placeholder: , button_icon: 'icons/search.svg', type: 'text', &block)
+    content_tag :div, class: 'search-page-input-container', data: { controller: 'reveal' } do
+      search_input = content_tag :div, class: 'search-page-input' do
+        concat text_field_tag(name, value, type: type, placeholder: placeholder)
+        concat(content_tag(:div, class: 'search-page-button') do
+          render Buttons::RegularButtonComponent.new(id:'search-page-button', value: "Search", variant: "primary", type: "submit") do |btn|
+            btn.icon_right { inline_svg_tag button_icon}
+          end
+        end)
+      end
+
+      options = block_given? ?  capture(&block) : ''
+
+      (search_input + options).html_safe
+    end
+  end
+
+  def paginated_list_component(id:, results:, next_page_url:, child_url:, child_turbo_frame:, child_param:, open_in_modal: false , selected: nil, auto_click: false)
+    render(TreeInfiniteScrollComponent.new(
+      id:  id,
+      collection: results.collection,
+      next_url: next_page_url,
+      current_page: results.page,
+      next_page: results.nextPage,
+      auto_click: auto_click,
+    )) do |c|
+      if results.page.eql?(1)
+        concat(content_tag(:div, class: 'ontologies-selector-results') do
+          content_tag(:div, class: 'results-number small ml-2') do
+            "#{t('ontologies.showing')} #{results.totalCount}".html_safe
+          end
+        end)
+      end
+
+      concepts = c.collection
+      if concepts && !concepts.empty?
+        concepts.each do |concept|
+          concept.id = concept["@id"] unless concept.id
+          data = {  child_param => concept.id }
+          href = child_url.include?('?') ? "#{child_url}&id=#{escape(concept.id)}" : "#{child_url}?id=#{escape(concept.id)}"
+          concat(render(TreeLinkComponent.new(
+            child: concept,
+            href: href,
+            children_href: '#',
+            selected: selected.blank? ? concept.id.eql?(concepts.first.id) : concept.id.eql?(selected) ,
+            target_frame: child_turbo_frame,
+            data: data,
+            open_in_modal: open_in_modal
+          )))
+        end
+      end
+      c.error do
+        t('components.tree_view_empty')
+      end
+    end
+  end
+
 
   def resolvability_check_tag(url)
     content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;')

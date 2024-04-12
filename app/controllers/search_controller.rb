@@ -1,7 +1,8 @@
 require 'uri'
 
 class SearchController < ApplicationController
-  include SearchAggregator
+  include SearchAggregator, SearchContent
+
   skip_before_action :verify_authenticity_token
 
   layout :determine_layout
@@ -99,6 +100,22 @@ class SearchController < ApplicationController
     render plain: response, content_type: content_type
   end
 
+  def json_ontology_content_search
+    query = params[:search] || '*'
+    page = (params[:page] || 1).to_i
+    acronyms = params[:ontologies]&.split(',') || []
+    page_size = (params[:page_size] || 10).to_i
+    type = params[:types]&.split(',') || []
+
+
+    results, page, next_page, total_count = search_ontologies_content(query: query,
+                                         page: page,
+                                         page_size: page_size,
+                                         filter_by_ontologies: acronyms,
+                                        filter_by_types: type)
+
+    render json: results
+  end
 
   private
 

@@ -1,5 +1,32 @@
 class InstancesController < ApplicationController
-  include InstancesHelper
+  include InstancesHelper, SearchContent
+
+  def index
+    concept_type = params[:type].to_s || 'NamedIndividual'
+
+    is_concept_instance = !params[:type].blank?
+    get_ontology(params)
+
+    query, page, page_size = helpers.search_content_params
+
+    results, _, next_page, total_count = search_ontologies_content(query: query,
+                                                                   page: page,
+                                                                   page_size: page_size,
+                                                                   filter_by_ontologies: [@ontology.acronym],
+                                                                   filter_by_types: Array(concept_type))
+
+
+    render inline: helpers.render_search_paginated_list(container_id: (is_concept_instance ? 'concept_' : '') + 'instances_sorted_list',
+                                                        next_page_url: "/ontologies/#{@ontology.acronym}/instances?type=#{helpers.escape(params[:type])}",
+                                                        child_url: "/ontologies/#{@ontology.acronym}/instances/show?modal=#{is_concept_instance.to_s}",
+                                                        child_turbo_frame: 'instance_show',
+                                                        child_param: :instanceid,
+                                                        show_count: is_concept_instance,
+                                                        auto_click: params[:instanceid].blank?,
+                                                        results:  results, next_page:  next_page, total_count: total_count)
+
+  end
+
   def index_by_ontology
     get_ontology(params)
     instances = get_instances_by_ontology_json(@ontology, get_query_parameters)
@@ -14,8 +41,9 @@ class InstancesController < ApplicationController
 
   def show
     get_ontology(params)
-    @instance = get_instance_details_json(params[:ontology_id], params[:id] || params[:instance_id], {include: 'all'})
-    render partial: 'instances/instance_details', layout: nil
+    @instance = get_instance_details_json(params[:ontology], params[:id] || params[:instanceid], {include: 'all'})
+
+    render partial: 'instances/details', layout: nil
   end
 
   private

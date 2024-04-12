@@ -5,6 +5,25 @@ module OntologiesHelper
   API_KEY = $API_KEY
   LANGUAGE_FILTERABLE_SECTIONS = %w[classes schemes collections instances properties].freeze
 
+  def concept_search_input(placeholder)
+    content_tag(:div, class: 'search-inputs p-1') do
+      concat link_to('/search'){ inline_svg_tag 'icons/search.svg', class: "home-search-button concepts-search-button"}
+      concat text_input(placeholder: placeholder, label: '', name: "search", value: '', data: { action: "input->browse-filters#dispatchInputEvent" })
+    end
+  end
+
+  def tree_container_component(id:, placeholder:, frame_url:, tree_url:)
+    content_tag(:div, class: 'search-page-input-container', data: { controller: "turbo-frame history browse-filters", "turbo-frame-url-value": frame_url, action: "changed->turbo-frame#updateFrame" }) do
+      concat(concept_search_input(placeholder))
+      concat(content_tag(:div, class: 'tree-container') do
+        render(TurboFrameComponent.new(
+          id: id,
+          src: tree_url,
+          data: { 'turbo-frame-target': 'frame' }
+        ))
+      end)
+    end
+  end
 
   def ontology_retired?(submission)
     submission[:status].to_s.eql?('retired') || submission[:deprecated].to_s.eql?('true')

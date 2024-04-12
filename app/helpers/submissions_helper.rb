@@ -219,8 +219,9 @@ module SubmissionsHelper
     submission_metadata.select { |x| x["enforce"].include?('Agent') }.map { |x| x["attribute"] }
   end
 
-  def render_submission_inputs(frame_id)
+  def render_submission_inputs(frame_id, submission)
     output = ""
+    @submission = submission
 
     if selected_attribute?('acronym')
       output += ontology_acronym_input(update: true)
