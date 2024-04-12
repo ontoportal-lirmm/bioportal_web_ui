@@ -12,7 +12,7 @@
 = check_box_tag "delete_mappings_permission", @delete_mapping_permission, @delete_mapping_permission, style: "display: none;"
 %div#concept_mappings_tables_div
   = render_alerts_container(MappingsController)
-  %table#concept_mappings_table.zebra{width: "100%", style:'word-break: break-word'}
+  %table#concept_mappings_table.table-content-stripped.table-content{width: "100%", style:'word-break: break-word'}
     %thead
       %tr
         %th= t("mappings.mapping_table.mapping_to")
