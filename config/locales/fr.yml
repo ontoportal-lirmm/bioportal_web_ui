@@ -1390,6 +1390,9 @@ fr:
     see_more: Voir plus...
     see_less: Voir moins...
     tree_view_empty: Pas de résultat
+    copy_original_uri: Copy original URI
+    copy_portal_uri: Copy %{portal_name} URI
+
   properties:
     id: ID
     type: Type

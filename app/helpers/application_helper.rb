@@ -292,6 +292,15 @@ module ApplicationHelper
                     class: "secondary-button regular-button", data: { show_modal_title_value: t('application.add_new_proposal')}
     end
   end
+  
+  def link_last_part(url)
+    if url.include?('#')
+      url.split('#').last
+    else
+      url.split('/').last
+    end
+  end
+
   def link?(str)
     # Regular expression to match strings starting with "http://" or "https://"
     link_pattern = /\Ahttps?:\/\//
