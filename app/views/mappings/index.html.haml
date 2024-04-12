@@ -2,7 +2,8 @@
 .mappigs-page-container{'data-controller': 'mappings', 
                         'data-mappings-mappings-list-value': "#{@ontologies_mapping_count.to_h.to_json}",
                         'data-mappings-zoom-ratio-value': 1,
-                        'data-mappings-type-value': 'page'
+                        'data-mappings-type-value': 'page',
+                        'data-mappings-api-url-value': $REST_URL 
                         }
   .mappings-page-subcontainer
     .mappings-page-title
