@@ -84,7 +84,7 @@ export default class extends Controller {
       const selected_leaf = bubblesContainer.querySelector('[data-selected="true"]')
       const acronym = selected_leaf.getAttribute('data-acronym')
       const target_acronym = selected_bubble.getAttribute('data-acronym')
-      const modal_link =  `/mappings/show_mappings?data%5Bshow_modal_size_value%5D=modal-xl&amp;data%5Bshow_modal_title_value%5D=bilel&amp;id=${acronym}&amp;target=${encodeURIComponent(this.apiUrlValue)}ontologies%2F${target_acronym}`
+      const modal_link =  `/mappings/show_mappings?data%5Bshow_modal_size_value%5D=modal-xl&amp;data%5Bshow_modal_title_value%5D=bilel&amp;id=${acronym}&amp;target=${encodeURIComponent(this.apiUrlValue)}%2Fontologies%2F${target_acronym}`
       this.modalTarget.querySelector('a').href = modal_link
       this.modalTarget.querySelector('a').click()
       this.#loading_animation()
