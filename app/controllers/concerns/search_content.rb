@@ -96,7 +96,7 @@ module SearchContent
 
   def search_content_result_to_json(query, changed_query, results, ontologies, selected_onto = [])
     json = []
-    selected_onto = selected_onto.empty? ? ontologies.select { |x| x.acronym.downcase.include?(query.downcase) } : selected_onto
+    selected_onto = selected_onto.empty? ? ontologies.select { |x| x.name.downcase.include?(query.downcase) || x.acronym.downcase.include?(query.downcase) } : selected_onto
 
     json += selected_onto.map do |x|
       {
@@ -111,7 +111,8 @@ module SearchContent
     changed_query.gsub!('*', '')
 
     json += results.collection.map do |x|
-      next nil unless x.ontology_t
+      acronym = x.ontology_t || x.submission_id_t.split('/')[-3]
+      next nil unless acronym
 
       label = nil
       [
@@ -129,9 +130,9 @@ module SearchContent
 
       type = id_type(x.type_t, x.type_txt)
       {
-        id: link_by_type(x.resource_id, x.ontology_t, type),
+        id: link_by_type(x.resource_id, acronym, type),
         name: x.resource_id,
-        acronym: x.ontology_t,
+        acronym: acronym,
         type: type || '',
         label: label
       }

@@ -16,15 +16,21 @@ class InstancesController < ApplicationController
                                                                    filter_by_types: Array(concept_type))
 
 
-    render inline: helpers.render_search_paginated_list(container_id: (is_concept_instance ? 'concept_' : '') + 'instances_sorted_list',
-                                                        next_page_url: "/ontologies/#{@ontology.acronym}/instances?type=#{helpers.escape(params[:type])}",
-                                                        child_url: "/ontologies/#{@ontology.acronym}/instances/show?modal=#{is_concept_instance.to_s}",
-                                                        child_turbo_frame: 'instance_show',
-                                                        child_param: :instanceid,
-                                                        show_count: is_concept_instance,
-                                                        auto_click: params[:instanceid].blank?,
-                                                        results:  results, next_page:  next_page, total_count: total_count)
 
+    view = helpers.render_search_paginated_list(container_id: (is_concept_instance ? 'concept_' : '') + 'instances_sorted_list',
+                                                next_page_url: "/ontologies/#{@ontology.acronym}/instances?type=#{helpers.escape(params[:type])}",
+                                                child_url: "/ontologies/#{@ontology.acronym}/instances/show?modal=#{is_concept_instance.to_s}",
+                                                child_turbo_frame: 'instance_show',
+                                                child_param: :instanceid,
+                                                show_count: is_concept_instance,
+                                                auto_click: params[:instanceid].blank?,
+                                                results:  results, next_page:  next_page, total_count: total_count)
+
+    if is_concept_instance && page.eql?(1)
+      render turbo_stream: view
+    else
+      render inline:  view
+    end
   end
 
   def index_by_ontology
