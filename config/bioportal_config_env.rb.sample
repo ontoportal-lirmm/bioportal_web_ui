@@ -239,6 +239,7 @@ $FOOTER_LINKS = {
     products: {
       release_notes: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/release-notes-btKjZk5tU2",
       api: "https://data.agroportal.lirmm.fr/",
+      tools: "/tools",
       sparql: "https://sparql.agroportal.lirmm.fr/test/",
       ontoportal: "https://ontoportal.org/"
     },

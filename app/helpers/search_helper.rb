@@ -47,5 +47,4 @@ module SearchHelper
                                                       auto_click: auto_click)
     end
   end
-
 end

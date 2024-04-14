@@ -14,9 +14,7 @@ class InstancesController < ApplicationController
                                                                    page_size: page_size,
                                                                    filter_by_ontologies: [@ontology.acronym],
                                                                    filter_by_types: Array(concept_type))
-
-
-
+    
     view = helpers.render_search_paginated_list(container_id: (is_concept_instance ? 'concept_' : '') + 'instances_sorted_list',
                                                 next_page_url: "/ontologies/#{@ontology.acronym}/instances?type=#{helpers.escape(params[:type])}",
                                                 child_url: "/ontologies/#{@ontology.acronym}/instances/show?modal=#{is_concept_instance.to_s}",

@@ -1,15 +1,7 @@
 .search-page-container
   .search-page-subcontainer{'data-controller': 'reveal-component'}
     = form_tag(search_path, method: :get,data:{turbo: true, controller: 'form-url', action: 'submit->form-url#submit'}) do
-      .search-page-input-container{'data-controller': 'reveal'}
-        .search-page-input
-          %input{type:"text", placeholder: t('search.search_place_holder'), name: "q", value: @search_query}
-          .search-page-button
-            = render Buttons::RegularButtonComponent.new(id:'search-page-button', value: "Search", variant: "primary", type: "submit") do |btn|
-              = btn.icon_right do
-                = inline_svg_tag "icons/search.svg"
-
-
+      = search_page_input_component(placeholder: t('search.search_place_holder'), name: "q", value: @search_query) do
         .search-page-advanced{'data-reveal-component-target': 'item', class: "#{@advanced_options_open ? '' : 'd-none'}"}
           .left
             .filter-container
@@ -45,7 +37,7 @@
             .search-page-number-of-results
               = "#{t('search.match_in')} #{@search_results.length} #{t('search.ontologies')}"
           %div.d-flex
-            .search-page-json.mx-4
+            .search-page-json.mx-4.mt-1
               = search_json_link
             .search-page-advanced-button.show-options{class: "#{@advanced_options_open ? 'd-none' : ''}",'data': {'action': 'click->reveal-component#show', 'reveal-component-target': 'showButton'}}
               .icon
