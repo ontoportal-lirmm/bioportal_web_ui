@@ -24,7 +24,7 @@ module SubmissionFilter
     @analytics = Rails.cache.fetch("ontologies_analytics-#{Time.now.year}-#{Time.now.month}") do
       helpers.ontologies_analytics
     end
-    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'notes,projects', also_include_views: @show_views, display_links: false, display_context: false)
+    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'notes,projects', also_include_views: true, display_links: false, display_context: false)
 
     # get fair scores of all ontologies
     @fair_scores = fairness_service_enabled? ? get_fair_score('all') : nil
@@ -84,7 +84,7 @@ module SubmissionFilter
   end
 
   def filter_using_data(query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
-    submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: show_views, display_links: false, display_context: false)
+    submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: true, display_links: false, display_context: false)
 
     submissions.map do |s|
       out = !s.ontology.nil?
@@ -96,19 +96,20 @@ module SubmissionFilter
       out = out && (is_of_type.blank? || is_of_type.split(',').any? { |f| helpers.link_last_part(s.isOfType).eql?(f) })
       out = out && (formality_level.blank? || formality_level.split(',').any? { |f| helpers.link_last_part(s.hasFormalityLevel).eql?(f) })
       out = out && (languages.blank? || languages.split(',').any? { |f| s.naturalLanguage.any? { |n| helpers.link_last_part(n).eql?(f) } })
+      out = out && (s.ontology.viewOf.blank? || (show_views && !s.ontology.viewOf.blank?))
 
-      out = out && (query.blank? || [s.description, s.ontology.name, s.ontology.acronym].any? { |x| x.downcase.include?(query.downcase) })
+      out = out && (query.blank? || [s.description, s.ontology.name, s.ontology.acronym].any? { |x| (x|| '').downcase.include?(query.downcase) })
 
       if out
         s[:rank] = 0
 
         next s if query.blank?
 
-        s[:rank] += 3 if s.ontology.acronym.downcase.include?(query.downcase)
+        s[:rank] += 3 if s.ontology.acronym && s.ontology.acronym.downcase.include?(query.downcase)
 
-        s[:rank] += 2 if s.ontology.name.downcase.include?(query.downcase)
+        s[:rank] += 2 if s.ontology.name && s.ontology.name.downcase.include?(query.downcase)
 
-        s[:rank] += 1 if s.description.downcase.include?(query.downcase)
+        s[:rank] += 1 if s.description && s.description.downcase.include?(query.downcase)
 
         s
       else
