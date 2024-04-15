@@ -448,8 +448,7 @@ module OntologiesHelper
 
   def sections_to_show
     sections = ['summary']
-
-    if !@ontology.summaryOnly && submission_ready?(@submission_latest)
+    if !@ontology.summaryOnly && (submission_ready?(@submission_latest) || @old_submission_ready)
       sections += ['classes']
       sections += %w[properties]
       sections += %w[schemes collections] if skos?
@@ -459,7 +458,7 @@ module OntologiesHelper
     sections
   end
 
-  def not_ready_submission_alert(ontology: @ontology, submission: @submission)
+  def not_ready_submission_alert(ontology: @ontology, submission: @submission, old_submission_ready: @old_submission_ready)
     if ontology.admin?(session[:user])
       status = status_string(submission)
       type = nil
@@ -475,8 +474,10 @@ module OntologiesHelper
         type = 'info'
         if submission.nil?
           message = t('ontologies.upload_an_ontology', ontology: ontology_data_sections.join(', '))
-        else
+        elsif old_submission_ready
           message = t('ontologies.ontology_is_processing', ontology: ontology_data_sections.join(', '))
+        else
+          message = t('ontologies.new_ontology_is_processing', ontology: ontology_data_sections.join(', '))
         end
       end
       render Display::AlertComponent.new(message: message, type: type, button: Buttons::RegularButtonComponent.new(id:'regular-button', value: t('ontologies.contact_support', site: "#{$SITE}"), variant: "primary", href: "/feedback", color: type, size: "slim")) if type
