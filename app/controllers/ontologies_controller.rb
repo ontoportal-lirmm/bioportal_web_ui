@@ -261,7 +261,7 @@ class OntologiesController < ApplicationController
       submissions = @ontology.explore.submissions(include: 'submissionId,submissionStatus')
       if submissions.any?{|x| helpers.submission_ready?(x)}
         @old_submission_ready = true
-      else
+      elsif !params[:p].blank?
         redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
       end
     end
