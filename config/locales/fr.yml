@@ -1354,8 +1354,8 @@ fr:
     join_the_count: Rejoignez les %{count} utilisateurs, surveillant cette ressource et soyez informé de toutes ses mises à jour
     see_more: Voir plus...
     see_less: Voir moins...
-    copy_original_uri: Copy original URI
-    copy_portal_uri: Copy %{portal_name} URI
+    copy_original_uri: Copier l'URI d'origine
+    copy_portal_uri: Copier l'URI de %{portal_name}
 
   properties:
     id: ID
