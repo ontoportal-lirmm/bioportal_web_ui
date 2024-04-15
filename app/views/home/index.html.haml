@@ -43,7 +43,7 @@
         = t('home.index.welcome', site: $SITE)
       %p
         = t('home.index.tagline')
-      = render OntologySearchInputComponent.new(search_icon_type: 'home')
+      = ontologies_content_autocomplete
  
 .home-body-container
   .home-section

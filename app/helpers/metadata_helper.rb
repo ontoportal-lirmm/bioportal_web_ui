@@ -5,7 +5,9 @@ module MetadataHelper
   end
 
   def submission_metadata
-    @metadata ||= JSON.parse(Net::HTTP.get(URI.parse("#{$REST_URL}/submission_metadata?apikey=#{$API_KEY}")))
+    @metadata ||= Rails.cache.fetch('submission_metadata') do
+      JSON.parse(LinkedData::Client::HTTP.get("/submission_metadata", {}, {raw: true}))
+    end
   end
 
   def attr_metadata(attr_key)

@@ -9,7 +9,7 @@ module ApplicationHelper
   REST_URI = $REST_URL
   API_KEY = $API_KEY
 
-  include ModalHelper, MultiLanguagesHelper
+  include ModalHelper, MultiLanguagesHelper, UrlsHelper
 
   RESOLVE_NAMESPACE = {:omv => "http://omv.ontoware.org/2005/05/ontology#", :skos => "http://www.w3.org/2004/02/skos/core#", :owl => "http://www.w3.org/2002/07/owl#",
                        :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#", :rdfs => "http://www.w3.org/2000/01/rdf-schema#", :metadata => "http://data.bioontology.org/metadata/",
@@ -90,14 +90,6 @@ module ApplicationHelper
 
   def encode_param(string)
     CGI.escape(string)
-  end
-
-  def escape(string)
-    CGI.escape(string) if string
-  end
-
-  def unescape(string)
-    CGI.unescape(string) if string
   end
 
   def clean(string)
@@ -194,6 +186,16 @@ module ApplicationHelper
     end
     onts_for_select.sort! { |a,b| a[0].downcase <=> b[0].downcase }
     onts_for_select
+  end
+
+  def link_last_part(url)
+    return "" if url.nil?
+
+    if url.include?('#')
+      url.split('#').last
+    else
+      url.split('/').last
+    end
   end
 
   def get_categories_data(categories = nil)
@@ -641,4 +643,5 @@ module ApplicationHelper
       end
     end
   end
+  
 end

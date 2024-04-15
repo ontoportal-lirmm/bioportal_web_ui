@@ -75,7 +75,6 @@ module SearchAggregator
 
   def ontology_name_acronym(ontologies, selected_acronym)
     ontology = ontologies.select { |x| x.acronym.eql?(selected_acronym.split('/').last) }.first
-    binding.pry if ontology.nil?
     "#{ontology.name} (#{ontology.acronym})"
   end
 
@@ -202,7 +201,7 @@ module SearchAggregator
   def ontology_own_class?(cls_id, acronym, blacklist_words)
     cls_id = blacklist_cls_id_components(cls_id.dup, blacklist_words)
 
-    cls_id.upcase.include?(acronym) rescue binding.pry
+    cls_id.upcase.include?(acronym)
   end
 
   def blacklist_cls_id_components(cls_id, blacklist_words)

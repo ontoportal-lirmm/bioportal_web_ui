@@ -79,7 +79,7 @@ fr:
     incomplete_simple_ontology: "Ontologie simple incomplète : %{id}, %{ont}"
   label_xl:
     error_valid_label_xl: "Erreur : Vous devez fournir un identifiant de label_xl valide"
-    
+
   admin:
     query_not_permitted: Requête non autorisée
     update_info_successfully: Informations de mise à jour récupérées avec succès
@@ -119,7 +119,7 @@ fr:
       ontologies_with_errors: Ontologies avec erreurs
       total_visits: Visites totales
       active_users: Utilisateurs actifs
-      visit_users: "%{ visits } utilisateurs depuis le mois dernier"
+      visit_users: "%{visits} utilisateurs depuis le mois dernier"
       ontology_visits: Visites d'ontologies
       unique_users_visits: Visites d'utilisateurs uniques
       page_visits: Visites de page de ce mois
@@ -147,8 +147,9 @@ fr:
       metadata_administration: Administration des métadonnées
       groups: Groupes
       categories: Catégories
-      persons_and_organizations: Personnes & Organisations
+      persons_and_organizations: Personnes et Organisations
       sparql: SPARQL
+      search: Recherche et Indexation
       report_generated_on: "Rapport généré le :"
       licensed_to: Licencié à
       appliance_id: ID de l'appareil
@@ -240,6 +241,34 @@ fr:
         license_from_being_saved: "a empêché cette licence d'être sauvegardée :"
         paste_your_license: Collez votre clé de licence dans la zone de texte
         submit: Soumettre
+    search:
+      index:
+        index_data: "DONNÉES INDEXES"
+        collections_management: "GESTION DES COLLECTIONS"
+        name: "Nom"
+        actions: "Actions"
+        select_model: "Sélectionnez un modèle à indexer"
+        ontology: "Ontologie"
+        agent: "Agent"
+        ontology_submission: "Soumission"
+        generate_schema: "Générer le schéma"
+        see_schema: "Voir le schéma"
+        see_indexed_data: "Voir les données indexées"
+      show:
+        field_name: "Nom du champ"
+        type: "Type"
+        multi_valued: "Multivalué"
+        indexed: "Indexé"
+        stored: "Stocké"
+      search:
+        search_query: "Requête de recherche"
+        page: "Page"
+        page_size: "Taille de la page"
+        found_documents: "Trouvé %{count} documents"
+        id: "ID"
+        properties: "Propriétés"
+        show_more: "+ Afficher plus ..."
+        show_less: "- Afficher moins ..."
 
   annotator:
     title: Annotateur
@@ -313,7 +342,7 @@ fr:
           <blockquote>
             <p>Justification (optionnel)<br>Fournissez ici toute information supplémentaire concernant le terme demandé.</p>
           </blockquote>
-        
+
   home:
     ontoportal_instances: "Autres installations d’OntoPortal"
     bug: Bug
@@ -475,6 +504,7 @@ fr:
       ontoportal: OntoPortal
       release_notes: Notes de version
       api: API
+      tools: Outils
       sparql: SPARQL
       support: Aides
       contact_us: Contactez-nous
@@ -1024,6 +1054,10 @@ fr:
     help_creator: "Les propriétés suivantes prennent pour valeur un 'agent' dans %{portal_name} (soit une personne, soit une organisation). Ces agents sont partagés sur toutes les ontologies et sont suggérés avec l'autocomplétion s'ils existent déjà. Modifier un agent ici le modifiera pour toutes les ontologies auxquelles cet agent est impliqué."
     version_help: "Pour plus d'informations sur la manière d'encoder les informations de version dans une ontologie, consultez %{link}"
     version_helper_link: "les lignes directrices et recommandations."
+  instances:
+    id: ID
+    type: Type
+    label: Label
   collections:
     error_valid_collection: "Erreur : Vous devez fournir un identifiant de collection valide"
     no_collections_alert: "%{acronym} ne contient pas de collections (skos:Collection)"
@@ -1136,7 +1170,8 @@ fr:
     ontology_processing_failed: "Le traitement de l'ontologie a échoué, avec les statuts actuels : %{status}"
     ontology_parsing_succeeded: "L'analyse de l'ontologie a réussi, mais certaines étapes de traitement ont échoué, voici les statuts actuels : %{status}"
     upload_an_ontology: Téléchargez une ontologie. Des sections comme %{ontology} seront disponibles une fois terminées.
-    ontology_is_processing: L'ontologie est en cours de traitement. Des sections comme %{ontology} seront disponibles une fois le traitement terminé.
+    new_ontology_is_processing: L'ontologie est en cours de traitement. Des sections comme %{ontology} seront disponibles une fois le traitement terminé.
+    ontology_is_processing: L'ontologie est en cours de traitement. Des sections comme %{ontology} seront mis a jours une fois le traitement terminé.
     contact_support: Contacter le support
     edit_natural_languages: Modifier les langues naturelles de %{acronym}
     edit_available_languages: Cliquez ici pour modifier les langues disponibles
@@ -1288,6 +1323,11 @@ fr:
       ncbo_widget_wiki: Wiki des Widgets NCBO
       file: fichier.
       no_class_concept_found: Aucune classe/concept trouvé
+      instances_search_placeholder: Rechercher une instance dans %{acronym}
+      properties_search_placeholder: Rechercher une propriété dans %{acronym}
+      schemes_search_placeholder: Rechercher un schéma dans %{acronym}
+      collections_search_placeholder: Rechercher une collection dans %{acronym}
+
       metadata:
         fair_score_title: Score FAIR
         total_score: "Score total : %{score} ( %{normalized_score}%)"
@@ -1354,11 +1394,13 @@ fr:
     join_the_count: Rejoignez les %{count} utilisateurs, surveillant cette ressource et soyez informé de toutes ses mises à jour
     see_more: Voir plus...
     see_less: Voir moins...
+    tree_view_empty: Pas de résultat
     copy_original_uri: Copier l'URI d'origine
     copy_portal_uri: Copier l'URI de %{portal_name}
 
   properties:
     id: ID
+    type: Type
     preferred_name: Nom préféré
     definitions: Définitions
     parent: Parent
@@ -1385,3 +1427,25 @@ fr:
     cancel: Annuler
     apply: Appliquer
     unselect_all: Tout désélectionner
+
+  tools:
+    search:
+      title: "Rechercher du contenu (à venir)"
+      description: >
+        Cet outil/service permet aux utilisateurs de rechercher n'importe quel élément du Cadre de Description des Ressources (RDF) dans le portail.
+        Les utilisateurs peuvent rechercher soit par l'identifiant unique (URI) associé à l'élément RDF, soit par son libellé.
+        Il facilite la navigation efficace et la récupération d'éléments RDF spécifiques, améliorant ainsi l'expérience utilisateur et la productivité au sein du portail.
+
+    converter:
+      title: "Convertisseur de contenu (à venir)"
+      description: >
+        L'outil/service de conversion de contenu offre la possibilité de convertir n'importe quel élément RDF en divers formats tels que RDF/XML, Turtle, Ntriples ou JSON.
+        Cette fonctionnalité permet aux utilisateurs de transformer les données RDF en formats adaptés à différents usages ou compatibles avec divers systèmes et applications.
+        Il favorise l'interopérabilité et la flexibilité dans la manipulation des données RDF au sein de l'écosystème du portail.
+
+    url_checker:
+      title: "Vérificateur de résolvabilité d'URI"
+      description: >
+        Cet outil/service vérifie la résolvabilité des Identifiants Uniformes de Ressource (URI) et leur négociabilité de contenu.
+        Il vérifie si un URI donné est accessible et si le contenu associé peut être négocié en fonction des préférences du client.
+        Cette fonctionnalité garantit la fiabilité et l'accessibilité des ressources liées dans l'écosystème RDF, aidant ainsi à maintenir l'intégrité des données et facilitant l'intégration transparente avec des ressources externes.

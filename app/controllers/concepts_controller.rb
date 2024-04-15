@@ -7,7 +7,7 @@ class ConceptsController < ApplicationController
 
   layout 'ontology'
 
-  def show_concept
+  def show
     params[:id] = params[:id] ? params[:id] : params[:conceptid]
 
     if params[:id].nil? || params[:id].empty?
@@ -16,8 +16,8 @@ class ConceptsController < ApplicationController
     end
 
     # Note that find_by_acronym includes views by default
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
-    ontology_not_found(params[:ontology_id]) if @ontology.nil?
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
+    ontology_not_found(params[:ontology]) if @ontology.nil?
 
     @submission = get_ontology_submission_ready(@ontology)
     @ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
@@ -30,7 +30,7 @@ class ConceptsController < ApplicationController
     render :partial => 'show'
   end
 
-  def show
+  def index
     # Handle multiple methods of passing concept ids
     params[:id] = params[:id] ? params[:id] : params[:conceptid]
 

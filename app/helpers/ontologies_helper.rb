@@ -5,6 +5,25 @@ module OntologiesHelper
   API_KEY = $API_KEY
   LANGUAGE_FILTERABLE_SECTIONS = %w[classes schemes collections instances properties].freeze
 
+  def concept_search_input(placeholder)
+    content_tag(:div, class: 'search-inputs p-1') do
+      concat link_to('/search'){ inline_svg_tag 'icons/search.svg', class: "home-search-button concepts-search-button"}
+      concat text_input(placeholder: placeholder, label: '', name: "search", value: '', data: { action: "input->browse-filters#dispatchInputEvent" })
+    end
+  end
+
+  def tree_container_component(id:, placeholder:, frame_url:, tree_url:)
+    content_tag(:div, class: 'search-page-input-container', data: { controller: "turbo-frame history browse-filters", "turbo-frame-url-value": frame_url, action: "changed->turbo-frame#updateFrame" }) do
+      concat(concept_search_input(placeholder))
+      concat(content_tag(:div, class: 'tree-container') do
+        render(TurboFrameComponent.new(
+          id: id,
+          src: tree_url,
+          data: { 'turbo-frame-target': 'frame' }
+        ))
+      end)
+    end
+  end
 
   def ontology_retired?(submission)
     submission[:status].to_s.eql?('retired') || submission[:deprecated].to_s.eql?('true')
@@ -429,8 +448,7 @@ module OntologiesHelper
 
   def sections_to_show
     sections = ['summary']
-
-    if !@ontology.summaryOnly && submission_ready?(@submission_latest)
+    if !@ontology.summaryOnly && (submission_ready?(@submission_latest) || @old_submission_ready)
       sections += ['classes']
       sections += %w[properties]
       sections += %w[schemes collections] if skos?
@@ -440,7 +458,7 @@ module OntologiesHelper
     sections
   end
 
-  def not_ready_submission_alert(ontology: @ontology, submission: @submission)
+  def not_ready_submission_alert(ontology: @ontology, submission: @submission, old_submission_ready: @old_submission_ready)
     if ontology.admin?(session[:user])
       status = status_string(submission)
       type = nil
@@ -456,8 +474,10 @@ module OntologiesHelper
         type = 'info'
         if submission.nil?
           message = t('ontologies.upload_an_ontology', ontology: ontology_data_sections.join(', '))
-        else
+        elsif old_submission_ready
           message = t('ontologies.ontology_is_processing', ontology: ontology_data_sections.join(', '))
+        else
+          message = t('ontologies.new_ontology_is_processing', ontology: ontology_data_sections.join(', '))
         end
       end
       render Display::AlertComponent.new(message: message, type: type, button: Buttons::RegularButtonComponent.new(id:'regular-button', value: t('ontologies.contact_support', site: "#{$SITE}"), variant: "primary", href: "/feedback", color: type, size: "slim")) if type
