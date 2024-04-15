@@ -4,7 +4,7 @@ class ContentFinderController < ApplicationController
   include OntologyContentSerializer
 
   def index
-    @result = serialize_content(ontology_acronym: params[:acronym],
+    @result, content_type = serialize_content(ontology_acronym: params[:acronym],
                                 concept_id: params[:uri],
                                 format: params[:output_format])
     render 'content_finder/index', layout: 'tool'

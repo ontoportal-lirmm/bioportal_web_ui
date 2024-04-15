@@ -12,9 +12,9 @@ module OntologyContentSerializer
       return @result if format.eql?('html')
 
       url = content_finder_url(ontology_acronym, concept_id)
-      @accept_header = content_finder_accept_header(@format)
+      accept_header = content_finder_accept_header(@format)
       conn = Faraday.new(url: url) do |faraday|
-        faraday.headers['Accept'] = @accept_header
+        faraday.headers['Accept'] = accept_header
         faraday.adapter Faraday.default_adapter
         faraday.headers['Authorization'] = "apikey token=#{get_apikey}"
       end
@@ -23,7 +23,7 @@ module OntologyContentSerializer
         @result = response.body.force_encoding(Encoding::UTF_8)
       end
     end
-    @result
+    [@result, accept_header]
   end
 
   def content_finder_url(acronym, uri)
