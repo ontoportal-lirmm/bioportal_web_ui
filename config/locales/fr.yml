@@ -1166,7 +1166,8 @@ fr:
     ontology_processing_failed: "Le traitement de l'ontologie a échoué, avec les statuts actuels : %{status}"
     ontology_parsing_succeeded: "L'analyse de l'ontologie a réussi, mais certaines étapes de traitement ont échoué, voici les statuts actuels : %{status}"
     upload_an_ontology: Téléchargez une ontologie. Des sections comme %{ontology} seront disponibles une fois terminées.
-    ontology_is_processing: L'ontologie est en cours de traitement. Des sections comme %{ontology} seront disponibles une fois le traitement terminé.
+    new_ontology_is_processing: L'ontologie est en cours de traitement. Des sections comme %{ontology} seront disponibles une fois le traitement terminé.
+    ontology_is_processing: L'ontologie est en cours de traitement. Des sections comme %{ontology} seront mis a jours une fois le traitement terminé.
     contact_support: Contacter le support
     edit_natural_languages: Modifier les langues naturelles de %{acronym}
     edit_available_languages: Cliquez ici pour modifier les langues disponibles

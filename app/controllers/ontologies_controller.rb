@@ -256,9 +256,16 @@ class OntologiesController < ApplicationController
 
     @submission_latest = @ontology.explore.latest_submission(include: 'all', invalidate_cache: invalidate_cache?) rescue @ontology.explore.latest_submission(include: '')
 
-    if !helpers.submission_ready?(@submission_latest) && params[:p].present? && data_pages.include?(params[:p].to_s)
-      redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
+
+    unless helpers.submission_ready?(@submission_latest)
+      submissions = @ontology.explore.submissions(include: 'submissionId,submissionStatus')
+      if submissions.any?{|x| helpers.submission_ready?(x)}
+        @old_submission_ready = true
+      elsif !params[:p].blank?
+        redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
+      end
     end
+
     # Is the ontology downloadable?
     @ont_restricted = ontology_restricted?(@ontology.acronym)
 
