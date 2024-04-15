@@ -1041,6 +1041,10 @@ en:
     help_creator: "The following properties take for value an 'agent' in %{portal_name} (either a person or an organization). These agents are shared over all the ontologies and suggested with autocompletion if they already exist. Editing an agent here will change it to all the ontologies that agent is involved in."
     version_help: "For more information on how to encode versioning information in an ontology, see %{link}"
     version_helper_link: "guidelines and recommendations."
+  instances:
+    id: ID
+    type: Type
+    label: Label
   collections:
     error_valid_collection: "Error: You must provide a valid collection id"
     no_collections_alert: "%{acronym} does not contain collections (skos:Collection)"
@@ -1147,7 +1151,8 @@ en:
     ontology_processing_failed: "The ontology processing failed, with the current statuses: %{status}"
     ontology_parsing_succeeded: "The ontology parsing succeeded, but some processing steps failed, here are the current statuses: %{status}"
     upload_an_ontology: Upload an ontology. Sections such as %{ontology} will be available once done.
-    ontology_is_processing: The ontology is processing. Sections such as %{ontology} will be available once processing is complete.
+    new_ontology_is_processing: The ontology is processing. Sections such as %{ontology} will be available  once processing is complete.
+    ontology_is_processing: The ontology is processing. Sections such as %{ontology} will be updated once processing is complete.
     contact_support: Contact support
     edit_natural_languages: Edit natural languages of %{acronym}
     edit_available_languages: Click here to edit available languages

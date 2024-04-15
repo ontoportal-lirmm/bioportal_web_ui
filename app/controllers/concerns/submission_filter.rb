@@ -24,7 +24,7 @@ module SubmissionFilter
     @analytics = Rails.cache.fetch("ontologies_analytics-#{Time.now.year}-#{Time.now.month}") do
       helpers.ontologies_analytics
     end
-    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'notes,projects', also_include_views: @show_views, display_links: false, display_context: false)
+    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'notes,projects', also_include_views: true, display_links: false, display_context: false)
 
     # get fair scores of all ontologies
     @fair_scores = fairness_service_enabled? ? get_fair_score('all') : nil
@@ -41,7 +41,7 @@ module SubmissionFilter
                is_of_type: request_params[:isOfType],
                groups: request_params[:group], categories: request_params[:hasDomain],
                formats: request_params[:hasOntologyLanguage] }
-    submissions = []
+
 
     if search_backend.eql?('index')
       submissions = filter_using_index(**params)
@@ -51,8 +51,7 @@ module SubmissionFilter
 
     submissions = submissions.reject { |sub| sub.ontology.nil? }.map { |sub| ontology_hash(sub, @ontologies) }
 
-
-    submissions = sort_submission_by(submissions, @sort_by)   if @search.blank?
+    submissions = sort_submission_by(submissions, @sort_by, @search)
 
 
     @page = paginate_submissions(submissions, request_params[:page].to_i, request_params[:pagesize].to_i)
@@ -85,12 +84,11 @@ module SubmissionFilter
   end
 
   def filter_using_data(query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
-    submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: show_views, display_links: false, display_context: false)
+    submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: true, display_links: false, display_context: false)
 
-    submissions.select do |s|
+    submissions.map do |s|
       out = !s.ontology.nil?
       out = out && ((s.ontology.viewingRestriction.eql?('public') && !private_only) || private_only && s.ontology.viewingRestriction.eql?('private'))
-      out = out && (query.blank? || [s.description, s.ontology.name, s.ontology.acronym].any? { |x| x.downcase.include?(query.downcase) })
       out = out && (groups.blank? || (s.ontology.group.map { |x| helpers.link_last_part(x) } & groups.split(',')).any?)
       out = out && (categories.blank? || (s.ontology.hasDomain.map { |x| helpers.link_last_part(x) } & categories.split(',')).any?)
       out = out && (status.blank? || status.split(',').include?(s.status))
@@ -98,8 +96,27 @@ module SubmissionFilter
       out = out && (is_of_type.blank? || is_of_type.split(',').any? { |f| helpers.link_last_part(s.isOfType).eql?(f) })
       out = out && (formality_level.blank? || formality_level.split(',').any? { |f| helpers.link_last_part(s.hasFormalityLevel).eql?(f) })
       out = out && (languages.blank? || languages.split(',').any? { |f| s.naturalLanguage.any? { |n| helpers.link_last_part(n).eql?(f) } })
-      out
-    end
+      out = out && (s.ontology.viewOf.blank? || (show_views && !s.ontology.viewOf.blank?))
+
+      out = out && (query.blank? || [s.description, s.ontology.name, s.ontology.acronym].any? { |x| (x|| '').downcase.include?(query.downcase) })
+
+      if out
+        s[:rank] = 0
+
+        next s if query.blank?
+
+        s[:rank] += 3 if s.ontology.acronym && s.ontology.acronym.downcase.include?(query.downcase)
+
+        s[:rank] += 2 if s.ontology.name && s.ontology.name.downcase.include?(query.downcase)
+
+        s[:rank] += 1 if s.description && s.description.downcase.include?(query.downcase)
+
+        s
+      else
+        nil
+      end
+
+    end.compact
   end
 
   def paginate_submissions(all_submissions, page, size)
@@ -113,7 +130,9 @@ module SubmissionFilter
                    collection: all_submissions[start_index..end_index])
   end
 
-  def sort_submission_by(submissions, sort_by)
+  def sort_submission_by(submissions, sort_by, query = nil)
+    return submissions.sort_by { |x| x[:rank] ? -x[:rank] : 0}  unless query.blank?
+
     if sort_by.eql?('visits')
       submissions = submissions.sort_by { |x| -x[:popularity] }
     elsif sort_by.eql?('fair')
@@ -217,7 +236,7 @@ module SubmissionFilter
     o[:note_count] = ont.notes.length
     o[:project_count] = ont.projects.length
     o[:popularity] = @analytics[ont.acronym] || 0
-
+    o[:rank] = sub[:rank]
     # if o[:type].eql?('ontology_view')
     #   unless ontologies_hash[ont.viewOf].blank?
     #     o[:viewOfOnt] = {
