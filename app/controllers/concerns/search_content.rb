@@ -85,12 +85,15 @@ module SearchContent
       query = "*#{query}*"
     end
 
-    results = LinkedData::Client::HTTP.get('search/ontologies/content', { q: query, qf: qf.join(' '), page: page, pagesize: page_size, ontologies: acronyms.first, types: types.join(',') })
+    results = search_content( q: query, qf: qf.join(' '), page: page, pagesize: page_size, ontologies: acronyms.first, types: types.join(','))
     [search_content_result_to_json(original_query, query, results, ontologies, selected_onto), results.page,results.nextPage, results.totalCount]
   end
 
 
 
+  def search_content(params)
+    LinkedData::Client::HTTP.get('search/ontologies/content', params)
+  end
 
   private
 
@@ -170,9 +173,9 @@ module SearchContent
     when 'AnnotationProperty', 'ObjectProperty', 'DatatypeProperty'
       ontology_path(id: ontology, p: 'properties', instanceid: id)
     else
-      #"/content_finder?acronym=#{x.ontology_t}&uri=#{helpers.escape(x.resource_id)}&output_format=xml"
-      ontology_path(id: ontology, p: 'summary')
+      "/content_finder?acronym=#{ontology}&uri=#{escape(id)}&output_format=json"
     end
   end
+
 end
 
