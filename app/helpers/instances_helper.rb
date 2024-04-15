@@ -1,14 +1,7 @@
 module InstancesHelper
   include ConceptsHelper
   include ApplicationHelper
-  def get_instances_by_class_json(concept, query_parameters)
-    concept.explore.instances(query_parameters)
-  end
-
-  def get_instances_by_ontology_json(ontology, query_parameters)
-    ontology.explore.instances(query_parameters)
-  end
-
+  
   def get_instance_details_json(ontology_acronym, instance_uri , query_parameters, raw: false)
     LinkedData::Client::HTTP
       .get("/ontologies/#{ontology_acronym}/instances/#{CGI.escape(instance_uri)}",
@@ -69,14 +62,6 @@ module InstancesHelper
       return link_to_instance(instance, ontology_acronym) unless instance.empty?
     end
     property
-  end
-
-  def add_labels_to_print(instance, ontology_acronym)
-    instance['labelToPrint'] = instance_label(instance)
-    instance['types'].reject!{|t| t['NamedIndividual']}
-    instance['types'].map!{ |t|  {type:t, labelToPrint: t}}
-    instance['ontology'] = ontology_acronym
-    instance
   end
 
 end

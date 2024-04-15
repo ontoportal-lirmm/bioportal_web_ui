@@ -1035,6 +1035,10 @@ en:
     help_creator: "The following properties take for value an 'agent' in %{portal_name} (either a person or an organization). These agents are shared over all the ontologies and suggested with autocompletion if they already exist. Editing an agent here will change it to all the ontologies that agent is involved in."
     version_help: "For more information on how to encode versioning information in an ontology, see %{link}"
     version_helper_link: "guidelines and recommendations."
+  instances:
+    id: ID
+    type: Type
+    label: Label
   collections:
     error_valid_collection: "Error: You must provide a valid collection id"
     no_collections_alert: "%{acronym} does not contain collections (skos:Collection)"

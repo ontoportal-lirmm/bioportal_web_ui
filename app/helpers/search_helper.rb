@@ -24,8 +24,8 @@ module SearchHelper
     next_page_link = "#{next_page_link}&#{child_param}=#{escape(params[child_param.to_sym])}"
 
     if show_count && page.eql?(1)
-      render turbo_stream: [
-        replace("#{container_id}_count", render_to_string(inline: content_tag(:span, @results.totalCount))),
+      [
+        replace("#{container_id}_count", content_tag(:span, @results.totalCount).html_safe),
         prepend("#{container_id}_view-page-1", paginated_list_component(id: container_id,
                                                                                         results: @results,
                                                                                         next_page_url: next_page_link,
@@ -47,5 +47,4 @@ module SearchHelper
                                                       auto_click: auto_click)
     end
   end
-  
 end
