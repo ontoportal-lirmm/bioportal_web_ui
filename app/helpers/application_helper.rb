@@ -293,13 +293,6 @@ module ApplicationHelper
     end
   end
   
-  def link_last_part(url)
-    if url.include?('#')
-      url.split('#').last
-    else
-      url.split('/').last
-    end
-  end
 
   def link?(str)
     # Regular expression to match strings starting with "http://" or "https://"
