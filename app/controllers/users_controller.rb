@@ -57,7 +57,7 @@ class UsersController < ApplicationController
 
     if @errors.size < 1
       @user_saved = @user.save
-      if @user_saved.errors
+      if response_error?(@user_saved)
         @errors = response_errors(@user_saved)
         # @errors = {acronym: "Username already exists, please use another"} if @user_saved.status == 409
         render action: "new"
@@ -79,10 +79,10 @@ class UsersController < ApplicationController
   # PUT /users/1
   # PUT /users/1.xml
   def update
+    @user = LinkedData::Client::Models::User.find(params[:id])
+    @user = LinkedData::Client::Models::User.find_by_username(params[:id]).first if @user.nil?
     @errors = validate_update(user_params)
     if @errors.size < 1
-      @user = LinkedData::Client::Models::User.find(params[:id])
-      @user = LinkedData::Client::Models::User.find_by_username(params[:id]).first if @user.nil?
 
       if params[:user][:password]
         error_response = @user.update(values: { password: params[:user][:password] })
@@ -97,7 +97,7 @@ class UsersController < ApplicationController
         error_response = @user.update
       end
 
-      if error_response
+      if response_error?(error_response)
         @errors = response_errors(error_response)
         # @errors = {acronym: "Username already exists, please use another"} if error_response.status == 409
         render action: "edit"

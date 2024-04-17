@@ -33,37 +33,36 @@
     jQuery(document).data().bp.ont_viewer.concept_param = "#{"conceptid=\#{params[:conceptid]}" unless params[:conceptid].nil? || params[:conceptid].empty?}";
     jQuery(document).data().bp.ont_viewer.concept_name = "#{@concept.prefLabel unless @concept.nil?}";
     jQuery(document).data().bp.ont_viewer.metadata_only = "#{@ontology.summaryOnly}";
-    jQuery(document).data().bp.ont_viewer.current_purl = "#{@current_purl}";
-    jQuery(document).data().bp.ont_viewer.purl_prefix = "#{($PURL_ENABLED ? $PURL_PREFIX+"/"+@ontology.acronym : '')}";
+    jQuery(document).data().bp.ont_viewer.purl_prefix = "#{(Rails.configuration.settings.purl[:enabled] ? Rails.configuration.settings.purl[:prefix]+"/"+@ontology.acronym : '')}";
     jQuery(document).data().bp.ont_viewer.concept_name_title = (jQuery(document).data().bp.ont_viewer.concept_name == "") ?
         "" : " - " + jQuery(document).data().bp.ont_viewer.concept_name;
 
 
   -# Modal dialog for creating a new mapping (must reside in a top-level position in the document to display properly).
-  %div#createNewMappingModal{class: "modal fade", tabindex: "-1", role: "dialog", "aria-labelledby": "createNewMappingLabel"}
-    %div.modal-dialog.modal-lg{role: "document"}
+  %div#createNewMappingModal{class: "modal fade", tabindex: "-1", "aria-labelledby": "createNewMappingLabel"}
+    %div.modal-dialog.modal-lg
       %div.modal-content
         %div.modal-header
-          %button.close{type: "button", "data-dismiss": "modal", "aria-label": "Close"}
-            %span{"aria-hidden": "true"} &times;
           %h4#createNewMappingLabel.modal-title
+          %button.btn-close{type: "button", "data-bs-dismiss": "modal", "aria-label": "Close"}
         %div.createNewMappingModalBody.modal-body
         %div.modal-footer
-          = submit_tag("Create Mapping", class: "btn btn-default", id: "create_mapping_button")
-          %button{type: "button", class: "btn btn-default", "data-dismiss": "modal"} Close
-          
+          %button{type: "button", class: "btn btn-secondary", "data-bs-dismiss": "modal"} Close
+          = submit_tag("Create Mapping", class: "btn btn-primary", id: "create_mapping_button")
+
   -# Modal dialog for getting a permanent link to a class (must reside in a top-level position in the document to display properly).
-  %div#classPermalinkModal{class: "modal fade", tabindex: "-1", role: "dialog", aria: {labelledby: "classPermalinkLabel", hidden: "true"}}
-    %div.modal-dialog.modal-dialog-centered.modal-lg{role: "document"}
+  %div#classPermalinkModal{class: "modal fade", tabindex: "-1", aria: {labelledby: "classPermalinkLabel", hidden: "true"}}
+    %div.modal-dialog.modal-dialog-centered.modal-lg
       %div.modal-content
         %div.modal-header
-          %h5#classPermalinkLabel.modal-title Permanent link to this class
-          %button.close{type: "button", "data-dismiss": "modal", "aria-label": "Close"}
-            %span{"aria-hidden": "true"} &times;
+          %h5#classPermalinkLabel.modal-title Link to this page
+          %button.btn-close{type: "button", "data-bs-dismiss": "modal", "aria-label": "Close"}
         %div.modal-body
           = text_field_tag("purl_input", nil, class: "form-control")
         %div.modal-footer
-          %button.btn.btn-secondary{"data-dismiss": "modal"} Close
+          %button.btn.btn-secondary{"data-bs-dismiss": "modal"} Close
+
+  = render partial: 'kgcl_dialogs'
 
   -# A header of sorts to display ontology name and subset of details.
   %div.row.pt-md-3.pb-md-2
@@ -77,25 +76,31 @@
               %span.text-muted
                 Last uploaded:
                 = l(Date.parse(sub.creationDate), format: :monthfull_day_year)
-        %div.ont-info-links
+        %div{class: 'ont-info-links d-flex gap-2'}
           - unless (@ontology.summaryOnly || @ont_restricted || @submissions.empty?)
-            = link_to(@submissions.first.id + "/download?apikey=#{get_apikey}", "aria-label": "Download latest version", title: "Download latest version") do
-              %i.fas.fa-lg.fa-download{"aria-hidden": true}
+            = link_to(@submissions.first.id + "/download?apikey=#{get_apikey}", class: 'btn btn-outline-secondary',
+                      'aria-label': 'Download latest submission', title: 'Download latest submission') do
+              %i.fas.fa-lg.fa-file-download{"aria-hidden": true}
           - if details_available
-            - if $PURL_ENABLED
-              = link_to(@ontology.purl, "aria-label": "BioPortal PURL", title: "BioPortal PURL", target: "_blank") do
+            - if Rails.configuration.settings.purl[:enabled]
+              = link_to(@ontology.purl, class: 'btn btn-outline-secondary', 'aria-label': "#{$SITE} PURL",
+                        title: "#{$SITE} PURL", target: "_blank") do
                 %i.fas.fa-lg.fa-link{"aria-hidden": true}
-            = link_to(sub.homepage, "aria-label": "Ontology home page", title: "Ontology home page", target: "_blank") do
+            = link_to(sub.homepage, class: 'btn btn-outline-secondary', 'aria-label': 'Ontology homepage',
+                      title: 'Ontology homepage', target: "_blank") do
               %i.fas.fa-lg.fa-home{"aria-hidden": true}
             - unless sub.documentation.nil?
-              = link_to(sub.documentation, "aria-label": "Ontology documentation", title: "Ontology documentation", target: "_blank") do
+              = link_to(sub.documentation, class: 'btn btn-outline-secondary', "aria-label": "Documentation",
+                        title: "Documentation", target: "_blank") do
                 %i.fas.fa-lg.fa-book-reader{"aria-hidden": true}
             - unless sub.publication.nil?
-              = link_to(sub.publication, "aria-label": "Ontology publications", title: "Ontology publications", target: "_blank") do
-                %i.fas.fa-lg.fa-book{"aria-hidden": true}
+              = link_to(sub.publication, class: 'btn btn-outline-secondary', "aria-label": "Publications",
+                        title: "Publications", target: "_blank") do
+                %i.far.fa-lg.fa-newspaper{"aria-hidden": true}
           - if @ontology.admin?(session[:user])
-            = link_to(edit_ontology_path(@ontology.acronym), "aria-label": "Edit ontology details", title: "Edit ontology details") do
-              %i.fas.fa-lg.fa-user-edit
+            = link_to(edit_ontology_path(@ontology.acronym), class: 'btn btn-outline-secondary',
+                      "aria-label": "Edit ontology details", title: "Edit ontology details") do
+              %i.fas.fa-lg.fa-user-edit{"aria-hidden": true}
 
   %div.row.pb-4
     %div.col
@@ -104,14 +109,38 @@
           - sections  = %w[summary classes properties notes mappings]
           -# Tabbed navigation bar for ontology content sections
           %ul.nav.nav-tabs.card-header-tabs{id: "navbar-ontology", role: "tablist"}
-            - sections.each do |section|
-              - if !@ontology.summaryOnly || (@ontology.summaryOnly && section.eql?('summary'))
-                %li.nav-item
-
-                  = link_to(section.capitalize , ontology_path(@ontology.acronym, p: section),
-                        id: "ont-summary-tab", class: "nav-link #{selected_section?(section) ? 'active show' : ''}",
-                        data: {toggle: "tab", target: "#ont_#{section}_content", 'bp-ont-page': section ,
-                        'bp-ont-page-name': ontology_viewer_page_name(@ontology.name, @concept&.prefLabel || '', section) })
+            %li{class: 'nav-item', role: 'presentation'}
+              = link_to("Summary", ontology_path(@ontology.acronym, p: "summary"), id: "ont-summary-tab",
+                        class: "nav-link", type: 'button', role: 'tab',
+                        data: {bp_ont_page: "summary", "bs-toggle": "tab", "bs-target": "#ont_summary_content"},
+                        aria: {controls: "ont_summary_content", selected: "false"})
+            - unless @ontology.summaryOnly
+              %li{class: 'nav-item', role: 'presentation'}
+                = link_to("Classes", ontology_path(@ontology.acronym, p: "classes"), id: "ont-classes-tab",
+                          class: "nav-link", type: 'button', role: "tab",
+                          data: {bp_ont_page: "classes", "bs-toggle": "tab", "bs-target": "#ont_classes_content"},
+                          aria: {controls: "ont_classes_content", selected: "false"})
+              %li{class: 'nav-item', role: 'presentation'}
+                = link_to("Properties", ontology_path(@ontology.acronym, p: "properties"), id: "ont-properties-tab",
+                          class: "nav-link", type: 'button', role: "tab",
+                          data: {bp_ont_page: "properties", "bs-toggle": "tab", "bs-target": "#ont_properties_content"},
+                          aria: {controls: "ont_properties_content", selected: "false"})
+            %li{class: 'nav-item', role: 'presentation'}
+              = link_to("Notes", ontology_path(@ontology.acronym, p: "notes"), id: "ont-notes-tab",
+                        class: "nav-link", type: 'button', role: "tab",
+                        data: {bp_ont_page: "notes", "bs-toggle": "tab", "bs-target": "#ont_notes_content"},
+                        aria: {controls: "ont_notes_content", selected: "false"})
+            - unless @ontology.summaryOnly
+              %li{class: 'nav-item', role: 'presentation'}
+                = link_to("Mappings", ontology_path(@ontology.acronym, p: "mappings"), id: "ont-mappings-tab",
+                          class: "nav-link", type: 'button', role: "tab",
+                          data: {bp_ont_page: "mappings", "bs-toggle": "tab", "bs-target": "#ont_mappings_content"},
+                          aria: {controls: "ont_mappings_content", selected: "false"})
+              %li{class: 'nav-item', role: 'presentation'}
+                = link_to("Widgets", ontology_path(@ontology.acronym, p: "widgets"), id: "ont-widgets-tab",
+                          class: "nav-link", type: 'button', role: "tab",
+                          data: {bp_ont_page: "widgets", "bs-toggle": "tab", "bs-target": "#ont_widgets_content"},
+                          aria: {controls: "ont_widgets_content", selected: "false"})
         %div.card-body
           %div.tab-content{id: "ontology_content"}
             - sections.each do |section|
@@ -119,6 +148,7 @@
                 = lazy_load_section(section) do
                   = yield
 - if Rails.env.appliance?
+  </main>
   = render partial: "footer_appliance"
   = javascript_include_tag "application", "data-turbo-track": "reload"
   = render partial: "ga_tracking"

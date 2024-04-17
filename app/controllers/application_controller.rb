@@ -1,5 +1,4 @@
 require 'uri'
-require 'open-uri'
 require 'net/http'
 require 'net/https'
 require 'net/ftp'
@@ -28,6 +27,8 @@ class ApplicationController < ActionController::Base
   EXPIRY_SEMANTIC_TYPES = 60 * 60 * 24 # 24:00 hours
   EXPIRY_RECENT_MAPPINGS = 60 * 60     #  1:00 hours
   EXPIRY_ONTOLOGY_SIMPLIFIED = 60 * 1  #  0:01 minute
+
+  RETRY_LIMIT = 1
 
   $trial_license_initialized = false
 
@@ -169,14 +170,24 @@ class ApplicationController < ActionController::Base
     file_exists
   end
 
+  def parse_response_body(response)
+    return nil if response.nil?
+
+    if response.respond_to?(:errors) && response.errors
+      response
+    else
+      OpenStruct.new(JSON.parse(response.body, symbolize_names: true))
+    end
+  end
+
   def response_errors(error_struct)
+    error_struct = parse_response_body(error_struct)
     errors = {error: "There was an error, please try again"}
     return errors unless error_struct
     return errors unless error_struct.respond_to?(:errors)
     errors = {}
-    error_struct.errors.each {|e| ""}
     error_struct.errors.each do |error|
-      if error.is_a?(Struct)
+      if error.is_a?(OpenStruct) || error.is_a?(Struct)
         errors.merge!(struct_to_hash(error))
       else
         errors[:error] = error
@@ -185,11 +196,25 @@ class ApplicationController < ActionController::Base
     errors
   end
 
+  def response_success?(response)
+    return true if response.nil?
+
+    if response.respond_to?(:status) && response.status
+        response.status.to_i < 400
+    else
+      !(response.respond_to?(:errors) && response.errors)
+    end
+  end
+
+  def response_error?(response)
+    !response_success?(response)
+  end
+
   def struct_to_hash(struct)
     hash = {}
     struct.members.each do |attr|
       next if [:links, :context].include?(attr)
-      if struct[attr].is_a?(Struct)
+      if struct[attr].is_a?(Struct) || struct[attr].is_a?(OpenStruct)
         hash[attr] = struct_to_hash(struct[attr])
       else
         hash[attr] = struct[attr]
@@ -206,16 +231,6 @@ class ApplicationController < ActionController::Base
     redirect_to "/"
   end
 
-  def redirect_to_history # Redirects to the correct tab through the history system
-    if session[:redirect].nil?
-      redirect_to_home
-    else
-      tab = find_tab(session[:redirect][:ontology])
-      session[:redirect]=nil
-      redirect_to uri_url(:ontology=>tab.ontology_id,:conceptid=>tab.concept)
-    end
-  end
-
   def redirect_new_api(class_view = false)
     # Hack to make ontologyid and conceptid work in addition to id and ontology params
     params[:ontology] = params[:ontology].nil? ? params[:ontologyid] : params[:ontology]
@@ -224,7 +239,7 @@ class ApplicationController < ActionController::Base
       @error = "Please provide an ontology id or concept id with an ontology id."
       return
     end
-    acronym = BpidResolver.id_to_acronym(params[:ontology])
+    acronym = BPIDResolver.id_to_acronym(params[:ontology])
     not_found unless acronym
     if class_view
       @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
@@ -238,7 +253,7 @@ class ApplicationController < ActionController::Base
   def params_cleanup_new_api
     params = @_params
     if params[:ontology] && params[:ontology].to_i > 0
-      params[:ontology] = BpidResolver.id_to_acronym(params[:ontology])
+      params[:ontology] = BPIDResolver.id_to_acronym(params[:ontology])
     end
 
     params
@@ -299,40 +314,20 @@ class ApplicationController < ActionController::Base
     session[:user] && session[:user].admin?
   end
 
-  # updates the 'history' tab with the current selected concept
   def update_tab(ontology, concept)
-    array = session[:ontologies] || []
+    onts = session[:ontologies] || []
     found = false
-    for item in array
-      if item.ontology_id.eql?(ontology.id)
-        item.concept=concept
-        found=true
+    onts.each do |ont|
+      if ont.ontology_id.eql? ontology.id
+        ont.concept = concept
+        found = true
       end
     end
 
-    unless found
-      array << History.new(ontology.id, ontology.name, ontology.acronym, concept)
-    end
+    onts << History.new(ontology.id, ontology.name, ontology.acronym, concept) unless found
 
-    session[:ontologies]=array
-  end
-
-  # Removes a 'history' tab
-  def remove_tab(ontology_id)
-    array = session[:ontologies]
-    array.delete(find_tab(ontology_id))
-    session[:ontologies]=array
-  end
-
-  # Returns a specific 'history' tab
-  def find_tab(ontology_id)
-    array = session[:ontologies]
-    for item in array
-      if item.ontology_id.eql?(ontology_id)
-        return item
-      end
-    end
-    return nil
+    # The "Recently Viewed" menu item displays the contents of session[:ontologies]
+    session[:ontologies] = onts
   end
 
   def check_delete_mapping_permission(mappings)
@@ -351,7 +346,7 @@ class ApplicationController < ActionController::Base
   end
 
   def using_captcha?
-    !ENV['USE_RECAPTCHA'].nil? && ENV['USE_RECAPTCHA'] == 'true'
+    ENV['USE_RECAPTCHA'].present? && ENV['USE_RECAPTCHA'] == 'true'
   end
 
   def get_class(params)
@@ -585,21 +580,17 @@ class ApplicationController < ActionController::Base
   end
 
   def parse_json(uri)
-    uri = URI.parse(uri)
     begin
-      response = open(uri, "Authorization" => "apikey token=#{get_apikey}").read
-    rescue Exception => error
+      response = Net::HTTP.get(URI(uri), { 'Authorization' => "apikey token=#{get_apikey}" })
+    rescue StandardError => e
       @retries ||= 0
-      if @retries < 1  # retry once only
-        @retries += 1
-        retry
-      else
-        raise error
-      end
+      raise e unless @retries < RETRY_LIMIT
+
+      @retries += 1
+      retry
     end
     JSON.parse(response)
   end
-
 
   def get_batch_results(params)
     begin

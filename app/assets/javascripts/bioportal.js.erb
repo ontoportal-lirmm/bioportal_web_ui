@@ -127,40 +127,6 @@ function toggleHide(id,name_to_hide){
 
 }
 
-
-//helper function for demo only
-function newProposal(string){
-  document.getElementById('subject').value="Proposal For Change";
-  document.getElementById('comment').value=string;
-
-  selectBox = document.getElementById('margin_note_note_type');
-  for(var x =0; x<selectBox.options.length;x++){
-    option = selectBox.options[x]
-    if(option.value!=5){
-      option.disabled=true;
-    }
-    if(option.value==5){
-      option.selected=true;
-    }
-  }
-}
-
-  function newNote(){
-    toggleHide("commentForm","forms")
-  }
-
-
-
-
-  function compare(note_id){
-    oldValue = document.getElementById("oldValue").innerHTML;
-    element = document.getElementById("note_value"+note_id)
-    target = document.getElementById("note_text"+note_id)
-    var d = dmp.diff_main(oldValue, element.value);
-      dmp.diff_cleanupSemantic(d);
-      target.innerHTML=dmp.diff_prettyHtml(d)
-  }
-
   function hide(id){
     document.getElementById(id).style.display="none";
   }
@@ -286,47 +252,6 @@ var tabs=null;
 
   }
 
-  function resetNoteForm(uniq){
-    document.getElementById("note_subject"+uniq).value=""
-    document.getElementById("note_comment"+uniq).value=""
-    document.getElementById('noteParent'+uniq).value="";
-  }
-
-
-var myEditor;
-
-
-
-function buildEditor(uniq){
-
-
-
-  var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event;
-
-  myEditor = new YAHOO.widget.SimpleEditor('note_comment'+uniq, {
-    height: '300px',
-    width: '522px',
-    dompath: false //Turns on the bar at the bottom
-});
-myEditor.render();
-}
-
-function saveNote(){
-  myEditor.saveHTML();
-  myEditor.destroy();
-
-}
-
-function destroyEditor(){
-    myEditor.clearEditorDoc();
-    myEditor.destroy();
-
-}
-
-
-
-
 function updateOntologyList(ontology){
     list = document.getElementById("ontologieslist")
     if(ontology.checked){
@@ -416,29 +341,6 @@ function ajaxForm(form, target, callback) {
   return false;
 }
 
-function update_tab(ontology,concept){
-
-
-          jQuery.get("/tab/update/"+ontology+"/"+concept)
-
-
-}
-
-
-function remove_tab(link,ontology,redirect){
-
-      jQuery.get("/tab/remove/"+ontology,function(){
-            if(redirect){
-              window.location="/ontologies"
-            }else{
-              jQuery("#tab"+ontology).remove()
-
-            }
-
-      })
-
-}
-
 function selectTab(id,tab){
     nav = document.getElementById(id);
     for(var x=0; x<nav.childNodes.length; x++){
@@ -512,7 +414,7 @@ function bpPopWindow(e) {
     newWindow.focus()
   };
 }
-jQuery("div.footer-support, div.dropdown-menu.dropdown-menu-right").on("click", "a.pop_window", { w: "800", h: "600" }, bpPopWindow)
+jQuery("div.footer-support, ul.dropdown-menu.dropdown-menu-end").on("click", "a.pop_window", { w: "800", h: "600" }, bpPopWindow)
 
 /**************************************************************
  * Standardized BP modal popups

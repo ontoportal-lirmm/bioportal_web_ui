@@ -1,14 +1,9 @@
 class VirtualApplianceController < ApplicationController
   layout 'ontology'
+  before_action :require_login
 
   def index
     @user = session[:user]
-
-    # Go away and come back if you aren't logged in
-    if @user.nil?
-      redirect_to :controller => 'login', :action => 'index', :redirect => "/virtual_appliance"
-      return
-    end
 
     @virtual_appliance_user = VirtualApplianceUser.where(user_id: @user.id)
 
@@ -17,11 +12,7 @@ class VirtualApplianceController < ApplicationController
       @virtual_appliance_access = true
     end
 
-    users_with_access = VirtualApplianceUser.all
-    @users_with_access = []
-    users_with_access.each do |user|
-      @users_with_access << LinkedData::Client::Models::User.find(user.user_id)
-    end
+    @va_users = VirtualApplianceUser.order(:user_id)
   end
 
   def create
@@ -42,4 +33,12 @@ class VirtualApplianceController < ApplicationController
     redirect_to :action => 'index'
   end
 
+  private
+
+  def require_login
+    return if session[:user]
+
+    flash[:error] = 'You must be logged in to access this section'
+    redirect_to login_index_path(redirect: virtual_appliance_index_path)
+  end
 end

@@ -7,21 +7,12 @@
   .enable-lists{style: "color:red; padding-left:10px;"}
     %strong Errors On Form
     %ul
-      - if @errors[:error].instance_of? OpenStruct
-        - errors_hash = @errors[:error].to_h.except :links, :context
-        - errors_hash.each do |field, error|
-          -# Highlight fields with errors.
-          <style>#project_#{field} { border: thin solid red; }</style>
+      - @errors = @errors[:error ] if @errors[:error]
+      %ul
+        - @errors.each do |key, message|
+          <style>#project_#{key} { border: thin solid red; }</style>
           %li
-            -# Display error message to users.
-            - if error.instance_of? OpenStruct
-              - error_hash = error.to_h.except :links, :context
-              - error_hash.each do |f, e|
-                = "#{e}"
-            - else
-              = field
-      - else
-        = @errors.to_json
+            = message.values.join(',')
 
 / Override the bioportal.css for .required to avoid red text in the input fields.
 :css
@@ -38,11 +29,14 @@
   %table.form
     %tr
       %th Name: *
-      %td.top= text_field :project, :name, value: @project.name, :class => "required", :tabindex => 1
+      %td.top
+        = text_field(:project, :name, value: @project.name, class: 'required', tabindex: 1, required: 'true')
     %tr
       - disabled = @project.id ? "disabled" : nil
       %th Acronym: *
-      %td.top= text_field :project, :acronym, value: @project.acronym, :class => "required", :tabindex => 1, disabled: disabled
+      %td.top
+        = text_field(:project, :acronym, value: @project.acronym, class: 'required', tabindex: 1,
+                     disabled: disabled, required: 'true')
     %tr
       %th Institution:
       %td= text_field :project, :institution, value: @project.institution, :tabindex => 2
@@ -58,12 +52,20 @@
         %br/
         %span.default_owl
           Example:
-          %a{:href => "http://en.wikipedia.org/wiki/SNOMED_CT", :target => "_blank"} http://en.wikipedia.org/wiki/SNOMED_CT
-      %td= text_field :project, :homePage, value: @project.homePage, :class => "required url", :tabindex => 5
+          %a{href: 'https://en.wikipedia.org/wiki/SNOMED_CT', target: '_blank'} https://en.wikipedia.org/wiki/SNOMED_CT
+      %td
+        = text_field(:project, :homePage, value: @project.homePage, class: 'required url',
+                     tabindex: 5, required: 'true')
     %tr
-      %th Description:*
-      %td= text_area :project, :description, value: @project.description, :rows=>6, :class=>"required", :tabindex => 6
+      %th Description: *
+      %td
+        = text_area(:project, :description, value: @project.description, rows: 6, class: 'required',
+                    tabindex: 6, required: 'true')
   %div#ontology_picker_project{style: "padding-top: 2em;"}
     - selected_ontologies = @project.ontologyUsed && @project.ontologyUsed.map {|id| id.split('/').last } || []
     - locals = { sel_text: "Select Ontologies Used", selected_ontologies: selected_ontologies, form_object: :project, form_attribute: "ontologyUsed" }
     = render :partial => "shared/ontology_picker", locals: locals
+
+  %div.py-4
+    = f.submit button_text, class: 'btn btn-primary'
+    = link_to 'Cancel', :back, class: 'btn btn-primary'

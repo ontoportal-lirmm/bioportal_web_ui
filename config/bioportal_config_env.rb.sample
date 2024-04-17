@@ -10,20 +10,10 @@ $SITE = "BioPortal"
 # The URL for the BioPortal Rails UI (this application)
 $UI_URL = "http://bioportal.bioontology.org"
 
-# If you are running a PURL server to provide URLs for ontologies in your BioPortal instance, enable this option
-$PURL_ENABLED = false
-
-# The PURL URL is generated using this prefix + the abbreviation for an ontology.
-# The PURL URL generation algorithm can be altered in app/models/ontology_wrapper.rb
-$PURL_PREFIX = "http://purl.bioontology.org/ontology"
-
-# If your BioPortal installation includes Annotator set this to false
-$ANNOTATOR_DISABLED = true
-
-# Unique string representing the UI's id for use with the BioPortal Core
+# Unique string representing the UI's id for use with the BioPortal API
 $API_KEY = ""
 
-# REST core service address
+# BioPortal API service address
 $REST_URL = "http://example.org:8080/"
 
 # Ontolobridge endpoint url
@@ -35,9 +25,6 @@ $ONTOLOBRIDGE_AUTHENTICATION_TOKEN = "Token Uq2pae73ktMtmgjUgtnhEOuHxr9sZeuK"
 # Ontologies for which to enable the new term request (Ontolobridge) tab
 $NEW_TERM_REQUEST_ONTOLOGIES = []
 
-# Legacy REST core service address (BioPortal v3.x and lower)
-$LEGACY_REST_URL = "http://example.org:8080/bioportal"
-
 # Max number of children to return when rendering a tree view
 $MAX_CHILDREN = 2500
 
@@ -47,12 +34,8 @@ $MAX_POSSIBLE_DISPLAY = 10000
 # Release version text (appears in footer of all pages, except 404 and 500 errors)
 $RELEASE_VERSION = ""
 
-# Pairing a name with an array of ontology virtual ids will allow you to filter ontologies based on a subdomain.
-# If your main UI is hosted at example.org and you add custom.example.org pointing to the same Rails installation
-# you could filter the ontologies visible at custom.example.org by adding this to the hash: "custom" => { :name => "Custom Slice", :ontologies => [1032, 1054, 1099] }
-# Any number of slices can be added. Groups are added automatically using the group acronym as the subdomain.
+# Enable Slices, filtering of ontologies based on subdomain and ontology groups
 $ENABLE_SLICES = false
-$ONTOLOGY_SLICES = {}
 
 # Google Analytics ID (optional)
 $ANALYTICS_ID = ""
@@ -98,31 +81,20 @@ CalendarDateSelect.format = :american
 # reCAPTCHA
 # In order to use reCAPTCHA on the account creation and feedback submission pages:
 #    1. Obtain a reCAPTCHA v2 key from: https://www.google.com/recaptcha/admin
-#    2. Include the corresponding keys below (between the single quotes)
+#    2. Put the site and secret keys in the encrypted credentials file:
+#
+#       recaptcha:
+#         site_key: your_site_key
+#         secret_key: your_secret_key
+#
 #    3. Set the USE_RECAPTCHA option to 'true'
 ENV['USE_RECAPTCHA'] = 'false'
-ENV['RECAPTCHA_PUBLIC_KEY']  = ''
-ENV['RECAPTCHA_PRIVATE_KEY'] = ''
 
 # Memcached servers
 ENV['MEMCACHE_SERVERS'] = 'localhost'
 
 # Custom BioPortal logging
 require 'log'
-$REMOTE_LOGGING = false
-
-##
-# Flex Options
-##
-
-# URL to pull Flex apps from
-$FLEX_URL = "/flex"
-
-# Flex App API keys
-$ANNOTATOR_FLEX_APIKEY = ""
-$SEARCH_FLEX_APIKEY = ""
-$RECOMMENDER_FLEX_APIKEY = ""
-$FLEXOVIZ_APIKEY = ""
 
 # URL where BioMixer GWT app is located
 $BIOMIXER_URL = 'http://biomixer.bioontology.org'

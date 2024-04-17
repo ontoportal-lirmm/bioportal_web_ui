@@ -1,0 +1,33 @@
+.concept_details .label {
+  vertical-align: top;
+  width: 180px;
+  max-width: 200px;
+}
+
+.concept_details tbody td {
+  white-space: normal; /* css-3 */
+  white-space: -moz-normal; /* Mozilla, since 1999 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
+
+  p {
+    margin-bottom: 0;
+  }
+
+  a.btn.btn-link {
+    padding: 0;  
+  }
+}
+
+.concept_details td:nth-child(1) {
+  white-space: nowrap;
+}
+
+div.synonym-change-request {
+  display: flex;
+  column-gap: 5px;
+  justify-content: flex-end;
+}
+
+div.synonym-change-request button {
+  padding: 0px;
+}

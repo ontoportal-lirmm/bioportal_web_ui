@@ -32,10 +32,3 @@ jQuery(document).ready(function() {
   jQuery('#projects-help').on("click", bpPopWindow);
 
 });
-
-function descriptionDialog(title, body) {
-  jQuery("#DescriptionDialog").text(body);
-  jQuery("#DescriptionDialog").css("display:block")
-  jQuery("#DescriptionDialog").dialog({ dialogClass: "alert" });
-}
-

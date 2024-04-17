@@ -2,7 +2,4 @@
 %h1{:style => "padding: 10px;"}
   New project
 = form_for :project, url: {action: "create"}, html: {id: 'form'} do |f|
-  = render partial: 'form', locals: { f: f }
-  %p{:style => "padding: 10px;"}
-    = submit_tag "Cancel"
-    = f.submit "Create Project", class: "blueButton"
+  = render partial: 'form', locals: { f: f, button_text: 'Create project' }

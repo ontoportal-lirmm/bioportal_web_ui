@@ -1,4 +1,4 @@
-BpidResolver::VIRTUAL_FROM_VERSION = {
+BPIDResolver::VIRTUAL_FROM_VERSION = {
   "old:virtual_from_version:40876" => 1048,
   "old:virtual_from_version:44059" => 1125,
   "old:virtual_from_version:46266" => 1172,

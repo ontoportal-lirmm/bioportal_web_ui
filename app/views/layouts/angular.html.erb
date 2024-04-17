@@ -7,8 +7,9 @@
 <!--[if lt IE 7]>      <html lang="en" ng-app="<%=@app_name%>" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html lang="en" ng-app="<%=@app_name%>" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html lang="en" ng-app="<%=@app_name%>" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en" ng-app="<%=@app_name%>" class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="<%=@app_name%>" class="no-js h-100"> <!--<![endif]-->
 <head>
+  <%= render partial: "ga_tracking" %>
   <!-- Angular doesn't work well in sub-directories, this provides a base path that everything is relative to (HTML and Angular alike) -->
   <base href="<%=@base_path%>">
 
@@ -31,7 +32,7 @@
   <%= stylesheet_link_tag "https://use.fontawesome.com/releases/v5.2.0/css/all.css", integrity: "sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ", crossorigin: "anonymous" %>
   <%= stylesheet_link_tag "application" %>
 </head>
-<body class="<%= controller_name %> <%= action_name %>">
+<body class="<%= controller_name %> <%= action_name %> d-flex flex-column h-100">
   <%=javascript_include_tag "vendor"%>
   <%=javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"%>
   <%=javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js"%>
@@ -43,10 +44,10 @@
     jQuery(document).data().bp.ont_viewer = {};
     jQuery(document).data().bp.ont_chart = {};
   </script>
-  <%=render partial: 'layouts/topnav'%>
-  <div id="angular-notices">
-    <%=render partial: 'layouts/notices'%>
-  </div>
+
+  <header>
+    <%=render partial: 'layouts/topnav'%>
+  </header>
 
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -70,7 +71,6 @@
   <% if appliance_mode %>
     <%= render partial: "footer_appliance" %>
     <%= javascript_include_tag "application" %>
-    <%= render partial: "ga_tracking" %>    
   <% else %>
     <%= render partial: 'layouts/footer' %>
   <% end %>

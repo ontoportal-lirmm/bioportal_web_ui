@@ -25,8 +25,6 @@ config/deploy/*
 /public/assets/
 nohup.out
 
-.ruby-version
-
 # Ignore editor files
 .idea
 *.swp
@@ -43,3 +41,9 @@ node_modules
 !/app/assets/builds/.keep
 
 /node_modules
+
+# Ignore keys for decrypting credentials
+/config/credentials/development.key
+/config/credentials/test.key
+/config/credentials/staging.key
+/config/credentials/production.key

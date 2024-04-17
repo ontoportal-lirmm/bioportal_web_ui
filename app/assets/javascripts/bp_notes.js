@@ -311,13 +311,14 @@ function subscribeToNotes(button) {
   var ontologyId = jQuery(button).attr("data-bp_ontology_id");
   var isSubbed = jQuery(button).attr("data-bp_is_subbed");
   var userId = jQuery(button).attr("data-bp_user_id");
+  let encodedUserId = encodeURIComponent(userId);
 
   jQuery(".notes_sub_error").html("");
   jQuery(".notes_subscribe_spinner").show();
 
   jQuery.ajax({
     type: "POST",
-    url: "/subscriptions?user_id="+userId+"&ontology_id="+ontologyId+"&subbed="+isSubbed,
+    url: `/subscriptions?user_id=${encodedUserId}&ontology_id=${ontologyId}&subbed=${isSubbed}`,
     dataType: "json",
     success: function(data) {
       jQuery(".notes_subscribe_spinner").hide();
@@ -326,10 +327,17 @@ function subscribeToNotes(button) {
       var subbedVal = (isSubbed == "true") ? "false" : "true";
       jQuery("a.subscribe_to_notes").attr("data-bp_is_subbed", subbedVal);
 
-      // Change button text
-      var txt = jQuery("a.subscribe_to_notes").html();
-      var newButtonText = txt.match("Unsubscribe") ? txt.replace("Unsubscribe", "Subscribe") : txt.replace("Subscribe", "Unsubscribe");
-      jQuery("a.subscribe_to_notes").html(newButtonText);
+      /*
+       * Update link text.
+       * Note that there are two links that allow users to subscribe/unsubscribe from notes emails. Given any ontology,
+       * one link is located on the top-level Notes tab, and the other link is located on the Notes sub-tab on the
+       * right-hand side of the Classes tab. Both links are handled by the subscriptions controller, and the text of
+       * both should be updated on success.
+       */
+      const matches = document.querySelectorAll('a.subscribe_to_notes');
+      matches.forEach(match => {
+        match.textContent = (subbedVal === 'true') ? 'Unsubscribe from notes emails' : 'Subscribe to notes emails';
+      });
     },
     error: function(data) {
       jQuery(".notes_subscribe_spinner").hide();

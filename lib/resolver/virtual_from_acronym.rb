@@ -1,4 +1,4 @@
-BpidResolver::VIRTUAL_FROM_ACRONYM = {
+BPIDResolver::VIRTUAL_FROM_ACRONYM = {
   "JERM" => 1488,
   "OGSF" => 3214,
   "NATPRO" => 3004,

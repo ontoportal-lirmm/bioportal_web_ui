@@ -43,8 +43,14 @@ div.search_result {
   margin-bottom: 1.5em;
 }
 
-div.class_link a {
-  font-size: 18px;
+div.class_link {
+  a {
+    font-size: 18px;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
 }
 
 span.class_def {
@@ -94,9 +100,16 @@ div.additional_results_link {
   margin-top: 5px;
 }
 
-.search_result_links a {
-  font-size: 11px !important;
-  color: green;
+.search_result_links {
+  a {
+    color: green;
+    font-size: 14px;
+    text-decoration: none;
+  }
+  a:hover {
+    color: green;
+    text-decoration: underline;
+  }
 }
 
 .hide_link {
@@ -139,8 +152,24 @@ div#search_categories_chzn .chzn-drop {
   padding-bottom: 7px;
 }
 
-#result_stats a {
-  color: gray;
+#result_stats {
+  a {
+    color: gray;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+#classSearchHelpBlock {
+  a {
+    float: right;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
 }
 
 #ontology_counts {
@@ -168,7 +197,7 @@ div#search_categories_chzn .chzn-drop {
 }
 
 .concept_uri {
-  font-size: 9pt;
+  font-size: 12px;
   color: gray;
 }
 

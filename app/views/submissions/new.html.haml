@@ -3,7 +3,6 @@
 %div.container.py-4.py-md-5
   %h3.text-center.mb-4
     Add new submission
-    - if !(@submission.ontology.nil? || (@submission.ontology.is_a? String))
-      %small.text-muted for #{@submission.ontology.acronym}
+    = acronym_from_params_muted
   = form_for :submission, url: {action: "create"}, html: {id: "ontology_submission_form", multipart: true} do |f|
     = render partial: "form", locals: {f: f, button_text: "Add submission"}

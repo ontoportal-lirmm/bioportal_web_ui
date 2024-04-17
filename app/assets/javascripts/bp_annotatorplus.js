@@ -56,7 +56,7 @@ function get_annotations() {
   }
 
   jQuery("#annotations_container").hide();
-  jQuery(".annotator_spinner").show();
+  jQuery(".annotator_spinner").css('display', 'inline-block');
   ajax_process_halt();
 
   var params = {},
@@ -148,12 +148,12 @@ function get_annotations() {
     success: function(data) {
       set_last_params(params);
       display_annotations(data, bp_last_params);
-      jQuery(".annotator_spinner").hide(200);
+      jQuery(".annotator_spinner").hide();
       jQuery("#annotations_container").show(300);
     },
     error: function(data) {
       set_last_params(params);
-      jQuery(".annotator_spinner").hide(200);
+      jQuery(".annotator_spinner").hide();
       jQuery("#annotations_container").hide();
       jQuery("#annotator_error").html(" Problem getting annotations, please try again");
     }

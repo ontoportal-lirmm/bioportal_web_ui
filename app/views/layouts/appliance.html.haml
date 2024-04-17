@@ -1,6 +1,7 @@
 !!! Strict
-%html
+%html{class: 'h-100'}
   %head
+    = render partial: 'ga_tracking'
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
     %title= @title.nil? ? "#{$ORG_SITE}" : "#{@title} | #{$ORG_SITE}"
@@ -24,16 +25,16 @@
       jQuery(document).data().bp.ont_viewer = {};
       jQuery(document).data().bp.ont_chart = {};
 
-  %body{:class => "#{controller_name} #{action_name}"}
-    = render partial: "layouts/topnav"
+  %body{class: "#{controller_name} #{action_name} d-flex flex-column h-100"}
+    %header
+      = render partial: "layouts/topnav"
     
-    %div.container-fluid
-      = render partial: "layouts/notices"
-      = yield
+    %main{class: 'flex-shrink-0'}
+      %div.container-fluid
+        = render partial: "layouts/notices"
+        = yield
 
     = render partial: "footer_appliance"
 
     -# BioPortal-specific JavaScript
     = javascript_include_tag "application"
-
-    = render partial: "ga_tracking"

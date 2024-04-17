@@ -1,9 +1,5 @@
-div#semanticTypes_chzn.chzn-container input.default {
-  font-style: oblique !important;
-}
-
-div#semanticTypes_chzn.chzn-container-active input.default {
-  font-style: normal !important;
+select#semantic_types + .chosen-container {
+  display: block;
 }
 
 div#annotations_filter, div#annotations_info {
@@ -37,6 +33,10 @@ div#annotations_filter, div#annotations_info {
   float: right; 
   font-style: oblique; 
   color: gray;
+}
+
+#annotator-help i {
+  margin-left: .25em;
 }
 
 /* AnnotatorPlus */

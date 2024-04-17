@@ -1,4 +1,4 @@
-BpidResolver::ACRONYM_FROM_VIRTUAL = {
+BPIDResolver::ACRONYM_FROM_VIRTUAL = {
   "old:acronym_from_virtual:3013" => "DIAGONT",
   "old:acronym_from_virtual:3245" => "SuicidO",
   "old:acronym_from_virtual:1247" => "GEOSPECIES",

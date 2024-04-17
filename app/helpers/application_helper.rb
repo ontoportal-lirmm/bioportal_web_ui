@@ -27,14 +27,6 @@ module ApplicationHelper
     end
   end
 
-  def encode_param(string)
-    return URI.escape(string, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
-  end
-
-  def escape(string)
-    CGI.escape(string)
-  end
-
   def clean(string)
     string = string.gsub("\"",'\'')
     return string.gsub("\n",'')
@@ -43,10 +35,6 @@ module ApplicationHelper
   def clean_id(string)
     new_string = string.gsub(":","").gsub("-","_").gsub(".","_")
     return new_string
-  end
-
-  def to_param(string)
-     "#{encode_param(string.gsub(" ","_"))}"
   end
 
   def get_username(user_id)
@@ -71,70 +59,6 @@ module ApplicationHelper
       else
         #return strings[1].titleize
         return strings[1]
-      end
-    end
-  end
-
-  def draw_note_tree(notes,key)
-    output = ""
-    draw_note_tree_leaves(notes,0,output,key)
-    return output
-  end
-
-  def draw_note_tree_leaves(notes,level,output,key)
-    for note in notes
-      name="Anonymous"
-      unless note.user.nil?
-        name=note.user.username
-      end
-      headertext=""
-      notetext=""
-      if note.note_type.eql?(5)
-        headertext<< "<div class=\"header\" onclick=\"toggleHide('note_body#{note.id}','');compare('#{note.id}')\">"
-        notetext << " <input type=\"hidden\" id=\"note_value#{note.id}\" value=\"#{note.comment}\">
-                  <span class=\"message\" id=\"note_text#{note.id}\">#{note.comment}</span>"
-      else
-        headertext<< "<div onclick=\"toggleHide('note_body#{note.id}','')\">"
-
-        notetext<< "<span class=\"message\" id=\"note_text#{note.id}\">#{simple_format(note.comment)}</span>"
-      end
-
-
-      output << "
-        <div style=\"clear:both;margin-left:#{level*20}px;\">
-        <div  style=\"float:left;width:100%\">
-          #{headertext}
-              <div>
-                <span class=\"sender\" style=\"float:right\">#{name} at #{note.created_at.strftime('%m/%d/%y %H:%M')}</span>
-                <div class=\"header\"><span class=\"notetype\">#{note.type_label.titleize}:</span> #{note.subject}</div>
-                              <div style=\"clear:both\"></div>
-              </div>
-
-          </div>
-
-          <div name=\"hiddenNote\" id=\"note_body#{note.id}\" >
-          <div class=\"messages\">
-            <div>
-              <div>
-               #{notetext}"
-      if session[:user].nil?
-        output << "<div id=\"insert\"><a href=\"\/login?redirect=/visualize/#{@ontology.to_param}/?conceptid=#{@concept.id}#notes\">Reply</a></div>"
-      else
-        if @modal
-          output << "<div id=\"insert\"><a href=\"#\"  onclick =\"document.getElementById('m_noteParent').value='#{note.id}';document.getElementById('m_note_subject#{key}').value='RE:#{note.subject}';jQuery('#modal_form').html(jQuery('#modal_comment').html());return false;\">Reply</a></div>"
-        else
-          output << "<div id=\"insert\"><a href=\"#TB_inline?height=400&width=600&inlineId=commentForm\" class=\"thickbox\" onclick =\"document.getElementById('noteParent').value='#{note.id}';document.getElementById('note_subject#{key}').value='RE:#{note.subject}';\">Reply</a></div>"
-        end
-      end
-      output << "</div>
-            </div>
-          </div>
-
-          </div>
-        </div>
-        </div>"
-      if(!note.children.nil? && note.children.size>0)
-        draw_note_tree_leaves(note.children,level+1,output,key)
       end
     end
   end
@@ -360,15 +284,16 @@ module ApplicationHelper
   end
 
   def subscribed_to_ontology?(ontology_acronym, user)
-    user.bring(:subscription) if user.subscription.nil?
-    # user.subscription is an array of subscriptions like {ontology: ontology_id, notification_type: "NOTES"}
-    return false if user.subscription.nil? or user.subscription.empty?
-    user.subscription.each do |sub|
-      #sub = {ontology: ontology_acronym, notification_type: "NOTES"}
-      sub_ont_acronym = sub[:ontology].split('/').last # make sure we get the acronym, even if it's a full URI
-      return true if sub_ont_acronym == ontology_acronym
-    end
-    return false
+    return false if user.subscription.blank?
+
+    # In some cases this method is called with user objects that don't have the :ontology attribute loaded on
+    # the associated subscription objects. Calling find is the only way (?) to ensure that we get a user where the
+    # :ontology attribute is loaded for all subscriptions.
+    ontology_attributes_missing = user.subscription.any? { |sub| sub[:ontology].nil? }
+    user = LinkedData::Client::Models::User.find(user.id) if ontology_attributes_missing
+
+    sub = user.subscription.select { |sub| sub[:ontology].split('/').last.eql? ontology_acronym }
+    sub.length.positive? ? 'true' : 'false'
   end
 
   def ontolobridge_instructions_template(ontology)
@@ -400,16 +325,13 @@ module ApplicationHelper
   end
 
   def flash_class(level)
-    case level
-    when "notice" 
-      "alert alert-info"
-    when "success" 
-      "alert alert-success"
-    when "error"
-      "alert alert-danger"
-    when "alert" 
-      "alert alert-error"
-    end
+    bootstrap_alert_class = {
+      'notice' => 'alert-info',
+      'success' => 'alert-success',
+      'error' => 'alert-danger',
+      'alert' => 'alert-danger'
+    }
+    bootstrap_alert_class[level]
   end
 
   ###BEGIN ruby equivalent of JS code in bp_ajax_controller.
@@ -417,9 +339,11 @@ module ApplicationHelper
   def bp_ont_link(ont_acronym)
     return "/ontologies/#{ont_acronym}"
   end
+
   def bp_class_link(cls_id, ont_acronym)
-    return "#{bp_ont_link(ont_acronym)}?p=classes&conceptid=#{URI.escape(cls_id, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))}"
+    ontology_path(id: ont_acronym, p: 'classes', conceptid: cls_id)
   end
+
   def get_link_for_cls_ajax(cls_id, ont_acronym, target=nil)
     # Note: bp_ajax_controller.ajax_process_cls will try to resolve class labels.
     # Uses 'http' as a more generic attempt to resolve class labels than .include? ont_acronym; the

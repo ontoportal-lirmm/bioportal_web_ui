@@ -401,21 +401,6 @@ tr.mainresource td {
   background: #e2ebf0;
 }
 
-/* Ratings */
-.star_ratings{
-    color: #234979;
-    border: 1px solid #C1DAD7;
-    background: #e2ebf0;
-    width:300px;
-    float:left;
-    margin-right:10px;
-
-}
-.star_ratings li{
-    list-style:none;
-    border-bottom:1px solid white;
-}
-
 /*Projects */
 .pheader {
   cursor:pointer;
@@ -509,27 +494,6 @@ tr.mainresource td {
 li.ac_over > .obsolete_class {
   color: rgb(200,200,200);
   cursor: inherit;  /*override the help cursor for selection menus*/
-}
-
-.concept_details p {
-  margin-bottom: .5em;
-}
-
-.concept_details .label {
-  vertical-align: top;
-  width: 180px;
-  max-width: 200px;
-}
-
-.concept_details tbody td {
-  padding: 0.6em 0.8em 0 !important;
-  white-space: normal; /* css-3 */
-  white-space: -moz-normal; /* Mozilla, since 1999 */
-  word-wrap: break-word; /* Internet Explorer 5.5+ */
-}
-
-.concept_details td:nth-child(1) {
-  white-space: nowrap;
 }
 
 #format_specific_options td {
@@ -912,9 +876,9 @@ button.fg-button-menu, button.fg-button {
 /************************************
  * Top navigation bar
  ************************************/
-.btn-bp-login {
+div#topNavigationToggler a.btn.btn-login {
   color: #C58612;
-  border-color: #C58612 !important;
+  border-color: #C58612;
 
   &:hover {
     color: #234979;
@@ -924,23 +888,6 @@ button.fg-button-menu, button.fg-button {
 
 .navbar-custom {
   background-color: #234979;
-}
-
-.nav_text a {
-  font-family: 'Droid Sans', sans-serif;
-  font-size: 1.1em;
-  padding: 25px 15px;
-  position: relative;
-  text-decoration: none;
-  top: 11px;
-}
-
-.nav_text a:hover {
-  color: lightGray !important;
-}
-
-.nav_text_active a {
-  color: lightGray !important;
 }
 
 /************************************
@@ -1038,9 +985,6 @@ button.fg-button-menu, button.fg-button {
  * Help Links
  ************************************/
 .pop_window {
-}
-div.subdomain_info a.pop_window {
-  font-size: inherit;
 }
 
 /************************************

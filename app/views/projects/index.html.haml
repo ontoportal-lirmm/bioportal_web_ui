@@ -1,19 +1,18 @@
 - @title = "Project Listing"
 
-#DescriptionDialog{:style => "display: none", :title => "project description"}
-  %p Description text
 %h1.tab_header Projects
 %p.tab_description
   = t(".intro", site: "#{$SITE}")
-  = link_to(help_path(anchor: "Projects_Tab"), id: "projects-help", aria: {label: "View projects help"}) do
-    %i.fas.fa-question-circle.fa-lg{aria: {hidden: "true"}, style: "margin-left: .25em"}
+  = link_to(Rails.configuration.settings.links[:help_projects], id: 'projects-help',
+            'aria-label': 'View projects help') do
+    %i.fas.fa-question-circle.fa-lg.pl-1{'aria-hidden': 'true'}
 
 %div{:style => "padding:10px;"}
   %span
     - if session[:user].nil?
-      = button_to "Create New Project", "/login", :method => :get
+      = button_to "Create new project", login_index_path, method: :get, class: 'btn btn-primary'
     - else
-      = button_to "Create New Project", new_project_path, :method => :get
+      = button_to "Create new project", new_project_path, method: :get, class: 'btn btn-primary'
   %br/
   %br/
   %table#projects.zebra{:cellpadding => "0", :cellspacing => "0"}
@@ -43,7 +42,8 @@
                 / TODO_REV: Enable delete project for admins
               - if current_user_admin?
                 &nbsp;&nbsp;
-                = link_to("Delete (admin only)", project_path(project.acronym), :method => :delete, :confirm => "Are you sure?")
+                = link_to("Delete (admin only)", project_path(project.acronym), method: :delete,
+                          data: {confirm: "Are you sure?"})
           / Project description (may be truncated with a dialog)
           %td{:style => "vertical-align:top;", :width => "50%"}
             - if ! project.description.nil?

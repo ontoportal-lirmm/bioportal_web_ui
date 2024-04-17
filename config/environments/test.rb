@@ -57,4 +57,7 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+
+  # Include the BioPortal-specific configuration options
+  require Rails.root.join('config', "bioportal_config_#{Rails.env}.rb")
 end

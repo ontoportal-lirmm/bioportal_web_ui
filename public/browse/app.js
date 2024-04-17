@@ -149,7 +149,7 @@ var app = angular.module('FacetedBrowsing.OntologyList', ['checklist-model', 'ng
     ontology: {sort: 1, id: "ontology"},
     ontology_view: {sort: 2, id: "ontology_view"}
   };
-  $scope.artifacts = ["notes", "reviews", "projects", "summary_only"];
+  $scope.artifacts = ["notes", "projects", "summary_only"];
 
   $scope.groupAcronyms = function(groups) {
     var groupNames = [];

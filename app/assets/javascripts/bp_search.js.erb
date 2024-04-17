@@ -370,7 +370,7 @@ function performSearch() {
             // Display error message if no results found
             if (data.collection.length === 0) {
                 result_count.html("");
-                jQuery("#search_results").html("<h2 style='padding-top: 1em;'>No matches found</h2>");
+                jQuery("#search_results").html("<h2>No matches found</h2>");
             } else {
                 if (jQuery("#ontology_ontologyId").val() === null) {
                     resultsOntCount = jQuery("<span>");

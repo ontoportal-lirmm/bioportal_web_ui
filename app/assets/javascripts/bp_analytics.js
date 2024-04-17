@@ -55,7 +55,7 @@ function SearchAnalytics() {
     }
 
     // Was this an additional result or a top-level
-    info.additional_result = link.closest(".additional_results").length > 0;
+    info.additional_result = link.closest('div.search_result_additional').length > 0;
 
     // Get the name of ontologies higher in the list
     if (info.position > 1 || info.additional_result === true) {

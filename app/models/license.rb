@@ -1,5 +1,6 @@
-class License < ApplicationRecord
+# frozen_string_literal: true
 
+class License < ApplicationRecord
   attr_reader :appliance_id, :organization, :expiry_date
 
   validates :encrypted_key, presence: true, encrypted_key: true, virtual_appliance_id: true
@@ -28,7 +29,6 @@ class License < ApplicationRecord
       @appliance_id = license_data[0]
       @organization = license_data[1]
       @expiry_date = Date.parse(license_data[2])
-    end  
+    end
   end
-
 end

@@ -28,7 +28,8 @@
 	display: block;
 	width: 100%;
 	font: menu;
-	font-size: 12px;
+	font-size: 1rem;
+	font-weight: 400;
 	overflow: hidden;
 	text-align:left;
 }

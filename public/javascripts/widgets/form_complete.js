@@ -96,12 +96,34 @@ function bpFormCompleteOnLoad() {
     }
 
     // Grab the specific scripts we need and fires the start event
-    jQuery.getScript(BP_SEARCH_SERVER + "/javascripts/JqueryPlugins/autocomplete/crossdomain_autocomplete.js",function(){
+    getScript(BP_SEARCH_SERVER + "/javascripts/JqueryPlugins/autocomplete/crossdomain_autocomplete.js").then(function(){
       formComplete_setup_functions();
     });
   });
 }
 
+
+function getScript(url){
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+
+        script.onerror = reject
+
+        script.onload = script.onreadystatechange = function() {
+            const loadState = this.readyState
+
+            if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+
+            script.onload = script.onreadystatechange = null
+
+            resolve()
+        }
+
+        document.head.appendChild(script)
+    })
+}
 
 // Formats the search results
 function formComplete_formatItem(row) {
