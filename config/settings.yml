@@ -31,6 +31,12 @@ development:
     host: 'purl.bioontology.org'
     prefix: 'https://purl.bioontology.org/ontology'
 
+test:
+  purl:
+    enabled: false
+    host: 'stagepurl.bioontology.org'
+    prefix: 'https://stagepurl.bioontology.org/ontology'
+
 staging:
   links:
     release_notes: 'https://github.com/ncbo/bioportal_web_ui/releases'

@@ -10,6 +10,8 @@ module BioportalWebUi
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
+    config.active_support.cache_format_version = 6.1
+    config.active_support.disable_to_s_conversion = true
     config.active_record.yaml_column_permitted_classes = [
       ActionController::Parameters,
       HashWithIndifferentAccess

@@ -1,20 +1,22 @@
-class NotesController < ApplicationController
+# frozen_string_literal: true
 
+class NotesController < ApplicationController
   layout 'ontology'
 
   def show
     id = clean_note_id(params[:id])
 
     @note = LinkedData::Client::Models::Note.get(id, include_threads: true)
-    @ontology = (@notes.explore.relatedOntology || []).first
+    @note_decorator = NoteDecorator.new(@note, view_context)
+    @ontology = (@note.explore.relatedOntology || []).first
 
     if request.xhr?
-      render :partial => 'thread'
+      render partial: 'thread'
       return
     end
 
     respond_to do |format|
-      format.html { render :template => 'notes/show' }
+      format.html { render template: 'notes/show' }
     end
   end
 
@@ -32,12 +34,12 @@ class NotesController < ApplicationController
     elsif concept_id
       @notes = @ontology.explore.single_class(concept_id).explore.notes
       @note_link = "/notes/virtual/#{@ontology.ontologyId}/?noteid="
-      render :partial => 'list', :layout => 'ontology'
+      render partial: 'list', layout: 'ontology'
       return
     else
       @notes = @ontology.explore.notes
       @note_link = "/notes/virtual/#{@ontology.ontologyId}/?noteid="
-      render :partial => 'list', :layout => 'ontology'
+      render partial: 'list', layout: 'ontology'
       return
     end
 
@@ -52,14 +54,14 @@ class NotesController < ApplicationController
   end
 
   def create
-    if params[:type].eql?("reply")
+    if params[:type].eql?('reply')
       note = LinkedData::Client::Models::Reply.new(values: note_params)
-    elsif params[:type].eql?("ontology")
+    elsif params[:type].eql?('ontology')
       params[:relatedOntology] = [params.delete(:parent)]
       note = LinkedData::Client::Models::Note.new(values: note_params)
-    elsif params[:type].eql?("class")
+    elsif params[:type].eql?('class')
       params[:relatedClass] = [params.delete(:parent)]
-      params[:relatedOntology] = params[:relatedClass].map {|c| c["ontology"]}
+      params[:relatedOntology] = params[:relatedClass].map { |c| c['ontology'] }
       note = LinkedData::Client::Models::Note.new(values: note_params)
     else
       note = LinkedData::Client::Models::Note.new(values: note_params)
@@ -68,17 +70,17 @@ class NotesController < ApplicationController
     new_note = note.save
 
     if new_note.errors
-      render :json => new_note.errors, :status => 500
+      render json: new_note.errors, status: 500
       return
     end
 
     unless new_note.nil?
-      render :json => new_note.to_hash.to_json
+      render json: new_note.to_hash.to_json
     end
   end
 
   def destroy
-    note_ids = params[:noteids].kind_of?(String) ? params[:noteids].split(",") : params[:noteids]
+    note_ids = params[:noteids].kind_of?(String) ? params[:noteids].split(',') : params[:noteids]
 
     ontology = DataAccess.getOntology(params[:ontologyid])
 
@@ -87,7 +89,7 @@ class NotesController < ApplicationController
     note_ids.each do |note_id|
       begin
         result = DataAccess.deleteNote(note_id, ontology.ontologyId, params[:concept_id])
-        raise Exception if !result.nil? && result["errorCode"]
+        raise Exception if !result.nil? && result['errorCode']
       rescue Exception => e
         errors << note_id
         next
@@ -95,27 +97,27 @@ class NotesController < ApplicationController
       successes << note_id
     end
 
-    render :json => { :success => successes, :error => errors }
+    render json: { success: successes, error: errors }
   end
 
   def archive
     ontology = DataAccess.getLatestOntology(params[:ontology_virtual_id])
 
     unless ontology.admin?(session[:user])
-      render :json => nil.to_json, :status => 500
+      render json: nil.to_json, status: 500
       return
     end
 
     @archive = DataAccess.archiveNote(params)
 
     unless @archive.nil?
-      render :json => @archive.to_json
+      render json: @archive.to_json
     end
   end
 
   def show_concept_list
-    params[:p] = "classes"
-    params[:t] = "notes"
+    params[:p] = 'classes'
+    params[:t] = 'notes'
     redirect_new_api
   end
 
@@ -134,5 +136,4 @@ class NotesController < ApplicationController
     id = id.match(/\Ahttp:\/\w/) ? id.sub('http:/', 'http://') : id
     CGI.unescape(id)
   end
-
 end

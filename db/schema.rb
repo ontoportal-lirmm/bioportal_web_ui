@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_16_231337) do
-
+ActiveRecord::Schema[7.0].define(version: 2023_11_30_210229) do
   create_table "analytics", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "segment"
     t.string "action"
@@ -39,8 +38,8 @@ ActiveRecord::Schema.define(version: 2023_06_16_231337) do
     t.string "concept_id"
     t.string "subject"
     t.text "comment"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "ontologies", charset: "utf8", force: :cascade do |t|
