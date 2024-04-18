@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 export default class extends Controller {
   static values = {
     mappingsList: Object,
-    zoomRatio: Number,
+    zoomRatio: { type: Number, default: 1 },
     type: String,
     acronym: String,
     apiUrl: String
