@@ -261,6 +261,8 @@ $FOOTER_LINKS = {
   }
 }
 
+$TERMS_AND_CONDITIONS_LINK = 'https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/terms-conditions-naDsDo2Zxq'
+
 $NOT_DOWNLOADABLE = {}
 
 $UI_THEME = ENV['UI_THEME'] || 'ontoportal'

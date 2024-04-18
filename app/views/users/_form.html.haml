@@ -57,7 +57,7 @@
       %input.user_register_checkbox{:checked => "checked", :name => "user[mailing_list]", :type => "checkbox", :value => "1"}/
       %p#register-check-text 
         = t('register.accept_terms_and_conditions')
-        %a{href: '#', target: '_blank'}
+        %a{href: $TERMS_AND_CONDITIONS_LINK, target: '_blank'}
           = t('register.terms_and_conditions', site: portal_name)
     .register-button-container
       = render Buttons::RegularButtonComponent.new(id: 'register-button', value: "Register", type:'submit')
