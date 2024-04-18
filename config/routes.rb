@@ -170,6 +170,7 @@ Rails.application.routes.draw do
   get 'ontologies/:ontology/notes/:noteid', to: 'notes#virtual_show', as: :note_virtual, noteid: /.+/
   get 'ontologies/:ontology/notes', to: 'notes#virtual_show'
 
+  get '/ontologies/htaccess/:acronym' => 'ontologies#generate_htaccess'
   get 'ontologies/:acronym/:id' => 'ontologies#redirect', :id => /.+/
 
   # Ajax

@@ -334,6 +334,21 @@ class OntologiesController < ApplicationController
     end
   end
 
+  def generate_htaccess
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:acronym]).first
+    ontology_uri = @ontology.explore.latest_submission(include: 'URI', invalidate_cache: invalidate_cache?).URI
+
+    rewriterule_ontology_uri = ""
+    rewriterule_ontology_resource = "RewriteRule ^.*(?:/|#)([^/#]+)$ https://stageportal.lirmm.fr/ontologies/#{params[:acronym]}/$1 [R=301,L]"
+
+    if ontology_uri
+      ontology_uri += '/' unless ontology_uri.end_with?('/')
+      rewriterule_ontology_uri = "RewriteRule ^#{URI.parse(ontology_uri).path[1..-1]}?$ https://stageportal.lirmm.fr/ontologies/#{params[:acronym]} [R=301,L]\n" 
+    end
+
+    @htaccess_content= "RewriteEngine On\n" + rewriterule_ontology_uri + rewriterule_ontology_resource
+    render 'ontologies/htaccess', layout: nil
+  end
   # Main ontology description page (with metadata): /ontologies/ACRONYM
   def summary
 

@@ -91,7 +91,22 @@ module ComponentsHelper
     end
   end
 
-  def link_to_with_actions(link_to_tag, acronym: nil, url: nil, copy: true, check_resolvability: true, generate_link: true)
+  def generated_link_to_clipboard(url, acronym) 
+    url = "#{$UI_URL}/ontologies/#{acronym}/#{link_last_part(url)}"
+    content_tag(:span, style: 'display: inline-block;') do
+      render ClipboardComponent.new(icon: 'icons/copy_link.svg', title: t("components.copy_portal_uri", portal_name: portal_name)+" : "+ url, message: url, show_content: false)
+    end
+  end
+
+  def htaccess_tag(acronym)
+    content_tag(:span, style: 'display: inline-block; width: 18px;') do
+      link_to_modal(nil, "/ontologies/htaccess/#{acronym}", data: {show_modal_title_value: ".htaccess rewrite rules for #{acronym} ontology", show_modal_size_value: 'modal-xl'}) do
+        inline_svg_tag("icons/copy_link.svg")
+      end
+    end
+  end
+
+  def link_to_with_actions(link_to_tag, acronym: nil, url: nil, copy: true, check_resolvability: true, generate_link: true, generate_htaccess: false)
     tag = link_to_tag
     url = link_to_tag if url.nil?
     tag = tag + copy_link_to_clipboard(url) if copy
@@ -99,6 +114,8 @@ module ComponentsHelper
     tag = tag + resolvability_check_tag(url) if check_resolvability
     
     tag= tag + generated_link_to_clipboard(url, acronym) if generate_link
+
+    tag= tag + htaccess_tag(acronym) if generate_htaccess
 
     tag.html_safe
   end
