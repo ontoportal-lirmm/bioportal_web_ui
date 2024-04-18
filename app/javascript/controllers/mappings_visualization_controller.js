@@ -250,13 +250,9 @@ export default class extends Controller {
   }
   #hash_to_list(data){
     return Object.keys(data).map(key => ({
-      ontology_name: this.#getLastPartOfUrl(key),
+      ontology_name: key.split('/').pop(),
       ontology_mappings: data[key],
     }));
-  }
-  #getLastPartOfUrl(url) {
-    let parts = url.split('/');
-    return parts[parts.length - 1];
   }
   #center_scroll(frame){
     frame.scrollTop = frame.scrollHeight / 2 - frame.clientHeight / 2;
