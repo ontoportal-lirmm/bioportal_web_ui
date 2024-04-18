@@ -9,11 +9,11 @@
         = ontologies_selector(id:'mappings_page_ontologies' ,name: 'ontologies[]')
         .selector-button{'data-action': 'click->mappings#filter_ontologies'}
           = render Buttons::RegularButtonComponent.new(id:'filter-bubbles', value: t('mappings.filter_bubbles'), variant: "secondary", state: "regular", size: "slim")
-  
   .mappings-bubble-view-frame{'data-mappings-target': 'frame'}
     #mappings-bubbles-view{'data-mappings-target': 'bubbles'}
     .mapping-bubbles-loader.d-none{'data-mappings-target': 'loader'}
       = render LoaderComponent.new(type: 'pulsing')
+  = render Display::InfoTooltipComponent.new(text: mappings_bubble_view_legend)
   .mappings-zoom-buttons
     .in{'data-action': 'click->mappings#zoomIn'}
       = inline_svg_tag 'icons/zoom-in.svg'

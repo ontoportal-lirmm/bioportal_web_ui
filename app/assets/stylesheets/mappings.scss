@@ -41,7 +41,6 @@
 }
 .mappings-zoom-buttons svg{
   width: 40px;
-  margin-right: 40px;
   cursor: pointer;
   path{
     fill: var(--primary-color)
@@ -49,6 +48,9 @@
   &:hover path{
     fill: var(--hover-color)
   }
+}
+.mappings-zoom-buttons div + div{
+  margin-left: 40px;
 }
 .mappings-bubble-view-container{
   display: flex;
@@ -142,6 +144,115 @@
 
 .mappings-table-pagination a, .mappings-table-pagination em{
   margin-left: 10px;
+}
+
+.mappings-bubble-view-legend{
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 500;
+  padding: 20px;
+}
+.mappings-bubble-view-legend > .title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mappings-bubble-view-legend > .title .text{
+  font-size: 18px;
+  color: var(--primary-color);
+}
+.mappings-bubble-view-legend > .title .line{
+  background-color: var(--primary-color);
+  border-radius: 100%;
+  width: 40px;
+  height: 2px;
+}
+
+.content-container{
+  width: 100%;
+  margin-top: -35px;
+}
+.bubble-view-legend-item{
+  margin-top: 50px;
+}
+.bubble-view-legend-item .title{
+  font-weight: 500;
+}
+.bubble-view-legend-item .title span{
+  font-weight: 400;
+} 
+
+.mappings-bubble-size-legend, .mappings-bubble-color-legend{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+}
+.mappings-bubble-size-legend .bubble{
+  border-radius: 100%;
+  background-color: var(--primary-color);
+}
+.mappings-bubble-size-legend .bubble.bubble1{
+  width: 10px;
+  height: 10px;
+}
+.mappings-bubble-size-legend .bubble.bubble2{
+  width: 20px;
+  height: 20px;
+}
+.mappings-bubble-size-legend .bubble.bubble3{
+  width: 30px;
+  height: 30px;
+}
+.mappings-bubble-size-legend .bubble.bubble4{
+  width: 40px;
+  height: 40px;
+}
+.mappings-bubble-size-legend .bubble.bubble5{
+  width: 50px;
+  height: 50px;
+}
+.mappings-bubble-size-legend .bubble.bubble6{
+  width: 60px;
+  height: 60px;
+}
+
+.mappings-bubble-color-legend .bubble{
+  border-radius: 100%;
+  background-color: var(--primary-color);
+  width: 35px;
+  height: 35px;
+}
+.mappings-bubble-color-legend .bubble.bubble1{
+  opacity: 30%;
+}
+.mappings-bubble-color-legend .bubble.bubble2{
+  opacity: 50%;
+}
+.mappings-bubble-color-legend .bubble.bubble3{
+  opacity: 70%;
+}
+.mappings-bubble-color-legend .bubble.bubble4{
+  opacity: 80%;
+}
+.mappings-bubble-color-legend .bubble.bubble5{
+  opacity: 90%;
+}
+.mappings-bubble-color-legend .bubble.bubble6{
+  opacity: 100%;
+}
+.mappings-bubble-size-legend .bubble.yellow{
+  width: 35px;
+  height: 35px;
+  background-color: var(--secondary-color);
+}
+.mappings-legend-text{
+  color: var(--primary-color);
+  font-size: 15px;
+  font-weight: 500;
 }
 
 @media (min-width: 1000px)  {

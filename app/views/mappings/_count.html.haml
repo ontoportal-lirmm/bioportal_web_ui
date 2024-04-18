@@ -30,3 +30,5 @@
         = render LoaderComponent.new(type: 'pulsing')
     .d-none{'data-mappings-target': 'modal'}
       = empty_modal # to be filled in js
+    .d-flex.justify-content-center
+      = render Display::InfoTooltipComponent.new(text: mappings_bubble_view_legend)
