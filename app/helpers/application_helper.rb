@@ -633,4 +633,8 @@ module ApplicationHelper
     end
   end
   
+  def empty_modal
+    link_to_modal "", ""
+  end
+  
 end
