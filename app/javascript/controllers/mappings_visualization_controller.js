@@ -5,7 +5,7 @@ export default class extends Controller {
   static values = {
     mappingsList: Object,
     zoomRatio: { type: Number, default: 1 },
-    type: String,
+    type: { type: String, default: 'page' },
     acronym: String,
     apiUrl: String
   }
