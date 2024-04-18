@@ -795,6 +795,8 @@ fr:
     first_name: Prénom
     last_name: Nom
     mailing_list: S'inscrire à la liste de diffusion de %{site}
+    accept_terms_and_conditions: Je reconnais et j'accepte
+    terms_and_conditions: les conditions générales de %{site}.
     optional: "(Optionnel)"
     password: Mot de passe
     title: S'inscrire

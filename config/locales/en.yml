@@ -781,6 +781,8 @@ en:
     first_name: First name
     last_name: Last name
     mailing_list: Register to the %{site}'s mailing list
+    accept_terms_and_conditions: I acknowledge and accept
+    terms_and_conditions: "%{site}'s terms and conditions."
     optional: "(Optional)"
     password: Password
     title: Register
