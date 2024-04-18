@@ -16,11 +16,11 @@ export default class extends Controller {
     this.#center_scroll(this.frameTarget)
     if(this.typeValue == 'partial'){
       this.typeValue = 'disable'
-      var acronym = this.acronymValue
-      var bubbles = this.bubblesTarget 
+      let acronym = this.acronymValue
+      let bubbles = this.bubblesTarget 
       setTimeout(function() {
         const currentBubble = bubbles.querySelector(`[data-acronym="${acronym}"]`)
-        var clickEvent = new MouseEvent("click", {
+        let clickEvent = new MouseEvent("click", {
           bubbles: true,
           cancelable: true,
           view: window
@@ -256,7 +256,7 @@ export default class extends Controller {
     }));
   }
   #getLastPartOfUrl(url) {
-    var parts = url.split('/');
+    let parts = url.split('/');
     return parts[parts.length - 1];
   }
   #center_scroll(frame){
