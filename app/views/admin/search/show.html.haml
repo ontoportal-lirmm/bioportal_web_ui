@@ -1,0 +1,16 @@
+= render_in_modal do
+  = render TableComponent.new(id: 'collection_schema', paging: true, searching: true) do |t|
+    - t.header do |h|
+      - h.th {t('admin.search.show.field_name')}
+      - h.th {t('admin.search.show.type')}
+      - h.th {t('admin.search.show.multi_valued')}
+      - h.th {t('admin.search.show.indexed')}
+      - h.th {t('admin.search.show.stored')}
+
+    - (@collection["fields"] + @collection["dynamicFields"]).each do |f|
+      - t.row do |r|
+        - r.td {f["name"]}
+        - r.td {f["type"]}
+        - r.td {f["multiValued"].eql?('true').to_s}
+        - r.td {f["indexed"].eql?('true').to_s}
+        - r.td {f["stored"].eql?('true').to_s}

@@ -34,8 +34,8 @@
     %div.p-5
       %a.d-flex.flex-column.container-gradient.mx-auto.d-flex.justify-content-center.align-items-center{href: "/", style: 'width: 200px; height: 200px; border-radius: 100px;'}
         %img{:src => asset_path("logo-white.svg"), style: 'width: 100px; height: 100px'}
-        %p.text-white.h3
-          = portal_name
+        %p.text-white.h3.text-center
+          = @title || portal_name
     = yield
 
 

@@ -32,45 +32,33 @@ class OntologiesController < ApplicationController
   def index
     @categories = LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
     @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
+
     @filters = ontology_filters_init(@categories, @groups)
     init_filters(params)
     render 'ontologies/browser/browse'
   end
 
   def ontologies_filter
-    @ontologies = submissions_paginate_filter(params)
-    @object_count = count_objects(@ontologies)
+    @time = Benchmark.realtime do
+      @ontologies, @count, @count_objects, @request_params = submissions_paginate_filter(params)
+    end
 
-    update_filters_counts = @object_count.map do |section, values_count|
-      values_count.map do |value, count|
-        replace("count_#{section}_#{value}") do
-          helpers.turbo_frame_tag("count_#{section}_#{value}") do
-            helpers.content_tag(:span, count.to_s, class: "hide-if-loading #{count.zero? ? 'disabled' : ''}")
+    if @page.page.eql?(1)
+      streams = [prepend("ontologies_list_view-page-#{@page.page}", partial: 'ontologies/browser/ontologies')]
+      streams += @count_objects.map do |section, values_count|
+        values_count.map do |value, count|
+          replace("count_#{section}_#{value}") do
+            helpers.turbo_frame_tag("count_#{section}_#{value}") do
+              helpers.content_tag(:span, count.to_s, class: "hide-if-loading #{count.zero? ? 'disabled' : ''}")
+            end
           end
         end
-      end
-    end.flatten
+      end.flatten
+    else
+      streams = [replace("ontologies_list_view-page-#{@page.page}", partial: 'ontologies/browser/ontologies')]
+    end
 
-    count_streams = [
-      replace('ontologies_filter_count_request') do
-        helpers.content_tag(:p, class: "browse-desc-text", style: "margin-bottom: 12px !important;") { t("ontologies.showing_ontologies_size", ontologies_size: @ontologies.size, analytics_size: @analytics.keys.size) }
-      end
-    ] + update_filters_counts
-
-    streams = if params[:page].nil?
-                [
-                  prepend('ontologies_list_container', partial: 'ontologies/browser/ontologies'),
-                  prepend('ontologies_list_container') {
-                    helpers.turbo_frame_tag("ontologies_filter_count_request") do
-                      helpers.browser_counter_loader
-                    end
-                  }
-                ]
-              else
-                [replace("ontologies_list_view-page-1", partial: 'ontologies/browser/ontologies')]
-              end
-
-    render turbo_stream: streams + count_streams
+    render turbo_stream: streams
   end
 
   def classes
@@ -182,35 +170,28 @@ class OntologiesController < ApplicationController
   end
 
   def instances
-    if request.xhr?
-      render partial: 'instances/instances', locals: { id: 'instances-data-table' }, layout: false
-    else
-      render partial: 'instances/instances', locals: { id: 'instances-data-table' }, layout: 'ontology_viewer'
+
+    if params[:instanceid]
+      @instance = helpers.get_instance_details_json(@ontology.acronym, params[:instanceid], {include: 'all'})
     end
+
+    render partial: 'instances/instances', locals: { id: 'instances-data-table' }, layout: 'ontology_viewer'
   end
 
   def schemes
     @schemes = get_schemes(@ontology)
-    scheme_id = params[:scheme_id] || @submission_latest.URI || nil
+    scheme_id = params[:schemeid] || @submission_latest.URI || nil
     @scheme = get_scheme(@ontology, scheme_id) if scheme_id
 
-    if request.xhr?
-      render partial: 'ontologies/sections/schemes', layout: false
-    else
-      render partial: 'ontologies/sections/schemes', layout: 'ontology_viewer'
-    end
+    render partial: 'ontologies/sections/schemes', layout: 'ontology_viewer'
   end
 
   def collections
     @collections = get_collections(@ontology)
-    collection_id = params[:collection_id]
-    @collection = get_collection(@ontology, collection_id) if collection_id
+    collection_id = params[:collectionid]
+    @collection = collection_id ? get_collection(@ontology, collection_id) : @collections.first
 
-    if request.xhr?
-      render partial: 'ontologies/sections/collections', layout: false
-    else
-      render partial: 'ontologies/sections/collections', layout: 'ontology_viewer'
-    end
+    render partial: 'ontologies/sections/collections', layout: 'ontology_viewer'
   end
 
   def sparql
@@ -223,8 +204,8 @@ class OntologiesController < ApplicationController
 
   def content_serializer
     @result = serialize_content(ontology_acronym: params[:acronym],
-                      concept_id: params[:id],
-                      format: params[:output_format])
+                                concept_id: params[:id],
+                                format: params[:output_format])
 
     render 'ontologies/content_serializer', layout: nil
   end
@@ -276,9 +257,16 @@ class OntologiesController < ApplicationController
 
     @submission_latest = @ontology.explore.latest_submission(include: 'all', invalidate_cache: invalidate_cache?) rescue @ontology.explore.latest_submission(include: '')
 
-    if !helpers.submission_ready?(@submission_latest) && params[:p].present? && data_pages.include?(params[:p].to_s)
-      redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
+
+    unless helpers.submission_ready?(@submission_latest)
+      submissions = @ontology.explore.submissions(include: 'submissionId,submissionStatus')
+      if submissions.any?{|x| helpers.submission_ready?(x)}
+        @old_submission_ready = true
+      elsif !params[:p].blank?
+        redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
+      end
     end
+
     # Is the ontology downloadable?
     @ont_restricted = ontology_restricted?(@ontology.acronym)
 
@@ -554,13 +542,6 @@ class OntologiesController < ApplicationController
     properties.map { |x| [x.to_s, [sub.send(x.to_s), custom_labels[x.to_sym]]] }.to_h
   end
 
-  def get_metrics_hash
-    metrics_hash = {}
-    # TODO: Metrics do not return for views on the backend, need to enable include_views param there
-    @metrics = LinkedData::Client::Models::Metrics.all(include_views: true)
-    @metrics.each { |m| metrics_hash[m.links['ontology']] = m }
-    return metrics_hash
-  end
 
   def determine_layout
     case action_name

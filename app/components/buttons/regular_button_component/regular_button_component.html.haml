@@ -9,3 +9,9 @@
             element.style.display = 'none';
             loading.style.display = 'flex';
         }
+        document.addEventListener('turbo:submit-end', function(event) {
+             const loading = document.getElementById('#{"#{@id}-loading-animation"}')
+             const button = document.getElementById('#{"#{@id}"}')
+             button.style.display = 'flex';
+             loading.style.display = 'none';
+        });

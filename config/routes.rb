@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root to: 'home#index'
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
+  get'/tools', to: 'home#tools'
   get 'auth/:provider/callback', to: 'login#create_omniauth'
   get 'locale/:language', to: 'language#set_locale_language'
   get 'metadata_export/index'
@@ -43,19 +44,37 @@ Rails.application.routes.draw do
 
   resources :concepts
 
-  get 'ontologies/:ontology_id/concepts', to: 'concepts#show_concept'
+
+  scope :ontologies do
+    get ':ontology/concepts' => 'concepts#index'
+    get ':ontology/concepts/show', to: 'concepts#show'
+
+
+    get ':ontology/instances', to: 'instances#index'
+    get ':ontology/instances/show', to: 'instances#show'
+
+    get ':ontology/properties', to: 'properties#index'
+    get ':ontology/properties/show', to: 'properties#show'
+
+    get ':ontology/schemes', to: 'schemes#index'
+    get ':ontology/schemes/show', to: 'schemes#show'
+
+    get ':ontology/collections', to: 'collections#index'
+    get ':ontology/collections/show', to: 'collections#show'
+  end
+
+
   resources :ontologies do
     resources :submissions do
       get 'edit_properties'
     end
 
-    get 'instances/:instance_id', to: 'instances#show', constraints: { instance_id: /[^\/?]+/ }
-    get 'schemes/show_scheme', to: 'schemes#show'
-    get 'collections/show'
     get 'metrics'
     get 'metrics_evolution'
     get 'subscriptions'
   end
+
+
 
   resources :login
 
@@ -66,6 +85,14 @@ Rails.application.routes.draw do
     match 'groups/synchronize_groups' => 'groups#synchronize_groups', via: [:post]
     resources :groups, only: [:index, :create, :new, :edit, :update, :destroy]
     resources :categories, only: [:index, :create, :new, :edit, :update, :destroy]
+    scope :search do
+      get '/', to: 'search#index'
+      post 'index_batch', to: 'search#index_batch'
+      post ':collection/init_schema', to: 'search#init_schema'
+      get ':collection/schema', to: 'search#show'
+      get ':collection/data', to: 'search#search'
+    end
+
   end
 
   post 'admin/clearcache', to: 'admin#clearcache'
@@ -138,7 +165,7 @@ Rails.application.routes.draw do
   match '/ontologies/:acronym/submissions/:id/edit_metadata' => 'submissions#edit_metadata', via: [:get, :post]
   get '/ontologies_filter', to: 'ontologies#ontologies_filter'
 
-  get '/ontologies/:acronym/properties/show', to: 'properties#show'
+
   get 'ontologies_selector', to: 'ontologies#ontologies_selector'
   get 'ontologies_selector/results', to: 'ontologies#ontologies_selector_results'
   # Notes
@@ -147,7 +174,6 @@ Rails.application.routes.draw do
 
   # Ajax
   get '/ajax/' => 'ajax_proxy#get', :as => :ajax
-  get '/ajax_concepts/:ontology/' => 'concepts#show', :constraints => { id: /[^\/?]+/ }
   get '/ajax/class_details' => 'concepts#details'
   get '/ajax/mappings/get_concept_table' => 'mappings#get_concept_table'
   get '/ajax/json_ontology' => 'ajax_proxy#json_ontology'
@@ -160,7 +186,6 @@ Rails.application.routes.draw do
   get '/ajax/classes/treeview' => 'concepts#show_tree'
   get '/ajax/classes/list' => 'collections#show_members'
   get '/ajax/classes/date_sorted_list' => 'concepts#show_date_sorted_list'
-  get '/ajax/properties/treeview' => 'properties#show_tree'
   get '/ajax/properties/children' => 'properties#show_children'
   get '/ajax/properties/tree' => 'concepts#property_tree'
   get 'ajax/schemes/label', to: "schemes#show_label"
@@ -171,8 +196,6 @@ Rails.application.routes.draw do
   get '/ajax/fair_score/html' => 'fair_score#details_html'
   get '/ajax/submission/show_licenses/:id' => 'ontologies#show_licenses'
   get '/ajax/fair_score/json' => 'fair_score#details_json'
-  get '/ajax/:ontology/instances' => 'instances#index_by_ontology'
-  get '/ajax/:ontology/classes/:conceptid/instances' => 'instances#index_by_class', :constraints => { conceptid: /[^\/?]+/ }
   get '/ajax/ontologies', to: "ontologies#ajax_ontologies"
   get '/ajax/agents', to: "agents#ajax_agents"
   get '/ajax/images/show' => 'application#show_image_modal'
@@ -187,6 +210,7 @@ Rails.application.routes.draw do
 
   # Search
   get 'search', to: 'search#index'
+  get 'ajax/search/ontologies/content', to: 'search#json_ontology_content_search'
 
   get 'check_resolvability' => 'check_resolvability#index'
   get 'check_url_resolvability' => 'check_resolvability#check_resolvability'

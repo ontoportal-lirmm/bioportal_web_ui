@@ -37,7 +37,7 @@
 
 .progress-pages-container .progress-item:last-of-type {
     & > div {
-        align-items: end;
+        align-items: flex-end;
         left: -23px;
     }
 }

@@ -2,11 +2,11 @@
 module ConceptsHelper
 
   def concept_link(acronym, child, language)
-    child.id.eql?('bp_fake_root') ? '#' : "/ontologies/#{acronym}/concepts/?id=#{CGI.escape(child.id)}&language=#{language}"
+    child.id.eql?('bp_fake_root') ? '#' : "/ontologies/#{acronym}/concepts/show?id=#{CGI.escape(child.id)}&language=#{language}"
   end
 
   def concept_children_link(acronym, child, language, concept_schemes)
-    "/ajax_concepts/#{acronym}/?conceptid=#{CGI.escape(child.id)}&concept_schemes=#{concept_schemes.join(',')}&language=#{language}"
+    "/ontologies/#{acronym}/concepts?conceptid=#{CGI.escape(child.id)}&concept_schemes=#{concept_schemes.join(',')}&language=#{language}"
   end
 
   def concept_tree_data(acronym, child, language, concept_schemes)
@@ -145,7 +145,7 @@ module ConceptsHelper
   end
 
   def concept_list_url(page = 1, collection_id, acronym)
-    "/ajax/classes/list?ontology_id=#{acronym}&collection_id=#{collection_id}&page=#{page}"
+    "/ajax/classes/list?ontology_id=#{acronym}&collectionid=#{collection_id}&page=#{page}"
   end
 
 

@@ -26,7 +26,7 @@ class OntologiesControllerTest < ActionDispatch::IntegrationTest
     test "should open the tree views of #{ont.acronym} ontology" do
       paths = [
         ajax_classes_treeview_path(ontology: ont.acronym),
-        ajax_properties_treeview_path(ontology: ont.acronym)
+        "/ontologies/#{ont.acronym}/properties"
       ]
       paths.each do |path|
         begin
