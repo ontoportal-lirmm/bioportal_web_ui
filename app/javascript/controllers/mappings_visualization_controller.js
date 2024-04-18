@@ -15,20 +15,24 @@ export default class extends Controller {
     this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue, this.#normalization_ratio(this.mappingsListValue))
     this.#center_scroll(this.frameTarget)
     if(this.typeValue == 'partial'){
-      this.typeValue = 'disable'
-      let acronym = this.acronymValue
-      let bubbles = this.bubblesTarget 
-      setTimeout(function() {
-        const currentBubble = bubbles.querySelector(`[data-acronym="${acronym}"]`)
-        let clickEvent = new MouseEvent("click", {
-          bubbles: true,
-          cancelable: true,
-          view: window
-        });
-        currentBubble.dispatchEvent(clickEvent)
-      }, 100); 
+      this.#init_mappings_section_bubble_view()
     }
   }
+  #init_mappings_section_bubble_view(){
+    this.typeValue = 'disable'
+    let acronym = this.acronymValue
+    let bubbles = this.bubblesTarget 
+    setTimeout(function() {
+      const currentBubble = bubbles.querySelector(`[data-acronym="${acronym}"]`)
+      let clickEvent = new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+        view: window
+      });
+      currentBubble.dispatchEvent(clickEvent)
+    }, 100); 
+  }
+  
   filter_ontologies(){
     const selectOptions = this.ontologiesTarget.querySelector('select').selectedOptions
     if (selectOptions.length == 0){
