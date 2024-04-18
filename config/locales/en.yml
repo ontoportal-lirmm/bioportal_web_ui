@@ -804,6 +804,7 @@ en:
     validate_orcid: Please enter a valid ORCID.
     validate_username: please enter a valid username
     valid_email_adresse: Please enter a valid email adresse
+    validate_terms_and_conditions: Accepting the terms and conditions is required, please check the box to proceed.
     first_name_required: First name field is required
     last_name_required: Last name field is required
     index:

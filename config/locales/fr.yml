@@ -796,7 +796,7 @@ fr:
     last_name: Nom
     mailing_list: S'inscrire à la liste de diffusion de %{site}
     accept_terms_and_conditions: Je reconnais et j'accepte
-    terms_and_conditions: les conditions générales de %{site}.
+    terms_and_conditions: les termes et conditions de %{site}.
     optional: "(Optionnel)"
     password: Mot de passe
     title: S'inscrire
@@ -819,6 +819,7 @@ fr:
     validate_orcid: Veuillez entrer un ORCID valide.
     validate_username: veuillez entrer un nom d'utilisateur valide
     valid_email_adresse: Veuillez entrer une adresse email valide
+    validate_terms_and_conditions: L'acceptation des termes et conditions est requise, veuillez cocher la case pour continuer.
     first_name_required: Le champ du prénom est requis
     last_name_required: Le champ du nom est requis
     index:

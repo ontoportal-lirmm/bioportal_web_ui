@@ -208,7 +208,7 @@ class UsersController < ApplicationController
     params[:user]["orcidId"] = extract_id_from_url(params[:user]["orcidId"], 'orcid.org')
     params[:user]["githubId"] = extract_id_from_url(params[:user]["githubId"], 'github.com')
     p = params.require(:user).permit(:firstName, :lastName, :username, :orcidId, :githubId, :email, :email_confirmation, :password,
-                                     :password_confirmation, :register_mail_list, :admin)
+                                     :password_confirmation, :register_mail_list, :admin, :terms_and_conditions)
     p.to_h
   end
 
@@ -264,6 +264,10 @@ class UsersController < ApplicationController
 
     if params[:username].nil? || params[:username].length < 1 || !params[:username].match(/^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$/)
       errors << t('users.validate_username')
+    end
+
+    unless params[:terms_and_conditions]
+      errors << t('users.validate_terms_and_conditions')
     end
     return errors
   end
