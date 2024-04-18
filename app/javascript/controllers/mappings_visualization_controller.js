@@ -52,29 +52,29 @@ export default class extends Controller {
     this.#draw_bubbles(filteredList, this.zoomRatioValue, this.#normalization_ratio(filteredList))
     this.#center_scroll(this.frameTarget)
   }
-  submit(event){
-    if (event.currentTarget.querySelector('.item') == null){
-      return
+  submit(event) {
+    const itemElement = event.currentTarget.querySelector('.item');
+    if (!itemElement) return;
+  
+    this.submitTarget.click();
+  
+    const selectValue = event.currentTarget.querySelector('select').value;
+    const selectAcronym = this.#get_acronym(selectValue);
+  
+    const bubblesContainer = document.getElementById('mappings-bubbles-view');
+    const selectedBubble = bubblesContainer.querySelector('[data-selected="true"]');
+    const currentBubble = bubblesContainer.querySelector(`[data-acronym="${selectAcronym}"]`);
+  
+    if (selectedBubble && selectedBubble.dataset.acronym === selectAcronym) return;
+  
+    const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true, view: window });
+  
+    if (currentBubble && (currentBubble.getAttribute('data-enabled') === 'false' || currentBubble.getAttribute('data-highlighted') === 'true')) {
+      selectedBubble.dispatchEvent(clickEvent);
     }
-    this.submitTarget.click()
-    const selectValue = event.currentTarget.querySelector('select').value
-    const selectAcronym = this.#get_acronym(selectValue)
-    const bubblesContainer = this.bubblesTarget
-    const selected_bubble = bubblesContainer.querySelector('[data-selected="true"]')
-    const currentBubble = bubblesContainer.querySelector(`[data-acronym="${selectAcronym}"]`)
-    if (selected_bubble && selected_bubble.dataset.acronym === selectAcronym) {
-      return;
-    }
-    let clickEvent = new MouseEvent('click', {
-      bubbles: true,
-      cancelable: true,
-      view: window
-    });
-    if(currentBubble.getAttribute('data-enabled') == 'false' || currentBubble.getAttribute('data-highlighted') == 'true'){
-      selected_bubble.dispatchEvent(clickEvent)
-    }
-    currentBubble.dispatchEvent(clickEvent);
-  }
+  
+    if (currentBubble) currentBubble.dispatchEvent(clickEvent);
+  } 
   select_bubble(event){
     this.#loading_animation()
     const selected_bubble = event.currentTarget
@@ -87,7 +87,7 @@ export default class extends Controller {
       const selected_leaf = bubblesContainer.querySelector('[data-selected="true"]')
       const acronym = selected_leaf.getAttribute('data-acronym')
       const target_acronym = selected_bubble.getAttribute('data-acronym')
-      const modal_link =  `/mappings/show_mappings?data%5Bshow_modal_size_value%5D=modal-xl&amp;data%5Bshow_modal_title_value%5D=bilel&amp;id=${acronym}&amp;target=${encodeURIComponent(this.apiUrlValue)}%2Fontologies%2F${target_acronym}`
+      const modal_link =  `/mappings/show_mappings?data%5Bshow_modal_size_value%5D=modal-xl&amp;data%5Bshow_modal_title_value%5D=bilel&amp;id=${acronym}&amp;target=${encodeURIComponent(this.apiUrlValue)}ontologies%2F${target_acronym}`
       this.modalTarget.querySelector('a').href = modal_link
       this.modalTarget.querySelector('a').click()
       this.#loading_animation()
