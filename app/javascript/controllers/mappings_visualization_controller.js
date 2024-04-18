@@ -273,17 +273,15 @@ export default class extends Controller {
     frame.scrollTop = frame.scrollHeight / 2 - frame.clientHeight / 2;
     frame.scrollLeft = frame.scrollWidth / 2 - frame.clientWidth / 2;
   }
-  #normalization_ratio(ontologies_hash){
-    let maxValue = -Infinity
-    for (const value of Object.values(ontologies_hash)) {
-      maxValue = (maxValue < value) ? value : maxValue
+  #normalization_ratio(ontologies_hash) { // try to find the biggest multiple of 10 inferior than the max mappings value
+    const maxValue = Math.max(...Object.values(ontologies_hash));
+    let normalization_ratio = 1;
+    while (maxValue / normalization_ratio > 10) {
+        normalization_ratio *= 10;
     }
-    let normalization_ratio = 1
-    while((maxValue / normalization_ratio)>10){
-      normalization_ratio *= 10
-    }
-    return normalization_ratio
+    return normalization_ratio;
   }
+
   #init_select(acronym){
     let input = this.selectorTarget.querySelector('input')
     input.value = acronym
