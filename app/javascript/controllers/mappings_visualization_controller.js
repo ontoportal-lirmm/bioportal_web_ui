@@ -13,7 +13,6 @@ export default class extends Controller {
 
   connect() {
     this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue, this.#normalization_ratio(this.mappingsListValue))
-    this.#center_scroll(this.frameTarget)
     if(this.typeValue == 'partial'){
       this.#init_mappings_section_bubble_view()
     }
@@ -38,7 +37,6 @@ export default class extends Controller {
     if (selectOptions.length == 0){
       this.bubblesTarget.innerHTML = ''
       this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue, this.#normalization_ratio(this.mappingsListValue))
-      this.#center_scroll(this.frameTarget)
       return
     }
     let acronyms = []
@@ -50,7 +48,6 @@ export default class extends Controller {
     );
     this.bubblesTarget.innerHTML = ''
     this.#draw_bubbles(filteredList, this.zoomRatioValue, this.#normalization_ratio(filteredList))
-    this.#center_scroll(this.frameTarget)
   }
   submit(event) {
     const itemElement = event.currentTarget.querySelector('.item');
@@ -181,14 +178,12 @@ export default class extends Controller {
     this.zoomRatioValue++
     this.bubblesTarget.innerHTML = ''
     this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue, this.#normalization_ratio(this.mappingsListValue))
-    this.#center_scroll(this.frameTarget)
   }
   zoomOut(){
     if (this.zoomRatioValue>1){
       this.zoomRatioValue--
       this.bubblesTarget.innerHTML = ''
       this.#draw_bubbles(this.mappingsListValue, this.zoomRatioValue, this.#normalization_ratio(this.mappingsListValue))
-      this.#center_scroll(this.frameTarget)
     }
   }
 
@@ -266,6 +261,7 @@ export default class extends Controller {
 
 
     this.svg = svg;
+    this.#center_scroll(this.frameTarget)
   }
   #hash_to_list(data){
     return Object.keys(data).map(key => ({
