@@ -75,6 +75,31 @@ export default class extends Controller {
   
     if (currentBubble) currentBubble.dispatchEvent(clickEvent);
   } 
+  #init_highlighted_bubble(bubblesContainer, selected_bubble){
+    const selected_leaf = bubblesContainer.querySelector('[data-selected="true"]')
+    const acronym = selected_leaf.getAttribute('data-acronym')
+    const target_acronym = selected_bubble.getAttribute('data-acronym')
+    const modal_link =  `/mappings/show_mappings?data%5Bshow_modal_size_value%5D=modal-xl&amp;data%5Bshow_modal_title_value%5D=bilel&amp;id=${acronym}&amp;target=${encodeURIComponent(this.apiUrlValue)}ontologies%2F${target_acronym}`
+    this.modalTarget.querySelector('a').href = modal_link
+    this.modalTarget.querySelector('a').click()
+    this.#loading_animation()
+  }
+  #deselect_bubble(selected_bubble, selected_circle, leafs){
+    if (this.typeValue == 'disable'){
+      this.#loading_animation()
+      return
+    }
+    selected_bubble.setAttribute('data-selected', 'false')
+    selected_circle.style.fill = 'var(--primary-color)'
+    for(let i = 0; i<leafs.length; i++){
+        const circle = leafs[i].querySelector('circle')
+        circle.style.fill = 'var(--primary-color)'
+        circle.style.opacity = '1'
+        leafs[i].setAttribute('data-enabled', 'true')
+        leafs[i].setAttribute('data-highlighted', 'false')
+    }
+    this.#loading_animation()
+  }
   select_bubble(event){
     this.#loading_animation()
     const selected_bubble = event.currentTarget
@@ -83,84 +108,74 @@ export default class extends Controller {
     const leafs = bubblesContainer.querySelectorAll('.leaf')
     const acronym = selected_bubble.getAttribute('data-acronym')
     let url = 'mappings/ontology_mappings/' + acronym
-    if(selected_bubble.getAttribute('data-highlighted') == 'true'){
-      const selected_leaf = bubblesContainer.querySelector('[data-selected="true"]')
-      const acronym = selected_leaf.getAttribute('data-acronym')
-      const target_acronym = selected_bubble.getAttribute('data-acronym')
-      const modal_link =  `/mappings/show_mappings?data%5Bshow_modal_size_value%5D=modal-xl&amp;data%5Bshow_modal_title_value%5D=bilel&amp;id=${acronym}&amp;target=${encodeURIComponent(this.apiUrlValue)}ontologies%2F${target_acronym}`
-      this.modalTarget.querySelector('a').href = modal_link
-      this.modalTarget.querySelector('a').click()
+    if(selected_bubble.getAttribute('data-highlighted') == 'true'){ // user clicks on a highlighted bubble (should show a modal with the mappings)
+      this.#init_highlighted_bubble(bubblesContainer, selected_bubble)
+      return
+    }
+    if(selected_bubble.getAttribute('data-enabled') == 'false'){ // user clicks on a bubble that is disabled (has no mappings with the current bubble)
       this.#loading_animation()
       return
     }
-    if(selected_bubble.getAttribute('data-enabled') == 'false'){
-      this.#loading_animation()
+    if(selected_bubble.getAttribute('data-selected') == 'true'){ // user clicks on current bubble (should deselecte it, but nothing heppen if we're in mappings sectin not the page)
+      this.#deselect_bubble(selected_bubble, selected_circle, leafs)
       return
-    }
-    if(selected_bubble.getAttribute('data-selected') == 'true'){
-        if (this.typeValue == 'disable'){
-          this.#loading_animation()
-          return
-        }
-        selected_bubble.setAttribute('data-selected', 'false')
-        selected_circle.style.fill = 'var(--primary-color)'
-        for(let i = 0; i<leafs.length; i++){
-            const circle = leafs[i].querySelector('circle')
-            circle.style.fill = 'var(--primary-color)'
-            circle.style.opacity = '1'
-            leafs[i].setAttribute('data-enabled', 'true')
-            leafs[i].setAttribute('data-highlighted', 'false')
-        }
-        this.#loading_animation()
-        return
     }
     selected_bubble.setAttribute('data-selected', 'true')
     if (this.typeValue != 'disable'){
       this.#init_select(selected_bubble.getAttribute('data-acronym'))
     } else {
-      url = '../'+url
+      url = '../'+url //change relative url cause we're now in /ontologies
     }
+    this.#fetch_mappings_data_and_colorate_bubbles(url, this.bubblesTarget)
+  }
+
+  #fetch_mappings_data_and_colorate_bubbles(url, bubblesTarget) {
     fetch(url)
         .then(response => {
             if (!response.ok) {
-            throw new Error('Network response was not ok');
+                throw new Error('Network response was not ok');
             }
             return response.json();
         })
         .then(data => {
-            let mappings_list = []
-            for(let i=0; i<data.length; i++){
-                let list_item = {acronym: data[i]['target_ontology']['acronym'], count: data[i]['count']}
-                mappings_list.push(list_item)
+            let mappings_list = [];
+            for (let i = 0; i < data.length; i++) {
+                let list_item = { acronym: data[i]['target_ontology']['acronym'], count: data[i]['count'] };
+                mappings_list.push(list_item);
             }
-            const bubblesContainer = this.bubblesTarget
-            const leafs = bubblesContainer.querySelectorAll('.leaf')
+
+            const bubblesContainer = bubblesTarget;
+            const leafs = bubblesContainer.querySelectorAll('.leaf');
             const max_mappings_count = mappings_list.reduce((max, item) => Math.max(max, item.count), -Infinity);
-            for(let i=0; i<leafs.length; i++){
-                const circle = leafs[i].querySelector('circle')
-                const acronym = leafs[i].getAttribute('data-acronym')
-                if(mappings_list.some(item => item.acronym === acronym)){
-                  leafs[i].setAttribute('data-highlighted', 'true')
-                  circle.style.fill = 'var(--primary-color)'
-                  const elem = mappings_list.find(item => item.acronym === acronym);
-                  const opacity = (elem["count"] / max_mappings_count + Math.log( elem["count"] + 1)) / 10 + 0.3
-                  circle.style.opacity = `${opacity}`
+
+            for (let i = 0; i < leafs.length; i++) {
+                const circle = leafs[i].querySelector('circle');
+                const acronym = leafs[i].getAttribute('data-acronym');
+
+                if (mappings_list.some(item => item.acronym === acronym)) {
+                    leafs[i].setAttribute('data-highlighted', 'true');
+                    circle.style.fill = 'var(--primary-color)';
+                    const elem = mappings_list.find(item => item.acronym === acronym);
+                    const opacity = (elem.count / max_mappings_count + Math.log(elem.count + 1)) / 10 + 0.3;
+                    circle.style.opacity = `${opacity}`;
                 } else {
-                  leafs[i].setAttribute('data-enabled', 'false')
-                  circle.style.fill = 'var(--light-color)'
+                    leafs[i].setAttribute('data-enabled', 'false');
+                    circle.style.fill = 'var(--light-color)';
                 }
             }
-            const selected_leaf = bubblesContainer.querySelector('[data-selected="true"]')
-            selected_leaf.setAttribute('data-enabled', 'true')
-            const selected_circle = selected_leaf.querySelector('circle')
-            selected_circle.style.fill = 'var(--secondary-color)'
-            this.#loading_animation()
+
+            const selected_leaf = bubblesContainer.querySelector('[data-selected="true"]');
+            selected_leaf.setAttribute('data-enabled', 'true');
+            const selected_circle = selected_leaf.querySelector('circle');
+            selected_circle.style.fill = 'var(--secondary-color)';
+            this.#loading_animation(); 
         })
         .catch(error => {
+            console.error('Error fetching or processing data:', error);
             // Handle errors here
-            console.error('There was a problem with the fetch operation:', error);
         });
-  }
+      }
+
 
   zoomIn(){
     this.zoomRatioValue++
