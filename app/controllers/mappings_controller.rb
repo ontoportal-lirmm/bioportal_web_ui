@@ -16,14 +16,33 @@ class MappingsController < ApplicationController
 
   def index
     @ontologies_mapping_count = LinkedData::Client::HTTP.get("#{MAPPINGS_URL}/statistics/ontologies")
-    ontologies = LinkedData::Client::Models::Ontology.all(
-      include: 'acronym,name,summaryOnly',
-      display_links: false,
-      display_context: false
-    )
-    @selector_ontologies_count = ontologies.map do |ontology|
-      "#{ontology.name} - #{ontology.acronym} (#{@ontologies_mapping_count[ontology.acronym]})" if @ontologies_mapping_count[ontology.acronym]
+    ontology_list = LinkedData::Client::Models::Ontology.all.select { |o| !o.summaryOnly }
+    ontologies_hash = {}
+    ontology_list.each do |ontology|
+      ontologies_hash[ontology.acronym] = ontology
     end
+
+    @options = {}
+    @ontologies_mapping_count&.members&.each do |ontology_acronym|
+      if ontology_acronym.to_s == EXTERNAL_MAPPINGS_GRAPH
+        mapping_count = @ontologies_mapping_count[ontology_acronym.to_s] || 0
+        select_text = t('mappings.external_mappings', number_with_delimiter: number_with_delimiter(mapping_count, delimiter: ',')) if mapping_count >= 0
+        ontology_acronym = EXTERNAL_URL_PARAM_STR
+      elsif ontology_acronym.to_s.start_with?(INTERPORTAL_MAPPINGS_GRAPH)
+        mapping_count = @ontologies_mapping_count[ontology_acronym.to_s] || 0
+        select_text = t('mappings.interportal_mappings', acronym: ontology_acronym.to_s.split("/")[-1].upcase, number_with_delimiter: number_with_delimiter(mapping_count, delimiter: ',')) if mapping_count >= 0
+        ontology_acronym = INTERPORTAL_URL_PARAM_STR + ontology_acronym.to_s.split("/")[-1]
+      else
+        ontology = ontologies_hash[ontology_acronym.to_s]
+        mapping_count = @ontologies_mapping_count[ontology_acronym] || 0
+        next unless ontology && mapping_count > 0
+        select_text = "#{ontology.name} - #{ontology.acronym} (#{number_with_delimiter(mapping_count, delimiter: ',')})"
+      end
+      @options[select_text] = ontology_acronym
+    end
+
+    @options = @options.sort
+    @options.unshift([])
 
     @example_code = [{
                        "classes": ["http://bioontology.org/ontologies/BiomedicalResourceOntology.owl#Image_Algorithm",

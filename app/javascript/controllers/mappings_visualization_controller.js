@@ -55,9 +55,8 @@ export default class extends Controller {
   
     this.submitTarget.click();
   
-    const selectValue = event.currentTarget.querySelector('select').value;
-    const selectAcronym = this.#get_acronym(selectValue);
-  
+    const selectAcronym = event.currentTarget.querySelector('select').value;
+    
     const bubblesContainer = document.getElementById('mappings-bubbles-view');
     const selectedBubble = bubblesContainer.querySelector('[data-selected="true"]');
     const currentBubble = bubblesContainer.querySelector(`[data-acronym="${selectAcronym}"]`);
@@ -288,17 +287,13 @@ export default class extends Controller {
     input.dispatchEvent(new Event('input', { bubbles: true }));
     for(let i = 0; i<this.selectorTarget.querySelectorAll('.option').length; i++){
       const selectValue = this.selectorTarget.querySelectorAll('.option')[i]
-      const selectAcronym = this.#get_acronym(selectValue.getAttribute('data-value'))
+      const selectAcronym = selectValue.getAttribute('data-value')
       if(selectAcronym == acronym){
         selectValue.click()
       }
     }
   }
-  #get_acronym(selectValue){
-    let acronym = selectValue.split('-')
-    acronym.shift()
-    return acronym.join('-').split('(')[0].replace(/\s/g, '')
-  }
+
   #loading_animation(){
     this.loaderTarget.classList.toggle('d-none')
     this.bubblesTarget.classList.toggle('d-none')
