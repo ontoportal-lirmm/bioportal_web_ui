@@ -339,14 +339,19 @@ class OntologiesController < ApplicationController
     ontology_uri = @ontology.explore.latest_submission(include: 'URI', invalidate_cache: invalidate_cache?).URI
 
     rewriterule_ontology_uri = ""
-    rewriterule_ontology_resource = "RewriteRule ^.*(?:/|#)([^/#]+)$ https://stageportal.lirmm.fr/ontologies/#{params[:acronym]}/$1 [R=301,L]"
-
     if ontology_uri
       ontology_uri += '/' unless ontology_uri.end_with?('/')
       rewriterule_ontology_uri = "RewriteRule ^#{URI.parse(ontology_uri).path[1..-1]}?$ https://stageportal.lirmm.fr/ontologies/#{params[:acronym]} [R=301,L]\n" 
+      rewriterule_ontology_uri_nginx = "rewrite ^#{URI.parse(ontology_uri).path[1..-1]}?$ https://stageportal.lirmm.fr/ontologies/#{params[:acronym]} permanent\n"
     end
 
+    rewriterule_ontology_resource = "RewriteRule ^.*(?:/|#)([^/#]+)$ https://stageportal.lirmm.fr/ontologies/#{params[:acronym]}/$1 [R=301,L]"
+    rewriterule_ontology_resource_nginx = " if ($request_uri ~ ^/(.*)/(?:|#)([^/#]+)$) {\n  return 301 https://stageportal.lirmm.fr/ontologies/#{params[:acronym]}/$2;\n  }\n"
+
+
     @htaccess_content= "RewriteEngine On\n" + rewriterule_ontology_uri + rewriterule_ontology_resource
+    @nginx_content= "location / {\n " + rewriterule_ontology_uri_nginx + rewriterule_ontology_resource_nginx + "}"
+
     render 'ontologies/htaccess', layout: nil
   end
   # Main ontology description page (with metadata): /ontologies/ACRONYM

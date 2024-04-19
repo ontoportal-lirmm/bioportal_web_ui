@@ -1,9 +1,56 @@
 = render_in_modal do
+    %p We offer a seamless solution to make your ontology URIs resolvable and content negotiable by allowing URL redirection for your ontology URIs to our Agroportal URIs. To facilitate this process, we've provided you with a set of .htaccess rewrite rules. By following the simple instructions below, you'll be able to implement these rules swiftly and efficiently, ensuring smooth redirection 
+    %hr
+
+    %h5
+        %strong Instructions for Apache servers
     %ol
-        %li This is the htacces file to make redirection to agroportal.
+        %li
+            %strong Access .htaccess File:
+            Locate the .htaccess file in the root directory of your website, if it doesn't exist create one. This file controls how your web server behaves and is often used for URL rewriting and redirection.
+        %li
+            %strong Copy and Paste Redirect Rules in the .htaccess file:
+            Copy the rewrite rules provided in the black rectangle. Open the .htaccess file and paste the copied redirect rules into the file.
+        %li
+            %strong Enable rewrite module (Linux): 
+            you'll need to ensure that the Apache module called 'rewrite' is enabled by running the command 
+            %code sudo a2enmod rewrite 
     .htacess-code-container
         .clipboard-component-resource-content{style: 'position: absolute; right: 2%; top: 8%;'}
             = render ClipboardComponent.new(message: @htaccess_content, show_content: false)
         %pre.mb-0
             %code.d-block{style: 'text-wrap: pretty; word-break: break-all; color: white;'}
                 = @htaccess_content
+
+    %hr
+
+    %h5
+        %strong Instructions for Nginx servers
+    %ol
+        %li
+            %strong Access Nginx configuration file:
+            The location of this file can vary depending on your system, but common locations include
+            %strong  /etc/nginx/nginx.conf, /etc/nginx/sites-available/default or /usr/local/etc/nginx/nginx.conf.
+        %li
+            %strong Locate the server block or location block where you want to enable URL rewriting:
+            This is typically within the server { ... } block.
+        %li
+            %strong Copy and Paste Redirect Rules :
+            Copy the rewrite rules provided in the black rectangle. Inside the appropriate block, add the copied rules to enable URL rewriting
+        
+        %li
+            %strong Test the configuration for syntax errors:
+            Run the following command to test the redirection configuration
+            %code sudo nginx -t 
+        %li
+            %strong Reload Nginx to apply the changes:
+            Restart the nginx server to apply the redirection using this command
+            %code sudo systemctl reload nginx
+    .htacess-code-container
+        .clipboard-component-resource-content{style: 'position: absolute; right: 2%; top: 8%;'}
+            = render ClipboardComponent.new(message: @nginx_content, show_content: false)
+        %pre.mb-0
+            %code.d-block{style: 'text-wrap: pretty; word-break: break-all; color: white;'}
+                = @nginx_content
+    .contact-support{style: "width: 180px;"}
+        = render Buttons::RegularButtonComponent.new(id:'regular-button', value: "Contact Support", variant: "primary")
