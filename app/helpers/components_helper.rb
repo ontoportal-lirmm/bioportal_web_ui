@@ -56,7 +56,7 @@ module ComponentsHelper
             child: concept,
             href: href,
             children_href: '#',
-            selected: selected.blank? ? concept.id.eql?(concepts.first.id) : concept.id.eql?(selected) ,
+            selected: selected.blank? ? false : concept.id.eql?(selected) ,
             target_frame: child_turbo_frame,
             data: data,
             open_in_modal: open_in_modal
