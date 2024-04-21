@@ -576,6 +576,11 @@ module ApplicationHelper
     end
   end
 
+  def prefixed_url(url)
+    key = link_last_part(url)
+    prefix_property_url(url.split(key).first, key)
+  end
+
   def show_advanced_options_button(text: nil, init: nil)
     content_tag(:div, class: "#{init ? 'd-none' : ''} advanced-options-button", 'data-action': 'click->reveal-component#show', 'data-reveal-component-target': 'showButton') do
       inline_svg_tag('icons/settings.svg') +

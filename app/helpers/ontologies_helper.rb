@@ -701,6 +701,61 @@ module OntologiesHelper
     render IconWithTooltipComponent.new(icon: "json.svg",link: link, target: '_blank', title: title)
   end
 
+  def n_triples_to_table(n_triples_string)
+    grouped_by_id = n_triples_string.split(".\n").map do |x|
+      x.strip.scan(/^<([^>]+)> <([^>]+)> (.+)/).flatten
+    end.group_by { |x| x.shift }
+
+    grouped_by_id_and_properties = grouped_by_id.transform_values do |x|
+      x.group_by { |y| y.shift }
+    end
+
+    render TableComponent.new do |t|
+      resource_id, resource_id_values = grouped_by_id_and_properties.shift
+
+      t.add_row({ td: "ID" }, { td: resource_id })
+
+      resource_id_values.each do |property, values|
+        t.row do |row|
+          url = property.gsub(/[<>]/, '')
+          row.td do
+            content_tag(:span, prefixed_url(url), title: link_to(url, url), 'data-controller': 'tooltip')
+          end
+
+          row.td do
+            horizontal_list_container(values.flatten) do |v|
+              v = v.strip.match?(/^<(.+)>/) ? v.strip.match(/^<(.+)>/)[1] : v
+              link?(v) ? render(LinkFieldComponent.new(value: v)) : "#{v}, "
+            end
+          end
+        end
+      end
+
+      inverse_grouped_by_properties = grouped_by_id_and_properties.transform_values(&:to_a)
+                                                                  .to_a
+                                                                  .map(&:flatten)
+                                                                  .group_by { |x| x.delete_at(1) }
+      inverse_grouped_by_properties.each do |property, values|
+        t.row do |row|
+          url = property.gsub(/[<>]/, '')
+          row.td do
+            content_tag(:span, prefixed_url(url), title: link_to(url, url), 'data-controller': 'tooltip')
+          end
+
+          row.td do
+            horizontal_list_container(values.flatten) do |v|
+              v = v.strip.match?(/^<(.+)>/) ? v.strip.match(/^<(.+)>/)[1] : v
+              next if v.eql?(resource_id)
+
+              link?(v) ? render(LinkFieldComponent.new(value: v)) : "#{v}, "
+            end
+          end
+        end
+      end
+
+    end
+  end
+
   private
 
   def submission_languages(submission = @submission)
@@ -711,5 +766,5 @@ module OntologiesHelper
     id.split('/').last
   end
 
-  
+
 end
