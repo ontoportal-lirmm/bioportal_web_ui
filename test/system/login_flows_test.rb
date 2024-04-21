@@ -31,6 +31,7 @@ class LoginFlowsTest < ApplicationSystemTestCase
     fill_in 'user_email', with: new_user.email
     fill_in 'user_password', with: new_user.password
     fill_in 'user_password_confirmation', with: new_user.password
+    find("input[name='user[terms_and_conditions]']").set(true)
 
     # Click the save button
     click_button 'Register'

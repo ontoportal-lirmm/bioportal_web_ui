@@ -56,7 +56,7 @@ module ComponentsHelper
             child: concept,
             href: href,
             children_href: '#',
-            selected: selected.blank? ? concept.id.eql?(concepts.first.id) : concept.id.eql?(selected) ,
+            selected: selected.blank? ? false : concept.id.eql?(selected) ,
             target_frame: child_turbo_frame,
             data: data,
             open_in_modal: open_in_modal
@@ -84,17 +84,11 @@ module ComponentsHelper
     end
   end
 
-  def generated_link_to_clipboard(url, acronym) 
-    url = "#{$UI_URL}/ontologies/#{acronym}/#{link_last_part(url)}"
-    content_tag(:span, style: 'display: inline-block;') do
-      render ClipboardComponent.new(icon: 'icons/copy_link.svg', title: t("components.copy_portal_uri", portal_name: portal_name)+" : "+ url, message: url, show_content: false)
-    end
-  end
 
   def generated_link_to_clipboard(url, acronym) 
     url = "#{$UI_URL}/ontologies/#{acronym}/#{link_last_part(url)}"
     content_tag(:span, style: 'display: inline-block;') do
-      render ClipboardComponent.new(icon: 'icons/copy_link.svg', title: t("components.copy_portal_uri", portal_name: portal_name)+" : "+ url, message: url, show_content: false)
+      render ClipboardComponent.new(icon: 'icons/copy_link.svg', title: "#{t("components.copy_portal_uri", portal_name: portal_name)} #{link_to(url)}", message: url, show_content: false)
     end
   end
 
@@ -106,15 +100,17 @@ module ComponentsHelper
     end
   end
 
-  def link_to_with_actions(link_to_tag, acronym: nil, url: nil, copy: true, check_resolvability: true, generate_link: true, generate_htaccess: false)
+
+  def link_to_with_actions(link_to_tag, acronym: nil, url: nil, copy: true, check_resolvability: true, generate_link: true)
     tag = link_to_tag
     url = link_to_tag if url.nil?
+    
     tag = tag + copy_link_to_clipboard(url) if copy
+
+    tag= tag + generated_link_to_clipboard(url, acronym) if generate_link
 
     tag = tag + resolvability_check_tag(url) if check_resolvability
     
-    tag= tag + generated_link_to_clipboard(url, acronym) if generate_link
-
     tag= tag + htaccess_tag(acronym) if generate_htaccess
 
     tag.html_safe

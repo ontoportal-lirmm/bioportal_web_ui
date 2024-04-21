@@ -508,6 +508,7 @@ en:
       agreements: Legal
       terms: Terms and Conditions
       privacy_policy: Privacy Policy
+      legal_notices: Legal Notices
       cite_us: Cite Us
       acknowledgments: Acknowledgments
       about: About
@@ -781,6 +782,8 @@ en:
     first_name: First name
     last_name: Last name
     mailing_list: Register to the %{site}'s mailing list
+    accept_terms_and_conditions: I acknowledge and accept
+    terms_and_conditions: "%{site}'s terms and conditions."
     optional: "(Optional)"
     password: Password
     title: Register
@@ -802,6 +805,7 @@ en:
     validate_orcid: Please enter a valid ORCID.
     validate_username: please enter a valid username
     valid_email_adresse: Please enter a valid email adresse
+    validate_terms_and_conditions: Accepting the terms and conditions is required, please check the box to proceed.
     first_name_required: First name field is required
     last_name_required: Last name field is required
     index:

@@ -203,7 +203,7 @@ class OntologiesController < ApplicationController
   end
 
   def content_serializer
-    @result, content_type = serialize_content(ontology_acronym: params[:acronym],
+    @result, _ = serialize_content(ontology_acronym: params[:acronym],
                       concept_id: params[:id],
                       format: params[:output_format])
 
@@ -316,24 +316,24 @@ class OntologiesController < ApplicationController
     request_accept_header = request.env["HTTP_ACCEPT"].split(",")[0]
     type, resource_id  = find_type_by_id(params[:id], params[:acronym])
 
+    if resource_id.nil?
+      @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:acronym]).first
+      @submission_latest = @ontology.explore.latest_submission(include: "URI")
+      resource_id = @submission_latest.URI
+    end
+
     if request_accept_header == "text/html"
-      if type.nil?
-        redirect_to(ontology_path(id: params[:acronym], p: 'summary'))
+      if type.nil? || resource_id.blank?
+        redirect_to ontology_path(id: params[:acronym], p: 'summary')
       else
-        redirect_to(link_by_type(resource_id, params[:acronym], type))
+        redirect_to link_by_type(resource_id, params[:acronym], type)
       end
     else
-      if resource_id.nil?
-        @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:acronym]).first
-        @submission_latest = @ontology.explore.latest_submission(include: "URI")
-        resource_id = @submission_latest.URI
-      end
       content, serializer_content_type = serialize_content(ontology_acronym: params[:acronym], concept_id: resource_id, format: request_accept_header)
       render plain: content, content_type: serializer_content_type
-    
     end
   end
-
+  
   def generate_htaccess
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:acronym]).first
     ontology_uri = @ontology.explore.latest_submission(include: 'URI', invalidate_cache: invalidate_cache?).URI
@@ -354,6 +354,7 @@ class OntologiesController < ApplicationController
 
     render 'ontologies/htaccess', layout: nil
   end
+
   # Main ontology description page (with metadata): /ontologies/ACRONYM
   def summary
 

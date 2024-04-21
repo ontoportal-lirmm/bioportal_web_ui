@@ -2,9 +2,13 @@ class InstancesController < ApplicationController
   include InstancesHelper, SearchContent
 
   def index
-    concept_type = params[:type].to_s || 'NamedIndividual'
+    if params[:type].blank?
+      concept_type =  'NamedIndividual'
+    else
+      is_concept_instance = true
+      concept_type = params[:type]
+    end
 
-    is_concept_instance = !params[:type].blank?
     get_ontology(params)
 
     query, page, page_size = helpers.search_content_params
@@ -21,7 +25,7 @@ class InstancesController < ApplicationController
                                                 child_turbo_frame: 'instance_show',
                                                 child_param: :instanceid,
                                                 show_count: is_concept_instance,
-                                                auto_click: params[:instanceid].blank?,
+                                                auto_click: params[:instanceid].blank? && page.eql?(1),
                                                 results:  results, next_page:  next_page, total_count: total_count)
 
     if is_concept_instance && page.eql?(1)
