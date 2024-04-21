@@ -96,10 +96,10 @@ module ComponentsHelper
     url = link_to_tag if url.nil?
     tag = tag + copy_link_to_clipboard(url) if copy
 
-    tag = tag + resolvability_check_tag(url) if check_resolvability
-    
     tag= tag + generated_link_to_clipboard(url, acronym) if generate_link
 
+    tag = tag + resolvability_check_tag(url) if check_resolvability
+    
     tag.html_safe
   end
 
