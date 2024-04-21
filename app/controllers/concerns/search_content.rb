@@ -173,7 +173,7 @@ module SearchContent
     when 'AnnotationProperty', 'ObjectProperty', 'DatatypeProperty'
       ontology_path(id: ontology, p: 'properties', instanceid: id)
     else
-      "/content_finder?acronym=#{ontology}&uri=#{escape(id)}&output_format=json"
+      "/content_finder?acronym=#{ontology}&uri=#{escape(id)}&output_format=html"
     end
   end
 
