@@ -292,6 +292,8 @@ module ApplicationHelper
                     class: "secondary-button regular-button", data: { show_modal_title_value: t('application.add_new_proposal')}
     end
   end
+  
+
   def link?(str)
     # Regular expression to match strings starting with "http://" or "https://"
     link_pattern = /\Ahttps?:\/\//
@@ -572,6 +574,11 @@ module ApplicationHelper
     else # we don't try to guess the prefix
        nil
     end
+  end
+
+  def prefixed_url(url)
+    key = link_last_part(url)
+    prefix_property_url(url.split(key).first, key)
   end
 
   def show_advanced_options_button(text: nil, init: nil)

@@ -80,16 +80,26 @@ module ComponentsHelper
 
   def copy_link_to_clipboard(url, show_content: false)
     content_tag(:span, style: 'display: inline-block;') do
-      render ClipboardComponent.new(message: url, show_content: show_content)
+      render ClipboardComponent.new(title: t("components.copy_original_uri"), message: url, show_content: show_content)
     end
   end
 
-  def link_to_with_actions(link_to_tag, url: nil, copy: true, check_resolvability: true)
+  def generated_link_to_clipboard(url, acronym) 
+    url = "#{$UI_URL}/ontologies/#{acronym}/#{link_last_part(url)}"
+    content_tag(:span, style: 'display: inline-block;') do
+      render ClipboardComponent.new(icon: 'icons/copy_link.svg', title: "#{t("components.copy_portal_uri", portal_name: portal_name)} #{link_to(url)}", message: url, show_content: false)
+    end
+  end
+
+  def link_to_with_actions(link_to_tag, acronym: nil, url: nil, copy: true, check_resolvability: true, generate_link: true)
     tag = link_to_tag
     url = link_to_tag if url.nil?
     tag = tag + copy_link_to_clipboard(url) if copy
 
+    tag= tag + generated_link_to_clipboard(url, acronym) if generate_link
+
     tag = tag + resolvability_check_tag(url) if check_resolvability
+    
     tag.html_safe
   end
 

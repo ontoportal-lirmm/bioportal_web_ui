@@ -9,7 +9,7 @@ module OntologyContentSerializer
       @result = ""
       @acronym = ontology_acronym
 
-      return @result if format.eql?('html')
+      @format = 'ntriples' if format.eql?('html')
 
       url = content_finder_url(ontology_acronym, concept_id)
       accept_header = content_finder_accept_header(@format)
@@ -23,7 +23,7 @@ module OntologyContentSerializer
         @result = response.body.force_encoding(Encoding::UTF_8)
       end
     end
-    @result
+    [@result, accept_header]
   end
 
   def content_finder_url(acronym, uri)
@@ -32,14 +32,16 @@ module OntologyContentSerializer
 
   def content_finder_accept_header(output_format)
     case output_format
-    when 'json'
-      "application/json"
-    when 'xml'
-      "application/xml"
-    when 'ntriples'
-      "application/n-triples"
-    when 'turtle'
-      "text/turtle"
+    when 'json', 'application/json', 'application/ld+json', 'application/*'
+      'application/ld+json'
+    when 'xml', 'text/xml', 'text/rdf+xml',  'application/rdf+xml', 'application/xml'
+      'application/rdf+xml'
+    when 'ntriples', 'application/n-triples', '*/*', 'text/*'
+      'application/n-triples'
+    when 'turtle', 'text/turtle'
+      'text/turtle'
+    else
+      output_format
     end
   end
 

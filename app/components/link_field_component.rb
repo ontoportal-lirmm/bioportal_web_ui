@@ -28,7 +28,7 @@ class LinkFieldComponent < ViewComponent::Base
     end
 
     tag = link_to(text, url, target: target, class: 'summary-link-truncate', 'data-controller': 'tooltip', title: text)
-    link_to_with_actions(tag, url: url, copy: @enable_copy, check_resolvability: @check_resolvability)
+    link_to_with_actions(tag, url: url, copy: @enable_copy, check_resolvability: @check_resolvability, generate_link: false)
   end
 
 end

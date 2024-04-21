@@ -13,6 +13,7 @@ class OntologiesController < ApplicationController
   include SparqlHelper
   include SubmissionFilter
   include OntologyContentSerializer
+  include UriRedirection
 
   require 'multi_json'
   require 'cgi'
@@ -202,9 +203,9 @@ class OntologiesController < ApplicationController
   end
 
   def content_serializer
-    @result = serialize_content(ontology_acronym: params[:acronym],
-                                concept_id: params[:id],
-                                format: params[:output_format])
+    @result, _ = serialize_content(ontology_acronym: params[:acronym],
+                      concept_id: params[:id],
+                      format: params[:output_format])
 
     render 'ontologies/content_serializer', layout: nil
   end
@@ -306,6 +307,31 @@ class OntologiesController < ApplicationController
   def submit_success
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
     render 'submit_success'
+  end
+
+  # GET /ontologies/:acronym/:id
+  def redirect
+    return not_found unless params[:acronym] && params[:id]
+
+    request_accept_header = request.env["HTTP_ACCEPT"].split(",")[0]
+    type, resource_id  = find_type_by_id(params[:id], params[:acronym])
+
+    if resource_id.nil?
+      @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:acronym]).first
+      @submission_latest = @ontology.explore.latest_submission(include: "URI")
+      resource_id = @submission_latest.URI
+    end
+
+    if request_accept_header == "text/html"
+      if type.nil? || resource_id.blank?
+        redirect_to ontology_path(id: params[:acronym], p: 'summary')
+      else
+        redirect_to link_by_type(resource_id, params[:acronym], type)
+      end
+    else
+      content, serializer_content_type = serialize_content(ontology_acronym: params[:acronym], concept_id: resource_id, format: request_accept_header)
+      render plain: content, content_type: serializer_content_type
+    end
   end
 
   # Main ontology description page (with metadata): /ontologies/ACRONYM
