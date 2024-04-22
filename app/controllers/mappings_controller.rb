@@ -62,24 +62,15 @@ class MappingsController < ApplicationController
                      }]
   end
 
-  def mappings_ontologies_table
-    ontology_acronym = params[:ontology].split("-").last.split('(').first.gsub(" ", "")
-    @acronym = ontology_acronym 
-    @mapping_counts = mapping_counts(ontology_acronym)
-    render "mappings/mappings_ontologies_table"
-  end
-
-
-  def ontology_mappings
-    acronym = params[:acronym]
-    render json: mapping_counts(acronym)
-  end
 
   def count
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    @ontology_acronym = @ontology&.acronym || params[:id]
+    @ontology_acronym = params[:ontology] || params[:id]
     @mapping_counts = mapping_counts(@ontology_acronym)
-    render partial: 'count'
+
+    respond_to do |format|
+      format.html {  render partial: 'mappings/count' }
+      format.json { render json: @mapping_counts }
+    end
   end
 
   def loader
@@ -101,7 +92,7 @@ class MappingsController < ApplicationController
                      }]
     render partial: 'mappings/bulk_loader/loader'
   end
-
+  
   def loader_process
     response = LinkedData::Client::HTTP.post('/mappings/load', file: params[:file])
     errors = response.errors
@@ -110,6 +101,7 @@ class MappingsController < ApplicationController
     created = response.created
     respond_to do |format|
       format.turbo_stream do
+        # TO test
         render turbo_stream: turbo_stream.replace('file_loader_result',
                                                   partial: 'mappings/bulk_loader/loaded_mappings',
                                                   locals: { errors: errors, created: created })
@@ -130,7 +122,8 @@ class MappingsController < ApplicationController
   def show_mappings
     page = params[:page] || 1
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    @target_ontology = LinkedData::Client::Models::Ontology.find(params[:target])
+    @target_ontology = LinkedData::Client::Models::Ontology.find(params[:target].split('/').last)
+
     # Cases if ontology or target are interportal or external
     if @ontology.nil?
       ontology_acronym = params[:id]

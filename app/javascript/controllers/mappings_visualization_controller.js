@@ -103,30 +103,40 @@ export default class extends Controller {
     const bubblesContainer = this.bubblesTarget
     const leafs = bubblesContainer.querySelectorAll('.leaf')
     const acronym = selected_bubble.getAttribute('data-acronym')
-    let url = 'mappings/ontology_mappings/' + acronym
-    if(selected_bubble.getAttribute('data-highlighted') == 'true'){ // user clicks on a highlighted bubble (should show a modal with the mappings)
+    let url = 'mappings/count/' + acronym
+
+    if(selected_bubble.getAttribute('data-highlighted') === 'true'){ // user clicks on a highlighted bubble (should show a modal with the mappings)
       this.#init_highlighted_bubble(bubblesContainer, selected_bubble)
       return
     }
-    if(selected_bubble.getAttribute('data-enabled') == 'false'){ // user clicks on a bubble that is disabled (has no mappings with the current bubble)
+
+    if(selected_bubble.getAttribute('data-enabled') === 'false'){ // user clicks on a bubble that is disabled (has no mappings with the current bubble)
       this.#loading_animation()
       return
     }
-    if(selected_bubble.getAttribute('data-selected') == 'true'){ // user clicks on current bubble (should deselecte it, but nothing heppen if we're in mappings sectin not the page)
+
+    if(selected_bubble.getAttribute('data-selected') === 'true'){ // user clicks on current bubble (should deselecte it, but nothing heppen if we're in mappings sectin not the page)
       this.#deselect_bubble(selected_bubble, selected_circle, leafs)
       return
     }
     selected_bubble.setAttribute('data-selected', 'true')
-    if (this.typeValue != 'disable'){
+
+    if (this.typeValue !== 'disable'){
       this.#init_select(selected_bubble.getAttribute('data-acronym'))
     } else {
-      url = '../'+url //change relative url cause we're now in /ontologies
+      url = '../'+url //change relative url because we're now in /ontologies
     }
     this.#fetch_mappings_data_and_colorate_bubbles(url, this.bubblesTarget)
   }
 
   #fetch_mappings_data_and_colorate_bubbles(url, bubblesTarget) {
-    fetch(url)
+    fetch(url, {
+      method: 'GET', // or 'POST', 'PUT', etc.
+      headers: {
+        'Accept': 'application/json',
+        // Other headers if needed
+      },
+    })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -197,7 +207,7 @@ export default class extends Controller {
         .size([width - margin, height - margin])
         .padding(3);
 
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
 
     const root = d3.hierarchy({ children: data })
         .sum(d => d.ontology_mappings / normalization_ratio + Math.log(d.ontology_mappings + 1) / logScaleFactor);

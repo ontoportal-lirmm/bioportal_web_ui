@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   post 'agents/:id/usages', to: 'agents#update_agent_usages', constraints: { id: /.+/ }
   resources :agents, constraints: { id: /.+/ }
   post 'agents/:id', to: 'agents#update', constraints: { id: /.+/ }
+
   resources :ontolobridge do
     post :save_new_term_instructions, on: :collection
   end
@@ -32,7 +33,6 @@ Rails.application.routes.draw do
   get '/mappings/loader', to: 'mappings#loader'
   post '/mappings/loader', to: 'mappings#loader_process'
   get 'mappings/count/:id', to: 'mappings#count', constraints: { id: /.+/ }
-  get 'mappings/ontology_mappings/:acronym', to: 'mappings#ontology_mappings'
   get 'mappings/show_mappings', to: 'mappings#show_mappings'
   get 'mappings/new', to: 'mappings#new'
   get 'mappings/:id', to: 'mappings#show', constraints: { id: /.+/ }
@@ -40,7 +40,6 @@ Rails.application.routes.draw do
   delete 'mappings/:id', to: 'mappings#destroy', constraints: { id: /.+/ }
   resources :mappings
   get 'mappings/:id', to: 'mappings#show', constraints: { id: /.+/ }
-  get '/mappings_ontologies_table', to: 'mappings#mappings_ontologies_table'
 
   resources :concepts
 
