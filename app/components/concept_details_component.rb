@@ -69,11 +69,12 @@ class ConceptDetailsComponent < ViewComponent::Base
     end
   end
 
-  def filter_properties(top_keys, bottom_keys, exclude_keys, concept_properties)
+  def filter_properties(top_keys, bottom_keys, exclude_keys, concept_properties) 
     all_keys = concept_properties&.keys || []
     top_set = properties_set_by_keys(top_keys, concept_properties, exclude_keys)
     bottom_set = properties_set_by_keys(bottom_keys, concept_properties, exclude_keys)
     leftover = properties_set_by_keys(all_keys - top_keys - bottom_keys, concept_properties, exclude_keys)
+    leftover = leftover.reject { |key, _| top_set.key?(key) }
     [top_set, leftover, bottom_set]
   end
 
