@@ -137,6 +137,7 @@ class OntologiesController < ApplicationController
   def mappings
     @ontology_acronym = @ontology.acronym || params[:id]
     @mapping_counts = mapping_counts(@ontology_acronym)
+    @ontologies_mapping_count = LinkedData::Client::HTTP.get("#{MAPPINGS_URL}/statistics/ontologies")
     if request.xhr?
       render partial: 'ontologies/sections/mappings', layout: false
     else

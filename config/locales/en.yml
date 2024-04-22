@@ -558,6 +558,13 @@ en:
     ontology_visits: Ontology visits
   mappings:
     all: All
+    description: Dive into an overview of the mappings in the bubble view, efficiently locate a specific ontology in the table view or upload your own mappings.
+    tabs:
+      bubble_view: Bubbles view
+      table_view: Table view
+      upload_mappings: Upload mappings
+    filter_ontologies: Filter ontologies in the bubble view
+    filter_bubbles: Filter bubbles
     external_mappings: "External Mappings (%{number_with_delimiter})"
     interportal_mappings: "Interportal Mappings - %{acronym} (%{number_with_delimiter})"
     test_bulk_load: This is the mappings produced to test the bulk load
@@ -570,7 +577,6 @@ en:
     find_mappings: Find mappings of a class/concept
     intro: Find all the mappings of an ontology
     loading_mappings: Loading mappings...
-    mappings_bulk_load: Upload mappings in bulk from a source file
     no_mappings_available: No mappings available
     title: Mappings
     upload_mappings: Upload mappings

@@ -566,75 +566,82 @@ fr:
     ontology_visits: Visites d'ontologies
 
   mappings:
-    select_ontologies_list: "Sélectionner des ontologies"
-    external_mappings: "Alignements Externes (%{number_with_delimiter})"
-    interportal_mappings: "Alignements Interportail - %{acronym} (%{number_with_delimiter})"
-    test_bulk_load: Ceci est les alignements produits pour tester le chargement en masse
-    mapping_created: Alignement créé
-    mapping_updated: Alignement mis à jour
+    all: Tous
+    description: Plongez dans une vue d'ensemble des mappings dans la vue en bulles, localisez efficacement une ontologie spécifique dans la vue en tableau ou téléchargez vos propres mappings.
+    tabs:
+      bubble_view: Vue en bulles
+      table_view: Vue en tableau
+      upload_mappings: Télécharger des mappings
+    filter_ontologies: Filtrer les ontologies dans la vue en bulles
+    filter_bubbles: Filtrer les bulles
+    external_mappings: "Mappings externes (%{number_with_delimiter})"
+    interportal_mappings: "Mappings interportails - %{acronym} (%{number_with_delimiter})"
+    test_bulk_load: Ceci sont les mappings créés pour tester le chargement en masse
+    mapping_created: Mapping créé
+    mapping_updated: Mapping mis à jour
     mapping_deleted: "%{map_id} supprimé avec succès"
-    mapping_not_found: "Alignement %{id} non trouvé"
+    mapping_not_found: "Mapping %{id} non trouvé"
     error_of_source_and_target: Les concepts source et cible doivent être spécifiés
-    mapping_issue: "Problème d'alignement avec '%{mapping}' : %{message}"
-    find_mappings: Trouver les alignements d'une classe/concept
-    intro: Trouver tous les alignements d'une ontologie
-    loading_mappings: Chargement des alignements...
-    mappings_bulk_load: Télécharger des alignements en masse à partir d'un fichier source
-    no_mappings_available: Aucun alignement disponible
-    title: Alignements
-    upload_mappings: Télécharger des alignements
-    all: Tout
+    mapping_issue: "Problème de mapping avec '%{mapping}' : %{message}"
+    find_mappings: Trouver tous les mappings d'une classe/concept
+    intro: Trouver tous les mappings d'une ontologie
+    loading_mappings: Chargement des mappings...
+    no_mappings_available: Aucun mapping disponible
+    title: Mappings
+    upload_mappings: Télécharger des mappings
+    select_ontologies_list: Sélectionner les ontologies
     count:
       ontology: Ontologie
-      mappings: Alignements
-      no_mappings: Il n'y a aucun alignement vers ou depuis cette ontologie
+      mappings: Mappings
+      no_mappings: Il n'y a aucun mapping vers ou depuis cette ontologie
     form:
       source_class: Classe source
-      mapping_name: Description du alignement (nom)
+      mapping_name: Description du mapping (nom)
       contact_info: Informations de contact
-      mapping_source_name: Nom de la source (ID de l'ensemble de alignement)
+      mapping_source_name: Nom source (ID de l'ensemble de mappings)
       mapping_comment: Commentaire
-      mapping_relation: Type de relation de alignement
-      save: Sauvegarder
+      mapping_relation: Type de relation de mapping
+      save: Enregistrer
     mapping_table:
-      mapping_to: Alignement vers
+      mapping_to: Mapping vers
       relations: Relations
       source: Source
       type: Type
       actions: Actions
-      no_mappings: Il n'y a actuellement aucun alignement pour cette classe.
+      no_mappings: Il n'y a actuellement aucun mapping pour cette classe.
     mapping_type_selector:
-      mapping_type: Type de alignement
+      mapping_type: Type de mapping
       internal: Interne
-      interportal: InterPortail
+      interportal: Interportail
       external: Externe
       target_class: Classe cible
       details: Détails
       ontology_acronym: Ontologie (acronyme)
       class: Classe
-      ontology_acronym_placeholder: Entrez l'acronyme de l'ontologie
+      ontology_acronym_placeholder: Entrez l'ACRONYM de l'ontologie
       class_uri_placeholder: Entrez l'URI de la classe
       ontology_uri_placeholder: Entrez l'URI de l'ontologie
     show_line:
-      edit_modal: Éditer
+      edit_modal: Modifier
       delete_button: Supprimer
-      turbo_confirm: Êtes-vous sûr ?
-      edit_mapping: Éditer l'alignement pour %{preflabel}
+      turbo_confirm: Êtes-vous sûr(e) ?
+      edit_mapping: Modifier le mapping pour %{preflabel}
     show:
-      no_mappings_found: Aucun alignement trouvé
+      no_mappings_found: Aucun mapping trouvé
     bulk_loader:
       loader:
         example_of_valid_file: Voir un exemple de fichier valide
-        save: Sauvegarder
+        save: Enregistrer
       loaded_mappings:
-        mappings_created: "%{size} alignements créés avec succès"
-        id: Id
+        mappings_created: "%{size} mappings créés avec succès"
+        id: ID
         source: Source
         target: Cible
         relation: Relation
         properties: Propriétés
         actions: Actions
         see_other_properties: Voir d'autres propriétés
+
 
   agents:
     not_found_agent: Agent avec id %{id}

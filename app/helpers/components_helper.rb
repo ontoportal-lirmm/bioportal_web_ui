@@ -139,6 +139,10 @@ module ComponentsHelper
     content_tag(:canvas, nil, data: data)
   end
 
+  def loader_component(type = 'pulsing')
+    render LoaderComponent.new(type: type)
+  end
+
   def info_tooltip(text)
     render Display::InfoTooltipComponent.new(text: text)
   end
@@ -219,6 +223,14 @@ module ComponentsHelper
       end
     end
   end
+
+
+  def regular_button(id, value, variant: "secondary", state: "regular", size: "slim", &block)
+    render Buttons::RegularButtonComponent.new(id:id, value: value, variant: variant, state: state, size: size) do |btn|
+      capture(btn, &block) if block_given?
+    end
+  end
+
 
   def form_save_button
     render Buttons::RegularButtonComponent.new(id: 'save-button', value: t('components.save_button'), variant: "primary", size: "slim", type: "submit") do |btn|
