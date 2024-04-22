@@ -9,7 +9,7 @@
         - c.container do
           .mappings-page-ontologies-selector{'data-mappings-target': 'ontologies'}
             = ontologies_selector(id:'mappings_page_ontologies' ,name: 'ontologies[]')
-            .selector-button{'data-action': 'click->mappings#filter_ontologies'}
+            .selector-button{'data-action': 'click->mappings#filterOntologies'}
               = regular_button('filter-bubbles', t('mappings.filter_bubbles'))
 
   .mappings-bubble-view-frame{'data-mappings-target': 'frame'}

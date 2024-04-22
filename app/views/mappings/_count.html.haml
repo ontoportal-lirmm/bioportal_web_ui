@@ -22,7 +22,6 @@
     - if @ontologies_mapping_count
       .summary-mappigs-page-container{'data-controller': 'mappings',
                           'data-mappings-mappings-list-value': "#{@ontologies_mapping_count.to_h.to_json}",
-                          'data-mappings-type-value': 'partial',
                           'data-mappings-acronym-value': @ontology_acronym,
                           'data-mappings-api-url-value': rest_url
                           }
