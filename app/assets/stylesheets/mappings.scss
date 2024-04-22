@@ -199,7 +199,7 @@
 }
 .mappings-bubble-size-legend .bubble{
   border-radius: 100%;
-  background-color: var(--primary-color);
+  border: 2px solid var(--primary-color);
 }
 .mappings-bubble-size-legend .bubble.bubble1{
   width: 10px;
