@@ -193,19 +193,9 @@ class ApplicationController < ActionController::Base
 
 
   def rest_url
-    # Split the URL into protocol and path parts
-    protocol, path = REST_URI.split("://", 2)
-
-    # Remove duplicate "//"
-    cleaned_url = REST_URI.gsub(/\/\//, '/')
-
-    # Remove the last '/' in the path part
-    cleaned_path = path.chomp('/')
-    # Reconstruct the cleaned URL
-    "#{protocol}://#{cleaned_path}"
+    helpers.rest_url
   end
-
-
+  
   def check_http_file(url)
     session = Net::HTTP.new(url.host, url.port)
     session.use_ssl = true if url.port == 443
