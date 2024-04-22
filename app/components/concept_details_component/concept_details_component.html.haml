@@ -8,6 +8,7 @@
         - if @bottom_keys.present?
           - top_set, leftover_set, bottom_set = filter_properties(@top_keys, @bottom_keys, @exclude_keys, prefix_properties(@concept_properties))
           - leftover_set = convert_dates(leftover_set)
+          - leftover_set = leftover_set.reject { |key, _| top_set.key?(key) } #remove duplicated rows in top_set
           - row_hash_properties(top_set, @acronym).each do |row|
             - t.add_row(*row)
 
