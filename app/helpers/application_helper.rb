@@ -645,35 +645,6 @@ module ApplicationHelper
     end
   end
  
-  def empty_modal
-    link_to_modal "", ""
-  end
-  
-  def mappings_bubble_view_legend
-    content_tag(:div, class: 'mappings-bubble-view-legend') do
-      legend_section('Bubble size:', 'The global number of mappings with all other ontologies.', 'mappings-bubble-size-legend') +
-      legend_section('Color degree:', 'The number of mappings with the selected ontology.', 'mappings-bubble-color-legend')
-    end
-  end
-  
-  def legend_section(title_text, description_text, css_class)
-    content_tag(:div, class: 'content-container') do
-      content_tag(:div, class: 'bubble-view-legend-item') do
-        content_tag(:div, class: 'title') do
-          content_tag(:div, "#{title_text} ", class: 'd-inline') +
-          content_tag(:span, description_text)
-        end + 
-        mappings_legend(css_class)
-      end
-    end
-  end
-  
-  def mappings_legend(css_class)
-    content_tag(:div, class: css_class) do
-      content_tag(:div, "Less mappings", class: 'mappings-legend-text') +
-      (1..6).map { |i| content_tag(:div, "", class: "bubble bubble#{i}") }.join +
-      content_tag(:div, "More mappings", class: 'mappings-legend-text')
-    end
-  end  
+
 
 end

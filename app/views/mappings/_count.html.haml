@@ -19,17 +19,18 @@
               - r.td do
                 = number_with_delimiter(mapping_count[:count], delimiter: ',')
 
-    .summary-mappigs-page-container{'data-controller': 'mappings',
-                        'data-mappings-mappings-list-value': "#{@ontologies_mapping_count.to_h.to_json}",
-                        'data-mappings-type-value': 'partial',
-                        'data-mappings-acronym-value': @ontology_acronym,
-                        'data-mappings-api-url-value': rest_url
-                        }
-      .mappings-bubble-view-frame{'data-mappings-target': 'frame'}
-        #mappings-bubbles-view{'data-mappings-target': 'bubbles'}
-        .mapping-bubbles-loader.d-none{'data-mappings-target': 'loader'}
-          = render LoaderComponent.new(type: 'pulsing')
-      .d-none{'data-mappings-target': 'modal'}
-        = empty_modal # to be filled in js
-      .d-flex.justify-content-center
-        = render Display::InfoTooltipComponent.new(text: mappings_bubble_view_legend)
+    - if @ontologies_mapping_count
+      .summary-mappigs-page-container{'data-controller': 'mappings',
+                          'data-mappings-mappings-list-value': "#{@ontologies_mapping_count.to_h.to_json}",
+                          'data-mappings-type-value': 'partial',
+                          'data-mappings-acronym-value': @ontology_acronym,
+                          'data-mappings-api-url-value': rest_url
+                          }
+        .mappings-bubble-view-frame{'data-mappings-target': 'frame'}
+          #mappings-bubbles-view{'data-mappings-target': 'bubbles'}
+          .mapping-bubbles-loader.d-none{'data-mappings-target': 'loader'}
+            = render LoaderComponent.new(type: 'pulsing')
+        .d-none{'data-mappings-target': 'modal'}
+          = client_filled_modal
+        .d-flex.justify-content-center
+          = render Display::InfoTooltipComponent.new(text: mappings_bubble_view_legend)
