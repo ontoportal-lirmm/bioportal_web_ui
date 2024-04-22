@@ -30,7 +30,6 @@ Rails.application.routes.draw do
   get '/users/subscribe/:username', to: 'users#subscribe'
   get '/users/un-subscribe/:email', to: 'users#un_subscribe'
 
-  get '/mappings/loader', to: 'mappings#loader'
   post '/mappings/loader', to: 'mappings#loader_process'
   get 'mappings/count/:id', to: 'mappings#count', constraints: { id: /.+/ }
   get 'mappings/show_mappings', to: 'mappings#show_mappings'

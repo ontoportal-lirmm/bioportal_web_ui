@@ -73,26 +73,7 @@ class MappingsController < ApplicationController
     end
   end
 
-  def loader
-    @example_code = [{
-                       "classes": ["http://bioontology.org/ontologies/BiomedicalResourceOntology.owl#Image_Algorithm",
-                                   "http://purl.org/incf/ontology/Computational_Neurosciences/cno_alpha.owl#cno_0000202"],
 
-                       "name": t('mappings.test_bulk_load'),
-                       "source": 'https://w3id.org/semapv/LexicalMatching',
-                       "comment": 'mock data',
-                       "relation": [
-                         'http://www.w3.org/2002/07/owl#subClassOf'
-                       ],
-                       "subject_source_id": 'http://bioontology.org/ontologies/BiomedicalResources.owl',
-                       "object_source_id": 'http://purl.org/incf/ontology/Computational_Neurosciences/cno_alpha.owl',
-                       "source_name": 'https://w3id.org/sssom/mapping/tests/data/basic.tsv',
-                       "source_contact_info": 'orcid:1234,orcid:5678',
-                       "date": '2020-05-30'
-                     }]
-    render partial: 'mappings/bulk_loader/loader'
-  end
-  
   def loader_process
     response = LinkedData::Client::HTTP.post('/mappings/load', file: params[:file])
     errors = response.errors
