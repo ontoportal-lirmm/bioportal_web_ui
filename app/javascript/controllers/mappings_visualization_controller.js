@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
-import * as d3 from 'd3'
+import { useMappingsDrawBubbles } from '../mixins/useMappingsBubbles'
 
 export default class extends Controller {
 
@@ -13,7 +13,26 @@ export default class extends Controller {
   static targets = ['frame', 'bubbles', 'submit', 'modal', 'selector', 'ontologies', 'loader']
 
   connect () {
-    this.#drawBubbles(this.mappingsListValue)
+
+    this.drawBubbles = (mappingsList) => {
+      const zoomRatio = this.zoomRatioValue
+      const width = 600 * zoomRatio
+      const height = 600 * zoomRatio
+      const margin = 1
+      const logScaleFactor = 10
+      const normalization_ratio =  this.#normalizationRatio(mappingsList)
+
+      const data = Object.entries(mappingsList).map(([key, value]) => ({
+        ontology_name: key.split('/').pop(),
+        ontology_mappings: value,
+      }))
+
+      useMappingsDrawBubbles(data, width, height, margin, this.bubblesTarget, normalization_ratio, logScaleFactor)
+
+      this.#centerScroll(this.frameTarget)
+    }
+
+    this.drawBubbles(this.mappingsListValue)
 
     if (this.#selectionDisabled()) {
       this.#clickOnSelectedAcronymBubble()
@@ -29,7 +48,7 @@ export default class extends Controller {
       Object.entries(this.mappingsListValue).filter(([key]) => acronyms.includes(key))
     )
 
-    this.#drawBubbles(filteredList)
+    this.drawBubbles(filteredList)
   }
 
   submit (event) {
@@ -57,13 +76,13 @@ export default class extends Controller {
 
   zoomIn () {
     this.zoomRatioValue++
-    this.#drawBubbles(this.mappingsListValue)
+    this.drawBubbles(this.mappingsListValue)
   }
 
   zoomOut () {
     if (this.zoomRatioValue > 1) {
       this.zoomRatioValue--
-      this.#drawBubbles(this.mappingsListValue)
+      this.drawBubbles(this.mappingsListValue)
     }
   }
 
@@ -196,87 +215,7 @@ export default class extends Controller {
     selected_circle.style.fill = 'var(--secondary-color)'
   }
 
-  #drawBubbles (mappingsList, zoomRatio = this.zoomRatioValue) {
-    const normalization_ratio = this.#normalizationRatio(mappingsList)
 
-    const data = Object.entries(mappingsList).map(([key, value]) => ({
-      ontology_name: key.split('/').pop(),
-      ontology_mappings: value,
-    }))
-
-    const width = 600 * zoomRatio
-    const height = 600 * zoomRatio
-    const margin = 1
-    const logScaleFactor = 10
-
-    this.bubblesTarget.innerHTML = ''
-
-    const pack = d3.pack()
-      .size([width - margin, height - margin])
-      .padding(3)
-
-    const root = d3.hierarchy({ children: data })
-      .sum(d => d.ontology_mappings / normalization_ratio + Math.log(d.ontology_mappings + 1) / logScaleFactor)
-
-    const svg = d3.select(`#${this.bubblesTarget.id}`)
-      .append('svg')
-      .attr('width', width)
-      .attr('height', height)
-      .append('g')
-      .attr('transform', `translate(${margin}, ${margin})`)
-
-    const node = svg.selectAll('.node')
-      .data(pack(root).descendants().slice(1)) // Exclude the root node
-      .enter().append('g')
-      .attr('class', d => d.children ? 'node mappings-bubble' : 'leaf mappings-bubble')
-      .attr('transform', d => `translate(${d.x},${d.y})`)
-      .attr('data-action', 'click->mappings#selectBubble')
-      .attr('data-acronym', d => d.data.ontology_name)
-      .attr('data-enabled', d => 'true')
-
-    const circle = node.append('circle')
-      .attr('r', d => d.r)
-      .style('fill', 'var(--primary-color)')
-
-    // Display ontology names in 16px white
-    const textOntology = node.append('text')
-      .attr('dy', '.35em')
-      .style('text-anchor', 'middle')
-      .style('font-size', '16px')
-      .style('fill', 'white')
-      .style('font-weight', '600')
-      .text(d => (d.r > d.data.ontology_name.length * 5 && d.r > 20) ? d.data.ontology_name : '')
-
-    // Display number of mappings in 12px white below ontology names
-    const textMappings = node.append('text')
-      .attr('dy', '1.5em')
-      .style('text-anchor', 'middle')
-      .style('font-size', '12px')
-      .style('fill', 'white')
-      .text(d => (d.r > d.data.ontology_name.length * 5 && d.r > 20) ? d.data.ontology_mappings : '')
-
-    // Display ontology names in bubble tooltips on hover
-    circle.on('mouseover', function (event, d) {
-      if (!(d.r > d.data.ontology_name.length * 5 && d.r > 20)) {
-        // Remove existing tooltip
-        d3.selectAll('.bubble-tooltip').remove()
-
-        // Calculate tooltip position based on mouse coordinates
-        const tooltip = d3.select('body')
-          .append('div')
-          .attr('class', 'bubble-tooltip')
-          .style('left', `${event.pageX + 10}px`) // Adjust position relative to mouse pointer
-          .style('top', `${event.pageY + 10}px`) // Adjust position relative to mouse pointer
-          .html(`<strong>${d.data.ontology_name}</strong><br>${d.data.ontology_mappings}`)
-      }
-    }).on('mouseout', function (event, d) {
-      // Remove tooltip on mouseout
-      d3.selectAll('.bubble-tooltip').remove()
-    })
-
-    this.svg = svg
-    this.#centerScroll(this.frameTarget)
-  }
 
   #centerScroll (frame) {
     frame.scrollTop = frame.scrollHeight / 2 - frame.clientHeight / 2
