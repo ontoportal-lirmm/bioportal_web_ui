@@ -20,7 +20,7 @@ class SearchController < ApplicationController
     results = LinkedData::Client::Models::Class.search(@search_query, params).collection
 
     @advanced_options_open = !search_params_empty?
-    @search_results = aggregate_results(@search_query, results)
+    @search_results = aggregate_results(@search_query, results, params[:lang])
     @json_url = json_link("#{rest_url}/search", params.permit!.to_h)
   end
 

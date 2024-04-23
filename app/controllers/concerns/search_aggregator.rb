@@ -24,39 +24,39 @@ module SearchAggregator
     /semanticweb/i
   ]
 
-  def aggregate_results(query, results)
+  def aggregate_results(query, results, lang)
     ontologies = aggregate_by_ontology(results)
     grouped_results = add_subordinate_ontologies(query, ontologies)
     all_ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', include_views: true, display_links: false, display_context: false)
 
     grouped_results.map do |group|
-      format_search_result(group, all_ontologies)
+      format_search_result(group, all_ontologies, lang)
     end
   end
 
-  def format_search_result(result, ontologies)
+  def format_search_result(result, ontologies, lang)
     same_ont = result[:same_ont]
     same_cls = result[:sub_ont]
     result = same_ont.shift
     ontology = result.links['ontology'].split('/').last
     {
-      root: search_result_elem(result, ontology, ontology_name_acronym(ontologies, ontology)),
-      descendants: same_ont.map { |x| search_result_elem(x, ontology, '') },
+      root: search_result_elem(result, ontology, ontology_name_acronym(ontologies, ontology), lang),
+      descendants: same_ont.map { |x| search_result_elem(x, ontology, '', lang) },
       reuses: same_cls.map do |x|
-        format_search_result(x, ontologies)
+        format_search_result(x, ontologies, lang)
       end
     }
   end
 
   private
 
-  def search_result_elem(class_object, ontology_acronym, title)
+  def search_result_elem(class_object, ontology_acronym, title, lang)
     label = concept_label(class_object.prefLabel)
     {
       uri: class_object.id.to_s,
       title: title.empty? ? label : "#{label} - #{title}",
       ontology_acronym: ontology_acronym,
-      link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}",
+      link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{lang == "all" ? '' : "&language="+lang}",
       definition: Array(class_object.definition)
     }
   end
