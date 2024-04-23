@@ -101,7 +101,7 @@ module ComponentsHelper
   end
 
 
-  def link_to_with_actions(link_to_tag, acronym: nil, url: nil, copy: true, check_resolvability: true, generate_link: true)
+  def link_to_with_actions(link_to_tag, acronym: nil, url: nil, copy: true, check_resolvability: true, generate_link: true, generate_htaccess: false)
     tag = link_to_tag
     url = link_to_tag if url.nil?
     

@@ -9,13 +9,10 @@
       = render partial: 'ontologies/sections/metadata/ontology_metrics_section'
     .summary-page-second-row
       = ontology_depiction_card
-      - @identifiers["ontology_portal_uri"] = ["#{$UI_URL}/ontologies/#{@ontology.acronym}", "#{portal_name} URI"]
       = properties_card(t('ontologies.sections.identifiers'),t("ontologies.sections.identifiers"), @identifiers) do |values|
         = horizontal_list_container(values) do |v|
-          - if v.eql?(@identifiers["ontology_portal_uri"].first)
-            = render LinkFieldComponent.new(value: v, acronym: @ontology.acronym, check_resolvability: true, generate_link: false, generate_htaccess: true)
-          - else
-            = render LinkFieldComponent.new(value: v, check_resolvability: true)
+          - generate_htaccess = v.eql?(@identifiers["ontology_portal_uri"].first)
+          = render LinkFieldComponent.new(value: v, acronym: @ontology.acronym, check_resolvability: true, generate_link: false, generate_htaccess: generate_htaccess)
 
       = properties_dropdown('dates',t("ontologies.sections.dates"),'', @dates_properties) do |values|
         - Array(values).sort.map do |v|
