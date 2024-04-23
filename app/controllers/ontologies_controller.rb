@@ -159,6 +159,7 @@ class OntologiesController < ApplicationController
 
   def notes
     @notes = @ontology.explore.notes
+    @notes = @notes.uniq { |note| [note.body, note.subject] }
     @notes_deletable = false
     # TODO_REV: Handle notes deletion
     # @notes.each {|n| @notes_deletable = true if n.deletable?(session[:user])} if @notes.kind_of?(Array)
