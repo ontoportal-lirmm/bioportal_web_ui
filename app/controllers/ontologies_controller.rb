@@ -13,7 +13,7 @@ class OntologiesController < ApplicationController
   include SparqlHelper
   include SubmissionFilter
   include OntologyContentSerializer
-  include UriRedirection
+  include OntologiesRedirectionController
 
   require 'multi_json'
   require 'cgi'
@@ -309,51 +309,6 @@ class OntologiesController < ApplicationController
     render 'submit_success'
   end
 
-  # GET /ontologies/:acronym/:id
-  def redirect
-    return not_found unless params[:acronym] && params[:id]
-
-    request_accept_header = request.env["HTTP_ACCEPT"].split(",")[0]
-    type, resource_id  = find_type_by_id(params[:id], params[:acronym])
-
-    if resource_id.nil?
-      @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:acronym]).first
-      @submission_latest = @ontology.explore.latest_submission(include: "URI")
-      resource_id = @submission_latest.URI
-    end
-
-    if request_accept_header == "text/html"
-      if type.nil? || resource_id.blank?
-        redirect_to ontology_path(id: params[:acronym], p: 'summary')
-      else
-        redirect_to link_by_type(resource_id, params[:acronym], type)
-      end
-    else
-      content, serializer_content_type = serialize_content(ontology_acronym: params[:acronym], concept_id: resource_id, format: request_accept_header)
-      render plain: content, content_type: serializer_content_type
-    end
-  end
-  
-  def generate_htaccess
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:acronym]).first
-    ontology_uri = @ontology.explore.latest_submission(include: 'URI', invalidate_cache: invalidate_cache?).URI
-
-    rewriterule_ontology_uri = ""
-    if ontology_uri
-      ontology_uri += '/' unless ontology_uri.end_with?('/')
-      rewriterule_ontology_uri = "RewriteRule ^#{URI.parse(ontology_uri).path[1..-1]}?$ https://stageportal.lirmm.fr/ontologies/#{params[:acronym]} [R=301,L]\n" 
-      rewriterule_ontology_uri_nginx = "rewrite ^#{URI.parse(ontology_uri).path[1..-1]}?$ https://stageportal.lirmm.fr/ontologies/#{params[:acronym]} permanent\n"
-    end
-
-    rewriterule_ontology_resource = "RewriteRule ^.*(?:/|#)([^/#]+)$ https://stageportal.lirmm.fr/ontologies/#{params[:acronym]}/$1 [R=301,L]"
-    rewriterule_ontology_resource_nginx = " if ($request_uri ~ ^/(.*)/(?:|#)([^/#]+)$) {\n  return 301 https://stageportal.lirmm.fr/ontologies/#{params[:acronym]}/$2;\n  }\n"
-
-
-    @htaccess_content= "RewriteEngine On\n" + rewriterule_ontology_uri + rewriterule_ontology_resource
-    @nginx_content= "location / {\n " + rewriterule_ontology_uri_nginx + rewriterule_ontology_resource_nginx + "}"
-
-    render 'ontologies/htaccess', layout: nil
-  end
 
   # Main ontology description page (with metadata): /ontologies/ACRONYM
   def summary
@@ -385,6 +340,7 @@ class OntologiesController < ApplicationController
     @content_properties = properties_hash_values(category_attributes["content"])
     @community_properties = properties_hash_values(category_attributes["community"] + [:notes])
     @identifiers = properties_hash_values([:URI, :versionIRI, :identifier])
+    @identifiers["ontology_portal_uri"] = ["#{$UI_URL}/ontologies/#{@ontology.acronym}", "#{portal_name} URI"]
     @projects_properties = properties_hash_values(category_attributes["usage"])
     @ontology_icon_links = [%w[summary/download dataDump],
                             %w[summary/homepage homepage],
