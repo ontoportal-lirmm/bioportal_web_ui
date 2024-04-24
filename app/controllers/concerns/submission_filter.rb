@@ -146,9 +146,9 @@ module SubmissionFilter
     elsif sort_by.eql?('metrics_individuals')
       submissions = submissions.sort_by { |x| -x[:individual_count] }
     elsif sort_by.eql?('creationDate')
-      submissions = submissions.sort_by { |x| -x[:creationDate] }
+      submissions = submissions.sort_by { |x| x[:creationDate] || '' }.reverse
     elsif sort_by.eql?('released')
-      submissions = submissions.sort_by { |x| -x[:released] }
+      submissions = submissions.sort_by { |x| x[:released] || '' }.reverse
     elsif sort_by.eql?('ontology_name')
       submissions = submissions.sort_by { |x| -x[:name] }
     end
@@ -216,7 +216,7 @@ module SubmissionFilter
   def ontology_hash(ont, submissions)
     o = {}
     sub = submissions.select{|x| x.ontology&.id.eql?(ont.id)}.first
-
+    
     o[:ontology] = ont
 
     add_ontology_attributes(o, ont)
