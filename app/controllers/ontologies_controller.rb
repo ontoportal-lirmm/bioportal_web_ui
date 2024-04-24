@@ -13,7 +13,6 @@ class OntologiesController < ApplicationController
   include SparqlHelper
   include SubmissionFilter
   include OntologyContentSerializer
-  include OntologiesRedirectionController
 
   require 'multi_json'
   require 'cgi'

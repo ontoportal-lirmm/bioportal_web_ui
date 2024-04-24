@@ -150,8 +150,8 @@ Rails.application.routes.draw do
   get '/ontologies/view/edit/:id' => 'ontologies#edit_view', :constraints => { id: /[^\/?]+/ }
   get '/ontologies/view/new/:id' => 'ontologies#new_view'
   get '/ontologies/:acronym/:id/serialize/:output_format' => 'ontologies#content_serializer', :id => /.+/
-  get '/ontologies/htaccess/:acronym' => 'ontologies#generate_htaccess'
-  get '/ontologies/:acronym/:id' => 'ontologies#redirect', :id => /.+/
+  get '/ontologies/htaccess/:acronym' => 'ontologies_redirection#generate_htaccess'
+  get '/ontologies/:acronym/:id' => 'ontologies_redirection#redirect', :id => /.+/
 
   get '/ontologies/virtual/:ontology' => 'ontologies#virtual', :as => :ontology_virtual
   get '/ontologies/success/:id' => 'ontologies#submit_success'
