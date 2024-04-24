@@ -56,7 +56,7 @@ module ComponentsHelper
             child: concept,
             href: href,
             children_href: '#',
-            selected: selected.blank? ? concept.id.eql?(concepts.first.id) : concept.id.eql?(selected) ,
+            selected: selected.blank? ? false : concept.id.eql?(selected) ,
             target_frame: child_turbo_frame,
             data: data,
             open_in_modal: open_in_modal
@@ -87,7 +87,7 @@ module ComponentsHelper
   def generated_link_to_clipboard(url, acronym) 
     url = "#{$UI_URL}/ontologies/#{acronym}/#{link_last_part(url)}"
     content_tag(:span, style: 'display: inline-block;') do
-      render ClipboardComponent.new(icon: 'icons/copy_link.svg', title: t("components.copy_portal_uri", portal_name: portal_name)+" : "+ url, message: url, show_content: false)
+      render ClipboardComponent.new(icon: 'icons/copy_link.svg', title: "#{t("components.copy_portal_uri", portal_name: portal_name)} #{link_to(url)}", message: url, show_content: false)
     end
   end
 
@@ -96,10 +96,10 @@ module ComponentsHelper
     url = link_to_tag if url.nil?
     tag = tag + copy_link_to_clipboard(url) if copy
 
-    tag = tag + resolvability_check_tag(url) if check_resolvability
-    
     tag= tag + generated_link_to_clipboard(url, acronym) if generate_link
 
+    tag = tag + resolvability_check_tag(url) if check_resolvability
+    
     tag.html_safe
   end
 
@@ -137,6 +137,10 @@ module ComponentsHelper
       'load-chart-legend-value': show_legend,
     }
     content_tag(:canvas, nil, data: data)
+  end
+
+  def loader_component(type = 'pulsing')
+    render LoaderComponent.new(type: type)
   end
 
   def info_tooltip(text)
@@ -219,6 +223,14 @@ module ComponentsHelper
       end
     end
   end
+
+
+  def regular_button(id, value, variant: "secondary", state: "regular", size: "slim", &block)
+    render Buttons::RegularButtonComponent.new(id:id, value: value, variant: variant, state: state, size: size) do |btn|
+      capture(btn, &block) if block_given?
+    end
+  end
+
 
   def form_save_button
     render Buttons::RegularButtonComponent.new(id: 'save-button', value: t('components.save_button'), variant: "primary", size: "slim", type: "submit") do |btn|

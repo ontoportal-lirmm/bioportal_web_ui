@@ -11,12 +11,14 @@
       #submit_button
         = render Buttons::RegularButtonComponent.new(id:'regular-button', value: "Fetch", variant: "primary", size: "slim", type:"submit")
 
-- if @result && !@result.empty?
-  %div.p-2.card.content-finder-result
-    = rdf_highlighter_container(@format, @result)
+- if !@result&.empty?
+  %div.p-2.card.content-finder-result.mb-3
+    - if params[:output_format] != "html"
+      = rdf_highlighter_container(@format, @result)
+    - else
+      = n_triples_to_table(@result)
 
-- if params[:output_format] == "html"
-  .content-finder-html-result.bg-white.p-2.card
-    = render TurboFrameComponent.new(id: "concept_details" , src: "/ajax/class_details?&ontology=#{@acronym}&conceptid=#{CGI.escape(params[:uri])}&styled=false")
-    
+- else
+  = empty_state("Content not found")
+
                     

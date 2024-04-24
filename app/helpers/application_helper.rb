@@ -293,13 +293,6 @@ module ApplicationHelper
     end
   end
   
-  def link_last_part(url)
-    if url.include?('#')
-      url.split('#').last
-    else
-      url.split('/').last
-    end
-  end
 
   def link?(str)
     # Regular expression to match strings starting with "http://" or "https://"
@@ -570,6 +563,16 @@ module ApplicationHelper
     modified_properties
   end
 
+  def rest_url
+    # Split the URL into protocol and path parts
+    protocol, path = $REST_URL.split("://", 2)
+
+    # Remove the last '/' in the path part
+    cleaned_path = path.chomp('/')
+    # Reconstruct the cleaned URL
+    "#{protocol}://#{cleaned_path}"
+  end
+
 
   def prefix_property_url(key_string, key = nil)
     namespace_key, _ = RESOLVE_NAMESPACE.find { |_, value| key_string.include?(value) }
@@ -581,6 +584,11 @@ module ApplicationHelper
     else # we don't try to guess the prefix
        nil
     end
+  end
+
+  def prefixed_url(url)
+    key = link_last_part(url)
+    prefix_property_url(url.split(key).first, key)
   end
 
   def show_advanced_options_button(text: nil, init: nil)
@@ -643,5 +651,7 @@ module ApplicationHelper
       end
     end
   end
-  
+ 
+
+
 end

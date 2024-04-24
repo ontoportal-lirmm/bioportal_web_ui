@@ -3,6 +3,7 @@
 module UriRedirection
     extend ActiveSupport::Concern
 
+    include SearchContent
     
     def find_type_by_id(id, acronym)
         type, resource_id = find_type_by_search(id, acronym)
@@ -15,7 +16,8 @@ module UriRedirection
     end
 
     def find_type_by_search(id, acronym)
-        result = LinkedData::Client::HTTP.get('search/ontologies/content', { q: "*#{id}", qf: "resource_id", page: 1, pagesize: 10, ontologies: acronym })
+        result = search_content(q: "*#{id}", qf: "resource_id", page: 1, pagesize: 10, ontologies: acronym)
+
         if result[:collection].empty?
           type = nil
           resource_id = nil
@@ -30,38 +32,4 @@ module UriRedirection
         return nil, nil # TODO maybe implimented if needed
     end
 
-    private
-    def supported_types
-        %w[Concept Class Ontology ConceptScheme Collection NamedIndividual AnnotationProperty ObjectProperty DatatypeProperty]
-    end
-
-    def id_type(type_t, type_txt)
-    
-        type = (Array(type_t) + Array(type_txt)).map { |x| helpers.link_last_part(x) }
-                                                .select{|x| supported_types.include?(x)}
-    
-        type = Array(type).reject { |x| x.eql?("NamedIndividual") } if (Array(type).size > 1)
-    
-        type.first
-    end
-
-    def link_by_type(id, ontology, type)
-        case type
-        when 'Concept', 'Class'
-          ontology_path(id: ontology, p: 'classes', conceptid: id)
-        when 'Ontology'
-          ontology_path(id: ontology, p: 'summary')
-        when 'ConceptScheme'
-          ontology_path(id: ontology, p: 'schemes', schemeid: id)
-        when 'Collection'
-          ontology_path(id: ontology, p: 'collections', collectionid: id)
-        when 'NamedIndividual'
-          ontology_path(id: ontology, p: 'instances', instanceid: id)
-        when 'AnnotationProperty', 'ObjectProperty', 'DatatypeProperty'
-          ontology_path(id: ontology, p: 'properties', instanceid: id)
-        else
-          "/content_finder?acronym=#{ontology}&uri=#{escape(id)}&output_format=json"
-        end
-    end
-    
 end  

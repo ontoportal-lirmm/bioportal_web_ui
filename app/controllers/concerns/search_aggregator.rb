@@ -1,4 +1,5 @@
 module SearchAggregator
+  include UrlsHelper
   extend ActiveSupport::Concern
   BLACKLIST_FIX_STR = [
     "https://",
@@ -55,7 +56,7 @@ module SearchAggregator
       uri: class_object.id.to_s,
       title: title.empty? ? label : "#{label} - #{title}",
       ontology_acronym: ontology_acronym,
-      link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{class_object.id}",
+      link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}",
       definition: Array(class_object.definition)
     }
   end

@@ -1,14 +1,12 @@
 - @title= t('mappings.title')
 .mappigs-page-container{'data-controller': 'mappings', 
                         'data-mappings-mappings-list-value': "#{@ontologies_mapping_count.to_h.to_json}",
-                        'data-mappings-zoom-ratio-value': 1,
-                        'data-mappings-type-value': 'page',
-                        'data-mappings-api-url-value': $REST_URL 
+                        'data-mappings-api-url-value': rest_url
                         }
   .mappings-page-subcontainer
     .mappings-page-title
       .text
-        = @title= t('mappings.title')
+        = @title
       .line
     .mappings-page-decription
       = t('mappings.description')

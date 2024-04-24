@@ -22,6 +22,7 @@ module SearchHelper
     next_page_link = next_page_url.include?('?') ? "#{next_page_url}&page=#{@results.nextPage}&search=#{@search}" : "#{next_page_url}?page=#{@results.nextPage}&search=#{@search}"
     next_page_link = "#{next_page_link}&lang=#{lang}"
     next_page_link = "#{next_page_link}&#{child_param}=#{escape(params[child_param.to_sym])}"
+    selected = params[child_param.to_sym].blank? && page.eql?(1) ? @results.collection.first&.id : params[child_param.to_sym]
 
     if show_count && page.eql?(1)
       [
@@ -33,7 +34,7 @@ module SearchHelper
                                                                                         child_param: child_param,
                                                                                         child_turbo_frame: child_turbo_frame,
                                                                                         open_in_modal: show_count,
-                                                                                        selected: params[child_param.to_sym]))
+                                                                                        selected: selected))
       ]
     else
       render inline: paginated_list_component(id: container_id,
@@ -43,7 +44,7 @@ module SearchHelper
                                                       child_param: child_param,
                                                       child_turbo_frame: child_turbo_frame,
                                                       open_in_modal: show_count,
-                                                      selected: params[child_param.to_sym],
+                                                      selected: selected,
                                                       auto_click: auto_click)
     end
   end

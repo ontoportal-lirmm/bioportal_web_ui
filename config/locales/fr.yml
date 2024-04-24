@@ -514,6 +514,7 @@ fr:
       agreements: Légal
       terms: Termes et conditions
       privacy_policy: Politique de confidentialité
+      legal_notices: Mentions légales
       cite_us: Citez-nous
       acknowledgments: Remerciements
       about: À propos
@@ -802,6 +803,8 @@ fr:
     first_name: Prénom
     last_name: Nom
     mailing_list: S'inscrire à la liste de diffusion de %{site}
+    accept_terms_and_conditions: Je reconnais et j'accepte
+    terms_and_conditions: les termes et conditions de %{site}.
     optional: "(Optionnel)"
     password: Mot de passe
     title: S'inscrire
@@ -824,6 +827,7 @@ fr:
     validate_orcid: Veuillez entrer un ORCID valide.
     validate_username: veuillez entrer un nom d'utilisateur valide
     valid_email_adresse: Veuillez entrer une adresse email valide
+    validate_terms_and_conditions: L'acceptation des termes et conditions est requise, veuillez cocher la case pour continuer.
     first_name_required: Le champ du prénom est requis
     last_name_required: Le champ du nom est requis
     index:
@@ -1402,8 +1406,8 @@ fr:
     see_more: Voir plus...
     see_less: Voir moins...
     tree_view_empty: Pas de résultat
-    copy_original_uri: Copy original URI
-    copy_portal_uri: Copy %{portal_name} URI
+    copy_original_uri: Copier l'URI d'origine
+    copy_portal_uri: Copier l'URI de %{portal_name}
 
   properties:
     id: ID

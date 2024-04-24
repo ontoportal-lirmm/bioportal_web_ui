@@ -9,7 +9,7 @@ module OntologyContentSerializer
       @result = ""
       @acronym = ontology_acronym
 
-      return @result if format.eql?('html')
+      @format = 'ntriples' if format.eql?('html')
 
       url = content_finder_url(ontology_acronym, concept_id)
       @accept_header = content_finder_accept_header(@format)
@@ -23,7 +23,7 @@ module OntologyContentSerializer
         @result = response.body.force_encoding(Encoding::UTF_8)
       end
     end
-    @result
+    [@result, accept_header]
   end
 
   def content_finder_url(acronym, uri)

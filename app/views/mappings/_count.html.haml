@@ -1,33 +1,35 @@
-.summary-mappings-tab
-  .summary-mappings-tab-table
-    = render TableComponent.new(id: 'summary-mappings-table', borderless: true, outline: true, searching: true, sort_column: '0', no_init_sort: true) do |t|
-      - t.header do |h|
-        - h.th {t("mappings.count.ontology")}
-        - h.th {t("mappings.count.mappings")}
+= turbo_frame_tag "mappings_table" do
+  .summary-mappings-tab
+    .summary-mappings-tab-table
+      = render TableComponent.new(id: 'summary-mappings-table', borderless: true, outline: true, searching: true, sort_column: '0', no_init_sort: true) do |t|
+        - t.header do |h|
+          - h.th {t("mappings.count.ontology")}
+          - h.th {t("mappings.count.mappings")}
 
-      - if @mapping_counts.blank?
-        - t.row do |r|
-          - r.td {t("mappings.count.no_mappings")}
-          - r.td {'&nbsp;'}
-      - else
-        - @mapping_counts.each do |mapping_count|
+        - if @mapping_counts.blank?
           - t.row do |r|
-            - r.td do
-              - title =  mapping_count[:target_ontology].name
-              = link_to_modal title, mappings_show_mappings_path(id: @ontology_acronym ,target: mapping_count[:target_ontology].id), data: { show_modal_title_value: title, show_modal_size_value: 'modal-xl'}
-            - r.td do
-              = number_with_delimiter(mapping_count[:count], delimiter: ',')
+            - r.td {t("mappings.count.no_mappings")}
+            - r.td {'&nbsp;'}
+        - else
+          - @mapping_counts.each do |mapping_count|
+            - t.row do |r|
+              - r.td do
+                - title =  mapping_count[:target_ontology].name
+                = link_to_modal title, mappings_show_mappings_path(id: @ontology_acronym ,target: mapping_count[:target_ontology].id), data: { show_modal_title_value: title, show_modal_size_value: 'modal-xl'}
+              - r.td do
+                = number_with_delimiter(mapping_count[:count], delimiter: ',')
 
-  .summary-mappigs-page-container{'data-controller': 'mappings', 
-                      'data-mappings-mappings-list-value': "#{@ontologies_mapping_count.to_h.to_json}",
-                      'data-mappings-zoom-ratio-value': 1,
-                      'data-mappings-type-value': 'partial',
-                      'data-mappings-acronym-value': @ontology_acronym,
-                      'data-mappings-api-url-value': $REST_URL 
-                      }
-    .mappings-bubble-view-frame{'data-mappings-target': 'frame'}
-      #mappings-bubbles-view{'data-mappings-target': 'bubbles'}
-      .mapping-bubbles-loader.d-none{'data-mappings-target': 'loader'}
-        = render LoaderComponent.new(type: 'pulsing')
-    .d-none{'data-mappings-target': 'modal'}
-      = link_to_modal "", ""
+    - if @ontologies_mapping_count
+      .summary-mappigs-page-container{'data-controller': 'mappings',
+                          'data-mappings-mappings-list-value': "#{@ontologies_mapping_count.to_h.to_json}",
+                          'data-mappings-acronym-value': @ontology_acronym,
+                          'data-mappings-api-url-value': rest_url
+                          }
+        .mappings-bubble-view-frame{'data-mappings-target': 'frame'}
+          #mappings-bubbles-view{'data-mappings-target': 'bubbles'}
+          .mapping-bubbles-loader.d-none{'data-mappings-target': 'loader'}
+            = render LoaderComponent.new(type: 'pulsing')
+        .d-none{'data-mappings-target': 'modal'}
+          = client_filled_modal
+        .d-flex.justify-content-center
+          = render Display::InfoTooltipComponent.new(text: mappings_bubble_view_legend)

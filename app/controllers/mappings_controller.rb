@@ -16,15 +16,34 @@ class MappingsController < ApplicationController
 
   def index
     @ontologies_mapping_count = LinkedData::Client::HTTP.get("#{MAPPINGS_URL}/statistics/ontologies")
-    ontologies = LinkedData::Client::Models::Ontology.all(
-      include: 'acronym,name,summaryOnly',
-      display_links: false,
-      display_context: false
-    )
-    @selector_ontologies_count = ontologies.map do |ontology|
-      "#{ontology.name} - #{ontology.acronym} (#{@ontologies_mapping_count[ontology.acronym]})" if @ontologies_mapping_count[ontology.acronym]
+    ontology_list = LinkedData::Client::Models::Ontology.all.select { |o| !o.summaryOnly }
+    ontologies_hash = {}
+    ontology_list.each do |ontology|
+      ontologies_hash[ontology.acronym] = ontology
     end
 
+    @options = {}
+    @ontologies_mapping_count&.members&.each do |ontology_acronym|
+      if ontology_acronym.to_s == EXTERNAL_MAPPINGS_GRAPH
+        mapping_count = @ontologies_mapping_count[ontology_acronym.to_s] || 0
+        select_text = t('mappings.external_mappings', number_with_delimiter: number_with_delimiter(mapping_count, delimiter: ',')) if mapping_count >= 0
+        ontology_acronym = EXTERNAL_URL_PARAM_STR
+      elsif ontology_acronym.to_s.start_with?(INTERPORTAL_MAPPINGS_GRAPH)
+        mapping_count = @ontologies_mapping_count[ontology_acronym.to_s] || 0
+        select_text = t('mappings.interportal_mappings', acronym: ontology_acronym.to_s.split("/")[-1].upcase, number_with_delimiter: number_with_delimiter(mapping_count, delimiter: ',')) if mapping_count >= 0
+        ontology_acronym = INTERPORTAL_URL_PARAM_STR + ontology_acronym.to_s.split("/")[-1]
+      else
+        ontology = ontologies_hash[ontology_acronym.to_s]
+        mapping_count = @ontologies_mapping_count[ontology_acronym] || 0
+        next unless ontology && mapping_count > 0
+        select_text = "#{ontology.name} - #{ontology.acronym} (#{number_with_delimiter(mapping_count, delimiter: ',')})"
+      end
+      @options[select_text] = ontology_acronym
+    end
+
+    @options = @options.sort
+    @options.unshift([])
+
     @example_code = [{
                        "classes": ["http://bioontology.org/ontologies/BiomedicalResourceOntology.owl#Image_Algorithm",
                                    "http://purl.org/incf/ontology/Computational_Neurosciences/cno_alpha.owl#cno_0000202"],
@@ -43,45 +62,17 @@ class MappingsController < ApplicationController
                      }]
   end
 
-  def mappings_ontologies_table
-    ontology_acronym = params[:ontology].split("-").last.split('(').first.gsub(" ", "")
-    @acronym = ontology_acronym 
-    @mapping_counts = mapping_counts(ontology_acronym)
-    render "mappings/mappings_ontologies_table"
-  end
-
-
-  def ontology_mappings
-    acronym = params[:acronym]
-    render json: mapping_counts(acronym)
-  end
 
   def count
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    @ontology_acronym = @ontology&.acronym || params[:id]
+    @ontology_acronym = params[:ontology] || params[:id]
     @mapping_counts = mapping_counts(@ontology_acronym)
-    render partial: 'count'
+
+    respond_to do |format|
+      format.html {  render partial: 'mappings/count' }
+      format.json { render json: @mapping_counts }
+    end
   end
 
-  def loader
-    @example_code = [{
-                       "classes": ["http://bioontology.org/ontologies/BiomedicalResourceOntology.owl#Image_Algorithm",
-                                   "http://purl.org/incf/ontology/Computational_Neurosciences/cno_alpha.owl#cno_0000202"],
-
-                       "name": t('mappings.test_bulk_load'),
-                       "source": 'https://w3id.org/semapv/LexicalMatching',
-                       "comment": 'mock data',
-                       "relation": [
-                         'http://www.w3.org/2002/07/owl#subClassOf'
-                       ],
-                       "subject_source_id": 'http://bioontology.org/ontologies/BiomedicalResources.owl',
-                       "object_source_id": 'http://purl.org/incf/ontology/Computational_Neurosciences/cno_alpha.owl',
-                       "source_name": 'https://w3id.org/sssom/mapping/tests/data/basic.tsv',
-                       "source_contact_info": 'orcid:1234,orcid:5678',
-                       "date": '2020-05-30'
-                     }]
-    render partial: 'mappings/bulk_loader/loader'
-  end
 
   def loader_process
     response = LinkedData::Client::HTTP.post('/mappings/load', file: params[:file])
@@ -91,6 +82,7 @@ class MappingsController < ApplicationController
     created = response.created
     respond_to do |format|
       format.turbo_stream do
+        # TO test
         render turbo_stream: turbo_stream.replace('file_loader_result',
                                                   partial: 'mappings/bulk_loader/loaded_mappings',
                                                   locals: { errors: errors, created: created })
@@ -111,7 +103,8 @@ class MappingsController < ApplicationController
   def show_mappings
     page = params[:page] || 1
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    @target_ontology = LinkedData::Client::Models::Ontology.find(params[:target])
+    @target_ontology = LinkedData::Client::Models::Ontology.find(params[:target].split('/').last)
+
     # Cases if ontology or target are interportal or external
     if @ontology.nil?
       ontology_acronym = params[:id]
