@@ -337,7 +337,7 @@ module SubmissionFilter
       groups: object_filter(groups, :groups),
       naturalLanguage: object_filter(@languages, :naturalLanguage, "value"),
       hasFormalityLevel: object_filter(@formalityLevel, :hasFormalityLevel),
-      isOfType: object_filter(@isOfType, :isOfType),
+      isOfType: object_filter(@isOfType, :isOfType, "value"),
       # missingStatus: object_filter(@missingStatus, :missingStatus)
     }
   end
