@@ -24,39 +24,39 @@ module SearchAggregator
     /semanticweb/i
   ]
 
-  def aggregate_results(query, results, lang)
+  def aggregate_results(query, results)
     ontologies = aggregate_by_ontology(results)
     grouped_results = add_subordinate_ontologies(query, ontologies)
     all_ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', include_views: true, display_links: false, display_context: false)
 
     grouped_results.map do |group|
-      format_search_result(group, all_ontologies, lang)
+      format_search_result(group, all_ontologies)
     end
   end
 
-  def format_search_result(result, ontologies, lang)
+  def format_search_result(result, ontologies)
     same_ont = result[:same_ont]
     same_cls = result[:sub_ont]
     result = same_ont.shift
     ontology = result.links['ontology'].split('/').last
     {
-      root: search_result_elem(result, ontology, ontology_name_acronym(ontologies, ontology), lang),
-      descendants: same_ont.map { |x| search_result_elem(x, ontology, '', lang) },
+      root: search_result_elem(result, ontology, ontology_name_acronym(ontologies, ontology)),
+      descendants: same_ont.map { |x| search_result_elem(x, ontology, '') },
       reuses: same_cls.map do |x|
-        format_search_result(x, ontologies, lang)
+        format_search_result(x, ontologies)
       end
     }
   end
 
   private
 
-  def search_result_elem(class_object, ontology_acronym, title, lang)
+  def search_result_elem(class_object, ontology_acronym, title)
     label = concept_label(class_object.prefLabel)
     {
       uri: class_object.id.to_s,
       title: title.empty? ? label : "#{label} - #{title}",
       ontology_acronym: ontology_acronym,
-      link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{lang == "all" ? '' : "&language="+lang}",
+      link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{helpers.request_lang&.eql?("ALL") ? '' : "&language="+helpers.request_lang.to_s}",
       definition: Array(class_object.definition)
     }
   end
