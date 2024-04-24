@@ -64,7 +64,7 @@ module SearchAggregator
   def concept_label(pref_labels_list, obsolete = false, max_length = 60)
     # select closest to query
     selected = pref_labels_list.select do |pref_lab|
-      pref_lab.include?(@search_query) || @search_query.include?(pref_lab)
+      pref_lab.downcase.include?(@search_query.downcase) || @search_query.downcase.include?(pref_lab.downcase)
     end.first
 
     selected ||= (pref_labels_list&.first || '')
