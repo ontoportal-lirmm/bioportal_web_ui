@@ -13,7 +13,7 @@ module FairScoreHelper
   end
 
   def get_fairness_json(ontologies_acronyms, apikey = user_apikey)
-    Rails.cache.fetch("fairness-#{ontologies_acronyms.gsub(',', '-')}", expires: 24.hours) do
+    Rails.cache.fetch("fairness-#{ontologies_acronyms.gsub(',', '-')}-#{apikey}", expires: 24.hours) do
       begin
         out = {}
         time = Benchmark.realtime do
