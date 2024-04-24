@@ -61,7 +61,7 @@ module SearchContent
       "http___www.w3.org_2000_01_rdf-schema_label_txt^30",
       "http___www.w3.org_2000_01_rdf-schema_label_t^30",
     ]
-    ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', also_include_views: true)
+    ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym,name,viewOf', also_include_views: true)
     selected_onto = []
 
     q = query.split(' ').first || ''
@@ -106,7 +106,7 @@ module SearchContent
         id: ontology_path(id: x.acronym, p: 'summary'),
         name: x.name,
         acronym: x.acronym,
-        type: 'Ontology',
+        type: x.viewOf.blank? ? 'Ontology' : 'Ontology View',
         label: nil
       }
     end

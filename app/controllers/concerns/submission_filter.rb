@@ -216,7 +216,7 @@ module SubmissionFilter
   def ontology_hash(ont, submissions)
     o = {}
     sub = submissions.select{|x| x.ontology&.id.eql?(ont.id)}.first
-    
+
     o[:ontology] = ont
 
     add_ontology_attributes(o, ont)
@@ -235,8 +235,8 @@ module SubmissionFilter
     o[:class_count_formatted] = number_with_delimiter(o[:class_count], delimiter: ',')
     o[:individual_count_formatted] = number_with_delimiter(o[:individual_count], delimiter: ',')
 
-    o[:note_count] = ont.notes.length
-    o[:project_count] = ont.projects.length
+    o[:note_count] = ont.notes&.length || 0
+    o[:project_count] = ont.projects&.length ||
     o[:popularity] = @analytics[ont.acronym] || 0
     o[:rank] = sub&[:rank] || 0
 
