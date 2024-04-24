@@ -171,7 +171,7 @@ module SearchContent
     when 'NamedIndividual'
       ontology_path(id: ontology, p: 'instances', instanceid: id)
     when 'AnnotationProperty', 'ObjectProperty', 'DatatypeProperty'
-      ontology_path(id: ontology, p: 'properties', instanceid: id)
+      ontology_path(id: ontology, p: 'properties', propertyid: id)
     else
       "/content_finder?acronym=#{ontology}&uri=#{escape(id)}&output_format=html"
     end
