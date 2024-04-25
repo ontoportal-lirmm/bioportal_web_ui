@@ -67,4 +67,4 @@
             = t("ontologies.redirection_note")
 
     .contact-support{style: "width: 100%; display: flex; justify-content: end;"}
-        = render Buttons::RegularButtonComponent.new(id:'regular-button', value: t("ontologies.contact_support"), variant: "primary", href: "/feedback") do |c|
+        = render Buttons::RegularButtonComponent.new(id:'regular-button', value: t("ontologies.contact_support"), variant: "primary", href: "/feedback", target: "_blank", state: "regular")
