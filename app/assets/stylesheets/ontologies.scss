@@ -307,11 +307,20 @@ $widget-table-border-color: #EFEFEF;
   margin-top: 20px;
   margin-bottom: 30px;
   text-align: left;
-  max-width: 99%;
   padding: 20px;
   background-color: #1d1d1d;
   color: white;
   border-radius: 10px;
-  border: 1px solid #a1a1a1;
+  position: relative;
+}
+
+.note-redirection-container{
+  margin-top: 10px;
+  margin-bottom: 20px;
+  text-align: left;
+  padding: 20px;
+  background-color: var(--secondary-color);
+  color: white;
+  border-radius: 10px;
   position: relative;
 }
