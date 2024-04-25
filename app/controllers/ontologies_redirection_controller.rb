@@ -56,7 +56,7 @@ class OntologiesRedirectionController < ApplicationController
         htaccess_content = <<-HTACCESS.strip_heredoc
             RewriteEngine On
             #{htaccess_rule if htaccess_rule}
-            RewriteRule ^.*(?:/|#)([^/#]+)$ #{ontology_portal_url}/$1 [R=301,L]
+            RewriteRule ^.*/([^/#]+)$ #{ontology_portal_url}/$1 [R=301,L]
         HTACCESS
     end
       
@@ -64,8 +64,8 @@ class OntologiesRedirectionController < ApplicationController
         nginx_content = <<-NGINX.strip_heredoc
             location / {
                 #{nginx_rule if nginx_rule}
-                if ($request_uri ~ ^/(.*)/(?:|#)([^/#]+)$){
-                    return 301 #{ontology_portal_url}/$2;
+                if ($request_uri ~ ^.*/([^/]+)$){
+                    return 301 #{ontology_portal_url}/$1;
                 }
             }
         NGINX
