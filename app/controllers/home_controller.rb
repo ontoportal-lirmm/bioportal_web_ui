@@ -13,6 +13,7 @@ class HomeController < ApplicationController
     metrics = LinkedData::Client::Models::Metrics.all
     metrics = metrics.each_with_object(Hash.new(0)) do |h, sum|
       h.to_hash.slice(:classes, :properties, :individuals).each { |k, v| sum[k] += v }
+    @slices = LinkedData::Client::Models::Slice.all
     end
 
     @cls_count = metrics[:classes]
