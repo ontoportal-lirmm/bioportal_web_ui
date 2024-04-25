@@ -4,12 +4,15 @@ class LinkFieldComponent < ViewComponent::Base
 
   include ApplicationHelper, Turbo::FramesHelper, ComponentsHelper
 
-  def initialize(value:, raw: false, check_resolvability: false, enable_copy: true)
+  def initialize(value:, acronym: nil, raw: false, check_resolvability: false, enable_copy: true,  generate_link: false, generate_htaccess: false)
     super
     @value = value
     @raw = raw
     @check_resolvability = check_resolvability
     @enable_copy = enable_copy
+    @acronym = acronym
+    @generate_link = generate_link
+    @generate_htaccess = generate_htaccess
   end
 
   def internal_link?
@@ -28,7 +31,7 @@ class LinkFieldComponent < ViewComponent::Base
     end
 
     tag = link_to(text, url, target: target, class: 'summary-link-truncate', 'data-controller': 'tooltip', title: text)
-    link_to_with_actions(tag, url: url, copy: @enable_copy, check_resolvability: @check_resolvability, generate_link: false)
+    link_to_with_actions(tag, acronym: @acronym, url: url, copy: @enable_copy, check_resolvability: @check_resolvability, generate_link: @generate_link, generate_htaccess: @generate_htaccess)
   end
 
 end

@@ -1369,6 +1369,32 @@ fr:
         abstract: Résumé
         description: Description
 
+    htaccess_modal_title: "Règles de redirection pour l'ontologie %{acronym}"
+    instructions_servers: Instructions pour les servers %{server}
+    htaccess_redirection_description: "Nous proposons une solution transparente pour rendre les URI de votre ontologie résolubles et le contenu négociable en autorisant la redirection d'URL de vos URI d'ontologie vers nos URI d'Agroportal. Pour faciliter ce processus, nous vous avons fourni un ensemble de règles de réécriture .htaccess. En suivant les instructions simples ci-dessous, vous serez en mesure de mettre en œuvre ces règles rapidement et efficacement, garantissant ainsi une redirection fluide"
+    
+    htaccess_redirection:
+      instruction_1: "Accéder au fichier .htaccess:"
+      instruction_1_content: "Localisez le fichier .htaccess dans le répertoire racine de votre site Web, s'il n'existe pas, créez-en un. Ce fichier contrôle le comportement de votre serveur Web et est souvent utilisé pour la réécriture et la redirection d'URL"
+      instruction_2: "Copiez et collez les règles de redirection dans le fichier .htaccess:"
+      instruction_2_content: "Copiez les règles de redirection fournies dans le rectangle noir. Ouvrez le fichier .htaccess et collez les règles de redirection copiées dans le fichier"
+      instruction_3: "Activer le module de réécriture (Linux):"
+      instruction_3_content: "vous devrez vous assurer que le module Apache appelé 'rewrite' est activé en exécutant la commande `sudo a2enmod rewrite`"
+    
+    nginx_redirection:
+      instruction_1: "Accéder au fichier de configuration Nginx:"
+      instruction_1_content: "L'emplacement de ce fichier peut varier en fonction de votre système, mais les emplacements courants incluent /etc/nginx/nginx.conf, /etc/nginx/sites-available/default ou /usr/local/etc/nginx/nginx. conf."
+      instruction_2: "Localisez le bloc de serveur ou le bloc d'emplacement dans lequel vous souhaitez activer la réécriture d'URL:"
+      instruction_2_content: "C'est généralement dans le bloc serveur { ... }."
+      instruction_3: "Copier et coller les règles de redirection:"
+      instruction_3_content: "Copiez les règles de redirection fournies dans le rectangle noir. Dans le bloc approprié, ajoutez les règles copiées pour activer la réécriture d'URL"
+      instruction_4: "Testez la configuration pour les erreurs de syntaxe:"
+      instruction_4_content: "Exécutez la commande suivante pour tester la configuration de redirection `sudo nginx -t`"
+      instruction_5: "Redémarrez Nginx pour appliquer les modifications:"
+      instruction_5_content: "Redémarrez le serveur nginx pour appliquer la redirection à l'aide de cette commande `sudo systemctl reload nginx`"
+
+
+
 
   components:
     check_resolvability: vérification de la résolvabilité...
@@ -1463,3 +1489,5 @@ fr:
         Cet outil/service vérifie la résolvabilité des Identifiants Uniformes de Ressource (URI) et leur négociabilité de contenu.
         Il vérifie si un URI donné est accessible et si le contenu associé peut être négocié en fonction des préférences du client.
         Cette fonctionnalité garantit la fiabilité et l'accessibilité des ressources liées dans l'écosystème RDF, aidant ainsi à maintenir l'intégrité des données et facilitant l'intégration transparente avec des ressources externes.
+
+
