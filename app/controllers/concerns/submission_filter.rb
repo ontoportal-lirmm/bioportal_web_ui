@@ -24,7 +24,8 @@ module SubmissionFilter
     @analytics = Rails.cache.fetch("ontologies_analytics-#{Time.now.year}-#{Time.now.month}") do
       helpers.ontologies_analytics
     end
-    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'notes,projects', also_include_views: true, display_links: false, display_context: false)
+
+    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'all', also_include_views: true, display_links: false, display_context: false)
 
     # get fair scores of all ontologies
     @fair_scores = fairness_service_enabled? ? get_fair_score('all') : nil
@@ -45,11 +46,10 @@ module SubmissionFilter
 
     if search_backend.eql?('index')
       submissions = filter_using_index(**params)
+      submissions = @ontologies.map{ |ont| ontology_hash(ont, submissions) }
     else
-      submissions = filter_using_data(**params)
+      submissions = filter_using_data(@ontologies, **params)
     end
-
-    submissions = submissions.reject { |sub| sub.ontology.nil? }.map { |sub| ontology_hash(sub, @ontologies) }
 
     submissions = sort_submission_by(submissions, @sort_by, @search)
 
@@ -83,15 +83,15 @@ module SubmissionFilter
 
   end
 
-  def filter_using_data(query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
+  def filter_using_data(ontologies, query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
     submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: true, display_links: false, display_context: false)
+    submissions = ontologies.map { |ont| ontology_hash(ont, submissions) }
 
     submissions.map do |s|
-      out = !s.ontology.nil?
-      out = out && ((s.ontology.viewingRestriction.eql?('public') && !private_only) || private_only && s.ontology.viewingRestriction.eql?('private'))
+      out = ((s.ontology.viewingRestriction.eql?('public') && !private_only) || private_only && s.ontology.viewingRestriction.eql?('private'))
       out = out && (groups.blank? || (s.ontology.group.map { |x| helpers.link_last_part(x) } & groups.split(',')).any?)
       out = out && (categories.blank? || (s.ontology.hasDomain.map { |x| helpers.link_last_part(x) } & categories.split(',')).any?)
-      out = out && (status.blank? || status.split(',').include?(s.status))
+      out = out && (status.blank? || status.eql?('alpha,beta,production,retired') || status.split(',').include?(s.status))
       out = out && (formats.blank? || formats.split(',').any? { |f| s.hasOntologyLanguage.eql?(f) })
       out = out && (is_of_type.blank? || is_of_type.split(',').any? { |f| helpers.link_last_part(s.isOfType).eql?(f) })
       out = out && (formality_level.blank? || formality_level.split(',').any? { |f| helpers.link_last_part(s.hasFormalityLevel).eql?(f) })
@@ -146,9 +146,9 @@ module SubmissionFilter
     elsif sort_by.eql?('metrics_individuals')
       submissions = submissions.sort_by { |x| -x[:individual_count] }
     elsif sort_by.eql?('creationDate')
-      submissions = submissions.sort_by { |x| -x[:creationDate] }
+      submissions = submissions.sort_by { |x| x[:creationDate] || '' }.reverse
     elsif sort_by.eql?('released')
-      submissions = submissions.sort_by { |x| -x[:released] }
+      submissions = submissions.sort_by { |x| x[:released] || '' }.reverse
     elsif sort_by.eql?('ontology_name')
       submissions = submissions.sort_by { |x| -x[:name] }
     end
@@ -213,17 +213,19 @@ module SubmissionFilter
     request_params
   end
 
-  def ontology_hash(sub, ontologies)
+  def ontology_hash(ont, submissions)
     o = {}
-    ont = sub.ontology
-    ont.notes = ontologies.select { |x| x.acronym.eql?(sub.ontology.acronym) }.first&.notes || []
-    ont.projects = ontologies.select { |x| x.acronym.eql?(sub.ontology.acronym) }.first&.projects || []
+    sub = submissions.select{|x| x.ontology&.id.eql?(ont.id)}.first
+
+    o[:ontology] = ont
 
     add_ontology_attributes(o, ont)
     add_submission_attributes(o, sub)
     add_fair_score_metrics(o, ont)
 
-    if sub.metrics
+    o[:hasOntologyLanguage] = sub&.hasOntologyLanguage
+
+    if sub&.metrics
       o[:class_count] = sub.metrics.classes
       o[:individual_count] = sub.metrics.individuals
     else
@@ -233,23 +235,17 @@ module SubmissionFilter
     o[:class_count_formatted] = number_with_delimiter(o[:class_count], delimiter: ',')
     o[:individual_count_formatted] = number_with_delimiter(o[:individual_count], delimiter: ',')
 
-    o[:note_count] = ont.notes.length
-    o[:project_count] = ont.projects.length
+    o[:note_count] = ont.notes&.length || 0
+    o[:project_count] = ont.projects&.length ||
     o[:popularity] = @analytics[ont.acronym] || 0
-    o[:rank] = sub[:rank]
-    # if o[:type].eql?('ontology_view')
-    #   unless ontologies_hash[ont.viewOf].blank?
-    #     o[:viewOfOnt] = {
-    #       name: ontologies_hash[ont.viewOf].name,
-    #       acronym: ontologies_hash[ont.viewOf].acronym
-    #     }
-    #   end
-    # end
+    o[:rank] = sub&[:rank] || 0
 
-    o
+    OpenStruct.new(o)
   end
 
   def add_submission_attributes(ont_hash, sub)
+    return if sub.nil?
+
     ont_hash[:submissionStatus] = sub.submissionStatus
     ont_hash[:deprecated] = sub.deprecated
     ont_hash[:status] = sub.status
@@ -337,7 +333,7 @@ module SubmissionFilter
       groups: object_filter(groups, :groups),
       naturalLanguage: object_filter(@languages, :naturalLanguage, "value"),
       hasFormalityLevel: object_filter(@formalityLevel, :hasFormalityLevel),
-      isOfType: object_filter(@isOfType, :isOfType),
+      isOfType: object_filter(@isOfType, :isOfType, "value"),
       # missingStatus: object_filter(@missingStatus, :missingStatus)
     }
   end
