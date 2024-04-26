@@ -1,0 +1,973 @@
+yaml_structure: regular
+sample_response:
+  - evaluationScore: 0.435
+    ontologies:
+    - acronym: EFO
+      "@id": https://data.agroportal.lirmm.fr/ontologies/EFO
+      "@type": http://data.bioontology.org/metadata/Ontology
+      links:
+        submissions: https://data.agroportal.lirmm.fr/ontologies/EFO/submissions
+        properties: https://data.agroportal.lirmm.fr/ontologies/EFO/properties
+        classes: https://data.agroportal.lirmm.fr/ontologies/EFO/classes
+        single_class: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/{class_id}
+        roots: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/roots
+        schemes: https://data.agroportal.lirmm.fr/ontologies/EFO/schemes
+        collections: https://data.agroportal.lirmm.fr/ontologies/EFO/collections
+        xl_labels: https://data.agroportal.lirmm.fr/ontologies/EFO/skos_xl_labels
+        instances: https://data.agroportal.lirmm.fr/ontologies/EFO/instances
+        metrics: https://data.agroportal.lirmm.fr/ontologies/EFO/metrics
+        reviews: https://data.agroportal.lirmm.fr/ontologies/EFO/reviews
+        notes: https://data.agroportal.lirmm.fr/ontologies/EFO/notes
+        groups: https://data.agroportal.lirmm.fr/ontologies/EFO/groups
+        categories: https://data.agroportal.lirmm.fr/ontologies/EFO/categories
+        latest_submission: https://data.agroportal.lirmm.fr/ontologies/EFO/latest_submission
+        projects: https://data.agroportal.lirmm.fr/ontologies/EFO/projects
+        download: https://data.agroportal.lirmm.fr/ontologies/EFO/download
+        views: https://data.agroportal.lirmm.fr/ontologies/EFO/views
+        analytics: https://data.agroportal.lirmm.fr/ontologies/EFO/analytics
+        ui: http://agroportal.lirmm.fr/ontologies/EFO
+        "@context":
+          submissions: http://data.bioontology.org/metadata/OntologySubmission
+          properties: http://data.bioontology.org/metadata/Property
+          classes: http://www.w3.org/2002/07/owl#Class
+          single_class: http://www.w3.org/2002/07/owl#Class
+          roots: http://www.w3.org/2002/07/owl#Class
+          schemes: http://www.w3.org/2004/02/skos/core#ConceptScheme
+          collections: http://www.w3.org/2004/02/skos/core#Collection
+          xl_labels: http://www.w3.org/2008/05/skos-xl#Label
+          instances: http://data.bioontology.org/metadata/Instance
+          metrics: http://data.bioontology.org/metadata/Metrics
+          reviews: http://data.bioontology.org/metadata/Review
+          notes: http://data.bioontology.org/metadata/Note
+          groups: http://data.bioontology.org/metadata/Group
+          categories: http://data.bioontology.org/metadata/Category
+          latest_submission: http://data.bioontology.org/metadata/OntologySubmission
+          projects: http://data.bioontology.org/metadata/Project
+          download: http://data.bioontology.org/metadata/Ontology
+          views: http://data.bioontology.org/metadata/Ontology
+          analytics: http://data.bioontology.org/metadata/Analytics
+          ui: http://data.bioontology.org/metadata/Ontology
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        acronym: http://omv.ontoware.org/2005/05/ontology#acronym
+        "@language": en
+    coverageResult:
+      score: 15
+      normalizedScore: 0.429
+      numberTermsCovered: 2
+      numberWordsCovered: 2
+      annotations:
+      - from: 13
+        to: 15
+        matchType: PREF
+        text: EST
+        annotatedClass:
+          "@id": http://www.ebi.ac.uk/efo/EFO_0006986
+          "@type": http://www.w3.org/2002/07/owl#Class
+          links:
+            self: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.ebi.ac.uk%2Fefo%2FEFO_0006986
+            ontology: https://data.agroportal.lirmm.fr/ontologies/EFO
+            children: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.ebi.ac.uk%2Fefo%2FEFO_0006986/children
+            parents: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.ebi.ac.uk%2Fefo%2FEFO_0006986/parents
+            descendants: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.ebi.ac.uk%2Fefo%2FEFO_0006986/descendants
+            ancestors: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.ebi.ac.uk%2Fefo%2FEFO_0006986/ancestors
+            instances: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.ebi.ac.uk%2Fefo%2FEFO_0006986/instances
+            tree: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.ebi.ac.uk%2Fefo%2FEFO_0006986/tree
+            notes: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.ebi.ac.uk%2Fefo%2FEFO_0006986/notes
+            mappings: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.ebi.ac.uk%2Fefo%2FEFO_0006986/mappings
+            ui: http://agroportal.lirmm.fr/ontologies/EFO?p=classes&conceptid=http%3A%2F%2Fwww.ebi.ac.uk%2Fefo%2FEFO_0006986
+            "@context":
+              self: http://www.w3.org/2002/07/owl#Class
+              ontology: http://data.bioontology.org/metadata/Ontology
+              children: http://www.w3.org/2002/07/owl#Class
+              parents: http://www.w3.org/2002/07/owl#Class
+              descendants: http://www.w3.org/2002/07/owl#Class
+              ancestors: http://www.w3.org/2002/07/owl#Class
+              instances: http://data.bioontology.org/metadata/Instance
+              tree: http://www.w3.org/2002/07/owl#Class
+              notes: http://data.bioontology.org/metadata/Note
+              mappings: http://data.bioontology.org/metadata/Mapping
+              ui: http://www.w3.org/2002/07/owl#Class
+          "@context":
+            "@vocab": http://data.bioontology.org/metadata/
+            "@language": en
+        hierarchySize: 5
+      - from: 36
+        to: 38
+        matchType: SYN
+        text: DES
+        annotatedClass:
+          "@id": http://www.orpha.net/ORDO/Orphanet_1766
+          "@type": http://www.w3.org/2002/07/owl#Class
+          links:
+            self: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.orpha.net%2FORDO%2FOrphanet_1766
+            ontology: https://data.agroportal.lirmm.fr/ontologies/EFO
+            children: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.orpha.net%2FORDO%2FOrphanet_1766/children
+            parents: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.orpha.net%2FORDO%2FOrphanet_1766/parents
+            descendants: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.orpha.net%2FORDO%2FOrphanet_1766/descendants
+            ancestors: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.orpha.net%2FORDO%2FOrphanet_1766/ancestors
+            instances: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.orpha.net%2FORDO%2FOrphanet_1766/instances
+            tree: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.orpha.net%2FORDO%2FOrphanet_1766/tree
+            notes: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.orpha.net%2FORDO%2FOrphanet_1766/notes
+            mappings: https://data.agroportal.lirmm.fr/ontologies/EFO/classes/http%3A%2F%2Fwww.orpha.net%2FORDO%2FOrphanet_1766/mappings
+            ui: http://agroportal.lirmm.fr/ontologies/EFO?p=classes&conceptid=http%3A%2F%2Fwww.orpha.net%2FORDO%2FOrphanet_1766
+            "@context":
+              self: http://www.w3.org/2002/07/owl#Class
+              ontology: http://data.bioontology.org/metadata/Ontology
+              children: http://www.w3.org/2002/07/owl#Class
+              parents: http://www.w3.org/2002/07/owl#Class
+              descendants: http://www.w3.org/2002/07/owl#Class
+              ancestors: http://www.w3.org/2002/07/owl#Class
+              instances: http://data.bioontology.org/metadata/Instance
+              tree: http://www.w3.org/2002/07/owl#Class
+              notes: http://data.bioontology.org/metadata/Note
+              mappings: http://data.bioontology.org/metadata/Mapping
+              ui: http://www.w3.org/2002/07/owl#Class
+          "@context":
+            "@vocab": http://data.bioontology.org/metadata/
+            "@language": en
+        hierarchySize: 7
+    specializationResult:
+      score: 6.329
+      normalizedScore: 1
+    acceptanceResult:
+      normalizedScore: 0
+      bioportalScore: 0
+      umlsScore: 0
+    detailResult:
+      normalizedScore: 0.324
+      definitionsScore: 0
+      synonymsScore: 0.5
+      propertiesScore: 0.471
+  - evaluationScore: 0.322
+    ontologies:
+    - acronym: SO
+      "@id": https://data.agroportal.lirmm.fr/ontologies/SO
+      "@type": http://data.bioontology.org/metadata/Ontology
+      links:
+        submissions: https://data.agroportal.lirmm.fr/ontologies/SO/submissions
+        properties: https://data.agroportal.lirmm.fr/ontologies/SO/properties
+        classes: https://data.agroportal.lirmm.fr/ontologies/SO/classes
+        single_class: https://data.agroportal.lirmm.fr/ontologies/SO/classes/{class_id}
+        roots: https://data.agroportal.lirmm.fr/ontologies/SO/classes/roots
+        schemes: https://data.agroportal.lirmm.fr/ontologies/SO/schemes
+        collections: https://data.agroportal.lirmm.fr/ontologies/SO/collections
+        xl_labels: https://data.agroportal.lirmm.fr/ontologies/SO/skos_xl_labels
+        instances: https://data.agroportal.lirmm.fr/ontologies/SO/instances
+        metrics: https://data.agroportal.lirmm.fr/ontologies/SO/metrics
+        reviews: https://data.agroportal.lirmm.fr/ontologies/SO/reviews
+        notes: https://data.agroportal.lirmm.fr/ontologies/SO/notes
+        groups: https://data.agroportal.lirmm.fr/ontologies/SO/groups
+        categories: https://data.agroportal.lirmm.fr/ontologies/SO/categories
+        latest_submission: https://data.agroportal.lirmm.fr/ontologies/SO/latest_submission
+        projects: https://data.agroportal.lirmm.fr/ontologies/SO/projects
+        download: https://data.agroportal.lirmm.fr/ontologies/SO/download
+        views: https://data.agroportal.lirmm.fr/ontologies/SO/views
+        analytics: https://data.agroportal.lirmm.fr/ontologies/SO/analytics
+        ui: http://agroportal.lirmm.fr/ontologies/SO
+        "@context":
+          submissions: http://data.bioontology.org/metadata/OntologySubmission
+          properties: http://data.bioontology.org/metadata/Property
+          classes: http://www.w3.org/2002/07/owl#Class
+          single_class: http://www.w3.org/2002/07/owl#Class
+          roots: http://www.w3.org/2002/07/owl#Class
+          schemes: http://www.w3.org/2004/02/skos/core#ConceptScheme
+          collections: http://www.w3.org/2004/02/skos/core#Collection
+          xl_labels: http://www.w3.org/2008/05/skos-xl#Label
+          instances: http://data.bioontology.org/metadata/Instance
+          metrics: http://data.bioontology.org/metadata/Metrics
+          reviews: http://data.bioontology.org/metadata/Review
+          notes: http://data.bioontology.org/metadata/Note
+          groups: http://data.bioontology.org/metadata/Group
+          categories: http://data.bioontology.org/metadata/Category
+          latest_submission: http://data.bioontology.org/metadata/OntologySubmission
+          projects: http://data.bioontology.org/metadata/Project
+          download: http://data.bioontology.org/metadata/Ontology
+          views: http://data.bioontology.org/metadata/Ontology
+          analytics: http://data.bioontology.org/metadata/Analytics
+          ui: http://data.bioontology.org/metadata/Ontology
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        acronym: http://omv.ontoware.org/2005/05/ontology#acronym
+        "@language": en
+    coverageResult:
+      score: 10
+      normalizedScore: 0.286
+      numberTermsCovered: 1
+      numberWordsCovered: 1
+      annotations:
+      - from: 13
+        to: 15
+        matchType: PREF
+        text: EST
+        annotatedClass:
+          "@id": http://purl.obolibrary.org/obo/SO_0000345
+          "@type": http://www.w3.org/2002/07/owl#Class
+          links:
+            self: https://data.agroportal.lirmm.fr/ontologies/SO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FSO_0000345
+            ontology: https://data.agroportal.lirmm.fr/ontologies/SO
+            children: https://data.agroportal.lirmm.fr/ontologies/SO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FSO_0000345/children
+            parents: https://data.agroportal.lirmm.fr/ontologies/SO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FSO_0000345/parents
+            descendants: https://data.agroportal.lirmm.fr/ontologies/SO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FSO_0000345/descendants
+            ancestors: https://data.agroportal.lirmm.fr/ontologies/SO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FSO_0000345/ancestors
+            instances: https://data.agroportal.lirmm.fr/ontologies/SO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FSO_0000345/instances
+            tree: https://data.agroportal.lirmm.fr/ontologies/SO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FSO_0000345/tree
+            notes: https://data.agroportal.lirmm.fr/ontologies/SO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FSO_0000345/notes
+            mappings: https://data.agroportal.lirmm.fr/ontologies/SO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FSO_0000345/mappings
+            ui: http://agroportal.lirmm.fr/ontologies/SO?p=classes&conceptid=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FSO_0000345
+            "@context":
+              self: http://www.w3.org/2002/07/owl#Class
+              ontology: http://data.bioontology.org/metadata/Ontology
+              children: http://www.w3.org/2002/07/owl#Class
+              parents: http://www.w3.org/2002/07/owl#Class
+              descendants: http://www.w3.org/2002/07/owl#Class
+              ancestors: http://www.w3.org/2002/07/owl#Class
+              instances: http://data.bioontology.org/metadata/Instance
+              tree: http://www.w3.org/2002/07/owl#Class
+              notes: http://data.bioontology.org/metadata/Note
+              mappings: http://data.bioontology.org/metadata/Mapping
+              ui: http://www.w3.org/2002/07/owl#Class
+          "@context":
+            "@vocab": http://data.bioontology.org/metadata/
+            "@language": en
+        hierarchySize: 5
+    specializationResult:
+      score: 2.91
+      normalizedScore: 0.46
+    acceptanceResult:
+      normalizedScore: 0
+      bioportalScore: 0
+      umlsScore: 0
+    detailResult:
+      normalizedScore: 0.641
+      definitionsScore: 1
+      synonymsScore: 0.333
+      propertiesScore: 0.588
+  - evaluationScore: 0.263
+    ontologies:
+    - acronym: EO
+      "@id": https://data.agroportal.lirmm.fr/ontologies/EO
+      "@type": http://data.bioontology.org/metadata/Ontology
+      links:
+        submissions: https://data.agroportal.lirmm.fr/ontologies/EO/submissions
+        properties: https://data.agroportal.lirmm.fr/ontologies/EO/properties
+        classes: https://data.agroportal.lirmm.fr/ontologies/EO/classes
+        single_class: https://data.agroportal.lirmm.fr/ontologies/EO/classes/{class_id}
+        roots: https://data.agroportal.lirmm.fr/ontologies/EO/classes/roots
+        schemes: https://data.agroportal.lirmm.fr/ontologies/EO/schemes
+        collections: https://data.agroportal.lirmm.fr/ontologies/EO/collections
+        xl_labels: https://data.agroportal.lirmm.fr/ontologies/EO/skos_xl_labels
+        instances: https://data.agroportal.lirmm.fr/ontologies/EO/instances
+        metrics: https://data.agroportal.lirmm.fr/ontologies/EO/metrics
+        reviews: https://data.agroportal.lirmm.fr/ontologies/EO/reviews
+        notes: https://data.agroportal.lirmm.fr/ontologies/EO/notes
+        groups: https://data.agroportal.lirmm.fr/ontologies/EO/groups
+        categories: https://data.agroportal.lirmm.fr/ontologies/EO/categories
+        latest_submission: https://data.agroportal.lirmm.fr/ontologies/EO/latest_submission
+        projects: https://data.agroportal.lirmm.fr/ontologies/EO/projects
+        download: https://data.agroportal.lirmm.fr/ontologies/EO/download
+        views: https://data.agroportal.lirmm.fr/ontologies/EO/views
+        analytics: https://data.agroportal.lirmm.fr/ontologies/EO/analytics
+        ui: http://agroportal.lirmm.fr/ontologies/EO
+        "@context":
+          submissions: http://data.bioontology.org/metadata/OntologySubmission
+          properties: http://data.bioontology.org/metadata/Property
+          classes: http://www.w3.org/2002/07/owl#Class
+          single_class: http://www.w3.org/2002/07/owl#Class
+          roots: http://www.w3.org/2002/07/owl#Class
+          schemes: http://www.w3.org/2004/02/skos/core#ConceptScheme
+          collections: http://www.w3.org/2004/02/skos/core#Collection
+          xl_labels: http://www.w3.org/2008/05/skos-xl#Label
+          instances: http://data.bioontology.org/metadata/Instance
+          metrics: http://data.bioontology.org/metadata/Metrics
+          reviews: http://data.bioontology.org/metadata/Review
+          notes: http://data.bioontology.org/metadata/Note
+          groups: http://data.bioontology.org/metadata/Group
+          categories: http://data.bioontology.org/metadata/Category
+          latest_submission: http://data.bioontology.org/metadata/OntologySubmission
+          projects: http://data.bioontology.org/metadata/Project
+          download: http://data.bioontology.org/metadata/Ontology
+          views: http://data.bioontology.org/metadata/Ontology
+          analytics: http://data.bioontology.org/metadata/Analytics
+          ui: http://data.bioontology.org/metadata/Ontology
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        acronym: http://omv.ontoware.org/2005/05/ontology#acronym
+        "@language": en
+    coverageResult:
+      score: 5
+      normalizedScore: 0.143
+      numberTermsCovered: 1
+      numberWordsCovered: 1
+      annotations:
+      - from: 36
+        to: 38
+        matchType: SYN
+        text: DES
+        annotatedClass:
+          "@id": http://purl.obolibrary.org/obo/CHEBI_34699
+          "@type": http://www.w3.org/2002/07/owl#Class
+          links:
+            self: https://data.agroportal.lirmm.fr/ontologies/EO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699
+            ontology: https://data.agroportal.lirmm.fr/ontologies/EO
+            children: https://data.agroportal.lirmm.fr/ontologies/EO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699/children
+            parents: https://data.agroportal.lirmm.fr/ontologies/EO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699/parents
+            descendants: https://data.agroportal.lirmm.fr/ontologies/EO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699/descendants
+            ancestors: https://data.agroportal.lirmm.fr/ontologies/EO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699/ancestors
+            instances: https://data.agroportal.lirmm.fr/ontologies/EO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699/instances
+            tree: https://data.agroportal.lirmm.fr/ontologies/EO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699/tree
+            notes: https://data.agroportal.lirmm.fr/ontologies/EO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699/notes
+            mappings: https://data.agroportal.lirmm.fr/ontologies/EO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699/mappings
+            ui: http://agroportal.lirmm.fr/ontologies/EO?p=classes&conceptid=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699
+            "@context":
+              self: http://www.w3.org/2002/07/owl#Class
+              ontology: http://data.bioontology.org/metadata/Ontology
+              children: http://www.w3.org/2002/07/owl#Class
+              parents: http://www.w3.org/2002/07/owl#Class
+              descendants: http://www.w3.org/2002/07/owl#Class
+              ancestors: http://www.w3.org/2002/07/owl#Class
+              instances: http://data.bioontology.org/metadata/Instance
+              tree: http://www.w3.org/2002/07/owl#Class
+              notes: http://data.bioontology.org/metadata/Note
+              mappings: http://data.bioontology.org/metadata/Mapping
+              ui: http://www.w3.org/2002/07/owl#Class
+          "@context":
+            "@vocab": http://data.bioontology.org/metadata/
+            "@language": en
+        hierarchySize: 8
+    specializationResult:
+      score: 1.43
+      normalizedScore: 0.226
+    acceptanceResult:
+      normalizedScore: 0
+      bioportalScore: 0
+      umlsScore: 0
+    detailResult:
+      normalizedScore: 1
+      definitionsScore: 1
+      synonymsScore: 1
+      propertiesScore: 1
+  - evaluationScore: 0.263
+    ontologies:
+    - acronym: PECO
+      "@id": https://data.agroportal.lirmm.fr/ontologies/PECO
+      "@type": http://data.bioontology.org/metadata/Ontology
+      links:
+        submissions: https://data.agroportal.lirmm.fr/ontologies/PECO/submissions
+        properties: https://data.agroportal.lirmm.fr/ontologies/PECO/properties
+        classes: https://data.agroportal.lirmm.fr/ontologies/PECO/classes
+        single_class: https://data.agroportal.lirmm.fr/ontologies/PECO/classes/{class_id}
+        roots: https://data.agroportal.lirmm.fr/ontologies/PECO/classes/roots
+        schemes: https://data.agroportal.lirmm.fr/ontologies/PECO/schemes
+        collections: https://data.agroportal.lirmm.fr/ontologies/PECO/collections
+        xl_labels: https://data.agroportal.lirmm.fr/ontologies/PECO/skos_xl_labels
+        instances: https://data.agroportal.lirmm.fr/ontologies/PECO/instances
+        metrics: https://data.agroportal.lirmm.fr/ontologies/PECO/metrics
+        reviews: https://data.agroportal.lirmm.fr/ontologies/PECO/reviews
+        notes: https://data.agroportal.lirmm.fr/ontologies/PECO/notes
+        groups: https://data.agroportal.lirmm.fr/ontologies/PECO/groups
+        categories: https://data.agroportal.lirmm.fr/ontologies/PECO/categories
+        latest_submission: https://data.agroportal.lirmm.fr/ontologies/PECO/latest_submission
+        projects: https://data.agroportal.lirmm.fr/ontologies/PECO/projects
+        download: https://data.agroportal.lirmm.fr/ontologies/PECO/download
+        views: https://data.agroportal.lirmm.fr/ontologies/PECO/views
+        analytics: https://data.agroportal.lirmm.fr/ontologies/PECO/analytics
+        ui: http://agroportal.lirmm.fr/ontologies/PECO
+        "@context":
+          submissions: http://data.bioontology.org/metadata/OntologySubmission
+          properties: http://data.bioontology.org/metadata/Property
+          classes: http://www.w3.org/2002/07/owl#Class
+          single_class: http://www.w3.org/2002/07/owl#Class
+          roots: http://www.w3.org/2002/07/owl#Class
+          schemes: http://www.w3.org/2004/02/skos/core#ConceptScheme
+          collections: http://www.w3.org/2004/02/skos/core#Collection
+          xl_labels: http://www.w3.org/2008/05/skos-xl#Label
+          instances: http://data.bioontology.org/metadata/Instance
+          metrics: http://data.bioontology.org/metadata/Metrics
+          reviews: http://data.bioontology.org/metadata/Review
+          notes: http://data.bioontology.org/metadata/Note
+          groups: http://data.bioontology.org/metadata/Group
+          categories: http://data.bioontology.org/metadata/Category
+          latest_submission: http://data.bioontology.org/metadata/OntologySubmission
+          projects: http://data.bioontology.org/metadata/Project
+          download: http://data.bioontology.org/metadata/Ontology
+          views: http://data.bioontology.org/metadata/Ontology
+          analytics: http://data.bioontology.org/metadata/Analytics
+          ui: http://data.bioontology.org/metadata/Ontology
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        acronym: http://omv.ontoware.org/2005/05/ontology#acronym
+        "@language": en
+    coverageResult:
+      score: 5
+      normalizedScore: 0.143
+      numberTermsCovered: 1
+      numberWordsCovered: 1
+      annotations:
+      - from: 36
+        to: 38
+        matchType: SYN
+        text: DES
+        annotatedClass:
+          "@id": http://purl.obolibrary.org/obo/CHEBI_34699
+          "@type": http://www.w3.org/2002/07/owl#Class
+          links:
+            self: https://data.agroportal.lirmm.fr/ontologies/PECO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699
+            ontology: https://data.agroportal.lirmm.fr/ontologies/PECO
+            children: https://data.agroportal.lirmm.fr/ontologies/PECO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699/children
+            parents: https://data.agroportal.lirmm.fr/ontologies/PECO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699/parents
+            descendants: https://data.agroportal.lirmm.fr/ontologies/PECO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699/descendants
+            ancestors: https://data.agroportal.lirmm.fr/ontologies/PECO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699/ancestors
+            instances: https://data.agroportal.lirmm.fr/ontologies/PECO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699/instances
+            tree: https://data.agroportal.lirmm.fr/ontologies/PECO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699/tree
+            notes: https://data.agroportal.lirmm.fr/ontologies/PECO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699/notes
+            mappings: https://data.agroportal.lirmm.fr/ontologies/PECO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699/mappings
+            ui: http://agroportal.lirmm.fr/ontologies/PECO?p=classes&conceptid=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FCHEBI_34699
+            "@context":
+              self: http://www.w3.org/2002/07/owl#Class
+              ontology: http://data.bioontology.org/metadata/Ontology
+              children: http://www.w3.org/2002/07/owl#Class
+              parents: http://www.w3.org/2002/07/owl#Class
+              descendants: http://www.w3.org/2002/07/owl#Class
+              ancestors: http://www.w3.org/2002/07/owl#Class
+              instances: http://data.bioontology.org/metadata/Instance
+              tree: http://www.w3.org/2002/07/owl#Class
+              notes: http://data.bioontology.org/metadata/Note
+              mappings: http://data.bioontology.org/metadata/Mapping
+              ui: http://www.w3.org/2002/07/owl#Class
+          "@context":
+            "@vocab": http://data.bioontology.org/metadata/
+            "@language": en
+        hierarchySize: 8
+    specializationResult:
+      score: 1.43
+      normalizedScore: 0.226
+    acceptanceResult:
+      normalizedScore: 0
+      bioportalScore: 0
+      umlsScore: 0
+    detailResult:
+      normalizedScore: 1
+      definitionsScore: 1
+      synonymsScore: 1
+      propertiesScore: 1
+  - evaluationScore: 0.262
+    ontologies:
+    - acronym: ANAEETHES
+      "@id": https://data.agroportal.lirmm.fr/ontologies/ANAEETHES
+      "@type": http://data.bioontology.org/metadata/Ontology
+      links:
+        submissions: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/submissions
+        properties: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/properties
+        classes: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/classes
+        single_class: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/classes/{class_id}
+        roots: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/classes/roots
+        schemes: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/schemes
+        collections: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/collections
+        xl_labels: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/skos_xl_labels
+        instances: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/instances
+        metrics: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/metrics
+        reviews: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/reviews
+        notes: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/notes
+        groups: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/groups
+        categories: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/categories
+        latest_submission: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/latest_submission
+        projects: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/projects
+        download: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/download
+        views: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/views
+        analytics: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/analytics
+        ui: http://agroportal.lirmm.fr/ontologies/ANAEETHES
+        "@context":
+          submissions: http://data.bioontology.org/metadata/OntologySubmission
+          properties: http://data.bioontology.org/metadata/Property
+          classes: http://www.w3.org/2002/07/owl#Class
+          single_class: http://www.w3.org/2002/07/owl#Class
+          roots: http://www.w3.org/2002/07/owl#Class
+          schemes: http://www.w3.org/2004/02/skos/core#ConceptScheme
+          collections: http://www.w3.org/2004/02/skos/core#Collection
+          xl_labels: http://www.w3.org/2008/05/skos-xl#Label
+          instances: http://data.bioontology.org/metadata/Instance
+          metrics: http://data.bioontology.org/metadata/Metrics
+          reviews: http://data.bioontology.org/metadata/Review
+          notes: http://data.bioontology.org/metadata/Note
+          groups: http://data.bioontology.org/metadata/Group
+          categories: http://data.bioontology.org/metadata/Category
+          latest_submission: http://data.bioontology.org/metadata/OntologySubmission
+          projects: http://data.bioontology.org/metadata/Project
+          download: http://data.bioontology.org/metadata/Ontology
+          views: http://data.bioontology.org/metadata/Ontology
+          analytics: http://data.bioontology.org/metadata/Analytics
+          ui: http://data.bioontology.org/metadata/Ontology
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        acronym: http://omv.ontoware.org/2005/05/ontology#acronym
+        "@language": en
+    coverageResult:
+      score: 5
+      normalizedScore: 0.143
+      numberTermsCovered: 1
+      numberWordsCovered: 1
+      annotations:
+      - from: 36
+        to: 38
+        matchType: SYN
+        text: DES
+        annotatedClass:
+          "@id": http://opendata.inra.fr/anaeeThes/c3_2441
+          "@type": http://www.w3.org/2002/07/owl#Class
+          links:
+            self: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/classes/http%3A%2F%2Fopendata.inra.fr%2FanaeeThes%2Fc3_2441
+            ontology: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES
+            children: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/classes/http%3A%2F%2Fopendata.inra.fr%2FanaeeThes%2Fc3_2441/children
+            parents: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/classes/http%3A%2F%2Fopendata.inra.fr%2FanaeeThes%2Fc3_2441/parents
+            descendants: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/classes/http%3A%2F%2Fopendata.inra.fr%2FanaeeThes%2Fc3_2441/descendants
+            ancestors: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/classes/http%3A%2F%2Fopendata.inra.fr%2FanaeeThes%2Fc3_2441/ancestors
+            instances: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/classes/http%3A%2F%2Fopendata.inra.fr%2FanaeeThes%2Fc3_2441/instances
+            tree: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/classes/http%3A%2F%2Fopendata.inra.fr%2FanaeeThes%2Fc3_2441/tree
+            notes: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/classes/http%3A%2F%2Fopendata.inra.fr%2FanaeeThes%2Fc3_2441/notes
+            mappings: https://data.agroportal.lirmm.fr/ontologies/ANAEETHES/classes/http%3A%2F%2Fopendata.inra.fr%2FanaeeThes%2Fc3_2441/mappings
+            ui: http://agroportal.lirmm.fr/ontologies/ANAEETHES?p=classes&conceptid=http%3A%2F%2Fopendata.inra.fr%2FanaeeThes%2Fc3_2441
+            "@context":
+              self: http://www.w3.org/2002/07/owl#Class
+              ontology: http://data.bioontology.org/metadata/Ontology
+              children: http://www.w3.org/2002/07/owl#Class
+              parents: http://www.w3.org/2002/07/owl#Class
+              descendants: http://www.w3.org/2002/07/owl#Class
+              ancestors: http://www.w3.org/2002/07/owl#Class
+              instances: http://data.bioontology.org/metadata/Instance
+              tree: http://www.w3.org/2002/07/owl#Class
+              notes: http://data.bioontology.org/metadata/Note
+              mappings: http://data.bioontology.org/metadata/Mapping
+              ui: http://www.w3.org/2002/07/owl#Class
+          "@context":
+            "@vocab": http://data.bioontology.org/metadata/
+            "@language": en
+        hierarchySize: 0
+    specializationResult:
+      score: 1.424
+      normalizedScore: 0.225
+    acceptanceResult:
+      normalizedScore: 0
+      bioportalScore: 0
+      umlsScore: 0
+    detailResult:
+      normalizedScore: 1
+      definitionsScore: 1
+      synonymsScore: 1
+      propertiesScore: 1
+  - evaluationScore: 0.262
+    ontologies:
+    - acronym: EDAM
+      "@id": https://data.agroportal.lirmm.fr/ontologies/EDAM
+      "@type": http://data.bioontology.org/metadata/Ontology
+      links:
+        submissions: https://data.agroportal.lirmm.fr/ontologies/EDAM/submissions
+        properties: https://data.agroportal.lirmm.fr/ontologies/EDAM/properties
+        classes: https://data.agroportal.lirmm.fr/ontologies/EDAM/classes
+        single_class: https://data.agroportal.lirmm.fr/ontologies/EDAM/classes/{class_id}
+        roots: https://data.agroportal.lirmm.fr/ontologies/EDAM/classes/roots
+        schemes: https://data.agroportal.lirmm.fr/ontologies/EDAM/schemes
+        collections: https://data.agroportal.lirmm.fr/ontologies/EDAM/collections
+        xl_labels: https://data.agroportal.lirmm.fr/ontologies/EDAM/skos_xl_labels
+        instances: https://data.agroportal.lirmm.fr/ontologies/EDAM/instances
+        metrics: https://data.agroportal.lirmm.fr/ontologies/EDAM/metrics
+        reviews: https://data.agroportal.lirmm.fr/ontologies/EDAM/reviews
+        notes: https://data.agroportal.lirmm.fr/ontologies/EDAM/notes
+        groups: https://data.agroportal.lirmm.fr/ontologies/EDAM/groups
+        categories: https://data.agroportal.lirmm.fr/ontologies/EDAM/categories
+        latest_submission: https://data.agroportal.lirmm.fr/ontologies/EDAM/latest_submission
+        projects: https://data.agroportal.lirmm.fr/ontologies/EDAM/projects
+        download: https://data.agroportal.lirmm.fr/ontologies/EDAM/download
+        views: https://data.agroportal.lirmm.fr/ontologies/EDAM/views
+        analytics: https://data.agroportal.lirmm.fr/ontologies/EDAM/analytics
+        ui: http://agroportal.lirmm.fr/ontologies/EDAM
+        "@context":
+          submissions: http://data.bioontology.org/metadata/OntologySubmission
+          properties: http://data.bioontology.org/metadata/Property
+          classes: http://www.w3.org/2002/07/owl#Class
+          single_class: http://www.w3.org/2002/07/owl#Class
+          roots: http://www.w3.org/2002/07/owl#Class
+          schemes: http://www.w3.org/2004/02/skos/core#ConceptScheme
+          collections: http://www.w3.org/2004/02/skos/core#Collection
+          xl_labels: http://www.w3.org/2008/05/skos-xl#Label
+          instances: http://data.bioontology.org/metadata/Instance
+          metrics: http://data.bioontology.org/metadata/Metrics
+          reviews: http://data.bioontology.org/metadata/Review
+          notes: http://data.bioontology.org/metadata/Note
+          groups: http://data.bioontology.org/metadata/Group
+          categories: http://data.bioontology.org/metadata/Category
+          latest_submission: http://data.bioontology.org/metadata/OntologySubmission
+          projects: http://data.bioontology.org/metadata/Project
+          download: http://data.bioontology.org/metadata/Ontology
+          views: http://data.bioontology.org/metadata/Ontology
+          analytics: http://data.bioontology.org/metadata/Analytics
+          ui: http://data.bioontology.org/metadata/Ontology
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        acronym: http://omv.ontoware.org/2005/05/ontology#acronym
+        "@language": en
+    coverageResult:
+      score: 5
+      normalizedScore: 0.143
+      numberTermsCovered: 1
+      numberWordsCovered: 1
+      annotations:
+      - from: 13
+        to: 15
+        matchType: SYN
+        text: EST
+        annotatedClass:
+          "@id": http://edamontology.org/topic_3512
+          "@type": http://www.w3.org/2002/07/owl#Class
+          links:
+            self: https://data.agroportal.lirmm.fr/ontologies/EDAM/classes/http%3A%2F%2Fedamontology.org%2Ftopic_3512
+            ontology: https://data.agroportal.lirmm.fr/ontologies/EDAM
+            children: https://data.agroportal.lirmm.fr/ontologies/EDAM/classes/http%3A%2F%2Fedamontology.org%2Ftopic_3512/children
+            parents: https://data.agroportal.lirmm.fr/ontologies/EDAM/classes/http%3A%2F%2Fedamontology.org%2Ftopic_3512/parents
+            descendants: https://data.agroportal.lirmm.fr/ontologies/EDAM/classes/http%3A%2F%2Fedamontology.org%2Ftopic_3512/descendants
+            ancestors: https://data.agroportal.lirmm.fr/ontologies/EDAM/classes/http%3A%2F%2Fedamontology.org%2Ftopic_3512/ancestors
+            instances: https://data.agroportal.lirmm.fr/ontologies/EDAM/classes/http%3A%2F%2Fedamontology.org%2Ftopic_3512/instances
+            tree: https://data.agroportal.lirmm.fr/ontologies/EDAM/classes/http%3A%2F%2Fedamontology.org%2Ftopic_3512/tree
+            notes: https://data.agroportal.lirmm.fr/ontologies/EDAM/classes/http%3A%2F%2Fedamontology.org%2Ftopic_3512/notes
+            mappings: https://data.agroportal.lirmm.fr/ontologies/EDAM/classes/http%3A%2F%2Fedamontology.org%2Ftopic_3512/mappings
+            ui: http://agroportal.lirmm.fr/ontologies/EDAM?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Ftopic_3512
+            "@context":
+              self: http://www.w3.org/2002/07/owl#Class
+              ontology: http://data.bioontology.org/metadata/Ontology
+              children: http://www.w3.org/2002/07/owl#Class
+              parents: http://www.w3.org/2002/07/owl#Class
+              descendants: http://www.w3.org/2002/07/owl#Class
+              ancestors: http://www.w3.org/2002/07/owl#Class
+              instances: http://data.bioontology.org/metadata/Instance
+              tree: http://www.w3.org/2002/07/owl#Class
+              notes: http://data.bioontology.org/metadata/Note
+              mappings: http://data.bioontology.org/metadata/Mapping
+              ui: http://www.w3.org/2002/07/owl#Class
+          "@context":
+            "@vocab": http://data.bioontology.org/metadata/
+            "@language": en
+        hierarchySize: 5
+    specializationResult:
+      score: 1.412
+      normalizedScore: 0.223
+    acceptanceResult:
+      normalizedScore: 0
+      bioportalScore: 0
+      umlsScore: 0
+    detailResult:
+      normalizedScore: 1
+      definitionsScore: 1
+      synonymsScore: 1
+      propertiesScore: 1
+  - evaluationScore: 0.232
+    ontologies:
+    - acronym: CO_357
+      "@id": https://data.agroportal.lirmm.fr/ontologies/CO_357
+      "@type": http://data.bioontology.org/metadata/Ontology
+      links:
+        submissions: https://data.agroportal.lirmm.fr/ontologies/CO_357/submissions
+        properties: https://data.agroportal.lirmm.fr/ontologies/CO_357/properties
+        classes: https://data.agroportal.lirmm.fr/ontologies/CO_357/classes
+        single_class: https://data.agroportal.lirmm.fr/ontologies/CO_357/classes/{class_id}
+        roots: https://data.agroportal.lirmm.fr/ontologies/CO_357/classes/roots
+        schemes: https://data.agroportal.lirmm.fr/ontologies/CO_357/schemes
+        collections: https://data.agroportal.lirmm.fr/ontologies/CO_357/collections
+        xl_labels: https://data.agroportal.lirmm.fr/ontologies/CO_357/skos_xl_labels
+        instances: https://data.agroportal.lirmm.fr/ontologies/CO_357/instances
+        metrics: https://data.agroportal.lirmm.fr/ontologies/CO_357/metrics
+        reviews: https://data.agroportal.lirmm.fr/ontologies/CO_357/reviews
+        notes: https://data.agroportal.lirmm.fr/ontologies/CO_357/notes
+        groups: https://data.agroportal.lirmm.fr/ontologies/CO_357/groups
+        categories: https://data.agroportal.lirmm.fr/ontologies/CO_357/categories
+        latest_submission: https://data.agroportal.lirmm.fr/ontologies/CO_357/latest_submission
+        projects: https://data.agroportal.lirmm.fr/ontologies/CO_357/projects
+        download: https://data.agroportal.lirmm.fr/ontologies/CO_357/download
+        views: https://data.agroportal.lirmm.fr/ontologies/CO_357/views
+        analytics: https://data.agroportal.lirmm.fr/ontologies/CO_357/analytics
+        ui: http://agroportal.lirmm.fr/ontologies/CO_357
+        "@context":
+          submissions: http://data.bioontology.org/metadata/OntologySubmission
+          properties: http://data.bioontology.org/metadata/Property
+          classes: http://www.w3.org/2002/07/owl#Class
+          single_class: http://www.w3.org/2002/07/owl#Class
+          roots: http://www.w3.org/2002/07/owl#Class
+          schemes: http://www.w3.org/2004/02/skos/core#ConceptScheme
+          collections: http://www.w3.org/2004/02/skos/core#Collection
+          xl_labels: http://www.w3.org/2008/05/skos-xl#Label
+          instances: http://data.bioontology.org/metadata/Instance
+          metrics: http://data.bioontology.org/metadata/Metrics
+          reviews: http://data.bioontology.org/metadata/Review
+          notes: http://data.bioontology.org/metadata/Note
+          groups: http://data.bioontology.org/metadata/Group
+          categories: http://data.bioontology.org/metadata/Category
+          latest_submission: http://data.bioontology.org/metadata/OntologySubmission
+          projects: http://data.bioontology.org/metadata/Project
+          download: http://data.bioontology.org/metadata/Ontology
+          views: http://data.bioontology.org/metadata/Ontology
+          analytics: http://data.bioontology.org/metadata/Analytics
+          ui: http://data.bioontology.org/metadata/Ontology
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        acronym: http://omv.ontoware.org/2005/05/ontology#acronym
+        "@language": en
+    coverageResult:
+      score: 10
+      normalizedScore: 0.286
+      numberTermsCovered: 1
+      numberWordsCovered: 1
+      annotations:
+      - from: 36
+        to: 38
+        matchType: PREF
+        text: DES
+        annotatedClass:
+          "@id": http://www.cropontology.org/rdf/CO_357:0000025
+          "@type": http://www.w3.org/2002/07/owl#Class
+          links:
+            self: https://data.agroportal.lirmm.fr/ontologies/CO_357/classes/http%3A%2F%2Fwww.cropontology.org%2Frdf%2FCO_357%3A0000025
+            ontology: https://data.agroportal.lirmm.fr/ontologies/CO_357
+            children: https://data.agroportal.lirmm.fr/ontologies/CO_357/classes/http%3A%2F%2Fwww.cropontology.org%2Frdf%2FCO_357%3A0000025/children
+            parents: https://data.agroportal.lirmm.fr/ontologies/CO_357/classes/http%3A%2F%2Fwww.cropontology.org%2Frdf%2FCO_357%3A0000025/parents
+            descendants: https://data.agroportal.lirmm.fr/ontologies/CO_357/classes/http%3A%2F%2Fwww.cropontology.org%2Frdf%2FCO_357%3A0000025/descendants
+            ancestors: https://data.agroportal.lirmm.fr/ontologies/CO_357/classes/http%3A%2F%2Fwww.cropontology.org%2Frdf%2FCO_357%3A0000025/ancestors
+            instances: https://data.agroportal.lirmm.fr/ontologies/CO_357/classes/http%3A%2F%2Fwww.cropontology.org%2Frdf%2FCO_357%3A0000025/instances
+            tree: https://data.agroportal.lirmm.fr/ontologies/CO_357/classes/http%3A%2F%2Fwww.cropontology.org%2Frdf%2FCO_357%3A0000025/tree
+            notes: https://data.agroportal.lirmm.fr/ontologies/CO_357/classes/http%3A%2F%2Fwww.cropontology.org%2Frdf%2FCO_357%3A0000025/notes
+            mappings: https://data.agroportal.lirmm.fr/ontologies/CO_357/classes/http%3A%2F%2Fwww.cropontology.org%2Frdf%2FCO_357%3A0000025/mappings
+            ui: http://agroportal.lirmm.fr/ontologies/CO_357?p=classes&conceptid=http%3A%2F%2Fwww.cropontology.org%2Frdf%2FCO_357%3A0000025
+            "@context":
+              self: http://www.w3.org/2002/07/owl#Class
+              ontology: http://data.bioontology.org/metadata/Ontology
+              children: http://www.w3.org/2002/07/owl#Class
+              parents: http://www.w3.org/2002/07/owl#Class
+              descendants: http://www.w3.org/2002/07/owl#Class
+              ancestors: http://www.w3.org/2002/07/owl#Class
+              instances: http://data.bioontology.org/metadata/Instance
+              tree: http://www.w3.org/2002/07/owl#Class
+              notes: http://data.bioontology.org/metadata/Note
+              mappings: http://data.bioontology.org/metadata/Mapping
+              ui: http://www.w3.org/2002/07/owl#Class
+          "@context":
+            "@vocab": http://data.bioontology.org/metadata/
+            "@language": en
+        hierarchySize: 0
+    specializationResult:
+      score: 3.134
+      normalizedScore: 0.495
+    acceptanceResult:
+      normalizedScore: 0
+      bioportalScore: 0
+      umlsScore: 0
+    detailResult:
+      normalizedScore: 0
+      definitionsScore: 0
+      synonymsScore: 0
+      propertiesScore: 0
+  - evaluationScore: 0.198
+    ontologies:
+    - acronym: PEAO
+      "@id": https://data.agroportal.lirmm.fr/ontologies/PEAO
+      "@type": http://data.bioontology.org/metadata/Ontology
+      links:
+        submissions: https://data.agroportal.lirmm.fr/ontologies/PEAO/submissions
+        properties: https://data.agroportal.lirmm.fr/ontologies/PEAO/properties
+        classes: https://data.agroportal.lirmm.fr/ontologies/PEAO/classes
+        single_class: https://data.agroportal.lirmm.fr/ontologies/PEAO/classes/{class_id}
+        roots: https://data.agroportal.lirmm.fr/ontologies/PEAO/classes/roots
+        schemes: https://data.agroportal.lirmm.fr/ontologies/PEAO/schemes
+        collections: https://data.agroportal.lirmm.fr/ontologies/PEAO/collections
+        xl_labels: https://data.agroportal.lirmm.fr/ontologies/PEAO/skos_xl_labels
+        instances: https://data.agroportal.lirmm.fr/ontologies/PEAO/instances
+        metrics: https://data.agroportal.lirmm.fr/ontologies/PEAO/metrics
+        reviews: https://data.agroportal.lirmm.fr/ontologies/PEAO/reviews
+        notes: https://data.agroportal.lirmm.fr/ontologies/PEAO/notes
+        groups: https://data.agroportal.lirmm.fr/ontologies/PEAO/groups
+        categories: https://data.agroportal.lirmm.fr/ontologies/PEAO/categories
+        latest_submission: https://data.agroportal.lirmm.fr/ontologies/PEAO/latest_submission
+        projects: https://data.agroportal.lirmm.fr/ontologies/PEAO/projects
+        download: https://data.agroportal.lirmm.fr/ontologies/PEAO/download
+        views: https://data.agroportal.lirmm.fr/ontologies/PEAO/views
+        analytics: https://data.agroportal.lirmm.fr/ontologies/PEAO/analytics
+        ui: http://agroportal.lirmm.fr/ontologies/PEAO
+        "@context":
+          submissions: http://data.bioontology.org/metadata/OntologySubmission
+          properties: http://data.bioontology.org/metadata/Property
+          classes: http://www.w3.org/2002/07/owl#Class
+          single_class: http://www.w3.org/2002/07/owl#Class
+          roots: http://www.w3.org/2002/07/owl#Class
+          schemes: http://www.w3.org/2004/02/skos/core#ConceptScheme
+          collections: http://www.w3.org/2004/02/skos/core#Collection
+          xl_labels: http://www.w3.org/2008/05/skos-xl#Label
+          instances: http://data.bioontology.org/metadata/Instance
+          metrics: http://data.bioontology.org/metadata/Metrics
+          reviews: http://data.bioontology.org/metadata/Review
+          notes: http://data.bioontology.org/metadata/Note
+          groups: http://data.bioontology.org/metadata/Group
+          categories: http://data.bioontology.org/metadata/Category
+          latest_submission: http://data.bioontology.org/metadata/OntologySubmission
+          projects: http://data.bioontology.org/metadata/Project
+          download: http://data.bioontology.org/metadata/Ontology
+          views: http://data.bioontology.org/metadata/Ontology
+          analytics: http://data.bioontology.org/metadata/Analytics
+          ui: http://data.bioontology.org/metadata/Ontology
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        acronym: http://omv.ontoware.org/2005/05/ontology#acronym
+        "@language": en
+    coverageResult:
+      score: 5
+      normalizedScore: 0.143
+      numberTermsCovered: 1
+      numberWordsCovered: 1
+      annotations:
+      - from: 36
+        to: 38
+        matchType: SYN
+        text: DES
+        annotatedClass:
+          "@id": http://purl.obolibrary.org/obo/EO_0007530
+          "@type": http://www.w3.org/2002/07/owl#Class
+          links:
+            self: https://data.agroportal.lirmm.fr/ontologies/PEAO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FEO_0007530
+            ontology: https://data.agroportal.lirmm.fr/ontologies/PEAO
+            children: https://data.agroportal.lirmm.fr/ontologies/PEAO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FEO_0007530/children
+            parents: https://data.agroportal.lirmm.fr/ontologies/PEAO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FEO_0007530/parents
+            descendants: https://data.agroportal.lirmm.fr/ontologies/PEAO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FEO_0007530/descendants
+            ancestors: https://data.agroportal.lirmm.fr/ontologies/PEAO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FEO_0007530/ancestors
+            instances: https://data.agroportal.lirmm.fr/ontologies/PEAO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FEO_0007530/instances
+            tree: https://data.agroportal.lirmm.fr/ontologies/PEAO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FEO_0007530/tree
+            notes: https://data.agroportal.lirmm.fr/ontologies/PEAO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FEO_0007530/notes
+            mappings: https://data.agroportal.lirmm.fr/ontologies/PEAO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FEO_0007530/mappings
+            ui: http://agroportal.lirmm.fr/ontologies/PEAO?p=classes&conceptid=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FEO_0007530
+            "@context":
+              self: http://www.w3.org/2002/07/owl#Class
+              ontology: http://data.bioontology.org/metadata/Ontology
+              children: http://www.w3.org/2002/07/owl#Class
+              parents: http://www.w3.org/2002/07/owl#Class
+              descendants: http://www.w3.org/2002/07/owl#Class
+              ancestors: http://www.w3.org/2002/07/owl#Class
+              instances: http://data.bioontology.org/metadata/Instance
+              tree: http://www.w3.org/2002/07/owl#Class
+              notes: http://data.bioontology.org/metadata/Note
+              mappings: http://data.bioontology.org/metadata/Mapping
+              ui: http://www.w3.org/2002/07/owl#Class
+          "@context":
+            "@vocab": http://data.bioontology.org/metadata/
+            "@language": en
+        hierarchySize: 6
+    specializationResult:
+      score: 1.487
+      normalizedScore: 0.235
+    acceptanceResult:
+      normalizedScore: 0
+      bioportalScore: 0
+      umlsScore: 0
+    detailResult:
+      normalizedScore: 0.562
+      definitionsScore: 1
+      synonymsScore: 0.333
+      propertiesScore: 0.353
+  - evaluationScore: 0.19
+    ontologies:
+    - acronym: PR
+      "@id": https://data.agroportal.lirmm.fr/ontologies/PR
+      "@type": http://data.bioontology.org/metadata/Ontology
+      links:
+        submissions: https://data.agroportal.lirmm.fr/ontologies/PR/submissions
+        properties: https://data.agroportal.lirmm.fr/ontologies/PR/properties
+        classes: https://data.agroportal.lirmm.fr/ontologies/PR/classes
+        single_class: https://data.agroportal.lirmm.fr/ontologies/PR/classes/{class_id}
+        roots: https://data.agroportal.lirmm.fr/ontologies/PR/classes/roots
+        schemes: https://data.agroportal.lirmm.fr/ontologies/PR/schemes
+        collections: https://data.agroportal.lirmm.fr/ontologies/PR/collections
+        xl_labels: https://data.agroportal.lirmm.fr/ontologies/PR/skos_xl_labels
+        instances: https://data.agroportal.lirmm.fr/ontologies/PR/instances
+        metrics: https://data.agroportal.lirmm.fr/ontologies/PR/metrics
+        reviews: https://data.agroportal.lirmm.fr/ontologies/PR/reviews
+        notes: https://data.agroportal.lirmm.fr/ontologies/PR/notes
+        groups: https://data.agroportal.lirmm.fr/ontologies/PR/groups
+        categories: https://data.agroportal.lirmm.fr/ontologies/PR/categories
+        latest_submission: https://data.agroportal.lirmm.fr/ontologies/PR/latest_submission
+        projects: https://data.agroportal.lirmm.fr/ontologies/PR/projects
+        download: https://data.agroportal.lirmm.fr/ontologies/PR/download
+        views: https://data.agroportal.lirmm.fr/ontologies/PR/views
+        analytics: https://data.agroportal.lirmm.fr/ontologies/PR/analytics
+        ui: http://agroportal.lirmm.fr/ontologies/PR
+        "@context":
+          submissions: http://data.bioontology.org/metadata/OntologySubmission
+          properties: http://data.bioontology.org/metadata/Property
+          classes: http://www.w3.org/2002/07/owl#Class
+          single_class: http://www.w3.org/2002/07/owl#Class
+          roots: http://www.w3.org/2002/07/owl#Class
+          schemes: http://www.w3.org/2004/02/skos/core#ConceptScheme
+          collections: http://www.w3.org/2004/02/skos/core#Collection
+          xl_labels: http://www.w3.org/2008/05/skos-xl#Label
+          instances: http://data.bioontology.org/metadata/Instance
+          metrics: http://data.bioontology.org/metadata/Metrics
+          reviews: http://data.bioontology.org/metadata/Review
+          notes: http://data.bioontology.org/metadata/Note
+          groups: http://data.bioontology.org/metadata/Group
+          categories: http://data.bioontology.org/metadata/Category
+          latest_submission: http://data.bioontology.org/metadata/OntologySubmission
+          projects: http://data.bioontology.org/metadata/Project
+          download: http://data.bioontology.org/metadata/Ontology
+          views: http://data.bioontology.org/metadata/Ontology
+          analytics: http://data.bioontology.org/metadata/Analytics
+          ui: http://data.bioontology.org/metadata/Ontology
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        acronym: http://omv.ontoware.org/2005/05/ontology#acronym
+        "@language": en
+    coverageResult:
+      score: 5
+      normalizedScore: 0.143
+      numberTermsCovered: 1
+      numberWordsCovered: 1
+      annotations:
+      - from: 36
+        to: 38
+        matchType: SYN
+        text: DES
+        annotatedClass:
+          "@id": http://purl.obolibrary.org/obo/PR_000006427
+          "@type": http://www.w3.org/2002/07/owl#Class
+          links:
+            self: https://data.agroportal.lirmm.fr/ontologies/PR/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FPR_000006427
+            ontology: https://data.agroportal.lirmm.fr/ontologies/PR
+            children: https://data.agroportal.lirmm.fr/ontologies/PR/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FPR_000006427/children
+            parents: https://data.agroportal.lirmm.fr/ontologies/PR/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FPR_000006427/parents
+            descendants: https://data.agroportal.lirmm.fr/ontologies/PR/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FPR_000006427/descendants
+            ancestors: https://data.agroportal.lirmm.fr/ontologies/PR/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FPR_000006427/ancestors
+            instances: https://data.agroportal.lirmm.fr/ontologies/PR/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FPR_000006427/instances
+            tree: https://data.agroportal.lirmm.fr/ontologies/PR/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FPR_000006427/tree
+            notes: https://data.agroportal.lirmm.fr/ontologies/PR/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FPR_000006427/notes
+            mappings: https://data.agroportal.lirmm.fr/ontologies/PR/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FPR_000006427/mappings
+            ui: http://agroportal.lirmm.fr/ontologies/PR?p=classes&conceptid=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FPR_000006427
+            "@context":
+              self: http://www.w3.org/2002/07/owl#Class
+              ontology: http://data.bioontology.org/metadata/Ontology
+              children: http://www.w3.org/2002/07/owl#Class
+              parents: http://www.w3.org/2002/07/owl#Class
+              descendants: http://www.w3.org/2002/07/owl#Class
+              ancestors: http://www.w3.org/2002/07/owl#Class
+              instances: http://data.bioontology.org/metadata/Instance
+              tree: http://www.w3.org/2002/07/owl#Class
+              notes: http://data.bioontology.org/metadata/Note
+              mappings: http://data.bioontology.org/metadata/Mapping
+              ui: http://www.w3.org/2002/07/owl#Class
+          "@context":
+            "@vocab": http://data.bioontology.org/metadata/
+            "@language": en
+        hierarchySize: 7
+    specializationResult:
+      score: 0.9
+      normalizedScore: 0.142
+    acceptanceResult:
+      normalizedScore: 0
+      bioportalScore: 0
+      umlsScore: 0
+    detailResult:
+      normalizedScore: 0.601
+      definitionsScore: 1
+      synonymsScore: 0.333
+      propertiesScore: 0.471

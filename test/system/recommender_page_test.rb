@@ -3,8 +3,12 @@ require 'webmock/minitest'
 
 class RecommenderPageTest < ApplicationSystemTestCase
     def setup
-        WebMock.disable_net_connect!(allow_localhost: true)
+        WebMock.disable!
+        @apikey = LinkedData::Client.settings.apikey
+        @recommender_api = "#{LinkedData::Client.settings.rest_url}/recommender"
+        @ontologies_url = "#{LinkedData::Client.settings.rest_url}/ontologies?include=acronym,name"
         @recommender_submit_button = "div.recommender-page-button"
+        @sample_response = fixtures(:recommender)["sample_response"]
     end
 
     test "go to recommender page and check if all filters and inputs are there" do
@@ -32,29 +36,35 @@ class RecommenderPageTest < ApplicationSystemTestCase
     test "go to recommender page insert sample text and get recommendations" do
         visit root_url
         click_link(href: '/recommender')
+
         find("div.insert-sample-text-button").find("div.button").click
+
         WebMock.enable!
-        stub_request(:post, "/recommender")
+        WebMock.stub_request(:post, @recommender_api)
             .with(
-                body: {
-                    input: "Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.",
-                    input_type: 1,
-                    output_type: 1,
-                    wc: 0.55,
-                    wa: 0.15,
-                    wd: 0.15,
-                    ws: 0.15,
-                    max_elements_set: 3
-                }
-            )
-            .to_return(
-                status: 200,
-                body: '{"recommendations": ["Recommendation 1", "Recommendation 2"]}',
-                headers: { 'Content-Type' => 'application/json' }
-            )
+                body: "{\"input\":\"Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.\",\"input_type\":\"1\",\"output_type\":\"1\",\"wc\":\"0.55\",\"wa\":\"0.15\",\"wd\":\"0.15\",\"ws\":\"0.15\",\"max_elements_set\":\"3\",\"controller\":\"recommender\",\"action\":\"index\"}",
+                headers: {
+                        'Accept'=>'application/json',
+                        'Authorization'=>'apikey token=1de0a270-29c5-4dda-b043-7c3580628cd5',
+                        'Content-Type'=>'application/json',
+                        'Host'=>'localhost:9393',
+                        'User-Agent'=>'NCBO API Ruby Client v0.1.0'
+                })
+            .to_return(status: 200, body: @sample_response.to_json, headers: {})
+            
+        WebMock.stub_request(:get, @ontologies_url)
+            .with(
+              headers: {
+                    'Accept'=>'application/json',
+                    'Authorization'=>'apikey token=1de0a270-29c5-4dda-b043-7c3580628cd5',
+                    'Host'=>'localhost:9393',
+                    'User-Agent'=>'NCBO API Ruby Client v0.1.0'
+              })
+            .to_return(status: 200, body: ([]).to_json, headers: {})
+
         
         find(@recommender_submit_button).click
-        sleep 20
+
         WebMock.disable!
     end
 end

@@ -37,7 +37,11 @@ def load_all_fixtures
   fixture_files.each do |fixture_file|
     fixture_name = File.basename(fixture_file, '.yml')
     data = YAML.load_file(fixture_file)
-    fixtures_data[fixture_name] = OpenStruct.new(Array(data).map{|key, hash| [key , OpenStruct.new(hash)]}.to_h)
+    if data["yaml_structure"].eql?("regular")
+      fixtures_data[fixture_name] = data
+    else
+      fixtures_data[fixture_name] = OpenStruct.new(Array(data).map{|key, hash| [key , OpenStruct.new(hash)]}.to_h)
+    end
   end
 
   fixtures_data
