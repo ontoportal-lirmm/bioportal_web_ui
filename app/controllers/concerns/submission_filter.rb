@@ -134,7 +134,7 @@ module SubmissionFilter
     return submissions.sort_by { |x| x[:rank] ? -x[:rank] : 0}  unless query.blank?
 
     if sort_by.eql?('visits')
-      submissions = submissions.sort_by { |x| -x[:popularity] }
+      submissions = submissions.sort_by { |x| -(x[:popularity] || 0) }
     elsif sort_by.eql?('fair')
       submissions = submissions.sort_by { |x| -x[:fairScore] }
     elsif sort_by.eql?('notes')
