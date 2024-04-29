@@ -66,7 +66,7 @@ en:
     provide_ontology_or_concept: Please provide an ontology id or concept id with an ontology id.
     search_for_class: Please search for a class using the Jump To field above
     missing_roots_for_ontology: Missing @roots for %{acronym}
-    missing_roots: Missing roots %{id}
+    missing_roots: Missing roots
     missing_class: Missing class %{root_child}
     missing_class_ontology: Missing class %{acronym} / %{concept_id}
     error_simplify_class: "Failure to simplify class: %{cls}"
