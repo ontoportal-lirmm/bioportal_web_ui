@@ -71,7 +71,7 @@ fr:
     provide_ontology_or_concept: Veuillez fournir un identifiant d'ontologie ou un identifiant de concept avec un identifiant d'ontologie.
     search_for_class: Veuillez rechercher une classe à l'aide du champ Jump To ci-dessus
     missing_roots_for_ontology: Racines manquantes pour %{acronym}
-    missing_roots: Racines manquantes %{id}
+    missing_roots: Racines manquantes
     missing_class: Classe manquante %{root_child}
     missing_class_ontology: Classe manquante %{acronym} / %{concept_id}
     error_simplify_class: "Échec de la simplification de la classe : %{cls}"
