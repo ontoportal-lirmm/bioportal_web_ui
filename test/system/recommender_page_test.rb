@@ -12,6 +12,10 @@ class RecommenderPageTest < ApplicationSystemTestCase
         @sample_response = fixtures(:recommender)["sample_response"]
     end
 
+    teardown do
+        WebMock.disable!
+    end
+
     test "go to recommender page and check if all filters and inputs are there" do
         visit root_url
         click_link(href: '/recommender')
@@ -22,18 +26,15 @@ class RecommenderPageTest < ApplicationSystemTestCase
         assert_selector "div.ontology-sets-choice"
 
         find("div.advanced-options-button").click
-        sleep 1
 
         assert_selector "div.weights-configuration"
         assert_selector ".ontologies.input"
 
         find("div.ontology-sets-choice").click
-        sleep 1
 
         assert_selector ".maxsets.input"
         assert_selector "div.insert-sample-text-button"
         assert_selector @recommender_submit_button
-        sleep 1
     end
 
     test "go to recommender page insert sample text and get recommendations" do
@@ -72,7 +73,7 @@ class RecommenderPageTest < ApplicationSystemTestCase
         assert_selector "div.json-button"
         assert_selector "div.cite-us-button"
         assert_selector "div.go-to-annotator"
-        sleep 1
+
         find("div#recommender-edit-button").click
         
         
@@ -96,6 +97,5 @@ class RecommenderPageTest < ApplicationSystemTestCase
         assert_selector "div.browse-empty-illustration"
         sleep 20
         
-        WebMock.disable!
     end
 end
