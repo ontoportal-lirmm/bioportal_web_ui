@@ -149,6 +149,7 @@ Rails.application.routes.draw do
   # Ontologies
   get '/ontologies/view/edit/:id' => 'ontologies#edit_view', :constraints => { id: /[^\/?]+/ }
   get '/ontologies/view/new/:id' => 'ontologies#new_view'
+  get '/ontologies/:acronym/download' => 'ontologies_redirection#redirect_ontology'
   get '/ontologies/:acronym/:id/serialize/:output_format' => 'ontologies#content_serializer', :id => /.+/
   get '/ontologies/htaccess/:acronym' => 'ontologies_redirection#generate_htaccess'
 
@@ -171,6 +172,7 @@ Rails.application.routes.draw do
   get 'ontologies/:ontology/notes/:noteid', to: 'notes#virtual_show', as: :note_virtual, noteid: /.+/
   get 'ontologies/:ontology/notes', to: 'notes#virtual_show'
 
+  get '/ontologies/:acronym/:id' => 'ontologies_redirection#redirect', :id => /.+/
 
 
   # Ajax
@@ -244,5 +246,4 @@ Rails.application.routes.draw do
 
   mount Lookbook::Engine, at: "/lookbook"
 
-  get '/ontologies/:acronym/:id' => 'ontologies_redirection#redirect', :id => /.+/
 end

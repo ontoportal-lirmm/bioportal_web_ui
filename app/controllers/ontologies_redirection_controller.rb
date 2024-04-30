@@ -38,6 +38,25 @@ class OntologiesRedirectionController < ApplicationController
 
         render 'ontologies/htaccess', layout: nil
     end
+    
+    # GET /ontologies/ACRONYM/download?format=FORMAT
+    def redirect_ontology
+        redirect_url = "#{rest_url}/ontologies/#{params[:acronym]}"
+        download_url = "#{redirect_url}/download?apikey=#{get_apikey}"
+        case params[:format]
+        when 'text/csv', 'csv'
+          redirect_to("#{download_url}&download_format=csv",  allow_other_host: true)
+        when 'text/xml', 'text/rdf+xml',  'application/rdf+xml', 'application/xml', 'xml'
+          redirect_to("#{download_url}&download_format=rdf",  allow_other_host: true)
+        when 'application/json', 'application/ld+json', 'application/*', 'json'
+          # redirect to the api
+          redirect_to("#{redirect_url}?apikey=#{get_apikey}", allow_other_host: true)
+        else
+          # redirect to download the original file 
+          redirect_to("#{download_url}",  allow_other_host: true)
+        end
+    end
+      
       
     private
       
