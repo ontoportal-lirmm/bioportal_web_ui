@@ -194,11 +194,13 @@
         %div
           - @slices.each do |slice, index|
             - slice_link = "http://#{slice.acronym}.#{$UI_URL.sub("http://", "")}"
-            %div.text-center{'data-controller': 'tooltip', title: slice.name}
+            %div.text-center{'data-controller': 'tooltip', title: content_tag(:div, slice.description, style: 'max-width: 200px')}
               = link_to slice_link, target: '_blank', class: 'home-slices' do
+                .home-slice-ontologies
+                  = slice.ontologies.length
                 = inline_svg 'icons/slices.svg', width: "70", height: "70"
                 .home-slice-name 
-                  = slice.acronym
+                  = "#{slice.name} (#{slice.acronym})"
 
   .home-section
     .home-statistics-container
