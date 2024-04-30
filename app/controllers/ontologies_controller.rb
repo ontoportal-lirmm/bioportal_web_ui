@@ -208,118 +208,99 @@ class OntologiesController < ApplicationController
 
     render 'ontologies/content_serializer', layout: nil
   end
-  
-  def redirect_ontology(accpet_header)
-    redirect_url = "#{ENV["API_URL"]}ontologies/#{params[:id]}"
-    download_url = "#{redirect_url}/download?apikey=#{ENV["API_KEY"]}"
-    case accpet_header
-    when "text/csv"
-      redirect_to("#{download_url}&download_format=csv",  allow_other_host: true)
-    when 'text/xml', 'text/rdf+xml',  'application/rdf+xml', 'application/xml'
-      redirect_to("#{download_url}&download_format=rdf",  allow_other_host: true)
-    when 'application/json', 'application/ld+json', 'application/*'
-      # redirect to the api
-      redirect_to("#{redirect_url}?apikey=#{ENV["API_KEY"]}", allow_other_host: true)
-    else
-      # redirect to download the original file 
-      redirect_to("#{download_url}",  allow_other_host: true)
-    end
-  end
-  
+
   # GET /ontologies/ACRONYM
   # GET /ontologies/1.xml
   def show
     request_accept_header = request.env["HTTP_ACCEPT"].split(",")[0]
-    if request_accept_header != "text/html"
-      redirect_ontology(request_accept_header)
-    else
-      # Hack to make ontologyid and conceptid work in addition to id and ontology params
-      params[:id] = params[:id].nil? ? params[:ontologyid] : params[:id]
-      params[:ontology] = params[:ontology].nil? ? params[:id] : params[:ontology]
+    return  redirect_to("/ontologies/#{params[:id]}/download?format=#{request_accept_header}", allow_other_host: true) if (request_accept_header != "text/html" && params[:p] == nil)
 
-      # Hash to convert Lexvo URI to flag code
+    # Hack to make ontologyid and conceptid work in addition to id and ontology params
+    params[:id] = params[:id].nil? ? params[:ontologyid] : params[:id]
+    params[:ontology] = params[:ontology].nil? ? params[:id] : params[:ontology]
 
-      # PURL-specific redirect to handle /ontologies/{ACR}/{CLASS_ID} paths
-      if params[:purl_conceptid]
-        params[:purl_conceptid] = 'root' if params[:purl_conceptid].eql?('classes')
-        if params[:conceptid]
-          params.delete(:purl_conceptid)
-        else
-          params[:conceptid] = params.delete(:purl_conceptid)
-        end
-        redirect_to "/ontologies/#{params[:acronym]}?p=classes#{params_string_for_redirect(params, prefix: "&")}", status: :moved_permanently
+    # Hash to convert Lexvo URI to flag code
+
+    # PURL-specific redirect to handle /ontologies/{ACR}/{CLASS_ID} paths
+    if params[:purl_conceptid]
+      params[:purl_conceptid] = 'root' if params[:purl_conceptid].eql?('classes')
+      if params[:conceptid]
+        params.delete(:purl_conceptid)
+      else
+        params[:conceptid] = params.delete(:purl_conceptid)
+      end
+      redirect_to "/ontologies/#{params[:acronym]}?p=classes#{params_string_for_redirect(params, prefix: "&")}", status: :moved_permanently
+      return
+    end
+
+    if params[:ontology].to_i > 0
+      acronym = BPIDResolver.id_to_acronym(params[:ontology])
+      if acronym
+        redirect_new_api
         return
       end
+    end
 
-      if params[:ontology].to_i > 0
-        acronym = BPIDResolver.id_to_acronym(params[:ontology])
-        if acronym
-          redirect_new_api
-          return
-        end
-      end
+    # Note: find_by_acronym includes ontology views
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
+    ontology_not_found(params[:ontology]) if @ontology.nil? || @ontology.errors
 
-      # Note: find_by_acronym includes ontology views
-      @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-      ontology_not_found(params[:ontology]) if @ontology.nil? || @ontology.errors
+    # Handle the case where an ontology is converted to summary only.
+    # See: https://github.com/ncbo/bioportal_web_ui/issues/133.
+    data_pages = KNOWN_PAGES - %w[summary notes]
+    if @ontology.summaryOnly && params[:p].present? && data_pages.include?(params[:p].to_s)
+      redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
+    end
 
-      # Handle the case where an ontology is converted to summary only.
-      # See: https://github.com/ncbo/bioportal_web_ui/issues/133.
-      data_pages = KNOWN_PAGES - %w[summary notes]
-      if @ontology.summaryOnly && params[:p].present? && data_pages.include?(params[:p].to_s)
+    #@ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
+
+    # Get the latest submission (not necessarily the latest 'ready' submission)
+
+    @submission_latest = @ontology.explore.latest_submission(include: 'all', invalidate_cache: invalidate_cache?) rescue @ontology.explore.latest_submission(include: '')
+
+
+    unless helpers.submission_ready?(@submission_latest)
+      submissions = @ontology.explore.submissions(include: 'submissionId,submissionStatus')
+      if submissions.any?{|x| helpers.submission_ready?(x)}
+        @old_submission_ready = true
+      elsif !params[:p].blank?
         redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
       end
+    end
 
-      #@ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
+    # Is the ontology downloadable?
+    @ont_restricted = ontology_restricted?(@ontology.acronym)
 
-      # Get the latest submission (not necessarily the latest 'ready' submission)
+    # Fix parameters to only use known pages
+    params[:p] = nil unless KNOWN_PAGES.include?(params[:p])
 
-      @submission_latest = @ontology.explore.latest_submission(include: 'all', invalidate_cache: invalidate_cache?) rescue @ontology.explore.latest_submission(include: '')
-
-
-      unless helpers.submission_ready?(@submission_latest)
-        submissions = @ontology.explore.submissions(include: 'submissionId,submissionStatus')
-        if submissions.any?{|x| helpers.submission_ready?(x)}
-          @old_submission_ready = true
-        elsif !params[:p].blank?
-          redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
-        end
-      end
-
-      # Is the ontology downloadable?
-      @ont_restricted = ontology_restricted?(@ontology.acronym)
-
-      # Fix parameters to only use known pages
-      params[:p] = nil unless KNOWN_PAGES.include?(params[:p])
-
-      # This action is now a router using the 'p' parameter as the page to show
-      case params[:p]
-      when 'terms'
-        params[:p] = 'classes'
-        redirect_to "/ontologies/#{params[:ontology]}#{params_string_for_redirect(params)}", status: :moved_permanently
-      when 'classes'
-        self.classes # rescue self.summary
-      when 'mappings'
-        self.mappings # rescue self.summary
-      when 'notes'
-        self.notes # rescue self.summary
-      when 'widgets'
-        self.widgets # rescue self.summary
-      when 'properties'
-        self.properties # rescue self.summary
-      when 'summary'
-        self.summary
-      when 'instances'
-        self.instances
-      when 'schemes'
-        self.schemes
-      when 'collections'
-        self.collections
-      when 'sparql'
-        self.sparql
-      else
-        self.summary
-      end
+    # This action is now a router using the 'p' parameter as the page to show
+    case params[:p]
+    when 'terms'
+      params[:p] = 'classes'
+      redirect_to "/ontologies/#{params[:ontology]}#{params_string_for_redirect(params)}", status: :moved_permanently
+    when 'classes'
+      self.classes # rescue self.summary
+    when 'mappings'
+      self.mappings # rescue self.summary
+    when 'notes'
+      self.notes # rescue self.summary
+    when 'widgets'
+      self.widgets # rescue self.summary
+    when 'properties'
+      self.properties # rescue self.summary
+    when 'summary'
+      self.summary
+    when 'instances'
+      self.instances
+    when 'schemes'
+      self.schemes
+    when 'collections'
+      self.collections
+    when 'sparql'
+      self.sparql
+    else
+      self.summary
     end
   end
 
