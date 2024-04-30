@@ -53,6 +53,7 @@ module SubmissionFilter
 
     submissions = sort_submission_by(submissions, @sort_by, @search)
 
+    submissions = submissions.select { |submission| @ontologies.any? { |ontology| ontology.id == submission[:id] } }
 
     @page = paginate_submissions(submissions, request_params[:page].to_i, request_params[:pagesize].to_i)
 
