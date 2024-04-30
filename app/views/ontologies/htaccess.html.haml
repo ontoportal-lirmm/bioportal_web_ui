@@ -62,9 +62,7 @@
     
     %h5
         %strong Note
-    .note-redirection-container
-        %p
-            = t("ontologies.redirection_note")
+        = render Display::AlertComponent.new(message: t("ontologies.redirection_note"), closable: false, type: "warning")
 
     .contact-support{style: "width: 100%; display: flex; justify-content: end;"}
         = render Buttons::RegularButtonComponent.new(id:'regular-button', value: t("ontologies.contact_support"), variant: "primary", href: "/feedback", target: "_blank", state: "regular")
