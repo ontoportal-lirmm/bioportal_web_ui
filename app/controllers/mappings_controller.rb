@@ -6,6 +6,7 @@ class MappingsController < ApplicationController
   include MappingStatistics
   include MappingsHelper
   include TurboHelper
+  include ApplicationHelper
   layout :determine_layout
   before_action :authorize_and_redirect, only: [:create, :new, :destroy]
 
@@ -39,6 +40,11 @@ class MappingsController < ApplicationController
         select_text = "#{ontology.name} - #{ontology.acronym} (#{number_with_delimiter(mapping_count, delimiter: ',')})"
       end
       @options[select_text] = ontology_acronym
+    end
+    
+    if at_slice?
+      slice_ontologies_acronyms = @subdomain_filter[:ontologies].map { |id| link_last_part(id).to_sym }
+      @ontologies_mapping_count = @ontologies_mapping_count.to_h.select{ |key, _| slice_ontologies_acronyms.include?(key) }
     end
 
     @options = @options.sort
