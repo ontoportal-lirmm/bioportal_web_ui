@@ -175,16 +175,7 @@
             %p= t("home.users")
       .home-statistics-link.justify-content-end
         = link_to t("home.see_details"),'/statistics', target: "_blank"
-
-  .home-section
-    .home-statistics-container
-      .home-support-title
-        %p= t('home.support_and_collaborations')
-        %hr.home-section-line/
-      .home-support-items
-        - $HOME_PAGE_LOGOS&.each do |logo|
-          %a{href:logo[:url], target: "_blanc"}
-            %img{src: asset_path(logo[:img_src])}
+  
   - if @slices
     .home-section
       .home-statistics-container
@@ -215,6 +206,15 @@
             %p{style: "color: #{portal[:color]}"} 
               = portal[:portal]
 
+  .home-section
+    .home-statistics-container
+      .home-support-title
+        %p= t('home.support_and_collaborations')
+        %hr.home-section-line/
+      .home-support-items
+        - $HOME_PAGE_LOGOS&.each do |logo|
+          %a{href:logo[:url], target: "_blanc"}
+            %img{src: asset_path(logo[:img_src])}
 
 :javascript
   function submitAnnotator(){
