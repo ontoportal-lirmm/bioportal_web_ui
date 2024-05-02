@@ -268,10 +268,10 @@ module ApplicationHelper
 
   def add_comment_button(parent_id, parent_type)
     if session[:user].nil?
-      link_to t('application.add_comment'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim"
+      link_to t('application.add_comment'),  login_index_path(redirect: request.url), class: "secondary-button regular-button"
     else
       link_to_modal t('application.add_comment'), notes_new_comment_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
-                    class: "secondary-button regular-button slim", data: { show_modal_title_value: t('application.add_new_comment')}
+                    class: "secondary-button regular-button", data: { show_modal_title_value: t('application.add_new_comment')}
     end
   end
 
@@ -286,10 +286,10 @@ module ApplicationHelper
 
   def add_proposal_button(parent_id, parent_type)
     if session[:user].nil?
-      link_to t('application.add_proposal'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim"
+      link_to t('application.add_proposal'),  login_index_path(redirect: request.url), class: "secondary-button regular-button"
     else
       link_to_modal t('application.add_proposal'), notes_new_proposal_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
-                    class: "secondary-button regular-button slim", data: { show_modal_title_value: t('application.add_new_proposal')}
+                    class: "secondary-button regular-button", data: { show_modal_title_value: t('application.add_new_proposal')}
     end
   end
   
