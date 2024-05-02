@@ -99,8 +99,10 @@ module MultiLanguagesHelper
 
 
   def language_hash(concept_label)
-
-    return concept_label.first if concept_label.is_a?(Array)
+    if concept_label.is_a?(Array)
+      return concept_label if concept_label.length > 1
+      return concept_label.first
+    end
     return concept_label.to_h.reject { |key, _| %i[links context].include?(key) } if concept_label.is_a?(OpenStruct)
 
     concept_label
@@ -149,7 +151,7 @@ module MultiLanguagesHelper
         concat content_tag(:p, Array(value).join(', '), class: 'm-0')
 
         unless key.to_s.upcase.eql?('NONE') || key.to_s.upcase.eql?('@NONE')
-          concat content_tag(:span, key.upcase, class: 'badge badge-secondary ml-1')
+          concat render(ChipButtonComponent.new(text: key, type: "clickable", class: "mr-2"))
         end
       end
     end.join)
