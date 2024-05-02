@@ -184,7 +184,7 @@
           %hr.home-section-line/
         %div
           - @slices.each do |slice, index|
-            - slice_link = "http://#{slice.acronym}.#{$UI_URL.sub("http://", "")}"
+            - slice_link = "http://#{slice.acronym}.#{$UI_URL.sub("https://", "")}"
             %div.text-center{'data-controller': 'tooltip', title: content_tag(:div, slice.description, style: 'max-width: 200px')}
               = link_to slice_link, target: '_blank', class: 'home-slices' do
                 .home-slice-ontologies
