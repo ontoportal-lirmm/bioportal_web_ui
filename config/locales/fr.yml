@@ -71,7 +71,7 @@ fr:
     provide_ontology_or_concept: Veuillez fournir un identifiant d'ontologie ou un identifiant de concept avec un identifiant d'ontologie.
     search_for_class: Veuillez rechercher une classe à l'aide du champ Jump To ci-dessus
     missing_roots_for_ontology: Racines manquantes pour %{acronym}
-    missing_roots: Racines manquantes %{id}
+    missing_roots: Racines manquantes
     missing_class: Classe manquante %{root_child}
     missing_class_ontology: Classe manquante %{acronym} / %{concept_id}
     error_simplify_class: "Échec de la simplification de la classe : %{cls}"
@@ -300,7 +300,10 @@ fr:
     get_annotation: Obtenir des annotations
     total_results: Résultats totaux
     insert_sample_text: Insérer un texte d'exemple
-    sample_text: Le mélanome est une tumeur maligne des mélanocytes trouvée principalement dans la peau mais aussi dans l'intestin et l'œil.
+    sample_text: Il y a eu de nombreuses études récentes sur l'utilisation d'antagonistes microbiens pour contrôler les maladies causées par des bactéries phytopathogènes telluriques
+              et aériennes, dans le but de remplacer les méthodes actuelles de contrôle chimique et d'éviter l'utilisation extensive de fongicides, qui conduisent souvent à une résistance chez les pathogènes des plantes.
+              En agriculture, les microorganismes promoteurs de croissance des plantes et de biocontrôle ont émergé comme des alternatives sûres aux pesticides chimiques. Les espèces de Streptomyces et leurs
+              métabolites peuvent avoir un grand potentiel en tant qu'agents excellents pour contrôler divers phytopathogènes fongiques et bactériens.
 
   concepts:
     error_valid_concept: "Erreur : Vous devez fournir un identifiant de concept valide"

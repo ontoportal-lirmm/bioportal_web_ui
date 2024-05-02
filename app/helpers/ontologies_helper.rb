@@ -499,7 +499,7 @@ module OntologiesHelper
   def edit_sub_languages_button(ontology = @ontology, submission = @submission_latest)
     return unless ontology.admin?(session[:user])
 
-    link = edit_ontology_submission_path(ontology.acronym, submission.submissionId, properties: 'naturalLanguage', container_id: 'application_modal_content')
+    link = edit_ontology_submission_path(ontology.acronym, submission&.submissionId || '', properties: 'naturalLanguage', container_id: 'application_modal_content')
     link_to_modal(nil,  link, class: "btn", id:'fair-details-link',
                   data: { show_modal_title_value: t('ontologies.edit_natural_languages', acronym: ontology.acronym), show_modal_size_value: 'modal-md' }) do
       render ChipButtonComponent.new(type: 'clickable', class: 'admin-background chip_button_small' ) do

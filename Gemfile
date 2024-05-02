@@ -115,6 +115,8 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
   gem 'i18n-tasks'
+  gem 'i18n-tasks-csv', '~> 1.1'
+
   gem 'deepl-rb'
   gem 'letter_opener_web', '~> 2.0'
   gem 'haml-rails'

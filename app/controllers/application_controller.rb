@@ -414,19 +414,20 @@ class ApplicationController < ActionController::Base
         # get the top level nodes for the root
         # TODO_REV: Support views? Replace old view call: @ontology.top_level_classes(view)
         @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
-        if @roots.nil? || @roots.empty?
+
+        if @roots.nil? || response_error?(@roots) || @roots.compact&.empty?
           LOG.add :debug, t('application.missing_roots_for_ontology', acronym: @ontology.acronym)
           classes = @ontology.explore.classes.collection
-          @concept = classes.first.explore.self(full: true) if classes.first
+          @concept = classes.first.explore.self(full: true) if classes&.first
           return
         end
 
         @root = LinkedData::Client::Models::Class.new(read_only: true)
-        @root.children = @roots.sort{|x,y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase}
+        @root.children = @roots.sort{|x,y| (x&.prefLabel || "").downcase <=> (y&.prefLabel || "").downcase}
 
         # get the initial concept to display
         root_child = @root.children&.first
-        not_found(t('application.missing_roots', id: @roots.id)) if root_child.nil?
+        not_found(t('application.missing_roots')) if root_child.nil?
 
         @concept = root_child.explore.self(full: true, lang: lang)
         # Some ontologies have "too many children" at their root. These will not process and are handled here.
@@ -446,7 +447,7 @@ class ApplicationController < ActionController::Base
         rootNode = @concept.explore.tree(include: include, concept_schemes: params[:concept_schemes], lang: lang)
         if rootNode.nil? || rootNode.empty?
           @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
-          if @roots.nil? || @roots.empty?
+          if @roots.nil? || response_error?(@roots) || @roots.compact&.empty?
             LOG.add :debug, t('application.missing_roots_for_ontology', acronym: @ontology.acronym)
             @concept = @ontology.explore.classes.collection.first.explore.self(full: true)
             return
