@@ -1,5 +1,6 @@
 class OntologiesRedirectionController < ApplicationController
     include UriRedirection
+    include OntologyContentSerializer
 
     # GET /ontologies/:acronym/:id
     def redirect
