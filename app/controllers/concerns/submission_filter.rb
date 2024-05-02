@@ -53,7 +53,6 @@ module SubmissionFilter
 
     submissions = sort_submission_by(submissions, @sort_by, @search)
 
-
     @page = paginate_submissions(submissions, request_params[:page].to_i, request_params[:pagesize].to_i)
 
     count = @page.page.eql?(1) ? count_objects(submissions) : {}
@@ -134,7 +133,7 @@ module SubmissionFilter
     return submissions.sort_by { |x| x[:rank] ? -x[:rank] : 0}  unless query.blank?
 
     if sort_by.eql?('visits')
-      submissions = submissions.sort_by { |x| -x[:popularity] }
+      submissions = submissions.sort_by { |x| -(x[:popularity] || 0) }
     elsif sort_by.eql?('fair')
       submissions = submissions.sort_by { |x| -x[:fairScore] }
     elsif sort_by.eql?('notes')

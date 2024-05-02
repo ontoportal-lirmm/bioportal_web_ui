@@ -38,8 +38,9 @@
     .ontology-details-header-right-container.justify-content-end{style: 'min-width: 20%;'}
       %span.mx-1
         = new_submission_button
-      %span.mx-1
-        = ontology_edit_button
+      - if @submission_latest
+        %span.mx-1
+          = ontology_edit_button
       %span
         = submission_json_button
       = subscribe_button(@ontology.id)
