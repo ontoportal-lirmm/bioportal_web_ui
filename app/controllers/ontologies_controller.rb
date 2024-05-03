@@ -212,8 +212,7 @@ class OntologiesController < ApplicationController
   # GET /ontologies/ACRONYM
   # GET /ontologies/1.xml
   def show
-    request_accept_header = request.env["HTTP_ACCEPT"].split(",")[0]
-    return  redirect_to("/ontologies/#{params[:id]}/download?format=#{request_accept_header}", allow_other_host: true) if (request_accept_header != "text/html" && params[:p] == nil)
+    return  redirect_to("/ontologies/#{params[:id]}/download?format=#{accept_header}", allow_other_host: true) if (accept_header != "text/html" && params[:p] == nil)
 
     # Hack to make ontologyid and conceptid work in addition to id and ontology params
     params[:id] = params[:id].nil? ? params[:ontologyid] : params[:id]
@@ -264,7 +263,7 @@ class OntologiesController < ApplicationController
       if submissions.any?{|x| helpers.submission_ready?(x)}
         @old_submission_ready = true
       elsif !params[:p].blank?
-        redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
+        params[:p] = "summary"
       end
     end
 
@@ -552,6 +551,10 @@ class OntologiesController < ApplicationController
     else
       super
     end
+  end
+
+  def accept_header
+    request.env["HTTP_ACCEPT"].split(",")[0]
   end
 
 end
