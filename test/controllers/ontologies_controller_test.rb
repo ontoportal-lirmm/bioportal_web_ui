@@ -19,7 +19,7 @@ class OntologiesControllerTest < ActionDispatch::IntegrationTest
         if response.redirect?
           follow_redirect!
         end
-        assert_response(response.status == 302 ? :redirect : :success, "GET #{path} returned #{response.status}")
+        assert_response :success, "GET #{path} returned #{response.status}"
       end
     end
 
