@@ -151,7 +151,7 @@ Rails.application.routes.draw do
   get '/ontologies/view/new/:id' => 'ontologies#new_view'
   get '/ontologies/:acronym/download' => 'ontologies_redirection#redirect_ontology'
   get '/ontologies/:acronym/:id/serialize/:output_format' => 'ontologies#content_serializer', :id => /.+/
-  get '/ontologies/htaccess/:acronym' => 'ontologies_redirection#generate_htaccess'
+  get '/ontologies/:acronym/htaccess' => 'ontologies_redirection#generate_htaccess'
 
   get '/ontologies/virtual/:ontology' => 'ontologies#virtual', :as => :ontology_virtual
   get '/ontologies/success/:id' => 'ontologies#submit_success'

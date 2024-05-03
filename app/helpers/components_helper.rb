@@ -94,7 +94,7 @@ module ComponentsHelper
 
   def htaccess_tag(acronym)
     content_tag(:span, style: 'display: inline-block; width: 18px;') do
-      link_to_modal(nil, "/ontologies/htaccess/#{acronym}", data: {show_modal_title_value: "#{t("ontologies.htaccess_modal_title", acronym: acronym)}", show_modal_size_value: 'modal-xl'}) do
+      link_to_modal(nil, "/ontologies/#{acronym}/htaccess", data: {show_modal_title_value: "#{t("ontologies.htaccess_modal_title", acronym: acronym)}", show_modal_size_value: 'modal-xl'}) do
         inline_svg_tag("icons/copy_link.svg")
       end
     end
