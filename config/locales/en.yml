@@ -1344,6 +1344,9 @@ en:
     instructions_servers: Instructions for %{server} servers
     htaccess_redirection_description: "We offer a seamless solution to make your ontology URIs resolvable and content negotiable by allowing URL redirection for your ontology URIs to our Agroportal URIs. To facilitate this process, we've provided you with a set of .htaccess rewrite rules. By following the simple instructions below, you'll be able to implement these rules swiftly and efficiently, ensuring smooth redirection"
     
+    redirection_note: |
+      This redirection works only for uri with the form of:  url/path/resource_id
+      This will not work for uris in the form of: url/path/to/something#resource_id OR url/path/to/something:resource_id
     htaccess_redirection:
       instruction_1: "Access .htaccess File:"
       instruction_1_content: "Locate the .htaccess file in the root directory of your website, if it doesn't exist create one. This file controls how your web server behaves and is often used for URL rewriting and redirection."

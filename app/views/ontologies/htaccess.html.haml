@@ -59,5 +59,10 @@
         %pre.mb-0
             %code.d-block{style: 'text-wrap: pretty; word-break: break-all; color: white;'}
                 = @nginx_content
-    .contact-support{style: "width: 220px"}
-        = render Buttons::RegularButtonComponent.new(id:'regular-button', value: t("ontologies.contact_support"), variant: "primary")
+    
+    %h5
+        %strong Note
+        = render Display::AlertComponent.new(message: t("ontologies.redirection_note"), closable: false, type: "warning")
+
+    .contact-support{style: "width: 100%; display: flex; justify-content: end;"}
+        = render Buttons::RegularButtonComponent.new(id:'regular-button', value: t("ontologies.contact_support"), variant: "primary", href: "/feedback", target: "_blank", state: "regular")

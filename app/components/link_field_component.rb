@@ -20,9 +20,9 @@ class LinkFieldComponent < ViewComponent::Base
   end
 
   def link_tag
-    if internal_link?
-      url = @raw ? @value : @value.to_s.split("/").last
-      text = @raw ? @value : @value.to_s.sub("data.", "")
+    if !@raw && internal_link?
+      url = @value.to_s.split("/").last
+      text = @value.to_s.sub("data.", "")
       target = ""
     else
       url = @value.to_s
