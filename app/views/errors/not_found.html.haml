@@ -6,7 +6,7 @@
         %div{style: "width: 216px;"}
             = render Buttons::RegularButtonComponent.new(id:'Home-button', value: t("errors.go_home_button"), variant: "secondary", href: "/") 
         %div{style: "width: 216px; margin-left: 22px"}
-            = render Buttons::RegularButtonComponent.new(id:"feedback-button" ,value: t("errors.send_feedback_button"), variant: "primary", href: "/feedback")
+            = render Buttons::RegularButtonComponent.new(id:"feedback-button" ,value: t("errors.send_feedback_button"), variant: "primary", href: "/feedback?location=#{@referer_url}")
 
 
 
