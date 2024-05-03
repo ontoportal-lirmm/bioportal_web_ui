@@ -53,7 +53,6 @@ module SubmissionFilter
 
     submissions = sort_submission_by(submissions, @sort_by, @search)
 
-
     @page = paginate_submissions(submissions, request_params[:page].to_i, request_params[:pagesize].to_i)
 
     count = @page.page.eql?(1) ? count_objects(submissions) : {}

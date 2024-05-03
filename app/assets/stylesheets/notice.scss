@@ -14,3 +14,26 @@ div#notice_message {
   }
 }
 
+.slice-notice-bar-container{
+  background-color: var(--warning-color);
+  display: flex;
+  justify-content: center;
+}
+.slice-notice-bar{
+  width: var(--container-max-width);
+  padding: 10px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+.slice-notice-bar>div{
+  display: flex;
+}
+.slice-notice-bar .slice-name{
+  margin-left: 5px;
+  font-weight: 600;
+}
+.slice-notice-bar .warning-button.primary-button{
+  background-color: #efb300 !important;
+}

@@ -6,21 +6,18 @@
 
 - do_not_display_subdomain_info_here = Set.new(["homeall_resources"])
 - if at_slice? && !do_not_display_subdomain_info_here.include?("#{controller.controller_name}#{controller.action_name}")
-  .subdomain_info{:style => "margin: 13px; padding: 5px; border: 1px solid gray; font-size:14px; background-color: #ffffcc;"}
-    %p{:style => "text-align: left; margin-bottom: 0;"}
-      - query_string = request.query_string.empty? ? "" : "?#{request.query_string}"
-      You are viewing the
-      %b= @subdomain_filter[:name]
-      %a.pop_window{:href => "help?pop=true#slice_definition", :target => "_blank"}
-        = $SITE
-        = t('layout.notices.slice')
-      = t('layout.notices.at')
-      = succeed "." do
-        %b= request.host
-      = $SITE
-      = succeed "." do
-        %a{:href => "#{$UI_URL}#{request.path}#{query_string}"}
-          = t('layout.notices.visit_the_site')
+  .slice-notice-bar-container
+    .slice-notice-bar
+      %div
+        .title
+          Viewing the slice:
+        .slice-name
+          = @subdomain_filter[:name]
+      .view-full-site-button
+        - query_string = request.query_string.empty? ? "" : "?#{request.query_string}"
+        = render Buttons::RegularButtonComponent.new(id:'slices-view-full-site', value: "View full website", variant: "primary", href: "#{$UI_URL}#{request.path}#{query_string}", color: 'warning', size: "slim") do |btn|
+          = btn.icon_right do
+            = inline_svg_tag "arrow-right.svg"
 #site-notice
   - message_name = ""
   - unless $SITE_NOTICE.nil? || $SITE_NOTICE.empty?
