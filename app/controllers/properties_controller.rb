@@ -31,6 +31,9 @@ class PropertiesController < ApplicationController
   def show
     @acronym = params[:ontology]
     @property = get_property(params[:id],  @acronym, include: 'all')
+
+    redirect_to(ontology_path(id: params[:ontology], p: 'properties', propertyid: params[:id], lang: request_lang)) and return unless turbo_frame_request?
+
     render partial: 'show'
   end
 
