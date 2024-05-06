@@ -156,19 +156,20 @@ module MultiLanguagesHelper
     if label.is_a?(String)
       content_tag(:p, label)
     elsif label.is_a?(Array)
-      raw(content_tag(:div) do
-        raw(label.map{|x|  content_tag(:div, x, class: 'mb-1')}.join)
-      end)
+      content_tag(:div) do
+        raw(label.map { |x| content_tag(:div, x) }.join)
+      end
     else
-      raw(label.map do |key, value|
-        content_tag(:div, class: 'd-flex align-items-center') do
-          concat content_tag(:p, Array(value).join(', '), class: 'm-0')
-
-          unless key.to_s.upcase.eql?('NONE') || key.to_s.upcase.eql?('@NONE')
-            concat content_tag(:span, key.upcase, class: 'badge badge-secondary ml-1')
-          end
-        end
-      end.join)
+      content_tag(:div) do
+        raw(label.map do |key, value|
+          Array(value).map do |v|
+            content_tag(:div) do
+              concat content_tag(:span, v)
+              concat content_tag(:span, key.upcase, class: 'badge badge-secondary ml-1') unless key.to_s.upcase.eql?('NONE') || key.to_s.upcase.eql?('@NONE')
+            end
+          end.join
+        end.join)
+      end
     end
   end
 

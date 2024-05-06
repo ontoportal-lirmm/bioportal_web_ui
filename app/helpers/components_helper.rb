@@ -94,12 +94,13 @@ module ComponentsHelper
   def link_to_with_actions(link_to_tag, acronym: nil, url: nil, copy: true, check_resolvability: true, generate_link: true)
     tag = link_to_tag
     url = link_to_tag if url.nil?
-    tag = tag + copy_link_to_clipboard(url) if copy
 
-    tag= tag + generated_link_to_clipboard(url, acronym) if generate_link
+    tag += content_tag(:span, class: 'mx-1') do
+      concat copy_link_to_clipboard(url) if copy
+      concat generated_link_to_clipboard(url, acronym) if generate_link
+      concat resolvability_check_tag(url) if check_resolvability
+    end
 
-    tag = tag + resolvability_check_tag(url) if check_resolvability
-    
     tag.html_safe
   end
 

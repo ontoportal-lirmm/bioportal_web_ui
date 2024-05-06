@@ -416,8 +416,9 @@ module ApplicationHelper
     data = label_ajax_data(cls_id, ont_acronym, ajax_uri, cls_url)
     options = {  'data-controller': 'label-ajax' }.merge(data)
     options = options.merge({ target: target }) if target
-
-    render ChipButtonComponent.new(url: link, text: cls_id, type: 'clickable', **options)
+    content_tag(:span, class: 'mx-1') do
+      render ChipButtonComponent.new(url: link, text: cls_id, type: 'clickable', **options)
+    end
   end
 
   def get_link_for_cls_ajax(cls_id, ont_acronym, target = nil)
@@ -427,7 +428,7 @@ module ApplicationHelper
       cls_url = "/ontologies/#{ont_acronym}?p=classes&conceptid=#{CGI.escape(cls_id)}"
       label_ajax_link(link, cls_id, ont_acronym, ajax_url , cls_url ,target)
     else
-      auto_link(cls_id, :all, target: '_blank')
+      content_tag(:div, auto_link(cls_id, :all, target: '_blank'))
     end
   end
 
@@ -460,9 +461,9 @@ module ApplicationHelper
     data = label_ajax_data_h(label_xl, ont_acronym, ajax_uri, label_xl_url)
     data[:data][:controller] = 'label-ajax'
     if modal
-      link_to_modal(cls_id, link, {data: data[:data] , class: 'btn btn-sm btn-light'})
+      link_to_modal(cls_id, link, {data: data[:data] , class: 'btn btn-sm btn-light m-1'})
     else
-      link_to(link,'', {data: data[:data], class: 'btn btn-sm btn-light', target: '_blank'})
+      link_to(link,'', {data: data[:data], class: 'btn btn-sm btn-light m-1', target: '_blank'})
     end
 
 
