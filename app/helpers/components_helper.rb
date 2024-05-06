@@ -144,8 +144,8 @@ module ComponentsHelper
     render LoaderComponent.new(type: type)
   end
 
-  def info_tooltip(text)
-    render Display::InfoTooltipComponent.new(text: text)
+  def info_tooltip(text, interactive: true)
+    render Display::InfoTooltipComponent.new(text: text, interactive: interactive)
   end
 
   def empty_state_message(message)
