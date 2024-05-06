@@ -41,7 +41,7 @@ fr:
     formats:
       year_month_day_concise: "%Y-%m-%d" # 2017-03-01
       month_day_year: "%b %-d, %Y" # Mar 1, 2017
-      monthfull_day_year: "%B %-d, %Y" # Mars 1, 2017
+      monthfull_day_year: "%-d %B %Y" # Mars 1, 2017
 
   language:
     translation_not_available: "Traduction en %{language} non disponible"
@@ -705,7 +705,7 @@ fr:
     metadata:
       additional_metadata: Métadonnées supplémentaires
     header:
-      last_submission_date: Date de la dernière soumission
+      last_submission_date: Date de la dernière soumission le
 
   projects:
     project_not_found: "Projet non trouvé : %{id}"
