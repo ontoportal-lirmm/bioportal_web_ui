@@ -96,6 +96,8 @@ class OntologiesController < ApplicationController
 
   def properties
     @acronym = @ontology.acronym
+    @properties = LinkedData::Client::HTTP.get("/ontologies/#{@acronym}/properties/roots", { lang: request_lang })
+
     if request.xhr?
       return render 'ontologies/sections/properties', layout: false
     else
