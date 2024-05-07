@@ -16,7 +16,7 @@ module UriRedirection
     end
 
     def find_type_by_search(id, acronym)
-        result = search_content(q: "*#{id}", qf: "resource_id", page: 1, pagesize: 10, ontologies: acronym)
+        result = search_content(q: "*##{id} || *\/#{id}", qf: "resource_id", page: 1, pagesize: 10, ontologies: acronym)
 
         if result[:collection].empty?
           type = nil
