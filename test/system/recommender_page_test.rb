@@ -43,6 +43,7 @@ class RecommenderPageTest < ApplicationSystemTestCase
 
         find("div.insert-sample-text-button").find("div.button").click
 
+        # Mock the response of the API calling /recommender with sample text
         WebMock.enable!
         WebMock.stub_request(:post, @recommender_api)
             .with(
@@ -55,7 +56,8 @@ class RecommenderPageTest < ApplicationSystemTestCase
                         'User-Agent'=>'NCBO API Ruby Client v0.1.0'
                 })
             .to_return(status: 200, body: @sample_response.to_json, headers: {})
-            
+
+        # Mock the response of the API calling /ontologies
         WebMock.stub_request(:get, @ontologies_url)
             .with(
               headers: {
@@ -69,17 +71,28 @@ class RecommenderPageTest < ApplicationSystemTestCase
         
         find(@recommender_submit_button).click
         
+        # Recommendations table exists
         assert_selector "div#recommender-table_wrapper"
-        assert_selector "div.json-button"
-        assert_selector "div.cite-us-button"
-        assert_selector "div.go-to-annotator"
 
+        # The number of results is 4
+        assert_equal 4, page.all('.recommender-result-ontology').count
+
+        # Json button exists
+        assert_selector "div.json-button"
+
+        # Cite us button exists
+        assert_selector "div.cite-us-button"
+
+        # Go to annotator button exists
+        assert_selector "div.go-to-annotator"
+        
         find("div#recommender-edit-button").click
         
         
         find(@recommender_text_area).native.clear
         find(@recommender_text_area).fill_in(with: 'input to show no result')
 
+        # Mock the response of the API calling /recommender using for an input that returns no results
         WebMock.stub_request(:post, "http://localhost:9393/recommender")
         .with(
           body: "{\"input\":\"input to show no result\",\"input_type\":\"1\",\"output_type\":\"1\",\"wc\":\"0.55\",\"wa\":\"0.15\",\"wd\":\"0.15\",\"ws\":\"0.15\",\"max_elements_set\":\"3\",\"controller\":\"recommender\",\"action\":\"index\"}",
@@ -95,7 +108,7 @@ class RecommenderPageTest < ApplicationSystemTestCase
         find(@recommender_submit_button).click
         
         assert_selector "div.browse-empty-illustration"
-        sleep 20
+        
         
     end
 end
