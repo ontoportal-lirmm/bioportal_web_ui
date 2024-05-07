@@ -66,7 +66,7 @@ en:
     provide_ontology_or_concept: Please provide an ontology id or concept id with an ontology id.
     search_for_class: Please search for a class using the Jump To field above
     missing_roots_for_ontology: Missing @roots for %{acronym}
-    missing_roots: Missing roots %{id}
+    missing_roots: Missing roots
     missing_class: Missing class %{root_child}
     missing_class_ontology: Missing class %{acronym} / %{concept_id}
     error_simplify_class: "Failure to simplify class: %{cls}"
@@ -298,7 +298,10 @@ en:
     score: Score
     api_documentation: "Annotator API documentation"
     insert_sample_text: Insert sample text
-    sample_text: Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.
+    sample_text: There has been many recent studies on the use of microbial antagonists to control diseases incited by soilborne and airborne plant pathogenic bacteria
+              and fungi, in an attempt to replace existing methods of chemical control and avoid extensive use of fungicides, which often lead to resistance in plant pathogens.
+              In agriculture, plant growth-promoting and biocontrol microorganisms have emerged as safe alternatives to chemical pesticides. Streptomyces spp. and their
+              metabolites may have great potential as excellent agents for controlling various fungal and bacterial phytopathogens.
   concepts:
     error_valid_concept: "Error: You must provide a valid concept id"
     missing_roots: Missing roots

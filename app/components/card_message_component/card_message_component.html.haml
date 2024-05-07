@@ -1,7 +1,7 @@
 .d-flex.justify-content-center.m-4
   .card-message-card
     .d-flex.justify-content-center.mb-4
-      %img{:src => "#{asset_path(icon)}"}/
+      = inline_svg_tag icon
     - if no_title?
       %p.card-message-text
         = @message

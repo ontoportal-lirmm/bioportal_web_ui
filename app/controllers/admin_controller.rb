@@ -379,7 +379,7 @@ class AdminController < ApplicationController
 
     return visits_data if analytics.empty?
 
-    analytics.each do |year, year_data|
+    analytics.sort.each do |year, year_data|
       year_data.each do |month, value|
         visits_data[:visits] << value
         visits_data[:labels] << DateTime.parse("#{year}/#{month}").strftime("%b %Y")
@@ -424,8 +424,7 @@ class AdminController < ApplicationController
     end
 
 
-
-    aggregated_data.each do |year, year_data|
+    aggregated_data.sort.each do |year, year_data|
       year_data.each do |month, value|
         visits_data[:visits] << value
         visits_data[:labels] << DateTime.parse("#{year}/#{month}").strftime("%b %Y")
@@ -443,6 +442,7 @@ class AdminController < ApplicationController
     visits_data = { visits: [], labels: [] }
 
     return visits_data if analytics.empty?
+
     analytics.each do |path, count|
       visits_data[:labels] << path
       visits_data[:visits] << count

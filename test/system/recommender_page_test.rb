@@ -40,8 +40,7 @@ class RecommenderPageTest < ApplicationSystemTestCase
     test "go to recommender page insert sample text and get recommendations" do
         visit root_url
         click_link(href: '/recommender')
-
-        find("div.insert-sample-text-button").find("div.button").click
+        find(@recommender_text_area).fill_in(with: 'Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.')
 
         # Mock the response of the API calling /recommender with sample text
         WebMock.enable!
@@ -79,7 +78,7 @@ class RecommenderPageTest < ApplicationSystemTestCase
 
         # The number of highlighted annotations are 5
         assert_selector ".recommender-page-text-area-results a", count: 5
-        
+
         # Json button exists
         assert_selector "div.json-button"
 
