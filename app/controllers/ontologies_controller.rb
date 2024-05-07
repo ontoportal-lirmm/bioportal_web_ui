@@ -212,7 +212,11 @@ class OntologiesController < ApplicationController
   # GET /ontologies/ACRONYM
   # GET /ontologies/1.xml
   def show
-    return  redirect_to("/ontologies/#{params[:id]}/download?format=#{accept_header}", allow_other_host: true) if (accept_header != "text/html" && params[:p] == nil)
+    # when dont have the specified format in the accept header
+    return not_acceptable("Invalid requested format, valid format are: JSON, XML, HTML and CSV") if (accept_header == nil)
+
+    # when the format is different than text/html 
+    return  redirect_to("/ontologies/#{params[:id]}/download?format=#{helpers.escape(accept_header)}", allow_other_host: true) if (accept_header != "text/html" && params[:p] == nil)
 
     # Hack to make ontologyid and conceptid work in addition to id and ontology params
     params[:id] = params[:id].nil? ? params[:ontologyid] : params[:id]
@@ -554,7 +558,43 @@ class OntologiesController < ApplicationController
   end
 
   def accept_header
-    request.env["HTTP_ACCEPT"].split(",")[0]
+    parse_accept_header(request.env["HTTP_ACCEPT"])
   end
+
+  def parse_accept_header(header)
+    entries = header.to_s.split(',')
+    parsed_entries = entries.map { |e| accept_entry(e) }
+    sorted_entries = parsed_entries.sort_by(&:last)
+    content_types = sorted_entries.map(&:first)
+    filtered_content_types = content_types.map { |e| find_content_type_for_media_range(e) }
+    filtered_content_types.flatten.compact.first
+  end
+
+  def accept_entry(entry)
+    type, *options = entry.split(';').map(&:strip)
+    quality = 0
+    options.delete_if { |e| quality = 1 - e[2..-1].to_f if e.start_with? 'q=' }
+    [options.unshift(type).join(';'), [quality, type.count('*'), 1 - options.size]]
+  end
+
+  def find_content_type_for_media_range(media_range)
+    case media_range.to_s
+    when '*/*', 'text/html', 'text/*'
+      'text/html'
+    when 'application/json', 'application/ld+json', 'application/*'
+      'application/ld+json'
+    when 'text/xml', 'text/rdf+xml',  'application/rdf+xml', 'application/xml'
+      'application/rdf+xml'
+    when 'text/csv'
+      'text/csv'
+    else
+      nil
+    end
+  end
+
+  def not_acceptable(message = nil)
+    render plain: message, status: 406
+  end
+
 
 end
