@@ -77,6 +77,9 @@ class RecommenderPageTest < ApplicationSystemTestCase
         # The number of results is 4
         assert_equal 4, page.all('.recommender-result-ontology').count
 
+        # The number of highlighted annotations are 5
+        assert_selector ".recommender-page-text-area-results a", count: 5
+        
         # Json button exists
         assert_selector "div.json-button"
 
