@@ -5,8 +5,14 @@ class RecommenderPageTest < ApplicationSystemTestCase
     def setup
         WebMock.disable!
         @apikey = LinkedData::Client.settings.apikey
-        @recommender_api = "#{LinkedData::Client.settings.rest_url}/recommender"
-        @ontologies_url = "#{LinkedData::Client.settings.rest_url}/ontologies?include=acronym,name"
+        @host = LinkedData::Client.settings.rest_url
+        @recommender_api = "#{@host}/recommender"
+        @ontologies_url = "#{@host}/ontologies?include=acronym,name"
+
+        ## Remove http:// from the host url
+        uri = URI.parse(@host)
+        @host = "#{uri.host}:#{uri.port}"
+
         @recommender_submit_button = "div.recommender-page-button"
         @recommender_text_area = "textarea#recommender-text-area"
         @sample_response = fixtures(:recommender)["sample_response"]
@@ -38,7 +44,6 @@ class RecommenderPageTest < ApplicationSystemTestCase
         visit root_url
         click_link(href: '/recommender')
         find(@recommender_text_area).fill_in(with: 'Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.')
-
         # Mock the response of the API calling /recommender with sample text
         WebMock.enable!
         WebMock.stub_request(:post, @recommender_api)
@@ -46,9 +51,9 @@ class RecommenderPageTest < ApplicationSystemTestCase
                 body: "{\"input\":\"Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.\",\"input_type\":\"1\",\"output_type\":\"1\",\"wc\":\"0.55\",\"wa\":\"0.15\",\"wd\":\"0.15\",\"ws\":\"0.15\",\"max_elements_set\":\"3\",\"controller\":\"recommender\",\"action\":\"index\"}",
                 headers: {
                         'Accept'=>'application/json',
-                        'Authorization'=>'apikey token=1de0a270-29c5-4dda-b043-7c3580628cd5',
+                        'Authorization'=>"apikey token=#{@apikey}",
                         'Content-Type'=>'application/json',
-                        'Host'=>'localhost:9393',
+                        'Host'=>@host,
                         'User-Agent'=>'NCBO API Ruby Client v0.1.0'
                 })
             .to_return(status: 200, body: @sample_response.to_json, headers: {})
@@ -58,8 +63,8 @@ class RecommenderPageTest < ApplicationSystemTestCase
             .with(
               headers: {
                     'Accept'=>'application/json',
-                    'Authorization'=>'apikey token=1de0a270-29c5-4dda-b043-7c3580628cd5',
-                    'Host'=>'localhost:9393',
+                    'Authorization'=>"apikey token=#{@apikey}",
+                    'Host'=>@host,
                     'User-Agent'=>'NCBO API Ruby Client v0.1.0'
               })
             .to_return(status: 200, body: ([]).to_json, headers: {})
@@ -97,9 +102,9 @@ class RecommenderPageTest < ApplicationSystemTestCase
           body: "{\"input\":\"input to show no result\",\"input_type\":\"1\",\"output_type\":\"1\",\"wc\":\"0.55\",\"wa\":\"0.15\",\"wd\":\"0.15\",\"ws\":\"0.15\",\"max_elements_set\":\"3\",\"controller\":\"recommender\",\"action\":\"index\"}",
           headers: {
                 'Accept'=>'application/json',
-                'Authorization'=>'apikey token=1de0a270-29c5-4dda-b043-7c3580628cd5',
+                'Authorization'=>"apikey token=#{@apikey}",
                 'Content-Type'=>'application/json',
-                'Host'=>'localhost:9393',
+                'Host'=>@host,
                 'User-Agent'=>'NCBO API Ruby Client v0.1.0'
           })
           .to_return(status: 200, body: ([]).to_json, headers: {})
