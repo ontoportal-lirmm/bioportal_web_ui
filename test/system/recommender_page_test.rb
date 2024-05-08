@@ -12,9 +12,6 @@ class RecommenderPageTest < ApplicationSystemTestCase
         @sample_response = fixtures(:recommender)["sample_response"]
     end
 
-    teardown do
-        WebMock.disable!
-    end
 
     test "go to recommender page and check if all filters and inputs are there" do
         visit root_url
