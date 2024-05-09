@@ -186,6 +186,18 @@ module SubmissionFilter
       end
     end
 
+    unless params[:sort_by].blank?
+      @filters[:sort_by] = params[:sort_by]
+    end
+
+    unless params[:search].blank?
+      @filters[:search] = params[:search]
+    end
+
+    unless params[:portals].blank?
+      @filters[:portals] = params[:portals]
+    end
+
     request_params.delete(:order_by) if %w[visits fair].include?(request_params[:sort_by].to_s)
     request_params
   end
@@ -212,7 +224,7 @@ module SubmissionFilter
 
     o[:note_count] = ont.notes&.length || 0
     o[:project_count] = ont.projects&.length || 0
-    o[:popularity] = @analytics[ont.acronym] || 0
+    o[:popularity] = @analytics[ont.id.to_s] || 0
     o[:rank] = sub ? sub[:rank] : 0
 
     o
@@ -321,11 +333,13 @@ module SubmissionFilter
   end
 
   def object_filter(objects, object_name, name_key = 'acronym')
-    checks = object_checks(object_name) || []
-    checks = checks.map { |x| check_id(x, objects, name_key) }.compact
+    checks = params[object_name]&.split(',') || []
+    checks = checks.map { |x| helpers.link_last_part(check_id(x, objects, name_key)) }.compact
 
-    ids = objects.map { |x| x['id'] }
+    objects.uniq! { |x| helpers.link_last_part(x['id']) }
+    ids = objects.map { |x| helpers.link_last_part(x['id']) }
     count = ids.count { |x| checks.include?(x) }
+
     [objects, checks, count]
   end
 
@@ -346,6 +360,8 @@ module SubmissionFilter
       object_names.each do |name|
         values = Array(ontology[name])
         values.each do |v|
+          v = helpers.link_last_part(v)
+
           objects_count[name] = {} unless objects_count[name]
           objects_count[name][v] = (objects_count[name][v] || 0) + 1
         end

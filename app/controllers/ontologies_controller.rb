@@ -42,11 +42,14 @@ class OntologiesController < ApplicationController
     @ontologies = submissions_paginate_filter(params)
     @object_count = count_objects(@ontologies)
 
-    update_filters_counts = @object_count.map do |section, values_count|
-      values_count.map do |value, count|
-        replace("count_#{section}_#{value}") do
-          helpers.turbo_frame_tag("count_#{section}_#{value}") do
-            helpers.content_tag(:span, count.to_s, class: "hide-if-loading #{count.zero? ? 'disabled' : ''}")
+    if @page.page.eql?(1)
+      streams = [prepend("ontologies_list_view-page-#{@page.page}", partial: 'ontologies/browser/ontologies')]
+      streams += @count_objects.map do |section, values_count|
+        values_count.map do |value, count|
+          replace("count_#{section}_#{link_last_part(value)}") do
+            helpers.turbo_frame_tag("count_#{section}_#{link_last_part(value)}") do
+              helpers.content_tag(:span, count.to_s, class: "hide-if-loading #{count.zero? ? 'disabled' : ''}")
+            end
           end
         end
       end
