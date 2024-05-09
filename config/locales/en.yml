@@ -1161,7 +1161,7 @@ en:
     update_the_current_displayed_content: "will update the current displayed content to all the following submissions:"
     save: Save
   ontologies:
-    showing_ontologies_size: "Showing %{ontologies_size} of %{analytics_size}"
+    showing_ontologies_size: "Showing %{ontologies_size} of %{analytics_size} from %{portals}"
     filters: Filters
     no_license: No license
     view_license: View license
