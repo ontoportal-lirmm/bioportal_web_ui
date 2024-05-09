@@ -60,31 +60,34 @@ module SubmissionFilter
 
   def filter_using_data(ontologies, query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
     submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: true, display_links: false, display_context: false)
+
+    submissions = submissions.map { |x| [x[:ontology][:id], x] }.to_h rescue binding.pry
+
     submissions = ontologies.map { |ont| ontology_hash(ont, submissions) }
 
     submissions.map do |s|
-      out = ((s.ontology.viewingRestriction.eql?('public') && !private_only) || private_only && s.ontology.viewingRestriction.eql?('private'))
-      out = out && (groups.blank? || (s.ontology.group.map { |x| helpers.link_last_part(x) } & groups.split(',')).any?)
-      out = out && (categories.blank? || (s.ontology.hasDomain.map { |x| helpers.link_last_part(x) } & categories.split(',')).any?)
-      out = out && (status.blank? || status.eql?('alpha,beta,production,retired') || status.split(',').include?(s.status))
-      out = out && (formats.blank? || formats.split(',').any? { |f| s.hasOntologyLanguage.eql?(f) })
-      out = out && (is_of_type.blank? || is_of_type.split(',').any? { |f| helpers.link_last_part(s.isOfType).eql?(f) })
-      out = out && (formality_level.blank? || formality_level.split(',').any? { |f| helpers.link_last_part(s.hasFormalityLevel).eql?(f) })
-      out = out && (languages.blank? || languages.split(',').any? { |f| s.naturalLanguage.any? { |n| helpers.link_last_part(n).eql?(f) } })
-      out = out && (s.ontology.viewOf.blank? || (show_views && !s.ontology.viewOf.blank?))
+      out = ((s[:ontology].viewingRestriction.eql?('public') && !private_only) || private_only && s[:ontology].viewingRestriction.eql?('private'))
+      out = out && (groups.blank? || (s[:ontology].group.map { |x| helpers.link_last_part(x) } & groups.split(',')).any?)
+      out = out && (categories.blank? || (s[:ontology].hasDomain.map { |x| helpers.link_last_part(x) } & categories.split(',')).any?)
+      out = out && (status.blank? || status.eql?('alpha,beta,production,retired') || status.split(',').include?(s[:status]))
+      out = out && (formats.blank? || formats.split(',').any? { |f| s[:hasOntologyLanguage].eql?(f) })
+      out = out && (is_of_type.blank? || is_of_type.split(',').any? { |f| helpers.link_last_part(s[:isOfType]).eql?(f) })
+      out = out && (formality_level.blank? || formality_level.split(',').any? { |f| helpers.link_last_part(s[:hasFormalityLevel]).eql?(f) })
+      out = out && (languages.blank? || languages.split(',').any? { |f| Array(s[:naturalLanguage]).any? { |n| helpers.link_last_part(n).eql?(f) } })
+      out = out && (s[:ontology].viewOf.blank? || (show_views && !s[:ontology].viewOf.blank?))
 
-      out = out && (query.blank? || [s.description, s.ontology.name, s.ontology.acronym].any? { |x| (x|| '').downcase.include?(query.downcase) })
+      out = out && (query.blank? || [s[:description], s[:ontology].name, s[:ontology].acronym].any? { |x| (x || '').downcase.include?(query.downcase) })
 
       if out
         s[:rank] = 0
 
         next s if query.blank?
 
-        s[:rank] += 3 if s.ontology.acronym && s.ontology.acronym.downcase.include?(query.downcase)
+        s[:rank] += 3 if s[:ontology].acronym && s[:ontology].acronym.downcase.include?(query.downcase)
 
-        s[:rank] += 2 if s.ontology.name && s.ontology.name.downcase.include?(query.downcase)
+        s[:rank] += 2 if s[:ontology].name && s[:ontology].name.downcase.include?(query.downcase)
 
-        s[:rank] += 1 if s.description && s.description.downcase.include?(query.downcase)
+        s[:rank] += 1 if s[:description] && s[:description].downcase.include?(query.downcase)
 
         s
       else
@@ -190,7 +193,7 @@ module SubmissionFilter
 
   def ontology_hash(ont, submissions)
     o = {}
-    sub = submissions.select{|x| x.ontology&.id.eql?(ont.id)}.first
+    sub = submissions[ont.id]
 
     o[:ontology] = ont
 
@@ -200,7 +203,7 @@ module SubmissionFilter
 
     o[:hasOntologyLanguage] = sub&.hasOntologyLanguage
 
-    if sub&.metrics
+    if sub&.metrics && !sub.metrics.is_a?(String)
       o[:class_count] = sub.metrics.classes
       o[:individual_count] = sub.metrics.individuals
     else
@@ -213,9 +216,9 @@ module SubmissionFilter
     o[:note_count] = ont.notes&.length || 0
     o[:project_count] = ont.projects&.length || 0
     o[:popularity] = @analytics[ont.acronym] || 0
-    o[:rank] = sub&[:rank] || 0
+    o[:rank] = sub ? sub[:rank] : 0
 
-    OpenStruct.new(o)
+    o
   end
 
   def add_submission_attributes(ont_hash, sub)
