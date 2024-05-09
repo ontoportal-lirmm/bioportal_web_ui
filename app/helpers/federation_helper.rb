@@ -43,7 +43,7 @@ module FederationHelper
 
   def ontoportal_ui_link(id)
     portal_key, config =  ontology_portal_config(id)
-    return id  unless portal_key
+    return nil  unless portal_key
 
     ui_link = config[:ui]
     api_link = config[:api]
