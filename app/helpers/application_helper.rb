@@ -32,6 +32,7 @@ module ApplicationHelper
   def resolve_namespaces
     RESOLVE_NAMESPACE
   end
+
   def ontologies_analytics
     data = LinkedData::Client::Analytics.last_month.onts
     data.map{|x| [x[:ont].to_s, x[:views]]}.to_h
@@ -251,7 +252,7 @@ module ApplicationHelper
   end
 
   def group_chip_component(id: nil, name: , object: , checked: , value: nil, title: nil, &block)
-    title ||= object["name"]
+    title ||= "#{object["name"]} (#{object["id"]})"
     value ||= (object["value"] || object["acronym"] || object["id"])
 
     chips_component(id: id || value, name: name, label: object["acronym"],
