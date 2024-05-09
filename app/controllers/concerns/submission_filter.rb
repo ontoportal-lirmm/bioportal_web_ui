@@ -19,7 +19,7 @@ module SubmissionFilter
     filter_params = params.permit(@filters.keys).to_h
     init_filters(params)
 
-    @analytics = Rails.cache.fetch("ontologies_analytics-#{Time.now.year}-#{Time.now.month}") do
+    @analytics = Rails.cache.fetch("ontologies_analytics-#{Time.now.year}-#{Time.now.month}-#{request_portals.join('-')}") do
       helpers.ontologies_analytics
     end
 
