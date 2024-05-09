@@ -1,8 +1,6 @@
 module SubmissionFilter
   extend ActiveSupport::Concern
 
-  include SearchContent
-
   BROWSE_ATTRIBUTES = ['ontology', 'submissionStatus', 'description', 'pullLocation', 'creationDate',
                        'contact', 'released', 'naturalLanguage', 'hasOntologyLanguage',
                        'hasFormalityLevel', 'isOfType', 'deprecated', 'status', 'metrics']
@@ -31,7 +29,7 @@ module SubmissionFilter
     @fair_scores = fairness_service_enabled? ? get_fair_score('all') : nil
 
     @total_ontologies = @ontologies.size
-    search_backend = params[:search_backend]
+
     params = { query: @search,
                status: request_params[:status],
                show_views: @show_views,
@@ -43,16 +41,9 @@ module SubmissionFilter
                groups: request_params[:group], categories: request_params[:hasDomain],
                formats: request_params[:hasOntologyLanguage] }
 
-
-    if search_backend.eql?('index')
-      submissions = filter_using_index(**params)
-      submissions = @ontologies.map{ |ont| ontology_hash(ont, submissions) }
-    else
-      submissions = filter_using_data(@ontologies, **params)
-    end
+    submissions = filter_using_data(@ontologies, **params)
 
     submissions = sort_submission_by(submissions, @sort_by, @search)
-
 
     @page = paginate_submissions(submissions, request_params[:page].to_i, request_params[:pagesize].to_i)
 
@@ -66,22 +57,6 @@ module SubmissionFilter
   end
 
   private
-
-  def filter_using_index(query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
-    search_ontologies(
-      query: query,
-      status: status,
-      show_views: show_views,
-      private_only: private_only,
-      languages: languages,
-      page_size: page_size,
-      formality_level: formality_level,
-      is_of_type: is_of_type,
-      groups: groups, categories: categories,
-      formats: formats
-    )
-
-  end
 
   def filter_using_data(ontologies, query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
     submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: true, display_links: false, display_context: false)
