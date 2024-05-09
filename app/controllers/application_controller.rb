@@ -114,7 +114,7 @@ class ApplicationController < ActionController::Base
       subdomain = host_parts[0].downcase
 
       slices = LinkedData::Client::Models::Slice.all
-      slices_acronyms = slices.map {|s| s.acronym}
+      slices_acronyms = slices.map {|s| s.acronym} rescue binding.pry
 
       # Set custom ontologies if we're on a subdomain that has them
       # Else, make sure user ontologies are set appropriately
@@ -174,6 +174,9 @@ class ApplicationController < ActionController::Base
 
   def rest_url
     helpers.rest_url
+  end
+  def request_portals
+    helpers.request_portals
   end
 
   def parse_response_body(response)
