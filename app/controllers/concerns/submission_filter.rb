@@ -28,16 +28,28 @@ module SubmissionFilter
     @fair_scores = fairness_service_enabled? ? get_fair_score('all') : nil
     submissions = submissions.reject { |sub| sub.ontology.nil? }.map { |sub| ontology_hash(sub) }
 
-    if @selected_sort_by.eql?('visits')
-      submissions = submissions.sort_by { |x| -x[:popularity] }
-    elsif @selected_sort_by.eql?('fair')
-      submissions = submissions.sort_by { |x| -x[:fairScore] }
-    elsif @selected_sort_by.eql?('notes')
-      submissions = submissions.sort_by { |x| -x[:note_count] }
-    elsif @selected_sort_by.eql?('projects')
-      submissions = submissions.sort_by { |x| -x[:project_count] }
-    end
-    submissions
+    @total_ontologies = @ontologies.size
+
+    params = { query: @search,
+               status: request_params[:status],
+               show_views: @show_views,
+               private_only: @show_private_only,
+               languages: request_params[:naturalLanguage],
+               page_size: @total_ontologies,
+               formality_level: request_params[:hasFormalityLevel],
+               is_of_type: request_params[:isOfType],
+               groups: request_params[:group], categories: request_params[:hasDomain],
+               formats: request_params[:hasOntologyLanguage] }
+
+    submissions = filter_using_data(@ontologies, **params)
+
+    submissions = sort_submission_by(submissions, @sort_by, @search)
+
+    @page = paginate_submissions(submissions, request_params[:page].to_i, request_params[:pagesize].to_i)
+
+    count = @page.page.eql?(1) ? count_objects(submissions) : {}
+
+    [@page.collection, @page.totalCount, count, filter_params]
   end
 
   def ontologies_filter_url(filters, page: 1, count: false)
@@ -45,6 +57,78 @@ module SubmissionFilter
   end
 
   private
+
+  def filter_using_data(ontologies, query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
+    submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: true, display_links: false, display_context: false)
+    submissions = ontologies.map { |ont| ontology_hash(ont, submissions) }
+
+    submissions.map do |s|
+      out = ((s.ontology.viewingRestriction.eql?('public') && !private_only) || private_only && s.ontology.viewingRestriction.eql?('private'))
+      out = out && (groups.blank? || (s.ontology.group.map { |x| helpers.link_last_part(x) } & groups.split(',')).any?)
+      out = out && (categories.blank? || (s.ontology.hasDomain.map { |x| helpers.link_last_part(x) } & categories.split(',')).any?)
+      out = out && (status.blank? || status.eql?('alpha,beta,production,retired') || status.split(',').include?(s.status))
+      out = out && (formats.blank? || formats.split(',').any? { |f| s.hasOntologyLanguage.eql?(f) })
+      out = out && (is_of_type.blank? || is_of_type.split(',').any? { |f| helpers.link_last_part(s.isOfType).eql?(f) })
+      out = out && (formality_level.blank? || formality_level.split(',').any? { |f| helpers.link_last_part(s.hasFormalityLevel).eql?(f) })
+      out = out && (languages.blank? || languages.split(',').any? { |f| s.naturalLanguage.any? { |n| helpers.link_last_part(n).eql?(f) } })
+      out = out && (s.ontology.viewOf.blank? || (show_views && !s.ontology.viewOf.blank?))
+
+      out = out && (query.blank? || [s.description, s.ontology.name, s.ontology.acronym].any? { |x| (x|| '').downcase.include?(query.downcase) })
+
+      if out
+        s[:rank] = 0
+
+        next s if query.blank?
+
+        s[:rank] += 3 if s.ontology.acronym && s.ontology.acronym.downcase.include?(query.downcase)
+
+        s[:rank] += 2 if s.ontology.name && s.ontology.name.downcase.include?(query.downcase)
+
+        s[:rank] += 1 if s.description && s.description.downcase.include?(query.downcase)
+
+        s
+      else
+        nil
+      end
+
+    end.compact
+  end
+
+  def paginate_submissions(all_submissions, page, size)
+    current_page = page
+    page_size = size
+
+    start_index = (current_page - 1) * page_size
+    end_index = start_index + page_size - 1
+    next_page = current_page * page_size < all_submissions.size ? current_page + 1 : nil
+    OpenStruct.new(page: current_page, nextPage: next_page, totalCount: all_submissions.size,
+                   collection: all_submissions[start_index..end_index])
+  end
+
+  def sort_submission_by(submissions, sort_by, query = nil)
+    return submissions.sort_by { |x| x[:rank] ? -x[:rank] : 0}  unless query.blank?
+
+    if sort_by.eql?('visits')
+      submissions = submissions.sort_by { |x| -(x[:popularity] || 0) }
+    elsif sort_by.eql?('fair')
+      submissions = submissions.sort_by { |x| -x[:fairScore] }
+    elsif sort_by.eql?('notes')
+      submissions = submissions.sort_by { |x| -x[:note_count] }
+    elsif sort_by.eql?('projects')
+      submissions = submissions.sort_by { |x| -x[:project_count] }
+    elsif sort_by.eql?('metrics_classes')
+      submissions = submissions.sort_by { |x| -x[:class_count] }
+    elsif sort_by.eql?('metrics_individuals')
+      submissions = submissions.sort_by { |x| -x[:individual_count] }
+    elsif sort_by.eql?('creationDate')
+      submissions = submissions.sort_by { |x| x[:creationDate] || '' }.reverse
+    elsif sort_by.eql?('released')
+      submissions = submissions.sort_by { |x| x[:released] || '' }.reverse
+    elsif sort_by.eql?('ontology_name')
+      submissions = submissions.sort_by { |x| -x[:name] }
+    end
+    submissions
+  end
 
   def filters_params(params, includes: BROWSE_ATTRIBUTES.join(','), page: 1, pagesize: 5)
     request_params = { display_links: false, display_context: false,
