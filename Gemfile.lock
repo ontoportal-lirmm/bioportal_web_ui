@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git
-  revision: 7664229920b93ca163f1ee96b21e49d1323f843c
+  revision: 0db56d748a1574450ebeb5f67429cd0b766cf932
   branch: feature/federate-multiple-apis
   specs:
     ontologies_api_client (2.2.0)
@@ -422,7 +422,7 @@ GEM
       json
     redcarpet (3.6.0)
     regexp_parser (2.9.0)
-    reline (0.5.5)
+    reline (0.5.6)
       io-console (~> 0.5)
     request_store (1.7.0)
       rack (>= 1.4)
@@ -450,7 +450,7 @@ GEM
       rspec-mocks (~> 3.13)
       rspec-support (~> 3.13)
     rspec-support (3.13.1)
-    rubocop (1.63.4)
+    rubocop (1.63.5)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
