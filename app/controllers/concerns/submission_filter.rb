@@ -24,6 +24,12 @@ module SubmissionFilter
     submissions = LinkedData::Client::Models::OntologySubmission.all(request_params)
     @analytics =  helpers.ontologies_analytics
 
+    @analytics = Rails.cache.fetch("ontologies_analytics-#{Time.now.year}-#{Time.now.month}-#{request_portals.join('-')}") do
+      helpers.ontologies_analytics
+    end
+
+    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'all', also_include_views: true, display_links: false, display_context: false)
+
     # get fair scores of all ontologies
     @fair_scores = fairness_service_enabled? ? get_fair_score('all') : nil
     submissions = submissions.reject { |sub| sub.ontology.nil? }.map { |sub| ontology_hash(sub) }
