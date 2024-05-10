@@ -193,6 +193,8 @@ module ApplicationHelper
   def link_last_part(url)
     return "" if url.nil?
 
+    url = url.value if url.is_a?(OpenStruct)
+
     if url.include?('#')
       url.split('#').last
     else
