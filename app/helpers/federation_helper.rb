@@ -1,7 +1,7 @@
 module FederationHelper
 
   def federated_portals
-    $FEDERATED_PORTALS
+    $FEDERATED_PORTALS || {}
   end
 
   def federated_portal_config(name_key)
