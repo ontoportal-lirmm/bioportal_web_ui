@@ -25,6 +25,8 @@ module SubmissionFilter
 
     @ontologies = LinkedData::Client::Models::Ontology.all(include: 'all', also_include_views: true, display_links: false, display_context: false)
 
+    @ontologies, @errors = @ontologies.partition { |x| !x.errors }
+
     # get fair scores of all ontologies
     @fair_scores = fairness_service_enabled? ? get_fair_score('all') : nil
 
@@ -61,7 +63,7 @@ module SubmissionFilter
   def filter_using_data(ontologies, query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
     submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: true, display_links: false, display_context: false)
 
-    submissions = submissions.map { |x| [x[:ontology][:id], x] }.to_h
+    submissions = submissions.map { |x| x[:ontology] ? [x[:ontology][:id], x] : nil}.compact.to_h
 
     submissions = ontologies.map { |ont| ontology_hash(ont, submissions) }
 

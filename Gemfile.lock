@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git
-  revision: 0db56d748a1574450ebeb5f67429cd0b766cf932
+  revision: 1fcf35adcb8955d6b2d48ed08055d31cb00cd3c2
   branch: feature/federate-multiple-apis
   specs:
     ontologies_api_client (2.2.0)
@@ -176,7 +176,7 @@ GEM
       sass-rails
     globalid (1.2.1)
       activesupport (>= 6.1)
-    graphql (2.3.2)
+    graphql (2.3.3)
       base64
     graphql-client (0.22.0)
       activesupport (>= 3.0)
