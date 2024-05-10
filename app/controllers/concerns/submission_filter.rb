@@ -67,7 +67,7 @@ module SubmissionFilter
   def filter_using_data(ontologies, query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
     submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: true, display_links: false, display_context: false)
 
-    submissions = submissions.map { |x| [x[:ontology][:id], x] }.to_h rescue binding.pry
+    submissions = submissions.map { |x| [x[:ontology][:id], x] }.to_h
 
     submissions = ontologies.map { |ont| ontology_hash(ont, submissions) }
 
