@@ -5,7 +5,7 @@ module CheckResolvabilityHelper
       'application/json' => ['application/ld+json'],
       'application/rdf+xml' => %w[application/xml application/rdf+xml text/xml],
       'text/turtle' => ['application/turtle'],
-      'text/n3' => [],
+      'text/n3' => ['application/n-triples'],
       'text/html' => []
     }
 
@@ -19,7 +19,7 @@ module CheckResolvabilityHelper
   end
 
   def resolvability_timeout
-    5
+    5000
   end
 
   def resolvability_max_redirections
