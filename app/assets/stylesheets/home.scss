@@ -150,6 +150,40 @@ i.fa.fa-caret-square-o-down {
   margin-bottom: 5px;
   font-weight: 700;
 }
+.home-section-title{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+.home-section-title .text{
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+.home-slice > a{
+  display: flex;
+  align-items: center;
+}
+.home-slice-icon{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.home-slice-icon svg{
+  width: 50px;
+  height: 50px;
+}
+.home-slices-container{
+  display: flex;
+  flex-wrap: wrap;
+}
+.home-slice{
+  border: 1px solid var(--primary-color);
+  border-radius: 8px;
+  padding: 5px 15px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
 
 .home-section-line{
   width: 60px;
@@ -177,19 +211,18 @@ i.fa.fa-caret-square-o-down {
   margin-bottom: 20px;
 }
 .home-slice-name{
-  width: 128px;
   font-size: 16px;
-  margin-bottom: 20px;
+  font-weight: 600;
+  margin-left: 10px;
 }
 .home-slice-ontologies{
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 500;
-  margin-bottom: -30px;
+  margin-bottom: -23px;
 }
 .home-statistics-container > div > p {
   font-size: 20px;
   font-weight: 600;
-  margin-left: 18px;
   margin-bottom: 0;
 }
 .home-statistics-item{
@@ -437,10 +470,6 @@ i.fa.fa-caret-square-o-down {
   padding: 23px;
   margin: 7px 12px !important;
   border-radius: 50%;
-  display: block;
-}
-.home-slices{
-  margin: 7px 12px !important;
   display: block;
 }
 .home-support-items  > *:not(:first-child){
