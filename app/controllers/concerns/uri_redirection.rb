@@ -18,13 +18,16 @@ module UriRedirection
     def find_type_by_search(id, acronym)
         result = search_content(q: "*##{id} || *\/#{id}", qf: "resource_id", page: 1, pagesize: 10, ontologies: acronym)
 
-        if result[:collection].empty?
+        find_exact_resource = result[:collection].select{|x| helpers.link_last_part(x[:resource_id]).eql?(id)}.first
+
+        if !find_exact_resource
           type = nil
           resource_id = nil
         else
-          type = id_type(result[:collection][0][:type_t], result[:collection][0][:type_txt])
-          resource_id = result[:collection][0][:resource_id]
+          type = id_type(find_exact_resource[:type_t], find_exact_resource[:type_txt])
+          resource_id = find_exact_resource[:resource_id]
         end
+
         [type, resource_id]
     end
 
