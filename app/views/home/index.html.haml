@@ -206,11 +206,11 @@
           - btn.icon_right do
             = inline_svg_tag "icons/plus.svg"
 
-
-  .home-section
-    .home-statistics-container
-      .home-support-title
-        %p= t('home.ontoportal_instances')
+  .home-ontoportal-instances
+    .ontoportal-instances-container
+      .home-section-title.ontoportal
+        .text
+          = t('home.ontoportal_instances')
         %hr.home-section-line/
       .home-support-items
         - $PORTALS_INSTANCES&.each do |portal|
@@ -219,16 +219,16 @@
               = inline_svg 'logo-white.svg', width: "35", height: "26"
             %p{style: "color: #{portal[:color]}"} 
               = portal[:portal]
-
+  
   .home-section
-    .home-statistics-container
-      .home-support-title
-        %p= t('home.support_and_collaborations')
-        %hr.home-section-line/
-      .home-support-items
-        - $HOME_PAGE_LOGOS&.each do |logo|
-          %a{href:logo[:url], target: "_blanc"}
-            %img{src: asset_path(logo[:img_src])}
+    .home-section-title
+      .text
+        = t('home.support_and_collaborations')
+      %hr.home-section-line/
+    .home-support-items
+      - $HOME_PAGE_LOGOS&.each do |logo|
+        %a{href:logo[:url], target: "_blanc"}
+          %img{src: asset_path(logo[:img_src])}
 
 :javascript
   function submitAnnotator(){
