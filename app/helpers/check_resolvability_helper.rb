@@ -116,7 +116,7 @@ module CheckResolvabilityHelper
     end
 
 
-    text = text + link_to(' See details', check_resolvability_path(url: url), target: '_blank') if url
+    text = text + link_to(', click to see details', check_resolvability_path(url: url), target: '_blank') if url
     text
   end
 end
