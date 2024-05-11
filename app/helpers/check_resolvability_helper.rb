@@ -1,7 +1,21 @@
 module CheckResolvabilityHelper
 
+  def formats_equivalents(format = nil)
+    all = {
+      'application/json' => ['application/ld+json'],
+      'application/rdf+xml' => %w[application/xml application/rdf+xml text/xml],
+      'text/turtle' => ['application/turtle'],
+      'text/n3' => [],
+      'text/html' => []
+    }
+
+    return all unless format
+
+    all[format]
+  end
+
   def resolvability_formats
-    %w[application/rdf+xml text/turtle application/json text/n3 text/html]
+    formats_equivalents.keys
   end
 
   def resolvability_timeout
@@ -28,12 +42,10 @@ module CheckResolvabilityHelper
     { result: result, status: status, allowed_format: supported_format, redirections: redirections }
   end
 
-  def follow_redirection(url, format, timeout_seconds)
-    # Follow redirects
+  def follow_redirection(url, format, timeout_seconds, redirect_limit = resolvability_max_redirections)
     url = url.strip
     uri = URI.parse(url)
     response = nil
-    redirect_limit = resolvability_max_redirections # Set a limit to prevent infinite loops
     redirect_count = 0
     redirections = [uri]
 
@@ -57,7 +69,8 @@ module CheckResolvabilityHelper
         redirect_count += 1
       end
     end
-    if response&.code.to_s.eql?('200') && response&.content_type.to_s.include?(format)
+
+    if response&.code.to_s.eql?('200') && (response&.content_type.to_s.include?(format) || formats_equivalents(format)&.include?(response&.content_type.to_s))
       result = 2
     elsif response&.code.to_s.eql?('200')
       result = 1
