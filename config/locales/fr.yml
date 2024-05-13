@@ -412,7 +412,7 @@ fr:
       feedback_complete:
         title: Retour envoyé avec succès
         message: Merci d'avoir pris le temps de partager votre retour avec nous. Notre équipe de support examinera votre message et vous répondra dès que possible. Nous apprécions votre opinion et sommes reconnaissants de votre aide pour améliorer nos services. Merci de votre soutien !
-
+    suggest_slice: Proposer un nouveau groupe/slice
   landscape:
     #select_ontologies: Commencez à taper pour sélectionner des ontologies ou laissez vide pour les utiliser toutes
     classes: Nombre de classes
