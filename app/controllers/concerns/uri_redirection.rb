@@ -22,7 +22,7 @@ module UriRedirection
 
   def redirect_to_file
     # when dont have the specified format in the accept header
-    return not_acceptable("Invalid requested format, valid format are: JSON, XML, HTML and CSV") if accept_header.nil?
+    return not_acceptable("Invalid requested format, valid format are: JSON, XML, HTML and CSV\nto download the original file you can get it from: #{rest_url}/ontologies/#{params[:id]}/download\n") if accept_header.nil?
 
     # when the format is different than text/html
     redirect_to_download_file if (accept_header != "text/html" && params[:p].nil?)
