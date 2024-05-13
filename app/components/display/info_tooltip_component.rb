@@ -2,13 +2,14 @@
 
 class Display::InfoTooltipComponent < ViewComponent::Base
 
-  def initialize(text: nil , icon: "info.svg")
+  def initialize(text: nil , icon: "info.svg", interactive: true)
     super
     @text = text
     @icon = icon
+    @interactive = interactive
   end
   def call
-    content_tag(:div, data:{controller:'tooltip', 'tooltip-interactive-value': 'true'}, title: @text, style: 'display: inline-block;') do
+    content_tag(:div, data:{controller:'tooltip', 'tooltip-interactive-value': @interactive}, title: @text, style: 'display: inline-block;') do
       if content
         content
       else

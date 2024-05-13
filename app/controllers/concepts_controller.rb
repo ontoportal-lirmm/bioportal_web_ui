@@ -19,6 +19,8 @@ class ConceptsController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     ontology_not_found(params[:ontology]) if @ontology.nil?
 
+    redirect_to(ontology_path(id: params[:ontology], p: 'classes', conceptid: params[:id], lang: request_lang)) and return unless turbo_frame_request?
+
     @submission = get_ontology_submission_ready(@ontology)
     @ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
     @concept = @ontology.explore.single_class({full: true, language: request_lang}, params[:id])
@@ -26,8 +28,7 @@ class ConceptsController < ApplicationController
 
     concept_not_found(params[:id]) if @concept.nil?
     @notes = @concept.explore.notes
-
-    render :partial => 'show'
+    render partial: 'show'
   end
 
   def index
