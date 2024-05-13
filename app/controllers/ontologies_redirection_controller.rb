@@ -67,7 +67,7 @@ class OntologiesRedirectionController < ApplicationController
             ontology_rule = "RewriteRule ^#{URI.parse(ontology_uri).path[1..-1]}?$ #{ontology_portal_url} [R=301,L]"
         end
 
-        htaccess_content = <<-HTACCESS.strip_heredoc
+        <<-HTACCESS.strip_heredoc
             RewriteEngine On
             #{ontology_rule if ontology_rule}
             RewriteRule ^.*/([^/#]+)$ #{ontology_portal_url}/$1 [R=301,L]
@@ -81,7 +81,7 @@ class OntologiesRedirectionController < ApplicationController
             ontology_rule = "rewrite ^#{URI.parse(ontology_uri).path[1..-1]}?$ #{ontology_portal_url} permanent"
         end
   
-        nginx_content = <<-NGINX.strip_heredoc
+        <<-NGINX.strip_heredoc
             location / {
                 #{ontology_rule if ontology_rule}
                 if ($request_uri ~ ^.*/([^/]+)$){

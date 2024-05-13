@@ -19,9 +19,7 @@ module OntologyContentSerializer
         faraday.headers['Authorization'] = "apikey token=#{get_apikey}"
       end
       response = conn.get
-      if response.success?
-        @result = response.body.force_encoding(Encoding::UTF_8)
-      end
+      @result = response.body.force_encoding(Encoding::UTF_8)
     end
     [@result, accept_header]
   end
@@ -36,7 +34,7 @@ module OntologyContentSerializer
       'application/ld+json'
     when 'xml', 'text/xml', 'text/rdf+xml',  'application/rdf+xml', 'application/xml'
       'application/rdf+xml'
-    when 'ntriples', 'application/n-triples', '*/*', 'text/*'
+    when 'ntriples', 'application/n-triples', '*/*', 'text/*', 'text/n3'
       'application/n-triples'
     when 'turtle', 'text/turtle'
       'text/turtle'

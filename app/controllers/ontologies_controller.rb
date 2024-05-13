@@ -13,6 +13,7 @@ class OntologiesController < ApplicationController
   include SparqlHelper
   include SubmissionFilter
   include OntologyContentSerializer
+  include UriRedirection
 
   require 'multi_json'
   require 'cgi'
@@ -213,7 +214,7 @@ class OntologiesController < ApplicationController
   # GET /ontologies/ACRONYM
   # GET /ontologies/1.xml
   def show
-    return  redirect_to("/ontologies/#{params[:id]}/download?format=#{accept_header}", allow_other_host: true) if (accept_header != "text/html" && params[:p] == nil)
+    return redirect_to_file if redirect_to_file?
 
     # Hack to make ontologyid and conceptid work in addition to id and ontology params
     params[:id] = params[:id].nil? ? params[:ontologyid] : params[:id]
@@ -554,8 +555,5 @@ class OntologiesController < ApplicationController
     end
   end
 
-  def accept_header
-    request.env["HTTP_ACCEPT"].split(",")[0]
-  end
 
 end

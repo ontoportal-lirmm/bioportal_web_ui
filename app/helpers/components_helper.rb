@@ -71,7 +71,7 @@ module ComponentsHelper
 
 
   def resolvability_check_tag(url)
-    content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;')
+    content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;', onClick: "window.open('#{check_resolvability_url(url: url)}', '_blank');")
   end
 
   def rounded_button_component(link)
@@ -93,7 +93,7 @@ module ComponentsHelper
   end
 
   def htaccess_tag(acronym)
-    content_tag(:span, style: 'display: inline-block; width: 18px;') do
+    content_tag(:span, 'data-controller': 'tooltip', style: 'display: inline-block; width: 18px;', title: "See #{t("ontologies.htaccess_modal_title", acronym: acronym)}") do
       link_to_modal(nil, "/ontologies/#{acronym}/htaccess", data: {show_modal_title_value: "#{t("ontologies.htaccess_modal_title", acronym: acronym)}", show_modal_size_value: 'modal-xl'}) do
         inline_svg_tag("icons/copy_link.svg")
       end
