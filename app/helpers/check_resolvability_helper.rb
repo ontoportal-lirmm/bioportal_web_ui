@@ -19,7 +19,7 @@ module CheckResolvabilityHelper
   end
 
   def resolvability_timeout
-    5000
+    5
   end
 
   def resolvability_max_redirections
