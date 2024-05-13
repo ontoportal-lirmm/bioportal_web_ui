@@ -184,12 +184,7 @@
         %hr.home-section-line/
       .home-section-description 
         .div
-          AgroPortal can be a lot to navigate?
-        .div
-          Slices offer a solution! Each Slice is a subset of ontologies focused on a specific topic.
-        .div
-          Selecting a Slice will brings you to our platform, but with all the features limited to only the ontologies of the selected slice.
-        
+          = t('home.slices_description')
       .home-slices-container
         - @slices.each do |slice, index|
           - slice_link = "http://#{slice.acronym}.#{$UI_URL.sub("https://", "")}"
