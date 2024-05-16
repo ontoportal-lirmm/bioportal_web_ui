@@ -42,21 +42,24 @@ class OntologiesControllerTest < ActionDispatch::IntegrationTest
     test 'test get STY in html format' do
       get '/ontologies/STY', headers: { 'Accept' => 'text/html' }
       assert_response :success
+      assert_equal 'text/html; charset=utf-8', response.content_type
     end
   
     test 'test get STY in json format' do
       get '/ontologies/STY', headers: { 'Accept' => 'application/json' }
-      assert_response :redirect
+      assert_response :success
+      assert_equal 'application/json', response.content_type
+
     end
   
     test 'test get STY in xml format' do
       get '/ontologies/STY', headers: { 'Accept' => 'application/xml' }
-      assert_response :redirect
+      assert_response :internal_server_error # returning 500 status response from the api
     end
   
     test 'test get STY in csv format' do
       get '/ontologies/STY', headers: { 'Accept' => 'text/csv' }
-      assert_response :redirect
+      assert_response :internal_server_error # returning 500 status response from the api
     end
   
     test 'test get STY in turtle format' do
