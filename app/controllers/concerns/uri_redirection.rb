@@ -22,10 +22,26 @@ module UriRedirection
 
   def redirect_to_file
     # when dont have the specified format in the accept header
+    # TO-DO add the turtle and n3 based on the hasSyntaxOntology
     return not_acceptable("Invalid requested format, valid format are: JSON, XML, HTML and CSV\nto download the original file you can get it from: #{rest_url}/ontologies/#{params[:id]}/download\n") if accept_header.nil?
 
     # when the format is different than text/html
-    redirect_to_download_file if (accept_header != "text/html" && params[:p].nil?)
+    download_ontology(acronym: params[:id], format: accept_header) if (accept_header != "text/html" && params[:p].nil?)
+  end
+
+  def download_ontology(params)
+    redirect_url = "#{rest_url}/ontologies/#{params[:acronym]}"
+    download_url = "#{redirect_url}/download?apikey=#{get_apikey}"
+    case params[:format]
+    when 'text/csv', 'csv'
+        fetch_and_forward_data("#{download_url}&download_format=csv")
+    when 'text/xml', 'text/rdf+xml', 'application/rdf+xml', 'application/xml', 'xml'
+        fetch_and_forward_data("#{download_url}&download_format=rdf")
+    when 'application/json', 'application/ld+json', 'application/*', 'json'
+        fetch_and_forward_data("#{redirect_url}?apikey=#{get_apikey}")
+    else
+        fetch_and_forward_data(download_url)
+    end
   end
 
   private
@@ -56,8 +72,10 @@ module UriRedirection
     render plain: message, status: 406
   end
 
-  def redirect_to_download_file
-    redirect_to("#{$UI_URL}/ontologies/#{params[:id]}/download?format=#{helpers.escape(accept_header)}", allow_other_host: true)
+  def fetch_and_forward_data(url)
+    uri = URI.parse(url)
+    response = Net::HTTP.get_response(uri)
+    send_data response.body, type: response.content_type, status: response.code.to_i
   end
 
 
