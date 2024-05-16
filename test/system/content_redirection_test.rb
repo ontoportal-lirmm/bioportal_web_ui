@@ -15,7 +15,7 @@ class ContentRedirectionTest < ApplicationSystemTestCase
 
         @generate_portal_link_button = 'span#generate_portal_link'
         @accordion_concept_details = '.dropdown-title-bar[data-target="#accordion-concept-details"]'
-        @resource_div_formats = 'div#content_resource_formats' #'div.d-flex.justify-content-center.p-2'
+        @resource_div_formats = 'div#content_resource_formats'
     end
 
 
@@ -23,32 +23,32 @@ class ContentRedirectionTest < ApplicationSystemTestCase
         visit @sty_url
         assert_selector @ontology_portal_uri , text: $SITE + ' URI'
         assert_selector @htaccess_button
-        sleep 1
         find(@htaccess_button).click
         assert_selector(@redirection_modal, visible: true, wait: 10)
         assert_selector @htaccess_code
         assert_selector @nginx_code
         assert_selector @contact_support_button
         find('button[data-action="turbo-modal#hide"]').click
-        sleep 1
     end
 
     test "go to STY ontology classes page and test the different format of resource" do
         visit @sty_url
         click_link('Classes')
         assert_selector(@generate_portal_link_button, visible: true, wait: 10)
-        # find(@generate_portal_link_button + " .clipboard.d-flex.align-items-center").find('div[data-clipboard-target="content"]', visible: :all).native.attribute('innerHTML').strip
+        generated_uri = find(@generate_portal_link_button + " .clipboard.d-flex.align-items-center").find('div[data-clipboard-target="content"]', visible: :all).native.attribute('innerHTML').strip
+        assert_equal "http://localhost:3000/ontologies/STY/T071", generated_uri
         find(@generate_portal_link_button, visible: :all).click
         assert_selector(@accordion_concept_details, visible: true, wait: 10)
         find(@accordion_concept_details, visible: :all).click
         assert_selector(@resource_div_formats, visible: true)
-        
-        all_button_format = find_all('div#content_resource_formats a')
-        all_button_format.each do |link|
-            link.click
-            sleep 2
+
+        # test all formats
+        ["json", "xml", "ntriples", "turtle"].each do |format|
+            assert_selector("a#resource_content_#{format}", visible: true)
+            find("a#resource_content_#{format}", visible: true).click
+            assert_selector("div#resource_content_modal", visible: true, wait: 10)
             find('button.close[data-action="turbo-modal#hide"]').click
-            sleep 1
+            # TO-DO test the correct result of each format
         end
     end
 
