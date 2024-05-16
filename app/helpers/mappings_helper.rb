@@ -1,12 +1,5 @@
 module MappingsHelper
 
-  RELATIONSHIP_URIS = {
-    "http://www.w3.org/2004/02/skos/core" => "skos:",
-    "http://www.w3.org/2000/01/rdf-schema" => "rdfs:",
-    "http://www.w3.org/2002/07/owl" => "owl:",
-    "http://www.w3.org/1999/02/22-rdf-syntax-ns" => "rdf:"
-  }
-
   # Used to replace the full URI by the prefixed URI
   RELATIONSHIP_PREFIX = {
     "http://www.w3.org/2004/02/skos/core#" => "skos:",
@@ -19,11 +12,6 @@ module MappingsHelper
 
   INTERPORTAL_HASH = $INTERPORTAL_HASH
 
-  def get_short_id(uri)
-    split = uri.split("#")
-    name = split.length > 1 && RELATIONSHIP_URIS.keys.include?(split[0]) ? RELATIONSHIP_URIS[split[0]] + split[1] : uri
-    "<a href='#{uri}' target='_blank'>#{name}</a>"
-  end
 
   # a little method that returns true if the URIs array contain a gold:translation or gold:freeTranslation
   def translation?(relation_array)
@@ -106,35 +94,6 @@ module MappingsHelper
     end
   end
 
-  def onts_and_views_for_select
-    @onts_and_views_for_select = []
-    ontologies = LinkedData::Client::Models::Ontology.all(include: "acronym,name", include_views: true)
-    ontologies.each do |ont|
-      next if (ont.acronym.nil? || ont.acronym.empty?)
-      ont_acronym = ont.acronym
-      ont_display_name = "#{ont.name.strip} (#{ont_acronym})"
-      @onts_and_views_for_select << [ont_display_name, ont_acronym]
-    end
-    @onts_and_views_for_select.sort! { |a, b| a[0].downcase <=> b[0].downcase }
-    return @onts_and_views_for_select
-  end
-
-  def get_concept_mappings(concept)
-    mappings = concept.explore.mappings
-    # Remove mappings where the destination class exists in an ontology that the logged in user doesn't have permissions to view.
-    # Workaround for https://github.com/ncbo/ontologies_api/issues/52.
-    mappings.delete_if do |mapping|
-      #mapping.classes.reject! { |cls| (cls.id == concept.id) && (cls.links['ontology'] == concept.links['ontology']) }
-      begin
-        ont = mapping.classes[0].explore.ontology
-        ont.errors && ont.errors.grep(/Access denied/).any?
-      rescue => e
-        Rails.logger.warn t('mappings.mapping_issue', mapping: mapping.inspect, message: e.message)
-        false
-      end
-    end
-  end
-
   def internal_mapping?(cls)
     cls.links['self'].to_s.start_with?(LinkedData::Client.settings.rest_url) || ($LOCAL_IP.present? && cls.links['self'].to_s.include?($LOCAL_IP))
   end
@@ -210,6 +169,37 @@ module MappingsHelper
           concat(t.loader { render(LoaderComponent.new(small: true)) })
         end
       end)
+    end
+  end
+
+  def client_filled_modal
+    link_to_modal "", ""
+  end
+
+  def mappings_bubble_view_legend
+    content_tag(:div, class: 'mappings-bubble-view-legend') do
+      mappings_legend_section('Bubble size:', 'The global number of mappings with all other ontologies.', 'mappings-bubble-size-legend') +
+        mappings_legend_section('Color degree:', 'The number of mappings with the selected ontology.', 'mappings-bubble-color-legend')
+    end
+  end
+
+  def mappings_legend_section(title_text, description_text, css_class)
+    content_tag(:div, class: 'content-container') do
+      content_tag(:div, class: 'bubble-view-legend-item') do
+        content_tag(:div, class: 'title') do
+          content_tag(:div, "#{title_text} ", class: 'd-inline') +
+            content_tag(:span, description_text)
+        end +
+          mappings_legend(css_class)
+      end
+    end
+  end
+
+  def mappings_legend(css_class)
+    content_tag(:div, class: css_class) do
+      content_tag(:div, "Less mappings", class: 'mappings-legend-text') +
+        (1..6).map { |i| content_tag(:div, "", class: "bubble bubble#{i}") }.join +
+        content_tag(:div, "More mappings", class: 'mappings-legend-text')
     end
   end
 end
