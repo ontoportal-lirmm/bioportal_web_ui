@@ -307,3 +307,6 @@ if $HOSTNAME
     require_relative "bioportal_config_development_#{$HOSTNAME}"
   end
 end
+
+$ontoportal_website_link = "https://ontoportal.org/"
+$ontoportal_github_repo = "https://github.com/ontoportal"
