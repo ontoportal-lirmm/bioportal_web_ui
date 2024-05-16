@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   post 'agents/:id/usages', to: 'agents#update_agent_usages', constraints: { id: /.+/ }
   resources :agents, constraints: { id: /.+/ }
   post 'agents/:id', to: 'agents#update', constraints: { id: /.+/ }
+
   resources :ontolobridge do
     post :save_new_term_instructions, on: :collection
   end
@@ -29,7 +30,6 @@ Rails.application.routes.draw do
   get '/users/subscribe/:username', to: 'users#subscribe'
   get '/users/un-subscribe/:email', to: 'users#un_subscribe'
 
-  get '/mappings/loader', to: 'mappings#loader'
   post '/mappings/loader', to: 'mappings#loader_process'
   get 'mappings/count/:id', to: 'mappings#count', constraints: { id: /.+/ }
   get 'mappings/show_mappings', to: 'mappings#show_mappings'
@@ -100,6 +100,7 @@ Rails.application.routes.draw do
   get 'admin/ontologies_report', to: 'admin#ontologies_report'
   post 'admin/refresh_ontologies_report', to: 'admin#refresh_ontologies_report'
   delete 'admin/ontologies', to: 'admin#delete_ontologies'
+  delete 'admin/ontologies/:acronym/submissions/:id', to: 'admin#delete_submission'
   put 'admin/ontologies', to: 'admin#process_ontologies'
   get 'admin/update_check_enabled', to: 'admin#update_check_enabled'
   get 'admin/ontologies/:acronym/log', to: 'admin#parse_log'
@@ -243,6 +244,7 @@ Rails.application.routes.draw do
   get '/visualize' => 'ontologies#visualize', :as => :visualize_concept, :constraints => { ontology: /[^\/?]+/, id: /[^\/?]+/, ontologyid: /[^\/?]+/, conceptid: /[^\/?]+/ }
 
   get '/exhibit/:ontology/:id' => 'concepts#exhibit'
+
 
   mount Lookbook::Engine, at: "/lookbook"
 

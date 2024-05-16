@@ -21,7 +21,8 @@ module ApplicationHelper
                        :cc => "http://creativecommons.org/ns#", :schema => "http://schema.org/", :doap => "http://usefulinc.com/ns/doap#", :bibo => "http://purl.org/ontology/bibo/",
                        :wdrs => "http://www.w3.org/2007/05/powder-s#", :cito => "http://purl.org/spar/cito/", :pav => "http://purl.org/pav/", :nkos => "http://w3id.org/nkos/nkostype#",
                        :oboInOwl => "http://www.geneontology.org/formats/oboInOwl#", :idot => "http://identifiers.org/idot/", :sd => "http://www.w3.org/ns/sparql-service-description#",
-                       :cclicense => "http://creativecommons.org/licenses/"}
+                       :cclicense => "http://creativecommons.org/licenses/",
+                       'skos-xl' => "http://www.w3.org/2008/05/skos-xl#"}
   def url_to_endpoint(url)
     uri = URI.parse(url)
     endpoint = uri.path.sub(/^\//, '')
@@ -556,11 +557,27 @@ module ApplicationHelper
         next if key_string.include?('metadata')
 
         modified_key = prefix_property_url(key_string, key)
-        modified_properties[modified_key] = value unless modified_key.nil?
+
+        if modified_key
+          modified_properties[modified_key] = value
+        else
+          modified_properties[link_last_part(key_string)] = value
+        end
+
       end
     end
 
     modified_properties
+  end
+
+  def rest_url
+    # Split the URL into protocol and path parts
+    protocol, path = $REST_URL.split("://", 2)
+
+    # Remove the last '/' in the path part
+    cleaned_path = path.chomp('/')
+    # Reconstruct the cleaned URL
+    "#{protocol}://#{cleaned_path}"
   end
 
 
@@ -572,7 +589,7 @@ module ApplicationHelper
     elsif key.nil? && namespace_key
       namespace_key
     else # we don't try to guess the prefix
-       nil
+      nil
     end
   end
 
@@ -641,5 +658,7 @@ module ApplicationHelper
       end
     end
   end
-  
+ 
+
+
 end

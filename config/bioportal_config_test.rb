@@ -55,7 +55,7 @@ $FAIRNESS_DISABLED = false
 # If your main UI is hosted at example.org and you add custom.example.org pointing to the same Rails installation
 # you could filter the ontologies visible at custom.example.org by adding this to the hash: "custom" => { :name => "Custom Slice", :ontologies => [1032, 1054, 1099] }
 # Any number of slices can be added. Groups are added automatically using the group acronym as the subdomain.
-$ENABLE_SLICES = true
+$ENABLE_SLICES = false
 $ONTOLOGY_SLICES = {}
 
 # Cube metrics reporting
