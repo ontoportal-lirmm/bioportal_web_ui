@@ -31,4 +31,10 @@ module HomeHelper
     end
   end
 
+  def home_ontoportal_tooltip
+    ontoportal_link = link_to("(#{$ontoportal_website_link})", $ontoportal_website_link, target: '_blank')
+    github_link = link_to("(#{$ontoportal_github_repo})", $ontoportal_github_repo, target: '_blank')
+    content_tag(:div, t('home.ontoportal_description', ontoportal_link: ontoportal_link, github_link: github_link).html_safe, style: "max-width: 600px;")
+  end
+
 end

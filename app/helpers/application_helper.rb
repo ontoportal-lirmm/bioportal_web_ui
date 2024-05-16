@@ -659,11 +659,6 @@ module ApplicationHelper
     end
   end
  
-  def home_ontoportal_tooltip
-    ontoportal_link = link_to('(https://ontoportal.org/)', 'https://ontoportal.org/', target: '_blank')
-    github_link = link_to('(https://github.com/ontoportal)', 'https://github.com/ontoportal', target: '_blank')
-    content_tag(:div, t('home.ontoportal_description', ontoportal_link: ontoportal_link, github_link: github_link).html_safe, style: "max-width: 600px;")
-  end
 
 
 end
