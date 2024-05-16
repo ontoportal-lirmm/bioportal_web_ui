@@ -131,6 +131,7 @@ group :test do
   gem 'simplecov', require: false
   gem 'simplecov-cobertura' # for codecov.io
   #gem 'webdrivers'
+  gem 'webmock'
 end
 
 

@@ -57,7 +57,7 @@ module UriRedirection
   end
 
   def redirect_to_download_file
-    redirect_to("/ontologies/#{params[:id]}/download?format=#{helpers.escape(accept_header)}", allow_other_host: true)
+    redirect_to("#{$UI_URL}/ontologies/#{params[:id]}/download?format=#{helpers.escape(accept_header)}", allow_other_host: true)
   end
 
 

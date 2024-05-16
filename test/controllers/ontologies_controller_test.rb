@@ -38,5 +38,37 @@ class OntologiesControllerTest < ActionDispatch::IntegrationTest
       end
 
     end
+
+    test 'test get STY in html format' do
+      get '/ontologies/STY', headers: { 'Accept' => 'text/html' }
+      assert_response :success
+    end
+  
+    test 'test get STY in json format' do
+      get '/ontologies/STY', headers: { 'Accept' => 'application/json' }
+      assert_response :redirect
+    end
+  
+    test 'test get STY in xml format' do
+      get '/ontologies/STY', headers: { 'Accept' => 'application/xml' }
+      assert_response :redirect
+    end
+  
+    test 'test get STY in csv format' do
+      get '/ontologies/STY', headers: { 'Accept' => 'text/csv' }
+      assert_response :redirect
+    end
+  
+    test 'test get STY in turtle format' do
+      get '/ontologies/STY', headers: { 'Accept' => 'text/turtle' }
+      assert_response :not_acceptable
+    end
+  
+    test 'test get STY in ntriples format' do
+      get '/ontologies/STY', headers: { 'Accept' => 'application/ntriples' }
+      assert_response :not_acceptable
+    end
+
+    
   end
 end

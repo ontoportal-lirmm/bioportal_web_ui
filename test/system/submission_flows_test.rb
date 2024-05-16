@@ -3,6 +3,7 @@ require "application_system_test_case"
 class SubmissionFlowsTest < ApplicationSystemTestCase
 
   setup do
+    WebMock.disable!
     @logged_user = fixtures(:users)[:john]
     @user_bob = fixtures(:users)[:bob]
     @new_ontology = fixtures(:ontologies)[:ontology1]
