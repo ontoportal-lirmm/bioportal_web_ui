@@ -584,6 +584,15 @@ en:
     title: Mappings
     upload_mappings: Upload mappings
     select_ontologies_list: Select ontologies
+    bubble_view_legend:
+      bubble_size: "Bubble size:"
+      bubble_size_desc: "The global number of mappings with all other ontologies."
+      color_degree: "Color degree:"
+      color_degree_desc: "The number of mappings with the selected ontology."
+      yellow_bubble: "Yellow bubble: "
+      selected_bubble: "The selected bubble."
+      less_mappings: "Less mappings"
+      more_mappings: "More mappings"
     count:
       ontology: Ontology
       mappings: Mappings

@@ -3,7 +3,7 @@ module CheckResolvabilityHelper
   def formats_equivalents(format = nil)
     all = {
       'application/json' => ['application/ld+json'],
-      'application/rdf+xml' => %w[application/xml application/rdf+xml text/xml],
+      'application/rdf+xml' => %w[application/xml application/rdf+xml text/xml application/octet-stream],
       'text/turtle' => ['application/turtle'],
       'text/n3' => ['application/n-triples'],
       'text/html' => []
@@ -54,7 +54,7 @@ module CheckResolvabilityHelper
       http.use_ssl = (uri.scheme == 'https')
       http.open_timeout = timeout_seconds
       begin
-        response = Timeout.timeout(timeout_seconds) { http.request_head(uri.path, 'Accept' => format) }
+        response = Timeout.timeout(timeout_seconds) { http.request_head(uri, 'Accept' => format) }
       rescue Timeout::Error, Net::OpenTimeout
         return resolvability_status('Timeout', [], redirections, result: 0)
       end
