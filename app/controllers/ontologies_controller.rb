@@ -252,7 +252,7 @@ class OntologiesController < ApplicationController
     # See: https://github.com/ncbo/bioportal_web_ui/issues/133.
     data_pages = KNOWN_PAGES - %w[summary notes]
     if @ontology.summaryOnly && params[:p].present? && data_pages.include?(params[:p].to_s)
-      redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
+      params[:p] = "summary"
     end
 
     #@ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
