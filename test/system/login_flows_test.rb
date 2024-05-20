@@ -3,6 +3,7 @@ require "application_system_test_case"
 class LoginFlowsTest < ApplicationSystemTestCase
 
   setup do
+    WebMock.disable!
     @user_john = fixtures(:users)[:john]
     @user_bob = create_user(fixtures(:users)[:bob])
   end

@@ -216,6 +216,7 @@ class OntologiesController < ApplicationController
   # GET /ontologies/ACRONYM
   # GET /ontologies/1.xml
   def show
+    return redirect_to_file if redirect_to_file?
 
     # Hack to make ontologyid and conceptid work in addition to id and ontology params
     params[:id] = params[:id].nil? ? params[:ontologyid] : params[:id]
@@ -266,7 +267,7 @@ class OntologiesController < ApplicationController
       if submissions.any?{|x| helpers.submission_ready?(x)}
         @old_submission_ready = true
       elsif !params[:p].blank?
-        redirect_to(ontology_path(params[:ontology]), status: :temporary_redirect) and return
+        params[:p] = "summary"
       end
     end
 
@@ -304,7 +305,6 @@ class OntologiesController < ApplicationController
     else
       self.summary
     end
-
   end
 
   def submit_success
@@ -312,30 +312,6 @@ class OntologiesController < ApplicationController
     render 'submit_success'
   end
 
-  # GET /ontologies/:acronym/:id
-  def redirect
-    return not_found unless params[:acronym] && params[:id]
-
-    request_accept_header = request.env["HTTP_ACCEPT"].split(",")[0]
-    type, resource_id  = find_type_by_id(params[:id], params[:acronym])
-
-    if resource_id.nil?
-      @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:acronym]).first
-      @submission_latest = @ontology.explore.latest_submission(include: "URI")
-      resource_id = @submission_latest.URI
-    end
-
-    if request_accept_header == "text/html"
-      if type.nil? || resource_id.blank?
-        redirect_to ontology_path(id: params[:acronym], p: 'summary')
-      else
-        redirect_to link_by_type(resource_id, params[:acronym], type)
-      end
-    else
-      content, serializer_content_type = serialize_content(ontology_acronym: params[:acronym], concept_id: resource_id, format: request_accept_header)
-      render plain: content, content_type: serializer_content_type
-    end
-  end
 
   # Main ontology description page (with metadata): /ontologies/ACRONYM
   def summary
@@ -367,6 +343,7 @@ class OntologiesController < ApplicationController
     @content_properties = properties_hash_values(category_attributes["content"])
     @community_properties = properties_hash_values(category_attributes["community"] + [:notes])
     @identifiers = properties_hash_values([:URI, :versionIRI, :identifier])
+    @identifiers["ontology_portal_uri"] = ["#{$UI_URL}/ontologies/#{@ontology.acronym}", "#{portal_name} URI"]
     @projects_properties = properties_hash_values(category_attributes["usage"])
     @ontology_icon_links = [%w[summary/download dataDump],
                             %w[summary/homepage homepage],
@@ -579,5 +556,6 @@ class OntologiesController < ApplicationController
       super
     end
   end
+
 
 end
