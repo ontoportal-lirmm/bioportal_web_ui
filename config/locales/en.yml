@@ -584,6 +584,15 @@ en:
     title: Mappings
     upload_mappings: Upload mappings
     select_ontologies_list: Select ontologies
+    bubble_view_legend:
+      bubble_size: "Bubble size:"
+      bubble_size_desc: "The global number of mappings with all other ontologies."
+      color_degree: "Color degree:"
+      color_degree_desc: "The number of mappings with the selected ontology."
+      yellow_bubble: "Yellow bubble: "
+      selected_bubble: "The selected bubble."
+      less_mappings: "Less mappings"
+      more_mappings: "More mappings"
     count:
       ontology: Ontology
       mappings: Mappings
@@ -1038,7 +1047,7 @@ en:
     help_text: Help text
     contact_name: "%{name} Name"
     contact_email: "%{name} Email"
-    edit_metadata_instruction: "Edit the metadata of your ontology here. Some of these values are used by %{portal_name} functionalities, including for FAIRness assessment. %{link)"
+    edit_metadata_instruction: "Edit the metadata of your ontology here. Some of these values are used by %{portal_name} functionalities, including for FAIRness assessment. %{link}"
     edit_metadata_instruction_link: "See guidelines and recommendations for metadata here."
     license_help: "%{portal_name} requires an URI for the license. If you do not find your choice here, %{link}"
     license_help_link: "Please pick up an URI from here."
@@ -1415,6 +1424,7 @@ en:
     preferred_name: Preferred name
     definitions: Definitions
     parent: Parent
+    no_properties_alert: "%{acronym} does not contain properties"
   visits:
     ontology_visits: Ontology visits
     name: name

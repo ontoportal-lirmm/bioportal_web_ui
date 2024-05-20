@@ -94,7 +94,7 @@
                 - r.td do
                   - ontologies = ""
                   - result[:ontologies].each do |ontology|
-                    %a.recommender-result-ontology{href: ontology[:link]}
+                    %a.recommender-result-ontology{href: ontology_path(id: ontology[:acronym], p: 'summary')}
                       = ontology[:acronym]
                 - r.td do
                   = render Display::ProgressBarComponent.new(progress: result[:final_score])

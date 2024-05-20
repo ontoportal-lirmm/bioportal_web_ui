@@ -105,13 +105,12 @@ module ComponentsHelper
     tag = link_to_tag
     url = link_to_tag if url.nil?
     
-    tag = tag + copy_link_to_clipboard(url) if copy
-
-    tag= tag + generated_link_to_clipboard(url, acronym) if generate_link
-
-    tag = tag + resolvability_check_tag(url) if check_resolvability
-    
-    tag= tag + htaccess_tag(acronym) if generate_htaccess
+    tag += content_tag(:span, class: 'mx-1') do
+      concat copy_link_to_clipboard(url) if copy
+      concat generated_link_to_clipboard(url, acronym) if generate_link
+      concat resolvability_check_tag(url) if check_resolvability
+      concat htaccess_tag(acronym) if generate_htaccess
+    end
 
     tag.html_safe
   end
@@ -156,8 +155,8 @@ module ComponentsHelper
     render LoaderComponent.new(type: type)
   end
 
-  def info_tooltip(text)
-    render Display::InfoTooltipComponent.new(text: text)
+  def info_tooltip(text, interactive: true)
+    render Display::InfoTooltipComponent.new(text: text, interactive: interactive)
   end
 
   def empty_state_message(message)
