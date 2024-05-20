@@ -593,6 +593,15 @@ fr:
     title: Mappings
     upload_mappings: Télécharger des mappings
     select_ontologies_list: Sélectionner les ontologies
+    bubble_view_legend:
+      bubble_size: "Taille de la bulle :"
+      bubble_size_desc: "Le nombre total de correspondances avec toutes les autres ontologies."
+      color_degree: "Degré de couleur :"
+      color_degree_desc: "Le nombre de correspondances avec l'ontologie sélectionnée."
+      yellow_bubble: "Bulle jaune : "
+      selected_bubble: "La bulle sélectionnée."
+      less_mappings: "Moins de correspondances"
+      more_mappings: "Plus de correspondances"
     count:
       ontology: Ontologie
       mappings: Mappings
