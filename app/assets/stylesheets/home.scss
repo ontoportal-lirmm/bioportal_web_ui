@@ -169,23 +169,13 @@ i.fa.fa-caret-square-o-down {
 }
 .home-statistics-container > div {
   display: flex;
-  align-items: start;
-  justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
 }
 .home-agroportal-figures{
   margin-bottom: 20px;
 }
-.home-slice-name{
-  width: 128px;
-  font-size: 16px;
-  margin-bottom: 20px;
-}
-.home-slice-ontologies{
-  font-size: 20px;
-  font-weight: 500;
-  margin-bottom: -30px;
-}
+
 .home-statistics-container > div > p {
   font-size: 20px;
   font-weight: 600;
@@ -437,10 +427,6 @@ i.fa.fa-caret-square-o-down {
   padding: 23px;
   margin: 7px 12px !important;
   border-radius: 50%;
-  display: block;
-}
-.home-slices{
-  margin: 7px 12px !important;
   display: block;
 }
 .home-support-items  > *:not(:first-child){

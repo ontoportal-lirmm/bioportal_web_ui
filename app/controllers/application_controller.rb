@@ -133,7 +133,6 @@ class ApplicationController < ActionController::Base
         @subdomain_filter[:active] = true
         @subdomain_filter[:name] = slice.name
         @subdomain_filter[:acronym] = slice.acronym
-        @subdomain_filter[:ontologies] = slice.ontologies
       end
     end
 

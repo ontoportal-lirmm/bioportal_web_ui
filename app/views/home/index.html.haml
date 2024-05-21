@@ -175,24 +175,17 @@
             %p= t("home.users")
       .home-statistics-link.justify-content-end
         = link_to t("home.see_details"),'/statistics', target: "_blank"
-  
-  - if @slices
-    .home-section
-      .home-statistics-container
-        .home-support-title
-          %p= "#{portal_name} slices"
-          %hr.home-section-line/
-        %div
-          - @slices.each do |slice, index|
-            - slice_link = "http://#{slice.acronym}.#{$UI_URL.sub("https://", "")}"
-            %div.text-center{'data-controller': 'tooltip', title: content_tag(:div, slice.description, style: 'max-width: 200px')}
-              = link_to slice_link, target: '_blank', class: 'home-slices' do
-                .home-slice-ontologies
-                  = slice.ontologies.length
-                = inline_svg 'icons/slices.svg', width: "70", height: "70"
-                .home-slice-name 
-                  = "#{slice.name} (#{slice.acronym})"
 
+  .home-section
+    .home-statistics-container
+      .home-support-title
+        %p= t('home.support_and_collaborations')
+        %hr.home-section-line/
+      .home-support-items
+        - $HOME_PAGE_LOGOS&.each do |logo|
+          %a{href:logo[:url], target: "_blanc"}
+            %img{src: asset_path(logo[:img_src])}
+  
   .home-section
     .home-statistics-container
       .home-support-title
@@ -206,15 +199,6 @@
             %p{style: "color: #{portal[:color]}"} 
               = portal[:portal]
 
-  .home-section
-    .home-statistics-container
-      .home-support-title
-        %p= t('home.support_and_collaborations')
-        %hr.home-section-line/
-      .home-support-items
-        - $HOME_PAGE_LOGOS&.each do |logo|
-          %a{href:logo[:url], target: "_blanc"}
-            %img{src: asset_path(logo[:img_src])}
 
 :javascript
   function submitAnnotator(){
