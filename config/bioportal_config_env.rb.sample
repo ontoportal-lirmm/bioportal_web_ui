@@ -258,6 +258,8 @@ $PORTALS_INSTANCES = [
     link: 'https://biodivportal.gfbio.org/'
   }
 ]
+$ONTOPORTAL_WEBSITE_LINK = "https://ontoportal.org/"
+$ONTOPORTAL_GITHUB_REPO = "https://github.com/ontoportal"
 
 $FOOTER_LINKS = {
   social: [
@@ -274,7 +276,7 @@ $FOOTER_LINKS = {
       api: "https://data.agroportal.lirmm.fr/",
       tools: "/tools",
       sparql: "https://sparql.agroportal.lirmm.fr/test/",
-      ontoportal: "https://ontoportal.org/"
+      ontoportal: $ONTOPORTAL_WEBSITE_LINK
     },
     support: {
       contact_us: "https://#{$SITE}.lirmm.fr/feedback",
@@ -307,6 +309,3 @@ if $HOSTNAME
     require_relative "bioportal_config_development_#{$HOSTNAME}"
   end
 end
-
-$ontoportal_website_link = "https://ontoportal.org/"
-$ontoportal_github_repo = "https://github.com/ontoportal"
