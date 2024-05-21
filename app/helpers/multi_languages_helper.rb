@@ -34,7 +34,7 @@ module MultiLanguagesHelper
             text = content_tag(:div, class: 'd-flex align-items-center') do
               content_tag(:span, render(LanguageFieldComponent.new(value: lang, auto_label: true)), class: 'mr-1') + beta_badge(metadata[:badge])
             end
-            link_options = { data: { turbo: true } }
+            link_options = { data: { turbo: false } }
 
             if metadata[:disabled]
               link_options[:class] = 'disabled-link'
