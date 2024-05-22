@@ -239,7 +239,7 @@ module SubmissionInputsHelper
     end
   end
 
-  def contact_input(label: '', name: t('submission_inputs.contact'), show_help: true)
+  def contact_input(label: '', name: t('submission_inputs.contact'), show_help: true, name_value: nil, email_value: nil)
     attr = SubmissionMetadataInput.new(attribute_key: 'contact', attr_metadata: attr_metadata('contact'))
     render Input::InputFieldComponent.new(name: '', label: attr_header_label(attr, label, show_tooltip: show_help),
                                           error_message: attribute_error(:contact)) do
@@ -252,10 +252,10 @@ module SubmissionInputsHelper
         c.template do
           content_tag(:div, class: 'd-flex my-1') do
             out = content_tag(:div, class: ' w-50 mr-2') do
-              text_input(label: '', name: 'submission[contact][NEW_RECORD][name]', value: '', error_message: '')
+              text_input(label: '', name: 'submission[contact][NEW_RECORD][name]', value: name_value || '', error_message: '')
             end
             out + content_tag(:div, class: ' w-50') do
-              text_input(label: '', name: 'submission[contact][NEW_RECORD][email]', value: '', error_message: '')
+              text_input(label: '', name: 'submission[contact][NEW_RECORD][email]', value: email_value || '', error_message: '')
             end
           end
         end

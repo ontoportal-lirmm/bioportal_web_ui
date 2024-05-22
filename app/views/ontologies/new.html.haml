@@ -49,4 +49,6 @@
                     - else
                       = attribute_input('released',  label: t("ontologies.date_of_original_creation"),  max_date: Date.today, value: params.dig(:submission, :released) || Date.today.to_s)
                   .upload-ontology-contact{id: "submissioncontact_from_group_input"}
-                    = contact_input(show_help: false)
+                    - contact_name = params[:submission]&.dig(:contact)&.[](0)&.dig(:name)
+                    - contact_email = params[:submission]&.dig(:contact)&.[](0)&.dig(:email)
+                    = contact_input(show_help: false, name_value: contact_name, email_value: contact_email)
