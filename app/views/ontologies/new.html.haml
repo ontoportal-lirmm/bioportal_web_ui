@@ -23,7 +23,7 @@
                   .upload-ontology-desc
                     = metadata_help_link
                   .upload-ontology-input-field-container
-                    = attribute_input('URI', label: t("ontologies.uri"))
+                    = attribute_input('URI', label: t("ontologies.uri"), value: params.dig(:submission, :URI))
                   .upload-ontology-input-field-container
                     = attribute_input('description', long_text: true)
                   - if @is_update_ontology

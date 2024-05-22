@@ -52,7 +52,7 @@ module SubmissionInputsHelper
   end
 
   # @param attr_key String
-  def attribute_input(attr_key, long_text: false, label: nil, show_tooltip: true, max_date: nil, help: nil)
+  def attribute_input(attr_key, long_text: false, label: nil, show_tooltip: true, max_date: nil, help: nil, value: nil)
     attr = SubmissionMetadataInput.new(attribute_key: attr_key, submission: @submission, label: label,
                                        attr_metadata: attr_metadata(attr_key))
 
@@ -84,7 +84,7 @@ module SubmissionInputsHelper
     elsif attr.type?('isOntology')
       generate_select_input(attr, multiple: attr['enforce'].include?('list'))
     elsif attr.type?('uri')
-      generate_url_input(attr, helper_text: help)
+      generate_url_input(attr, helper_text: help, value: value)
     elsif attr.type?('boolean')
       generate_boolean_input(attr, help: help)
     else
@@ -397,9 +397,9 @@ module SubmissionInputsHelper
 
   end
 
-  def generate_url_input(attr, helper_text: nil)
+  def generate_url_input(attr, helper_text: nil, value: nil)
     label = attr_header_label(attr)
-    values = attr.values
+    values = value || attr.values
     name = attr.name
 
     is_relation = ontology_relation?(attr.attr_key)
