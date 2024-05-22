@@ -21,10 +21,12 @@ module UriRedirection
   end
 
   def redirect_to_file
-    # when dont have the specified format in the accept header
-    # TO-DO add the turtle and n3 based on the hasSyntaxOntology
-    return not_acceptable("Invalid requested format, valid format are: JSON, XML, HTML and CSV\nto download the original file you can get it from: #{rest_url}/ontologies/#{params[:id]}/download\n") if accept_header.nil?
+    # check for hasOntologySyntax field for turtle format
+    ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
+    ontology_syntax = ontology.explore.latest_submission(include: 'hasOntologySyntax').hasOntologySyntax
 
+    return not_acceptable("Invalid requested format, valid format are: HTML, JSON, XML, CSV and Turtle format is available for some resources\nYou can download the original file you can get it from: #{rest_url}/ontologies/#{params[:id]}/download\n") if accept_header.nil? || (ontology_syntax != "http://www.w3.org/ns/formats/Turtle" && accept_header== "text/turtle")
+    
     # when the format is different than text/html
     download_ontology(acronym: params[:id], format: accept_header) if (accept_header != "text/html" && params[:p].nil?)
   end
@@ -106,6 +108,8 @@ module UriRedirection
       'application/rdf+xml'
     when 'text/csv'
       'text/csv'
+    when 'text/turtle'
+      'text/turtle'
     else
       nil
     end
