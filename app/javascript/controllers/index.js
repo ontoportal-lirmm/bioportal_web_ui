@@ -46,9 +46,6 @@ application.register("language-change", LanguageChangeController)
 import LoadChartController from "./load_chart_controller"
 application.register("load-chart", LoadChartController)
 
-import MetadataDownloaderController from "./metadata_downloader_controller"
-application.register("metadata-downloader", MetadataDownloaderController)
-
 import OntologyRelationsNetworkController from "./ontology_relations_network_controller"
 application.register("ontology-relations-network", OntologyRelationsNetworkController)
 
@@ -102,3 +99,7 @@ application.register('form-url', FormUrlController)
 
 import OntologiesSelector from "./ontologies_selector_controller"
 application.register("ontologies-selector", OntologiesSelector)
+
+
+import MappingsController from "./mappings_visualization_controller"
+application.register('mappings', MappingsController)

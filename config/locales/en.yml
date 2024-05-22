@@ -66,7 +66,7 @@ en:
     provide_ontology_or_concept: Please provide an ontology id or concept id with an ontology id.
     search_for_class: Please search for a class using the Jump To field above
     missing_roots_for_ontology: Missing @roots for %{acronym}
-    missing_roots: Missing roots %{id}
+    missing_roots: Missing roots
     missing_class: Missing class %{root_child}
     missing_class_ontology: Missing class %{acronym} / %{concept_id}
     error_simplify_class: "Failure to simplify class: %{cls}"
@@ -114,7 +114,7 @@ en:
       ontologies_with_errors: Ontologies with errors
       total_visits: Total visits
       active_users: Active users
-      visit_users: "%{ visits } users since last month"
+      visit_users: "%{visits} users since last month"
       ontology_visits: Ontology visits
       unique_users_visits: Unique users visits
       page_visits: Page visits of this month
@@ -144,6 +144,7 @@ en:
       categories: Categories
       persons_and_organizations: Persons & Organizations
       sparql: SPARQL
+      search: Search & Indexation
       report_generated_on: "Report generated on:"
       licensed_to: Licensed to
       appliance_id: Appliance ID
@@ -238,6 +239,35 @@ en:
         license_from_being_saved: "prohibited this license from being saved:"
         paste_your_license: Paste your license key into the text area
         submit: Submit
+    search:
+      index:
+        index_data: "INDEX DATA"
+        collections_management: "COLLECTIONS MANAGEMENT"
+        name: "Name"
+        actions: "Actions"
+        ontology: "Ontology"
+        agent: "Agent"
+        ontology_submission: "Ontology submission"
+        select_model: "Select a model to index"
+        generate_schema: "Generate schema"
+        see_schema: "See schema"
+        see_indexed_data: "See indexed data"
+      show:
+        field_name: "Field name"
+        type: "Type"
+        multi_valued: "Multi valued"
+        indexed: "Indexed"
+        stored: "Stored"
+      search:
+        search_query: "Search query"
+        page: "Page"
+        page_size: "Page size"
+        found_documents: "Found %{count} documents"
+        id: "ID"
+        properties: "Properties"
+        show_more: "+ Show more ..."
+        show_less: "- Show less ..."
+
   annotator:
     title: Annotator
     description: Get annotations for text with ontology classes
@@ -268,7 +298,10 @@ en:
     score: Score
     api_documentation: "Annotator API documentation"
     insert_sample_text: Insert sample text
-    sample_text: Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.
+    sample_text: There has been many recent studies on the use of microbial antagonists to control diseases incited by soilborne and airborne plant pathogenic bacteria
+              and fungi, in an attempt to replace existing methods of chemical control and avoid extensive use of fungicides, which often lead to resistance in plant pathogens.
+              In agriculture, plant growth-promoting and biocontrol microorganisms have emerged as safe alternatives to chemical pesticides. Streptomyces spp. and their
+              metabolites may have great potential as excellent agents for controlling various fungal and bacterial phytopathogens.
   concepts:
     error_valid_concept: "Error: You must provide a valid concept id"
     missing_roots: Missing roots
@@ -468,6 +501,7 @@ en:
       ontoportal: OntoPortal
       release_notes: Release Notes
       api: API
+      tools: Tools
       sparql: SPARQL
       support: Support
       contact_us: Contact Us
@@ -477,6 +511,7 @@ en:
       agreements: Legal
       terms: Terms and Conditions
       privacy_policy: Privacy Policy
+      legal_notices: Legal Notices
       cite_us: Cite Us
       acknowledgments: Acknowledgments
       about: About
@@ -526,6 +561,13 @@ en:
     ontology_visits: Ontology visits
   mappings:
     all: All
+    description: Dive into an overview of the mappings in the bubble view, efficiently locate a specific ontology in the table view or upload your own mappings.
+    tabs:
+      bubble_view: Bubbles view
+      table_view: Table view
+      upload_mappings: Upload mappings
+    filter_ontologies: Filter ontologies in the bubble view
+    filter_bubbles: Filter bubbles
     external_mappings: "External Mappings (%{number_with_delimiter})"
     interportal_mappings: "Interportal Mappings - %{acronym} (%{number_with_delimiter})"
     test_bulk_load: This is the mappings produced to test the bulk load
@@ -538,11 +580,19 @@ en:
     find_mappings: Find mappings of a class/concept
     intro: Find all the mappings of an ontology
     loading_mappings: Loading mappings...
-    mappings_bulk_load: Upload mappings in bulk from a source file
     no_mappings_available: No mappings available
     title: Mappings
     upload_mappings: Upload mappings
     select_ontologies_list: Select ontologies
+    bubble_view_legend:
+      bubble_size: "Bubble size:"
+      bubble_size_desc: "The global number of mappings with all other ontologies."
+      color_degree: "Color degree:"
+      color_degree_desc: "The number of mappings with the selected ontology."
+      yellow_bubble: "Yellow bubble: "
+      selected_bubble: "The selected bubble."
+      less_mappings: "Less mappings"
+      more_mappings: "More mappings"
     count:
       ontology: Ontology
       mappings: Mappings
@@ -750,6 +800,8 @@ en:
     first_name: First name
     last_name: Last name
     mailing_list: Register to the %{site}'s mailing list
+    accept_terms_and_conditions: I acknowledge and accept
+    terms_and_conditions: "%{site}'s terms and conditions."
     optional: "(Optional)"
     password: Password
     title: Register
@@ -771,6 +823,7 @@ en:
     validate_orcid: Please enter a valid ORCID.
     validate_username: please enter a valid username
     valid_email_adresse: Please enter a valid email adresse
+    validate_terms_and_conditions: Accepting the terms and conditions is required, please check the box to proceed.
     first_name_required: First name field is required
     last_name_required: Last name field is required
     index:
@@ -972,17 +1025,17 @@ en:
       and top concept assertion. %{link}
     ontology_obo_language_link: the OBOinOWL parser.
     ontology_obo_language_help: >
-        OBO ontologies submitted to %{portal_name} will be parsed by the OWL-API which integrates %{link} 
-        The resulting RDF triples will then be loaded in %{portal_name} triple-store.
+      OBO ontologies submitted to %{portal_name} will be parsed by the OWL-API which integrates %{link} 
+      The resulting RDF triples will then be loaded in %{portal_name} triple-store.
     ontology_owl_language_link: the Protégé
     ontology_owl_language_help: >
-        OWL ontologies submitted to %{portal_name} will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with
-        %{link}
-        software which does use the same component.
+      OWL ontologies submitted to %{portal_name} will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with
+      %{link}
+      software which does use the same component.
 
     ontology_umls_language_link: by the UMLS2RDF tool.
     ontology_umls_language_help: >
-        UMLS-RRF resources are usually produced %{link}
+      UMLS-RRF resources are usually produced %{link}
 
     groups: Groups
     visibility: Visibility
@@ -994,7 +1047,7 @@ en:
     help_text: Help text
     contact_name: "%{name} Name"
     contact_email: "%{name} Email"
-    edit_metadata_instruction: "Edit the metadata of your ontology here. Some of these values are used by %{portal_name} functionalities, including for FAIRness assessment. %{link)"
+    edit_metadata_instruction: "Edit the metadata of your ontology here. Some of these values are used by %{portal_name} functionalities, including for FAIRness assessment. %{link}"
     edit_metadata_instruction_link: "See guidelines and recommendations for metadata here."
     license_help: "%{portal_name} requires an URI for the license. If you do not find your choice here, %{link}"
     license_help_link: "Please pick up an URI from here."
@@ -1004,6 +1057,10 @@ en:
     help_creator: "The following properties take for value an 'agent' in %{portal_name} (either a person or an organization). These agents are shared over all the ontologies and suggested with autocompletion if they already exist. Editing an agent here will change it to all the ontologies that agent is involved in."
     version_help: "For more information on how to encode versioning information in an ontology, see %{link}"
     version_helper_link: "guidelines and recommendations."
+  instances:
+    id: ID
+    type: Type
+    label: Label
   collections:
     error_valid_collection: "Error: You must provide a valid collection id"
     no_collections_alert: "%{acronym} does not contain collections (skos:Collection)"
@@ -1110,7 +1167,8 @@ en:
     ontology_processing_failed: "The ontology processing failed, with the current statuses: %{status}"
     ontology_parsing_succeeded: "The ontology parsing succeeded, but some processing steps failed, here are the current statuses: %{status}"
     upload_an_ontology: Upload an ontology. Sections such as %{ontology} will be available once done.
-    ontology_is_processing: The ontology is processing. Sections such as %{ontology} will be available once processing is complete.
+    new_ontology_is_processing: The ontology is processing. Sections such as %{ontology} will be available  once processing is complete.
+    ontology_is_processing: The ontology is processing. Sections such as %{ontology} will be updated once processing is complete.
     contact_support: Contact support
     edit_natural_languages: Edit natural languages of %{acronym}
     edit_available_languages: Click here to edit available languages
@@ -1263,6 +1321,10 @@ en:
       ncbo_widget_wiki: NCBO Widget Wiki
       file: file.
       no_class_concept_found: No class/concept found
+      instances_search_placeholder: Search an Instance in %{acronym}
+      properties_search_placeholder: Search a property in %{acronym}
+      schemes_search_placeholder: Search a scheme in %{acronym}
+      collections_search_placeholder: Search a collection in %{acronym}
 
       metadata:
         fair_score_title: FAIR score
@@ -1286,6 +1348,35 @@ en:
         export_metadata: Export all metadata
         abstract: Abstract
         description: Description
+  
+    htaccess_modal_title: "Rewrite rules for %{acronym} ontology"
+    instructions_servers: Instructions for %{server} servers
+    htaccess_redirection_description: "We offer a seamless solution to make your ontology URIs resolvable and content negotiable by allowing URL redirection for your ontology URIs to our Agroportal URIs. To facilitate this process, we've provided you with a set of .htaccess rewrite rules. By following the simple instructions below, you'll be able to implement these rules swiftly and efficiently, ensuring smooth redirection"
+    
+    redirection_note: |
+      This redirection works only for uri with the form of:  url/path/resource_id
+      This will not work for uris in the form of: url/path/to/something#resource_id OR url/path/to/something:resource_id
+    htaccess_redirection:
+      instruction_1: "Access .htaccess File:"
+      instruction_1_content: "Locate the .htaccess file in the root directory of your website, if it doesn't exist create one. This file controls how your web server behaves and is often used for URL rewriting and redirection."
+      instruction_2: "Copy and Paste Redirect Rules in the .htaccess file:"
+      instruction_2_content: "Copy the rewrite rules provided in the black rectangle. Open the .htaccess file and paste the copied redirect rules into the file"
+      instruction_3: "Enable rewrite module (Linux):"
+      instruction_3_content: "you'll need to ensure that the Apache module called 'rewrite' is enabled by running the command `sudo a2enmod rewrite`"
+
+    
+    nginx_redirection:
+      instruction_1: "Access Nginx configuration file:"
+      instruction_1_content: "The location of this file can vary depending on your system, but common locations include /etc/nginx/nginx.conf, /etc/nginx/sites-available/default or /usr/local/etc/nginx/nginx.conf."
+      instruction_2: "Locate the server block or location block where you want to enable URL rewriting:"
+      instruction_2_content: "This is typically within the server { ... } block."
+      instruction_3: "Copy and Paste Redirect Rules :"
+      instruction_3_content: "Copy the rewrite rules provided in the black rectangle. Inside the appropriate block, add the copied rules to enable URL rewriting"
+      instruction_4: "Test the configuration for syntax errors:"
+      instruction_4_content: "Run the following command to test the redirection configuration `sudo nginx -t`"
+      instruction_5: "Reload Nginx to apply the changes:"
+      instruction_5_content: "Restart the nginx server to apply the redirection using this command `sudo systemctl reload nginx`"
+    
   components:
     check_resolvability: checking resolvability...
     error_block: child_data_generator block did not provide all the child arguements
@@ -1324,11 +1415,16 @@ en:
     join_the_count: Join the %{count} users, watching this resource and  be notified of all its updates
     see_more: See more...
     see_less: See less...
+    tree_view_empty: No result found
+    copy_original_uri: Copy original URI
+    copy_portal_uri: Copy %{portal_name} URI
   properties:
     id: ID
+    type: Type
     preferred_name: Preferred name
     definitions: Definitions
     parent: Parent
+    no_properties_alert: "%{acronym} does not contain properties"
   visits:
     ontology_visits: Ontology visits
     name: name
@@ -1350,3 +1446,22 @@ en:
     cancel: Cancel
     apply: Apply
     unselect_all: Unselect all
+  tools:
+    search:
+      title: "Search content (coming)"
+      description: >
+        This tool/service enables users to search for any Resource Description Framework (RDF) element within the portal.
+        Users can search by either the unique identifier (URI) associated with the RDF element or by its label.
+        It facilitates efficient navigation and retrieval of specific RDF elements, enhancing user experience and productivity within the portal.
+    converter:
+      title: "Content converter (coming)"
+      description: >
+        The Content Converter tool/service offers the capability to convert any RDF element into various formats such as RDF/XML, Turtle, Ntriples, or JSON.
+        This functionality allows users to transform RDF data into formats suitable for different purposes or compatible with various systems and applications.
+        It promotes interoperability and flexibility in handling RDF data within the portal ecosystem.
+    url_checker:
+      title: "URI resolvability checker"
+      description: >
+        This tool/service verifies the resolvability of Uniform Resource Identifiers (URIs) and their content negotiability.
+        It checks whether a given URI is accessible and whether the content associated with it can be negotiated based on the client's preferences.
+        This functionality ensures the reliability and accessibility of linked resources within the RDF ecosystem, aiding in maintaining data integrity and facilitating seamless integration with external resources.

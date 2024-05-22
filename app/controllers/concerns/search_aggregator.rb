@@ -1,4 +1,5 @@
 module SearchAggregator
+  include UrlsHelper
   extend ActiveSupport::Concern
   BLACKLIST_FIX_STR = [
     "https://",
@@ -55,7 +56,7 @@ module SearchAggregator
       uri: class_object.id.to_s,
       title: title.empty? ? label : "#{label} - #{title}",
       ontology_acronym: ontology_acronym,
-      link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{class_object.id}",
+      link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{helpers.request_lang&.eql?("ALL") ? '' : "&language="+helpers.request_lang.to_s}",
       definition: Array(class_object.definition)
     }
   end
@@ -63,7 +64,7 @@ module SearchAggregator
   def concept_label(pref_labels_list, obsolete = false, max_length = 60)
     # select closest to query
     selected = pref_labels_list.select do |pref_lab|
-      pref_lab.include?(@search_query) || @search_query.include?(pref_lab)
+      pref_lab.downcase.include?(@search_query.downcase) || @search_query.downcase.include?(pref_lab.downcase)
     end.first
 
     selected ||= (pref_labels_list&.first || '')
@@ -75,7 +76,6 @@ module SearchAggregator
 
   def ontology_name_acronym(ontologies, selected_acronym)
     ontology = ontologies.select { |x| x.acronym.eql?(selected_acronym.split('/').last) }.first
-    binding.pry if ontology.nil?
     "#{ontology.name} (#{ontology.acronym})"
   end
 
@@ -202,7 +202,7 @@ module SearchAggregator
   def ontology_own_class?(cls_id, acronym, blacklist_words)
     cls_id = blacklist_cls_id_components(cls_id.dup, blacklist_words)
 
-    cls_id.upcase.include?(acronym) rescue binding.pry
+    cls_id.upcase.include?(acronym)
   end
 
   def blacklist_cls_id_components(cls_id, blacklist_words)

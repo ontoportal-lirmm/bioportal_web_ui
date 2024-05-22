@@ -11,6 +11,7 @@
 
 .search-content{
   display: flex;
+  flex-wrap: wrap;
   color: #777777 !important;
   justify-content: space-between;
   padding: 20px 20px;
@@ -26,10 +27,14 @@
 .search-content div img{
   width: 12px;
 }
+
 .search-content div p{
   font-weight: 300;
-  margin-left: 10px;
   margin-bottom: 0;
+  word-break: break-word;
+}
+.search-content div small {
+  word-break: break-word;
 }
 
 .search-dropdown-active{
@@ -38,35 +43,59 @@
 
 .search-element{
   margin-bottom: 0;
+  max-width: 280px;
 }
 
 .searched-elements{
   margin-bottom: 0;
 }
+
 .search-inputs{
   position: relative;
 }
 
+.concepts-search-button{
+  top: 15px !important;
+  right: 10px !important;
+}
+
+
 .home-search-button{
   position: absolute;
-  top: 42px;
-  right: 20px;
+  top: 38px;
+  right: 12px;
+}
+
+.home-search-button svg{
   width: 15px;
   height: 15px;
   cursor: pointer;
 }
-.home-search-button path{
+.home-search-button svg path{
   fill: var(--primary-color);
 }
 .home-search-button.search-input-nav-icon{
   position: absolute;
-  top: 11px;
-  right: 8px;
+  top: 4px;
+  right: 6px;
+  z-index: 99;
+}
+.home-search-button.search-input-nav-icon svg{
   width: 11px;
   height: 11px;
   cursor: pointer;
-  z-index: 99;
 }
-.home-search-button.search-input-nav-icon path{
+
+.home-search-button.search-input-nav-icon svg path{
   fill: white;
+}
+.search-component-loader{
+  padding-top: 4px;
+  padding-right: 2px;
+  color: var(--primary-color); 
+}
+.home-search-button.search-input-nav-icon .search-component-loader{
+  margin-top: 0;
+  padding-right: 0;
+  color: white;
 }

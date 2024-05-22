@@ -24,7 +24,10 @@ import Reveal_component_controller from '../../components/layout/reveal_componen
 import Table_component_controller from '../../components/table_component/table_component_controller'
 import clipboard_component_controller from '../../components/clipboard_component/clipboard_component_controller'
 import range_slider_component_controller from '../../components/input/range_slider_component/range_slider_component_controller'
+import RDFHighlighter from '../../components/display/rdf_highlighter_component/rdf_highlighter_component_controller'
 
+
+application.register("rdf-highlighter", RDFHighlighter)
 application.register('turbo-modal', TurboModalController)
 application.register('file-input', FileInputLoaderController)
 application.register('radio-chip', RadioChipController)

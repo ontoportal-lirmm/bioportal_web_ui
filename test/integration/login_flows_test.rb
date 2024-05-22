@@ -40,7 +40,8 @@ class LoginFlowsTest < ActionDispatch::IntegrationTest
         githubId: new_user.githubId,
         email: new_user.email,
         password: new_user.password,
-        password_confirmation: new_user.password
+        password_confirmation: new_user.password,
+        terms_and_conditions: true
       }
     }
 

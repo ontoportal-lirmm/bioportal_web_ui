@@ -12,7 +12,8 @@ class NotesController < ApplicationController
     id = clean_note_id(params[:id])
 
     @note = LinkedData::Client::Models::Note.get(id, include_threads: true)
-    @ontology = (@notes.explore.relatedOntology || []).first
+    @note_decorator = NoteDecorator.new(@note, view_context)
+    @ontology = (@note.explore.relatedOntology || []).first
 
     if request.xhr?
       render :partial => 'thread'
