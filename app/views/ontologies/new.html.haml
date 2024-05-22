@@ -30,7 +30,7 @@
                     .upload-ontology-input-field-container{id: "submissionnotes_from_group_input"}
                       = attribute_input("notes", label: t("ontologies.change_notes"), long_text: true)
                   .upload-ontology-field-container
-                    = has_ontology_language_input
+                    = has_ontology_language_input(selected: params.dig(:submission, :hasOntologyLanguage))
                   .upload-ontology-field-container.mt-3
                     = render Layout::RevealComponent.new(selected: @submission.status, possible_values: ['retired']) do |c|
                       - c.button do

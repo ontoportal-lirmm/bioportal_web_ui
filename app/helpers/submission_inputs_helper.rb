@@ -79,7 +79,7 @@ module SubmissionInputsHelper
       elsif attr.type?('boolean')
         generate_boolean_input(attr, help: help)
       else
-        generate_select_input(attr, help_text: help)
+        generate_select_input(attr, help_text: help, value: value)
       end
     elsif attr.type?('isOntology')
       generate_select_input(attr, multiple: attr['enforce'].include?('list'))
@@ -171,8 +171,8 @@ module SubmissionInputsHelper
     end
   end
 
-  def has_ontology_language_input(submission = @submission)
-    render(Layout::RevealComponent.new(possible_values: %w[SKOS OBO UMLS OWL], selected: submission.hasOntologyLanguage)) do |c|
+  def has_ontology_language_input(submission = @submission, selected: nil)
+    render(Layout::RevealComponent.new(possible_values: %w[SKOS OBO UMLS OWL], selected: selected || submission.hasOntologyLanguage)) do |c|
       c.button do
         attribute_input("hasOntologyLanguage")
       end
