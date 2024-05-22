@@ -15,7 +15,12 @@ class ContentRedirectionTest < ApplicationSystemTestCase
 
         @generate_portal_link_button = 'span#generate_portal_link'
         @accordion_concept_details = '.dropdown-title-bar[data-target="#accordion-concept-details"]'
+        
         @resource_div_formats = 'div#content_resource_formats'
+        @json_response = fixtures(:ontologies)["resource_content_formats"].json
+        @xml_response = fixtures(:ontologies)["resource_content_formats"].xml.strip
+        @ntriples_response = fixtures(:ontologies)["resource_content_formats"].ntriples.strip
+        @turtle_response = fixtures(:ontologies)["resource_content_formats"].turtle.strip
     end
 
 
@@ -42,13 +47,22 @@ class ContentRedirectionTest < ApplicationSystemTestCase
         find(@accordion_concept_details, visible: :all).click
         assert_selector(@resource_div_formats, visible: true)
 
-        # test all formats
+        # test formats content
         ["json", "xml", "ntriples", "turtle"].each do |format|
-            assert_selector("a#resource_content_#{format}", visible: true)
-            find("a#resource_content_#{format}", visible: true).click
-            assert_selector("div#resource_content_modal", visible: true, wait: 10)
-            find('button.close[data-action="turbo-modal#hide"]').click
-            # TO-DO test the correct result of each format
+          find("a#resource_content_#{format}", visible: true).click
+          assert_selector("div#resource_content_modal", visible: true, wait: 10)
+          content = find("div#resource_content_modal pre code", visible: true).text.strip
+          case format
+          when "json"
+            assert_equal JSON.parse(content), @json_response
+          when "xml"
+            assert_equal content, @xml_response
+          when "ntriples"
+            assert_equal content, @ntriples_response
+          when "turtle"
+            assert_equal content, @turtle_response
+          end
+          find('button.close[data-action="turbo-modal#hide"]').click
         end
     end
 
