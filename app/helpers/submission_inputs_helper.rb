@@ -68,7 +68,7 @@ module SubmissionInputsHelper
       if attr.type?('list')
         generate_list_date_input(attr, max_date: max_date)
       else
-        generate_date_input(attr, max_date: max_date)
+        generate_date_input(attr, max_date: max_date, value: value)
       end
     elsif attr.type?('textarea')
       generate_textarea_input(attr)
@@ -347,9 +347,9 @@ module SubmissionInputsHelper
 
   end
 
-  def generate_date_input(attr, max_date: nil)
+  def generate_date_input(attr, max_date: nil, value: nil)
     date_input(label: attr_header_label(attr), name: attr.name,
-               value: (Date.parse(attr.values).to_s rescue attr.values),
+               value: value || (Date.parse(attr.values).to_s rescue attr.values),
                max_date: max_date)
   end
 

@@ -47,6 +47,6 @@
                     - if @is_update_ontology
                       = attribute_input('modificationDate', label: t("ontologies.modification_date"), max_date: Date.today)
                     - else
-                      = attribute_input('released',  label: t("ontologies.date_of_original_creation"),  max_date: Date.today)
+                      = attribute_input('released',  label: t("ontologies.date_of_original_creation"),  max_date: Date.today, value: Date.today.to_s)
                   .upload-ontology-contact{id: "submissioncontact_from_group_input"}
                     = contact_input(show_help: false)
