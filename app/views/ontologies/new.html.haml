@@ -25,7 +25,7 @@
                   .upload-ontology-input-field-container
                     = attribute_input('URI', label: t("ontologies.uri"), value: params.dig(:submission, :URI))
                   .upload-ontology-input-field-container
-                    = attribute_input('description', long_text: true)
+                    = attribute_input('description', long_text: true, value: params.dig(:submission, :description))
                   - if @is_update_ontology
                     .upload-ontology-input-field-container{id: "submissionnotes_from_group_input"}
                       = attribute_input("notes", label: t("ontologies.change_notes"), long_text: true)
