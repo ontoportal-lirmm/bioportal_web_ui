@@ -358,7 +358,7 @@ module SubmissionInputsHelper
                value: attr.values, helper_text: nil)
   end
 
-  def generate_select_input(attr, multiple: false, help_text: nil)
+  def generate_select_input(attr, multiple: false, help_text: nil, value: nil)
     name = attr.name
     label = attr_header_label(attr)
     metadata_values, select_values = selected_values(attr, enforced_values(attr))
@@ -369,7 +369,7 @@ module SubmissionInputsHelper
     end
 
     select_input(name: name, label: label, values: select_values,
-                 selected: metadata_values, multiple: multiple, required: attr.required?,
+                 selected: value || metadata_values, multiple: multiple, required: attr.required?,
                  open_to_add: open_to_add_metadata?(attr.attr_key), help: help_text)
   end
 
