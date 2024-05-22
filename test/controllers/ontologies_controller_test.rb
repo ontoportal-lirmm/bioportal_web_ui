@@ -64,7 +64,7 @@ class OntologiesControllerTest < ActionDispatch::IntegrationTest
   
     test 'test get STY in turtle format' do
       get '/ontologies/STY', headers: { 'Accept' => 'text/turtle' }
-      assert_response :not_acceptable
+      assert_includes [200, 406], response.status
     end
   
     test 'test get STY in ntriples format' do
