@@ -201,7 +201,6 @@ class AnnotatorController < ApplicationController
       params[:fast_context].nil? &&
       params[:lemmatize].nil?
   end
-  
 
   def remove_special_chars(input)
     regex = /^[a-zA-Z0-9\s]*$/
