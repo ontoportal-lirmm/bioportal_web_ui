@@ -61,6 +61,23 @@ class AnnotatorPageTest < ApplicationSystemTestCase
         assert_selector '#annotator_cite_us'
         assert_selector '#annotator_api_doc'
         
+        find(@annotator_text_area).native.clear
+        find(@annotator_text_area).fill_in(with: 'mainly')
+
+        stub_request(:get, "https://services.stageportal.lirmm.fr/annotator?class_hierarchy_max_level=None&confidence_threshold=0&score_threshold=0&text=mainly&whole_word_only=true")
+            .with(
+                headers: {
+                        'Accept'=>'application/json',
+                        'Authorization'=>'apikey token=1de0a270-29c5-4dda-b043-7c3580628cd5',
+                        'Host'=>'services.stageportal.lirmm.fr:443',
+                        'User-Agent'=>'NCBO API Ruby Client v0.1.0'
+                })
+            .to_return(status: 200, body: ([]).to_json, headers: {})
+
+        find(".annotator-page-button #annotator").click
+
+        assert_selector 'div.browse-empty-illustration'
+        
         WebMock.disable!
     end
 
