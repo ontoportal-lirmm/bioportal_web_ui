@@ -1,0 +1,817 @@
+
+yaml_structure: regular
+sty_ontology:
+  administeredBy:
+  - https://data.stageportal.lirmm.fr/users/admin
+  acronym: STY
+  name: Réseau sémantique UMLS
+  summaryOnly: 
+  flat: 
+  ontologyType: https://data.stageportal.lirmm.fr/ontology_types/ONTOLOGY
+  group: []
+  hasDomain: []
+  viewingRestriction: public
+  viewOf: 
+  views: []
+  "@id": https://data.stageportal.lirmm.fr/ontologies/STY
+  "@type": http://data.bioontology.org/metadata/Ontology
+  links:
+    submissions: https://data.stageportal.lirmm.fr/ontologies/STY/submissions
+    properties: https://data.stageportal.lirmm.fr/ontologies/STY/properties
+    classes: https://data.stageportal.lirmm.fr/ontologies/STY/classes
+    single_class: https://data.stageportal.lirmm.fr/ontologies/STY/classes/{class_id}
+    roots: https://data.stageportal.lirmm.fr/ontologies/STY/classes/roots
+    schemes: https://data.stageportal.lirmm.fr/ontologies/STY/schemes
+    collections: https://data.stageportal.lirmm.fr/ontologies/STY/collections
+    xl_labels: https://data.stageportal.lirmm.fr/ontologies/STY/skos_xl_labels
+    instances: https://data.stageportal.lirmm.fr/ontologies/STY/instances
+    metrics: https://data.stageportal.lirmm.fr/ontologies/STY/metrics
+    reviews: https://data.stageportal.lirmm.fr/ontologies/STY/reviews
+    notes: https://data.stageportal.lirmm.fr/ontologies/STY/notes
+    groups: https://data.stageportal.lirmm.fr/ontologies/STY/groups
+    categories: https://data.stageportal.lirmm.fr/ontologies/STY/categories
+    latest_submission: https://data.stageportal.lirmm.fr/ontologies/STY/latest_submission
+    projects: https://data.stageportal.lirmm.fr/ontologies/STY/projects
+    download: https://data.stageportal.lirmm.fr/ontologies/STY/download
+    views: https://data.stageportal.lirmm.fr/ontologies/STY/views
+    analytics: https://data.stageportal.lirmm.fr/ontologies/STY/analytics
+    ui: http://stageportal.lirmm.fr/ontologies/STY
+    "@context":
+      submissions: http://data.bioontology.org/metadata/OntologySubmission
+      properties: http://data.bioontology.org/metadata/Property
+      classes: http://www.w3.org/2002/07/owl#Class
+      single_class: http://www.w3.org/2002/07/owl#Class
+      roots: http://www.w3.org/2002/07/owl#Class
+      schemes: http://www.w3.org/2004/02/skos/core#ConceptScheme
+      collections: http://www.w3.org/2004/02/skos/core#Collection
+      xl_labels: http://www.w3.org/2008/05/skos-xl#Label
+      instances: http://data.bioontology.org/metadata/Instance
+      metrics: http://data.bioontology.org/metadata/Metrics
+      reviews: http://data.bioontology.org/metadata/Review
+      notes: http://data.bioontology.org/metadata/Note
+      groups: http://data.bioontology.org/metadata/Group
+      categories: http://data.bioontology.org/metadata/Category
+      latest_submission: http://data.bioontology.org/metadata/OntologySubmission
+      projects: http://data.bioontology.org/metadata/Project
+      download: http://data.bioontology.org/metadata/Ontology
+      views: http://data.bioontology.org/metadata/Ontology
+      analytics: http://data.bioontology.org/metadata/Analytics
+      ui: http://data.bioontology.org/metadata/Ontology
+  "@context":
+    "@vocab": http://data.bioontology.org/metadata/
+    acronym: http://omv.ontoware.org/2005/05/ontology#acronym
+    name: http://omv.ontoware.org/2005/05/ontology#name
+    administeredBy:
+      "@id": http://data.bioontology.org/metadata/User
+      "@type": "@id"
+    group:
+      "@id": http://data.bioontology.org/metadata/Group
+      "@type": "@id"
+    viewingRestriction: http://data.bioontology.org/metadata/viewingRestriction
+    flat: http://data.bioontology.org/metadata/flat
+    hasDomain:
+      "@id": http://data.bioontology.org/metadata/Category
+      "@type": "@id"
+    summaryOnly: http://data.bioontology.org/metadata/summaryOnly
+    viewOf:
+      "@id": http://data.bioontology.org/metadata/Ontology
+      "@type": "@id"
+    ontologyType:
+      "@id": http://data.bioontology.org/metadata/OntologyType
+      "@type": "@id"
+    "@language": en
+
+sample_response:  
+  - annotatedClass:
+      prefLabel: Melanom
+      synonym:
+      - cilt kanseri
+      "@id": http://aims.fao.org/aos/agrovoc/c_4713
+      "@type": http://www.w3.org/2002/07/owl#Class
+      links:
+        self: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_4713
+        ontology: https://data.stageportal.lirmm.fr/ontologies/AGROVOC
+        children: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_4713/children
+        parents: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_4713/parents
+        descendants: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_4713/descendants
+        ancestors: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_4713/ancestors
+        instances: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_4713/instances
+        tree: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_4713/tree
+        notes: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_4713/notes
+        mappings: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_4713/mappings
+        ui: http://stageportal.lirmm.fr/ontologies/AGROVOC?p=classes&conceptid=http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_4713
+        "@context":
+          self: http://www.w3.org/2002/07/owl#Class
+          ontology: http://data.bioontology.org/metadata/Ontology
+          children: http://www.w3.org/2002/07/owl#Class
+          parents: http://www.w3.org/2002/07/owl#Class
+          descendants: http://www.w3.org/2002/07/owl#Class
+          ancestors: http://www.w3.org/2002/07/owl#Class
+          instances: http://data.bioontology.org/metadata/Instance
+          tree: http://www.w3.org/2002/07/owl#Class
+          notes: http://data.bioontology.org/metadata/Note
+          mappings: http://data.bioontology.org/metadata/Mapping
+          ui: http://www.w3.org/2002/07/owl#Class
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        prefLabel: http://www.w3.org/2004/02/skos/core#prefLabel
+        synonym: http://www.w3.org/2004/02/skos/core#altLabel
+        "@language": en
+    hierarchy: []
+    annotations:
+    - from: 1
+      to: 8
+      matchType: PREF
+      text: MELANOMA
+    mappings: []
+  - annotatedClass:
+      prefLabel: Melanom
+      synonym:
+      - malignant melanoma
+      - melanoma patient
+      - melanocytes
+      "@id": http://data.europa.eu/8mn/euroscivoc/276b8c99-a318-48df-aa31-1f9f3e0ba910
+      "@type": http://www.w3.org/2002/07/owl#Class
+      links:
+        self: https://data.stageportal.lirmm.fr/ontologies/EUROSCIVOC/classes/http%3A%2F%2Fdata.europa.eu%2F8mn%2Feuroscivoc%2F276b8c99-a318-48df-aa31-1f9f3e0ba910
+        ontology: https://data.stageportal.lirmm.fr/ontologies/EUROSCIVOC
+        children: https://data.stageportal.lirmm.fr/ontologies/EUROSCIVOC/classes/http%3A%2F%2Fdata.europa.eu%2F8mn%2Feuroscivoc%2F276b8c99-a318-48df-aa31-1f9f3e0ba910/children
+        parents: https://data.stageportal.lirmm.fr/ontologies/EUROSCIVOC/classes/http%3A%2F%2Fdata.europa.eu%2F8mn%2Feuroscivoc%2F276b8c99-a318-48df-aa31-1f9f3e0ba910/parents
+        descendants: https://data.stageportal.lirmm.fr/ontologies/EUROSCIVOC/classes/http%3A%2F%2Fdata.europa.eu%2F8mn%2Feuroscivoc%2F276b8c99-a318-48df-aa31-1f9f3e0ba910/descendants
+        ancestors: https://data.stageportal.lirmm.fr/ontologies/EUROSCIVOC/classes/http%3A%2F%2Fdata.europa.eu%2F8mn%2Feuroscivoc%2F276b8c99-a318-48df-aa31-1f9f3e0ba910/ancestors
+        instances: https://data.stageportal.lirmm.fr/ontologies/EUROSCIVOC/classes/http%3A%2F%2Fdata.europa.eu%2F8mn%2Feuroscivoc%2F276b8c99-a318-48df-aa31-1f9f3e0ba910/instances
+        tree: https://data.stageportal.lirmm.fr/ontologies/EUROSCIVOC/classes/http%3A%2F%2Fdata.europa.eu%2F8mn%2Feuroscivoc%2F276b8c99-a318-48df-aa31-1f9f3e0ba910/tree
+        notes: https://data.stageportal.lirmm.fr/ontologies/EUROSCIVOC/classes/http%3A%2F%2Fdata.europa.eu%2F8mn%2Feuroscivoc%2F276b8c99-a318-48df-aa31-1f9f3e0ba910/notes
+        mappings: https://data.stageportal.lirmm.fr/ontologies/EUROSCIVOC/classes/http%3A%2F%2Fdata.europa.eu%2F8mn%2Feuroscivoc%2F276b8c99-a318-48df-aa31-1f9f3e0ba910/mappings
+        ui: http://stageportal.lirmm.fr/ontologies/EUROSCIVOC?p=classes&conceptid=http%3A%2F%2Fdata.europa.eu%2F8mn%2Feuroscivoc%2F276b8c99-a318-48df-aa31-1f9f3e0ba910
+        "@context":
+          self: http://www.w3.org/2002/07/owl#Class
+          ontology: http://data.bioontology.org/metadata/Ontology
+          children: http://www.w3.org/2002/07/owl#Class
+          parents: http://www.w3.org/2002/07/owl#Class
+          descendants: http://www.w3.org/2002/07/owl#Class
+          ancestors: http://www.w3.org/2002/07/owl#Class
+          instances: http://data.bioontology.org/metadata/Instance
+          tree: http://www.w3.org/2002/07/owl#Class
+          notes: http://data.bioontology.org/metadata/Note
+          mappings: http://data.bioontology.org/metadata/Mapping
+          ui: http://www.w3.org/2002/07/owl#Class
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        prefLabel: http://www.w3.org/2004/02/skos/core#prefLabel
+        synonym: http://www.w3.org/2004/02/skos/core#altLabel
+        "@language": en
+    hierarchy: []
+    annotations:
+    - from: 1
+      to: 8
+      matchType: PREF
+      text: MELANOMA
+    - from: 34
+      to: 44
+      matchType: SYN
+      text: MELANOCYTES
+    mappings: []
+  - annotatedClass:
+      definition:
+      - http://opendata.inrae.fr/thesaurusINRAE/note_f18c0fe1
+      prefLabel: mélanome
+      synonym:
+      - malignant melanoma
+      - mélanome malin
+      "@id": http://opendata.inrae.fr/thesaurusINRAE/c_11970
+      "@type": http://www.w3.org/2002/07/owl#Class
+      links:
+        self: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11970
+        ontology: https://data.stageportal.lirmm.fr/ontologies/INRAETHES
+        children: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11970/children
+        parents: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11970/parents
+        descendants: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11970/descendants
+        ancestors: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11970/ancestors
+        instances: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11970/instances
+        tree: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11970/tree
+        notes: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11970/notes
+        mappings: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11970/mappings
+        ui: http://stageportal.lirmm.fr/ontologies/INRAETHES?p=classes&conceptid=http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11970
+        "@context":
+          self: http://www.w3.org/2002/07/owl#Class
+          ontology: http://data.bioontology.org/metadata/Ontology
+          children: http://www.w3.org/2002/07/owl#Class
+          parents: http://www.w3.org/2002/07/owl#Class
+          descendants: http://www.w3.org/2002/07/owl#Class
+          ancestors: http://www.w3.org/2002/07/owl#Class
+          instances: http://data.bioontology.org/metadata/Instance
+          tree: http://www.w3.org/2002/07/owl#Class
+          notes: http://data.bioontology.org/metadata/Note
+          mappings: http://data.bioontology.org/metadata/Mapping
+          ui: http://www.w3.org/2002/07/owl#Class
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        prefLabel: http://www.w3.org/2004/02/skos/core#prefLabel
+        synonym: http://www.w3.org/2004/02/skos/core#altLabel
+        definition: http://www.w3.org/2004/02/skos/core#definition
+        "@language": en
+    hierarchy: []
+    annotations:
+    - from: 1
+      to: 8
+      matchType: PREF
+      text: MELANOMA
+    mappings: []
+  - annotatedClass:
+      prefLabel: tumeur
+      synonym:
+      - néoplasme
+      - néoplasie
+      "@id": http://opendata.inrae.fr/thesaurusINRAE/c_11887
+      "@type": http://www.w3.org/2002/07/owl#Class
+      links:
+        self: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11887
+        ontology: https://data.stageportal.lirmm.fr/ontologies/INRAETHES
+        children: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11887/children
+        parents: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11887/parents
+        descendants: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11887/descendants
+        ancestors: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11887/ancestors
+        instances: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11887/instances
+        tree: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11887/tree
+        notes: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11887/notes
+        mappings: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11887/mappings
+        ui: http://stageportal.lirmm.fr/ontologies/INRAETHES?p=classes&conceptid=http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11887
+        "@context":
+          self: http://www.w3.org/2002/07/owl#Class
+          ontology: http://data.bioontology.org/metadata/Ontology
+          children: http://www.w3.org/2002/07/owl#Class
+          parents: http://www.w3.org/2002/07/owl#Class
+          descendants: http://www.w3.org/2002/07/owl#Class
+          ancestors: http://www.w3.org/2002/07/owl#Class
+          instances: http://data.bioontology.org/metadata/Instance
+          tree: http://www.w3.org/2002/07/owl#Class
+          notes: http://data.bioontology.org/metadata/Note
+          mappings: http://data.bioontology.org/metadata/Mapping
+          ui: http://www.w3.org/2002/07/owl#Class
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        prefLabel: http://www.w3.org/2004/02/skos/core#prefLabel
+        synonym: http://www.w3.org/2004/02/skos/core#altLabel
+        "@language": en
+    hierarchy: []
+    annotations:
+    - from: 25
+      to: 29
+      matchType: PREF
+      text: TUMOR
+    mappings: []
+  - annotatedClass:
+      prefLabel: skin
+      "@id": http://opendata.inrae.fr/thesaurusINRAE/c_8606
+      "@type": http://www.w3.org/2002/07/owl#Class
+      links:
+        self: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8606
+        ontology: https://data.stageportal.lirmm.fr/ontologies/INRAETHES
+        children: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8606/children
+        parents: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8606/parents
+        descendants: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8606/descendants
+        ancestors: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8606/ancestors
+        instances: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8606/instances
+        tree: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8606/tree
+        notes: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8606/notes
+        mappings: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8606/mappings
+        ui: http://stageportal.lirmm.fr/ontologies/INRAETHES?p=classes&conceptid=http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8606
+        "@context":
+          self: http://www.w3.org/2002/07/owl#Class
+          ontology: http://data.bioontology.org/metadata/Ontology
+          children: http://www.w3.org/2002/07/owl#Class
+          parents: http://www.w3.org/2002/07/owl#Class
+          descendants: http://www.w3.org/2002/07/owl#Class
+          ancestors: http://www.w3.org/2002/07/owl#Class
+          instances: http://data.bioontology.org/metadata/Instance
+          tree: http://www.w3.org/2002/07/owl#Class
+          notes: http://data.bioontology.org/metadata/Note
+          mappings: http://data.bioontology.org/metadata/Mapping
+          ui: http://www.w3.org/2002/07/owl#Class
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        prefLabel: http://www.w3.org/2004/02/skos/core#prefLabel
+        "@language": en
+    hierarchy: []
+    annotations:
+    - from: 66
+      to: 69
+      matchType: PREF
+      text: SKIN
+    mappings: []
+  - annotatedClass:
+      definition:
+      - The organ covering the body that consists of the dermis and epidermis.
+      prefLabel: skin of body
+      synonym:
+      - entire skin
+      - skin organ
+      "@id": http://purl.obolibrary.org/obo/UBERON_0002097
+      "@type": http://www.w3.org/2002/07/owl#Class
+      links:
+        self: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002097
+        ontology: https://data.stageportal.lirmm.fr/ontologies/PATO
+        children: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002097/children
+        parents: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002097/parents
+        descendants: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002097/descendants
+        ancestors: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002097/ancestors
+        instances: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002097/instances
+        tree: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002097/tree
+        notes: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002097/notes
+        mappings: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002097/mappings
+        ui: http://stageportal.lirmm.fr/ontologies/PATO?p=classes&conceptid=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002097
+        "@context":
+          self: http://www.w3.org/2002/07/owl#Class
+          ontology: http://data.bioontology.org/metadata/Ontology
+          children: http://www.w3.org/2002/07/owl#Class
+          parents: http://www.w3.org/2002/07/owl#Class
+          descendants: http://www.w3.org/2002/07/owl#Class
+          ancestors: http://www.w3.org/2002/07/owl#Class
+          instances: http://data.bioontology.org/metadata/Instance
+          tree: http://www.w3.org/2002/07/owl#Class
+          notes: http://data.bioontology.org/metadata/Note
+          mappings: http://data.bioontology.org/metadata/Mapping
+          ui: http://www.w3.org/2002/07/owl#Class
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        prefLabel: http://www.w3.org/2004/02/skos/core#prefLabel
+        synonym: http://www.w3.org/2004/02/skos/core#altLabel
+        definition: http://www.w3.org/2004/02/skos/core#definition
+        "@language": en
+    hierarchy: []
+    annotations:
+    - from: 66
+      to: 69
+      matchType: SYN
+      text: SKIN
+    mappings: []
+  - annotatedClass:
+      definition:
+      - http://aims.fao.org/aos/agrovoc/xDef_1ed0eb11
+      prefLabel: шкіряний покрив
+      synonym:
+      - derme
+      - calo (pele de animal)
+      - epiderme animal
+      - Epidermis (Tier)
+      - Dermis
+      - Callus (Hornschwiele)
+      - állati epidermisz
+      - kallusz (állat bõrén)
+      - dermis
+      - dermis
+      - kalus (kůže živočichů)
+      - epidermis živočichů
+      - derme
+      - cal (peau des animaux)
+      - épiderme animal
+      - callus (animal skin)
+      - dermis
+      - animal epidermis
+      - pokožka zvierat
+      - kalus, mozoľ (na koži zvierat)
+      - پينه (پوست جانوري)
+      - ميان‌پوست
+      - روپوست جانوري
+      - 真皮
+      - たこ、皮膚硬結、胼胝
+      - 動物の表皮
+      - dermă
+      - epiderma animalelor
+      - înveliş cutanat
+      - эпидермис животных
+      - дерма
+      - кожная мозоль
+      - แคลลัส (ผิวหนังสัตว์)
+      - ชั้นของผิวหนังใต้หนังกำพร้า
+      - ผิวหนังชั้นนอกของสัตว์
+      - 진피
+      - 动物上皮
+      - 胼胝
+      - 真皮
+      - Epidermis zwierząt
+      - Modzel skórny
+      - Skóra właściwa
+      - अधिचर्म
+      - किण (पशु त्वचा )
+      - त्वचा
+      - епідерміс тварин
+      - дерма
+      - шкірна мозоль
+      - Dermis
+      - Callo (piel de los animales)
+      - Epidermis animal
+      - ແຄລັສ (ໜັງສັດ)
+      - ແພໜັງປົກຊັ້ນນອກຂອງສັດ
+      - kallus (hayvan derisi)
+      - dermis
+      - alt deri
+      - hayvan üstderisi
+      - Callo (pelle animale)
+      - Epidermide animale
+      - Derma
+      "@id": http://aims.fao.org/aos/agrovoc/c_7097
+      "@type": http://www.w3.org/2002/07/owl#Class
+      links:
+        self: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_7097
+        ontology: https://data.stageportal.lirmm.fr/ontologies/AGROVOC
+        children: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_7097/children
+        parents: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_7097/parents
+        descendants: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_7097/descendants
+        ancestors: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_7097/ancestors
+        instances: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_7097/instances
+        tree: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_7097/tree
+        notes: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_7097/notes
+        mappings: https://data.stageportal.lirmm.fr/ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_7097/mappings
+        ui: http://stageportal.lirmm.fr/ontologies/AGROVOC?p=classes&conceptid=http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_7097
+        "@context":
+          self: http://www.w3.org/2002/07/owl#Class
+          ontology: http://data.bioontology.org/metadata/Ontology
+          children: http://www.w3.org/2002/07/owl#Class
+          parents: http://www.w3.org/2002/07/owl#Class
+          descendants: http://www.w3.org/2002/07/owl#Class
+          ancestors: http://www.w3.org/2002/07/owl#Class
+          instances: http://data.bioontology.org/metadata/Instance
+          tree: http://www.w3.org/2002/07/owl#Class
+          notes: http://data.bioontology.org/metadata/Note
+          mappings: http://data.bioontology.org/metadata/Mapping
+          ui: http://www.w3.org/2002/07/owl#Class
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        prefLabel: http://www.w3.org/2004/02/skos/core#prefLabel
+        synonym: http://www.w3.org/2004/02/skos/core#altLabel
+        definition: http://www.w3.org/2004/02/skos/core#definition
+        "@language": en
+    hierarchy: []
+    annotations:
+    - from: 66
+      to: 69
+      matchType: PREF
+      text: SKIN
+    mappings: []
+  - annotatedClass:
+      definition:
+      - The outer epithelial layer of the skin that is superficial to the dermis.
+      prefLabel: skin epidermis
+      synonym:
+      - epidermis
+      - skin
+      "@id": http://purl.obolibrary.org/obo/UBERON_0001003
+      "@type": http://www.w3.org/2002/07/owl#Class
+      links:
+        self: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0001003
+        ontology: https://data.stageportal.lirmm.fr/ontologies/PATO
+        children: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0001003/children
+        parents: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0001003/parents
+        descendants: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0001003/descendants
+        ancestors: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0001003/ancestors
+        instances: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0001003/instances
+        tree: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0001003/tree
+        notes: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0001003/notes
+        mappings: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0001003/mappings
+        ui: http://stageportal.lirmm.fr/ontologies/PATO?p=classes&conceptid=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0001003
+        "@context":
+          self: http://www.w3.org/2002/07/owl#Class
+          ontology: http://data.bioontology.org/metadata/Ontology
+          children: http://www.w3.org/2002/07/owl#Class
+          parents: http://www.w3.org/2002/07/owl#Class
+          descendants: http://www.w3.org/2002/07/owl#Class
+          ancestors: http://www.w3.org/2002/07/owl#Class
+          instances: http://data.bioontology.org/metadata/Instance
+          tree: http://www.w3.org/2002/07/owl#Class
+          notes: http://data.bioontology.org/metadata/Note
+          mappings: http://data.bioontology.org/metadata/Mapping
+          ui: http://www.w3.org/2002/07/owl#Class
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        prefLabel: http://www.w3.org/2004/02/skos/core#prefLabel
+        synonym: http://www.w3.org/2004/02/skos/core#altLabel
+        definition: http://www.w3.org/2004/02/skos/core#definition
+        "@language": en
+    hierarchy: []
+    annotations:
+    - from: 66
+      to: 69
+      matchType: SYN
+      text: SKIN
+    mappings: []
+  - annotatedClass:
+      definition:
+      - Any portion of the organ that covers that body and consists of a layer of epidermis
+        and a layer of dermis.
+      prefLabel: zone of skin
+      synonym:
+      - region of skin
+      - skin
+      - portion of skin
+      - skin zone
+      - skin region
+      "@id": http://purl.obolibrary.org/obo/UBERON_0000014
+      "@type": http://www.w3.org/2002/07/owl#Class
+      links:
+        self: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000014
+        ontology: https://data.stageportal.lirmm.fr/ontologies/PATO
+        children: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000014/children
+        parents: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000014/parents
+        descendants: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000014/descendants
+        ancestors: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000014/ancestors
+        instances: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000014/instances
+        tree: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000014/tree
+        notes: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000014/notes
+        mappings: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000014/mappings
+        ui: http://stageportal.lirmm.fr/ontologies/PATO?p=classes&conceptid=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000014
+        "@context":
+          self: http://www.w3.org/2002/07/owl#Class
+          ontology: http://data.bioontology.org/metadata/Ontology
+          children: http://www.w3.org/2002/07/owl#Class
+          parents: http://www.w3.org/2002/07/owl#Class
+          descendants: http://www.w3.org/2002/07/owl#Class
+          ancestors: http://www.w3.org/2002/07/owl#Class
+          instances: http://data.bioontology.org/metadata/Instance
+          tree: http://www.w3.org/2002/07/owl#Class
+          notes: http://data.bioontology.org/metadata/Note
+          mappings: http://data.bioontology.org/metadata/Mapping
+          ui: http://www.w3.org/2002/07/owl#Class
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        prefLabel: http://www.w3.org/2004/02/skos/core#prefLabel
+        synonym: http://www.w3.org/2004/02/skos/core#altLabel
+        definition: http://www.w3.org/2004/02/skos/core#definition
+        "@language": en
+    hierarchy: []
+    annotations:
+    - from: 66
+      to: 69
+      matchType: SYN
+      text: SKIN
+    mappings: []
+  - annotatedClass:
+      definition:
+      - The dermis, epidermis and hypodermis.
+      prefLabel: integument
+      synonym:
+      - dermis plus epidermis plus hypodermis
+      - skin plus hypodermis
+      - integumentum commune
+      - the integument
+      - skin and subcutaneous tissue
+      "@id": http://purl.obolibrary.org/obo/UBERON_0002199
+      "@type": http://www.w3.org/2002/07/owl#Class
+      links:
+        self: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002199
+        ontology: https://data.stageportal.lirmm.fr/ontologies/PATO
+        children: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002199/children
+        parents: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002199/parents
+        descendants: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002199/descendants
+        ancestors: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002199/ancestors
+        instances: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002199/instances
+        tree: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002199/tree
+        notes: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002199/notes
+        mappings: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002199/mappings
+        ui: http://stageportal.lirmm.fr/ontologies/PATO?p=classes&conceptid=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002199
+        "@context":
+          self: http://www.w3.org/2002/07/owl#Class
+          ontology: http://data.bioontology.org/metadata/Ontology
+          children: http://www.w3.org/2002/07/owl#Class
+          parents: http://www.w3.org/2002/07/owl#Class
+          descendants: http://www.w3.org/2002/07/owl#Class
+          ancestors: http://www.w3.org/2002/07/owl#Class
+          instances: http://data.bioontology.org/metadata/Instance
+          tree: http://www.w3.org/2002/07/owl#Class
+          notes: http://data.bioontology.org/metadata/Note
+          mappings: http://data.bioontology.org/metadata/Mapping
+          ui: http://www.w3.org/2002/07/owl#Class
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        prefLabel: http://www.w3.org/2004/02/skos/core#prefLabel
+        synonym: http://www.w3.org/2004/02/skos/core#altLabel
+        definition: http://www.w3.org/2004/02/skos/core#definition
+        "@language": en
+    hierarchy: []
+    annotations:
+    - from: 66
+      to: 69
+      matchType: SYN
+      text: SKIN
+    mappings: []
+  - annotatedClass:
+      prefLabel: intestine
+      "@id": http://opendata.inrae.fr/thesaurusINRAE/c_8817
+      "@type": http://www.w3.org/2002/07/owl#Class
+      links:
+        self: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8817
+        ontology: https://data.stageportal.lirmm.fr/ontologies/INRAETHES
+        children: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8817/children
+        parents: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8817/parents
+        descendants: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8817/descendants
+        ancestors: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8817/ancestors
+        instances: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8817/instances
+        tree: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8817/tree
+        notes: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8817/notes
+        mappings: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8817/mappings
+        ui: http://stageportal.lirmm.fr/ontologies/INRAETHES?p=classes&conceptid=http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_8817
+        "@context":
+          self: http://www.w3.org/2002/07/owl#Class
+          ontology: http://data.bioontology.org/metadata/Ontology
+          children: http://www.w3.org/2002/07/owl#Class
+          parents: http://www.w3.org/2002/07/owl#Class
+          descendants: http://www.w3.org/2002/07/owl#Class
+          ancestors: http://www.w3.org/2002/07/owl#Class
+          instances: http://data.bioontology.org/metadata/Instance
+          tree: http://www.w3.org/2002/07/owl#Class
+          notes: http://data.bioontology.org/metadata/Note
+          mappings: http://data.bioontology.org/metadata/Mapping
+          ui: http://www.w3.org/2002/07/owl#Class
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        prefLabel: http://www.w3.org/2004/02/skos/core#prefLabel
+        "@language": en
+    hierarchy: []
+    annotations:
+    - from: 87
+      to: 95
+      matchType: PREF
+      text: INTESTINE
+    mappings: []
+  - annotatedClass:
+      prefLabel: œil
+      synonym:
+      - oeil
+      "@id": http://opendata.inrae.fr/thesaurusINRAE/c_9169
+      "@type": http://www.w3.org/2002/07/owl#Class
+      links:
+        self: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_9169
+        ontology: https://data.stageportal.lirmm.fr/ontologies/INRAETHES
+        children: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_9169/children
+        parents: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_9169/parents
+        descendants: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_9169/descendants
+        ancestors: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_9169/ancestors
+        instances: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_9169/instances
+        tree: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_9169/tree
+        notes: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_9169/notes
+        mappings: https://data.stageportal.lirmm.fr/ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_9169/mappings
+        ui: http://stageportal.lirmm.fr/ontologies/INRAETHES?p=classes&conceptid=http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_9169
+        "@context":
+          self: http://www.w3.org/2002/07/owl#Class
+          ontology: http://data.bioontology.org/metadata/Ontology
+          children: http://www.w3.org/2002/07/owl#Class
+          parents: http://www.w3.org/2002/07/owl#Class
+          descendants: http://www.w3.org/2002/07/owl#Class
+          ancestors: http://www.w3.org/2002/07/owl#Class
+          instances: http://data.bioontology.org/metadata/Instance
+          tree: http://www.w3.org/2002/07/owl#Class
+          notes: http://data.bioontology.org/metadata/Note
+          mappings: http://data.bioontology.org/metadata/Mapping
+          ui: http://www.w3.org/2002/07/owl#Class
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        prefLabel: http://www.w3.org/2004/02/skos/core#prefLabel
+        synonym: http://www.w3.org/2004/02/skos/core#altLabel
+        "@language": en
+    hierarchy: []
+    annotations:
+    - from: 105
+      to: 107
+      matchType: PREF
+      text: EYE
+    mappings: []
+  - annotatedClass:
+      definition:
+      - An organ of sight that includes the camera-type eyeball and supporting structures
+        such as the lacrimal apparatus, the conjunctiva, the eyelid.
+      prefLabel: camera-type eye
+      synonym:
+      - eye
+      "@id": http://purl.obolibrary.org/obo/UBERON_0000019
+      "@type": http://www.w3.org/2002/07/owl#Class
+      links:
+        self: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000019
+        ontology: https://data.stageportal.lirmm.fr/ontologies/PATO
+        children: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000019/children
+        parents: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000019/parents
+        descendants: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000019/descendants
+        ancestors: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000019/ancestors
+        instances: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000019/instances
+        tree: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000019/tree
+        notes: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000019/notes
+        mappings: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000019/mappings
+        ui: http://stageportal.lirmm.fr/ontologies/PATO?p=classes&conceptid=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000019
+        "@context":
+          self: http://www.w3.org/2002/07/owl#Class
+          ontology: http://data.bioontology.org/metadata/Ontology
+          children: http://www.w3.org/2002/07/owl#Class
+          parents: http://www.w3.org/2002/07/owl#Class
+          descendants: http://www.w3.org/2002/07/owl#Class
+          ancestors: http://www.w3.org/2002/07/owl#Class
+          instances: http://data.bioontology.org/metadata/Instance
+          tree: http://www.w3.org/2002/07/owl#Class
+          notes: http://data.bioontology.org/metadata/Note
+          mappings: http://data.bioontology.org/metadata/Mapping
+          ui: http://www.w3.org/2002/07/owl#Class
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        prefLabel: http://www.w3.org/2004/02/skos/core#prefLabel
+        synonym: http://www.w3.org/2004/02/skos/core#altLabel
+        definition: http://www.w3.org/2004/02/skos/core#definition
+        "@language": en
+    hierarchy: []
+    annotations:
+    - from: 105
+      to: 107
+      matchType: SYN
+      text: EYE
+    mappings: []
+  - annotatedClass:
+      definition:
+      - An organ that detects light.
+      prefLabel: eye
+      synonym:
+      - light-detecting organ
+      - visual apparatus
+      "@id": http://purl.obolibrary.org/obo/UBERON_0000970
+      "@type": http://www.w3.org/2002/07/owl#Class
+      links:
+        self: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000970
+        ontology: https://data.stageportal.lirmm.fr/ontologies/PATO
+        children: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000970/children
+        parents: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000970/parents
+        descendants: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000970/descendants
+        ancestors: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000970/ancestors
+        instances: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000970/instances
+        tree: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000970/tree
+        notes: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000970/notes
+        mappings: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000970/mappings
+        ui: http://stageportal.lirmm.fr/ontologies/PATO?p=classes&conceptid=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000970
+        "@context":
+          self: http://www.w3.org/2002/07/owl#Class
+          ontology: http://data.bioontology.org/metadata/Ontology
+          children: http://www.w3.org/2002/07/owl#Class
+          parents: http://www.w3.org/2002/07/owl#Class
+          descendants: http://www.w3.org/2002/07/owl#Class
+          ancestors: http://www.w3.org/2002/07/owl#Class
+          instances: http://data.bioontology.org/metadata/Instance
+          tree: http://www.w3.org/2002/07/owl#Class
+          notes: http://data.bioontology.org/metadata/Note
+          mappings: http://data.bioontology.org/metadata/Mapping
+          ui: http://www.w3.org/2002/07/owl#Class
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        prefLabel: http://www.w3.org/2004/02/skos/core#prefLabel
+        synonym: http://www.w3.org/2004/02/skos/core#altLabel
+        definition: http://www.w3.org/2004/02/skos/core#definition
+        "@language": en
+    hierarchy: []
+    annotations:
+    - from: 105
+      to: 107
+      matchType: PREF
+      text: EYE
+    mappings: []
+  - annotatedClass:
+      definition:
+      - The core globe-shaped component of the camera-type eye.
+      prefLabel: eyeball of camera-type eye
+      synonym:
+      - bulbus oculi
+      - eye globe
+      - eyeball
+      "@id": http://purl.obolibrary.org/obo/UBERON_0010230
+      "@type": http://www.w3.org/2002/07/owl#Class
+      links:
+        self: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0010230
+        ontology: https://data.stageportal.lirmm.fr/ontologies/PATO
+        children: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0010230/children
+        parents: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0010230/parents
+        descendants: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0010230/descendants
+        ancestors: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0010230/ancestors
+        instances: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0010230/instances
+        tree: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0010230/tree
+        notes: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0010230/notes
+        mappings: https://data.stageportal.lirmm.fr/ontologies/PATO/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0010230/mappings
+        ui: http://stageportal.lirmm.fr/ontologies/PATO?p=classes&conceptid=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0010230
+        "@context":
+          self: http://www.w3.org/2002/07/owl#Class
+          ontology: http://data.bioontology.org/metadata/Ontology
+          children: http://www.w3.org/2002/07/owl#Class
+          parents: http://www.w3.org/2002/07/owl#Class
+          descendants: http://www.w3.org/2002/07/owl#Class
+          ancestors: http://www.w3.org/2002/07/owl#Class
+          instances: http://data.bioontology.org/metadata/Instance
+          tree: http://www.w3.org/2002/07/owl#Class
+          notes: http://data.bioontology.org/metadata/Note
+          mappings: http://data.bioontology.org/metadata/Mapping
+          ui: http://www.w3.org/2002/07/owl#Class
+      "@context":
+        "@vocab": http://data.bioontology.org/metadata/
+        prefLabel: http://www.w3.org/2004/02/skos/core#prefLabel
+        synonym: http://www.w3.org/2004/02/skos/core#altLabel
+        definition: http://www.w3.org/2004/02/skos/core#definition
+        "@language": en
+    hierarchy: []
+    annotations:
+    - from: 105
+      to: 107
+      matchType: SYN
+      text: EYE
+    mappings: []

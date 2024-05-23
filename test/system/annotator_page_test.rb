@@ -7,7 +7,10 @@ class AnnotatorPageTest < ApplicationSystemTestCase
         @apikey = LinkedData::Client.settings.apikey
         @host = LinkedData::Client.settings.rest_url
         @annotator_api = "https://services.stageportal.lirmm.fr/annotator"
+        @ontologies_url = "#{@host}/ontologies?include_views=true"
         @annotator_text_area = ".annotator-page-text-area > textarea"
+        @sample_response = fixtures(:annotator)["sample_response"]
+        @sty_ontology = fixtures(:annotator)["sty_ontology"]
     end
 
     test "go to annotator page and check if all the inputs and filters are there" do
@@ -36,6 +39,21 @@ class AnnotatorPageTest < ApplicationSystemTestCase
         visit root_url
         click_link(href: '/annotator')
         find(@annotator_text_area).fill_in(with: 'Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.')
+        WebMock.enable!
+        stub_request(:get, "https://services.stageportal.lirmm.fr/annotator?class_hierarchy_max_level=None&confidence_threshold=0&score_threshold=0&text=Melanoma%20is%20a%20malignant%20tumor%20of%20melanocytes%20found%20mainly%20in%20the%20skin%20but%20also%20in%20the%20intestine%20and%20the%20eye&whole_word_only=true")
+            .with(
+                headers: {
+                        'Accept'=>'application/json',
+                        'Authorization'=>'apikey token=1de0a270-29c5-4dda-b043-7c3580628cd5',
+                        'Host'=>'services.stageportal.lirmm.fr:443',
+                        'User-Agent'=>'NCBO API Ruby Client v0.1.0'
+                })
+            .to_return(status: 200, body: @sample_response.to_json, headers: {})
+
+        
+        find(".annotator-page-button #annotator").click
+        
+        WebMock.disable!
     end
 
 end
