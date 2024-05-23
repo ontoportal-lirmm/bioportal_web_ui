@@ -2,6 +2,7 @@ require "application_system_test_case"
 require 'webmock/minitest'
 
 class AnnotatorPageTest < ApplicationSystemTestCase
+    WebMock.allow_net_connect!
     def setup
         WebMock.disable!
         @apikey = LinkedData::Client.settings.apikey
@@ -38,9 +39,9 @@ class AnnotatorPageTest < ApplicationSystemTestCase
     test "go to annotator page insert sample text and get annotations" do
         visit root_url
         click_link(href: '/annotator')
-        find(@annotator_text_area).fill_in(with: 'Melanoma is a malignant tumor of melanocytes found mainly in the skin but also in the intestine and the eye.')
+        find(@annotator_text_area).fill_in(with: 'Melanoma is a malignant tumor of melanocytes found mainly')
         WebMock.enable!
-        stub_request(:get, "https://services.stageportal.lirmm.fr/annotator?class_hierarchy_max_level=None&confidence_threshold=0&score_threshold=0&text=Melanoma%20is%20a%20malignant%20tumor%20of%20melanocytes%20found%20mainly%20in%20the%20skin%20but%20also%20in%20the%20intestine%20and%20the%20eye&whole_word_only=true")
+        stub_request(:get, "https://services.stageportal.lirmm.fr/annotator?class_hierarchy_max_level=None&confidence_threshold=0&score_threshold=0&text=Melanoma%20is%20a%20malignant%20tumor%20of%20melanocytes%20found%20mainly&whole_word_only=true")
             .with(
                 headers: {
                         'Accept'=>'application/json',
@@ -49,9 +50,16 @@ class AnnotatorPageTest < ApplicationSystemTestCase
                         'User-Agent'=>'NCBO API Ruby Client v0.1.0'
                 })
             .to_return(status: 200, body: @sample_response.to_json, headers: {})
-
+        
         
         find(".annotator-page-button #annotator").click
+
+        assert_selector 'table#annotator-table'
+        assert_equal 5, page.all('tr').count
+        assert_selector '#annotator_json'
+        assert_selector '#annotator_rdf'
+        assert_selector '#annotator_cite_us'
+        assert_selector '#annotator_api_doc'
         
         WebMock.disable!
     end
