@@ -103,3 +103,6 @@ application.register("ontologies-selector", OntologiesSelector)
 
 import MappingsController from "./mappings_visualization_controller"
 application.register('mappings', MappingsController)
+
+import ConceptsJsonController from "./concepts_json.js"
+application.register('concepts-json', ConceptsJsonController)

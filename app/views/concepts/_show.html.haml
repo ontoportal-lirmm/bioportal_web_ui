@@ -3,104 +3,73 @@
     = render Display::AlertComponent.new do
       = t('concepts.use_jump_to')
   - else
-    #concept_tabs_container
-      = render TabsContainerComponent.new(type:'outline') do |c|
+    %div{'data-controller': 'concepts-json', 'data-concepts-json-ontology-id-value': @ontology.id, 'data-concepts-json-concept-id-value': escape(@concept.id), 'data-concepts-json-api-key-value': get_apikey}
+      #concept_tabs_container{'data-action': 'click->concepts-json#update'}
+        = render TabsContainerComponent.new(type:'outline') do |c|
 
-        - c.pinned_right do
-          - if $PURL_ENABLED
-            %div.mx-1
-              = link_to("#classPermalinkModal", class: "class-permalink nav-link", title: t('concepts.permanent_link_class'), aria: {label: t('concepts.permanent_link_class')}, data: {toggle: "modal", current_purl: "#{@current_purl}"}) do
-                %i{class: "fas fa-link", aria: {hidden: "true"}}
-          %div
-            #concepts_json_link
-              = render RoundedButtonComponent.new(link: "#{@ontology.id}/classes/#{escape(@concept.id)}?display=all&apikey=#{get_apikey}", target:'_blank')
+          - c.pinned_right do
+            - if $PURL_ENABLED
+              %div.mx-1
+                = link_to("#classPermalinkModal", class: "class-permalink nav-link", title: t('concepts.permanent_link_class'), aria: {label: t('concepts.permanent_link_class')}, data: {toggle: "modal", current_purl: "#{@current_purl}"}) do
+                  %i{class: "fas fa-link", aria: {hidden: "true"}}
+            %div
+              #concepts_json_link
+                = render RoundedButtonComponent.new(link: "#{@ontology.id}/classes/#{escape(@concept.id)}?display=all&apikey=#{get_apikey}", target:'_blank')
 
-        - c.item(title: t('concepts.details'), path: '#details', selected: true)
+          - c.item(title: t('concepts.details'), path: '#details', selected: true)
 
-        - unless skos?
-          - c.item(id: 'instances', path: '#instances') do
-            = t('concepts.instances')
-            (
-            %span#instances_count
+          - unless skos?
+            - c.item(id: 'instances', path: '#instances') do
+              = t('concepts.instances')
+              (
+              %span#instances_count
+              )
+
+          - c.item(title: t('concepts.visualization'), path: '#visualization')
+
+          - c.item(id: 'notes', path: '#notes') do
+            = t('concepts.notes')
+            %span#note_count_wrapper
+              (
+              %span#note_count= @notes.length
+              )
+
+          - c.item(id: 'mappings', path: '#mappings') do
+            #{concept_label_to_show(submission: @submission).humanize} Mappings (
+            %span#mapping_count= 'loading'
             )
 
-        - c.item(title: t('concepts.visualization'), path: '#visualization')
+          - if @enable_ontolobridge
+            - c.item(title: t('concepts.new_term_requests'), path: '#request_term')
 
-        - c.item(id: 'notes', path: '#notes') do
-          = t('concepts.notes')
-          %span#note_count_wrapper
-            (
-            %span#note_count= @notes.length
-            )
-
-        - c.item(id: 'mappings', path: '#mappings') do
-          #{concept_label_to_show(submission: @submission).humanize} Mappings (
-          %span#mapping_count= 'loading'
-          )
-
-        - if @enable_ontolobridge
-          - c.item(title: t('concepts.new_term_requests'), path: '#request_term')
-
-        - c.item_content do
-          = render :partial =>'/concepts/details'
-
-        - unless skos?
           - c.item_content do
-            = render :partial =>'instances/instances' , locals: {id: "class-instances-data-table"}
-        - c.item_content do
-          = render :partial =>'/concepts/biomixer'
+            = render :partial =>'/concepts/details'
 
-        - c.item_content do
-          = render :partial =>'/notes/list'
-
-        - c.item_content do
-          = render TurboFrameComponent.new(id:'concept_mappings',
-          src:"/ajax/mappings/get_concept_table?ontologyid=#{@ontology.acronym}&conceptid=#{CGI.escape(@concept.id)}")
-
-        - if @enable_ontolobridge
+          - unless skos?
+            - c.item_content do
+              = render :partial =>'instances/instances' , locals: {id: "class-instances-data-table"}
           - c.item_content do
-            = render :partial =>'/concepts/request_term'
+            = render :partial =>'/concepts/biomixer'
+
+          - c.item_content do
+            = render :partial =>'/notes/list'
+
+          - c.item_content do
+            = render TurboFrameComponent.new(id:'concept_mappings',
+            src:"/ajax/mappings/get_concept_table?ontologyid=#{@ontology.acronym}&conceptid=#{CGI.escape(@concept.id)}")
+
+          - if @enable_ontolobridge
+            - c.item_content do
+              = render :partial =>'/concepts/request_term'
 
     :javascript
       jQuery(document).ready(function(){
+        jQuery("#classPermalinkModal").on("shown.bs.modal", function (e) {
+        var currentPurl = jQuery("a.class-permalink").data("current-purl");
+        jQuery("#purl_input").val(currentPurl);
+        })
 
-      jQuery("#classPermalinkModal").on("shown.bs.modal", function (e) {
-      var currentPurl = jQuery("a.class-permalink").data("current-purl");
-      jQuery("#purl_input").val(currentPurl);
-      })
-
-      jQuery("#purl_input").on("click", function () {
-      jQuery(this).select();
-      });
-      });
-
-      document.getElementById('concept_tabs_container').addEventListener("click", function(event) {
-        const baseClassUrl = `#{@ontology.id}/classes/#{escape(@concept.id)}`;
-        const apikey = `apikey=#{get_apikey}`;
-        const tabsList = document.querySelectorAll('#concept_tabs_container .nav-item');
-        const links = {
-            details_tab: `${baseClassUrl}?${apikey}&display=all`,
-            instances_tab: `${baseClassUrl}/instances?${apikey}`,
-            notes_tab: `${baseClassUrl}/notes?${apikey}`,
-            mappings_tab: `${baseClassUrl}/mappings?${apikey}`,
-            visualization_tab: ''
-        };
-  
-        let selectedItemId;
-        for (let i = 0; i < tabsList.length; i++) {
-          if (tabsList[i].classList.contains('active')) {
-            selectedItemId = tabsList[i].querySelector('a').id;
-            break;
-          }
-        }
-
-        const jsonLink = links[selectedItemId];
-        const conceptsJsonLink = document.querySelector('#concepts_json_link a');
-        
-        if (event.target.id === 'visualization_tab') {
-          conceptsJsonLink.style.display = 'none';
-        } else {
-          conceptsJsonLink.style.display = 'flex';
-          conceptsJsonLink.href = jsonLink;
-        }
+        jQuery("#purl_input").on("click", function () {
+        jQuery(this).select();
+        });
       });
