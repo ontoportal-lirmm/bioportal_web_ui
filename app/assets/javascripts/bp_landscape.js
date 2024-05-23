@@ -432,13 +432,6 @@ $(document).mouseup(function (e)
   }
 });
 
-jQuery(document).ready(function() {
-  "use strict";
-  // enable selected search
-  jQuery("#selected_relations").chosen({
-    search_contains: true
-  });
-})
 
 // Hide more properties pie div on load to let the pie lib the time to get the parent div size (to size the pie chart)
 window.onload = function() {

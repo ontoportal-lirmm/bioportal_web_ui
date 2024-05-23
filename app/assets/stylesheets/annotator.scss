@@ -45,8 +45,8 @@
 }
 .annotator-page-text-area .insert-sample-text-button{
   display: flex;
-  justify-content: end;
-  padding: 20px;
+  justify-content: flex-end;
+  padding: 10px 20px 20px 20px;
 }
 .annotator-page-text-area .insert-sample-text-button .button{
   display: flex;
@@ -188,7 +188,7 @@
   display: flex;
   white-space: nowrap;
 }
-.annotation-parent div,a{
+.annotation-parent div, .annotation-parent a{
   margin-right: 11px;
 }
 .annotation-parent .text{
@@ -197,6 +197,9 @@
 
 .annotation-parent a{
   text-decoration: underline !important;
+}
+.annotator-page-options .prefrences{
+  margin-top: 10px;
 }
 
 .annotation-parent .level{
@@ -211,6 +214,9 @@
 }
 .annotator-table-container .class{
   width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .annotation-parent + div{
   margin-top: 5px;

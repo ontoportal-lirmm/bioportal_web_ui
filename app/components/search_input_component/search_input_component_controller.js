@@ -1,15 +1,18 @@
 import {Controller} from "@hotwired/stimulus"
 import useAjax from "../../javascript/mixins/useAjax";
+import debounce from 'debounce'
 
 // Connects to data-controller="search-input"
 export default class extends Controller {
-    static targets = ["input", "dropDown", "actionLink", "template"]
+    static targets = ["input", "dropDown", "actionLink", "template", "button", "loader"]
     static values = {
         items: Array,
         ajaxUrl: String,
         itemLinkBase: String,
         idKey: String,
         cache: {type: Boolean, default: true},
+        selectedItem: Number,
+        searchEndpoint: {type: String, default: '/search'}
     }
 
     connect() {
@@ -17,10 +20,18 @@ export default class extends Controller {
         this.dropDown = this.dropDownTarget
         this.actionLinks = this.actionLinkTargets
         this.items = this.itemsValue
+        this.search = debounce(this.search.bind(this), 100);
     }
 
     search() {
-        this.#searchInput()
+        this.selectedItemValue = 0
+        this.loaderTarget.classList.remove("d-none")
+        this.buttonTarget.classList.add("d-none")
+        this.searchInput()
+    }
+
+    searchInput() {
+        this.#fetchItems()
     }
 
     prevent(event){
@@ -30,7 +41,32 @@ export default class extends Controller {
         this.dropDown.style.display = "none";
         this.input.classList.remove("home-dropdown-active");
     }
-
+    arrow_up(){
+        if (this.selectedItemValue > 1){
+            this.selectedItemValue--
+            this.dropDownTarget.querySelectorAll('.search-content')[this.selectedItemValue-1].style.backgroundColor = "rgba(0, 0, 0, 0.03)";
+            this.dropDownTarget.querySelectorAll('.search-content')[this.selectedItemValue].style.background = 'white'
+        }
+    }
+    arrow_down(){
+        if(this.selectedItemValue<this.dropDownTarget.querySelectorAll('.search-content').length){
+            this.selectedItemValue++
+        }
+        this.dropDownTarget.querySelectorAll('.search-content')[this.selectedItemValue-1].style.backgroundColor = "rgba(0, 0, 0, 0.03)";
+        if(this.selectedItemValue > 1){
+            this.dropDownTarget.querySelectorAll('.search-content')[this.selectedItemValue-2].style.background = 'white'
+        } 
+    }
+    enter_key(){
+        if(this.inputTarget.value != ''){
+            let results = this.dropDownTarget.querySelectorAll('.search-content')
+            if(this.selectedItemValue === 0 || this.dropDownTarget.style.display === 'none'){
+                results[results.length - 2].click()
+            } else {
+                results[this.selectedItemValue-1].click()
+            }
+        }        
+    }
     #inputValue() {
         return this.input.value.trim()
     }
@@ -46,7 +82,7 @@ export default class extends Controller {
         } else {
             useAjax({
                 type: "GET",
-                url: this.ajaxUrlValue + this.#inputValue(),
+                url: this.ajaxUrlValue + encodeURIComponent(this.#inputValue()),
                 dataType: "json",
                 success: (data) => {
                     this.items = data.map(x => { return {...x, link: (this.itemLinkBaseValue + x[this.idKeyValue])}} )
@@ -61,10 +97,12 @@ export default class extends Controller {
     }
 
     #renderLines() {
+        this.loaderTarget.classList.add("d-none")
+        this.buttonTarget.classList.remove("d-none")
         const inputValue = this.#inputValue();
         let results_list = []
         if (inputValue.length > 0) {
-
+            this.buttonTarget.href = `${this.searchEndpointValue}?q=${inputValue}`;
             this.actionLinks.forEach(action => {
                 const content = action.querySelector('p')
                 content.innerHTML = inputValue
@@ -84,9 +122,8 @@ export default class extends Controller {
 
                 let text =  Object.values(item).reduce((acc, value) => acc + value, "")
 
-
                 // Check if the item contains the substring
-                if (text.toLowerCase().includes(inputValue.toLowerCase())) {
+                if (!this.cacheValue || text.toLowerCase().includes(inputValue.toLowerCase())) {
                     results_list.push(item);
                     breaker = breaker + 1
                 }
@@ -121,13 +158,9 @@ export default class extends Controller {
                 value  = value.toString().split('/').slice(-1)
             }
             const regex = new RegExp('\\b' + key + '\\b', 'gi');
-            string =  string.replace(regex, value.toString())
+            string =  string.replace(regex, value ? value.toString() : "")
         })
 
         return new DOMParser().parseFromString(string, "text/html").body.firstElementChild
-    }
-
-    #searchInput() {
-        this.#fetchItems()
     }
 }

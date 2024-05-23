@@ -1,0 +1,33 @@
+= turbo_frame_tag 'search-admin' do
+  = render_alerts_container
+  %div#site-admin-clear-caches.my-5
+    %div.site-admin-page-header
+      = t('admin.search.index.index_data')
+    %dive.site-admin-page-section
+      = form_with url: admin_index_batch_path, method: 'post', data:{turbo: true, turbo_frame: '_top'} do
+        %div.d-flex.p-2
+          %div.mx-2{style: 'width: 250px'}
+            = select_input(name: "model_name", values: [[t('admin.search.index.select_model'), ''],[t('admin.search.index.ontology'), 'ontology'], t('admin.search.index.agent'), [t('admin.search.index.ontology_submission'), 'ontology_submission']], label: '')
+          = form_save_button
+
+  %div.mb-5
+    %div.site-admin-page-header
+      = t('admin.search.index.collections_management')
+    %dive.site-admin-page-section
+      = render TableComponent.new(id: 'search_collections', custom_class: 'border rounded my-2 mx-3') do |t|
+        - t.header do |h|
+          - h.th { t('admin.search.index.name') }
+          - h.th { t('admin.search.index.actions') }
+        - @collections.each do |c|
+          - t.row do |r|
+            - r.td{ c }
+            - r.td do
+              .d-flex.align-items-center
+                %span
+                  = action_button(t('admin.search.index.generate_schema'), "/admin/search/#{c}/init_schema")
+                %span.mx-1
+                  |
+                  = link_to_modal(t('admin.search.index.see_schema'), "/admin/search/#{c}/schema")
+                %span.mx-1
+                  |
+                  = link_to_modal(t('admin.search.index.see_indexed_data'), "/admin/search/#{c}/data",  data: { show_modal_size_value: 'modal-xl' } )

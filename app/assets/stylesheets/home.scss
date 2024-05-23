@@ -398,7 +398,13 @@ i.fa.fa-caret-square-o-down {
 .home-logos img{
   margin-left: 60px;
 }
-
+.home-upload-benifits svg{
+  width: 33px;
+  margin-top: 3px;
+}
+.home-upload-benifits svg path{
+  fill: var(--gray-color);
+}
 
 .home-support-title{
   display: flex;
@@ -419,7 +425,7 @@ i.fa.fa-caret-square-o-down {
 }
 .home-logo-instances{
   padding: 23px;
-  margin: 12px !important;
+  margin: 7px 12px !important;
   border-radius: 50%;
   display: block;
 }
@@ -471,7 +477,9 @@ i.fa.fa-caret-square-o-down {
   margin-bottom: 20px;
   background-color: var(--primary-color) !important;
 }
-
+.home-support-items svg path{
+  fill: white;
+}
 @keyframes scale-up {
   from { transform: scale(0.1); }
   to { transform: scale(1); }

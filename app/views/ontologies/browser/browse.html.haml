@@ -30,7 +30,7 @@
         });
       });
 
-    %div{data: { controller: "turbo-frame history browse-filters" , "turbo-frame-url-value": "/ontologies_filter", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL changed->turbo-frame#updateFrame"}}
+    %div{data: { controller: "turbo-frame history browse-filters" , "turbo-frame-url-value": "/ontologies_filter?page=1&#{request.original_url.split('?').last}", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL changed->turbo-frame#updateFrame"}}
 
       .browse-sub-container
         .browse-first-row{data:{controller: "browse-filters", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL"}}
@@ -56,12 +56,12 @@
                       = browse_filter_section_label(key)
                       %span.badge.badge-primary{"data-show-filter-count-target":"countSpan", style: "#{values[2] && values[2].positive? ? '' : 'display: none;'}"}
                         = values[2]
-                    %img{:src => "#{asset_path("arrow-down.svg")}"}/
+                    = inline_svg_tag 'arrow-down.svg'
                   .collapse{id: "browse-#{key}-filter", class: "#{values[2].positive? ? 'show': ''}"}
                     .browse-filter-checks-container
                       - values.first.each do |object|
                         - title = (key.eql?(:categories) || key.eql?(:groups)) ? nil : ''
-                        = group_chip_component(name: key, object: object, checked: values[1]&.include?(object["id"]), title: title) do |c|
+                        = group_chip_component(name: key, object: object, checked: values[1]&.include?(object["id"]) || values[1]&.include?(object["value"]) , title: title) do |c|
                           - c.count do
                             %span.badge.badge-light.ml-1
                               = turbo_frame_tag "count_#{key}_#{object["id"]}", busy: true
@@ -76,15 +76,10 @@
                 %select#format.browse-format-filter{:name => "format"}
                   = options_for_select(@formats, @selected_format)
                 %select#Sort_by.browse-sort-by-filter{:name => "Sort_by"}
-                  = options_for_select(@sorts_options, @selected_sort_by)
+                  = options_for_select(@sorts_options, @sort_by)
           .browse-ontologies
-            = render TurboFrameComponent.new(id:"ontologies_list_container", data:{"turbo-frame-target":"frame", "turbo-frame-url-value": "/ontologies_filter"}) do |container|
-              = turbo_frame_tag "ontologies_filter_count_request" do
-                = browser_counter_loader
-              = render TurboFrameComponent.new(id: "ontologies_list_view-page-1" , src: "/ontologies_filter?page=1&#{request.original_url.split('?').last}") do |list|
-                - list.loader do
-                  - ontologies_browse_skeleton
-              - container.loader do
+            = render TurboFrameComponent.new(id: "ontologies_list_view-page-1" , src: "/ontologies_filter?page=1&#{request.original_url.split('?').last}", data:{"turbo-frame-target":"frame", "turbo-frame-url-value": "/ontologies_filter"}) do |list|
+              - list.loader do
                 = browser_counter_loader
                 - ontologies_browse_skeleton
 

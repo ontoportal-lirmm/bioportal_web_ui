@@ -10,11 +10,11 @@ export default class extends Controller {
   
   copy () {
     const text = this.contentTarget.innerHTML || this.contentTarget.value
-    navigator.clipboard.writeText(text).then(() => {
+    navigator.clipboard.writeText(text.trim()).then(() => {
       this.#copied()
     })
   }
-
+  
   #copied () {
     if (this.timeout) {
       clearTimeout(this.timeout)

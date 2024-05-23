@@ -9,7 +9,7 @@ module ApplicationHelper
   REST_URI = $REST_URL
   API_KEY = $API_KEY
 
-  include ModalHelper, MultiLanguagesHelper
+  include ModalHelper, MultiLanguagesHelper, UrlsHelper
 
   RESOLVE_NAMESPACE = {:omv => "http://omv.ontoware.org/2005/05/ontology#", :skos => "http://www.w3.org/2004/02/skos/core#", :owl => "http://www.w3.org/2002/07/owl#",
                        :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#", :rdfs => "http://www.w3.org/2000/01/rdf-schema#", :metadata => "http://data.bioontology.org/metadata/",
@@ -21,13 +21,18 @@ module ApplicationHelper
                        :cc => "http://creativecommons.org/ns#", :schema => "http://schema.org/", :doap => "http://usefulinc.com/ns/doap#", :bibo => "http://purl.org/ontology/bibo/",
                        :wdrs => "http://www.w3.org/2007/05/powder-s#", :cito => "http://purl.org/spar/cito/", :pav => "http://purl.org/pav/", :nkos => "http://w3id.org/nkos/nkostype#",
                        :oboInOwl => "http://www.geneontology.org/formats/oboInOwl#", :idot => "http://identifiers.org/idot/", :sd => "http://www.w3.org/ns/sparql-service-description#",
-                       :cclicense => "http://creativecommons.org/licenses/"}
+                       :cclicense => "http://creativecommons.org/licenses/",
+                       'skos-xl' => "http://www.w3.org/2008/05/skos-xl#"}
   def url_to_endpoint(url)
     uri = URI.parse(url)
     endpoint = uri.path.sub(/^\//, '')
     endpoint
   end
 
+  def search_json_link(link = @json_url, style: '')
+    custom_style = "font-size: 50px; line-height: 0.5; margin-left: 6px; #{style}".strip
+    render IconWithTooltipComponent.new(icon: "json.svg",link: link, target: '_blank', title: t('fair_score.go_to_api'), size:'small', style: custom_style)
+  end
 
   def resolve_namespaces
     RESOLVE_NAMESPACE
@@ -86,14 +91,6 @@ module ApplicationHelper
 
   def encode_param(string)
     CGI.escape(string)
-  end
-
-  def escape(string)
-    CGI.escape(string) if string
-  end
-
-  def unescape(string)
-    CGI.unescape(string) if string
   end
 
   def clean(string)
@@ -177,60 +174,29 @@ module ApplicationHelper
     end
   end
 
-
-  def render_advanced_picker(custom_ontologies = nil, selected_ontologies = [], groups = nil, categories= nil,  align_to_dom_id = nil)
-    selected_ontologies ||= []
-    init_ontology_picker(custom_ontologies, selected_ontologies, groups, categories)
-    render :partial => "shared/ontology_picker_advanced", :locals => {
-      :custom_ontologies => custom_ontologies, :selected_ontologies => selected_ontologies, :align_to_dom_id => align_to_dom_id
-    }
-  end
-
-  def init_ontology_picker(ontologies = nil, selected_ontologies = [], groups = nil, categories = nil)
-    get_ontologies_data(ontologies)
-    get_groups_data(groups)
-    get_categories_data(categories)
-    # merge group and category ontologies into a json array
-    onts_in_gp_or_cat = @groups_map.values.flatten.to_set
-    onts_in_gp_or_cat.merge @categories_map.values.flatten.to_set
-    @onts_in_gp_or_cat_for_js = onts_in_gp_or_cat.sort.to_json
-  end
-
-  def init_ontology_picker_single
-    get_ontologies_data
-  end
-
-  def get_ontologies_data(ontologies = nil)
+  def onts_for_select
     ontologies ||= LinkedData::Client::Models::Ontology.all(include: "acronym,name")
-    @onts_for_select = []
-    @onts_acronym_map = {}
-    @onts_uri2acronym_map = {}
+    onts_for_select = [['', '']]
     ontologies.each do |ont|
-      # TODO: ontologies parameter may be a list of ontology models (not ontology submission models):
-      # ont.acronym instead of ont.ontology.acronym
-      # ont.name instead of ont.ontology.name
-      # ont.id instead of ont.ontology.id
-      # TODO: annotator passes in 'custom_ontologies' to the ontologies parameter.
       next if ( ont.acronym.nil? or ont.acronym.empty? )
       acronym = ont.acronym
       name = ont.name
-      #id = ont.id # ontology URI
       abbreviation = acronym.empty? ? "" : "(#{acronym})"
       ont_label = "#{name.strip} #{abbreviation}"
-      #@onts_for_select << [ont_label, id]  # using the URI crashes the UI checkbox selection behavior.
-      @onts_for_select << [ont_label, acronym]
-      @onts_acronym_map[ont_label] = acronym
-      @onts_uri2acronym_map[ont.id] = acronym  # required in ontologies_to_acronyms
+      onts_for_select << [ont_label, acronym]
     end
-    @onts_for_select.sort! { |a,b| a[0].downcase <=> b[0].downcase }
-    @onts_for_js = @onts_acronym_map.to_json
+    onts_for_select.sort! { |a,b| a[0].downcase <=> b[0].downcase }
+    onts_for_select
   end
 
-  def categories_for_select
-    # This method is called in the search index page.
-    get_ontologies_data
-    get_categories_data
-    return @categories_for_select
+  def link_last_part(url)
+    return "" if url.nil?
+
+    if url.include?('#')
+      url.split('#').last
+    else
+      url.split('/').last
+    end
   end
 
   def get_categories_data(categories = nil)
@@ -303,10 +269,10 @@ module ApplicationHelper
 
   def add_comment_button(parent_id, parent_type)
     if session[:user].nil?
-      link_to t('application.add_comment'),  login_index_path(redirect: request.url), class: "link_button"
+      link_to t('application.add_comment'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim"
     else
       link_to_modal t('application.add_comment'), notes_new_comment_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
-                    class: "add_comment btn btn-primary", data: { show_modal_title_value: t('application.add_new_comment')}
+                    class: "secondary-button regular-button slim", data: { show_modal_title_value: t('application.add_new_comment')}
     end
   end
 
@@ -321,12 +287,14 @@ module ApplicationHelper
 
   def add_proposal_button(parent_id, parent_type)
     if session[:user].nil?
-        link_to t('application.add_proposal'),  login_index_path(redirect: request.url), class: "link_button"
+      link_to t('application.add_proposal'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim"
     else
       link_to_modal t('application.add_proposal'), notes_new_proposal_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
-                    class: "add_proposal btn btn-primary", data: { show_modal_title_value: t('application.add_new_proposal')}
+                    class: "secondary-button regular-button slim", data: { show_modal_title_value: t('application.add_new_proposal')}
     end
   end
+  
+
   def link?(str)
     # Regular expression to match strings starting with "http://" or "https://"
     link_pattern = /\Ahttps?:\/\//
@@ -448,8 +416,9 @@ module ApplicationHelper
     data = label_ajax_data(cls_id, ont_acronym, ajax_uri, cls_url)
     options = {  'data-controller': 'label-ajax' }.merge(data)
     options = options.merge({ target: target }) if target
-
-    render ChipButtonComponent.new(url: link, text: cls_id, type: 'clickable', **options)
+    content_tag(:span, class: 'mx-1') do
+      render ChipButtonComponent.new(url: link, text: cls_id, type: 'clickable', **options)
+    end
   end
 
   def get_link_for_cls_ajax(cls_id, ont_acronym, target = nil)
@@ -459,7 +428,7 @@ module ApplicationHelper
       cls_url = "/ontologies/#{ont_acronym}?p=classes&conceptid=#{CGI.escape(cls_id)}"
       label_ajax_link(link, cls_id, ont_acronym, ajax_url , cls_url ,target)
     else
-      auto_link(cls_id, :all, target: '_blank')
+      content_tag(:div, auto_link(cls_id, :all, target: '_blank'))
     end
   end
 
@@ -492,9 +461,9 @@ module ApplicationHelper
     data = label_ajax_data_h(label_xl, ont_acronym, ajax_uri, label_xl_url)
     data[:data][:controller] = 'label-ajax'
     if modal
-      link_to_modal(cls_id, link, {data: data[:data] , class: 'btn btn-sm btn-light'})
+      link_to_modal(cls_id, link, {data: data[:data] , class: 'btn btn-sm btn-light m-1'})
     else
-      link_to(link,'', {data: data[:data], class: 'btn btn-sm btn-light', target: '_blank'})
+      link_to(link,'', {data: data[:data], class: 'btn btn-sm btn-light m-1', target: '_blank'})
     end
 
 
@@ -557,9 +526,11 @@ module ApplicationHelper
     config[:ncbo_slice] = @subdomain_filter[:acronym] if (@subdomain_filter[:active] && !@subdomain_filter[:acronym].empty?)
     config.to_json
   end
+
   def portal_name
     $SITE
-    end
+  end
+
   def navitems
     items = [["/ontologies", t('layout.header.browse')],
              ["/mappings", t('layout.header.mappings')],
@@ -581,17 +552,33 @@ module ApplicationHelper
   def prefix_properties(concept_properties)
     modified_properties = {}
 
-    concept_properties.each do |key, value|
+    concept_properties&.each do |key, value|
       if value.is_a?(Hash) && value.key?(:key)
         key_string = value[:key].to_s
         next if key_string.include?('metadata')
 
         modified_key = prefix_property_url(key_string, key)
-        modified_properties[modified_key] = value unless modified_key.nil?
+
+        if modified_key
+          modified_properties[modified_key] = value
+        else
+          modified_properties[link_last_part(key_string)] = value
+        end
+
       end
     end
 
     modified_properties
+  end
+
+  def rest_url
+    # Split the URL into protocol and path parts
+    protocol, path = $REST_URL.split("://", 2)
+
+    # Remove the last '/' in the path part
+    cleaned_path = path.chomp('/')
+    # Reconstruct the cleaned URL
+    "#{protocol}://#{cleaned_path}"
   end
 
 
@@ -603,8 +590,13 @@ module ApplicationHelper
     elsif key.nil? && namespace_key
       namespace_key
     else # we don't try to guess the prefix
-       nil
+      nil
     end
+  end
+
+  def prefixed_url(url)
+    key = link_last_part(url)
+    prefix_property_url(url.split(key).first, key)
   end
 
   def show_advanced_options_button(text: nil, init: nil)
@@ -623,7 +615,7 @@ module ApplicationHelper
 
   def insert_sample_text_button(text)
     content_tag(:div, class:'insert-sample-text-button') do
-      content_tag(:div, class: 'button', 'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("sample_text")) do
+      content_tag(:div, class: 'button', 'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("annotator.sample_text")) do
         content_tag(:div, text, class: 'text') +
         inline_svg_tag('icons/arrow-curved-up.svg')
       end
@@ -637,9 +629,37 @@ module ApplicationHelper
     end
   end
 
-  def list_to_string(list)
-    list&.join(',') || ''
+
+  def ontologies_selector(id:, label: nil, name: nil, selected: nil, placeholder: nil, multiple: true)
+    content_tag(:div) do
+      render(Input::SelectComponent.new(id: id, label: label, name: name, value: onts_for_select, multiple: multiple, selected: selected, placeholder: placeholder)) +
+      content_tag(:div, class: 'ontologies-selector-button', 'data-controller': 'ontologies-selector', 'data-ontologies-selector-id-value': id) do
+        content_tag(:div, t('ontologies_selector.clear_selection'), class: 'clear-selection', 'data-action': 'click->ontologies-selector#clear') +
+        link_to_modal(t('ontologies_selector.ontologies_advanced_selection'), "/ontologies_selector?id=#{id}", data: { show_modal_title_value: t('ontologies_selector.ontologies_advanced_selection')})
+      end
+    end
   end
+
+  def save_button_component(class_name: nil, id: , value:, data: nil, size: nil, type: nil)
+    content_tag(:div, data: data, class: class_name) do
+      render Buttons::RegularButtonComponent.new(id:id, value: value, variant: "primary", state: 'regular', size: size, type: type) do |btn|
+        btn.icon_right do
+          inline_svg_tag "check.svg"
+        end
+      end
+    end
+  end
+
+  def cancel_button_component(class_name: nil, id: , value:, data: nil)
+    content_tag(:div, data: data, class: class_name) do
+      render Buttons::RegularButtonComponent.new(id:id, value: value, variant: "secondary", state: 'regular') do |btn|
+        btn.icon_left do
+          inline_svg_tag "x.svg"
+        end
+      end
+    end
+  end
+ 
 
 
 end

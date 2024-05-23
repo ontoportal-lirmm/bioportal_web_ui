@@ -35,11 +35,12 @@ class AnnotatorController < ApplicationController
     @advanced_options_open = false
     @annotator_ontologies = LinkedData::Client::Models::Ontology.all
     if params[:text] && !params[:text].empty?
+      @init_whole_word_only = true
       api_params = {
-        text: params[:text],
-        ontologies: list_to_string(params[:ontologies_list]),
-        sementic_types: list_to_string(params[:semantic_types_list]),
-        semantic_groups: list_to_string(params[:semantic_groups_list]),
+        text: remove_special_chars(params[:text]),
+        ontologies: params[:ontologies],
+        semantic_types: params[:semantic_types],
+        semantic_groups: params[:semantic_groups],
         whole_word_only: params[:whole_word_only],
         longest_only: params[:longest_only],
         expand_mappings: params[:expand_mappings],
@@ -59,17 +60,17 @@ class AnnotatorController < ApplicationController
       @json_link = json_link(uri, api_params)
       @rdf_link = "#{@json_link}&format=rdf"
       @results_table_header = [
-        "Class", "Ontology", "Contexts"
+        t('annotator.class'), t('annotator.ontology'), t('annotator.context')
       ]
       if params[:fast_context]
-        @results_table_header += ['Negation', 'Experiencer', 'Temporality', 'Certainty']
+        @results_table_header += [t('annotator.negation'), t('annotator.experiencer'), t('annotator.temporality'), t('annotator.certainty')]
       end
       @direct_results = 0
       @parents_results = 0
       if params[:score].nil? || params[:score].eql?('none')
         params[:score] = nil
       else
-        @results_table_header.push('Score')
+        @results_table_header.push(t('annotator.score'))
       end
       annotations = LinkedData::Client::HTTP.get(uri, api_params)
       @ontologies = get_simplified_ontologies_hash
@@ -152,7 +153,7 @@ class AnnotatorController < ApplicationController
     return semantic_types if sty_ont.nil?
     # The first 500 items should be more than sufficient to get all semantic types.
     sty_classes = sty_ont.explore.classes({'pagesize'=>500, include: 'prefLabel'})
-    sty_classes.collection.each do |cls|
+    Array(sty_classes.collection).each do |cls|
       code = cls.id.split("/").last
       semantic_types[ code ] = cls.prefLabel
     end
@@ -191,8 +192,8 @@ class AnnotatorController < ApplicationController
   end
 
   def empty_advanced_options
-    params[:semantic_types_list].nil? &&
-      params[:semantic_groups_list].nil? &&
+    params[:semantic_types].nil? &&
+      params[:semantic_groups].nil? &&
       params[:class_hierarchy_max_level] == 'None' &&
       (params[:score].nil? || params[:score] == 'none') &&
       params[:score_threshold] == '0' &&
@@ -202,11 +203,12 @@ class AnnotatorController < ApplicationController
   end
   
 
-  def json_link(url, optional_params)
-    base_url = "#{url}?text=#{params[:text]}&"
-    filtered_params = optional_params.reject { |_, value| value.nil? }
-    optional_params_str = filtered_params.map { |param, value| "#{param}=#{value}" }.join("&")
-    return base_url + optional_params_str + "&apikey=#{$API_KEY}"
+  def remove_special_chars(input)
+    regex = /^[a-zA-Z0-9\s]*$/
+    unless input.match?(regex)
+      input.gsub!(/[^\w\s]/, '')
+    end
+    input
   end
 
 end

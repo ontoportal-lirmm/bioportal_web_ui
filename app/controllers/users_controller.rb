@@ -24,16 +24,13 @@ class UsersController < ApplicationController
   # GET /users/1.xml
   def show
     @user = if session[:user].admin? && params.has_key?(:id)
-              LinkedData::Client::Models::User.find_by_username(params[:id]).first
+              find_user(params[:id])
             else
-              LinkedData::Client::Models::User.find(session[:user].id)
+              find_user(session[:user].id)
             end
 
     @all_ontologies = LinkedData::Client::Models::Ontology.all(ignore_custom_ontologies: true)
 
-    logger.info 'user show'
-    logger.info @user.bring_remaining
-    logger.info @user
     @user_ontologies = @user.customOntology
 
     ## Copied from home controller , account action
@@ -51,10 +48,9 @@ class UsersController < ApplicationController
 
   # GET /users/1;edit
   def edit
-    @user = LinkedData::Client::Models::User.find(helpers.escape(params[:id]), include: 'all')
-    @user ||= LinkedData::Client::Models::User.find_by_username(helpers.escape(params[:id]), include: 'all').first
+    @user = find_user
 
-    if (params[:password].eql?("true"))
+    if params[:password].eql?("true")
       @user.validate_password = true
     end
   end
@@ -89,8 +85,7 @@ class UsersController < ApplicationController
   # PUT /users/1
   # PUT /users/1.xml
   def update
-    @user = LinkedData::Client::Models::User.find(helpers.escape(params[:id]), include: 'all')
-    @user = LinkedData::Client::Models::User.find_by_username(helpers.escape(params[:id]), include: 'all').first if @user.nil?
+    @user = find_user
     @errors = validate_update(user_params)
     if @errors.size < 1
 
@@ -127,9 +122,9 @@ class UsersController < ApplicationController
   # DELETE /users/1
   def destroy
     response = {errors: nil, success: ''}
-    @user = LinkedData::Client::Models::User.find(params[:id])
-    @user = LinkedData::Client::Models::User.find_by_username(params[:id]).first if @user.nil?
-    if(session[:user].admin?)
+    @user = find_user
+
+    if session[:user].admin?
       @user.delete
       response[:success] << t('users.user_deleted_successfully')
 
@@ -152,8 +147,7 @@ class UsersController < ApplicationController
   end
 
   def custom_ontologies
-    @user = LinkedData::Client::Models::User.find(params[:id], include: 'all')
-    @user = LinkedData::Client::Models::User.find_by_username(params[:id], include: 'all').first if @user.nil?
+    @user = find_user
 
     custom_ontologies = params[:ontology] ? params[:ontology][:ontologyId] : []
     custom_ontologies.reject!(&:blank?)
@@ -176,9 +170,10 @@ class UsersController < ApplicationController
 
   
   def subscribe
-    @user = LinkedData::Client::Models::User.find_by_username(params[:username]).first
+    @user = find_user
     deliver "subscribe", SubscribeMailer.register_for_announce_list(@user.email,@user.firstName,@user.lastName)
   end
+
 
   def un_subscribe
     @email = params[:email]
@@ -187,6 +182,16 @@ class UsersController < ApplicationController
 
   
   private
+
+  def find_user(id = params[:id])
+    id = helpers.unescape(id)
+    @user = LinkedData::Client::Models::User.find(helpers.escape(id), include: 'all')
+    @user ||= LinkedData::Client::Models::User.find_by_username(helpers.escape(id), include: 'all').first
+
+    not_found("User with id #{id} not found") if @user.nil?
+
+    @user
+  end
 
   def deliver(action,job)
     begin
@@ -203,7 +208,7 @@ class UsersController < ApplicationController
     params[:user]["orcidId"] = extract_id_from_url(params[:user]["orcidId"], 'orcid.org')
     params[:user]["githubId"] = extract_id_from_url(params[:user]["githubId"], 'github.com')
     p = params.require(:user).permit(:firstName, :lastName, :username, :orcidId, :githubId, :email, :email_confirmation, :password,
-                                     :password_confirmation, :register_mail_list, :admin)
+                                     :password_confirmation, :register_mail_list, :admin, :terms_and_conditions)
     p.to_h
   end
 
@@ -251,12 +256,18 @@ class UsersController < ApplicationController
         errors << t('users.recaptcha_validation')
       end
     end
+
+
     if ((!params[:orcidId].match(/^\d{4}+(-\d{4})+$/)) || (params[:orcidId].length != 19)) && !(params[:orcidId].nil? || params[:orcidId].length < 1)
       errors << t('users.validate_orcid')
     end
 
     if params[:username].nil? || params[:username].length < 1 || !params[:username].match(/^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$/)
       errors << t('users.validate_username')
+    end
+
+    unless params[:terms_and_conditions]
+      errors << t('users.validate_terms_and_conditions')
     end
     return errors
   end

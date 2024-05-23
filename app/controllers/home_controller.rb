@@ -25,7 +25,7 @@ class HomeController < ApplicationController
     @upload_benefits = [
       t('home.benefit1'),
       t('home.benefit2'),
-      t('home.benefit3'), 
+      t('home.benefit3'),
       t('home.benefit4'),
       t('home.benefit5')
     ]
@@ -39,6 +39,31 @@ class HomeController < ApplicationController
 
   end
 
+  def tools
+    @tools = {
+      search: {
+        link: "search/ontologies/content",
+        icon: "icons/search.svg",
+        title: t('tools.search.title'),
+        description: t('tools.search.description'),
+      },
+      converter: {
+        link: "/content_finder",
+        icon: "icons/settings.svg",
+        title: t('tools.converter.title'),
+        description: t('tools.converter.description'),
+      },
+      url_checker: {
+        link: check_resolvability_path,
+        icon: "check.svg",
+        title: t('tools.url_checker.title'),
+        description: t('tools.url_checker.description')
+      }
+    }
+
+    @title = "#{helpers.portal_name} #{t('layout.footer.tools')}"
+    render 'tools', layout: 'tool'
+  end
 
   def all_resources
     @conceptid = params[:conceptid]
@@ -135,9 +160,9 @@ class HomeController < ApplicationController
 
   def annotator_recommender_form
     if params[:submit_button] == "annotator"
-      redirect_to "/annotator?text=#{params[:text]}"
+      redirect_to "/annotator?text=#{helpers.escape(params[:text])}"
     elsif params[:submit_button] == "recommender"
-      redirect_to "/recommender?input=#{params[:input]}"
+      redirect_to "/recommender?input=#{helpers.escape(params[:input])}"
     end
   end
 

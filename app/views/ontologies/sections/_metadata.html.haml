@@ -9,9 +9,10 @@
       = render partial: 'ontologies/sections/metadata/ontology_metrics_section'
     .summary-page-second-row
       = ontology_depiction_card
-      = properties_card('Identifiers',t("ontologies.sections.identifiers"), @identifiers) do |values|
+      = properties_card(t('ontologies.sections.identifiers'),t("ontologies.sections.identifiers"), @identifiers) do |values|
         = horizontal_list_container(values) do |v|
-          = render LinkFieldComponent.new(value: v, check_resolvability: true)
+          - generate_htaccess = v.eql?(@identifiers["ontology_portal_uri"]&.first)
+          = render LinkFieldComponent.new(value: v, acronym: @ontology.acronym, raw: true, check_resolvability: true, generate_link: false, generate_htaccess: generate_htaccess)
 
       = properties_dropdown('dates',t("ontologies.sections.dates"),'', @dates_properties) do |values|
         - Array(values).sort.map do |v|
@@ -41,7 +42,7 @@
           - c.row do
             = render FieldContainerComponent.new(label: t("ontologies.sections.label_groups")) do
               = horizontal_list_container(@ontology.group) do |v|
-                = render ChipButtonComponent.new(text: show_group_name(v), type: "static")
+                = render ChipButtonComponent.new(text: show_group_name(v), type: "static", tooltip: show_group_name(v))
 
       = properties_dropdown('content',t("ontologies.sections.content"), t("ontologies.sections.info_tooltip_properties_dropdown"), nil) do |c|
         - properties_list_component(c, @content_properties.reject{|k, v| %w[keyClasses metadataVoc].include?(k.to_s)})

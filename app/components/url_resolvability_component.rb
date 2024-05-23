@@ -4,14 +4,15 @@ class UrlResolvabilityComponent < ViewComponent::Base
 
   include OntologiesHelper, CheckResolvabilityHelper
 
-  def initialize(resolvable: false, supported_formats: [], status: nil)
+  def initialize(url: '', resolvable: false, supported_formats: [], status: nil)
     @resolvable = resolvable
     @supported_formats = supported_formats
     @status = status
+    @url = url
   end
 
   def call
-    text = check_resolvability_message(@resolvable, @supported_formats, @status)
+    text = check_resolvability_message(@resolvable, @supported_formats, @status, @url)
     if @resolvable && @supported_formats.size > 1
       icon = status_icons(ok: true)
     elsif @resolvable

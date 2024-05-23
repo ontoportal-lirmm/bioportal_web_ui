@@ -150,3 +150,14 @@ div.synonym-change-request button {
     }
   }
 }
+
+.select-collection-placeholder{
+  display: flex;
+  justify-content: center;
+  color: var(--gray-color);
+  margin-top: 10px;
+}
+
+.concepts-mapping-count .d-flex{
+  display: inline !important;
+}

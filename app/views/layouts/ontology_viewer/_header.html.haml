@@ -5,7 +5,11 @@
 .ontology-details-header-container
   .ontology-details-path
     %a{href: "/ontologies"} ontologies
-    %img{src: asset_path("arrow-right-outlined.svg")}/
+    - if @ontology.viewOf
+      = inline_svg_tag 'arrow-right-outlined.svg'
+      %div
+        = @ontology.viewOf.split('/').last
+    = inline_svg_tag 'arrow-right-outlined.svg'
     %div
       = @ontology.acronym
   .ontology-details-header-sub-container
@@ -15,6 +19,8 @@
           = @ontology.name
           %span{data: { controller: 'tooltip'}, title: ontology_alternative_names}
             = "("+ @ontology.acronym+")"
+          - if @ontology.viewOf
+            = render ChipButtonComponent.new(class: 'chip_button_small mr-1', text: 'view', type: 'clickable', clickable: false)
           - if @ontology.private?
             = render ChipButtonComponent.new(class: 'chip_button_small mr-1') do
               = private_ontology_icon(@ontology.private?)
@@ -32,8 +38,9 @@
     .ontology-details-header-right-container.justify-content-end{style: 'min-width: 20%;'}
       %span.mx-1
         = new_submission_button
-      %span.mx-1
-        = ontology_edit_button
+      - if @submission_latest
+        %span.mx-1
+          = ontology_edit_button
       %span
         = submission_json_button
       = subscribe_button(@ontology.id)

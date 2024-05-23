@@ -1,8 +1,3 @@
-:javascript
-  jQuery(document).ready(function(){
-    jQuery("#project_creator").chosen();
-  });
-
 - unless @errors.nil?
   .enable-lists{style: "color:red; padding-left:10px;"}
     %strong= t('projects.form.errors_on_form')
@@ -42,7 +37,8 @@
       %td= text_field :project, :contacts, value: @project.contacts, :tabindex => 3
     %tr
       %th= t('projects.form.administrators')
-      %td= f.select :creator, @user_select_list, { selected: @project.creator || session[:user].id }, { multiple: true, :"data-placeholder" => t('projects.form.select_administrators') , tabindex: 4 }    
+      %td= select_input(name: "project[creator][]", values: @user_select_list, selected: @project.creator || session[:user].id,  multiple: true,placeholder: t('projects.form.select_administrators'))
+
     %tr
       %th
         = t('projects.form.home_page')
@@ -57,4 +53,5 @@
   %div#ontology_picker_project{style: "padding-top: 2em;"}
     - selected_ontologies = @project.ontologyUsed && @project.ontologyUsed.map {|id| id.split('/').last } || []
     - locals = { sel_text: t('projects.form.select_ontologies'), selected_ontologies: selected_ontologies, form_object: :project, form_attribute: "ontologyUsed" }
-    = render :partial => "shared/ontology_picker", locals: locals
+    = ontologies_selector(id:'projects_page_ontologies_selector' ,name: 'ontologies')              
+

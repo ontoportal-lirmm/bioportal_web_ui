@@ -3,6 +3,7 @@ require "application_system_test_case"
 class LoginFlowsTest < ApplicationSystemTestCase
 
   setup do
+    WebMock.disable!
     @user_john = fixtures(:users)[:john]
     @user_bob = create_user(fixtures(:users)[:bob])
   end
@@ -23,14 +24,15 @@ class LoginFlowsTest < ApplicationSystemTestCase
 
     LinkedData::Client::Models::User.find_by_username(new_user.username).first&.delete
 
-    fill_in 'user_firstName', with: new_user.first_name
-    fill_in 'user_lastName', with: new_user.last_name
+    fill_in 'user_firstName', with: new_user.firstName
+    fill_in 'user_lastName', with: new_user.lastName
     fill_in 'user_username', with: new_user.username
-    fill_in 'user_orcidId', with: new_user.orcid_id
-    fill_in 'user_githubId', with: new_user.github_id
+    fill_in 'user_orcidId', with: new_user.orcidId
+    fill_in 'user_githubId', with: new_user.githubId
     fill_in 'user_email', with: new_user.email
     fill_in 'user_password', with: new_user.password
     fill_in 'user_password_confirmation', with: new_user.password
+    find("input[name='user[terms_and_conditions]']").set(true)
 
     # Click the save button
     click_button 'Register'
@@ -62,9 +64,8 @@ class LoginFlowsTest < ApplicationSystemTestCase
 
     assert_selector '.account-page-card-title', text: 'API Key'
     assert_selector '.account-page-card-title', text: 'Subscriptions'
-    assert_selector '.account-page-card-title', text: 'Submitted Semantic Resources'
+    assert_selector '.account-page-card-title', text: 'Submitted Ontologies'
     assert_selector '.account-page-card-title', text: 'Projects Created'
-
   end
 
   test "go to login page and click save" do
@@ -72,4 +73,24 @@ class LoginFlowsTest < ApplicationSystemTestCase
 
     assert_selector '.notification', text: "Welcome #{@user_bob.username}!", wait: 10
   end
+
+  test "login and reset password" do
+    login_in_as(@user_bob)
+
+    visit root_url + '/account'
+
+    find("a[href=\"#{edit_user_path(@user_bob.username)}\"]").click
+
+    click_on 'Change password'
+
+    fill_in 'user_password', with: "new password"
+    fill_in 'user_password_confirmation', with: "new password"
+
+    click_on 'Save'
+
+    logged_in_user = LinkedData::Client::Models::User.authenticate(@user_bob.username, "new password")
+
+    assert logged_in_user && !logged_in_user.errors
+  end
+
 end

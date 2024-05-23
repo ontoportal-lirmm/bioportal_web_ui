@@ -17,6 +17,6 @@
       = t("ontologies.notification_message")
       = link_to ontology_url(@ontology.acronym), ontology_path(@ontology.acronym)
     %p
-      = t("ontologies.contact_support", site: "#{$SITE}")
+      = t("ontologies.contact_support_at", site: "#{$SITE}")
       = mail_to "#{$SUPPORT_EMAIL}", "#{$SUPPORT_EMAIL}"
 

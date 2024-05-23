@@ -40,10 +40,10 @@
   .home-header-title-container
     .home-header-title
       %h4
-        = t('.welcome', site: $SITE)
+        = t('home.index.welcome', site: $SITE)
       %p
         = t('home.index.tagline')
-      = render OntologySearchInputComponent.new
+      = ontologies_content_autocomplete
  
 .home-body-container
   .home-section
@@ -54,7 +54,7 @@
     .home-upload-benifits
       - @upload_benefits.each do |benefit|
         %div
-          %img{:src => asset_path("check-outlined.svg")}/
+          = inline_svg_tag 'check-outlined.svg'
           %p
             = benefit
     .home-ontologies-actions
@@ -73,9 +73,9 @@
         %input.d-none{type: "submit", name: "submit_button" ,value: "annotator", id: "annotator_submit"}/
         %input.d-none{type: "submit" , name: "submit_button" ,value: "recommender", id: "recommender_submit"}/
         .home-services-buttons.container
-          .insert-sample-text-button{'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("sample_text")}
+          .insert-sample-text-button{'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("annotator.sample_text")}
             %div
-              = t('insert_sample_text')
+              = t('annotator.insert_sample_text')
             = inline_svg_tag 'icons/arrow-curved-up.svg'
           .home-get-recommendations{onclick: "submitRecommender()"}
             %p= t('home.get_recommendations')
@@ -90,7 +90,7 @@
         %div.align-items
           %h4.margin-items= t('home.fairness')
           = render Display::InfoTooltipComponent.new(text: t('home.info_tooltip_text') )
-          = fairness_link('margin-bottom: 6px; vertical-align: top;')
+          = fairness_link(style: 'margin-bottom: 6px; vertical-align: top;')
         %hr.home-section-line/
         .home-card.home-fair-scores
           %div.fair-scores-badge-section
@@ -122,7 +122,7 @@
         .home-card.home-twitter-news
           %a.twitter-timeline{"data-height" => "360", :href => "https://twitter.com/lagroportal?ref_src=twsrc%5Etfw"}
             .home-twitter-loader 
-              = render LoaderComponent.new
+              = render LoaderComponent.new(type: 'pulsing')
           %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
 
   .home-section
@@ -182,7 +182,7 @@
         %p= t('home.support_and_collaborations')
         %hr.home-section-line/
       .home-support-items
-        - $HOME_PAGE_LOGOS.each do |logo|
+        - $HOME_PAGE_LOGOS&.each do |logo|
           %a{href:logo[:url], target: "_blanc"}
             %img{src: asset_path(logo[:img_src])}
   
@@ -192,7 +192,7 @@
         %p= t('home.ontoportal_instances')
         %hr.home-section-line/
       .home-support-items
-        - $PORTALS_INSTANCES.each do |portal|
+        - $PORTALS_INSTANCES&.each do |portal|
           %div.text-center
             = link_to portal[:link], target: '_blank', class: 'home-logo-instances', style: "background-color: #{portal[:color]}" do
               = inline_svg 'logo-white.svg', width: "35", height: "26"

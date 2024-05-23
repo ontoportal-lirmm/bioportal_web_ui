@@ -28,7 +28,7 @@ body{
 }
 
 .admin-background{
-  background-color: var(--light-color) !important;
+  background-color: var(--bg-info-light-color) !important;
   border-color: var(--admin-color) !important;
   color: var(--admin-color) !important;
   border-radius: 5px;
@@ -676,6 +676,8 @@ div.tree_error {
   a.tree-link {
     display: inline-block;
     padding: 5px;
+    word-break: break-all;
+    text-wrap: wrap;
     color: var(--primary-color) !important;
   }
 
@@ -1061,27 +1063,6 @@ button.fg-button-menu, button.fg-button {
   background: none;
   border-radius: 0;
   border: none;
-}
-
-#ontology_picker_container div.chzn-container {
-  width: 432px !important;
-}
-
-#ontology_picker_container div.chzn-container-active ul.chzn-choices li.search-field input {
-  font-style: normal !important;
-}
-
-#ontology_picker_container div.chzn-container ul.chzn-choices {
-  max-height: 110px;
-  overflow: auto !important;
-}
-
-#ontology_picker_container div.chzn-container li.search-field input {
-  font-style: oblique;
-}
-
-#ontology_picker_container div.chzn-drop {
-  display: none;
 }
 
 .no_right_border {

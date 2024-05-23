@@ -13,9 +13,14 @@ require 'ontologies_api_client'
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-  
+  include InternationalisationHelper
+
   before_action :set_locale
-  
+
+  def self.t(*args)
+    InternationalisationHelper.t(*args)
+  end
+
   # Sets the locale based on the locale cookie or the value returned by detect_locale.
   def set_locale    
     I18n.locale = cookies[:locale] || detect_locale
@@ -188,19 +193,9 @@ class ApplicationController < ActionController::Base
 
 
   def rest_url
-    # Split the URL into protocol and path parts
-    protocol, path = REST_URI.split("://", 2)
-
-    # Remove duplicate "//"
-    cleaned_url = REST_URI.gsub(/\/\//, '/')
-
-    # Remove the last '/' in the path part
-    cleaned_path = path.chomp('/')
-    # Reconstruct the cleaned URL
-    "#{protocol}://#{cleaned_path}"
+    helpers.rest_url
   end
-
-
+  
   def check_http_file(url)
     session = Net::HTTP.new(url.host, url.port)
     session.use_ssl = true if url.port == 443
@@ -417,20 +412,21 @@ class ApplicationController < ActionController::Base
       if ignore_concept_param
         # get the top level nodes for the root
         # TODO_REV: Support views? Replace old view call: @ontology.top_level_classes(view)
-        @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
-        if @roots.nil? || @roots.empty?
+        @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes]) rescue nil
+
+        if @roots.nil? || response_error?(@roots) || @roots.compact&.empty?
           LOG.add :debug, t('application.missing_roots_for_ontology', acronym: @ontology.acronym)
           classes = @ontology.explore.classes.collection
-          @concept = classes.first.explore.self(full: true) if classes.first
+          @concept = classes.first.explore.self(full: true) if classes&.first
           return
         end
 
         @root = LinkedData::Client::Models::Class.new(read_only: true)
-        @root.children = @roots.sort{|x,y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase}
+        @root.children = @roots.sort{|x,y| (x&.prefLabel || "").downcase <=> (y&.prefLabel || "").downcase}
 
         # get the initial concept to display
         root_child = @root.children&.first
-        not_found(t('application.missing_roots', id: @roots.id)) if root_child.nil?
+        not_found(t('application.missing_roots')) if root_child.nil?
 
         @concept = root_child.explore.self(full: true, lang: lang)
         # Some ontologies have "too many children" at their root. These will not process and are handled here.
@@ -450,7 +446,7 @@ class ApplicationController < ActionController::Base
         rootNode = @concept.explore.tree(include: include, concept_schemes: params[:concept_schemes], lang: lang)
         if rootNode.nil? || rootNode.empty?
           @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
-          if @roots.nil? || @roots.empty?
+          if @roots.nil? || response_error?(@roots) || @roots.compact&.empty?
             LOG.add :debug, t('application.missing_roots_for_ontology', acronym: @ontology.acronym)
             @concept = @ontology.explore.classes.collection.first.explore.self(full: true)
             return
@@ -705,16 +701,18 @@ class ApplicationController < ActionController::Base
   
   # Get the submission metadata from the REST API.
   def submission_metadata
-    @metadata ||= JSON.parse(LinkedData::Client::HTTP.get("#{REST_URI}/submission_metadata", {}, raw: true))
+    @metadata ||= helpers.submission_metadata
   end
-  helper_method :submission_metadata
 
   def request_lang
     helpers.request_lang
   end
 
-  def self.t(*args)
-    I18n.t(*args)
+  def json_link(url, optional_params)
+    base_url = "#{url}?"
+    filtered_params = optional_params.reject { |_, value| value.nil? }
+    optional_params_str = filtered_params.map { |param, value| "#{param}=#{value}" }.join("&")
+    return base_url + optional_params_str + "&apikey=#{$API_KEY}"
   end
 
   private

@@ -2,21 +2,24 @@
   - c.header(text: t("ontologies.sections.metadata.general_information"))
   = render Layout::ListComponent.new do |l|
     - l.row do
-      .d-flex.align-items-center
-        %div
-          - if @submission_latest&.abstract.blank?
-            .creation_text
-              = render TextAreaFieldComponent.new(value: @submission_latest&.description)
-          - else
+      %div
+        - if @submission_latest&.abstract.blank?
+          .creation_text.d-flex.align-items-center
+            = render TextAreaFieldComponent.new(value: @submission_latest&.description)
+            - unless @submission_latest&.logo.nil? || !link?(@submission_latest&.logo)
+              = image_tag(@submission_latest&.logo, class: 'description_img ml-2', width: '145px')
+        - else
+          .d-flex.align-items-center
             = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.abstract")) do
               .creation_text
                 = render TextAreaFieldComponent.new(value: @submission_latest&.abstract)
-            = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.description")) do
-              .creation_text
-                = render TextAreaFieldComponent.new(value: @submission_latest&.description)
+            - unless @submission_latest&.logo.nil? || !link?(@submission_latest&.logo)
+              = image_tag(@submission_latest&.logo, class: 'description_img ml-2', width: '145px')
+          = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.description")) do
+            .creation_text
+              = render TextAreaFieldComponent.new(value: @submission_latest&.description)
 
-        - unless @submission_latest&.logo.nil? || !link?(@submission_latest&.logo)
-          = image_tag(@submission_latest&.logo, class: 'description_img', width: '145px')
+        
 
 
     - l.row do
@@ -50,7 +53,7 @@
     - unless domains.empty?
       - l.row do
         = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.categories_and_subjects")) do
-          = horizontal_list_container(domains.uniq) do |v|
+          = horizontal_list_container(show_ontology_domains(domains).uniq) do |v|
             = render ChipButtonComponent.new(text: show_category_name(v), type: "static")
 
     - if  @submission_latest&.pullLocation

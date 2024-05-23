@@ -11,7 +11,7 @@
   %td
     = category.acronym
   %td
-    = link_to count , "/ontologies?categories=#{category.id}", target: "_blank"
+    = link_to count , "/ontologies?categories=#{category.id.split('/').last}", target: "_blank"
   %td
     %div.d-flex.align-items-center{style: 'width: 250px'}
       %span.mx-1

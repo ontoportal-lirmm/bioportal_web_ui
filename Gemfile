@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '7.0.7'
 
 gem 'jsbundling-rails'
-
+gem 'chart-js-rails'
 gem 'sassc-rails' #sass-rails replacent
 gem 'terser' #ugilifer replacent
 
@@ -115,6 +115,8 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
   gem 'i18n-tasks'
+  gem 'i18n-tasks-csv', '~> 1.1'
+
   gem 'deepl-rb'
   gem 'letter_opener_web', '~> 2.0'
   gem 'haml-rails'
@@ -131,6 +133,7 @@ group :test do
   gem 'simplecov', require: false
   gem 'simplecov-cobertura' # for codecov.io
   #gem 'webdrivers'
+  gem 'webmock'
 end
 
 

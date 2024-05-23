@@ -5,6 +5,24 @@ module OntologiesHelper
   API_KEY = $API_KEY
   LANGUAGE_FILTERABLE_SECTIONS = %w[classes schemes collections instances properties].freeze
 
+  def concept_search_input(placeholder)
+    content_tag(:div, class: 'search-inputs p-1') do
+      text_input(placeholder: placeholder, label: '', name: "search", value: '', data: { action: "input->browse-filters#dispatchInputEvent" })
+    end
+  end
+
+  def tree_container_component(id:, placeholder:, frame_url:, tree_url:)
+    content_tag(:div, class: 'search-page-input-container', data: { controller: "turbo-frame history browse-filters", "turbo-frame-url-value": frame_url, action: "changed->turbo-frame#updateFrame" }) do
+      concat(concept_search_input(placeholder))
+      concat(content_tag(:div, class: 'tree-container') do
+        render(TurboFrameComponent.new(
+          id: id,
+          src: tree_url,
+          data: { 'turbo-frame-target': 'frame' }
+        ))
+      end)
+    end
+  end
 
   def ontology_retired?(submission)
     submission[:status].to_s.eql?('retired') || submission[:deprecated].to_s.eql?('true')
@@ -54,6 +72,8 @@ module OntologiesHelper
   end
   def browse_filter_section_label(key)
     labels = {
+      categories: t('ontologies.categories'),
+      groups: t('ontologies.groups'),
       hasFormalityLevel: t('ontologies.formality_levels'),
       isOfType: t('ontologies.ontology_types'),
       naturalLanguage: t('ontologies.natural_languages')
@@ -302,10 +322,18 @@ module OntologiesHelper
 
   def show_category_name(domain)
     return domain unless link?(domain)
-
     acronym = domain.split('/').last.upcase.strip
     category = LinkedData::Client::Models::Category.find(acronym)
-    category ? category.name : acronym.titleize
+    category.name ? category.name : acronym.titleize
+  end
+
+
+  def show_ontology_domains(domains)
+    if domains.length == 1 && domains[0].include?(',')
+      domains[0].split(',').map(&:strip)
+    else
+      domains
+    end
   end
 
   def show_group_name(domain)
@@ -419,8 +447,7 @@ module OntologiesHelper
 
   def sections_to_show
     sections = ['summary']
-
-    if !@ontology.summaryOnly && submission_ready?(@submission_latest)
+    if !@ontology.summaryOnly && (submission_ready?(@submission_latest) || @old_submission_ready)
       sections += ['classes']
       sections += %w[properties]
       sections += %w[schemes collections] if skos?
@@ -430,7 +457,7 @@ module OntologiesHelper
     sections
   end
 
-  def not_ready_submission_alert(ontology: @ontology, submission: @submission)
+  def not_ready_submission_alert(ontology: @ontology, submission: @submission, old_submission_ready: @old_submission_ready)
     if ontology.admin?(session[:user])
       status = status_string(submission)
       type = nil
@@ -446,8 +473,10 @@ module OntologiesHelper
         type = 'info'
         if submission.nil?
           message = t('ontologies.upload_an_ontology', ontology: ontology_data_sections.join(', '))
-        else
+        elsif old_submission_ready
           message = t('ontologies.ontology_is_processing', ontology: ontology_data_sections.join(', '))
+        else
+          message = t('ontologies.new_ontology_is_processing', ontology: ontology_data_sections.join(', '))
         end
       end
       render Display::AlertComponent.new(message: message, type: type, button: Buttons::RegularButtonComponent.new(id:'regular-button', value: t('ontologies.contact_support', site: "#{$SITE}"), variant: "primary", href: "/feedback", color: type, size: "slim")) if type
@@ -469,7 +498,7 @@ module OntologiesHelper
   def edit_sub_languages_button(ontology = @ontology, submission = @submission_latest)
     return unless ontology.admin?(session[:user])
 
-    link = edit_ontology_submission_path(ontology.acronym, submission.submissionId, properties: 'naturalLanguage', container_id: 'application_modal_content')
+    link = edit_ontology_submission_path(ontology.acronym, submission&.submissionId || '', properties: 'naturalLanguage', container_id: 'application_modal_content')
     link_to_modal(nil,  link, class: "btn", id:'fair-details-link',
                   data: { show_modal_title_value: t('ontologies.edit_natural_languages', acronym: ontology.acronym), show_modal_size_value: 'modal-md' }) do
       render ChipButtonComponent.new(type: 'clickable', class: 'admin-background chip_button_small' ) do
@@ -517,7 +546,7 @@ module OntologiesHelper
     end
 
     link_to(link, title: title, class: "mx-1") do
-      inline_svg_tag("icons/plus.svg", width: '15px', height: '15px')
+      inline_svg_tag("icons/plus.svg", width: '15px', height: '15px', class: 'add-views-plus-icon')
     end
   end
 
@@ -671,9 +700,70 @@ module OntologiesHelper
     render IconWithTooltipComponent.new(icon: "json.svg",link: link, target: '_blank', title: title)
   end
 
+  def n_triples_to_table(n_triples_string)
+    grouped_by_id = n_triples_string.split(".\n").map do |x|
+      x.strip.scan(/^<([^>]+)> <([^>]+)> (.+)/).flatten
+    end.group_by { |x| x.shift }
+
+    grouped_by_id_and_properties = grouped_by_id.transform_values do |x|
+      x.group_by { |y| y.shift }
+    end
+
+    render TableComponent.new do |t|
+      resource_id, resource_id_values = grouped_by_id_and_properties.shift
+
+      t.add_row({ td: "ID" }, { td: resource_id })
+
+      resource_id_values.each do |property, values|
+        t.row do |row|
+          url = property.gsub(/[<>]/, '')
+          row.td do
+            content_tag(:span, prefixed_url(url), title: link_to(url, url), 'data-controller': 'tooltip')
+          end
+
+          row.td do
+            horizontal_list_container(values.flatten) do |v|
+              v = v.strip.match?(/^<(.+)>/) ? v.strip.match(/^<(.+)>/)[1] : v
+              link?(v) ? render(LinkFieldComponent.new(value: v)) : "#{v}, "
+            end
+          end
+        end
+      end
+
+      inverse_grouped_by_properties = grouped_by_id_and_properties.transform_values(&:to_a)
+                                                                  .to_a
+                                                                  .map(&:flatten)
+                                                                  .group_by { |x| x.delete_at(1) }
+      inverse_grouped_by_properties.each do |property, values|
+        t.row do |row|
+          url = property.gsub(/[<>]/, '')
+          row.td do
+            content_tag(:span, prefixed_url(url), title: link_to(url, url), 'data-controller': 'tooltip')
+          end
+
+          row.td do
+            horizontal_list_container(values.flatten) do |v|
+              v = v.strip.match?(/^<(.+)>/) ? v.strip.match(/^<(.+)>/)[1] : v
+              next if v.eql?(resource_id)
+
+              link?(v) ? render(LinkFieldComponent.new(value: v)) : "#{v}, "
+            end
+          end
+        end
+      end
+
+    end
+  end
+
   private
 
   def submission_languages(submission = @submission)
     Array(submission&.naturalLanguage).map { |natural_language| natural_language["iso639"] && natural_language.split('/').last }.compact
   end
+
+  def id_to_acronym(id)
+    id.split('/').last
+  end
+
+
 end

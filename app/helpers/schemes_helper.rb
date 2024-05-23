@@ -48,7 +48,7 @@ module SchemesHelper
   end
 
   def scheme_path(scheme_id = '', language = '')
-    "/ontologies/#{@ontology.acronym}/schemes/show_scheme?id=#{escape(scheme_id)}&lang=#{language}"
+    "/ontologies/#{@ontology.acronym}/schemes/show?id=#{escape(scheme_id)}&lang=#{language}"
   end
 
   def no_main_scheme?
@@ -106,7 +106,7 @@ module SchemesHelper
     selected_scheme = selected_scheme || main_scheme || root.children.first
 
 
-    tree_component(root, selected_scheme, target_frame: 'scheme', auto_click: true) do |child|
+    tree_component(root, selected_scheme, target_frame: 'scheme', auto_click: false) do |child|
       href = scheme_path(child['@id'], request_lang) rescue  ''
       data = { schemeid: (child['@id'] rescue '')}
       ["#", data, href]

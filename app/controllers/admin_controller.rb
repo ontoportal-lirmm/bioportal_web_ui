@@ -12,9 +12,19 @@ class AdminController < ApplicationController
 
   def sparql_endpoint
     graph = params["named-graph-uri"]
-    if !session[:user]&.admin? && !graph.blank?
+    apikey = params["apikey"]
+    user_name = params["username"]
+
+    unless user_name.blank?
+      user = LinkedData::Client::Models::User.find(user_name, {include: 'all', apikey: apikey})
+      render(inline: 'Query not permitted') && return if user.nil?
+    end
+
+    render(inline: 'Query not permitted') && return if graph.blank? && !user&.admin?
+
+    unless graph.blank?
       acronym = graph.split('/')[-3]
-      @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
+      @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym, {apikey: apikey}).first
       render(inline: t('admin.query_not_permitted')) && return  if @ontology.nil? || @ontology.errors
     end
 
@@ -369,7 +379,7 @@ class AdminController < ApplicationController
 
     return visits_data if analytics.empty?
 
-    analytics.each do |year, year_data|
+    analytics.sort.each do |year, year_data|
       year_data.each do |month, value|
         visits_data[:visits] << value
         visits_data[:labels] << DateTime.parse("#{year}/#{month}").strftime("%b %Y")
@@ -414,8 +424,7 @@ class AdminController < ApplicationController
     end
 
 
-
-    aggregated_data.each do |year, year_data|
+    aggregated_data.sort.each do |year, year_data|
       year_data.each do |month, value|
         visits_data[:visits] << value
         visits_data[:labels] << DateTime.parse("#{year}/#{month}").strftime("%b %Y")
@@ -433,6 +442,7 @@ class AdminController < ApplicationController
     visits_data = { visits: [], labels: [] }
 
     return visits_data if analytics.empty?
+
     analytics.each do |path, count|
       visits_data[:labels] << path
       visits_data[:visits] << count

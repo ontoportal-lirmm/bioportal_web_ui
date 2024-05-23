@@ -1,20 +1,31 @@
 module InputsHelper
 
-  def text_input(name:, value:, label: nil, disabled: false, help: nil, error_message: nil)
+  def text_input(name:, value:nil, label: nil, disabled: false, help: nil, error_message: nil, placeholder: nil, data: nil)
     render Input::TextInputComponent.new(label: input_label(label, name), name: name, value: value,
                                          error_message: error_message || input_error_message(name),
                                          disabled: disabled,
-                                         helper_text: help)
+                                         helper_text: help,
+                                         placeholder: placeholder,
+                                         data: data)
   end
 
-  def select_input(name:, values:, id: nil, label: nil, selected: nil, multiple: false, help: nil, open_to_add: false, required: false,  data: {})
+  def select_input(name:, values:, id: nil, label: nil, selected: nil, multiple: false, help: nil, open_to_add: false, required: false,
+                   placeholder: nil,
+                   data: {})
     render Input::SelectComponent.new(label: input_label(label, name), id: id || name, name: name, value: values,
                                       selected: selected,
                                       multiple: multiple,
                                       helper_text: help,
                                       open_to_add_values: open_to_add,
                                       required: required,
+                                      placeholder:  placeholder,
                                       data: data)
+  end
+
+  def number_input(name: , label: '', value: )
+    render Input::NumberComponent.new(label:label,
+                                      name: name,
+                                      value: value)
   end
 
   def check_input(id:, name:, value:, label: '', checked: false, &block)

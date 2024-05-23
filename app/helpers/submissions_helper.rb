@@ -2,11 +2,10 @@ module SubmissionsHelper
   def metadata_help_link
     content_tag(:div, class: 'edit-ontology-desc') do
       html = content_tag(:div) do
-        content_tag(:div, 'Edit the metadata of your ontology here.') +
-          content_tag(:span, "Some of these values are used by #{portal_name} functionalities, includng for FAIRness assessment. ") +
-          content_tag(:span) do
-            link_to('See guidelines and recommendations for metadata here.', Rails.configuration.settings.links[:metadata_help], target: "_blank")
-          end
+        content_tag(:div, t('submission_inputs.edit_metadata_instruction',
+                            portal_name: portal_name,
+                            link: link_to(t('submission_inputs.edit_metadata_instruction_link'), Rails.configuration.settings.links[:metadata_help], target: '_blank')).html_safe
+        )
       end
 
       html.html_safe
@@ -15,12 +14,10 @@ module SubmissionsHelper
 
   def metadata_license_help_link
     content_tag(:div, class: 'edit-ontology-desc') do
-      html = content_tag(:div) do
-        content_tag(:span, " #{portal_name} requires an URI for the license. If you do not find your choice here, ") +
-          content_tag(:span) do
-            link_to('Please pick up an URI from here.', "https://rdflicense.linkeddata.es/", target: "_blank")
-          end
-      end
+      html = content_tag(:div, t('submission_inputs.license_help',
+                                 portal_name: portal_name,
+                                 link: link_to(t('submission_inputs.license_help_link'), "https://rdflicense.linkeddata.es/", target: '_blank')).html_safe
+      )
       html.html_safe
     end
   end
@@ -28,7 +25,7 @@ module SubmissionsHelper
   def metadata_deprecated_help
     content_tag(:div, style: 'edit-ontology-desc') do
       html = content_tag(:div) do
-        content_tag(:div, " An ontology with status retired shall necessarily be also deprecated, but not the opposite.")
+        content_tag(:div, t('submission_inputs.deprecated_help'))
       end
       html.html_safe
     end
@@ -37,10 +34,7 @@ module SubmissionsHelper
   def metadata_knownUsage_help
     content_tag(:div, class: 'edit-ontology-desc') do
       html = content_tag(:div) do
-        content_tag(:span, 'Consider also declaring ') +
-          content_tag(:span, style: 'width: 10px; height: 10px') do
-            link_to('the projects that are using the ontology.', "/projects/new", target: "_blank")
-          end
+        content_tag(:span, t('submission_inputs.known_usage_help', metadata_knownUsage_help: link_to(t('submission_inputs.known_usage_help_link'), "/projects/new", target: "_blank")).html_safe)
       end
       html.html_safe
     end
@@ -49,7 +43,7 @@ module SubmissionsHelper
   def metadata_help_creator
     content_tag(:div, class: 'edit-ontology-desc') do
       html = content_tag(:div, style: 'text-align: center; margin-top: 56px;') do
-        content_tag(:span, "The following properties take for value an 'agent' in #{portal_name} (either a person or an organization). These agents are shared over all the ontologies and suggested with autocompletion if they already exist. Editing an agent here will change it to all the ontologies that agent is involved in.")
+        content_tag(:span, t('submission_inputs.help_creator', portal_name: portal_name))
       end
 
       html.html_safe
@@ -58,13 +52,7 @@ module SubmissionsHelper
 
   def metadata_version_help
     content_tag(:div, class: 'edit-ontology-desc') do
-      html = content_tag(:div) do
-        content_tag(:span, 'For more information on how to encode versionning information in an ontology, see ') +
-          content_tag(:span, style: 'width: 10px; height: 10px') do
-            link_to('guidelines and recommendations.', "https://hal.science/hal-04094847", target: "_blank")
-          end
-      end
-      html.html_safe
+      content_tag(:div , t('submission_inputs.version_help' , link: link_to(t('submission_inputs.version_helper_link'), "https://hal.science/hal-04094847", target: "_blank")).html_safe).html_safe
     end
   end
 
@@ -72,9 +60,9 @@ module SubmissionsHelper
     [acronym, submission_id].join('#')
   end
 
-  def submission_metadata_selector(id: 'search_metadata', name: 'search[metadata]', label: 'Filter properties to show')
+  def submission_metadata_selector(id: 'search_metadata', name: 'search[metadata]', label: t('submission_inputs.metadata_selector_label'))
     select_input(id: id, name: name, label: label, values: submission_editable_properties.sort, multiple: true,
-                 data: { placeholder: 'Start typing to select properties' })
+                 data: { placeholder: t('submission_inputs.metadata_selector_placeholder') })
   end
 
   def ontology_and_submission_id(value)
@@ -231,8 +219,9 @@ module SubmissionsHelper
     submission_metadata.select { |x| x["enforce"].include?('Agent') }.map { |x| x["attribute"] }
   end
 
-  def render_submission_inputs(frame_id)
+  def render_submission_inputs(frame_id, submission)
     output = ""
+    @submission = submission
 
     if selected_attribute?('acronym')
       output += ontology_acronym_input(update: true)

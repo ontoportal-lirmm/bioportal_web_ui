@@ -7,37 +7,34 @@
       .line
     .annotator-page-decription
       = t('annotator.description')
-    = form_tag(@form_url, method: :get, 'data-turbo': true, novalidate: true) do
+    = form_tag(@form_url, method: :get, 'data-turbo': true, novalidate: true,'data-controller': 'form-url', 'data-action': 'submit->form-url#submit') do
       .annotator-page-inputs{'data-controller': 'reveal-component'}
         .inputs
           %div
             .annotator-page-text-area{'data-controller': 'sample-text'}
-              %textarea{rows: "6" , placeholder: t('annotator.input_hint'), name: "text",  maxlength: "500", 'data-sample-text-target': "input", 'data-annotator-target': 'input'}
+              %textarea{rows: "7" , placeholder: t('annotator.input_hint'), name: "text",  maxlength: "500", 'data-sample-text-target': "input", 'data-annotator-target': 'input'}
                 = params[:text]
-              = insert_sample_text_button(t('recommender.insert_sample_text'))
+              = insert_sample_text_button(t('annotator.insert_sample_text'))
           .annotator-page-options
             .section-text
               = t('annotator.options')
-            .select-ontologies
-              - get_ontologies_data
-              = render Input::SelectComponent.new(label: t('recommender.select_ontologies'), id: 'ontologies', name: 'ontologies_list[]', value: @onts_for_select, multiple: "multiple", selected: params[:ontologies_list])
             .prefrences
-              .preftitle
-                = t('annotator.prefrences')
               .chips
-                = render(ChipsComponent.new(name: 'whole_word_only', label: t('annotator.whole_word_only'), checked: params[:whole_word_only] || true))
+                = render(ChipsComponent.new(name: 'whole_word_only', label: t('annotator.whole_word_only'), checked: @init_whole_word_only.nil? || params[:whole_word_only]))
                 = render(ChipsComponent.new(name: 'longest_only', label: t('annotator.match_longest_only'), checked: params[:longest_only]))
                 = render(ChipsComponent.new(name: 'expand_mappings', label: t('annotator.include_mappings'), checked: params[:expand_mappings]))
                 = render(ChipsComponent.new(name: 'exclude_numbers', label: t('annotator.exclude_numbers'), checked: params[:exclude_numbers]))
-                = render(ChipsComponent.new(name: 'exclude_synonyms', label: t('annotator.excclude_synonyms'), checked: params[:exclude_synonyms]))
-              = show_advanced_options_button(text: t('show_advanced_options'), init: @advanced_options_open)
-              = hide_advanced_options_button(text: t('hide_advanced_options'), init: @advanced_options_open)
-                
+                = render(ChipsComponent.new(name: 'exclude_synonyms', label: t('annotator.exclude_synonyms'), checked: params[:exclude_synonyms]))
+              
+            .select-ontologies
+              = ontologies_selector(id:'annotator_page_ontologies', label: 'Select ontologies' ,name: 'ontologies[]', selected: params[:ontologies]&.split(','))
+            = show_advanced_options_button(text: t('show_advanced_options'), init: @advanced_options_open)
+            = hide_advanced_options_button(text: t('hide_advanced_options'), init: @advanced_options_open)
         .more-advanced-options{'data-reveal-component-target': 'item', class: "#{@advanced_options_open ? '' : 'd-none'}"}
           .filters_line
-            = render Input::SelectComponent.new(label: t('annotator.select_umls_sementic_types'), id: 'umls_semantic_types', name: 'semantic_types_list[]', value: @semantic_types_for_select, multiple: true, selected: params[:semantic_types_list])
-            = render Input::SelectComponent.new(label: t('annotator.select_umls_sementic_groupes'), id: 'umls_semantic_groups', name: 'semantic_groups_list[]', value: @semantic_groups_for_select, multiple: true, selected: params[:semantic_groups_list])
-            = render Input::SelectComponent.new(label: t('annotator.include_ancentors'), id: 'ancestors_level', name: 'class_hierarchy_max_level', value: @ancestors_levels, selected: params[:class_hierarchy_max_level])
+            = render Input::SelectComponent.new(label: t('annotator.select_umls_sementic_types'), id: 'umls_semantic_types', name: 'semantic_types[]', value: @semantic_types_for_select, multiple: true, selected: params[:semantic_types]&.split(','))
+            = render Input::SelectComponent.new(label: t('annotator.select_umls_sementic_groups'), id: 'umls_semantic_groups', name: 'semantic_groups[]', value: @semantic_groups_for_select, multiple: true, selected: params[:semantic_groups]&.split(','))
+            = render Input::SelectComponent.new(label: t('annotator.include_ancestors'), id: 'ancestors_level', name: 'class_hierarchy_max_level', value: @ancestors_levels, selected: params[:class_hierarchy_max_level])
           .filters_line
             - include_score_helper = 'Score annotations following previous NCBO 2009 measure (old) or Score annotations following C-Value measure (cvalue) or Score annotations following C-Value measure with hierarchy expansion (cvalueh).'
             = render Input::SelectComponent.new(label: t('annotator.include_score'), id: 'include_score', name: 'score', value: @include_score, tooltip: include_score_helper, selected: params[:score])
@@ -78,7 +75,7 @@
                       .annotation-parent
                         .text
                           Parent of: 
-                        = link_to context[:child][:text], href: context[:child][:link]
+                        = link_to context[:child][:text], context[:child][:link]
                         .gray
                           |
                         .text
@@ -107,10 +104,10 @@
               - btn.icon_left do
                 = inline_svg_tag "summary/sparql.svg"
           .cite-us-button
-            = render Buttons::RegularButtonComponent.new(id:'annotator_cite_us', value: "Cite", variant: "secondary", href: $CITE_ANNOTATOR, size: "slim", target: '_blank', state: "regular") do |btn|
+            = render Buttons::RegularButtonComponent.new(id:'annotator_cite_us', value: t('recommender.cite'), variant: "secondary", href: $CITE_ANNOTATOR, size: "slim", target: '_blank', state: "regular") do |btn|
               - btn.icon_left do
                 = inline_svg_tag "icons/cite.svg"
           .annotator-doc
-            = render Buttons::RegularButtonComponent.new(id:'annotator_api_doc', value: "Annotator API documentation", variant: "secondary", href: $ANNOTATOR_API_DOC, size: "slim", target: '_blank', state: "regular") do |btn|
+            = render Buttons::RegularButtonComponent.new(id:'annotator_api_doc', value: t('annotator.api_documentation'), variant: "secondary", href: $ANNOTATOR_API_DOC, size: "slim", target: '_blank', state: "regular") do |btn|
               - btn.icon_left do
                 = inline_svg_tag "summary/documentation.svg"

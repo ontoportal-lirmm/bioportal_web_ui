@@ -9,7 +9,7 @@
       %h5.p-4
         = t("ontologies.sections.add_acronym_widgets", acronym: @ontology.acronym)
       %div
-        = render WidgetBlockComponent.new(id:'jump-to', title: t("ontologies.sections.widget_block_component_title_1"), description: t("ontologies.sections.widget_block_component_description_1", acronym: @ontology.acronym, site: "#{$SITE}")) do |c|
+        = render WidgetBlockComponent.new(id:'jump-to-widget', title: t("ontologies.sections.widget_block_component_title_1"), description: t("ontologies.sections.widget_block_component_description_1", acronym: @ontology.acronym, site: "#{$SITE}")) do |c|
           - c.widget do
             #bp_quick_jump
               :javascript
@@ -61,7 +61,7 @@
                 %a{:href => "http://bioontology.org/wiki/index.php/NCBO_Widgets#How_to_use_NCBO_Widgets", :target => "_blank"}
                   = t("ontologies.sections.ncbo_widget_wiki")
       %div
-        = render WidgetBlockComponent.new(id:'form-autocomplete', title: t("ontologies.sections.widget_block_component_title_2") , description: t("ontologies.sections.widget_block_component_description_2", acronym: @ontology.acronym)) do |c|
+        = render WidgetBlockComponent.new(id:'form-autocomplete-widget', title: t("ontologies.sections.widget_block_component_title_2") , description: t("ontologies.sections.widget_block_component_description_2", acronym: @ontology.acronym)) do |c|
           - c.widget do
             %div.py-3.px-1
               %p.card-text
@@ -147,7 +147,7 @@
 
 
       %div
-        =  render WidgetBlockComponent.new(id: 'visualization', title: t("ontologies.sections.widget_block_component_title_3"), description: t("ontologies.sections.widget_block_component_description_3", acronym: @ontology.acronym)) do |c|
+        =  render WidgetBlockComponent.new(id: 'visualization-widget', title: t("ontologies.sections.widget_block_component_title_3"), description: t("ontologies.sections.widget_block_component_description_3", acronym: @ontology.acronym)) do |c|
           - c.widget do
             #bp_vis_container
             - rest_domain = $REST_URL.sub(/https?:\/\//, "")
@@ -167,7 +167,7 @@
 
       - unless @ontology.flat?
         %div
-          =  render WidgetBlockComponent.new(id: 'tree', title: t("ontologies.sections.widget_block_component_title_4"), description: t("ontologies.sections.widget_block_component_description_4", acronym: @ontology.acronym)) do |c|
+          =  render WidgetBlockComponent.new(id: 'tree-widget', title: t("ontologies.sections.widget_block_component_title_4"), description: t("ontologies.sections.widget_block_component_description_4", acronym: @ontology.acronym)) do |c|
             - c.widget do
               %link{rel:"stylesheet", type:"text/css", href:"/widgets/jquery.ncbo.tree.css"}
               #widget_tree

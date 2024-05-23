@@ -58,9 +58,11 @@ module SparqlHelper
       "Query timeout"
     end
   end
-  def sparql_query_container(graph: nil)
+  def sparql_query_container(username: current_user&.username, graph: nil, apikey: get_apikey)
     content_tag(:div, '', data: {controller: 'sparql',
                                  'sparql-proxy-value': '/sparql_proxy/',
+                                 'sparql-apikey-value': apikey,
+                                 'sparql-username-value': username,
                                  'sparql-graph-value': graph})
   end
 

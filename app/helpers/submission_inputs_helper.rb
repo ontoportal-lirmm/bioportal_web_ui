@@ -172,7 +172,7 @@ module SubmissionInputsHelper
   end
 
   def has_ontology_language_input(submission = @submission)
-    render(Layout::RevealComponent.new(possible_values: %w[SKOS OBO UMLS OWL], selected: @submission.hasOntologyLanguage)) do |c|
+    render(Layout::RevealComponent.new(possible_values: %w[SKOS OBO UMLS OWL], selected: submission.hasOntologyLanguage)) do |c|
       c.button do
         attribute_input("hasOntologyLanguage")
       end
@@ -233,7 +233,7 @@ module SubmissionInputsHelper
       end
       c.container do
         content_tag(:div) do
-          render partial: "shared/ontology_picker_single", locals: { placeholder: "", field_name: "viewOf", selected: ontology.viewOf}
+          render SelectInputComponent.new(id: 'viewOfSelect', values: onts_for_select, name: 'ontology[viewOf]', selected: ontology.viewOf)
         end
       end
     end
@@ -246,7 +246,7 @@ module SubmissionInputsHelper
 
       render NestedFormInputsComponent.new(object_name: 'contact', default_empty_row: true) do |c|
         c.header do
-          content_tag(:div, label: t('submission_inputs.contact_name', name: name), class: 'w-50') + content_tag(:div, t('submission_inputs.contact_email', name: name), class: 'w-50')
+          content_tag(:div, name.blank? ? '' : t('submission_inputs.contact_name', name: name), class: 'w-50') + content_tag(:div, name.blank? ? '' : t('submission_inputs.contact_email', name: name), class: 'w-50')
         end
 
         c.template do
