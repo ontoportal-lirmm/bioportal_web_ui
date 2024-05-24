@@ -13,23 +13,26 @@ module FairScoreHelper
   end
 
   def get_fairness_json(ontologies_acronyms, apikey = user_apikey)
-    Rails.cache.fetch("fairness-#{ontologies_acronyms.gsub(',', '-')}-#{apikey}", expires: 24.hours) do
+    if Rails.cache.exist?("fairness-#{ontologies_acronyms.gsub(',', '-')}-#{apikey}")
+      out = read_large_data("fairness-#{ontologies_acronyms.gsub(',', '-')}-#{apikey}")
+    else
+      out = "{}"
       begin
-        out = {}
         time = Benchmark.realtime do
           conn = Faraday.new do |conn|
             conn.options.timeout = 30
           end
           response = conn.get(get_fairness_service_url(apikey) + "&ontologies=#{ontologies_acronyms}&combined")
-          out = MultiJson.load(response.body.force_encoding('ISO-8859-1').encode('UTF-8'))
+          out = response.body.force_encoding('ISO-8859-1').encode('UTF-8')
         end
         puts "Call fairness service for: #{ontologies_acronyms} (#{time}s)"
       rescue
         Rails.logger.warn t('fair_score.fairness_unreachable_warning')
       end
-
-      out
+      cache_large_data("fairness-#{ontologies_acronyms.gsub(',', '-')}-#{apikey}", out)
     end
+    MultiJson.use :oj
+    MultiJson.load(out)
   end
 
   def get_fair_score(ontologies_acronyms, apikey = user_apikey)
@@ -139,5 +142,53 @@ module FairScoreHelper
     ontology = ontology || 'all'
     render IconWithTooltipComponent.new(icon: "json.svg",link: "#{get_fairness_service_url}&ontologies=#{ontology}&combined=true", target: '_blank', title: t('fair_score.go_to_api'), size:'small', style: custom_style)  
   end
+
+  private
+  require 'zlib'
+
+  def cache_large_data(key, data, chunk_size = 1.megabyte)
+    compressed_data = Zlib::Deflate.deflate(data)
+    total_size = compressed_data.bytesize
+    Rails.logger.info "Total compressed data size: #{total_size} bytes"
+
+    # Determine the number of chunks
+    chunk_count = (total_size.to_f / chunk_size).ceil
+
+    chunk_count.times do |index|
+      chunk_key = "#{key}_chunk_#{index}"
+      start_byte = index * chunk_size
+      end_byte = start_byte + chunk_size - 1
+      chunk = compressed_data.byteslice(start_byte..end_byte)
+
+      unless Rails.cache.write(chunk_key, chunk, expires_in: 24.hours)
+        Rails.logger.error "Failed to write chunk #{index} for key: #{key}"
+        return false
+      end
+    end
+
+    # Store metadata about the chunks
+    metadata = { chunk_count: chunk_count }
+    Rails.cache.write("#{key}_metadata", metadata, expires_in: 24.hours)
+    Rails.cache.write(key, true, expires_in: 24.hours)
+  end
+
+  def read_large_data(key)
+    metadata = Rails.cache.read("#{key}_metadata")
+    return nil unless metadata
+
+    chunk_count = metadata[:chunk_count]
+    data = ''
+
+    chunk_count.times do |index|
+      chunk_key = "#{key}_chunk_#{index}"
+      chunk = Rails.cache.read(chunk_key)
+      return nil unless chunk
+      data << chunk
+    end
+
+    # Decompress data
+    Zlib::Inflate.inflate(data)
+  end
+
 end
 
