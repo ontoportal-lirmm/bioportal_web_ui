@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git
-  revision: fff54539bbdcf98ff4cd01d188440cda66fa3a01
+  revision: f91c32d532e6109b7eaccd5fd2ef51fef2192d71
   branch: development
   specs:
     ontologies_api_client (2.2.0)
@@ -553,7 +553,7 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    webmock (3.23.0)
+    webmock (3.23.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
