@@ -66,6 +66,12 @@ class AnnotatorPageTest < ApplicationSystemTestCase
 
         # Check if the number of annotations is 4
         assert_equal 5, page.all('tr').count
+       
+        # Check if we got the correct annotations
+        assert_selector 'a[href="ontologies/AGROVOC/classes/http%3A%2F%2Faims.fao.org%2Faos%2Fagrovoc%2Fc_4713"]', text: 'Melanom'
+        assert_selector 'a[href="ontologies/EUROSCIVOC/classes/http%3A%2F%2Fdata.europa.eu%2F8mn%2Feuroscivoc%2F276b8c99-a318-48df-aa31-1f9f3e0ba910"]', text: 'Melanom'
+        assert_selector 'a[href="ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11970"]', text: 'mélanome'
+        assert_selector 'a[href="ontologies/INRAETHES/classes/http%3A%2F%2Fopendata.inrae.fr%2FthesaurusINRAE%2Fc_11887"]', text: 'tumeur'
 
         # Check if the action buttons below the table are there (json, rdf, cite us and api doc buttons)
         assert_selector '#annotator_json'
