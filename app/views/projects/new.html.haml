@@ -1,8 +1,8 @@
-- @title = "Add your project"
+- @title = t('projects.new.title')
 %h1{:style => "padding: 10px;"}
-  New project
+  = t('projects.new.new_project')
 = form_for :project, url: {action: "create"}, html: {id: 'form'} do |f|
   = render partial: 'form', locals: { f: f }
   %p{:style => "padding: 10px;"}
-    = submit_tag "Cancel"
-    = f.submit "Create Project", class: "blueButton"
+    = submit_tag t('projects.edit.cancel')
+    = f.submit t('projects.new.create_project'), class: "blueButton"

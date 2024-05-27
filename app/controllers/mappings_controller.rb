@@ -15,32 +15,26 @@ class MappingsController < ApplicationController
   INTERPORTAL_HASH = $INTERPORTAL_HASH ||= {}
 
   def index
+    @ontologies_mapping_count = LinkedData::Client::HTTP.get("#{MAPPINGS_URL}/statistics/ontologies")
     ontology_list = LinkedData::Client::Models::Ontology.all.select { |o| !o.summaryOnly }
-    ontologies_mapping_count = LinkedData::Client::HTTP.get("#{MAPPINGS_URL}/statistics/ontologies")
     ontologies_hash = {}
     ontology_list.each do |ontology|
       ontologies_hash[ontology.acronym] = ontology
     end
 
-    # TODO_REV: Views support for mappings
-    # views_list.each do |view|
-    #   ontologies_hash[view.ontologyId] = view
-    # end
-
     @options = {}
-    ontologies_mapping_count&.members&.each do |ontology_acronym|
-      # Adding external and interportal mappings to the dropdown list
+    @ontologies_mapping_count&.members&.each do |ontology_acronym|
       if ontology_acronym.to_s == EXTERNAL_MAPPINGS_GRAPH
-        mapping_count = ontologies_mapping_count[ontology_acronym.to_s] || 0
-        select_text = "External Mappings (#{number_with_delimiter(mapping_count, delimiter: ',')})" if mapping_count >= 0
+        mapping_count = @ontologies_mapping_count[ontology_acronym.to_s] || 0
+        select_text = t('mappings.external_mappings', number_with_delimiter: number_with_delimiter(mapping_count, delimiter: ',')) if mapping_count >= 0
         ontology_acronym = EXTERNAL_URL_PARAM_STR
       elsif ontology_acronym.to_s.start_with?(INTERPORTAL_MAPPINGS_GRAPH)
-        mapping_count = ontologies_mapping_count[ontology_acronym.to_s] || 0
-        select_text = "Interportal Mappings - #{ontology_acronym.to_s.split("/")[-1].upcase} (#{number_with_delimiter(mapping_count, delimiter: ',')})" if mapping_count >= 0
+        mapping_count = @ontologies_mapping_count[ontology_acronym.to_s] || 0
+        select_text = t('mappings.interportal_mappings', acronym: ontology_acronym.to_s.split("/")[-1].upcase, number_with_delimiter: number_with_delimiter(mapping_count, delimiter: ',')) if mapping_count >= 0
         ontology_acronym = INTERPORTAL_URL_PARAM_STR + ontology_acronym.to_s.split("/")[-1]
       else
         ontology = ontologies_hash[ontology_acronym.to_s]
-        mapping_count = ontologies_mapping_count[ontology_acronym] || 0
+        mapping_count = @ontologies_mapping_count[ontology_acronym] || 0
         next unless ontology && mapping_count > 0
         select_text = "#{ontology.name} - #{ontology.acronym} (#{number_with_delimiter(mapping_count, delimiter: ',')})"
       end
@@ -48,21 +42,13 @@ class MappingsController < ApplicationController
     end
 
     @options = @options.sort
-  end
+    @options.unshift([])
 
-  def count
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    @ontology_acronym = @ontology&.acronym || params[:id]
-    @mapping_counts = mapping_counts(@ontology_acronym)
-    render partial: 'count'
-  end
-
-  def loader
     @example_code = [{
                        "classes": ["http://bioontology.org/ontologies/BiomedicalResourceOntology.owl#Image_Algorithm",
                                    "http://purl.org/incf/ontology/Computational_Neurosciences/cno_alpha.owl#cno_0000202"],
 
-                       "name": 'This is the mappings produced to test the bulk load',
+                       "name": t('mappings.test_bulk_load'),
                        "source": 'https://w3id.org/semapv/LexicalMatching',
                        "comment": 'mock data',
                        "relation": [
@@ -74,8 +60,19 @@ class MappingsController < ApplicationController
                        "source_contact_info": 'orcid:1234,orcid:5678',
                        "date": '2020-05-30'
                      }]
-    render partial: 'mappings/bulk_loader/loader'
   end
+
+
+  def count
+    @ontology_acronym = params[:ontology] || params[:id]
+    @mapping_counts = mapping_counts(@ontology_acronym)
+
+    respond_to do |format|
+      format.html {  render partial: 'mappings/count' }
+      format.json { render json: @mapping_counts }
+    end
+  end
+
 
   def loader_process
     response = LinkedData::Client::HTTP.post('/mappings/load', file: params[:file])
@@ -85,6 +82,7 @@ class MappingsController < ApplicationController
     created = response.created
     respond_to do |format|
       format.turbo_stream do
+        # TO test
         render turbo_stream: turbo_stream.replace('file_loader_result',
                                                   partial: 'mappings/bulk_loader/loaded_mappings',
                                                   locals: { errors: errors, created: created })
@@ -105,36 +103,37 @@ class MappingsController < ApplicationController
   def show_mappings
     page = params[:page] || 1
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    @target_ontology = LinkedData::Client::Models::Ontology.find(params[:target])
+    @target_ontology = LinkedData::Client::Models::Ontology.find(params[:target].split('/').last)
 
     # Cases if ontology or target are interportal or external
     if @ontology.nil?
       ontology_acronym = params[:id]
       if params[:id] == EXTERNAL_URL_PARAM_STR
-        @ontology_name = "External Mappings"
+        @ontology_name = t('mappings.external_mappings')
       elsif params[:id].start_with?(INTERPORTAL_URL_PARAM_STR)
         @ontology_name = params[:id].sub(":", " - ")
       end
     else
       ontology_acronym = @ontology.acronym
-      @ontology_name = @ontology.name
+      @ontology_name = ontology_acronym
     end
     if @target_ontology.nil?
       if params[:target] == EXTERNAL_MAPPINGS_GRAPH
         target_acronym = EXTERNAL_URL_PARAM_STR
-        @target_ontology_name = "External Mappings"
+        @target_ontology_name = t('mappings.external_mappings')
       elsif params[:target].start_with?(INTERPORTAL_MAPPINGS_GRAPH)
         target_acronym = "#{INTERPORTAL_URL_PARAM_STR}:#{params[:target].split("/")[-1]}"
-        @target_ontology_name = "Interportal - #{params[:target].split("/")[-1].upcase}"
+        @target_ontology_name = t('mappings.interportal_mappings', params: params[:target].split("/")[-1].upcase)
       end
     else
       target_acronym = @target_ontology.acronym
-      @target_ontology_name = @target_ontology.name
+      @target_ontology_name = target_acronym
     end
 
     ontologies = [ontology_acronym, target_acronym]
 
     @mapping_pages = LinkedData::Client::HTTP.get("#{MAPPINGS_URL}", { page: page, ontologies: ontologies.join(',') })
+    not_found(@mapping_pages.errors) if @mapping_pages.respond_to?(:errors)
     @mappings = @mapping_pages.collection
     @delete_mapping_permission = check_delete_mapping_permission(@mappings)
 
@@ -160,13 +159,9 @@ class MappingsController < ApplicationController
     @concept = @ontology.explore.single_class({ full: true }, params[:conceptid])
 
     @mappings = @concept.explore.mappings
-
+    @type = params[:type]
     @delete_mapping_permission = check_delete_mapping_permission(@mappings)
-    render turbo_stream: [
-      replace('mapping_count') { "#{@mappings.size}" },
-      replace('concept_mappings', partial: 'mappings/concept_mappings')
-    ]
-
+    render partial: 'mappings/concept_mappings', layout: false
   end
 
   def new
@@ -195,7 +190,7 @@ class MappingsController < ApplicationController
           @delete_mapping_permission = check_delete_mapping_permission(@mapping_saved)
           mapping = LinkedData::Client::Models::Mapping.find(@mapping_saved.id)
           render turbo_stream: [
-            alert(type: 'success') { 'Mapping created' },
+            alert(type: 'success') {t('mappings.mapping_created')},
             prepend('concept_mappings_table_content', partial: 'show_line', locals: { map: mapping, concept: @concept })
           ]
         end
@@ -219,7 +214,7 @@ class MappingsController < ApplicationController
           render_turbo_stream(alert_error { JSON.pretty_generate errors })
         else
           render_turbo_stream(
-            alert_success { 'Mapping updated' },
+            alert_success { t('mappings.mapping_updated') },
             replace(@mapping.id.split('/').last, partial: 'show_line', locals: { map: request_mapping, concept: @concept })
           )
         end
@@ -235,7 +230,7 @@ class MappingsController < ApplicationController
     map_uri = "#{MAPPINGS_URL}/#{CGI.escape(map_id)}"
     result = LinkedData::Client::HTTP.delete(map_uri)
     if result.status == 204
-      success_text = "#{map_id} deleted successfully"
+      success_text = t('mappings.mapping_deleted', map_id: map_id)
     else
       error = result.body
     end
@@ -248,7 +243,7 @@ class MappingsController < ApplicationController
           ]
 
         else
-          render alert(type: 'danger') { error }
+          render_turbo_stream alert(type: 'danger') { error }
         end
       end
       format.html { render json: { success: success_text, error: error } }
@@ -279,8 +274,8 @@ class MappingsController < ApplicationController
       end
     else
       mapping = LinkedData::Client::Models::Mapping.new
-      @ontology_from = LinkedData::Client::Models::Ontology.find(params[:ontology_from])
-      @ontology_to = LinkedData::Client::Models::Ontology.find(params[:ontology_to])
+      @ontology_from = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_from].split('/').last).first
+      @ontology_to = params[:ontology_to].present? ? LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_to].split('/').last).first : nil
       @concept_from = @ontology_from.explore.single_class({ full: true }, params[:conceptid_from]) if @ontology_from
       if @ontology_to
         @concept_to = @ontology_to.explore.single_class({ full: true }, params[:conceptid_to])
@@ -335,14 +330,14 @@ class MappingsController < ApplicationController
 
   def request_mapping
     mapping = LinkedData::Client::Models::Mapping.find(params[:id])
-    not_found("Mapping #{params[:id]} not found") if mapping.nil? || mapping.errors
+    not_found( t('mappings.mapping_not_found', id: params[:id]) ) if mapping.nil? || mapping.errors
     mapping
   end
 
   def valid_values?(values)
     errors = []
     if values[:classes].reject(&:blank?).size != 2
-      errors << 'Source and target concepts need to be specified'
+      errors << t('mappings.error_of_source_and_target')
     end
     errors
   end

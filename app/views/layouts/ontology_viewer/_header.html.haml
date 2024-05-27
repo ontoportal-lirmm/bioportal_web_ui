@@ -1,0 +1,46 @@
+- sub = @submission_latest
+
+
+-# A header of sorts to display ontology name and subset of details.
+.ontology-details-header-container
+  .ontology-details-path
+    %a{href: "/ontologies"} ontologies
+    - if @ontology.viewOf
+      = inline_svg_tag 'arrow-right-outlined.svg'
+      %div
+        = @ontology.viewOf.split('/').last
+    = inline_svg_tag 'arrow-right-outlined.svg'
+    %div
+      = @ontology.acronym
+  .ontology-details-header-sub-container
+    .ontology-details-header-left-container{style:'width: 70%'}
+      .ontology-details-name-bar
+        %div
+          = @ontology.name
+          %span{data: { controller: 'tooltip'}, title: ontology_alternative_names}
+            = "("+ @ontology.acronym+")"
+          - if @ontology.viewOf
+            = render ChipButtonComponent.new(class: 'chip_button_small mr-1', text: 'view', type: 'clickable', clickable: false)
+          - if @ontology.private?
+            = render ChipButtonComponent.new(class: 'chip_button_small mr-1') do
+              = private_ontology_icon(@ontology.private?)
+          - if @submission_latest&.hasOntologyLanguage
+            = render ChipButtonComponent.new(class: 'chip_button_small mr-1', text: @submission_latest.hasOntologyLanguage)
+          = ontology_retired_badge(@submission_latest, small: true, clickable: false)
+          = ontology_license_badge(@ontology.acronym, @submission_latest)
+
+      - unless sub.nil? ||  sub.creationDate.nil?
+        .ontology-details-last-update
+          %img{src: asset_path("update.svg")}/
+          %div
+            = t('ontology_details.header.last_submission_date')
+            = render DateTimeFieldComponent.new(value: sub.creationDate)
+    .ontology-details-header-right-container.justify-content-end{style: 'min-width: 20%;'}
+      %span.mx-1
+        = new_submission_button
+      - if @submission_latest
+        %span.mx-1
+          = ontology_edit_button
+      %span
+        = submission_json_button
+      = subscribe_button(@ontology.id)

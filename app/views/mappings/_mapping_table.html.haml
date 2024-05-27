@@ -1,31 +1,21 @@
--# called from mappings_controller in several ways:
--# 1. mappings_controller::get_concept_table via /app/views/mappings/_concept_mappings.html.haml
--# 2. directly from mappings_controller::get_concept_table
--#NOTES on control over mapping deletion:
--#deleteMappings() is a callback that is called by "#delete_mappings_button" created below.
--#The appearance of that button is controlled by updateMappingDeletePermissions(), which
--#relies on @delete_mapping_permission in /app/views/mappings/_mapping_table.html.haml; which,
--#in turn, is set by /app/controllers/application_controller.check_delete_mapping_permission()
--#
--# The delete mappings button display is controlled by JS on page ready (see bp_mappings.js)
--# check_box_tag(name, value = "1", checked = false, options = {})
 = check_box_tag "delete_mappings_permission", @delete_mapping_permission, @delete_mapping_permission, style: "display: none;"
 %div#concept_mappings_tables_div
   = render_alerts_container(MappingsController)
-  %table#concept_mappings_table.zebra{width: "100%", style:'word-break: break-word'}
+  %table#concept_mappings_table.table-content-stripped.table-content{width: "100%", style:'word-break: break-word'}
     %thead
       %tr
-        %th Mapping To
-        %th{width: "30%"} Ontology
-        %th Relations
-        %th Source
-        %th Type
-        %th{:class => 'delete_mappings_column'} Actions
+        %th= t("mappings.mapping_table.mapping_to")
+        %th{width: "30%"}= t("mappings.count.ontology")
+        %th= t("mappings.mapping_table.relations")
+        %th= t("mappings.mapping_table.source")
+        %th= t("mappings.mapping_table.type")
+        - if current_user_admin?
+          %th{:class => 'delete_mappings_column'}= t("mappings.mapping_table.actions")
     %tbody#concept_mappings_table_content
       - @mappings.each do |map|
         = render partial: 'mappings/show_line' , locals: {map: map, concept: @concept}
       %tr.empty-state
-        %td.text-center{:colspan => "6"} There are currently no  mappings for this class.
+        %td.text-center{:colspan => "6"}= t("mappings.mapping_table.no_mappings")
 :javascript
   jQuery(document).ready(function(){
     ajax_process_init();

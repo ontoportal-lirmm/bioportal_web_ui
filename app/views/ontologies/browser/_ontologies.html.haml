@@ -1,0 +1,17 @@
+= render InfiniteScrollComponent.new(id: 'ontologies_list',
+                                    collection: @ontologies,
+                                    next_url: ontologies_filter_url(@request_params, page: @page.nextPage),
+                                    current_page: @page.page, next_page: @page.nextPage) do |c|
+
+  - if @page.page.eql?(1)
+    = content_tag(:p, class: "browse-desc-text", style: "margin-bottom: 12px !important;") { "#{t("ontologies.showing_ontologies_size", ontologies_size: @count, analytics_size: @total_ontologies)} (#{sprintf("%.2f", @time)}s)" }
+
+  - ontologies = c.collection
+  - ontologies.each do |ontology|
+    = render OntologyBrowseCardComponent.new(ontology: ontology)
+  - c.loader do
+    - ontologies_browse_skeleton
+  - c.error do
+    .browse-empty-illustration
+      %img{:src => "#{asset_path("empty-box.svg")}"}
+      %p No result was found

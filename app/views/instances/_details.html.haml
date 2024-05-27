@@ -1,0 +1,27 @@
+= render TurboFrameComponent.new(id: params[:modal]&.to_s.eql?('true') ? modal_frame_id : 'instance_show') do
+  - if @instance && @instance["@id"]
+    %div
+      - ontology_acronym = params[:ontology_id] || @ontology.acronym
+      - filter_properties = ["http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://www.w3.org/2000/01/rdf-schema#label", "http://www.w3.org/2004/02/skos/core#prefLabel"]
+
+      =  render ConceptDetailsComponent.new(id:'instance-details', acronym: ontology_acronym, concept_id: @instance["@id"]) do |c|
+        - c.header(stripped: true) do |t|
+          - t.add_row({th: t("instances.id")}, {td: link_to_with_actions(@instance["@id"]) })
+
+          - label = @instance['label'] || @instance['prefLabel']
+          - unless label.blank?
+            - t.add_row({th: t('instances.label') }, {td: label.join(',').html_safe})
+
+          - types = @instance.types.reject{|x| x['NamedIndividual']}
+          - unless types.empty?
+            - t.add_row({th: t('instances.type') }) do |r|
+              - r.td do
+                = types.reject{|x| x['NamedIndividual']}.map {|cls| link_to_class(ontology_acronym,cls)}.join(', ').html_safe
+          - properties = @instance[:properties].to_h.select{|k,v| !filter_properties.include? k.to_s}
+          - properties.each do |prop|
+            - if !prop[1].nil?
+              - t.add_row({th: link_to_property(prop[0], ontology_acronym)}, {td: prop[1].map { |value| instance_property_value(value , ontology_acronym) }.join(', ').html_safe})
+
+
+
+

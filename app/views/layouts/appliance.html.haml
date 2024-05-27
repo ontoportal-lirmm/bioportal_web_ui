@@ -1,6 +1,7 @@
 !!! Strict
 %html
   %head
+    = render partial: 'ga_tracking'
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <meta name="turbo-cache-control" content="no-cache">
 
@@ -15,8 +16,6 @@
     = stylesheet_link_tag "application", media: "all"
 
     = javascript_include_tag "vendor"
-    = javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"
-    = javascript_include_tag "//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"
 
     %script
       jQuery(document).data({bp: {config: #{bp_config_json.html_safe}, user: #{(session[:user] || {}).to_hash.to_json.html_safe}}});
@@ -28,9 +27,10 @@
   %body{:class => "#{controller_name} #{action_name}"}
     = render partial: "layouts/topnav"
     
-    %div.container-fluid.flex-grow-1
+    %div.flex-grow-1
       = render partial: "layouts/notices"
-      = render TurboModalComponent.new(id: 'application_modal')
+      = modal_frame_container
+
       = yield
 
     = render partial: "layouts/footer"

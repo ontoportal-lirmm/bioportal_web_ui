@@ -8,6 +8,27 @@
   margin-bottom: 30px;
 }
 
+.analytics {
+  .card-header-1{
+    color: white; font-size: 60px; font-weight: 600; word-wrap: break-word
+  }
+
+  .card-header-2{
+    color: white; font-size: 14px;  font-weight: 400; word-wrap: break-word
+  }
+
+  .card-header-3{
+    color: white; opacity: 0.6; font-size: 14px;  font-weight: 400; word-wrap: break-word
+  }
+}
+
+.yasgui .autocompleteWrapper, .yasgui .tabContextButton{
+  display: none !important;
+}
+.yasqe .yasqe_buttons .yasqe_share{
+  display: none !important;
+}
+
 .alert-box span {
   font-weight: bold;
   text-transform: uppercase;
@@ -50,6 +71,7 @@ table.dataTable tbody tr.selected {
 
 .ontologies_list_container {
   padding: 1em;
+  position: relative;
 }
 
 /* Datatables */
@@ -106,10 +128,7 @@ table.dataTable tbody tr.selected {
   display: none;
 }
 
-/* to fix facebox default sizing in chrome */
-#facebox .body {
-  width: 375px !important;
-}
+
 
 .zebra td {
   padding: 8px 12px 8px 12px !important;
@@ -133,9 +152,7 @@ table.dataTable tbody tr.selected {
 }
 
 .site-admin-page-section {
-  display: flex;
   margin-top: 15px;
-
   .admin-action-item {
     margin-right: 8px;
   }
@@ -166,3 +183,8 @@ div.groupFormError {
   padding-top: 3px;
 }
 
+
+div.groupFormError {
+  color: red;
+  padding-top: 3px;
+}

@@ -1,11 +1,15 @@
-= turbo_frame_tag 'collections' do
+= render TurboFrameComponent.new(id: "collections", data: {"turbo-frame-target": "frame"} ) do
   - if no_collections?
     = no_collections_alert
   - else
     %div.ont-collections{data:{controller: 'container-splitter'}}
-      %div#collectionsTree{data:{'container-splitter-target': 'container'}}
-        = render partial: 'collections/list_view'
-      %div#collection_contents.pl-3{data:{'container-splitter-target': 'container'}}
+      %div#collectionsTree.card.sidebar{data:{'container-splitter-target': 'container'}}
+        = tree_container_component(id: "collections_sorted_list_view-page-1",
+                                 placeholder: t('ontologies.sections.collections_search_placeholder',  acronym: @ontology.acronym),
+                                 frame_url:  "/ontologies/#{@ontology.acronym}/collections",
+                                 tree_url: "/ontologies/#{@ontology.acronym}/collections?#{request.original_url.split('?')[1]}")
+
+      %div#collection_contents{data:{'container-splitter-target': 'container'}}
         = render TurboFrameComponent.new(id: 'collection') do
           - if @collection
             = render partial: 'collections/collection', locals: {collection: @collection}

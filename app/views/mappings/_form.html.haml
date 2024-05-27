@@ -10,7 +10,7 @@
   = form_with url: form_url, method: 'post', data:{turbo: true} do
     = hidden_field_tag :map_from_bioportal_ontology_id, @ontology_from.acronym
     %div.form-group
-      %label{for: "map_to"} Source class
+      %label{for: "map_to"}= t("mappings.form.source_class")
       - from_name = :map_from_bioportal_full_id
       - if @concept_from
         = text_field_tag('', @concept_from.id, class: "form-control", disabled: true)
@@ -22,21 +22,21 @@
     %hr.w-100
 
     %div.form-group
-      %label{for: "mapping_name"} Mapping description (name)
+      %label{for: "mapping_name"}= t("mappings.form.mapping_name")
       = text_field_tag('mapping[name]',@mapping_name, class: "form-control")
     %div.form-group
-      %label{for: "mapping_source_contact_info"} Contact info
+      %label{for: "mapping_source_contact_info"}= t("mappings.form.contact_info")
       = text_field_tag('mapping[source_contact_info]',@mapping_source_contact_info, class: "form-control")
     %div.form-group
-      %label{for: "mapping_source_name"} Source name (Mapping set id)
+      %label{for: "mapping_source_name"}= t("mappings.form.mapping_source_name")
       = text_field_tag('mapping[source_name]',@mapping_source_name, class: "form-control")
     %div.form-group
-      %label{for: "mapping_comment"} Comment
+      %label{for: "mapping_comment"}= t("mappings.form.mapping_comment")
       = text_area_tag('mapping[comment]',@mapping_comment, rows: 5, class: "form-control")
     %div.form-group
-      %label{for: "mapping_relation"} Mapping relation type
+      %label{for: "mapping_relation"}= t("mappings.form.mapping_relation")
       = select("mapping", "relation", options_for_select(@mapping_relation_options, @selected_relation), {}, class: "form-control")
 
     %div.form-group
-      = submit_tag "Save" , class:'btn btn-success btn-block'
+      = submit_tag t("mappings.form.save") , class:'regular-button primary-button slim'
 

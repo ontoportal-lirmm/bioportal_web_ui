@@ -1,4 +1,266 @@
+.mappigs-page-container{
+  display: flex;
+  justify-content: center;
+  .file_uploader{
+    width: 700px;
+  }
+}
+.mappings-page-subcontainer{
+  width: 1248px;
+  padding: 20px 50px;
+}
 
+.mappings-page-title{
+  font-size: 25px;
+  font-weight: 700;
+}
+.mappings-page-title .line{
+  height: 2px;
+  width: 57px;
+  background-color: var(--primary-color);
+  border-radius: 10px;
+}
+.mappings-page-decription{
+  color: #888888;
+  margin: 20px 0;
+}
+
+.mappings-bubble{
+  cursor: pointer;
+}
+.mappings-bubble-view-frame{
+  width: 600px;
+  height: 600px;
+  overflow: auto;
+}
+
+.mappings-zoom-buttons{
+  display: flex;
+  margin-top: 20px;
+  justify-content: center;
+}
+.mappings-zoom-buttons svg{
+  width: 40px;
+  cursor: pointer;
+  path{
+    fill: var(--primary-color)
+  }
+  &:hover path{
+    fill: var(--hover-color)
+  }
+}
+.mappings-zoom-buttons div + div{
+  margin-left: 40px;
+}
+.mappings-bubble-view-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.mappings-table-view-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+}
+.mappings-ontologies-select{
+  width: 700px;
+}
+
+.mappings-table-container{
+  width: 678px;
+  margin: 20px 0;
+}
+.mappings-table-ontology-name{
+  font-weight: 600;
+}
+
+.bubble-tooltip {
+  position: absolute;
+  text-align: center;
+  padding: 6px;
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 9999; 
+}
+
+.upload-mappings{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.upload-mappings-example{
+  width: 700px;
+  margin-bottom: 20px;
+}
+.upload-mappings-example.ontologies{
+  width: 600px;
+}
+
+.mappings-page-ontologies-selector{
+  width: 100%;
+  padding: 0 30px 30px 30px;
+}
+
+.mappings-page-ontologies-selector .selector-button{
+  margin-top: 20px;
+}
+
+.upload-mappings-example .title-bar{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  cursor: pointer;
+  padding: 15px;
+  color: var(--primary-color);
+  align-items: center;
+}
+.upload-mappings-example .title-bar svg{
+  margin-right: 10px;
+}
+
+.summary-mappigs-page-container{
+  margin-left: 90px;
+}
+.mapping-bubbles-loader{
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.summary-mappings-tab {
+  margin-top: 10px;
+}
+
+#ontology_viewermappings_content {
+  .summary-mappings-tab {
+    display: flex;
+  }
+
+  .summary-mappings-tab-table {
+    width: 400px;
+  }
+}
+
+.mappings-table-pagination a, .mappings-table-pagination em{
+  margin-left: 10px;
+}
+
+.mappings-bubble-view-legend{
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 500;
+  padding: 20px;
+}
+.mappings-bubble-view-legend > .title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mappings-bubble-view-legend > .title .text{
+  font-size: 18px;
+  color: var(--primary-color);
+}
+.mappings-bubble-view-legend > .title .line{
+  background-color: var(--primary-color);
+  border-radius: 100%;
+  width: 40px;
+  height: 2px;
+}
+
+.content-container{
+  width: 100%;
+  margin-top: -35px;
+}
+.bubble-view-legend-item{
+  margin-top: 50px;
+}
+.bubble-view-legend-item .title{
+  font-weight: 500;
+}
+.bubble-view-legend-item .title span{
+  font-weight: 400;
+} 
+
+.mappings-bubble-size-legend, .mappings-bubble-color-legend{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+}
+.mappings-bubble-size-legend .bubble{
+  border-radius: 100%;
+  border: 2px solid var(--primary-color);
+}
+.mappings-bubble-size-legend .bubble.bubble1{
+  width: 10px;
+  height: 10px;
+}
+.mappings-bubble-size-legend .bubble.bubble2{
+  width: 20px;
+  height: 20px;
+}
+.mappings-bubble-size-legend .bubble.bubble3{
+  width: 30px;
+  height: 30px;
+}
+.mappings-bubble-size-legend .bubble.bubble4{
+  width: 40px;
+  height: 40px;
+}
+.mappings-bubble-size-legend .bubble.bubble5{
+  width: 50px;
+  height: 50px;
+}
+.mappings-bubble-size-legend .bubble.bubble6{
+  width: 60px;
+  height: 60px;
+}
+
+.mappings-bubble-color-legend .bubble{
+  border-radius: 100%;
+  background-color: var(--primary-color);
+  width: 35px;
+  height: 35px;
+}
+.mappings-bubble-color-legend .bubble.bubble1{
+  opacity: 30%;
+}
+.mappings-bubble-color-legend .bubble.bubble2{
+  opacity: 50%;
+}
+.mappings-bubble-color-legend .bubble.bubble3{
+  opacity: 70%;
+}
+.mappings-bubble-color-legend .bubble.bubble4{
+  opacity: 80%;
+}
+.mappings-bubble-color-legend .bubble.bubble5{
+  opacity: 90%;
+}
+.mappings-bubble-color-legend .bubble.bubble6{
+  opacity: 100%;
+}
+.mappings-bubble-size-legend .bubble.yellow{
+  width: 35px;
+  height: 35px;
+  background-color: var(--secondary-color);
+  border: none;
+}
+.mappings-legend-text{
+  color: var(--primary-color);
+  font-size: 15px;
+  font-weight: 500;
+}
 
 @media (min-width: 1000px)  {
   #mappings_container{
@@ -58,7 +320,7 @@ div#map_from_concept_details_table, div#map_to_concept_details_table {
   overflow: auto;
 }
 
-#map_to_picker, .select2-container {
+#map_to_picker {
   width: 100% !important;
 }
 
@@ -76,3 +338,23 @@ div#map_from_concept_details_table, div#map_to_concept_details_table {
   width: 100%;
 }
 
+.summary-mappings-tab-table {
+  .dataTables_wrapper .dataTables_filter {
+    float: none;
+    text-align: unset;
+  }
+}
+
+.summary-mappings-tab-table label {
+  display: block;
+  font-size: 0;
+}
+
+.summary-mappings-tab-table label input[type="search"] {
+  font-size: 16px;
+  width: 100%;
+  border-radius: 8px;
+  padding: 10px;
+  outline: none;
+  margin-left: 0 !important;
+}

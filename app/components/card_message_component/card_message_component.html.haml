@@ -1,7 +1,7 @@
 .d-flex.justify-content-center.m-4
   .card-message-card
     .d-flex.justify-content-center.mb-4
-      %img{:src => "#{asset_path(icon)}"}/
+      = inline_svg_tag icon
     - if no_title?
       %p.card-message-text
         = @message
@@ -13,8 +13,12 @@
     - unless no_button?
       - case @type
       - when "success"
-        %a.card-message-button.card-message-button-success{:href => "/"}
+        %a.card-message-button.card-message-button-success{:href => @button_link}
           = @button_text
       - when "failure"
-        %a.card-message-button.card-message-button-failure{:href => "/"}
+        %a.card-message-button.card-message-button-failure{:href => @button_link}
           = @button_text
+      - when "warning"
+        %a.card-message-button.card-message-button-warning{:href => @button_link}
+          = @button_text
+

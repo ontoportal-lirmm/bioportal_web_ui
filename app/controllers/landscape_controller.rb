@@ -43,16 +43,16 @@ class LandscapeController < ApplicationController
 
     ontologyFormatsCount = {"OWL" => 0, "SKOS" => 0, "UMLS" => 0, "OBO" => 0}
 
-    @metrics_average = [{attr: "numberOfClasses", label: "Number of classes", array: []},
-                        {attr: "numberOfIndividuals", label: "Number of individuals", array: []},
-                        {attr: "numberOfProperties", label: "Number of properties", array: []},
-                        {attr: "maxDepth", label: "Max depth", array: []},
-                        {attr: "maxChildCount", label: "Max child count", array: []},
-                        {attr: "averageChildCount", label: "Average child count", array: []},
-                        {attr: "classesWithOneChild", label: "Classes with one child", array: []},
-                        {attr: "classesWithMoreThan25Children", label: "Classes with more than 25 children", array: []},
-                        {attr: "classesWithNoDefinition", label: "Classes with no definition	", array: []},
-                        {attr: "numberOfAxioms", label: "Number of axioms (triples)", array: []}]
+    @metrics_average = [{attr: "classes", label: t('landscape.classes'), array: []},
+                        {attr: "individuals", label: t('landscape.individuals'), array: []},
+                        {attr: "properties", label: t('landscape.properties'), array: []},
+                        {attr: "maxDepth", label: t('landscape.max_depth'), array: []},
+                        {attr: "maxChildCount", label: t('landscape.max_child_count'), array: []},
+                        {attr: "averageChildCount", label: t('landscape.average_child_count'), array: []},
+                        {attr: "classesWithOneChild", label: t('landscape.classes_with_one_child'), array: []},
+                        {attr: "classesWithMoreThan25Children", label: t('landscape.classes_with_more_than_25_children'), array: []},
+                        {attr: "classesWithNoDefinition", label: t('landscape.classes_with_no_definition'), array: []},
+                        {attr: "numberOfAxioms", label: t('landscape.number_of_xioms_triples'), array: []}]
 
     # Attributes to include. To avoid to get everything and make it faster
     # They are also used to get the value of each property later in the controller
@@ -73,16 +73,18 @@ class LandscapeController < ApplicationController
 
     # We need prefixes to display them, we remove them to call them in the include
     relations_attributes = @relations_array.map {|r| r.to_s.split(":")[1]}
+
     metrics_attributes = @metrics_average.map {|m| m[:attr]}
 
     # Concat all attributes array and generate a string separated with comma for include param
     all_attributes = sub_attributes.concat(contributors_attr_list).concat(org_attr_list)
-                         .concat(relations_attributes).concat(metrics_attributes).concat(pref_properties_attributes).join(",")
+                                   .concat(relations_attributes).concat([:metrics]).concat(pref_properties_attributes).join(",")
 
 
     # Special treatment for includedInDataCatalog: arrays with a lot of different values, so it trigger the SPARQL default
     # when we retrieve multiple attr with multiple values in the array, and make the request slower
-    data_catalog_submissions = LinkedData::Client::Models::OntologySubmission.all(include_status: "any", include_views: true, display_links: false, display_context: false, include: "includedInDataCatalog")
+    @submissions = LinkedData::Client::Models::OntologySubmission.all(include_status: "any", include_views: true, display_links: false, display_context: false, include: 'all')
+    data_catalog_submissions = @submissions
 
     dataCatalog_count_hash = {}
     # Add our Portal to the dataCatalog list
@@ -98,9 +100,6 @@ class LandscapeController < ApplicationController
         end
       end
     end
-
-    # Get all latest submissions with the needed attributes (this request can be slow)
-    @submissions = LinkedData::Client::Models::OntologySubmission.all(include_status: "any", include_views: true, display_links: false, display_context: false, include: all_attributes)
 
     # Iterate ontologies to get the submissions with all metadata
     @submissions.each do |sub|
@@ -147,9 +146,9 @@ class LandscapeController < ApplicationController
 
         # Count the number of classes (individuals for skos by ontologies) to get number of ontologies by slice of size
         if sub.hasOntologyLanguage.eql?("SKOS")
-          ontology_size = sub.numberOfIndividuals
+          ontology_size = sub.metrics&.individuals || 0
         else
-          ontology_size = sub.numberOfClasses
+          ontology_size = sub.metrics&.classes || 0
         end
         if (!ontology_size.nil?)
           if (ontology_size >= 100000)
@@ -188,36 +187,36 @@ class LandscapeController < ApplicationController
         end
 
         # Get the count for usedOntologyEngineeringTool (to create a tag cloud)
-        if (engineering_tool_count.has_key?(sub.usedOntologyEngineeringTool))
-          engineering_tool_count[sub.usedOntologyEngineeringTool] += 1
-        else
-          engineering_tool_count[sub.usedOntologyEngineeringTool] = 1
+        Array(sub.usedOntologyEngineeringTool).each do |tool|
+          if engineering_tool_count.key?(tool)
+            engineering_tool_count[tool] += 1
+          else
+            engineering_tool_count[tool] = 1
+          end
         end
 
         # Get people that are mentioned as ontology actors (contact, contributors, creators, curator) to create a tag cloud
         # hasContributor hasCreator contact(explore,name) curatedBy
         contributors_attr_list.each do |contributor_attr|
-          contributor_label = sub.send(contributor_attr.to_s).to_s
-          if !contributor_label.nil?
-            contributors_split = contributor_label.split(",")
-            contributors_split.each do |contrib|
-              if people_count_hash.has_key?(contrib)
-                people_count_hash[contrib][contributor_attr] += 1
-              else
-                # Create the contributor entry in the Hash and create the attr entries that will be incremented
-                people_count_hash[contrib] = {}
-                people_count_hash[contrib][:contact] = 0
-                contributors_attr_list.each do |create_contributor_attr|
-                  people_count_hash[contrib][create_contributor_attr] = 0
-                end
-                people_count_hash[contrib][contributor_attr] += 1
+          contributors = sub.send(contributor_attr.to_s)
+          Array(contributors).each do |contributor|
+            contrib = contributor.name || contributor.to_s
+            if people_count_hash.has_key?(contrib)
+              people_count_hash[contrib][contributor_attr] += 1
+            else
+              # Create the contributor entry in the Hash and create the attr entries that will be incremented
+              people_count_hash[contrib] = {}
+              people_count_hash[contrib][:contact] = 0
+              contributors_attr_list.each do |create_contributor_attr|
+                people_count_hash[contrib][create_contributor_attr] = 0
               end
+              people_count_hash[contrib][contributor_attr] += 1
             end
           end
         end
         sub.contact.each do |contact|
           contributor_label = contact.name
-          if !contributor_label.nil?
+          unless contributor_label.nil?
             if people_count_hash.has_key?(contributor_label)
               people_count_hash[contributor_label][:contact] += 1
             else
@@ -229,44 +228,35 @@ class LandscapeController < ApplicationController
               end
               people_count_hash[contributor_label][:contact] += 1
             end
-            people_count_emails[contributor_label] = contact.email if !contact.email.nil?
+            people_count_emails[contributor_label] = contact.email unless contact.email.nil?
           end
         end
 
         org_attr_list.each do |org_attr|
           # If the attribute object is not a list we make it a list of the single object we get
-          orgs_list = sub.send(org_attr.to_s)
-          if !orgs_list.kind_of?(Array)
-            orgs_list = [orgs_list]
-          end
+          organizations_list = Array(sub.send(org_attr.to_s))
 
-          orgs_list.each do |orgs_comma_list|
-            if !orgs_comma_list.nil? &&
-              orgs_comma_split = orgs_comma_list.split(",")
-              orgs_comma_split.each do |org_str|
-                # TODO: handle badly formatted strings and URI
-                org_uri = nil
-                # Check if the organization is actually an URL
-                if org_str =~ /\A#{URI::regexp}\z/
-                  org_uri = org_str
-                  # Remove http, www and last / from URI
-                  org_str = org_str.sub("http://", "").sub("https://", "").sub("www.", "")
-                  org_str = org_str[0..-2] if org_str.last.eql?("/")
+          organizations_list.each do |org|
+            org_str = org.name || org.to_s rescue org.to_s
+            org_uri = nil
+            # Check if the organization is actually an URL
+            if org_str =~ /\A#{URI::regexp}\z/
+              org_uri = org_str
+              # Remove http, www and last / from URI
+              org_str = org_str.sub("http://", "").sub("https://", "").sub("www.", "")
+              org_str = org_str[0..-2] if org_str.last.eql?("/")
+            end
 
-                end
-
-                if org_count_hash.has_key?(org_str)
-                  org_count_hash[org_str][org_attr] += 1
-                else
-                  # Create the contrinutor entry in the Hash and create the attr entries that will be incremented
-                  org_count_hash[org_str] = {}
-                  org_attr_list.each do |create_org_attr|
-                    org_count_hash[org_str][create_org_attr] = 0
-                  end
-                  org_count_hash[org_str][:uri] = org_uri if !org_uri.nil?
-                  org_count_hash[org_str][org_attr] += 1
-                end
+            if org_count_hash.has_key?(org_str)
+              org_count_hash[org_str][org_attr] += 1
+            else
+              # Create the contrinutor entry in the Hash and create the attr entries that will be incremented
+              org_count_hash[org_str] = {}
+              org_attr_list.each do |create_org_attr|
+                org_count_hash[org_str][create_org_attr] = 0
               end
+              org_count_hash[org_str][:uri] = org_uri unless org_uri.nil?
+              org_count_hash[org_str][org_attr] += 1
             end
           end
         end
@@ -281,17 +271,19 @@ class LandscapeController < ApplicationController
             relation_values.each do |relation_value|
               target_id = relation_value
               target_in_portal = false
+              target_ont = nil
               # if we find our portal URL in the ontology URL, then we just keep the ACRONYM to try to get the ontology.
-              if relation_value.include?($UI_URL)
+              if relation_value.include?(helpers.portal_name)
                 relation_value = relation_value.split('/').last
+                target_ont = LinkedData::Client::Models::Ontology.find_by_acronym(relation_value).first
               end
+
               # Use acronym to get ontology from the portal
-              target_ont = LinkedData::Client::Models::Ontology.find_by_acronym(relation_value).first
               if target_ont
                 target_id = target_ont.acronym
                 target_in_portal = true
               end
-              ontology_relations_array.push({source: ont.acronym, target: target_id, relation: relation_attr.to_s, targetInPortal: target_in_portal})
+              ontology_relations_array.push({ source: ont.acronym, target: target_id, relation: relation_attr.to_s, targetInPortal: target_in_portal })
             end
           end
         end
@@ -342,15 +334,15 @@ class LandscapeController < ApplicationController
       title_array = []
       total_count = 0
       if hash_counts.has_key?(:projects)
-        title_array.push("#{hash_counts[:projects]} projects")
+        title_array.push(t('landscape.projects_count', count: hash_counts[:projects]))
         total_count += hash_counts[:projects]
       end
       if hash_counts.has_key?(:notes)
-        title_array.push("#{hash_counts[:notes]} notes")
+        title_array.push(t('landscape.notes_count', count: hash_counts[:notes]))
         total_count += hash_counts[:notes]
       end
       if hash_counts.has_key?(:reviews)
-        title_array.push("#{hash_counts[:reviews]} reviews")
+        title_array.push(t('landscape.reviews_count', count: hash_counts[:reviews]))
         total_count += hash_counts[:reviews]
       end
       if total_count > 0
@@ -364,15 +356,15 @@ class LandscapeController < ApplicationController
       title_array = []
       total_count = 0
       if hash_counts.has_key?(:projects)
-        title_array.push("#{hash_counts[:projects]} projects")
+        title_array.push(t('landscape.projects_count', count: hash_counts[:projects]))
         total_count += hash_counts[:projects]
       end
       if hash_counts.has_key?(:notes)
-        title_array.push("#{hash_counts[:notes]} notes")
+        title_array.push(t('landscape.notes_count', count: hash_counts[:notes]))
         total_count += hash_counts[:notes]
       end
       if hash_counts.has_key?(:reviews)
-        title_array.push("#{hash_counts[:reviews]} reviews")
+        title_array.push(t('landscape.reviews_count', count: hash_counts[:reviews]))
         total_count += hash_counts[:reviews]
       end
       if total_count > 0
@@ -397,22 +389,22 @@ class LandscapeController < ApplicationController
       title_array = []
       total_count = 0
       if hash_count[:contact] > 0
-        title_array.push("#{hash_count[:contact]} as contact")
+        title_array.push(t('landscape.as_contact_count', count: hash_count[:contact]))
         total_count += hash_count[:contact]
       end
       if hash_count[:hasContributor] > 0
-        title_array.push("#{hash_count[:hasContributor]} as contributor")
+        title_array.push(t('landscape.as_contributor_count', count: hash_count[:hasContributor]))
         total_count += hash_count[:hasContributor]
       end
       if hash_count[:hasCreator] > 0
-        title_array.push("#{hash_count[:hasCreator]} as creator")
+        title_array.push(t('landscape.as_creator_count', count: hash_count[:hasCreator]))
         total_count += hash_count[:hasCreator]
       end
       if hash_count[:curatedBy] > 0
-        title_array.push("#{hash_count[:curatedBy]} as curator")
+        title_array.push(t('landscape.as_curator_count', count: hash_count[:curatedBy]))
         total_count += hash_count[:curatedBy]
       end
-      title_str = "Contributions: #{title_array.join(", ")}"
+      title_str = t('landscape.contributions', title: title_array.join(", "))
 
       if total_count > 1
         if people_count_emails[people.to_s].nil?
@@ -430,18 +422,18 @@ class LandscapeController < ApplicationController
       title_array = []
       total_count = 0
       if hash_count[:publisher] > 0
-        title_array.push("published #{hash_count[:publisher]} ontologies")
+        title_array.push(t('landscape.published_ontologies', count: hash_count[:publisher]))
         total_count += hash_count[:publisher]
       end
       if hash_count[:fundedBy] > 0
-        title_array.push("funded #{hash_count[:fundedBy]} ontologies")
+        title_array.push( t('landscape.funded_ontologies', count: hash_count[:fundedBy]))
         total_count += hash_count[:fundedBy]
       end
       if hash_count[:endorsedBy] > 0
-        title_array.push("endorsed #{hash_count[:endorsedBy]} ontologies")
+        title_array.push( t('landscape.endorsed_ontologies', count: hash_count[:endorsedBy]))
         total_count += hash_count[:endorsedBy]
       end
-      title_str = "Contributions: #{title_array.join(", ")}"
+      title_str = t('landscape.contributions', title: title_array.join(", "))
 
       if total_count > 1
         if hash_count.has_key?(:uri)
@@ -506,36 +498,36 @@ class LandscapeController < ApplicationController
 
     # Format the ontologyFormatsCount hash as the JSON needed to generate the chart
     ontologyFormatsChartJson = { labels: ontologyFormatsCount.keys,
-                                 datasets: [{ label: "Number of ontologies using this format",
+                                 datasets: [{ label: t('landscape.number_of_ontologies_using_format'),
                                                  data: ontologyFormatsCount.values,
                                                  backgroundColor: pie_colors_array[3]}] }
 
     isOfTypeChartJson = { labels: isOfTypeCount.keys,
-                          datasets: [{ label: "Number of ontologies of this ontology type",
+                          datasets: [{ label: t('landscape.number_of_ontologies_of_type'),
                                           data: isOfTypeCount.values,
                                           backgroundColor: pie_colors_array[0]}] }
 
     formalityLevelChartJson = { labels: formalityLevelCount.keys,
-                                datasets: [{ label: "Number of ontologies of this formality level",
+                                datasets: [{ label: t('landscape.number_of_ontologies_of_formality_level'),
                                                 data: formalityLevelCount.values,
                                                 backgroundColor: pie_colors_array[2]}] }
 
     dataCatalogChartJson = { labels: dataCatalog_count_hash.keys,
-                             datasets: [{ label: "Number of ontologies in this catalog", data: dataCatalog_count_hash.values,
+                             datasets: [{ label: t('landscape.number_of_ontologies_in_catalog'), data: dataCatalog_count_hash.values,
                                                 backgroundColor: pie_colors_array[5]}] }
 
     # Format the groupOntologiesCount hash as the JSON needed to generate the chart
     groupCountChartJson = { labels: groups_count_hash.keys,
-                            datasets: [{ label: "Number of ontologies", data: groups_count_hash.values,
+                            datasets: [{ label: t('landscape.number_of_ontologies'), data: groups_count_hash.values,
                                                   backgroundColor: pie_colors_array[3]}] }
 
     domainCountChartJson = { labels: domains_count_hash.keys,
-                             datasets: [{ label: "Number of ontologies", data: domains_count_hash.values,
+                             datasets: [{ label: t('landscape.number_of_ontologies'), data: domains_count_hash.values,
                                              backgroundColor: pie_colors_array[4]}] }
 
     # Format the groupOntologiesCount hash as the JSON needed to generate the chart
     sizeSlicesChartJson = { labels: size_slices_hash.keys,
-                            datasets: [{ label: "Number of ontologies with a class count in this range",
+                            datasets: [{ label: t('landscape.number_of_ontologies_with_class_count_in_range'),
                                             data: size_slices_hash.values,
                                             backgroundColor: pie_colors_array[2]}] }
 
@@ -550,7 +542,7 @@ class LandscapeController < ApplicationController
       groups_info_hash[group.acronym][:name] = group.name
       groups_info_hash[group.acronym][:description] = []
       # Slice the description in 6 words string to avoid too long sentence in the bar chart tooltip in js
-      group.description.split(" ").each_slice(6) {|slice| groups_info_hash[group.acronym][:description].push(slice.join(" ")) }
+      group.description.split(" ").each_slice(6) {|slice| groups_info_hash[group.acronym][:description].push(slice.join(" ")) } if group.description
     end
 
     domains_info_hash = {}
@@ -560,31 +552,31 @@ class LandscapeController < ApplicationController
       domains_info_hash[domain.acronym][:name] = domain.name
       domains_info_hash[domain.acronym][:description] = []
       # Slice the description in 6 words string to avoid too long sentence in the bar chart tooltip in js
-      domain.description.split(" ").each_slice(6) {|slice| domains_info_hash[domain.acronym][:description].push(slice.join(" ")) }
+      domain.description.split(" ").each_slice(6) {|slice| domains_info_hash[domain.acronym][:description].push(slice.join(" ")) } if domain.description
     end
 
     @landscape_data = {
-        people_count_json_cloud: people_count_json_cloud,
-        org_count_json_cloud: org_count_json_cloud,
-        engineering_tool_cloud_json: engineering_tool_cloud_json,
-        notes_ontologies_json_cloud: notes_ontologies_json_cloud,
-        notes_people_json_cloud: notes_people_json_cloud,
-        natural_language_json_pie: natural_language_json_pie,
-        licenseProperty_json_pie: licenseProperty_json_pie,
-        ontology_relations_array: ontology_relations_array,
-        prefLabelProperty_json_pie: prefLabelProperty_json_pie,
-        synonymProperty_json_pie: synonymProperty_json_pie,
-        definitionProperty_json_pie: definitionProperty_json_pie,
-        authorProperty_json_pie: authorProperty_json_pie,
-        ontologyFormatsChartJson: ontologyFormatsChartJson,
-        isOfTypeChartJson: isOfTypeChartJson,
-        formalityLevelChartJson: formalityLevelChartJson,
-        dataCatalogChartJson: dataCatalogChartJson,
-        groupCountChartJson: groupCountChartJson,
-        groupsInfoHash: groups_info_hash,
-        domainCountChartJson: domainCountChartJson,
-        domainsInfoHash: domains_info_hash,
-        sizeSlicesChartJson: sizeSlicesChartJson
+      people_count_json_cloud: people_count_json_cloud,
+      org_count_json_cloud: org_count_json_cloud,
+      engineering_tool_cloud_json: engineering_tool_cloud_json,
+      notes_ontologies_json_cloud: notes_ontologies_json_cloud,
+      notes_people_json_cloud: notes_people_json_cloud,
+      natural_language_json_pie: natural_language_json_pie,
+      licenseProperty_json_pie: licenseProperty_json_pie,
+      ontology_relations_array: ontology_relations_array,
+      prefLabelProperty_json_pie: prefLabelProperty_json_pie,
+      synonymProperty_json_pie: synonymProperty_json_pie,
+      definitionProperty_json_pie: definitionProperty_json_pie,
+      authorProperty_json_pie: authorProperty_json_pie,
+      ontologyFormatsChartJson: ontologyFormatsChartJson,
+      isOfTypeChartJson: isOfTypeChartJson,
+      formalityLevelChartJson: formalityLevelChartJson,
+      dataCatalogChartJson: dataCatalogChartJson,
+      groupCountChartJson: groupCountChartJson,
+      groupsInfoHash: groups_info_hash,
+      domainCountChartJson: domainCountChartJson,
+      domainsInfoHash: domains_info_hash,
+      sizeSlicesChartJson: sizeSlicesChartJson
     }.to_json.html_safe
 
   end
@@ -610,11 +602,14 @@ class LandscapeController < ApplicationController
   # Add metrics metadata from the param sub to the @metrics_average var to get the average for each metrics
   def get_metrics_for_average(sub)
     # Adding metrics to their arrays
-
-    @metrics_average.each do |metrics|
-      if !sub.send(metrics[:attr]).nil?
-        metrics[:array].push(sub.metrics.send(metrics[:attr]))
+    metrics = sub.send(:metrics)
+    @metrics_average.each do |m|
+      if metrics.nil? || metrics.send(m[:attr]).nil?
+        m[:array].push(0)
+      else
+        m[:array].push(metrics.send(m[:attr]))
       end
+
     end
   end
 

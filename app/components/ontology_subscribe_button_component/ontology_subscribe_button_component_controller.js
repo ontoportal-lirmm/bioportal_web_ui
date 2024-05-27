@@ -8,7 +8,7 @@ export default class extends Controller {
         isSubbed: Boolean,
         userId: String
     }
-    static targets = ["error", "loader"]
+    static targets = ["error", "loader", "text" ,"count"]
 
     subscribeToNotes() {
         let ontologyId = this.ontologyIdValue
@@ -23,16 +23,26 @@ export default class extends Controller {
             type: "POST",
             url: url,
             dataType: "json",
-            success: () => {
+            success: (data) => {
                 // Change subbed value on a element
                 this.#hideSpinner()
+
+                if(!data.updated_sub){
+                    this.#showError()
+                    return
+                }
+
                 let linkElement = $(this.element);
                 this.isSubbedValue = !isSubbed
 
                 // Change button text
-                let txt = linkElement.html();
-                let newButtonText = txt.match("Unsubscribe") ? txt.replace("Unsubscribe", "Subscribe") : txt.replace("Subscribe", "Unsubscribe");
-                linkElement.html(newButtonText);
+                let txt = this.textTarget.innerHTML
+                let count = parseInt(this.countTarget.innerHTML)
+
+                let newButtonText = txt.match("UnWatch") ? txt.replace("UnWatch", "Watch") : txt.replace("Watch", "UnWatch");
+                this.element.setAttribute('title', newButtonText + ' this ontology')
+                this.textTarget.innerHTML  = newButtonText
+                this.countTarget.innerHTML  = newButtonText.match("UnWatch") ? (count + 1) :  (count - 1)
             },
             error: () => {
                 this.#hideSpinner()

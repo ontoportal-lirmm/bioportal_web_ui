@@ -1,0 +1,13 @@
+.notification{class: notification_class}
+  .notification-inner
+    .notification-content
+      %span
+        = notification_type_icon
+      .notification-text
+        %p.text-sm.font-medium.text-gray-900
+          = @title
+        %p
+          = @comment
+      .ml-4.flex-shrink-0.d-flex
+        %button.notification-close{"onClick": "this.parentElement.parentElement.parentElement.style.opacity = 0"}
+          = svg_icon('close')

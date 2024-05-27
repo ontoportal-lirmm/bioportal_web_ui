@@ -1,2 +1,5 @@
 = render TurboFrameComponent.new(id: agent_id_frame_id(@agent_id, params[:parent_id])) do
-  = render partial: 'agents/agent_show', locals: {agent: @agent, name_prefix: @name_prefix, parent_id: params[:parent_id], edit_on_modal: @edit_on_modal}
+  = render partial: 'agents/agent_show', locals: {agent_id: @agent_id, agent: @agent,
+                                                  name_prefix: @name_prefix,
+                                                  parent_id: params[:parent_id],
+                                                  edit_on_modal: @edit_on_modal, deletable: @deletable}

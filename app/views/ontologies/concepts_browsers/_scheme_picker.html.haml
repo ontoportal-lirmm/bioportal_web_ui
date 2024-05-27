@@ -10,7 +10,7 @@
       %label{:for => "schemes_select"} Schemes
       %div
         = select_tag(:concept_schemes,
-                     options_for_select(schemes_labels.map{|s| [s["prefLabel"], s["@id"]]}, selected_scheme.compact.map{|x| x["@id"]} ),
+                     options_for_select(schemes_labels.map{|s| [s["prefLabel"].last, s["@id"]]}, selected_scheme.compact.map{|x| x["@id"]} ),
                       {multiple: true, id: "schemes_select",
                       data:{controller:'chosen', 'chosen-name-value': :concept_schemes,
                       action: 'changed->history#updateURL changed->turbo-frame#updateFrame'}})

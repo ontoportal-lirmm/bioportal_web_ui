@@ -1,0 +1,2 @@
+= render TurboFrameComponent.new(id: "sparql", data: {"turbo-frame-target": "frame"} ) do
+  = sparql_query_container(graph: @submission_latest.id )

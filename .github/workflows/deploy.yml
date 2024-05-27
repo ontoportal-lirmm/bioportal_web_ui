@@ -9,6 +9,7 @@
 # GH_PAT - github Personal Access Token for accessing private config repo
 #
 # SSH_JUMPHOST - ssh jump/proxy host though which deployments have to though if UI nodes live on private network.
+# SSH_JUMPHOST_USER - username  to use to connect to the ssh jump/proxy.
 #
 # DEPLOY_ENC_KEY - key for decrypting deploymnet ssh key residing in config/
 # this SSH key is used for accessing jump host, UI nodes, and private github repo.
@@ -17,26 +18,27 @@ name: Capistrano Deployment
 # Controls when the action will run.
 on:
   push:
-    branches: [ development staging ]
+    branches: [ stage test]
   # Allows running this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       BRANCH:
         description: 'Branch/tag to deploy'
         options:
-          - development
-          - staging
+          - stage
+          - test
           - master
-        default: staging
+        default: test
         required: true
       environment:
         description: 'target environment to deploy to'
         type: choice
         options:
-          - development
           - staging
           - production
-        default: staging
+          - appliance
+          - test
+        default: test
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -55,6 +57,13 @@ jobs:
 
         USER_INPUT_ENVIRONMENT=${{ inputs.environment }}
         echo "TARGET=${USER_INPUT_ENVIRONMENT:-staging}" >> $GITHUB_ENV
+        
+        CONFIG_REPO=${{ secrets.CONFIG_REPO }}
+        GH_PAT=${{ secrets.GH_PAT }}
+        echo "PRIVATE_CONFIG_REPO=https://${GH_PAT}@github.com/${CONFIG_REPO}" >> $GITHUB_ENV
+        
+        echo "SSH_JUMPHOST=${{ secrets.SSH_JUMPHOST }}" >> $GITHUB_ENV
+        echo "SSH_JUMPHOST_USER=${{ secrets.SSH_JUMPHOST_USER }}" >> $GITHUB_ENV
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v3
     - uses: ruby/setup-ruby@v1
@@ -69,6 +78,13 @@ jobs:
         path:  deploy_config
     - name: copy-deployment-config
       run:  cp -r deploy_config/ontoportal_web_ui/${{ inputs.environment }}/* .
+      # add ssh hostkey so that capistrano doesn't complain
+    - name: Add jumphost's hostkey to Known Hosts
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_JUMPHOST }}"
+        ssh-keyscan -H ${{ secrets.SSH_JUMPHOST }} > ~/.ssh/known_hosts
+      shell: bash
     - uses: miloserdow/capistrano-deploy@master
       with:
         target: ${{ env.TARGET }} # which environment to deploy

@@ -1,0 +1,6 @@
+= turbo_frame_tag 'application_modal_content' do
+  - data = data.values.first.each_with_index.map{|x, i| ["Submission  #{i + 1}", x]}.reject{|_, count| count.zero?}.to_h
+
+  = chart_component(title: '', type: 'line',
+                            labels: data.keys,
+                            datasets: visits_chart_dataset_array({ count: data.to_a}, fill: false))

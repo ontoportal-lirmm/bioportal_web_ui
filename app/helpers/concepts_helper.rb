@@ -1,5 +1,31 @@
 # frozen_string_literal: true
 module ConceptsHelper
+
+  def concept_link(acronym, child, language)
+    child.id.eql?('bp_fake_root') ? '#' : "/ontologies/#{acronym}/concepts/show?id=#{CGI.escape(child.id)}&language=#{language}"
+  end
+
+  def concept_children_link(acronym, child, language, concept_schemes)
+    "/ontologies/#{acronym}/concepts?conceptid=#{CGI.escape(child.id)}&concept_schemes=#{concept_schemes.join(',')}&language=#{language}"
+  end
+
+  def concept_tree_data(acronym, child, language, concept_schemes)
+    href = concept_link(acronym, child, language)
+    children_link = concept_children_link(acronym, child, language, concept_schemes)
+    data = {
+      conceptid: child.id,
+      'active-collections-value': child.isInActiveCollection || [],
+      'collections-value': child.memberOf || [],
+      'skos-collection-colors-target': 'collection',
+    }
+    [children_link, data, href]
+  end
+  def concepts_tree_component(root, selected_concept, acronym, concept_schemes, language, sub_tree: false, id: nil, auto_click: false)
+    tree_component(root, selected_concept, target_frame: 'concept_show', sub_tree: sub_tree, id: id, auto_click: auto_click) do |child|
+      concept_tree_data(acronym, child, language, concept_schemes)
+    end
+  end
+
   def exclude_relation?(relation_to_check, ontology = nil)
     excluded_relations = %w[type rdf:type [R] SuperClass InstanceCount]
 
@@ -19,11 +45,29 @@ module ConceptsHelper
   end
 
   def get_concept_id(params, concept, root)
+    return nil if concept.nil?
+
     if concept_id_param_exist?(params)
       concept.nil? ? '' : concept.id
     elsif !root.children.first.nil?
       root.children.first.id
     end
+  end
+
+  def sub_menu_active?(section)
+    params["sub_menu"]&.eql? section
+  end
+
+  def sub_menu_active_class(section)
+    "active show" if sub_menu_active?(section)
+  end
+
+  def default_sub_menu?
+    !sub_menu_active?('list') && !sub_menu_active?('date')
+  end
+
+  def default_sub_menu_class
+    "active show" if default_sub_menu?
   end
 
   def concept_label(ont_id, cls_id)
@@ -32,7 +76,7 @@ module ConceptsHelper
     ontology_not_found(ont_id) unless @ontology
     # Retrieve a class prefLabel or return the class ID (URI)
     # - mappings may contain class URIs that are not in bioportal (e.g. obo-xrefs)
-    cls = @ontology.explore.single_class(cls_id)
+    cls = @ontology.explore.single_class({language: request_lang, include: 'prefLabel'}, cls_id)
     # TODO: log any cls.errors
     # TODO: NCBO-402 might be implemented here, but it throws off a lot of ajax result rendering.
     #cls_label = cls.prefLabel({:use_html => true}) || cls_id
@@ -50,7 +94,7 @@ module ConceptsHelper
   end
 
   def sorted_by_date_url(page = 1, last_concept = nil)
-    out = "/ajax/classes/date_sorted_list?ontology=#{@ontology.acronym}&page=#{page}"
+    out = "/ajax/classes/date_sorted_list?ontology=#{@ontology.acronym}&page=#{page}&language=#{request_lang}"
     out += "&last_date=#{concept_date(last_concept)}" if last_concept
     out
   end
@@ -61,22 +105,25 @@ module ConceptsHelper
     year.eql?(date.year) && month.eql?(date.strftime('%B'))
   end
 
-  def concepts_li_list(concepts)
+  def concepts_li_list(concepts, auto_click: false)
     out = ''
     concepts.each do |concept|
-      out += tree_link_to_concept(child: concept, ontology_acronym: @ontology.acronym, active_style: '')
+      children_link, data, href = concept_tree_data(@ontology.acronym, concept, request_lang, [])
+      out += render TreeLinkComponent.new(child: concept, href: href,
+                                          children_href: '#', selected: concept.id.eql?(concepts.first.id) && auto_click,
+                                          target_frame: 'concept_show', data: data)
     end
     out
   end
 
-  def render_concepts_by_dates
-    return if  @concepts_year_month.empty?
+  def render_concepts_by_dates(auto_click: false)
+    return if @concepts_year_month.empty?
 
     first_year, first_month_concepts = @concepts_year_month.shift
     first_month, first_concepts = first_month_concepts.shift
     out = ''
     if same_period?(first_year, first_month, @last_date)
-      out += "<ul>#{concepts_li_list(first_concepts)}</ul>"
+      out += "<ul>#{concepts_li_list(first_concepts, auto_click: auto_click)}</ul>"
     else
       tmp = {}
       tmp[first_month] = first_concepts
@@ -89,7 +136,7 @@ module ConceptsHelper
     @concepts_year_month.each do |year, month_concepts|
       month_concepts.each do |month, concepts|
         out += "<ul> #{month + ' ' + year.to_s}"
-        out += concepts_li_list(concepts)
+        out += concepts_li_list(concepts, auto_click: auto_click)
         out += "</ul>"
       end
     end
@@ -98,7 +145,7 @@ module ConceptsHelper
   end
 
   def concept_list_url(page = 1, collection_id, acronym)
-    "/ajax/classes/list?ontology_id=#{acronym}&collection_id=#{collection_id}&page=#{page}"
+    "/ajax/classes/list?ontology_id=#{acronym}&collectionid=#{collection_id}&page=#{page}"
   end
 
 

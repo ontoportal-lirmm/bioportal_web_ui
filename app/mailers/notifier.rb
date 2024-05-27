@@ -1,27 +1,14 @@
 class Notifier < ApplicationMailer
 
-  def lost_password(user, password)
-    # Email header info MUST be added here
-    recipients user.email
-    from "#{$SUPPORT_EMAIL}"
-    subject "[#{$ORG_SITE}] Password Reset"
-
-    # Email body substitutions go here
-    body :user => user, :password => password
-  end
-
-  def error(error)
-    recipients $ERROR_EMAIL
-    from "#{$ADMIN_EMAIL}"
-    subject "Exception Mailer"
-    body :exception_message => error.message, :trace => error.backtrace
-  end
-
-  def endlessloop(node)
-    recipients $ERROR_EMAIL
-    from "#{$ADMIN_EMAIL}"
-    subject "Exception Mailer"
-    body :node => node.inspect
+  def error(error, current_user = nil, request_ip = nil, current_url = nil)
+    @error_message = error.message
+    @backtrace = error.backtrace
+    @current_user = current_user
+    @request_ip = request_ip
+    @current_url = current_url
+  
+    mail(to: "#{$SUPPORT_EMAIL}", from: "#{$SUPPORT_EMAIL}",
+        subject: "[#{$SITE}] Exception Mailer: #{@error_message}")
   end
 
   def feedback(name, email, comment, location, tags)
@@ -34,10 +21,6 @@ class Notifier < ApplicationMailer
     mail(:to => "#{$SUPPORT_EMAIL}, #{email}",
          :from => "#{$SUPPORT_EMAIL}",
          :subject => "[#{$SITE}] Feedback from #{name}")
-  end
-
-  def signup(user)
-
   end
 
 end

@@ -1,0 +1,40 @@
+= turbo_frame_tag 'users-list' do
+  %div.my-1
+    = render_alerts_container
+  .d-flex.justify-content-end.my-1
+    = rounded_button_component("#{$REST_URL}/users?display=all&apikey=#{get_apikey}")
+
+  = render TableComponent.new(id: 'admin_users', custom_class: 'border rounded p-1', searching: true, paging: true, sort_column: '7') do |t|
+    - t.header do |h|
+      - h.th {t('users.index.first_name')}
+      - h.th {t('users.index.last_name')}
+      - h.th {t('users.index.username')}
+      - h.th {t('users.index.email')}
+      - h.th {t('users.index.roles')}
+      - h.th {t('users.index.ontologies')}
+      - h.th {t('users.index.project')}
+      - h.th {t('users.index.created')}
+      - h.th {t('users.index.actions')}
+    - @users.each do |user|
+      - t.row(id: user.id.split('/').last) do |r|
+        - r.td {user.firstName}
+        - r.td {user.lastName}
+        - r.td {user.username}
+        - r.td {user.email}
+        - r.td {user.role.join(', ')}
+        - r.td {(user.ontologies&.size || 0).to_s}
+        - r.td {(user.projects&.size || 0).to_s}
+        - r.td {Date.parse(user.created).to_s}
+        - r.td do
+          - count = (user.ontologies&.size || 0) +  (user.projects&.size || 0)
+          %div.d-flex.align-items-center{style: 'min-width: 200px'}
+            %span
+              = link_to t('users.index.detail'), user_path(user.id.split('/').last), {data: {turbo_frame: '_top'}}
+            %span
+              - if count.zero?
+                = button_to t('users.index.delete'), user_path(user.id.split('/').last), method: :delete, class: 'btn btn-link',  form: {data: { turbo: true, turbo_confirm: t('users.index.turbo_confirm'), turbo_frame: '_top'}}
+              - else
+                %span{data: { controller: 'tooltip' }, title:t('users.index.error_delete_message')}
+                  = link_to t('users.index.delete'), "", class: 'btn btn-link disabled'
+            %span
+              = link_to t('users.index.login_as'), "login_as/#{user.username}", {data: {turbo_frame: '_top'}}

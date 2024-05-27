@@ -1,11 +1,6 @@
-:javascript
-  jQuery(document).ready(function(){
-    jQuery("#project_creator").chosen();
-  });
-
 - unless @errors.nil?
   .enable-lists{style: "color:red; padding-left:10px;"}
-    %strong Errors On Form
+    %strong= t('projects.form.errors_on_form')
     %ul
       - @errors = @errors[:error ] if @errors[:error]
       %ul
@@ -28,33 +23,35 @@
 %div{:style => "padding:10px"}
   %table.form
     %tr
-      %th Name: *
+      %th= t('projects.form.name')
       %td.top= text_field :project, :name, value: @project.name, :class => "required", :tabindex => 1
     %tr
       - disabled = @project.id ? "disabled" : nil
-      %th Acronym: *
+      %th= t('projects.form.acronym')
       %td.top= text_field :project, :acronym, value: @project.acronym, :class => "required", :tabindex => 1, disabled: disabled
     %tr
-      %th Institution:
+      %th= t('projects.show.institution')
       %td= text_field :project, :institution, value: @project.institution, :tabindex => 2
     %tr
-      %th Contacts:
+      %th= t('projects.show.contacts')
       %td= text_field :project, :contacts, value: @project.contacts, :tabindex => 3
     %tr
-      %th Administrators: *
-      %td= f.select :creator, @user_select_list, { selected: @project.creator || session[:user].id }, { multiple: true, :"data-placeholder" => "Select administrators", tabindex: 4 }    
+      %th= t('projects.form.administrators')
+      %td= select_input(name: "project[creator][]", values: @user_select_list, selected: @project.creator || session[:user].id,  multiple: true,placeholder: t('projects.form.select_administrators'))
+
     %tr
       %th
-        Homepage: *
+        = t('projects.form.home_page')
         %br/
         %span.default_owl
-          Example:
+          = t('projects.form.example')
           %a{:href => "http://en.wikipedia.org/wiki/SNOMED_CT", :target => "_blank"} http://en.wikipedia.org/wiki/SNOMED_CT
       %td= text_field :project, :homePage, value: @project.homePage, :class => "required url", :tabindex => 5
     %tr
-      %th Description:*
+      %th= t('projects.form.description')
       %td= text_area :project, :description, value: @project.description, :rows=>6, :class=>"required", :tabindex => 6
   %div#ontology_picker_project{style: "padding-top: 2em;"}
     - selected_ontologies = @project.ontologyUsed && @project.ontologyUsed.map {|id| id.split('/').last } || []
-    - locals = { sel_text: "Select Ontologies Used", selected_ontologies: selected_ontologies, form_object: :project, form_attribute: "ontologyUsed" }
-    = render :partial => "shared/ontology_picker", locals: locals
+    - locals = { sel_text: t('projects.form.select_ontologies'), selected_ontologies: selected_ontologies, form_object: :project, form_attribute: "ontologyUsed" }
+    = ontologies_selector(id:'projects_page_ontologies_selector' ,name: 'ontologies')              
+

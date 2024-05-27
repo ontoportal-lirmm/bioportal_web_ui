@@ -1,0 +1,9 @@
+- acronym = submission.id.split('/')[-3]
+- id = ontology_submission_id_label(acronym, submission.submissionId)
+%tr{id: id+'_row'}
+  %th{scope:"row", style: 'width: 5%'}
+    %div
+      %h6{style:'margin-top: 0.2rem'}=id
+  - attributes.each do |meta|
+    %td{style: "width: #{95 / attributes.size}%; vertical-align: top; word-break: break-word;"}
+      = render partial: 'attribute_inline_editable', locals: {attribute: meta, submission: submission, ontology: nil}

@@ -1,78 +1,236 @@
-div#semanticTypes_chzn.chzn-container input.default {
-  font-style: oblique !important;
+.annotator-page-container{
+  display:flex;
+  justify-content:center;
+}
+.annotator-page-container a{
+  color: var(--primary-color) !important;
+}
+.annotator-page-subcontainer{
+  width: 1248px;
+  padding: 20px 50px;
+}
+.annotator-page-title{
+  font-size: 25px;
+  font-weight: 700;
+}
+.annotator-page-title .line{
+  height: 2px;
+  width: 57px;
+  background-color: var(--primary-color);
+  border-radius: 10px;
+}
+.annotator-page-decription{
+  color: #888888;
+  margin-top: 20px;
+}
+.annotator-page-inputs{
+  margin-top: 20px;
+}
+.annotator-page-inputs .inputs{
+  display: flex;
+}
+.annotator-page-text-area{
+  box-shadow: 2px 30px 60px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 630px;
+  margin-right: 30px;
+}
+.annotator-page-text-area textarea{
+  font-size: 16px;
+  outline: none;
+  padding: 20px;
+  width: 630px;
+  border: none;
+  margin-right: 30px;
+}
+.annotator-page-text-area .insert-sample-text-button{
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 20px 20px 20px;
+}
+.annotator-page-text-area .insert-sample-text-button .button{
+  display: flex;
+  align-items: center;
+}
+.annotator-page-text-area .insert-sample-text-button .button:hover{
+  cursor: pointer;
+}
+.annotator-page-text-area .insert-sample-text-button .button .text{
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primary-color);
+  margin-right: 10px;
+}
+.annotator-page-text-area .insert-sample-text-button .button svg{
+  width: 16px;
+  height: 16px;
+}
+.annotator-page-text-area .insert-sample-text-button .button svg path{
+  fill: var(--primary-color);
+}
+.annotator-page-options{
+  width: 100%;
 }
 
-div#semanticTypes_chzn.chzn-container-active input.default {
-  font-style: normal !important;
+.annotator-page-options .section-text{
+  font-weight: 600;
+  
+}
+.annotator-page-options .title{
+  margin-top: 10px;
+  color: #888888;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 5px; 
 }
 
-div#annotations_filter, div#annotations_info {
-  display: none;
+.annotator-page-options .chips{
+  display: flex;
+}
+.annotator-page-options input{
+  accent-color: var(--primary-color) revert;
+}
+.annotator-page-options .radios{
+  display: flex;
 }
 
-.result_count {
-  font-weight: bold;
+.annotator-page-options .advanced-options-button{
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+}
+.annotator-page-options .advanced-options-button:hover{
+  cursor: pointer;
+}
+.annotator-page-options .advanced-options-button .text{
+  margin-left: 10px;
+  color: var(--primary-color);
+  font-size: 14px;
 }
 
-#annotations th {
-	padding-right: 6px;
+.annotator-page-options .advanced-options-button svg path{
+  fill: var(--primary-color);
+}
+.annotator-page-button{
+  margin-top: 27px;
+  width: 630px;
 }
 
-#annotations span[class="popup_container"] {
-  padding-left: 1.7em;
+.annotator-page-options .chips{
+  display: flex;
+  flex-wrap: wrap;
 }
-
-#annotator_parameters {
-  color: gray; 
-  font-weight: bold;
+.annotator-page-options .select-ontologies{
+  margin: 10px 0;
 }
-
-#annotations_container {
-  display: none; 
-  margin-top: 10px; 
-  margin-bottom: 25px;
+.annotator-page-options .preftitle{
+  font-size: 14px;
+  color: #666666;
+  margin-bottom: 5px;
 }
-
-#annotations_container #result_counts {
-  float: right; 
-  font-style: oblique; 
+.annotator-page-container .advanced-options-button{
+  color: var(--primary-color);
+  font-size: 14px;
+  margin-top: 5px !important;
+}
+.annotator-page-container .advanced-options-button:hover{
+  cursor: pointer;
+}
+.annotator-page-container .advanced-options-button svg{
+  margin-left: 5px;
+}
+.annotator-page-container .advanced-options-button svg path{
+  fill: var(--primary-color);
+}
+.annotator-page-container .advanced-options-button.hide-button svg{
+  transform: scaleY(-1);
+}
+.annotation-context{
   color: gray;
+  font-weight: 400;
+}
+.annotator-page-container .highlighted-annotation{
+  color: black;
+  font-weight: 600;
+}
+.annotator-page-results .cont{
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.annotator-page-results .title{
+  font-size: 18px;
+  font-weight: 600;
+}
+.annotator-page-results .details{
+  color: #888888;
+}
+.annotator-page-container .more-advanced-options{
+  margin-top: 20px;
+}
+.annotator-page-container .more-advanced-options .filters_line{
+  display: flex;
+  margin-top: 20px;
+}
+.annotator-page-container .more-advanced-options .filters_line div{
+  width: 100%;
 }
 
-#annotator-help i {
-  margin-left: .25em;
+.annotator-page-container .more-advanced-options .filters_line > :not(:first-child) {
+  margin-left: 20px;
+}
+.annotator-page-container .more-advanced-options .chips{
+  display: flex;
+  margin-top: 20px;
+}
+.annotation-parent{
+  display: flex;
+  white-space: nowrap;
+}
+.annotation-parent div, .annotation-parent a{
+  margin-right: 11px;
+}
+.annotation-parent .text{
+  margin-right: 8px;
 }
 
-/* AnnotatorPlus */
+.annotation-parent a{
+  text-decoration: underline !important;
+}
+.annotator-page-options .prefrences{
+  margin-top: 10px;
+}
 
-.annotatorplus {
-
-  #annotator-help > i.fa.fa-question-circle {
-    margin-left: .25em;
-    vertical-align: middle;
-  }
-
-  #download_links {
-    margin-top: 1.5em;
-  }
-
-  #annotator_parameters {
-    font-weight: normal;
-  }
-
-  .annotator_spinner {
-    display: none;
-    
-    img {
-      margin-left: 3px;
-      vertical-align: middle;
-    }
-  }
-
-  .annotator_error {
-    color: red;
-    font-style: italic;
-    margin-left: 3px;
-    vertical-align: middle;
-  }
+.annotation-parent .level{
+  font-weight: 600;
+  color: var(--primary-color);
+}
+.annotation-parent .gray{
+  color: #888888;
+}
+.annotator-table-container{
+  margin-top: 20px;
+}
+.annotator-table-container .class{
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.annotation-parent + div{
+  margin-top: 5px;
+}
+.annotator-bottom-actions{
+  margin-top: 20px;
+  display: flex;
+}
+.annotator-bottom-actions div{
+  display: inline-block;
+}
+.annotator-bottom-actions div + div{
+  margin-left: 20px;
+}
+.annotator-bottom-actions .rdf-button svg, .annotator-doc svg{
+  width: 21px;
 }

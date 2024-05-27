@@ -3,13 +3,13 @@
     %div.alert.alert-danger{role: "alert"}
       %h5.alert-heading
         = pluralize(license.errors.count, "error") 
-        prohibited this license from being saved:
+        = t("admin.licenses.form.license_from_being_saved")
       - license.errors.full_messages.each do |message|
         %p.font-italic.pl-3.mb-0= message
   %div.form-group
     %label{for: "license_encrypted_key"} License key
     = text_area(:license, :encrypted_key, rows: 10, required: true, class: "form-control", aria: { describedBy: "licenseKeyHelpBlock" })
     %small#licenseKeyHelpBlock.form-text.text-muted
-      Paste your license key into the text area
+      = t("admin.licenses.form.paste_your_license")
   %div.form-group
-    = form.submit "Submit", class: "btn btn-primary"
+    = form.submit t("admin.licenses.form.submit"), class: "btn btn-primary"

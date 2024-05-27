@@ -1,0 +1,26 @@
+= render_in_modal do
+  = form_with url: "admin/search/#{params[:collection]}/data", method: 'get', data:{turbo: true} do
+    %div.mb-2
+      = text_input(label: t('admin.search.search.search_query'), name: "query", value: params[:query])
+      %div.d-flex.my-1{style: 'gap: 10px'}
+        = number_input(name: 'page', label: t('admin.search.search.page'), value: params[:page] || 1)
+        = number_input(name: 'page_size', label: t('admin.search.search.page_size'), value: params[:page_size] || 10)
+    = form_save_button
+
+  %div.my-1
+    = t('admin.search.search.found_documents', count: @count)
+  = render TableComponent.new(id: 'collection_data', paging: true) do |t|
+    - t.header do |h|
+      - h.th { t('admin.search.search.id') }
+      - h.th { t('admin.search.search.properties') }
+    -  @docs.each do |d|
+      - t.row do |r|
+        - r.td {d['id']}
+        - r.td do
+          %div{data:{controller:"text-truncate", 'text-truncate-more-text-value': t('admin.search.search.show_more') , 'text-truncate-less-text-value': t('admin.search.search.show_less')}}
+            %div.overflow-hidden{'data-text-truncate-target': 'content', style: ' display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: var(--read-more-line-clamp, 2);'}
+              - d.each do |k,v|
+                %div
+                  #{k}: #{v}
+            %div.btn.btn-link{data:{'text-truncate-target': 'button', 'action':"click->text-truncate#toggle"}}
+              = t('admin.search.search.show_more')

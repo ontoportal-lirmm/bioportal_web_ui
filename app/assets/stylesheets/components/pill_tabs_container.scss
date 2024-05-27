@@ -1,0 +1,22 @@
+.pill-tabs-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.pill-tabs-container .tab-items{
+  margin-bottom: 10px;
+}
+
+.pill-tabs-container .nav-item {
+  display: block;
+  padding: 0.2rem 1rem;
+}
+
+.pill-tabs-container .nav-item.active {
+  border-radius: 5px;
+  background-color: var(--primary-color);
+  color: white !important;
+  a {
+    color: white !important;
+  }
+}

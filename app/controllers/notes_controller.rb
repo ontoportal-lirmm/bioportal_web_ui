@@ -1,17 +1,19 @@
 class NotesController < ApplicationController
   include TurboHelper
   layout 'ontology'
+ 
   NOTES_PROPOSAL_TYPES = {
-    ProposalNewClass: "New Class Proposal",
-    ProposalChangeHierarchy: "New Relationship Proposal",
-    ProposalChangeProperty: "Change Property Value Proposal"
+    ProposalNewClass:  t('notes.new_class_proposal'),
+    ProposalChangeHierarchy: t('notes.new_relationship_proposal'),
+    ProposalChangeProperty: t('notes.change_property_value_proposal')
   }
 
   def show
     id = clean_note_id(params[:id])
 
     @note = LinkedData::Client::Models::Note.get(id, include_threads: true)
-    @ontology = (@notes.explore.relatedOntology || []).first
+    @note_decorator = NoteDecorator.new(@note, view_context)
+    @ontology = (@note.explore.relatedOntology || []).first
 
     if request.xhr?
       render :partial => 'thread'
@@ -100,10 +102,10 @@ class NotesController < ApplicationController
       new_note = note.save
       parent_type = params[:type].eql?("ontology") ? 'ontology' : 'class'
       ontology_acronym = new_note.relatedOntology.first.split('/').last
-      success_message = 'New comment added successfully'
+      success_message = t('notes.new_comment_added')
       locals =  { note: new_note, ontology_acronym: ontology_acronym, parent_type: parent_type }
       partial = 'notes/note_line'
-      container_id = "#{parent_type}_notes_table_content"
+      container_id = "#{parent_type}_notes_table_body"
       alerts_container_id = nil
     end
 
@@ -128,10 +130,10 @@ class NotesController < ApplicationController
       if note.errors
         response[:errors] = note.errors
       else
-        response[:success] = "Note #{note_id}  was deleted successfully"
+        response[:success] = t('notes.note_deleted_successfully', note_id: note_id)
       end
     else
-      response[:errors] = "Note #{note_id}  was not found in the system"
+      response[:errors] = t('notes.note_not_found', note_id: note_id)
     end
     parent_type = params[:parent_type]
     alerts_container_id = "notes_#{parent_type}_list_table_alerts"

@@ -1,10 +1,7 @@
 %span
   %span
-    FAIR Scores
-  %span.badge.badge-pill.badge-secondary
-    beta
+  = beta_badge
 %span
-  = link_to("https://github.com/agroportal/fairness", target: "_blank", "aria-label": "View fair scores definitions", title: "View fair scores definitions") do
-    %i.fas.fa-lg.fa-question-circle{"aria-hidden": "true", style: "margin-left: 0.5rem"}
-  = link_to(get_fairness_service_url,id: "fairness-service-url", target: "_blank", "aria-label": "Get the json version", title: "Get the json version") do
-    %i.fas.fa-lg.fa-code{"aria-hidden": "true", style: "margin-left: 0.5rem" }
+  = info_tooltip(content_tag(:div, t("fair_score.view_fair_scores_definitions"), style: "width: 300px"), interactive: false)
+%span{style: 'vertical-align: bottom; margin-left: -5px;'}
+  = fairness_link(style: 'vertical-align: middle;', ontology: @ontology&.acronym)

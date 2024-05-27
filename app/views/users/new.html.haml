@@ -1,9 +1,10 @@
-- @title = "Register"
+- @title = t('register.title')
 = form_for(:user, :url => users_path) do |f|
   - unless @errors.nil?
-    .enable-lists{:style => "color: red; padding: 1em;"}
-      Errors creating your account:
-      %ul
-        - for error in @errors
-          %li= error
+    .d-flex.justify-content-center.mt-4
+      = render Display::AlertComponent.new(type: "danger", closable: false) do
+        = t('register.account_errors')
+        %ul.mb-0
+          - for error in @errors
+            %li= error.is_a?(Array) ? error.last : error
   = render :partial => 'form', :locals => {:f => f}

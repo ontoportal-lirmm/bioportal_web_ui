@@ -28,7 +28,7 @@ class FairScoreController < ApplicationController
         @fair_scores_data = create_fair_scores_data(get_fair_score(@ontologies).values.first, 1)
       end
     rescue NameError
-      raise StandardError, 'Error: load failed'
+      #raise StandardError, 'Error: load failed'
     end
   end
 end

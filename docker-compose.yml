@@ -1,52 +1,86 @@
 x-app: &default-app
-  build:
-    context: "."
-    target: "app"
-    args:
-      - "UID=${UID:-1000}"
-      - "GID=${GID:-1000}"
-      - "RAILS_ENV=${RAILS_ENV:-production}"
-      - "NODE_ENV=${NODE_ENV:-production}"
-  depends_on:
-    - "db"
-    - "cache"
-  links:
-    - "db"
-    - "cache"
+  image: agroportal/ontoportal_web_ui:development
   env_file:
     - ".env"
   tty: true
   volumes:
-    - "${DOCKER_WEB_VOLUME}"
-    -  bundle:/usr/local/bundle
+    - .:/app
+    - bundle:/usr/local/bundle
     - node:/node_modules
+    - rails_cache:/app/tmp/cache
+    - assets:/app/public/assets
+    - /var/run/docker.sock:/var/run/docker.sock
+  tmpfs:
+    - /tmp
+    - /app/tmp/pids
 
 services:
   db:
-    environment:
-      MYSQL_ROOT_PASSWORD: 'bp_user'
-    image: "mysql:latest"
-    profiles: ["db"]
+    image: "mysql:8.0"
+    networks:
+      - default
+    volumes:
+      - mysql-data:/var/lib/mysql
     ports:
       - "3306:3306"
-    volumes:
-      - db-v:/var/lib/mysql
-  cache:
-    deploy:
-      resources:
-        limits:
-          cpus: "${DOCKER_REDIS_CPUS:-0}"
-          memory: "${DOCKER_REDIS_MEMORY:-0}"
-    image: "memcached:1.6.17-bullseye"
-    profiles: ["cache"]
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 3  
 
-  web:
-    <<: *default-app
+  cache:
+    image: memcached:latest
+    restart: unless-stopped
+    command: [ "-m", "1024" ]
+    networks:
+      - default
     ports:
-      - "${DOCKER_WEB_PORT_FORWARD:-127.0.0.1:3000}:${PORT:-3000}"
-    profiles: ["web"]
+      - "11211:11211"
+  node:
+    <<: *default-app
     command: "yarn build --watch"
+
+  rails:
+    <<: *default-app
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_started
+      node:
+        condition: service_started
+    links:
+      - db
+      - cache
+    environment:
+      BUNDLE_WITHOUT: ''
+      DB_HOST: db
+      CACHE_HOST: cache
+    ports:
+      - "3000:3000"
+  test:
+    <<: *default-app
+    depends_on:
+      - db
+      - cache
+      - chrome-server
+    network_mode: 'host'
+    environment:
+      BUNDLE_WITHOUT: ''
+      DB_HOST: 127.0.0.1
+      CACHE_HOST: 127.0.0.1
+  chrome-server:
+    image: selenium/standalone-chrome:112.0-chromedriver-112.0-grid-4.9.0-20230421
+    shm_size: 2g
+    ports:
+      - "4444:4444"
+      - "7900:7900"
+
 volumes:
-  db-v:
+  mysql-data:
   bundle:
+  rails_cache:
+  assets:
   node:
