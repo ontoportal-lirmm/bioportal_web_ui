@@ -83,9 +83,7 @@ module DoiRequestAdministration
   def process_doi(doi_request)
     doi_req_submission =  LinkedData::Client::Models::OntologySubmission.find(doi_request.submission.id, include: 'all')
     ont_submission_id = doi_req_submission.submissionId
-    ontology_id = doi_req_submission.ontology.id
-    ontology_acronym = ontology_id.split('/').last
-    hash_metadata = data_cite_metadata_json(ontology_acronym, ont_submission_id)
+    hash_metadata = data_cite_metadata_json(doi_req_submission.ontology, ont_submission_id)
     if doi_request.requestType == 'DOI_CREATE'
       satisfy_doi_creation_request(doi_request, hash_metadata, doi_req_submission)
     elsif doi_request.requestType == 'DOI_UPDATE'
@@ -93,13 +91,15 @@ module DoiRequestAdministration
     end
   end
 
-  def data_cite_metadata_json(ontology_acronym, ont_submission_id)
+  def data_cite_metadata_json( ontology, ont_submission_id)
+    ontology_acronym = ontology.acronym
+    ontology_name = ontology.name
     sub_metadata_url = SUB_DATA_CITE_METADATA_URL.call(ontology_acronym, ont_submission_id)
     hash_metadata = LinkedData::Client::HTTP.get(sub_metadata_url, {}, raw: true)
     json = JSON.parse(hash_metadata, symbolize_names: true)
 
-    json[:title] = json[:titles]&.first ? json[:titles].first[:title] : ontology_acronym
-    json[:url] = helpers.ontologies_url + '/' +ontology_acronym
+    json[:title] = ontology_name
+    json[:url] = json[:url] || (helpers.ontologies_url + '/' +ontology_acronym)
     json
   end
 
