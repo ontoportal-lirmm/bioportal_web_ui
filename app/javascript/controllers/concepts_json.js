@@ -2,13 +2,12 @@ import {Controller} from "@hotwired/stimulus"
 
 export default class extends Controller {
     static values = {
-        ontologyId: String,
-        conceptId: String,
+        classUrl: String,
         apiKey: String
       }
 
     update(){
-        const baseClassUrl = `${this.ontologyIdValue}/classes/${this.conceptIdValue}`;
+        const baseClassUrl = this.classUrlValue;
         const apikey = `apikey=${this.apiKeyValue}`;
         const tabsList = document.querySelectorAll('#concept_tabs_container .nav-item');
         const links = {

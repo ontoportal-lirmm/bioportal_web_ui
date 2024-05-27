@@ -3,7 +3,7 @@
     = render Display::AlertComponent.new do
       = t('concepts.use_jump_to')
   - else
-    %div{'data-controller': 'concepts-json', 'data-concepts-json-ontology-id-value': @ontology.id, 'data-concepts-json-concept-id-value': escape(@concept.id), 'data-concepts-json-api-key-value': get_apikey}
+    %div{'data-controller': 'concepts-json', 'data-concepts-json-class-url-value': "#{@ontology.id}/classes/#{escape(@concept.id)}", 'data-concepts-json-api-key-value': get_apikey}
       #concept_tabs_container{'data-action': 'click->concepts-json#update'}
         = render TabsContainerComponent.new(type:'outline') do |c|
 
