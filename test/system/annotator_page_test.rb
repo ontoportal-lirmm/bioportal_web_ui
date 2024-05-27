@@ -29,10 +29,10 @@ class AnnotatorPageTest < ApplicationSystemTestCase
         find('div.advanced-options-button').click
 
         # Check if there are the advanced options
-        assert_selector '#umls_semantic_types_selector'
-        assert_selector '#umls_semantic_groups_selector'
-        assert_selector '#include_accentors'
-        assert_selector '#include_score'
+        assert_selector 'input#select_umls_semantic_types-ts-control', visible: :all
+        assert_selector 'input#select_umls_semantic_groups-ts-control', visible: :all
+        assert_selector 'input#select_ancestors_level-ts-control', visible: :all
+        assert_selector 'input#select_include_score-ts-control', visible: :all
         assert_selector 'input[name="score_threshold"]'
         assert_selector 'input[name="confidence_threshold"]'
         assert_selector 'label[for="chips-fast_context-check"]'
