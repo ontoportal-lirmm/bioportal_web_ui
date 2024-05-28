@@ -1,19 +1,15 @@
-= turbo_frame_tag 'instances' do
-  %div.ontologies_list_container.mt-3
-    %instances-table.zebra{id: id, style:"width:100%; position:relative" , 'ontology-acronym': @ontology.acronym ,'class-uri': @instances_concept_id}
+= render TurboFrameComponent.new(id: "instances", data: {"turbo-frame-target": "frame"} ) do
+  %div.ont-properties{data: {controller: ( params[:p].eql?('instances') ? 'container-splitter turbo-frame': ''), 'turbo-frame': { 'url-value': "/ontologies/#{@ontology.acronym}/instances/show"}}}
+    %div.sidebar.w-100.position-relative.card{data: {'container-splitter-target': 'container', action: 'change->turbo-frame#updateFrame'}}
+      = tree_container_component(id: "#{params[:p].eql?('instances') ? '' : 'concept_'}instances_sorted_list_view-page-1",
+                                 placeholder: t('ontologies.sections.instances_search_placeholder', acronym: @ontology.acronym),
+                                 frame_url:  "/ontologies/#{@ontology.acronym}/instances#{@concept ? '?type=' + escape(@concept.id) : ''}",
+                                 tree_url: "/ontologies/#{@ontology.acronym}/instances?page=1#{@concept ? '&type=' + escape(@concept.id) : ''}&#{request.original_url.split('?')[1]}")
 
-  :javascript
-    $(document).ready(function() {
-        const inst = document.querySelector("##{id}")
-         const concept_id = "#{@instances_concept_id}"
-         //print the instance count append to the tab title
-         const updateInstancesCount = (count) => {
-            document.querySelector("#instances_count").textContent = count
-         }
-         if(concept_id){
-            updateInstancesCount(0)
-            $(inst).on("init.dt" ,  (e, setting, json) => {
-                updateInstancesCount(json["table"]["totalCount"])
-            })
-         }
-    })
+
+    - if params[:p].eql?('instances')
+      %div#prop_contents{data: {'container-splitter-target': 'container'}}
+        = render partial: 'instances/details'
+
+
+

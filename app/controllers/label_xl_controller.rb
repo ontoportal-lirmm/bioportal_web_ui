@@ -10,7 +10,7 @@ class LabelXlController < ApplicationController
     label_xl_label = label_xl ? label_xl['literalForm'] : nil
     label_xl_label = params[:id] if label_xl_label.nil? || label_xl_label.empty?
 
-    render LabelLinkComponent.inline(params[:id], label_xl_label)
+    render LabelLinkComponent.inline(params[:id], helpers.main_language_label(label_xl_label))
   end
 
   private
@@ -19,7 +19,7 @@ class LabelXlController < ApplicationController
     params[:id] = params[:id] ? params[:id] : params[:label_xl_id]
     params[:ontology_id] = params[:ontology_id] ? params[:ontology_id] : params[:ontology]
     if params[:id].nil? || params[:id].empty?
-      render text: 'Error: You must provide a valid label_xl id'
+      render text: t('label_xl.error_valid_label_xl')
       return
     end
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first

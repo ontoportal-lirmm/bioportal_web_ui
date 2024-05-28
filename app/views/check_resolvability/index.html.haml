@@ -1,0 +1,78 @@
+.search-page-container
+  .search-page-subcontainer{'data-controller': 'reveal-component'}
+    = form_tag(check_resolvability_path, method: :get, 'data-turbo': true) do
+      = search_page_input_component(name: 'url', value: @url, placeholder: t("check_resolvability.uri_placeholder"), type: "url")
+
+
+      = render(Layout::RevealComponent.new(toggle: true, selected: false)) do |c|
+        - c.button do
+          .d-flex.justify-content-end
+            .search-page-advanced-button.show-options
+              .icon
+                = inline_svg_tag 'icons/settings.svg'
+              .text
+                = t("check_resolvability.show_help")
+
+        - c.container do
+          %div.mt-2.mx-auto
+            = render Display::AlertComponent.new(type:'info') do
+              %h4= t("check_resolvability.how_it_works.title")
+              %p
+                = t("check_resolvability.how_it_works.content_1", resolvability_formats: resolvability_formats.join(', ')) 
+              %p
+                = t("check_resolvability.how_it_works.content_2", resolvability_timeout: resolvability_timeout, resolvability_max_redirections: resolvability_max_redirections) 
+            = render Display::AlertComponent.new(type:'info') do
+              %h4
+                = t("check_resolvability.resolving_uri.title")
+              %p
+                = t("check_resolvability.resolving_uri.content")
+
+              %h4
+                = t("check_resolvability.content_negotiation.title")
+              %p
+                = t("check_resolvability.content_negotiation.content")
+
+    - if @results
+      %div.bg-white.mt-3.border.rounded
+        %div.p-1
+          - text = check_resolvability_message(url_resolvable?(@results), @results[:allowed_format], @results[:status])
+          - if url_content_negotiable?(@results)
+            = render Display::AlertComponent.new(type:'success') do
+              = text
+          - elsif url_resolvable?(@results)
+            = render Display::AlertComponent.new(type:'warning') do
+              = text
+          - else
+            = render Display::AlertComponent.new(type:'danger') do
+              = text
+        %div.p-1
+          - count = 0
+          - @results[:redirections].each do |format, result|
+            - count += 1
+            - title = content_tag(:span, format, class: result[:result].eql?(2) ? 'text-primary' : 'text-danger')
+            = render DropdownContainerComponent.new(id: "format#{count}" , title: "#{title} redirection path".html_safe) do
+              = render TableComponent.new(stripped: true) do |t|
+                - result[:redirections].each_with_index do |redirection, index|
+                  - t.row do |row|
+                    - row.td do
+                      = link_to redirection.to_s, redirection.to_s
+                      - if !index.eql?(result[:redirections].length - 1)
+                        - color = 'text-warning bg-warning-light'
+                        - status = '302'
+                        - format_badge = nil
+                      - else
+                        - status = result[:status]
+                        - color = status.eql?('200') ? '' : 'bg-danger-light text-danger'
+                        - format_badge = render ChipButtonComponent.new(class: "mx-1", text: result[:allowed_format].first.blank? ? t("check_resolvability.format_not_specified"): result[:allowed_format].first)
+                      = render ChipButtonComponent.new(class: "mx-1 #{color}", type: 'clickable', text: status)
+                      = format_badge
+
+
+
+
+
+
+
+
+
+

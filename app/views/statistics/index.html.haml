@@ -1,0 +1,33 @@
+%div.px-3.py-3.pt-md-5.pb-md-4.text-center
+  %h1.display-4
+    = t('statistics.title', portal: portal_name)
+    %p.lead
+      = t('statistics.lead', last_years: Date.today.year - Date.parse(@merged_data[:labels].first).year)
+%div.container
+  %div
+    = chart_component(title: nil, type: 'line', show_legend: true, 
+                      labels: @merged_data[:labels], datasets: visits_chart_dataset_array({ t('statistics.ontologies') => @merged_data[:visits][2], 
+                      t('statistics.users') => @merged_data[:visits][0], t('statistics.projects') => @merged_data[:visits][1] }, fill: false))
+
+  %div.pb-3.pb-md-4
+    - size = @merged_data[:labels].size - 1
+    - visits =  @year_month_visits
+    = render TableComponent.new(id: 'statistics_table') do |t|
+      - t.header do |h|
+        - h.th {t('statistics.date')}
+        - h.th {t('statistics.ontologies')}
+        - h.th {t('statistics.users')}
+        - h.th {t('statistics.projects')}
+        - h.th {t('statistics.ontology_visits')}
+
+      - @merged_data[:labels].reverse.each_with_index  do |year_month, i|
+        - t.row do |r|
+          - r.td {year_month}
+          - r.td {@merged_data[:visits][2][size - i].to_s}
+          - r.td {@merged_data[:visits][0][size - i].to_s}
+          - r.td {@merged_data[:visits][1][size - i].to_s}
+          - r.td do
+            - year = Date.parse(year_month).year
+            - month = Date.parse(year_month).month
+            = visits[[year, month]] || 0
+

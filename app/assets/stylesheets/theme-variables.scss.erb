@@ -1,29 +1,34 @@
 <%# This file contains all the color themes of ontoportal alliance%>
-<% if $UI_THEME
-    case $UI_THEME.to_s
+<% if (ui_theme = $UI_THEME.to_s.parameterize)
+    case ui_theme
     when "agroportal" %>
         :root{
-            --primary-color: #31B404;
-            --hover-color: #40C811;
+            --primary-color: #3CB371;
+            --hover-color: #41C67C;
             --secondary-color: #ffc107;
+            --light-color: #F1F6FA;
         }
     <% when "stageportal" %>
         :root{
-            --primary-color: #76A7CC;
-            --hover-color: #6B96B7;
+            --primary-color: #37AEA0;
+            --hover-color: #3BBDAE;
             --secondary-color: #ffc107;
+            --light-color: #ECF7F6;
         }
     <% when "bioportal" %>
         :root{
             --primary-color: #76A7CC;
             --hover-color: #6B96B7;
             --secondary-color: #ffc107;
+            --light-color: #F0F5F6;
         }
-    <% when "ontoportal" %>
+    
+    <% when "ontoportal" , "testportal" %>
         :root{
-            --primary-color: #6E98A2;
-            --hover-color: #7BABB6;
+            --primary-color: #5499a4;
+            --hover-color: #6B96B7;
             --secondary-color: #ffc107;
+            --light-color: #F1F6FA;
         }
     <% when "ecoportal" %>
     :root{
@@ -34,3 +39,24 @@
     <%# Here to add a new theme ... %>
     <% end %>
 <% end %>
+
+
+
+// common variables
+:root{
+    --error-color: #EB4335;
+    --warning-color: #e48c11;
+    --gray-color: #888888;
+    --success-color: #2DC54E;
+    --admin-color: #145FF4;
+    --container-max-width: 1248px;
+    --bg-info-light-color: rgba(59, 130, 246, 0.1);
+    --bg-danger-light-color: rgba(239, 68, 68, 0.1);
+    --bg-warning-light-color: rgba(234, 179, 8, 0.1);
+    --bg-success-light-color: rgba(34, 197, 94, 0.1);
+}
+
+
+
+
+

@@ -1,43 +1,46 @@
-- new_record = @category.acronym.nil?
-%div.alert-box.error{style: @errors.nil? ?  "display: none" : nil }
-  %ul
-    - unless @errors.nil?
-      - for error in @errors
-        %li
-          = error
-%div{:style => "width:500px"}
-  %span.asterik{:style => "float:right;"} * fields are required
-  %h3 #{title_text}
-  %table#category_form.form
-    %colgroup
-      %col
-      %col{style: "width: 100%"}
-    %tr
-      %th
-        Acronym:
-        %span.asterik *
-      %td.top
-        - if new_record
-          = f.text_field :acronym, class: "form-control"
-        - else
-          = f.text_field :acronym, class: "form-control", readonly: true
-    %tr
-      %th
-        Name:
-        %span.asterik *
-      %td.top
-        = f.text_field :name, class: "form-control"
-    %tr
-      %th
-        Description:
-      %td.top
-        = f.text_area :description, class: "form-control"
-    - unless new_record
+= render_in_modal do
+  - new_record = @category.acronym.nil?
+
+  %div
+    = render_alerts_container('category')
+  %div
+    %table#category_form.form
+      %colgroup
+        %col
+        %col{style: "width: 100%"}
       %tr
         %th
-          Created:
+          = t('admin.categories.form.acronym')
+          %span.asterik *
         %td.top
-          = f.text_field :created, readonly: true, class: "form-control"
-  %div.mt-2
-    = f.submit button_text, class: "btn btn-primary mr-sm-2 group-form-accept"
-    = link_to "Cancel", "javascript:;", class: "btn btn-primary dismiss-dialog"
+          - if new_record
+            = f.text_field :acronym, class: "form-control", id: "category_acronym", required: true
+            %div#error-category-acronym.groupFormError
+          - else
+            = f.text_field :acronym, class: "form-control", readonly: true
+      %tr
+        %th
+          = t('admin.categories.form.name')
+          %span.asterik *
+        %td.top
+          = f.text_field :name, class: "form-control", id: "category_name", required: true
+          %div#error-category-name.groupFormError
+      %tr
+        %th
+          = t('admin.categories.form.description')
+        %td.top
+          = f.text_area :description, class: "form-control"
+      - unless new_record
+        %tr
+          %th
+            = t('admin.categories.form.created')
+          %td.top
+            = f.text_field :created, readonly: true, class: "form-control"
+        %tr
+          %th
+            = t('admin.categories.form.ontologies')
+          %td.top
+            = render SelectInputComponent.new(id: "category_ontologies", name: "category[ontologies]", values: @ontologies_category, selected: @category.ontologies, multiple: true, open_to_add_values: true)
+            %div.d-flex.mt-1{:style => "display: none;"}
+    %div.mt-2
+      %input{type: "submit", value: button_text, class: "btn btn-primary mr-sm-2 group-form-accept", onclick: "return validateCategoryForm();"}

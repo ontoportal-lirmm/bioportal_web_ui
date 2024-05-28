@@ -1,0 +1,13 @@
+.tools-container{
+  svg path {
+    fill: var(--primary-color);
+  }
+  .summary-card{
+    height: 100%;
+    background-color: white;
+  }
+
+  .tool-description{
+    color: var(--gray-color) !important;
+  }
+}

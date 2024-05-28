@@ -1,25 +1,18 @@
 module InstancesHelper
   include ConceptsHelper
   include ApplicationHelper
-  def get_instances_by_class_json(concept, query_parameters)
-    concept.explore.instances(query_parameters)
-  end
-
-  def get_instances_by_ontology_json(ontology, query_parameters)
-    ontology.explore.instances(query_parameters)
-  end
-
+  
   def get_instance_details_json(ontology_acronym, instance_uri , query_parameters, raw: false)
     LinkedData::Client::HTTP
       .get("/ontologies/#{ontology_acronym}/instances/#{CGI.escape(instance_uri)}",
            query_parameters, raw: raw)
   end
 
-  def get_instance_and_type(instance_id)
+  def get_instance_and_type(instance_id, acronym = @ontology.acronym)
     if instance_id.nil?
       [{}, nil]
     else
-      instance_details = JSON.parse(get_instance_details_json(@ontology.acronym,instance_id, {}, raw: true))
+      instance_details = JSON.parse(get_instance_details_json(acronym,instance_id, {}, raw: true))
       if(!instance_details['types'].nil?)
         types = instance_details['types'].reject{ |type| type.eql? 'http://www.w3.org/2002/07/owl#NamedIndividual'}
         [instance_details, types[0]]
@@ -65,16 +58,10 @@ module InstancesHelper
 
   def instance_property_value(property, ontology_acronym)
     if uri?(property)
-      instance, types = get_instance_and_type(property)
-      return link_to_instance instance, ontology_acronym unless instance.empty?
+      instance, types = get_instance_and_type(property, ontology_acronym)
+      return link_to_instance(instance, ontology_acronym) unless instance.empty?
     end
     property
-  end
-
-  def add_labels_to_print(instance, ontology_acronym)
-    instance['labelToPrint'] = instance_label(instance)
-    instance['types'].map!{ |t|  {type:t, labelToPrint:concept_label(ontology_acronym , t)}}
-    instance
   end
 
 end

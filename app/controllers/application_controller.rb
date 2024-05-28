@@ -13,9 +13,43 @@ require 'ontologies_api_client'
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
+  include InternationalisationHelper
+
+  before_action :set_locale
+
+  def self.t(*args)
+    InternationalisationHelper.t(*args)
+  end
+
+  # Sets the locale based on the locale cookie or the value returned by detect_locale.
+  def set_locale    
+    I18n.locale = cookies[:locale] || detect_locale
+    cookies.permanent[:locale] = I18n.locale if cookies[:locale].nil?
+    logger.debug "* Locale set to '#{I18n.locale}'"
+    session[:locale] = I18n.locale
+  end
+
+  # Returns detedted locale based on the Accept-Language header of the request or the default locale if none is found.
+  def detect_locale    
+    languages = request.headers['Accept-Language']&.split(',')
+    supported_languages = I18n.available_locales
+
+    Array(languages).each do |language|
+      language_code = language.split(/[-;]/).first.downcase.to_sym
+      return language_code if supported_languages.include?(language_code)
+    end
+    
+    return I18n.default_locale 
+  end
+  
+
   helper :all # include all helpers, all the time
   helper_method :bp_config_json, :current_license, :using_captcha?
-  rescue_from ActiveRecord::RecordNotFound, with: :not_found_record
+
+  if !Rails.env.development? && !Rails.env.test?
+    rescue_from ActiveRecord::RecordNotFound, with: :not_found_record
+  end
+
   # Pull configuration parameters for REST connection.
   REST_URI = $REST_URL
   API_KEY = $API_KEY
@@ -52,9 +86,6 @@ class ApplicationController < ActionController::Base
 
   $trial_license_initialized = false
 
-  if !$EMAIL_EXCEPTIONS.nil? && $EMAIL_EXCEPTIONS == true
-    include ExceptionNotifiable
-  end
 
   # See ActionController::RequestForgeryProtection for details
   protect_from_forgery
@@ -62,6 +93,14 @@ class ApplicationController < ActionController::Base
   before_action :set_global_thread_values, :domain_ontology_set, :authorize_miniprofiler, :clean_empty_strings_from_params_arrays, :init_trial_license
 
 
+  def invalidate_cache?
+    params[:invalidate_cache] && params[:invalidate_cache].to_s.eql?('true')
+  end
+
+  def show_image_modal
+    url = params[:url]
+    render turbo_stream: helpers.prepend('application_modal_content') { helpers.image_tag(url, style:'width: 100%') }
+  end
 
   def set_global_thread_values
     Thread.current[:session] = session
@@ -100,26 +139,23 @@ class ApplicationController < ActionController::Base
     Thread.current[:slice] = @subdomain_filter
   end
 
-  def anonymous_user
-    user = DataAccess.getUser($ANONYMOUS_USER)
-    user ||= User.new({"id" => 0})
-  end
+
 
   def ontology_not_found(ontology_acronym)
-    not_found("Ontology #{ontology_acronym} not found")
+    not_found(t('application.ontology_not_found',acronym: ontology_acronym))
   end
 
   def concept_not_found(concept_id)
-    not_found("Concept #{concept_id} not found")
+    not_found(t('application.concept_not_found',concept: concept_id))
   end
 
   def not_found(message = '')
     if request.xhr?
-      render plain: message || "Error: load failed"
+      render plain: message || t('application.error_load')
       return
     end
 
-    raise ActiveRecord::RecordNotFound.new(message || 'Not Found')
+    raise ActiveRecord::RecordNotFound.new(message || t('application.not_found_message'))
   end
 
   NOTIFICATION_TYPES = { :notes => "CREATE_NOTE_NOTIFICATION", :all => "ALL_NOTIFICATION" }
@@ -127,12 +163,6 @@ class ApplicationController < ActionController::Base
   def to_param(name) # Paramaterizes URLs without encoding
     unless name.nil?
       name.to_s.gsub(' ',"_")
-    end
-  end
-
-  def undo_param(name) #Undo Paramaterization
-    unless name.nil?
-      name.to_s.gsub('_'," ")
     end
   end
 
@@ -161,23 +191,11 @@ class ApplicationController < ActionController::Base
     config.to_json
   end
 
-  def remote_file_exists?(url)
-    begin
-      url = URI.parse(url)
 
-      if url.kind_of?(URI::FTP)
-        check = check_ftp_file(url)
-      else
-        check = check_http_file(url)
-      end
-
-    rescue
-      return false
-    end
-
-    check
+  def rest_url
+    helpers.rest_url
   end
-
+  
   def check_http_file(url)
     session = Net::HTTP.new(url.host, url.port)
     session.use_ssl = true if url.port == 443
@@ -218,7 +236,7 @@ class ApplicationController < ActionController::Base
   def response_errors(error_response)
     error_struct = parse_response_body(error_response)
 
-    errors = {error: "There was an error, please try again"}
+    errors = {error: t('application.try_again')}
     return errors unless error_struct
     return errors unless error_struct.respond_to?(:errors)
     errors = {}
@@ -267,22 +285,13 @@ class ApplicationController < ActionController::Base
     redirect_to "/"
   end
 
-  def redirect_to_history # Redirects to the correct tab through the history system
-    if session[:redirect].nil?
-      redirect_to_home
-    else
-      tab = find_tab(session[:redirect][:ontology])
-      session[:redirect]=nil
-      redirect_to uri_url(:ontology=>tab.ontology_id,:conceptid=>tab.concept)
-    end
-  end
 
   def redirect_new_api(class_view = false)
     # Hack to make ontologyid and conceptid work in addition to id and ontology params
     params[:ontology] = params[:ontology].nil? ? params[:ontologyid] : params[:ontology]
     # Error checking
     if params[:ontology].nil? || params[:id] && params[:ontology].nil?
-      @error = "Please provide an ontology id or concept id with an ontology id."
+      @error = t('application.provide_ontology_or_concept')
       return
     end
     acronym = BpidResolver.id_to_acronym(params[:ontology])
@@ -332,24 +341,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # Verifies that a user owns an object
-  def authorize_owner(id=nil)
-    if id.nil?
-      id = params[:id].to_i
-    end
-
-    id.map! {|i| i.to_i} if id.kind_of?(Array)
-
-    if session[:user].nil?
-      redirect_to_home
-    else
-      if id.kind_of?(Array)
-        redirect_to_home if !session[:user].admin? && !id.include?(session[:user].id.to_i)
-      else
-        redirect_to_home if !session[:user].admin? && !session[:user].id.to_i.eql?(id)
-      end
-    end
-  end
 
   def authorize_admin
     admin = session[:user] && session[:user].admin?
@@ -364,41 +355,7 @@ class ApplicationController < ActionController::Base
     restrict_downloads = $NOT_DOWNLOADABLE
     restrict_downloads.include? acronym
   end
-  # updates the 'history' tab with the current selected concept
-  def update_tab(ontology, concept)
-    array = session[:ontologies] || []
-    found = false
-    for item in array
-      if item.ontology_id.eql?(ontology.id)
-        item.concept=concept
-        found=true
-      end
-    end
 
-    unless found
-      array << History.new(ontology.id, ontology.name, ontology.acronym, concept)
-    end
-
-    session[:ontologies]=array
-  end
-
-  # Removes a 'history' tab
-  def remove_tab(ontology_id)
-    array = session[:ontologies]
-    array.delete(find_tab(ontology_id))
-    session[:ontologies]=array
-  end
-
-  # Returns a specific 'history' tab
-  def find_tab(ontology_id)
-    array = session[:ontologies]
-    for item in array
-      if item.ontology_id.eql?(ontology_id)
-        return item
-      end
-    end
-    return nil
-  end
 
   def check_delete_mapping_permission(mappings)
     # ensure mappings is an Array of mappings (some calls may provide only a single mapping instance)
@@ -421,23 +378,25 @@ class ApplicationController < ActionController::Base
 
   def get_class(params)
 
+    lang = request_lang
+
     if @ontology.flat?
 
       ignore_concept_param = params[:conceptid].nil? ||
-          params[:conceptid].empty? ||
-          params[:conceptid].eql?("root") ||
-          params[:conceptid].eql?("bp_fake_root")
+        params[:conceptid].empty? ||
+        params[:conceptid].eql?("root") ||
+        params[:conceptid].eql?("bp_fake_root")
       if ignore_concept_param
         # Don't display any classes in the tree
         @concept = LinkedData::Client::Models::Class.new
-        @concept.prefLabel = "Please search for a class using the Jump To field above"
+        @concept.prefLabel = t('application.search_for_class')
         @concept.obsolete = false
         @concept.id = "bp_fake_root"
         @concept.properties = {}
         @concept.children = []
       else
         # Display only the requested class in the tree
-        @concept = @ontology.explore.single_class({full: true}, params[:conceptid])
+        @concept = @ontology.explore.single_class({full: true, lang: lang }, params[:conceptid])
         @concept.children = []
       end
       @root = LinkedData::Client::Models::Class.new
@@ -446,47 +405,54 @@ class ApplicationController < ActionController::Base
     else
 
       # not ignoring 'bp_fake_root' here
+      include = 'prefLabel,hasChildren,obsolete'
       ignore_concept_param = params[:conceptid].nil? ||
-          params[:conceptid].empty? ||
-          params[:conceptid].eql?("root")
+        params[:conceptid].empty? ||
+        params[:conceptid].eql?("root")
       if ignore_concept_param
         # get the top level nodes for the root
         # TODO_REV: Support views? Replace old view call: @ontology.top_level_classes(view)
-        roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
-        if roots.nil? || roots.empty?
-          LOG.add :debug, "Missing roots for #{@ontology.acronym}"
-          not_found("Missing roots for #{@ontology.acronym}")
+        @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes]) rescue nil
+
+        if @roots.nil? || response_error?(@roots) || @roots.compact&.empty?
+          LOG.add :debug, t('application.missing_roots_for_ontology', acronym: @ontology.acronym)
+          classes = @ontology.explore.classes.collection
+          @concept = classes.first.explore.self(full: true) if classes&.first
+          return
         end
+
         @root = LinkedData::Client::Models::Class.new(read_only: true)
-        @root.children = roots.sort{|x,y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase}
+        @root.children = @roots.sort{|x,y| (x&.prefLabel || "").downcase <=> (y&.prefLabel || "").downcase}
 
         # get the initial concept to display
-        root_child = @root.children.first
+        root_child = @root.children&.first
+        not_found(t('application.missing_roots')) if root_child.nil?
 
-        @concept = root_child.explore.self(full: true)
+        @concept = root_child.explore.self(full: true, lang: lang)
         # Some ontologies have "too many children" at their root. These will not process and are handled here.
         if @concept.nil?
-          LOG.add :debug, "Missing class #{root_child.links.self}"
-          not_found("Missing class #{root_child.links.self}")
+          LOG.add :debug, t('application.missing_class', root_child: root_child.links.self)
+          not_found(t('application.missing_class', root_child: root_child.links.self))
         end
       else
         # if the id is coming from a param, use that to get concept
-        @concept = @ontology.explore.single_class({full: true}, params[:conceptid])
+        @concept = @ontology.explore.single_class({full: true, lang: lang}, params[:conceptid])
         if @concept.nil? || @concept.errors
-          LOG.add :debug, "Missing class #{@ontology.acronym} / #{params[:conceptid]}"
-          not_found("Missing class #{@ontology.acronym} / #{params[:conceptid]}")
+          LOG.add :debug, t('application.missing_class_ontology', acronym: @ontology.acronym, concept_id: params[:conceptid])
+          not_found(t('application.missing_class_ontology', acronym: @ontology.acronym, concept_id: params[:conceptid]))
         end
 
         # Create the tree
-        rootNode = @concept.explore.tree(include: "prefLabel,hasChildren,obsolete", concept_schemes: params[:concept_schemes])
+        rootNode = @concept.explore.tree(include: include, concept_schemes: params[:concept_schemes], lang: lang)
         if rootNode.nil? || rootNode.empty?
-          roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
-          if roots.nil? || roots.empty?
-            LOG.add :debug, "Missing roots for #{@ontology.acronym}"
-            not_found("Missing roots for #{@ontology.acronym}")
+          @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
+          if @roots.nil? || response_error?(@roots) || @roots.compact&.empty?
+            LOG.add :debug, t('application.missing_roots_for_ontology', acronym: @ontology.acronym)
+            @concept = @ontology.explore.classes.collection.first.explore.self(full: true)
+            return
           end
-          if roots.any? {|c| c.id == @concept.id}
-            rootNode = roots
+          if @roots.any? {|c| c.id == @concept.id}
+            rootNode = @roots
           else
             rootNode = [@concept]
           end
@@ -499,13 +465,6 @@ class ApplicationController < ActionController::Base
     @concept
   end
 
-  def get_metrics_hash
-    metrics_hash = {}
-    # TODO: Metrics do not return for views on the backend, need to enable include_views param there
-    @metrics = LinkedData::Client::Models::Metrics.all(include_views: true)
-    @metrics.each {|m| metrics_hash[m.links['ontology']] = m }
-    return metrics_hash
-  end
 
   def get_ontology_submission_ready(ontology)
     # Get the latest 'ready' submission
@@ -528,17 +487,7 @@ class ApplicationController < ActionController::Base
     return simple_ontologies
   end
 
-  def get_ontology_details(ont_uri)
-    # Note the simplify_ontology_model will cache individual ontology data.
-    begin
-      ont_model = LinkedData::Client::Models::Ontology.find(ont_uri)
-      ont = simplify_ontology_model(ont_model)
-    rescue Exception => e
-      LOG.add :error, e.message
-      return nil
-    end
-    return ont
-  end
+
 
   def simplify_classes(classes)
     # Simplify the classes batch service data for the UI
@@ -601,7 +550,7 @@ class ApplicationController < ActionController::Base
       end
     rescue Exception => e
       LOG.add :error, e.message
-      LOG.add :error, "Failure to simplify class: #{cls}"
+      LOG.add :error, t('application.error_simplify_class', cls: cls)
     end
     return cls
   end
@@ -616,7 +565,7 @@ class ApplicationController < ActionController::Base
     ont = Rails.cache.read(id)
     return ont unless ont.nil?
     # No cache or it has expired
-    LOG.add :debug, "No cache or expired cache for ontology: #{id}"
+    LOG.add :debug, t('application.no_cache', id: id)
     ont = {}
     ont[:id] = id
     ont[:uri] = id
@@ -633,7 +582,7 @@ class ApplicationController < ActionController::Base
     end
     # Only cache a complete representation of a simplified ontology
     if ont[:id].nil? || ont[:uri].nil? || ont[:acronym].nil? || ont[:name].nil? || ont[:ui].nil?
-      raise "Incomplete simple ontology: #{id}, #{ont}"
+      raise t('application.incomplete_simple_ontology', id: id, ont: ont)
     else
       Rails.cache.write(ont[:id], ont, expires_in: EXPIRY_ONTOLOGY_SIMPLIFIED)
     end
@@ -752,13 +701,24 @@ class ApplicationController < ActionController::Base
   
   # Get the submission metadata from the REST API.
   def submission_metadata
-    @metadata ||= JSON.parse(Net::HTTP.get(URI.parse("#{REST_URI}/submission_metadata?apikey=#{API_KEY}")))
+    @metadata ||= helpers.submission_metadata
   end
-  helper_method :submission_metadata
+
+  def request_lang
+    helpers.request_lang
+  end
+
+  def json_link(url, optional_params)
+    base_url = "#{url}?"
+    filtered_params = optional_params.reject { |_, value| value.nil? }
+    optional_params_str = filtered_params.map { |param, value| "#{param}=#{value}" }.join("&")
+    return base_url + optional_params_str + "&apikey=#{$API_KEY}"
+  end
 
   private
   def not_found_record(exception)
     @error_message = exception.message
+
     render 'errors/not_found', status: 404
   end
 end

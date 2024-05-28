@@ -3,7 +3,7 @@
   - note_decorator = NoteDecorator.new(note, self)
   .reply_author
     %b #{note_decorator.author}
-    about #{note_decorator.created_date}
+    = t('notes.reply.about_note_decorator', note_decorator: note_decorator.created_date)
   .reply_body
     = note_decorator.body_content
     %br/

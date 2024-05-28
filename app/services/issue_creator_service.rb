@@ -6,7 +6,6 @@ class IssueCreatorService < ApplicationService
   class QueryError < StandardError; end
 
 
-
   def initialize(params)
     @title = params[:content][:title]
     @body = params[:content][:body]
@@ -14,13 +13,14 @@ class IssueCreatorService < ApplicationService
   end
 
   def call
+
     findRepoQuery = GitHub::Client.parse <<-'GRAPHQL'
     query ($owner: String!, $name: String!) {
       repository(owner: $owner, name: $name) {
         id
       }
     }
-  GRAPHQL
+    GRAPHQL
 
     createIssueMutation = GitHub::Client.parse <<-'GRAPHQL'
     mutation ($repositoryId: ID!, $title: String!, $body: String) {

@@ -1,0 +1,68 @@
+= render_in_modal do
+    %p
+        = t("ontologies.htaccess_redirection_description")
+
+    %h5
+        %strong
+            = t("ontologies.instructions_servers", server: "Apache")
+    %ol
+        %li
+            %strong
+                = t("ontologies.htaccess_redirection.instruction_1")
+            = t("ontologies.htaccess_redirection.instruction_1_content")
+        %li
+            %strong
+                = t("ontologies.htaccess_redirection.instruction_2")
+            = t("ontologies.htaccess_redirection.instruction_2_content")
+        %li
+            %strong 
+                = t("ontologies.htaccess_redirection.instruction_3")
+            = t("ontologies.htaccess_redirection.instruction_3_content")
+            
+    .htacess-code-container
+        .clipboard-component-resource-content{style: 'position: absolute; right: 2%; top: 8%;'}
+            = render ClipboardComponent.new(message: @htaccess_content, show_content: false)
+        %pre.mb-0
+            %code.d-block{style: 'text-wrap: pretty; word-break: break-all; color: white;'}
+                = @htaccess_content
+
+    %hr
+
+    %h5
+        %strong
+            = t("ontologies.instructions_servers", server: "Nginx")
+    %ol
+        %li
+            %strong
+                = t("ontologies.nginx_redirection.instruction_1")
+            = t("ontologies.nginx_redirection.instruction_1_content")
+        %li
+            %strong
+                = t("ontologies.nginx_redirection.instruction_2")
+            = t("ontologies.nginx_redirection.instruction_2_content")
+        %li
+            %strong
+                = t("ontologies.nginx_redirection.instruction_3")
+            = t("ontologies.nginx_redirection.instruction_3_content")
+        %li
+            %strong
+                = t("ontologies.nginx_redirection.instruction_4")
+            = t("ontologies.nginx_redirection.instruction_4_content")
+        %li
+            %strong
+                = t("ontologies.nginx_redirection.instruction_5")
+            = t("ontologies.nginx_redirection.instruction_5_content")
+
+    .htacess-code-container
+        .clipboard-component-resource-content{style: 'position: absolute; right: 2%; top: 8%;'}
+            = render ClipboardComponent.new(message: @nginx_content, show_content: false)
+        %pre.mb-0
+            %code.d-block{style: 'text-wrap: pretty; word-break: break-all; color: white;'}
+                = @nginx_content
+    
+    %h5
+        %strong Note
+        = render Display::AlertComponent.new(message: t("ontologies.redirection_note"), closable: false, type: "warning")
+
+    .contact-support{style: "width: 100%; display: flex; justify-content: end;"}
+        = render Buttons::RegularButtonComponent.new(id:'regular-button', value: t("ontologies.contact_support"), variant: "primary", href: "/feedback", target: "_blank", state: "regular")

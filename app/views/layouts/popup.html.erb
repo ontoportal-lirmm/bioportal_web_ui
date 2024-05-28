@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" style="background: none !important;">
 <head>
+  <%= render partial: "ga_tracking" %>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
   <meta name="google-site-verification" content="IBxfKu6VbYH9atd5OLu2zXVD2ZRWi9SgMKTi8nvw3ks" />
@@ -11,9 +12,7 @@
   <%= stylesheet_link_tag "https://use.fontawesome.com/releases/v5.2.0/css/all.css", integrity: "sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ", crossorigin: "anonymous" %>
   <%= stylesheet_link_tag "application" %>  
   <%= javascript_include_tag "vendor" %>
-  <%= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js" %>
   <%= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.min.js" %>
-  <%= javascript_include_tag "//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js" %>
   <script>
     jQuery(document).data({bp: {config: <%=bp_config_json.html_safe%>, user: <%=(session[:user] || {}).to_hash.to_json.html_safe%>}});
     jQuery(document).data().bp.ontology = <%=@ontology.to_json.html_safe%> || {};

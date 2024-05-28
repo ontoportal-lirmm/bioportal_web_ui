@@ -1,0 +1,16 @@
+= render TurboFrameComponent.new(id: 'property_show', data: {"turbo-frame-target": "frame"}) do
+  - if @property
+    - if @property.errors
+      = render Display::AlertComponent.new(type:'info', message: @property.errors.join)
+    - else
+      = render ConceptDetailsComponent.new(id:'property-details', acronym: @acronym, concept_id: @property.id,
+                      properties: OpenStruct.new(LinkedData::Client::Models::Property.properties_to_hash(@property).first),
+                      top_keys: [],
+                      bottom_keys: [],
+                      exclude_keys: []) do |c|
+        - c.header(stripped: true) do |t|
+          - t.add_row({th: t('properties.id')}, {td: link_to_with_actions(c.concept_properties[:id][:values], acronym: @acronym)}) if c.concept_properties[:id][:values].present?
+          - t.add_row({th: t('properties.type')}, {td: c.concept_properties[:type][:values] }) if c.concept_properties[:id][:values].present?
+          - t.add_row({th: t('properties.preferred_name')}, {td: display_in_multiple_languages(c.concept_properties[:label][:values])}) if  c.concept_properties[:label][:values].present?
+          - t.add_row({th: t('properties.definitions')}, {td: display_in_multiple_languages(c.concept_properties[:definition][:values])}) if c.concept_properties[:definition][:values].present?
+          - t.add_row({th: t('properties.parent')}, {td: display_in_multiple_languages(c.concept_properties[:parents][:values])}) if c.concept_properties[:parents][:values].present?

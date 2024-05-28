@@ -7,7 +7,7 @@
         event.preventDefault()
         let admin_checkbox = jQuery('input[id=user_admin]')
         if(admin_checkbox.attr('checked') && !admin_checkbox.hasClass('admin')){
-          alertify.confirm('Are you sure you want to make this user an admin?', (e) => {
+          alertify.confirm(t('users.edit.user_to_admin'), (e) => {
             if(e){
               this.submit()
             }else {
@@ -15,7 +15,7 @@
             }
           })
         } else if (!admin_checkbox.attr('checked') && admin_checkbox.hasClass('admin')){
-          alertify.confirm('Are you sure you want to revoke admin privileges for this user?',  (e) => {
+          alertify.confirm(t('users.edit.admin_privileges'),  (e) => {
             if(e){
               this.submit()
             }else {
@@ -62,7 +62,7 @@
 = form_for(:user, :url => user_path(@user.username), :html => { :id => "user_info", :method => :put }) do |f|
   - unless @errors.nil?
     .enable-lists{:style => "color: red; padding: 1em;"}
-      Errors creating your account:
+      = t('users.edit.errors_creating_account')
       %ul
         - for error in @errors
           %li= error
@@ -73,36 +73,36 @@
           %img.lost-password-arrowback{:src => "#{asset_path("arrow-back.svg")}"}
         .register-title-container
           %h2.register-title
-            Edit personal information
+            = t('users.edit.edit_information')
           %hr#register-title-line/
         %div
       - if @user.validate_password.nil?
         .register-double-input
           .register-first-input
             %p.register-input-title
-              First name
+              = t('users.edit.first_name')
               %font{:color => "red"} *
             = text_field :user, :firstName, value: @user.firstName, class: "register-input-short"
           %div
             %p.register-input-title
-              Last name
+              = t('users.edit.last_name')
               %font{:color => "red"} *
             = text_field :user, :lastName, value: @user.lastName, class: "register-input-short"
         %p.register-input-title
-          Username
+          = t('users.edit.username')
           %font{:color => "red"} *
         = text_field :user, :username, value: @user.username, class: "register-input-long"
         %p.register-input-title
-          Email
+          = t('users.edit.email')
           %font{:color => "red"} *
         = text_field :user, :email, value: @user.email, class: "register-input-long"
         %p.register-input-title
-          ORCID ID
+          = t('users.edit.orcid_id')
           %font.register-optional (optional)
         %img.register-input-icon{:src => "#{asset_path("orcid.svg")}"}/
         = text_field :user, :orcidId, value: @user.orcidId, class: "register-input-long register-input-with-icon"
         %p.register-input-title
-          Github ID
+          = t('users.edit.github_id')
           %font.register-optional (optional)
         %img.register-input-icon{:src => "#{asset_path("github-icon.svg")}"}/
         = text_field :user, :githubId, value: @user.githubId, class: "register-input-long register-input-with-icon no-margin"
@@ -116,17 +116,17 @@
         = hidden_field :user, :lastName, value: @user.lastName
         = hidden_field :user, :email, value: @user.email
         %p.register-input-title
-          New password
+          = t('users.edit.new_password')
           %font{:color => "red"} *
         = password_field :user, :password, class: "register-input-long"
 
         %p.register-input-title
-          Confirm password
+          = t('users.edit.confirm_password')
           %font{:color => "red"} *
         = password_field :user, :password_confirmation, class: "register-input-long"
       %br
-      %input.register-button{:type => "submit", :value => "Save", :name => "Update"}/
+      = render Buttons::RegularButtonComponent.new(id: 'update-button', value: "Save", type:'submit')
       - unless params[:password].eql?("true")
         .change-password
           %a{:href => edit_user_path(@user.username, password: true)}
-            Change password
+            = t('users.edit.change_password')

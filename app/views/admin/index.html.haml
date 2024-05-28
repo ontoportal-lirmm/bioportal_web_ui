@@ -1,165 +1,61 @@
-- @title = "Administration"
+- @title = t('admin.index.title')
 
-%div.row
-  %div.col
-    %h3.my-4 Administration Console
 
-%div.row
-  %div.col-2
-    %div#progress_message{:class => "alert-box progress_box"}
-    %div#success_message{:class => "alert-box success"}
-    %div#error_message{:class => "alert-box error"}
-    %div#info_message{:class => "alert-box notice"}
+%div
+  %div.container.my-3
+    = render_alerts_container
+    = render Display::AlertComponent.new(id: 'progress_message', type:'info')
+    = render Display::AlertComponent.new(id: 'success_message', type:'success')
+    = render Display::AlertComponent.new(id: 'error_message', type:'danger')
+    = render Display::AlertComponent.new(id: 'info_message', type:'info')
 
-%div.row
-  %div.col
-    %ul.nav.nav-tabs{id: "admin-tabs", role: "tablist"}
-      %li.nav-item
-        =link_to("Site Administration", "#site-admin", id: "site-admin-tab", class: "nav-link #{selected_admin_section?('site') ? 'active': ''}", role: "tab", data: { toggle: "tab" }, aria: { controls: "site-admin", selected: "true" })
-      %li.nav-item
-        =link_to("Ontology Administration", "#ontology-admin", id: "ontology-admin-tab", class: "nav-link #{selected_admin_section?('ontology') ? 'active': ''}", role: "tab", data: { toggle: "tab" }, aria: { controls: "ontology-admin", selected: "false" })
-      %li.nav-item
-        =link_to("Licensing", "#licensing", id: "licensing-admin-tab", class: "nav-link #{selected_admin_section?('licensing') ? 'active': ''}", role: "tab", data: { toggle: "tab", href: admin_licenses_path() }, aria: { controls: "licensing", selected: "false" })
-      %li.nav-item
-        =link_to("Users", "#users", id: "users-admin-tab", class: "nav-link  #{selected_admin_section?('users') ? 'active': ''}", role: "tab", data: { toggle: "tab", href: users_path() }, aria: { controls: "users", selected: "false" })
-      %li.nav-item
-        =link_to("Metadata Administration", "#ontologies_metadata_curator", id: "ontologies_metadata_curator-admin-tab", class: "nav-link  #{selected_admin_section?('metadata') ? 'active': ''}", role: "tab", data: { toggle: "tab"}, aria: { controls: "ontologies_metadata_curator", selected: "false" })
-      %li.nav-item
-        =link_to("DOI Requests", "#doi_requests", id: "doi_requests-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: "doi_requests" }, aria: { controls: "doi_requests", selected: "false" })
-      %li.nav-item
-        =link_to("Groups", "#groups", id: "groups-admin-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: "groups" }, aria: { controls: "groups", selected: "false" })
-      %li.nav-item
-        =link_to("Categories", "#categories", id: "categories-admin-tab", class: "nav-link #{selected_admin_section?('categories') ? 'active': ''}", role: "tab", data: { toggle: "tab", href: "categories" }, aria: { controls: "categories", selected: "false" })
-      %li.nav-item
-        =link_to("Process Scheduling", "#process-scheduling", id: "process-scheduling-tab", class: "nav-link", role: "tab", data: { toggle: "tab", href: "process-scheduling" }, aria: { controls: "process-scheduling", selected: "false" })
-      %li.nav-item
-        =link_to("Persons & Organizations", "#agents", id: "agents-admin-tab", class: "nav-link #{selected_admin_section?('agents') ? 'active': ''}", role: "tab", data: { toggle: "tab", href: "agents" }, aria: { controls: "agents", selected: "false" })
-
-    %div#adminTabContent.tab-content
-
-      -# Site Administration tab
-      %div.tab-pane.fade{id: "site-admin", role: "tabpanel", aria: { labelledby: "site-admin-tab" }, class: selected_admin_section?('site') ? 'show active': ''}
-        
-        -# Clear caches
-        %div#site-admin-clear-caches.my-5
-          %div.site-admin-page-header
-            CACHE MANAGEMENT
-          %dive.site-admin-page-section
-            = link_to("Flush UI cache", "#", id: "flush_memcache_action", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
-            = link_to("Reset UI cache connection", "#", id: "reset_memcache_connection_action", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
-            = link_to("Flush GOO cache", "#", id: "flush_goo_cache_action", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
-            = link_to("Flush HTTP cache", "#", id: "flush_http_cache_action", class: "btn btn-outline-secondary btn-sm",  role: "button")
-        
-        -# Check for updates
-        %div#site-admin-update-check.mb-5
-          %div.site-admin-page-header
-            VERSION MANAGEMENT
-          %dive.site-admin-page-section
-            = link_to("Check for updates", "#", id: "update_check_action", class: "btn btn-outline-secondary btn-sm",  role: "button")
-
-        -# View appliance ID
-        %div#site-admin-appliance-id.mb-5
-          %div.site-admin-page-header
-            APPLIANCE ID
-          %dive.site-admin-page-section
-            %div#appliance-id
-              %span
-        
-        -# Clear caches
-        %div#site-admin-clear-caches.my-5
-          %div.site-admin-page-header
-            MONITORING LINKS
-          %dive.site-admin-page-section
-            = link_to("Newrelic", "https://login.newrelic.com/login", target: '_blank', id: "newrelic_link", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
-            = link_to("StatusCake", "https://app.statuscake.com/Login", target: '_blank', id: "statuscake_link", class: "btn btn-outline-secondary btn-sm admin-action-item",  role: "button")
-          
-
-      -# Ontology Administration tab
-      %div.tab-pane.fade{id: "ontology-admin", role: "tabpanel", aria: { labelledby: "ontology-admin-tab" }, class: selected_admin_section?('ontology') ? 'show active': ''}
-        %div.ontologies_list_container.mt-3
+%div
+  %div.mx-1
+    - sections = [t('admin.index.analytics'), t('admin.index.site_administration'),t('admin.index.ontology_administration'),  t('admin.index.licensing'), t('admin.index.users'), t('admin.index.metadata_administration'), t('admin.index.groups'), t('admin.index.categories'), t('admin.index.persons_and_organizations'), t('admin.index.sparql'), t('admin.index.search')]
+    - selected = params[:section] || sections.first.downcase
+    = render Layout::VerticalTabsComponent.new(header:  t('admin.index.administration_console'), titles: sections, selected: selected, url_parameter: 'section') do |t|
+      - t.item_content do
+        = render 'analytics'
+      - t.item_content do
+        = render 'main'
+      - t.item_content do
+        %div
           %table{:style => "float:left;"}
             %tr
               %td{:style => "white-space:nowrap;"}
-                Report generated on:&nbsp;&nbsp;
+                = t('admin.index.report_generated_on')
+                &nbsp;&nbsp;
                 %span.report_date_generated
                 %a#refresh_report_action{:href => "javascript:;", :class => "link_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only", :style => "margin-left:11px;"}
                   %span.ui-button-text{:class => "report_date_generated_button"}
           %p.tab_description{:style => "clear:both;"}
-          %table#adminOntologies.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
-
-      -# Licensing tab
-      %div.tab-pane.fade{id: "licensing", role: "tabpanel", aria: { labelledby: "licensing-admin-tab" }, class: selected_admin_section?('licensing') ? 'show active': ''}
+          %table#adminOntologies.border.rounded.p-1
+      - t.item_content do
         %div#renew-license-notice
-
-        %table.table.table-sm.table-bordered.mt-5#license-table
-          %thead
-            %tr
-              %th{scope: "col"} Licensed to
-              %th{scope: "col"} Appliance ID
-              %th{scope: "col"} Valid till  
-              %th{scope: "col"} Days remaining
-          %tbody
+          %table.table.table-sm.table-bordered.mt-5#license-table
+            %thead
+              %tr
+                %th{scope: "col"}= t('admin.index.licensed_to')
+                %th{scope: "col"}= t('admin.index.appliance_id')
+                %th{scope: "col"}= t('admin.index.valid_till')
+                %th{scope: "col"}= t('admin.index.days_remaining')
+            %tbody
 
         %div.mb-5#renew-license-button
-          = link_to("Renew license", new_admin_license_path(), class: "btn btn-primary", role: "button", remote: "true")
+          = link_to(t('admin.index.renew_license'), new_admin_license_path, class: "btn btn-primary", role: "button", remote: "true")
 
         %div.mb-5#renew-license-form
-
-      -# Users tab
-      %div.tab-pane.fade{id: "users", role: "tabpanel", aria: { labelledby: "users-admin-tab" }, class: selected_admin_section?('users') ? 'show active': ''}
-        %div.ontologies_list_container.mt-3
-          %table#adminUsers.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
-      
-      -# metadata tab
-      %div.tab-pane.fade{id: "ontologies_metadata_curator", role: "tabpanel", aria: { labelledby: "ontologies_metadata_curator-admin-tab" }, class: selected_admin_section?('metadata') ? 'show active': ''}
+      - t.item_content do
+        = render TurboFrameComponent.new(id: 'users-list', src: users_path, loading: 'lazy')
+      - t.item_content do
         = render partial: 'ontologies_metadata_curator/metadata_tab'
-      -# DOI requests tab
-      %div.tab-pane.fade{id: "doi_requests", role: "tabpanel", aria: { labelledby: "doi_requests-admin-tab" }}
-        %div.ontologies_list_container.mt-3
-          %table#adminDOIReq.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
-
-      -# Groups tab
-      %div.tab-pane.fade{id: "groups", role: "tabpanel", aria: { labelledby: "groups-admin-tab" }, class: selected_admin_section?('groups') ? 'show active': ''}
-        %div.ontologies_list_container.mt-3
-          %table#adminGroups.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
-
-      -# Categories tab
-      %div.tab-pane.fade{id: "categories", role: "tabpanel", aria: { labelledby: "categories-admin-tab" }, class: selected_admin_section?('categories') ? 'show active': ''}
-        %div.ontologies_list_container.mt-3
-          %table#adminCategories.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
-
-      -# Agents  tab
-      %div.tab-pane.fade{id: "agents", role: "tabpanel", aria: { labelledby: "agents-admin-tab" }, class: selected_admin_section?('agents') ? 'show active': ''}
-        %div.ontologies_list_container.mt-3
-          = render TurboFrameComponent.new(id: 'agents-list', src: '/agents', loading: 'lazy')
-
-
-
-
-  
-      -# Process Scheduling tab
-      %div.tab-pane.fade{id: "process-scheduling", role: "tabpanel", aria: { labelledby: "process-scheduling-tab" }}
-        %div.my-5
-          %div.mb-2
-            The schedule is to be changed by altering the configuration of the module <em>ncbo_cron</em>. This module
-            must be restarted for the changes to take effect.
-          %div.mb-5
-            %a.btn.btn-outline-secondary.btn-sm.show-scheduler-log
-              Show log
-
-          - @scheduledJobs&.each do |job_key, job_descr|
-            %div.site-admin-page-header
-              %div.job-title
-                = job_descr[:title]
-              - if job_descr[:enabled]
-                - title = job_descr[:scheduler_type] + ": " + job_descr[:schedule]
-                %div.job-schedule{title: title, data: {enabled: "true", scheduler_type: job_descr[:scheduler_type], schedule: job_descr[:schedule]}}
-                  = title
-              - else
-                %div.job-schedule{data: {enabled: "false"}}
-                  Disabled
-
-
-            %div.site-admin-page-section
-              %a.btn.btn-outline-secondary.btn-sm.show-scheduler-log{data: {job_name: job_key}}
-                Show log
+      - t.item_content do
+        = render TurboFrameComponent.new(id: 'groups-list', src: admin_groups_path, loading: 'lazy')
+      - t.item_content do
+        = render TurboFrameComponent.new(id: 'categories-list', src: admin_categories_path, loading: 'lazy')
+      - t.item_content do
+        = render TurboFrameComponent.new(id: 'agents-list', src: agents_path, loading: 'lazy')
+      - t.item_content do
+        = sparql_query_container
+      - t.item_content do
+        = render TurboFrameComponent.new(id: 'search-admin', src: '/admin/search', loading: 'lazy')

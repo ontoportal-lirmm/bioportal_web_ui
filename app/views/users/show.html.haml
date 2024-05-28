@@ -1,78 +1,76 @@
 .account-page-center
   .account-page-container
-    %h3.account-page-title My account
+    %h3.account-page-title= t('users.show.my_account')
     %hr#account-page-title-line/
     .account-page-sub-container
       .account-page-first-row
         .account-page-card
           .account-page-personal-informations-title-bar
-            %h4.account-page-card-title Personal information
+            %h4.account-page-card-title Personal Information
             %a.account-page-rounded-button{:href => edit_user_path(url_encode(@user.username))}
               = render partial: "shared/svgs/edit_icon"
           .account-page-info-column
-            %p.title First name:
+            %p.title= t('users.show.first_name')
             %p.info
               = @user.firstName
           .account-page-info-column
-            %p.title Last name:
+            %p.title= t('users.show.last_name')
             %p.info
               = @user.lastName
           .account-page-info-column
-            %p.title Email address:
+            %p.title= t('users.show.email')
             %p.info
               = @user.email
           .account-page-info-column
-            %p.title Username:
+            %p.title= t('users.show.username')
             %p.info
               = @user.username
           .account-page-info-column
-            %p.title ORCID ID:
+            %p.title= t('users.show.orcid_id')
             %p.info
               =@user.orcidId
           .account-page-info-column
-            %p.title Github ID:
+            %p.title= t('users.show.github_id')
             %p.info
               =@user.githubId
         .account-page-card
           .account-page-card-container
             .account-page-card-sub-container
-              %h4.account-page-card-title Mailing list subscription
-              %p.account-page-card-desc #{$SITE} announcements email list
+              %h4.account-page-card-title= t('users.show.mailing_list_subscription')
+              %p.account-page-card-desc= t('users.show.mailing_list_description', portal: portal_name)
             - subscribed = false
-            - if subscribed 
-              %a.btn.btn-primary{:href =>"mailto:#{$ANNOUNCE_SERVICE_HOST}?Subject=unsubscribe%20#{$ANNOUNCE_LIST}"}
-                Unsubscribe
+            - if subscribed
+              %a.account-page-subscribe-button{:href =>"mailto:#{$ANNOUNCE_SERVICE_HOST}?subject=unsubscribe%20#{$ANNOUNCE_LIST}"}
+                = t('users.show.unsubscribe')
             - else
-              %a.btn.btn-primary{:href => "mailto:#{$ANNOUNCE_SERVICE_HOST}?Subject=subscribe%20#{$ANNOUNCE_LIST}%20#{@user.firstName}%20#{@user.lastName}"}
-                Subscribe
+              %a.account-page-subscribe-button{:href => "mailto:#{$ANNOUNCE_SERVICE_HOST}?subject=subscribe%20#{$ANNOUNCE_LIST}%20#{@user.firstName}%20#{@user.lastName}"}
+                = t('users.show.subscribe')
         .account-page-card
           .account-page-card-container
             .account-page-card-sub-container
               %h4.account-page-card-title API Key
-              %p.account-page-card-desc Your API Key can be used to access the NCBO API (REST) Services
-              %p.apikey
-                = session[:user].apikey
-            %a{:href => "javascript:navigator.clipboard.writeText('"+session[:user].apikey+"');"}
-              = render partial: "shared/svgs/copy_icon"
+              %p.account-page-card-desc
+                = t('users.show.api_key_description', portal: portal_name)
+              %div.apikey
+                = render ClipboardComponent.new(message: session[:user].apikey)
           .account-page-api-documentation-link
-            %a{href: "#{$REST_URL.chomp('/')}/documentation", target: "_blank"}
-              API documentation
+            %a{href: "#{$REST_URL}/documentation", target: "_blank"}
+              = t('users.show.api_documentation')
               = render partial: "shared/svgs/external_link_icon"
         .account-page-card
           %h4.account-page-card-title
-            Custom semantic resource set
+            = t('users.show.custom_semantic_resource')
           #custom_ontologies.enable-lists
             - if at_slice?
               %p{style: "padding-left: 7px; font-size: 10pt; margin: -3px 0 7px;"}
-                Please
-                %a{href: "#{$UI_URL}/account"} visit the main site
-                to modify your Custom semantic resource set.
+                = t('users.show.please')
+                %a{href: "#{$UI_URL}/account"}= t('users.show.modify_custom_semantic_resource')
             - else
               %p.account-page-card-desc
-                Customize your #{$SITE} display: pick the semantic resources that you want to see on #{$SITE}. Pay attention: this will hide all other Semantic Resources.
+                = t('users.show.customize_portal_display', portal: portal_name)
               %p
                 %span{style: "font-weight: normal; font-size: 9pt; padding-left: 7px;"}
-                  %a#edit_custom_ontologies{href: "javascript:void(0);"} Select semantic resources
+                  %a#edit_custom_ontologies{href: "javascript:void(0);"}= t('users.show.select_semantic_resources')
               - if @user_ontologies && !@user_ontologies.empty?
                 %ul
                   - @user_ontologies.each do |ont|
@@ -80,17 +78,19 @@
                     %li
                       #{ont.name} (#{ont.acronym})
               - else
-                %p{style: "padding-left: 7px;"} You haven't picked any Semantic Resources yet.
+                %p{style: "padding-left: 7px;"}= t('users.show.no_semantic_resources')
+          %p.account-page-card-desc= t('users.show.note_feature_logged_in')
           #custom_ontologies_picker{style: "left: -9999px; position: absolute;"}
             = form_tag custom_ontologies_path(url_encode(@user.username)) do
               - selected = @user.customOntology.map {|o| LinkedData::Client::Models::Ontology.get(o).acronym}
-              - locals = { custom_ontologies: @all_ontologies, selected_ontologies: selected, sel_text: "Select Custom Semantic Resources" }
-              = render partial: "shared/ontology_picker", locals: locals
-              = submit_tag "Save custom semantic resources", class: "bnt btn-primary"
+              = ontologies_selector(id:'account_page_ontologies_selector' ,name: 'ontologies', selected: selected)
+              = submit_tag t('users.show.save_custom_semantic_resources'), class: "link_button"
       .account-page-second-row
-        - unless @user.subscription.nil? || @user.subscription.empty?
-          .account-page-card
-            %h4.account-page-card-title Subscriptions
+        .account-page-card
+          %h4.account-page-card-title= t('users.show.subscriptions')
+          - if @user.subscription.nil? || @user.subscription.empty?
+            = t('users.show.not_subscribed')
+          - else
             - @user.subscription.each do |subscription|
               - ont_id = subscription[:ontology]
               - ont = (!subscription[:ontology].nil? ? subscription[:ontology].split('/').last: nil) # ensure we get the acronym
@@ -99,33 +99,37 @@
                 %a{:href => "/ontologies/#{ont}?p=notes"}= ont
                 %div
                   - if type == "notes"
-                    %a.notes{:href => "/ontologies/#{ont}?p=notes"} Notes
+                    %a.notes{:href => "/ontologies/#{ont}?p=notes"}= t('users.show.notes')
                   - else
                     = type
                   = subscribe_button(ont_id)
-        - no_ontologies = true
-        - unless @admin_ontologies.nil? || @admin_ontologies.empty?
-          - no_ontologies = false
-          .account-page-card
-            %h4.account-page-card-title Submitted semantic resources
-            .account-page-small-cards-container
+        .account-page-card
+          %h4.account-page-card-title= t('users.show.submitted_semantic_resources')
+          .account-page-small-cards-container
+            - if @admin_ontologies.nil? || @admin_ontologies.empty?
+              .account-page-no-ontology.w-100
+                %img{:src => "#{asset_path("empty-box.svg")}"}/
+                %p= t('users.show.no_uploaded_resources')
+                %a.account-page-upload-ontology-button{href: "/ontologies/new"}= t('users.show.upload_semantic_resources')
+            - else
               - @admin_ontologies.each do |ont|
-                .account-page-submitted-ontology
-                  %a{href: "/ontologies/#{ont.acronym}"}= ont.name
-        - unless @user_projects.nil? || @user_projects.empty?
-          - no_ontologies = false
-          .account-page-card
-            %h4.account-page-card-title Projects Created
-            .account-page-small-cards-container
+                .account-page-submitted-ontology{data: {controller: 'tooltip'}, title: ont.name}
+                  %a{href: "/ontologies/#{ont.acronym}"}= ont.acronym
+                - unless ont.views.nil? || ont.views.empty?
+                  - ont.views.each do |view|
+                    .account-page-submitted-ontology{data: {controller: 'tooltip'}, title: ont.name}
+                      %a{href: "/ontologies/#{view.match(/\/([^\/]+)$/)[1]}"}= view.match(/\/([^\/]+)$/)[1]
+
+        .account-page-card
+          %h4.account-page-card-title= t('users.show.projects_created')
+          .account-page-small-cards-container
+            - if @user_projects.nil? || @user_projects.empty?
+              = t('users.show.no_project_created')
+            - else
               - @user_projects.each do |project|
                 .account-page-submitted-ontology
                   %a{href: "/projects/#{project.acronym}"}= project.name
-        - if no_ontologies
-          .account-page-card
-            .account-page-no-ontology
-              %img{:src => "#{asset_path("empty-box.svg")}"}/
-              %p You didn't upload any semantic resources yet
-              %a.account-page-upload-ontology-button{href: "/ontologies/new"} Upload Semantic Resource
+
 :javascript
   jQuery(document).ready(function(){
     jQuery("#edit_custom_ontologies").click(editCustomOntologies);

@@ -1,12 +1,5 @@
 module MappingsHelper
 
-  RELATIONSHIP_URIS = {
-    "http://www.w3.org/2004/02/skos/core" => "skos:",
-    "http://www.w3.org/2000/01/rdf-schema" => "rdfs:",
-    "http://www.w3.org/2002/07/owl" => "owl:",
-    "http://www.w3.org/1999/02/22-rdf-syntax-ns" => "rdf:"
-  }
-
   # Used to replace the full URI by the prefixed URI
   RELATIONSHIP_PREFIX = {
     "http://www.w3.org/2004/02/skos/core#" => "skos:",
@@ -19,11 +12,6 @@ module MappingsHelper
 
   INTERPORTAL_HASH = $INTERPORTAL_HASH
 
-  def get_short_id(uri)
-    split = uri.split("#")
-    name = split.length > 1 && RELATIONSHIP_URIS.keys.include?(split[0]) ? RELATIONSHIP_URIS[split[0]] + split[1] : uri
-    "<a href='#{uri}' target='_blank'>#{name}</a>"
-  end
 
   # a little method that returns true if the URIs array contain a gold:translation or gold:freeTranslation
   def translation?(relation_array)
@@ -37,7 +25,6 @@ module MappingsHelper
         false
       end
     else
-      LOG.add :error, "Warning: Mapping relation is not an array"
       false
     end
   end
@@ -46,26 +33,6 @@ module MappingsHelper
   def get_prefixed_uri(uri)
     RELATIONSHIP_PREFIX.each { |k, v| uri.sub!(k, v) }
     return uri
-  end
-
-  def get_link_for_cls_ajax(cls_id, ont_acronym, target = nil)
-    # Note: bp_ajax_controller.ajax_process_cls will try to resolve class labels.
-    # Uses 'http' as a more generic attempt to resolve class labels than .include? ont_acronym; the
-    # bp_ajax_controller.ajax_process_cls will try to resolve class labels and
-    # otherwise remove the UNIQUE_SPLIT_STR and the ont_acronym.
-    if target.nil?
-      target = ""
-    else
-      target = " target='#{target}' "
-    end
-    if cls_id.start_with? 'http://'
-      href_cls = " href='#{bp_class_link(cls_id, ont_acronym)}' "
-      data_cls = " data-cls='#{cls_id}' "
-      data_ont = " data-ont='#{ont_acronym}' "
-      return "<a class='cls4ajax' #{data_ont} #{data_cls} #{href_cls} #{target}>#{cls_id}</a>"
-    else
-      return auto_link(cls_id, :all, :target => '_blank')
-    end
   end
 
   # method to get (using http) prefLabel for interportal classes
@@ -124,35 +91,6 @@ module MappingsHelper
       uri
     else
       uri.sub!(INTERPORTAL_HASH[interportal_acronym]["api"], INTERPORTAL_HASH[interportal_acronym]["ui"])
-    end
-  end
-
-  def onts_and_views_for_select
-    @onts_and_views_for_select = []
-    ontologies = LinkedData::Client::Models::Ontology.all(include: "acronym,name", include_views: true)
-    ontologies.each do |ont|
-      next if (ont.acronym.nil? || ont.acronym.empty?)
-      ont_acronym = ont.acronym
-      ont_display_name = "#{ont.name.strip} (#{ont_acronym})"
-      @onts_and_views_for_select << [ont_display_name, ont_acronym]
-    end
-    @onts_and_views_for_select.sort! { |a, b| a[0].downcase <=> b[0].downcase }
-    return @onts_and_views_for_select
-  end
-
-  def get_concept_mappings(concept)
-    mappings = concept.explore.mappings
-    # Remove mappings where the destination class exists in an ontology that the logged in user doesn't have permissions to view.
-    # Workaround for https://github.com/ncbo/ontologies_api/issues/52.
-    mappings.delete_if do |mapping|
-      #mapping.classes.reject! { |cls| (cls.id == concept.id) && (cls.links['ontology'] == concept.links['ontology']) }
-      begin
-        ont = mapping.classes[0].explore.ontology
-        ont.errors && ont.errors.grep(/Access denied/).any?
-      rescue => e
-        Rails.logger.warn "Mapping issue with '#{mapping.inspect}' : #{e.message}"
-        false
-      end
     end
   end
 
@@ -218,5 +156,61 @@ module MappingsHelper
 
   def type?(type)
     @mapping_type.nil? && type.eql?('internal') || @mapping_type.eql?(type)
+  end
+
+  def concept_mappings_loader(ontology_acronym: ,concept_id: )
+    content_tag(:span, id: 'mapping_count') do
+      concat(content_tag(:div, class: 'concepts-mapping-count ml-1 mr-1') do
+        render(TurboFrameComponent.new(
+          id: 'mapping_count',
+          src: "/ajax/mappings/get_concept_table?ontologyid=#{ontology_acronym}&conceptid=#{CGI.escape(concept_id)}",
+          loading: 'lazy'
+        )) do |t|
+          concat(t.loader { render(LoaderComponent.new(small: true)) })
+        end
+      end)
+    end
+  end
+
+  def client_filled_modal
+    link_to_modal "", ""
+  end
+
+  def mappings_bubble_view_legend
+    content_tag(:div, class: 'mappings-bubble-view-legend') do
+      mappings_legend_section(t('mappings.bubble_view_legend.bubble_size'), t('mappings.bubble_view_legend.bubble_size_desc'), 'mappings-bubble-size-legend') +
+        mappings_legend_section(
+          t('mappings.bubble_view_legend.color_degree'),t('mappings.bubble_view_legend.color_degree_desc'),'mappings-bubble-color-legend') +
+        content_tag(:div, class: 'content-container') do
+          content_tag(:div, class: 'bubble-view-legend-item') do
+            content_tag(:div, class: 'title') do
+              content_tag(:div, t('mappings.bubble_view_legend.yellow_bubble'), class: 'd-inline') + content_tag(:span, t('mappings.bubble_view_legend.selected_bubble'))
+            end +
+              content_tag(:div, class: "mappings-bubble-size-legend d-flex justify-content-center") do
+                content_tag(:div, '', class: "bubble yellow")
+              end
+          end
+        end
+    end
+  end
+
+  def mappings_legend_section(title_text, description_text, css_class)
+    content_tag(:div, class: 'content-container') do
+      content_tag(:div, class: 'bubble-view-legend-item') do
+        content_tag(:div, class: 'title') do
+          content_tag(:div, "#{title_text} ", class: 'd-inline') +
+            content_tag(:span, description_text)
+        end +
+          mappings_legend(css_class)
+      end
+    end
+  end
+
+  def mappings_legend(css_class)
+    content_tag(:div, class: css_class) do
+      content_tag(:div, t('mappings.bubble_view_legend.less_mappings'), class: 'mappings-legend-text') +
+        (1..6).map { |i| content_tag(:div, "", class: "bubble bubble#{i}") }.join.html_safe +
+        content_tag(:div, t('mappings.bubble_view_legend.more_mappings'), class: 'mappings-legend-text')
+    end
   end
 end

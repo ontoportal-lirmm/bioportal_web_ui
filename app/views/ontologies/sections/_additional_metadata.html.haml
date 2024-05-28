@@ -1,0 +1,8 @@
+= turbo_frame_tag 'application_modal_content' do
+  %div.card.overflow-hidden{style: 'border-radius: 20px;'}
+    %section{style:'height: 70vh; overflow-y: scroll'}
+      = render SubmissionMetadataComponent.new(submission: @submission_latest, submission_metadata: submission_metadata) unless @submission_latest.nil?
+    %div.scroll-message.text-center.py-3.bg-light.text-primary
+      %p.scroll-text.mb-0
+        = t("ontologies.sections.scroll_down_to_see_more")
+      %i.scroll-icon.fa.fa-chevron-down

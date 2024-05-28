@@ -1,0 +1,31 @@
+!!!
+%html
+    %head
+        %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+        %meta{content: "no-cache", name: "turbo-cache-control"}/
+    %body
+        %strong Error message: 
+        %p
+            #{@error_message}
+        - if @current_user
+            %p
+                %strong Current User:
+                %ul
+                    %li User Name: 
+                    = @current_user[:username]
+                %ul
+                    %li Email: 
+                    = @current_user[:email]  
+        - else
+            %p
+                %strong Request IP:
+                = @request_ip
+        - if @current_url
+            %p
+                %strong Current URL:
+                = @current_url
+        %p
+            %br/
+            %strong Details:
+            - backtrace = @backtrace.join("\n")
+            = simple_format(backtrace)

@@ -1,9 +1,91 @@
+.turbo-progress-bar {
+  height: 5px;
+  background-color: var(--admin-color);
+}
+
+a{
+  text-decoration: none !important;
+}
+p {
+  margin-bottom: 0;
+}
+
+body{
+  position: relative;
+}
 
 .alignright {
   float:right;
 }
 .alignleft {
   float:left;
+}
+
+.admin-border{
+  border: 1px solid;
+  border-radius: 5px;
+  border-color: var(--admin-color) !important;
+}
+
+.admin-background{
+  background-color: var(--bg-info-light-color) !important;
+  border-color: var(--admin-color) !important;
+  color: var(--admin-color) !important;
+  border-radius: 5px;
+}
+
+.container-gradient {
+  background: linear-gradient(-45deg, var(--admin-color), var(--primary-color), var(--admin-color));
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  .header-component{
+    color: white;
+  }
+
+  .field-description_text{
+    color: white !important;
+    opacity: 0.7;
+  }
+
+}
+
+.disabled-link{
+  pointer-events: none;
+  color: #888888 !important;
+  span{
+    opacity: 0.6;
+  }
+  a {
+    color: #888888 !important;
+  }
+  svg path{
+    fill: #888888 !important;
+  }
+}
+.text-truncate-scroll{
+  overflow: scroll;
+  white-space: nowrap;
+}
+
+
+.bg-warning-light{
+  background-color: var(--bg-warning-light-color) !important;
+}
+
+.bg-danger-light{
+  background-color: var(--bg-danger-light-color) !important;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 #hd {
@@ -474,9 +556,13 @@ tr.mainresource td {
   margin-bottom: 1em;
 }
 
-.feedback ul li, .enable-lists ul li {
+.enable-lists ul li {
   list-style-position: outside;
   list-style-type: square;
+  margin-left: 1.5em;
+}
+.feedback ul li{
+  list-style-position: outside;
   margin-left: 1.5em;
 }
 
@@ -498,7 +584,7 @@ tr.mainresource td {
 }
 
 .obsolete_class {
-  color: rgb(100,100,100);
+  color: rgb(100,100,100)!important;
   cursor: help;
   font-style: oblique;
 }
@@ -568,7 +654,8 @@ div.tree_error {
 }
 
 #bd ul.simpleTree li{
-  margin-left:-10px;
+  margin-left: 0px;
+  padding: 5px 0 0 10px;
 }
 
 #bd ul.simpleTree{
@@ -586,6 +673,26 @@ div.tree_error {
   overflow:auto;
   border: 1px solid #444444;
   */
+  a.tree-link {
+    display: inline-block;
+    padding: 5px;
+    word-break: break-all;
+    text-wrap: wrap;
+    color: var(--primary-color) !important;
+  }
+
+  a.tree-link.active {
+    cursor: default;
+    background-color: var(--light-color);
+    font-weight: bold;
+    border-radius: 3px;
+    padding: 7px 5px;
+  }
+
+  .tree-border-left{
+    border-left: 2px dotted #eee;
+    margin-left: 2px;
+  }
 }
 .simpleTree li {
   list-style: none;
@@ -958,27 +1065,6 @@ button.fg-button-menu, button.fg-button {
   border: none;
 }
 
-#ontology_picker_container div.chzn-container {
-  width: 432px !important;
-}
-
-#ontology_picker_container div.chzn-container-active ul.chzn-choices li.search-field input {
-  font-style: normal !important;
-}
-
-#ontology_picker_container div.chzn-container ul.chzn-choices {
-  max-height: 110px;
-  overflow: auto !important;
-}
-
-#ontology_picker_container div.chzn-container li.search-field input {
-  font-style: oblique;
-}
-
-#ontology_picker_container div.chzn-drop {
-  display: none;
-}
-
 .no_right_border {
   border-right: none !important;
 }
@@ -1137,6 +1223,9 @@ a.truncated_less, a.truncated_more {
 .highlighted .search_ontology_acronym {
   color: white;
 }
+.hide {
+  display: none !important;
+}
 
 .empty-state {
   display: none;
@@ -1157,4 +1246,8 @@ turbo-frame[busy] .hide-if-loading, .show-if-loading {
 }
 turbo-frame[busy] ~ .show-if-loading {
   display: inline-block;
+}
+
+.hide{
+  display:none;
 }

@@ -3,6 +3,7 @@ import {useChosen} from "../mixins/useChosen";
 
 // Connects to data-controller="chosen"
 export default class extends Controller {
+    // TODO to update to use TomSelect
     static values = {
         name: String,
         enableColors: {type: Boolean, default: false}
@@ -61,9 +62,6 @@ export default class extends Controller {
 
                 chosenClose.style.position = "unset"
                 chosenClose.style.margin = "auto"
-
-
-
             }
         })
     }

@@ -1,0 +1,47 @@
+%div.analytics
+  %dive.site-admin-page-section
+    %div.d-flex
+      %div.col.card.d-flex.justify-content-center.mr-2.p-2.text-center.container-gradient
+        %div.card-header-2
+          = t('admin.analytics.total_ontologies')
+        %div.card-header-1
+          = @ontologies_count
+        %div.card-header-3{data: {controller: 'tooltip'}, title: new_ontologies_created_title}
+          = t('admin.analytics.ontologies_count', size: @new_ontologies_count.size)
+      %div.col.card.d-flex.justify-content-center.p-2.mr-2.text-center.container-gradient
+        %div.card-header-2
+          = t('admin.analytics.ontologies_with_errors')
+        %div.card-header-1
+          = @ontologies_problems_count
+        %div.card-header-3.py-2.mt-1
+      %div.col.card.d-flex.justify-content-center.mr-2.p-2.text-center.container-gradient
+        %div.card-header-2
+          = t('admin.analytics.total_visits')
+        %div.card-header-1
+          = format_number_abbreviated(@page_visits[:visits].sum)
+        %div.card-header-3.py-2.mt-1
+
+      %div.col.card.d-flex.justify-content-center.p-2.text-center.container-gradient
+        %div.card-header-2
+          = t('admin.analytics.active_users')
+        %div.card-header-1
+          = @users_visits[:visits].last
+        %div.card-header-3
+          = t('admin.analytics.visit_users', visits: visits_evolution)
+    %div.d-flex.mt-2
+      %div.col.card.p-2.mr-2
+        = chart_component(title: t('admin.analytics.ontology_visits'), type: 'bar',
+                            labels: @ontology_visits[:labels].last(13),
+                            datasets: visits_chart_dataset(@ontology_visits[:visits].last(13)))
+
+      %div.col.card.p-2
+        = chart_component(title: t('admin.analytics.unique_users_visits'), type: 'line',
+                            labels: @users_visits[:labels].last(13),
+                            datasets: visits_chart_dataset(@users_visits[:visits].last(13)))
+
+    %div.mt-2
+      %div.card.p-2
+        = chart_component(title: t('admin.analytics.page_visits'), type: 'bar',
+                            labels: @page_visits[:labels].last(13).reverse,
+                            datasets: visits_chart_dataset(@page_visits[:visits].last(13).reverse),
+                            index_axis: 'y')

@@ -1,0 +1,8 @@
+= render_in_modal do
+  = render Layout::ListComponent.new do |l|
+    - attrs  = @licenses.reject{|x| x.to_s.eql?('copyrightHolder')}
+    - properties_list_component(l, attrs.map { |x| [x, @submission_latest.send(x.to_s)] }.to_h)
+    - properties_list_component(l, {copyrightHolder: [@submission_latest.copyrightHolder]}) do |values|
+      = horizontal_list_container(values) do |v|
+        = render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: '', class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do
+          = display_agent(v, link: false)

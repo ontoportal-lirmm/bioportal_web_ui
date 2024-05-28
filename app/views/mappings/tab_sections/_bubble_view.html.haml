@@ -1,0 +1,26 @@
+.mappings-bubble-view-container
+  .upload-mappings
+    .card.upload-mappings-example.ontologies
+      = render(Layout::RevealComponent.new(toggle: true, selected: false)) do |c|
+        - c.button do
+          .title-bar
+            = inline_svg_tag 'icons/settings.svg'
+            = t('mappings.filter_ontologies')
+        - c.container do
+          .mappings-page-ontologies-selector{'data-mappings-target': 'ontologies'}
+            = ontologies_selector(id:'mappings_page_ontologies' ,name: 'ontologies[]')
+            .selector-button{'data-action': 'click->mappings#filterOntologies'}
+              = regular_button('filter-bubbles', t('mappings.filter_bubbles'))
+
+  .mappings-bubble-view-frame{'data-mappings-target': 'frame'}
+    #mappings-bubbles-view{'data-mappings-target': 'bubbles'}
+    .mapping-bubbles-loader.d-none{'data-mappings-target': 'loader'}
+      = loader_component
+  = info_tooltip(mappings_bubble_view_legend)
+  .mappings-zoom-buttons
+    .in{'data-action': 'click->mappings#zoomIn'}
+      = inline_svg_tag 'icons/zoom-in.svg'
+    .out{'data-action': 'click->mappings#zoomOut'}
+      = inline_svg_tag 'icons/zoom-out.svg'
+  .d-none{'data-mappings-target': 'modal'}
+    = client_filled_modal

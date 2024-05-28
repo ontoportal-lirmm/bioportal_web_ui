@@ -1,8 +1,7 @@
 class AdminController < ApplicationController
-  include TurboHelper
+  include TurboHelper, HomeHelper, SparqlHelper
   layout :determine_layout
   before_action :cache_setup
-
 
   ADMIN_URL = "#{LinkedData::Client.settings.rest_url}/admin/"
   ONTOLOGIES_URL = "#{ADMIN_URL}ontologies_report"
@@ -13,9 +12,35 @@ class AdminController < ApplicationController
   ONTOLOGIES_LIST_URL = "#{LinkedData::Client.settings.rest_url}/ontologies/"
 
   include DoiRequestAdministration
+  def sparql_endpoint
+    graph = params["named-graph-uri"]
+    apikey = params["apikey"]
+    user_name = params["username"]
+
+    unless user_name.blank?
+      user = LinkedData::Client::Models::User.find(user_name, {include: 'all', apikey: apikey})
+      render(inline: 'Query not permitted') && return if user.nil?
+    end
+
+    render(inline: 'Query not permitted') && return if graph.blank? && !user&.admin?
+
+    unless graph.blank?
+      acronym = graph.split('/')[-3]
+      @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym, {apikey: apikey}).first
+      render(inline: t('admin.query_not_permitted')) && return  if @ontology.nil? || @ontology.errors
+    end
+
+    response = helpers.ontology_sparql_query(params[:query], graph)
+
+    render inline:  response
+  end
 
   def index
     @users = LinkedData::Client::Models::User.all
+    @ontology_visits = ontology_visits_data
+    @users_visits = user_visits_data
+    @page_visits = page_visits_data
+    @ontologies_problems_count = _ontologies_report[:ontologies]&.select{|a,v| v[:problem]}&.size || 0
 
     if session[:user].nil? || !session[:user].admin?
       redirect_to :controller => 'login', :action => 'index', :redirect => '/admin'
@@ -26,43 +51,48 @@ class AdminController < ApplicationController
     end
   end
 
-  def update_info
-    response = {update_info: Hash.new, errors: '', success: '', notices: ''}
-    json = LinkedData::Client::HTTP.get("#{ADMIN_URL}update_info", params, raw: true)
-
-    begin
-      update_info = JSON.parse(json)
-
-      if update_info["error"]
-        response[:errors] = update_info["error"]
-      else
-        response[:update_info] = update_info
-        response[:notices] = update_info["notes"] if update_info["notes"]
-        response[:success] = "Update info successfully retrieved"
-      end
-    rescue Exception => e
-      response[:errors] = "Problem retrieving update info - #{e.message}"
-    end
-    render :json => response
-  end
 
   def update_check_enabled
     enabled = LinkedData::Client::HTTP.get("#{ADMIN_URL}update_check_enabled", {}, raw: false)
-    render :json => enabled
+
+    if enabled
+      response = {update_info: Hash.new, errors: nil, success: '', notices: ''}
+      json = LinkedData::Client::HTTP.get("#{ADMIN_URL}update_info", params, raw: true)
+
+      begin
+        update_info = JSON.parse(json)
+
+        if update_info["error"]
+          response[:errors] = update_info["error"]
+        else
+          response[:update_info] = update_info
+          response[:notices] = update_info["notes"] if update_info["notes"]
+          response[:success] = t('admin.update_info_successfully')
+        end
+      rescue Exception => e
+        response[:errors] = t('admin.error_update_info', message: e.message)
+      end
+
+      if response[:errors]
+        render_turbo_stream alert(id: 'update_check_frame', type: 'danger') { response[:errors] }
+      else
+        output = []
+
+        output << response[:update_info]["notes"]  if response[:update_info]["update_available"]
+
+        output << t('admin.current_version', version: response[:update_info]['current_version'])
+        output << t('admin.appliance_id', id: response[:update_info]['appliance_id'])
+
+
+        render_turbo_stream *output.map{|message|   alert(id: 'update_check_frame', type: 'info') {message} }
+
+
+      end
+    else
+      render_turbo_stream alert(id: 'update_check_frame', type: 'info') { 'not enabled' }
+    end
   end
 
-  def submissions
-    @submissions = nil
-    @acronym = params["acronym"]
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params["acronym"]).first
-    begin
-      @submissions = @ontology.explore.submissions({include: "submissionId,creationDate,released,modificationDate,submissionStatus,hasOntologyLanguage,version,diffFilePath,ontology"})
-                              .sort {|a,b| b.submissionId.to_i <=> a.submissionId.to_i } || []
-    rescue
-      @submissions = []
-    end
-    render :partial => "layouts/ontology_report_submissions"
-  end
 
   def parse_log
     @acronym = params["acronym"]
@@ -75,66 +105,104 @@ class AdminController < ApplicationController
       full_log_file_path = ontology[:logFilePath]
       @log_file_path = /#{params["acronym"]}\/\d+\/[-a-zA-Z0-9_]+\.log$/.match(full_log_file_path)
     else
-      @parse_log = "No record exists for ontology #{params["acronym"]}"
+      @parse_log = t('admin.no_record_exists', acronym: params["acronym"])
       @log_file_path = "None"
     end
     render action: "parse_log"
   end
 
   def clearcache
-    response = {errors: '', success: ''}
+    response = {errors: nil, success: ''}
 
     if @cache.respond_to?(:flush_all)
       begin
         @cache.flush_all
-        response[:success] = "UI cache successfully flushed"
+        response[:success] = t('admin.cache_flush_success')
       rescue Exception => e
-        response[:errors] = "Problem flushing the UI cache - #{e.class}: #{e.message}"
+        response[:errors] = t('admin.cache_flush_error', class: e.class, message: e.message)
       end
     else
-      response[:errors] = "The UI cache does not respond to the 'flush_all' command"
+      response[:errors] = t('admin.no_flush_command')
     end
-    render :json => response
+
+    respond_to do |format|
+      format.turbo_stream do
+        if response[:errors]
+          render_turbo_stream alert(type: 'danger') { response[:errors].to_s }
+        else
+          render_turbo_stream alert(type: 'success') { response[:success] }
+        end
+      end
+    end
+
   end
 
   def resetcache
-    response = {errors: '', success: ''}
+    response = {errors: nil, success: ''}
 
     if @cache.respond_to?(:reset)
       begin
         @cache.reset
-        response[:success] = "UI cache connection successfully reset"
+        response[:success] = t('admin.cache_reset_success')
       rescue Exception => e
-        response[:errors] = "Problem resetting the UI cache connection - #{e.message}"
+        response[:errors] = t('admin.cache_reset_error', message: e.message)
       end
     else
-      response[:errors] = "The UI cache does not respond to the 'reset' command"
+      response[:errors] =  t('admin.no_reset_command')
     end
-    render :json => response
+
+    respond_to do |format|
+      format.turbo_stream do
+        if response[:errors]
+          render_turbo_stream alert(type: 'danger') { response[:errors].to_s }
+        else
+          render_turbo_stream alert(type: 'success') { response[:success] }
+        end
+      end
+    end
   end
 
   def clear_goo_cache
-    response = {errors: '', success: ''}
+    response = {errors: nil, success: ''}
 
     begin
       response_raw = LinkedData::Client::HTTP.post("#{ADMIN_URL}clear_goo_cache", params, raw: true)
-      response[:success] = "Goo cache successfully flushed"
+      response[:success] = t('admin.clear_goo_cache_success')
     rescue Exception => e
-      response[:errors] = "Problem flushing the Goo cache - #{e.class}: #{e.message}"
+      response[:errors] = t('admin.clear_goo_cache_error', class: e.class, message: e.message)
     end
-    render :json => response
+
+    respond_to do |format|
+      format.turbo_stream do
+        if response[:errors]
+          render_turbo_stream alert(type: 'danger') { response[:errors].to_s }
+        else
+          render_turbo_stream alert(type: 'success') { response[:success] }
+        end
+      end
+    end
+
   end
 
   def clear_http_cache
-    response = {errors: '', success: ''}
+    response = {errors: nil, success: ''}
 
     begin
       response_raw = LinkedData::Client::HTTP.post("#{ADMIN_URL}clear_http_cache", params, raw: true)
-      response[:success] = "HTTP cache successfully flushed"
+      response[:success] = t('admin.clear_http_cache_success')
     rescue Exception => e
-      response[:errors] = "Problem flushing the HTTP cache - #{e.class}: #{e.message}"
+      response[:errors] = t('admin.clear_http_cache_error', class: e.class, message: e.message)
     end
-    render :json => response
+
+    respond_to do |format|
+      format.turbo_stream do
+        if response[:errors]
+          render_turbo_stream alert(type: 'danger') { response[:errors].to_s }
+        else
+          render_turbo_stream alert(type: 'success') { response[:success] }
+        end
+      end
+    end
   end
 
   def ontologies_report
@@ -155,18 +223,19 @@ class AdminController < ApplicationController
         response = response_json
 
         if params["ontologies"].nil? || params["ontologies"].empty?
-          response[:success] = "Refresh of ontologies report started successfully";
+          response[:success] = t('admin.refresh_report_without_ontologies')
         else
           ontologies = params["ontologies"].split(",").map {|o| o.strip}
-          response[:success] = "Refresh of report for ontologies: #{ontologies.join(", ")} started successfully";
+          response[:success] = t('admin.refresh_report_with_ontologies', ontologies: ontologies.join(", "))
         end
       end
     rescue Exception => e
-      response[:errors] = "Problem refreshing report - #{e.class}: #{e.message}"
+      response[:errors] = t('admin.problem_refreshing_report', class: e.class, message: e.message)
       # puts "#{e.class}: #{e.message}\n#{e.backtrace.join("\n\t")}"
     end
     render :json => response
   end
+
 
   def process_ontologies
     _process_ontologies('enqued for processing', 'processing', :_process_ontology)
@@ -192,16 +261,16 @@ class AdminController < ApplicationController
             errors = response_errors(error_response)
             _process_errors(errors, response, true)
           else
-            response[:success] << "Submission #{params["id"]} for ontology #{ont} was deleted successfully"
+            response[:success] << t('admin.submission_deleted_successfully', id: params["id"], ont: ont)
           end
         else
-          response[:errors] << "Submission #{params["id"]} for ontology #{ont} was not found in the system"
+          response[:errors] << t('admin.submission_not_found', id: params["id"], ont: ont)
         end
       else
-        response[:errors] << "Ontology #{ont} was not found in the system"
+        response[:errors] << t('admin.ontology_not_found', ont: ont)
       end
     rescue Exception => e
-      response[:errors] << "Problem deleting submission #{params["id"]} for ontology #{ont} - #{e.class}: #{e.message}"
+      response[:errors] << t('admin.problem_deleting_submission', id: params["id"], ont: ont, class: e.class, message: e.message )
     end
 
     if params[:turbo_stream]
@@ -217,10 +286,6 @@ class AdminController < ApplicationController
 
   end
 
-  def users
-    response = _users
-    render :json => response
-  end
 
   def doi_requests_list
     render json: doi_requests
@@ -254,11 +319,11 @@ class AdminController < ApplicationController
         _process_errors(ontologies_data_parsed[:errors], response, true)
       else
         response.merge!(ontologies_data_parsed)
-        response[:success] = "Report successfully regenerated on #{ontologies_data_parsed[:report_date_generated]}"
-        LOG.add :debug, "Ontologies Report - retrieved #{response[:ontologies].length} ontologies in #{Time.now - start}s"
+        response[:success] = t('admin.report_successfully_regenerated', report_date_generated: ontologies_data_parsed[:report_date_generated])
+        LOG.add :debug, t('admin.ontologies_report_retrieved', ontologies: response[:ontologies].length, time: Time.now - start)
       end
     rescue Exception => e
-      response[:errors] = "Problem retrieving ontologies report - #{e.message}"
+      response[:errors] = t('admin.problem_retrieving_ontologies', message: e.message)
     end
     response
   end
@@ -292,7 +357,7 @@ class AdminController < ApplicationController
     response = {errors: '', success: ''}
 
     if params["ontologies"].nil? || params["ontologies"].empty?
-      response[:errors] = "No ontologies parameter passed. Syntax: ?ontologies=ONT1,ONT2,...,ONTN"
+      response[:errors] = t('admin.no_ontologies_parameter_passed')
     else
       ontologies = params["ontologies"].split(",").map {|o| o.strip}
 
@@ -306,13 +371,13 @@ class AdminController < ApplicationController
               errors = response_errors(error_response) # see application_controller::response_errors
               _process_errors(errors, response, false)
             else
-              response[:success] << "Ontology #{ont} #{success_keyword} successfully, "
+              response[:success] << t('admin.ontology_process_success', ont: ont, success_keyword: success_keyword)
             end
           else
-            response[:errors] << "Ontology #{ont} was not found in the system, "
+            response[:errors] << t('admin.ontology_not_found_system', ont: ont)
           end
         rescue Exception => e
-          response[:errors] << "Problem #{error_keyword} ontology #{ont} - #{e.class}: #{e.message}, "
+          response[:errors] << t('admin.ontology_process_error', error_keyword: error_keyword, ont: ont, class: e.class, message: e.message)
         end
       end
       response[:success] = response[:success][0...-2] unless response[:success].empty?
@@ -321,18 +386,85 @@ class AdminController < ApplicationController
     render :json => response
   end
 
-  def _users
-    response = {users: Hash.new , errors: '', success: ''}
-    start = Time.now
-    begin
-      response[:users] = JSON.parse(LinkedData::Client::HTTP.get(USERS_URL, {include: 'all'}, raw: true))
 
-      response[:success] = "users successfully retrieved in  #{Time.now - start}s"
-    LOG.add :debug, "Users - retrieved #{response[:users].length} users in #{Time.now - start}s"
-    rescue Exception => e
-      response[:errors] = "Problem retrieving users  - #{e.message}"
+  def user_visits_data
+    begin
+      analytics = JSON.parse(LinkedData::Client::HTTP.get("#{rest_url}/data/analytics/users", {}, raw: true))
+    rescue
+      analytics = {}
     end
-    response
+    visits_data = { visits: [], labels: [] }
+
+    return visits_data if analytics.empty?
+
+    analytics.sort.each do |year, year_data|
+      year_data.each do |month, value|
+        visits_data[:visits] << value
+        visits_data[:labels] << DateTime.parse("#{year}/#{month}").strftime("%b %Y")
+      end
+    end
+    visits_data
   end
 
+  def ontology_visits_data
+    begin
+      analytics = JSON.parse(LinkedData::Client::HTTP.get("#{rest_url}/data/analytics/ontologies", {}, raw: true))
+    rescue
+      analytics = {}
+    end
+    visits_data = { visits: [], labels: [] }
+    @new_ontologies_count = []
+    @ontologies_count = 0
+
+    return visits_data if analytics.empty?
+
+    aggregated_data = {}
+    analytics.each do |acronym, years_data|
+      current_year_count = 0
+      previous_year_count  = 0
+      years_data.each do |year, months_data|
+        previous_year_count += current_year_count
+        current_year_count = 0
+        aggregated_data[year] ||= {}
+        months_data.each do |month, value|
+          if aggregated_data[year][month]
+            aggregated_data[year][month] += value
+          else
+            aggregated_data[year][month] = value
+          end
+          current_year_count += value
+        end
+      end
+      @ontologies_count += 1
+      if previous_year_count.zero? && current_year_count.positive?
+        @new_ontologies_count << [acronym]
+      end
+    end
+
+
+    aggregated_data.sort.each do |year, year_data|
+      year_data.each do |month, value|
+        visits_data[:visits] << value
+        visits_data[:labels] << DateTime.parse("#{year}/#{month}").strftime("%b %Y")
+      end
+    end
+    visits_data
+  end
+
+  def page_visits_data
+    begin
+      analytics = JSON.parse(LinkedData::Client::HTTP.get("#{rest_url}/data/analytics/page_visits", {}, raw: true))
+    rescue
+      analytics = {}
+    end
+    visits_data = { visits: [], labels: [] }
+
+    return visits_data if analytics.empty?
+
+    analytics.each do |path, count|
+      visits_data[:labels] << path
+      visits_data[:visits] << count
+    end
+    visits_data
+  end
 end

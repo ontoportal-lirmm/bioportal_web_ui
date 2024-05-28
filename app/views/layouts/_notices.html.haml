@@ -2,10 +2,7 @@
   = license_notification(current_license())
 
 - flash.each do |key, message|
-  %div{class: "flash alert #{flash_class(key)} alert-dismissible fade show", role: "alert"}
-    = message
-    %button{type: 'button', class: 'close', 'data-dismiss': 'alert', 'aria-label': 'Close'}
-      %span{'aria-hidden': 'true'} &times;
+  = render NotificationComponent.new(title: message , type:  notification_type(key))
 
 - do_not_display_subdomain_info_here = Set.new(["homeall_resources"])
 - if at_slice? && !do_not_display_subdomain_info_here.include?("#{controller.controller_name}#{controller.action_name}")
@@ -16,13 +13,14 @@
       %b= @subdomain_filter[:name]
       %a.pop_window{:href => "help?pop=true#slice_definition", :target => "_blank"}
         = $SITE
-        Slice
-      at
+        = t('layout.notices.slice')
+      = t('layout.notices.at')
       = succeed "." do
         %b= request.host
       = $SITE
       = succeed "." do
-        %a{:href => "#{$UI_URL}#{request.path}#{query_string}"} visit the full site
+        %a{:href => "#{$UI_URL}#{request.path}#{query_string}"}
+          = t('layout.notices.visit_the_site')
 #site-notice
   - message_name = ""
   - unless $SITE_NOTICE.nil? || $SITE_NOTICE.empty?

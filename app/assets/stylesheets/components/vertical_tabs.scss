@@ -1,0 +1,83 @@
+.center {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.edit-ontology-container {
+  padding: 0 50px;
+  width: 1248px
+}
+
+.edit-ontology-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.edit-ontology-title hr {
+  width: 93px;
+  border: 1px solid var(--primary-color);
+  margin: 0;
+  opacity: 100%;
+}
+
+
+.tabs-left-column {
+  border-radius: 5px;
+  min-width: 250px;
+  .nav-pills.disabled  a {
+    color: #888888 !important;
+    cursor: not-allowed;
+  }
+
+  .nav-pills:not(.disabled){
+    .vertical-tab-item.active {
+      color: var(--primary-color);
+      background-color: var(--light-color) !important;
+      border-left: 3px solid var(--primary-color);
+      font-weight: 700;
+    }
+
+
+
+    .vertical-tab-item:hover {
+      background-color: #F6F6F6;
+    }
+
+  }
+}
+
+.vertical-tab-item {
+  font-size: 14px;
+  width: 100%;
+  padding: 10px 15px;
+  font-weight: 500;
+  margin: 3px 0;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color ease 0.3s;
+}
+
+.tabs-right-column {
+  border-radius: 5px;
+  width: 100%;
+}
+
+
+
+.tabs-left-column input {
+  border: 1px solid #BDBDBD;
+  outline: none;
+  font-size: 14px;
+  border-radius: 5px;
+  padding: 10px 15px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+
+
+
+
+
+
