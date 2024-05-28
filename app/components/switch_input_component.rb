@@ -3,7 +3,7 @@
 class SwitchInputComponent < ViewComponent::Base
 
 
-  def initialize(id:, name: , label: nil, value: '', checked: false, boolean_switch: false)
+  def initialize(id:, name: , label: '', value: '', checked: false, boolean_switch: false, style: nil, help: nil)
     super
     @id = id
     @name = name
@@ -11,10 +11,12 @@ class SwitchInputComponent < ViewComponent::Base
     @value = value.nil? || value.empty? ? @name : value
     @checked = checked
     @boolean_switch = boolean_switch
+    @style = style
+    @help = help
   end
 
   def boolean_switch_action
-    "this.previousElementSibling.value = this.previousElementSibling.value !== 'true'" if @boolean_switch
+    "this.parentElement.previousElementSibling.value = this.parentElement.previousElementSibling.value !== 'true'" if @boolean_switch
   end
 
   def check_box_name
