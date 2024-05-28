@@ -1,6 +1,16 @@
 class ChipsComponent < ViewComponent::Base
-    def initialize(name:, value:)
+
+    renders_one :count
+    def initialize(id:nil, name:,  label: nil, value: nil, checked: false, tooltip: nil)
+        @id = id || name
         @name = name
-        @value = value
+        @value = value || 'true'
+        @checked = checked
+        @label = label || @value
+        @tooltip = tooltip
+    end
+
+    def checked?
+        @checked
     end
 end

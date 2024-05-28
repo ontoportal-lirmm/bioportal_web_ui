@@ -1,137 +1,87 @@
-import {Controller} from "@hotwired/stimulus"
-import {useChosen} from "../../javascript/mixins/useChosen";
+import { Controller } from '@hotwired/stimulus'
+import { useTomSelect } from '../../javascript/mixins/useTomSelect'
 
-export default class extends Controller {
+export default class SelectInput extends Controller {
+  static DISPLAY_VALUE = 'value'
+  static DISPLAY_TEXT = 'text'
 
-    static values = {
-        other: {type: Boolean, default: true},
-        multiple: {type: Boolean, default: false}
-    }
+  static values = {
+    multiple: { type: Boolean, default: false },
+    openAdd: { type: Boolean, default: false },
+    required: { type: Boolean, default: false },
+    searchable: { type: Boolean, default: true },
+    displayField: { type: String, default: SelectInput.DISPLAY_TEXT }
+  }
 
-    static targets = ["btnValueField", "inputValueField", "selectedValues"]
-
-    connect() {
-        this.initMultipleSelect()
-        this.#displayOtherValueField()
-    }
-
-    toggleOtherValue() {
-        if (this.otherValue && !this.multipleValue) {
-            this.#toggle()
+  connect () {
+    let myOptions = {}
+    myOptions = {
+      render: {
+        option: (data) => {
+          return `<div> ${data.text} </div>`
+        },
+        item: (data) => {
+          if (this.displayFieldValue === SelectInput.DISPLAY_TEXT) {
+            return `<div> ${data.text} </div>`
+          } else {
+            return `<div> ${data.value} </div>`
+          }
         }
+      }
+    }
+    
+    myOptions['maxOptions'] = Infinity
+
+    if(!this.searchableValue){
+      myOptions['controlInput'] = null
     }
 
-    addValue(event) {
-        event.preventDefault()
+    if (this.multipleValue) {
+      myOptions['onItemAdd'] = function () {
+        this.setTextboxValue('')
+        this.refreshOptions()
+      }
+      myOptions['plugins'] = ['remove_button']
+    }
 
-        if (this.inputValueFieldTarget.value) {
-            let newOption = this.inputValueFieldTarget.value;
-            this.#addNewOption(newOption)
-            this.#selectNewOption(newOption)
-            if (!this.multipleValue) {
-                this.#hideOtherValueField()
-            }
+    if (this.openAddValue) {
+      myOptions['create'] = true
+    }
+
+    this.select = useTomSelect(this.element, myOptions, this.#triggerChange.bind(this))
+    this.element.style.visibilty = 'hidden';
+
+    [...this.element.attributes].forEach(attribute => {
+      if(attribute.name !== 'class' && attribute.name !== 'style' && attribute.name !== 'id' && attribute.name !== 'name'){
+        this.select.control.setAttribute(attribute.name, attribute.value.replace('select-input', ''))
+        if(attribute.name === 'title'){
+          this.select.control.setAttribute('data-controller', 'tooltip')
         }
+      }
+    })
+  }
+
+  #triggerChange () {
+    if (this.#isRequired() && !this.#isMultiple() && this.#isEmpty()) {
+      this.#selectFirstItem()
     }
 
+    document.dispatchEvent(new Event('change', { target: this.element }))
+  }
 
-    initMultipleSelect() {
-        this.#addEmptyOption()
-        useChosen(this.selectedValuesTarget, {
-            width: '100%',
-            search_contains: true,
-            allow_single_deselect: !this.multipleValue,
-        }, (event) => {
-            if(this.multipleValue){
-                let selected = event.target.selectedOptions
-                if (selected.length === 0) {
-                    this.#selectEmptyOption()
-                } else {
-                    this.#unSelectEmptyOption()
-                }
-            }
-        })
-    }
+  #isRequired () {
+    return this.requiredValue
+  }
 
-    #selectEmptyOption() {
-        this.emptyOption.selected = true
-        this.emptyOption.disabled = false
-    }
+  #isMultiple () {
+    return this.multipleValue
+  }
 
-    #unSelectEmptyOption() {
-        this.emptyOption.selected = false
-        this.emptyOption.disabled = true
-    }
+  #isEmpty () {
+    return this.select.getValue() === ''
+  }
 
-    #addEmptyOption() {
-        this.emptyOption = document.createElement("option")
-        this.emptyOption.innerHTML = ''
-        this.emptyOption.value = ''
-        this.selectedValuesTarget.prepend(this.emptyOption)
-    }
-
-    #selectNewOption(newOption) {
-        let selectedOptions = this.#selectedOptions();
-
-
-        if (Array.isArray(selectedOptions)) {
-            selectedOptions.push(newOption);
-        } else {
-            selectedOptions = [];
-            selectedOptions.push(newOption)
-        }
-
-        this.selectedValuesTarget.value = selectedOptions
-        if (this.multipleValue) {
-            const options = this.selectedValuesTarget.options
-            for (const element of options) {
-                element.selected = selectedOptions.indexOf(element.value) >= 0;
-            }
-            jQuery(this.selectedValuesTarget).trigger("chosen:updated")
-        }
-
-    }
-
-    #addNewOption(newOption) {
-        let option = document.createElement("option");
-        option.value = newOption;
-        option.text = newOption;
-        this.selectedValuesTarget.add(option)
-    }
-
-    #selectedOptions() {
-        if (this.multipleValue) {
-            const selectedOptions = [];
-            for (let option of this.selectedValuesTarget.options) {
-                if (option.selected) {
-                    selectedOptions.push(option.value);
-                }
-            }
-            return selectedOptions
-        } else {
-            return this.selectedValuesTarget.value
-        }
-    }
-
-    #toggle() {
-        if (this.selectedValuesTarget.value === 'other') {
-            this.#displayOtherValueField()
-        } else {
-            this.#hideOtherValueField()
-        }
-    }
-
-    #displayOtherValueField() {
-        this.inputValueFieldTarget.value = ""
-        this.btnValueFieldTarget.style.display = 'block'
-        this.inputValueFieldTarget.style.display = 'block'
-    }
-
-    #hideOtherValueField() {
-        this.inputValueFieldTarget.value = ""
-        this.btnValueFieldTarget.style.display = 'none'
-        this.inputValueFieldTarget.style.display = 'none'
-    }
-
-
+  #selectFirstItem () {
+    this.select.setValue(Object.keys(this.select.options)[0], true)
+  }
 }

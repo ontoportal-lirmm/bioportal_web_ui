@@ -1,0 +1,13 @@
+= render InfiniteScrollComponent.new(id: @id,
+                                    collection: @collection,
+                                    next_url: @next_url,
+                                    current_page: @current_page, next_page: @next_page) do |c|
+
+  %div
+    = render TreeViewComponent.new(id: nil,  auto_click: auto_click?) do
+      = content
+
+  - c.error do
+    %div.text-wrap
+      = render Display::AlertComponent.new(type:'info') do
+        = error

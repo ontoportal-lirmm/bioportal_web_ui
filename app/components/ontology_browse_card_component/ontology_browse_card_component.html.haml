@@ -1,0 +1,85 @@
+-if ontology
+  .browse-ontology-container
+    .d-flex
+      .browse-ontology-description
+        .browse-ontology-title-bar
+          %a.browse-ontology-title{:href => "/ontologies/#{ontology[:acronym]}", data: {'turbo': 'false'}}
+            = ontology[:name]+" ("+ontology[:acronym]+")"
+            = private_ontology_icon(ontology[:private])
+            - if session[:user]&.admin?
+              - ontology_status = status_string(ontology)
+              = render Display::InfoTooltipComponent.new(text: ontology_status, icon: submission_status_icons(ontology_status))
+        .browse-desc-container{data:{controller:"text-truncate", 'text-truncate-more-text-value': t('components.show_more') , 'text-truncate-less-text-value': t('components.show_less')}}
+          %p.browse-desc-text{'data-text-truncate-target': 'content'}
+            = ontology[:description]
+          .browse-show-more-button{data:{'text-truncate-target': 'button', 'action':"click->text-truncate#toggle"}}
+            = t('components.show_more')
+
+
+          - unless ontology[:fairScore].nil? || ontology[:acronym] == 'AGROVOC'
+            .browse-fair
+              %p.browse-fair-title
+                = t('components.fair_score')
+              .browse-progress-bar
+                .browse-faire-progress{:style => "width: #{ontology[:normalizedFairScore].to_s+"%"}"}
+              %p.browse-fair-score
+                = ontology[:fairScore]
+              %a.browse-fair-details{:href => "/ontologies/#{ontology[:acronym]}#fair-details", 'data-turbo': 'false'}= t('components.details_details')
+
+      .browse-ontology-cards
+        = render SquareBadgeComponent.new(label: t('components.classes'),  count: ontology[:class_count_formatted], link:  "/ontologies/#{ontology[:acronym]}?p=classes" )
+
+        = render SquareBadgeComponent.new(label: ontology[:format] == 'SKOS' ? t('components.concepts') : t('components.instances'),
+                                                   count: ontology[:individual_count_formatted],
+                                                  link:  "/ontologies/#{ontology[:acronym]}?p=#{ontology[:format] == 'SKOS' ? "classes" : "instances"}")
+
+        = render SquareBadgeComponent.new(label: t('components.projects'),  count: ontology[:project_count], link:  "/ontologies/#{ontology[:acronym]}#projects_section" )
+
+        = render SquareBadgeComponent.new(label: t('components.notes'),  count: ontology[:note_count], link: "/ontologies/#{ontology[:acronym]}?p=notes" )
+
+
+    .d-flex.align-items-baseline.mt-1
+      - if ontology[:creationDate]
+        %span.mr-1
+          = render ChipButtonComponent.new(type: "clickable") do
+            %span.mr-1= t('components.submitted')
+            %span.browse-uploaded-date{data:{controller: 'timeago', 'timeago-datetime-value': ontology[:creationDate], 'timeago-add-suffix-value': 'true'}}
+            - if ontology[:contact]
+              %span.mx-1= t('components.by')
+              %span.browse-uploaded-date.text-truncate
+                = ontology[:contact].humanize
+
+      - if ontology[:released]
+        - date = render DateTimeFieldComponent.new(value: ontology[:released])
+        %span{data:{controller:'tooltip'}, title: t('components.creation_date', date: date)}
+          = render ChipButtonComponent.new(type: "clickable") do
+            = DateTime.parse(date).year rescue date
+
+      - if ontology[:format]
+        %span.mx-1
+          = render ChipButtonComponent.new(type: "clickable") do
+            = ontology[:format]
+      - if ontology_retired?(ontology)
+        %span.mx-1
+          = ontology_retired_badge(ontology)
+      - if ontology[:viewOfOnt]
+        %span.mx-1{data:{controller:'tooltip'}, title: t('components.view_of_the_ontology', ontology: ontology[:viewOfOnt].split('/').last )}
+          = render ChipButtonComponent.new(type: "clickable", text: t('components.view'))
+
+      - if session[:user]&.admin?
+        %div.mx-1{title: content_tag(:div, debug(ontology), style: 'height: 300px; overflow: scroll'), data:{controller: 'tooltip', 'tooltip-interactive-value': 'true'}}
+          = render ChipButtonComponent.new(type: "clickable", text: t('components.debug') , class: 'admin-background')
+- else
+  .browse-ontology-container
+    .browse-sket
+      .browse-sket-column-one
+        .one
+        .two
+        .three
+        .four
+      .browse-sket-column-two
+        .one
+        .two
+      .browse-sket-column-three
+        .one
+        .two

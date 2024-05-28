@@ -3,6 +3,8 @@
 class TurboFrameComponent < ViewComponent::Base
   include Turbo::FramesHelper
 
+  renders_one :loader
+
   def initialize(id:, src: '', **html_options)
     @id = id
     @src = src
@@ -28,6 +30,9 @@ class TurboFrameComponent < ViewComponent::Base
       @html_options[:class] += " #{out[:class]}"
     end
 
+    if @src && !@src.empty?
+      @html_options[:src] = @src
+    end
 
     @html_options
   end
