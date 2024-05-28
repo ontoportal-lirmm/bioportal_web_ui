@@ -5,17 +5,19 @@
     %meta{content: "no-cache", name: "turbo-cache-control"}/
   %body
     %p
-      = t("ontologies.notifier.name", name: @name)
+      = "Name: #{@name}"
     %p
-      = t("ontologies.notifier.email", email: @email)
+      = "Email: #{@email}"
     %p
-      = t("ontologies.notifier.location", location: @location)
-    %p= t("ontologies.notifier.tags")
+      = "Location: #{@location}"
+    %p
+      Tags
     %ul
       - for tag in @tags
         %li
           = tag
     %p
       %br/
-      %strong= t("ontologies.notifier.feedback")
+      %strong
+        Feedback
       = simple_format(@comment)
