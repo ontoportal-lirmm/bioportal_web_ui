@@ -18,13 +18,7 @@ export default class extends Controller {
             visualization_tab: ''
         };
 
-        let selectedItemId;
-        for (let i = 0; i < tabsList.length; i++) {
-            if (tabsList[i].classList.contains('active')) {
-                selectedItemId = tabsList[i].querySelector('a').id;
-                break;
-            }
-        }
+        const selectedItemId = Array.from(tabsList).find(tab => tab.classList.contains('active'))?.querySelector('a').id; 
 
         const jsonLink = links[selectedItemId];
         const conceptsJsonLink = document.querySelector('#concepts_json_link a');
