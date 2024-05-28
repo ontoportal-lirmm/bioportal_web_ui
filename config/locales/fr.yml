@@ -1503,4 +1503,9 @@ fr:
         Il vérifie si un URI donné est accessible et si le contenu associé peut être négocié en fonction des préférences du client.
         Cette fonctionnalité garantit la fiabilité et l'accessibilité des ressources liées dans l'écosystème RDF, aidant ainsi à maintenir l'intégrité des données et facilitant l'intégration transparente avec des ressources externes.
 
-
+  feedback_mail:
+    name: "Nom: %{name}"
+    email: "E-mail: %{email}"
+    location: "Emplacement: %{location}"
+    tags: Tags
+    feedback: Feedback
