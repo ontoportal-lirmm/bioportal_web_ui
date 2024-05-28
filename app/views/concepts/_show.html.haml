@@ -3,7 +3,7 @@
     = render Display::AlertComponent.new do
       = t('concepts.use_jump_to')
   - else
-    %div{'data-controller': 'concepts-json', 'data-concepts-json-class-url-value': "#{@ontology.id}/classes/#{escape(@concept.id)}", 'data-concepts-json-api-key-value': get_apikey, 'data-action': 'click->concepts-json#update'}
+    %div{'data-controller': 'concepts-json', 'data-action': 'click->concepts-json#update'}
       = render TabsContainerComponent.new(type:'outline') do |c|
         - c.pinned_right do
           - if $PURL_ENABLED
@@ -12,11 +12,12 @@
                 %i{class: "fas fa-link", aria: {hidden: "true"}}
           %div{'data-concepts-json-target': 'button'}
             = render RoundedButtonComponent.new(link: "#{@ontology.id}/classes/#{escape(@concept.id)}?display=all&apikey=#{get_apikey}", target:'_blank')
-
-        - c.item(title: t('concepts.details'), path: '#details', selected: true)
+        - apikey = "apikey=#{get_apikey}"
+        - baseClassUrl = "#{@ontology.id}/classes/#{escape(@concept.id)}"
+        - c.item(title: t('concepts.details'), path: '#details', selected: true, json_link: "#{baseClassUrl}?#{apikey}&display=all")
 
         - unless skos?
-          - c.item(id: 'instances', path: '#instances') do
+          - c.item(id: 'instances', path: '#instances', json_link: "#{baseClassUrl}/instances?#{apikey}") do
             = t('concepts.instances')
             (
             %span#concept_instances_sorted_list_count
@@ -24,13 +25,13 @@
 
         - c.item(title: t('concepts.visualization'), path: '#visualization')
 
-        - c.item(id: 'notes', path: '#notes') do
+        - c.item(id: 'notes', path: '#notes', json_link: "#{baseClassUrl}/notes?#{apikey}") do
           = t('concepts.notes')
           %span#note_count_wrapper
             (
             %span#note_count= @notes.length
             )
-        - c.item(id: 'mappings', path: '#mappings') do
+        - c.item(id: 'mappings', path: '#mappings', json_link: "#{baseClassUrl}/mappings?#{apikey}") do
           .d-flex
             #{t('concepts.mappings')}
             (
