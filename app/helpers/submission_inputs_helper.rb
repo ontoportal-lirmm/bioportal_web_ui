@@ -426,6 +426,8 @@ module SubmissionInputsHelper
                                                                .map { |x| ["#{x.name} (#{x.acronym})", x.id.to_s] }
       @ontology_acronyms << ['', '']
     end
+    
+    @ontology_acronyms = @ontology_acronyms.reject { |acronym, id| id == @ontology.id }
 
     input = ''
 
