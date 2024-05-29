@@ -24,7 +24,7 @@ class Admin::GroupsController < ApplicationController
   def edit
     @group = LinkedData::Client::Models::Group.find_by_acronym(params[:id]).first
     @acronyms = @group&.ontologies&.map { |url| url.match(/\/([^\/]+)$/)[1] }
-    @ontologies_group = LinkedData::Client::Models::Ontology.all(include: 'acronym').map {|o|[o.acronym, o.id] }
+    @ontologies_group = LinkedData::Client::Models::Ontology.all(include: 'name,acronym').map {|x| ["#{x.name} (#{x.acronym})", x.id.to_s]}
     respond_to do |format|
       format.html { render "edit", :layout => false }
     end
