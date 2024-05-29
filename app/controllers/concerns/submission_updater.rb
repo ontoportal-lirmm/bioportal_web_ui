@@ -114,7 +114,7 @@ module SubmissionUpdater
       { contact: %i[name email] },
       :homepage,
       :documentation,
-      {copyrightHolder: {}} # TODO add automatically no list Agents
+      {copyrightHolder: {}}, # TODO add automatically no list Agents
       :identifier,
       :is_doi_requested,
     ]
