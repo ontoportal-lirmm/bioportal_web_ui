@@ -298,10 +298,7 @@ en:
     score: Score
     api_documentation: "Annotator API documentation"
     insert_sample_text: Insert sample text
-    sample_text: There has been many recent studies on the use of microbial antagonists to control diseases incited by soilborne and airborne plant pathogenic bacteria
-              and fungi, in an attempt to replace existing methods of chemical control and avoid extensive use of fungicides, which often lead to resistance in plant pathogens.
-              In agriculture, plant growth-promoting and biocontrol microorganisms have emerged as safe alternatives to chemical pesticides. Streptomyces spp. and their
-              metabolites may have great potential as excellent agents for controlling various fungal and bacterial phytopathogens.
+    sample_text: Invasive alien species are plants, animals, pathogens and other organisms that are non-native to an ecosystem, and which may cause economic or environmental harm or adversely affect human health.
   concepts:
     error_valid_concept: "Error: You must provide a valid concept id"
     missing_roots: Missing roots
@@ -364,7 +361,7 @@ en:
     get_annotations: Get annotations
     get_recommendations: Get recommendations
     index:
-      tagline: The home of semantic resources and semantic artefacts in agri-food and related domains.
+      tagline: The LifeWatch ERIC repository of semantic resources for ecology and related domains
       title: Welcome to %{site}
       welcome: Welcome to %{site},
     ontology_upload: Do you want to share an semantic resource?
