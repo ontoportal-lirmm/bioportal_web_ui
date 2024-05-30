@@ -6,14 +6,15 @@
 footer{
     width: 1248px;
     background-color: var(--primary-color);
-    padding: 40px 50px;
+    padding: 10px 50px 40px 50px;
 }
 
 .footer-header{
     display: flex;
     justify-content: space-between;
-    margin-bottom: 40px;
+    align-items: center;
 }
+
 .footer-logo{
     color: white;
     display: flex;

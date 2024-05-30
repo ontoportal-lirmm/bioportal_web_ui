@@ -7,9 +7,7 @@
   %footer
     .footer-header
       .footer-logo
-        %img{:src => "#{asset_path("logos/ontoportal.svg")}"}
-        %p
-          = portal_name
+        = inline_svg_tag('logos/logoLW_eric_outline_white-01.svg')
       .footer-social-media-links
         - $FOOTER_LINKS[:social].each do |link|
           %a{:href => link[:link], :target => "_blank"}
