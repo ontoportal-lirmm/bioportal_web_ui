@@ -417,14 +417,6 @@ module OntologiesHelper
     ontology_data_sections.include?(section_title)
   end
 
-  def section_data(section_title)
-    if ontology_data_section?(section_title)
-      url_value = selected_section?(section_title) ? request.fullpath : "/ontologies/#{@ontology.acronym}?p=#{section_title}"
-      { controller: "history turbo-frame", 'turbo-frame-url-value': url_value, action: "lang_changed->history#updateURL lang_changed->turbo-frame#updateFrame" }
-    else
-      {}
-    end
-  end
 
   def lazy_load_section(section_title, &block)
     if current_section.eql?(section_title)
@@ -527,7 +519,7 @@ module OntologiesHelper
 
   def language_selector_hidden_tag(section)
     hidden_field_tag "language_selector_hidden_#{section}", '',
-                     data: { controller: "language-change", 'language-change-section-value': section, action: "change->language-change#dispatchLangChangeEvent" }
+                     data: { controller: "language-change", 'language-change-section-value': section, action: "change->language-change#changeContentLanguage" }
   end
 
 
