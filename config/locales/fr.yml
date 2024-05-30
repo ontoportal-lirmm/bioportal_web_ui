@@ -150,6 +150,7 @@ fr:
       persons_and_organizations: Personnes et Organisations
       sparql: SPARQL
       search: Recherche et Indexation
+      jobs: Ordonnancement des processus
       report_generated_on: "Rapport généré le :"
       licensed_to: Licencié à
       appliance_id: ID de l'appareil

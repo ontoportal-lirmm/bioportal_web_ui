@@ -1,0 +1,86 @@
+= turbo_frame_tag('jobs-admin') do
+  %div{id: "process-scheduling", role: "tabpanel", aria: { labelledby: "process-scheduling-tab" }}
+    %div.my-5
+      %div.mb-2
+        The schedule is to be changed by altering the configuration of the module <em>ncbo_cron</em>. This module
+        must be restarted for the changes to take effect.
+      %div.mb-5
+        %a.btn.btn-outline-secondary.btn-sm.show-scheduler-log
+          Show log
+      - @scheduledJobs.each do |job_key, job_descr|
+        %div.site-admin-page-header
+          %div.job-title
+            = job_descr[:title]
+          - if job_descr[:enabled]
+            - title = job_descr[:scheduler_type] + ": " + job_descr[:schedule]
+            %div.job-schedule{title: title, data: {enabled: "true", scheduler_type: job_descr[:scheduler_type], schedule: job_descr[:schedule]}}
+              = title
+          - else
+            %div.job-schedule{data: {enabled: "false"}}
+              Disabled
+        %div.site-admin-page-section
+          %a.btn.btn-outline-secondary.btn-sm.show-scheduler-log{data: {job_name: job_key}}
+            Show log
+  :javascript
+    jQuery("#process-scheduling .job-schedule").each(function () {
+      renderSchedule(this)
+    });
+
+    jQuery(".show-scheduler-log").on("click", function (event) {
+      let jobName = event.target.dataset.jobName;
+      if (jobName) {
+        window.open(
+          BP_CONFIG.rest_url + "/admin/scheduled_jobs/" + encodeURIComponent(jobName) + "/log?apikey=" + BP_CONFIG.apikey + "&userapikey=" + BP_CONFIG.userapikey,
+          "_blank");
+      } else {
+        window.open(
+          BP_CONFIG.rest_url + "/admin/scheduled_jobs/log?apikey=" + BP_CONFIG.apikey + "&userapikey=" + BP_CONFIG.userapikey,
+          "_blank");
+      }
+    });
+
+    function renderSchedule(scheduleElement) {
+      let enabled = scheduleElement.dataset.enabled;
+      let schedulerType = scheduleElement.dataset.schedulerType;
+      let schedule = scheduleElement.dataset.schedule;
+
+      if (enabled != "true")
+        return;
+
+      if (schedule == "")
+        return;
+
+      let s = "";
+
+      if (schedulerType == "every") {
+        let unit = null;
+        if (schedule.endsWith("m")) {
+          schedule = schedule.substr(0, schedule.length - 1);
+          unit = "minute";
+        } else if(schedule.endsWith("s")) {
+          schedule = schedule.substr(0, schedule.length - 1);
+          unit = "second";
+        }
+
+        schedule = schedule.trim();
+
+        if (schedule.match(/^[1-9]\d*$/)) { // schedule number
+          if (!unit) {
+            unit = "second"; // default to unit second
+          }
+          s = "Every " + schedule + " " + unit + (Number.parseInt(schedule) != 1 ? "s" : "");
+        } else {
+          s = "Every " + schedule + (unit ? " " + unit : "");
+        }
+      } else {
+        try {
+          s = window.cronstrue.toString(schedule);
+        } catch(e) {
+          console.log("An error occurred when verbalizing the following cron: " + schedule, e);
+        }
+      }
+
+      if (s) {
+        scheduleElement.textContent = s;
+      }
+    }

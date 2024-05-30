@@ -145,6 +145,7 @@ en:
       persons_and_organizations: Persons & Organizations
       sparql: SPARQL
       search: Search & Indexation
+      jobs: Process Scheduling
       report_generated_on: "Report generated on:"
       licensed_to: Licensed to
       appliance_id: Appliance ID
