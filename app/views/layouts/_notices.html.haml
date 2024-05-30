@@ -1,5 +1,5 @@
 - if Rails.env.appliance?
-  = license_notification(current_license())
+  = #license_notification(current_license())
 
 - flash.each do |key, message|
   = render NotificationComponent.new(title: message , type:  notification_type(key))
