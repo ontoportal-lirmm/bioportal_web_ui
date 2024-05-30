@@ -578,6 +578,8 @@ html {
   margin-bottom: 20px;
 }
 
-.nav-items  .nav-a{
+.regular-button, .secondary-button, .nav-items .nav-a, .account-page-rounded-button, .account-page-upload-ontology-button,
+.account-page-select-ontology-set-button, .account-page-subscribe-button ,
+.card-message-button, .feedback-button, .lost-password-button, .home-get-recommendations, .home-get-annotations{
   border-radius: 0 !important;
 }
