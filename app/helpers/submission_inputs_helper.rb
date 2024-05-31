@@ -97,7 +97,7 @@ module SubmissionInputsHelper
         url_input(name: name, label: label, value: @submission.URI)
       elsif long_text
         text_area_input(name: name, label: label,
-                        value: attr.values)
+                        value: attr.values, resize: true)
       else
         text_input(name: name, label: label,
                    value: attr.values, help: help)
