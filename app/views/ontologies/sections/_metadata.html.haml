@@ -9,10 +9,25 @@
       = render partial: 'ontologies/sections/metadata/ontology_metrics_section'
     .summary-page-second-row
       = ontology_depiction_card
-      = properties_card(t('ontologies.sections.identifiers'),t("ontologies.sections.identifiers"), @identifiers) do |values|
-        = horizontal_list_container(values) do |v|
-          - generate_htaccess = v.eql?(@identifiers["ontology_portal_uri"]&.first)
-          = render LinkFieldComponent.new(value: v, acronym: @ontology.acronym, raw: true, check_resolvability: true, generate_link: false, generate_htaccess: generate_htaccess)
+      = properties_card(t('ontologies.sections.identifiers'),t("ontologies.sections.identifiers")) do
+        = render Layout::ListComponent.new do |c|
+          - properties_list_component(c, @identifiers) do |values|
+            = horizontal_list_container(values) do |v|
+              - generate_htaccess = v.eql?(@identifiers["ontology_portal_uri"]&.first)
+              = render LinkFieldComponent.new(value: v, acronym: @ontology.acronym, raw: true, check_resolvability: true, generate_link: false, generate_htaccess: generate_htaccess)
+          - c.row do
+            - if @ontology.admin?(session[:user]) || !@doi.blank?
+              = render FieldContainerComponent.new(label: 'DOI') do
+                - if @doi
+                  = render LinkFieldComponent.new(value: @doi)
+                - else
+                  = render TurboFrameComponent.new(id: "#{@ontology.acronym}_doi_request", src: "/admin/doi_requests/#{@ontology.acronym}") do |t|
+                    - t.loader do
+                      %div.d-flex.align-items-center.w-100.justify-content-start
+                        %span.mr-1
+                          Search for a DOI request
+                        %span
+                          = render LoaderComponent.new(small: true)
 
       = properties_dropdown('dates',t("ontologies.sections.dates"),'', @dates_properties) do |values|
         - Array(values).sort.map do |v|
@@ -22,7 +37,7 @@
       = properties_dropdown('person_and_organization',t("ontologies.sections.person_and_organization"),'', @agents_properties) do |values|
         = horizontal_list_container(values) do |v|
           = agent_chip_component(v)
-            
+
       = properties_dropdown('link',t("ontologies.sections.other_links"), t("ontologies.sections.info_tooltip_links") , @links_properties) do |values|
         = horizontal_list_container(values) do |v|
           = render LinkFieldComponent.new(value: v, raw: true)

@@ -1,0 +1,9 @@
+= turbo_frame_tag "#{@ontology.acronym}_doi_request" do
+  - if @identifier_request
+    %div.d-flex.align-items-center
+      %span
+        A DOI was requested, waiting for admin approval,
+      %span
+        = cancel_doi_request_button(@ontology.acronym)
+  - else
+    = doi_request_button(@ontology.acronym)

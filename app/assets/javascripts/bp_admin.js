@@ -1,16 +1,4 @@
-/**
- * Created by mdorf on 3/27/15.
- * Updated by Syphax.Bouazzouni on 28/04/21 , users admin part
- */
-
-const handlerType = {
-  ONTOLOGY: 'ONTOLOGY',
-  DOI_REQUEST: 'DOI_REQUEST'
-}
-
 var DUMMY_ONTOLOGY = "DUMMY_ONT";
-var DUMMY_DOI_REQUEST = "DUMMY_DOI_REQUEST"
-
 if (window.BP_CONFIG === undefined) {
   window.BP_CONFIG = jQuery(document).data().bp.config;
 }
@@ -31,7 +19,6 @@ function parseReportDate(dateStr) {
   if (dateStr.trim() === "") return "";
   var reggie = /^(((0[13578]|1[02])[\/\.-](0[1-9]|[12]\d|3[01])[\/\.-]((19|[2-9]\d)\d{2}),\s(0[0-9]|1[0-2]):(0[0-9]|[1-59]\d)\s(AM|am|PM|pm))|((0[13456789]|1[012])[\/\.-](0[1-9]|[12]\d|30)[\/\.-]((19|[2-9]\d)\d{2}),\s(0[0-9]|1[0-2]):(0[0-9]|[1-59]\d)\s(AM|am|PM|pm))|((02)[\/\.-](0[1-9]|1\d|2[0-8])[\/\.-]((19|[2-9]\d)\d{2}),\s(0[0-9]|1[0-2]):(0[0-9]|[1-59]\d)\s(AM|am|PM|pm))|((02)[\/\.-](29)[\/\.-]((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)),\s(0[0-9]|1[0-2]):(0[0-9]|[1-59]\d)\s(AM|am|PM|pm)))$/g;
   var dateArr = reggie.exec(dateStr);
-  if (dateArr !== null) {
   dateArr = dateArr.filter(function(e){return e});
   var hours = Number(dateArr[7]);
   var ampm = dateArr[9].toUpperCase();
@@ -40,36 +27,22 @@ function parseReportDate(dateStr) {
   var strHours = hours.toString();
   var strMonth = (Number(dateArr[3]) - 1).toString();
   var dateObj = new Date(dateArr[5], strMonth, dateArr[4], strHours, dateArr[8], "00", "00");
-  } else {
-    dateObj = new Date(dateStr);    
-  }
   return dateObj.toLocaleString([], {month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute:'2-digit'});
 }
 
-var AjaxAction = function(httpMethod, operation, path, isLongOperation, params, _handlerType = handlerType.ONTOLOGY) {
+var AjaxAction = function(httpMethod, operation, path, isLongOperation, params) {
   params = params || {};
   this.httpMethod = httpMethod;
   this.operation = operation;
   this.path = path;
   this.isLongOperation = isLongOperation;
-
-  this.handlerType = _handlerType;
-  if (this.handlerType === handlerType.DOI_REQUEST) {
-    this.doi_requests = [DUMMY_DOI_REQUEST];    
-    if (params["doi_requests"]) {
-      this.doi_requests = params["doi_requests"].split(",");
-      delete params["doi_requests"];
-    }
-  } else {
   this.ontologies = [DUMMY_ONTOLOGY];
+  this.isProgressMessageEnabled = true;
+
   if (params["ontologies"]) {
     this.ontologies = params["ontologies"].split(",");
     delete params["ontologies"];
   }
-  }
-  
-  this.isProgressMessageEnabled = true;
-
   this.params = params;
   this.confirmMsg = "Are you sure?";
 };
@@ -97,14 +70,8 @@ AjaxAction.prototype.showProgressMessage = function() {
   this.clearStatusMessages();
   var msg = "Performing " + this.operation;
 
-  if (this.handlerType === handlerType.DOI_REQUEST) {
-    if (this.doi_requests[0] !== DUMMY_ONTOLOGY) {
-      msg += " for " + this.doi_requests.join(", ");
-    }
-  } else {
   if (this.ontologies[0] !== DUMMY_ONTOLOGY) {
     msg += " for " + this.ontologies.join(", ");
-  }
   }
   jQuery("#progress_message").text(msg).html();
   jQuery("#progress_message").show();
@@ -114,21 +81,13 @@ AjaxAction.prototype.showStatusMessages = function(success, errors, notices, isA
   _showStatusMessages(success, errors, notices, isAppendMode);
 };
 
-AjaxAction.prototype.getSelectedItemsForDisplay = function() {
+AjaxAction.prototype.getSelectedOntologiesForDisplay = function() {
   var msg = '';
 
-  if (this.handlerType === handlerType.DOI_REQUEST) {
-    if (this.doi_requests.length > 0) {
-      var ontMsg = this.doi_requests.join(", ");
-      msg = "<br style='margin-bottom:5px;'/><span style='color:red;font-weight:bold;'>" + ontMsg + "</span><br/>";
-    }
-  } else {
   if (this.ontologies.length > 0) {
     var ontMsg = this.ontologies.join(", ");
     msg = "<br style='margin-bottom:5px;'/><span style='color:red;font-weight:bold;'>" + ontMsg + "</span><br/>";
   }
-  }
-  
   return msg;
 };
 
@@ -145,24 +104,9 @@ AjaxAction.prototype._ajaxCall = function() {
   }
 
   // using javascript closure for passing index to asynchronous calls
-  var refresh_on_complete = false //if true, then the item list is refreshed after the processing is finished
-  var items = [];
-  if (this.handlerType === handlerType.DOI_REQUEST) {
-    items = self.doi_requests;
-    refresh_on_complete = true;
-  } else {
-    items = self.ontologies;
-    }
-
-  jQuery.each(items, function(index, item) {
-    if (self.handlerType === handlerType.DOI_REQUEST) {
-      if (item != DUMMY_DOI_REQUEST) {
-        params["doi_requests"] = item;
-      }
-    } else {
-      if (item != DUMMY_ONTOLOGY) {
-        params["ontologies"] = item;
-      }
+  jQuery.each(self.ontologies, function(index, ontology) {
+    if (ontology != DUMMY_ONTOLOGY) {
+      params["ontologies"] = ontology;
     }
     var deferredObj = jQuery.Deferred();
     if (!self.isLongOperation) {
@@ -191,7 +135,7 @@ AjaxAction.prototype._ajaxCall = function() {
         }
 
         if (data.success) {
-          self.onSuccessAction(data, item, deferredObj);
+          self.onSuccessAction(data, ontology, deferredObj);
 
           if (data.success) {
             var suc = data.success.replace(reg, ',');
@@ -213,7 +157,7 @@ AjaxAction.prototype._ajaxCall = function() {
       },
       complete: function(request, textStatus) {
         if (errorState || !self.isLongOperation) {
-          self.removeSelectedRow(item);
+          self.removeSelectedRow(ontology);
         }
       }
     });
@@ -224,50 +168,22 @@ AjaxAction.prototype._ajaxCall = function() {
   jQuery.when.apply(null, promises).always(function() {
     jQuery("#progress_message").hide();
     jQuery("#progress_message").html("");
-
-    //if enabled, refresh the items list
-    if(refresh_on_complete) {
-      console.log("refresh_on_complete - this.handlerType:", self.handlerType)
-      if (self.handlerType === handlerType.DOI_REQUEST) {
-        let doiReqDataTable = jQuery('#adminDOIReq').DataTable();
-        console.log("refresh_on_complete: doiReqDataTable = ", doiReqDataTable)
-        if(doiReqDataTable){
-          console.log("refresh_on_complete: doiReqTable.ajax.reload()")
-          //displayDOIRequest({}, DUMMY_DOI_REQUEST);
-          doiReqDataTable.ajax.reload();
-        }
-      }
-    }
   });
 };
 
-AjaxAction.prototype.removeSelectedRow = function(item) {
-  if (this.handlerType === handlerType.DOI_REQUEST) {    
-    if (item != DUMMY_DOI_REQUEST) {
-      var jQueryRow = jQuery("#tr_" + item);
+AjaxAction.prototype.removeSelectedRow = function(ontology) {
+  if (ontology != DUMMY_ONTOLOGY) {
+    var jQueryRow = jQuery("#tr_" + ontology);
     jQueryRow.removeClass('selected');
   }
-  } else {
-    if (item != DUMMY_ONTOLOGY) {
-      var jQueryRow = jQuery("#tr_" + item);
-      jQueryRow.removeClass('selected');
-    }
-  } 
 };
 
 AjaxAction.prototype.ajaxCall = function() {
   var self = this;
 
-  if (this.handlerType === handlerType.DOI_REQUEST) {    
-    if (self.doi_requests.length === 0) {
-      alertify.alert("Please select at least one request from the table to perform action on.<br/>To select/de-select requests, simply click anywhere in the request row.");
-      return;
-    }
-  } else {
   if (self.ontologies.length === 0) {
     alertify.alert("Please select at least one ontology from the table to perform action on.<br/>To select/de-select ontologies, simply click anywhere in the ontology row.");
     return;
-  }
   }
 
   if (self.confirmMsg) {
@@ -397,7 +313,7 @@ function RefreshReport() {
   this.setSelectedOntologies();
 
   if (this.ontologies.length > 0) {
-    msg = "Ready to refresh report for ontologies:" + this.getSelectedItemsForDisplay() + "Proceed?";
+    msg = "Ready to refresh report for ontologies:" + this.getSelectedOntologiesForDisplay() + "Proceed?";
   } else {
     this.ontologies = [DUMMY_ONTOLOGY];
   }
@@ -418,7 +334,7 @@ RefreshReport.act = function() {
 function DeleteOntologies() {
   AjaxAction.call(this, "DELETE", "ONTOLOGY DELETION", "ontologies", false);
   this.setSelectedOntologies();
-  this.setConfirmMsg("You are about to delete the following ontologies:" + this.getSelectedItemsForDisplay() + "<b>This action CAN NOT be undone!!! Are you sure?</b>");
+  this.setConfirmMsg("You are about to delete the following ontologies:" + this.getSelectedOntologiesForDisplay() + "<b>This action CAN NOT be undone!!! Are you sure?</b>");
 }
 
 DeleteOntologies.prototype = Object.create(AjaxAction.prototype);
@@ -443,7 +359,7 @@ function ProcessOntologies(action) {
   };
   AjaxAction.call(this, "PUT", actions[action], "ontologies", false, {actions: action});
   this.setSelectedOntologies();
-  this.setConfirmMsg("You are about to perform " + actions[action] + " on the following ontologies:" + this.getSelectedItemsForDisplay() + "The ontologies will be added to the queue and processed on the next cron job execution.<br style='margin:10px 0;'/><b>Should I proceed?</b>");
+  this.setConfirmMsg("You are about to perform " + actions[action] + " on the following ontologies:" + this.getSelectedOntologiesForDisplay() + "The ontologies will be added to the queue and processed on the next cron job execution.<br style='margin:10px 0;'/><b>Should I proceed?</b>");
 }
 
 ProcessOntologies.prototype = Object.create(AjaxAction.prototype);
@@ -741,8 +657,8 @@ jQuery(".admin.index").ready(function() {
 
   // onclick action for "Refresh Report" button
   jQuery("#refresh_report_action").click(function() {
-        RefreshReport.act();
-    });
+    RefreshReport.act();
+  });
 
 
 

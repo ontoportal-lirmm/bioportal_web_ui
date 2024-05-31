@@ -1,0 +1,34 @@
+= turbo_frame_tag('doi-request-admin') do
+  %div.my-1.border-radius-0
+    = render_alerts_container
+    = render TableComponent.new(id: 'doi_request', custom_class: 'border rounded p-1', searching: true, paging:true, sort_column: '4') do |t|
+      - t.header do |h|
+        - h.th {'REQUEST ID'}
+        - h.th {'USER'}
+        - h.th {'ONTOLOGY'}
+        - h.th {'SUBMISSION'}
+        - h.th {'DATE CREATED'}
+        - h.th {'TYPE'}
+        - h.th {'STATUS'}
+        - h.th {t('admin.categories.index.actions')}
+
+      - @doi_requests&.each do |request|
+        - t.row do |r|
+          - r.td { request[:requestId] }
+          - r.td { request[:requestedBy] ? "#{request[:requestedBy][:username]} (#{request[:requestedBy][:email]})" : 'Removed user' }
+          - r.td { request[:ontology] ? link_to(request[:ontology], ontology_path(id: request[:ontology]), data: {turbo: false}) : 'Ontology removed' }
+          - r.td { request[:submissionId]&.to_s || '0' }
+          - r.td { DateTime.parse(request[:requestDate]).to_s }
+          - r.td { request[:requestType] }
+          - r.td do
+            = turbo_frame_tag "#{request[:requestId]}_status" do
+              = request[:status]
+          - r.td do
+            = turbo_frame_tag "#{request[:requestId]}_actions" do
+              - if request[:status].eql?('PENDING')
+                %div.d-flex
+                  %span
+                    = link_to 'Process', admin_doi_requests_path(actions: 'process', doi_requests: request[:requestId]) , class: 'btn btn-link', data: { turbo: true,  turbo_frame: '_top'}
+                  %span
+                  = link_to 'Reject', admin_doi_requests_path(actions: 'reject', doi_requests: request[:requestId]),  class: 'btn btn-link',  data: { turbo: true,  turbo_frame: '_top'}
+

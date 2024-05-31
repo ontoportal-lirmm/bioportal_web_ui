@@ -343,7 +343,14 @@ class OntologiesController < ApplicationController
     @content_properties = properties_hash_values(category_attributes["content"])
     @community_properties = properties_hash_values(category_attributes["community"] + [:notes])
     @identifiers = properties_hash_values([:URI, :versionIRI, :identifier])
+
+    @doi = @identifiers["identifier"].first.select{|x| x['doi.org']}.first
+    @identifiers["identifier"].first.reject!{|x| x['doi.org']}
+    @identifiers.delete("identifier") if  @identifiers["identifier"].first.blank?
+
     @identifiers["ontology_portal_uri"] = ["#{$UI_URL}/ontologies/#{@ontology.acronym}", "#{portal_name} URI"]
+
+
     @projects_properties = properties_hash_values(category_attributes["usage"])
     @ontology_icon_links = [%w[summary/download dataDump],
                             %w[summary/homepage homepage],

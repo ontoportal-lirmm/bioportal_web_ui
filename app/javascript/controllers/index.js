@@ -16,9 +16,6 @@ application.register("class-search-auto-complete", ClassSearchAutoCompleteContro
 import ContainerSplitterController from "./container_splitter_controller"
 application.register("container-splitter", ContainerSplitterController)
 
-import DoiRequestController from "./doi_request_controller"
-application.register("doi-request", DoiRequestController)
-
 import FairScoreHomeController from "./fair_score_home_controller"
 application.register("fair-score-home", FairScoreHomeController)
 

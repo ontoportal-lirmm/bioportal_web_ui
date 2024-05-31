@@ -286,19 +286,29 @@ class AdminController < ApplicationController
 
   end
 
-
   def doi_requests_list
-    render json: doi_requests
+    @doi_requests = doi_requests[:doi_requests]
+    render 'doi_request', layout: nil
   end
 
   def process_doi_requests
-    response = { errors: '', success: '' }
+    response = { errors: nil, success: nil }
     if params['actions'].nil? || params['actions'].empty?
       response[:errors] = "No operation 'actions' was specified in params for request processing"
-      render :json => response
     else
-      process_identifier_requests('processed', 'processing', params['actions'])
+      response = process_identifier_requests('processed', 'processing', params['actions'])
     end
+
+    if !response[:errors].blank?
+      render_turbo_stream alert_error(id: alerts_container_id) { response[:errors] }
+    else
+      render_turbo_stream(
+        alert_success(id: alerts_container_id) { response[:success] },
+        replace("#{params['doi_requests']}_status") { params['actions'].eql?('reject') ? 'REJECTED' : 'SATISFIED'},
+        remove("#{params['doi_requests']}_actions")
+      )
+    end
+
   end
 
   private

@@ -99,6 +99,9 @@ Rails.application.routes.draw do
       get ':collection/data', to: 'search#search'
     end
 
+    get 'doi_requests/:ontology_id', to: 'doi_request#show'
+    post 'doi_requests/:ontology_id/create', to: 'doi_request#create'
+    post 'doi_requests/:ontology_id/cancel', to: 'doi_request#update'
   end
 
   post 'admin/clearcache', to: 'admin#clearcache'
@@ -113,6 +116,8 @@ Rails.application.routes.draw do
   get 'admin/update_check_enabled', to: 'admin#update_check_enabled'
   get 'admin/ontologies/:acronym/log', to: 'admin#parse_log'
   get 'admin/jobs', to: 'admin#jobs'
+  get '/admin/doi_requests_list' => 'admin#doi_requests_list'
+  match '/admin/doi_requests' => 'admin#process_doi_requests', via: [:put, :get]
 
   resources :subscriptions
 
@@ -210,7 +215,6 @@ Rails.application.routes.draw do
   get 'ajax/label_xl/label', to: "label_xl#show_label"
   get 'ajax/label_xl', to: "label_xl#show"
   get '/ajax/biomixer' => 'concepts#biomixer'
-  match '/ajax/cancelIdentifierRequest' => 'ajax_proxy#cancelIdentifierRequest', via: :post
   get '/ajax/fair_score/html' => 'fair_score#details_html'
   get '/ajax/submission/show_licenses/:id' => 'ontologies#show_licenses'
   get '/ajax/fair_score/json' => 'fair_score#details_json'
@@ -229,23 +233,6 @@ Rails.application.routes.draw do
   get 'check_resolvability' => 'check_resolvability#index'
   get 'check_url_resolvability' => 'check_resolvability#check_resolvability'
 
-  # Admin
-  match '/admin/clearcache' => 'admin#clearcache', via: [:post]
-  match '/admin/resetcache' => 'admin#resetcache', via: [:post]
-  match '/admin/clear_goo_cache' => 'admin#clear_goo_cache', via: [:post]
-  match '/admin/clear_http_cache' => 'admin#clear_http_cache', via: [:post]
-  match '/admin/ontologies_report' => 'admin#ontologies_report', via: [:get]
-  match '/admin/refresh_ontologies_report' => 'admin#refresh_ontologies_report', via: [:post]
-  match '/admin/ontologies' => 'admin#delete_ontologies', via: [:delete]
-  match '/admin/ontologies' => 'admin#process_ontologies', via: [:put]
-  match '/admin/ontologies/:acronym/submissions/:id' => 'admin#delete_submission', via: [:delete]
-  match '/admin/ontologies/:acronym/submissions' => 'admin#submissions', via: [:get]
-  match '/admin/ontologies/:acronym/log' => 'admin#parse_log', via: [:get]
-  match '/admin/update_info' => 'admin#update_info', via: [:get]
-  match '/admin/update_check_enabled' => 'admin#update_check_enabled', via: [:get]
-  match '/admin/users' => 'admin#users', via: [:get]
-  match '/admin/doi_requests_list' => 'admin#doi_requests_list', via: [:get]
-  match '/admin/doi_requests' => 'admin#process_doi_requests', via: [:put]
   # Ontolobridge
   # post '/ontolobridge/:save_new_term_instructions' => 'ontolobridge#save_new_term_instructions'
 
