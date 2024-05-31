@@ -420,12 +420,14 @@ module SubmissionInputsHelper
     end
   end
 
-  def generate_ontology_select_input(name, label, selected, multiple)
+  def generate_ontology_select_input(name, label, selected, multiple, reject_ontology: @ontology)
     unless @ontology_acronyms
       @ontology_acronyms = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', display_links: false, display_context: false, include_views: true)
                                                                .map { |x| ["#{x.name} (#{x.acronym})", x.id.to_s] }
       @ontology_acronyms << ['', '']
     end
+
+    @ontology_acronyms = @ontology_acronyms.reject { |acronym, id| id == reject_ontology.id }
 
     input = ''
 
