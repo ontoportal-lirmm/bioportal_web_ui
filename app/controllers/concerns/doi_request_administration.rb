@@ -7,8 +7,6 @@ module DoiRequestAdministration
     DOI_REQUESTS_URL = "#{AdminController::ADMIN_URL}doi_requests_list"
   end
 
-
-
   def doi_requests
     response = { doi_requests: Hash.new, errors: '', success: '' }
     start = Time.now
@@ -39,12 +37,10 @@ module DoiRequestAdministration
       doi_requests = params['doi_requests'].split(',').map { |o| o.strip }
       doi_requests.each do |request_id|
         begin
-          doi_request = LinkedData::Client::Models::IdentifierRequest.find_by_requestId(request_id).first
+          doi_request = LinkedData::Client::Models::IdentifierRequest.find(request_id)
           if doi_request
             if doi_request.status.upcase == 'PENDING'
               # Get ontology submission information
-
-
               error_response = nil
               case action
               when 'process'
@@ -75,13 +71,13 @@ module DoiRequestAdministration
       response[:success] = response[:success][0...-2] unless response[:success].empty?
       response[:errors] = response[:errors][0...-2] unless response[:errors].empty?
     end
-    render json: response
+   response
   end
 
   private
 
   def process_doi(doi_request)
-    doi_req_submission =  LinkedData::Client::Models::OntologySubmission.find(doi_request.submission.id, include: 'all')
+    doi_req_submission =  doi_request.submission
     ont_submission_id = doi_req_submission.submissionId
     hash_metadata = data_cite_metadata_json(doi_req_submission.ontology, ont_submission_id)
     if doi_request.requestType == 'DOI_CREATE'
@@ -93,12 +89,12 @@ module DoiRequestAdministration
 
   def data_cite_metadata_json( ontology, ont_submission_id)
     ontology_acronym = ontology.acronym
-    ontology_name = ontology.name
     sub_metadata_url = SUB_DATA_CITE_METADATA_URL.call(ontology_acronym, ont_submission_id)
     hash_metadata = LinkedData::Client::HTTP.get(sub_metadata_url, {}, raw: true)
     json = JSON.parse(hash_metadata, symbolize_names: true)
 
-    json[:title] = ontology_name
+    json[:titles].each {|t| t.delete(:titleType) if t[:titleType].blank? }
+    #json[:title] = ontology_name
     json[:url] = json[:url] || (helpers.ontologies_url + '/' +ontology_acronym)
     json
   end

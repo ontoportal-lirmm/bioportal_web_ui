@@ -58,20 +58,20 @@ en:
     watching: Watching
     beta_badge_text: Beta
     beta_badge_tooltip: This feature is experimental and may have issues
-    ontology_not_found: Ontology %{acronym} not found
+    ontology_not_found: Semantic resource %{acronym} not found
     concept_not_found: Concept %{concept} not found
     error_load: "Error: load failed"
     not_found_message: Not Found
     try_again: There was an error, please try again
-    provide_ontology_or_concept: Please provide an ontology id or concept id with an ontology id.
+    provide_ontology_or_concept: Please provide an semantic resource id or concept id with an semantic resource id.
     search_for_class: Please search for a class using the Jump To field above
     missing_roots_for_ontology: Missing @roots for %{acronym}
     missing_roots: Missing roots
     missing_class: Missing class %{root_child}
     missing_class_ontology: Missing class %{acronym} / %{concept_id}
     error_simplify_class: "Failure to simplify class: %{cls}"
-    no_cache: "No cache or expired cache for ontology: %{id}"
-    incomplete_simple_ontology: "Incomplete simple ontology: %{id}, %{ont}"
+    no_cache: "No cache or expired cache for semantic resource: %{id}"
+    incomplete_simple_ontology: "Incomplete simple semantic resource: %{id}, %{ont}"
   label_xl:
     error_valid_label_xl: "Error: You must provide a valid label_xl id"
 
@@ -81,7 +81,7 @@ en:
     error_update_info: Problem retrieving update info - %{message}
     current_version: "Current version: %{version}"
     appliance_id: "Appliance ID: %{id}"
-    no_record_exists: No record exists for ontology %{acronym}
+    no_record_exists: No record exists for semantic resource %{acronym}
     cache_flush_success: UI cache successfully flushed
     cache_flush_error: "Problem flushing the UI cache - %{class}: %{message}"
     no_flush_command: "The UI cache does not respond to the 'flush_all' command"
@@ -92,30 +92,30 @@ en:
     clear_goo_cache_error: "Problem flushing the Goo cache - %{class}: %{message}"
     clear_http_cache_success: HTTP cache successfully flushed
     clear_http_cache_error: "Problem flushing the HTTP cache - %{class}: %{message}"
-    refresh_report_without_ontologies: Refresh of ontologies report started successfully
-    refresh_report_with_ontologies: "Refresh of report for ontologies: %{ontologies} started successfully"
-    submission_deleted_successfully: Submission %{id} for ontology %{ont} was deleted successfully
-    submission_not_found: Submission %{id} for ontology %{ont} was not found in the system
-    ontology_not_found: Ontology %{ont} was not found in the system
-    problem_deleting_submission: "Problem deleting submission %{id} for ontology %{ont} - %{class}: %{message}"
+    refresh_report_without_ontologies: Refresh of semantic resources report started successfully
+    refresh_report_with_ontologies: "Refresh of report for semantic resources: %{ontologies} started successfully"
+    submission_deleted_successfully: Submission %{id} for semantic resource %{ont} was deleted successfully
+    submission_not_found: Submission %{id} for semantic resource %{ont} was not found in the system
+    ontology_not_found: Semantic resource %{ont} was not found in the system
+    problem_deleting_submission: "Problem deleting submission %{id} for semantic resource %{ont} - %{class}: %{message}"
     problem_refreshing_report: "Problem refreshing report - %{class}: %{message}"
     report_successfully_regenerated: Report successfully regenerated on %{report_date_generated}
-    ontologies_report_retrieved: Ontologies Report - retrieved %{ontologies} ontologies in %{time}s"
-    problem_retrieving_ontologies: Problem retrieving ontologies report - %{message}
-    no_ontologies_parameter_passed: "No ontologies parameter passed. Syntax: ?ontologies=ONT1,ONT2,...,ONTN"
-    ontology_process_success: "Ontology %{ont} %{success_keyword} successfully,"
-    ontology_not_found_system: "Ontology %{ont} was not found in the system, "
-    ontology_process_error: "Problem %{error_keyword} ontology %{ont} - %{class}: %{message},"
-    new_ontologies_created_title: "The following ontologies: %{count} were created in this year"
+    ontologies_report_retrieved: Semantic resources Report - retrieved %{ontologies} semantic resources in %{time}s"
+    problem_retrieving_ontologies: Problem retrieving semantic resources report - %{message}
+    no_ontologies_parameter_passed: "No semantic resources parameter passed. Syntax: ?ontologies=ONT1,ONT2,...,ONTN"
+    ontology_process_success: "Semantic resource %{ont} %{success_keyword} successfully,"
+    ontology_not_found_system: "Semantic resource %{ont} was not found in the system, "
+    ontology_process_error: "Problem %{error_keyword} semantic resource %{ont} - %{class}: %{message},"
+    new_ontologies_created_title: "The following semantic resources: %{count} were created in this year"
     turbo_confirm: "Are you sure you want to %{name}?"
     analytics:
-      total_ontologies: Total Ontologies
-      ontologies_count: "%{size} new ontology this year"
-      ontologies_with_errors: Ontologies with errors
+      total_ontologies: Total semantic resources
+      ontologies_count: "%{size} new semantic resource this year"
+      ontologies_with_errors: Semantic resources with errors
       total_visits: Total visits
       active_users: Active users
       visit_users: "%{visits} users since last month"
-      ontology_visits: Ontology visits
+      ontology_visits: Semantic resource visits
       unique_users_visits: Unique users visits
       page_visits: Page visits of this month
     main:
@@ -136,7 +136,7 @@ en:
       administration_console: Administration console
       analytics: Analytics
       site_administration: Site Administration
-      ontology_administration: Ontology Administration
+      ontology_administration: Semantic resources Administration
       licensing: Licensing
       users: Users
       metadata_administration: Metadata Administration
@@ -145,6 +145,7 @@ en:
       persons_and_organizations: Persons & Organizations
       sparql: SPARQL
       search: Search & Indexation
+      jobs: Process Scheduling
       report_generated_on: "Report generated on:"
       licensed_to: Licensed to
       appliance_id: Appliance ID
@@ -171,7 +172,7 @@ en:
         name: Name
         description: Description
         created: Created
-        ontologies: Ontologies
+        ontologies: Semantic resources
       new:
         create_new_group: Create new group
         create_group: Create group
@@ -202,7 +203,7 @@ en:
         name: Name
         description: Description
         created: Created
-        ontologies: Ontologies
+        ontologies: Semantic resources
       edit:
         edit_category: Edit category
         save: Save
@@ -245,9 +246,9 @@ en:
         collections_management: "COLLECTIONS MANAGEMENT"
         name: "Name"
         actions: "Actions"
-        ontology: "Ontology"
+        ontology: "Semantic resource"
         agent: "Agent"
-        ontology_submission: "Ontology submission"
+        ontology_submission: "Semantic resource submission"
         select_model: "Select a model to index"
         generate_schema: "Generate schema"
         see_schema: "See schema"
@@ -270,7 +271,7 @@ en:
 
   annotator:
     title: Annotator
-    description: Get annotations for text with ontology classes
+    description: Get annotations for text with semantic resource classes
     input_hint: Enter or past a text to be annotated ...
     options: Options
     whole_word_only: Whole word only
@@ -291,17 +292,14 @@ en:
     context: Context
     certainty: Certainty
     class: Class
-    ontology: Ontology
+    ontology: Semantic resource
     negation: Negation
     temporality: Temporality
     experiencer: Experiencer
     score: Score
     api_documentation: "Annotator API documentation"
     insert_sample_text: Insert sample text
-    sample_text: There has been many recent studies on the use of microbial antagonists to control diseases incited by soilborne and airborne plant pathogenic bacteria
-              and fungi, in an attempt to replace existing methods of chemical control and avoid extensive use of fungicides, which often lead to resistance in plant pathogens.
-              In agriculture, plant growth-promoting and biocontrol microorganisms have emerged as safe alternatives to chemical pesticides. Streptomyces spp. and their
-              metabolites may have great potential as excellent agents for controlling various fungal and bacterial phytopathogens.
+    sample_text: Invasive alien species are plants, animals, pathogens and other organisms that are non-native to an ecosystem, and which may cause economic or environmental harm or adversely affect human health.
   concepts:
     error_valid_concept: "Error: You must provide a valid concept id"
     missing_roots: Missing roots
@@ -309,8 +307,8 @@ en:
     list_error: The Collection didn't define any member
     close: Close
     request_terms_instructions: |
-      The text below is displayed to the user as the instructions on how to request new terms for your ontology.
-      You can change this text for %{acronym} ontology by clicking anywhere on the existing text to 
+      The text below is displayed to the user as the instructions on how to request new terms for your semantic resource.
+      You can change this text for %{acronym} semantic resource by clicking anywhere on the existing text to 
       bring up the editing dialog.
       Click 'Submit Changes' to save or 'Cancel' to discard your changes.
     submit_changes: Submit Changes
@@ -346,7 +344,7 @@ en:
     bug: Bug
     proposition: Proposition
     question: Question
-    ontology_submissions_request: Ontology submissions request
+    ontology_submissions_request: Semantic resource submissions request
     include_name: Please include your name
     include_email: Please include your email
     include_comment: Please include your comment
@@ -354,34 +352,34 @@ en:
     notice_feedback: Feedback has been sent
     account_title: Account Information
     agroportal_figures: "%{site} in figures"
-    benefit1: Discover new insights and knowledge by exploring other ontologies or smeantic resources in the repository.
+    benefit1: Discover new insights and knowledge by exploring other semantic resources or semantic resources in the repository.
     benefit2: Contribute to knowledge sharing and semantic interoperability in your domain.
-    benefit3: Map your ontology to other relevant ones in the domain and collaborate with other users.
-    benefit4: Get feedback and suggestions from other users who can use and comment on your ontology.
-    benefit5: Precisely describe your ontology with relevant metadata and get a FAIR score for your ontology.
+    benefit3: Map your semantic resource to other relevant ones in the domain and collaborate with other users.
+    benefit4: Get feedback and suggestions from other users who can use and comment on your semantic resource.
+    benefit5: Precisely describe your semantic resource with relevant metadata and get a FAIR score for your semantic resource.
     fair_details: See details
     fairness: FAIR Score
     get_annotations: Get annotations
     get_recommendations: Get recommendations
     index:
-      tagline: The home of ontologies and semantic artefacts in agri-food and related domains.
+      tagline: The LifeWatch ERIC repository of semantic resources for ecology and related domains
       title: Welcome to %{site}
       welcome: Welcome to %{site},
-    ontology_upload: Do you want to share an ontology?
-    ontology_upload_benefits: 'By uploading and sharing your ontology to %{site}, you can:'
-    ontology_upload_button: Submit ontology
-    discover_ontologies_button: Discover ontologies
-    ontology_upload_desc: Uploading an ontology or another type of semantic artefact (vocabulary, terminology, thesaurus, ...) is a way of sharing your knowledge with others.
+    ontology_upload: Do you want to share an semantic resource?
+    ontology_upload_benefits: 'By uploading and sharing your semantic resources to %{site}, you can:'
+    ontology_upload_button: Submit a semantic resource
+    discover_ontologies_button: Discover semantic resources
+    ontology_upload_desc: Uploading an semantic resource, ontology, vocabulary, terminology, thesaurus, ... is a way of sharing your knowledge with others.
     paste_text_prompt: Enter a paragraph of text or some keywords...
     recommender_annotator: Recommender and Annotator
     support_and_collaborations: Support & Collaborations
     ontoportal_instances: Other OntoPortal Instances
     see_details: See details
-    info_tooltip_text: "You are seing the average scores for all the public ontologies in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
+    info_tooltip_text: "You are seing the average scores for all the public semantic resources in EcoPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
     average: Average
     min: Min
     max: Max
-    ontologies: Ontologies
+    ontologies: Semantic resources
     classes: Classes
     individuals: Individuals
     properties: Properties
@@ -402,7 +400,7 @@ en:
       bug: Bug
       proposition: Proposition
       question: Question
-      ontology_submissions_request: Ontology submissions request
+      ontology_submissions_request: Semantic resource submissions request
       optional: (optional)
       send: Send
       feedback_complete:
@@ -428,56 +426,56 @@ en:
     as_creator_count: "%{count} as creator"
     as_curator_count: "%{count} as curator"
     contributions: "Contributions: %{title}"
-    published_ontologies: published %{count} ontologies
-    funded_ontologies: funded %{count} ontologies
-    endorsed_ontologies: endorsed %{count} ontologies
-    number_of_ontologies_using_format: Number of ontologies using this format
-    number_of_ontologies_of_type: Number of ontologies of this ontology type
-    number_of_ontologies_of_formality_level: Number of ontologies of this formality level
-    number_of_ontologies_in_catalog: Number of ontologies in this catalog
-    number_of_ontologies: Number of ontologies
-    number_of_ontologies_with_class_count_in_range: Number of ontologies with a class count in this range
+    published_ontologies: published %{count} semantic resources
+    funded_ontologies: funded %{count} semantic resources
+    endorsed_ontologies: endorsed %{count} semantic resources
+    number_of_ontologies_using_format: Number of semantic resources using this format
+    number_of_ontologies_of_type: Number of semantic resources of this semantic resource type
+    number_of_ontologies_of_formality_level: Number of semantic resources of this formality level
+    number_of_ontologies_in_catalog: Number of semantic resources in this catalog
+    number_of_ontologies: Number of semantic resources
+    number_of_ontologies_with_class_count_in_range: Number of semantic resources with a class count in this range
     average: Average
-    fairness_interface_introduction: This interface shows how an ontology or a group responded successfully to O’FAIRe FAIRness assessment questions
-    fairness_interface_details: See details for each ontologies on the specific ontology summary pages
+    fairness_interface_introduction: This interface shows how an semantic resource or a group responded successfully to O’FAIRe FAIRness assessment questions
+    fairness_interface_details: See details for each semantic resources on the specific semantic resource summary pages
     fairness_interface_hover_instruction: hover on a principle to see details
     average_metrics: Average metrics
     category: category
     filter_network: Filter network
-    funding_endorsing_organizations: Organizations funding and endorsing the most ontologies
+    funding_endorsing_organizations: Organizations funding and endorsing the most semantic resources
     group: group
     groups_and_categories: Groups and Categories
-    intro: Visualize the panorama of all ontologies on %{site} via metadata aggregation.
+    intro: Visualize the panorama of all semantic resources on %{site} via metadata aggregation.
     more_properties_charts: More properties charts
-    most_active_ontologies: Most active ontologies
+    most_active_ontologies: Most active semantic resources
     most_active_organizations: Most active organizations
     most_active_people: Most active people
     most_active_people_as_reviewer: Most active user account
     most_mentioned_people: Most mentioned people as contact, creator, contributor or curator
     most_mentioned_people_as_reviewer: User account who published notes, reviews, and projects
-    ontologies_activity_on: Ontology activity
-    ontologies_by: Ontologies by %{type}
-    ontologies_contributors: Contributors to ontology development
-    ontologies_count_by_catalog: Number of ontologies in each semantic artefact catalog
+    ontologies_activity_on: Semantic resource activity
+    ontologies_by: Semantic resources by %{type}
+    ontologies_contributors: Contributors to semantic resource development
+    ontologies_count_by_catalog: Number of semantic resources in each semantic artefact catalog
     ontologies_formats: Representation language
     ontologies_languages: Natural languages
     ontologies_licenses: Licenses
-    ontologies_with_notes_reviews_projects: Ontologies with notes, reviews, and projects
+    ontologies_with_notes_reviews_projects: Semantic resources with notes, reviews, and projects
     ontology_fairness_evaluator: Ontology FAIRness Evaluator (O’FAIRe)
     ontology_formality_levels: Formality levels
-    ontology_properties_pie_charts: Pie charts retated to object description properties (i.e., meatdata properties used to describe ontology objects).
-    ontology_relations_network: Ontology relations network
-    ontology_tools: Most used tools to build ontologies
+    ontology_properties_pie_charts: Pie charts rotated to object description properties (i.e., meatdata properties used to describe semantic resource objects).
+    ontology_relations_network: semantic resource relations network
+    ontology_tools: Most used tools to build semantic resources
     owl_ontology_author_uris: Properties used to specify object author
     owl_ontology_definition_uris: Properties used to specify objects definition
     owl_ontology_preflabel_uris: Properties used to specify objects preferred label
     owl_ontology_synonym_uris: Properties used to specify object synonyms
     properties_usage_proportion: Pie charts related to the most frequent values for certain metadata properties
     properties_use: Property usage
-    relations_between_stored_ontologies: Set of relationships between %{site} ontologies as captured by metadata. Green ontologies are stored in the repository while those in blue are external resources.
+    relations_between_stored_ontologies: Set of relationships between %{site} semantic resources as captured by metadata. Green semantic resources are stored in the repository while those in blue are external resources.
     size: size
     title: "Landscape"
-    ontologies_properties: Ontologies properties
+    ontologies_properties: Semantic resources properties
   layout:
     header:
       account_setting: Account settings
@@ -507,7 +505,7 @@ en:
       contact_us: Contact Us
       wiki: Wiki
       documentation: Documentation
-      agro_documentation: AgroPortal documentation
+      agro_documentation: EcoPortal documentation
       agreements: Legal
       terms: Terms and Conditions
       privacy_policy: Privacy Policy
@@ -516,7 +514,7 @@ en:
       acknowledgments: Acknowledgments
       about: About
       about_us: About Us
-      projects: D2KAB
+      projects: Projects
       team: Team
     notices:
       slice: Slice
@@ -529,7 +527,7 @@ en:
     user_logged_out: You have successfully logged out
     try_again_notice: ". Please try again."
     reset_password_again: ". Please reset your password again."
-    custom_ontology_set: "The display is now based on your <a href='/account#custom_ontology_set'>Custom Ontology Set</a>."
+    custom_ontology_set: "The display is now based on your <a href='/account#custom_ontology_set'>Custom semantic resource Set</a>."
     welcome: "Welcome <b>"
     error_account_name: Please enter an account name
     error_password: Please enter a password
@@ -554,19 +552,19 @@ en:
   statistics:
     title: "%{portal} Statistics"
     lead: (last %{last_years} years)
-    ontologies: Ontologies
+    ontologies: Semantic resources
     users: Users
     projects: Projects
     date: Date
-    ontology_visits: Ontology visits
+    ontology_visits: Semantic resource visits
   mappings:
     all: All
-    description: Dive into an overview of the mappings in the bubble view, efficiently locate a specific ontology in the table view or upload your own mappings.
+    description: Dive into an overview of the mappings in the bubble view, efficiently locate a specific semantic resource in the table view or upload your own mappings.
     tabs:
       bubble_view: Bubbles view
       table_view: Table view
       upload_mappings: Upload mappings
-    filter_ontologies: Filter ontologies in the bubble view
+    filter_ontologies: Filter semantic resources in the bubble view
     filter_bubbles: Filter bubbles
     external_mappings: "External Mappings (%{number_with_delimiter})"
     interportal_mappings: "Interportal Mappings - %{acronym} (%{number_with_delimiter})"
@@ -578,25 +576,25 @@ en:
     error_of_source_and_target: Source and target concepts need to be specified
     mapping_issue: "Mapping issue with '%{mapping}' : %{message}"
     find_mappings: Find mappings of a class/concept
-    intro: Find all the mappings of an ontology
+    intro: Find all the mappings of an semantic resource
     loading_mappings: Loading mappings...
     no_mappings_available: No mappings available
     title: Mappings
     upload_mappings: Upload mappings
-    select_ontologies_list: Select ontologies
+    select_ontologies_list: Select semantic resources
     bubble_view_legend:
       bubble_size: "Bubble size:"
-      bubble_size_desc: "The global number of mappings with all other ontologies."
+      bubble_size_desc: "The global number of mappings with all other semantic resources."
       color_degree: "Color degree:"
-      color_degree_desc: "The number of mappings with the selected ontology."
+      color_degree_desc: "The number of mappings with the selected semantic resource."
       yellow_bubble: "Yellow bubble: "
       selected_bubble: "The selected bubble."
       less_mappings: "Less mappings"
       more_mappings: "More mappings"
     count:
-      ontology: Ontology
+      ontology: Semantic resource
       mappings: Mappings
-      no_mappings: There are no mappings to or from this ontology
+      no_mappings: There are no mappings to or from this semantic resource
     form:
       source_class: Source class
       mapping_name: Mapping description (name)
@@ -619,11 +617,11 @@ en:
       external: External
       target_class: Target class
       details: Details
-      ontology_acronym: Ontology (acronym)
+      ontology_acronym: Semantic resource (acronym)
       class: Class
-      ontology_acronym_placeholder: Enter the ontology ACRONYM
+      ontology_acronym_placeholder: Enter the semantic resource ACRONYM
       class_uri_placeholder: Enter the class URI
-      ontology_uri_placeholder: Enter the ontology URI
+      ontology_uri_placeholder: Enter the semantic resource URI
     show_line:
       edit_modal: Edit
       delete_button: Delete
@@ -651,7 +649,7 @@ en:
     agent_usages_updated: Agent usages successfully updated
     agent_already_deleted: Agent %{id} already deleted
     agent_deleted_successfully: Agent %{id} deleted successfully
-    ontology_not_valid: "ontology is not valid, here are the errors: "
+    ontology_not_valid: "semantic resource is not valid, here are the errors: "
     save: Save
     not_used: Not used
     see_usages_count: See usages (%{count})
@@ -721,9 +719,9 @@ en:
     edit_text: Edit
     home_page: Home page
     index:
-      intro: Browse a selection of projects that use %{site} ontologies
+      intro: Browse a selection of projects that use %{site} semantic resources
     institutions: Institutions
-    ontologies: Ontologies
+    ontologies: Semantic resources
     project_description: Project Description
     self: Projects
     title: Projects List
@@ -736,8 +734,8 @@ en:
       institution: "Institution:"
       contacts: "Contacts:"
       home_page: "Home Page:"
-      ontologies_used: Ontologies Used
-      no_ontologies_associated: No ontologies are currently associated with this project
+      ontologies_used: Semantic resources Used
+      no_ontologies_associated: No semantic resources are currently associated with this project
 
     form:
       errors_on_form: Errors On Form
@@ -747,7 +745,7 @@ en:
       home_page: "Homepage: *"
       example: "Example:"
       description: "Description:*"
-      select_ontologies: Select Ontologies Used
+      select_ontologies: Select Semantic resources Used
       select_administrators: Select administrators
     
     edit:
@@ -762,30 +760,30 @@ en:
       create_project: Create Project
   recommender:
     title: Recommender
-    intro: Get recommendations for the most relevant ontologies from an excerpt of text or a list of keywords
+    intro: Get recommendations for the most relevant semantic resources from an excerpt of text or a list of keywords
     options: Options
     input: Input
     text: Text
     keywords: Keywords
     output: Output
-    ontologies: Ontologies
-    ontology_sets: Ontology sets
+    ontologies: Semantic resources
+    ontology_sets: Semantic resource sets
     hint: Paste a paragraph of text or some keywords ...
     weights_configuration: Weights configuration
     coverage: Coverage
     acceptance: Acceptance
     knowledge_detail: Knowledge detail
     specialization: Specialization
-    ontologies_configuration: Ontologies configuration
-    max_ont_set: Maximum number of ontologies per set
-    select_ontologies: Select ontologies
+    ontologies_configuration: Semantic resources configuration
+    max_ont_set: Maximum number of semantic resources per set
+    select_ontologies: Select semantic resources
     get_recommendations: Get recommendations
     edit: Edit
-    results_title: Recommended ontologies
+    results_title: Recommended semantic resources
     call_annotator: Call Annotator with the same input
     cite: Cite
     results_table:
-      ontology: Ontology
+      ontology: Semantic resource
       final_score: Final score
       coverage_score: Coverage score
       acceptance_score: Acceptance score
@@ -811,9 +809,9 @@ en:
     account_successfully_updated: Account was successfully updated
     user_deleted_successfully: User deleted successfully
     not_permitted: Not permitted
-    error_saving_custom_ontologies: Error saving Custom Ontologies, please try again
-    custom_ontologies_cleared: Custom Ontologies were cleared
-    custom_ontologies_saved: Custom Ontologies were saved
+    error_saving_custom_ontologies: Error saving Custom Semantic resources, please try again
+    custom_ontologies_cleared: Custom Semantic resources were cleared
+    custom_ontologies_saved: Custom Semantic resources were saved
     subscribe_flash_message: "You have successfully  %{action} %{to_or_from} our user mailing list: %{list}"
     error_subscribe: Something went wrong ...
     validate_email_address: Please enter an email address
@@ -832,7 +830,7 @@ en:
       username: Username
       email: Email
       roles: Roles
-      ontologies: Ontologies
+      ontologies: Semantic resources
       project: Project
       created: Created At
       actions: Actions
@@ -867,37 +865,37 @@ en:
       mailing_list_description: Register to the %{portal} announcements mailing list.
       api_key_description: Your API Key can be used to access  %{portal} Web services
       api_documentation: API documentation
-      custom_semantic_resource: Custom ontology set
+      custom_semantic_resource: Custom semantic resource set
       please: Please
       modify_custom_semantic_resource: |
         visit the main site
-        to modify your Custom Ontology Set.
-      customize_portal_display: "Customize your %{portal} display: Pick the ontologies that you want to see on %{portal} will hide all other ontologies."
-      select_semantic_resources: Select ontologies
-      no_semantic_resources: You haven't picked any ontologies yet
+        to modify your Custom semantic resource Set.
+      customize_portal_display: "Customize your %{portal} display: Pick the semantic resources that you want to see on %{portal} will hide all other semantic resources."
+      select_semantic_resources: Select semantic resources
+      no_semantic_resources: You haven't picked any semantic resources yet
       note_feature_logged_in: "Note: this feature works only when you are logged in."
-      save_custom_semantic_resources: Save custom ontologies
-      not_subscribed: Not subscribed to any ontology
-      submitted_semantic_resources: Submitted Ontologies
-      upload_semantic_resources: Upload Ontologies
+      save_custom_semantic_resources: Save custom semantic resources
+      not_subscribed: Not subscribed to any semantic resource
+      submitted_semantic_resources: Submitted semantic resources
+      upload_semantic_resources: Upload semantic resources
       projects_created: Projects Created
       no_project_created: No project created
       unsubscribe: Unsubscribe
       subscribe: Subscribe
       subscriptions: Subscriptions
-      no_uploaded_resources: You didn't upload any ontology yet
+      no_uploaded_resources: You didn't upload any semantic resource yet
       notes: Notes
   search:
     no_search_class_provided: No search class provided
     search_place_holder: Enter a term, e.g. plant height
     advanced_options:
       search_language: Search language
-      ontologies: Ontologies
+      ontologies: Semantic resources
       include_in_search_title: Include in search
       include_in_search_values:
         property_values: Property values
         obolete_classses: Obsolete classes
-        ontology_views: Ontology views
+        ontology_views: Semantic resource views
       show_only_title: Show only
       show_only_values:
         exact_matches: Exact matches
@@ -905,11 +903,11 @@ en:
     show_advanced_options: Show options
     hide_advanced_options: Hide options
     match_in: Match in
-    ontologies: ontologies
+    ontologies: semantic resources
     result_component:
       details: Details
       visualize: Vizualize
-      more_from_ontology: more from this ontology
+      more_from_ontology: more from this semantic resource
       reuses_in: Reuses in
   notes:
     no_notes: No notes to display
@@ -967,7 +965,7 @@ en:
       sort_by_popularity: Sort by popularity
       sort_by_notes: Sort by notes
       sort_by_projects: Sort by projects
-    no_submissions_for_ontology: "No submissions for ontology: %{ontology}"
+    no_submissions_for_ontology: "No submissions for semantic resource: %{ontology}"
     submission_updated_successfully: Submission updated successfully
     save_button: Save
     id: ID
@@ -981,7 +979,7 @@ en:
     edit_button: Edit
     delete_submission_alert:
       content_1: "Are you sure you want to delete submission <span style='color:red;font-weight:bold;'>"
-      content_2: "</span> for ontology <span style='color:red;font-weight:bold;'>"
+      content_2: "</span> for semantic resource <span style='color:red;font-weight:bold;'>"
       content_3: "</span>?<br/><b>This action CAN NOT be undone!!!</b>"
   ontoportal_virtual_appliance:
     problem_adding_account: "Problem adding account <strong>%{id}</strong>: account does not exist"
@@ -996,7 +994,7 @@ en:
     ontologies_api: Ontologies API (REST service)
     annotator: Annotator
     recommender: Recommender
-    web_user_interface: BioPortal Web User Interface (including ontology visualization, widgets, and Annotator UI)
+    web_user_interface: BioPortal Web User Interface (including semantic resource visualization, widgets, and Annotator UI)
     see_documentation: Please see our
     more_information: for more information on working with the Appliance.
     download_button_text: Download Latest OntoPortal
@@ -1015,7 +1013,7 @@ en:
       export_users_link: "Export Appliance Users As CSV"
       bioportal_user: BioPortal User ID
   submission_inputs:
-    edit_ontology_title: Edit ontology
+    edit_ontology_title: Edit semantic resource
     metadata_selector_label: "Filter properties to show"
     metadata_selector_placeholder: "Start typing to select properties"
     administrators: Administrators
@@ -1039,23 +1037,23 @@ en:
 
     groups: Groups
     visibility: Visibility
-    accounts_allowed: Add or remove accounts that are allowed to see this ontology in %{portal_name}.
-    ontology_view_of_another_ontology: Is this ontology a view of another ontology?
+    accounts_allowed: Add or remove accounts that are allowed to see this semantic resource in %{portal_name}.
+    ontology_view_of_another_ontology: Is this semantic resources a view of another semantic resource?
     contact: Contact
     equivalents: Equivalents
     validators: Validators
     help_text: Help text
     contact_name: "%{name} Name"
     contact_email: "%{name} Email"
-    edit_metadata_instruction: "Edit the metadata of your ontology here. Some of these values are used by %{portal_name} functionalities, including for FAIRness assessment. %{link}"
+    edit_metadata_instruction: "Edit the metadata of your semantic resource here. Some of these values are used by %{portal_name} functionalities, including for FAIRness assessment. %{link}"
     edit_metadata_instruction_link: "See guidelines and recommendations for metadata here."
     license_help: "%{portal_name} requires an URI for the license. If you do not find your choice here, %{link}"
     license_help_link: "Please pick up an URI from here."
-    deprecated_help: "An ontology with status retired shall necessarily be also deprecated, but not the opposite."
+    deprecated_help: "A semantic resource with status retired shall necessarily be also deprecated, but not the opposite."
     known_usage_help: "Consider also declaring %{metadata_knownUsage_help}"
-    known_usage_help_link: "the projects that are using the ontology"
-    help_creator: "The following properties take for value an 'agent' in %{portal_name} (either a person or an organization). These agents are shared over all the ontologies and suggested with autocompletion if they already exist. Editing an agent here will change it to all the ontologies that agent is involved in."
-    version_help: "For more information on how to encode versioning information in an ontology, see %{link}"
+    known_usage_help_link: "the projects that are using the semantic resource"
+    help_creator: "The following properties take for value an 'agent' in %{portal_name} (either a person or an organization). These agents are shared over all the semantic resources and suggested with autocompletion if they already exist. Editing an agent here will change it to all the semantic resources that agent is involved in."
+    version_help: "For more information on how to encode versioning information in an semantic resource, see %{link}"
     version_helper_link: "guidelines and recommendations."
   instances:
     id: ID
@@ -1130,20 +1128,20 @@ en:
     mod_link: MOD1.4
     see_the_used_properties: see the used properties
     metadata_properties: Metadata properties listed in the following are picked from %{mod_link}.
-    ontology_repository: This ontology repository implements %{mod_link} but does not necessarily encode metadata with the same properties (%{submission_link}).
+    ontology_repository: This semantic resource repository implements %{mod_link} but does not necessarily encode metadata with the same properties (%{submission_link}).
     see_possible_credits: See possible credits
     see_metadata_used_properties: See metadata used properties
     not_found: not found
     "null": "null"
-    view_fair_scores_definitions: "You are seeing the FAIRness assessment score for this ontology in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
+    view_fair_scores_definitions: "You are seeing the FAIRness assessment score for this semantic resource in EcoPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
   ontologies_metadata_curator:
     #bulk_edit: Start bulk edit
     #use_the_bulk_edit: To use the bulk edit select in the table submissions (the rows) and metadata properties (the columns) for which you want to edit
     start_the_bulk_edit: Select in the table submissions (rows) and metadata properties (columns) to start the bulk edit
     alert_success_submissions: Submissions were successfully updated
-    ontologies: Ontologies
+    ontologies: Semantic resources
     get_values: Get values
-    select_ontologies_and_metadata: select ontologies and the metadata properties
+    select_ontologies_and_metadata: select semantic resources and the metadata properties
     include_all_submissions: Include all submissions
     apply_the_change_for_all: Apply the change for all
     update_the_current_displayed_content: "will update the current displayed content to all the following submissions:"
@@ -1155,20 +1153,20 @@ en:
     view_license: View license
     access_rights_information: Additional license and access rights information
     referred_to: It can also be referred to as
-    private_ontology: Private Ontology
+    private_ontology: Private semantic resource
     formality_levels: Formality levels
     categories: Categories
     groups: Groups
-    ontology_types: Ontology types
+    ontology_types: Semantic resource types
     natural_languages: Natural languages
     showing: Showing
     metadata_properties: of %{acronym}  metadata properties are filled
     home_page: Home Page
-    ontology_processing_failed: "The ontology processing failed, with the current statuses: %{status}"
-    ontology_parsing_succeeded: "The ontology parsing succeeded, but some processing steps failed, here are the current statuses: %{status}"
-    upload_an_ontology: Upload an ontology. Sections such as %{ontology} will be available once done.
-    new_ontology_is_processing: The ontology is processing. Sections such as %{ontology} will be available  once processing is complete.
-    ontology_is_processing: The ontology is processing. Sections such as %{ontology} will be updated once processing is complete.
+    ontology_processing_failed: "The semantic resource processing failed, with the current statuses: %{status}"
+    ontology_parsing_succeeded: "The semantic resource parsing succeeded, but some processing steps failed, here are the current statuses: %{status}"
+    upload_an_ontology: Upload an semantic resource. Sections such as %{ontology} will be available once done.
+    new_ontology_is_processing: This semantic resource is processing. Sections such as %{ontology} will be available  once processing is complete.
+    ontology_is_processing: This semantic resource is processing. Sections such as %{ontology} will be updated once processing is complete.
     contact_support: Contact support
     edit_natural_languages: Edit natural languages of %{acronym}
     edit_available_languages: Click here to edit available languages
@@ -1179,8 +1177,8 @@ en:
     create_new_project: Create new project
     no_projects_using_ontology: No projects using %{acronym}
     outside: outside
-    relation_with_other_ontologies: Relation with other ontologies either in %{inside} or %{outside}
-    ontology_search_prompt: 'Search an ontology or a term (e.g., plant height)'
+    relation_with_other_ontologies: Relation with other semantic resources either in %{inside} or %{outside}
+    ontology_search_prompt: 'Search an semantic resource or a term (e.g., Environmental impact)'
     views: Views
     create_new_view: Create new view
     expand_all: Expand All
@@ -1201,26 +1199,26 @@ en:
     see_details: See details
     collecting_data: We are still collecting data for %{acronym}
     location: Location
-    allow_users: Allow users to view the metadata of your ontology (Summary) only.
+    allow_users: Allow users to view the metadata of your semantic resource (Summary) only.
     metadata_only: Metadata only (No file)
     load_from_url: Load from URL
     new_versions_loaded: New versions loaded on a nightly basis.
     upload_local_file: Upload local file
-    ontology_submitted: Ontology submitted successfully!
+    ontology_submitted: semantic resource submitted successfully!
     users_can_see: Users can now see
-    your_ontology: your ontology
+    your_ontology: your semantic resource
     exploring_and_searching: |
-      in our ontology list but they cannot explore or search it. To enable exploring and searching,
-      please upload a full version of your ontology.
-    submitting_ontology_view: Thank you for submitting your ontology view to %{site}.
-    submitting_ontology: Thank you for submitting your ontology to %{site}.
+      in our semantic resource list but they cannot explore or search it. To enable exploring and searching,
+      please upload a full version of your semantic resource.
+    submitting_ontology_view: Thank you for submitting your semantic resource view to %{site}.
+    submitting_ontology: Thank you for submitting your semantic resource to %{site}.
     processing_message: |
-      We will now put your ontology in the queue to be processed. Please keep in mind that it may take up to several
-      hours before %{site} users will be able to explore and search your ontology.
+      We will now put your semantic resource in the queue to be processed. Please keep in mind that it may take up to several
+      hours before %{site} users will be able to explore and search your semantic resource.
     notification_message: "When your ontology is ready for viewing, you will receive an email notification and it will be available here:"
     contact_support_at: "If you have any questions or problems, please email the %{site} support team at:"
     collecting_data_message: We are still collecting data for %{acronym}
-    submit_new_ontology: Submit new ontology
+    submit_new_ontology: Submit new semantic resource
     details: Details
     general_information: General information
     dates_and_contacts: Dates and contacts
@@ -1237,10 +1235,10 @@ en:
       filter: Filter
     browser:
       admin_welcome: Welcome admin,this coloring indicates admin-only features
-      show_private_ontology: Show private ontology only
-      show_ontology_views: Show ontology views
-      show_retired_ontologies: Show retired ontologies
-      search_placeholder: Start typing to filter ontologies, e.g., AGROVOC...
+      show_private_ontology: Show private semantic resource only
+      show_ontology_views: Show semantic resource views
+      show_retired_ontologies: Show retired semantic resources
+      search_placeholder: Start typing to filter semantic resources, e.g., AGROVOC...
     sections:
       classes: Classes
       individuals: Individuals
@@ -1252,17 +1250,17 @@ en:
       classes_with_more_than_25_children: Classes with more than 25 children
       classes_with_no_definition: Classes with no definition
       identifiers: Identifiers
-      identifiers_tooltip: Principal identifiers of the ontology.
+      identifiers_tooltip: Principal identifiers of the semantic resource.
       dates: Dates
       person_and_organization: Persons and organizations
       other_links: Other links
-      info_tooltip_links: Metadata properties that highlight the links enabling access to datasets, downloading ontologies, etc
+      info_tooltip_links: Metadata properties that highlight the links enabling access to datasets, downloading semantic resources, etc
       projects_and_usage_information: Projects and usage information
-      info_tooltip_projects: Details pertaining to the utilization of the ontology.
+      info_tooltip_projects: Details pertaining to the utilization of the semantic resource.
       methodology_and_provenance: Methodology and provenance
       community: Community
       content: Content
-      info_tooltip_properties_dropdown: Metadata properties primarily encompass the design, methods, and actions to create the ontology. This includes elements such as the tools and software employed by the creator of the ontology during its configuration.
+      info_tooltip_properties_dropdown: Metadata properties primarily encompass the design, methods, and actions to create the semantic resource. This includes elements such as the tools and software employed by the creator of the semantic resource during its configuration.
       visits: Visits
       views: Views of %{acronym}
       create_new_view: Create new view
@@ -1272,7 +1270,7 @@ en:
       download_as_csv: Download as CSV
       scroll_down_to_see_more: Scroll down to see more
 
-      widgets: Widgets are only available for ontologies stored in %{site}.
+      widgets: Widgets are only available for semantic resources stored in %{site}.
       add_acronym_widgets: Add %{acronym} Web Widgets to your site
       widget_block_component_title_1: Jump To
       widget_block_component_description_1: Type a class name from %{acronym} and jump to it in %{site}
@@ -1280,9 +1278,9 @@ en:
       put_on_server: and put it on your server.
       copy_and_paste: Copy the code below and paste it to your HTML page
       note: "Note:"
-      use_quick_jump: If you would like to use Quick Jump across multiple ontologies
-      enter_list_of_ontologies: You can enter a comma-separated list of ontology ids
-      set_the_variable: "You can set the variable to 'all' to search all ontologies in %{site}:"
+      use_quick_jump: If you would like to use Quick Jump across multiple semantic resources
+      enter_list_of_ontologies: You can enter a comma-separated list of semantic resource ids
+      set_the_variable: "You can set the variable to 'all' to search all semantic resources in %{site}:"
       include_definitions: "To include definitions in the Jump To drop-down, add the following variable in Javascript:"
       info_pasted_code: In the code that you just pasted, make sure to change the path to the quick_jump.js file to point to the location where you put the file (relative to your HTML file)
       example_to_use_code: "For example, if you put the quick_jump.js file in the same directory as your HTML file, this is the code you would use:"
@@ -1295,11 +1293,11 @@ en:
       include_file: In the header for the page where you want the form field, include the
       use_widget: "On your form, for the fields where you want to use the class-selection widget, specify the field's class in the following format:"
       for_example: For example,
-      use_ontology: will use NCI Thesaurus (ontology id is NCIT) and will put the class URI in the field after the user selects the class from the pull-down list.
-      use_list: "In addition to single ontology ids, you can use a list:"
+      use_ontology: will use NCI Thesaurus (semantic resource id is NCIT) and will put the class URI in the field after the user selects the class from the pull-down list.
+      use_list: "In addition to single semantic resource ids, you can use a list:"
       or: OR
-      use_all_to_search: "use 'all' to search across all %{site} ontologies:"
-      autocomplete_widget_accesses: The autocomplete widget accesses ontology content from the latest version of the ontology.
+      use_all_to_search: "use 'all' to search across all %{site} semantic resources:"
+      autocomplete_widget_accesses: The autocomplete widget accesses semantic resource content from the latest version of the semantic resource.
       use_following_parameters: "You can use the following parameters to select which value will be placed into the user-visible input field:"
       uri: uri
       shortid: shortid
@@ -1330,14 +1328,14 @@ en:
         fair_score_title: FAIR score
         total_score: "Total score : %{score} ( %{normalized_score}%)"
         metrics: Metrics
-        metrics_link_title: Information and evolution diagrams about metrics and other measurements of the ontology.
+        metrics_link_title: Information and evolution diagrams about metrics and other measurements of the semantic resource.
         see_all_metrics: See all the metrics of %{acronym}
         show_modal_title_1: All the metrics of %{acronym}
         not_calculated_metrics: We have not yet calculated metrics for %{acronym}
         show_modal_title_2: "Evolution of the number of %{metric} in %{acronym} per submissions."
         submissions: Submissions
         submissions_link_title: Set of all the files that have been submitted to %{site}. Each previous metadata record is accessible but only the content of the latest parsed file is accessible via %{site} services
-        relations_network: Ontology relations network
+        relations_network: Semantic resource relations network
         general_information: General information
         initial_created_on: Initial created on
         additional_information: For additional information, contact
@@ -1349,9 +1347,9 @@ en:
         abstract: Abstract
         description: Description
   
-    htaccess_modal_title: "Rewrite rules for %{acronym} ontology"
+    htaccess_modal_title: "Rewrite rules for %{acronym} semantic resource"
     instructions_servers: Instructions for %{server} servers
-    htaccess_redirection_description: "We offer a seamless solution to make your ontology URIs resolvable and content negotiable by allowing URL redirection for your ontology URIs to our Agroportal URIs. To facilitate this process, we've provided you with a set of .htaccess rewrite rules. By following the simple instructions below, you'll be able to implement these rules swiftly and efficiently, ensuring smooth redirection"
+    htaccess_redirection_description: "We offer a seamless solution to make your semantic resource URIs resolvable and content negotiable by allowing URL redirection for your semantic resource URIs to our EcoPortal URIs. To facilitate this process, we've provided you with a set of .htaccess rewrite rules. By following the simple instructions below, you'll be able to implement these rules swiftly and efficiently, ensuring smooth redirection"
     
     redirection_note: |
       This redirection works only for uri with the form of:  url/path/resource_id
@@ -1404,7 +1402,7 @@ en:
     submitted: Submitted
     by: by
     creation_date: Creation date %{date}
-    view_of_the_ontology: "View of the ontology %{ontology}"
+    view_of_the_ontology: "View of the semantic resource %{ontology}"
     view: View
     debug: Debug
     loading: Loading
@@ -1426,22 +1424,22 @@ en:
     parent: Parent
     no_properties_alert: "%{acronym} does not contain properties"
   visits:
-    ontology_visits: Ontology visits
+    ontology_visits: Semantic resource visits
     name: name
     visits: visits
   ontologies_selector:
     clear_selection: Clear selection
-    ontologies_advanced_selection: Ontologies advanced selection
-    search_hint: Filter ontologies ...
-    show_ontology_view: Show ontology views
-    hide_retired_ontologies: Hide retired ontologies
+    ontologies_advanced_selection: Semantic resources advanced selection
+    search_hint: Filter semantic resources ...
+    show_ontology_view: Show semantic resource views
+    hide_retired_ontologies: Hide retired semantic resources
     tabs_title:
       categories: Categories
       groups: Groups
       format: Format
       natural_languages: Natural languages
       formality_levels: Formality levels
-      ontology_types: Ontology types
+      ontology_types: semantic resource types
     select_all: Select all
     cancel: Cancel
     apply: Apply

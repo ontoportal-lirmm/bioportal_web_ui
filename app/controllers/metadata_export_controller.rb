@@ -29,4 +29,8 @@ class MetadataExportController < ApplicationController
       @ontology_metadata[attr] = value
     end
   end
+
+  def datacite_export
+    @ontology_metadata = LinkedData::Client::HTTP.get( "#{rest_url}/ontologies/#{params[:ontology]}/latest_submission/datacite_metadata_json?display_links=false&display_context=false", {}, raw: true)
+  end
 end

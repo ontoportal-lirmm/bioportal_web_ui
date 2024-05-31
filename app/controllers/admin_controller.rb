@@ -1,7 +1,7 @@
 class AdminController < ApplicationController
   include TurboHelper, HomeHelper, SparqlHelper
   layout :determine_layout
-  before_action :cache_setup
+  before_action :cache_setup, :check_admin?
 
   ADMIN_URL = "#{LinkedData::Client.settings.rest_url}/admin/"
   ONTOLOGIES_URL = "#{ADMIN_URL}ontologies_report"
@@ -12,6 +12,14 @@ class AdminController < ApplicationController
   ONTOLOGIES_LIST_URL = "#{LinkedData::Client.settings.rest_url}/ontologies/"
 
   include DoiRequestAdministration
+
+  def jobs
+    json = LinkedData::Client::HTTP.get("#{ADMIN_URL}scheduled_jobs", raw: true)
+    @scheduledJobs = JSON.parse(json, :symbolize_names => true)
+
+    render 'jobs', layout: nil
+  end
+
   def sparql_endpoint
     graph = params["named-graph-uri"]
     apikey = params["apikey"]
@@ -41,14 +49,6 @@ class AdminController < ApplicationController
     @users_visits = user_visits_data
     @page_visits = page_visits_data
     @ontologies_problems_count = _ontologies_report[:ontologies]&.select{|a,v| v[:problem]}&.size || 0
-
-    if session[:user].nil? || !session[:user].admin?
-      redirect_to :controller => 'login', :action => 'index', :redirect => '/admin'
-    else
-      json = LinkedData::Client::HTTP.get("#{ADMIN_URL}scheduled_jobs", raw: true)
-      @scheduledJobs = JSON.parse(json, :symbolize_names => true)
-      render action: "index"
-    end
   end
 
 
@@ -286,19 +286,29 @@ class AdminController < ApplicationController
 
   end
 
-
   def doi_requests_list
-    render json: doi_requests
+    @doi_requests = doi_requests[:doi_requests]
+    render 'doi_request', layout: nil
   end
 
   def process_doi_requests
-    response = { errors: '', success: '' }
+    response = { errors: nil, success: nil }
     if params['actions'].nil? || params['actions'].empty?
       response[:errors] = "No operation 'actions' was specified in params for request processing"
-      render :json => response
     else
-      process_identifier_requests('processed', 'processing', params['actions'])
+      response = process_identifier_requests('processed', 'processing', params['actions'])
     end
+
+    if !response[:errors].blank?
+      render_turbo_stream alert_error(id: alerts_container_id) { response[:errors] }
+    else
+      render_turbo_stream(
+        alert_success(id: alerts_container_id) { response[:success] },
+        replace("#{params['doi_requests']}_status") { params['actions'].eql?('reject') ? 'REJECTED' : 'SATISFIED'},
+        remove("#{params['doi_requests']}_actions")
+      )
+    end
+
   end
 
   private
@@ -466,5 +476,11 @@ class AdminController < ApplicationController
       visits_data[:visits] << count
     end
     visits_data
+  end
+
+  def check_admin?
+    if session[:user].nil? || !session[:user].admin?
+      redirect_to :controller => 'login', :action => 'index', :redirect => '/admin'
+    end
   end
 end

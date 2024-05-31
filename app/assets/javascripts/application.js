@@ -19,7 +19,6 @@
 //= require bp_admin
 //= require concepts
 //= require projects
-//= require metadata_form
 //= require Chart.min
 //= require application_esbuild
 

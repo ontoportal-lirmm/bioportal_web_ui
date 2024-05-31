@@ -206,16 +206,10 @@ module ComponentsHelper
     end
   end
 
-  def properties_card(title, tooltip, properties, &block)
+  def properties_card(title, tooltip, &block)
     render Layout::CardComponent.new do |d|
       d.header(text: title, tooltip: tooltip)
-      render(Layout::ListComponent.new) do |c|
-        if properties
-          properties_list_component(c, properties, &block)
-        else
-          capture(c, &block)
-        end
-      end
+      capture(&block)
     end
   end
 

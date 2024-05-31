@@ -1,6 +1,5 @@
 class SubmissionsController < ApplicationController
   include SubmissionsHelper, SubmissionUpdater, OntologyUpdater
-  include DoiRequest
   layout :determine_layout
   before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
   before_action :submission_metadata, only: [:create, :edit, :new, :update, :index]
@@ -25,7 +24,6 @@ class SubmissionsController < ApplicationController
   def new
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
     @submission = @ontology.explore.latest_submission || LinkedData::Client::Models::OntologySubmission.new
-    @identifier_request = first_pending_doi_request
     @submission.id = nil
     @categories = LinkedData::Client::Models::Category.all
     @groups = LinkedData::Client::Models::Group.all
@@ -53,8 +51,6 @@ class SubmissionsController < ApplicationController
     if response_error?(@submission)
       show_new_errors(@submission)
     else
-      cancel_pending_doi_requests
-      submit_new_doi_request if doi_requested?
       redirect_to "/ontologies/success/#{@ontology.acronym}"
     end
   end
@@ -63,7 +59,6 @@ class SubmissionsController < ApplicationController
   def edit_properties
     display_submission_attributes params[:ontology_id], params[:properties]&.split(','), submissionId: params[:submission_id],
                                   inline_save: params[:inline_save]&.eql?('true')
-    @identifier_request = first_pending_doi_request
 
     attribute_template_output = render_to_string(inline: helpers.render_submission_inputs(params[:container_id] || 'metadata_by_ontology', @submission))
 
@@ -120,7 +115,6 @@ class SubmissionsController < ApplicationController
       @submission.submissionId = submission_id
       reset_agent_attributes
       render_submission_attribute(params[:attribute])
-      submit_new_doi_request if doi_requested?
     end
 
   end

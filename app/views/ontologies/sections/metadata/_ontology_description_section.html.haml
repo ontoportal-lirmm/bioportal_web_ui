@@ -63,11 +63,26 @@
             = horizontal_list_container([@submission_latest&.pullLocation]) do |v|
               %span.admin-background
                 = render LinkFieldComponent.new(value: v)
-  %hr.w-100.my-3
+    - l.row do
+      %section.ont-metadata-card.ont-socialshare-card
+        %div.ont-section-toolbar
+          %span.pb-2 Share on socials
+          = social_share_link(@ontology, "Facebook")
+          = social_share_link(@ontology, "Twitter")
+          = social_share_link(@ontology, "LinkedIn")
+          :javascript
+               window.Sharer.init()
+        %div
+  %hr.w-100.mb-3.mt-0
   .icons_container
     = ontology_icon_links(@ontology_icon_links, @submission_latest)
   %hr.w-100.my-3
-  %div.text-center.pb-3
-    = link_to_modal(nil, metadata_export_index_path(ontology: @ontology.acronym), {data: {show_modal_title_value: metadata_filled_count, show_modal_size_value: 'modal-xl' }}) do
-      = t("ontologies.sections.metadata.export_metadata")
+  %div.pb-3.d-flex
+    %div.text-center.w-50
+      = link_to_modal(nil, metadata_export_index_path(ontology: @ontology.acronym), {data: {show_modal_title_value: metadata_filled_count, show_modal_size_value: 'modal-xl' }}) do
+        = t("ontologies.sections.metadata.export_metadata")
+    %div.border
+    %div.text-center.w-50
+      = link_to_modal(nil, metadata_export_datacite_export_path(ontology: @ontology.acronym), {data: {show_modal_title_value: "DataCite metadata", show_modal_size_value: 'modal-xl' }}) do
+        Export to DataCite
       

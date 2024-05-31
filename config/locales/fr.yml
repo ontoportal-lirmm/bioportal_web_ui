@@ -150,6 +150,7 @@ fr:
       persons_and_organizations: Personnes et Organisations
       sparql: SPARQL
       search: Recherche et Indexation
+      jobs: Ordonnancement des processus
       report_generated_on: "Rapport généré le :"
       licensed_to: Licencié à
       appliance_id: ID de l'appareil
@@ -522,7 +523,7 @@ fr:
       acknowledgments: Remerciements
       about: À propos
       about_us: À propos de nous
-      projects: D2KAB
+      projects: Projets
       team: Équipe
     notices:
       slice: Tranche

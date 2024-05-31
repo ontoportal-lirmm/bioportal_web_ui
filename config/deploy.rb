@@ -32,9 +32,9 @@ set :log_level, :error
 
 # Default value for linked_dirs is []
 # set :linked_dirs, %w{bin log tmp/pids tmp/cache public/system public/assets config/locales}
-set :linked_dirs, %w{log tmp/pids tmp/cache public/system public/assets}
+set :linked_dirs, %w{log tmp/pids tmp/cache}
 append :linked_files, 'config/database.yml', 'config/bioportal_config_appliance.rb'
-append :linked_dirs, 'log', 'tmp', '.bundle', 'config/locales'
+#append :linked_dirs, 'log', 'tmp', '.bundle'
 append :linked_files, 'config/secrets.yml', 'config/site_config.rb','config/credentials/appliance.key', 'config/credentials/appliance.yml.enc'
 
 # Default value for default_env is {}
@@ -142,7 +142,7 @@ namespace :deploy do
   end
 
 
-  after :updating, :get_config
+  #after :updating, :get_config
   after :publishing, :restart
 
   after :restart, :clear_cache do
