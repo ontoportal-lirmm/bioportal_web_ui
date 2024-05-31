@@ -169,8 +169,7 @@ module AgentHelper
     if agent.affiliations && agent.affiliations != []
       affiliations = ""
       agent.affiliations.each do |affiliation|
-        affiliation_display = affiliation.acronym ? affiliation.acronym : affiliation.name
-        affiliations = affiliations + affiliation_display + " "
+        affiliations = "#{affiliations} #{affiliation.acronym || affiliation.name}"
       end
     end
     person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
