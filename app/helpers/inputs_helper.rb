@@ -46,10 +46,10 @@ module InputsHelper
                                    helper_text:  help)
   end
 
-  def text_area_input(name:, value:, label: nil, help: nil)
+  def text_area_input(name:, value:, label: nil, help: nil, resize: nil)
     render Input::TextAreaComponent.new(label: input_label(label, name), name: name, value: value,
                                         error_message: input_error_message(name),
-                                        helper_text: help)
+                                        helper_text: help, resize: resize)
   end
 
   def date_input(name:, value:, label: nil, help: nil, max_date: nil)

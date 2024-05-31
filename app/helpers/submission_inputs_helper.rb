@@ -97,7 +97,7 @@ module SubmissionInputsHelper
         url_input(name: name, label: label, value: @submission.URI)
       elsif long_text
         text_area_input(name: name, label: label,
-                        value: attr.values)
+                        value: attr.values, resize: true)
       else
         text_input(name: name, label: label,
                    value: attr.values, help: help)
@@ -446,7 +446,7 @@ module SubmissionInputsHelper
 
     generate_list_field_input(attr, name, label, values, helper_text: helper_text) do |value, row_name, id|
       if long_text
-        text_area_tag(row_name, value, class: 'input-field-component', label: '')
+        text_area_tag(row_name, value, class: 'input-field-component', label: '', style: 'resize: vertical;')
       else
         text_input(label: '', name: row_name, value: value)
       end
