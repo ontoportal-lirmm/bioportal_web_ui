@@ -47,7 +47,7 @@ module AgentHelper
   end
 
   def link_to_agent_edit(agent, parent_id, name_prefix, deletable: false, show_affiliations: true)
-    link_to(edit_agent_path(agent_id(agent), name_prefix: name_prefix, deletable: deletable, parent_id: parent_id, show_affiliations: show_affiliations), class: 'btn btn-sm btn-light') do
+    link_to(edit_agent_path(agent_id(agent), name_prefix: name_prefix, deletable: deletable, parent_id: parent_id, show_affiliations: show_affiliations), class: 'btn btn-sm btn-light agent-edit-icon') do
       content_tag(:i, '', class: 'far fa-edit')
     end
   end
@@ -169,7 +169,8 @@ module AgentHelper
     if agent.affiliations && agent.affiliations != []
       affiliations = ""
       agent.affiliations.each do |affiliation|
-        affiliations = affiliations + affiliation.acronym + " "
+        affiliation_display = affiliation.acronym ? affiliation.acronym : affiliation.name
+        affiliations = affiliations + affiliation_display + " "
       end
     end
     person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
