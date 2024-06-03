@@ -87,7 +87,7 @@ gem 'omniauth-keycloak'
 
 group :staging, :production, :appliance do
   # application monitoring
-  gem 'newrelic_rpm'
+  gem 'newrelic_rpm', '~> 9.9'
   # logs in json format, useful for shipping logs to logstash
   # gem 'rackstash', git: 'https://github.com/planio-gmbh/rackstash.git'
   # gem 'logstash-logger'
