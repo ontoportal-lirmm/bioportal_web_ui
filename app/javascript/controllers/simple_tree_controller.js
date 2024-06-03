@@ -10,8 +10,8 @@ export default class extends Controller {
     setTimeout(() => {
       let activeElem = this.element.querySelector('.tree-link.active');
       if (activeElem) {
-        activeElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    
+        activeElem.scrollIntoView({ block: 'center' });
+        window.scrollTo({top: 0,});
         if (this.autoClickValue) {
           activeElem.click();
         }
