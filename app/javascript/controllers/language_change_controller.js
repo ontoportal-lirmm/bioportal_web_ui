@@ -12,6 +12,6 @@ export default class extends Controller {
         urlSearchParams.append('language', lang);
     }
     var newUrl = window.location.origin + window.location.pathname + '?' + urlSearchParams.toString();
-    Turbo.visit(newUrl);
+    window.location.href = newUrl;
   }
 }
