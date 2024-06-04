@@ -115,24 +115,24 @@ module ComponentsHelper
     tag.html_safe
   end
 
-  def tree_component(root, selected, target_frame:, sub_tree: false, id: nil, auto_click: false, &child_data_generator)
+  def tree_component(root, selected, target_frame:, sub_tree: false, id: nil, auto_click: false, ontology_uri_pattern: nil, &child_data_generator)
     root.children.sort! { |a, b| (a.prefLabel || a.id).downcase <=> (b.prefLabel || b.id).downcase }
-
+    
     render TreeViewComponent.new(id: id, sub_tree: sub_tree, auto_click: auto_click) do |tree_child|
       root.children.each do |child|
         children_link, data, href = child_data_generator.call(child)
-
+  
         if children_link.nil? || data.nil? || href.nil?
           raise ArgumentError, t('components.error_block')
         end
-
+  
         tree_child.child(child: child, href: href,
                          children_href: children_link, selected: child.id.eql?(selected&.id),
                          muted: child.isInActiveScheme&.empty?,
                          target_frame: target_frame,
-                         data: data) do
+                         data: data, ontology_uri_pattern: ontology_uri_pattern) do
           tree_component(child, selected, target_frame: target_frame, sub_tree: true,
-                         id: id, auto_click: auto_click, &child_data_generator)
+                         id: id, auto_click: auto_click, ontology_uri_pattern: ontology_uri_pattern, &child_data_generator)
         end
       end
     end

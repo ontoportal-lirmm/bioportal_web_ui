@@ -103,9 +103,10 @@ class ConceptsController < ApplicationController
       
       not_found(t('concepts.missing_roots')) if @root.nil?
 
+      ontology_uri_pattern = LinkedData::Client::HTTP.get("ontologies/#{@ontology.acronym}/latest_submission", {display: 'uriRegexPattern'}).uriRegexPattern
       render inline: helpers.concepts_tree_component(@root, @concept,
                                       @ontology.acronym, Array(params[:concept_schemes]&.split(',')), request_lang,
-                                      id: 'concepts_tree_view', auto_click: params[:auto_click] || true)
+                                      id: 'concepts_tree_view', auto_click: params[:auto_click] || true, ontology_uri_pattern: ontology_uri_pattern)
     end
   end
 

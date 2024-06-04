@@ -2,7 +2,7 @@
 
 class TreeLinkComponent < ViewComponent::Base
   include MultiLanguagesHelper, ModalHelper, ApplicationHelper
-  def initialize(child:, href:, children_href: , selected: false , data: {}, muted: false, target_frame: nil, open_in_modal: false)
+  def initialize(child:, href:, children_href: , selected: false , data: {}, muted: false, target_frame: nil, open_in_modal: false, ontology_uri_pattern: nil)
     @child = child
     @active_style = selected ? 'active' : ''
     #@icons = child.relation_icon(node)
