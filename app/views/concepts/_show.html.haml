@@ -11,7 +11,7 @@
               = link_to("#classPermalinkModal", class: "class-permalink nav-link", title: t('concepts.permanent_link_class'), aria: {label: t('concepts.permanent_link_class')}, data: {toggle: "modal", current_purl: "#{@current_purl}"}) do
                 %i{class: "fas fa-link", aria: {hidden: "true"}}
           %div{'data-concepts-json-target': 'button'}
-            #concepts_json_button
+            .concepts_json_button
               = render RoundedButtonComponent.new(link: "#{@ontology.id}/classes/#{escape(@concept.id)}?display=all&apikey=#{get_apikey}", target:'_blank')
         - apikey = "apikey=#{get_apikey}"
         - baseClassUrl = "#{@ontology.id}/classes/#{escape(@concept.id)}"
