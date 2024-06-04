@@ -28,6 +28,8 @@ class TreeLinkComponent < ViewComponent::Base
     end
 
     @open_in_modal = open_in_modal
+
+    @ontology_uri_pattern = ontology_uri_pattern
   end
 
 
@@ -71,6 +73,12 @@ class TreeLinkComponent < ViewComponent::Base
       end
     end
 
+  end
+
+  def is_reused
+    if @ontology_uri_pattern
+      !@child.id.include?(@ontology_uri_pattern)
+    end
   end
 
 end
