@@ -125,12 +125,14 @@ module ComponentsHelper
         if children_link.nil? || data.nil? || href.nil?
           raise ArgumentError, t('components.error_block')
         end
-  
+        if ontology_uri_pattern
+          is_reused = !child.id.include?(ontology_uri_pattern)
+        end
         tree_child.child(child: child, href: href,
                          children_href: children_link, selected: child.id.eql?(selected&.id),
                          muted: child.isInActiveScheme&.empty?,
                          target_frame: target_frame,
-                         data: data, ontology_uri_pattern: ontology_uri_pattern) do
+                         data: data, is_reused: is_reused) do
           tree_component(child, selected, target_frame: target_frame, sub_tree: true,
                          id: id, auto_click: auto_click, ontology_uri_pattern: ontology_uri_pattern, &child_data_generator)
         end

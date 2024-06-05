@@ -6,7 +6,7 @@
     %a{id: @child.id, data: @data, title:  @tooltip,
               href: @href, class: "tree-link #{@muted_style} #{@active_style} #{border_left} #{open?}"}
       = @pref_label_html
-      - if is_reused
+      - if @is_reused
         .tree-view-reuse-icon
           = inline_svg_tag 'icons/reuses.svg'
   - if @child.hasChildren && !@child.expanded?

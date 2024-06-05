@@ -2,7 +2,7 @@
 
 class TreeLinkComponent < ViewComponent::Base
   include MultiLanguagesHelper, ModalHelper, ApplicationHelper
-  def initialize(child:, href:, children_href: , selected: false , data: {}, muted: false, target_frame: nil, open_in_modal: false, ontology_uri_pattern: nil)
+  def initialize(child:, href:, children_href: , selected: false , data: {}, muted: false, target_frame: nil, open_in_modal: false, is_reused: nil)
     @child = child
     @active_style = selected ? 'active' : ''
     #@icons = child.relation_icon(node)
@@ -29,7 +29,7 @@ class TreeLinkComponent < ViewComponent::Base
 
     @open_in_modal = open_in_modal
 
-    @ontology_uri_pattern = ontology_uri_pattern
+    @is_reused = is_reused
   end
 
 
@@ -73,12 +73,6 @@ class TreeLinkComponent < ViewComponent::Base
       end
     end
 
-  end
-
-  def is_reused
-    if @ontology_uri_pattern
-      !@child.id.include?(@ontology_uri_pattern)
-    end
   end
 
 end
