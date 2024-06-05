@@ -412,7 +412,7 @@ class ApplicationController < ActionController::Base
       if ignore_concept_param
         # get the top level nodes for the root
         # TODO_REV: Support views? Replace old view call: @ontology.top_level_classes(view)
-        @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes])
+        @roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes]) rescue nil
 
         if @roots.nil? || response_error?(@roots) || @roots.compact&.empty?
           LOG.add :debug, t('application.missing_roots_for_ontology', acronym: @ontology.acronym)

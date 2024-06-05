@@ -2,6 +2,6 @@
   %span
   = beta_badge
 %span
-  = render Display::InfoTooltipComponent.new(text: t("fair_score.view_fair_scores_definitions"))
+  = info_tooltip(content_tag(:div, t("fair_score.view_fair_scores_definitions"), style: "width: 300px"), interactive: false)
 %span{style: 'vertical-align: bottom; margin-left: -5px;'}
   = fairness_link(style: 'vertical-align: middle;', ontology: @ontology&.acronym)
