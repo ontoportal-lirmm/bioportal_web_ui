@@ -1098,21 +1098,21 @@ fr:
     submit: Soumettre
 
   check_resolvability:
-    check_resolvability_message_1: "L'URL est résolvable et supporte les formats suivants : %{supported_format}"
-    check_resolvability_message_2: "L'URL est résolvable mais n'est pas négociable en contenu, supporte uniquement : %{supported_format}"
-    check_resolvability_message_3: L'URL n'est pas résolvable et n'est pas négociable en contenu (retourne %{status}).
+    check_resolvability_message_1: "L'URI est résolvable et supporte les formats suivants : %{supported_format}"
+    check_resolvability_message_2: "L'URI est résolvable mais n'est pas négociable en contenu, supporte uniquement : %{supported_format}"
+    check_resolvability_message_3: L'URI n'est pas résolvable et n'est pas négociable en contenu (retourne %{status}).
     uri_placeholder: Tapez une URI pour tester sa résolvabilité
     show_help: Afficher l'aide
     format_not_specified: Format non spécifié
     how_it_works:
       title: Comment ça fonctionne
       content_1: |
-        L'outil de vérification de la résolvabilité vous permet de tester si une URL donnée est résolvable. Il est basé sur la méthode HTTP HEAD.
-        Nous vérifions la résolvabilité d'une URL en envoyant une requête HEAD à l'URL et en vérifiant si le code de statut de la réponse est 200 (OK) et
+        L'outil de vérification de la résolvabilité vous permet de tester si une URI donnée est résolvable. Il est basé sur la méthode HTTP HEAD.
+        Nous vérifions la résolvabilité d'une URI en envoyant une requête HEAD à l'URI et en vérifiant si le code de statut de la réponse est 200 (OK) et
         si le type de contenu retourné est égal à l'un des %{resolvability_formats} suivants.
       content_2: |
-        Nous avons un délai d'attente fixé à %{resolvability_timeout} secondes, donc si l'URL n'est pas résolvable dans ce délai, la vérification échouera.
-        Et un nombre maximal de redirections fixé à %{resolvability_max_redirections}, donc si l'URL n'est pas résolvable dans ce nombre de redirections, la vérification échouera.
+        Nous avons un délai d'attente fixé à %{resolvability_timeout} secondes, donc si l'URI n'est pas résolvable dans ce délai, la vérification échouera.
+        Et un nombre maximal de redirections fixé à %{resolvability_max_redirections}, donc si l'URI n'est pas résolvable dans ce nombre de redirections, la vérification échouera.
     resolving_uri:
       title: Résolution d'une URI
       content: |
