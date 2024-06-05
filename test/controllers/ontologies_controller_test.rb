@@ -75,7 +75,7 @@ class OntologiesControllerTest < ActionDispatch::IntegrationTest
     
     test 'test get STY resource in html format' do
       get '/ontologies/STY/T071', headers: { 'Accept' => 'text/html' }
-      assert_equal "http://www.example.com/ontologies/STY?conceptid=http%3A%2F%2Fpurl.lirmm.fr%2Fontology%2FSTY%2FT071&p=classes", response.location
+      assert_equal "http://www.example.com/ontologies/STY?conceptid=http%3A%2F%2Fpurl.bioontology.org%2Fontology%2FSTY%2FT071&p=classes", response.location
       assert_response :redirect
       assert_equal "text/html; charset=utf-8" , response.content_type
     end
