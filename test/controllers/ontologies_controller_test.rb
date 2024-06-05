@@ -38,70 +38,70 @@ class OntologiesControllerTest < ActionDispatch::IntegrationTest
       end
 
     end
+  end
 
-    test 'test get STY in html format' do
-      get '/ontologies/STY', headers: { 'Accept' => 'text/html' }
-      assert_response :success
-      assert_equal 'text/html; charset=utf-8', response.content_type
-    end
+  test 'test get STY in html format' do
+    get '/ontologies/STY', headers: { 'Accept' => 'text/html' }
+    assert_response :success
+    assert_equal 'text/html; charset=utf-8', response.content_type
+  end
+
+  test 'test get STY in json format' do
+    get '/ontologies/STY', headers: { 'Accept' => 'application/json' }
+    assert_response :success
+    assert_equal 'application/json', response.content_type
+
+  end
+
+  test 'test get STY in xml format' do
+    get '/ontologies/STY', headers: { 'Accept' => 'application/xml' }
+    assert_includes [200, 500, 404], response.status
+  end
+
+  test 'test get STY in csv format' do
+    get '/ontologies/STY', headers: { 'Accept' => 'text/csv' }
+    assert_includes [200, 500, 404], response.status
+  end
+
+  test 'test get STY in turtle format' do
+    get '/ontologies/STY', headers: { 'Accept' => 'text/turtle' }
+    assert_includes [200, 406], response.status
+  end
+
+  test 'test get STY in ntriples format' do
+    get '/ontologies/STY', headers: { 'Accept' => 'application/ntriples' }
+    assert_response :not_acceptable
+  end
+
   
-    test 'test get STY in json format' do
-      get '/ontologies/STY', headers: { 'Accept' => 'application/json' }
-      assert_response :success
-      assert_equal 'application/json', response.content_type
-
-    end
+  test 'test get STY resource in html format' do
+    get '/ontologies/STY/T071', headers: { 'Accept' => 'text/html' }
+    assert_equal "http://www.example.com/ontologies/STY?conceptid=http%3A%2F%2Fpurl.bioontology.org%2Fontology%2FSTY%2FT071&p=classes", response.location
+    assert_response :redirect
+    assert_equal "text/html; charset=utf-8" , response.content_type
+  end
   
-    test 'test get STY in xml format' do
-      get '/ontologies/STY', headers: { 'Accept' => 'application/xml' }
-      assert_includes [200, 500, 404], response.status
-    end
-  
-    test 'test get STY in csv format' do
-      get '/ontologies/STY', headers: { 'Accept' => 'text/csv' }
-      assert_includes [200, 500, 404], response.status
-    end
-  
-    test 'test get STY in turtle format' do
-      get '/ontologies/STY', headers: { 'Accept' => 'text/turtle' }
-      assert_includes [200, 406], response.status
-    end
-  
-    test 'test get STY in ntriples format' do
-      get '/ontologies/STY', headers: { 'Accept' => 'application/ntriples' }
-      assert_response :not_acceptable
-    end
+  test 'test get STY resource in json format' do
+    get '/ontologies/STY/T071', headers: { 'Accept' => 'application/json' }
+    assert_response :success
+    assert_equal "application/ld+json; charset=utf-8" , response.content_type
+  end
 
-    
-    test 'test get STY resource in html format' do
-      get '/ontologies/STY/T071', headers: { 'Accept' => 'text/html' }
-      assert_equal "http://www.example.com/ontologies/STY?conceptid=http%3A%2F%2Fpurl.bioontology.org%2Fontology%2FSTY%2FT071&p=classes", response.location
-      assert_response :redirect
-      assert_equal "text/html; charset=utf-8" , response.content_type
-    end
-    
-    test 'test get STY resource in json format' do
-      get '/ontologies/STY/T071', headers: { 'Accept' => 'application/json' }
-      assert_response :success
-      assert_equal "application/ld+json; charset=utf-8" , response.content_type
-    end
+  test 'test get STY resource in xml format' do
+    get '/ontologies/STY/T071', headers: { 'Accept' => 'application/xml' }
+    assert_response :success
+    assert_equal "application/rdf+xml; charset=utf-8" , response.content_type
+  end
 
-    test 'test get STY resource in xml format' do
-      get '/ontologies/STY/T071', headers: { 'Accept' => 'application/xml' }
-      assert_response :success
-      assert_equal "application/rdf+xml; charset=utf-8" , response.content_type
-    end
+  test 'test get STY resource in ntriples format' do
+    get '/ontologies/STY/T071', headers: { 'Accept' => 'application/n-triples' }
+    assert_response :success
+    assert_equal "application/n-triples; charset=utf-8" , response.content_type
+  end
 
-    test 'test get STY resource in ntriples format' do
-      get '/ontologies/STY/T071', headers: { 'Accept' => 'application/n-triples' }
-      assert_response :success
-      assert_equal "application/n-triples; charset=utf-8" , response.content_type
-    end
-
-    test 'test get STY resource in turtle format' do
-      get '/ontologies/STY/T071', headers: { 'Accept' => 'text/turtle' }
-      assert_response :success
-      assert_equal "text/turtle; charset=utf-8" , response.content_type
-    end
+  test 'test get STY resource in turtle format' do
+    get '/ontologies/STY/T071', headers: { 'Accept' => 'text/turtle' }
+    assert_response :success
+    assert_equal "text/turtle; charset=utf-8" , response.content_type
   end
 end
