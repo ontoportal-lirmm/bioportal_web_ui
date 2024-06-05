@@ -55,17 +55,17 @@ class OntologiesControllerTest < ActionDispatch::IntegrationTest
 
   test 'test get STY in xml format' do
     get '/ontologies/STY', headers: { 'Accept' => 'application/xml' }
-    assert_includes [200, 500, 404], response.status
+    assert_equal 500, response.status # STY has only Turtle
   end
 
   test 'test get STY in csv format' do
     get '/ontologies/STY', headers: { 'Accept' => 'text/csv' }
-    assert_includes [200, 500, 404], response.status
+    assert_response :success
   end
 
   test 'test get STY in turtle format' do
     get '/ontologies/STY', headers: { 'Accept' => 'text/turtle' }
-    assert_includes [200, 406], response.status
+    assert_response :success
   end
 
   test 'test get STY in ntriples format' do

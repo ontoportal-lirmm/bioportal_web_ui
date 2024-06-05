@@ -19,25 +19,47 @@ module ApplicationTestHelpers
       if logged_in_user && !logged_in_user.errors
         logged_in_user = create_user(user)
       end
-      session[:user] = logged_in_user
+      logged_in_user
     end
 
-    def create_user(user , admin: false)
-      unless (existent_user = LinkedData::Client::Models::User.find_by_username(user.username).first)
-        values = user.to_h
-        values[:role] = ["ADMINISTRATOR"]   if admin
-        existent_user = LinkedData::Client::Models::User.new(values: values).save
+    def create_user(user, admin: false)
+      admin_user = LinkedData::Client::Models::User.authenticate('admin', 'password') if admin
+      existent_user = LinkedData::Client::Models::User.find_by_username(user.username).first
+
+      existent_user.delete if existent_user
+
+      values = user.to_h
+      values[:role] = ["ADMINISTRATOR"] if admin
+      existent_user = LinkedData::Client::Models::User.new(values: values)
+
+      if admin
+        # Overwrite the normal ".save" to accept creating admin user
+        conn = Faraday.new(url: LinkedData::Client.settings.rest_url) do |faraday|
+          faraday.request :url_encoded
+          faraday.response :logger
+          faraday.adapter Faraday.default_adapter
+          faraday.headers = {
+            "Accept" => "application/json",
+            "Authorization" => "apikey token=#{admin_user.apikey}",
+            "User-Agent" => "NCBO API Ruby Client v0.1.0"
+          }
+
+        end
+        conn.post(existent_user.class.collection_path, existent_user.to_hash.to_json, 'Content-Type' => 'application/json')
+      else
+        existent_user.save
       end
 
       existent_user.password = user.password
       existent_user
     end
 
-    def delete_users(ontologies = LinkedData::Client::Models::Ontology.all)
-      Array(ontologies).each do |o|
+    def delete_users(users = LinkedData::Client::Models::User.all)
+      Array(users).each do |o|
         LinkedData::Client::Models::Ontology.find_by_acronym(o.acronym).first&.delete
       end
     end
+
     def delete_user(user)
       LinkedData::Client::Models::User.find_by_username(user.username).first&.delete
     end
