@@ -126,7 +126,7 @@ module ComponentsHelper
           raise ArgumentError, t('components.error_block')
         end
         if ontology_uri_pattern
-          is_reused = !child.id.include?(ontology_uri_pattern)
+          is_reused = !(child.id =~ Regexp.new(ontology_uri_pattern))
         end
         tree_child.child(child: child, href: href,
                          children_href: children_link, selected: child.id.eql?(selected&.id),
