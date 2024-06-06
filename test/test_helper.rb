@@ -2,6 +2,7 @@ ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 require 'rails/test_help'
 require 'simplecov'
+require 'webmock/minitest'
 
 SimpleCov.start 'rails' do
   add_filter '/bin/'
@@ -16,6 +17,7 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
 
+  WebMock.allow_net_connect!
 
   Capybara.server_host = "0.0.0.0"
   Capybara.app_host = "http://#{Socket.gethostname}:#{Capybara.server_port}"

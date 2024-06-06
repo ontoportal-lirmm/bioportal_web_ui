@@ -72,7 +72,7 @@ class AnnotatorController < ApplicationController
       else
         @results_table_header.push(t('annotator.score'))
       end
-      annotations = LinkedData::Client::HTTP.get(uri, api_params)
+      annotations = LinkedData::Client::HTTP.get(uri.dup.to_s, api_params)
       @ontologies = get_simplified_ontologies_hash
       @semantic_types = get_semantic_types 
       @results = []

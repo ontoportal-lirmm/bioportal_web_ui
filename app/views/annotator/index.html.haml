@@ -37,6 +37,7 @@
             = render Input::SelectComponent.new(label: t('annotator.include_ancestors'), id: 'ancestors_level', name: 'class_hierarchy_max_level', value: @ancestors_levels, selected: params[:class_hierarchy_max_level])
           .filters_line
             - include_score_helper = 'Score annotations following previous NCBO 2009 measure (old) or Score annotations following C-Value measure (cvalue) or Score annotations following C-Value measure with hierarchy expansion (cvalueh).'
+
             = render Input::SelectComponent.new(label: t('annotator.include_score'), id: 'include_score', name: 'score', value: @include_score, tooltip: include_score_helper, selected: params[:score])
             = render Input::NumberComponent.new(label: t('annotator.score_threshold'), name: "score_threshold", value: params[:score_threshold] || 0, tooltip: 'Specify minimum score value for annotations.')
             = render Input::NumberComponent.new(label: t('annotator.confidence_threshold'), name: 'confidence_threshold', value: params[:confidence_threshold] || 0, tooltip: 'Specify the minimum position in the score distribution (between 1 and 100).')
