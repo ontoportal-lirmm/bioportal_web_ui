@@ -87,7 +87,7 @@ module ComponentsHelper
 
   def generated_link_to_clipboard(url, acronym) 
     url = "#{$UI_URL}/ontologies/#{acronym}/#{link_last_part(url)}"
-    content_tag(:span, style: 'display: inline-block;') do
+    content_tag(:span, id: "generate_portal_link", style: 'display: inline-block;') do
       render ClipboardComponent.new(icon: 'icons/copy_link.svg', title: "#{t("components.copy_portal_uri", portal_name: portal_name)} #{link_to(url)}", message: url, show_content: false)
     end
   end

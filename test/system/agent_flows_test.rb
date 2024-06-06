@@ -14,7 +14,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
 
   def teardown
     delete_agents
-    delete_users
+    delete_user(@logged_user) if @logged_user
   end
 
   test "go admin page and create an agent person and edit it" do
@@ -87,6 +87,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
     agent_fill(agent, parent_id: agent.id)
     # assert_text "New Agent added successfully"
     find('.close').click
+    sleep 1
     within "table#admin_agents" do
       assert_selector '.human',  count: person_count + organization_count # all created  agents
       assert_text agent.name
