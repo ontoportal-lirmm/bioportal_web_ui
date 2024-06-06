@@ -8,7 +8,7 @@ $UI_URL = "http://#{$UI_HOSTNAME}:3000"
 $API_KEY = ENV['API_KEY']
 $REST_URL = ENV['API_URL']
 $BIOMIXER_URL = ENV['BIOMIXER_URL']
-$ANNOTATOR_URL = $PROXY_URL = ENV['ANNOTATOR_URL']
+$ANNOTATOR_URL = $PROXY_URL = ENV['ANNOTATOR_URL'].blank? ? "https://services.tesportal.lirmm.fr/annotator" : ENV['ANNOTATOR_URL']
 $FAIRNESS_URL = ENV['FAIRNESS_URL']
 
 # Resource term
@@ -219,6 +219,3 @@ $PORTALS_INSTANCES = [
 ]
 
 $UI_THEME = :stageportal
-if File.exist?('config/bioportal_config_development_testportal.lirmm.fr.rb')
-  require_relative 'bioportal_config_development_testportal.lirmm.fr' # local credentials
-end

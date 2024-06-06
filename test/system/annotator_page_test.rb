@@ -2,7 +2,6 @@ require "application_system_test_case"
 require 'webmock/minitest'
 
 class AnnotatorPageTest < ApplicationSystemTestCase
-    WebMock.allow_net_connect!
     def setup
         WebMock.disable!
         @apikey = LinkedData::Client.settings.apikey
@@ -10,6 +9,10 @@ class AnnotatorPageTest < ApplicationSystemTestCase
         @host = "#{@annotator_api.split('/')[-2]}:443"
         @annotator_text_area = ".annotator-page-text-area > textarea"
         @sample_response = fixtures(:annotator)["sample_response"]
+    end
+
+    def teardown
+        WebMock.disable!
     end
 
     test "go to annotator page and check if all the inputs and filters are there" do
@@ -100,8 +103,6 @@ class AnnotatorPageTest < ApplicationSystemTestCase
         
         # Check if we got the empty state correctly
         assert_selector 'div.browse-empty-illustration'
-        
-        WebMock.disable!
     end
 
 end

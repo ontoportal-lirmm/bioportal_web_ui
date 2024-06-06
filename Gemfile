@@ -76,6 +76,7 @@ gem "lookbook", '~> 1.5.5'
 gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'development'
 gem "flag-icons-rails", "~> 3.4"
 gem "iso-639", "~> 0.3.6"
+gem "ffi", "~> 1.16.3"
 
 # Multi-Provider Authentication
 gem 'omniauth'
