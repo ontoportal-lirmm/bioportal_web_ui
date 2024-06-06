@@ -150,7 +150,9 @@ Rails.application.routes.draw do
   # Ontologies
   get '/ontologies/view/edit/:id' => 'ontologies#edit_view', :constraints => { id: /[^\/?]+/ }
   get '/ontologies/view/new/:id' => 'ontologies#new_view'
+  get '/ontologies/:acronym/download' => 'ontologies_redirection#redirect_ontology'
   get '/ontologies/:acronym/:id/serialize/:output_format' => 'ontologies#content_serializer', :id => /.+/
+  get '/ontologies/:acronym/htaccess' => 'ontologies_redirection#generate_htaccess'
 
   get '/ontologies/virtual/:ontology' => 'ontologies#virtual', :as => :ontology_virtual
   get '/ontologies/success/:id' => 'ontologies#submit_success'
@@ -171,7 +173,8 @@ Rails.application.routes.draw do
   get 'ontologies/:ontology/notes/:noteid', to: 'notes#virtual_show', as: :note_virtual, noteid: /.+/
   get 'ontologies/:ontology/notes', to: 'notes#virtual_show'
 
-  get 'ontologies/:acronym/:id' => 'ontologies#redirect', :id => /.+/
+  get '/ontologies/:acronym/:id' => 'ontologies_redirection#redirect', :id => /.+/
+
 
   # Ajax
   get '/ajax/' => 'ajax_proxy#get', :as => :ajax

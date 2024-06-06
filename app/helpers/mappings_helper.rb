@@ -178,8 +178,19 @@ module MappingsHelper
 
   def mappings_bubble_view_legend
     content_tag(:div, class: 'mappings-bubble-view-legend') do
-      mappings_legend_section('Bubble size:', 'The global number of mappings with all other ontologies.', 'mappings-bubble-size-legend') +
-        mappings_legend_section('Color degree:', 'The number of mappings with the selected ontology.', 'mappings-bubble-color-legend')
+      mappings_legend_section(t('mappings.bubble_view_legend.bubble_size'), t('mappings.bubble_view_legend.bubble_size_desc'), 'mappings-bubble-size-legend') +
+        mappings_legend_section(
+          t('mappings.bubble_view_legend.color_degree'),t('mappings.bubble_view_legend.color_degree_desc'),'mappings-bubble-color-legend') +
+        content_tag(:div, class: 'content-container') do
+          content_tag(:div, class: 'bubble-view-legend-item') do
+            content_tag(:div, class: 'title') do
+              content_tag(:div, t('mappings.bubble_view_legend.yellow_bubble'), class: 'd-inline') + content_tag(:span, t('mappings.bubble_view_legend.selected_bubble'))
+            end +
+              content_tag(:div, class: "mappings-bubble-size-legend d-flex justify-content-center") do
+                content_tag(:div, '', class: "bubble yellow")
+              end
+          end
+        end
     end
   end
 
@@ -197,9 +208,9 @@ module MappingsHelper
 
   def mappings_legend(css_class)
     content_tag(:div, class: css_class) do
-      content_tag(:div, "Less mappings", class: 'mappings-legend-text') +
-        (1..6).map { |i| content_tag(:div, "", class: "bubble bubble#{i}") }.join +
-        content_tag(:div, "More mappings", class: 'mappings-legend-text')
+      content_tag(:div, t('mappings.bubble_view_legend.less_mappings'), class: 'mappings-legend-text') +
+        (1..6).map { |i| content_tag(:div, "", class: "bubble bubble#{i}") }.join.html_safe +
+        content_tag(:div, t('mappings.bubble_view_legend.more_mappings'), class: 'mappings-legend-text')
     end
   end
 end

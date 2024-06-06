@@ -71,7 +71,7 @@ module ComponentsHelper
 
 
   def resolvability_check_tag(url)
-    content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;')
+    content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;', onClick: "window.open('#{check_resolvability_url(url: url)}', '_blank');")
   end
 
   def rounded_button_component(link)
@@ -84,22 +84,34 @@ module ComponentsHelper
     end
   end
 
+
   def generated_link_to_clipboard(url, acronym) 
     url = "#{$UI_URL}/ontologies/#{acronym}/#{link_last_part(url)}"
-    content_tag(:span, style: 'display: inline-block;') do
+    content_tag(:span, id: "generate_portal_link", style: 'display: inline-block;') do
       render ClipboardComponent.new(icon: 'icons/copy_link.svg', title: "#{t("components.copy_portal_uri", portal_name: portal_name)} #{link_to(url)}", message: url, show_content: false)
     end
   end
 
-  def link_to_with_actions(link_to_tag, acronym: nil, url: nil, copy: true, check_resolvability: true, generate_link: true)
+  def htaccess_tag(acronym)
+    content_tag(:span, 'data-controller': 'tooltip', style: 'display: inline-block; width: 18px;', title: "See #{t("ontologies.htaccess_modal_title", acronym: acronym)}") do
+      link_to_modal(nil, "/ontologies/#{acronym}/htaccess", data: {show_modal_title_value: "#{t("ontologies.htaccess_modal_title", acronym: acronym)}", show_modal_size_value: 'modal-xl'}) do
+        inline_svg_tag("icons/copy_link.svg")
+      end
+    end
+  end
+
+
+  def link_to_with_actions(link_to_tag, acronym: nil, url: nil, copy: true, check_resolvability: true, generate_link: true, generate_htaccess: false)
     tag = link_to_tag
     url = link_to_tag if url.nil?
-    tag = tag + copy_link_to_clipboard(url) if copy
-
-    tag= tag + generated_link_to_clipboard(url, acronym) if generate_link
-
-    tag = tag + resolvability_check_tag(url) if check_resolvability
     
+    tag += content_tag(:span, class: 'mx-1') do
+      concat copy_link_to_clipboard(url) if copy
+      concat generated_link_to_clipboard(url, acronym) if generate_link
+      concat resolvability_check_tag(url) if check_resolvability
+      concat htaccess_tag(acronym) if generate_htaccess
+    end
+
     tag.html_safe
   end
 
@@ -143,8 +155,8 @@ module ComponentsHelper
     render LoaderComponent.new(type: type)
   end
 
-  def info_tooltip(text)
-    render Display::InfoTooltipComponent.new(text: text)
+  def info_tooltip(text, interactive: true)
+    render Display::InfoTooltipComponent.new(text: text, interactive: interactive)
   end
 
   def empty_state_message(message)

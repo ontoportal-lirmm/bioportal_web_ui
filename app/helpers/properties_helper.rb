@@ -22,4 +22,14 @@ module PropertiesHelper
       property_tree_data(acronym, child, language)
     end
   end
+
+  def no_properties?
+    @properties.nil? || @properties.empty?
+  end
+
+  def no_properties_alert
+    render Display::AlertComponent.new do
+      t('properties.no_properties_alert', acronym: @ontology.acronym)
+    end
+  end
 end

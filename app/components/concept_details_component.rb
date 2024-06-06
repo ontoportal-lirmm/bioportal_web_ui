@@ -42,7 +42,7 @@ class ConceptDetailsComponent < ViewComponent::Base
       values = data[:values]
       url = data[:key]
 
-      ajax_links = values.map do |v|
+      ajax_links = Array(values).map do |v|
         if block_given?
           block.call(v)
         else
@@ -52,11 +52,11 @@ class ConceptDetailsComponent < ViewComponent::Base
             display_in_multiple_languages([v].to_h)
           end
         end
-      end if values.is_a?(Array)
+      end
 
       out << [
-        { th: "<span title=#{url} data-controller='tooltip'>#{remove_owl_notation(key)}</span>".html_safe },
-        { td: "<div class='d-flex flex-wrap'> #{"<p class='mx-1'>#{ajax_links&.join('</p><p class="mx-1">')}"}</div>".html_safe }
+        { th:  content_tag(:span, remove_owl_notation(key), title: url, 'data-controller': 'tooltip') },
+        { td: content_tag(:span, ajax_links.join.html_safe) }
       ]
     end
     out
@@ -69,7 +69,7 @@ class ConceptDetailsComponent < ViewComponent::Base
     end
   end
 
-  def filter_properties(top_keys, bottom_keys, exclude_keys, concept_properties) 
+  def filter_properties(top_keys, bottom_keys, exclude_keys, concept_properties)
     all_keys = concept_properties&.keys || []
     top_set = properties_set_by_keys(top_keys, concept_properties, exclude_keys)
     bottom_set = properties_set_by_keys(bottom_keys, concept_properties, exclude_keys)
@@ -81,7 +81,7 @@ class ConceptDetailsComponent < ViewComponent::Base
   private
 
   def link_to_format_modal(format, icon)
-    link_to_modal(nil, "/ontologies/#{@acronym}/#{escape(@concept_id)}/serialize/#{format}", data: {show_modal_title_value: @concept_id, show_modal_size_value: 'modal-xl'}) do
+    link_to_modal(nil, "/ontologies/#{@acronym}/#{escape(@concept_id)}/serialize/#{format}",{ id: "resource_content_#{format}", data: {show_modal_title_value: @concept_id, show_modal_size_value: 'modal-xl'}}) do
       inline_svg("icons/#{icon}.svg", width: '50px', height: '50px')
     end
   end

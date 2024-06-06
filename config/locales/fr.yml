@@ -41,7 +41,7 @@ fr:
     formats:
       year_month_day_concise: "%Y-%m-%d" # 2017-03-01
       month_day_year: "%b %-d, %Y" # Mar 1, 2017
-      monthfull_day_year: "%B %-d, %Y" # Mars 1, 2017
+      monthfull_day_year: "%-d %B %Y" # Mars 1, 2017
 
   language:
     translation_not_available: "Traduction en %{language} non disponible"
@@ -598,6 +598,15 @@ fr:
     title: Mappings
     upload_mappings: Télécharger des mappings
     select_ontologies_list: Sélectionner les ontologies
+    bubble_view_legend:
+      bubble_size: "Taille de la bulle :"
+      bubble_size_desc: "Le nombre total de correspondances avec toutes les autres ontologies."
+      color_degree: "Degré de couleur :"
+      color_degree_desc: "Le nombre de correspondances avec l'ontologie sélectionnée."
+      yellow_bubble: "Bulle jaune : "
+      selected_bubble: "La bulle sélectionnée."
+      less_mappings: "Moins de correspondances"
+      more_mappings: "Plus de correspondances"
     count:
       ontology: Ontologie
       mappings: Mappings
@@ -710,7 +719,7 @@ fr:
     metadata:
       additional_metadata: Métadonnées supplémentaires
     header:
-      last_submission_date: Date de la dernière soumission
+      last_submission_date: Date de la dernière soumission le
 
   projects:
     project_not_found: "Projet non trouvé : %{id}"
@@ -1094,21 +1103,21 @@ fr:
     submit: Soumettre
 
   check_resolvability:
-    check_resolvability_message_1: "L'URL est résolvable et supporte les formats suivants : %{supported_format}"
-    check_resolvability_message_2: "L'URL est résolvable mais n'est pas négociable en contenu, supporte uniquement : %{supported_format}"
-    check_resolvability_message_3: L'URL n'est pas résolvable et n'est pas négociable en contenu (retourne %{status}).
+    check_resolvability_message_1: "L'URI est résolvable et supporte les formats suivants : %{supported_format}"
+    check_resolvability_message_2: "L'URI est résolvable mais n'est pas négociable en contenu, supporte uniquement : %{supported_format}"
+    check_resolvability_message_3: L'URI n'est pas résolvable et n'est pas négociable en contenu (retourne %{status}).
     uri_placeholder: Tapez une URI pour tester sa résolvabilité
     show_help: Afficher l'aide
     format_not_specified: Format non spécifié
     how_it_works:
       title: Comment ça fonctionne
       content_1: |
-        L'outil de vérification de la résolvabilité vous permet de tester si une URL donnée est résolvable. Il est basé sur la méthode HTTP HEAD.
-        Nous vérifions la résolvabilité d'une URL en envoyant une requête HEAD à l'URL et en vérifiant si le code de statut de la réponse est 200 (OK) et
+        L'outil de vérification de la résolvabilité vous permet de tester si une URI donnée est résolvable. Il est basé sur la méthode HTTP HEAD.
+        Nous vérifions la résolvabilité d'une URI en envoyant une requête HEAD à l'URI et en vérifiant si le code de statut de la réponse est 200 (OK) et
         si le type de contenu retourné est égal à l'un des %{resolvability_formats} suivants.
       content_2: |
-        Nous avons un délai d'attente fixé à %{resolvability_timeout} secondes, donc si l'URL n'est pas résolvable dans ce délai, la vérification échouera.
-        Et un nombre maximal de redirections fixé à %{resolvability_max_redirections}, donc si l'URL n'est pas résolvable dans ce nombre de redirections, la vérification échouera.
+        Nous avons un délai d'attente fixé à %{resolvability_timeout} secondes, donc si l'URI n'est pas résolvable dans ce délai, la vérification échouera.
+        Et un nombre maximal de redirections fixé à %{resolvability_max_redirections}, donc si l'URI n'est pas résolvable dans ce nombre de redirections, la vérification échouera.
     resolving_uri:
       title: Résolution d'une URI
       content: |
@@ -1374,6 +1383,35 @@ fr:
         abstract: Résumé
         description: Description
 
+    htaccess_modal_title: "Règles de redirection pour l'ontologie %{acronym}"
+    instructions_servers: Instructions pour les servers %{server}
+    htaccess_redirection_description: "Nous proposons une solution transparente pour rendre les URI de votre ontologie résolubles et le contenu négociable en autorisant la redirection d'URL de vos URI d'ontologie vers nos URI d'Agroportal. Pour faciliter ce processus, nous vous avons fourni un ensemble de règles de réécriture .htaccess. En suivant les instructions simples ci-dessous, vous serez en mesure de mettre en œuvre ces règles rapidement et efficacement, garantissant ainsi une redirection fluide"
+    
+    redirection_note: >
+      Cette redirection fonctionne uniquement pour les uri sous la forme: url/path/resource_id.
+      Cela ne fonctionnera pas pour les URIS sous la forme: url/path/to/something#resource_id OR url/path/to/something:resource_id
+    htaccess_redirection:
+      instruction_1: "Accéder au fichier .htaccess:"
+      instruction_1_content: "Localisez le fichier .htaccess dans le répertoire racine de votre site Web, s'il n'existe pas, créez-en un. Ce fichier contrôle le comportement de votre serveur Web et est souvent utilisé pour la réécriture et la redirection d'URL"
+      instruction_2: "Copiez et collez les règles de redirection dans le fichier .htaccess:"
+      instruction_2_content: "Copiez les règles de redirection fournies dans le rectangle noir. Ouvrez le fichier .htaccess et collez les règles de redirection copiées dans le fichier"
+      instruction_3: "Activer le module de réécriture (Linux):"
+      instruction_3_content: "vous devrez vous assurer que le module Apache appelé 'rewrite' est activé en exécutant la commande `sudo a2enmod rewrite`"
+    
+    nginx_redirection:
+      instruction_1: "Accéder au fichier de configuration Nginx:"
+      instruction_1_content: "L'emplacement de ce fichier peut varier en fonction de votre système, mais les emplacements courants incluent /etc/nginx/nginx.conf, /etc/nginx/sites-available/default ou /usr/local/etc/nginx/nginx. conf."
+      instruction_2: "Localisez le bloc de serveur ou le bloc d'emplacement dans lequel vous souhaitez activer la réécriture d'URL:"
+      instruction_2_content: "C'est généralement dans le bloc serveur { ... }."
+      instruction_3: "Copier et coller les règles de redirection:"
+      instruction_3_content: "Copiez les règles de redirection fournies dans le rectangle noir. Dans le bloc approprié, ajoutez les règles copiées pour activer la réécriture d'URL"
+      instruction_4: "Testez la configuration pour les erreurs de syntaxe:"
+      instruction_4_content: "Exécutez la commande suivante pour tester la configuration de redirection `sudo nginx -t`"
+      instruction_5: "Redémarrez Nginx pour appliquer les modifications:"
+      instruction_5_content: "Redémarrez le serveur nginx pour appliquer la redirection à l'aide de cette commande `sudo systemctl reload nginx`"
+
+
+
 
   components:
     check_resolvability: vérification de la résolvabilité...
@@ -1423,6 +1461,7 @@ fr:
     preferred_name: Nom préféré
     definitions: Définitions
     parent: Parent
+    no_properties_alert: "%{acronym} ne contient pas de propriétés"
 
   visits:
     ontology_visits: Visites de l'ontologie
@@ -1468,3 +1507,5 @@ fr:
         Cet outil/service vérifie la résolvabilité des Identifiants Uniformes de Ressource (URI) et leur négociabilité de contenu.
         Il vérifie si un URI donné est accessible et si le contenu associé peut être négocié en fonction des préférences du client.
         Cette fonctionnalité garantit la fiabilité et l'accessibilité des ressources liées dans l'écosystème RDF, aidant ainsi à maintenir l'intégrité des données et facilitant l'intégration transparente avec des ressources externes.
+
+

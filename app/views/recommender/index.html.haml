@@ -73,7 +73,7 @@
         .recommender-page-button#get_recommendations_button{class: is_input ?  "" : "d-none", 'data-recommender-target': 'button'}
           = render Buttons::RegularButtonComponent.new(id:'recommender', value: t('recommender.get_recommendations'), variant: "primary", type: 'submit')
 
-        .recommender-page-button{class: is_input ? "d-none" : "", 'data-action': 'click->recommender#edit'}
+        .recommender-page-button{class: is_input ? "d-none" : "", 'data-action': 'click->recommender#edit', id: 'recommender-edit-button'}
           = render Buttons::RegularButtonComponent.new(id:'edit-recommender', value: t('recommender.edit'), variant: "primary") do |btn|
             - btn.icon_left do
               = inline_svg_tag "edit.svg"
@@ -94,7 +94,7 @@
                 - r.td do
                   - ontologies = ""
                   - result[:ontologies].each do |ontology|
-                    %a.recommender-result-ontology{href: ontology[:link]}
+                    %a.recommender-result-ontology{href: ontology_path(id: ontology[:acronym], p: 'summary')}
                       = ontology[:acronym]
                 - r.td do
                   = render Display::ProgressBarComponent.new(progress: result[:final_score])
