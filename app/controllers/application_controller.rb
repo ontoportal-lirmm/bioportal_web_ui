@@ -90,7 +90,7 @@ class ApplicationController < ActionController::Base
   # See ActionController::RequestForgeryProtection for details
   protect_from_forgery
 
-  before_action :set_global_thread_values, :domain_ontology_set, :authorize_miniprofiler, :clean_empty_strings_from_params_arrays, :init_trial_license
+  before_action :set_global_thread_values, :domain_ontology_set, :clean_empty_strings_from_params_arrays, :init_trial_license
 
 
   def invalidate_cache?
@@ -323,15 +323,6 @@ class ApplicationController < ActionController::Base
       params_array << "#{key}=#{CGI.escape(value)}"
     end
     params_array.empty? ? "" : "#{prefix}#{params_array.join('&')}"
-  end
-
-  # rack-mini-profiler authorization
-  def authorize_miniprofiler
-    if params[:enable_profiler] && params[:enable_profiler].eql?("true") && session[:user] && session[:user].admin?
-      Rack::MiniProfiler.authorize_request
-    else
-      Rack::MiniProfiler.deauthorize_request
-    end
   end
 
   # Verifies if user is logged in
