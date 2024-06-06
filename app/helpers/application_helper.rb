@@ -428,7 +428,7 @@ module ApplicationHelper
       cls_url = "/ontologies/#{ont_acronym}?p=classes&conceptid=#{CGI.escape(cls_id)}"
       label_ajax_link(link, cls_id, ont_acronym, ajax_url , cls_url ,target)
     else
-      content_tag(:div, auto_link(cls_id, :all, target: '_blank'))
+      content_tag(:div, cls_id)
     end
   end
 
