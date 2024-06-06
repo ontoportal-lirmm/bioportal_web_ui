@@ -105,12 +105,12 @@ module ConceptsHelper
     year.eql?(date.year) && month.eql?(date.strftime('%B'))
   end
 
-  def concepts_li_list(concepts, auto_click: false, first_concept_id: nil)
+  def concepts_li_list(concepts, auto_click: false, selected_id: nil)
     out = ''
     concepts.each do |concept|
       children_link, data, href = concept_tree_data(@ontology.acronym, concept, request_lang, [])
       out += render TreeLinkComponent.new(child: concept, href: href,
-                                          children_href: '#', selected: concept.id.eql?(first_concept_id) && auto_click,
+                                          children_href: '#', selected: concept.id.eql?(selected_id) && auto_click,
                                           target_frame: 'concept_show', data: data)
     end
     out
@@ -132,11 +132,11 @@ module ConceptsHelper
     tmp = {}
     tmp[first_year] = first_month_concepts
     @concepts_year_month = tmp.merge(@concepts_year_month)
-    first_concept_id = @concepts_year_month.first.last.first.last.first.id if auto_click
+    selected_id = @concepts.first.id if @page.page.eql?(1)
     @concepts_year_month.each do |year, month_concepts|
       month_concepts.each do |month, concepts|
         out += "<ul> #{month + ' ' + year.to_s}"
-        out += concepts_li_list(concepts, auto_click: auto_click, first_concept_id: first_concept_id)
+        out += concepts_li_list(concepts, auto_click: auto_click, selected_id: selected_id)
         out += "</ul>"
       end
     end
