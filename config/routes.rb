@@ -154,7 +154,6 @@ Rails.application.routes.draw do
   get '/ontologies/:acronym/:id/serialize/:output_format' => 'ontologies#content_serializer', :id => /.+/
   get '/ontologies/:acronym/htaccess' => 'ontologies_redirection#generate_htaccess'
 
-  get '/ontologies/virtual/:ontology' => 'ontologies#virtual', :as => :ontology_virtual
   get '/ontologies/success/:id' => 'ontologies#submit_success'
   match '/ontologies/:acronym' => 'ontologies#update', via: [:get, :post]
   match '/ontologies/:acronym/submissions/:id' => 'submissions#update', via: [:get, :post]
@@ -162,29 +161,24 @@ Rails.application.routes.draw do
   match '/ontologies/:ontology_id/submissions' => 'submissions#create', :ontology_id => /.+/, via: [:post]
   match '/ontologies/:ontology_id/submissions' => 'submissions#index', :ontology_id => /.+/, via: [:get]
   get '/ontologies/:acronym/classes/:purl_conceptid', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
-  get '/ontologies/:acronym/: f', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
+  get '/ontologies/:acronym/:purl_conceptid', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
   match '/ontologies/:acronym/submissions/:id/edit_metadata' => 'submissions#edit_metadata', via: [:get, :post]
   get '/ontologies_filter', to: 'ontologies#ontologies_filter'
 
 
   get 'ontologies_selector', to: 'ontologies#ontologies_selector'
   get 'ontologies_selector/results', to: 'ontologies#ontologies_selector_results'
+
   # Notes
   get 'ontologies/:ontology/notes/:noteid', to: 'notes#virtual_show', as: :note_virtual, noteid: /.+/
   get 'ontologies/:ontology/notes', to: 'notes#virtual_show'
 
   get '/ontologies/:acronym/:id' => 'ontologies_redirection#redirect', :id => /.+/
 
-
   # Ajax
-  get '/ajax/' => 'ajax_proxy#get', :as => :ajax
   get '/ajax/class_details' => 'concepts#details'
   get '/ajax/mappings/get_concept_table' => 'mappings#get_concept_table'
-  get '/ajax/json_ontology' => 'ajax_proxy#json_ontology'
-  get '/ajax/json_class' => 'ajax_proxy#json_class'
-  get '/ajax/jsonp' => 'ajax_proxy#jsonp'
   get '/ajax/notes/delete' => 'notes#destroy'
-  get '/ajax/notes/concept_list' => 'notes#show_concept_list'
   get '/ajax/classes/label' => 'concepts#show_label'
   get '/ajax/classes/definition' => 'concepts#show_definition'
   get '/ajax/classes/treeview' => 'concepts#show_tree'
@@ -203,6 +197,7 @@ Rails.application.routes.draw do
   get '/ajax/ontologies', to: "ontologies#ajax_ontologies"
   get '/ajax/agents', to: "agents#ajax_agents"
   get '/ajax/images/show' => 'application#show_image_modal'
+
   # User
   get '/logout' => 'login#destroy', :as => :logout
   get '/lost_pass' => 'login#lost_password'

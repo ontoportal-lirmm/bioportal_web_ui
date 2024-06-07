@@ -103,10 +103,6 @@ module ApplicationHelper
     return new_string
   end
 
-  def to_param(string)
-     "#{encode_param(string.gsub(" ","_"))}"
-  end
-
   def get_username(user_id)
     user = LinkedData::Client::Models::User.find(user_id)
     username = user.nil? ? user_id : user.username
