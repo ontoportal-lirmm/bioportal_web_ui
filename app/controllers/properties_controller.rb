@@ -43,11 +43,11 @@ class PropertiesController < ApplicationController
     id = params[:propertyid]
     @property = get_property(id, acronym)
     @property.children = property_children(id, acronym)
-
+    ontology_uri_pattern = LinkedData::Client::HTTP.get("ontologies/#{acronym}/latest_submission", {display: 'uriRegexPattern'}).uriRegexPattern
     render turbo_stream: [
       replace(helpers.child_id(@property) + '_open_link') { TreeLinkComponent.tree_close_icon },
       replace(helpers.child_id(@property) + '_childs') do
-        helpers.property_tree_component(@property, @property, acronym, request_lang, sub_tree: true)
+        helpers.property_tree_component(@property, @property, acronym, request_lang, sub_tree: true, ontology_uri_pattern: ontology_uri_pattern)
       end
     ]
   end
@@ -85,10 +85,10 @@ class PropertiesController < ApplicationController
 
       @property ||= @root.children.first
     end
-
+    ontology_uri_pattern = LinkedData::Client::HTTP.get("ontologies/#{@ontology.acronym}/latest_submission", {display: 'uriRegexPattern'}).uriRegexPattern
     render inline: helpers.property_tree_component(@root, @property,
                                                    @ontology.acronym, request_lang,
-                                                   id: container_id, auto_click: true)
+                                                   id: container_id, auto_click: true, ontology_uri_pattern: ontology_uri_pattern)
   end
 
 end
