@@ -393,7 +393,8 @@ en:
       error_on_form: Errors On Form
       leave_your_feedback: Leave your feedback
       feedback_hi_text: Hi
-      feedback_info_text: you can use the form below or email us directly at
+      feedback_info_text: You can use the form below, email us directly at
+      feedback_info_text_rest: or leave us a github issue here
       email: Email
       name: Name
       proposition_url_page: Error/Proposition page URL
@@ -508,6 +509,7 @@ en:
       wiki: Wiki
       documentation: Documentation
       agro_documentation: AgroPortal documentation
+      issues_and_requests: Issues and Requests
       agreements: Legal
       terms: Terms and Conditions
       privacy_policy: Privacy Policy
