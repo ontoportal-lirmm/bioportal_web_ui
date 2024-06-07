@@ -72,6 +72,7 @@ class AnnotatorController < ApplicationController
       else
         @results_table_header.push(t('annotator.score'))
       end
+
       # if we are in a slice, pass the ontologies of this slice in the params
       
       if at_slice?
@@ -86,7 +87,8 @@ class AnnotatorController < ApplicationController
       end
 
       annotations = LinkedData::Client::HTTP.get(uri, api_params)
-      @ontologies = get_simplified_ontologies_hash
+      @ontologies = LinkedData::Client::Models::Ontology.all({:include_views => true}).map{ |o| [o.id.to_s, o]}.to_h
+
       @semantic_types = get_semantic_types 
       @results = []
       annotations.each do |annotation|
@@ -174,14 +176,14 @@ class AnnotatorController < ApplicationController
   end
 
   def annotation_class_info(cls)
-    return {
+    {
       text: cls.prefLabel,
       link: url_to_endpoint(cls.links["self"])
     }
   end
   def annotation_ontology_info(ontology_url)
-    return {
-      text: @ontologies[ontology_url][:name],
+    {
+      text: @ontologies[ontology_url].name,
       link: url_to_endpoint(ontology_url)
     }
   end

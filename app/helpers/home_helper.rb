@@ -1,5 +1,4 @@
 require 'open-uri'
-require 'open_uri_redirections'
 require 'nokogiri'
 
 module HomeHelper
