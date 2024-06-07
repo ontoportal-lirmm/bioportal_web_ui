@@ -219,33 +219,6 @@ Rails.application.routes.draw do
   get 'check_resolvability' => 'check_resolvability#index'
   get 'check_url_resolvability' => 'check_resolvability#check_resolvability'
 
-  ###########################################################################################################
-  # Install the default route as the lowest priority.
-  get '/:controller(/:action(/:id))'
-  ###########################################################################################################
-
-  #####
-  ## OLD ROUTES
-  ## All of these should redirect to new addresses in the controller method or using the redirect controller
-  #####
-
-  # Redirects from old URL locations
-  get '/annotate' => 'redirect#index', :url => '/annotator'
-  get '/visconcepts/:ontology/' => 'redirect#index', :url => '/visualize/'
-  get '/ajax/terms/label' => 'redirect#index', :url => '/ajax/classes/label'
-  get '/ajax/terms/definition' => 'redirect#index', :url => '/ajax/classes/definition'
-  get '/ajax/terms/treeview' => 'redirect#index', :url => '/ajax/classes/treeview'
-  get '/ajax/term_details/:ontology' => 'redirect#index', :url => '/ajax/class_details'
-  get '/ajax/json_term' => 'redirect#index', :url => '/ajax/json_class'
-
-  # Visualize
-  get '/visualize/:ontology' => 'ontologies#visualize', :as => :visualize, :constraints => { ontology: /[^\/?]+/ }
-  get '/visualize/:ontology/:conceptid' => 'ontologies#visualize', :as => :uri, :constraints => { ontology: /[^\/?]+/, conceptid: /[^\/?]+/ }
-  get '/visualize' => 'ontologies#visualize', :as => :visualize_concept, :constraints => { ontology: /[^\/?]+/, id: /[^\/?]+/, ontologyid: /[^\/?]+/, conceptid: /[^\/?]+/ }
-
-  get '/exhibit/:ontology/:id' => 'concepts#exhibit'
-
 
   mount Lookbook::Engine, at: "/lookbook"
-
 end

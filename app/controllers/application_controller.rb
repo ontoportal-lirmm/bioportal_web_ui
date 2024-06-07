@@ -285,46 +285,6 @@ class ApplicationController < ActionController::Base
     redirect_to "/"
   end
 
-
-  def redirect_new_api(class_view = false)
-    # Hack to make ontologyid and conceptid work in addition to id and ontology params
-    params[:ontology] = params[:ontology].nil? ? params[:ontologyid] : params[:ontology]
-    # Error checking
-    if params[:ontology].nil? || params[:id] && params[:ontology].nil?
-      @error = t('application.provide_ontology_or_concept')
-      return
-    end
-    acronym = BpidResolver.id_to_acronym(params[:ontology])
-    ontology_not_found(params[:ontology]) unless acronym
-    if class_view
-      @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
-      concept = get_class(params).first.to_s
-      redirect_to "/ontologies/#{acronym}?p=classes#{params_string_for_redirect(params, prefix: "&")}", :status => :moved_permanently
-    else
-      redirect_to "/ontologies/#{acronym}#{params_string_for_redirect(params)}", :status => :moved_permanently
-    end
-  end
-
-  def params_cleanup_new_api
-    params = @_params
-    if params[:ontology] && params[:ontology].to_i > 0
-      params[:ontology] = BpidResolver.id_to_acronym(params[:ontology])
-    end
-
-    params
-  end
-
-  def params_string_for_redirect(params, options = {})
-    prefix = options[:prefix] || "?"
-    stop_words = options[:stop_words] || ["ontology", "controller", "action", "id", "acronym"]
-    params_array = []
-    params.each do |key,value|
-      next if stop_words.include?(key.to_s) || value.nil? || value.empty?
-      params_array << "#{key}=#{CGI.escape(value)}"
-    end
-    params_array.empty? ? "" : "#{prefix}#{params_array.join('&')}"
-  end
-
   # Verifies if user is logged in
   def authorize_and_redirect
     unless session[:user]
