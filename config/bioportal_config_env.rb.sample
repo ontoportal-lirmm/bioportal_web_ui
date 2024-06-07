@@ -280,7 +280,7 @@ $FOOTER_LINKS = {
     support: {
       contact_us: "https://#{$SITE}.lirmm.fr/feedback",
       documentation: "https://ontoportal.github.io/documentation/",
-      agro_documentation: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/public-documentation-QMpsC9aVBb"
+      agro_documentation: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/public-documentation-QMpsC9aVBb",
       issues_and_requests: $GITHUB_ISSUES 
     },
     agreements: {
