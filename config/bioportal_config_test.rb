@@ -58,8 +58,6 @@ $FAIRNESS_DISABLED = false
 $ENABLE_SLICES = false
 $ONTOLOGY_SLICES = {}
 
-# Cube metrics reporting
-$ENABLE_CUBE = false
 
 $NOT_DOWNLOADABLE = {}
 # Enable client request caching
