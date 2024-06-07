@@ -161,7 +161,6 @@ Rails.application.routes.draw do
   match '/ontologies/:ontology_id/submissions' => 'submissions#create', :ontology_id => /.+/, via: [:post]
   match '/ontologies/:ontology_id/submissions' => 'submissions#index', :ontology_id => /.+/, via: [:get]
   get '/ontologies/:acronym/classes/:purl_conceptid', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
-  get '/ontologies/:acronym/:purl_conceptid', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
   match '/ontologies/:acronym/submissions/:id/edit_metadata' => 'submissions#edit_metadata', via: [:get, :post]
   get '/ontologies_filter', to: 'ontologies#ontologies_filter'
 
@@ -214,6 +213,8 @@ Rails.application.routes.draw do
   get 'check_resolvability' => 'check_resolvability#index'
   get 'check_url_resolvability' => 'check_resolvability#check_resolvability'
 
+  # Install the default route as the lowest priority.
+  get '/:controller(/:action(/:id))'
 
   mount Lookbook::Engine, at: "/lookbook"
 end
