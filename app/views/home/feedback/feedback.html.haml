@@ -25,6 +25,9 @@
       %p.feedback-email
         = t("home.feedback.feedback_info_text")
         %a{:href => "mailto: #{$SUPPORT_EMAIL}"}= $SUPPORT_EMAIL
+        = t("home.feedback.feedback_info_text_rest")
+        %a{:href => $GITHUB_ISSUES}
+          Github issues
       - if session[:user].nil?
         %p.feedback-input-title
           = t("home.feedback.email")

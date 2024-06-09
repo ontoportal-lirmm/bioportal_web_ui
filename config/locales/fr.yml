@@ -397,7 +397,8 @@ fr:
       error_on_form: Erreurs sur le formulaire
       leave_your_feedback: Laissez votre retour
       feedback_hi_text: Salut
-      feedback_info_text: vous pouvez utiliser le formulaire ci-dessous ou nous envoyer un email directement à
+      feedback_info_text: Vous pouvez utiliser le formulaire ci-dessous, nous envoyer un email directement à
+      feedback_info_text_rest: ou nous laisser une github issue ici
       email: Email
       name: Nom
       proposition_url_page: URL de la page Erreur/Proposition
@@ -514,6 +515,7 @@ fr:
       wiki: Wiki
       documentation: Documentation
       agro_documentation: Documentation d'AgroPortal
+      issues_and_requests: Problèmes et demandes
       agreements: Légal
       terms: Termes et conditions
       privacy_policy: Politique de confidentialité
