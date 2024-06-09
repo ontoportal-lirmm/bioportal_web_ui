@@ -1,15 +1,32 @@
 x-app: &default-app
-  image: agroportal/ontoportal_web_ui:development
+  image: agroportal/ontoportal_web_ui:master
   env_file:
     - ".env"
   tty: true
   volumes:
-    - .:/app
-    - bundle:/usr/local/bundle
+    - bundle:/srv/ontoportal/bundle
     - node:/node_modules
     - rails_cache:/app/tmp/cache
     - assets:/app/public/assets
     - /var/run/docker.sock:/var/run/docker.sock
+    - .:/app
+  depends_on:
+    db:
+      condition: service_healthy
+    cache:
+      condition: service_started
+    node:
+      condition: service_started
+  links:
+    - db
+    - cache
+  environment: &env
+    BUNDLE_WITHOUT: ""
+    BUNDLE_PATH: /srv/ontoportal/bundle
+    DB_HOST: db
+    CACHE_HOST: cache
+  ports:
+    - "3000:3000"
   tmpfs:
     - /tmp
     - /app/tmp/pids
@@ -28,12 +45,12 @@ services:
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 5s
-      retries: 3  
+      retries: 3
 
   cache:
     image: memcached:latest
     restart: unless-stopped
-    command: [ "-m", "1024" ]
+    command: ["-m", "1024"]
     networks:
       - default
     ports:
@@ -41,36 +58,48 @@ services:
   node:
     <<: *default-app
     command: "yarn build --watch"
+    depends_on:
+      - cache
+      - db
 
-  rails:
+  dev:
     <<: *default-app
+
+  production:
+    <<: *default-app
+    command: "bundle exec puma -C config/puma.rb"
+    environment:
+      <<: *env
+      RAILS_ENV: "production"
+      BUNDLE_WITHOUT: "development test"
+      BUNDLE_PATH: "/usr/local/bundle"
+      #SECRET_KEY_BASE: TODO
+      #RAILS_MASTER_KEY: TODO
+      BIOPORTAL_WEB_UI_DATABASE_PASSWORD: root
+      MEMCACHE_SERVERS: "cache:11211"
     depends_on:
       db:
         condition: service_healthy
       cache:
         condition: service_started
-      node:
-        condition: service_started
-    links:
-      - db
-      - cache
-    environment:
-      BUNDLE_WITHOUT: ''
-      DB_HOST: db
-      CACHE_HOST: cache
-    ports:
-      - "3000:3000"
+    volumes:
+      - node:/node_modules
+      - rails_cache:/app/tmp/cache
+      - assets:/app/public/assets
+      - app_ui:/app
+
   test:
     <<: *default-app
     depends_on:
       - db
       - cache
       - chrome-server
-    network_mode: 'host'
+    network_mode: "host"
     environment:
-      BUNDLE_WITHOUT: ''
+      BUNDLE_WITHOUT: ""
       DB_HOST: 127.0.0.1
       CACHE_HOST: 127.0.0.1
+
   chrome-server:
     image: selenium/standalone-chrome:112.0-chromedriver-112.0-grid-4.9.0-20230421
     shm_size: 2g
@@ -84,3 +113,4 @@ volumes:
   rails_cache:
   assets:
   node:
+  app_ui:
