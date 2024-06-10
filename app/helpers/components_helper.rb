@@ -125,8 +125,10 @@ module ComponentsHelper
         if children_link.nil? || data.nil? || href.nil?
           raise ArgumentError, t('components.error_block')
         end
-        if ontology_uri_pattern
-          is_reused = !(child.id =~ Regexp.new(ontology_uri_pattern))
+        if ontology_uri_pattern[0] # if uriRegexPattern exists
+          is_reused = !(child.id =~ Regexp.new(ontology_uri_pattern[0]))
+        elsif ontology_uri_pattern[1] # if preferredNamespaceUri exists
+          is_reused = !(child.id.include?(ontology_uri_pattern[1]))
         end
         tree_child.child(child: child, href: href,
                          children_href: children_link, selected: child.id.eql?(selected&.id),
