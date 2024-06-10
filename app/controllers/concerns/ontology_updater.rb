@@ -47,7 +47,8 @@ module OntologyUpdater
     @selected_attributes = (Array(errors_attributes) + Array(params[:submission]&.keys)).uniq
     @ontology = ontology_from_params if @ontology.nil?
 
-    @submission = submission_from_params(params[:submission]) if params[:submission] && @submission.nil?
+    @submission = submission_from_params(params[:submission]) if params[:submission] && (@submission.nil? || @submission.errors)
+    
     reset_agent_attributes
     if redirection.is_a?(Hash) && redirection[:id]
       render_turbo_stream replace(redirection[:id], partial: redirection[:partial])
