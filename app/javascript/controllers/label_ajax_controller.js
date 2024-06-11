@@ -33,7 +33,7 @@ export default class extends Controller {
                 success: this.#ajaxSuccess.bind(this),
                 error: this.#ajaxError.bind(this)
             });
-          },0)
+          },1)
     }
 
     abort() {
