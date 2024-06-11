@@ -23,7 +23,7 @@ class PropertiesController < ApplicationController
                                                           child_url: "/ontologies/#{@ontology.acronym}/properties/show",
                                                           child_turbo_frame: 'property_show',
                                                           child_param: :propertyid,
-                                                          results:  results, next_page:  next_page, total_count: total_count)
+                                                          results:  results, next_page:  next_page, total_count: total_count, submission: @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri'))
     end
   end
 
