@@ -69,11 +69,6 @@ module ComponentsHelper
           concept.id = concept["@id"] unless concept.id
           data = {  child_param => concept.id }
           href = child_url.include?('?') ? "#{child_url}&id=#{escape(concept.id)}" : "#{child_url}?id=#{escape(concept.id)}"
-          if ontology_uri_pattern[0] # if uriRegexPattern exists
-            is_reused = !(concept.id =~ Regexp.new(ontology_uri_pattern[0]))
-          elsif ontology_uri_pattern[1] # if preferredNamespaceUri exists
-            is_reused = !(concept.id.include?(ontology_uri_pattern[1]))
-          end
           concat(render(TreeLinkComponent.new(
             child: concept,
             href: href,
@@ -82,7 +77,7 @@ module ComponentsHelper
             target_frame: child_turbo_frame,
             data: data,
             open_in_modal: open_in_modal,
-            is_reused: is_reused
+            is_reused: is_reused(ontology_uri_pattern: ontology_uri_pattern, concept_id: concept.id)
           )))
         end
       end
@@ -148,16 +143,12 @@ module ComponentsHelper
         if children_link.nil? || data.nil? || href.nil?
           raise ArgumentError, t('components.error_block')
         end
-        if ontology_uri_pattern[0] # if uriRegexPattern exists
-          is_reused = !(child.id =~ Regexp.new(ontology_uri_pattern[0]))
-        elsif ontology_uri_pattern[1] # if preferredNamespaceUri exists
-          is_reused = !(child.id.include?(ontology_uri_pattern[1]))
-        end
+
         tree_child.child(child: child, href: href,
                          children_href: children_link, selected: child.id.eql?(selected&.id),
                          muted: child.isInActiveScheme&.empty?,
                          target_frame: target_frame,
-                         data: data, is_reused: is_reused) do
+                         data: data, is_reused: is_reused(ontology_uri_pattern: ontology_uri_pattern, concept_id: child.id)) do
           tree_component(child, selected, target_frame: target_frame, sub_tree: true,
                          id: id, auto_click: auto_click, ontology_uri_pattern: ontology_uri_pattern, &child_data_generator)
         end
@@ -284,6 +275,14 @@ module ComponentsHelper
       btn.icon_left do
         inline_svg_tag "x.svg", width: "9", height: "9"
       end
+    end
+  end
+
+  def is_reused(ontology_uri_pattern:, concept_id:)
+    if ontology_uri_pattern[0] # if uriRegexPattern exists
+      is_reused = !(concept_id =~ Regexp.new(ontology_uri_pattern[0]))
+    elsif ontology_uri_pattern[1] # if preferredNamespaceUri exists
+      is_reused = !(concept_id.include?(ontology_uri_pattern[1]))
     end
   end
 
