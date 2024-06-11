@@ -52,6 +52,7 @@ class CollectionsController < ApplicationController
 
   def show_members
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id] || params[:ontology]).first
+    @submission = @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri')
     @collection = get_request_collection
     page = params[:page] || '1'
     @auto_click = page.to_s.eql?('1')
