@@ -1,5 +1,22 @@
 module ComponentsHelper
 
+  def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, &block)
+    content_tag(:div, data: { controller: 'tooltip' }, title: tooltip) do
+      check_input(id: id, name: name, value: value, label: label, checked: checked, &block)
+    end
+  end
+
+  def group_chip_component(id: nil, name: , object: , checked: , value: nil, title: nil, &block)
+    title ||= object["name"]
+    value ||= (object["value"] || object["acronym"] || object["id"])
+
+    chips_component(id: id || value, name: name, label: object["acronym"],
+                    checked: checked,
+                    value: value, tooltip: title, &block)
+  end
+  alias  :category_chip_component :group_chip_component
+
+
   def rdf_highlighter_container(format, content)
     render Display::RdfHighlighterComponent.new(format: format, text: content)
   end
@@ -93,7 +110,7 @@ module ComponentsHelper
 
   def generated_link_to_clipboard(url, acronym) 
     url = "#{$UI_URL}/ontologies/#{acronym}/#{link_last_part(url)}"
-    content_tag(:span, style: 'display: inline-block;') do
+    content_tag(:span, id: "generate_portal_link", style: 'display: inline-block;') do
       render ClipboardComponent.new(icon: 'icons/copy_link.svg', title: "#{t("components.copy_portal_uri", portal_name: portal_name)} #{link_to(url)}", message: url, show_content: false)
     end
   end

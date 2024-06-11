@@ -195,7 +195,7 @@ $widget-table-border-color: #EFEFEF;
 #bd_content .sidebar {
   overflow-x: auto;
   white-space: nowrap;
-  min-width: 35%;
+  min-width: 29%;
 }
 
 #search_box:focus {
@@ -305,7 +305,7 @@ $widget-table-border-color: #EFEFEF;
   }
 }
 
-.htacess-code-container{
+.htacess-code-container, .nginx-code-container{
   margin-top: 20px;
   margin-bottom: 30px;
   text-align: left;
