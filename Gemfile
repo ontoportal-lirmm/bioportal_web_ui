@@ -16,6 +16,9 @@ gem 'sassc-rails' # sass-rails replacement
 # Terser JavaScript minifier as a replacement for Uglifier
 gem 'terser' # uglifier replacement
 
+# Debugging tool
+gem 'pry'
+
 # Bootstrap front-end framework
 gem 'bootstrap', '~> 4.2.0'
 
@@ -140,7 +143,6 @@ group :development do
 
   # Debugging tools
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem 'pry'
   gem 'debug', platforms: %i[mri mingw x64_mingw]
 
   # Use console on exceptions pages
