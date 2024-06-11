@@ -1,13 +1,8 @@
 module TermsReuses
     extend ActiveSupport::Concern
 
-    def ontology_uri_pattern(ontology: nil, acronym: nil)
-        if ontology
-            submission = ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri') 
-        elsif acronym
-            submission = LinkedData::Client::HTTP.get("ontologies/#{acronym}/latest_submission", {display: 'uriRegexPattern,preferredNamespaceUri'})
-        end
-        return submission
+    def get_submission_uri_pattern_by_id(acronym: nil)
+        LinkedData::Client::HTTP.get("ontologies/#{acronym}/latest_submission", {display: 'uriRegexPattern,preferredNamespaceUri'})
     end
 
     def concept_reused?(ontology_uri_pattern: nil, concept_id: nil)

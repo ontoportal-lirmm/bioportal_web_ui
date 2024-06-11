@@ -46,7 +46,7 @@ class PropertiesController < ApplicationController
     render turbo_stream: [
       replace(helpers.child_id(@property) + '_open_link') { TreeLinkComponent.tree_close_icon },
       replace(helpers.child_id(@property) + '_childs') do
-        helpers.property_tree_component(@property, @property, acronym, request_lang, sub_tree: true, ontology_uri_pattern: ontology_uri_pattern(acronym: acronym))
+        helpers.property_tree_component(@property, @property, acronym, request_lang, sub_tree: true, ontology_uri_pattern: get_submission_uri_pattern_by_id(acronym: acronym))
       end
     ]
   end
@@ -86,7 +86,7 @@ class PropertiesController < ApplicationController
     end
     render inline: helpers.property_tree_component(@root, @property,
                                                    @ontology.acronym, request_lang,
-                                                   id: container_id, auto_click: true, ontology_uri_pattern: ontology_uri_pattern(ontology: @ontology))
+                                                   id: container_id, auto_click: true, ontology_uri_pattern: @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri'))
   end
 
 end

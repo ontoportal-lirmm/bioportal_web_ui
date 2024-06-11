@@ -124,7 +124,7 @@ module ConceptsHelper
     first_month, first_concepts = first_month_concepts.shift
     out = ''
     if same_period?(first_year, first_month, @last_date)
-      out += "<ul>#{concepts_li_list(first_concepts, auto_click: auto_click, ontology_uri_pattern: ontology_uri_pattern(ontology: @ontology))}</ul>"
+      out += "<ul>#{concepts_li_list(first_concepts, auto_click: auto_click, ontology_uri_pattern: @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri'))}</ul>"
     else
       tmp = {}
       tmp[first_month] = first_concepts
@@ -137,7 +137,7 @@ module ConceptsHelper
     @concepts_year_month.each do |year, month_concepts|
       month_concepts.each do |month, concepts|
         out += "<ul> #{month + ' ' + year.to_s}"
-        out += concepts_li_list(concepts, auto_click: auto_click, selected_id: selected_id, ontology_uri_pattern: ontology_uri_pattern(ontology: @ontology))
+        out += concepts_li_list(concepts, auto_click: auto_click, selected_id: selected_id, ontology_uri_pattern: ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri'))
         out += "</ul>"
       end
     end
