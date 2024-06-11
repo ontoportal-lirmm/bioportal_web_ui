@@ -29,7 +29,7 @@ module ComponentsHelper
     end
   end
 
-  def paginated_list_component(id:, results:, next_page_url:, child_url:, child_turbo_frame:, child_param:, open_in_modal: false , selected: nil, auto_click: false)
+  def paginated_list_component(id:, results:, next_page_url:, child_url:, child_turbo_frame:, child_param:, open_in_modal: false , selected: nil, auto_click: false, ontology_uri_pattern: nil)
     render(TreeInfiniteScrollComponent.new(
       id:  id,
       collection: results.collection,
@@ -45,13 +45,18 @@ module ComponentsHelper
           end
         end)
       end
-
+      
       concepts = c.collection
       if concepts && !concepts.empty?
         concepts.each do |concept|
           concept.id = concept["@id"] unless concept.id
           data = {  child_param => concept.id }
           href = child_url.include?('?') ? "#{child_url}&id=#{escape(concept.id)}" : "#{child_url}?id=#{escape(concept.id)}"
+          if ontology_uri_pattern[0] # if uriRegexPattern exists
+            is_reused = !(concept.id =~ Regexp.new(ontology_uri_pattern[0]))
+          elsif ontology_uri_pattern[1] # if preferredNamespaceUri exists
+            is_reused = !(concept.id.include?(ontology_uri_pattern[1]))
+          end
           concat(render(TreeLinkComponent.new(
             child: concept,
             href: href,
@@ -59,7 +64,8 @@ module ComponentsHelper
             selected: selected.blank? ? false : concept.id.eql?(selected) ,
             target_frame: child_turbo_frame,
             data: data,
-            open_in_modal: open_in_modal
+            open_in_modal: open_in_modal,
+            is_reused: is_reused
           )))
         end
       end
