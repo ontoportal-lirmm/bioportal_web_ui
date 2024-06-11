@@ -58,7 +58,7 @@ class ConceptsController < ApplicationController
     render turbo_stream: [
       replace(helpers.child_id(@concept) + '_open_link') { TreeLinkComponent.tree_close_icon },
       replace(helpers.child_id(@concept) + '_childs') do
-        helpers.concepts_tree_component(@concept, @concept, @ontology.acronym, Array(@schemes), request_lang, sub_tree: true, ontology_uri_pattern: ontology_uri_pattern(submission: @submission))
+        helpers.concepts_tree_component(@concept, @concept, @ontology.acronym, Array(@schemes), request_lang, sub_tree: true, ontology_uri_pattern: @submission)
       end
     ]
   end

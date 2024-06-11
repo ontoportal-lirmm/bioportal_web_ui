@@ -112,7 +112,7 @@ module ConceptsHelper
 
       out += render TreeLinkComponent.new(child: concept, href: href,
                                           children_href: '#', selected: concept.id.eql?(selected_id) && auto_click,
-                                          target_frame: 'concept_show', data: data, is_reused: is_reused(ontology_uri_pattern: ontology_uri_pattern, concept_id: concept.id))
+                                          target_frame: 'concept_show', data: data, is_reused: concept_reused?(ontology_uri_pattern: ontology_uri_pattern, concept_id: concept.id))
     end
     out
   end

@@ -1,26 +1,22 @@
 module TermsReuses
     extend ActiveSupport::Concern
 
-    def ontology_uri_pattern(ontology: nil, submission: nil, acronym: nil)
+    def ontology_uri_pattern(ontology: nil, acronym: nil)
         if ontology
-            raw_ontology_uri_pattern = ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri') 
-            ontology_uri_pattern = [raw_ontology_uri_pattern.uriRegexPattern, raw_ontology_uri_pattern.preferredNamespaceUri]
-        elsif submission
-            ontology_uri_pattern = [@submission.uriRegexPattern, @submission.preferredNamespaceUri]
+            submission = ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri') 
         elsif acronym
-            raw_ontology_uri_pattern = LinkedData::Client::HTTP.get("ontologies/#{acronym}/latest_submission", {display: 'uriRegexPattern,preferredNamespaceUri'})
-            ontology_uri_pattern = [raw_ontology_uri_pattern.uriRegexPattern, raw_ontology_uri_pattern.preferredNamespaceUri]
+            submission = LinkedData::Client::HTTP.get("ontologies/#{acronym}/latest_submission", {display: 'uriRegexPattern,preferredNamespaceUri'})
         end
-
-        return ontology_uri_pattern
+        return submission
     end
 
-    def is_reused(ontology_uri_pattern:, concept_id:)
-        if ontology_uri_pattern[0] # if uriRegexPattern exists
-          is_reused = !(concept_id =~ Regexp.new(ontology_uri_pattern[0]))
-        elsif ontology_uri_pattern[1] # if preferredNamespaceUri exists
-          is_reused = !(concept_id.include?(ontology_uri_pattern[1]))
+    def concept_reused?(ontology_uri_pattern: nil, concept_id: nil)
+        if ontology_uri_pattern&.uriRegexPattern 
+            is_reused = !(concept_id =~ Regexp.new(ontology_uri_pattern.uriRegexPattern))
+        elsif ontology_uri_pattern&.preferredNamespaceUri 
+            is_reused = !(concept_id.include?(ontology_uri_pattern.preferredNamespaceUri))
         end
+        return is_reused
     end
 
 end

@@ -78,7 +78,7 @@ module ComponentsHelper
             target_frame: child_turbo_frame,
             data: data,
             open_in_modal: open_in_modal,
-            is_reused: is_reused(ontology_uri_pattern: ontology_uri_pattern, concept_id: concept.id)
+            is_reused: concept_reused?(ontology_uri_pattern: ontology_uri_pattern, concept_id: concept.id)
           )))
         end
       end
@@ -149,7 +149,7 @@ module ComponentsHelper
                          children_href: children_link, selected: child.id.eql?(selected&.id),
                          muted: child.isInActiveScheme&.empty?,
                          target_frame: target_frame,
-                         data: data, is_reused: is_reused(ontology_uri_pattern: ontology_uri_pattern, concept_id: child.id)) do
+                         data: data, is_reused: concept_reused?(ontology_uri_pattern: ontology_uri_pattern, concept_id: child.id)) do
           tree_component(child, selected, target_frame: target_frame, sub_tree: true,
                          id: id, auto_click: auto_click, ontology_uri_pattern: ontology_uri_pattern, &child_data_generator)
         end
