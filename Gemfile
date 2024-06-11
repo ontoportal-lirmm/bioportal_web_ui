@@ -107,6 +107,12 @@ gem 'omniauth-google-oauth2'
 gem 'omniauth-orcid'
 gem 'omniauth-keycloak'
 
+
+# Debugging tools
+# See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gemgem 'pry'
+gem 'debug', platforms: %i[mri mingw x64_mingw]
+gem 'pry'
+
 group :staging, :production, :appliance do
   # Application performance monitoring
   gem 'newrelic_rpm'
@@ -137,11 +143,6 @@ group :development do
   # Haml support for Rails
   gem 'haml-rails'
   gem 'html2haml'
-
-  # Debugging tools
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem 'pry'
-  gem 'debug', platforms: %i[mri mingw x64_mingw]
 
   # Use console on exceptions pages
   # [https://github.com/rails/web-console]
