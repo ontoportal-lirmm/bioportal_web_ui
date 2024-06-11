@@ -104,8 +104,7 @@ module SchemesHelper
     root = OpenStruct.new
     root.children = children
     selected_scheme = selected_scheme || main_scheme || root.children.first
-
-    tree_component(root, selected_scheme, target_frame: 'scheme', auto_click: false) do |child|
+    tree_component(root, selected_scheme, target_frame: 'scheme', auto_click: false, submission: @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri')) do |child|
       href = scheme_path(child['@id'], request_lang) rescue  ''
       data = { schemeid: (child['@id'] rescue '')}
       ["#", data, href]
