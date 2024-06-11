@@ -108,7 +108,7 @@ export default class extends Controller {
   }
 
   downloadXML () {
-    this.#generateDownloadFile(this.#toXML(this.formatedData, this.submissionValue['context']), 'rdf')
+    this.#generateDownloadFile(this.#toXML(this.formatedData, this.contextValue), 'rdf')
   }
 
   downloadCSV () {

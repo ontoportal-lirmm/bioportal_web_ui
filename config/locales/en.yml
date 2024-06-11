@@ -393,7 +393,8 @@ en:
       error_on_form: Errors On Form
       leave_your_feedback: Leave your feedback
       feedback_hi_text: Hi
-      feedback_info_text: you can use the form below or email us directly at
+      feedback_info_text: You can use the form below, email us directly at
+      feedback_info_text_rest: or leave us a github issue here
       email: Email
       name: Name
       proposition_url_page: Error/Proposition page URL
@@ -508,6 +509,7 @@ en:
       wiki: Wiki
       documentation: Documentation
       agro_documentation: AgroPortal documentation
+      issues_and_requests: Issues and Requests
       agreements: Legal
       terms: Terms and Conditions
       privacy_policy: Privacy Policy
@@ -1076,21 +1078,21 @@ en:
     close: Close
     submit: Submit
   check_resolvability:
-    check_resolvability_message_1: "The URL is resolvable and support the following formats: %{supported_format}"
-    check_resolvability_message_2: "The URL resolvable but is not content negotiable, support only: %{supported_format}"
-    check_resolvability_message_3: The URL is not resolvable and not content negotiable (returns %{status}).
+    check_resolvability_message_1: "The URI is resolvable and support the following formats: %{supported_format}"
+    check_resolvability_message_2: "The URI resolvable but is not content negotiable, support only: %{supported_format}"
+    check_resolvability_message_3: The URI is not resolvable and not content negotiable (returns %{status}).
     uri_placeholder: Type a URI to test its resolvability
     show_help: Show help
     format_not_specified: Format not specified
     how_it_works:
       title: How it works
       content_1: |
-        The check resolvability tool allows you to test if a given URL is resolvable. It is based on the HTTP HEAD method.
-        We check the resolvability of a URL by sending a HEAD request to the URL and checking if the response status code is 200 (OK) and
+        The check resolvability tool allows you to test if a given URI is resolvable. It is based on the HTTP HEAD method.
+        We check the resolvability of a URI by sending a HEAD request to the URI and checking if the response status code is 200 (OK) and
         the returned content type is equal to one of the following %{resolvability_formats}.
       content_2: |
-        We have a timeout set to %{resolvability_timeout} seconds, so if the URL is not resolvable within that time, the check will fail.
-        And a max redirections set to %{resolvability_max_redirections}, so if the URL is not resolvable within that number of redirections, the check will fail.
+        We have a timeout set to %{resolvability_timeout} seconds, so if the URI is not resolvable within that time, the check will fail.
+        And a max redirections set to %{resolvability_max_redirections}, so if the URI is not resolvable within that number of redirections, the check will fail.
     resolving_uri:
       title: Resolving a URI
       content: |
