@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module ConceptsHelper
-
+  include TermsReuses
   def concept_link(acronym, child, language)
     child.id.eql?('bp_fake_root') ? '#' : "/ontologies/#{acronym}/concepts/show?id=#{CGI.escape(child.id)}&language=#{language}"
   end
@@ -105,13 +105,14 @@ module ConceptsHelper
     year.eql?(date.year) && month.eql?(date.strftime('%B'))
   end
 
-  def concepts_li_list(concepts, auto_click: false, selected_id: nil)
+  def concepts_li_list(concepts, auto_click: false, selected_id: nil, ontology_uri_pattern: nil)
     out = ''
     concepts.each do |concept|
       children_link, data, href = concept_tree_data(@ontology.acronym, concept, request_lang, [])
+
       out += render TreeLinkComponent.new(child: concept, href: href,
                                           children_href: '#', selected: concept.id.eql?(selected_id) && auto_click,
-                                          target_frame: 'concept_show', data: data)
+                                          target_frame: 'concept_show', data: data, is_reused: is_reused(ontology_uri_pattern: ontology_uri_pattern, concept_id: concept.id))
     end
     out
   end
@@ -123,7 +124,7 @@ module ConceptsHelper
     first_month, first_concepts = first_month_concepts.shift
     out = ''
     if same_period?(first_year, first_month, @last_date)
-      out += "<ul>#{concepts_li_list(first_concepts, auto_click: auto_click)}</ul>"
+      out += "<ul>#{concepts_li_list(first_concepts, auto_click: auto_click, ontology_uri_pattern: ontology_uri_pattern(ontology: @ontology))}</ul>"
     else
       tmp = {}
       tmp[first_month] = first_concepts
@@ -136,7 +137,7 @@ module ConceptsHelper
     @concepts_year_month.each do |year, month_concepts|
       month_concepts.each do |month, concepts|
         out += "<ul> #{month + ' ' + year.to_s}"
-        out += concepts_li_list(concepts, auto_click: auto_click, selected_id: selected_id)
+        out += concepts_li_list(concepts, auto_click: auto_click, selected_id: selected_id, ontology_uri_pattern: ontology_uri_pattern(ontology: @ontology))
         out += "</ul>"
       end
     end

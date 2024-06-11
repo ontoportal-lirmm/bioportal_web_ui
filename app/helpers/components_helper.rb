@@ -1,4 +1,5 @@
 module ComponentsHelper
+  include TermsReuses
 
   def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, &block)
     content_tag(:div, data: { controller: 'tooltip' }, title: tooltip) do
@@ -278,12 +279,5 @@ module ComponentsHelper
     end
   end
 
-  def is_reused(ontology_uri_pattern:, concept_id:)
-    if ontology_uri_pattern[0] # if uriRegexPattern exists
-      is_reused = !(concept_id =~ Regexp.new(ontology_uri_pattern[0]))
-    elsif ontology_uri_pattern[1] # if preferredNamespaceUri exists
-      is_reused = !(concept_id.include?(ontology_uri_pattern[1]))
-    end
-  end
 
 end

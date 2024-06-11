@@ -15,4 +15,12 @@ module TermsReuses
         return ontology_uri_pattern
     end
 
+    def is_reused(ontology_uri_pattern:, concept_id:)
+        if ontology_uri_pattern[0] # if uriRegexPattern exists
+          is_reused = !(concept_id =~ Regexp.new(ontology_uri_pattern[0]))
+        elsif ontology_uri_pattern[1] # if preferredNamespaceUri exists
+          is_reused = !(concept_id.include?(ontology_uri_pattern[1]))
+        end
+    end
+
 end
