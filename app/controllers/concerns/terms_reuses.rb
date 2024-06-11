@@ -5,11 +5,11 @@ module TermsReuses
         LinkedData::Client::HTTP.get("ontologies/#{acronym}/latest_submission", {display: 'uriRegexPattern,preferredNamespaceUri'})
     end
 
-    def concept_reused?(ontology_uri_pattern: nil, concept_id: nil)
-        if ontology_uri_pattern&.uriRegexPattern 
-            is_reused = !(concept_id =~ Regexp.new(ontology_uri_pattern.uriRegexPattern))
-        elsif ontology_uri_pattern&.preferredNamespaceUri 
-            is_reused = !(concept_id.include?(ontology_uri_pattern.preferredNamespaceUri))
+    def concept_reused?(submission: nil, concept_id: nil)
+        if submission&.uriRegexPattern 
+            is_reused = !(concept_id =~ Regexp.new(submission.uriRegexPattern))
+        elsif submission&.preferredNamespaceUri 
+            is_reused = !(concept_id.include?(submission.preferredNamespaceUri))
         end
         return is_reused
     end

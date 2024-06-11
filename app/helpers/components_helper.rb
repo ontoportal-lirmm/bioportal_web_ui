@@ -47,7 +47,7 @@ module ComponentsHelper
     end
   end
 
-  def paginated_list_component(id:, results:, next_page_url:, child_url:, child_turbo_frame:, child_param:, open_in_modal: false , selected: nil, auto_click: false, ontology_uri_pattern: nil)
+  def paginated_list_component(id:, results:, next_page_url:, child_url:, child_turbo_frame:, child_param:, open_in_modal: false , selected: nil, auto_click: false, submission: nil)
     render(TreeInfiniteScrollComponent.new(
       id:  id,
       collection: results.collection,
@@ -78,7 +78,7 @@ module ComponentsHelper
             target_frame: child_turbo_frame,
             data: data,
             open_in_modal: open_in_modal,
-            is_reused: concept_reused?(ontology_uri_pattern: ontology_uri_pattern, concept_id: concept.id)
+            is_reused: concept_reused?(submission: submission, concept_id: concept.id)
           )))
         end
       end
@@ -134,7 +134,7 @@ module ComponentsHelper
     tag.html_safe
   end
 
-  def tree_component(root, selected, target_frame:, sub_tree: false, id: nil, auto_click: false, ontology_uri_pattern: nil, &child_data_generator)
+  def tree_component(root, selected, target_frame:, sub_tree: false, id: nil, auto_click: false, submission: nil, &child_data_generator)
     root.children.sort! { |a, b| (a.prefLabel || a.id).downcase <=> (b.prefLabel || b.id).downcase }
     
     render TreeViewComponent.new(id: id, sub_tree: sub_tree, auto_click: auto_click) do |tree_child|
@@ -149,9 +149,9 @@ module ComponentsHelper
                          children_href: children_link, selected: child.id.eql?(selected&.id),
                          muted: child.isInActiveScheme&.empty?,
                          target_frame: target_frame,
-                         data: data, is_reused: concept_reused?(ontology_uri_pattern: ontology_uri_pattern, concept_id: child.id)) do
+                         data: data, is_reused: concept_reused?(submission: submission, concept_id: child.id)) do
           tree_component(child, selected, target_frame: target_frame, sub_tree: true,
-                         id: id, auto_click: auto_click, ontology_uri_pattern: ontology_uri_pattern, &child_data_generator)
+                         id: id, auto_click: auto_click, submission: submission, &child_data_generator)
         end
       end
     end
