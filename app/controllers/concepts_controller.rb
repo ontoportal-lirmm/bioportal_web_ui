@@ -4,6 +4,7 @@ class ConceptsController < ApplicationController
   include MappingsHelper
   include ConceptsHelper
   include TurboHelper
+  include TermsReuses
 
   layout 'ontology'
 
@@ -54,11 +55,10 @@ class ConceptsController < ApplicationController
 
     @concept.children = @concept.explore.children(pagesize: 750, concept_schemes: Array(@schemes).join(','), language: request_lang, display: 'prefLabel,obsolete,hasChildren').collection || []
     @concept.children.sort! { |x, y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase } unless @concept.children.empty?
-    ontology_uri_pattern = [@submission.uriRegexPattern, @submission.preferredNamespaceUri]
     render turbo_stream: [
       replace(helpers.child_id(@concept) + '_open_link') { TreeLinkComponent.tree_close_icon },
       replace(helpers.child_id(@concept) + '_childs') do
-        helpers.concepts_tree_component(@concept, @concept, @ontology.acronym, Array(@schemes), request_lang, sub_tree: true, ontology_uri_pattern: ontology_uri_pattern)
+        helpers.concepts_tree_component(@concept, @concept, @ontology.acronym, Array(@schemes), request_lang, sub_tree: true, ontology_uri_pattern: ontology_uri_pattern(submission: @submission))
       end
     ]
   end
@@ -85,11 +85,10 @@ class ConceptsController < ApplicationController
       get_class(params) #application_controller
       
       not_found(t('concepts.missing_roots')) if @root.nil?
-      raw_ontology_uri_pattern = LinkedData::Client::HTTP.get("ontologies/#{@ontology.acronym}/latest_submission", {display: 'uriRegexPattern,preferredNamespaceUri'}) 
-      ontology_uri_pattern = [raw_ontology_uri_pattern.uriRegexPattern, raw_ontology_uri_pattern.preferredNamespaceUri]
+
       render inline: helpers.concepts_tree_component(@root, @concept,
                                       @ontology.acronym, Array(params[:concept_schemes]&.split(',')), request_lang,
-                                      id: 'concepts_tree_view', auto_click: params[:auto_click] || true, ontology_uri_pattern: ontology_uri_pattern)
+                                      id: 'concepts_tree_view', auto_click: params[:auto_click] || true, ontology_uri_pattern: ontology_uri_pattern(ontology: @ontology))
     end
   end
 

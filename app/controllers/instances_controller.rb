@@ -1,5 +1,5 @@
 class InstancesController < ApplicationController
-  include InstancesHelper, SearchContent
+  include InstancesHelper, SearchContent, TermsReuses
 
   def index
     if params[:type].blank?
@@ -18,9 +18,6 @@ class InstancesController < ApplicationController
                                                                    page_size: page_size,
                                                                    filter_by_ontologies: [@ontology.acronym],
                                                                    filter_by_types: Array(concept_type))
-    
-    raw_ontology_uri_pattern = LinkedData::Client::HTTP.get("ontologies/#{@ontology.acronym}/latest_submission", {display: 'uriRegexPattern,preferredNamespaceUri'}) 
-    ontology_uri_pattern = [raw_ontology_uri_pattern.uriRegexPattern, raw_ontology_uri_pattern.preferredNamespaceUri]
 
     view = helpers.render_search_paginated_list(container_id: (is_concept_instance ? 'concept_' : '') + 'instances_sorted_list',
                                                 next_page_url: "/ontologies/#{@ontology.acronym}/instances?type=#{helpers.escape(params[:type])}",
@@ -29,7 +26,7 @@ class InstancesController < ApplicationController
                                                 child_param: :instanceid,
                                                 show_count: is_concept_instance,
                                                 auto_click: params[:instanceid].blank? && page.eql?(1),
-                                                results:  results, next_page:  next_page, total_count: total_count, ontology_uri_pattern: ontology_uri_pattern)
+                                                results:  results, next_page:  next_page, total_count: total_count, ontology_uri_pattern: ontology_uri_pattern(ontology: @ontology))
 
     if is_concept_instance && page.eql?(1)
       render turbo_stream: view
