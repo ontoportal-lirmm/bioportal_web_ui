@@ -45,6 +45,10 @@ gem 'turbo-rails'
 # [https://stimulus.hotwired.dev]
 gem 'stimulus-rails'
 
+# Debugging tool
+# See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem  gem 'pry'
+gem 'pry'
+
 # Time zone info for Windows platforms
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
@@ -140,8 +144,6 @@ group :development do
   gem 'html2haml'
 
   # Debugging tools
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem 'pry'
   gem 'debug', platforms: %i[mri mingw x64_mingw]
 
   # Use console on exceptions pages
