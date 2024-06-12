@@ -409,6 +409,11 @@ en:
       feedback_complete:
         title: Feedback sent successfully
         message: Thank you for taking the time to share your feedback with us. Our support team will review your message and get back to you as soon as possible with a response. We value your opinion and appreciate your help in improving our services. Thank you for your support!
+    suggest_slice: Suggest a new group/slice
+    slices_description: Slices allow users to interact (both via API or UI) only with a subset of ontologies in AgroPortal. If browsing the slice, all the portal features will be restricted to the chosen subset, enabling users to focus on their specific use cases. On AgroPortal, slices and groups are synchronized, so every group has a corresponding slice displaying only the ontologies from that group.
+    ontoportal_description: "The OntoPortal Alliance %{ontoportal_link} is a consortium of research and infrastructure teams dedicated to promoting the development of ontology repositories and semantic artefact catalogues based on the open, collaboratively developed OntoPortal software %{github_link}. Hereafter are the current public and open repositories built with the technology maintained by the Alliance."
+    viewing_slice: "Viewing the slice:"
+    view_full_site: View full website
   landscape:
     #select_ontologies: Start typing to select ontologies or leave blank to use them all
     classes: Number of classes
