@@ -258,6 +258,8 @@ $PORTALS_INSTANCES = [
     link: 'https://biodivportal.gfbio.org/'
   }
 ]
+$ONTOPORTAL_WEBSITE_LINK = "https://ontoportal.org/"
+$ONTOPORTAL_GITHUB_REPO = "https://github.com/ontoportal"
 
 $GITHUB_ISSUES = "https://github.com/agroportal/project-management/issues"
 $FOOTER_LINKS = {
@@ -275,7 +277,7 @@ $FOOTER_LINKS = {
       api: "https://data.agroportal.lirmm.fr/",
       tools: "/tools",
       sparql: "https://sparql.agroportal.lirmm.fr/test/",
-      ontoportal: "https://ontoportal.org/"
+      ontoportal: $ONTOPORTAL_WEBSITE_LINK
     },
     support: {
       contact_us: "https://#{$SITE}.lirmm.fr/feedback",

@@ -40,6 +40,7 @@ class MappingsController < ApplicationController
       end
       @options[select_text] = ontology_acronym
     end
+    
 
     @options = @options.sort
     @options.unshift([])
