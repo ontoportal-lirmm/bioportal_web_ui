@@ -1,0 +1,10 @@
+.projects-table{
+    margin-top: 20px;
+}
+.projects-table td{
+    max-width: 100px;
+}
+.projects-table td:not(:first-child){
+    max-width: 100px;
+    word-break: break-all;
+}

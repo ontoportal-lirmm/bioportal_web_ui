@@ -1,0 +1,18 @@
+.page-container{
+    display:flex;
+    justify-content:center;
+}
+.page-subcontainer{
+    width: 1248px;
+    padding: 20px 50px;
+}
+.page-title{
+    font-size: 25px;
+    font-weight: 700;
+}
+.page-title .line{
+    height: 2px;
+    width: 57px;
+    background-color: var(--primary-color);
+    border-radius: 10px;
+}
