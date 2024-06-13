@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 # Main Rails gem
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '7.0.7'
+gem 'rails', '7.0.3'
 
 # JavaScript bundling for Rails
 gem 'jsbundling-rails'
@@ -99,7 +99,8 @@ gem 'flag-icons-rails', '~> 3.4'
 gem 'iso-639', '~> 0.3.6'
 
 # Custom API client
-gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'development'
+gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git',
+                             branch: 'development'
 
 # Ruby 2.7.8 pinned gems (to remove when migrating to Ruby >= 3.0)
 gem 'ffi', '~> 1.16.3'
@@ -108,15 +109,15 @@ gem 'net-http', '~> 0.3.2'
 
 # Multi-Provider Authentication
 gem 'omniauth'
-gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-github'
 gem 'omniauth-google-oauth2'
-gem 'omniauth-orcid'
 gem 'omniauth-keycloak'
+gem 'omniauth-orcid'
+gem 'omniauth-rails_csrf_protection'
 
 group :staging, :production, :appliance do
   # Application performance monitoring
-  gem 'newrelic_rpm'
+  gem 'newrelic_rpm', '< 9.10.0'
 
   # Error monitoring
   gem 'bugsnag', '~> 6.26'
@@ -154,9 +155,9 @@ group :development do
 
   # Internationalization tasks
   # gem 'i18n-debug'
+  gem 'deepl-rb'
   gem 'i18n-tasks'
   gem 'i18n-tasks-csv', '~> 1.1'
-  gem 'deepl-rb'
 
   # Email preview in the browser
   gem 'letter_opener_web', '~> 2.0'
