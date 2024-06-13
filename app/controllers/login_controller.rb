@@ -3,7 +3,7 @@ class LoginController < ApplicationController
   layout :determine_layout
 
   def index
-    @errors = [params[:errors]] if params[:errors]
+    @notices = [params[:notices]] if params[:notices]
     # Sets the redirect properties
     if params[:redirect]
       # Get the original, encoded redirect

@@ -244,7 +244,7 @@ class OntologiesController < ApplicationController
     
     if @ontology.nil? || @ontology.errors
       if @ontology&.errors.first.eql?("Access denied for this resource")
-        redirect_to "/login?redirect=/ontologies/#{params[:ontology]}&errors=#{escape(t('login.private_ontology'))}"
+        redirect_to "/login?redirect=/ontologies/#{params[:ontology]}&notices=#{escape(t('login.private_ontology'))}"
         return
       else
         ontology_not_found(params[:ontology])
