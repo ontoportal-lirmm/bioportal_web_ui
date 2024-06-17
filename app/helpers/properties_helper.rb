@@ -17,8 +17,8 @@ module PropertiesHelper
     }
     [children_link, data, href]
   end
-  def property_tree_component(root, selected_concept, acronym, language, sub_tree: false, id: nil, auto_click: false)
-    tree_component(root, selected_concept, target_frame: 'property_show', sub_tree: sub_tree, id: id, auto_click: auto_click) do |child|
+  def property_tree_component(root, selected_concept, acronym, language, sub_tree: false, id: nil, auto_click: false, submission: nil)
+    tree_component(root, selected_concept, target_frame: 'property_show', sub_tree: sub_tree, id: id, auto_click: auto_click, submission: submission) do |child|
       property_tree_data(acronym, child, language)
     end
   end

@@ -21,13 +21,13 @@ class SchemesController < ApplicationController
                                                                      filter_by_ontologies: [acronym],
                                                                      filter_by_types: ['ConceptScheme'])
 
-
+                                                                     
       render inline: helpers.render_search_paginated_list(container_id: 'schemes_sorted_list',
                          next_page_url: "/ontologies/#{@ontology.acronym}/schemes",
                          child_url: "/ontologies/#{@ontology.acronym}/schemes/show", child_turbo_frame: 'scheme',
                          child_param: :schemeid,
-                         results:  results, next_page:  next_page, total_count: total_count
-      )
+                         results:  results, next_page:  next_page, total_count: total_count, submission: @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri'))
+      
     end
   end
 

@@ -4,6 +4,7 @@ class ConceptsController < ApplicationController
   include MappingsHelper
   include ConceptsHelper
   include TurboHelper
+  include TermsReuses
 
   layout 'ontology'
 
@@ -57,7 +58,7 @@ class ConceptsController < ApplicationController
     render turbo_stream: [
       replace(helpers.child_id(@concept) + '_open_link') { TreeLinkComponent.tree_close_icon },
       replace(helpers.child_id(@concept) + '_childs') do
-        helpers.concepts_tree_component(@concept, @concept, @ontology.acronym, Array(@schemes), request_lang, sub_tree: true)
+        helpers.concepts_tree_component(@concept, @concept, @ontology.acronym, Array(@schemes), request_lang, sub_tree: true, submission: @submission)
       end
     ]
   end
@@ -87,7 +88,7 @@ class ConceptsController < ApplicationController
 
       render inline: helpers.concepts_tree_component(@root, @concept,
                                       @ontology.acronym, Array(params[:concept_schemes]&.split(',')), request_lang,
-                                      id: 'concepts_tree_view', auto_click: params[:auto_click] || true)
+                                      id: 'concepts_tree_view', auto_click: params[:auto_click] || true, submission: @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri'))
     end
   end
 
