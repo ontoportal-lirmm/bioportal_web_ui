@@ -50,7 +50,6 @@ test:
 production:
   <<: *default
   database: bioportal_ui_production
-  username: bp_user
   password: <%= ENV["BIOPORTAL_WEB_UI_DATABASE_PASSWORD"] %>
 
 appliance:

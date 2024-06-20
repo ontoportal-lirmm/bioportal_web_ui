@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 # Main Rails gem
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '7.0.7'
+gem 'rails', '7.0.3'
 
 # JavaScript bundling for Rails
 gem 'jsbundling-rails'
@@ -111,8 +111,9 @@ gem 'omniauth'
 gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-github'
 gem 'omniauth-google-oauth2'
-gem 'omniauth-orcid'
 gem 'omniauth-keycloak'
+gem 'omniauth-orcid'
+gem 'omniauth-rails_csrf_protection'
 
 group :staging, :production, :appliance do
   # Application performance monitoring

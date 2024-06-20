@@ -38,10 +38,14 @@ RUN yarn install && yarn build
 
 
 
+RUN cp config/bioportal_config_env.rb.sample config/bioportal_config_production.rb
+RUN cp config/bioportal_config_env.rb.sample config/bioportal_config_development.rb
+RUN cp config/database.yml.sample config/database.yml
+
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile --gemfile app/ lib/
 
-# RUN SECRET_KEY_BASE_DUMMY="1" ./bin/rails assets:precompile
+RUN SECRET_KEY_BASE_DUMMY="1" ./bin/rails assets:precompile
 
 ENV BINDING="0.0.0.0"
 EXPOSE 3000

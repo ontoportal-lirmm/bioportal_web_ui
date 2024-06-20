@@ -3,11 +3,12 @@ name: Docker branch Images build
 on:
   push:
     branches:
+      - master
       - development
       - stage
       - test
   release:
-    types: [ published ]
+    types: [published]
 jobs:
   push_to_registry:
     name: Push Docker branch image to Docker Hub
