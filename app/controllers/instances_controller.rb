@@ -10,7 +10,7 @@ class InstancesController < ApplicationController
     end
 
     get_ontology(params)
-
+    @submission  = @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri')
     query, page, page_size = helpers.search_content_params
 
     results, _, next_page, total_count = search_ontologies_content(query: query,
@@ -26,7 +26,7 @@ class InstancesController < ApplicationController
                                                 child_param: :instanceid,
                                                 show_count: is_concept_instance,
                                                 auto_click: params[:instanceid].blank? && page.eql?(1),
-                                                results:  results, next_page:  next_page, total_count: total_count, submission: @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri'))
+                                                results:  results, next_page:  next_page, total_count: total_count)
 
     if is_concept_instance && page.eql?(1)
       render turbo_stream: view

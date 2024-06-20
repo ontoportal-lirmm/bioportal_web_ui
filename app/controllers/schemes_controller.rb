@@ -6,9 +6,9 @@ class SchemesController < ApplicationController
     acronym = params[:ontology]
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
     ontology_not_found(acronym) if @ontology.nil?
+    @submission_latest = @submission = @ontology.explore.latest_submission(include: 'all')
 
     if params[:search].blank?
-      @submission_latest = @ontology.explore.latest_submission(include: 'all', invalidate_cache: invalidate_cache?) rescue @ontology.explore.latest_submission(include: '')
       @schemes = get_schemes(@ontology)
 
       render partial: 'schemes/tree_view'
@@ -21,13 +21,13 @@ class SchemesController < ApplicationController
                                                                      filter_by_ontologies: [acronym],
                                                                      filter_by_types: ['ConceptScheme'])
 
-                                                                     
+
       render inline: helpers.render_search_paginated_list(container_id: 'schemes_sorted_list',
                          next_page_url: "/ontologies/#{@ontology.acronym}/schemes",
                          child_url: "/ontologies/#{@ontology.acronym}/schemes/show", child_turbo_frame: 'scheme',
                          child_param: :schemeid,
-                         results:  results, next_page:  next_page, total_count: total_count, submission: @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri'))
-      
+                         results:  results, next_page:  next_page, total_count: total_count)
+
     end
   end
 
