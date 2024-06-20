@@ -236,7 +236,7 @@ module SubmissionFilter
     o[:individual_count_formatted] = number_with_delimiter(o[:individual_count], delimiter: ',')
 
     o[:note_count] = ont.notes&.length || 0
-    o[:project_count] = ont.projects&.length ||
+    o[:project_count] = ont.projects&.length || 0
     o[:popularity] = @analytics[ont.acronym] || 0
     o[:rank] = sub&[:rank] || 0
 

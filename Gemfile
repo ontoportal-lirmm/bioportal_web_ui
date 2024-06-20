@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 # Main Rails gem
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '7.0.7'
+gem 'rails', '7.0.3'
 
 # JavaScript bundling for Rails
 gem 'jsbundling-rails'
@@ -44,6 +44,10 @@ gem 'turbo-rails'
 # Hotwire's modest JavaScript framework
 # [https://stimulus.hotwired.dev]
 gem 'stimulus-rails'
+
+# Debugging tool
+# See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem  gem 'pry'
+gem 'pry'
 
 # Time zone info for Windows platforms
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
@@ -104,8 +108,9 @@ gem 'omniauth'
 gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-github'
 gem 'omniauth-google-oauth2'
-gem 'omniauth-orcid'
 gem 'omniauth-keycloak'
+gem 'omniauth-orcid'
+gem 'omniauth-rails_csrf_protection'
 
 group :staging, :production, :appliance do
   # Application performance monitoring
@@ -139,8 +144,6 @@ group :development do
   gem 'html2haml'
 
   # Debugging tools
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem 'pry'
   gem 'debug', platforms: %i[mri mingw x64_mingw]
 
   # Use console on exceptions pages
