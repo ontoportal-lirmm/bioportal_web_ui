@@ -20,9 +20,11 @@ module ConceptsHelper
     }
     [children_link, data, href]
   end
-  def concepts_tree_component(root, selected_concept, acronym, concept_schemes, language, sub_tree: false, id: nil, auto_click: false, submission: @submission)
-    #binding.pry
-    tree_component(root, selected_concept, target_frame: 'concept_show', sub_tree: sub_tree, id: id, auto_click: auto_click, submission: submission) do |child|
+
+  def concepts_tree_component(root, selected_concept, acronym, concept_schemes, language, sub_tree: false, id: nil,
+                              auto_click: false, submission: @submission)
+    tree_component(root, selected_concept, target_frame: 'concept_show', sub_tree: sub_tree, id: id,
+                                           auto_click: auto_click, submission: submission) do |child|
       concept_tree_data(acronym, child, language, concept_schemes)
     end
   end
