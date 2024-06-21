@@ -238,12 +238,10 @@ class OntologiesController < ApplicationController
       return
     end
 
-
-    # Note: find_by_acronym includes ontology views
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
 
     if @ontology.nil? || @ontology.errors
-      if @ontology&.errors.first.eql?("Access denied for this resource")
+      if ontology_access_denied?
         redirect_to "/login?redirect=/ontologies/#{params[:ontology]}", alert: t('login.private_ontology')
         return
       else
