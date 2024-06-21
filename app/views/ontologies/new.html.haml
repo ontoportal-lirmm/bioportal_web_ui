@@ -1,7 +1,7 @@
 - @title = t("ontologies.submit_new_ontology")
 
 %div{:style => "margin:10px;"}
-  = form_for :ontology, url: {action: "create"}, html: {id: "ontologyForm", multipart: true} do
+  = form_for :ontology, url: {action: "create"}, html: {id: "ontologyForm", multipart: true, novalidate: true} do
     .upload-ontology-container
       %div{style: 'width: 589px'}
         = error_message_alert

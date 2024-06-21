@@ -195,7 +195,7 @@ $widget-table-border-color: #EFEFEF;
 #bd_content .sidebar {
   overflow-x: auto;
   white-space: nowrap;
-  min-width: 35%;
+  min-width: 29%;
 }
 
 #search_box:focus {
@@ -293,8 +293,10 @@ $widget-table-border-color: #EFEFEF;
 }
 .metadata-exporter .download-btn {
   position: absolute;
-  right: 20px;
+  right: 0;
+  top: -50px;
   z-index: 2;
+  cursor: pointer;
   .chip_button_container_clickable {
     opacity: 0.6;
     &:hover {
@@ -303,7 +305,7 @@ $widget-table-border-color: #EFEFEF;
   }
 }
 
-.htacess-code-container{
+.htacess-code-container, .nginx-code-container{
   margin-top: 20px;
   margin-bottom: 30px;
   text-align: left;

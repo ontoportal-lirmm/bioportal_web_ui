@@ -72,8 +72,23 @@ class AnnotatorController < ApplicationController
       else
         @results_table_header.push(t('annotator.score'))
       end
+
+      # if we are in a slice, pass the ontologies of this slice in the params
+      
+      if at_slice?
+        slice_ontologies_acronyms = @subdomain_filter[:ontologies].map{ |id| link_last_part(id)}
+        if api_params[:ontologies]
+          selected_ontolgies = api_params[:ontologies].split(',')
+          filtred_ontologies = selected_ontolgies.select{ |ontology| slice_ontologies_acronyms.include?(ontology) }
+        else
+          filtred_ontologies = slice_ontologies_acronyms
+        end
+        api_params[:ontologies] = filtred_ontologies.join(',')
+      end
+
       annotations = LinkedData::Client::HTTP.get(uri, api_params)
-      @ontologies = get_simplified_ontologies_hash
+      @ontologies = LinkedData::Client::Models::Ontology.all({:include_views => true}).map{ |o| [o.id.to_s, o]}.to_h
+
       @semantic_types = get_semantic_types 
       @results = []
       annotations.each do |annotation|
@@ -161,14 +176,14 @@ class AnnotatorController < ApplicationController
   end
 
   def annotation_class_info(cls)
-    return {
+    {
       text: cls.prefLabel,
       link: url_to_endpoint(cls.links["self"])
     }
   end
   def annotation_ontology_info(ontology_url)
-    return {
-      text: @ontologies[ontology_url][:name],
+    {
+      text: @ontologies[ontology_url].name,
       link: url_to_endpoint(ontology_url)
     }
   end
@@ -201,6 +216,7 @@ class AnnotatorController < ApplicationController
       params[:fast_context].nil? &&
       params[:lemmatize].nil?
   end
+  
 
   def remove_special_chars(input)
     regex = /^[a-zA-Z0-9\s]*$/

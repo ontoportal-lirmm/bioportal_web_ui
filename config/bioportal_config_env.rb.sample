@@ -258,7 +258,10 @@ $PORTALS_INSTANCES = [
     link: 'https://biodivportal.gfbio.org/'
   }
 ]
+$ONTOPORTAL_WEBSITE_LINK = "https://ontoportal.org/"
+$ONTOPORTAL_GITHUB_REPO = "https://github.com/ontoportal"
 
+$GITHUB_ISSUES = "https://github.com/agroportal/project-management/issues"
 $FOOTER_LINKS = {
   social: [
     { logo: "social/people.svg", link: "https://github.com/orgs/agroportal/people" },
@@ -274,12 +277,13 @@ $FOOTER_LINKS = {
       api: "https://data.agroportal.lirmm.fr/",
       tools: "/tools",
       sparql: "https://sparql.agroportal.lirmm.fr/test/",
-      ontoportal: "https://ontoportal.org/"
+      ontoportal: $ONTOPORTAL_WEBSITE_LINK
     },
     support: {
       contact_us: "https://#{$SITE}.lirmm.fr/feedback",
       documentation: "https://ontoportal.github.io/documentation/",
-      agro_documentation: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/public-documentation-QMpsC9aVBb"
+      agro_documentation: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/public-documentation-QMpsC9aVBb",
+      issues_and_requests: $GITHUB_ISSUES 
     },
     agreements: {
       terms: $TERMS_AND_CONDITIONS_LINK,
@@ -307,3 +311,4 @@ if $HOSTNAME
     require_relative "bioportal_config_development_#{$HOSTNAME}"
   end
 end
+

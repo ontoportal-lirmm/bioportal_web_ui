@@ -152,6 +152,8 @@ class OntologiesController < ApplicationController
     @ontology.viewOf = params.dig(:ontology, :viewOf)
     @submission = LinkedData::Client::Models::OntologySubmission.new
     @submission.hasOntologyLanguage = 'OWL'
+    @submission.released = Date.today.to_s
+    @submission.status = 'production'
     @ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym', include_views: true, display_links: false, display_context: false)
     @categories = LinkedData::Client::Models::Category.all
     @groups = LinkedData::Client::Models::Group.all
@@ -232,21 +234,20 @@ class OntologiesController < ApplicationController
       else
         params[:conceptid] = params.delete(:purl_conceptid)
       end
-      redirect_to "/ontologies/#{params[:acronym]}?p=classes#{params_string_for_redirect(params, prefix: "&")}", status: :moved_permanently
+      redirect_to "/ontologies/#{params[:acronym]}?p=classes&conceptid=#{params[:conceptid]}", status: :moved_permanently
       return
     end
 
-    if params[:ontology].to_i > 0
-      acronym = BPIDResolver.id_to_acronym(params[:ontology])
-      if acronym
-        redirect_new_api
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
+
+    if @ontology.nil? || @ontology.errors
+      if ontology_access_denied?
+        redirect_to "/login?redirect=/ontologies/#{params[:ontology]}", alert: t('login.private_ontology')
         return
+      else
+        ontology_not_found(params[:ontology])
       end
     end
-
-    # Note: find_by_acronym includes ontology views
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-    ontology_not_found(params[:ontology]) if @ontology.nil? || @ontology.errors
 
     # Handle the case where an ontology is converted to summary only.
     # See: https://github.com/ncbo/bioportal_web_ui/issues/133.
@@ -279,9 +280,6 @@ class OntologiesController < ApplicationController
 
     # This action is now a router using the 'p' parameter as the page to show
     case params[:p]
-    when 'terms'
-      params[:p] = 'classes'
-      redirect_to "/ontologies/#{params[:ontology]}#{params_string_for_redirect(params)}", status: :moved_permanently
     when 'classes'
       self.classes # rescue self.summary
     when 'mappings'
@@ -386,13 +384,6 @@ class OntologiesController < ApplicationController
     }
   end
 
-  def virtual
-    redirect_new_api
-  end
-
-  def visualize
-    redirect_new_api(true)
-  end
 
   def widgets
     if request.xhr?

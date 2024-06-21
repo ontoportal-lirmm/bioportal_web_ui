@@ -26,7 +26,7 @@
         - if @concept_id
           - t.row do |r|
             - r.td(colspan: 2) do
-              %div.d-flex.justify-content-center.p-2
+              %div.d-flex.justify-content-center.p-2#content_resource_formats
                 - [["json","json-ld-file"], ["xml","rdf-xml-file"] , ["ntriples","ntriples-file"], ["turtle","turtle-file"]].each do |format, icon|
                   %div.mx-4{data: {controller: "tooltip"}, title: "Export in #{format.upcase}"}
                     = link_to_format_modal(format, icon)

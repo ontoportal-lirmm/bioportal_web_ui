@@ -14,6 +14,7 @@ class HomeController < ApplicationController
     metrics = metrics.each_with_object(Hash.new(0)) do |h, sum|
       h.to_hash.slice(:classes, :properties, :individuals).each { |k, v| sum[k] += v }
     end
+    @slices = LinkedData::Client::Models::Slice.all
 
     @cls_count = metrics[:classes]
     @individuals_count = metrics[:individuals]
@@ -160,7 +161,7 @@ class HomeController < ApplicationController
 
   def annotator_recommender_form
     if params[:submit_button] == "annotator"
-      redirect_to "/annotator?text=#{helpers.escape(params[:text])}"
+      redirect_to "/annotator?text=#{helpers.escape(params[:input])}"
     elsif params[:submit_button] == "recommender"
       redirect_to "/recommender?input=#{helpers.escape(params[:input])}"
     end

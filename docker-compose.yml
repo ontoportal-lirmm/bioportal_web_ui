@@ -25,8 +25,6 @@ x-app: &default-app
     BUNDLE_PATH: /srv/ontoportal/bundle
     DB_HOST: db
     CACHE_HOST: cache
-  ports:
-    - "3000:3000"
   tmpfs:
     - /tmp
     - /app/tmp/pids
@@ -64,6 +62,8 @@ services:
 
   dev:
     <<: *default-app
+    ports:
+      - "3000:3000"
 
   production:
     <<: *default-app
@@ -103,9 +103,10 @@ services:
   chrome-server:
     image: selenium/standalone-chrome:112.0-chromedriver-112.0-grid-4.9.0-20230421
     shm_size: 2g
-    ports:
-      - "4444:4444"
-      - "7900:7900"
+    network_mode: 'host'
+#    ports:
+#      - "4444:4444"
+#      - "7900:7900"
 
 volumes:
   mysql-data:

@@ -6,8 +6,7 @@ class CollectionsController < ApplicationController
     acronym = params[:ontology]
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
     ontology_not_found(acronym) if @ontology.nil?
-
-
+    @submission = @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri')
     collection_id = params[:collectionid]
     @collection = get_collection(@ontology, collection_id) if collection_id
 
@@ -31,7 +30,8 @@ class CollectionsController < ApplicationController
                                                           next_page_url: "/ontologies/#{@ontology.acronym}/collections",
                                                           child_url: "/ontologies/#{@ontology.acronym}/collections/show", child_turbo_frame: 'collection',
                                                           child_param: :collectionid,
-                                                          results:  results, next_page:  next_page, total_count: total_count
+                                                          results:  results, next_page:  next_page,
+                                                          total_count: total_count
       )
     end
   end
@@ -53,6 +53,7 @@ class CollectionsController < ApplicationController
 
   def show_members
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id] || params[:ontology]).first
+    @submission = @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri')
     @collection = get_request_collection
     page = params[:page] || '1'
     @auto_click = page.to_s.eql?('1')
