@@ -4,6 +4,8 @@ class PropertiesController < ApplicationController
   def index
     acronym = params[:ontology]
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
+    @submission = @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri')
+
     ontology_not_found(acronym) if @ontology.nil?
 
     if params[:search].blank?
@@ -43,10 +45,15 @@ class PropertiesController < ApplicationController
     id = params[:propertyid]
     @property = get_property(id, acronym)
     @property.children = property_children(id, acronym)
+
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
+    @submission = @ontology.explore.latest_submission({include: 'uriRegexPattern,preferredNamespaceUri'})
+
+
     render turbo_stream: [
       replace(helpers.child_id(@property) + '_open_link') { TreeLinkComponent.tree_close_icon },
       replace(helpers.child_id(@property) + '_childs') do
-        helpers.property_tree_component(@property, @property, acronym, request_lang, sub_tree: true, submission: get_submission_uri_pattern_by_id(acronym: acronym))
+        helpers.property_tree_component(@property, @property, acronym, request_lang, sub_tree: true, submission: @submission)
       end
     ]
   end

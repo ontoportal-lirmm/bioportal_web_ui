@@ -543,7 +543,7 @@ en:
     enter_email: Enter your username
     enter_password: Enter your password
     forgot_password: Forgot password?
-    invalid_login: Errors on the form
+    private_ontology: This ontology is private. Please login.
     no_account: Do not have an account?
     password: Password
     register: Register

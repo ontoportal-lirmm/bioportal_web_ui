@@ -5,6 +5,10 @@ module OntologiesHelper
   API_KEY = $API_KEY
   LANGUAGE_FILTERABLE_SECTIONS = %w[classes schemes collections instances properties].freeze
 
+  def ontology_access_denied?
+    @ontology&.errors&.include?('Access denied for this resource')
+  end
+
   def concept_search_input(placeholder)
     content_tag(:div, class: 'search-inputs p-1') do
       text_input(placeholder: placeholder, label: '', name: "search", value: '', data: { action: "input->browse-filters#dispatchInputEvent" })

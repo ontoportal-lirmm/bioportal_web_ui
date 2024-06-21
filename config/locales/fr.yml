@@ -550,7 +550,7 @@ fr:
     enter_email: Entrez votre nom d'utilisateur
     enter_password: Entrez votre mot de passe
     forgot_password: Mot de passe oublié ?
-    invalid_login: Erreurs sur le formulaire
+    private_ontology: Cette ontologie est privée. Veuillez vous connecter.
     no_account: Vous n'avez pas de compte ?
     password: Mot de passe
     register: S'inscrire

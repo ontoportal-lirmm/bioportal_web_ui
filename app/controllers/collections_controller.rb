@@ -30,7 +30,8 @@ class CollectionsController < ApplicationController
                                                           next_page_url: "/ontologies/#{@ontology.acronym}/collections",
                                                           child_url: "/ontologies/#{@ontology.acronym}/collections/show", child_turbo_frame: 'collection',
                                                           child_param: :collectionid,
-                                                          results:  results, next_page:  next_page, total_count: total_count, submission: @submission
+                                                          results:  results, next_page:  next_page,
+                                                          total_count: total_count
       )
     end
   end
