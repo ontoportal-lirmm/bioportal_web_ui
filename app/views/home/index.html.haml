@@ -204,11 +204,13 @@
   .home-ontoportal-instances
     .ontoportal-instances-container
       .home-section-title.ontoportal
-        .d-flex.align-items-center
-          .text.mr-2
-            = t('home.ontoportal_instances')
-          = render Display::InfoTooltipComponent.new(text: home_ontoportal_tooltip)
+        .text.mr-2
+          = t('home.ontoportal_instances')
         %hr.home-section-line/
+
+      .home-section-description 
+        .div
+          = home_ontoportal_description
       .home-support-items
         - $PORTALS_INSTANCES&.each do |portal|
           %div.text-center
