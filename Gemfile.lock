@@ -552,6 +552,7 @@ GEM
 PLATFORMS
   x86_64-darwin-23
   x86_64-linux
+  x86_64-linux-gnu
   x86_64-linux-musl
 
 DEPENDENCIES

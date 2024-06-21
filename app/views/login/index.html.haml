@@ -4,10 +4,6 @@
     = render Display::AlertComponent.new(type: "danger", closable: false) do
       - for error in @errors
         %div=error
-  - unless @notices.nil?  
-    = render Display::AlertComponent.new(closable: false) do
-      - for notice in @notices
-        %div=notice
 .d-flex.justify-content-center
   .login-form
     = form_for(:user, :url => {:controller => 'login',:action=>'create'}) do |f|
