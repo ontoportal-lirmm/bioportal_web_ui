@@ -1,5 +1,6 @@
 # Load the Rails application.
-require_relative "application"
+require_relative 'application'
+
 
 # Remove this after migrating to Rails 7.1 (https://github.com/rails/rails/issues/32947#issuecomment-1356391185)
 class Rails::Application
