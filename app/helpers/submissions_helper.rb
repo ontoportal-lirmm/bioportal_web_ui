@@ -202,9 +202,9 @@ module SubmissionsHelper
   def submission_editable_properties
     properties = submission_properties.map do |x|
       if x.is_a? Array
-        [x[0].to_s.underscore.humanize, x[0]]
+        [attr_label(x[0], show_tooltip: false), x[0]]
       else
-        [x.to_s.underscore.humanize, x]
+        [attr_label(x, show_tooltip: false), x]
       end
     end
 
