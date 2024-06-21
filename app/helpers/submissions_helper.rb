@@ -194,16 +194,25 @@ module SubmissionsHelper
 
     out
   end
+  def ontology_properties
+    ['acronym', 'name', [t('submission_inputs.visibility'), :viewingRestriction], 'viewOf', 'groups', 'categories',
+     [t('submission_inputs.administrators'), 'administeredBy']]
+  end
 
   def submission_editable_properties
-    properties = submission_properties
-    properties.map do |x|
+    properties = submission_properties.map do |x|
       if x.is_a? Array
-        [x[0].to_s.underscore.humanize, x[0]]
+        [attr_label(x[0], show_tooltip: false), x[0]]
       else
-        [x.to_s.underscore.humanize, x]
+        [attr_label(x, show_tooltip: false), x]
       end
     end
+
+    properties += ontology_properties.map do |x|
+      x.is_a?(Array) ? x : [x.to_s.underscore.humanize, x]
+    end
+
+    properties
   end
 
   def attribute_infos(attr_label)
