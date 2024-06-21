@@ -4,6 +4,7 @@ class ConceptsController < ApplicationController
   include MappingsHelper
   include ConceptsHelper
   include TurboHelper
+  include TermsReuses
 
   layout 'ontology'
 
@@ -44,9 +45,7 @@ class ConceptsController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     @ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
 
-    # Get the latest 'ready' submission, or fallback to any latest submission
-    # TODO: change the logic here if the fallback will crash the visualization
-    @submission = get_ontology_submission_ready(@ontology)  # application_controller
+    @submission = @ontology.explore.latest_submission(include: 'all')
 
     @concept = @ontology.explore.single_class({full: true}, params[:id])
     concept_not_found(params[:id]) if @concept.nil?
@@ -57,7 +56,7 @@ class ConceptsController < ApplicationController
     render turbo_stream: [
       replace(helpers.child_id(@concept) + '_open_link') { TreeLinkComponent.tree_close_icon },
       replace(helpers.child_id(@concept) + '_childs') do
-        helpers.concepts_tree_component(@concept, @concept, @ontology.acronym, Array(@schemes), request_lang, sub_tree: true)
+        helpers.concepts_tree_component(@concept, @concept, @ontology.acronym, Array(@schemes), request_lang, sub_tree: true, submission: @submission)
       end
     ]
   end
@@ -78,11 +77,12 @@ class ConceptsController < ApplicationController
 
   def show_tree
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
+    @submission = @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri')
     if @ontology.nil? || @ontology.errors
       ontology_not_found(params[:ontology])
     else
       get_class(params) #application_controller
-      
+
       not_found(t('concepts.missing_roots')) if @root.nil?
 
       render inline: helpers.concepts_tree_component(@root, @concept,
@@ -96,6 +96,7 @@ class ConceptsController < ApplicationController
     if @ontology.nil?
       ontology_not_found(params[:ontology])
     else
+      @submission = @ontology.explore.latest_submission(include: 'uriRegexPattern,preferredNamespaceUri')
       page = params[:page]
       @last_date = params[:last_date]
       auto_click = page.to_s.eql?('1')

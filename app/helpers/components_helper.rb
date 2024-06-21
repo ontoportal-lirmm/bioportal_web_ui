@@ -1,4 +1,5 @@
 module ComponentsHelper
+  include TermsReuses
 
   def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, &block)
     content_tag(:div, data: { controller: 'tooltip' }, title: tooltip) do
@@ -46,7 +47,7 @@ module ComponentsHelper
     end
   end
 
-  def paginated_list_component(id:, results:, next_page_url:, child_url:, child_turbo_frame:, child_param:, open_in_modal: false , selected: nil, auto_click: false)
+  def paginated_list_component(id:, results:, next_page_url:, child_url:, child_turbo_frame:, child_param:, open_in_modal: false , selected: nil, auto_click: false, submission: nil)
     render(TreeInfiniteScrollComponent.new(
       id:  id,
       collection: results.collection,
@@ -62,7 +63,7 @@ module ComponentsHelper
           end
         end)
       end
-
+      
       concepts = c.collection
       if concepts && !concepts.empty?
         concepts.each do |concept|
@@ -76,7 +77,8 @@ module ComponentsHelper
             selected: selected.blank? ? false : concept.id.eql?(selected) ,
             target_frame: child_turbo_frame,
             data: data,
-            open_in_modal: open_in_modal
+            open_in_modal: open_in_modal,
+            is_reused: concept_reused?(submission: submission, concept_id: concept.id)
           )))
         end
       end
@@ -132,13 +134,13 @@ module ComponentsHelper
     tag.html_safe
   end
 
-  def tree_component(root, selected, target_frame:, sub_tree: false, id: nil, auto_click: false, &child_data_generator)
+  def tree_component(root, selected, target_frame:, sub_tree: false, id: nil, auto_click: false, submission: nil, &child_data_generator)
     root.children.sort! { |a, b| (a.prefLabel || a.id).downcase <=> (b.prefLabel || b.id).downcase }
-
+    
     render TreeViewComponent.new(id: id, sub_tree: sub_tree, auto_click: auto_click) do |tree_child|
       root.children.each do |child|
         children_link, data, href = child_data_generator.call(child)
-
+  
         if children_link.nil? || data.nil? || href.nil?
           raise ArgumentError, t('components.error_block')
         end
@@ -147,9 +149,9 @@ module ComponentsHelper
                          children_href: children_link, selected: child.id.eql?(selected&.id),
                          muted: child.isInActiveScheme&.empty?,
                          target_frame: target_frame,
-                         data: data) do
+                         data: data, is_reused: concept_reused?(submission: submission, concept_id: child.id)) do
           tree_component(child, selected, target_frame: target_frame, sub_tree: true,
-                         id: id, auto_click: auto_click, &child_data_generator)
+                         id: id, auto_click: auto_click, submission: submission, &child_data_generator)
         end
       end
     end
@@ -276,5 +278,6 @@ module ComponentsHelper
       end
     end
   end
+
 
 end

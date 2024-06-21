@@ -51,7 +51,7 @@
             .title 
               = t('recommender.weights_configuration')
             .inputs-container
-              -#binding.pry
+
               .ninput
                 = render Input::RangeSliderComponent.new(label: t('recommender.coverage'), name: "wc", value: params[:wc] || 0.55, min: '0', max: '1', step: '0.01')
               .ninput

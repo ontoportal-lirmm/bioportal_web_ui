@@ -1,5 +1,5 @@
 class InstancesController < ApplicationController
-  include InstancesHelper, SearchContent
+  include InstancesHelper, SearchContent, TermsReuses
 
   def index
     if params[:type].blank?
@@ -10,7 +10,7 @@ class InstancesController < ApplicationController
     end
 
     get_ontology(params)
-
+    @submission  = @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri')
     query, page, page_size = helpers.search_content_params
 
     results, _, next_page, total_count = search_ontologies_content(query: query,
