@@ -189,7 +189,7 @@
         - @slices.each do |slice, index|
           - slice_link = "https://#{slice.acronym}.#{$UI_URL.sub("https://", "")}"
           .home-slice{'data-controller': 'tooltip', title: content_tag(:div, slice.description, style: 'max-width: 200px')}
-            = link_to slice_link, target: '_blank' do
+            = link_to slice_link do
               .home-slice-icon
                 .home-slice-ontologies
                   = slice.ontologies.length
