@@ -96,6 +96,7 @@ class ConceptsController < ApplicationController
     if @ontology.nil?
       ontology_not_found(params[:ontology])
     else
+      @submission = @ontology.explore.latest_submission(include: 'uriRegexPattern,preferredNamespaceUri')
       page = params[:page]
       @last_date = params[:last_date]
       auto_click = page.to_s.eql?('1')
