@@ -173,7 +173,7 @@
             %h4
               = format_number_abbreviated(@users_count)
             %p= t("home.users")
-      .home-statistics-link.justify-content-end
+      .home-statistics-link.justify-content-end{style: @analytics.empty? && "visibility: hidden"}
         = link_to t("home.see_details"),'/statistics', target: "_blank"
 
   .home-section
