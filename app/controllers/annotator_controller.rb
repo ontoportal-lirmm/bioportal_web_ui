@@ -168,7 +168,7 @@ class AnnotatorController < ApplicationController
   end
   def annotation_ontology_info(ontology_url)
     return {
-      text: @ontologies[ontology_url][:name],
+      text: @ontologies["#{rest_url}/ontologies/#{ontology_url.split('/').last}"][:name],
       link: url_to_endpoint(ontology_url)
     }
   end
