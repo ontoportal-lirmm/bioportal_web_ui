@@ -77,6 +77,8 @@ services:
       #RAILS_MASTER_KEY: TODO
       BIOPORTAL_WEB_UI_DATABASE_PASSWORD: root
       MEMCACHE_SERVERS: "cache:11211"
+    ports:
+      - "3000:3000"
     depends_on:
       db:
         condition: service_healthy
