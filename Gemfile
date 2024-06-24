@@ -105,7 +105,6 @@ gem 'net-http', '~> 0.3.2'
 
 # Multi-Provider Authentication
 gem 'omniauth'
-gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-github'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-keycloak'
