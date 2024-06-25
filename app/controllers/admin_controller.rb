@@ -2,6 +2,8 @@ class AdminController < ApplicationController
   include TurboHelper, HomeHelper, SparqlHelper
   layout :determine_layout
   before_action :cache_setup, :check_admin?
+  skip_before_action :cache_setup, :check_admin?, only: [:sparql_endpoint]
+
 
   ADMIN_URL = "#{LinkedData::Client.settings.rest_url}/admin/"
   ONTOLOGIES_URL = "#{ADMIN_URL}ontologies_report"
