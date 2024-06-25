@@ -1415,7 +1415,7 @@ en:
     view: View
     debug: Debug
     loading: Loading
-    unwatch: UnWatch
+    unwatch: Unwatch
     watch: Watch
     resource: "%{sub_text} this resource"
     notified_of_all_updates: Be the first to watch this resource and  be notified of all its updates
