@@ -176,7 +176,7 @@ module ApplicationHelper
                     class: "secondary-button regular-button slim", data: { show_modal_title_value: t('application.add_new_proposal')}
     end
   end
-  
+
 
   def link?(str)
     # Regular expression to match strings starting with "http://" or "https://"
@@ -297,7 +297,7 @@ module ApplicationHelper
     options = {  'data-controller': 'label-ajax' }.merge(data)
     options = options.merge({ target: target }) if target
     content_tag(:span, class: 'mx-1') do
-      render ChipButtonComponent.new(url: link, text: cls_id, type: 'clickable', **options)
+      render ChipButtonComponent.new(url: link, text: cls_id, type: 'clickable', data_turbo: 'false', **options)
     end
   end
 

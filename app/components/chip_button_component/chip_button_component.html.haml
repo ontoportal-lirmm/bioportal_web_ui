@@ -3,7 +3,7 @@
     %span.chip_button_container{@html_options}
       = @text || content
   - elsif !content
-    %a.chip_button_container_clickable{@html_options}
+    %a.chip_button_container_clickable{@html_options, 'data-turbo': @data_turbo}
       = @text
   - else
     %span.chip_button_container_clickable{@html_options}

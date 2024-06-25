@@ -43,16 +43,16 @@ module MappingsHelper
     if inter_portal_acronym
       data_cls = " data-cls='#{cls.links["self"]}?apikey=' "
       portal_cls = " portal-cls='#{inter_portal_acronym}' "
-      raw("<a class='interportalcls4ajax' #{data_cls} #{portal_cls} #{href_cls} target='_blank'>#{cls.id}</a>")
+      raw("<a data-turbo='false' class='interportalcls4ajax' #{data_cls} #{portal_cls} #{href_cls} target='_blank'>#{cls.id}</a>")
     else
-      raw("<a #{href_cls} target='_blank'>#{cls.id}</a>")
+      raw("<a data-turbo='false' #{href_cls} target='_blank'>#{cls.id}</a>")
     end
 
   end
 
   def ajax_to_internal_cls(cls)
     link_to("#{cls.id}<span href='/ajax/classes/label?ontology=#{cls.links["ontology"]}&concept=#{escape(cls.id)}' class='get_via_ajax'></span>".html_safe,
-            ontology_path(cls.explore.ontology.acronym, p: 'classes', conceptid: cls.id))
+            ontology_path(cls.explore.ontology.acronym, p: 'classes', conceptid: cls.id), data: { turbo: false })
   end
 
   # to get the apikey from the interportal instance of the interportal class.
@@ -80,7 +80,7 @@ module MappingsHelper
   end
 
   def ajax_to_external_cls(cls)
-    raw("<a href='#{cls.links['self']}' target='_blank'>#{get_label_for_external_cls(cls.id)}</a>")
+    raw("<a  data-turbo='false' href='#{cls.links['self']}' target='_blank'>#{get_label_for_external_cls(cls.id)}</a>")
   end
 
   # Replace the inter_portal mapping ontology URI (that link to the API) by the link to the ontology in the UI

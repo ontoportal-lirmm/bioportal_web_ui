@@ -1,4 +1,4 @@
-- process = map.process || {}
+- process = map.process || {} 
 - source = "#{map.source} #{process[:source_name]}"
 - relations = process[:relation]&.each { |relation| get_prefixed_uri(relation)}
 - map_id = map.id.to_s.split("/").last
