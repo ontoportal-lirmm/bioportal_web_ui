@@ -371,11 +371,17 @@ class OntologiesController < ApplicationController
       link = "javascript:void(0);"
       user_id = user.id
     end
-
     count = helpers.count_subscriptions(params[:ontology_id])
-    render inline: helpers.turbo_frame_tag('subscribe_button') {
-      render_to_string(OntologySubscribeButtonComponent.new(id: '', ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: link), layout: nil)
-    }
+    if session[:user].nil?
+      render inline: helpers.turbo_frame_tag('subscribe_button') {
+        render_to_string(OntologySubscribeButtonComponent.new(id: '', ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: "/login?redirect=/ontologies/#{ontology_acronym}"), layout: nil)
+      }
+    else
+      render inline: helpers.turbo_frame_tag('subscribe_button') {
+        render_to_string(OntologySubscribeButtonComponent.new(id: '', ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: link), layout: nil)
+      }
+    end
+
   end
 
 

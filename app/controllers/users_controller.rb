@@ -184,9 +184,7 @@ class UsersController < ApplicationController
   private
 
   def find_user(id = params[:id])
-    id = helpers.unescape(id)
-    @user = LinkedData::Client::Models::User.find(helpers.escape(id), include: 'all')
-    @user ||= LinkedData::Client::Models::User.find_by_username(helpers.escape(id), include: 'all').first
+    @user = LinkedData::Client::Models::User.find(id.split('/').last, {include: 'all'})
 
     not_found("User with id #{id} not found") if @user.nil?
 

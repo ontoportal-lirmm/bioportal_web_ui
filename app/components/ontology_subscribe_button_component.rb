@@ -30,4 +30,8 @@ class OntologySubscribeButtonComponent < ViewComponent::Base
       t('components.join_the_count', count: @count)
     end
   end
+
+  def data_turbo
+    @link.include?('/login') ? 'false' : 'true'
+  end
 end

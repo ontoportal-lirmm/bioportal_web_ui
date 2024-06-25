@@ -208,8 +208,7 @@ module ApplicationHelper
   end
 
   def subscribed_to_ontology?(ontology_acronym, user)
-    user.bring(:subscription) if user.subscription.nil?
-    # user.subscription is an array of subscriptions like {ontology: ontology_id, notification_type: "NOTES"}
+    user = LinkedData::Client::Models::User.find(user.username, {include: 'subscription'})
     return false if user.subscription.nil? or user.subscription.empty?
     user.subscription.each do |sub|
       #sub = {ontology: ontology_acronym, notification_type: "NOTES"}
