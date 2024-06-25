@@ -378,16 +378,9 @@ class OntologiesController < ApplicationController
       user_id = user.id
     end
     count = helpers.count_subscriptions(params[:ontology_id])
-    if session[:user].nil?
-      render inline: helpers.turbo_frame_tag('subscribe_button') {
-        render_to_string(OntologySubscribeButtonComponent.new(id: '', ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: "/login?redirect=/ontologies/#{ontology_acronym}"), layout: nil)
-      }
-    else
-      render inline: helpers.turbo_frame_tag('subscribe_button') {
-        render_to_string(OntologySubscribeButtonComponent.new(id: '', ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: link), layout: nil)
-      }
-    end
-
+    render inline: helpers.turbo_frame_tag('subscribe_button') {
+      render_to_string(OntologySubscribeButtonComponent.new(id: '', ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: session[:user].nil? ? "/login?redirect=/ontologies/#{ontology_acronym}" : link), layout: nil)
+    }
   end
 
   def widgets
