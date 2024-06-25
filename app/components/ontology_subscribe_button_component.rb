@@ -15,6 +15,8 @@ class OntologySubscribeButtonComponent < ViewComponent::Base
         'subscribe-notes-ontology-id-value': ontology_id,
         'subscribe-notes-is-subbed-value': subscribed.to_s,
         'subscribe-notes-user-id-value': user_id,
+        'subscribe-notes-watch-value': t('components.watch'),
+        'subscribe-notes-unwatch-value': t('components.unwatch'),
         action: 'click->subscribe-notes#subscribeToNotes',
       },
       title: title

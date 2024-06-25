@@ -6,7 +6,9 @@ export default class extends Controller {
     static values = {
         ontologyId: String,
         isSubbed: Boolean,
-        userId: String
+        userId: String,
+        watch: String,
+        unwatch: String
     }
     static targets = ["error", "loader", "text" ,"count"]
 
@@ -39,10 +41,10 @@ export default class extends Controller {
                 let txt = this.textTarget.innerHTML
                 let count = parseInt(this.countTarget.innerHTML)
 
-                let newButtonText = txt.match("UnWatch") ? txt.replace("UnWatch", "Watch") : txt.replace("Watch", "UnWatch");
+                let newButtonText = txt.match(this.unwatchValue) ? txt.replace(this.unwatchValue, this.watchValue) : txt.replace(this.watchValue, this.unwatchValue);
                 this.element.setAttribute('title', newButtonText + ' this ontology')
                 this.textTarget.innerHTML  = newButtonText
-                this.countTarget.innerHTML  = newButtonText.match("UnWatch") ? (count + 1) :  (count - 1)
+                this.countTarget.innerHTML  = newButtonText.match(this.unwatchValue) ? (count + 1) :  (count - 1)
             },
             error: () => {
                 this.#hideSpinner()
