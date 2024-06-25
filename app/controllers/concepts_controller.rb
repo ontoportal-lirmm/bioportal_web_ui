@@ -87,7 +87,7 @@ class ConceptsController < ApplicationController
 
       render inline: helpers.concepts_tree_component(@root, @concept,
                                       @ontology.acronym, Array(params[:concept_schemes]&.split(',')), request_lang,
-                                      id: 'concepts_tree_view', auto_click: params[:auto_click] || true, submission: @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri'))
+                                      id: 'concepts_tree_view', auto_click: params[:auto_click] || true)
     end
   end
 
