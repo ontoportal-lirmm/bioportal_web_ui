@@ -238,10 +238,16 @@ class OntologiesController < ApplicationController
       return
     end
 
-
-    # Note: find_by_acronym includes ontology views
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-    ontology_not_found(params[:ontology]) if @ontology.nil? || @ontology.errors
+
+    if @ontology.nil? || @ontology.errors
+      if ontology_access_denied?
+        redirect_to "/login?redirect=/ontologies/#{params[:ontology]}", alert: t('login.private_ontology')
+        return
+      else
+        ontology_not_found(params[:ontology])
+      end
+    end
 
     # Handle the case where an ontology is converted to summary only.
     # See: https://github.com/ncbo/bioportal_web_ui/issues/133.
@@ -383,7 +389,6 @@ class OntologiesController < ApplicationController
     end
 
   end
-
 
   def widgets
     if request.xhr?

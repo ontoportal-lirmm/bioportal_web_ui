@@ -4,6 +4,8 @@ class PropertiesController < ApplicationController
   def index
     acronym = params[:ontology]
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
+    @submission = @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri')
+
     ontology_not_found(acronym) if @ontology.nil?
 
     if params[:search].blank?
@@ -23,7 +25,7 @@ class PropertiesController < ApplicationController
                                                           child_url: "/ontologies/#{@ontology.acronym}/properties/show",
                                                           child_turbo_frame: 'property_show',
                                                           child_param: :propertyid,
-                                                          results:  results, next_page:  next_page, total_count: total_count, submission: @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri'))
+                                                          results:  results, next_page:  next_page, total_count: total_count)
     end
   end
 
@@ -43,10 +45,15 @@ class PropertiesController < ApplicationController
     id = params[:propertyid]
     @property = get_property(id, acronym)
     @property.children = property_children(id, acronym)
+
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
+    @submission = @ontology.explore.latest_submission({include: 'uriRegexPattern,preferredNamespaceUri'})
+
+
     render turbo_stream: [
       replace(helpers.child_id(@property) + '_open_link') { TreeLinkComponent.tree_close_icon },
       replace(helpers.child_id(@property) + '_childs') do
-        helpers.property_tree_component(@property, @property, acronym, request_lang, sub_tree: true, submission: get_submission_uri_pattern_by_id(acronym: acronym))
+        helpers.property_tree_component(@property, @property, acronym, request_lang, sub_tree: true, submission: @submission)
       end
     ]
   end
@@ -86,7 +93,7 @@ class PropertiesController < ApplicationController
     end
     render inline: helpers.property_tree_component(@root, @property,
                                                    @ontology.acronym, request_lang,
-                                                   id: container_id, auto_click: true, submission: @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri'))
+                                                   id: container_id, auto_click: true)
   end
 
 end

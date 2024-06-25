@@ -20,8 +20,11 @@ module ConceptsHelper
     }
     [children_link, data, href]
   end
-  def concepts_tree_component(root, selected_concept, acronym, concept_schemes, language, sub_tree: false, id: nil, auto_click: false, submission: nil)
-    tree_component(root, selected_concept, target_frame: 'concept_show', sub_tree: sub_tree, id: id, auto_click: auto_click, submission: submission) do |child|
+
+  def concepts_tree_component(root, selected_concept, acronym, concept_schemes, language, sub_tree: false, id: nil,
+                              auto_click: false, submission: @submission)
+    tree_component(root, selected_concept, target_frame: 'concept_show', sub_tree: sub_tree, id: id,
+                                           auto_click: auto_click, submission: submission) do |child|
       concept_tree_data(acronym, child, language, concept_schemes)
     end
   end
@@ -117,14 +120,14 @@ module ConceptsHelper
     out
   end
 
-  def render_concepts_by_dates(auto_click: false)
+  def render_concepts_by_dates(auto_click: false, submission: @submission)
     return if @concepts_year_month.empty?
 
     first_year, first_month_concepts = @concepts_year_month.shift
     first_month, first_concepts = first_month_concepts.shift
     out = ''
     if same_period?(first_year, first_month, @last_date)
-      out += "<ul>#{concepts_li_list(first_concepts, auto_click: auto_click, submission: @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri'))}</ul>"
+      out += "<ul>#{concepts_li_list(first_concepts, auto_click: auto_click, submission: submission)}</ul>"
     else
       tmp = {}
       tmp[first_month] = first_concepts
@@ -137,8 +140,9 @@ module ConceptsHelper
     @concepts_year_month.each do |year, month_concepts|
       month_concepts.each do |month, concepts|
         out += "<ul> #{month + ' ' + year.to_s}"
-        out += concepts_li_list(concepts, auto_click: auto_click, selected_id: selected_id, submission: @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri'))
-        out += "</ul>"
+        out += concepts_li_list(concepts, auto_click: auto_click, selected_id: selected_id,
+                                          submission: submission)
+        out += '</ul>'
       end
     end
     raw out

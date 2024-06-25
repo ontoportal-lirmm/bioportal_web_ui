@@ -35,6 +35,8 @@ module SubmissionInputsHelper
     end
 
     def label
+      return attr_key unless @attr_metadata
+
       @label || @attr_metadata['label'] || @attr_metadata['attribute'].humanize
     end
 

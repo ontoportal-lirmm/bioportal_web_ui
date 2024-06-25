@@ -7,7 +7,7 @@ module HomeHelper
     link_content = options[:text][I18n.locale] || options[:text][:en] if options[:text]
     link_content ||= image_tag(options[:img_src]) if options[:img_src]
     link_content ||= content_tag(:i, '', class: options[:icon]) if options[:icon]
-  
+
     link_to(link_content, options[:url], target: options[:target], class: options[:css_class].to_s, style: options[:text].blank? ? 'text-decoration: none' : '').html_safe if link_content
   end
 
@@ -20,7 +20,7 @@ module HomeHelper
     else
       number.to_s
     end
-  end  
+  end
 
   def discover_ontologies_button
     render Buttons::RegularButtonComponent.new(id: 'discover-ontologies-button', value: t('home.discover_ontologies_button'), variant: "secondary", state: "regular", href: "/ontologies") do |btn|
@@ -30,10 +30,10 @@ module HomeHelper
     end
   end
 
-  def home_ontoportal_tooltip
+  def home_ontoportal_description
     ontoportal_link = link_to("(#{$ONTOPORTAL_WEBSITE_LINK})", $ONTOPORTAL_WEBSITE_LINK, target: '_blank')
     github_link = link_to("(#{$ONTOPORTAL_GITHUB_REPO})", $ONTOPORTAL_GITHUB_REPO, target: '_blank')
-    content_tag(:div, t('home.ontoportal_description', ontoportal_link: ontoportal_link, github_link: github_link).html_safe, style: "max-width: 600px;")
+    content_tag(:div, t('home.ontoportal_description', ontoportal_link: ontoportal_link, github_link: github_link).html_safe, style: "margin-bottom: 20px")
   end
 
 end
