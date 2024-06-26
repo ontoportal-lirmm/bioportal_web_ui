@@ -110,7 +110,6 @@ gem 'omniauth-github'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-keycloak'
 gem 'omniauth-orcid'
-gem 'omniauth-rails_csrf_protection'
 
 group :staging, :production, :appliance do
   # Application performance monitoring
