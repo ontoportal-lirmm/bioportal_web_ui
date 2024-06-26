@@ -103,7 +103,7 @@ export default class extends Controller {
 
   downloadJsonLd () {
     this.#toJSONLD().then((jsonld) => {
-      this.#generateDownloadFile(JSON.stringify(jsonld, null, '  '), 'nt')
+      this.#generateDownloadFile(JSON.stringify(jsonld, null, '  '), 'json')
     })
   }
 
@@ -211,7 +211,6 @@ export default class extends Controller {
     // TODO: change MIME type?
     element.setAttribute('href', 'data:application/rdf+json;charset=utf-8,' + encodeURIComponent(content))
     element.setAttribute('download', jQuery(document).data().bp.ontology.acronym + '_metadata.' + fileExtension)
-
     element.style.display = 'none'
     document.body.appendChild(element)
     element.click()
