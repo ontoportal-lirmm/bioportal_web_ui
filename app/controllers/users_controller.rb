@@ -29,7 +29,7 @@ class UsersController < ApplicationController
               find_user(session[:user].id)
             end
 
-    @all_ontologies = LinkedData::Client::Models::Ontology.all(ignore_custom_ontologies: true)
+    @all_ontologies = LinkedData::Client::Models::Ontology.all(ignore_custom_ontologies: true).map {|x| ["#{x.name} (#{x.acronym})", x.acronym]}
 
     @user_ontologies = @user.customOntology
 
@@ -149,7 +149,7 @@ class UsersController < ApplicationController
   def custom_ontologies
     @user = find_user
     custom_ontologies = params[:ontologies] || []
-    
+
     @user.update_from_params(customOntology: custom_ontologies)
     error_response = !@user.update
     if error_response
