@@ -1,6 +1,6 @@
 %div{@controller_params, style: 'margin-left: 10px;', id: @id}
   = render PillButtonComponent.new do
-    %a.d-flex.align-items-center{href: @link}
+    %a.d-flex.align-items-center{href: @link, 'data-turbo': data_turbo}
       = inline_svg_tag "eye.svg"
       %div
         %span{'data-subscribe-notes-target': 'text'}

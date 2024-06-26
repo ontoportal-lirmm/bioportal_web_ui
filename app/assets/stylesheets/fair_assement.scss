@@ -35,6 +35,7 @@ $non_applicable_color :  rgba(176, 190, 197, 0.4);
   animation-duration: .75s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
+  color: var(--primary-color);
 }
 
 .spinner-border-reverse {
