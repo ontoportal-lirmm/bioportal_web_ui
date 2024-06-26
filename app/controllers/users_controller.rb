@@ -148,16 +148,14 @@ class UsersController < ApplicationController
 
   def custom_ontologies
     @user = find_user
-
-    custom_ontologies = params[:ontology] ? params[:ontology][:ontologyId] : []
-    custom_ontologies.reject!(&:blank?)
+    custom_ontologies = params[:ontologies] || []
+    
     @user.update_from_params(customOntology: custom_ontologies)
     error_response = !@user.update
-
     if error_response
       flash[:notice] = t('users.error_saving_custom_ontologies')
     else
-      updated_user = LinkedData::Client::Models::User.find(@user.id)
+      updated_user = LinkedData::Client::Models::User.find(@user.id, {include: 'all'})
       session[:user].update_from_params(customOntology: updated_user.customOntology)
       flash[:notice] = if updated_user.customOntology.empty?
                         t('users.custom_ontologies_cleared')
@@ -168,7 +166,7 @@ class UsersController < ApplicationController
     redirect_to user_path(@user.username)
   end
 
-  
+
   def subscribe
     @user = find_user
     deliver "subscribe", SubscribeMailer.register_for_announce_list(@user.email,@user.firstName,@user.lastName)
@@ -180,7 +178,7 @@ class UsersController < ApplicationController
     deliver "unsubscribe", SubscribeMailer.unregister_for_announce_list(@email)
   end
 
-  
+
   private
 
   def find_user(id = params[:id])

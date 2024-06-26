@@ -144,6 +144,7 @@ class HomeController < ApplicationController
     end
 
     @user = LinkedData::Client::Models::User.get(session[:user].id, include: 'all')
+    @all_ontologies = LinkedData::Client::Models::Ontology.all(ignore_custom_ontologies: true).map {|x| ["#{x.name} (#{x.acronym})", x.acronym]}
 
     @user_ontologies = @user.customOntology
     @user_ontologies ||= []
