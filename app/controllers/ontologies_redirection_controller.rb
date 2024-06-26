@@ -30,11 +30,13 @@ class OntologiesRedirectionController < ApplicationController
     # GET /ontologies/:acronym/htaccess
     def generate_htaccess
         ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:acronym]).first
-        ontology_uri = ontology.explore.latest_submission(include: 'URI').URI
+        subminssions_params = ontology.explore.latest_submission(include: 'URI,preferredNamespaceUri')
+        ontology_uri = subminssions_params.URI
+        preferred_name_space_uri = subminssions_params.preferredNamespaceUri
         ontology_portal_url = "#{$UI_URL}/ontologies/#{params[:acronym]}"
         
-        @htaccess_content = generate_htaccess_content(ontology_portal_url, ontology_uri)
-        @nginx_content = generate_nginx_content(ontology_portal_url, ontology_uri)
+        @htaccess_content = generate_htaccess_content(ontology_portal_url, ontology_uri, preferred_name_space_uri)
+        @nginx_content = generate_nginx_content(ontology_portal_url, ontology_uri, preferred_name_space_uri)
 
         render 'ontologies/htaccess', layout: nil
     end
@@ -47,32 +49,45 @@ class OntologiesRedirectionController < ApplicationController
       
     private
       
-    def generate_htaccess_content(ontology_portal_url, ontology_uri)
-        ontology_rule = nil
-        if ontology_uri
-            ontology_uri += '/' unless ontology_uri.end_with?('/')
-            ontology_rule = "RewriteRule ^#{URI.parse(ontology_uri).path[1..-1]}?$ #{ontology_portal_url} [R=301,L]"
-        end
-
+    def generate_htaccess_content(ontology_portal_url, ontology_uri, preferred_name_space_uri)
+        rewrite_condition = if preferred_name_space_uri
+                              "RewriteCond %{REQUEST_URI} ^.*#{URI.parse(preferred_name_space_uri).path[1..-1]}.*$"
+                            elsif ontology_uri
+                              "RewriteCond %{REQUEST_URI} ^.*#{URI.parse(ontology_uri).path[1..-1]}.*$"
+                            end
+      
+        ontology_rule = if ontology_uri
+                          ontology_uri += '/' unless ontology_uri.end_with?('/')
+                          "RewriteRule ^#{URI.parse(ontology_uri).path[1..-1]}?$ #{ontology_portal_url} [R=301,L]"
+                        end
+      
         <<-HTACCESS.strip_heredoc
-            RewriteEngine On
-            #{ontology_rule if ontology_rule}
-            RewriteRule ^.*/([^/#]+)$ #{ontology_portal_url}/$1 [R=301,L]
+          RewriteEngine On
+          #{ontology_rule if ontology_rule}
+          #{rewrite_condition if rewrite_condition}
+          RewriteRule ^.*/([^/#]+)/?$ #{ontology_portal_url}/$1 [R=301,L]
         HTACCESS
     end
       
-    def generate_nginx_content(ontology_portal_url, ontology_uri)
+    def generate_nginx_content(ontology_portal_url, ontology_uri, preferred_name_space_uri)
         ontology_rule = nil
+        rewrite_condition = if preferred_name_space_uri
+            URI.parse(preferred_name_space_uri).path[1..-1]
+          elsif ontology_uri
+            ontology_uri += '/' unless ontology_uri.end_with?('/')
+            URI.parse(ontology_uri).path[1..-1]
+          end
+
         if ontology_uri
             ontology_uri += '/' unless ontology_uri.end_with?('/')
-            ontology_rule = "rewrite ^#{URI.parse(ontology_uri).path[1..-1]}?$ #{ontology_portal_url} permanent"
+            ontology_rule = "rewrite ^/#{URI.parse(ontology_uri).path[1..-1]}?$ #{ontology_portal_url} permanent;"
         end
   
         <<-NGINX.strip_heredoc
             location / {
                 #{ontology_rule if ontology_rule}
-                if ($request_uri ~ ^.*/([^/]+)$){
-                    return 301 #{ontology_portal_url}/$1;
+                if ($request_uri ~* #{rewrite_condition} ){
+                    rewrite ^.*/([^/]+)/?$ #{ontology_portal_url}/$1 permanent;
                 }
             }
         NGINX
