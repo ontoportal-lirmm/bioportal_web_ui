@@ -368,7 +368,7 @@ class OntologiesController < ApplicationController
     ontology_acronym = ontology_id.split('/').last
 
     if session[:user].nil?
-      link = "/login?redirect=#{request.url}"
+      link = "/login?redirect=/ontologies/#{ontology_acronym}"
       subscribed = false
       user_id = nil
     else
@@ -379,7 +379,7 @@ class OntologiesController < ApplicationController
     end
     count = helpers.count_subscriptions(params[:ontology_id])
     render inline: helpers.turbo_frame_tag('subscribe_button') {
-      render_to_string(OntologySubscribeButtonComponent.new(id: '', ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: session[:user].nil? ? "/login?redirect=/ontologies/#{ontology_acronym}" : link), layout: nil)
+      render_to_string(OntologySubscribeButtonComponent.new(id: '', ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: link), layout: nil)
     }
   end
 

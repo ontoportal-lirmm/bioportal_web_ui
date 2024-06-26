@@ -168,7 +168,7 @@ class UsersController < ApplicationController
     redirect_to user_path(@user.username)
   end
 
-  
+
   def subscribe
     @user = find_user
     deliver "subscribe", SubscribeMailer.register_for_announce_list(@user.email,@user.firstName,@user.lastName)
@@ -180,10 +180,11 @@ class UsersController < ApplicationController
     deliver "unsubscribe", SubscribeMailer.unregister_for_announce_list(@email)
   end
 
-  
+
   private
 
   def find_user(id = params[:id])
+    id = helpers.unescape(id)
     @user = LinkedData::Client::Models::User.find(id.split('/').last, {include: 'all'})
 
     not_found("User with id #{id} not found") if @user.nil?
