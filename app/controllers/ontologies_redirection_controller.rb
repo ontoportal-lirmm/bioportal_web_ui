@@ -50,15 +50,18 @@ class OntologiesRedirectionController < ApplicationController
     private
       
     def generate_htaccess_content(ontology_portal_url, ontology_uri, preferred_name_space_uri)
-        rewrite_condition = if preferred_name_space_uri
-                              "RewriteCond %{REQUEST_URI} ^.*#{URI.parse(preferred_name_space_uri).path[1..-1]}.*$"
-                            elsif ontology_uri
-                              "RewriteCond %{REQUEST_URI} ^.*#{URI.parse(ontology_uri).path[1..-1]}.*$"
+        preferred_name_space_path = get_path(preferred_name_space_uri)
+        ontology_uri_path = get_path(ontology_uri)
+        
+        rewrite_condition = if preferred_name_space_path
+                              "RewriteCond %{REQUEST_URI} ^.*#{preferred_name_space_path}.*$"
+                            elsif ontology_uri_path
+                              "RewriteCond %{REQUEST_URI} ^.*#{ontology_uri_path}.*$"
                             end
-      
-        ontology_rule = if ontology_uri
-                          ontology_uri += '/' unless ontology_uri.end_with?('/')
-                          "RewriteRule ^#{URI.parse(ontology_uri).path[1..-1]}?$ #{ontology_portal_url} [R=301,L]"
+        
+        ontology_rule = if ontology_uri_path
+                          ontology_uri_path += '/' unless ontology_uri_path.end_with?('/')
+                          "RewriteRule ^#{ontology_uri_path}?$ #{ontology_portal_url} [R=301,L]"
                         end
       
         <<-HTACCESS.strip_heredoc
@@ -70,18 +73,15 @@ class OntologiesRedirectionController < ApplicationController
     end
       
     def generate_nginx_content(ontology_portal_url, ontology_uri, preferred_name_space_uri)
-        ontology_rule = nil
-        rewrite_condition = if preferred_name_space_uri
-            URI.parse(preferred_name_space_uri).path[1..-1]
-          elsif ontology_uri
-            ontology_uri += '/' unless ontology_uri.end_with?('/')
-            URI.parse(ontology_uri).path[1..-1]
-          end
+        preferred_name_space_path = get_path(preferred_name_space_uri)
+        ontology_uri_path = get_path(ontology_uri)
+        
+        rewrite_condition = preferred_name_space_path || ontology_uri_path
 
-        if ontology_uri
-            ontology_uri += '/' unless ontology_uri.end_with?('/')
-            ontology_rule = "rewrite ^/#{URI.parse(ontology_uri).path[1..-1]}?$ #{ontology_portal_url} permanent;"
-        end
+        ontology_rule = if ontology_uri_path
+                            ontology_uri_path += '/' unless ontology_uri_path.end_with?('/')
+                            ontology_rule = "rewrite ^/#{ontology_uri_path}?$ #{ontology_portal_url} permanent;"
+                        end
   
         <<-NGINX.strip_heredoc
             location / {
@@ -92,4 +92,14 @@ class OntologiesRedirectionController < ApplicationController
             }
         NGINX
     end
+    
+    def get_path(uri)
+        begin
+          parsed_uri = URI.parse(uri)
+          parsed_uri.path[1..-1]
+        rescue URI::InvalidURIError
+          nil
+        end
+    end
+
 end
