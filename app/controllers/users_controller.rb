@@ -23,6 +23,11 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.xml
   def show
+    @title = t('home.account_title')
+    if session[:user].nil?
+      redirect_to controller: 'login', action: 'index', redirect: '/account'
+      return
+    end
     @user = if session[:user].admin? && params.has_key?(:id)
               find_user(params[:id])
             else
@@ -32,8 +37,8 @@ class UsersController < ApplicationController
     @all_ontologies = LinkedData::Client::Models::Ontology.all(ignore_custom_ontologies: true).map {|x| ["#{x.name} (#{x.acronym})", x.acronym]}
 
     @user_ontologies = @user.customOntology
+    @user_ontologies ||= []
 
-    ## Copied from home controller , account action
     onts = LinkedData::Client::Models::Ontology.all;
     @admin_ontologies = onts.select {|o| o.administeredBy.include? @user.id }
 
