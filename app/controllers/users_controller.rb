@@ -33,14 +33,13 @@ class UsersController < ApplicationController
             else
               find_user(session[:user].id)
             end
-
-    @all_ontologies = LinkedData::Client::Models::Ontology.all(ignore_custom_ontologies: true).map {|x| ["#{x.name} (#{x.acronym})", x.acronym]}
+    @ontologies = LinkedData::Client::Models::Ontology.all(ignore_custom_ontologies: true);
+    @all_ontologies_for_select = @ontologies.map {|x| ["#{x.name} (#{x.acronym})", x.acronym]}
 
     @user_ontologies = @user.customOntology
     @user_ontologies ||= []
 
-    onts = LinkedData::Client::Models::Ontology.all;
-    @admin_ontologies = onts.select {|o| o.administeredBy.include? @user.id }
+    @admin_ontologies = @ontologies.select {|o| o.administeredBy.include? @user.id }
 
     projects = LinkedData::Client::Models::Project.all;
     @user_projects = projects.select {|p| p.creator.include? @user.id }

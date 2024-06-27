@@ -74,14 +74,14 @@
 
               .account-page-custom-ontologies
                 - @user_ontologies.each do |ont|
-                  - ont = LinkedData::Client::Models::Ontology.get(ont)
+                  - ont = @ontologies.select{ |o| o.id.eql?(ont) }.first
                   = render ChipButtonComponent.new(url: "/ontologies/#{ont.acronym}", text: ont.acronym , type: "clickable", tooltip: ont.name)
 
           %p.account-page-card-desc= t('users.show.note_feature_logged_in')
           #custom_ontologies_picker{style: "left: -9999px; position: absolute;"}
             = form_tag custom_ontologies_path(url_encode(@user.username)) do
-              - selected = @user.customOntology.map {|o| LinkedData::Client::Models::Ontology.get(o).acronym}
-              = ontologies_selector(id:'account_page_ontologies_selector' ,name: 'ontologies', selected: selected, ontologies: @all_ontologies)
+              - selected = @user.customOntology.map {|o| o.split('/').last }
+              = ontologies_selector(id:'account_page_ontologies_selector' ,name: 'ontologies', selected: selected, ontologies: @all_ontologies_for_select)
               .mt-3
                 = render Buttons::RegularButtonComponent.new(id: 'submit_custom_set', variant: "secondary", size: "slim", type: 'submit', value: t('users.show.save_custom_semantic_resources'))
       .account-page-second-row
