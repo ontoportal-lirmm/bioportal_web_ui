@@ -30,11 +30,13 @@ class OntologiesRedirectionController < ApplicationController
     # GET /ontologies/:acronym/htaccess
     def generate_htaccess
         ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:acronym]).first
-        ontology_uri = ontology.explore.latest_submission(include: 'URI').URI
+        subminssions_params = ontology.explore.latest_submission(include: 'URI,preferredNamespaceUri')
+        ontology_uri = subminssions_params.URI
+        preferred_name_space_uri = subminssions_params.preferredNamespaceUri
         ontology_portal_url = "#{$UI_URL}/ontologies/#{params[:acronym]}"
         
-        @htaccess_content = generate_htaccess_content(ontology_portal_url, ontology_uri)
-        @nginx_content = generate_nginx_content(ontology_portal_url, ontology_uri)
+        @htaccess_content = generate_htaccess_content(ontology_portal_url, ontology_uri, preferred_name_space_uri)
+        @nginx_content = generate_nginx_content(ontology_portal_url, ontology_uri, preferred_name_space_uri)
 
         render 'ontologies/htaccess', layout: nil
     end
@@ -47,34 +49,57 @@ class OntologiesRedirectionController < ApplicationController
       
     private
       
-    def generate_htaccess_content(ontology_portal_url, ontology_uri)
-        ontology_rule = nil
-        if ontology_uri
-            ontology_uri += '/' unless ontology_uri.end_with?('/')
-            ontology_rule = "RewriteRule ^#{URI.parse(ontology_uri).path[1..-1]}?$ #{ontology_portal_url} [R=301,L]"
-        end
-
+    def generate_htaccess_content(ontology_portal_url, ontology_uri, preferred_name_space_uri)
+        preferred_name_space_path = get_path(preferred_name_space_uri)
+        ontology_uri_path = get_path(ontology_uri)
+        
+        rewrite_condition = if preferred_name_space_path
+                              "RewriteCond %{REQUEST_URI} ^.*#{preferred_name_space_path}.*$"
+                            elsif ontology_uri_path
+                              "RewriteCond %{REQUEST_URI} ^.*#{ontology_uri_path}.*$"
+                            end
+        
+        ontology_rule = if ontology_uri_path
+                          ontology_uri_path += '/' unless ontology_uri_path.end_with?('/')
+                          "RewriteRule ^#{ontology_uri_path}?$ #{ontology_portal_url} [R=301,L]"
+                        end
+      
         <<-HTACCESS.strip_heredoc
-            RewriteEngine On
-            #{ontology_rule if ontology_rule}
-            RewriteRule ^.*/([^/#]+)$ #{ontology_portal_url}/$1 [R=301,L]
+          RewriteEngine On
+          #{ontology_rule if ontology_rule}
+          #{rewrite_condition if rewrite_condition}
+          RewriteRule ^.*/([^/#]+)/?$ #{ontology_portal_url}/$1 [R=301,L]
         HTACCESS
     end
       
-    def generate_nginx_content(ontology_portal_url, ontology_uri)
-        ontology_rule = nil
-        if ontology_uri
-            ontology_uri += '/' unless ontology_uri.end_with?('/')
-            ontology_rule = "rewrite ^#{URI.parse(ontology_uri).path[1..-1]}?$ #{ontology_portal_url} permanent"
-        end
+    def generate_nginx_content(ontology_portal_url, ontology_uri, preferred_name_space_uri)
+        preferred_name_space_path = get_path(preferred_name_space_uri)
+        ontology_uri_path = get_path(ontology_uri)
+        
+        rewrite_condition = preferred_name_space_path || ontology_uri_path
+
+        ontology_rule = if ontology_uri_path
+                            ontology_uri_path += '/' unless ontology_uri_path.end_with?('/')
+                            ontology_rule = "rewrite ^/#{ontology_uri_path}?$ #{ontology_portal_url} permanent;"
+                        end
   
         <<-NGINX.strip_heredoc
             location / {
                 #{ontology_rule if ontology_rule}
-                if ($request_uri ~ ^.*/([^/]+)$){
-                    return 301 #{ontology_portal_url}/$1;
+                if ($request_uri ~* #{rewrite_condition} ){
+                    rewrite ^.*/([^/]+)/?$ #{ontology_portal_url}/$1 permanent;
                 }
             }
         NGINX
     end
+    
+    def get_path(uri)
+        begin
+          parsed_uri = URI.parse(uri)
+          parsed_uri.path[1..-1]
+        rescue URI::InvalidURIError
+          nil
+        end
+    end
+
 end
