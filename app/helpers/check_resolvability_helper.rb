@@ -60,11 +60,7 @@ module CheckResolvabilityHelper
       end
 
       if response.is_a?(Net::HTTPRedirection) && response['location']
-        if !uri.to_s.start_with?(response['location']) && uri.to_s.include?(response['location'].chomp('/'))
-          uri = URI.parse(uri.scheme + '://' + uri.host + '/' + response['location'])
-        else
-          uri = URI.parse(response['location'])
-        end
+        uri = URI.join(uri, response['location'])
         redirections << uri
         redirect_count += 1
       end
@@ -85,7 +81,7 @@ module CheckResolvabilityHelper
     supported_format = negotiation_formats.find_all do |format|
       begin
         redirections[format] = follow_redirection(url, format, timeout_seconds)
-        redirections[:result].eql?(2)
+        redirections[format][:result].eql?(2)
       rescue StandardError => e
         redirections[format] = resolvability_status(e.message, [], [], result: 0)
         false
