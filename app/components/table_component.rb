@@ -5,7 +5,10 @@ class TableComponent < ViewComponent::Base
   renders_one :header, TableRowComponent
   renders_many :rows, TableRowComponent
 
-  def initialize(id: '', stripped: true, borderless: false, custom_class: '', layout_fixed: false, small_text: false, outline: false, sort_column: nil, paging: false, searching: false, no_init_sort: false)
+  def initialize(id: '', stripped: true, borderless: false, custom_class: '', layout_fixed: false,
+                 small_text: false, outline: false, sort_column: nil,
+                 paging: false, searching: false, search_placeholder: nil,
+                 no_init_sort: false)
     super
     @id = id
     @stripped = stripped
@@ -18,6 +21,7 @@ class TableComponent < ViewComponent::Base
     @paging = paging
     @no_init_sort = no_init_sort
     @custom_class =custom_class
+    @search_placeholder = search_placeholder
   end
 
   def stripped_class
