@@ -159,9 +159,8 @@ class UsersController < ApplicationController
     if error_response
       flash[:notice] = t('users.error_saving_custom_ontologies')
     else
-      updated_user = LinkedData::Client::Models::User.find(@user.id, {include: 'all'})
-      session[:user].update_from_params(customOntology: updated_user.customOntology)
-      flash[:notice] = if updated_user.customOntology.empty?
+      session[:user].update_from_params(customOntology: @user.customOntology)
+      flash[:notice] = if @user.customOntology.empty?
                         t('users.custom_ontologies_cleared')
                        else
                         t('users.custom_ontologies_saved')
