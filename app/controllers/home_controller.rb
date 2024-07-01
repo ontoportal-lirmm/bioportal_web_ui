@@ -142,27 +142,6 @@ class HomeController < ApplicationController
     render json: bp_config_json
   end
 
-  def account
-    @title = t('home.account_title')
-    if session[:user].nil?
-      redirect_to controller: 'login', action: 'index', redirect: '/account'
-      return
-    end
-
-    @user = LinkedData::Client::Models::User.get(session[:user].id, include: 'all')
-
-    @user_ontologies = @user.customOntology
-    @user_ontologies ||= []
-
-    onts = LinkedData::Client::Models::Ontology.all(include_views: true);
-    @admin_ontologies = onts.select { |o| o.administeredBy.include? @user.id }
-
-    projects = LinkedData::Client::Models::Project.all
-    @user_projects = projects.select { |p| p.creator.include? @user.id }
-
-    render 'users/show'
-  end
-
   def feedback_complete; end
 
   def annotator_recommender_form
