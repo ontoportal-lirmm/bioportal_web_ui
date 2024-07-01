@@ -47,7 +47,7 @@
             - if ontology[:contact]
               %span.mx-1= t('components.by')
               %span.browse-uploaded-date.text-truncate
-                = ontology[:contact].humanize
+                = ontology[:contact].titleize
 
       - if ontology[:released]
         - date = render DateTimeFieldComponent.new(value: ontology[:released])
