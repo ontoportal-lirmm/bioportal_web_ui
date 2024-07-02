@@ -37,9 +37,14 @@ module ApplicationHelper
   def resolve_namespaces
     RESOLVE_NAMESPACE
   end
+
   def ontologies_analytics
-    data = LinkedData::Client::Analytics.last_month.onts
-    data.map{|x| [x[:ont].to_s, x[:views]]}.to_h
+    begin
+      data = LinkedData::Client::Analytics.last_month.onts
+      data.map{|x| [x[:ont].to_s, x[:views]]}.to_h
+    rescue StandardError
+      {}
+    end
   end
 
   def get_apikey

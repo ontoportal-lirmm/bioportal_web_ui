@@ -7,9 +7,15 @@ class HomeController < ApplicationController
   include FairScoreHelper
 
   def index
-    @analytics =  helpers.ontologies_analytics
+    @analytics = helpers.ontologies_analytics
     # Calculate BioPortal summary statistics
-    @ont_count = @analytics.keys.size
+
+    @ont_count = if @analytics.empty?
+                   LinkedData::Client::Models::Ontology.all.size
+                 else
+                   @analytics.keys.size
+                 end
+
     metrics = LinkedData::Client::Models::Metrics.all
     metrics = metrics.each_with_object(Hash.new(0)) do |h, sum|
       h.to_hash.slice(:classes, :properties, :individuals).each { |k, v| sum[k] += v }
