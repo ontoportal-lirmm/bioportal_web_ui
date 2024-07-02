@@ -78,7 +78,7 @@
                   - values = %w[ORCID ROR ISNI GRID]
                   = render SelectInputComponent.new(id: "#{name_prefix}_identifiers_schemaAgency_#{i.to_s.upcase}", name: agent_identifier_name(i.to_s.upcase, :schemaAgency, name_prefix), values: values, selected: identifier.schemaAgency)
   - if show_affiliations
-    %tr
+    %tr{'data-form-options-display-target':"option1",  class: is_organization?(agent) && 'd-none'}
       %th
         = t("agents.form.affiliations")
       %td.top.agents-affiliations.agents-inputs
