@@ -176,7 +176,7 @@ module ApplicationHelper
                     class: "secondary-button regular-button slim", data: { show_modal_title_value: t('application.add_new_proposal')}
     end
   end
-  
+
 
   def link?(str)
     # Regular expression to match strings starting with "http://" or "https://"
@@ -208,7 +208,7 @@ module ApplicationHelper
   end
 
   def subscribed_to_ontology?(ontology_acronym, user)
-    user = LinkedData::Client::Models::User.find(user.username, {include: 'subscription'})
+    user = LinkedData::Client::Models::User.find(user.username, {include: 'subscription', invalidate_cache: true}) if user.subscription.nil?
     return false if user.subscription.nil? or user.subscription.empty?
     user.subscription.each do |sub|
       #sub = {ontology: ontology_acronym, notification_type: "NOTES"}

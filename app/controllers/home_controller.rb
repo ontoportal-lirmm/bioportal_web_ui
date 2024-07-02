@@ -143,7 +143,7 @@ class HomeController < ApplicationController
       return
     end
 
-    @user = LinkedData::Client::Models::User.get(session[:user].id, include: 'all')
+    @user = LinkedData::Client::Models::User.get(session[:user].id, include: 'all', invalidate_cache: true)
 
     @user_ontologies = @user.customOntology
     @user_ontologies ||= []
