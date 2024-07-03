@@ -122,7 +122,7 @@ export default class extends Controller {
                 const item = this.items[i];
 
                 let text =  Object.values(item).reduce((acc, value) => acc + value, "")
-
+                
                 // Check if the item contains the substring
                 if (!this.cacheValue || text.toLowerCase().includes(inputValue.toLowerCase())) {
                     results_list.push(item);

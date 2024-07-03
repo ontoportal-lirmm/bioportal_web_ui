@@ -18,15 +18,17 @@ class AgentsController < ApplicationController
   end
 
   def ajax_agents
-    filters = { name: params[:name] }
-    filters[:agentType] = params[:agent_type] if params[:agent_type]
-    @agents = LinkedData::Client::Models::Agent.all(filters)
+    @agents = LinkedData::Client::Models::Agent.all
     agents_json = @agents.map do |x|
       {
         id: x.id,
         name: x.name,
         type: x.agentType,
-        identifiers: x.identifiers.map { |i| "#{i.schemaAgency}:#{i.notation}" }.join(', ')
+        identifiers: x.identifiers.map { |i| "#{i.schemaAgency}:#{i.notation}" }.join(', '),
+        acronym: x.acronym,
+        affiliations: x.affiliations.to_s,
+        email: x.email,
+        homepage: x.homepage
       }
     end
 
