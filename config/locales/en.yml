@@ -1346,7 +1346,7 @@ en:
         export_metadata: Export all metadata
         abstract: Abstract
         description: Description
-  
+
     htaccess_modal_title: "Rewrite rules for %{acronym} semantic resource"
     instructions_servers: Instructions for %{server} servers
     htaccess_redirection_description: "We offer a seamless solution to make your semantic resource URIs resolvable and content negotiable by allowing URL redirection for your semantic resource URIs to our EcoPortal URIs. To facilitate this process, we've provided you with a set of .htaccess rewrite rules. By following the simple instructions below, you'll be able to implement these rules swiftly and efficiently, ensuring smooth redirection"
@@ -1374,7 +1374,7 @@ en:
       instruction_4_content: "Run the following command to test the redirection configuration `sudo nginx -t`"
       instruction_5: "Reload Nginx to apply the changes:"
       instruction_5_content: "Restart the nginx server to apply the redirection using this command `sudo systemctl reload nginx`"
-    
+
   components:
     check_resolvability: checking resolvability...
     error_block: child_data_generator block did not provide all the child arguements
@@ -1463,3 +1463,11 @@ en:
         This tool/service verifies the resolvability of Uniform Resource Identifiers (URIs) and their content negotiability.
         It checks whether a given URI is accessible and whether the content associated with it can be negotiated based on the client's preferences.
         This functionality ensures the reliability and accessibility of linked resources within the RDF ecosystem, aiding in maintaining data integrity and facilitating seamless integration with external resources.
+  cookies_modal:
+    title: "Manage Cookie Consent"
+    paragraph1: "We use cookies to help you navigate efficiently and perform certain functions. You will find detailed information about all cookies in the \"Privacy Statement\" link."
+    paragraph2: "We also use third-party cookies that help us analyse how you use this website, store your preferences, and provide the content that is relevant to you. These cookies will only be stored in your browser with your prior consent."
+    paragraph3: "Please note that disabling such cookies may affect your browsing experience."
+    accept_button: "Accept"
+    deny_button: "Deny"
+    privacy_link: "Privacy Statement"

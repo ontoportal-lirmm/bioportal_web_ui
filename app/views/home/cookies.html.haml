@@ -1,0 +1,18 @@
+= turbo_frame_tag :cookies_modal do
+  - if session[:cookies_accepted].nil? # don't re-render if a true/false selected
+    %section.cookies-modal
+      %h4
+        = t('cookies_modal.title')
+      %p
+        = t('cookies_modal.paragraph1')
+      %p
+        = t('cookies_modal.paragraph2')
+      %p
+        = t('cookies_modal.paragraph3')
+      %div.d-flex
+        %div.w-50
+          = link_button_component(id:'accept-cookie-selector', value: t('cookies_modal.accept_button'), href: cookies_path(cookies: true), size: "slim")
+        %div.w-50.ml-1
+          = link_button_component(id:'deny-cookie-selector', value: t('cookies_modal.deny_button'), href: cookies_path(cookies: false), size: "slim")
+      %div.cookie-privacy-link
+        = link_to t('cookies_modal.privacy_link'), $FOOTER_LINKS.dig(:sections, :agreements, :privacy_policy)
