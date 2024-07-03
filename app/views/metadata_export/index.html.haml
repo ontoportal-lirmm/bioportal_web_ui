@@ -1,7 +1,7 @@
 = render_in_modal do
   = render TabsContainerComponent.new(id: 'metadata-export', type: 'pill') do |t|
     - t.item(id: 'csv', title: 'CSV', selected: true)
-    - t.item(id: 'xml', title: 'XML')
+    - t.item(id: 'xml', title: 'RDF/XML')
     - t.item(id: 'json', title: 'JSON')
     - t.item(id: 'triples', title: 'N3')
     - %w[csv xml json triples].each do |format|
