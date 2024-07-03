@@ -57,10 +57,10 @@
             %a{href: "#{$REST_URL}/documentation", target: "_blank"}
               = t('users.show.api_documentation')
               = render partial: "shared/svgs/external_link_icon"
-        .account-page-card
+        .account-page-card{'data-controller': 'reveal-component'}
           %h4.account-page-card-title
             = t('users.show.custom_semantic_resource')
-          #custom_ontologies.enable-lists
+          #custom_ontologies.enable-lists{'data-reveal-component-target': "item"}
             - if at_slice?
               %p{style: "padding-left: 7px; font-size: 10pt; margin: -3px 0 7px;"}
                 = t('users.show.please')
@@ -70,21 +70,20 @@
                 = t('users.show.customize_portal_display', portal: portal_name)
               %p
                 %span{style: "font-weight: normal; font-size: 9pt; padding-left: 7px;"}
-                  %a#edit_custom_ontologies{href: "javascript:void(0);"}= t('users.show.select_semantic_resources')
-              - if @user_ontologies && !@user_ontologies.empty?
-                %ul
-                  - @user_ontologies.each do |ont|
-                    - ont = LinkedData::Client::Models::Ontology.get(ont)
-                    %li
-                      #{ont.name} (#{ont.acronym})
-              - else
-                %p{style: "padding-left: 7px;"}= t('users.show.no_semantic_resources')
+                  %a#edit_custom_ontologies{'data-action': "click->reveal-component#toggle", 'data-reveal-component-target': "item", style: 'cursor: pointer;'}= t('users.show.select_semantic_resources')
+
+              .account-page-custom-ontologies
+                - @user_ontologies.each do |ont|
+                  - ont = @ontologies.select{ |o| o.id.eql?(ont) }.first
+                  = render ChipButtonComponent.new(url: "/ontologies/#{ont.acronym}", text: ont.acronym , type: "clickable", tooltip: ont.name)
+
           %p.account-page-card-desc= t('users.show.note_feature_logged_in')
-          #custom_ontologies_picker{style: "left: -9999px; position: absolute;"}
+          #custom_ontologies_picker.d-none{'data-reveal-component-target': "item"}
             = form_tag custom_ontologies_path(url_encode(@user.username)) do
-              - selected = @user.customOntology.map {|o| LinkedData::Client::Models::Ontology.get(o).acronym}
-              = ontologies_selector(id:'account_page_ontologies_selector' ,name: 'ontologies', selected: selected)
-              = submit_tag t('users.show.save_custom_semantic_resources'), class: "link_button"
+              - selected = @user.customOntology.map {|o| o.split('/').last }
+              = ontologies_selector(id:'account_page_ontologies_selector' ,name: 'ontologies', selected: selected, ontologies: @all_ontologies_for_select)
+              .mt-3
+                = render Buttons::RegularButtonComponent.new(id: 'submit_custom_set', variant: "secondary", size: "slim", type: 'submit', value: t('users.show.save_custom_semantic_resources'))
       .account-page-second-row
         .account-page-card
           %h4.account-page-card-title= t('users.show.subscriptions')
@@ -129,14 +128,3 @@
               - @user_projects.each do |project|
                 .account-page-submitted-ontology
                   %a{href: "/projects/#{project.acronym}"}= project.name
-
-:javascript
-  jQuery(document).ready(function(){
-    jQuery("#edit_custom_ontologies").click(editCustomOntologies);
-  });
-
-
-  function editCustomOntologies() {
-    jQuery("#custom_ontologies_picker").css("left", "").css("position", "");
-    jQuery("#custom_ontologies").hide();
-  }
