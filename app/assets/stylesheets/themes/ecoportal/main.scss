@@ -543,17 +543,22 @@ html {
 }
 
 /******* TEAM ******/
-.team-card-container .row {
-  background-color: #f2f2f2;
-  margin: 5px 0;
-}
-
-.team-card-container .col-sm-6 {
-  padding: 0;
+.team-card-container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 30px;
 }
 
 .team-card {
   display: flex;
+  width: 30%;
+  flex-direction: column;
+  align-content: center;
+  margin-bottom: 10px;
+  .team-card-content{
+    text-align: center;
+  }
 }
 
 .team-card-container h4 {
@@ -562,17 +567,14 @@ html {
 
 .team-card-image {
   box-sizing: border-box;
-  flex-basis: 220px;
-  flex-grow: 0;
-  flex-shrink: 0;
-  padding-right: 20px;
   text-align: center;
+  margin-bottom: 10px;
+  img, svg {
+    height: 140px;
+    width: 140px;
+    border-radius: 50%;
+  }
 }
-
-.team-card-image img {
-  height: 200px;
-}
-
 /******* GENERAL ******/
 .margin-bottom-20 {
   margin-bottom: 20px;

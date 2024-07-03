@@ -1,62 +1,82 @@
--# .container.card-container
-  -# %section
-  -#   .row
-  -#     .col-sm-12
-  -#       %h3.separator-title Who we are
-  -#   .row
-  -#     .col-sm-12.abstract
-  -#       %p{:style => "text-align: justify;"}
-  -#         %strong EcoPortal
-  -#         employs an international staff with wide-ranging expertise and multidisciplinary skills. Staff members, roles and contact details are available below.
--# %center
 .container.card-container
   %section
-    .row
-      .col-sm-12
-        %h1.mt-5 Team members
-
+    .row.mb-2
+      .col-sm-12.text-center
+        %h1.mt-5 Current team
     .row
       .col-sm-12
         .container.team-card-container
-          .row
-            .col-sm-6.team-card
-              %div.team-card-image
-                %img{alt: 'Nicola fiore', src: 'https://github.com/lifewatch-eric/documentation/raw/main/assets/img/team/nicola-fiore.png'}
-              %div.team-card-content
-                %h4 Nicola Fiore
-                %p LifeWatch ERIC Service Centre ICT Coordinator
-                %p nicola.fiore[at]lifewatch.eu
-            .col-sm-6.team-card
-              %div.team-card-image
-                %img{alt: 'Ilaria Rosati', src: asset_path('static/irosati.jpg')}
-              %div.team-card-content
-                %h4 Ilaria Rosati
-                %p Data Scientist - LifeWatch Italy
-                %p Research Institute on Terrestrial Ecosystems - National Research Council
-                %p ilaria.rosati[at]cnr.it
-          .row
-            .col-sm-6.team-card
-              %div.team-card-image
-                %img{alt: 'Lucia Vaira', src: 'https://github.com/lifewatch-eric/documentation/raw/main/assets/img/team/lucia-vaira.png'}
-              %div.team-card-content
-                %h4 Lucia Vaira
-                %p Data and Service Architect
-                %p lucia.vaira[at]lifewatch.eu
-            .col-sm-6.team-card
-              %div.team-card-image
-                %img{alt: 'Pierfrancesco Tommasino', src: 'https://github.com/lifewatch-eric/documentation/raw/main/assets/img/team/pierfrancesco-tommasino.jpg'}
-              %div.team-card-content
-                %h4 Pierfrancesco Tommasino
-                %p Research Grant - LifeWatch Italy
-                %p Research Institute on Terrestrial Ecosystems - National Research Council
-                %p pierfrancesco.tommasino[at]iret.cnr.it
-            .col-sm-6.team-card
-              %div.team-card-image
-                %img{alt: 'Giuseppe Turrisi', src: 'https://github.com/lifewatch-eric/documentation/raw/main/assets/img/team/GTURRISI.jpg'}
-              %div.team-card-content
-                %h4 Giuseppe Turrisi
-                %p LifeWatch ERIC Web Portal Developer 
-                %p giuseppe.turrisi[at]lifewatch.eu
-              
+          .team-card
+            %div.team-card-image
+              %img{alt: 'Nicola fiore', src: 'https://github.com/lifewatch-eric/documentation/raw/main/assets/img/team/nicola-fiore.png'}
+            %div.team-card-content
+              %h4 Nicola Fiore
+              %p LifeWatch ERIC Service Centre ICT Coordinator
+              %p nicola.fiore[at]lifewatch.eu
+          .team-card
+            %div.team-card-image
+              %img{alt: 'Ilaria Rosati', src: asset_path('static/irosati.jpg')}
+            %div.team-card-content
+              %h4 Ilaria Rosati
+              %p Data Scientist - LifeWatch Italy
+              %p Research Institute on Terrestrial Ecosystems - National Research Council
+              %p ilaria.rosati[at]cnr.it
+          .team-card
+            %div.team-card-image
+              %img{alt: 'Lucia Vaira', src: 'https://cdn-djihj.nitrocdn.com/IeGNEtFQTgDNmjBKutlxatJePkfnEidb/assets/images/optimized/rev-e5da706/www.lifewatchitaly.eu/wp-content/uploads/LuciaVaira.jpg'}
+            %div.team-card-content
+              %h4 Lucia Vaira
+              %p Data and Service Architect
+              %p lucia.vaira[at]lifewatch.eu
+          .team-card
+            %div.team-card-image
+              %img{alt: 'Martina Pulieri', src: 'https://i1.rgstatic.net/ii/profile.image/11431281184882682-1693469077909_Q128/Martina-Pulieri.jpg'}
+            %div.team-card-content
+              %h4 Martina Pulieri
+              %p Data Scientist - LifeWatch Italy
+              %p Research Institute on Terrestrial Ecosystems - National Research Council
+              %p martina.pulieri[at]unisalento.it
+          .team-card
+            %div.team-card-image
+              = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
+            %div.team-card-content
+              %h4 Parham Ramezani
+              %p LifeWatch Italy
+              %p parham.ramezani[at]lifewatch.eu
+          .team-card
+            %div.team-card-image
+              = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
+            %div.team-card-content
+              %h4 Davide Raho
+              %p Research Institute on Terrestrial Ecosystems - National Research Council
+              %p davide.raho@cnr.it
 
-              
+
+    .row.mb-2
+      .col-sm-12.text-center
+        %h1.mt-5 Past team
+    .row
+      .col-sm-12
+        .container.team-card-container
+          .team-card
+            %div.team-card-image
+              %img{alt: 'Xeni Kechagioglou', src: 'https://github.com/lifewatch-eric/documentation/raw/main/assets/img/team/Xeni.jpg'}
+            %div.team-card-content
+              %h4 Xeni Kechagioglou
+              %p LifeWatch ERIC Ontology Developer
+              %p xeni.kechagioglou[at]lifewatch.eu
+          .team-card
+            %div.team-card-image
+              %img{alt: 'Pierfrancesco Tommasino', src: 'https://sredlist.eu/assets/images/team/pierfrancescoTommasino.jpeg'}
+            %div.team-card-content
+              %h4 Pierfrancesco Tommasino
+              %p Research Grant - LifeWatch Italy
+              %p Research Institute on Terrestrial Ecosystems - National Research Council
+              %p pierfrancesco.tommasino[at]iret.cnr.it
+          .team-card
+            %div.team-card-image
+              %img{alt: 'Giuseppe Turrisi', src: 'https://github.com/lifewatch-eric/documentation/raw/main/assets/img/team/GTURRISI.jpg'}
+            %div.team-card-content
+              %h4 Giuseppe Turrisi
+              %p LifeWatch ERIC Web Portal Developer
+              %p giuseppe.turrisi[at]lifewatch.eu
