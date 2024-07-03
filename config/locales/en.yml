@@ -63,7 +63,7 @@ en:
     error_load: "Error: load failed"
     not_found_message: Not Found
     try_again: There was an error, please try again
-    provide_ontology_or_concept: Please provide an semantic resource id or concept id with an semantic resource id.
+    provide_ontology_or_concept: Please provide a semantic resource id or concept id with a semantic resource id.
     search_for_class: Please search for a class using the Jump To field above
     missing_roots_for_ontology: Missing @roots for %{acronym}
     missing_roots: Missing roots
@@ -365,11 +365,11 @@ en:
       tagline: The LifeWatch ERIC repository of semantic resources for ecology and related domains
       title: Welcome to %{site}
       welcome: Welcome to %{site},
-    ontology_upload: Do you want to share an semantic resource?
+    ontology_upload: Do you want to share a semantic resource?
     ontology_upload_benefits: 'By uploading and sharing your semantic resources to %{site}, you can:'
     ontology_upload_button: Submit a semantic resource
     discover_ontologies_button: Discover semantic resources
-    ontology_upload_desc: Uploading an semantic resource, ontology, vocabulary, terminology, thesaurus, ... is a way of sharing your knowledge with others.
+    ontology_upload_desc: Uploading a semantic resource, ontology, vocabulary, terminology, thesaurus, ... is a way of sharing your knowledge with others.
     paste_text_prompt: Enter a paragraph of text or some keywords...
     recommender_annotator: Recommender and Annotator
     support_and_collaborations: Support & Collaborations
@@ -436,7 +436,7 @@ en:
     number_of_ontologies: Number of semantic resources
     number_of_ontologies_with_class_count_in_range: Number of semantic resources with a class count in this range
     average: Average
-    fairness_interface_introduction: This interface shows how an semantic resource or a group responded successfully to O’FAIRe FAIRness assessment questions
+    fairness_interface_introduction: This interface shows how a semantic resource or a group responded successfully to O’FAIRe FAIRness assessment questions
     fairness_interface_details: See details for each semantic resources on the specific semantic resource summary pages
     fairness_interface_hover_instruction: hover on a principle to see details
     average_metrics: Average metrics
@@ -576,7 +576,7 @@ en:
     error_of_source_and_target: Source and target concepts need to be specified
     mapping_issue: "Mapping issue with '%{mapping}' : %{message}"
     find_mappings: Find mappings of a class/concept
-    intro: Find all the mappings of an semantic resource
+    intro: Find all the mappings of a semantic resource
     loading_mappings: Loading mappings...
     no_mappings_available: No mappings available
     title: Mappings
@@ -1053,7 +1053,7 @@ en:
     known_usage_help: "Consider also declaring %{metadata_knownUsage_help}"
     known_usage_help_link: "the projects that are using the semantic resource"
     help_creator: "The following properties take for value an 'agent' in %{portal_name} (either a person or an organization). These agents are shared over all the semantic resources and suggested with autocompletion if they already exist. Editing an agent here will change it to all the semantic resources that agent is involved in."
-    version_help: "For more information on how to encode versioning information in an semantic resource, see %{link}"
+    version_help: "For more information on how to encode versioning information in a semantic resource, see %{link}"
     version_helper_link: "guidelines and recommendations."
   instances:
     id: ID
@@ -1164,7 +1164,7 @@ en:
     home_page: Home Page
     ontology_processing_failed: "The semantic resource processing failed, with the current statuses: %{status}"
     ontology_parsing_succeeded: "The semantic resource parsing succeeded, but some processing steps failed, here are the current statuses: %{status}"
-    upload_an_ontology: Upload an semantic resource. Sections such as %{ontology} will be available once done.
+    upload_an_ontology: Upload a semantic resource. Sections such as %{ontology} will be available once done.
     new_ontology_is_processing: This semantic resource is processing. Sections such as %{ontology} will be available  once processing is complete.
     ontology_is_processing: This semantic resource is processing. Sections such as %{ontology} will be updated once processing is complete.
     contact_support: Contact support
@@ -1178,7 +1178,7 @@ en:
     no_projects_using_ontology: No projects using %{acronym}
     outside: outside
     relation_with_other_ontologies: Relation with other semantic resources either in %{inside} or %{outside}
-    ontology_search_prompt: 'Search an semantic resource or a term (e.g., Environmental impact)'
+    ontology_search_prompt: 'Search a semantic resource or a term (e.g., Environmental impact)'
     views: Views
     create_new_view: Create new view
     expand_all: Expand All
