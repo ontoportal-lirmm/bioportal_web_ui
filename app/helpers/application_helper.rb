@@ -176,7 +176,7 @@ module ApplicationHelper
                     class: "secondary-button regular-button slim", data: { show_modal_title_value: t('application.add_new_proposal')}
     end
   end
-  
+
 
   def link?(str)
     # Regular expression to match strings starting with "http://" or "https://"
@@ -516,8 +516,8 @@ module ApplicationHelper
     end
   end
 
-  def link_button_component(href: , value: , id:, size: nil)
-    render Buttons::RegularButtonComponent.new(id:id, value: value, variant: "primary", type: 'link', href: href, size: size)
+  def link_button_component(href: , value: , id:, size: nil, variant: 'primary')
+    render Buttons::RegularButtonComponent.new(id:id, value: value, variant: variant, type: 'link', href: href, size: size)
   end
 
   def save_button_component(class_name: nil, id: , value:, data: nil, size: nil, type: nil)

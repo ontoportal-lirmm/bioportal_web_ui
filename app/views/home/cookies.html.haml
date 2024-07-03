@@ -11,8 +11,8 @@
         = t('cookies_modal.paragraph3')
       %div.d-flex
         %div.w-50
-          = link_button_component(id:'accept-cookie-selector', value: t('cookies_modal.accept_button'), href: cookies_path(cookies: true), size: "slim")
-        %div.w-50.ml-1
-          = link_button_component(id:'deny-cookie-selector', value: t('cookies_modal.deny_button'), href: cookies_path(cookies: false), size: "slim")
+          = link_button_component(id:'accept-cookie-selector', value: t('cookies_modal.accept_button'), href: cookies_path(cookies: true), size: "slim", variant: 'primary')
+        %div.w-50.ml-2
+          = link_button_component(id:'deny-cookie-selector', value: t('cookies_modal.deny_button'), href: cookies_path(cookies: false), size: "slim", variant: 'secondary')
       %div.cookie-privacy-link
         = link_to t('cookies_modal.privacy_link'), $FOOTER_LINKS.dig(:sections, :agreements, :privacy_policy)
