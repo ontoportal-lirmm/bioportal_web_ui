@@ -680,6 +680,7 @@ en:
     index:
       create_new_agent: Create New Agent
       first_name: First name
+      acronym: Acronym
       usages: Usages
       actions: Actions
       no_agents: There are currently no  agents.
