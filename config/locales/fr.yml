@@ -691,6 +691,7 @@ fr:
     index:
       create_new_agent: Créer un nouvel agent
       first_name: Prénom
+      acronym: Acronyme
       usages: Utilisations
       actions: Actions
       no_agents: Il n'y a actuellement aucun agent.
