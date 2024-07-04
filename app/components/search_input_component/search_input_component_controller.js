@@ -150,18 +150,22 @@ export default class extends Controller {
 
     #renderLine(item) {
         let template = this.templateTarget.content
-        let newElement = template.firstElementChild
-        let string = newElement.outerHTML
-
+        let newElement = template.firstElementChild.outerHTML
         Object.entries(item).forEach( ([key, value]) => {
             key = key.toString().toUpperCase()
             if (key === 'TYPE'){
                 value  = value.toString().split('/').slice(-1)
             }
+            if (key === 'ACRONYM'){
+                value = value ? `(${value.toString()})` : ''
+            }
+            if (key === 'IDENTIFIERS'){
+                value = value ? `- ${value.toString()}` : ''
+            }
             const regex = new RegExp('\\b' + key + '\\b', 'gi');
-            string =  string.replace(regex, value ? value.toString() : "")
+            newElement =  newElement.replace(regex, value ? value.toString() : "")
         })
-
-        return new DOMParser().parseFromString(string, "text/html").body.firstElementChild
+        
+        return new DOMParser().parseFromString(newElement, "text/html").body.firstElementChild
     }
 }
