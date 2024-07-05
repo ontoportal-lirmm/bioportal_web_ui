@@ -26,7 +26,7 @@ module CheckResolvabilityHelper
     10
   end
 
-  def resolvability_status(status, allowed_format, redirections, result: nil)
+  def resolvability_status(status, allowed_format, redirections, result: nil, response_time:0)
 
     supported_format = Array(allowed_format)
     unless result
@@ -39,7 +39,7 @@ module CheckResolvabilityHelper
       end
     end
 
-    { result: result, status: status, allowed_format: supported_format, redirections: redirections }
+    { result: result, status: status, allowed_format: supported_format, response_time: response_time, redirections: redirections }
   end
 
   def follow_redirection(url, format, timeout_seconds, redirect_limit = resolvability_max_redirections)
@@ -49,31 +49,37 @@ module CheckResolvabilityHelper
     redirect_count = 0
     redirections = [uri]
 
-    until (!response.nil? && !response.is_a?(Net::HTTPRedirection)) || redirect_count >= redirect_limit
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = (uri.scheme == 'https')
-      http.open_timeout = timeout_seconds
-      begin
-        response = Timeout.timeout(timeout_seconds) { http.request_head(uri, 'Accept' => format) }
-      rescue Timeout::Error, Net::OpenTimeout
-        return resolvability_status('Timeout', [], redirections, result: 0)
-      end
+    total_time = Benchmark.measure do
+      until (!response.nil? && !response.is_a?(Net::HTTPRedirection)) || redirect_count >= redirect_limit
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = (uri.scheme == 'https')
+        http.open_timeout = timeout_seconds
+        begin
+          response = Timeout.timeout(timeout_seconds) { http.request_head(uri, 'Accept' => format) }
+        rescue Timeout::Error, Net::OpenTimeout
+          return resolvability_status('Timeout', [], redirections, result: 0, response_time: total_time.real.round(3))
+        end
 
-      if response.is_a?(Net::HTTPRedirection) && response['location']
-        uri = URI.join(uri, response['location'])
-        redirections << uri
-        redirect_count += 1
+        if response.is_a?(Net::HTTPRedirection) && response['location']
+          uri = URI.join(uri, response['location'])
+          redirections << uri
+          redirect_count += 1
+        end
       end
     end
 
-    if response&.code.to_s.eql?('200') && (response&.content_type.to_s.include?(format) || formats_equivalents(format)&.include?(response&.content_type.to_s))
-      result = 2
-    elsif response&.code.to_s.eql?('200')
-      result = 1
+    if redirect_count >= redirect_limit
+      resolvability_status('Too Many Redirections', [], redirections, result: 0, response_time: total_time.real.round(3))
     else
-      result = 0
+      if response&.code.to_s.eql?('200') && (response&.content_type.to_s.include?(format) || formats_equivalents(format)&.include?(response&.content_type.to_s))
+        result = 2
+      elsif response&.code.to_s.eql?('200')
+        result = 1
+      else
+        result = 0
+      end
+      resolvability_status(response&.code, [response&.content_type], redirections, result: result, response_time: total_time.real.round(3))
     end
-    resolvability_status(response&.code, [response&.content_type], redirections, result: result)
   end
 
   def check_resolvability_helper(url, negotiation_formats = resolvability_formats, timeout_seconds = resolvability_timeout)
@@ -89,13 +95,16 @@ module CheckResolvabilityHelper
     end
 
     status = redirections.values.map { |v| v[:status] }.uniq.join(', ')
+    # Calculate the average response time
+    total_response_time = redirections.values.sum { |v| v[:response_time] }
+    average_response_time = (total_response_time / redirections.size).to_f.round(3)
     if supported_format.size > 1
-      { result: 2, status: status, allowed_format: supported_format, redirections: redirections }
+      { result: 2, status: status, allowed_format: supported_format, average_response_time: average_response_time, redirections: redirections }
     elsif status.include?('200')
       returned_format = redirections.map { |k, v| !v[:result].eql?(0) ? v[:allowed_format] : nil }.flatten.compact.uniq
-      { result: 1, status: status, allowed_format: returned_format, redirections: redirections }
+      { result: 1, status: status, allowed_format: returned_format,  average_response_time: average_response_time, redirections: redirections }
     else
-      { result: 0, status: status, allowed_format: [], redirections: redirections }
+      { result: 0, status: status, allowed_format: [],  average_response_time: average_response_time, redirections: redirections }
     end
 
   end
