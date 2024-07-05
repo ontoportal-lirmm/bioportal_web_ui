@@ -3,9 +3,9 @@ module CheckResolvabilityHelper
   def formats_equivalents(format = nil)
     all = {
       'application/json' => ['application/ld+json'],
-      'application/rdf+xml' => %w[application/xml application/rdf+xml text/xml application/octet-stream],
-      'text/turtle' => ['application/turtle'],
-      'text/n3' => ['application/n-triples'],
+      'application/rdf+xml' => %w[application/xml text/xml text/rdf+xml application/octet-stream],
+      'text/turtle' => %w[application/turtle application/octet-stream],
+      'text/n3' => %w[text/rdf+n3 application/rdf+n3 application/n3 application/n-triples text/n-triples application/ntriples text/ntriples],
       'text/html' => []
     }
 
