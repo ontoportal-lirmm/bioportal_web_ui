@@ -57,7 +57,7 @@ module CheckResolvabilityHelper
         begin
           response = Timeout.timeout(timeout_seconds) { http.request_head(uri, 'Accept' => format) }
         rescue Timeout::Error, Net::OpenTimeout
-          return resolvability_status('Timeout', [], redirections, result: 0, response_time: total_time.real.round(3))
+          return resolvability_status('Timeout', [], redirections, result: 0, response_time: timeout_seconds)
         end
 
         if response.is_a?(Net::HTTPRedirection) && response['location']
