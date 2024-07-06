@@ -121,7 +121,7 @@ module CheckResolvabilityHelper
     url_resolvable?(result) || url_content_negotiable?(result)
   end
 
-  def check_resolvability_message(resolvable, allowed_formats, status, url = nil)
+  def check_resolvability_message(resolvable, allowed_formats, status, url: nil, response_time: nil)
     supported_format = Array(allowed_formats).compact
     supported_format = allowed_formats.empty? ? 'Format not specified' : supported_format.join(', ')
 
@@ -135,6 +135,7 @@ module CheckResolvabilityHelper
 
 
     text = text + link_to(', click to see details', check_resolvability_path(url: url), target: '_blank') if url
+    text += " (Average response time: #{response_time}s)" if response_time
     text
   end
 end
