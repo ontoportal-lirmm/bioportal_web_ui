@@ -95,9 +95,7 @@ module CheckResolvabilityHelper
     end
 
     status = redirections.values.map { |v| v[:status] }.uniq.join(', ')
-    # Calculate the average response time
-    total_response_time = redirections.values.sum { |v| v[:response_time] }
-    average_response_time = (total_response_time / redirections.size).to_f.round(3)
+    average_response_time = redirections.values.sum { |v| v[:response_time] }.fdiv(redirections.size).round(3)
     if supported_format.size > 1
       { result: 2, status: status, allowed_format: supported_format, average_response_time: average_response_time, redirections: redirections }
     elsif status.include?('200')
