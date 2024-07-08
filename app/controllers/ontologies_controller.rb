@@ -342,7 +342,7 @@ class OntologiesController < ApplicationController
     @community_properties = properties_hash_values(category_attributes["community"] + [:notes])
     @identifiers = properties_hash_values([:URI, :versionIRI, :identifier])
     @identifiers["ontology_portal_uri"] = ["#{$UI_URL}/ontologies/#{@ontology.acronym}", "#{portal_name} URI"]
-    @projects_properties = properties_hash_values(category_attributes["usage"])
+    @projects_properties = properties_hash_values(category_attributes["usage"] - ["hasDomain"])
     @ontology_icon_links = [%w[summary/download dataDump],
                             %w[summary/homepage homepage],
                             %w[summary/documentation documentation],
