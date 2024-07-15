@@ -1,50 +1,49 @@
-FROM ruby:2.7.5-alpine AS app
+# Make sure it matches the Ruby version in .ruby-version and Gemfile
+ARG RUBY_VERSION=2.7.8
+FROM ruby:${RUBY_VERSION}-alpine
 
+# Install libvips for Active Storage preview support
+RUN apk add --no-cache build-base \
+                       libxml2-dev \
+                       libxslt-dev \
+                       mariadb-dev \
+                       git \
+                       tzdata \
+                       nodejs yarn \
+                       less \
+                       bash \
+                       docker \
+                       docker-compose \
+    && mkdir /node_modules
+
+# Rails app lives here
 WORKDIR /app
 
-ARG UID=1000
-ARG GID=1000
-
-RUN apk add --no-cache \
-    build-base \
-    libxml2-dev \
-    libxslt-dev \
-    mariadb-dev \
-    git \
-    nodejs \
-    tzdata \
-    yarn \
-    less \
-  && addgroup --gid ${GID} ruby \
-  && adduser  -u ${UID} -G ruby -D  ruby \
-  && chown ruby:ruby -R /app \
-  && mkdir /node_modules \
-  && chown ruby:ruby -R /node_modules /app
-
-USER ruby
-
-COPY --chown=ruby:ruby bin/ ./bin
-RUN chmod 0755 bin/*
-
+# Set production environment
 ARG RAILS_ENV="production"
+ARG BUNDLE_WITHOUT="development test"
 
-ENV RAILS_ENV="${RAILS_ENV}" \
-  NODE_ENV="${NODE_ENV}" \
-  PATH="${PATH}:/home/ruby/.local/bin:/node_modules/.bin" \
-  USER="ruby" \
-  BUNDLE_PATH=/usr/local/bundle
+ENV RAILS_LOG_TO_STDOUT="1" \
+    RAILS_SERVE_STATIC_FILES="true" \
+    RAILS_ENV="${RAILS_ENV}" \
+    BUNDLE_PATH=/usr/local/bundle \
+    BUNDLE_WITHOUT="${BUNDLE_WITHOUT}"
 
-COPY --chown=ruby:ruby Gemfile* ./
-RUN bundle install --jobs "$(nproc)"
-RUN gem install rails 
+RUN gem update --system 3.4.22 # the 3.4.22 can be removed if we support Ruby version > 3.0
 
+COPY . .
 
-
-RUN echo "--modules-folder /node_modules" > .yarnrc
-COPY --chown=ruby:ruby package.json *yarn* ./
-RUN yarn install
+RUN bundle install
+RUN yarn install && yarn build
 
 
+
+# Precompile bootsnap code for faster boot times
+RUN bundle exec bootsnap precompile --gemfile app/ lib/
+
+# RUN SECRET_KEY_BASE_DUMMY="1" ./bin/rails assets:precompile
+
+ENV BINDING="0.0.0.0"
 EXPOSE 3000
 
-CMD ["sh"]
+CMD ["bash"]
