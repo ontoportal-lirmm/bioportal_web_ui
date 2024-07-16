@@ -328,7 +328,7 @@ module OntologiesHelper
     return domain unless link?(domain)
     acronym = domain.split('/').last.upcase.strip
     category = LinkedData::Client::Models::Category.find(acronym)
-    category.name ? category.name : acronym.titleize
+    category.name ? category.name : domain
   end
 
 
