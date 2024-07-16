@@ -235,7 +235,7 @@ module SubmissionInputsHelper
       end
       c.container do
         content_tag(:div) do
-          render SelectInputComponent.new(id: 'viewOfSelect', values: onts_for_select, name: 'ontology[viewOf]', selected: ontology.viewOf)
+          render SelectInputComponent.new(id: 'viewOfSelect', values: onts_for_select, name: 'ontology[viewOf]', selected: ontology.viewOf&.split('/')&.last)
         end
       end
     end

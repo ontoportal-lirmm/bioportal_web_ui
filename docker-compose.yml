@@ -108,10 +108,9 @@ services:
   chrome-server:
     image: selenium/standalone-chrome:112.0-chromedriver-112.0-grid-4.9.0-20230421
     shm_size: 2g
-    network_mode: 'host'
-#    ports:
-#      - "4444:4444"
-#      - "7900:7900"
+    ports:
+      - "4444:4444"
+      - "7900:7900"
 
 volumes:
   mysql-data:
