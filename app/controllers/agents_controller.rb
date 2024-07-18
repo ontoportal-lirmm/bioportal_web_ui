@@ -273,6 +273,10 @@ class AgentsController < ApplicationController
         v
       end
     end
+    identifiers_schemaAgency = params[:agentType].eql?('person') ? 'ORCID' : 'ROR'
+    p[:identifiers].values.each do |identifier|
+      identifier[:schemaAgency] = identifiers_schemaAgency
+    end
     p[:identifiers] = (p[:identifiers] || {}).values
     p[:affiliations] = (p[:affiliations] || {}).values
     p[:affiliations].each do |affiliation|
