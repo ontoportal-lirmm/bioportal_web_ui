@@ -13,7 +13,7 @@ export default class extends Controller {
         cache: {type: Boolean, default: true},
         selectedItem: Number,
         searchEndpoint: {type: String, default: '/search'},
-        displayMode: String
+        displayAll: Boolean
     }
 
     connect() {
@@ -115,7 +115,7 @@ export default class extends Controller {
             this.dropDown.innerHTML = ""
             let breaker = 0
             for (let i = 0; i < this.items.length; i++) {
-                if (this.displayModeValue != 'all' && breaker === 4) {
+                if (!this.displayAllValue && breaker === 4) {
                     break;
                 }
                 // Get the current item from the ontologies array
