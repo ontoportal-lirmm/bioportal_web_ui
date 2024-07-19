@@ -43,7 +43,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_selector '.alert-message', text: "The ontology is processing."
 
     @new_ontology.hasDomain.each do |cat|
-      assert_text cat.name
+      assert_text cat.acronym.titleize
     end
 
 
@@ -143,7 +143,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_text "#{ontology_2.name} (#{@new_ontology.acronym})"
 
     selected_categories.each do |cat|
-      assert_text cat.name
+      assert_text cat.acronym.titleize
     end
 
     assert_text submission_2.URI
@@ -349,7 +349,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_selector '.alert-message', text: "The ontology is processing."
 
     ontology_2.hasDomain.each do |cat|
-      assert_text cat.name
+      assert_text cat.acronym.titleize
     end
 
     refute_text 'Version IRI'
