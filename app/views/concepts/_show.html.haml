@@ -21,9 +21,7 @@
           (
           %span#concept_instances_sorted_list_count
           )
-
-      - c.item(title: t('concepts.visualization'), path: '#visualization')
-
+            
       - c.item(id: 'notes', path: '#notes') do
         = t('concepts.notes')
         %span#note_count_wrapper
@@ -46,8 +44,6 @@
       - unless skos?
         - c.item_content do
           = render :partial =>'instances/instances' , locals: {id: "class-instances-data-table"}
-      - c.item_content do
-        = render :partial =>'/concepts/biomixer'
 
       - c.item_content do
         = render :partial =>'/notes/list'
