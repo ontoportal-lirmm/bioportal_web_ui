@@ -1044,3 +1044,43 @@ turbo-frame[busy] ~ .show-if-loading {
 .hide{
   display:none;
 }
+
+.cookies-modal {
+  position: fixed;
+  height: auto;
+  top: initial;
+  left: initial;
+  bottom: 30px;
+  right: 30px;
+  transform: initial;
+  grid-template-rows: minmax(0, 1fr);
+  z-index: 99999;
+  background: white;
+  border-style: solid;
+  border-color: #f2f2f2;
+  border-radius: 8px;
+  border-width: 0;
+  padding: 15px 20px;
+  display: grid;
+  grid-gap: 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px, rgba(0, 0, 0, 0.1) 0px 2px 4px;
+  width: 526px;
+  grid-row-gap: 10px;
+
+  h4{
+    justify-self: center;
+    font-size: 16px;
+    color: var(--primary-color);
+    font-weight: 500;
+  }
+  p {
+    word-wrap: break-word;
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
+  .cookie-privacy-link {
+    font-size: 12px;
+    text-align: center;
+    text-decoration: underline;
+  }
+}
