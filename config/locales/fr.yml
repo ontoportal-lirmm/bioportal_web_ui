@@ -301,9 +301,9 @@ fr:
     total_results: Résultats totaux
     insert_sample_text: Insérer un texte d'exemple
     sample_text: Il y a eu de nombreuses études récentes sur l'utilisation d'antagonistes microbiens pour contrôler les maladies causées par des bactéries phytopathogènes telluriques
-              et aériennes, dans le but de remplacer les méthodes actuelles de contrôle chimique et d'éviter l'utilisation extensive de fongicides, qui conduisent souvent à une résistance chez les pathogènes des plantes.
-              En agriculture, les microorganismes promoteurs de croissance des plantes et de biocontrôle ont émergé comme des alternatives sûres aux pesticides chimiques. Les espèces de Streptomyces et leurs
-              métabolites peuvent avoir un grand potentiel en tant qu'agents excellents pour contrôler divers phytopathogènes fongiques et bactériens.
+      et aériennes, dans le but de remplacer les méthodes actuelles de contrôle chimique et d'éviter l'utilisation extensive de fongicides, qui conduisent souvent à une résistance chez les pathogènes des plantes.
+      En agriculture, les microorganismes promoteurs de croissance des plantes et de biocontrôle ont émergé comme des alternatives sûres aux pesticides chimiques. Les espèces de Streptomyces et leurs
+      métabolites peuvent avoir un grand potentiel en tant qu'agents excellents pour contrôler divers phytopathogènes fongiques et bactériens.
 
   concepts:
     error_valid_concept: "Erreur : Vous devez fournir un identifiant de concept valide"
@@ -691,6 +691,7 @@ fr:
     index:
       create_new_agent: Créer un nouvel agent
       first_name: Prénom
+      acronym: Acronyme
       usages: Utilisations
       actions: Actions
       no_agents: Il n'y a actuellement aucun agent.
@@ -1516,3 +1517,12 @@ fr:
     location: "Emplacement: %{location}"
     tags: Tags
     feedback: Feedback
+
+  cookies_modal:
+    title: "Gérer le consentement des cookies"
+    paragraph1: "Nous utilisons des cookies pour vous aider à naviguer efficacement et à effectuer certaines fonctions. Vous trouverez des informations détaillées sur tous les cookies dans le lien \"Déclaration de confidentialité\"."
+    paragraph2: "Nous utilisons également des cookies tiers qui nous aident à analyser comment vous utilisez ce site Web, à stocker vos préférences et à fournir le contenu qui vous est pertinent. Ces cookies ne seront stockés dans votre navigateur qu'avec votre consentement préalable."
+    paragraph3: "Veuillez noter que la désactivation de ces cookies peut affecter votre expérience de navigation."
+    accept_button: "Accepter"
+    deny_button: "Refuser"
+    privacy_link: "Déclaration de confidentialité"
