@@ -52,7 +52,7 @@ module MappingsHelper
 
   def ajax_to_internal_cls(cls)
     link_to("#{cls.id}<span href='/ajax/classes/label?ontology=#{cls.links["ontology"]}&concept=#{escape(cls.id)}' class='get_via_ajax'></span>".html_safe,
-            ontology_path(cls.explore.ontology.acronym, p: 'classes', conceptid: cls.id))
+            ontology_path(cls.explore.ontology.acronym, p: 'classes', conceptid: cls.id), target: "_blank")
   end
 
   # to get the apikey from the interportal instance of the interportal class.

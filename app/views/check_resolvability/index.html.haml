@@ -35,7 +35,7 @@
     - if @results
       %div.bg-white.mt-3.border.rounded
         %div.p-1
-          - text = check_resolvability_message(url_resolvable?(@results), @results[:allowed_format], @results[:status])
+          - text = check_resolvability_message(url_resolvable?(@results), @results[:allowed_format], @results[:status], response_time: @results[:average_response_time])
           - if url_content_negotiable?(@results)
             = render Display::AlertComponent.new(type:'success') do
               = text
@@ -45,6 +45,7 @@
           - else
             = render Display::AlertComponent.new(type:'danger') do
               = text
+
         %div.p-1
           - count = 0
           - @results[:redirections].each do |format, result|
@@ -63,16 +64,8 @@
                       - else
                         - status = result[:status]
                         - color = status.eql?('200') ? '' : 'bg-danger-light text-danger'
-                        - format_badge = render ChipButtonComponent.new(class: "mx-1", text: result[:allowed_format].first.blank? ? t("check_resolvability.format_not_specified"): result[:allowed_format].first)
+                        - format_badge = render ChipButtonComponent.new(class: "mx-1", type: 'clickable', text: result[:allowed_format].first.blank? ? t("check_resolvability.format_not_specified"): result[:allowed_format].first)
                       = render ChipButtonComponent.new(class: "mx-1 #{color}", type: 'clickable', text: status)
                       = format_badge
-
-
-
-
-
-
-
-
-
-
+                      - if index.eql?(result[:redirections].length - 1)
+                        = render ChipButtonComponent.new(class: "mx-1", type: 'clickable', text: "Response time: #{result[:response_time]} s")

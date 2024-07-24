@@ -15,7 +15,11 @@
     - selected = params[:section] || sections.first.downcase
     = render Layout::VerticalTabsComponent.new(header:  t('admin.index.administration_console'), titles: sections, selected: selected, url_parameter: 'section') do |t|
       - t.item_content do
-        = render 'analytics'
+        - if @ontology_visits[:visits].empty?
+          %div.d-flex.justify-content-center
+            Google analytics not enabled
+        - else 
+          = render 'analytics'
       - t.item_content do
         = render 'main'
       - t.item_content do

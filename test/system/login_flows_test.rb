@@ -40,7 +40,7 @@ class LoginFlowsTest < ApplicationSystemTestCase
 
     assert_selector '.notification', text: 'Account was successfully created'
 
-    visit root_url + '/account'
+    visit root_url + "/accounts/#{new_user.username}"
 
     assert_selector '.account-page-title', text:  'My account'
 
@@ -77,7 +77,7 @@ class LoginFlowsTest < ApplicationSystemTestCase
   test "login and reset password" do
     login_in_as(@user_bob)
 
-    visit root_url + '/account'
+    visit root_url + "/accounts/#{@user_bob.username}"
 
     find("a[href=\"#{edit_user_path(@user_bob.username)}\"]").click
 

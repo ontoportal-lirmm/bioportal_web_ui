@@ -23,19 +23,23 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.xml
   def show
+    @title = t('home.account_title')
+    if session[:user].nil?
+      redirect_to controller: 'login', action: 'index', redirect: '/account'
+      return
+    end
     @user = if session[:user].admin? && params.has_key?(:id)
               find_user(params[:id])
             else
               find_user(session[:user].id)
             end
-
-    @all_ontologies = LinkedData::Client::Models::Ontology.all(ignore_custom_ontologies: true)
+    @ontologies = LinkedData::Client::Models::Ontology.all(ignore_custom_ontologies: true);
+    @all_ontologies_for_select = @ontologies.map {|x| ["#{x.name} (#{x.acronym})", x.acronym]}
 
     @user_ontologies = @user.customOntology
+    @user_ontologies ||= []
 
-    ## Copied from home controller , account action
-    onts = LinkedData::Client::Models::Ontology.all;
-    @admin_ontologies = onts.select {|o| o.administeredBy.include? @user.id }
+    @admin_ontologies = @ontologies.select {|o| o.administeredBy.include? @user.id }
 
     projects = LinkedData::Client::Models::Project.all;
     @user_projects = projects.select {|p| p.creator.include? @user.id }
@@ -148,18 +152,15 @@ class UsersController < ApplicationController
 
   def custom_ontologies
     @user = find_user
+    custom_ontologies = params[:ontologies] || []
 
-    custom_ontologies = params[:ontology] ? params[:ontology][:ontologyId] : []
-    custom_ontologies.reject!(&:blank?)
     @user.update_from_params(customOntology: custom_ontologies)
     error_response = !@user.update
-
     if error_response
       flash[:notice] = t('users.error_saving_custom_ontologies')
     else
-      updated_user = LinkedData::Client::Models::User.find(@user.id)
-      session[:user].update_from_params(customOntology: updated_user.customOntology)
-      flash[:notice] = if updated_user.customOntology.empty?
+      session[:user].update_from_params(customOntology: @user.customOntology)
+      flash[:notice] = if @user.customOntology.empty?
                         t('users.custom_ontologies_cleared')
                        else
                         t('users.custom_ontologies_saved')
@@ -168,7 +169,7 @@ class UsersController < ApplicationController
     redirect_to user_path(@user.username)
   end
 
-  
+
   def subscribe
     @user = find_user
     deliver "subscribe", SubscribeMailer.register_for_announce_list(@user.email,@user.firstName,@user.lastName)
@@ -180,13 +181,12 @@ class UsersController < ApplicationController
     deliver "unsubscribe", SubscribeMailer.unregister_for_announce_list(@email)
   end
 
-  
+
   private
 
   def find_user(id = params[:id])
     id = helpers.unescape(id)
-    @user = LinkedData::Client::Models::User.find(helpers.escape(id), include: 'all')
-    @user ||= LinkedData::Client::Models::User.find_by_username(helpers.escape(id), include: 'all').first
+    @user = LinkedData::Client::Models::User.find(id.split('/').last, {include: 'all'})
 
     not_found("User with id #{id} not found") if @user.nil?
 

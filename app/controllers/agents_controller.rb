@@ -243,7 +243,7 @@ class AgentsController < ApplicationController
           end
           values[attr.to_sym] = current_val.map { |x| x.id }
         else
-          values[attr.to_sym] = agent
+          values[attr.to_sym] = agent.id
         end
       end
 

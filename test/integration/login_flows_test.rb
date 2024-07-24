@@ -50,7 +50,7 @@ class LoginFlowsTest < ActionDispatch::IntegrationTest
 
     assert_select '.notification', text: 'Account was successfully created'
 
-    get account_path
+    get "/accounts/#{new_user.username}"
     assert_response :success
 
     assert_select '.account-page-title', text: 'My account'

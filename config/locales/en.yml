@@ -680,6 +680,7 @@ en:
     index:
       create_new_agent: Create New Agent
       first_name: First name
+      acronym: Acronym
       usages: Usages
       actions: Actions
       no_agents: There are currently no  agents.
@@ -1383,7 +1384,7 @@ en:
       instruction_4_content: "Run the following command to test the redirection configuration `sudo nginx -t`"
       instruction_5: "Reload Nginx to apply the changes:"
       instruction_5_content: "Restart the nginx server to apply the redirection using this command `sudo systemctl reload nginx`"
-    
+
   components:
     check_resolvability: checking resolvability...
     error_block: child_data_generator block did not provide all the child arguements
@@ -1415,7 +1416,7 @@ en:
     view: View
     debug: Debug
     loading: Loading
-    unwatch: UnWatch
+    unwatch: Unwatch
     watch: Watch
     resource: "%{sub_text} this resource"
     notified_of_all_updates: Be the first to watch this resource and  be notified of all its updates
@@ -1478,3 +1479,11 @@ en:
     location: "Location: %{location}"
     tags: Tags
     feedback: Feedback
+  cookies_modal:
+    title: "Manage Cookie Consent"
+    paragraph1: "We use cookies to help you navigate efficiently and perform certain functions. You will find detailed information about all cookies in the \"Privacy Statement\" link."
+    paragraph2: "We also use third-party cookies that help us analyse how you use this website, store your preferences, and provide the content that is relevant to you. These cookies will only be stored in your browser with your prior consent."
+    paragraph3: "Please note that disabling such cookies may affect your browsing experience."
+    accept_button: "Accept"
+    deny_button: "Deny"
+    privacy_link: "Privacy Statement"

@@ -12,7 +12,7 @@ class UrlResolvabilityComponent < ViewComponent::Base
   end
 
   def call
-    text = check_resolvability_message(@resolvable, @supported_formats, @status, @url)
+    text = check_resolvability_message(@resolvable, @supported_formats, @status, url: @url)
     if @resolvable && @supported_formats.size > 1
       icon = status_icons(ok: true)
     elsif @resolvable
