@@ -4,7 +4,8 @@
   'data-search-input-id-key-value': @id_key,
   'data-search-input-cache-value': @use_cache.to_s,
   'data-search-input-scroll-down-value': @scroll_down.to_s,
-  'data-search-input-selected-item-value': 0
+  'data-search-input-selected-item-value': 0,
+  'data-search-input-display-all-value': @display_all
   }
 
   - if @search_icon_type
@@ -21,7 +22,7 @@
   = render Input::InputFieldComponent.new(name: @name, placeholder: @placeholder,
                                             data: {'action': 'input->search-input#search blur->search-input#blur keydown.down->search-input#arrow_down keydown.up->search-input#arrow_up keydown.enter->search-input#enter_key',
                                             'search-input-target': 'input'})
-  .search-container{'data-search-input-target': 'dropDown', 'data-action': 'mousedown->search-input#prevent'}
+  %div{class: "search-container #{display_all_mode_class}", 'data-search-input-target': 'dropDown', 'data-action': 'mousedown->search-input#prevent'}
     - @actions_links.each do |key, value|
       - link, target = action_link_info(value)
       %a.search-content#search-content{href:  link, 'data-turbo-frame': target, 'data-search-input-target': 'actionLink'}
