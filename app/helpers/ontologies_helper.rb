@@ -426,12 +426,12 @@ module OntologiesHelper
     end
   end
 
-  def lazy_load_section(section_title, &block)
+  def lazy_load_section(section_title, lazy_loading, &block)
     if current_section.eql?(section_title)
       block.call
     else
       render TurboFrameComponent.new(id: section_title, src: "/ontologies/#{@ontology.acronym}?p=#{section_title}",
-                                     loading: Rails.env.development?  ? "lazy" : "eager",
+                                     loading: (Rails.env.development? || lazy_loading)  ? "lazy" : "eager",
                                      target: '_top', data: { "turbo-frame-target": "frame" })
     end
   end
