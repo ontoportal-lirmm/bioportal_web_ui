@@ -69,7 +69,7 @@ module AgentHelper
   end
 
 
-  def affiliation?(agent)
+  def is_organization?(agent)
     agent.agentType.eql?('organization')
   end
 
@@ -163,7 +163,7 @@ module AgentHelper
   def agent_tooltip(agent)
     name = agent.name
     email = agent.email
-    type = agent.agentType 
+    type = agent.agentType
     identifiers = display_identifiers(agent.identifiers, link: false)
     identifiers = orcid_number(identifiers)
     if agent.affiliations && agent.affiliations != []
@@ -203,7 +203,7 @@ module AgentHelper
       end
     end
   end
-  
+
 
   def agent_chip_component(agent)
     person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
@@ -219,16 +219,16 @@ module AgentHelper
       title = agent_tooltip(agent)
     end
     render_chip_component(title, agent_icon, name)
-  end 
+  end
 
 
   def render_chip_component(title,agent_icon,name)
-    render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: title , class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do 
+    render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: title , class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do
       content_tag(:div, class: 'agent-chip') do
         content_tag(:div, agent_icon, class: 'agent-chip-circle') +
         content_tag(:div, name, class: 'agent-chip-name text-truncate')
-      end   
-    end 
+      end
+    end
   end
 
   def orcid_number(orcid)
@@ -236,5 +236,5 @@ module AgentHelper
   end
 
 
-  
+
 end
