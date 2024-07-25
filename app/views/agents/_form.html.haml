@@ -56,7 +56,7 @@
     %th
       = t("agents.form.identifiers")
     %td.top
-      %div.agents-identifiers{'data-form-options-display-target':"option1",  class: affiliation?(agent) && 'd-none'}
+      %div.agents-identifiers{'data-form-options-display-target':"option1",  class: is_organization?(agent) && 'd-none'}
         = render NestedFormInputsComponent.new do |c|
           - c.template do
             %div.d-flex{id: 'NEW_RECORD'}
@@ -68,7 +68,7 @@
           - c.empty_state do
             = hidden_field_tag agent_field_name('',  name_prefix+"[#{Array(agent.identifiers).size}]")
 
-      %div.agents-identifiers{'data-form-options-display-target':"option2",  class: !affiliation?(agent) && 'd-none'}
+      %div.agents-identifiers{'data-form-options-display-target':"option2",  class: !is_organization?(agent) && 'd-none'}
         = render NestedFormInputsComponent.new do |c|
           - c.template do
             %div.d-flex{id: 'NEW_RECORD'}
