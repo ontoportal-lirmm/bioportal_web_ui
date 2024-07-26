@@ -273,6 +273,16 @@ class AgentsController < ApplicationController
         v
       end
     end
+
+    p[:identifiers]&.each_value do |identifier|
+      normalized_orcid = normalize_orcid(identifier[:notation])
+      if normalized_orcid[:error]
+        # todo: return error
+      else
+        identifier[:notation] = normalized_orcid[:orcid]
+      end
+    end
+
     p[:identifiers] = (p[:identifiers] || {}).values
     p[:affiliations] = (p[:affiliations] || {}).values
     p[:affiliations].each do |affiliation|
@@ -286,5 +296,33 @@ class AgentsController < ApplicationController
     LinkedData::Client::Models::Agent.where({ display: 'all' }) do |obj|
       obj.id.to_s.eql?("#{rest_url}/Agents/#{id}")
     end.first
+  end
+
+  def normalize_orcid(orcid)
+    case orcid
+    when /\A\d{16}\z/
+      # Case 1: 16 digits, add dashes
+      orcid = orcid.scan(/.{1,4}/).join('-')
+
+    when /\A\d{4}-\d{4}-\d{4}-\d{4}\z/
+      orcid = orcid
+
+    when /\Ahttps:\/\/(www\.)?orcid\.org\/\d{4}-\d{4}-\d{4}-\d{4}\z/
+      # Case 3: ORCID URL (with or without "www."), extract the numbers with dashes
+      orcid = orcid.split('/').last
+
+    when /\Aorcid\.org\/\d{4}-\d{4}-\d{4}-\d{4}\z/
+      # Case 4: ORCID without scheme (http/https)
+      orcid = orcid.split('/').last
+
+    when /\Awww\.orcid\.org\/\d{4}-\d{4}-\d{4}-\d{4}\z/
+      # Case 5: ORCID with "www." without scheme
+      orcid = orcid.split('/').last
+
+    else
+      error = 'Invalid orcid'
+    end
+
+    return {orcid: orcid, error: error}
   end
 end
