@@ -520,6 +520,10 @@ module ApplicationHelper
     end
   end
 
+  def link_button_component(href: , value: , id:, size: nil, variant: 'primary')
+    render Buttons::RegularButtonComponent.new(id:id, value: value, variant: variant, type: 'link', href: href, size: size)
+  end
+
   def save_button_component(class_name: nil, id: , value:, data: nil, size: nil, type: nil)
     content_tag(:div, data: data, class: class_name) do
       render Buttons::RegularButtonComponent.new(id:id, value: value, variant: "primary", state: 'regular', size: size, type: type) do |btn|

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  match 'cookies', to: 'home#set_cookies', via: [:post, :get]
 
   root to: 'home#index'
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
