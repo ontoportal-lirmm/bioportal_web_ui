@@ -181,7 +181,10 @@ class OntologiesController < ApplicationController
   def instances
 
     params[:instanceid] = params[:instanceid] || instances_tree_first_id
-    @instance = helpers.get_instance_details_json(@ontology.acronym, params[:instanceid], {include: 'all'})
+
+    if params[:instanceid]
+      @instance = helpers.get_instance_details_json(@ontology.acronym, params[:instanceid], {include: 'all'})
+    end
 
     render partial: 'instances/instances', locals: { id: 'instances-data-table' }, layout: 'ontology_viewer'
   end
@@ -563,7 +566,8 @@ class OntologiesController < ApplicationController
                         page_size: page_size,
                         filter_by_ontologies: [@ontology.acronym],
                         filter_by_types: ["NamedIndividual"])
-    return results[1][:name]
+    results.shift
+    return !results.blank? ? results.first[:name] : nil
   end
 
 end
