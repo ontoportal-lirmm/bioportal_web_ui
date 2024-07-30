@@ -98,6 +98,10 @@ class OntologiesController < ApplicationController
     @acronym = @ontology.acronym
     @properties = LinkedData::Client::HTTP.get("/ontologies/#{@acronym}/properties/roots", { lang: request_lang })
 
+    unless @property
+      @property = get_property(@properties.first.id,  @acronym, include: 'all')
+    end
+
     if request.xhr?
       return render 'ontologies/sections/properties', layout: false
     else
@@ -176,9 +180,8 @@ class OntologiesController < ApplicationController
 
   def instances
 
-    if params[:instanceid]
-      @instance = helpers.get_instance_details_json(@ontology.acronym, params[:instanceid], {include: 'all'})
-    end
+    params[:instanceid] = params[:instanceid] || instances_tree_first_id
+    @instance = helpers.get_instance_details_json(@ontology.acronym, params[:instanceid], {include: 'all'})
 
     render partial: 'instances/instances', locals: { id: 'instances-data-table' }, layout: 'ontology_viewer'
   end
@@ -553,5 +556,14 @@ class OntologiesController < ApplicationController
     end
   end
 
+  def instances_tree_first_id
+    query, page, page_size = helpers.search_content_params
+    results, _, _, _ = search_ontologies_content(query: query,
+                        page: page,
+                        page_size: page_size,
+                        filter_by_ontologies: [@ontology.acronym],
+                        filter_by_types: ["NamedIndividual"])
+    return results[1][:name]
+  end
 
 end
