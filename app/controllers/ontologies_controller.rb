@@ -180,6 +180,8 @@ class OntologiesController < ApplicationController
 
   def instances
 
+    params[:instanceid] = params[:instanceid] || instances_tree_first_id
+
     if params[:instanceid]
       @instance = helpers.get_instance_details_json(@ontology.acronym, params[:instanceid], {include: 'all'})
     end
@@ -557,5 +559,15 @@ class OntologiesController < ApplicationController
     end
   end
 
+  def instances_tree_first_id
+    query, page, page_size = helpers.search_content_params
+    results, _, _, _ = search_ontologies_content(query: query,
+                        page: page,
+                        page_size: page_size,
+                        filter_by_ontologies: [@ontology.acronym],
+                        filter_by_types: ["NamedIndividual"])
+    results.shift
+    return !results.blank? ? results.first[:name] : nil
+  end
 
 end
