@@ -25,7 +25,7 @@ class InstancesController < ApplicationController
                                                 child_turbo_frame: 'instance_show',
                                                 child_param: :instanceid,
                                                 show_count: is_concept_instance,
-                                                auto_click: params[:instanceid].blank? && page.eql?(1),
+                                                auto_click: false,
                                                 results:  results, next_page:  next_page, total_count: total_count)
 
     if is_concept_instance && page.eql?(1)
