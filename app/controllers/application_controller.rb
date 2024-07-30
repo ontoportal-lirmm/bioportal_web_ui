@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   end
 
   # Sets the locale based on the locale cookie or the value returned by detect_locale.
-  def set_locale    
+  def set_locale
     I18n.locale = cookies[:locale] || detect_locale
     cookies.permanent[:locale] = I18n.locale if cookies[:locale].nil?
     logger.debug "* Locale set to '#{I18n.locale}'"
@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
   end
 
   # Returns detedted locale based on the Accept-Language header of the request or the default locale if none is found.
-  def detect_locale    
+  def detect_locale
     languages = request.headers['Accept-Language']&.split(',')
     supported_languages = I18n.available_locales
 
@@ -38,10 +38,10 @@ class ApplicationController < ActionController::Base
       language_code = language.split(/[-;]/).first.downcase.to_sym
       return language_code if supported_languages.include?(language_code)
     end
-    
-    return I18n.default_locale 
+
+    return I18n.default_locale
   end
-  
+
 
   helper :all # include all helpers, all the time
   helper_method :bp_config_json, :current_license, :using_captcha?
@@ -367,6 +367,10 @@ class ApplicationController < ActionController::Base
     @concept
   end
 
+  def get_property(id, acronym = params[:acronym], lang = request_lang, include: nil)
+    LinkedData::Client::HTTP.get("/ontologies/#{acronym}/properties/#{helpers.encode_param(id)}", { lang: lang , include: include})
+  end
+
   def get_ontology_submission_ready(ontology)
     # Get the latest 'ready' submission
     submission = ontology.explore.latest_submission({:include_status => 'ready'})
@@ -385,7 +389,7 @@ class ApplicationController < ActionController::Base
 
   def total_mapping_count
     total_count = 0
-    
+
     begin
       stats = LinkedData::Client::HTTP.get("#{REST_URI}/mappings/statistics/ontologies")
       unless stats.blank?
@@ -397,7 +401,7 @@ class ApplicationController < ActionController::Base
     rescue
       LOG.add :error, e.message
     end
-    
+
     return total_count
   end
 
@@ -421,7 +425,7 @@ class ApplicationController < ActionController::Base
       $trial_license_initialized = true
     end
   end
-  
+
   # Get the submission metadata from the REST API.
   def submission_metadata
     @metadata ||= helpers.submission_metadata

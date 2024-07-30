@@ -60,9 +60,6 @@ class PropertiesController < ApplicationController
 
   private
 
-  def get_property(id, acronym = params[:acronym], lang = request_lang, include: nil)
-    LinkedData::Client::HTTP.get("/ontologies/#{acronym}/properties/#{helpers.encode_param(id)}", { lang: lang , include: include})
-  end
 
   def property_tree(id, acronym = params[:acronym], lang = request_lang)
     LinkedData::Client::HTTP.get("/ontologies/#{acronym}/properties/#{helpers.encode_param(id)}/tree", { lang: lang })
