@@ -12,14 +12,12 @@ module PropertiesHelper
   def property_tree_data(acronym, child, language)
     href = property_link(acronym, child, language)
     children_link = property_children_link(acronym, child, language)
-    data = {
-      propertyid: child.id
-    }
+    data = {}
     [children_link, data, href]
   end
 
   def property_tree_component(root, selected_concept, acronym, language, sub_tree: false, id: nil, auto_click: false, submission: @submission)
-    tree_component(root, selected_concept, target_frame: 'property_show', sub_tree: sub_tree, id: id, submission: submission) do |child|
+    tree_component(root, selected_concept, target_frame: 'property_show', sub_tree: sub_tree, id: id, auto_click: auto_click, submission: submission) do |child|
       property_tree_data(acronym, child, language)
     end
   end
