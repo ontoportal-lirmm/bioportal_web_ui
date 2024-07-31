@@ -51,7 +51,13 @@ class AgentsController < ApplicationController
     alert_id = agent_id_alert_container_id(params[:id], parent_id)
     deletable = params[:deletable]&.eql?('true')
     if new_agent.errors
-      render_turbo_stream alert_error(id: alert_id) { JSON.pretty_generate(response_errors(new_agent)) }
+      errors = []
+      response_errors(new_agent).values.each_with_index do |v, i|
+        if v[:existence]
+          errors << "#{response_errors(new_agent).keys[i].capitalize} is required for agents"
+        end
+      end
+      render_turbo_stream alert_error(id: alert_id) { errors.join(', ') }
     else
       success_message = t('agents.add_agent')
       streams = [alert_success(id: alert_id) { success_message }]
@@ -95,7 +101,13 @@ class AgentsController < ApplicationController
     alert_id = agent_alert_container_id(agent, parent_id)
     deletable = params[:deletable]&.eql?('true')
     if response_error?(agent_update)
-      render_turbo_stream(alert_error(id: alert_id) { JSON.pretty_generate(response_errors(agent_update)) })
+      errors = []
+      response_errors(agent_update).values.first.values.each_with_index do |v, i|
+        if v[:existence]
+          errors << "#{response_errors(agent_update).values.first.keys[i].capitalize} is required for agents"
+        end
+      end
+      render_turbo_stream alert_error(id: alert_id) { errors.join(', ') }
     else
       success_message = t('agents.update_agent')
       table_line_id = agent_table_line_id(agent_id(agent))
@@ -273,13 +285,12 @@ class AgentsController < ApplicationController
         v
       end
     end
-
     p[:identifiers]&.each_value do |identifier|
       normalized_orcid = normalize_orcid(identifier[:notation])
-      if normalized_orcid[:error]
-        # todo: return error
+      if normalized_orcid
+        identifier[:notation] = normalized_orcid
       else
-        identifier[:notation] = normalized_orcid[:orcid]
+        identifier[:notation] = "invalid_orcid"
       end
     end
 
@@ -320,9 +331,9 @@ class AgentsController < ApplicationController
       orcid = orcid.split('/').last
 
     else
-      error = 'Invalid orcid'
+      return nil
     end
 
-    return {orcid: orcid, error: error}
+    return orcid
   end
 end
