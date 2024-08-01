@@ -54,9 +54,9 @@ class AgentsController < ApplicationController
       errors = []
       response_errors(new_agent).values.each_with_index do |v, i|
         if v[:existence]
-          errors << "#{response_errors(new_agent).keys[i].capitalize} is required for agents"
+          errors << "#{response_errors(new_agent).keys[i].capitalize} #{t('agents.errors.required')}"
         elsif v[:unique_identifiers]
-          errors << "This identifier is already used by another agent"
+          errors << t('agents.errors.used_identifier')
         else
           errors << JSON.pretty_generate(response_errors(new_agent))
         end
