@@ -56,7 +56,7 @@ class AgentsController < ApplicationController
         if v[:existence]
           errors << "#{response_errors(new_agent).keys[i].capitalize} is required for agents"
         elsif v[:unique_identifiers]
-          errros << "This identifier is already used by another agent"
+          errors << "This identifier is already used by another agent"
         else
           errors << JSON.pretty_generate(response_errors(new_agent))
         end
@@ -109,6 +109,10 @@ class AgentsController < ApplicationController
       response_errors(agent_update).values.first.values.each_with_index do |v, i|
         if v[:existence]
           errors << "#{response_errors(agent_update).values.first.keys[i].capitalize} is required for agents"
+        elsif v[:unique_identifiers]
+          errros << "This identifier is already used by another agent"
+        else
+          errors << JSON.pretty_generate(response_errors(new_agent))
         end
       end
       render_turbo_stream alert_error(id: alert_id) { errors.join(', ') }
@@ -290,7 +294,7 @@ class AgentsController < ApplicationController
       end
     end
     p[:identifiers]&.each_value do |identifier|
-      if identifier[:schemaAgency].eql?('orcid')
+      if identifier[:schemaAgency].downcase.eql?('orcid')
         normalized_orcid = normalize_orcid(identifier[:notation])
         if normalized_orcid
           identifier[:notation] = normalized_orcid
