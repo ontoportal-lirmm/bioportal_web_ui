@@ -55,6 +55,10 @@ class AgentsController < ApplicationController
       response_errors(new_agent).values.each_with_index do |v, i|
         if v[:existence]
           errors << "#{response_errors(new_agent).keys[i].capitalize} is required for agents"
+        elsif v[:unique_identifiers]
+          errros << "This identifier is already used by another agent"
+        else
+          errors << JSON.pretty_generate(response_errors(new_agent))
         end
       end
       render_turbo_stream alert_error(id: alert_id) { errors.join(', ') }
@@ -286,11 +290,20 @@ class AgentsController < ApplicationController
       end
     end
     p[:identifiers]&.each_value do |identifier|
-      normalized_orcid = normalize_orcid(identifier[:notation])
-      if normalized_orcid
-        identifier[:notation] = normalized_orcid
+      if identifier[:schemaAgency].eql?('orcid')
+        normalized_orcid = normalize_orcid(identifier[:notation])
+        if normalized_orcid
+          identifier[:notation] = normalized_orcid
+        else
+          identifier[:notation] = "invalid_orcid"
+        end
       else
-        identifier[:notation] = "invalid_orcid"
+        normalized_ror = normalize_ror(identifier[:notation])
+        if normalized_ror
+          identifier[:notation] = normalized_ror
+        else
+          identifier[:notation] = "invalid_ror"
+        end
       end
     end
 
@@ -335,5 +348,26 @@ class AgentsController < ApplicationController
     end
 
     return orcid
+  end
+
+  def normalize_ror(ror)
+    case ror
+    when /\A0\w{6}\d{2}\z/
+      # Case 1: 9 characters, starting with '0', 6 alphanumeric, ending with 2 digits
+      ror = ror
+
+    when /\Ahttps:\/\/ror\.org\/(0\w{6}\d{2})\z/
+      # Case 2: Full URL with 'https://ror.org/', extract the ROR ID
+      ror = ror.split('/').last
+
+    when /\Aror\.org\/(0\w{6}\d{2})\z/
+      # Case 3: ROR without scheme (http/https), extract the ROR ID
+      ror = ror.split('/').last
+
+    else
+      return nil
+    end
+
+    return ror
   end
 end
