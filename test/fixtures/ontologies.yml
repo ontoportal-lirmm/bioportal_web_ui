@@ -83,10 +83,10 @@ resource_content_formats:
         "metadata_def:mappingSameURI":
           "@id": "ns0:T071"
         "metadata_def:mappingLoom": "entity"
-      - "@id": "ns0:T077"
+      - "@id": "ns0:T072"
         "rdfs:subClassOf":
           "@id": "ns0:T071"
-      - "@id": "ns0:T072"
+      - "@id": "ns0:T077"
         "rdfs:subClassOf":
           "@id": "ns0:T071"
   
@@ -119,9 +119,10 @@ resource_content_formats:
     <http://purl.bioontology.org/ontology/STY/T071> <http://www.w3.org/2004/02/skos/core#notation> "T071" .
     <http://purl.bioontology.org/ontology/STY/T071> <http://data.bioontology.org/metadata/def/mappingSameURI> <http://purl.bioontology.org/ontology/STY/T071> .
     <http://purl.bioontology.org/ontology/STY/T071> <http://data.bioontology.org/metadata/def/mappingLoom> "entity" .
+    <http://purl.bioontology.org/ontology/STY/T072> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.bioontology.org/ontology/STY/T071> .
     <http://purl.bioontology.org/ontology/STY/T077> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.bioontology.org/ontology/STY/T071> .
     <http://purl.bioontology.org/ontology/STY/T071> <http://data.bioontology.org/metadata/def/mappingSameURI> <http://purl.bioontology.org/ontology/STY/T071> .
-    <http://purl.bioontology.org/ontology/STY/T072> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.bioontology.org/ontology/STY/T071> .
+
   
   turtle: |
     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
