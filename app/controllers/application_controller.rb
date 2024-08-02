@@ -367,10 +367,6 @@ class ApplicationController < ActionController::Base
     @concept
   end
 
-  def get_property(id, acronym = params[:acronym], lang = request_lang, include: nil)
-    LinkedData::Client::HTTP.get("/ontologies/#{acronym}/properties/#{helpers.encode_param(id)}", { lang: lang , include: include})
-  end
-
   def get_ontology_submission_ready(ontology)
     # Get the latest 'ready' submission
     submission = ontology.explore.latest_submission({:include_status => 'ready'})

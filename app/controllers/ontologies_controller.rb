@@ -14,6 +14,7 @@ class OntologiesController < ApplicationController
   include SubmissionFilter
   include OntologyContentSerializer
   include UriRedirection
+  include PropertiesHelper
 
   require 'multi_json'
   require 'cgi'

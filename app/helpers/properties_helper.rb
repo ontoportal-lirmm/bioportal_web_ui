@@ -33,4 +33,8 @@ module PropertiesHelper
       t('properties.no_properties_alert', acronym: @ontology.acronym)
     end
   end
+
+  def get_property(id, acronym = params[:acronym], lang = request_lang, include: nil)
+    LinkedData::Client::HTTP.get("/ontologies/#{acronym}/properties/#{helpers.encode_param(id)}", { lang: lang , include: include})
+  end
 end
