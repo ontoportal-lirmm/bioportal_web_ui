@@ -51,16 +51,7 @@ class AgentsController < ApplicationController
     alert_id = agent_id_alert_container_id(params[:id], parent_id)
     deletable = params[:deletable]&.eql?('true')
     if new_agent.errors
-      errors = []
-      response_errors(new_agent).values.each_with_index do |v, i|
-        if v[:existence]
-          errors << "#{response_errors(new_agent).keys[i].capitalize} #{t('agents.errors.required')}"
-        elsif v[:unique_identifiers]
-          errors << t('agents.errors.used_identifier')
-        else
-          errors << JSON.pretty_generate(response_errors(new_agent))
-        end
-      end
+      errors = generate_errors(response_errors(new_agent))
       render_turbo_stream alert_error(id: alert_id) { errors.join(', ') }
     else
       success_message = t('agents.add_agent')
@@ -105,16 +96,7 @@ class AgentsController < ApplicationController
     alert_id = agent_alert_container_id(agent, parent_id)
     deletable = params[:deletable]&.eql?('true')
     if response_error?(agent_update)
-      errors = []
-      response_errors(agent_update).values.first.values.each_with_index do |v, i|
-        if v[:existence]
-          errors << "#{response_errors(agent_update).values.first.keys[i].capitalize} is required for agents"
-        elsif v[:unique_identifiers]
-          errros << "This identifier is already used by another agent"
-        else
-          errors << JSON.pretty_generate(response_errors(new_agent))
-        end
-      end
+      errors = generate_errors(response_errors(agent_update).values.first)
       render_turbo_stream alert_error(id: alert_id) { errors.join(', ') }
     else
       success_message = t('agents.update_agent')
@@ -373,5 +355,19 @@ class AgentsController < ApplicationController
     end
 
     return ror
+  end
+  
+  def generate_errors(response_errors)
+    errors = []
+    response_errors.values.each_with_index do |v, i|
+      if v[:existence]
+        errors << "#{response_errors.keys[i].capitalize} is required for agents"
+      elsif v[:unique_identifiers]
+        errros << "This identifier is already used by another agent"
+      else
+        errors << JSON.pretty_generate(response_errors)
+      end
+    end
+    return errors
   end
 end
