@@ -566,7 +566,7 @@ class OntologiesController < ApplicationController
                         page_size: page_size,
                         filter_by_ontologies: [@ontology.acronym],
                         filter_by_types: ["NamedIndividual"])
-    results.shift
+    results.shift # Remove the ontology entry
     return !results.blank? ? results.first[:name] : nil
   end
 
