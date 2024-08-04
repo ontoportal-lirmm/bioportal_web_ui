@@ -99,14 +99,12 @@ class OntologiesController < ApplicationController
     @acronym = @ontology.acronym
     @properties = LinkedData::Client::HTTP.get("/ontologies/#{@acronym}/properties/roots", { lang: request_lang })
 
-    unless @property
-      @property = get_property(@properties.first.id,  @acronym, include: 'all')
-    end
+    @property = get_property(@properties.first.id,  @acronym, include: 'all') unless @property || @properties.empty?
 
     if request.xhr?
-      return render 'ontologies/sections/properties', layout: false
+      render 'ontologies/sections/properties', layout: false
     else
-      return render 'ontologies/sections/properties', layout: 'ontology_viewer'
+      render 'ontologies/sections/properties', layout: 'ontology_viewer'
     end
   end
 
