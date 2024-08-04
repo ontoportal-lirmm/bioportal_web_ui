@@ -9,7 +9,7 @@
   = hidden_field_tag :deletable, deletable if deletable
   = hidden_field_tag agent_field_name(:id, name_prefix), agent.id if agent.id
 
-  - if is_organization?(agent) &&  params[:parent_id]
+  - if is_organization?(agent) && params[:parent_id]
     = hidden_field_tag agent_field_name(:agentType, name_prefix), agent.agentType
   - else
     %tr
@@ -56,27 +56,31 @@
     %th
       = t("agents.form.identifiers")
     %td.top
-      %div.agents-identifiers
+      %div.agents-identifiers{'data-form-options-display-target':"option1",  class: is_organization?(agent) && 'd-none'}
         = render NestedFormInputsComponent.new do |c|
           - c.template do
-            %div.d-flex{id: 'NEW_RECORD'}
-              %div.w-100
-                = hidden_field_tag agent_identifier_name('NEW_RECORD' , :creator, name_prefix), session[:user].id
-                = text_field_tag agent_identifier_name('NEW_RECORD' , :notation, name_prefix), '', class: "form-control"
-              %div{style:'width: 15%'}
-                - values = %w[ORCID ROR ISNI GRID]
-                = render SelectInputComponent.new(id: "agent_identifiers_schemaAgency_NEW_RECORD", name: agent_identifier_name('NEW_RECORD', :schemaAgency, name_prefix), values: values, selected: 'ORCID')
+            = agent_identifier_input('NEW_RECORD', name_prefix)
+
           - c.empty_state do
             = hidden_field_tag agent_field_name('',  name_prefix+"[#{Array(agent.identifiers).size}]")
+
           - Array(agent.identifiers).each_with_index do |identifier, i|
             - c.row do
-              %div.d-flex{id: identifier.id}
-                %div.w-100
-                  = hidden_field_tag agent_identifier_name(i.to_s.upcase, :creator, name_prefix), session[:user].id
-                  = text_field_tag agent_identifier_name(i.to_s.upcase, :notation, name_prefix), identifier.notation, class: "form-control"
-                %div{style:'width: 15%'}
-                  - values = %w[ORCID ROR ISNI GRID]
-                  = render SelectInputComponent.new(id: "#{name_prefix}_identifiers_schemaAgency_#{i.to_s.upcase}", name: agent_identifier_name(i.to_s.upcase, :schemaAgency, name_prefix), values: values, selected: identifier.schemaAgency)
+              = agent_identifier_input(i.to_s.upcase, name_prefix, identifier.notation)
+
+      %div.agents-identifiers{'data-form-options-display-target':"option2",  class: !is_organization?(agent) && 'd-none'}
+        = render NestedFormInputsComponent.new do |c|
+          - c.template do
+            = agent_identifier_input('NEW_RECORD', name_prefix, is_organization: false)
+
+          - c.empty_state do
+            = hidden_field_tag agent_field_name('',  name_prefix+"[#{Array(agent.identifiers).size}]")
+
+          - Array(agent.identifiers).each_with_index do |identifier, i|
+            - c.row do
+              = agent_identifier_input(i.to_s.upcase, name_prefix, identifier.notation, is_organization: false)
+
+
   - if show_affiliations
     %tr{'data-form-options-display-target':"option1",  class: is_organization?(agent) && 'd-none'}
       %th

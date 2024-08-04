@@ -68,7 +68,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
     within "table#admin_agents" do
       assert_selector '.human',  count: person_count + organization_count #  all created  agents
       assert_text new_agent.name
-      new_agent.identifiers.map{|x| "https://orcid.org/#{x["notation"]}"}.each do |orcid|
+      new_agent.identifiers.map{|x| "https://#{new_agent.agentType.eql?('organization') ? 'ror' : 'orcid'}.org/#{x["notation"]}"}.each do |orcid|
         assert_text orcid
       end
 
@@ -91,7 +91,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
     within "table#admin_agents" do
       assert_selector '.human',  count: person_count + organization_count # all created  agents
       assert_text agent.name
-      agent.identifiers.map{|x| "https://orcid.org/#{x["notation"]}"}.each do |orcid|
+      agent.identifiers.map{|x| "https://#{agent.agentType.eql?('organization') ? 'ror' : 'orcid'}.org/#{x["notation"]}"}.each do |orcid|
         assert_text orcid
       end
       assert_text 'person', count: person_count
