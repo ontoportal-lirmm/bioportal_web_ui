@@ -41,7 +41,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
     click_on "Persons & organizations"
 
     # Creation test
-    create_agent_flow(@new_organization, person_count: 0, organization_count: 3)
+    create_agent_flow(@new_organization, person_count: 0, organization_count: 1)
 
     # Edition test
     @new_organization2 = fixtures(:agents)[:organization2]
@@ -50,7 +50,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
     @new_organization2.id = edit_link['href'].split('/')[-2]
     edit_link.click
 
-    edit_agent_flow(@new_organization2, person_count: 0, organization_count: 5)
+    edit_agent_flow(@new_organization2, person_count: 0, organization_count: 1)
   end
 
 
@@ -61,7 +61,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
     # Creation test
     click_on "Create New Agent"
     wait_for_text "TYPE"
-    agent_fill(new_agent)
+    agent_fill(new_agent, is_affiliation: false)
     sleep 1
     assert_text "New Agent added successfully"
     find('.close').click
@@ -75,7 +75,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
       assert_text 'person', count: person_count
       assert_text 'organization', count: organization_count
 
-      new_agent.affiliations.map do |aff|
+      Array(new_agent.affiliations).map do |aff|
         aff["identifiers"] = aff["identifiers"].each{|x| x["schemaAgency"] = 'ORCID'}
         assert_text aff['name']
       end
@@ -97,7 +97,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
       assert_text 'person', count: person_count
       assert_text 'organization', count: organization_count
 
-      agent.affiliations.map do |aff|
+      Array(agent.affiliations).map do |aff|
         aff["identifiers"] = aff["identifiers"].each{|x| x["schemaAgency"] = 'ORCID'}
         assert_text aff['name']
       end

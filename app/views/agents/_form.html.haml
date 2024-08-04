@@ -30,19 +30,19 @@
       %span.asterik *
     %td.top
       = text_field_tag agent_field_name(:name, name_prefix), agent.name, class: "form-control"
-  %tr{'data-form-options-display-target':"option1",  class: affiliation?(agent) && 'd-none'}
+  %tr{'data-form-options-display-target':"option1",  class: is_organization?(agent) && 'd-none'}
     %th
       = t("agents.form.email")
       %span.asterik
     %td.top
       = email_field_tag agent_field_name(:email, name_prefix), agent.email, class: "form-control"
-  %tr{'data-form-options-display-target':"option2",  class: !affiliation?(agent) && 'd-none'}
+  %tr{'data-form-options-display-target':"option2",  class: !is_organization?(agent) && 'd-none'}
     %th
       = t("agents.form.acronym")
       %span.asterik
     %td.top
       = text_field_tag agent_field_name(:acronym, name_prefix), agent.acronym,class: "form-control"
-  %tr{'data-form-options-display-target':"option2",  class: !affiliation?(agent) && 'd-none'}
+  %tr{'data-form-options-display-target':"option2",  class: !is_organization?(agent) && 'd-none'}
     %th
       = t("agents.form.homepage")
     %td.top
@@ -80,7 +80,7 @@
             = hidden_field_tag agent_field_name('',  name_prefix+"[#{Array(agent.identifiers).size}]")
 
   - if show_affiliations
-    %tr
+    %tr{'data-form-options-display-target':"option1",  class: is_organization?(agent) && 'd-none'}
       %th
         = t("agents.form.affiliations")
       %td.top.agents-affiliations.agents-inputs
