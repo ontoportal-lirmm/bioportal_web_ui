@@ -9,7 +9,7 @@
   = hidden_field_tag :deletable, deletable if deletable
   = hidden_field_tag agent_field_name(:id, name_prefix), agent.id if agent.id
 
-  - if params[:show_affiliations].eql?('false')
+  - if is_organization?(agent) && params[:parent_id]
     = hidden_field_tag agent_field_name(:agentType, name_prefix), agent.agentType
   - else
     %tr
