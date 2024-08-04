@@ -59,40 +59,26 @@
       %div.agents-identifiers{'data-form-options-display-target':"option1",  class: is_organization?(agent) && 'd-none'}
         = render NestedFormInputsComponent.new do |c|
           - c.template do
-            %div.d-flex{id: 'NEW_RECORD'}
-              %div.w-100
-                = hidden_field_tag agent_identifier_name('NEW_RECORD' , :creator, name_prefix), session[:user].id
-                = inline_svg_tag 'orcid.svg', class: 'agent-input-icon'
-                = text_field_tag agent_identifier_name('NEW_RECORD' , :notation, name_prefix), '', class: "agent-input-with-icon"
+            = agent_identifier_input('NEW_RECORD', name_prefix)
 
           - c.empty_state do
             = hidden_field_tag agent_field_name('',  name_prefix+"[#{Array(agent.identifiers).size}]")
+
           - Array(agent.identifiers).each_with_index do |identifier, i|
             - c.row do
-              %div.d-flex{id: 'NEW_RECORD'}
-                %div.w-100
-                = hidden_field_tag agent_identifier_name(i.to_s.upcase, :creator, name_prefix), session[:user].id
-                = inline_svg_tag 'orcid.svg', class: 'agent-input-icon'
-                = text_field_tag agent_identifier_name(i.to_s.upcase, :notation, name_prefix), identifier.notation, class: "agent-input-with-icon"
+              = agent_identifier_input(i.to_s.upcase, name_prefix, identifier.notation)
 
       %div.agents-identifiers{'data-form-options-display-target':"option2",  class: !is_organization?(agent) && 'd-none'}
         = render NestedFormInputsComponent.new do |c|
           - c.template do
-            %div.d-flex{id: 'NEW_RECORD'}
-              %div.w-100
-                = hidden_field_tag agent_identifier_name('NEW_RECORD' , :creator, name_prefix), session[:user].id
-                = inline_svg_tag 'icons/ror.svg', class: 'agent-input-icon'
-                = text_field_tag agent_identifier_name('NEW_RECORD' , :notation, name_prefix), '', class: "agent-input-with-icon"
+            = agent_identifier_input('NEW_RECORD', name_prefix, is_organization: false)
+
           - c.empty_state do
             = hidden_field_tag agent_field_name('',  name_prefix+"[#{Array(agent.identifiers).size}]")
+
           - Array(agent.identifiers).each_with_index do |identifier, i|
             - c.row do
-              %div.d-flex{id: 'NEW_RECORD'}
-                %div.w-100
-                  = hidden_field_tag agent_identifier_name(i.to_s.upcase, :creator, name_prefix), session[:user].id
-                  = inline_svg_tag 'icons/ror.svg', class: 'agent-input-icon'
-                  = text_field_tag agent_identifier_name(i.to_s.upcase, :notation, name_prefix), identifier.notation, class: "agent-input-with-icon"
-
+              = agent_identifier_input(i.to_s.upcase, name_prefix, identifier.notation, is_organization: false)
 
 
   - if show_affiliations
