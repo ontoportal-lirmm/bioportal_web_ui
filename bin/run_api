@@ -52,7 +52,7 @@ image_tag="${image_tag:-$API_IMAGE_TAG}"
 starter_ontology="${starter_ontology:-$STARTER_ONTOLOGY}"
 remote_api_url="${remote_api_url:-$OP_API_URL}"
 
-if curl -sSf http://localhost:9393 > /dev/null 2>&1;  then
+if curl -sSf http://localhost:9393 > /dev/null 2>&1; then
   echo "API is already running in http://localhost:9393"
   exit 0
 fi
@@ -62,7 +62,7 @@ docker compose ls -a --filter "name=ontoportal_docker" | grep -q "ontoportal_doc
 (
   cd tmp/ontoportal_docker || exit 1
   command="./run -k $api_key -r $image_repository -t $image_tag -s $starter_ontology -u $remote_api_url"
-  [ "$no_provision" = true ] && command="$command --no-provision"
+  [ "$no_provision" = true ] && command="$command"
   echo "Run: $command"
   eval "$command"
 )

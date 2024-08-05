@@ -151,11 +151,11 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   end
 
-  def agent_fill(agent, parent_id: nil, enable_affiliations: true)
+  def agent_fill(agent, parent_id: nil, is_affiliation: false)
     id = agent.id ? "/#{agent.id}": ''
     form = all("form[action=\"/agents#{id}\"]").first
     within form  do
-      choose "", option: agent.agentType, allow_label_click: true if enable_affiliations
+      choose "", option: agent.agentType, allow_label_click: true  unless is_affiliation
       fill_in 'name', with: agent.name
 
       if agent.agentType.eql?('organization')
@@ -171,8 +171,9 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
       list_inputs ".agents-identifiers",
                   "[identifiers]", agent.identifiers
 
-      unless enable_affiliations
+      if is_affiliation || agent.agentType.eql?('organization')
         refute_selector ".agents-affiliations"
+        click_on "Save" if agent.agentType.eql?('organization')
         return
       end
 
@@ -184,8 +185,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
           agent_id = agent_search(aff.name)
           id = parent_id && !parent_id.eql?('NEW_RECORD') ? "#{parent_id}_#{agent_id}" : agent_id
           within "turbo-frame[id=\"#{id}\"]" do
-            agent_fill(aff, enable_affiliations: false)
-            click_on "Save"
+            agent_fill(aff, is_affiliation: true)
             sleep 1
           end
         end

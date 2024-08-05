@@ -203,11 +203,14 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     open_dropdown "#projects_section"
     usage_properties = [
       :coverage, :knownUsage,
-      :hasDomain, :example
+      :example
     ]
     usage_properties.each do |property|
       Array(submission_2[property]).each { |v| assert_text v } # check
     end
+
+    has_domain_values = ["Has Domain2.1", "Has Domain2.2", "Has Domain2.3"]
+    has_domain_values.each { |v| assert_text v }
 
     submission_2.designedForOntologyTask.each do |task|
       assert_text task.delete(' ') # TODO fix in the UI the disaply of taskes
@@ -329,7 +332,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_equal existent_submission.pullLocation, find_field('submission[pullLocation]').value
 
     click_button 'Next'
-    
+
     assert_equal Date.parse(existent_submission.modificationDate).to_s, find('[name="submission[modificationDate]"]', visible: false).value
     assert_equal existent_submission.contact.map(&:values).flatten.sort, all('[name^="submission[contact]"]').map(&:value).sort
 

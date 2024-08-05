@@ -104,9 +104,9 @@ class OntologiesController < ApplicationController
     end
 
     if request.xhr?
-      return render 'ontologies/sections/properties', layout: false
+      render 'ontologies/sections/properties', layout: false
     else
-      return render 'ontologies/sections/properties', layout: 'ontology_viewer'
+      render 'ontologies/sections/properties', layout: 'ontology_viewer'
     end
   end
 
