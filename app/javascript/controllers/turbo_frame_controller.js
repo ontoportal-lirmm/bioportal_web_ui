@@ -24,7 +24,9 @@ export default class extends Controller {
             this.frame.innerHTML = this.placeHolderValue
         } else {
             this.frame.innerHTML = ""
-            this.urlValue = new HistoryService().getUpdatedURL(this.urlValue, data)
+
+            let currentUrl = document.location.pathname + document.location.search
+            this.urlValue = new HistoryService().getUpdatedURL(currentUrl, data)
             this.frame.src = this.urlValue
         }
     }
