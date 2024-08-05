@@ -950,7 +950,7 @@ en:
       synonym: Synonym
       definition: Definition
       parent: Parent
-      save: save
+      save: Save
     note_line:
       alert_text: "Are you sure you want to delete the note <span style='color:red;font-weight:bold;'> ''%{subject}''</span> created by <span style='color:red;font-weight:bold;'>%{creator}</span>?<br/><b>This action CAN NOT be undone!!!</b>"
       delete: Delete
@@ -961,8 +961,8 @@ en:
     reply:
       about_note_decorator: about %{note_decorator}
       comment: Comment
-      save: save
-      cancel: cancel
+      save: Save
+      cancel: Cancel
   ontolobridge:
     problem_of_creating_new_term: "Problem creating a new term %{endpoint}: %{class} - %{message}"
     new_term_instructions_saved: New term request instructions for %{acronym} saved

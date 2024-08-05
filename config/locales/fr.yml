@@ -968,7 +968,7 @@ fr:
       synonym: Synonyme
       definition: Définition
       parent: Parent
-      save: sauvegarder
+      save: Sauvegarder
     note_line:
       alert_text: "Êtes-vous sûr de vouloir supprimer la note <span style='color:red;font-weight:bold;'> ''%{subject}''</span> créée par <span style='color:red;font-weight:bold;'>%{creator}</span>?<br/><b>Cette action NE PEUT PAS être annulée !!!</b>"
       delete: Supprimer
@@ -979,8 +979,8 @@ fr:
     reply:
       about_note_decorator: à propos de %{note_decorator}
       comment: Commentaire
-      save: sauvegarder
-      cancel: annuler
+      save: Sauvegarder
+      cancel: Annuler
 
   ontolobridge:
     problem_of_creating_new_term: "Problème de création d'un nouveau terme %{endpoint} : %{class} - %{message}"

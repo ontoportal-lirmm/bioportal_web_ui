@@ -14,6 +14,7 @@ class OntologiesController < ApplicationController
   include SubmissionFilter
   include OntologyContentSerializer
   include UriRedirection
+  include PropertiesHelper
 
   require 'multi_json'
   require 'cgi'
@@ -98,10 +99,12 @@ class OntologiesController < ApplicationController
     @acronym = @ontology.acronym
     @properties = LinkedData::Client::HTTP.get("/ontologies/#{@acronym}/properties/roots", { lang: request_lang })
 
+    @property = get_property(@properties.first.id,  @acronym, include: 'all') unless @property || @properties.empty?
+
     if request.xhr?
-      return render 'ontologies/sections/properties', layout: false
+      render 'ontologies/sections/properties', layout: false
     else
-      return render 'ontologies/sections/properties', layout: 'ontology_viewer'
+      render 'ontologies/sections/properties', layout: 'ontology_viewer'
     end
   end
 
@@ -175,6 +178,8 @@ class OntologiesController < ApplicationController
   end
 
   def instances
+
+    params[:instanceid] = params[:instanceid] || search_first_instance_id
 
     if params[:instanceid]
       @instance = helpers.get_instance_details_json(@ontology.acronym, params[:instanceid], {include: 'all'})
@@ -553,5 +558,15 @@ class OntologiesController < ApplicationController
     end
   end
 
+  def search_first_instance_id
+    query, page, page_size = helpers.search_content_params
+    results, _, _, _ = search_ontologies_content(query: query,
+                        page: page,
+                        page_size: page_size,
+                        filter_by_ontologies: [@ontology.acronym],
+                        filter_by_types: ["NamedIndividual"])
+    results.shift # Remove the ontology entry
+    return !results.blank? ? results.first[:name] : nil
+  end
 
 end

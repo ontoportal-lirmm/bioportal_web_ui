@@ -18,7 +18,7 @@ class AgentsController < ApplicationController
   end
 
   def ajax_agents
-    filters = { query: params[:query]}
+    filters = { query: params[:query], qf: "identifiers_texts^20 acronym_text^15 name_text^10 email_text^10"}
     @agents = LinkedData::Client::HTTP.get('/search/agents', filters)
     agents_json = @agents.collection.map do |x|
       {
@@ -275,7 +275,9 @@ class AgentsController < ApplicationController
         v
       end
     end
+    identifiers_schemaAgency = params[:agentType].eql?('person') ? 'ORCID' : 'ROR'
     p[:identifiers]&.each_value do |identifier|
+      identifier[:schemaAgency] = identifiers_schemaAgency
       if identifier[:schemaAgency].downcase.eql?('orcid')
         identifier[:notation] = normalize_orcid(identifier[:notation])
       else
