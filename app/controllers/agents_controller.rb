@@ -277,19 +277,9 @@ class AgentsController < ApplicationController
     end
     p[:identifiers]&.each_value do |identifier|
       if identifier[:schemaAgency].downcase.eql?('orcid')
-        normalized_orcid = normalize_orcid(identifier[:notation])
-        if normalized_orcid
-          identifier[:notation] = normalized_orcid
-        else
-          identifier[:notation] = "invalid_orcid"
-        end
+        identifier[:notation] = normalize_orcid(identifier[:notation])
       else
-        normalized_ror = normalize_ror(identifier[:notation])
-        if normalized_ror
-          identifier[:notation] = normalized_ror
-        else
-          identifier[:notation] = "invalid_ror"
-        end
+        identifier[:notation] = normalize_ror(identifier[:notation])
       end
     end
 
@@ -328,9 +318,6 @@ class AgentsController < ApplicationController
     when /\Awww\.orcid\.org\/\d{4}-\d{4}-\d{4}-\d{4}\z/
       # Case 5: ORCID with "www." without scheme
       orcid = orcid.split('/').last
-
-    else
-      return nil
     end
 
     return orcid
@@ -349,14 +336,11 @@ class AgentsController < ApplicationController
     when /\Aror\.org\/(0\w{6}\d{2})\z/
       # Case 3: ROR without scheme (http/https), extract the ROR ID
       ror = ror.split('/').last
-
-    else
-      return nil
     end
 
     return ror
   end
-  
+
   def generate_errors(response_errors)
     errors = []
     response_errors.values.each_with_index do |v, i|
