@@ -55,8 +55,9 @@
   %tr
     %th
       = t("agents.form.identifiers")
+
     %td.top
-      %div.agents-identifiers{'data-form-options-display-target':"option1",  class: is_organization?(agent) && 'd-none'}
+      %div.agents-identifiers{'data-form-options-display-target':"option2",  class: !is_organization?(agent) && 'd-none'}
         = render NestedFormInputsComponent.new do |c|
           - c.template do
             = agent_identifier_input('NEW_RECORD', name_prefix)
@@ -68,7 +69,7 @@
             - c.row do
               = agent_identifier_input(i.to_s.upcase, name_prefix, identifier.notation)
 
-      %div.agents-identifiers{'data-form-options-display-target':"option2",  class: !is_organization?(agent) && 'd-none'}
+      %div.agents-identifiers{'data-form-options-display-target':"option1",  class: is_organization?(agent) && 'd-none'}
         = render NestedFormInputsComponent.new do |c|
           - c.template do
             = agent_identifier_input('NEW_RECORD', name_prefix, is_organization: false)
