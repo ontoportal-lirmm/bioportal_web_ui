@@ -652,6 +652,10 @@ en:
         actions: Actions
         see_other_properties: See other properties
   agents:
+    errors:
+      required: is required and cannot be empty
+      used_identifier: This identifier is already used by another agent
+      invalid_url: The identifier must be a valid ORCID/ROR URL
     not_found_agent: Agent with id %{id}
     add_agent: New Agent added successfully
     update_agent: Agent successfully updated

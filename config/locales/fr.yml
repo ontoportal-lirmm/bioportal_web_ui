@@ -663,6 +663,10 @@ fr:
 
 
   agents:
+    errors:
+      required: est requis et ne peut pas être vide
+      used_identifier: Cet identifiant est déjà utilisé par un autre agent
+      invalid_url: L'identifiant doit être une URL ORCID/ROR valide
     not_found_agent: Agent avec id %{id}
     add_agent: Nouvel agent ajouté avec succès
     update_agent: Agent mis à jour avec succès
