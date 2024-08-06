@@ -55,32 +55,19 @@
   %tr
     %th
       = t("agents.form.identifiers")
-
+    - identifier = agent&.identifiers&.first
     %td.top
       %div.agents-identifiers{'data-form-options-display-target':"option2",  class: !is_organization?(agent) && 'd-none'}
-        = render NestedFormInputsComponent.new do |c|
-          - c.template do
-            = agent_identifier_input('NEW_RECORD', name_prefix)
-
-          - c.empty_state do
-            = hidden_field_tag agent_field_name('',  name_prefix+"[#{Array(agent.identifiers).size}]")
-
-          - Array(agent.identifiers).each_with_index do |identifier, i|
-            - c.row do
-              = agent_identifier_input(i.to_s.upcase, name_prefix, identifier.notation)
+        - if identifier&.schemaAgency&.eql?('ROR')
+          = agent_identifier_input('0', name_prefix, identifier.notation)
+        - else
+          = agent_identifier_input('0', name_prefix)
 
       %div.agents-identifiers{'data-form-options-display-target':"option1",  class: is_organization?(agent) && 'd-none'}
-        = render NestedFormInputsComponent.new do |c|
-          - c.template do
-            = agent_identifier_input('NEW_RECORD', name_prefix, is_organization: false)
-
-          - c.empty_state do
-            = hidden_field_tag agent_field_name('',  name_prefix+"[#{Array(agent.identifiers).size}]")
-
-          - Array(agent.identifiers).each_with_index do |identifier, i|
-            - c.row do
-              = agent_identifier_input(i.to_s.upcase, name_prefix, identifier.notation, is_organization: false)
-
+        - if identifier&.schemaAgency&.eql?('ORCID')
+          = agent_identifier_input('1', name_prefix, identifier.notation, is_organization: false)
+        - else
+          = agent_identifier_input('1', name_prefix, is_organization: false)
 
   - if show_affiliations
     %tr{'data-form-options-display-target':"option1",  class: is_organization?(agent) && 'd-none'}

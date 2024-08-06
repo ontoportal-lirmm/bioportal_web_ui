@@ -273,6 +273,7 @@ class AgentsController < ApplicationController
         v
       end
     end
+    p[:identifiers] = p[:identifiers].reject{ |key, value| value["notation"].empty? }
     identifiers_schemaAgency = params[:agentType].eql?('person') ? 'ORCID' : 'ROR'
     p[:identifiers]&.each_value do |identifier|
       identifier[:schemaAgency] = identifiers_schemaAgency
