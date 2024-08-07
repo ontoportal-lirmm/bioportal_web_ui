@@ -6,7 +6,7 @@
   %td
     = agent.acronym
   %td
-    = raw display_identifiers(agent.identifiers)
+    = display_admin_agent_identifier(agent.identifiers)
   %td
     = raw agent.affiliations.map{|i| display_agent(i)}.join(', ')
   %td

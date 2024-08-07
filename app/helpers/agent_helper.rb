@@ -113,6 +113,21 @@ module AgentHelper
     end.join(', ')
   end
 
+  def display_admin_agent_identifier(identifiers)
+    return if identifiers.blank?
+    identifier = identifiers.first
+    url = identifier.schemaAgency.eql?('ORCID') ? "https://orcid.org/#{identifier.notation}" : "https://ror.org/#{identifier.notation}"
+    ror_icon = inline_svg_tag 'icons/ror.svg', class: 'agent-dependency-icon ror colored-icon'
+    orcid_icon = inline_svg_tag 'icons/orcid.svg', class: 'agent-dependency-icon colored-icon'
+    icon = identifier.schemaAgency.eql?('ORCID') ? orcid_icon : ror_icon
+
+    return content_tag(:a, href: url ,class: 'agents-identifiers-admin-card d-flex align-items-center', target: "_blank") do
+      icon +
+      content_tag(:div, identifier.notation)
+    end
+
+  end
+
   def agent_field_name(name, name_prefix = '')
     name_prefix&.empty? ? name : "#{name_prefix}[#{name}]"
   end

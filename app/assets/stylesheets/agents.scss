@@ -51,3 +51,16 @@
   padding: 11px 17px;
   box-sizing: unset;
 }
+.agents-identifiers-admin-card{
+  background-color: var(--light-color);
+  line-height: 44px;
+  padding: 3px 16px;
+  border-radius: 5px;
+  color: var(--primary-color);
+  font-weight: 500;
+  font-size: 15px;
+  display: inline;
+}
+.colored-icon path{
+  fill: var(--primary-color) !important;
+}
