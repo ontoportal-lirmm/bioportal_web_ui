@@ -683,7 +683,7 @@ en:
       affiliations: Affiliations
     index:
       create_new_agent: Create New Agent
-      first_name: First name
+      first_name: Name
       acronym: Acronym
       usages: Usages
       actions: Actions

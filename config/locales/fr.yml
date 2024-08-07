@@ -694,7 +694,7 @@ fr:
       affiliations: Affiliations
     index:
       create_new_agent: Créer un nouvel agent
-      first_name: Prénom
+      first_name: Nom
       acronym: Acronyme
       usages: Utilisations
       actions: Actions
