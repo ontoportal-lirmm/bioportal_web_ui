@@ -180,7 +180,7 @@ module AgentHelper
 
   def agent_tooltip(agent)
     name = agent.name
-    email = agent.email
+    email = agent.email unless agent.class.eql?(LinkedData::Client::Models::Agent)
     type = agent.agentType
     identifiers = display_identifiers(agent.identifiers, link: false)
     identifiers = orcid_number(identifiers)
@@ -232,7 +232,7 @@ module AgentHelper
       name = agent
       title = nil
     else
-      name = agent.name
+      name = agent.agentType.eql?("organization") ? (agent.acronym || agent.name) : agent.name
       agent_icon = agent.agentType.eql?("organization") ? organization_icon : person_icon
       title = agent_tooltip(agent)
     end
