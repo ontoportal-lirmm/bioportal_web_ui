@@ -231,7 +231,7 @@ module AgentHelper
       name = agent
       title = nil
     else
-      name = agent.name
+      name = agent.agentType.eql?("organization") ? (agent.acronym || agent.name) : agent.name
       agent_icon = agent.agentType.eql?("organization") ? organization_icon : person_icon
       title = agent_tooltip(agent)
     end
