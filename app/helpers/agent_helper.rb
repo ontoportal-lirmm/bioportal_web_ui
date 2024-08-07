@@ -180,7 +180,7 @@ module AgentHelper
 
   def agent_tooltip(agent)
     name = agent.name
-    email = agent.email
+    email = agent.email unless agent.class.eql?(LinkedData::Client::Models::Agent)
     type = agent.agentType
     identifiers = display_identifiers(agent.identifiers, link: false)
     identifiers = orcid_number(identifiers)
@@ -196,15 +196,16 @@ module AgentHelper
     orcid_icon = inline_svg_tag 'icons/orcid.svg', class: 'agent-dependency-icon'
     agent_icon = type == "organization" ? organization_icon : person_icon
     identifiers_icon = type == "organization" ? ror_icon : orcid_icon
-    tooltip_html = generate_agent_tooltip(agent_icon, name, identifiers, affiliations, identifiers_icon)
+    tooltip_html = generate_agent_tooltip(agent_icon, name, email, identifiers, affiliations, identifiers_icon)
     return tooltip_html
   end
 
-  def generate_agent_tooltip(agent_icon, name, identifiers = nil, affiliations = nil, identifiers_icon = nil)
+  def generate_agent_tooltip(agent_icon, name, email = nil, identifiers = nil, affiliations = nil, identifiers_icon = nil)
     content_tag(:div, class: 'agent-container') do
       content_tag(:div, agent_icon, class: 'agent-circle') +
       content_tag(:div) do
         content_tag(:div, name, class: 'agent-name') +
+        content_tag(:div, email || '', class: 'agent-dependency') +
         unless identifiers.to_s.empty?
           content_tag(:div, class: 'agent-dependency') do
             identifiers_icon +
