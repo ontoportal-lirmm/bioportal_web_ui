@@ -652,6 +652,10 @@ en:
         actions: Actions
         see_other_properties: See other properties
   agents:
+    errors:
+      required: is required and cannot be empty
+      used_identifier: This identifier is already used by another agent
+      invalid_url: The identifier must be a valid ORCID/ROR URL
     not_found_agent: Agent with id %{id}
     add_agent: New Agent added successfully
     update_agent: Agent successfully updated
@@ -680,6 +684,7 @@ en:
     index:
       create_new_agent: Create New Agent
       first_name: First name
+      acronym: Acronym
       usages: Usages
       actions: Actions
       no_agents: There are currently no  agents.
@@ -945,7 +950,7 @@ en:
       synonym: Synonym
       definition: Definition
       parent: Parent
-      save: save
+      save: Save
     note_line:
       alert_text: "Are you sure you want to delete the note <span style='color:red;font-weight:bold;'> ''%{subject}''</span> created by <span style='color:red;font-weight:bold;'>%{creator}</span>?<br/><b>This action CAN NOT be undone!!!</b>"
       delete: Delete
@@ -956,8 +961,8 @@ en:
     reply:
       about_note_decorator: about %{note_decorator}
       comment: Comment
-      save: save
-      cancel: cancel
+      save: Save
+      cancel: Cancel
   ontolobridge:
     problem_of_creating_new_term: "Problem creating a new term %{endpoint}: %{class} - %{message}"
     new_term_instructions_saved: New term request instructions for %{acronym} saved
@@ -1383,7 +1388,7 @@ en:
       instruction_4_content: "Run the following command to test the redirection configuration `sudo nginx -t`"
       instruction_5: "Reload Nginx to apply the changes:"
       instruction_5_content: "Restart the nginx server to apply the redirection using this command `sudo systemctl reload nginx`"
-    
+
   components:
     check_resolvability: checking resolvability...
     error_block: child_data_generator block did not provide all the child arguements
@@ -1415,7 +1420,7 @@ en:
     view: View
     debug: Debug
     loading: Loading
-    unwatch: UnWatch
+    unwatch: Unwatch
     watch: Watch
     resource: "%{sub_text} this resource"
     notified_of_all_updates: Be the first to watch this resource and  be notified of all its updates
@@ -1478,3 +1483,9 @@ en:
     location: "Location: %{location}"
     tags: Tags
     feedback: Feedback
+  cookies_modal:
+    title: "Manage Cookie Consent"
+    paragraph1: "%{portal} uses cookies to help you navigate efficiently and for audience measurement. You will find detailed information about all cookies in the \"Privacy policy\" link"
+    paragraph2: "The cookies are functional and non-optional. By staying on %{portal}, you acknowledge the information was delivered to you."
+    accept_button: "Accept"
+    privacy_link: "Privacy policy"

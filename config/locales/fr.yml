@@ -301,9 +301,9 @@ fr:
     total_results: Résultats totaux
     insert_sample_text: Insérer un texte d'exemple
     sample_text: Il y a eu de nombreuses études récentes sur l'utilisation d'antagonistes microbiens pour contrôler les maladies causées par des bactéries phytopathogènes telluriques
-              et aériennes, dans le but de remplacer les méthodes actuelles de contrôle chimique et d'éviter l'utilisation extensive de fongicides, qui conduisent souvent à une résistance chez les pathogènes des plantes.
-              En agriculture, les microorganismes promoteurs de croissance des plantes et de biocontrôle ont émergé comme des alternatives sûres aux pesticides chimiques. Les espèces de Streptomyces et leurs
-              métabolites peuvent avoir un grand potentiel en tant qu'agents excellents pour contrôler divers phytopathogènes fongiques et bactériens.
+      et aériennes, dans le but de remplacer les méthodes actuelles de contrôle chimique et d'éviter l'utilisation extensive de fongicides, qui conduisent souvent à une résistance chez les pathogènes des plantes.
+      En agriculture, les microorganismes promoteurs de croissance des plantes et de biocontrôle ont émergé comme des alternatives sûres aux pesticides chimiques. Les espèces de Streptomyces et leurs
+      métabolites peuvent avoir un grand potentiel en tant qu'agents excellents pour contrôler divers phytopathogènes fongiques et bactériens.
 
   concepts:
     error_valid_concept: "Erreur : Vous devez fournir un identifiant de concept valide"
@@ -663,6 +663,10 @@ fr:
 
 
   agents:
+    errors:
+      required: est requis et ne peut pas être vide
+      used_identifier: Cet identifiant est déjà utilisé par un autre agent
+      invalid_url: L'identifiant doit être une URL ORCID/ROR valide
     not_found_agent: Agent avec id %{id}
     add_agent: Nouvel agent ajouté avec succès
     update_agent: Agent mis à jour avec succès
@@ -691,6 +695,7 @@ fr:
     index:
       create_new_agent: Créer un nouvel agent
       first_name: Prénom
+      acronym: Acronyme
       usages: Utilisations
       actions: Actions
       no_agents: Il n'y a actuellement aucun agent.
@@ -963,7 +968,7 @@ fr:
       synonym: Synonyme
       definition: Définition
       parent: Parent
-      save: sauvegarder
+      save: Sauvegarder
     note_line:
       alert_text: "Êtes-vous sûr de vouloir supprimer la note <span style='color:red;font-weight:bold;'> ''%{subject}''</span> créée par <span style='color:red;font-weight:bold;'>%{creator}</span>?<br/><b>Cette action NE PEUT PAS être annulée !!!</b>"
       delete: Supprimer
@@ -974,8 +979,8 @@ fr:
     reply:
       about_note_decorator: à propos de %{note_decorator}
       comment: Commentaire
-      save: sauvegarder
-      cancel: annuler
+      save: Sauvegarder
+      cancel: Annuler
 
   ontolobridge:
     problem_of_creating_new_term: "Problème de création d'un nouveau terme %{endpoint} : %{class} - %{message}"
@@ -1516,3 +1521,10 @@ fr:
     location: "Emplacement: %{location}"
     tags: Tags
     feedback: Feedback
+
+  cookies_modal:
+    title: "Gérer le consentement des cookies"
+    paragraph1: "%{portal} utilise des cookies pour vous aider à naviguer efficacement et pour mesurer l'audience. Vous trouverez des informations détaillées sur tous les cookies dans le lien \"Vie privé\""
+    paragraph2: "Les cookies sont fonctionnels et non facultatifs. En restant sur %{portal}, vous reconnaissez que les informations vous ont été transmises."
+    accept_button: "Accepter"
+    privacy_link: "Vie privé"

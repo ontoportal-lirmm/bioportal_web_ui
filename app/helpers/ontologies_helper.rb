@@ -324,11 +324,22 @@ module OntologiesHelper
     "<a href='#{ont_url}/?p=#{page_name}'>#{link_name}</a>"
   end
 
-  def show_category_name(domain)
-    return domain unless link?(domain)
+  def category_name_chip_component(domain)
+    text = domain.split('/').last.titleize
+
+
+    return render(ChipButtonComponent.new(text: text, tooltip: domain,  type: "static")) unless link?(domain)
+
+
     acronym = domain.split('/').last.upcase.strip
     category = LinkedData::Client::Models::Category.find(acronym)
-    category.name ? category.name : acronym.titleize
+
+    if category.name
+      render ChipButtonComponent.new(text: text, tooltip: category.name,  type: "static")
+    else
+      render ChipButtonComponent.new(text: text, tooltip: domain,  url: domain, type: "clickable", target: '_blank')
+    end
+
   end
 
 
@@ -420,7 +431,7 @@ module OntologiesHelper
       block.call
     else
       render TurboFrameComponent.new(id: section_title, src: "/ontologies/#{@ontology.acronym}?p=#{section_title}",
-                                     loading: Rails.env.development?  ? "lazy" : "eager",
+                                     loading: Rails.env.development? ? "lazy" : "eager",
                                      target: '_top', data: { "turbo-frame-target": "frame" })
     end
   end

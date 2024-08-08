@@ -8,7 +8,8 @@ export default class extends Controller {
         sortcolumn: String,
         paging: Boolean,
         searching: Boolean,
-        noinitsort: Boolean
+        noinitsort: Boolean,
+        searchPlaceholder: {type: String, default: 'Filter records'},
     }
     connect(){
         const table_component = this.element.querySelector('table')
@@ -20,7 +21,11 @@ export default class extends Controller {
                 info: false,
                 searching: this.searchingValue,
                 autoWidth: true,
-                order: this.noinitsortValue ? [] : [[default_sort_column, 'desc']]
+                order: this.noinitsortValue ? [] : [[default_sort_column, 'desc']],
+                language: {
+                    search: '_INPUT_',
+                    searchPlaceholder: this.searchPlaceholderValue
+                }
             });
         }
     }
