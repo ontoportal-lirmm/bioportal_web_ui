@@ -4,15 +4,10 @@
       %h4
         = t('cookies_modal.title')
       %p
-        = t('cookies_modal.paragraph1')
+        = t('cookies_modal.paragraph1', portal: portal_name)
       %p
-        = t('cookies_modal.paragraph2')
-      %p
-        = t('cookies_modal.paragraph3')
-      %div.d-flex
-        %div.w-50
-          = link_button_component(id:'accept-cookie-selector', value: t('cookies_modal.accept_button'), href: cookies_path(cookies: true), size: "slim", variant: 'primary')
-        %div.w-50.ml-2
-          = link_button_component(id:'deny-cookie-selector', value: t('cookies_modal.deny_button'), href: cookies_path(cookies: false), size: "slim", variant: 'secondary')
+        = t('cookies_modal.paragraph2', portal: portal_name)
+      %div
+        = link_button_component(id:'accept-cookie-selector', value: t('cookies_modal.accept_button'), href: cookies_path(cookies: true), size: "slim", variant: 'primary')
       %div.cookie-privacy-link
         = link_to t('cookies_modal.privacy_link'), $FOOTER_LINKS.dig(:sections, :agreements, :privacy_policy)

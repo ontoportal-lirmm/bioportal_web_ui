@@ -1485,9 +1485,7 @@ en:
     feedback: Feedback
   cookies_modal:
     title: "Manage Cookie Consent"
-    paragraph1: "We use cookies to help you navigate efficiently and perform certain functions. You will find detailed information about all cookies in the \"Privacy Statement\" link."
-    paragraph2: "We also use third-party cookies that help us analyse how you use this website, store your preferences, and provide the content that is relevant to you. These cookies will only be stored in your browser with your prior consent."
-    paragraph3: "Please note that disabling such cookies may affect your browsing experience."
+    paragraph1: "%{portal} uses cookies to help you navigate efficiently and for audience measurement. You will find detailed information about all cookies in the \"Privacy policy\" link"
+    paragraph2: "The cookies are functional and non-optional. By staying on %{portal}, you acknowledge the information was delivered to you."
     accept_button: "Accept"
-    deny_button: "Deny"
-    privacy_link: "Privacy Statement"
+    privacy_link: "Privacy policy"
