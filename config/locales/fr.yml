@@ -1519,9 +1519,7 @@ fr:
 
   cookies_modal:
     title: "Gérer le consentement des cookies"
-    paragraph1: "Nous utilisons des cookies pour vous aider à naviguer efficacement et à effectuer certaines fonctions. Vous trouverez des informations détaillées sur tous les cookies dans le lien \"Déclaration de confidentialité\"."
-    paragraph2: "Nous utilisons également des cookies tiers qui nous aident à analyser comment vous utilisez ce site Web, à stocker vos préférences et à fournir le contenu qui vous est pertinent. Ces cookies ne seront stockés dans votre navigateur qu'avec votre consentement préalable."
-    paragraph3: "Veuillez noter que la désactivation de ces cookies peut affecter votre expérience de navigation."
+    paragraph1: "%{portal} utilise des cookies pour vous aider à naviguer efficacement et pour mesurer l'audience. Vous trouverez des informations détaillées sur tous les cookies dans le lien \"Vie privé\""
+    paragraph2: "Les cookies sont fonctionnels et non facultatifs. En restant sur %{portal}, vous reconnaissez que les informations vous ont été transmises."
     accept_button: "Accepter"
-    deny_button: "Refuser"
-    privacy_link: "Déclaration de confidentialité"
+    privacy_link: "Vie privé"
