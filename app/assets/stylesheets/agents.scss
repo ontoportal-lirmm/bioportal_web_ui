@@ -63,4 +63,8 @@
 }
 .colored-icon path{
   fill: var(--primary-color) !important;
+  cursor: pointer;
+}
+.disabled-icon path{
+  fill: #B2B2B2;
 }
