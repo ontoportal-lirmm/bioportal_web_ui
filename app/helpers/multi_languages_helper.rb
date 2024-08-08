@@ -72,6 +72,9 @@ module MultiLanguagesHelper
   def content_languages(submission = @submission || @submission_latest)
     current_lang = request_lang.downcase
     submission_lang = submission_languages(submission)
+
+    submission_lang = [current_lang.to_s]  if submission_lang.empty?
+
     # Transform each language into a select option
     submission_lang = submission_lang.map do |lang|
       lang = lang.split('/').last.upcase
@@ -96,7 +99,7 @@ module MultiLanguagesHelper
     languages, selected = content_languages
     render Input::LanguageSelectorComponent.new(id: id, name: name, enable_all: true,
                                                 languages: languages,
-                                                selected: selected || 'all',
+                                                selected: selected || request_lang,
                                                 'data-tooltip-interactive-value': true,
                                                 'data-select-input-searchable-value': false,
                                                 title: content_language_help_text)
