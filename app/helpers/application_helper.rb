@@ -37,9 +37,14 @@ module ApplicationHelper
   def resolve_namespaces
     RESOLVE_NAMESPACE
   end
+
   def ontologies_analytics
-    data = LinkedData::Client::Analytics.last_month.onts
-    data.map{|x| [x[:ont].to_s, x[:views]]}.to_h
+    begin
+      data = LinkedData::Client::Analytics.last_month.onts
+      data.map{|x| [x[:ont].to_s, x[:views]]}.to_h
+    rescue StandardError
+      {}
+    end
   end
 
   def get_apikey
@@ -208,8 +213,7 @@ module ApplicationHelper
   end
 
   def subscribed_to_ontology?(ontology_acronym, user)
-    user.bring(:subscription) if user.subscription.nil?
-    # user.subscription is an array of subscriptions like {ontology: ontology_id, notification_type: "NOTES"}
+    user = LinkedData::Client::Models::User.find(user.username, {include: 'subscription'}) if user.subscription.nil?
     return false if user.subscription.nil? or user.subscription.empty?
     user.subscription.each do |sub|
       #sub = {ontology: ontology_acronym, notification_type: "NOTES"}
@@ -506,9 +510,9 @@ module ApplicationHelper
     end
   end
 
-  def ontologies_selector(id:, label: nil, name: nil, selected: nil, placeholder: nil, multiple: true)
+  def ontologies_selector(id:, label: nil, name: nil, selected: nil, placeholder: nil, multiple: true, ontologies: onts_for_select)
     content_tag(:div) do
-      render(Input::SelectComponent.new(id: id, label: label, name: name, value: onts_for_select, multiple: multiple, selected: selected, placeholder: placeholder)) +
+      render(Input::SelectComponent.new(id: id, label: label, name: name, value: ontologies, multiple: multiple, selected: selected, placeholder: placeholder)) +
       content_tag(:div, class: 'ontologies-selector-button', 'data-controller': 'ontologies-selector', 'data-ontologies-selector-id-value': id) do
         content_tag(:div, t('ontologies_selector.clear_selection'), class: 'clear-selection', 'data-action': 'click->ontologies-selector#clear') +
         link_to_modal(t('ontologies_selector.ontologies_advanced_selection'), "/ontologies_selector?id=#{id}", data: { show_modal_title_value: t('ontologies_selector.ontologies_advanced_selection')})

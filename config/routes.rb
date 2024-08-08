@@ -135,7 +135,7 @@ Rails.application.routes.draw do
 
   # Top-level pages
   match '/feedback', to: 'home#feedback', via: [:get, :post]
-  get '/account' => 'home#account'
+  get '/account' => 'users#show'
   get '/site_config' => 'home#site_config'
   post '/annotator_recommender_form' => 'home#annotator_recommender_form'
   match '/visits', to: 'visits#index', via: :get

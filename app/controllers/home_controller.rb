@@ -7,9 +7,15 @@ class HomeController < ApplicationController
   include FairScoreHelper
 
   def index
-    @analytics =  helpers.ontologies_analytics
+    @analytics = helpers.ontologies_analytics
     # Calculate BioPortal summary statistics
-    @ont_count = @analytics.keys.size
+
+    @ont_count = if @analytics.empty?
+                   LinkedData::Client::Models::Ontology.all.size
+                 else
+                   @analytics.keys.size
+                 end
+
     metrics = LinkedData::Client::Models::Metrics.all
     metrics = metrics.each_with_object(Hash.new(0)) do |h, sum|
       h.to_hash.slice(:classes, :properties, :individuals).each { |k, v| sum[k] += v }
@@ -139,27 +145,6 @@ class HomeController < ApplicationController
 
   def site_config
     render json: bp_config_json
-  end
-
-  def account
-    @title = t('home.account_title')
-    if session[:user].nil?
-      redirect_to controller: 'login', action: 'index', redirect: '/account'
-      return
-    end
-
-    @user = LinkedData::Client::Models::User.get(session[:user].id, include: 'all')
-
-    @user_ontologies = @user.customOntology
-    @user_ontologies ||= []
-
-    onts = LinkedData::Client::Models::Ontology.all(include_views: true);
-    @admin_ontologies = onts.select { |o| o.administeredBy.include? @user.id }
-
-    projects = LinkedData::Client::Models::Project.all
-    @user_projects = projects.select { |p| p.creator.include? @user.id }
-
-    render 'users/show'
   end
 
   def feedback_complete; end
