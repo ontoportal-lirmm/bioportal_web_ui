@@ -12,6 +12,6 @@
         = select_tag(:concept_schemes,
                      options_for_select(schemes_labels.map{|s| [s["prefLabel"].last, s["@id"]]}, selected_scheme.compact.map{|x| x["@id"]} ),
                       {multiple: true, id: "schemes_select",
-                      data:{controller:'chosen', 'chosen-name-value': :concept_schemes,
+                      data:{controller:'skos-collections-selector', 'skos-collections-selector-name-value': :concept_schemes,
                       action: 'changed->history#updateURL changed->turbo-frame#updateFrame'}})
 

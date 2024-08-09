@@ -8,5 +8,5 @@
       %label{:for => id} Collections
       %div
         = select_tag(:collections,options_for_select(collections_labels.map{|s| [s["prefLabel"].last, s["@id"], {'data-color': s['color']}]}, selected_collection.map{|x| x["@id"]}),
-              { multiple: multiple, id: id, class:"form-control", include_blank: true,
-              data:{controller:'chosen', 'chosen-name-value': :collectionid}.merge(data)})
+              { multiple: multiple, id: id,
+              data:{controller:'skos-collections-selector', 'skos-collections-selector-name-value': :collectionid}.merge(data)})

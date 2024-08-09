@@ -75,9 +75,19 @@ module CollectionsHelper
 
   private
 
+  require 'color'
+
+  def random_color
+    hue = rand(0..360)
+    saturation = rand(50..100) # Higher saturation for more vibrant colors
+    lightness = rand(30..70) # Middle lightness to avoid extremes
+
+    Color::HSL.new(hue, saturation, lightness).html
+  end
+
   def generate_collections_colors(collections)
     collections.each do |c|
-      c.color = format('#%06x', (rand * 0xffffff))
+      c.color = random_color
     end
   end
 end
