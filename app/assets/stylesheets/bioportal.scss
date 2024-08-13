@@ -1,8 +1,91 @@
+.turbo-progress-bar {
+  height: 5px;
+  background-color: var(--admin-color);
+}
+
+a{
+  text-decoration: none !important;
+}
+p {
+  margin-bottom: 0;
+}
+
+body{
+  position: relative;
+}
+
 .alignright {
   float: right;
 }
 .alignleft {
   float: left;
+}
+
+.admin-border{
+  border: 1px solid;
+  border-radius: 5px;
+  border-color: var(--admin-color) !important;
+}
+
+.admin-background{
+  background-color: var(--bg-info-light-color) !important;
+  border-color: var(--admin-color) !important;
+  color: var(--admin-color) !important;
+  border-radius: 5px;
+}
+
+.container-gradient {
+  background: linear-gradient(-45deg, var(--admin-color), var(--primary-color), var(--admin-color));
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  .header-component{
+    color: white;
+  }
+
+  .field-description_text{
+    color: white !important;
+    opacity: 0.7;
+  }
+
+}
+
+.disabled-link{
+  pointer-events: none;
+  color: #888888 !important;
+  span{
+    opacity: 0.6;
+  }
+  a {
+    color: #888888 !important;
+  }
+  svg path{
+    fill: #888888 !important;
+  }
+}
+.text-truncate-scroll{
+  overflow: scroll;
+  white-space: nowrap;
+}
+
+
+.bg-warning-light{
+  background-color: var(--bg-warning-light-color) !important;
+}
+
+.bg-danger-light{
+  background-color: var(--bg-danger-light-color) !important;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 #hd {
@@ -483,6 +566,10 @@ tr.mainresource td {
   list-style-type: square;
   margin-left: 1.5em;
 }
+.feedback ul li{
+  list-style-position: outside;
+  margin-left: 1.5em;
+}
 
 .enable-lists ul {
   margin-bottom: 15px;
@@ -555,14 +642,6 @@ li.ac_over > .obsolete_class {
   font-style: italic;
 }
 
-/********************
-## TREE VIEW
-*********************/
-div.tree_error {
-  background: none repeat scroll 0 0 lightYellow;
-  font-weight: 600;
-  padding: 5px 10px;
-}
 
 .expansion_error {
   color: red;
@@ -1161,6 +1240,9 @@ a.truncated_more {
 .highlighted .search_ontology_acronym {
   color: white;
 }
+.hide {
+  display: none !important;
+}
 
 .empty-state {
   display: none;
@@ -1176,4 +1258,48 @@ turbo-frame[busy] .hide-if-loading,
 }
 turbo-frame[busy] ~ .show-if-loading {
   display: inline-block;
+}
+
+.hide{
+  display:none;
+}
+
+.cookies-modal {
+  position: fixed;
+  height: auto;
+  top: initial;
+  left: initial;
+  bottom: 30px;
+  right: 30px;
+  transform: initial;
+  grid-template-rows: minmax(0, 1fr);
+  z-index: 99999;
+  background: white;
+  border-style: solid;
+  border-color: #f2f2f2;
+  border-radius: 8px;
+  border-width: 0;
+  padding: 15px 20px;
+  display: grid;
+  grid-gap: 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px, rgba(0, 0, 0, 0.1) 0px 2px 4px;
+  width: 526px;
+  grid-row-gap: 10px;
+
+  h4{
+    justify-self: center;
+    font-size: 16px;
+    color: var(--primary-color);
+    font-weight: 500;
+  }
+  p {
+    word-wrap: break-word;
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
+  .cookie-privacy-link {
+    font-size: 12px;
+    text-align: center;
+    text-decoration: underline;
+  }
 }

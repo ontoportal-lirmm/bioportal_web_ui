@@ -1,6 +1,59 @@
-%div.container.py-4.py-md-5
-  %h3.text-center.mb-4
-    Edit submission information
-    %small.text-muted for #{@submission.ontology.acronym}
-  = form_for :submission, url: ontology_submission_path(@ontology.acronym, @submission.submissionId), html: { id: "ontology_submission_form", method: :put, multipart: true } do |f|
-    = render partial: "form", locals: {f: f, button_text: "Save submission"}
+- section = params[:section] || 'general'
+.center
+  .edit-ontology-container
+    = turbo_frame_tag(params[:container_id] || 'test') do
+      = form_for :submission, url: ontology_submission_path(@ontology.acronym, params["id"]), html: { id: "ontology_submission_form", method: :put, multipart: true, 'data-turbo': true, 'data-turbo-frame': '_top', novalidate: 'true'} do
+        .edit-ontology-title
+          %div
+            = t('submission_inputs.edit_ontology_title')
+          %hr
+        .edit-ontology-sub-container
+          - if @selected_attributes.empty?
+            .edit-ontology-left-column{:role => "tablist",onchange:"onMetadataChange()"}
+              .edit-ontology-desc
+                = submission_metadata_selector
+              %div.nav.nav-pills.flex-column#categories-tabs
+                - @categories_order.each_with_index  do |key, index|
+                  %a.edit-ontology-tab-item.d-block{href: "##{key.parameterize}-tab", "data-toggle" => "pill", class:  section.eql?(key.parameterize) ? 'active show' : ''}
+                    = key.humanize
+
+          #myTabContent.edit-ontology-right-column.w-100
+            = render TurboFrameComponent.new(id:"metadata_by_ontology") do
+              = metadata_help_link
+              %div.tab-content
+                - if @selected_attributes.empty?
+                  - @categories_order.each_with_index  do |key, index|
+                    - properties = @category_attributes[key]
+                    .edit-ontology-tab.tab-pane.fade{id: key.parameterize+'-tab', class: section.eql?(key.parameterize) ? 'active show' : ''}
+                      = render TurboFrameComponent.new(id: "ontology-content-#{index}", loading:"lazy", src: "edit_properties?properties=#{properties.join(',')}&container_id=ontology-content-#{index}")
+                - else
+                  - link  = ontology_submission_edit_properties_path(@ontology.acronym, params[:id], properties: @selected_attributes.join(','), container_id: 'ontology-content-0')
+                  = render TurboFrameComponent.new(id: "ontology-content-0", loading:"lazy", src: link)
+
+        %hr#edit-ontology-actions-devider
+        .edit-ontology-actions
+          - unless params[:container_id]
+            .cancel-button.mx-2{onClick: 'window.history.back();'}
+              = form_cancel_button
+          .save-button
+            = form_save_button
+
+
+  :javascript
+    function onMetadataChange(){
+      document.querySelector('.edit-ontology-tab-item.d-block.active.show')?.classList.remove('active', 'show')
+      document.querySelector('.edit-ontology-tab.tab-pane.fade.active.show')?.classList.remove('active', 'show')
+      document.getElementById('categories-tabs')?.classList.add('disabled')
+
+      let frame = document.getElementById('metadata_by_ontology')
+      let properties = document.getElementById('select_search_metadata')
+
+      let selectedProperties = "all"
+      if(properties && properties.selectedOptions.length > 0){
+        selectedProperties = Array.from(properties.selectedOptions).map(({ value }) => value).join(',')
+        frame.src = "./edit_properties?properties=" + selectedProperties
+      } else {
+        Turbo.visit(location.href)
+      }
+
+    }

@@ -36,7 +36,7 @@ class OntolobridgeController < ApplicationController
       response["error"] = e.message
     rescue Exception => e
       code = 500
-      response["error"] = "Problem creating a new term #{endpoint}: #{e.class} - #{e.message}"
+      response["error"] = t('ontolobridge.problem_of_creating_new_term', endpoint: endpoint, class: e.class, message: e.message)
     end
 
     render json: [response, code], status: code

@@ -1,15 +1,13 @@
-- @title = "BioPortal Administration"
+- @title = t('admin.index.title')
 
-%div.row
-  %div.col
-    %h3.my-4 Administration Console
 
-%div.row
-  %div.col-2
-    %div#progress_message{:class => "alert-box progress_box"}
-    %div#success_message{:class => "alert-box success"}
-    %div#error_message{:class => "alert-box error"}
-    %div#info_message{:class => "alert-box notice"}
+%div
+  %div.container.my-3
+    = render_alerts_container
+    = render Display::AlertComponent.new(id: 'progress_message', type:'info')
+    = render Display::AlertComponent.new(id: 'success_message', type:'success')
+    = render Display::AlertComponent.new(id: 'error_message', type:'danger')
+    = render Display::AlertComponent.new(id: 'info_message', type:'info')
 
 %div.row
   %div.col
@@ -61,15 +59,14 @@
           %table{:style => "float:left;"}
             %tr
               %td{:style => "white-space:nowrap;"}
-                Report generated on:&nbsp;&nbsp;
+                = t('admin.index.report_generated_on')
+                &nbsp;&nbsp;
                 %span.report_date_generated
                 %a#refresh_report_action{:href => "javascript:;", :class => "link_button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only", :style => "margin-left:11px;"}
                   %span.ui-button-text{:class => "report_date_generated_button"}
           %p.tab_description{:style => "clear:both;"}
-          %table#adminOntologies.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
-
-      -# Licensing tab
-      %div.tab-pane.fade{id: "licensing", role: "tabpanel", aria: { labelledby: "licensing-admin-tab" }}
+          %table#adminOntologies.border.rounded.p-1
+      - t.item_content do
         %div#renew-license-notice
 
         %table.table.table-sm.table-bordered.mt-5#license-table
@@ -82,19 +79,20 @@
           %tbody
 
         %div.mb-5#renew-license-button
-          = link_to("Renew license", new_admin_license_path(), class: "btn btn-primary", role: "button", remote: "true")
+          = link_to(t('admin.index.renew_license'), new_admin_license_path, class: "btn btn-primary", role: "button", remote: "true")
 
         %div.mb-5#renew-license-form
-
-      -# Users tab
-      %div.tab-pane.fade{id: "users", role: "tabpanel", aria: { labelledby: "users-admin-tab" }}
-        %div.ontologies_list_container.mt-3
-          %table#adminUsers.zebra{:cellpadding => "0", :cellspacing => "0", :width => "100%"}
-      
-      -# metadata tab
-      %div.tab-pane.fade{id: "ontologies_metadata_curator", role: "tabpanel", aria: { labelledby: "ontologies_metadata_curator-admin-tab" }}
+      - t.item_content do
+        = render TurboFrameComponent.new(id: 'users-list', src: users_path, loading: 'lazy')
+      - t.item_content do
         = render partial: 'ontologies_metadata_curator/metadata_tab'
-
-
-
-  
+      - t.item_content do
+        = render TurboFrameComponent.new(id: 'groups-list', src: admin_groups_path, loading: 'lazy')
+      - t.item_content do
+        = render TurboFrameComponent.new(id: 'categories-list', src: admin_categories_path, loading: 'lazy')
+      - t.item_content do
+        = render TurboFrameComponent.new(id: 'agents-list', src: agents_path, loading: 'lazy')
+      - t.item_content do
+        = sparql_query_container
+      - t.item_content do
+        = render TurboFrameComponent.new(id: 'search-admin', src: '/admin/search', loading: 'lazy')

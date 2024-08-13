@@ -14,25 +14,35 @@ module ApplicationHelper
     end
   end
 
-  def isOwner?(id)
-    unless session[:user].nil?
-      if session[:user].admin?
-        return true
-      elsif session[:user].id.eql?(id)
-        return true
-      else
-        return false
-      end
+  def rest_hostname
+    extract_hostname(REST_URI)
+  end
+
+  def extract_hostname(url)
+    begin
+      uri = URI.parse(url)
+      uri.hostname
+    rescue URI::InvalidURIError
+      url
     end
+  end
+
+  def omniauth_providers_info
+    $OMNIAUTH_PROVIDERS
+  end
+
+  def omniauth_provider_info(strategy)
+    omniauth_providers_info.select {|k,v| v[:strategy].eql?(strategy.to_sym) || k.eql?(strategy)}
+  end
+
+  def omniauth_token_provider(strategy)
+    omniauth_provider_info(strategy.to_sym).keys.first
   end
 
   def encode_param(string)
     CGI.escape(string)
   end
 
-  def escape(string)
-    CGI.escape(string)
-  end
 
   def unescape(string)
     CGI.unescape(string)
@@ -62,9 +72,6 @@ module ApplicationHelper
     session[:user] && session[:user].admin?
   end
 
-  def remove_owl_notation(string)
-    # TODO_REV: No OWL notation, but should we modify the IRI?
-    return string
 
     unless string.nil?
       strings = string.split(":")
@@ -257,25 +264,9 @@ module ApplicationHelper
     }
   end
 
-  def init_ontology_picker(ontologies = nil, selected_ontologies = [])
-    get_ontologies_data(ontologies)
-    get_groups_data
-    get_categories_data
-    # merge group and category ontologies into a json array
-    onts_in_gp_or_cat = @groups_map.values.flatten.to_set
-    onts_in_gp_or_cat.merge @categories_map.values.flatten.to_set
-    @onts_in_gp_or_cat_for_js = onts_in_gp_or_cat.sort.to_json
-  end
-
-  def init_ontology_picker_single
-    get_ontologies_data
-  end
-
-  def get_ontologies_data(ontologies = nil)
+  def onts_for_select
     ontologies ||= LinkedData::Client::Models::Ontology.all(include: "acronym,name")
-    @onts_for_select = []
-    @onts_acronym_map = {}
-    @onts_uri2acronym_map = {}
+    onts_for_select = [['', '']]
     ontologies.each do |ont|
       # TODO: ontologies parameter may be a list of ontology models (not ontology submission models):
       # ont.acronym instead of ont.ontology.acronym
@@ -285,24 +276,16 @@ module ApplicationHelper
       next if (ont.acronym.nil? or ont.acronym.empty?)
       acronym = ont.acronym
       name = ont.name
-      #id = ont.id # ontology URI
       abbreviation = acronym.empty? ? "" : "(#{acronym})"
       ont_label = "#{name.strip} #{abbreviation}"
-      #@onts_for_select << [ont_label, id]  # using the URI crashes the UI checkbox selection behavior.
-      @onts_for_select << [ont_label, acronym]
-      @onts_acronym_map[ont_label] = acronym
-      @onts_uri2acronym_map[ont.id] = acronym  # required in ontologies_to_acronyms
+      onts_for_select << [ont_label, acronym]
     end
     @onts_for_select.sort! { |a, b| a[0].downcase <=> b[0].downcase }
     @onts_for_js = @onts_acronym_map.to_json
   end
 
-  def categories_for_select
-    # This method is called in the search index page.
-    get_ontologies_data
-    get_categories_data
-    return @categories_for_select
-  end
+  def link_last_part(url)
+    return "" if url.nil?
 
   def get_categories_data
     @categories_for_select = []
@@ -354,59 +337,65 @@ module ApplicationHelper
     !@subdomain_filter.nil? && !@subdomain_filter[:active].nil? && @subdomain_filter[:active] == true
   end
 
-  def truncate_with_more(text, options = {})
-    length ||= options[:length] ||= 30
-    trailing_text ||= options[:trailing_text] ||= " ... "
-    link_more ||= options[:link_more] ||= "[more]"
-    link_less ||= options[:link_less] ||= "[less]"
-    more_text = " <a href='javascript:void(0);' class='truncated_more'>#{link_more}</a></span><span class='truncated_less'>#{text} <a href='javascript:void(0);' class='truncated_less'>#{link_less}</a></span>"
-    more = text.length > length ? more_text : "</span>"
-    output = "<span class='more_less_container'><span class='truncated_more'>#{truncate(text, :length => length, :omission => trailing_text)}" + more + "</span>"
-  end
-
 
   def add_comment_button(parent_id, parent_type)
     if session[:user].nil?
-      link_to "Add comment",  login_index_path(redirect: request.url), class: "link_button"
+      link_to t('application.add_comment'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim"
     else
-      link_to_modal "Add comment", notes_new_comment_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
-                    class: "add_comment btn btn-primary", data: { show_modal_title_value: "Add a new comment"}
+      link_to_modal t('application.add_comment'), notes_new_comment_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
+                    class: "secondary-button regular-button slim", data: { show_modal_title_value: t('application.add_new_comment')}
     end
   end
 
   def add_reply_button(parent_id)
     if session[:user].nil?
-      link_to "Reply", login_index_path, 'data-turbo': false
+      link_to t('application.reply'), login_index_path, 'data-turbo': false
     else
-      link_to 'Reply', notes_new_reply_path(parent_id: parent_id ), "data-turbo-frame": "#{parent_id}_new_reply"
+      link_to t('application.reply'), notes_new_reply_path(parent_id: parent_id ), "data-turbo-frame": "#{parent_id}_new_reply"
     end
   end
-
 
   def add_proposal_button(parent_id, parent_type)
     if session[:user].nil?
-        link_to "Add proposal",  login_index_path(redirect: request.url), class: "link_button"
+      link_to t('application.add_proposal'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim"
     else
-      link_to_modal "Add proposal", notes_new_proposal_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
-                    class: "add_proposal btn btn-primary", data: { show_modal_title_value: "Add a new proposal"}
+      link_to_modal t('application.add_proposal'), notes_new_proposal_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
+                    class: "secondary-button regular-button slim", data: { show_modal_title_value: t('application.add_new_proposal')}
     end
   end
- 
+
+
+  def link?(str)
+    # Regular expression to match strings starting with "http://" or "https://"
+    link_pattern = /\Ahttps?:\/\//
+    str = str&.strip
+    # Check if the string matches the pattern
+    !!(str =~ link_pattern)
+  end
+
   def subscribe_button(ontology_id)
-    if session[:user].nil?
-      return link_to 'Subscribe to notes emails', "/login?redirect=#{request.url}", {style:'font-size: .9em;', class:'link_button'}
+    return if ontology_id.nil?
+    render TurboFrameComponent.new(id: 'subscribe_button', src: ontology_subscriptions_path(ontology_id: ontology_id.split('/').last), class: 'ml-1') do |t|
+      t.loader do
+        content_tag(:div, style: 'margin-left: 10px;') do
+          render PillButtonComponent.new do
+            (content_tag(:span, t('application.watching'), class: 'ml-1') + render(LoaderComponent.new(small: true))).html_safe
+          end
+        end
+      end
     end
+  end
 
-    user = LinkedData::Client::Models::User.find(session[:user].id)
-    ontology_acronym = ontology_id.split('/').last
-    subscribed = subscribed_to_ontology?(ontology_acronym, user)
-
-    render OntologySubscribeButtonComponent.new(ontology_id: ontology_id, subscribed: subscribed, user_id: user.id)
+  def admin_block(ontology: @ontology, user: session[:user], class_css: "admin-border", &block)
+    if ontology.admin?(user)
+      content_tag(:div, class: class_css) do
+        capture(&block) if block_given?
+      end
+    end
   end
 
   def subscribed_to_ontology?(ontology_acronym, user)
-    user.bring(:subscription) if user.subscription.nil?
-    # user.subscription is an array of subscriptions like {ontology: ontology_id, notification_type: "NOTES"}
+    user = LinkedData::Client::Models::User.find(user.username, {include: 'subscription'}) if user.subscription.nil?
     return false if user.subscription.nil? or user.subscription.empty?
     user.subscription.each do |sub|
       #sub = {ontology: ontology_acronym, notification_type: "NOTES"}
@@ -444,24 +433,22 @@ module ApplicationHelper
     #return DateTime.xmlschema( xml_date_time_str ).to_date.to_s
   end
 
-  def flash_class(level)
+  def notification_type(flash_key)
     bootstrap_alert_class = {
       "notice" => "alert-info",
       "success" => "alert-success",
       "error" => "alert-danger",
       "alert" => "alert-danger",
     }
-    bootstrap_alert_class[level]
+    bootstrap_alert_class[flash_key]
   end
 
-  ###BEGIN ruby equivalent of JS code in bp_ajax_controller.
-  ###Note: this code is used in concepts/_details partial.
   def bp_ont_link(ont_acronym)
     return "/ontologies/#{ont_acronym}"
   end
 
   def bp_class_link(cls_id, ont_acronym)
-    return "#{bp_ont_link(ont_acronym)}?p=classes&conceptid=#{escape(cls_id)}"
+    return "#{bp_ont_link(ont_acronym)}?p=classes&conceptid=#{escape(cls_id)}&language=#{request_lang}"
   end
 
   def bp_scheme_link(scheme_id, ont_acronym)
@@ -486,7 +473,7 @@ module ApplicationHelper
   end
 
   def label_ajax_data(cls_id, ont_acronym, ajax_uri, cls_url)
-    tag.attributes label_ajax_data_h(cls_id, ont_acronym, ajax_uri, cls_url)
+    label_ajax_data_h(cls_id, ont_acronym, ajax_uri, cls_url)
   end
 
   def label_ajax_link(link, cls_id, ont_acronym, ajax_uri, cls_url, target = "")
@@ -558,21 +545,18 @@ module ApplicationHelper
     if name.nil?
       link_to(options, html_options, &block)
     else
-      link_to(name, options, html_options)
+      link_to(link,'', {data: data[:data], class: 'btn btn-sm btn-light m-1', target: '_blank'})
     end
+
+
   end
-  def submit_to_modal(name, html_options = nil, &block)
-    new_data = {
-      controller: 'show-modal', turbo: true,
-      turbo_frame: 'application_modal_content',
-      action: 'click->show-modal#show'
-    }
 
-    html_options[:data].merge!(new_data) do |_, old, new|
-      "#{old} #{new}"
-    end
+  def ontology_viewer_page_name(ontology_name, concept_label, page)
+    ontology_name + " | "  + " #{page.capitalize}"
+  end
 
-    submit_tag(name || "save", html_options)
+  def help_path(anchor: nil)
+    "#{Rails.configuration.settings.links[:help]}##{anchor}"
   end
 
   def uri?(url)
@@ -595,4 +579,168 @@ module ApplicationHelper
     submission = @submission || @submission_latest
     submission&.hasOntologyLanguage === "SKOS"
   end
+
+  def current_page?(path)
+    request.path.eql?(path)
+  end
+
+  def bp_config_json
+    # For config settings, see
+    # config/bioportal_config.rb
+    # config/initializers/ontologies_api_client.rb
+    config = {
+      org: $ORG,
+      org_url: $ORG_URL,
+      site: $SITE,
+      org_site: $ORG_SITE,
+      ui_url: $UI_URL,
+      apikey: LinkedData::Client.settings.apikey,
+      userapikey: get_apikey,
+      rest_url: LinkedData::Client.settings.rest_url,
+      proxy_url: $PROXY_URL,
+      biomixer_url: $BIOMIXER_URL,
+      annotator_url: $ANNOTATOR_URL,
+      ncbo_annotator_url: $NCBO_ANNOTATOR_URL,
+      ncbo_apikey: $NCBO_API_KEY,
+      interportal_hash: $INTERPORTAL_HASH,
+      resolve_namespace: RESOLVE_NAMESPACE
+    }
+    config[:ncbo_slice] = @subdomain_filter[:acronym] if (@subdomain_filter[:active] && !@subdomain_filter[:acronym].empty?)
+    config.to_json
+  end
+
+  def portal_name
+    $SITE
+  end
+
+  def navitems
+    items = [["/ontologies", t('layout.header.browse')],
+             ["/mappings", t('layout.header.mappings')],
+             ["/recommender", t("layout.header.recommender")],
+             ["/annotator", t("layout.header.annotator")],
+             ["/landscape", t("layout.header.landscape")]]
+  end
+
+  def beta_badge(text = t('application.beta_badge_text'), tooltip: t('application.beta_badge_tooltip'))
+    return unless text
+    content_tag(:span, text, data: { controller: 'tooltip' }, title: tooltip, class: 'badge badge-pill bg-secondary text-white')
+  end
+
+  def attribute_enforced_values(attr)
+    submission_metadata.select {|x| x['@id'][attr]}.first['enforcedValues']
+  end
+
+  def prefix_properties(concept_properties)
+    modified_properties = {}
+
+    concept_properties&.each do |key, value|
+      if value.is_a?(Hash) && value.key?(:key)
+        key_string = value[:key].to_s
+        next if key_string.include?('metadata')
+
+        modified_key = prefix_property_url(key_string, key)
+
+        if modified_key
+          modified_properties[modified_key] = value
+        else
+          modified_properties[link_last_part(key_string)] = value
+        end
+
+      end
+    end
+
+    modified_properties
+  end
+
+  def rest_url
+    # Split the URL into protocol and path parts
+    protocol, path = $REST_URL.split("://", 2)
+
+    # Remove the last '/' in the path part
+    cleaned_path = path.chomp('/')
+    # Reconstruct the cleaned URL
+    "#{protocol}://#{cleaned_path}"
+  end
+
+  def prefix_property_url(key_string, key = nil)
+    namespace_key, _ = RESOLVE_NAMESPACE.find { |_, value| key_string.include?(value) }
+
+    if key && namespace_key
+      "#{namespace_key}:#{key}"
+    elsif key.nil? && namespace_key
+      namespace_key
+    else # we don't try to guess the prefix
+      nil
+    end
+  end
+
+  def prefixed_url(url)
+    key = link_last_part(url)
+    prefix_property_url(url.split(key).first, key)
+  end
+
+  def show_advanced_options_button(text: nil, init: nil)
+    content_tag(:div, class: "#{init ? 'd-none' : ''} advanced-options-button", 'data-action': 'click->reveal-component#show', 'data-reveal-component-target': 'showButton') do
+      inline_svg_tag('icons/settings.svg') +
+      content_tag(:div, text, class: 'text')
+    end
+  end
+
+  def hide_advanced_options_button(text: nil, init: nil)
+    content_tag(:div, class: "#{init ? '' : 'd-none'} advanced-options-button", 'data-action': 'click->reveal-component#hide', 'data-reveal-component-target': 'hideButton') do
+      inline_svg_tag('icons/hide.svg') +
+      content_tag(:div, text, class: 'text')
+    end
+  end
+
+  def insert_sample_text_button(text)
+    content_tag(:div, class:'insert-sample-text-button') do
+      content_tag(:div, class: 'button', 'data-action': 'click->sample-text#annotator_recommender', 'data-sample-text': t("annotator.sample_text")) do
+        content_tag(:div, text, class: 'text') +
+        inline_svg_tag('icons/arrow-curved-up.svg')
+      end
+    end
+  end
+
+  def empty_state(text)
+    content_tag(:div, class:'browse-empty-illustration') do
+      inline_svg_tag('empty-box.svg') +
+      content_tag(:p, text)
+    end
+  end
+
+  def ontologies_selector(id:, label: nil, name: nil, selected: nil, placeholder: nil, multiple: true, ontologies: onts_for_select)
+    content_tag(:div) do
+      render(Input::SelectComponent.new(id: id, label: label, name: name, value: ontologies, multiple: multiple, selected: selected, placeholder: placeholder)) +
+      content_tag(:div, class: 'ontologies-selector-button', 'data-controller': 'ontologies-selector', 'data-ontologies-selector-id-value': id) do
+        content_tag(:div, t('ontologies_selector.clear_selection'), class: 'clear-selection', 'data-action': 'click->ontologies-selector#clear') +
+        link_to_modal(t('ontologies_selector.ontologies_advanced_selection'), "/ontologies_selector?id=#{id}", data: { show_modal_title_value: t('ontologies_selector.ontologies_advanced_selection')})
+      end
+    end
+  end
+
+  def link_button_component(href: , value: , id:, size: nil, variant: 'primary')
+    render Buttons::RegularButtonComponent.new(id:id, value: value, variant: variant, type: 'link', href: href, size: size)
+  end
+
+  def save_button_component(class_name: nil, id: , value:, data: nil, size: nil, type: nil)
+    content_tag(:div, data: data, class: class_name) do
+      render Buttons::RegularButtonComponent.new(id:id, value: value, variant: "primary", state: 'regular', size: size, type: type) do |btn|
+        btn.icon_right do
+          inline_svg_tag "check.svg"
+        end
+      end
+    end
+  end
+
+  def cancel_button_component(class_name: nil, id: , value:, data: nil)
+    content_tag(:div, data: data, class: class_name) do
+      render Buttons::RegularButtonComponent.new(id:id, value: value, variant: "secondary", state: 'regular') do |btn|
+        btn.icon_left do
+          inline_svg_tag "x.svg"
+        end
+      end
+    end
+  end
+
 end

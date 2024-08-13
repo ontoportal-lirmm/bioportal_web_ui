@@ -42,7 +42,8 @@ set :linked_dirs, %w{log tmp/pids tmp/cache public/system public/assets}
 set :keep_releases, 5
 set :bundle_without, "development:test"
 set :bundle_config, { deployment: true }
-
+set :rails_env, "appliance"
+set :config_folder_path, "#{fetch(:application)}/#{fetch(:stage)}"
 # Defaults to [:web]
 set :assets_roles, [:web, :app]
 set :keep_assets, 3
@@ -55,6 +56,43 @@ set :passenger_restart_with_touch, true
 # If you don't set `:passenger_restart_with_touch`, capistrano-passenger will check what version of passenger you are running
 # and use `passenger-config restart-app` if it is available in that version.
 
+# you can set custom ssh options
+# it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options
+# you can see them in [net/ssh documentation](http://net-ssh.github.io/net-ssh/classes/Net/SSH.html#method-c-start)
+# set it globally
+#  set :ssh_options, {
+#    keys: %w(/home/rlisowski/.ssh/id_rsa),
+#    forward_agent: false,
+#    auth_methods: %w(password)
+#  }
+# and/or per server
+# server 'example.com',
+#   user: 'user_name',
+#   roles: %w{web app},
+#   ssh_options: {
+#     user: 'user_name', # overrides user setting above
+#     keys: %w(/home/user_name/.ssh/id_rsa),
+#     forward_agent: false,
+#     auth_methods: %w(publickey password)
+#     # password: 'please use keys'
+#   }
+# setting per server overrides global ssh_options
+
+SSH_JUMPHOST = ENV.include?('SSH_JUMPHOST') ? ENV['SSH_JUMPHOST'] : 'jumpbox.hostname.com'
+SSH_JUMPHOST_USER = ENV.include?('SSH_JUMPHOST_USER') ? ENV['SSH_JUMPHOST_USER'] : 'username'
+
+JUMPBOX_PROXY = "#{SSH_JUMPHOST_USER}@#{SSH_JUMPHOST}"
+set :ssh_options, {
+  user: 'ontoportal',
+  forward_agent: 'true',
+  keys: %w(config/deploy_id_rsa),
+  auth_methods: %w(publickey),
+  # use ssh proxy if UI servers are on a private network
+  proxy: Net::SSH::Proxy::Command.new("ssh #{JUMPBOX_PROXY} -W %h:%p")
+}
+
+#private git repo for configuraiton
+PRIVATE_CONFIG_REPO = ENV.include?('PRIVATE_CONFIG_REPO') ? ENV['PRIVATE_CONFIG_REPO'] : 'https://your_github_pat_token@github.com/your_organization/ontoportal-configs.git'
 desc "Check if agent forwarding is working"
 task :forwarding do
   on roles(:all) do |h|
@@ -83,7 +121,7 @@ namespace :deploy do
       TMP_CONFIG_PATH = "/tmp/#{SecureRandom.hex(15)}".freeze
       on roles(:app) do
         execute "git clone -q #{PRIVATE_CONFIG_REPO} #{TMP_CONFIG_PATH}"
-        execute "rsync -a #{TMP_CONFIG_PATH}/#{fetch(:application)}/ #{release_path}/"
+        execute "rsync -a #{TMP_CONFIG_PATH}/#{fetch(:config_folder_path)}/ #{release_path}/"
         execute "rm -rf #{TMP_CONFIG_PATH}"
       end
     elsif defined?(LOCAL_CONFIG_PATH)
@@ -102,6 +140,7 @@ namespace :deploy do
   end
 
 
+  after :updating, :get_config
   after :publishing, :restart
 
   after :restart, :clear_cache do

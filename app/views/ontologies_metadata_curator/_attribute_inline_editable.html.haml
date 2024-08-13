@@ -1,4 +1,4 @@
-- acronym = ontology.acronym
+- acronym = ontology ? ontology.acronym : submission.id.split('/')[-3]
 - submission_id = submission.submissionId
 - id = attribute_input_frame_id(acronym, submission_id, attribute)
 = render TurboFrameComponent.new(id: id+'_form') do
@@ -6,19 +6,5 @@
     = hidden_field object_name(acronym, submission_id), :ontology, value: acronym
     = hidden_field object_name(acronym, submission_id), :id, value: submission_id
     = hidden_field_tag :attribute, attribute
-    = render TurboFrameComponent.new(id: id) do
-      %div.d-flex.justify-content-between.align-items-center
-        %div.d-flex.justify-content-between
-          %div
-            - equivalents = equivalent_properties(attribute)
-            - equivalents.each do |attr|
-              %div.d-flex
-                - if equivalents.size > 1
-                  %span= "#{attr}: "
-                %div
-                  = render_submission_attribute_inline(attr.to_s, submission, acronym)
-
-
-          %div
-            %a.btn.btn-sm.btn-light{href: "ontologies_metadata_curator/#{ontology.acronym}/submissions/#{submission_id}?properties=#{attribute}&inline_save=true", data: {turbo: true}}
-              %i.far.fa-edit
+    = render partial: "ontologies_metadata_curator/attribute", locals: { id: id, attribute: attribute,
+                    submission: submission , ontology: ontology}

@@ -1,5 +1,0 @@
-- @title = "Edit Ontology Information"
-
-%div{:style => "margin:10px;"}
-  = form_for :ontology, url: ontology_path(@ontology.acronym), html: {method: :put, id: "ontologyForm"} do |f|
-    = render partial: "form", locals: {f: f, button_text: "Save ontology", title_text: "Edit Ontology Information"}

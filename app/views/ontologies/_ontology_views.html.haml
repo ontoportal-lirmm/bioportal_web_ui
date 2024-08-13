@@ -1,0 +1,8 @@
+- if @views.empty?
+  = empty_state_message t("ontologies.no_views", acronym: @ontology.acronym)
+- else
+  %div.border-top
+    %dl
+      - @view_decorators.each do |view_decorator|
+        %dt= view_decorator.linked_name
+        %dd= view_decorator.description

@@ -1,0 +1,8 @@
+.dropdown{class:@component_classes}
+  %div.d-flex.align-items-center{data: {toggle: "dropdown"}}
+    %div
+      = header
+    %i.fas.fa-chevron-down.ml-1
+  %div.dropdown-menu
+    - sections.each do |s|
+      = s

@@ -1,4 +1,4 @@
-= render TurboFrameComponent.new(id: 'application_modal_content') do
+= render_in_modal do
   :javascript
     function updateProposalForm(event){
       let frame = document.getElementById('application_modal_content')
@@ -19,35 +19,35 @@
 
     - if type.eql?('ProposalChangeHierarchy')
       .form-group
-        = text_field_tag 'proposal[reasonForChange]', '', placeholder: "Reason for change", class: "form-control", required: true
+        = text_field_tag 'proposal[reasonForChange]', '', placeholder: t('notes.new_proposal.reason_for_change'), class: "form-control", required: true
       .form-group
-        = text_field_tag 'proposal[newTarget]', '', placeholder: "New target", class: "form-control", required: true
+        = text_field_tag 'proposal[newTarget]', '', placeholder: t('notes.new_proposal.new_target'), class: "form-control", required: true
       .form-group
-        = text_field_tag 'proposal[oldTarget]', '', placeholder: "Old target", class: "form-control", required: true
+        = text_field_tag 'proposal[oldTarget]', '', placeholder: t('notes.new_proposal.old_target'), class: "form-control", required: true
       .form-group
-        = text_field_tag 'proposal[newRelationshipType]', '', placeholder: "Relationship type", class: "form-control", required: true
+        = text_field_tag 'proposal[newRelationshipType]', '', placeholder: t('notes.new_proposal.relationship_type'), class: "form-control", required: true
 
     - elsif type.eql?('ProposalChangeProperty')
       .form-group
-        = text_field_tag 'proposal[reasonForChange]', '', placeholder: "Reason for change", class: "form-control", required: true
+        = text_field_tag 'proposal[reasonForChange]', '', placeholder: t('notes.new_proposal.reason_for_change'), class: "form-control", required: true
       .form-group
-        = text_field_tag 'proposal[propertyId]', '', placeholder: "Property id", class: "form-control", required: true
+        = text_field_tag 'proposal[propertyId]', '', placeholder: t('notes.new_proposal.property_id'), class: "form-control", required: true
       .form-group
-        = text_field_tag 'proposal[newValue]', '', placeholder: "New value", class: "form-control", required: true
+        = text_field_tag 'proposal[newValue]', '', placeholder: t('notes.new_proposal.new_value'), class: "form-control", required: true
       .form-group
-        = text_field_tag 'proposal[oldValue]', '', placeholder: "Old value", class: "form-control", required: true
+        = text_field_tag 'proposal[oldValue]', '', placeholder: t('notes.new_proposal.old_value'), class: "form-control", required: true
     - else
       .form-group
-        = text_field_tag 'proposal[reasonForChange]', '', placeholder: "Reason for change", class: "form-control", required: true
+        = text_field_tag 'proposal[reasonForChange]', '', placeholder: t('notes.new_proposal.reason_for_change'), class: "form-control", required: true
       .form-group
-        = text_field_tag 'proposal[classId]','', placeholder: "Class id", class: "form-control", required: true
+        = text_field_tag 'proposal[classId]','', placeholder: t('notes.new_proposal.class_id'), class: "form-control", required: true
       .form-group
-        = text_field_tag 'proposal[label]','', placeholder: "Label", class: "form-control", required: true
+        = text_field_tag 'proposal[label]','', placeholder: t('notes.new_proposal.label'), class: "form-control", required: true
       .form-group
-        = text_field_tag 'proposal[synonym]','', placeholder: "Synonym", class: "form-control", required: true
+        = text_field_tag 'proposal[synonym]','', placeholder:t('notes.new_proposal.synonym'), class: "form-control", required: true
       .form-group
-        = text_area_tag 'proposal[definition]','', placeholder: "Definition", class: "form-control", required: true
+        = text_area_tag 'proposal[definition]','', placeholder: t('notes.new_proposal.definition'), class: "form-control", required: true
       .form-group
-        = text_field_tag 'proposal[parent]','', placeholder: "Parent", class: "form-control", required: true
+        = text_field_tag 'proposal[parent]','', placeholder: t('notes.new_proposal.parent'), class: "form-control", required: true
 
-    = submit_tag "Save" , class:'btn btn-success btn-block'
+    = submit_tag t('notes.new_proposal.save') , class:'btn btn-success btn-block'

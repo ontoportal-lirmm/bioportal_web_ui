@@ -6,29 +6,47 @@ class SearchController < ApplicationController
   layout :determine_layout
 
   def index
-    @search_query = params[:query].nil? ? params[:q] : params[:query]
-    @search_query ||= ""
+    @search_query = params[:query] || params[:q] || ''
+    params[:query] = nil
+    @advanced_options_open = false
+    @search_results = []
+    @json_url = json_link("#{rest_url}/search", {})
+
+    return if @search_query.empty?
+
+    params[:pagesize] = "150"
+    results = LinkedData::Client::Models::Class.search(@search_query, params).collection
+
+    @advanced_options_open = !search_params_empty?
+    @search_results = aggregate_results(@search_query, results)
+    @json_url = json_link("#{rest_url}/search", params.permit!.to_h)
   end
 
   def json_search
     if params[:q].nil?
-      render :text => "No search class provided"
+      render :text => t('search.no_search_class_provided')
       return
     end
     check_params_query(params)
     check_params_ontologies(params)  # Filter on ontology_id
+    if params["id"]&.eql?('All')
+      params.delete("id")
+      params.delete("ontologies")
+    end
     search_page = LinkedData::Client::Models::Class.search(params[:q], params)
     @results = search_page.collection
 
     response = ""
     obsolete_response = ""
     separator = (params[:separator].nil?) ? "~!~" : params[:separator]
-    for result in @results
+
+    for result in Array(@results)
       # TODO_REV: Format the response with type information, target information
       # record_type = format_record_type(result[:recordType], result[:obsolete])
       record_type = ""
 
-      target_value = result.prefLabel
+      target_value = result.prefLabel.select{|x| x.include?( params[:q].delete('*'))}.first || result.prefLabel.first
+
       case params[:target]
       when "name"
         target_value = result.prefLabel
@@ -38,14 +56,15 @@ class SearchController < ApplicationController
         target_value = result.id
       end
 
+      acronym =  result.links["ontology"].split('/').last
       json = []
       json << "#{target_value}"
       json << " [obsolete]" if result.obsolete? # used by JS in ontologies/visualize to markup obsolete classes
       json << "|#{result.id}"
       json << "|#{record_type}"
-      json << "|#{result.explore.ontology.acronym}"
+      json << "|#{acronym}"
       json << "|#{result.id}" # Duplicated because we used to have shortId and fullId
-      json << "|#{result.prefLabel}"
+      json << "|#{target_value}"
       # This is nasty, but hard to workaround unless we rewrite everything (form_autocomplete, jump_to, crossdomain_autocomplete)
       # to use JSON from the bottom up. To avoid this, we pass a tab separated column list
       # Columns: synonym
@@ -53,8 +72,8 @@ class SearchController < ApplicationController
       if params[:id] && params[:id].split(",").length == 1
         json << "|#{CGI.escape((result.definition || []).join(". "))}#{separator}"
       else
-        json << "|#{result.explore.ontology.name}"
-        json << "|#{result.explore.ontology.acronym}"
+        json << "|#{acronym}"
+        json << "|#{acronym}"
         json << "|#{CGI.escape((result.definition || []).join(". "))}#{separator}"
       end
 

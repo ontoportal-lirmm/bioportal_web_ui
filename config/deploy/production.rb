@@ -6,7 +6,7 @@
 # Don't declare `role :all`, it's a meta role
 role :app, %w{ui1.prd.ontoportal.org ui2.prd.ontoportal.org}
 role :db, %w{ui1.prd.ontoportal.org} # sufficient to run db:migrate only on one system
-
+set :branch, ENV.include?('BRANCH') ? ENV['BRANCH'] : 'master'
 # Extended Server Syntax
 # ======================
 # This can be used to drop a more detailed server

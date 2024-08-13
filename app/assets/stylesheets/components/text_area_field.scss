@@ -1,0 +1,14 @@
+.text-content {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--read-more-line-clamp, 5);
+}
+
+
+.see_more_text {
+    color: var(--primary-color);
+    font-size: 15px;
+    margin-top: 10px;
+    text-align: end;
+}

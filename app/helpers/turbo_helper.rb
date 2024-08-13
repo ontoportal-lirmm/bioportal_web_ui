@@ -9,7 +9,7 @@ module TurboHelper
 
   def alert(id: nil, type: 'success', &block)
     turbo_stream.prepend(id ||alerts_container_id) do
-      AlertMessageComponent.new(type: type).render_in(view_context, &block)
+      Display::AlertComponent.new(type: type).render_in(view_context, &block)
     end
   end
 

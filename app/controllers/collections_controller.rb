@@ -2,6 +2,8 @@ class CollectionsController < ApplicationController
   include CollectionsHelper
 
   def show
+    redirect_to(ontology_path(id: params[:ontology_id], p: 'collections', collectionid: params[:id], lang: request_lang)) and return unless turbo_frame_request?
+
     @collection = get_request_collection
   end
 
@@ -11,11 +13,12 @@ class CollectionsController < ApplicationController
     collection_label = collection["prefLabel"] if collection
     collection_label = params[:id] if collection_label.nil? || collection_label.empty?
 
-    render LabelLinkComponent.inline(params[:id], collection_label)
+    render LabelLinkComponent.inline(params[:id], helpers.main_language_label(collection_label))
   end
 
   def show_members
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id] || params[:ontology]).first
+    @submission = @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri')
     @collection = get_request_collection
     page = params[:page] || "1"
     @auto_click = page.to_s.eql?("1")

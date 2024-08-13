@@ -14,11 +14,11 @@
   - begin
     - ont = target_concept.explore.ontology
     - ont_name = ont.acronym
-    - ont_link =  link_to ont_name, ontology_path(ont_name)
+    - ont_link =  link_to ont_name, ontology_path(ont_name), 'data-turbo-frame':'_top'
   - rescue
     - ont_name =   target_concept.links['ontology'] || target_concept.id
     - ont_link =   ont_name
-  - cls_link = raw(get_link_for_cls_ajax(target_concept.id, ont_name))
+  - cls_link = raw(get_link_for_cls_ajax(target_concept.id, ont_name, '_top'))
   - type = 'Internal'
 - else
   - cls_label = get_label_for_external_cls(target_concept.links["self"])

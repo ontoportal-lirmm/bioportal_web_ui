@@ -1,6 +1,6 @@
-= turbo_frame_tag 'application_modal_content' do
+= render_in_modal do
   :javascript
-    var scrollY = window.getScrollTop()
+    var scrollY = window.scrollY || window.pageYOffset;
     $(document).ready(function(){
       $("#fair-details-content").scrollspy({
           target: "#fair-navbar",
@@ -26,12 +26,12 @@
                   = link_to question[0], "#"+get_name_with_out_dot(question[0]), data: {turbo: false}, class: "nav-link my-1 ml-3 text-dark"
         %div.col-9#fair-details-content{style:"overflow: scroll;height: 70vh"}
           %div.alert.alert-light
-            - mod_link =link_to "MOD1.4", "https://github.com/sifrproject/MOD-Ontology"
-            - submission_link =link_to "see the used properties",@rest_uri, target: "_blank"
+            - mod_link =link_to t("fair_score.mod_link"), "https://github.com/sifrproject/MOD-Ontology"
+            - submission_link =link_to t("fair_score.see_the_used_properties"),@rest_uri, target: "_blank"
             %div
-              Metadata properties listed in the following are picked from #{mod_link}.
+              = t("fair_score.metadata_properties", mod_link: "#{mod_link}").html_safe
             %div
-              This ontology repository implements #{mod_link} but does not necessity encode a metadata with the same properties (#{submission_link})
+              = t("fair_score.ontology_repository", mod_link: "#{mod_link}", submission_link: "#{submission_link}").html_safe
           %div{style:"margin-bottom:400px"}
             - @fair_scores_data[:criteria][:labels].each_with_index  do |label , index|
               %div.my-3.border{id:get_name_with_out_dot(label)}
@@ -86,10 +86,10 @@
                           -if !not_implemented?(question[1]) && !default_score?(question[1])
                             -if question[1]["points"]
                               %button.btn.btn-outline-primary{'data-toggle':"collapse" ,'data-target':"#collapse-credits-"+get_name_with_out_dot(question[0])}
-                                See possible credits
+                                = t("fair_score.see_possible_credits")
                             -if question[1]["properties"]
                               %button.btn.btn-outline-primary{'data-toggle':"collapse" ,'data-target':"#collapse-properties-"+get_name_with_out_dot(question[0])}
-                                See metadata used properties
+                                = t("fair_score.see_metadata_used_properties")
                         %div.mt-2
                           %div.collapse{id:"collapse-credits-"+get_name_with_out_dot(question[0])}
                             %div.card.p-3
@@ -110,9 +110,9 @@
                                         = key
                                       %span.badge.badge-light{style:"white-space:normal"}
                                         - if value == nil
-                                          not found
+                                          = t("fair_score.not_found")
                                         -elsif value == "" || value == "[]"
-                                          null
+                                          = t("fair_score.null")
                                         - else
                                           #{value}
 

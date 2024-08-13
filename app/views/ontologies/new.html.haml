@@ -1,5 +1,52 @@
-- @title = "Submit New Ontology"
+- @title = t("ontologies.submit_new_ontology")
 
 %div{:style => "margin:10px;"}
-  = form_for :ontology, url: {action: "create"}, html: {id: "ontologyForm"} do |f|
-    = render partial: "form", locals: {f: f}
+  = form_for :ontology, url: {action: "create"}, html: {id: "ontologyForm", multipart: true, novalidate: true} do
+    .upload-ontology-container
+      %div{style: 'width: 589px'}
+        = error_message_alert
+        .upload-ontology-card
+          .upload-ontology-center
+            .d-flex.justify-content-between
+              %a{:href => "javascript:javascript:history.go(-1)"}
+                %img.lost-password-arrowback{:src => "#{asset_path("arrow-back.svg")}"}
+              .register-title-container
+                %h2.register-title
+                  = @is_update_ontology ? t("ontologies.add_new_submission", acronym: @ontology.acronym) : t("ontologies.submit_new_ontology") 
+                %hr#register-title-line/
+              %div
+            .upload-ontology-progress
+              = render Layout::ProgressPagesComponent.new(pages_title: [t("ontologies.details"), t("ontologies.general_information"), t("ontologies.dates_and_contacts")]) do |c|
+                - c.page do
+                  = render partial: 'ontologies/form'
+                - c.page do
+                  .upload-ontology-desc
+                    = metadata_help_link
+                  .upload-ontology-input-field-container
+                    = attribute_input('URI', label: t("ontologies.uri"))
+                  .upload-ontology-input-field-container
+                    = attribute_input('description', long_text: true)
+                  - if @is_update_ontology
+                    .upload-ontology-input-field-container{id: "submissionnotes_from_group_input"}
+                      = attribute_input("notes", label: t("ontologies.change_notes"), long_text: true)
+                  .upload-ontology-field-container
+                    = has_ontology_language_input
+                  .upload-ontology-field-container.mt-3
+                    = render Layout::RevealComponent.new(selected: @submission.status, possible_values: ['retired']) do |c|
+                      - c.button do
+                        = attribute_input("status")
+                      - c.container do
+                        .upload-ontology-field-container
+                          - @submission.valid = nil unless @submission.status&.eql?('retired')
+                          = attribute_input("valid")
+                  .upload-ontology-field-container
+                    = render partial: 'ontologies/submission_location_form'
+
+                - c.page do
+                  .upload-ontology-input-field-container
+                    - if @is_update_ontology
+                      = attribute_input('modificationDate', label: t("ontologies.modification_date"), max_date: Date.today)
+                    - else
+                      = attribute_input('released',  label: t("ontologies.date_of_original_creation"),  max_date: Date.today)
+                  .upload-ontology-contact{id: "submissioncontact_from_group_input"}
+                    = contact_input(show_help: false)

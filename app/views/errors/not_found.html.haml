@@ -1,0 +1,12 @@
+.d-flex.align-items-center.flex-column.position-relative.error-page
+    = inline_svg("errors/agroportal.svg") 
+    %h1.position-absolute{style: "top: 442px; font-size: 30px; font-weight: 800; color: #263238;"}
+        = @error_message || t("errors.not_found_page")
+    .buttons.d-flex.justify-content-center.mt-3
+        %div{style: "width: 216px;"}
+            = render Buttons::RegularButtonComponent.new(id:'Home-button', value: t("errors.go_home_button"), variant: "secondary", href: "/") 
+        %div{style: "width: 216px; margin-left: 22px"}
+            = render Buttons::RegularButtonComponent.new(id:"feedback-button" ,value: t("errors.send_feedback_button"), variant: "primary", href: "/feedback?location=#{@referer_url}")
+
+
+

@@ -16,7 +16,7 @@ module InstancesHelper
            query_parameters, raw: raw)
   end
 
-  def get_instance_and_type(instance_id)
+  def get_instance_and_type(instance_id, acronym = @ontology.acronym)
     if instance_id.nil?
       [{}, nil]
     else
@@ -66,8 +66,8 @@ module InstancesHelper
 
   def instance_property_value(property, ontology_acronym)
     if uri?(property)
-      instance, types = get_instance_and_type(property)
-      return link_to_instance instance, ontology_acronym unless instance.empty?
+      instance, types = get_instance_and_type(property, ontology_acronym)
+      return link_to_instance(instance, ontology_acronym) unless instance.empty?
     end
     property
   end

@@ -1,6 +1,119 @@
+require 'iso-639'
 module OntologiesHelper
   REST_URI = $REST_URL
   API_KEY = $API_KEY
+  LANGUAGE_FILTERABLE_SECTIONS = %w[classes schemes collections instances properties].freeze
+
+  def ontology_access_denied?
+    @ontology&.errors&.include?('Access denied for this resource')
+  end
+
+  def concept_search_input(placeholder)
+    content_tag(:div, class: 'search-inputs p-1') do
+      text_input(placeholder: placeholder, label: '', name: "search", value: '', data: { action: "input->browse-filters#dispatchInputEvent" })
+    end
+  end
+
+  def tree_container_component(id:, placeholder:, frame_url:, tree_url:)
+    content_tag(:div, class: 'search-page-input-container', data: { controller: "turbo-frame history browse-filters", "turbo-frame-url-value": frame_url, action: "changed->turbo-frame#updateFrame" }) do
+      concat(concept_search_input(placeholder))
+      concat(content_tag(:div, class: 'tree-container') do
+        render(TurboFrameComponent.new(
+          id: id,
+          src: tree_url,
+          data: { 'turbo-frame-target': 'frame' }
+        ))
+      end)
+    end
+  end
+
+  def ontology_retired?(submission)
+    submission[:status].to_s.eql?('retired') || submission[:deprecated].to_s.eql?('true')
+  end
+  def ontology_license_badge(acronym, submission = @submission_latest)
+    return if submission.nil?
+
+    no_license = submission.hasLicense.blank?
+    render ChipButtonComponent.new(class: "text-nowrap chip_button_small #{no_license && 'disabled-link'}", type: no_license ? 'static' : 'clickable') do
+      if no_license
+        content_tag(:span) do
+          content_tag(:span, t('ontologies.no_license'), class: "mx-1") + inline_svg_tag('icons/law.svg', width: "15px")
+        end
+      else
+        link_to_modal(nil, "/ajax/submission/show_licenses/#{acronym}",data: { show_modal_title_value: t('ontologies.access_rights_information')}) do
+          content_tag(:span, t('ontologies.view_license'), class: "mx-1") + inline_svg_tag('icons/law.svg')
+        end
+      end
+
+    end
+  end
+  def ontology_retired_badge(submission, small: false, clickable: true)
+    return if submission.nil? || !ontology_retired?(submission)
+    text_color = submission[:status].to_s.eql?('retired') ? 'text-danger bg-danger-light' : 'text-warning bg-warning-light'
+    text_content = submission[:status].to_s.eql?('retired') ?  'Retired' : 'Deprecated'
+    style = "#{text_color} #{small && 'chip_button_small'}"
+    render ChipButtonComponent.new(class:  "#{style} mr-1", text: text_content, type: clickable ? 'clickable' : 'static')
+  end
+
+  def ontology_alternative_names(submission = @submission_latest)
+    alt_labels = (Array(submission&.alternative) + Array(submission&.hiddenLabel))
+    return unless alt_labels.present?
+
+    content_tag(:div, class: 'creation_text') do
+      concat(t('ontologies.referred_to'))
+      concat(content_tag(:span, class: 'date_creation_text') do
+        if alt_labels.length > 1
+          concat("#{alt_labels[0..-2].join(', ')} or #{alt_labels.last}.")
+        else
+          concat("#{alt_labels.first}.")
+        end
+      end)
+    end
+  end
+  def private_ontology_icon(is_private)
+    raw(content_tag(:i, '', class: 'fas fa-key', title: t('ontologies.private_ontology'))) if is_private
+  end
+  def browse_filter_section_label(key)
+    labels = {
+      categories: t('ontologies.categories'),
+      groups: t('ontologies.groups'),
+      hasFormalityLevel: t('ontologies.formality_levels'),
+      isOfType: t('ontologies.ontology_types'),
+      naturalLanguage: t('ontologies.natural_languages')
+    }
+
+    labels[key] || key.to_s.underscore.humanize.capitalize
+  end
+
+  def browser_counter_loader
+    content_tag(:div, class: "browse-desc-text", style: "margin-bottom: 15px;") do
+      content_tag(:div, class: "d-flex align-items-center") do
+        str = content_tag(:span, t('ontologies.showing'))
+        str += content_tag(:span, "", class: "p-1 p-2", style: "color: #a7a7a7;") do
+          render LoaderComponent.new(small: true)
+        end
+        str
+      end
+    end
+  end
+
+  def ontologies_browse_skeleton(pagesize = 5)
+    pagesize.times do
+      concat render OntologyBrowseCardComponent.new
+    end
+  end
+
+  def ontologies_filter_url(filters, page: 1, count: false)
+    url = 'ontologies_filter?'
+    url += "page=#{page}" if page
+    url += "count=#{page}" if count
+    if filters
+      filters_str = filters.reject { |k, v| v.nil? || (k.eql?(:sort_by) && count) }
+                           .map { |k, v| "#{k}=#{v}" }.join('&')
+      url += "&#{filters_str}"
+    end
+    url
+  end
 
   def additional_details
     return "" if $ADDITIONAL_ONTOLOGY_DETAILS.nil? || $ADDITIONAL_ONTOLOGY_DETAILS[@ontology.acronym].nil?
@@ -16,28 +129,14 @@ module OntologiesHelper
   end
 
   # Display data catalog metadata under visits (in _metadata.html.haml)
-  def display_data_catalog(sub)
-    if !sub.send("includedInDataCatalog").nil? && sub.send("includedInDataCatalog").any?
+  def display_data_catalog(value)
+    if !value.nil? && value.any?
       # Buttons for data catalogs
-      return content_tag(:section, { :class => "ont-metadata-card ont-included-in-data-catalog-card" }) do
-        concat(content_tag(:div, { :class => "ont-section-toolbar" }) do
-          concat(content_tag(:header, "includedInDataCatalog", { :class => "pb-2 font-weight-bold" }))
-        end)
-        concat(content_tag(:div, { :class => "" }) do
-          sub.send("includedInDataCatalog").each do |catalog|
-            catalog_btn_label = catalog
-            $DATA_CATALOG_VALUES.each do |cat_uri, cat_label|
-              if catalog[cat_uri]
-                catalog_btn_label = cat_label
-                break
-              end
-            end
-            concat(content_tag(:a, catalog_btn_label, { :class => "btn btn-primary", :href => catalog, :target => "_blank" }))
-          end
-        end)
+      content_tag(:div, { :class => "" }) do
+
       end
     else
-       ""
+      ""
     end
   end
 
@@ -65,18 +164,9 @@ module OntologiesHelper
     return logo_html
   end
 
-  # Add additional metadata as html for a submission
-  def additional_metadata(sub)
-    # Get the list of metadata attribute from the REST API
-    json_metadata = submission_metadata
-    metadata_list = {}
-    # Get extracted metadata and put them in a hash with their label, if one, as value
-    json_metadata.each do |metadata|
-      if metadata["extracted"] == true
-        metadata_list[metadata["attribute"]] = metadata["label"]
-      end
-    end
-    metadata_list = metadata_list.sort
+  def display_contact(contacts)
+    contacts.map do |c|
+      next unless c.member?(:name) && c.member?(:email)
 
     html = []
 
@@ -244,15 +334,31 @@ module OntologiesHelper
     count_links(ontology.ontology.acronym, "classes", count)
   end
 
+  def metadata_filled_count(submission = @submission_latest, ontology = @ontology)
+    return if submission.nil?
+
+    reject = [:csvDump, :dataDump, :openSearchDescription, :metrics, :prefLabelProperty, :definitionProperty,
+              :definitionProperty, :synonymProperty, :authorProperty, :hierarchyProperty, :obsoleteProperty,
+              :ontology, :endpoint, :submissionId, :submissionStatus, :uploadFilePath, :context, :links, :ontology]
+    sub_values = submission.to_hash.except(*reject).values
+    count = sub_values.count{|x| !x.blank?}
+    content_tag(:div, class: 'd-flex align-items-center justify-content-center') do
+      content_tag(:span, style:'width: 50px; height: 50px', data: {controller: 'tooltip'}, title: "#{count} of #{sub_values.size}") do
+        render CircleProgressBarComponent.new(count: count , max:  sub_values.size )
+      end  +  content_tag(:span, class: 'mx-1') { t('ontologies.metadata_properties', acronym: ontology.acronym)}
+    end.html_safe
+  end
+
   # Creates a link based on the status of an ontology submission
   def download_link(submission, ontology = nil)
     ontology ||= @ontology
+    links = []
     if ontology.summaryOnly
       if submission.homepage.nil?
         link = "N/A - metadata only"
       else
         uri = submission.homepage
-        link = "<a href='#{uri}'>Home Page</a>"
+        links << { href: uri, label: t('ontologies.home_page') }
       end
     else
       uri = submission.id + "/download?apikey=#{get_apikey}"
@@ -266,11 +372,13 @@ module OntologiesHelper
       end
       unless submission.diffFilePath.nil?
         uri = submission.id + "/download_diff?apikey=#{get_apikey}"
-        link = link + " | <a href='#{uri} 'rel='nofollow'>DIFF</a>"
+        links << { href: uri, label: "DIFF" }
       end
     end
-    link
+    links
   end
+
+
 
   def mappings_link(ontology, count)
     return "0" if ontology.summaryOnly || count.nil? || count.zero?
@@ -294,7 +402,10 @@ module OntologiesHelper
     version_link + status_text
   end
 
-  def submission_status2string(sub)
+
+  def submission_status2string(data)
+    return '' if data[:submissionStatus].nil?
+
     # Massage the submission status into a UI string
     # submission status values, from:
     # https://github.com/ncbo/ontologies_linked_data/blob/master/lib/ontologies_linked_data/models/submission_status.rb
@@ -318,6 +429,50 @@ module OntologiesHelper
     "(" + status.join(", ") + ")"
   end
 
+  def status_string(data)
+    return '' unless data.present? && data[:submissionStatus].present?
+
+    submission_status2string(data)
+  end
+
+  def submission_status_ok?(status)
+    status.include?('Parsed') && !status.include?('Error')
+  end
+
+  def submission_status_error?(status)
+    !status.include?('Parsed') && status.include?('Error')
+  end
+
+  def submission_status_warning?(status)
+    status.include?('Parsed') && status.include?('Error')
+  end
+
+  def submission_status_icons(status)
+    if submission_status_ok?(status)
+      status_icons(ok: true)
+    elsif submission_status_error?(status)
+      status_icons(error: true)
+    elsif status == '(Archived)'
+      'archive.svg'
+    elsif submission_status_warning?(status)
+      status_icons(warning: true)
+    else
+      "info.svg"
+    end
+  end
+
+  def status_icons(ok: false, error: false, warning: false)
+    if ok
+      "success-icon.svg"
+    elsif error
+      'error-icon.svg'
+    elsif warning
+      "alert-triangle.svg"
+    else
+      "info.svg"
+    end
+  end
+
   # Link for private/public/licensed ontologies
   def visibility_link(ontology)
     ont_url = "/ontologies/#{ontology.acronym}" # 'ontology' is NOT a submission here
@@ -332,6 +487,42 @@ module OntologiesHelper
     end
     "<a href='#{ont_url}/?p=#{page_name}'>#{link_name}</a>"
   end
+
+  def category_name_chip_component(domain)
+    text = domain.split('/').last.titleize
+
+
+    return render(ChipButtonComponent.new(text: text, tooltip: domain,  type: "static")) unless link?(domain)
+
+
+    acronym = domain.split('/').last.upcase.strip
+    category = LinkedData::Client::Models::Category.find(acronym)
+
+    if category.name
+      render ChipButtonComponent.new(text: text, tooltip: category.name,  type: "static")
+    else
+      render ChipButtonComponent.new(text: text, tooltip: domain,  url: domain, type: "clickable", target: '_blank')
+    end
+
+  end
+
+
+  def show_ontology_domains(domains)
+    if domains.length == 1 && domains[0].include?(',')
+      domains[0].split(',').map(&:strip)
+    else
+      domains
+    end
+  end
+
+  def show_group_name(domain)
+    return domain unless link?(domain)
+
+    acronym = domain.split('/').last.upcase.strip
+    category = LinkedData::Client::Models::Group.find(acronym)
+    category ? category.name : acronym.titleize
+  end
+
 
   def visits_data(ontology = nil)
     ontology ||= @ontology
@@ -370,15 +561,42 @@ module OntologiesHelper
     (params[:p]) ? params[:p] : "summary"
   end
 
+  def link_to_section(section_title)
+    link_to(section_name(section_title), ontology_path(@ontology.acronym, p: section_title),
+            id: "ont-#{section_title}-tab", class: "nav-link #{selected_section?(section_title) ? 'active show' : ''}",
+            data: { action: 'click->ontology-viewer-tabs#selectTab',
+                    toggle: "tab", target: "#ont_#{section_title}_content", 'bp-ont-page': section_title,
+                    'bp-ont-page-name': ontology_viewer_page_name(@ontology.name, @concept&.prefLabel || '', section_title) })
+  end
+
   def selected_section?(section_title)
     current_section.eql?(section_title)
+  end
+
+  def ontology_data_sections
+    LANGUAGE_FILTERABLE_SECTIONS
+  end
+
+  def ontology_data_section?(section_title = current_section)
+    ontology_data_sections.include?(section_title)
+  end
+
+  def section_data(section_title)
+    if ontology_data_section?(section_title)
+      url_value = selected_section?(section_title) ? request.fullpath : "/ontologies/#{@ontology.acronym}?p=#{section_title}"
+      { controller: "history turbo-frame", 'turbo-frame-url-value': url_value, action: "lang_changed->history#updateURL lang_changed->turbo-frame#updateFrame" }
+    else
+      {}
+    end
   end
 
   def lazy_load_section(section_title, &block)
     if current_section.eql?(section_title)
       block.call
     else
-      render TurboFrameComponent.new(id: section_title, src: "/ontologies/#{@ontology.acronym}?p=#{section_title}", target: '_top')
+      render TurboFrameComponent.new(id: section_title, src: "/ontologies/#{@ontology.acronym}?p=#{section_title}",
+                                     loading: Rails.env.development? ? "lazy" : "eager",
+                                     target: '_top', data: { "turbo-frame-target": "frame" })
     end
   end
 
@@ -400,7 +618,7 @@ module OntologiesHelper
       sections += %w[classes properties notes mappings]
       sections += %w[schemes collections] if skos?
       sections += %w[instances] unless skos?
-      sections += %w[widgets]
+      sections += %w[notes mappings widgets sparql]
     end
     sections
   end

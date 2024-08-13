@@ -1,0 +1,27 @@
+= render_in_modal do
+  = render TabsContainerComponent.new(id: 'metadata-export', type: 'pill') do |t|
+    - t.item(id: 'csv', title: 'CSV', selected: true)
+    - t.item(id: 'xml', title: 'XML')
+    - t.item(id: 'json', title: 'JSON')
+    - t.item(id: 'triples', title: 'N3')
+    - %w[csv xml json triples].each do |format|
+      - t.item_content do
+        %div.metadata-exporter{data: {controller: 'rdf-highlighter',
+                  'rdf-highlighter-metadata-value': @ontology_metadata.to_json,
+                  'rdf-highlighter-context-value': @submission_latest['@context'].to_json,
+                  'rdf-highlighter-namespaces-value': resolve_namespaces.to_json,
+                  'rdf-highlighter-format-value': format}}
+          %div.download-btn
+            = render ChipButtonComponent.new(type: 'clickable', 'data-action': "click->rdf-highlighter#download") do
+              = inline_svg("summary/download.svg", width: '15px', height: '15px')
+          - if format.eql?('csv')
+            %div{data: {'rdf-highlighter-target': 'content'}}
+              = render partial: 'ontologies/sections/additional_metadata'
+            %div.d-none{data: {'rdf-highlighter-target': 'loader'}}
+              = render LoaderComponent.new
+          - else
+            %div.p-3.my-2.card
+              %pre
+                %code.d-block{style: 'text-wrap: pretty; word-break: break-all', data: {'rdf-highlighter-target': 'content'}}
+              %div.d-none{data: {'rdf-highlighter-target': 'loader'}}
+                = render LoaderComponent.new

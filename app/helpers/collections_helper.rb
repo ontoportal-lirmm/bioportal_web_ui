@@ -1,6 +1,6 @@
 module CollectionsHelper
   def get_collections(ontology, add_colors: false)
-    collections = ontology.explore.collections
+    collections = ontology.explore.collections(language: request_lang)
     generate_collections_colors(collections) if add_colors
     collections
   end
@@ -49,7 +49,24 @@ module CollectionsHelper
   end
 
   def request_collection_id
-    params[:id] || params[:collection_id] || params[:concept_collection]
+    params[:id] || params[:collectionid] || params[:concept_collection]
+  end
+
+  def sort_collections_label(collections_labels)
+    sorted_labels(collections_labels)
+  end
+
+  def link_to_collection(collection, selected_collection_id)
+    pref_label_lang, pref_label_html = get_collection_label(collection)
+    tooltip  = pref_label_lang.to_s.eql?('@none') ? '' :  "data-controller='tooltip' data-tooltip-position-value='right' title='#{pref_label_lang.upcase}'"
+    <<-EOS
+          <a id="#{collection['@id']}" href="#{collection_path(collection['@id'], request_lang)}" 
+            data-turbo="true" data-turbo-frame="collection" data-collectionid="#{collection['@id']}"
+           #{tooltip}
+            class="#{selected_collection_id.eql?(collection['@id']) ? 'active' : nil}">
+              #{pref_label_html}
+          </a>
+    EOS
   end
 
   private

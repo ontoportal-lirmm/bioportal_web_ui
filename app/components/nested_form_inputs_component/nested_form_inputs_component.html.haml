@@ -1,21 +1,34 @@
-%div{data: {controller: "nested-form"}}
+%div.nested-form-input-container{data: {controller: "nested-form"}}
   %template{'data-nested-form-target':"template"}
-    %div.d-flex.align-items-center.nested-form-wrapper{'data-new-record': 'true'}
+    %div.d-flex.align-items-center.nested-form-wrapper.my-1{'data-new-record': 'true'}
       %div{style: 'width: 90%'}
         = template
       %div.d-flex.justify-content-end{style: 'width: 10%'}
-        %button.btn.btn-danger{data: {action:"nested-form#remove"}}
-          %i.fas.fa-minus.fa-lg
+        %div.delete{data: {action:"click->nested-form#remove"}}
+          = inline_svg 'icons/delete.svg'
+
+  %div.titles
+    = header
+  %div.d-none
+    = empty_state
   - rows.each_with_index  do |row , index|
-    %div.d-flex.align-items-center.nested-form-wrapper{'data-new-record': 'true'}
+    %div.d-flex.align-items-center.nested-form-wrapper.my-1{'data-new-record': 'true'}
       %div{style: 'width: 90%'}
         = row
       %div.d-flex.justify-content-end{style: 'width: 10%'}
-        - unless index == 0
-          %button.btn.btn-danger{data: {action:"nested-form#remove"}}
-            %i.fas.fa-minus.fa-lg
+        %div.delete{data: {action:"click->nested-form#remove"}}
+          = inline_svg 'icons/delete.svg'
+
+  - if @default_row && rows.empty?
+    %div.d-flex.align-items-center.nested-form-wrapper.my-1{'data-new-record': 'true'}
+      %div{style: 'width: 90%'}
+        = template
+      %div.d-flex.justify-content-end{style: 'width: 10%'}
+        %div.delete{data: {action:"click->nested-form#remove"}}
+          = inline_svg 'icons/delete.svg'
 
   %div{'data-nested-form-target': "target"}
-  %div.float-right
-    %button.btn.btn-success{data: {action:"nested-form#add"}}
-      %i.fas.fa-plus.fa-lg
+  %div.add-another-object{data: {action:"click->nested-form#add"}}
+    = inline_svg 'icons/plus.svg', width: "14px", height: "14px"
+    %div
+      Add another #{@object_name}

@@ -1,13 +1,23 @@
-- @title = "Mappings"
-%div#mappings_container.container-fluid.py-4
-  %h1.my-1 Mappings
+- @title= t('mappings.title')
+.mappigs-page-container{'data-controller': 'mappings', 
+                        'data-mappings-mappings-list-value': "#{@ontologies_mapping_count.to_h.to_json}",
+                        'data-mappings-api-url-value': rest_url
+                        }
+  .mappings-page-subcontainer
+    .mappings-page-title
+      .text
+        = @title
+      .line
+    .mappings-page-decription
+      = t('mappings.description')
+    = render TabsContainerComponent.new do |c|
+      - c.item(title: t('mappings.tabs.bubble_view'), selected: true)
+      - c.item_content do
+        = render partial: '/mappings/tab_sections/bubble_view'
 
-  %div#mappings_uploader.my-2
-    = link_to_modal "Upload mappings" , "/mappings/loader", class: "btn btn-primary btn-block",
-       data: { show_modal_title_value: "Mappings bulk load", show_modal_size_value: 'modal-xl'}
-  %hr.my-3.w-100
-    #accordionExample.accordion
-      = render partial: 'ontology_mappings'
-      = render partial: 'concept_mappings_selector'
-
-
+      - c.item(title: t('mappings.tabs.table_view'))
+      - c.item_content do
+        = render partial: '/mappings/tab_sections/table_view'
+      - c.item(title: t('mappings.tabs.upload_mappings'))
+      - c.item_content do    
+        = render partial: '/mappings/tab_sections/upload_mappings'

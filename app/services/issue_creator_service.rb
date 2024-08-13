@@ -3,15 +3,24 @@
 class IssueCreatorService < ApplicationService
   class QueryError < StandardError; end
 
-  FindRepoQuery = GitHub::Client.parse <<-'GRAPHQL'
+
+  def initialize(params)
+    @title = params[:content][:title]
+    @body = params[:content][:body]
+    @repo = Rails.configuration.change_request.dig(:ontologies, params[:ont_acronym].to_sym, :repository)
+  end
+
+  def call
+
+    findRepoQuery = GitHub::Client.parse <<-'GRAPHQL'
     query ($owner: String!, $name: String!) {
       repository(owner: $owner, name: $name) {
         id
       }
     }
-  GRAPHQL
+    GRAPHQL
 
-  CreateIssueMutation = GitHub::Client.parse <<-'GRAPHQL'
+    createIssueMutation = GitHub::Client.parse <<-'GRAPHQL'
     mutation ($repositoryId: ID!, $title: String!, $body: String) {
       createIssue(input: {repositoryId: $repositoryId, title: $title, body: $body}) {
         issue {

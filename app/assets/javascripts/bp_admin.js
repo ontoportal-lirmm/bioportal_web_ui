@@ -858,8 +858,6 @@ function displayOntologies(data, ontology) {
           _showStatusMessages([], [json.errors], [], false);
         }
         setDateGenerated(json);
-        // Keep header at top of table even when scrolling
-        // new jQuery.fn.dataTable.FixedHeader(ontTable);
       },
       columnDefs: [
         {
@@ -943,10 +941,7 @@ function displayOntologies(data, ontology) {
   return ontTable;
 }
 
-function showSubmissions(ev, acronym) {
-  ev.preventDefault();
-  jQuery.facebox({ ajax: "/admin/ontologies/" + acronym + "/submissions" });
-}
+
 
 function showOntologiesToggleLinks(problemOnly) {
   var str = "View Ontologies:&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -964,8 +959,6 @@ function showOntologiesToggleLinks(problemOnly) {
 jQuery(".admin.index").ready(function () {
   // display ontologies table on load
   displayOntologies({}, DUMMY_ONTOLOGY);
-  displayUsers({});
-  UpdateCheck.act();
 
   // make sure facebox window is empty before populating it
   // otherwise ajax requests stack up and you see more than
@@ -1067,6 +1060,12 @@ jQuery(".admin.index").ready(function () {
   });
 
   // end: BUTTON onclick actions -----------------------------------
+
+
+
+  //==============================================================
+  //      MANAGEMENT COMMONS
+  //==============================================================
 });
 
 /* users part */

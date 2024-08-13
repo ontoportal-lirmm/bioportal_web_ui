@@ -1,6 +1,6 @@
 module SchemesHelper
   def get_schemes(ontology)
-    ontology.explore.schemes
+    ontology.explore.schemes(language: request_lang)
   end
 
   def get_scheme(ontology, scheme_uri)
@@ -32,9 +32,8 @@ module SchemesHelper
     end
     schemes_labels.sort_by! { |s| s["prefLabel"] }
 
-    if selected_label
-      schemes_labels.unshift selected_label
-    end
+    schemes_labels = sorted_labels(schemes_labels)
+    schemes_labels.unshift selected_label if selected_label
     [schemes_labels, selected_label]
   end
 
@@ -97,6 +96,5 @@ module SchemesHelper
       EOS
       out << li
     end
-    out
   end
 end

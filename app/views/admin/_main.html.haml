@@ -1,0 +1,16 @@
+%div
+  %div#site-admin-clear-caches
+    %div.site-admin-page-header
+      = t('admin.main.cache_management')
+    %dive.site-admin-page-section.d-flex
+      = action_button(t('admin.main.clear_cache'), admin_clearcache_path, class_style: 'btn btn-primary mx-1')
+      = action_button(t('admin.main.reset_cache'), admin_resetcache_path, class_style: 'btn btn-primary mx-1')
+      = action_button(t('admin.main.clear_goo_cache'), admin_clear_goo_cache_path, class_style: 'btn btn-primary mx-1')
+      = action_button(t('admin.main.clear_http_cache'), admin_clear_http_cache_path, class_style: 'btn btn-primary mx-1')
+
+  %div.mb-5
+    %div.site-admin-page-header
+      = t('admin.main.version_management')
+    %dive.site-admin-page-section.p-2
+      = render TurboFrameComponent.new(id: 'update_check_frame', src: '/admin/update_check_enabled') do |c|
+        - c.loader { t('admin.main.checking_for_updates') }

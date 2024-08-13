@@ -22,7 +22,7 @@ class ProjectsController < ApplicationController
   def show
     projects = LinkedData::Client::Models::Project.find_by_acronym(params[:id])
     if projects.nil? || projects.empty?
-      flash[:notice] = flash_error("Project not found: #{params[:id]}")
+      flash[:notice] = flash_error(t('projects.project_not_found', id: params[:id]))
       redirect_to projects_path
       return
     end
@@ -55,7 +55,7 @@ class ProjectsController < ApplicationController
   def edit
     projects = LinkedData::Client::Models::Project.find_by_acronym(params[:id])
     if projects.nil? || projects.empty?
-      flash[:notice] = flash_error("Project not found: #{params[:id]}")
+      flash[:notice] = flash_error(t('projects.project_not_found', id: params[:id]))
       redirect_to projects_path
       return
     end
@@ -86,7 +86,7 @@ class ProjectsController < ApplicationController
 
     # Errors creating project.
     if @project_saved.status == 409
-      error = OpenStruct.new existence: "Project with acronym #{params[:project][:acronym]} already exists.  Please enter a unique acronym."
+      error = OpenStruct.new existence: t('projects.error_unique_acronym', acronym: params[:project][:acronym])
       @errors = Hash[:error, OpenStruct.new(acronym: error)]
     else
       @errors = response_errors(@project_saved)
@@ -107,7 +107,7 @@ class ProjectsController < ApplicationController
     end
     projects = LinkedData::Client::Models::Project.find_by_acronym(params[:id])
     if projects.nil? || projects.empty?
-      flash[:notice] = flash_error("Project not found: #{params[:id]}")
+      flash[:notice] = flash_error(t('projects.project_not_found', id: params[:id]))
       redirect_to projects_path
       return
     end
@@ -132,7 +132,7 @@ class ProjectsController < ApplicationController
   def destroy
     projects = LinkedData::Client::Models::Project.find_by_acronym(params[:id])
     if projects.nil? || projects.empty?
-      flash[:notice] = flash_error("Project not found: #{params[:id]}")
+      flash[:notice] = flash_error(t('projects.project_not_found', id: params[:id]))
       redirect_to projects_path
       return
     end
@@ -140,7 +140,7 @@ class ProjectsController < ApplicationController
     error_response = @project.delete
     if response_error?(error_response)
       @errors = response_errors(error_response)
-      flash[:notice] = "Project delete failed: #{@errors}"
+      flash[:notice] = t('projects.error_delete_project', errors: @errors)
       respond_to do |format|
         format.html { redirect_to projects_path }
         format.xml { head :internal_server_error }

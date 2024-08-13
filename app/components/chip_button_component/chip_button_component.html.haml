@@ -1,0 +1,10 @@
+.chip-button-component-container{'data-controller': 'tooltip', title: @tooltip}
+  - if @type == "static"
+    %span.chip_button_container{@html_options}
+      = @text || content
+  - elsif !content
+    %a.chip_button_container_clickable{@html_options}
+      = @text
+  - else
+    %span.chip_button_container_clickable{@html_options}
+      = content

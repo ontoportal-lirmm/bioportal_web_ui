@@ -4,9 +4,17 @@ class OntologiesController < ApplicationController
   include InstancesHelper
   include ActionView::Helpers::NumberHelper
   include OntologiesHelper
+  include ConceptsHelper
   include SchemesHelper
   include CollectionsHelper
   include MappingStatistics
+  include OntologyUpdater
+  include TurboHelper
+  include SparqlHelper
+  include SubmissionFilter
+  include OntologyContentSerializer
+  include UriRedirection
+  include PropertiesHelper
 
   require "multi_json"
   require "cgi"
@@ -14,7 +22,7 @@ class OntologiesController < ApplicationController
   helper :concepts
   helper :fair_score
 
-  layout :determine_layout
+  layout 'ontology'
 
   before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
   before_action :submission_metadata, only: [:show]
@@ -52,10 +60,9 @@ display_context: false, include: browse_attributes)
     analytics = LinkedData::Client::Analytics.last_month
     @analytics = Hash[analytics.onts.map { |o| [o[:ont].to_s, o[:views]] }]
 
-    reviews = {}
-    LinkedData::Client::Models::Review.all(display_links: false, display_context: false).each do |r|
-      reviews[r.reviewedOntology] ||= []
-      reviews[r.reviewedOntology] << r
+  def ontologies_filter
+    @time = Benchmark.realtime do
+      @ontologies, @count, @count_objects, @request_params = submissions_paginate_filter(params)
     end
 
     metrics_hash = get_metrics_hash
@@ -172,8 +179,6 @@ display_context: false, include: browse_attributes)
       @notes = @concept.explore.notes
     end
 
-    update_tab(@ontology, @concept.id)
-
     if request.xhr?
       render "ontologies/sections/visualize", layout: false
     else
@@ -182,6 +187,11 @@ display_context: false, include: browse_attributes)
   end
 
   def properties
+    @acronym = @ontology.acronym
+    @properties = LinkedData::Client::HTTP.get("/ontologies/#{@acronym}/properties/roots", { lang: request_lang })
+
+    @property = get_property(@properties.first.id,  @acronym, include: 'all') unless @property || @properties.empty?
+
     if request.xhr?
       return render "ontologies/sections/properties", layout: false
     else
@@ -204,16 +214,11 @@ display_context: false, include: browse_attributes)
       @errors = response_errors(@ontology_saved)
       render "new"
     else
-      if @ontology_saved.summaryOnly
-        redirect_to "/ontologies/success/#{@ontology.acronym}"
-      else
-        redirect_to new_ontology_submission_path(@ontology.acronym)
-      end
+      redirect_to "/ontologies/success/#{@ontology.acronym}"
     end
   end
 
   def edit
-    # Note: find_by_acronym includes ontology views
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
     redirect_to_home unless session[:user] && @ontology.administeredBy.include?(session[:user].id) || session[:user].admin?
     @categories = LinkedData::Client::Models::Category.all
@@ -225,6 +230,7 @@ display_context: false, include: browse_attributes)
   def mappings
     @ontology_acronym = @ontology.acronym || params[:id]
     @mapping_counts = mapping_counts(@ontology_acronym)
+    @ontologies_mapping_count = LinkedData::Client::HTTP.get("#{MAPPINGS_URL}/statistics/ontologies")
     if request.xhr?
       render partial: "ontologies/sections/mappings", layout: false
     else
@@ -234,8 +240,12 @@ display_context: false, include: browse_attributes)
 
   def new
     @ontology = LinkedData::Client::Models::Ontology.new
-    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym', include_views: true,
-display_links: false, display_context: false)
+    @ontology.viewOf = params.dig(:ontology, :viewOf)
+    @submission = LinkedData::Client::Models::OntologySubmission.new
+    @submission.hasOntologyLanguage = 'OWL'
+    @submission.released = Date.today.to_s
+    @submission.status = 'production'
+    @ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym', include_views: true, display_links: false, display_context: false)
     @categories = LinkedData::Client::Models::Category.all
     @groups = LinkedData::Client::Models::Group.all
     @user_select_list = LinkedData::Client::Models::User.all.map { |u| [u.username, u.id] }
@@ -261,11 +271,13 @@ display_links: false, display_context: false)
     else
       render partial: "instances/instances", locals: { id: "instances-data-table" }, layout: "ontology_viewer"
     end
+
+    render partial: 'instances/instances', locals: { id: 'instances-data-table' }, layout: 'ontology_viewer'
   end
 
   def schemes
     @schemes = get_schemes(@ontology)
-    scheme_id = params[:scheme_id] || @submission_latest.URI || nil
+    scheme_id = params[:schemeid] || @submission_latest.URI || nil
     @scheme = get_scheme(@ontology, scheme_id) if scheme_id
 
     if request.xhr?
@@ -277,9 +289,13 @@ display_links: false, display_context: false)
 
   def collections
     @collections = get_collections(@ontology)
-    collection_id = params[:collection_id]
-    @collection = get_collection(@ontology, collection_id) if collection_id
+    collection_id = params[:collectionid]
+    @collection = collection_id ? get_collection(@ontology, collection_id) : @collections.first
 
+    render partial: 'ontologies/sections/collections', layout: 'ontology_viewer'
+  end
+
+  def sparql
     if request.xhr?
       render partial: "ontologies/sections/collections", layout: false
     else
@@ -287,19 +303,24 @@ display_links: false, display_context: false)
     end
   end
 
+  def content_serializer
+    @result, _ = serialize_content(ontology_acronym: params[:acronym],
+                      concept_id: params[:id],
+                      format: params[:output_format])
+
+    render 'ontologies/content_serializer', layout: nil
+  end
+
   # GET /ontologies/ACRONYM
   # GET /ontologies/1.xml
   def show
+    return redirect_to_file if redirect_to_file?
 
     # Hack to make ontologyid and conceptid work in addition to id and ontology params
     params[:id] = params[:id].nil? ? params[:ontologyid] : params[:id]
     params[:ontology] = params[:ontology].nil? ? params[:id] : params[:ontology]
 
     # Hash to convert Lexvo URI to flag code
-    $LEXVO_TO_FLAG = { 'http://lexvo.org/id/iso639-3/aar' => 'aa', 'http://lexvo.org/id/iso639-3/abk' => 'ab',
-                       'http://lexvo.org/id/iso639-3/ave' => 'ae', 'http://lexvo.org/id/iso639-3/afr' => 'af',
-                       'http://lexvo.org/id/iso639-3/aka' => 'ak', 'http://lexvo.org/id/iso639-3/amh' => 'am',
-                       'http://lexvo.org/id/iso639-3/arg' => 'an', 'http://lexvo.org/id/iso639-3/ara' => 'ar', 'http://lexvo.org/id/iso639-3/asm' => 'as', 'http://lexvo.org/id/iso639-3/ava' => 'av', 'http://lexvo.org/id/iso639-3/aym' => 'ay', 'http://lexvo.org/id/iso639-3/aze' => 'az', 'http://lexvo.org/id/iso639-3/bak' => 'ba', 'http://lexvo.org/id/iso639-3/bel' => 'be', 'http://lexvo.org/id/iso639-3/bul' => 'bg', 'http://lexvo.org/id/iso639-3/bis' => 'bi', 'http://lexvo.org/id/iso639-3/bam' => 'bm', 'http://lexvo.org/id/iso639-3/ben' => 'bn', 'http://lexvo.org/id/iso639-3/bod' => 'bo', 'http://lexvo.org/id/iso639-3/bre' => 'br', 'http://lexvo.org/id/iso639-3/bos' => 'bs', 'http://lexvo.org/id/iso639-3/cat' => 'ca', 'http://lexvo.org/id/iso639-3/che' => 'ce', 'http://lexvo.org/id/iso639-3/cha' => 'ch', 'http://lexvo.org/id/iso639-3/cos' => 'co', 'http://lexvo.org/id/iso639-3/cre' => 'cr', 'http://lexvo.org/id/iso639-3/ces' => 'cs', 'http://lexvo.org/id/iso639-3/chu' => 'cu', 'http://lexvo.org/id/iso639-3/chv' => 'cv', 'http://lexvo.org/id/iso639-3/cym' => 'cy', 'http://lexvo.org/id/iso639-3/dan' => 'da', 'http://lexvo.org/id/iso639-3/deu' => 'de', 'http://lexvo.org/id/iso639-3/div' => 'dv', 'http://lexvo.org/id/iso639-3/dzo' => 'dz', 'http://lexvo.org/id/iso639-3/ewe' => 'ee', 'http://lexvo.org/id/iso639-3/ell' => 'el', 'http://lexvo.org/id/iso639-3/eng' => 'en', 'http://lexvo.org/id/iso639-3/epo' => 'eo', 'http://lexvo.org/id/iso639-3/spa' => 'es', 'http://lexvo.org/id/iso639-3/est' => 'et', 'http://lexvo.org/id/iso639-3/eus' => 'eu', 'http://lexvo.org/id/iso639-3/fas' => 'fa', 'http://lexvo.org/id/iso639-3/ful' => 'ff', 'http://lexvo.org/id/iso639-3/fin' => 'fi', 'http://lexvo.org/id/iso639-3/fij' => 'fj', 'http://lexvo.org/id/iso639-3/fao' => 'fo', 'http://lexvo.org/id/iso639-3/fra' => 'fr', 'http://lexvo.org/id/iso639-3/fry' => 'fy', 'http://lexvo.org/id/iso639-3/gle' => 'ga', 'http://lexvo.org/id/iso639-3/gla' => 'gd', 'http://lexvo.org/id/iso639-3/glg' => 'gl', 'http://lexvo.org/id/iso639-3/grn' => 'gn', 'http://lexvo.org/id/iso639-3/guj' => 'gu', 'http://lexvo.org/id/iso639-3/glv' => 'gv', 'http://lexvo.org/id/iso639-3/hau' => 'ha', 'http://lexvo.org/id/iso639-3/heb' => 'he', 'http://lexvo.org/id/iso639-3/hin' => 'hi', 'http://lexvo.org/id/iso639-3/hmo' => 'ho', 'http://lexvo.org/id/iso639-3/hrv' => 'hr', 'http://lexvo.org/id/iso639-3/hat' => 'ht', 'http://lexvo.org/id/iso639-3/hun' => 'hu', 'http://lexvo.org/id/iso639-3/hye' => 'hy', 'http://lexvo.org/id/iso639-3/her' => 'hz', 'http://lexvo.org/id/iso639-3/ina' => 'ia', 'http://lexvo.org/id/iso639-3/ind' => 'id', 'http://lexvo.org/id/iso639-3/ile' => 'ie', 'http://lexvo.org/id/iso639-3/ibo' => 'ig', 'http://lexvo.org/id/iso639-3/iii' => 'ii', 'http://lexvo.org/id/iso639-3/ipk' => 'ik', 'http://lexvo.org/id/iso639-3/ido' => 'io', 'http://lexvo.org/id/iso639-3/isl' => 'is', 'http://lexvo.org/id/iso639-3/ita' => 'it', 'http://lexvo.org/id/iso639-3/iku' => 'iu', 'http://lexvo.org/id/iso639-3/jpn' => 'ja', 'http://lexvo.org/id/iso639-3/jav' => 'jv', 'http://lexvo.org/id/iso639-3/kat' => 'ka', 'http://lexvo.org/id/iso639-3/kon' => 'kg', 'http://lexvo.org/id/iso639-3/kik' => 'ki', 'http://lexvo.org/id/iso639-3/kua' => 'kj', 'http://lexvo.org/id/iso639-3/kaz' => 'kk', 'http://lexvo.org/id/iso639-3/kal' => 'kl', 'http://lexvo.org/id/iso639-3/khm' => 'km', 'http://lexvo.org/id/iso639-3/kan' => 'kn', 'http://lexvo.org/id/iso639-3/kor' => 'ko', 'http://lexvo.org/id/iso639-3/kau' => 'kr', 'http://lexvo.org/id/iso639-3/kas' => 'ks', 'http://lexvo.org/id/iso639-3/kur' => 'ku', 'http://lexvo.org/id/iso639-3/kom' => 'kv', 'http://lexvo.org/id/iso639-3/cor' => 'kw', 'http://lexvo.org/id/iso639-3/kir' => 'ky', 'http://lexvo.org/id/iso639-3/lat' => 'la', 'http://lexvo.org/id/iso639-3/ltz' => 'lb', 'http://lexvo.org/id/iso639-3/lug' => 'lg', 'http://lexvo.org/id/iso639-3/lim' => 'li', 'http://lexvo.org/id/iso639-3/lin' => 'ln', 'http://lexvo.org/id/iso639-3/lao' => 'lo', 'http://lexvo.org/id/iso639-3/lit' => 'lt', 'http://lexvo.org/id/iso639-3/lub' => 'lu', 'http://lexvo.org/id/iso639-3/lav' => 'lv', 'http://lexvo.org/id/iso639-3/mlg' => 'mg', 'http://lexvo.org/id/iso639-3/mah' => 'mh', 'http://lexvo.org/id/iso639-3/mri' => 'mi', 'http://lexvo.org/id/iso639-3/mkd' => 'mk', 'http://lexvo.org/id/iso639-3/mal' => 'ml', 'http://lexvo.org/id/iso639-3/mon' => 'mn', 'http://lexvo.org/id/iso639-3/mar' => 'mr', 'http://lexvo.org/id/iso639-3/msa' => 'ms', 'http://lexvo.org/id/iso639-3/mlt' => 'mt', 'http://lexvo.org/id/iso639-3/mya' => 'my', 'http://lexvo.org/id/iso639-3/nau' => 'na', 'http://lexvo.org/id/iso639-3/nob' => 'nb', 'http://lexvo.org/id/iso639-3/nde' => 'nd', 'http://lexvo.org/id/iso639-3/nep' => 'ne', 'http://lexvo.org/id/iso639-3/ndo' => 'ng', 'http://lexvo.org/id/iso639-3/nld' => 'nl', 'http://lexvo.org/id/iso639-3/nno' => 'nn', 'http://lexvo.org/id/iso639-3/nor' => 'no', 'http://lexvo.org/id/iso639-3/nbl' => 'nr', 'http://lexvo.org/id/iso639-3/nav' => 'nv', 'http://lexvo.org/id/iso639-3/nya' => 'ny', 'http://lexvo.org/id/iso639-3/oci' => 'oc', 'http://lexvo.org/id/iso639-3/oji' => 'oj', 'http://lexvo.org/id/iso639-3/orm' => 'om', 'http://lexvo.org/id/iso639-3/ori' => 'or', 'http://lexvo.org/id/iso639-3/oss' => 'os', 'http://lexvo.org/id/iso639-3/pan' => 'pa', 'http://lexvo.org/id/iso639-3/pli' => 'pi', 'http://lexvo.org/id/iso639-3/pol' => 'pl', 'http://lexvo.org/id/iso639-3/pus' => 'ps', 'http://lexvo.org/id/iso639-3/por' => 'pt', 'http://lexvo.org/id/iso639-3/que' => 'qu', 'http://lexvo.org/id/iso639-3/roh' => 'rm', 'http://lexvo.org/id/iso639-3/run' => 'rn', 'http://lexvo.org/id/iso639-3/ron' => 'ro', 'http://lexvo.org/id/iso639-3/rus' => 'ru', 'http://lexvo.org/id/iso639-3/kin' => 'rw', 'http://lexvo.org/id/iso639-3/san' => 'sa', 'http://lexvo.org/id/iso639-3/srd' => 'sc', 'http://lexvo.org/id/iso639-3/snd' => 'sd', 'http://lexvo.org/id/iso639-3/sme' => 'se', 'http://lexvo.org/id/iso639-3/sag' => 'sg', 'http://lexvo.org/id/iso639-3/hbs' => 'sh', 'http://lexvo.org/id/iso639-3/sin' => 'si', 'http://lexvo.org/id/iso639-3/slk' => 'sk', 'http://lexvo.org/id/iso639-3/slv' => 'sl', 'http://lexvo.org/id/iso639-3/smo' => 'sm', 'http://lexvo.org/id/iso639-3/sna' => 'sn', 'http://lexvo.org/id/iso639-3/som' => 'so', 'http://lexvo.org/id/iso639-3/sqi' => 'sq', 'http://lexvo.org/id/iso639-3/srp' => 'sr', 'http://lexvo.org/id/iso639-3/ssw' => 'ss', 'http://lexvo.org/id/iso639-3/sot' => 'st', 'http://lexvo.org/id/iso639-3/sun' => 'su', 'http://lexvo.org/id/iso639-3/swe' => 'sv', 'http://lexvo.org/id/iso639-3/swa' => 'sw', 'http://lexvo.org/id/iso639-3/tam' => 'ta', 'http://lexvo.org/id/iso639-3/tel' => 'te', 'http://lexvo.org/id/iso639-3/tgk' => 'tg', 'http://lexvo.org/id/iso639-3/tha' => 'th', 'http://lexvo.org/id/iso639-3/tir' => 'ti', 'http://lexvo.org/id/iso639-3/tuk' => 'tk', 'http://lexvo.org/id/iso639-3/tgl' => 'tl', 'http://lexvo.org/id/iso639-3/tsn' => 'tn', 'http://lexvo.org/id/iso639-3/ton' => 'to', 'http://lexvo.org/id/iso639-3/tur' => 'tr', 'http://lexvo.org/id/iso639-3/tso' => 'ts', 'http://lexvo.org/id/iso639-3/tat' => 'tt', 'http://lexvo.org/id/iso639-3/twi' => 'tw', 'http://lexvo.org/id/iso639-3/tah' => 'ty', 'http://lexvo.org/id/iso639-3/uig' => 'ug', 'http://lexvo.org/id/iso639-3/ukr' => 'uk', 'http://lexvo.org/id/iso639-3/urd' => 'ur', 'http://lexvo.org/id/iso639-3/uzb' => 'uz', 'http://lexvo.org/id/iso639-3/ven' => 've', 'http://lexvo.org/id/iso639-3/vie' => 'vi', 'http://lexvo.org/id/iso639-3/vol' => 'vo', 'http://lexvo.org/id/iso639-3/wln' => 'wa', 'http://lexvo.org/id/iso639-3/wol' => 'wo', 'http://lexvo.org/id/iso639-3/xho' => 'xh', 'http://lexvo.org/id/iso639-3/yid' => 'yi', 'http://lexvo.org/id/iso639-3/yor' => 'yo', 'http://lexvo.org/id/iso639-3/zha' => 'za', 'http://lexvo.org/id/iso639-3/zho' => 'zh', 'http://lexvo.org/id/iso639-3/zul' => 'zu' }
 
     # PURL-specific redirect to handle /ontologies/{ACR}/{CLASS_ID} paths
     if params[:purl_conceptid]
@@ -309,21 +330,20 @@ display_links: false, display_context: false)
       else
         params[:conceptid] = params.delete(:purl_conceptid)
       end
-      redirect_to "/ontologies/#{params[:acronym]}?p=classes#{params_string_for_redirect(params, prefix: "&")}", status: :moved_permanently
+      redirect_to "/ontologies/#{params[:acronym]}?p=classes&conceptid=#{params[:conceptid]}", status: :moved_permanently
       return
     end
 
-    if params[:ontology].to_i > 0
-      acronym = BPIDResolver.id_to_acronym(params[:ontology])
-      if acronym
-        redirect_new_api
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
+
+    if @ontology.nil? || @ontology.errors
+      if ontology_access_denied?
+        redirect_to "/login?redirect=/ontologies/#{params[:ontology]}", alert: t('login.private_ontology')
         return
+      else
+        ontology_not_found(params[:ontology])
       end
     end
-
-    # Note: find_by_acronym includes ontology views
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-    ontology_not_found(params[:ontology]) if @ontology.nil?
 
     # Handle the case where an ontology is converted to summary only.
     # See: https://github.com/ncbo/bioportal_web_ui/issues/133.
@@ -347,19 +367,16 @@ display_links: false, display_context: false)
 
     # This action is now a router using the 'p' parameter as the page to show
     case params[:p]
-    when 'terms'
-      params[:p] = 'classes'
-      redirect_to "/ontologies/#{params[:ontology]}#{params_string_for_redirect(params)}", status: :moved_permanently
     when 'classes'
-      self.classes #rescue self.summary
+      self.classes # rescue self.summary
     when 'mappings'
-      self.mappings #rescue self.summary
+      self.mappings # rescue self.summary
     when 'notes'
-      self.notes #rescue self.summary
+      self.notes # rescue self.summary
     when 'widgets'
-      self.widgets #rescue self.summary
+      self.widgets # rescue self.summary
     when 'properties'
-      self.properties #rescue self.summary
+      self.properties # rescue self.summary
     when 'summary'
       self.summary
     when 'instances'
@@ -368,16 +385,18 @@ display_links: false, display_context: false)
       self.schemes
     when 'collections'
       self.collections
+    when 'sparql'
+      self.sparql
     else
       self.summary
     end
-
   end
 
   def submit_success
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
     render "submit_success"
   end
+
 
   # Main ontology description page (with metadata): /ontologies/ACRONYM
   def summary
@@ -394,16 +413,46 @@ display_links: false, display_context: false)
 
     @metrics = @ontology.explore.metrics rescue []
     #@reviews = @ontology.explore.reviews.sort {|a,b| b.created <=> a.created} || []
-    @projects = @ontology.explore.projects.sort {|a,b| a.name.downcase <=> b.name.downcase } || []
+    @projects = @ontology.explore.projects.sort { |a, b| a.name.downcase <=> b.name.downcase } || []
     @analytics = LinkedData::Client::HTTP.get(@ontology.links['analytics'])
 
-    #Call to fairness assessment service
+    # Call to fairness assessment service
     tmp = fairness_service_enabled? ? get_fair_score(@ontology.acronym) : nil
     @fair_scores_data = create_fair_scores_data(tmp.values.first) unless tmp.nil?
 
     @views = get_views(@ontology)
-    @view_decorators = @views.map{ |view| ViewDecorator.new(view, view_context) }
+    @view_decorators = @views.map { |view| ViewDecorator.new(view, view_context) }
+    @ontology_relations_data = ontology_relations_data
+    @relations_array_display = @relations_array.map do |relation|
+      attr = relation.split(':').last
+      ["#{helpers.attr_label(attr, attr_metadata: helpers.attr_metadata(attr), show_tooltip: false)}(#{relation})",
+       relation]
+    end
+    @relations_array_display.unshift(['View of (bpm:viewOf)', 'bpm:viewOf'])
 
+    category_attributes = submission_metadata.group_by { |x| x['category'] }.transform_values { |x| x.map { |attr| attr['attribute'] } }
+
+    @config_properties = properties_hash_values(category_attributes["object description properties"])
+    @methodology_properties = properties_hash_values(category_attributes["methodology"])
+    @agents_properties = properties_hash_values(category_attributes["persons and organizations"])
+    @dates_properties = properties_hash_values(category_attributes["dates"])
+    @links_properties = properties_hash_values([:isFormatOf, :hasFormat, :source, :includedInDataCatalog])
+    @content_properties = properties_hash_values(category_attributes["content"])
+    @community_properties = properties_hash_values(category_attributes["community"] + [:notes])
+    @identifiers = properties_hash_values([:URI, :versionIRI, :identifier])
+    @identifiers["ontology_portal_uri"] = ["#{$UI_URL}/ontologies/#{@ontology.acronym}", "#{portal_name} URI"]
+    @projects_properties = properties_hash_values(category_attributes["usage"] - ["hasDomain"])
+    @ontology_icon_links = [%w[summary/download dataDump],
+                            %w[summary/homepage homepage],
+                            %w[summary/documentation documentation],
+                            %w[icons/github repository],
+                            %w[summary/sparql endpoint],
+                            %w[icons/publication publication],
+                            %w[icons/searching_database openSearchDescription]
+    ]
+    @ontology_icon_links.each do |icon|
+      icon << helpers.attr_label(icon[1], attr_metadata: helpers.attr_metadata(icon[1]), show_tooltip: false)
+    end
     if request.xhr?
       render partial: "ontologies/sections/metadata", layout: false
     else
@@ -430,20 +479,15 @@ display_links: false, display_context: false)
       flash[:error] = @errors
       redirect_to "/ontologies/#{@ontology.acronym}/edit"
     else
-      # TODO_REV: Enable subscriptions
-      # if params["ontology"]["subscribe_notifications"].eql?("1")
-      #  DataAccess.createUserSubscriptions(@ontology.administeredBy, @ontology.ontologyId, NOTIFICATION_TYPES[:all])
-      # end
-      redirect_to "/ontologies/#{@ontology.acronym}"
+      user = LinkedData::Client::Models::User.find(session[:user].id)
+      subscribed = helpers.subscribed_to_ontology?(ontology_acronym, user)
+      link = "javascript:void(0);"
+      user_id = user.id
     end
-  end
-
-  def virtual
-    redirect_new_api
-  end
-
-  def visualize
-    redirect_new_api(true)
+    count = helpers.count_subscriptions(params[:ontology_id])
+    render inline: helpers.turbo_frame_tag('subscribe_button') {
+      render_to_string(OntologySubscribeButtonComponent.new(id: '', ontology_id: ontology_id, subscribed: subscribed, user_id: user_id, count: count, link: link), layout: nil)
+    }
   end
 
   def widgets
@@ -466,6 +510,58 @@ display_links: false, display_context: false)
     p[:group].reject!(&:blank?)
     p.to_h
   end
+
+  def ontology_relations_data(sub = @submission_latest)
+    ontology_relations_array = []
+    @relations_array = ["bpm:viewOf", "omv:useImports", "door:isAlignedTo", "door:ontologyRelatedTo", "omv:isBackwardCompatibleWith", "omv:isIncompatibleWith", "door:comesFromTheSameDomain", "door:similarTo",
+                        "door:explanationEvolution", "voaf:generalizes", "door:hasDisparateModelling", "dct:hasPart", "voaf:usedBy", "schema:workTranslation", "schema:translationOfWork"]
+
+    return if sub.nil?
+
+    ont = sub.ontology
+    # Get ontology relations between each other (ex: STY isAlignedTo GO)
+    @relations_array.each do |relation_attr|
+      relation_values = sub.send(relation_attr.to_s.split(':')[1])
+      next if relation_values.nil? || relation_values.empty?
+
+      relation_values = [relation_values] unless relation_values.kind_of?(Array)
+
+      relation_values.each do |relation_value|
+        next if relation_value.eql?(ont.acronym)
+
+        target_id = relation_value
+        target_in_portal = false
+        target_ont = nil
+        # if we find our portal URL in the ontology URL, then we just keep the ACRONYM to try to get the ontology.
+        if relation_value.include?(helpers.portal_name.downcase)
+          relation_value = relation_value.split('/').last
+          target_ont = LinkedData::Client::Models::Ontology.find_by_acronym(relation_value).first
+        end
+
+        # Use acronym to get ontology from the portal
+        if target_ont
+          target_id = target_ont.acronym
+          target_in_portal = true
+        end
+
+        ontology_relations_array.push({ source: ont.acronym, target: target_id, relation: relation_attr.to_s, targetInPortal: target_in_portal })
+      end
+    end
+
+    if ont.viewOf
+      target_ont = LinkedData::Client::Models::Ontology.find(ont.viewOf)
+      ontology_relations_array.push({ source: ont.acronym, target: target_ont.acronym, relation: "bpm:viewOf", targetInPortal: true })
+    end
+
+    ontology_relations_array
+  end
+
+  def properties_hash_values(properties, sub: @submission_latest, custom_labels: {})
+    return {} if sub.nil?
+
+    properties.map { |x| [x.to_s, [sub.send(x.to_s), custom_labels[x.to_sym]]] }.to_h
+  end
+
 
   def determine_layout
     case action_name

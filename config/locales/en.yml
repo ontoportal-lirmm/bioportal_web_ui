@@ -1,3 +1,4 @@
+---
 en:
   about: >
     <div class='about p-2'>
@@ -52,15 +53,30 @@ en:
         license:
           attributes:
             encrypted_key:
-              invalid_license_key: is an invalid license key
-              no_appliance_id_for_comparison: couldn't be validated. Unable to retrieve virtual appliance ID.
-              appliance_id_mismatch: is an appliance ID mismatch
+              invalid_license_key: is an invalid license key.
+              no_appliance_id_for_comparison: Could not be validated. Unable to retrieve virtual appliance ID.
+              appliance_id_mismatch: is an appliance id mismatch.
+  # Make the resource_term 'ontology' configurable throughout the portal, allowing it to be replaced by alternative terms such as 'semantic_resource', 'vocabulary', 'terminology', or 'semantic_artefact'
+  resource_term:
+    ontology: ontology
+    ontology_plural: ontologies
+    ontology_single: an ontology
 
-  admin:
-    licenses:
-      create:
-        success: License successfully renewed!
+    semantic_resource: semantic resource
+    semantic_resource_plural: semantic resources
+    semantic_resource_single: a semantic resource
 
+    vocabulary: vocabulary
+    vocabulary_plural: vocabularies
+    vocabulary_single: a vocabulary
+
+    terminology: terminology
+    terminology_plural: terminologies
+    terminology_single: a terminology
+
+    semantic_artefact: semantic artefact
+    semantic_artefact_plural: semantic artefacts
+    semantic_artefact_single: a semantic artefact
   date:
     formats:
       year_month_day_concise: "%Y-%m-%d" # 2017-03-01
@@ -145,23 +161,268 @@ en:
     intro: Browse the library of ontologies
 
   concepts:
+    error_valid_concept: "Error: You must provide a valid concept id"
+    missing_roots: Missing roots
+    date_sorted_list_error: The Classes/Concepts didn't define <strong>creation</strong> or <strong>modifications</strong> dates with dcterms
+    list_error: The Collection didn't define any member
+    close: Close
+    request_terms_instructions: |
+      The text below is displayed to the user as the instructions on how to request new terms for your ontology.
+      You can change this text for %{acronym} ontology by clicking anywhere on the existing text to 
+      bring up the editing dialog.
+      Click 'Submit Changes' to save or 'Cancel' to discard your changes.
+    submit_changes: Submit Changes
+    cancel: Cancel
+    request_new_term: Request New Term
+    use_jump_to: Use the "Jump To" to find a class and display details, visualization, notes, and mappings
+    instances: Instances
+    notes: Notes
+    details: Details
+    visualization: Visualization
+    mappings: Mappings
+    new_term_requests: New Term Requests
+    permanent_link_class: Get a permanent link to this class
     request_term:
-      new_term_instructions: >
-        <p>This ontology integrates with OntoloBridge, allowing community users to suggest additions to the public ontology. Complete the template below to submit a term request directly to the ontology maintainer.</p>
-        <blockquote>
-          <p>Term Label (required)<br>Suggested term name. If a term can be described with multiple synonyms, only list the preferred name here.</p>
-        </blockquote>
-        <blockquote>
-          <p>Term description (required)<br>A brief definition, description, or usage of your suggested term.   Additional term synonyms may be listed in this section.</p>
-        </blockquote>
-        <blockquote>
-          <p>Superclass (required)<br>The parent term of the suggested term. The parent term should be an existing entry of the current ontology. The superclass can be selected directly from Bioportal's Classes tree viewer.</p>
-        </blockquote>
-        <blockquote>
-          <p>References (optional)<br>Provide evidence for the existence of the requested term such as Pubmed IDs of papers or links to other resources that describe the term.</p>
-        </blockquote>
-        <blockquote>
-          <p>Justification (optional)<br>Provide any additional information about the requested term here.</p>
-        </blockquote>
+      new_term_instructions: |
+        <p>This ontology integrates with OntoloBridge, allowing community users to suggest additions to the public ontology. Complete the template below to submit a term request directly to the Ontology Manager.</p>
+          <blockquote>
+            <p>Term label (required)<br>Suggested term name. If a term can be described with more than one synonym, enter only the preferred name here.</p>
+          </blockquote>
+          <blockquote>
+            <p>Term Description (required)<br>A brief definition, description, or usage of the suggested term. Synonyms of additional terms may be listed in this section.</p>
+          </blockquote>
+          <blockquote>
+            <p>Superclass (required)<br>The parent term of the suggested term. The parent term must be an existing entry in the current ontology. The superclass can be selected directly from the class tree.</p>
+          </blockquote>
+          <blockquote>
+            <p>References (optional)<br>Provide evidence that the requested term exists, such as IDs of articles or links to other resources describing the term.</p>
+          </blockquote>
+          <blockquote>
+            <p>Justification (optional)<br>Provide here any additional information about the requested term.</p>
+          </blockquote>
+  home:
+    bug: Bug
+    proposition: Proposition
+    question: Question
+    ontology_submissions_request: Ontology submissions request
+    include_name: Please include your name
+    include_email: Please include your email
+    include_comment: Please include your comment
+    fill_text: Please fill in the proper text from the supplied image
+    notice_feedback: Feedback has been sent
+    account_title: Account Information
+    agroportal_figures: "%{site} in figures"
+    benefit1: Discover new insights and knowledge by exploring other ontologies or smeantic resources in the repository.
+    benefit2: Contribute to knowledge sharing and semantic interoperability in your domain.
+    benefit3: Map your ontology to other relevant ones in the domain and collaborate with other users.
+    benefit4: Get feedback and suggestions from other users who can use and comment on your ontology.
+    benefit5: Precisely describe your ontology with relevant metadata and get a FAIR score for your ontology.
+    fair_details: See details
+    fairness: FAIR Score
+    get_annotations: Get annotations
+    get_recommendations: Get recommendations
+    index:
+      tagline: The home of ontologies and semantic artefacts in agri-food and related domains.
+      title: Welcome to %{site}
+      welcome: Welcome to %{site},
+    ontology_upload: Do you want to share an ontology?
+    ontology_upload_benefits: 'By uploading and sharing your ontology to %{site}, you can:'
+    ontology_upload_button: Submit ontology
+    discover_ontologies_button: Discover ontologies
+    ontology_upload_desc: Uploading an ontology or another type of semantic artefact (vocabulary, terminology, thesaurus, ...) is a way of sharing your knowledge with others.
+    paste_text_prompt: Enter a paragraph of text or some keywords...
+    recommender_annotator: Recommender and Annotator
+    support_and_collaborations: Support & Collaborations
+    ontoportal_instances: Other OntoPortal Instances
+    see_details: See details
+    info_tooltip_text: "You are seing the average scores for all the public ontologies in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
+    average: Average
+    min: Min
+    max: Max
+    ontologies: Ontologies
+    classes: Classes
+    individuals: Individuals
+    properties: Properties
+    projects: Projects
+    mappings: Mappings
+    users: Users
+    twitter_news: News
+    feedback:
+      error_on_form: Errors On Form
+      leave_your_feedback: Leave your feedback
+      feedback_hi_text: Hi
+      feedback_info_text: You can use the form below, email us directly at
+      feedback_info_text_rest: or leave us a github issue here
+      email: Email
+      name: Name
+      proposition_url_page: Error/Proposition page URL
+      feedback: Feedback
+      tags: Tags
+      bug: Bug
+      proposition: Proposition
+      question: Question
+      ontology_submissions_request: Ontology submissions request
+      optional: (optional)
+      send: Send
+      feedback_complete:
+        title: Feedback sent successfully
+        message: Thank you for taking the time to share your feedback with us. Our support team will review your message and get back to you as soon as possible with a response. We value your opinion and appreciate your help in improving our services. Thank you for your support!
+    suggest_slice: Suggest a new group/slice
+    slices_description: Slices allow users to interact (both via API or UI) only with a subset of ontologies in AgroPortal. If browsing the slice, all the portal features will be restricted to the chosen subset, enabling users to focus on their specific use cases. On AgroPortal, slices and groups are synchronized, so every group has a corresponding slice displaying only the ontologies from that group.
+    ontoportal_description: "The OntoPortal Alliance %{ontoportal_link} is a consortium of research and infrastructure teams dedicated to promoting the development of ontology repositories and semantic artefact catalogues based on the open, collaboratively developed OntoPortal software %{github_link}. Hereafter are the current public and open repositories built with the technology maintained by the Alliance."
+    viewing_slice: "Viewing the slice:"
+    view_full_site: View full website
+  landscape:
+    #select_ontologies: Start typing to select ontologies or leave blank to use them all
+    classes: Number of classes
+    individuals: Number of individuals
+    properties: Number of properties
+    max_depth: Max depth
+    max_child_count: Max child count
+    average_child_count: Average child count
+    classes_with_one_child: Classes with one child
+    classes_with_more_than_25_children: Classes with more than 25 children
+    classes_with_no_definition: Classes with no definition
+    number_of_xioms_triples: Number of axioms (triples)
+    projects_count: "%{count} projects"
+    notes_count: "%{count} notes"
+    reviews_count: "%{count} reviews"
+    as_contact_count: "%{count} as contact"
+    as_contributor_count: "%{count} as contributor"
+    as_creator_count: "%{count} as creator"
+    as_curator_count: "%{count} as curator"
+    contributions: "Contributions: %{title}"
+    published_ontologies: published %{count} ontologies
+    funded_ontologies: funded %{count} ontologies
+    endorsed_ontologies: endorsed %{count} ontologies
+    number_of_ontologies_using_format: Number of ontologies using this format
+    number_of_ontologies_of_type: Number of ontologies of this ontology type
+    number_of_ontologies_of_formality_level: Number of ontologies of this formality level
+    number_of_ontologies_in_catalog: Number of ontologies in this catalog
+    number_of_ontologies: Number of ontologies
+    number_of_ontologies_with_class_count_in_range: Number of ontologies with a class count in this range
+    average: Average
+    fairness_interface_introduction: This interface shows how an ontology or a group responded successfully to O’FAIRe FAIRness assessment questions
+    fairness_interface_details: See details for each ontologies on the specific ontology summary pages
+    fairness_interface_hover_instruction: hover on a principle to see details
+    average_metrics: Average metrics
+    category: category
+    filter_network: Filter network
+    funding_endorsing_organizations: Organizations funding and endorsing the most ontologies
+    group: group
+    groups_and_categories: Groups and Categories
+    intro: Visualize the panorama of all ontologies on %{site} via metadata aggregation.
+    more_properties_charts: More properties charts
+    most_active_ontologies: Most active ontologies
+    most_active_organizations: Most active organizations
+    most_active_people: Most active people
+    most_active_people_as_reviewer: Most active user account
+    most_mentioned_people: Most mentioned people as contact, creator, contributor or curator
+    most_mentioned_people_as_reviewer: User account who published notes, reviews, and projects
+    ontologies_activity_on: Ontology activity
+    ontologies_by: Ontologies by %{type}
+    ontologies_contributors: Contributors to ontology development
+    ontologies_count_by_catalog: Number of ontologies in each semantic artefact catalog
+    ontologies_formats: Representation language
+    ontologies_languages: Natural languages
+    ontologies_licenses: Licenses
+    ontologies_with_notes_reviews_projects: Ontologies with notes, reviews, and projects
+    ontology_fairness_evaluator: Ontology FAIRness Evaluator (O’FAIRe)
+    ontology_formality_levels: Formality levels
+    ontology_properties_pie_charts: Pie charts retated to object description properties (i.e., meatdata properties used to describe ontology objects).
+    ontology_relations_network: Ontology relations network
+    ontology_tools: Most used tools to build ontologies
+    owl_ontology_author_uris: Properties used to specify object author
+    owl_ontology_definition_uris: Properties used to specify objects definition
+    owl_ontology_preflabel_uris: Properties used to specify objects preferred label
+    owl_ontology_synonym_uris: Properties used to specify object synonyms
+    properties_usage_proportion: Pie charts related to the most frequent values for certain metadata properties
+    properties_use: Property usage
+    relations_between_stored_ontologies: Set of relationships between %{site} ontologies as captured by metadata. Green ontologies are stored in the repository while those in blue are external resources.
+    size: size
+    title: "Landscape"
+    ontologies_properties: Ontologies properties
+  layout:
+    header:
+      account_setting: Account settings
+      annotator: Annotator
+      browse: Browse
+      documentation: Documentation
+      help: Help
+      landscape: Landscape
+      login: Login
+      logout: Logout
+      mappings: Mappings
+      recommender: Recommender
+      publications: Publications
+      release_notes: Release Notes
+      search_prompt: Search in %{portal_name} ...
+      submit_feedback: Send Feedback
+      support: Support
+      cite_us: Cite Us
+    footer:
+      products: Products
+      ontoportal: OntoPortal
+      release_notes: Release Notes
+      api: API
+      tools: Tools
+      sparql: SPARQL
+      support: Support
+      contact_us: Contact Us
+      wiki: Wiki
+      documentation: Documentation
+      agro_documentation: AgroPortal documentation
+      issues_and_requests: Issues and Requests
+      agreements: Legal
+      terms: Terms and Conditions
+      privacy_policy: Privacy Policy
+      legal_notices: Legal Notices
+      cite_us: Cite Us
+      acknowledgments: Acknowledgments
+      about: About
+      about_us: About Us
+      projects: D2KAB
+      team: Team
+    notices:
+      slice: Slice
+      at: at
+      visit_the_site: visit the full site
+  login:
+    invalid_account_combination: "Invalid account name/password combination"
+    authentication_failed: "%{provider} authentication failed"
+    admin_logged_out: Logged out <b>%{old_user}</b>, returned to <b>%{user}</b>
+    user_logged_out: You have successfully logged out
+    try_again_notice: ". Please try again."
+    reset_password_again: ". Please reset your password again."
+    custom_ontology_set: "The display is now based on your <a href='/account#custom_ontology_set'>Custom Ontology Set</a>."
+    welcome: "Welcome <b>"
+    error_account_name: Please enter an account name
+    error_password: Please enter a password
+    enter_email: Enter your username
+    enter_password: Enter your password
+    forgot_password: Forgot password?
+    private_ontology: This ontology is private. Please login.
+    no_account: Do not have an account?
+    password: Password
+    register: Register
+    title: Login
+    username_or_email: Username
+    login_with_provider: Login with %{provider}
+    reset_password_message: A password reset email has been sent to your email address, please follow the instructions to reset your password.
+    back_home_button: Back home
+    recover_password: Recover password
+    email: Email
+    user: User
+    email_address_associated: Enter the email address associated with your account and we will send an email with instructions to reset your password.
+    email_placeholder: Enter the email
+    send_instructions: Send instructions
+  statistics:
+    title: "%{portal} Statistics"
+    lead: (last %{last_years} years)
+    ontologies: Ontologies
+    users: Users
+    projects: Projects
+    date: Date
+    ontology_visits: Ontology visits
   mappings:
     intro: Browse mappings between classes in different ontologies

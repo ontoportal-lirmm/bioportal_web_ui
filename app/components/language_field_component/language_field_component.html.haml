@@ -1,0 +1,8 @@
+- if @lang_code
+  .d-flex.align-items-center
+    = @icon ? inline_svg_tag(@icon, width: "17px", height: "17px") : flag_icon(lang_code)
+    - if @label
+      %div.ml-1
+        = @label
+- else
+  = render ChipButtonComponent.new(text: value)

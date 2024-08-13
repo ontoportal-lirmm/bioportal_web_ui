@@ -47,22 +47,28 @@ class HomeController < ApplicationController
     @individuals_count = LinkedData::Client::Models::Metrics.all.map { |m| m.individuals.to_i }.sum
     @prop_count = 36286
     @map_count = total_mapping_count
-    @analytics = LinkedData::Client::Analytics.last_month
+    @projects_count = LinkedData::Client::Models::Project.all.length
+    @users_count = LinkedData::Client::Models::User.all.length
 
-    @ontology_names = @ontologies.map { |ont| ["#{ont.name} (#{ont.acronym})", ont.acronym] }
+    @upload_benefits = [
+      t('home.benefit1'),
+      t('home.benefit2'),
+      t('home.benefit3'),
+      t('home.benefit4'),
+      t('home.benefit5')
+    ]
 
-    @anal_ont_names = {}
+    @anal_ont_names = []
     @anal_ont_numbers = []
-    @analytics.onts[0..4].each do |visits|
-      ont = @ontologies_hash[visits[:ont].to_s]
-      @anal_ont_names[ont.acronym] = ont.name
-      @anal_ont_numbers << visits[:views]
+    @analytics.sort_by{|ont, count| -count}[0..4].each do |ont, count|
+      @anal_ont_names << ont
+      @anal_ont_numbers << count
     end
   end
 
-  def render_layout_partial
-    partial = params[:partial]
-    render partial: "layouts/#{partial}"
+  def set_cookies
+    session[:cookies_accepted] = params[:cookies] if params[:cookies]
+    render 'cookies', layout: nil
   end
 
   def help
@@ -92,16 +98,16 @@ class HomeController < ApplicationController
 
     @tags = []
     unless params[:bug].nil? || params[:bug].empty?
-      @tags << "Bug"
+      @tags << t('home.bug')
     end
     unless params[:proposition].nil? || params[:proposition].empty?
-      @tags << "Proposition"
+      @tags << t('home.proposition')
     end
     unless params[:question].nil? || params[:question].empty?
-      @tags << "Question"
+      @tags << t('home.question')
     end
-    unless params[:ontology_submissions_request].nil? || params[:bug].empty?
-      @tags << "Ontology submissions request"
+    unless params[:ontology_submissions_request].nil? || params[:ontology_submissions_request].empty?
+      @tags << t('home.ontology_submissions_request')
     end
 
     @errors = []
@@ -122,7 +128,7 @@ class HomeController < ApplicationController
     end
 
     unless @errors.empty?
-      render render 'home/feedback/feedback', layout: feedback_layout
+      render 'home/feedback/feedback', layout: feedback_layout
       return
     end
 

@@ -9,27 +9,25 @@
     - if !session[:user].nil? && @ontology.admin?(session[:user])
       %p
         %em
-          The text below is displayed to the user as the instructions on how to request new terms for your ontology.
-          You can change this text for #{@ontology.acronym} ontology by clicking anywhere on the existing text to bring up the editing dialog.
-          Click 'Submit Changes' to save or 'Cancel' to discard your changes.
+          = t('concepts.request_terms_instructions', acronym: @ontology.acronym)
       %div#new_term_instructions_container{style: 'clear: both;'}
         %form#new_term_instructions_form
           = hidden_field nil, :acronym, value: @ontology.acronym
           = hidden_field nil, :new_term_instructions_old, value: @ob_instructions.html_safe
           %div#new_term_instructions
             = @ob_instructions.html_safe
-          %button#new_term_instructions_submit{class: "btn", type: "button", title: "Submit Changes", alt: "Submit Changes", style: 'display: none;'}
-            Submit Changes
-          %button#new_term_instructions_cancel{class: "btn", type: "button", title: "Cancel", alt: "Cancel", style: 'display: none;'}
-            Cancel
+          %button#new_term_instructions_submit{class: "btn", type: "button", title: t('concepts.submit_changes'), alt: "Submit Changes", style: 'display: none;'}
+            = t('concepts.submit_changes')
+          %button#new_term_instructions_cancel{class: "btn", type: "button", title: t('concepts.cancel'), alt: "Cancel", style: 'display: none;'}
+            = t('concepts.cancel')
           %span#progress_message{style: 'display: none; margin-left: 20px;'}
     - else
       %div
         = @ob_instructions.html_safe
     - if session[:user].nil?
-      = link_to "Request New Term", login_index_path, style: "font-size: .9em;"
+      = link_to t('concepts.request_new_term'), login_index_path, style: "font-size: .9em;"
     - else
-      = link_to "Request New Term", "javascript:void(0);", class: "add_request_term", style: "font-size: .9em;", data: { parent_id: "#{@concept.id}" }
+      = link_to t('concepts.request_new_term'), "javascript:void(0);", class: "add_request_term", style: "font-size: .9em;", data: { parent_id: "#{@concept.id}" }
   %div.request_term_form_div{style: "display: none; clear: both; padding-top: 1em;"}
 
 :javascript

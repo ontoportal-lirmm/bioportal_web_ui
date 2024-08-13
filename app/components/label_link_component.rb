@@ -9,9 +9,9 @@ class LabelLinkComponent < ViewComponent::Base
 
   def call
     if @id.eql?(@text)
-      @text
+      ExternalLinkTextComponent.new(text: @text).call
     else
-      @text + "<i class=' #{@icon} mx-1'></i>"
+      InternalLinkTextComponent.new(text: @text).call
     end
   end
 

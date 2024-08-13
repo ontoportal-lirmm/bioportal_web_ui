@@ -5,17 +5,17 @@
     %meta{content: "no-cache", name: "turbo-cache-control"}/
   %body
     %p
-      Name: #{@name}
+      = t("feedback_mail.name", name: @name)
     %p
-      Email: #{@email}
+      = t("feedback_mail.email", email: @email)
     %p
-      Location: #{@location}
-    %p Tags:
+      = t("feedback_mail.location", location: @location)
+    %p= t("feedback_mail.tags")
     %ul
       - for tag in @tags
         %li
           = tag
     %p
       %br/
-      %strong Feedback:
+      %strong= t("feedback_mail.feedback")
       = simple_format(@comment)

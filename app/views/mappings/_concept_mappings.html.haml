@@ -1,9 +1,7 @@
--# NOTES on control over mapping deletion:
--# deleteMappings() is a callback that is called by "#delete_mappings_button" created below.
--# The appearance of that button is controlled by updateMappingDeletePermissions(), which
--# relies on @delete_mapping_permission in /app/views/mappings/_mapping_table.html.haml; which,
--# in turn, is set by /app/controllers/application_controller.check_delete_mapping_permission()
-= turbo_frame_tag 'concept_mappings' do
+= turbo_frame_tag 'mapping_count' do
+  = "#{@mappings.size}"
+
+= turbo_frame_tag @type.eql?('modal') ? 'application_modal_content' : 'concept_mappings' do
   %div{:style => "padding: 1%; width: 98%"}
     - if session[:user].nil?
       = link_to "Create New Mapping", "/login?redirect=/ontologies/#{@ontology.acronym}/?p=classes&t=mappings&conceptid=#{escape(@concept.id)}", :method => :get, :class => "btn btn-default mb-3"

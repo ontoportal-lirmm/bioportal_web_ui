@@ -1,0 +1,11 @@
+= render_in_modal do
+  = render TableComponent.new do |t|
+    - t.add_row({th: t("ontologies.sections.classes")}, {td: number_with_delimiter(@metrics.classes)})
+    - t.add_row({th: t("ontologies.sections.individuals")},  {td: number_with_delimiter(@metrics.individuals)})
+    - t.add_row({th: t("ontologies.sections.properties")},  {td: number_with_delimiter(@metrics.properties)})
+    - t.add_row({th: t("ontologies.sections.maximum_depth")},  {td: number_with_delimiter(@metrics.maxDepth)})
+    - t.add_row({th: t("ontologies.sections.maximum_number_of_children")},  {td: number_with_delimiter(@metrics.maxChildCount)})
+    - t.add_row({th: t("ontologies.sections.average_number_of_children")},  {td: number_with_delimiter(@metrics.averageChildCount)})
+    - t.add_row({th: t("ontologies.sections.classes_with_a_single_child")},  {td: number_with_delimiter(@metrics.classesWithOneChild)})
+    - t.add_row({th: t("ontologies.sections.classes_with_more_than_25_children")}, { td: number_with_delimiter(@metrics.classesWithMoreThan25Children)})
+    - t.add_row({th: t("ontologies.sections.classes_with_no_definition")}, {td: number_with_delimiter(@metrics.classesWithNoDefinition)})

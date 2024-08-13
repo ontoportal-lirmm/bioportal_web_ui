@@ -1,0 +1,146 @@
+.notification {
+  display: flex;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 50;
+  padding: 1.5rem 1rem;
+  justify-content: center;
+  align-items: flex-end;
+  pointer-events: none;
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-duration: 1000ms;
+  transform: translateX(1rem);
+  opacity: 0;
+  @media (min-width: 640px) {
+    padding: 4rem 1.5rem 1.5rem;
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
+}
+
+
+.notification-inner {
+  overflow: hidden;
+  padding: 1rem;
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 24rem;
+  border-radius: 0.5rem;
+  pointer-events: auto;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.notification-content {
+  display: flex;
+  align-items: flex-start;
+}
+
+.notification-content svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.notification-text {
+  padding-top: 0.125rem;
+  margin-left: 0.75rem;
+  flex: 1 1 0;
+  width: 0;
+}
+
+.notification-text p:first-of-type {
+  color: #111827;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+}
+
+.notification-text p:last-of-type {
+  margin-top: 0.25rem;
+  color: #6B7280;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.notification-close {
+  display: inline-flex;
+  background-color: #ffffff;
+  color: #9CA3AF;
+  border: none;
+  cursor: pointer;
+}
+
+.notification-close svg {
+  height: 1rem;
+  outline: none;
+}
+
+.type-success path {
+  fill: #14a38c;
+}
+
+.type-error {
+  path:first-of-type {
+    fill: #f44336;
+  }
+
+  path {
+    fill: white;
+  }
+}
+
+.type-alert path {
+  fill: #edb464;
+}
+
+
+.slide-in-right {
+  animation-name: slide-in-right;
+  animation-duration: 0.5s;
+  animation-delay: 0.5s;
+  animation-timing-function: cubic-bezier(0.250, 0.460, 0.450, 0.940);
+  animation-fill-mode: forwards;
+}
+
+
+.slide-in-out-right {
+  animation-name: slide-in-right, slide-out-right;
+  animation-duration: 0.5s, 0.5s;
+  animation-delay: 0.5s, 5s;
+  animation-timing-function: cubic-bezier(0.250, 0.460, 0.450, 0.940), cubic-bezier(0.550, 0.085, 0.680, 0.530);
+  animation-fill-mode: forwards, forwards;
+}
+
+
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(1rem);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-right {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateX(1rem);
+    opacity: 0;
+  }
+}
+
+
+

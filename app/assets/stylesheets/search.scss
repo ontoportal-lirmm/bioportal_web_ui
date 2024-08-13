@@ -1,56 +1,58 @@
-form.button-to {
-  float: left;
+.search-page-container {
+  display: flex;
+  justify-content: center;
+}
+.search-page-subcontainer {
+  width: 1248px;
+  padding: 20px 50px;
+}
+.search-page-input-container{
+  width: 100%;
 }
 
-#ontology_picker_head {
-  font-size: 10pt !important;
+.search-page-input{
+  position: relative;
+  padding-bottom: 30px;
+  display: flex;
+  .search-container{
+    top:65px;
+  }
 }
-
-.not_visible {
-  position: fixed !important;
-  top: -999999px !important;
-}
-
-#search_results_container #search_results_info {
-  display: none !important;
-}
-
-#search_results_filter {
-  display: none;
-}
-
-#search_spinner {
-  display: inline-block;
-  padding: 8px 4px;
-}
-
-#search_options #ontology_ontologyId {
-  display: none;
-}
-
-.class_details_pop {
-  overflow: auto;
-  width: 750px !important;
-  display: block !important;
-}
-
-table#search_results td {
-  vertical-align: top;
-  padding: 12px 8px 12px 12px;
-}
-
-div.search_result {
-  margin-bottom: 1.5em;
-}
-
-div.class_link a {
+.search-page-input input{
+  border-radius: 8px;
+  box-shadow: rgba(100, 100, 111, 0.1) 0 7px 29px 0;
+  border: none;
+  outline: none;
   font-size: 18px;
+  padding: 15px 25px;
+  width: 100%;
+}
+.search-page-input input:focus{
+  box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;
+}
+.search-page-advanced{
+  display: flex;
+  margin-bottom: 15px;
+}
+.search-page-advanced .left{
+  width: 600px;
+  margin-right: 40px;
+}
+.search-page-advanced .filter-container{
+  margin-bottom: 15px;
+}
+.search-page-advanced .filter-container .title{
+  margin-bottom: 5px;
+  color: #888888;
+  font-size: 14px;
+}
+.search-page-button{
+  width: 120px;
+  margin-left: 20px;
 }
 
-span.class_def {
-  display: block;
-  margin: 3px 0 2px;
-  font-size: 12px;
+.search-page-button svg{
+  width: 14px;
 }
 
 .additional_ont_results {

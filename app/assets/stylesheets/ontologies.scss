@@ -2,16 +2,32 @@ $ont-metadata-bg-color: #e2ebf0;
 $widget-table-border-color: #efefef;
 $ont-show-bg-color: #e9ecef;
 
-.ontologies.show {
-  background-color: $ont-show-bg-color;
 
-  #bd {
-    background-color: $ont-show-bg-color;
+.admin-background{
+  a.chip_button_container_clickable{
+    color: var(--admin-color) !important;
   }
 }
 
+.admin-border {
+  .dropdown-container{
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+.custom-container {
+  padding: 1rem;
+  background-color: #2c3e50; /* Dark gray */
+  border-radius: 0.25rem;
+}
+/* Code block styles */
+.custom-code {
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem; /* 14px */
+  color: #fff;
+}
 .ontologies.show .gutter {
-  background-color: rgba(0, 0, 0, 0.03);
   background-repeat: no-repeat;
   background-position: center;
 
@@ -170,6 +186,13 @@ $ont-show-bg-color: #e9ecef;
 /************************************
 /* Classes pane
 ************************************/
+.tree-container {
+  overflow-x: auto;
+  min-width: 35%;
+  min-height: 70vh;
+  max-height: 90vh;
+  font: small/1.231 arial,helvetica,clean,sans-serif;
+}
 
 #bd_content {
   display: flex;
@@ -179,6 +202,7 @@ $ont-show-bg-color: #e9ecef;
 #bd_content .sidebar {
   overflow-x: auto;
   white-space: nowrap;
+  min-width: 29%;
 }
 
 #search_box:focus {
@@ -211,11 +235,6 @@ $ont-show-bg-color: #e9ecef;
 .ont-properties {
   display: flex;
   flex-direction: row;
-}
-
-#propTree {
-  overflow-x: auto;
-  white-space: nowrap;
 }
 
 /************************************

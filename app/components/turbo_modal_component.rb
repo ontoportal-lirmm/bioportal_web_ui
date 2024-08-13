@@ -8,5 +8,6 @@ class TurboModalComponent < ViewComponent::Base
     @id = id
     @title = title
     @size = size
+    @show = show
   end
 end

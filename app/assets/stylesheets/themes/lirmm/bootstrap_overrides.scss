@@ -6,7 +6,10 @@ a {
   color: $color-links !important;
 }
 a i {
-  color: $color-primary;
+  color: var(--primary-color);
+}
+.text-primary {
+  color: var(--primary-color) !important;
 }
 
 .btn-info,

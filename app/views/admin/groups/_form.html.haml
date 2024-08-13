@@ -1,0 +1,44 @@
+- new_record = @group.acronym.nil?
+
+%div
+  = render_alerts_container('group')
+%div
+  %table#group_form.form
+    %colgroup
+      %col
+      %col{style: "width: 100%"}
+    %tr
+      %th
+        = t('admin.groups.form.acronym')
+        %span.asterik *
+      %td.top
+        - if new_record
+          = f.text_field :acronym, class: "form-control", id: "group_acronym", required: true
+          %div#error-acronym.groupFormError
+        - else
+          = f.text_field :acronym, class: "form-control", readonly: true
+    %tr
+      %th
+        = t('admin.groups.form.name')
+        %span.asterik *
+      %td.top
+        = f.text_field :name, class: "form-control", id: "group_name", required: true
+        %div#error-name.groupFormError
+    %tr
+      %th
+        = t('admin.groups.form.description')
+      %td.top
+        = f.text_area :description, class: "form-control"
+    - unless new_record
+      %tr
+        %th
+          = t('admin.groups.form.created')
+        %td.top
+          = f.text_field :created, readonly: true, class: "form-control"
+      %tr
+        %th
+          = t('admin.groups.form.ontologies')
+        %td.top
+          = render SelectInputComponent.new(id: "group_ontologies", name: "group[ontologies]", values: @ontologies_group , selected: @group.ontologies , multiple: true, open_to_add_values: true)
+  %div.mt-2
+    %input{type: "submit", value: button_text, class: "btn btn-primary mr-sm-2 group-form-accept"}

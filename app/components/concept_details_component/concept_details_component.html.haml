@@ -1,11 +1,6 @@
-- require 'cgi'
-%div.py-3.pl-3.hide-if-loading
+%div.hide-if-loading.concept_details_component
   %div.card
-    %table.minimal.concept_details{cellpadding: "0", cellspacing: "0", width: "100%"}
-      %tr{style:"visibility:hidden"}
-        %td{style:"width:30%"}
-        %td
-      = header
+    = header
   %div.my-3
   .accordion.card{id: "accordion-#{@id}"}
     .card
