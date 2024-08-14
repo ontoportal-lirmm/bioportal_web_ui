@@ -50,8 +50,8 @@ module SearchAggregator
 
   private
 
-  def search_result_elem(class_object, ontology_acronym, title)
-    label = language_hash(class_object.prefLabel)
+  def search_concept_label(label)
+    label = language_hash(label)
 
     if label.is_a?(Hash)
       label = label.values.flatten
@@ -59,6 +59,12 @@ module SearchAggregator
         pref_lab.downcase.include?(@search_query.downcase) || @search_query.downcase.include?(pref_lab.downcase)
       end.first || label.first
     end
+    
+    label
+  end
+  def search_result_elem(class_object, ontology_acronym, title)
+
+    label = search_concept_label(class_object.prefLabel)
 
     {
       uri: class_object.id.to_s,

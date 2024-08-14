@@ -47,9 +47,7 @@ class SearchController < ApplicationController
       # record_type = format_record_type(result[:recordType], result[:obsolete])
       record_type = ""
 
-      label = main_language_label(result.prefLabel)
-      label = label.first if label.is_a?(Array)
-
+      label = search_concept_label(result.prefLabel)
       target_value = label
 
       case params[:target]
