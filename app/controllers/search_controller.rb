@@ -47,11 +47,14 @@ class SearchController < ApplicationController
       # record_type = format_record_type(result[:recordType], result[:obsolete])
       record_type = ""
 
-      target_value = result.prefLabel.select{|x| x.include?( params[:q].delete('*'))}.first || result.prefLabel.first
+      label = main_language_label(result.prefLabel)
+      label = label.first if label.is_a?(Array)
+
+      target_value = label
 
       case params[:target]
       when "name"
-        target_value = result.prefLabel
+        target_value = label
       when "shortid"
         target_value = result.id
       when "uri"

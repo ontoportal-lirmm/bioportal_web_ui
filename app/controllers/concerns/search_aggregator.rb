@@ -1,5 +1,5 @@
 module SearchAggregator
-  include UrlsHelper
+  include UrlsHelper, MultiLanguagesHelper
   extend ActiveSupport::Concern
   BLACKLIST_FIX_STR = [
     "https://",
@@ -51,28 +51,24 @@ module SearchAggregator
   private
 
   def search_result_elem(class_object, ontology_acronym, title)
-    label = concept_label(class_object.prefLabel)
+    label = language_hash(class_object.prefLabel)
+
+    if label.is_a?(Hash)
+      label = label.values.flatten
+      label = label.select do |pref_lab|
+        pref_lab.downcase.include?(@search_query.downcase) || @search_query.downcase.include?(pref_lab.downcase)
+      end.first || label.first
+    end
+
     {
       uri: class_object.id.to_s,
       title: title.empty? ? label : "#{label} - #{title}",
       ontology_acronym: ontology_acronym,
       link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{helpers.request_lang&.eql?("ALL") ? '' : "&language="+helpers.request_lang.to_s}",
-      definition: Array(class_object.definition)
+      definition:  class_object.definition
     }
   end
 
-  def concept_label(pref_labels_list, obsolete = false, max_length = 60)
-    # select closest to query
-    selected = pref_labels_list.select do |pref_lab|
-      pref_lab.downcase.include?(@search_query.downcase) || @search_query.downcase.include?(pref_lab.downcase)
-    end.first
-
-    selected ||= (pref_labels_list&.first || '')
-
-    selected = selected[0..max_length] if selected.size > max_length
-    selected = "<span class='obsolete_class' title='obsolete class'>#{selected}</span>".html_safe if obsolete
-    selected
-  end
 
   def ontology_name_acronym(ontologies, selected_acronym)
     ontology = ontologies.select { |x| x.acronym.eql?(selected_acronym.split('/').last) }.first
