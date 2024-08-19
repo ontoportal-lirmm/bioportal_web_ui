@@ -1,6 +1,6 @@
-set :author, "ontoportal-lirmm"
-set :application, "bioportal_web_ui"
-
+set :author, "biodivportal"
+set :application, "ontoportal_web_ui"
+set :rails_env, "appliance"
 set :repo_url, "https://github.com/#{fetch(:author)}/#{fetch(:application)}.git"
 
 set :deploy_via, :remote_cache
@@ -13,7 +13,7 @@ set :deploy_via, :remote_cache
 
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, "/srv/ontoportal/#{fetch(:application)}"
+set :deploy_to, "/srv/ontoportal/bioportal_web_ui"
 
 # Default value for :scm is :git
 # set :scm, :git
@@ -32,7 +32,10 @@ set :log_level, :error
 
 # Default value for linked_dirs is []
 # set :linked_dirs, %w{bin log tmp/pids tmp/cache public/system public/assets config/locales}
-set :linked_dirs, %w{log tmp/pids tmp/cache public/system public/assets}
+set :linked_dirs, %w{log tmp/pids tmp/cache}
+append :linked_files, 'config/database.yml', 'config/bioportal_config_appliance.rb'
+#append :linked_dirs, 'log', 'tmp', '.bundle'
+append :linked_files, 'config/secrets.yml', 'config/credentials/appliance.key', 'config/credentials/appliance.yml.enc'
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -139,7 +142,7 @@ namespace :deploy do
   end
 
 
-  after :updating, :get_config
+  #after :updating, :get_config
   after :publishing, :restart
 
   after :restart, :clear_cache do
