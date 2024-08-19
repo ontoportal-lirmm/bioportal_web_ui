@@ -354,7 +354,7 @@ en:
     notice_feedback: Feedback has been sent
     account_title: Account Information
     agroportal_figures: "%{site} in figures"
-    benefit1: Discover new insights and knowledge by exploring other ontologies or smeantic resources in the repository.
+    benefit1: Discover new insights and knowledge by exploring other ontologies or semantic resources in the repository.
     benefit2: Contribute to knowledge sharing and semantic interoperability in your domain.
     benefit3: Map your ontology to other relevant ones in the domain and collaborate with other users.
     benefit4: Get feedback and suggestions from other users who can use and comment on your ontology.
@@ -364,7 +364,7 @@ en:
     get_annotations: Get annotations
     get_recommendations: Get recommendations
     index:
-      tagline: The home of ontologies and semantic artefacts in agri-food and related domains.
+      tagline: The home of ontologies and semantic artefacts in biodiversity and related domains.
       title: Welcome to %{site}
       welcome: Welcome to %{site},
     ontology_upload: Do you want to share an ontology?
@@ -377,7 +377,7 @@ en:
     support_and_collaborations: Support & Collaborations
     ontoportal_instances: Other OntoPortal Instances
     see_details: See details
-    info_tooltip_text: "You are seing the average scores for all the public ontologies in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
+    info_tooltip_text: "You are seing the average scores for all the public ontologies in BiodivPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
     average: Average
     min: Min
     max: Max
@@ -410,7 +410,7 @@ en:
         title: Feedback sent successfully
         message: Thank you for taking the time to share your feedback with us. Our support team will review your message and get back to you as soon as possible with a response. We value your opinion and appreciate your help in improving our services. Thank you for your support!
     suggest_slice: Suggest a new group/slice
-    slices_description: Slices allow users to interact (both via API or UI) only with a subset of ontologies in AgroPortal. If browsing the slice, all the portal features will be restricted to the chosen subset, enabling users to focus on their specific use cases. On AgroPortal, slices and groups are synchronized, so every group has a corresponding slice displaying only the ontologies from that group.
+    slices_description: Slices allow users to interact (both via API or UI) only with a subset of ontologies in Biodivportal. If browsing the slice, all the portal features will be restricted to the chosen subset, enabling users to focus on their specific use cases. On BiodivPortal, slices and groups are synchronized, so every group has a corresponding slice displaying only the ontologies from that group.
     ontoportal_description: "The OntoPortal Alliance %{ontoportal_link} is a consortium of research and infrastructure teams dedicated to promoting the development of ontology repositories and semantic artefact catalogues based on the open, collaboratively developed OntoPortal software %{github_link}. Hereafter are the current public and open repositories built with the technology maintained by the Alliance."
     viewing_slice: "Viewing the slice:"
     view_full_site: View full website
@@ -513,7 +513,7 @@ en:
       contact_us: Contact Us
       wiki: Wiki
       documentation: Documentation
-      agro_documentation: AgroPortal documentation
+      agro_documentation: BiodivPortal documentation
       issues_and_requests: Issues and Requests
       agreements: Legal
       terms: Terms and Conditions
@@ -901,7 +901,7 @@ en:
       notes: Notes
   search:
     no_search_class_provided: No search class provided
-    search_place_holder: Enter a term, e.g. plant height
+    search_place_holder: Enter a term, e.g. honey bee
     advanced_options:
       search_language: Search language
       ontologies: Ontologies
@@ -1147,7 +1147,7 @@ en:
     see_metadata_used_properties: See metadata used properties
     not_found: not found
     "null": "null"
-    view_fair_scores_definitions: "You are seeing the FAIRness assessment score for this ontology in AgroPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
+    view_fair_scores_definitions: "You are seeing the FAIRness assessment score for this ontology in Biodivportal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
   ontologies_metadata_curator:
     #bulk_edit: Start bulk edit
     #use_the_bulk_edit: To use the bulk edit select in the table submissions (the rows) and metadata properties (the columns) for which you want to edit
@@ -1252,7 +1252,7 @@ en:
       show_private_ontology: Show private ontology only
       show_ontology_views: Show ontology views
       show_retired_ontologies: Show retired ontologies
-      search_placeholder: Start typing to filter ontologies, e.g., AGROVOC...
+      search_placeholder: Start typing to filter ontologies, e.g., ITIS...
     sections:
       classes: Classes
       individuals: Individuals
@@ -1363,7 +1363,7 @@ en:
   
     htaccess_modal_title: "Rewrite rules for %{acronym} ontology"
     instructions_servers: Instructions for %{server} servers
-    htaccess_redirection_description: "We offer a seamless solution to make your ontology URIs resolvable and content negotiable by allowing URL redirection for your ontology URIs to our Agroportal URIs. To facilitate this process, we've provided you with a set of .htaccess rewrite rules. By following the simple instructions below, you'll be able to implement these rules swiftly and efficiently, ensuring smooth redirection"
+    htaccess_redirection_description: "We offer a seamless solution to make your ontology URIs resolvable and content negotiable by allowing URL redirection for your ontology URIs to our BiodivPortal URIs. To facilitate this process, we've provided you with a set of .htaccess rewrite rules. By following the simple instructions below, you'll be able to implement these rules swiftly and efficiently, ensuring smooth redirection"
     
     redirection_note: |
       This redirection works only for uri with the form of:  url/path/resource_id

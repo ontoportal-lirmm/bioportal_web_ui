@@ -369,7 +369,7 @@ fr:
     get_annotations: Obtenir des annotations
     get_recommendations: Obtenir des recommandations
     index:
-      tagline: Le foyer des ontologies et des artefacts sémantiques dans l'agroalimentaire et les domaines connexes.
+      tagline: Le foyer des ontologies et des artefacts sémantiques dans la biodiversité et les domaines connexes.
       title: Bienvenue sur %{site}
       welcome: Bienvenue sur %{site},
     ontology_upload: Vous souhaitez partager une ontologie ?
@@ -381,7 +381,7 @@ fr:
     recommender_annotator: Recommandeur et Annotateur
     support_and_collaborations: Support & Collaborations
     see_details: Voir les détails
-    info_tooltip_text: "Vous voyez les scores moyens pour toutes les ontologies publiques dans AgroPortal. Les scores FAIR sont calculés avec la méthodologie O'FAIRe. Plus de détails ici : https://github.com/agroportal/fairness"
+    info_tooltip_text: "Vous voyez les scores moyens pour toutes les ontologies publiques dans Biodivportal. Les scores FAIR sont calculés avec la méthodologie O'FAIRe. Plus de détails ici : https://github.com/agroportal/fairness"
     average: Moyenne
     min: Min
     max: Max
@@ -414,7 +414,7 @@ fr:
         title: Retour envoyé avec succès
         message: Merci d'avoir pris le temps de partager votre retour avec nous. Notre équipe de support examinera votre message et vous répondra dès que possible. Nous apprécions votre opinion et sommes reconnaissants de votre aide pour améliorer nos services. Merci de votre soutien !
     suggest_slice: Proposer un nouveau groupe/slice
-    slices_description: Les "slices" permettent aux utilisateurs d'interagir (à la fois via l'API ou l'interface utilisateur) uniquement avec un sous-ensemble d'ontologies dans AgroPortal. Si vous parcourez une slice, toutes les fonctionnalités du portail seront limitées au sous-ensemble choisi; cela permet aux utilisateurs de se concentrer sur leurs cas d'utilisation spécifiques. Sur AgroPortal, les slices et les groupes sont synchronisés, de sorte que chaque groupe a une slice correspondante affichant uniquement les ontologies de ce groupe.
+    slices_description: Les "slices" permettent aux utilisateurs d'interagir (à la fois via l'API ou l'interface utilisateur) uniquement avec un sous-ensemble d'ontologies dans BiodivPortal. Si vous parcourez une slice, toutes les fonctionnalités du portail seront limitées au sous-ensemble choisi; cela permet aux utilisateurs de se concentrer sur leurs cas d'utilisation spécifiques. Sur BiodivPortal, les slices et les groupes sont synchronisés, de sorte que chaque groupe a une slice correspondante affichant uniquement les ontologies de ce groupe.
     ontoportal_description: "L'OntoPortal Alliance %{ontoportal_link} est un consortium d'équipes de recherche et d'infrastructure dédiées à promouvoir le développement de portails d'ontologies et de catalogues d'artefacts sémantiques basés sur le logiciel OntoPortal %{github_link} ouvert et collaboratif. Ci-dessous se trouvent les portails publics et ouverts actuels construits avec la technologie maintenue par l'Alliance."
     viewing_slice: "Affichage de la slice:"
     view_full_site: Voir le site complet
@@ -519,7 +519,7 @@ fr:
       contact_us: Contactez-nous
       wiki: Wiki
       documentation: Documentation
-      agro_documentation: Documentation d'AgroPortal
+      agro_documentation: Documentation d'BiodivPortal
       issues_and_requests: Problèmes et demandes
       agreements: Légal
       terms: Termes et conditions
@@ -1171,7 +1171,7 @@ fr:
     see_metadata_used_properties: Voir les propriétés de métadonnées utilisées
     not_found: non trouvé
     "null": "null"
-    view_fair_scores_definitions: "Vous voyez le score d'évaluation de l'équité FAIR pour cette ontologie dans AgroPortal. Les scores FAIR sont calculés avec la méthodologie O'FAIRe. Plus de détails ici : https://github.com/agroportal/fairness"
+    view_fair_scores_definitions: "Vous voyez le score d'évaluation de l'équité FAIR pour cette ontologie dans BiodivPortal. Les scores FAIR sont calculés avec la méthodologie O'FAIRe. Plus de détails ici : https://github.com/agroportal/fairness"
 
   ontologies_metadata_curator:
     #bulk_edit: Commencer l'édition en masse
@@ -1392,7 +1392,7 @@ fr:
 
     htaccess_modal_title: "Règles de redirection pour l'ontologie %{acronym}"
     instructions_servers: Instructions pour les servers %{server}
-    htaccess_redirection_description: "Nous proposons une solution transparente pour rendre les URI de votre ontologie résolubles et le contenu négociable en autorisant la redirection d'URL de vos URI d'ontologie vers nos URI d'Agroportal. Pour faciliter ce processus, nous vous avons fourni un ensemble de règles de réécriture .htaccess. En suivant les instructions simples ci-dessous, vous serez en mesure de mettre en œuvre ces règles rapidement et efficacement, garantissant ainsi une redirection fluide"
+    htaccess_redirection_description: "Nous proposons une solution transparente pour rendre les URI de votre ontologie résolubles et le contenu négociable en autorisant la redirection d'URL de vos URI d'ontologie vers nos URI de BiodivPortal. Pour faciliter ce processus, nous vous avons fourni un ensemble de règles de réécriture .htaccess. En suivant les instructions simples ci-dessous, vous serez en mesure de mettre en œuvre ces règles rapidement et efficacement, garantissant ainsi une redirection fluide"
     
     redirection_note: >
       Cette redirection fonctionne uniquement pour les uri sous la forme: url/path/resource_id.
