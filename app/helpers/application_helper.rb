@@ -69,7 +69,7 @@ module ApplicationHelper
   end
 
   def omniauth_providers_info
-    $OMNIAUTH_PROVIDERS
+    $OMNIAUTH_PROVIDERS || {}
   end
 
   def omniauth_provider_info(strategy)
