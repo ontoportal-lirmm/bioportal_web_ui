@@ -1,0 +1,16 @@
+.groupes-section-grid
+    - @groups.each do |group|
+        .group-card
+            .title
+                = "#{group.name} (#{group.acronym})"
+            .ontologies
+                = group.ontologies.length
+            .description
+                = group.description
+            .ontologies-cards
+                - group.ontologies.each do |ontology|
+                    = render(ChipButtonComponent.new(text: ontology.split('/').last, type: "static"))
+            
+
+
+
