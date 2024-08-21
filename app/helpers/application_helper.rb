@@ -543,10 +543,13 @@ module ApplicationHelper
       end
     end
   end
-  def taxonomy_card(taxonomy: ,is_slice: false)
+  def taxonomy_card(taxonomy:)
     content_tag(:div, class: 'taxonomy-card') do
-      content_tag(:div, class: 'title') do
-        "#{taxonomy.name} (#{taxonomy.acronym})"
+      content_tag(:div, class: 'title-bar') do
+        content_tag(:div, class: 'title') do
+          "#{taxonomy.name} (#{taxonomy.acronym})"
+        end +
+        inline_svg_tag('icons/slices.svg', height: '35px', width: '35px', class:"taxonomy-slice-svg #{taxonomy.is_slice ? '' : 'd-none' }")
       end +
       content_tag(:div, class: 'ontologies') do
         inline_svg_tag('icons/ontology.svg') +

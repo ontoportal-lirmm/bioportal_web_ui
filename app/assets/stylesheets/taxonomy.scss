@@ -34,6 +34,11 @@
     border-radius: 5px;
     margin-top: 10px;
 }
+.taxonomy-card .title-bar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 .taxonomy-card .title{
     color: var(--primary-color);
     font-size: 18px;
