@@ -21,17 +21,41 @@
     color: #888888;
     margin: 20px 0;
 }
-.groupes-section-grid{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: auto;
-    grid-gap: 10px;
+.groupes-section{
+    display: flex;
+}
+.groupes-section .second-row{
+    margin-left: 10px;
 }
 .group-card{
-    border: 1px solid #b2b2b2;
+    border: 1px solid #DFDFDF;
     padding: 15px 20px;
     width: 580px;
-    
+    border-radius: 5px;
+    margin-top: 10px;
+}
+.group-card .title{
+    color: var(--primary-color);
+    font-size: 18px;
+    font-weight: bold;
 }
 
+.group-card .ontologies{
+    display: flex;
+    align-items: center;
+    color: var(--primary-color);
+    margin: 5px 0;
+}
+.group-card .ontologies svg{
+    width: 15px;
+    height: 15px;
+    margin-right: 10px;
+}
+.group-card .ontologies svg path{
+    fill: var(--primary-color);
+}
+.group-card .description{
+    color: #666666;
+    margin-bottom: 5px;
+}
 

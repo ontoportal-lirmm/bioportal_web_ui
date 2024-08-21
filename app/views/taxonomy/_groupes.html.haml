@@ -1,15 +1,35 @@
-.groupes-section-grid
-    - @groups.each do |group|
-        .group-card
-            .title
-                = "#{group.name} (#{group.acronym})"
-            .ontologies
-                = group.ontologies.length
-            .description
-                = group.description
-            .ontologies-cards
-                - group.ontologies.each do |ontology|
-                    = render(ChipButtonComponent.new(text: ontology.split('/').last, type: "static"))
+.groupes-section
+    - pairs, impairs = @groups.each_with_index.partition { |_, index| index.even? }
+    - groups_first_row = pairs.map(&:first)
+    - groups_second_row = impairs.map(&:first)
+    .first-row
+        - groups_first_row.each do |group|
+            .group-card
+                .title
+                    = "#{group.name} (#{group.acronym})"
+                .ontologies
+                    = inline_svg_tag 'icons/ontology.svg'
+                    .number-of-ontologies
+                        = "#{group.ontologies.length} ontologies"
+                .description
+                    = group.description
+                .ontologies-cards
+                    - group.ontologies.each do |ontology|
+                        = render(ChipButtonComponent.new(text: ontology.split('/').last, type: "static"))
+    .second-row
+        - groups_second_row.each do |group|
+            .group-card
+                .title
+                    = "#{group.name} (#{group.acronym})"
+                .ontologies
+                    = inline_svg_tag 'icons/ontology.svg'
+                    .number-of-ontologies
+                        = "#{group.ontologies.length} ontologies"
+                .description
+                    = group.description
+                .ontologies-cards
+                    - group.ontologies.each do |ontology|
+                        = render(ChipButtonComponent.new(text: ontology.split('/').last, type: "static"))
             
 
 
