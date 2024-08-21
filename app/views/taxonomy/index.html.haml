@@ -2,13 +2,13 @@
     .taxonomy-page-subcontainer 
         .taxonomy-page-title
             .text
-                Groups and categories
+                = t('taxonomy.groups_and_categories')
             .line
         .taxonomy-page-decription
-            In AgroPortal, ontologies are organized in groups and tagged with categories. Typically, groups associate ontologies from the same project or organization for better identification of the provenance. Whereas categories are about subjects/topics and enable to classify ontologies. As of 2016, AgroPortal's categories were established in cooperation with FAO Agricultural Information Management Standards (AIMS). Groups and categories, along with other metadata, can be used on the “Browse” page of AgroPortal to filter out the list of ontologies.
+            = t('taxonomy.description')
 
         = render TabsContainerComponent.new do |c|
-            - c.item(title: 'Groupes', selected: true)
+            - c.item(title: 'Groups', selected: true)
             - c.item_content do
                 = render partial: '/taxonomy/groupes'
 
