@@ -1,4 +1,4 @@
-.groupes-section
+.taxonomy-section
     - pairs, impairs = @groups.each_with_index.partition { |_, index| index.even? }
     - groups_first_row = pairs.map(&:first)
     - groups_second_row = impairs.map(&:first)

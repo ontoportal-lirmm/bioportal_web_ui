@@ -13,7 +13,7 @@ class TaxonomyController < ApplicationController
       end
     end
 
-    
+    @categories = LinkedData::Client::HTTP.get('/categories',{display: 'name,acronym,description,ontologies'})
   end
 
 end

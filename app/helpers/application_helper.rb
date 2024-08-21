@@ -549,7 +549,7 @@ module ApplicationHelper
         content_tag(:div, class: 'title') do
           "#{taxonomy.name} (#{taxonomy.acronym})"
         end +
-        inline_svg_tag('icons/slices.svg', height: '35px', width: '35px', class:"taxonomy-slice-svg #{taxonomy.is_slice ? '' : 'd-none' }")
+        inline_svg_tag('icons/slices.svg', class:"taxonomy-slice-svg #{taxonomy.is_slice ? '' : 'd-none' }")
       end +
       content_tag(:div, class: 'ontologies') do
         inline_svg_tag('icons/ontology.svg') +

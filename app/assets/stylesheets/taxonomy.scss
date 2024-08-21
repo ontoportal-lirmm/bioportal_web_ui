@@ -21,10 +21,10 @@
     color: #888888;
     margin: 20px 0;
 }
-.groupes-section{
+.taxonomy-section{
     display: flex;
 }
-.groupes-section .second-row{
+.taxonomy-section .second-row{
     margin-left: 10px;
 }
 .taxonomy-card{
@@ -49,18 +49,23 @@
     display: flex;
     align-items: center;
     color: var(--primary-color);
-    margin: 5px 0;
+    margin: 3px 0;
 }
 .taxonomy-card .ontologies svg{
     width: 15px;
     height: 15px;
     margin-right: 10px;
 }
+
 .taxonomy-card .ontologies svg path{
     fill: var(--primary-color);
 }
 .taxonomy-card .description{
     color: #666666;
-    margin-bottom: 5px;
+    padding-bottom: 5px;
 }
-
+.taxonomy-slice-svg{
+    width: 35px;
+    height: 35px;
+    margin-bottom: 2px;
+}

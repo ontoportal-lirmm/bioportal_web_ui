@@ -1,1 +1,10 @@
-categories page
+.taxonomy-section
+    - pairs, impairs = @categories.each_with_index.partition { |_, index| index.even? }
+    - categories_first_row = pairs.map(&:first)
+    - categories_second_row = impairs.map(&:first)
+    .first-row
+        - categories_first_row.each do |category|
+            = taxonomy_card(taxonomy: category)
+    .second-row
+        - categories_second_row.each do |category|
+            = taxonomy_card(taxonomy: category)
