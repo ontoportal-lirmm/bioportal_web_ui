@@ -27,34 +27,34 @@
 .groupes-section .second-row{
     margin-left: 10px;
 }
-.group-card{
+.taxonomy-card{
     border: 1px solid #DFDFDF;
     padding: 15px 20px;
-    width: 580px;
+    width: 569px;
     border-radius: 5px;
     margin-top: 10px;
 }
-.group-card .title{
+.taxonomy-card .title{
     color: var(--primary-color);
     font-size: 18px;
     font-weight: bold;
 }
 
-.group-card .ontologies{
+.taxonomy-card .ontologies{
     display: flex;
     align-items: center;
     color: var(--primary-color);
     margin: 5px 0;
 }
-.group-card .ontologies svg{
+.taxonomy-card .ontologies svg{
     width: 15px;
     height: 15px;
     margin-right: 10px;
 }
-.group-card .ontologies svg path{
+.taxonomy-card .ontologies svg path{
     fill: var(--primary-color);
 }
-.group-card .description{
+.taxonomy-card .description{
     color: #666666;
     margin-bottom: 5px;
 }

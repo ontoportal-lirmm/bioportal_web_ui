@@ -543,5 +543,26 @@ module ApplicationHelper
       end
     end
   end
+  def taxonomy_card(taxonomy: ,is_slice: false)
+    content_tag(:div, class: 'taxonomy-card') do
+      content_tag(:div, class: 'title') do
+        "#{taxonomy.name} (#{taxonomy.acronym})"
+      end +
+      content_tag(:div, class: 'ontologies') do
+        inline_svg_tag('icons/ontology.svg') +
+        content_tag(:div, class: 'number-of-ontologies') do
+          "#{taxonomy.ontologies.length} ontologies"
+        end
+      end +
+      content_tag(:div, class: 'description') do
+        taxonomy.description
+      end +
+      content_tag(:div, class: 'ontologies-cards') do
+        taxonomy.ontologies.map do |ontology|
+          render(ChipButtonComponent.new(text: ontology.split('/').last, type: "static"))
+        end.join.html_safe
+      end
+    end
+  end
 
 end

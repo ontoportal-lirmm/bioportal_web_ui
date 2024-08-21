@@ -4,32 +4,10 @@
     - groups_second_row = impairs.map(&:first)
     .first-row
         - groups_first_row.each do |group|
-            .group-card
-                .title
-                    = "#{group.name} (#{group.acronym})"
-                .ontologies
-                    = inline_svg_tag 'icons/ontology.svg'
-                    .number-of-ontologies
-                        = "#{group.ontologies.length} ontologies"
-                .description
-                    = group.description
-                .ontologies-cards
-                    - group.ontologies.each do |ontology|
-                        = render(ChipButtonComponent.new(text: ontology.split('/').last, type: "static"))
+            = taxonomy_card(taxonomy: group)
     .second-row
         - groups_second_row.each do |group|
-            .group-card
-                .title
-                    = "#{group.name} (#{group.acronym})"
-                .ontologies
-                    = inline_svg_tag 'icons/ontology.svg'
-                    .number-of-ontologies
-                        = "#{group.ontologies.length} ontologies"
-                .description
-                    = group.description
-                .ontologies-cards
-                    - group.ontologies.each do |ontology|
-                        = render(ChipButtonComponent.new(text: ontology.split('/').last, type: "static"))
+            = taxonomy_card(taxonomy: group)
             
 
 
