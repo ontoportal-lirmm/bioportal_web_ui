@@ -111,6 +111,9 @@ gem 'omniauth-google-oauth2'
 gem 'omniauth-keycloak'
 gem 'omniauth-orcid'
 
+# Used to generate colors randomly
+gem "color", "~> 1.8"
+
 group :staging, :production, :appliance do
   # Application performance monitoring
   gem 'newrelic_rpm'
