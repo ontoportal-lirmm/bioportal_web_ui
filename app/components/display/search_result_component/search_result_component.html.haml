@@ -5,9 +5,8 @@
         .uri
             = @uri
     - if @definition
-        - @definition.each do |definition|
-            .definition
-                = definition
+
+        = display_in_multiple_languages(@definition)
     .actions
         = details_button
         = visualize_button
