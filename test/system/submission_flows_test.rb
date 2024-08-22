@@ -148,7 +148,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
 
     assert_text submission_2.URI
     assert_text submission_2.versionIRI
-    assert_selector '#submission-status', text: submission_2.version
+    assert_selector '.submission-status', text: submission_2.version
     assert_selector ".flag-icon-fr" # todo fix this
     submission_2.identifier.each do |id|
       assert_text id
