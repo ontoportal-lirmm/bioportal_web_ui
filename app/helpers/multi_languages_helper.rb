@@ -166,7 +166,7 @@ module MultiLanguagesHelper
       content_tag(:div) do
         raw(label.map do |key, value|
           Array(value).map do |v|
-            content_tag(:div) do
+            content_tag(:div, class: 'definition') do
               concat content_tag(:span, v)
               concat content_tag(:span, key.upcase, class: 'badge badge-secondary ml-1') unless key.to_s.upcase.eql?('NONE') || key.to_s.upcase.eql?('@NONE')
             end
