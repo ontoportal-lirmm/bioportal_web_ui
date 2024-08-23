@@ -3,9 +3,9 @@ class TaxonomyController < ApplicationController
   layout :determine_layout
 
   def index
-    @groups = LinkedData::Client::HTTP.get('/groups')
+    @groups = LinkedData::Client::Models::Group.all
 
-    slices = LinkedData::Client::HTTP.get('/slices')
+    slices = LinkedData::Client::Models::Slice.all
     slices_acronyms = slices.map { |slice| slice.acronym.downcase }
     @groups.each do |group|
       if slices_acronyms.include?(group.acronym.downcase)
@@ -13,7 +13,7 @@ class TaxonomyController < ApplicationController
       end
     end
 
-    @categories = LinkedData::Client::HTTP.get('/categories',{display: 'name,acronym,description,ontologies'})
+    @categories = LinkedData::Client::Models::Category.all(display: 'name,acronym,description,ontologies')
   end
 
 end
