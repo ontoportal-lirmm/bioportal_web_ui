@@ -4,8 +4,6 @@ agent1:
   email: "jonh@test.com"
   identifiers:
     - notation: "0000-0001-2345-6789"
-    - notation: "0000-0001-2345-6788"
-    - notation: "0000-0001-2345-6788"
   affiliations:
     - name: "Research Institute X"
       agentType: "organization"

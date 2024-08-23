@@ -1,6 +1,8 @@
 class Display::SearchResultComponent < ViewComponent::Base
   include UrlsHelper
   include ModalHelper
+  include MultiLanguagesHelper
+
   renders_many :subresults, Display::SearchResultComponent
   renders_many :reuses, Display::SearchResultComponent
   def initialize(number: 0,title: nil, ontology_acronym: nil ,uri: nil, definition: nil, link: nil,  is_sub_component: false)

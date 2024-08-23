@@ -105,11 +105,14 @@ gem 'net-http', '~> 0.3.2'
 
 # Multi-Provider Authentication
 gem 'omniauth'
+gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-github'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-keycloak'
 gem 'omniauth-orcid'
-gem 'omniauth-rails_csrf_protection'
+
+# Used to generate colors randomly
+gem "color", "~> 1.8"
 
 group :staging, :production, :appliance do
   # Application performance monitoring

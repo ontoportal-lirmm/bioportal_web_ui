@@ -104,7 +104,6 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     element = find(ts_wrapper_selector)
     element.click
 
-
     return unless page.has_selector?("#{ts_wrapper_selector} > .ts-dropdown")
 
     if multiple
@@ -137,6 +136,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   end
 
   def agent_search(name)
+    sleep 1
     within(".search-inputs:last-of-type") do
       input = find("input[name^='agent']")
       agent_id = input[:name].split('agent').last
@@ -152,10 +152,10 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   end
 
   def agent_fill(agent, parent_id: nil, is_affiliation: false)
-    id = agent.id ? "/#{agent.id}": ''
+    id = agent.id ? "/#{agent.id}" : ''
     form = all("form[action=\"/agents#{id}\"]").first
-    within form  do
-      choose "", option: agent.agentType, allow_label_click: true  unless is_affiliation
+    within form do
+      choose "", option: agent.agentType, allow_label_click: true unless is_affiliation
       fill_in 'name', with: agent.name
 
       if agent.agentType.eql?('organization')
@@ -168,8 +168,13 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
         fill_in 'email', with: agent.email
       end
 
-      list_inputs ".agents-identifiers",
-                  "[identifiers]", agent.identifiers
+      identifier = agent.identifiers.first
+
+      if agent.agentType.eql?('organization')
+        fill_in "_identifiers_0_notation", with: identifier['notation']
+      else
+        fill_in "_identifiers_1_notation", with: identifier['notation']
+      end
 
       if is_affiliation || agent.agentType.eql?('organization')
         refute_selector ".agents-affiliations"
