@@ -1436,6 +1436,8 @@ en:
     preferred_name: Preferred name
     definitions: Definitions
     parent: Parent
+    domain: Domain
+    range: Range
     no_properties_alert: "%{acronym} does not contain properties"
   visits:
     ontology_visits: Ontology visits
