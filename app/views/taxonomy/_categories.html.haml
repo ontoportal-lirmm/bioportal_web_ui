@@ -4,7 +4,7 @@
     - categories_second_row = impairs.map(&:first)
     .first-row
         - categories_first_row.each do |category|
-            = taxonomy_card(taxonomy: category)
+            = render Display::TaxonomyCardComponent.new(taxonomy: category)
     .second-row
         - categories_second_row.each do |category|
-            = taxonomy_card(taxonomy: category)
+            = render Display::TaxonomyCardComponent.new(taxonomy: category)

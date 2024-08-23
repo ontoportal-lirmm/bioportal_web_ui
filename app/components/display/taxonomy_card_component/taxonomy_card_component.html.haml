@@ -1,0 +1,14 @@
+.taxonomy-card
+  .title-bar
+    .title
+      = "#{@taxonomy.name} (#{@taxonomy.acronym})"
+    = inline_svg_tag('icons/slices.svg', class: "taxonomy-slice-svg #{@taxonomy.is_slice ? '' : 'd-none'}")
+  .ontologies
+    = inline_svg_tag('icons/ontology.svg')
+    .number-of-ontologies
+      = "#{@taxonomy.ontologies.length} ontologies"
+  .description
+    = @taxonomy.description
+  .ontologies-cards
+    - @taxonomy.ontologies.each do |ontology|
+      = render(ChipButtonComponent.new(text: ontology.split('/').last, type: "static"))
