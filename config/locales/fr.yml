@@ -1468,6 +1468,8 @@ fr:
     preferred_name: Nom préféré
     definitions: Définitions
     parent: Parent
+    domain: Domaine
+    range: Étendue
     no_properties_alert: "%{acronym} ne contient pas de propriétés"
 
   visits:
