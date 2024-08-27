@@ -15,3 +15,10 @@
             - c.item(title: 'Categories', selected: @category_section_active)
             - c.item_content do
                 = render partial: '/taxonomy/categories'
+:javascript
+    document.getElementById('categories_tab').addEventListener('click', function(event) {
+        window.history.pushState({ path: '/categories' }, '', '/categories');
+    })
+    document.getElementById('groups_tab').addEventListener('click', function(event) {
+        window.history.pushState({ path: '/groups' }, '', '/groups');
+    })
