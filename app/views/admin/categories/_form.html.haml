@@ -30,6 +30,11 @@
           = t('admin.categories.form.description')
         %td.top
           = f.text_area :description, class: "form-control"
+      %tr
+        %th
+          Parent category
+        %td.top
+          = render Input::SelectComponent.new(id: 'category_parent_select', name: 'category[parentCategory]', value: @categories_for_select, selected: @category&.parentCategory)
       - unless new_record
         %tr
           %th
