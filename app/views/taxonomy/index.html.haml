@@ -8,10 +8,10 @@
             = t('taxonomy.description')
 
         = render TabsContainerComponent.new do |c|
-            - c.item(title: 'Groups', selected: true)
+            - c.item(title: 'Groups', selected: !@category_section_active)
             - c.item_content do
                 = render partial: '/taxonomy/groups'
 
-            - c.item(title: 'Categories')
+            - c.item(title: 'Categories', selected: @category_section_active)
             - c.item_content do
                 = render partial: '/taxonomy/categories'

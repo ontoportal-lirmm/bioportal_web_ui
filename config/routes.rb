@@ -207,7 +207,8 @@ Rails.application.routes.draw do
   get '/login_as/:login_as' => 'login#login_as', constraints: { login_as: /[\d\w\.\-\%\+ ]+/ }
   post '/login/send_pass', to: 'login#send_pass'
 
-  get '/taxonomy' => 'taxonomy#index'
+  get '/groups' => 'taxonomy#index'
+  get '/categories' => 'taxonomy#categories'
 
   # Search
   get 'search', to: 'search#index'
