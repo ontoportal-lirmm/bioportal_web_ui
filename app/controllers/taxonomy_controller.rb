@@ -13,7 +13,24 @@ class TaxonomyController < ApplicationController
       end
     end
 
-    @categories = LinkedData::Client::Models::Category.all(display: 'name,acronym,description,ontologies')
+    @categories = LinkedData::Client::Models::Category.all(display: 'name,acronym,description,ontologies,parentCategory')
+    @categories = nest_categories_children(@categories)
+  end
+
+  def nest_categories_children(categories)
+    category_index = {}
+    categories.each do |category|
+      category_index[category[:id]] = category
+    end
+    categories.each do |category|
+      if category.parentCategory
+        parent = category_index[category.parentCategory]
+        parent[:children] ||= []
+        parent[:children] << category
+      end
+    end
+    categories.reject! { |category| category.parentCategory }
+    categories
   end
 
 end

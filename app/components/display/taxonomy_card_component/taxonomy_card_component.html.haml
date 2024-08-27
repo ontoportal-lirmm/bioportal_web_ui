@@ -1,4 +1,4 @@
-.taxonomy-card
+.taxonomy-card{'data-controller': 'reveal-component'}
   .title-bar
     .title
       = "#{@taxonomy.name} (#{@taxonomy.acronym})"
@@ -12,3 +12,13 @@
   .ontologies-cards
     - @taxonomy.ontologies.each do |ontology|
       = render(ChipButtonComponent.new(text: ontology.split('/').last, type: "static"))
+  - if @taxonomy.children
+    .taxonomy-children-reveal{'data-action': "click->reveal-component#toggle", 'data-id': reveal_id}
+      .text
+        Show children
+      = inline_svg_tag 'icons/arrow-down.svg'
+    .taxonomy-children-container
+      .taxonomy-children-line
+      .taxonomy-children.d-none{id: reveal_id}
+        - @taxonomy.children.each do |child|
+          = render Display::TaxonomyCardComponent.new(taxonomy: child)

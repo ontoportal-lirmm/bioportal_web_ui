@@ -34,6 +34,7 @@
     border-radius: 5px;
     margin-top: 10px;
 }
+
 .taxonomy-card .title-bar{
     display: flex;
     justify-content: space-between;
@@ -68,4 +69,31 @@
     width: 35px;
     height: 35px;
     margin-bottom: 2px;
+}
+
+.taxonomy-children-reveal{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: var(--primary-color);
+}
+.taxonomy-children-reveal svg{
+    margin-left: 5px;
+    margin-top: 3px;
+}
+
+.taxonomy-children .taxonomy-card{
+    border: none;
+    padding: 0px 18px;
+    width: unset;
+}
+
+.taxonomy-children-container{
+    display: flex;
+    margin-top: 10px
+}
+
+.taxonomy-children-line{
+    width: 1px;
+    background-color: var(--primary-color);
 }
