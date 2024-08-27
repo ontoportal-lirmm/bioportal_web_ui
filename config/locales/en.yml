@@ -203,6 +203,7 @@ en:
         description: Description
         created: Created
         ontologies: Ontologies
+        parent_category: Parent category
       edit:
         edit_category: Edit category
         save: Save

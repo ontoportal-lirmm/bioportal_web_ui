@@ -209,6 +209,7 @@ fr:
         description: Description
         created: Créé
         ontologies: Ontologies
+        parent_category: Catégorie parent
       edit:
         edit_category: Modifier la catégorie
         save: Sauvegarder
