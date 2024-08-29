@@ -40,7 +40,8 @@ class LoginFlowsTest < ActionDispatch::IntegrationTest
         githubId: new_user.githubId,
         email: new_user.email,
         password: new_user.password,
-        password_confirmation: new_user.password
+        password_confirmation: new_user.password,
+        terms_and_conditions: true
       }
     }
 
@@ -49,7 +50,7 @@ class LoginFlowsTest < ActionDispatch::IntegrationTest
 
     assert_select '.notification', text: 'Account was successfully created'
 
-    get account_path
+    get "/accounts/#{new_user.username}"
     assert_response :success
 
     assert_select '.account-page-title', text: 'My account'

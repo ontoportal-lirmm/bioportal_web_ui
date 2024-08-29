@@ -10,7 +10,6 @@
  *
  *= require jquery-ui
  *= require alertify
- *= require chosen
  *= require jquery-ui-1.8.1.custom
  *= require jquery.autocomplete
  *= require trumbowyg
@@ -56,10 +55,14 @@
 @import "ontology_details_header";
 @import "ontology_viewer";
 @import "browse";
+@import "agent_tooltip";
+@import "content_finder";
+@import "tools";
+
 /* Bootstrap and Font Awesome */
 @import "bootstrap";
 @import "bootstrap_overrides";
-@import "agent_tooltip";
+
 
 <% if (ui_theme = $UI_THEME.to_s.parameterize).present? && File.exists?(Rails.root.join('app', 'assets', 'stylesheets', 'themes', ui_theme)) %>
   @import "themes/<%= ui_theme %>/main";

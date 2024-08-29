@@ -7,8 +7,8 @@ import { application } from "./application"
 import BrowseFiltersController from "./browse_filters_controller"
 application.register("browse-filters", BrowseFiltersController)
 
-import ChosenController from "./chosen_controller"
-application.register("chosen", ChosenController)
+import Skos_collections_selector from "./skos_collections_selector"
+application.register("skos-collections-selector", Skos_collections_selector)
 
 import ClassSearchAutoCompleteController from "./class_search_auto_complete_controller"
 application.register("class-search-auto-complete", ClassSearchAutoCompleteController)
@@ -45,9 +45,6 @@ application.register("language-change", LanguageChangeController)
 
 import LoadChartController from "./load_chart_controller"
 application.register("load-chart", LoadChartController)
-
-import MetadataDownloaderController from "./metadata_downloader_controller"
-application.register("metadata-downloader", MetadataDownloaderController)
 
 import OntologyRelationsNetworkController from "./ontology_relations_network_controller"
 application.register("ontology-relations-network", OntologyRelationsNetworkController)
@@ -102,3 +99,10 @@ application.register('form-url', FormUrlController)
 
 import OntologiesSelector from "./ontologies_selector_controller"
 application.register("ontologies-selector", OntologiesSelector)
+
+
+import MappingsController from "./mappings_visualization_controller"
+application.register('mappings', MappingsController)
+
+import ConceptsJsonButtonController from "./concepts_json_button_controller.js"
+application.register('concepts-json', ConceptsJsonButtonController)

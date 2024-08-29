@@ -2,7 +2,7 @@
     .ontologies-selector-results
         .horizontal-line                  
         .results-number
-            = "Showing #{@ontologies.length} of #{@total_ontologies_number}" 
+            = t("ontologies.showing_ontologies_size", ontologies_size: @ontologies.length, analytics_size: @total_ontologies_number)
             %span.select-all{'data-action': 'click->ontologies-selector#selectall'}
                 = t('ontologies_selector.select_all')
         .ontologies

@@ -1,11 +1,12 @@
 = render_in_modal do
   #mappings.paginate_ajax{:style => "overflow: auto; max-height: 600px;"}
     #mapping_results
-      = will_paginate @page_results, :update => 'mappings', :params => { :target => params[:target] }
+      .mappings-table-pagination
+        = will_paginate @page_results, :update => 'mappings', :params => { :target => params[:target] }
       - if @mappings.nil? or @mappings.empty?
         = t("mappings.show.no_mappings_found")
-      - else
-        %table.zebra.w-100
+      - else            
+        %table.table-content.table-content-stripped
           %thead
             %th #{@ontology_name}
             %th #{@target_ontology_name}
@@ -22,7 +23,8 @@
                     = ajax_to_external_cls(cls)
               %td
                 #{map.source} #{(map.process || {})[:source_name]}
-      = will_paginate @page_results, :update => 'mappings', :params => { :target => params[:target] }
+      .mappings-table-pagination
+        = will_paginate @page_results, :update => 'mappings', :params => { :target => params[:target] }
 
   :javascript
     jQuery(document).ready(function(){

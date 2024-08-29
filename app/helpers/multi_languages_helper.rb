@@ -2,6 +2,7 @@ module MultiLanguagesHelper
   def portal_lang
     session[:locale] || 'en'
   end
+
   def request_lang
     lang = params[:language] || params[:lang]
     lang = portal_lang unless lang
@@ -11,6 +12,7 @@ module MultiLanguagesHelper
   def portal_language_help_text
     t('language.portal_language_help_text')
   end
+
   def portal_languages
     {
       en: { badge: nil, disabled: false },
@@ -32,7 +34,7 @@ module MultiLanguagesHelper
             text = content_tag(:div, class: 'd-flex align-items-center') do
               content_tag(:span, render(LanguageFieldComponent.new(value: lang, auto_label: true)), class: 'mr-1') + beta_badge(metadata[:badge])
             end
-            link_options = { data: { turbo: true } }
+            link_options = { data: { turbo: false } }
 
             if metadata[:disabled]
               link_options[:class] = 'disabled-link'
@@ -52,10 +54,12 @@ module MultiLanguagesHelper
       t('language.search_language_help_text')
     end
   end
+
   def search_languages
     # top ten spoken languages
     portal_languages.keys + %w[zh es hi ar bn pt ru ur id]
   end
+
   def search_language_selector(id: 'search_language', name: 'search_language', selected: nil)
     render Input::LanguageSelectorComponent.new(id: id, name: name, enable_all: true,
                                                 languages: search_languages,
@@ -68,6 +72,9 @@ module MultiLanguagesHelper
   def content_languages(submission = @submission || @submission_latest)
     current_lang = request_lang.downcase
     submission_lang = submission_languages(submission)
+
+    submission_lang = [current_lang.to_s]  if submission_lang.empty?
+
     # Transform each language into a select option
     submission_lang = submission_lang.map do |lang|
       lang = lang.split('/').last.upcase
@@ -78,29 +85,33 @@ module MultiLanguagesHelper
 
     [submission_lang, current_lang]
   end
+
   def content_language_help_text
     content_tag(:div, style: 'width: 350px;') do
       concat content_tag(:div, t('language.content_language_help_text_1'))
-      concat(content_tag(:div, class: "mt-1" ) do
+      concat(content_tag(:div, class: "mt-1") do
         content_tag(:span, t('language.content_language_help_text_2')) + edit_sub_languages_button
       end)
     end
   end
+
   def content_language_selector(id: 'content_language', name: 'content_language')
     languages, selected = content_languages
     render Input::LanguageSelectorComponent.new(id: id, name: name, enable_all: true,
                                                 languages: languages,
-                                                selected: selected || 'all',
+                                                selected: selected || request_lang,
                                                 'data-tooltip-interactive-value': true,
                                                 'data-select-input-searchable-value': false,
                                                 title: content_language_help_text)
 
   end
 
+  def language_hash(concept_label, multiple: false)
+    if concept_label.is_a?(Array)
+      return concept_label.first unless multiple
+      return concept_label
+    end
 
-  def language_hash(concept_label)
-
-    return concept_label.first if concept_label.is_a?(Array)
     return concept_label.to_h.reject { |key, _| %i[links context].include?(key) } if concept_label.is_a?(OpenStruct)
 
     concept_label
@@ -133,26 +144,36 @@ module MultiLanguagesHelper
     select_language_label(label)&.last
   end
 
+  # @param label String | Array | OpenStruct
   def display_in_multiple_languages(label)
-    label = language_hash(label)
-
-    if label.nil?
+    if label.blank?
       return render Display::AlertComponent.new(message: t('ontology_details.concept.no_preferred_name_for_selected_language'),
                                                 type: "warning",
                                                 closable: true)
     end
 
-    return content_tag(:p, label) if label.is_a?(String)
 
-    raw(label.map do |key, value|
-      content_tag(:div, class: 'd-flex align-items-center') do
-        concat content_tag(:p, Array(value).join(', '), class: 'm-0')
 
-        unless key.to_s.upcase.eql?('NONE') || key.to_s.upcase.eql?('@NONE')
-          concat content_tag(:span, key.upcase, class: 'badge badge-secondary ml-1')
-        end
+    label = label.to_h.reject { |key, _| %i[links context].include?(key) } if label.is_a?(OpenStruct)
+
+    if label.is_a?(String)
+      content_tag(:p, label)
+    elsif label.is_a?(Array)
+      content_tag(:div) do
+        raw(label.map { |x| content_tag(:div, x) }.join)
       end
-    end.join)
+    else
+      content_tag(:div) do
+        raw(label.map do |key, value|
+          Array(value).map do |v|
+            content_tag(:div, class: 'definition') do
+              concat content_tag(:span, v)
+              concat content_tag(:span, key.upcase, class: 'badge badge-secondary ml-1') unless key.to_s.upcase.eql?('NONE') || key.to_s.upcase.eql?('@NONE')
+            end
+          end.join
+        end.join)
+      end
+    end
   end
 
   def selected_language_label(label)

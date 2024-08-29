@@ -11,8 +11,12 @@
 }
 
 .search-page-input{
+  position: relative;
+  padding-bottom: 30px;
   display: flex;
-  margin-bottom: 25px;
+  .search-container{
+    top:65px;
+  }
 }
 .search-page-input input{
   border-radius: 8px;
@@ -57,6 +61,7 @@
 }
 .search-page-advanced-button{
   display: flex;
+  align-items: center;
 }
 .search-page-advanced-button :hover{
   cursor: pointer;

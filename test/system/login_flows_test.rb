@@ -3,8 +3,9 @@ require "application_system_test_case"
 class LoginFlowsTest < ApplicationSystemTestCase
 
   setup do
+    WebMock.disable!
     @user_john = fixtures(:users)[:john]
-    @user_bob = create_user(fixtures(:users)[:bob])
+    @user_bob = fixtures(:users)[:bob]
   end
 
   teardown do
@@ -31,6 +32,7 @@ class LoginFlowsTest < ApplicationSystemTestCase
     fill_in 'user_email', with: new_user.email
     fill_in 'user_password', with: new_user.password
     fill_in 'user_password_confirmation', with: new_user.password
+    find("input[name='user[terms_and_conditions]']").set(true)
 
     # Click the save button
     click_button 'Register'
@@ -38,7 +40,7 @@ class LoginFlowsTest < ApplicationSystemTestCase
 
     assert_selector '.notification', text: 'Account was successfully created'
 
-    visit root_url + '/account'
+    visit root_url + "/accounts/#{new_user.username}"
 
     assert_selector '.account-page-title', text:  'My account'
 
@@ -75,7 +77,7 @@ class LoginFlowsTest < ApplicationSystemTestCase
   test "login and reset password" do
     login_in_as(@user_bob)
 
-    visit root_url + '/account'
+    visit root_url + "/accounts/#{@user_bob.username}"
 
     find("a[href=\"#{edit_user_path(@user_bob.username)}\"]").click
 

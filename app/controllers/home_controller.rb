@@ -7,13 +7,20 @@ class HomeController < ApplicationController
   include FairScoreHelper
 
   def index
-    @analytics =  helpers.ontologies_analytics
+    @analytics = helpers.ontologies_analytics
     # Calculate BioPortal summary statistics
-    @ont_count = @analytics.keys.size
+
+    @ont_count = if @analytics.empty?
+                   LinkedData::Client::Models::Ontology.all.size
+                 else
+                   @analytics.keys.size
+                 end
+
     metrics = LinkedData::Client::Models::Metrics.all
     metrics = metrics.each_with_object(Hash.new(0)) do |h, sum|
       h.to_hash.slice(:classes, :properties, :individuals).each { |k, v| sum[k] += v }
     end
+    @slices = LinkedData::Client::Models::Slice.all
 
     @cls_count = metrics[:classes]
     @individuals_count = metrics[:individuals]
@@ -25,7 +32,7 @@ class HomeController < ApplicationController
     @upload_benefits = [
       t('home.benefit1'),
       t('home.benefit2'),
-      t('home.benefit3'), 
+      t('home.benefit3'),
       t('home.benefit4'),
       t('home.benefit5')
     ]
@@ -39,6 +46,36 @@ class HomeController < ApplicationController
 
   end
 
+  def set_cookies
+    session[:cookies_accepted] = params[:cookies] if params[:cookies]
+    render 'cookies', layout: nil
+  end
+
+  def tools
+    @tools = {
+      search: {
+        link: "search/ontologies/content",
+        icon: "icons/search.svg",
+        title: t('tools.search.title'),
+        description: t('tools.search.description'),
+      },
+      converter: {
+        link: "/content_finder",
+        icon: "icons/settings.svg",
+        title: t('tools.converter.title'),
+        description: t('tools.converter.description'),
+      },
+      url_checker: {
+        link: check_resolvability_path,
+        icon: "check.svg",
+        title: t('tools.url_checker.title'),
+        description: t('tools.url_checker.description')
+      }
+    }
+
+    @title = "#{helpers.portal_name} #{t('layout.footer.tools')}"
+    render 'tools', layout: 'tool'
+  end
 
   def all_resources
     @conceptid = params[:conceptid]
@@ -110,32 +147,11 @@ class HomeController < ApplicationController
     render json: bp_config_json
   end
 
-  def account
-    @title = t('home.account_title')
-    if session[:user].nil?
-      redirect_to controller: 'login', action: 'index', redirect: '/account'
-      return
-    end
-
-    @user = LinkedData::Client::Models::User.get(session[:user].id, include: 'all')
-
-    @user_ontologies = @user.customOntology
-    @user_ontologies ||= []
-
-    onts = LinkedData::Client::Models::Ontology.all(include_views: true);
-    @admin_ontologies = onts.select { |o| o.administeredBy.include? @user.id }
-
-    projects = LinkedData::Client::Models::Project.all
-    @user_projects = projects.select { |p| p.creator.include? @user.id }
-
-    render 'users/show'
-  end
-
   def feedback_complete; end
 
   def annotator_recommender_form
     if params[:submit_button] == "annotator"
-      redirect_to "/annotator?text=#{helpers.escape(params[:text])}"
+      redirect_to "/annotator?text=#{helpers.escape(params[:input])}"
     elsif params[:submit_button] == "recommender"
       redirect_to "/recommender?input=#{helpers.escape(params[:input])}"
     end

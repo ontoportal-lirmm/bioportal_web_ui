@@ -3,14 +3,14 @@
   - label_xl_set = %w[skos-xl#prefLabel skos-xl#altLabel skos-xl#hiddenLabel]
 
 
-  = render ConceptDetailsComponent.new(id:'concept-details', acronym: @ontology.acronym,
+  = render ConceptDetailsComponent.new(id:'concept-details', acronym: @ontology.acronym, concept_id: @concept.id,
                 properties: @concept.properties,
                 top_keys: %w[description comment],
                 bottom_keys: %w[disjoint subclass is_a has_part],
                 exclude_keys: schemes_keys + label_xl_set + ['inScheme', 'narrower']) do |c|
 
     - c.header(stripped: true) do |t|
-      - t.add_row({th: t('ontology_details.concept.id')}, {td:link_to_with_actions(@concept.id)})
+      - t.add_row({th: t('ontology_details.concept.id')}, {td:link_to_with_actions(@concept.id, acronym: @ontology.acronym)})
       - t.add_row({th: t('ontology_details.concept.preferred_name')}) do |h|
         - h.td do
           = display_in_multiple_languages(@concept.prefLabel)
@@ -19,7 +19,7 @@
         - t.add_row({th: t('ontology_details.concept.synonyms')}) do |h|
           - h.td do
             %div.d-flex
-              %div
+              %div.d-flex
                 = display_in_multiple_languages(@concept.synonym)
               %div.synonym-change-request
                 = add_synonym_button

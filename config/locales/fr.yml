@@ -41,7 +41,7 @@ fr:
     formats:
       year_month_day_concise: "%Y-%m-%d" # 2017-03-01
       month_day_year: "%b %-d, %Y" # Mar 1, 2017
-      monthfull_day_year: "%B %-d, %Y" # Mars 1, 2017
+      monthfull_day_year: "%-d %B %Y" # Mars 1, 2017
 
   language:
     translation_not_available: "Traduction en %{language} non disponible"
@@ -71,7 +71,7 @@ fr:
     provide_ontology_or_concept: Veuillez fournir un identifiant d'ontologie ou un identifiant de concept avec un identifiant d'ontologie.
     search_for_class: Veuillez rechercher une classe à l'aide du champ Jump To ci-dessus
     missing_roots_for_ontology: Racines manquantes pour %{acronym}
-    missing_roots: Racines manquantes %{id}
+    missing_roots: Racines manquantes
     missing_class: Classe manquante %{root_child}
     missing_class_ontology: Classe manquante %{acronym} / %{concept_id}
     error_simplify_class: "Échec de la simplification de la classe : %{cls}"
@@ -79,7 +79,7 @@ fr:
     incomplete_simple_ontology: "Ontologie simple incomplète : %{id}, %{ont}"
   label_xl:
     error_valid_label_xl: "Erreur : Vous devez fournir un identifiant de label_xl valide"
-    
+
   admin:
     query_not_permitted: Requête non autorisée
     update_info_successfully: Informations de mise à jour récupérées avec succès
@@ -119,7 +119,7 @@ fr:
       ontologies_with_errors: Ontologies avec erreurs
       total_visits: Visites totales
       active_users: Utilisateurs actifs
-      visit_users: "%{ visits } utilisateurs depuis le mois dernier"
+      visit_users: "%{visits} utilisateurs depuis le mois dernier"
       ontology_visits: Visites d'ontologies
       unique_users_visits: Visites d'utilisateurs uniques
       page_visits: Visites de page de ce mois
@@ -147,8 +147,9 @@ fr:
       metadata_administration: Administration des métadonnées
       groups: Groupes
       categories: Catégories
-      persons_and_organizations: Personnes & Organisations
+      persons_and_organizations: Personnes et Organisations
       sparql: SPARQL
+      search: Recherche et Indexation
       report_generated_on: "Rapport généré le :"
       licensed_to: Licencié à
       appliance_id: ID de l'appareil
@@ -240,6 +241,34 @@ fr:
         license_from_being_saved: "a empêché cette licence d'être sauvegardée :"
         paste_your_license: Collez votre clé de licence dans la zone de texte
         submit: Soumettre
+    search:
+      index:
+        index_data: "DONNÉES INDEXES"
+        collections_management: "GESTION DES COLLECTIONS"
+        name: "Nom"
+        actions: "Actions"
+        select_model: "Sélectionnez un modèle à indexer"
+        ontology: "Ontologie"
+        agent: "Agent"
+        ontology_submission: "Soumission"
+        generate_schema: "Générer le schéma"
+        see_schema: "Voir le schéma"
+        see_indexed_data: "Voir les données indexées"
+      show:
+        field_name: "Nom du champ"
+        type: "Type"
+        multi_valued: "Multivalué"
+        indexed: "Indexé"
+        stored: "Stocké"
+      search:
+        search_query: "Requête de recherche"
+        page: "Page"
+        page_size: "Taille de la page"
+        found_documents: "Trouvé %{count} documents"
+        id: "ID"
+        properties: "Propriétés"
+        show_more: "+ Afficher plus ..."
+        show_less: "- Afficher moins ..."
 
   annotator:
     title: Annotateur
@@ -271,7 +300,10 @@ fr:
     get_annotation: Obtenir des annotations
     total_results: Résultats totaux
     insert_sample_text: Insérer un texte d'exemple
-    sample_text: Le mélanome est une tumeur maligne des mélanocytes trouvée principalement dans la peau mais aussi dans l'intestin et l'œil.
+    sample_text: Il y a eu de nombreuses études récentes sur l'utilisation d'antagonistes microbiens pour contrôler les maladies causées par des bactéries phytopathogènes telluriques
+      et aériennes, dans le but de remplacer les méthodes actuelles de contrôle chimique et d'éviter l'utilisation extensive de fongicides, qui conduisent souvent à une résistance chez les pathogènes des plantes.
+      En agriculture, les microorganismes promoteurs de croissance des plantes et de biocontrôle ont émergé comme des alternatives sûres aux pesticides chimiques. Les espèces de Streptomyces et leurs
+      métabolites peuvent avoir un grand potentiel en tant qu'agents excellents pour contrôler divers phytopathogènes fongiques et bactériens.
 
   concepts:
     error_valid_concept: "Erreur : Vous devez fournir un identifiant de concept valide"
@@ -313,9 +345,9 @@ fr:
           <blockquote>
             <p>Justification (optionnel)<br>Fournissez ici toute information supplémentaire concernant le terme demandé.</p>
           </blockquote>
-        
+
   home:
-    ontoportal_instances: "Instances d'Ontoportal"
+    ontoportal_instances: "Autres installations d’OntoPortal"
     bug: Bug
     proposition: Proposition
     question: Question
@@ -365,7 +397,8 @@ fr:
       error_on_form: Erreurs sur le formulaire
       leave_your_feedback: Laissez votre retour
       feedback_hi_text: Salut
-      feedback_info_text: vous pouvez utiliser le formulaire ci-dessous ou nous envoyer un email directement à
+      feedback_info_text: Vous pouvez utiliser le formulaire ci-dessous, nous envoyer un email directement à
+      feedback_info_text_rest: ou nous laisser une github issue ici
       email: Email
       name: Nom
       proposition_url_page: URL de la page Erreur/Proposition
@@ -380,6 +413,11 @@ fr:
       feedback_complete:
         title: Retour envoyé avec succès
         message: Merci d'avoir pris le temps de partager votre retour avec nous. Notre équipe de support examinera votre message et vous répondra dès que possible. Nous apprécions votre opinion et sommes reconnaissants de votre aide pour améliorer nos services. Merci de votre soutien !
+    suggest_slice: Proposer un nouveau groupe/slice
+    slices_description: Les "slices" permettent aux utilisateurs d'interagir (à la fois via l'API ou l'interface utilisateur) uniquement avec un sous-ensemble d'ontologies dans AgroPortal. Si vous parcourez une slice, toutes les fonctionnalités du portail seront limitées au sous-ensemble choisi; cela permet aux utilisateurs de se concentrer sur leurs cas d'utilisation spécifiques. Sur AgroPortal, les slices et les groupes sont synchronisés, de sorte que chaque groupe a une slice correspondante affichant uniquement les ontologies de ce groupe.
+    ontoportal_description: "L'OntoPortal Alliance %{ontoportal_link} est un consortium d'équipes de recherche et d'infrastructure dédiées à promouvoir le développement de portails d'ontologies et de catalogues d'artefacts sémantiques basés sur le logiciel OntoPortal %{github_link} ouvert et collaboratif. Ci-dessous se trouvent les portails publics et ouverts actuels construits avec la technologie maintenue par l'Alliance."
+    viewing_slice: "Affichage de la slice:"
+    view_full_site: Voir le site complet
 
   landscape:
     #select_ontologies: Commencez à taper pour sélectionner des ontologies ou laissez vide pour les utiliser toutes
@@ -475,15 +513,18 @@ fr:
       ontoportal: OntoPortal
       release_notes: Notes de version
       api: API
+      tools: Outils
       sparql: SPARQL
       support: Aides
       contact_us: Contactez-nous
       wiki: Wiki
       documentation: Documentation
       agro_documentation: Documentation d'AgroPortal
+      issues_and_requests: Problèmes et demandes
       agreements: Légal
       terms: Termes et conditions
       privacy_policy: Politique de confidentialité
+      legal_notices: Mentions légales
       cite_us: Citez-nous
       acknowledgments: Remerciements
       about: À propos
@@ -509,7 +550,7 @@ fr:
     enter_email: Entrez votre nom d'utilisateur
     enter_password: Entrez votre mot de passe
     forgot_password: Mot de passe oublié ?
-    invalid_login: Erreurs sur le formulaire
+    private_ontology: Cette ontologie est privée. Veuillez vous connecter.
     no_account: Vous n'avez pas de compte ?
     password: Mot de passe
     register: S'inscrire
@@ -535,69 +576,84 @@ fr:
     ontology_visits: Visites d'ontologies
 
   mappings:
-    select_ontologies_list: "Sélectionner des ontologies"
-    external_mappings: "Alignements Externes (%{number_with_delimiter})"
-    interportal_mappings: "Alignements Interportail - %{acronym} (%{number_with_delimiter})"
-    test_bulk_load: Ceci est les alignements produits pour tester le chargement en masse
-    mapping_created: Alignement créé
-    mapping_updated: Alignement mis à jour
+    all: Tous
+    description: Plongez dans une vue d'ensemble des mappings dans la vue en bulles, localisez efficacement une ontologie spécifique dans la vue en tableau ou téléchargez vos propres mappings.
+    tabs:
+      bubble_view: Vue en bulles
+      table_view: Vue en tableau
+      upload_mappings: Télécharger des mappings
+    filter_ontologies: Filtrer les ontologies dans la vue en bulles
+    filter_bubbles: Filtrer les bulles
+    external_mappings: "Mappings externes (%{number_with_delimiter})"
+    interportal_mappings: "Mappings interportails - %{acronym} (%{number_with_delimiter})"
+    test_bulk_load: Ceci sont les mappings créés pour tester le chargement en masse
+    mapping_created: Mapping créé
+    mapping_updated: Mapping mis à jour
     mapping_deleted: "%{map_id} supprimé avec succès"
-    mapping_not_found: "Alignement %{id} non trouvé"
+    mapping_not_found: "Mapping %{id} non trouvé"
     error_of_source_and_target: Les concepts source et cible doivent être spécifiés
-    mapping_issue: "Problème d'alignement avec '%{mapping}' : %{message}"
-    find_mappings: Trouver les alignements d'une classe/concept
-    intro: Trouver tous les alignements d'une ontologie
-    loading_mappings: Chargement des alignements...
-    mappings_bulk_load: Télécharger des alignements en masse à partir d'un fichier source
-    no_mappings_available: Aucun alignement disponible
-    title: Alignements
-    upload_mappings: Télécharger des alignements
-    all: Tout
+    mapping_issue: "Problème de mapping avec '%{mapping}' : %{message}"
+    find_mappings: Trouver tous les mappings d'une classe/concept
+    intro: Trouver tous les mappings d'une ontologie
+    loading_mappings: Chargement des mappings...
+    no_mappings_available: Aucun mapping disponible
+    title: Mappings
+    upload_mappings: Télécharger des mappings
+    select_ontologies_list: Sélectionner les ontologies
+    bubble_view_legend:
+      bubble_size: "Taille de la bulle :"
+      bubble_size_desc: "Le nombre total de correspondances avec toutes les autres ontologies."
+      color_degree: "Degré de couleur :"
+      color_degree_desc: "Le nombre de correspondances avec l'ontologie sélectionnée."
+      yellow_bubble: "Bulle jaune : "
+      selected_bubble: "La bulle sélectionnée."
+      less_mappings: "Moins de correspondances"
+      more_mappings: "Plus de correspondances"
     count:
       ontology: Ontologie
-      mappings: Alignements
-      no_mappings: Il n'y a aucun alignement vers ou depuis cette ontologie
+      mappings: Mappings
+      no_mappings: Il n'y a aucun mapping vers ou depuis cette ontologie
     form:
       source_class: Classe source
-      mapping_name: Description du alignement (nom)
+      mapping_name: Description du mapping (nom)
       contact_info: Informations de contact
-      mapping_source_name: Nom de la source (ID de l'ensemble de alignement)
+      mapping_source_name: Nom source (ID de l'ensemble de mappings)
       mapping_comment: Commentaire
-      mapping_relation: Type de relation de alignement
-      save: Sauvegarder
+      mapping_relation: Type de relation de mapping
+      save: Enregistrer
     mapping_table:
-      mapping_to: Alignement vers
+      mapping_to: Mapping vers
       relations: Relations
       source: Source
       type: Type
       actions: Actions
-      no_mappings: Il n'y a actuellement aucun alignement pour cette classe.
+      no_mappings: Il n'y a actuellement aucun mapping pour cette classe.
     mapping_type_selector:
-      mapping_type: Type de alignement
+      mapping_type: Type de mapping
       internal: Interne
-      interportal: InterPortail
+      interportal: Interportail
       external: Externe
       target_class: Classe cible
       details: Détails
       ontology_acronym: Ontologie (acronyme)
       class: Classe
-      ontology_acronym_placeholder: Entrez l'acronyme de l'ontologie
+      ontology_acronym_placeholder: Entrez l'ACRONYM de l'ontologie
       class_uri_placeholder: Entrez l'URI de la classe
       ontology_uri_placeholder: Entrez l'URI de l'ontologie
     show_line:
-      edit_modal: Éditer
+      edit_modal: Modifier
       delete_button: Supprimer
-      turbo_confirm: Êtes-vous sûr ?
-      edit_mapping: Éditer l'alignement pour %{preflabel}
+      turbo_confirm: Êtes-vous sûr(e) ?
+      edit_mapping: Modifier le mapping pour %{preflabel}
     show:
-      no_mappings_found: Aucun alignement trouvé
+      no_mappings_found: Aucun mapping trouvé
     bulk_loader:
       loader:
         example_of_valid_file: Voir un exemple de fichier valide
-        save: Sauvegarder
+        save: Enregistrer
       loaded_mappings:
-        mappings_created: "%{size} alignements créés avec succès"
-        id: Id
+        mappings_created: "%{size} mappings créés avec succès"
+        id: ID
         source: Source
         target: Cible
         relation: Relation
@@ -605,7 +661,12 @@ fr:
         actions: Actions
         see_other_properties: Voir d'autres propriétés
 
+
   agents:
+    errors:
+      required: est requis et ne peut pas être vide
+      used_identifier: Cet identifiant est déjà utilisé par un autre agent
+      invalid_url: L'identifiant doit être une URL ORCID/ROR valide
     not_found_agent: Agent avec id %{id}
     add_agent: Nouvel agent ajouté avec succès
     update_agent: Agent mis à jour avec succès
@@ -634,6 +695,7 @@ fr:
     index:
       create_new_agent: Créer un nouvel agent
       first_name: Prénom
+      acronym: Acronyme
       usages: Utilisations
       actions: Actions
       no_agents: Il n'y a actuellement aucun agent.
@@ -664,7 +726,7 @@ fr:
     metadata:
       additional_metadata: Métadonnées supplémentaires
     header:
-      last_submission_date: Date de la dernière soumission
+      last_submission_date: Date de la dernière soumission le
 
   projects:
     project_not_found: "Projet non trouvé : %{id}"
@@ -765,6 +827,8 @@ fr:
     first_name: Prénom
     last_name: Nom
     mailing_list: S'inscrire à la liste de diffusion de %{site}
+    accept_terms_and_conditions: Je reconnais et j'accepte
+    terms_and_conditions: les termes et conditions de %{site}.
     optional: "(Optionnel)"
     password: Mot de passe
     title: S'inscrire
@@ -787,6 +851,7 @@ fr:
     validate_orcid: Veuillez entrer un ORCID valide.
     validate_username: veuillez entrer un nom d'utilisateur valide
     valid_email_adresse: Veuillez entrer une adresse email valide
+    validate_terms_and_conditions: L'acceptation des termes et conditions est requise, veuillez cocher la case pour continuer.
     first_name_required: Le champ du prénom est requis
     last_name_required: Le champ du nom est requis
     index:
@@ -903,7 +968,7 @@ fr:
       synonym: Synonyme
       definition: Définition
       parent: Parent
-      save: sauvegarder
+      save: Sauvegarder
     note_line:
       alert_text: "Êtes-vous sûr de vouloir supprimer la note <span style='color:red;font-weight:bold;'> ''%{subject}''</span> créée par <span style='color:red;font-weight:bold;'>%{creator}</span>?<br/><b>Cette action NE PEUT PAS être annulée !!!</b>"
       delete: Supprimer
@@ -914,8 +979,8 @@ fr:
     reply:
       about_note_decorator: à propos de %{note_decorator}
       comment: Commentaire
-      save: sauvegarder
-      cancel: annuler
+      save: Sauvegarder
+      cancel: Annuler
 
   ontolobridge:
     problem_of_creating_new_term: "Problème de création d'un nouveau terme %{endpoint} : %{class} - %{message}"
@@ -1024,6 +1089,10 @@ fr:
     help_creator: "Les propriétés suivantes prennent pour valeur un 'agent' dans %{portal_name} (soit une personne, soit une organisation). Ces agents sont partagés sur toutes les ontologies et sont suggérés avec l'autocomplétion s'ils existent déjà. Modifier un agent ici le modifiera pour toutes les ontologies auxquelles cet agent est impliqué."
     version_help: "Pour plus d'informations sur la manière d'encoder les informations de version dans une ontologie, consultez %{link}"
     version_helper_link: "les lignes directrices et recommandations."
+  instances:
+    id: ID
+    type: Type
+    label: Label
   collections:
     error_valid_collection: "Erreur : Vous devez fournir un identifiant de collection valide"
     no_collections_alert: "%{acronym} ne contient pas de collections (skos:Collection)"
@@ -1041,21 +1110,21 @@ fr:
     submit: Soumettre
 
   check_resolvability:
-    check_resolvability_message_1: "L'URL est résolvable et supporte les formats suivants : %{supported_format}"
-    check_resolvability_message_2: "L'URL est résolvable mais n'est pas négociable en contenu, supporte uniquement : %{supported_format}"
-    check_resolvability_message_3: L'URL n'est pas résolvable et n'est pas négociable en contenu (retourne %{status}).
+    check_resolvability_message_1: "L'URI est résolvable et supporte les formats suivants : %{supported_format}"
+    check_resolvability_message_2: "L'URI est résolvable mais n'est pas négociable en contenu, supporte uniquement : %{supported_format}"
+    check_resolvability_message_3: L'URI n'est pas résolvable et n'est pas négociable en contenu (retourne %{status}).
     uri_placeholder: Tapez une URI pour tester sa résolvabilité
     show_help: Afficher l'aide
     format_not_specified: Format non spécifié
     how_it_works:
       title: Comment ça fonctionne
       content_1: |
-        L'outil de vérification de la résolvabilité vous permet de tester si une URL donnée est résolvable. Il est basé sur la méthode HTTP HEAD.
-        Nous vérifions la résolvabilité d'une URL en envoyant une requête HEAD à l'URL et en vérifiant si le code de statut de la réponse est 200 (OK) et
+        L'outil de vérification de la résolvabilité vous permet de tester si une URI donnée est résolvable. Il est basé sur la méthode HTTP HEAD.
+        Nous vérifions la résolvabilité d'une URI en envoyant une requête HEAD à l'URI et en vérifiant si le code de statut de la réponse est 200 (OK) et
         si le type de contenu retourné est égal à l'un des %{resolvability_formats} suivants.
       content_2: |
-        Nous avons un délai d'attente fixé à %{resolvability_timeout} secondes, donc si l'URL n'est pas résolvable dans ce délai, la vérification échouera.
-        Et un nombre maximal de redirections fixé à %{resolvability_max_redirections}, donc si l'URL n'est pas résolvable dans ce nombre de redirections, la vérification échouera.
+        Nous avons un délai d'attente fixé à %{resolvability_timeout} secondes, donc si l'URI n'est pas résolvable dans ce délai, la vérification échouera.
+        Et un nombre maximal de redirections fixé à %{resolvability_max_redirections}, donc si l'URI n'est pas résolvable dans ce nombre de redirections, la vérification échouera.
     resolving_uri:
       title: Résolution d'une URI
       content: |
@@ -1136,7 +1205,8 @@ fr:
     ontology_processing_failed: "Le traitement de l'ontologie a échoué, avec les statuts actuels : %{status}"
     ontology_parsing_succeeded: "L'analyse de l'ontologie a réussi, mais certaines étapes de traitement ont échoué, voici les statuts actuels : %{status}"
     upload_an_ontology: Téléchargez une ontologie. Des sections comme %{ontology} seront disponibles une fois terminées.
-    ontology_is_processing: L'ontologie est en cours de traitement. Des sections comme %{ontology} seront disponibles une fois le traitement terminé.
+    new_ontology_is_processing: L'ontologie est en cours de traitement. Des sections comme %{ontology} seront disponibles une fois le traitement terminé.
+    ontology_is_processing: L'ontologie est en cours de traitement. Des sections comme %{ontology} seront mis a jours une fois le traitement terminé.
     contact_support: Contacter le support
     edit_natural_languages: Modifier les langues naturelles de %{acronym}
     edit_available_languages: Cliquez ici pour modifier les langues disponibles
@@ -1288,6 +1358,11 @@ fr:
       ncbo_widget_wiki: Wiki des Widgets NCBO
       file: fichier.
       no_class_concept_found: Aucune classe/concept trouvé
+      instances_search_placeholder: Rechercher une instance dans %{acronym}
+      properties_search_placeholder: Rechercher une propriété dans %{acronym}
+      schemes_search_placeholder: Rechercher un schéma dans %{acronym}
+      collections_search_placeholder: Rechercher une collection dans %{acronym}
+
       metadata:
         fair_score_title: Score FAIR
         total_score: "Score total : %{score} ( %{normalized_score}%)"
@@ -1314,6 +1389,35 @@ fr:
         export_metadata: Exporter toutes les métadonnées
         abstract: Résumé
         description: Description
+
+    htaccess_modal_title: "Règles de redirection pour l'ontologie %{acronym}"
+    instructions_servers: Instructions pour les servers %{server}
+    htaccess_redirection_description: "Nous proposons une solution transparente pour rendre les URI de votre ontologie résolubles et le contenu négociable en autorisant la redirection d'URL de vos URI d'ontologie vers nos URI d'Agroportal. Pour faciliter ce processus, nous vous avons fourni un ensemble de règles de réécriture .htaccess. En suivant les instructions simples ci-dessous, vous serez en mesure de mettre en œuvre ces règles rapidement et efficacement, garantissant ainsi une redirection fluide"
+    
+    redirection_note: >
+      Cette redirection fonctionne uniquement pour les uri sous la forme: url/path/resource_id.
+      Cela ne fonctionnera pas pour les URIS sous la forme: url/path/to/something#resource_id OR url/path/to/something:resource_id
+    htaccess_redirection:
+      instruction_1: "Accéder au fichier .htaccess:"
+      instruction_1_content: "Localisez le fichier .htaccess dans le répertoire racine de votre site Web, s'il n'existe pas, créez-en un. Ce fichier contrôle le comportement de votre serveur Web et est souvent utilisé pour la réécriture et la redirection d'URL"
+      instruction_2: "Copiez et collez les règles de redirection dans le fichier .htaccess:"
+      instruction_2_content: "Copiez les règles de redirection fournies dans le rectangle noir. Ouvrez le fichier .htaccess et collez les règles de redirection copiées dans le fichier"
+      instruction_3: "Activer le module de réécriture (Linux):"
+      instruction_3_content: "vous devrez vous assurer que le module Apache appelé 'rewrite' est activé en exécutant la commande `sudo a2enmod rewrite`"
+    
+    nginx_redirection:
+      instruction_1: "Accéder au fichier de configuration Nginx:"
+      instruction_1_content: "L'emplacement de ce fichier peut varier en fonction de votre système, mais les emplacements courants incluent /etc/nginx/nginx.conf, /etc/nginx/sites-available/default ou /usr/local/etc/nginx/nginx. conf."
+      instruction_2: "Localisez le bloc de serveur ou le bloc d'emplacement dans lequel vous souhaitez activer la réécriture d'URL:"
+      instruction_2_content: "C'est généralement dans le bloc serveur { ... }."
+      instruction_3: "Copier et coller les règles de redirection:"
+      instruction_3_content: "Copiez les règles de redirection fournies dans le rectangle noir. Dans le bloc approprié, ajoutez les règles copiées pour activer la réécriture d'URL"
+      instruction_4: "Testez la configuration pour les erreurs de syntaxe:"
+      instruction_4_content: "Exécutez la commande suivante pour tester la configuration de redirection `sudo nginx -t`"
+      instruction_5: "Redémarrez Nginx pour appliquer les modifications:"
+      instruction_5_content: "Redémarrez le serveur nginx pour appliquer la redirection à l'aide de cette commande `sudo systemctl reload nginx`"
+
+
 
 
   components:
@@ -1354,12 +1458,19 @@ fr:
     join_the_count: Rejoignez les %{count} utilisateurs, surveillant cette ressource et soyez informé de toutes ses mises à jour
     see_more: Voir plus...
     see_less: Voir moins...
+    tree_view_empty: Pas de résultat
+    copy_original_uri: Copier l'URI d'origine
+    copy_portal_uri: Copier l'URI de %{portal_name}
 
   properties:
     id: ID
+    type: Type
     preferred_name: Nom préféré
     definitions: Définitions
     parent: Parent
+    domain: Domaine
+    range: Étendue
+    no_properties_alert: "%{acronym} ne contient pas de propriétés"
 
   visits:
     ontology_visits: Visites de l'ontologie
@@ -1383,3 +1494,39 @@ fr:
     cancel: Annuler
     apply: Appliquer
     unselect_all: Tout désélectionner
+
+  tools:
+    search:
+      title: "Rechercher du contenu (à venir)"
+      description: >
+        Cet outil/service permet aux utilisateurs de rechercher n'importe quel élément du Cadre de Description des Ressources (RDF) dans le portail.
+        Les utilisateurs peuvent rechercher soit par l'identifiant unique (URI) associé à l'élément RDF, soit par son libellé.
+        Il facilite la navigation efficace et la récupération d'éléments RDF spécifiques, améliorant ainsi l'expérience utilisateur et la productivité au sein du portail.
+
+    converter:
+      title: "Convertisseur de contenu (à venir)"
+      description: >
+        L'outil/service de conversion de contenu offre la possibilité de convertir n'importe quel élément RDF en divers formats tels que RDF/XML, Turtle, Ntriples ou JSON.
+        Cette fonctionnalité permet aux utilisateurs de transformer les données RDF en formats adaptés à différents usages ou compatibles avec divers systèmes et applications.
+        Il favorise l'interopérabilité et la flexibilité dans la manipulation des données RDF au sein de l'écosystème du portail.
+
+    url_checker:
+      title: "Vérificateur de résolvabilité d'URI"
+      description: >
+        Cet outil/service vérifie la résolvabilité des Identifiants Uniformes de Ressource (URI) et leur négociabilité de contenu.
+        Il vérifie si un URI donné est accessible et si le contenu associé peut être négocié en fonction des préférences du client.
+        Cette fonctionnalité garantit la fiabilité et l'accessibilité des ressources liées dans l'écosystème RDF, aidant ainsi à maintenir l'intégrité des données et facilitant l'intégration transparente avec des ressources externes.
+
+  feedback_mail:
+    name: "Nom: %{name}"
+    email: "E-mail: %{email}"
+    location: "Emplacement: %{location}"
+    tags: Tags
+    feedback: Feedback
+
+  cookies_modal:
+    title: "Gérer le consentement des cookies"
+    paragraph1: "%{portal} utilise des cookies pour vous aider à naviguer efficacement et pour mesurer l'audience. Vous trouverez des informations détaillées sur tous les cookies dans le lien \"Vie privé\""
+    paragraph2: "Les cookies sont fonctionnels et non facultatifs. En restant sur %{portal}, vous reconnaissez que les informations vous ont été transmises."
+    accept_button: "Accepter"
+    privacy_link: "Vie privé"

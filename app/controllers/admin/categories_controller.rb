@@ -24,7 +24,7 @@ class Admin::CategoriesController < ApplicationController
   def edit
     @category = _category
     @acronyms = @category.ontologies.map { |url| url.match(/\/([^\/]+)$/)[1] }
-    @ontologies_category = LinkedData::Client::Models::Ontology.all(include: 'acronym').map {|o|[o.acronym, o.id] }
+    @ontologies_category = LinkedData::Client::Models::Ontology.all(include: 'name,acronym').map {|x| ["#{x.name} (#{x.acronym})", x.id.to_s]}
     respond_to do |format|
       format.html { render "edit", :layout => false }
     end

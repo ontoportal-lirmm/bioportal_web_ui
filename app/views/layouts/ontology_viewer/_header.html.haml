@@ -4,11 +4,13 @@
 -# A header of sorts to display ontology name and subset of details.
 .ontology-details-header-container
   .ontology-details-path
-    %a{href: "/ontologies"} ontologies
+    %a{href: "/ontologies"} Ontologies
     - if @ontology.viewOf
       = inline_svg_tag 'arrow-right-outlined.svg'
       %div
-        = @ontology.viewOf.split('/').last
+        - viewOfAcronym = @ontology.viewOf.split('/').last
+        %a{href: "/ontologies/#{viewOfAcronym}"}
+          = viewOfAcronym
     = inline_svg_tag 'arrow-right-outlined.svg'
     %div
       = @ontology.acronym
@@ -38,8 +40,9 @@
     .ontology-details-header-right-container.justify-content-end{style: 'min-width: 20%;'}
       %span.mx-1
         = new_submission_button
-      %span.mx-1
-        = ontology_edit_button
+      - if @submission_latest
+        %span.mx-1
+          = ontology_edit_button
       %span
         = submission_json_button
       = subscribe_button(@ontology.id)

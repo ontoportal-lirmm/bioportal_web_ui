@@ -1,0 +1,8 @@
+.mappings-table-view-container
+    .mappings-ontologies-select
+        = form_tag('/mappings/count/fake_id', method: :get, novalidate: true, data: { turbo: true, turbo_frame: 'mappings_table' }) do
+            .mappings-selector{data: {action: 'change->mappings#submit', 'mappings-target': 'selector'}}
+                = select_input(name: "ontology", values: @options, placeholder: t('mappings.intro'))
+            %input.d-none{ type: 'submit', 'data-mappings-target': 'submit'}
+            %div
+                = render TurboFrameComponent.new(id:"mappings_table")

@@ -8,7 +8,7 @@ $UI_URL = "http://#{$UI_HOSTNAME}:3000"
 $API_KEY = ENV['API_KEY']
 $REST_URL = ENV['API_URL']
 $BIOMIXER_URL = ENV['BIOMIXER_URL']
-$ANNOTATOR_URL = $PROXY_URL = ENV['ANNOTATOR_URL']
+$ANNOTATOR_URL = $PROXY_URL = ENV['ANNOTATOR_URL'].blank? ? "https://services.tesportal.lirmm.fr/annotator" : ENV['ANNOTATOR_URL']
 $FAIRNESS_URL = ENV['FAIRNESS_URL']
 
 # Resource term
@@ -55,11 +55,9 @@ $FAIRNESS_DISABLED = false
 # If your main UI is hosted at example.org and you add custom.example.org pointing to the same Rails installation
 # you could filter the ontologies visible at custom.example.org by adding this to the hash: "custom" => { :name => "Custom Slice", :ontologies => [1032, 1054, 1099] }
 # Any number of slices can be added. Groups are added automatically using the group acronym as the subdomain.
-$ENABLE_SLICES = true
+$ENABLE_SLICES = false
 $ONTOLOGY_SLICES = {}
 
-# Cube metrics reporting
-$ENABLE_CUBE = false
 
 $NOT_DOWNLOADABLE = {}
 # Enable client request caching
@@ -219,6 +217,3 @@ $PORTALS_INSTANCES = [
 ]
 
 $UI_THEME = :stageportal
-if File.exist?('config/bioportal_config_development_testportal.lirmm.fr.rb')
-  require_relative 'bioportal_config_development_testportal.lirmm.fr' # local credentials
-end

@@ -43,7 +43,7 @@
         = t('home.index.welcome', site: $SITE)
       %p
         = t('home.index.tagline')
-      = render OntologySearchInputComponent.new(search_icon_type: 'home')
+      = ontologies_content_autocomplete
  
 .home-body-container
   .home-section
@@ -173,24 +173,44 @@
             %h4
               = format_number_abbreviated(@users_count)
             %p= t("home.users")
-      .home-statistics-link.justify-content-end
+      .home-statistics-link.justify-content-end{style: @analytics.empty? && "visibility: hidden"}
         = link_to t("home.see_details"),'/statistics', target: "_blank"
 
-  .home-section
-    .home-statistics-container
-      .home-support-title
-        %p= t('home.support_and_collaborations')
+  - if @slices
+    .home-section
+      .home-section-title
+        .text
+          = "#{portal_name} slices"
         %hr.home-section-line/
-      .home-support-items
-        - $HOME_PAGE_LOGOS&.each do |logo|
-          %a{href:logo[:url], target: "_blanc"}
-            %img{src: asset_path(logo[:img_src])}
-  
-  .home-section
-    .home-statistics-container
-      .home-support-title
-        %p= t('home.ontoportal_instances')
+      .home-section-description 
+        .div
+          = t('home.slices_description')
+      .home-slices-container
+        - @slices.each do |slice, index|
+          - slice_link = "https://#{slice.acronym}.#{$UI_URL.sub("https://", "")}"
+          .home-slice{'data-controller': 'tooltip', title: content_tag(:div, slice.description, style: 'max-width: 200px')}
+            = link_to slice_link do
+              .home-slice-icon
+                .home-slice-ontologies
+                  = slice.ontologies.length
+                = inline_svg 'icons/slices.svg', width: "70", height: "70"
+              
+              .home-slice-name 
+                = "#{slice.name} (#{slice.acronym})"
+        = render Buttons::RegularButtonComponent.new(id:'regular-button', value: t('home.suggest_slice'), variant: "secondary", state: "regular", href: '/feedback') do |btn|
+          - btn.icon_right do
+            = inline_svg_tag "icons/plus.svg"
+
+  .home-ontoportal-instances
+    .ontoportal-instances-container
+      .home-section-title.ontoportal
+        .text.mr-2
+          = t('home.ontoportal_instances')
         %hr.home-section-line/
+
+      .home-section-description 
+        .div
+          = home_ontoportal_description
       .home-support-items
         - $PORTALS_INSTANCES&.each do |portal|
           %div.text-center
@@ -198,7 +218,16 @@
               = inline_svg 'logo-white.svg', width: "35", height: "26"
             %p{style: "color: #{portal[:color]}"} 
               = portal[:portal]
-
+  
+  .home-section
+    .home-section-title
+      .text
+        = t('home.support_and_collaborations')
+      %hr.home-section-line/
+    .home-support-items
+      - $HOME_PAGE_LOGOS&.each do |logo|
+        %a{href:logo[:url], target: "_blanc"}
+          %img{src: asset_path(logo[:img_src])}
 
 :javascript
   function submitAnnotator(){

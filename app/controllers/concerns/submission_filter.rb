@@ -1,6 +1,8 @@
 module SubmissionFilter
   extend ActiveSupport::Concern
 
+  include SearchContent
+
   BROWSE_ATTRIBUTES = ['ontology', 'submissionStatus', 'description', 'pullLocation', 'creationDate',
                        'contact', 'released', 'naturalLanguage', 'hasOntologyLanguage',
                        'hasFormalityLevel', 'isOfType', 'deprecated', 'status', 'metrics']
@@ -10,19 +12,14 @@ module SubmissionFilter
     @show_private_only = params[:private_only]&.eql?('true')
     @show_retired = params[:show_retired]&.eql?('true')
     @selected_format = params[:format]
-    @selected_sort_by = params[:sort_by].blank? ? 'visits' : params[:sort_by]
+    @sort_by = params[:sort_by].blank? ? 'visits' : params[:sort_by]
     @search = params[:search]
   end
 
   def submissions_paginate_filter(params)
-    request_params = filters_params(params, page: nil)
+    request_params = filters_params(params, page: params[:page], pagesize: 10)
+    filter_params = params.permit(@filters.keys).to_h
     init_filters(params)
-    # pagination disabled because is not supported by 4store,
-    # see  https://github.com/ontoportal-lirmm/ontologies_api/issues/25
-    # @page = LinkedData::Client::Models::OntologySubmission.all(request_params)
-    @page = OpenStruct.new(page: 1, next_page: nil)
-    submissions = LinkedData::Client::Models::OntologySubmission.all(request_params)
-    @analytics =  helpers.ontologies_analytics
 
     @analytics = Rails.cache.fetch("ontologies_analytics-#{Time.now.year}-#{Time.now.month}-#{request_portals.join('-')}") do
       helpers.ontologies_analytics
@@ -34,7 +31,6 @@ module SubmissionFilter
 
     # get fair scores of all ontologies
     @fair_scores = fairness_service_enabled? ? get_fair_score('all') : nil
-    submissions = submissions.reject { |sub| sub.ontology.nil? }.map { |sub| ontology_hash(sub) }
 
     @total_ontologies = @ontologies.size
 
@@ -144,7 +140,7 @@ module SubmissionFilter
   def filters_params(params, includes: BROWSE_ATTRIBUTES.join(','), page: 1, pagesize: 5)
     request_params = { display_links: false, display_context: false,
                        include: includes, include_status: 'RDF' }
-    request_params.merge!(page: page, pagesize: pagesize) if page
+    request_params.merge!(page: page.to_i, pagesize: pagesize.to_i) if page
     filters_values_map = {
       categories: :hasDomain,
       groups: :group,
@@ -178,7 +174,6 @@ module SubmissionFilter
       @filters[:show_retired] = 'true'
     end
 
-
     filters_values_map.each do |filter, api_key|
       next if params[filter].nil? || params[filter].empty?
 
@@ -204,9 +199,11 @@ module SubmissionFilter
     request_params
   end
 
-  def ontology_hash(sub)
+  def ontology_hash(ont, submissions)
     o = {}
     sub = submissions[ont.id]
+
+    o[:ontology] = ont
 
     add_ontology_attributes(o, ont)
     add_submission_attributes(o, sub)
@@ -233,6 +230,8 @@ module SubmissionFilter
   end
 
   def add_submission_attributes(ont_hash, sub)
+    return if sub.nil?
+
     ont_hash[:submissionStatus] = sub.submissionStatus
     ont_hash[:deprecated] = sub.deprecated
     ont_hash[:status] = sub.status
@@ -245,12 +244,12 @@ module SubmissionFilter
     ont_hash[:hasFormalityLevel] = sub.hasFormalityLevel
     ont_hash[:isOfType] = sub.isOfType
     ont_hash[:submissionStatusFormatted] = submission_status2string(sub).gsub(/\(|\)/, '')
-    ont_hash[:format] = sub.hasOntologyLanguage
-    ont_hash[:contact] = sub.contact.map(&:name).first unless sub.contact.nil?
+    ont_hash[:format] = sub.hasOntologyLanguage&.split('/').last
+    ont_hash[:contact] = sub.contact.map { |c| c.is_a?(String) ? c.split('|').first : c.name }.first unless sub.contact.nil?
   end
 
   def add_ontology_attributes(ont_hash, ont)
-    return  if ont.nil?
+    return if ont.nil?
 
     ont_hash[:id] = ont.id
     ont_hash[:type] = ont.viewOf.nil? ? 'ontology' : 'ontology_view'
@@ -283,11 +282,11 @@ module SubmissionFilter
     end
 
     @formalityLevel = submission_metadata.select { |x| x['@id']['hasFormalityLevel'] }.first['enforcedValues'].map do |id, name|
-      { 'id' => id, 'name' => name, 'acronym' => name.camelize(:lower), 'value' => name.delete(' ')}
+      { 'id' => id, 'name' => helpers.link_last_part(id), 'acronym' => name, 'value' => helpers.link_last_part(id) }
     end
 
     @isOfType = submission_metadata.select { |x| x['@id']['isOfType'] }.first['enforcedValues'].map do |id, name|
-      { 'id' => id, 'name' => name, 'acronym' => name.camelize(:lower), 'value' => name.delete(' ') }
+      { 'id' => id, 'name' => helpers.link_last_part(id), 'acronym' => name, 'value' => helpers.link_last_part(id) }
     end
 
     @formats = [[t("submissions.filter.all_formats"), ''], 'OBO', 'OWL', 'SKOS', 'UMLS']
@@ -318,10 +317,10 @@ module SubmissionFilter
     {
       categories: object_filter(categories, :categories),
       groups: object_filter(groups, :groups),
-      naturalLanguage: object_filter(@languages, :naturalLanguage),
+      naturalLanguage: object_filter(@languages, :naturalLanguage, "value"),
       hasFormalityLevel: object_filter(@formalityLevel, :hasFormalityLevel),
-      isOfType: object_filter(@isOfType, :isOfType),
-      #missingStatus: object_filter(@missingStatus, :missingStatus)
+      isOfType: object_filter(@isOfType, :isOfType, "value"),
+      # missingStatus: object_filter(@missingStatus, :missingStatus)
     }
   end
 
@@ -330,9 +329,6 @@ module SubmissionFilter
     selected_category.first && selected_category.first['id']
   end
 
-  def object_checks(key)
-    params[key]&.split(',')
-  end
 
   def object_filter(objects, object_name, name_key = 'acronym')
     checks = params[object_name]&.split(',') || []
@@ -349,9 +345,9 @@ module SubmissionFilter
     objects_count = {}
     @categories = LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
     @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
+
     @filters = ontology_filters_init(@categories, @groups)
     object_names = @filters.keys
-
 
     @filters.each do |filter, values|
       objects = values.first

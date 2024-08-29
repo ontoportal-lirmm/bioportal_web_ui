@@ -27,13 +27,13 @@
       ORCID ID
       %font.register-optional 
       = t('register.optional')
-    %img.register-input-icon{:src => "#{asset_path("orcid.svg")}"}/
+    = inline_svg_tag 'orcid.svg', class: 'register-input-icon'
     = text_field :user, :orcidId, value: @user.orcidId, class: "register-input-long register-input-with-icon"
     %p.register-input-title
       Github ID
       %font.register-optional 
       = t('register.optional')
-    %img.register-input-icon{:src => "#{asset_path("github-icon.svg")}"}/
+    = inline_svg_tag 'github-icon.svg', class: 'register-input-icon'
     = text_field :user, :githubId, value: @user.githubId, class: "register-input-long register-input-with-icon"
     %p.register-input-title
       = t('register.email')
@@ -50,8 +50,15 @@
     - if using_captcha?
       = recaptcha_tags
     .d-flex
-      %input#user_register_mail_list{:checked => "checked", :name => "user[register_mail_list]", :type => "checkbox", :value => "1"}/
+      %input.user_register_checkbox{:checked => "checked", :name => "user[register_mail_list]", :type => "checkbox", :value => "1"}/
       %p#register-check-text 
         = t('register.mailing_list', site: portal_name)
+    .d-flex
+      %input.user_register_checkbox{:name => "user[terms_and_conditions]", :type => "checkbox"}/
+      %p#register-check-text 
+        = t('register.accept_terms_and_conditions')
+        %a{href: $TERMS_AND_CONDITIONS_LINK, target: '_blank'}
+          = t('register.terms_and_conditions', site: portal_name)
+        %font{:color => "red"} *
     .register-button-container
       = render Buttons::RegularButtonComponent.new(id: 'register-button', value: "Register", type:'submit')

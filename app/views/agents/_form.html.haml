@@ -9,7 +9,7 @@
   = hidden_field_tag :deletable, deletable if deletable
   = hidden_field_tag agent_field_name(:id, name_prefix), agent.id if agent.id
 
-  - if affiliation?(agent) &&  params[:parent_id]
+  - if params[:show_affiliations].eql?('false')
     = hidden_field_tag agent_field_name(:agentType, name_prefix), agent.agentType
   - else
     %tr
@@ -30,19 +30,19 @@
       %span.asterik *
     %td.top
       = text_field_tag agent_field_name(:name, name_prefix), agent.name, class: "form-control"
-  %tr{'data-form-options-display-target':"option1",  class: affiliation?(agent) && 'd-none'}
+  %tr{'data-form-options-display-target':"option1",  class: is_organization?(agent) && 'd-none'}
     %th
       = t("agents.form.email")
       %span.asterik
     %td.top
       = email_field_tag agent_field_name(:email, name_prefix), agent.email, class: "form-control"
-  %tr{'data-form-options-display-target':"option2",  class: !affiliation?(agent) && 'd-none'}
+  %tr{'data-form-options-display-target':"option2",  class: !is_organization?(agent) && 'd-none'}
     %th
       = t("agents.form.acronym")
       %span.asterik
     %td.top
       = text_field_tag agent_field_name(:acronym, name_prefix), agent.acronym,class: "form-control"
-  %tr{'data-form-options-display-target':"option2",  class: !affiliation?(agent) && 'd-none'}
+  %tr{'data-form-options-display-target':"option2",  class: !is_organization?(agent) && 'd-none'}
     %th
       = t("agents.form.homepage")
     %td.top
@@ -55,30 +55,22 @@
   %tr
     %th
       = t("agents.form.identifiers")
+    - identifier = agent&.identifiers&.first
     %td.top
-      %div.agents-identifiers
-        = render NestedFormInputsComponent.new do |c|
-          - c.template do
-            %div.d-flex{id: 'NEW_RECORD'}
-              %div.w-100
-                = hidden_field_tag agent_identifier_name('NEW_RECORD' , :creator, name_prefix), session[:user].id
-                = text_field_tag agent_identifier_name('NEW_RECORD' , :notation, name_prefix), '', class: "form-control"
-              %div{style:'width: 15%'}
-                - values = %w[ORCID ROR ISNI GRID]
-                = render SelectInputComponent.new(id: "agent_identifiers_schemaAgency_NEW_RECORD", name: agent_identifier_name('NEW_RECORD', :schemaAgency, name_prefix), values: values, selected: 'ORCID')
-          - c.empty_state do
-            = hidden_field_tag agent_field_name('',  name_prefix+"[#{Array(agent.identifiers).size}]")
-          - Array(agent.identifiers).each_with_index do |identifier, i|
-            - c.row do
-              %div.d-flex{id: identifier.id}
-                %div.w-100
-                  = hidden_field_tag agent_identifier_name(i.to_s.upcase, :creator, name_prefix), session[:user].id
-                  = text_field_tag agent_identifier_name(i.to_s.upcase, :notation, name_prefix), identifier.notation, class: "form-control"
-                %div{style:'width: 15%'}
-                  - values = %w[ORCID ROR ISNI GRID]
-                  = render SelectInputComponent.new(id: "#{name_prefix}_identifiers_schemaAgency_#{i.to_s.upcase}", name: agent_identifier_name(i.to_s.upcase, :schemaAgency, name_prefix), values: values, selected: identifier.schemaAgency)
+      %div.agents-identifiers{'data-form-options-display-target':"option2",  class: !is_organization?(agent) && 'd-none'}
+        - if identifier&.schemaAgency&.eql?('ROR')
+          = agent_identifier_input('0', name_prefix, identifier.notation)
+        - else
+          = agent_identifier_input('0', name_prefix)
+
+      %div.agents-identifiers{'data-form-options-display-target':"option1",  class: is_organization?(agent) && 'd-none'}
+        - if identifier&.schemaAgency&.eql?('ORCID')
+          = agent_identifier_input('1', name_prefix, identifier.notation, is_organization: false)
+        - else
+          = agent_identifier_input('1', name_prefix, is_organization: false)
+
   - if show_affiliations
-    %tr
+    %tr{'data-form-options-display-target':"option1",  class: is_organization?(agent) && 'd-none'}
       %th
         = t("agents.form.affiliations")
       %td.top.agents-affiliations.agents-inputs

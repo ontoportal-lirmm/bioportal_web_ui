@@ -1,7 +1,8 @@
 require 'uri'
 
 class SearchController < ApplicationController
-  include SearchAggregator
+  include SearchAggregator, SearchContent
+
   skip_before_action :verify_authenticity_token
 
   layout :determine_layout
@@ -11,6 +12,7 @@ class SearchController < ApplicationController
     params[:query] = nil
     @advanced_options_open = false
     @search_results = []
+    @json_url = json_link("#{rest_url}/search", {})
 
     return if @search_query.empty?
 
@@ -19,6 +21,7 @@ class SearchController < ApplicationController
 
     @advanced_options_open = !search_params_empty?
     @search_results = aggregate_results(@search_query, results)
+    @json_url = json_link("#{rest_url}/search", params.permit!.to_h)
   end
 
   def json_search
@@ -44,11 +47,12 @@ class SearchController < ApplicationController
       # record_type = format_record_type(result[:recordType], result[:obsolete])
       record_type = ""
 
-      target_value = result.prefLabel.select{|x| x.include?( params[:q].delete('*'))}.first || result.prefLabel.first
+      label = search_concept_label(result.prefLabel)
+      target_value = label
 
       case params[:target]
       when "name"
-        target_value = result.prefLabel
+        target_value = label
       when "shortid"
         target_value = result.id
       when "uri"
@@ -97,6 +101,22 @@ class SearchController < ApplicationController
     render plain: response, content_type: content_type
   end
 
+  def json_ontology_content_search
+    query = params[:search] || '*'
+    page = (params[:page] || 1).to_i
+    acronyms = params[:ontologies]&.split(',') || []
+    page_size = (params[:page_size] || 10).to_i
+    type = params[:types]&.split(',') || []
+
+
+    results, page, next_page, total_count = search_ontologies_content(query: query,
+                                         page: page,
+                                         page_size: page_size,
+                                         filter_by_ontologies: acronyms,
+                                        filter_by_types: type)
+
+    render json: results
+  end
 
   private
 
@@ -112,9 +132,6 @@ class SearchController < ApplicationController
         params[:ontologies] = params[:ontologies].split(",")
       else
         params[:ontologies] = [params[:ontologies]]
-      end
-      if params[:ontologies].first.to_i > 0
-        params[:ontologies].map! {|o| BpidResolver.id_to_acronym(o)}
       end
       params[:ontologies] = params[:ontologies].join(",")
     end

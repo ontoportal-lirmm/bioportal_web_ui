@@ -53,7 +53,7 @@ module CollectionsHelper
   end
 
   def request_collection_id
-    params[:id] || params[:collection_id] || params[:concept_collection]
+    params[:id] || params[:collectionid] || params[:concept_collection]
   end
 
   def sort_collections_label(collections_labels)
@@ -75,9 +75,19 @@ module CollectionsHelper
 
   private
 
+  require 'color'
+
+  def random_color
+    hue = rand(0..360)
+    saturation = rand(50..100) # Higher saturation for more vibrant colors
+    lightness = rand(30..70) # Middle lightness to avoid extremes
+
+    Color::HSL.new(hue, saturation, lightness).html
+  end
+
   def generate_collections_colors(collections)
     collections.each do |c|
-      c.color = format('#%06x', (rand * 0xffffff))
+      c.color = random_color
     end
   end
 end

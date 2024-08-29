@@ -1,23 +1,30 @@
 # Organization info
 $ORG = ENV['ORG']
 $ORG_URL = ENV['ORG_URL']
+
 # Site name (required)
 $SITE = ENV['SITE']
+
 # Full string for site, EX: "NCBO BioPortal", do not modify
 $ORG_SITE = $ORG.nil? || $ORG.empty? ? $SITE : "#{$ORG} #{$SITE}"
+
 # The URL for the BioPortal Rails UI (this application)
 $UI_URL = ENV['UI_URL']
+
 # If you are running a PURL server to provide URLs for ontologies in your BioPortal instance, enable this option
 $PURL_ENABLED = false
 # The PURL URL is generated using this prefix + the abbreviation for an ontology.
 # The PURL URL generation algorithm can be altered in app/models/ontology_wrapper.rb
 $PURL_PREFIX = 'http://purl.bioontology.org/ontology'
+
+
 # If your BioPortal installation includes Annotator set this to false
 $ANNOTATOR_DISABLED = false
 # Unique string representing the UI's id for use with the BioPortal Core
 $API_KEY = ENV['API_KEY']
 # BioPortal API service address
 $REST_URL = ENV['API_URL']
+
 # Annotator REST service address
 # $ANNOTATOR_URL = "http://services.stageportal.lirmm.fr/annotator"
 $ANNOTATOR_URL = $PROXY_URL = ENV['ANNOTATOR_URL']
@@ -25,6 +32,7 @@ $ANNOTATOR_URL = $PROXY_URL = ENV['ANNOTATOR_URL']
 $NCBO_ANNOTATORPLUS_ENABLED = ENV['NCBO_ANNOTATORPLUS_ENABLED']
 $NCBO_ANNOTATOR_URL = ENV['NCBO_ANNOTATOR_URL']
 $NCBO_API_KEY = ENV['NCBO_API_KEY']
+
 # Fairness Assessment.
 $FAIRNESS_DISABLED = ENV['FAIRNESS_DISABLED']
 $FAIRNESS_URL = ENV['FAIRNESS_URL']
@@ -80,9 +88,12 @@ $FEDERATED_PORTALS = {
 # Then create the mapping using the following class in JSON : "http://purl.bioontology.org/ontology/MESH/C585345": "ncbo:MESH"
 # Where "ncbo" is the namespace used as key in the interportal_hash
 $INTERPORTAL_HASH = {}
+
 $NOT_DOWNLOADABLE = {}
+
 # Bugsnag API key for monitoring exception
 #$BUGSNAG_API_KEY=
+
 # OAuth2 authentication
 $OMNIAUTH_PROVIDERS = {
   github: {
@@ -114,29 +125,40 @@ $OMNIAUTH_PROVIDERS = {
     enable: false
   }
 }.freeze
+
 # Don't load and don't display recent mappings if false, in case of too many mappings (take longer to load homepage)
 $DISPLAY_RECENT = false
+
 # If true then the UI will get available recognize at API_URL/annotators/recognizers
 $MULTIPLE_RECOGNIZERS = false
+
 # Remove download for these ontologies. Default:
 # ["CPT","ICD10","ICNP","ICPC2P","MDDB","MEDDRA","MSHFRE","MSHSPA_1","NDDF","NDFRT","NIC","RCD","SCTSPA","SNOMEDCT","WHO-ART"]
 $RESTRICTED_DOWNLOADS = []
+
 # Ontolobridge endpoint url
 $ONTOLOBRIDGE_BASE_URL = 'https://ontolobridge.ccs.miami.edu/api-test/requests'
 # Ontolobridge authentication token
 $ONTOLOBRIDGE_AUTHENTICATION_TOKEN = 'Token Uq2pae73ktMtmgjUgtnhEOuHxr9sZeuK'
+
 # Ontologies for which to enable the new term request (Ontolobridge) tab
 $NEW_TERM_REQUEST_ONTOLOGIES = []
+
 # Legacy REST core service address (BioPortal v3.x and lower)
 $LEGACY_REST_URL = 'http://example.org:8080/bioportal'
+
 # Release version text (appears in footer of all pages, except 404 and 500 errors)
 $RELEASE_VERSION = ENV['RELEASE_VERSION']
+
 # Enable Slices, filtering of ontologies based on subdomain and ontology groups
 $ENABLE_SLICES = false
+
 # Google Analytics ID (optional)
 $ANALYTICS_ID = ENV['ANALYTICS_ID']
+
 # Enable client request caching
 $CLIENT_REQUEST_CACHING = true
+
 # Email settings
 ActionMailer::Base.smtp_settings = {
   address: '', # smtp server address, ex: smtp.example.org
@@ -151,8 +173,8 @@ $SUPPORT_EMAIL = ENV['SUPPORT_EMAIL']
 # Email used to send notifications
 $NOTIFICATION_EMAIL = ENV['SUPPORT_EMAIL']
 
-# Bugsnag is a tool for exceptions tracking https://www.bugsnag.com/
-$BUGSNAG_APIKEY
+
+
 # reCAPTCHA
 # In order to use reCAPTCHA on the account creation and feedback submission pages:
 #    1. Obtain a reCAPTCHA v2 key from: https://www.google.com/recaptcha/admin
@@ -166,10 +188,12 @@ $BUGSNAG_APIKEY
 ENV['USE_RECAPTCHA'] = 'false'
 # Custom BioPortal logging
 require 'log'
+
 # URL where BioMixer GWT app is located
 # $BIOMIXER_URL = "http://bioportal-integration.bio-mixer.appspot.com"
 $BIOMIXER_URL = ENV['BIOMIXER_URL']
 $BIOMIXER_APIKEY = ENV['BIOMIXER_APIKEY']
+
 ##
 # Custom Ontology Details
 # Custom details can be added on a per ontology basis using a key/value pair as columns of the details table
@@ -178,11 +202,20 @@ $BIOMIXER_APIKEY = ENV['BIOMIXER_APIKEY']
 # $ADDITIONAL_ONTOLOGY_DETAILS = { "STY" => { "Additional Detail" => "Text to be shown in the right-hand column." } }
 ##
 $ADDITIONAL_ONTOLOGY_DETAILS = {}
+
 # Front notice appears on the front page only and is closable by the user. It remains closed for seven days (stored in cookie)
 $FRONT_NOTICE = ''
 # Site notice appears on all pages and remains closed indefinitely. Stored below as a hash with a unique key and a string message
 # EX: $SITE_NOTICE = { :unique_key => 'Put your message here (can include <a href="/link">html</a> if you use single quotes).' }
 $SITE_NOTICE = {}
+
+$TERMS_AND_CONDITIONS_LINK = 'https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/terms-conditions-naDsDo2Zxq'
+$CITE_ANNOTATOR = 'https://hal.science/hal-00492024'
+$ANNOTATOR_API_DOC = 'https://data.agroportal.lirmm.fr/documentation#nav_annotator'
+$CITE_RECOMMENDER = 'https://doi.org/10.1186/s13326-017-0128-y' 
+# Resource term
+$RESOURCE_TERM = ENV['RESOURCE_TERM'] || 'ontology'
+
 $HOME_PAGE_LOGOS = [
     {
       img_src: 'logos/supports/numev.png',
@@ -268,7 +301,10 @@ $PORTALS_INSTANCES = [
     link: 'https://biodivportal.gfbio.org/'
   }
 ]
+$ONTOPORTAL_WEBSITE_LINK = "https://ontoportal.org/"
+$ONTOPORTAL_GITHUB_REPO = "https://github.com/ontoportal"
 
+$GITHUB_ISSUES = "https://github.com/agroportal/project-management/issues"
 $FOOTER_LINKS = {
   social: [
     { logo: "social/people.svg", link: "https://github.com/orgs/agroportal/people" },
@@ -282,17 +318,20 @@ $FOOTER_LINKS = {
     products: {
       release_notes: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/release-notes-btKjZk5tU2",
       api: "https://data.agroportal.lirmm.fr/",
+      tools: "/tools",
       sparql: "https://sparql.agroportal.lirmm.fr/test/",
-      ontoportal: "https://ontoportal.org/"
+      ontoportal: $ONTOPORTAL_WEBSITE_LINK
     },
     support: {
       contact_us: "https://#{$SITE}.lirmm.fr/feedback",
       documentation: "https://ontoportal.github.io/documentation/",
-      agro_documentation: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/public-documentation-QMpsC9aVBb"
+      agro_documentation: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/public-documentation-QMpsC9aVBb",
+      issues_and_requests: $GITHUB_ISSUES 
     },
     agreements: {
-      terms: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/terms-and-conditions-naDsDo2Zxq",
-      privacy_policy: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/privacy-policy-wsJtxnwHmo",
+      terms: $TERMS_AND_CONDITIONS_LINK,
+      privacy_policy: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/terms-conditions-naDsDo2Zxq#h-privacy-policy",
+      legal_notices: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/terms-conditions-naDsDo2Zxq#h-legal-notice"
     },
     about: {
       about_us: "https://github.com/agroportal/project-management",
@@ -303,10 +342,11 @@ $FOOTER_LINKS = {
   }
 }
 
-$NOT_DOWNLOADABLE = {}
+
 
 $UI_THEME = ENV['UI_THEME'] || 'ontoportal'
 $HOSTNAME = ENV['API_URL']
+
 if $HOSTNAME
   $HOSTNAME = ENV['API_URL'].split('data.').last
   # add custom stage server configuration if needed (e.g bioportal_config_development_stageportal.lirmm.fr)
@@ -314,10 +354,4 @@ if $HOSTNAME
     require_relative "bioportal_config_development_#{$HOSTNAME}"
   end
 end
-$CITE_ANNOTATOR = 'https://hal.science/hal-00492024'
-$ANNOTATOR_API_DOC = 'https://data.agroportal.lirmm.fr/documentation#nav_annotator'
 
-$CITE_RECOMMENDER = 'https://doi.org/10.1186/s13326-017-0128-y' 
-
-# Resource term
-$RESOURCE_TERM = ENV['RESOURCE_TERM'] || 'ontology'

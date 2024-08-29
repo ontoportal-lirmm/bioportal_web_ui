@@ -15,15 +15,10 @@
 //= require bp_ajax_controller
 //= require bp_notes
 //= require bp_form_complete
-//= require bp_mappings
 //= require bp_admin
 //= require concepts
-//= require_tree ./components
 //= require projects
 //= require Chart.min
 //= require application_esbuild
-customElements.define('data-table-loader', DataTableLoader)
-customElements.define('data-table', DataTable)
-customElements.define('instances-table', InstancesTable)
 
 

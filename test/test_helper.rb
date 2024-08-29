@@ -2,6 +2,7 @@ ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 require 'rails/test_help'
 require 'simplecov'
+require 'webmock/minitest'
 
 SimpleCov.start 'rails' do
   add_filter '/bin/'
@@ -16,6 +17,7 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
 
+  WebMock.allow_net_connect!
 
   Capybara.server_host = "0.0.0.0"
   Capybara.app_host = "http://#{Socket.gethostname}:#{Capybara.server_port}"
@@ -37,7 +39,11 @@ def load_all_fixtures
   fixture_files.each do |fixture_file|
     fixture_name = File.basename(fixture_file, '.yml')
     data = YAML.load_file(fixture_file)
-    fixtures_data[fixture_name] = OpenStruct.new(Array(data).map{|key, hash| [key , OpenStruct.new(hash)]}.to_h)
+    if data["yaml_structure"].eql?("regular")
+      fixtures_data[fixture_name] = data
+    else
+      fixtures_data[fixture_name] = OpenStruct.new(Array(data).map{|key, hash| [key , OpenStruct.new(hash)]}.to_h)
+    end
   end
 
   fixtures_data

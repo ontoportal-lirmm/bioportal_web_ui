@@ -8,10 +8,14 @@ export default class extends Controller {
     }
 
     dispatchInputEvent(event) {
-        if (event.target.name !== "search") {
-            return
+        let value
+        if (event.target instanceof HTMLSelectElement) {
+            value = Array.from(event.target.selectedOptions).map(x => x.value)
+        } else {
+            value = [event.target.value]
         }
-        this.#dispatchEvent("search", [event.target.value])
+
+        this.#dispatchEvent(event.target.name, value)
     }
 
     dispatchFilterEvent(event) {
@@ -43,7 +47,7 @@ export default class extends Controller {
                 break;
             default:
                 checks = this.#getSelectedChecks().map(x => x.value)
-                filter = this.element.id.split("_")[0]
+                filter = event.target.name
         }
 
         this.#dispatchEvent(filter, checks)

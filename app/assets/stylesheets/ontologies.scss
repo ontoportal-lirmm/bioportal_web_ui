@@ -179,6 +179,13 @@ $widget-table-border-color: #EFEFEF;
 /************************************
 /* Classes pane
 ************************************/
+.tree-container {
+  overflow-x: auto;
+  min-width: 35%;
+  min-height: 70vh;
+  max-height: 90vh;
+  font: small/1.231 arial,helvetica,clean,sans-serif;
+}
 
 #bd_content {
   display: flex;
@@ -188,7 +195,7 @@ $widget-table-border-color: #EFEFEF;
 #bd_content .sidebar {
   overflow-x: auto;
   white-space: nowrap;
-  min-width: 35%;
+  min-width: 29%;
 }
 
 #search_box:focus {
@@ -213,19 +220,9 @@ $widget-table-border-color: #EFEFEF;
 /* Properties pane
 ************************************/
 
-#propTree a {
-  font-family: "Myriad Pro","Myriad Web Pro","Myriad Web","Myriad","Trebuchet MS","Tahoma","Helvetica","Arial",sans-serif;
-  font: small/1.231 arial,helvetica,clean,sans-serif;
-}
-
 .ont-properties {
   display: flex;
   flex-direction: row;
-}
-
-#propTree {
-  overflow-x: auto;
-  white-space: nowrap;
 }
 
 /************************************
@@ -296,12 +293,25 @@ $widget-table-border-color: #EFEFEF;
 }
 .metadata-exporter .download-btn {
   position: absolute;
-  right: 20px;
+  right: 0;
+  top: -50px;
   z-index: 2;
+  cursor: pointer;
   .chip_button_container_clickable {
     opacity: 0.6;
     &:hover {
       opacity: 1;
     }
   }
+}
+
+.htacess-code-container, .nginx-code-container{
+  margin-top: 20px;
+  margin-bottom: 30px;
+  text-align: left;
+  padding: 20px;
+  background-color: #1d1d1d;
+  color: white;
+  border-radius: 10px;
+  position: relative;
 }

@@ -18,15 +18,15 @@ class AgentsController < ApplicationController
   end
 
   def ajax_agents
-    filters = { name: params[:name] }
-    filters[:agentType] = params[:agent_type] if params[:agent_type]
-    @agents = LinkedData::Client::Models::Agent.all(filters)
-    agents_json = @agents.map do |x|
+    filters = { query: params[:query], qf: "identifiers_texts^20 acronym_text^15 name_text^10 email_text^10"}
+    @agents = LinkedData::Client::HTTP.get('/search/agents', filters)
+    agents_json = @agents.collection.map do |x|
       {
-        id: x.id,
-        name: x.name,
-        type: x.agentType,
-        identifiers: x.identifiers.map { |i| "#{i.schemaAgency}:#{i.notation}" }.join(', ')
+        id: x.resource_id,
+        name: x.name_text,
+        type: x.agentType_t,
+        identifiers: x.identifiers_texts&.join(', '),
+        acronym: x.acronym_text
       }
     end
 
@@ -51,7 +51,8 @@ class AgentsController < ApplicationController
     alert_id = agent_id_alert_container_id(params[:id], parent_id)
     deletable = params[:deletable]&.eql?('true')
     if new_agent.errors
-      render_turbo_stream alert_error(id: alert_id) { JSON.pretty_generate(response_errors(new_agent)) }
+      errors = generate_errors(response_errors(new_agent))
+      render_turbo_stream alert_error(id: alert_id) { errors.join(', ') }
     else
       success_message = t('agents.add_agent')
       streams = [alert_success(id: alert_id) { success_message }]
@@ -95,7 +96,8 @@ class AgentsController < ApplicationController
     alert_id = agent_alert_container_id(agent, parent_id)
     deletable = params[:deletable]&.eql?('true')
     if response_error?(agent_update)
-      render_turbo_stream(alert_error(id: alert_id) { JSON.pretty_generate(response_errors(agent_update)) })
+      errors = generate_errors(response_errors(agent_update).values.first)
+      render_turbo_stream alert_error(id: alert_id) { errors.join(', ') }
     else
       success_message = t('agents.update_agent')
       table_line_id = agent_table_line_id(agent_id(agent))
@@ -243,7 +245,7 @@ class AgentsController < ApplicationController
           end
           values[attr.to_sym] = current_val.map { |x| x.id }
         else
-          values[attr.to_sym] = agent
+          values[attr.to_sym] = agent.id
         end
       end
 
@@ -273,6 +275,17 @@ class AgentsController < ApplicationController
         v
       end
     end
+    p[:identifiers] = p[:identifiers].reject{ |key, value| value["notation"].empty? }
+    identifiers_schemaAgency = params[:agentType].eql?('person') ? 'ORCID' : 'ROR'
+    p[:identifiers]&.each_value do |identifier|
+      identifier[:schemaAgency] = identifiers_schemaAgency
+      if identifier[:schemaAgency].downcase.eql?('orcid')
+        identifier[:notation] = normalize_orcid(identifier[:notation])
+      else
+        identifier[:notation] = normalize_ror(identifier[:notation])
+      end
+    end
+
     p[:identifiers] = (p[:identifiers] || {}).values
     p[:affiliations] = (p[:affiliations] || {}).values
     p[:affiliations].each do |affiliation|
@@ -286,5 +299,64 @@ class AgentsController < ApplicationController
     LinkedData::Client::Models::Agent.where({ display: 'all' }) do |obj|
       obj.id.to_s.eql?("#{rest_url}/Agents/#{id}")
     end.first
+  end
+
+  def normalize_orcid(orcid)
+    case orcid
+    when /\A\d{16}\z/
+      # Case 1: 16 digits, add dashes
+      orcid = orcid.scan(/.{1,4}/).join('-')
+
+    when /\A\d{4}-\d{4}-\d{4}-\d{4}\z/
+      orcid = orcid
+
+    when /\Ahttps:\/\/(www\.)?orcid\.org\/\d{4}-\d{4}-\d{4}-\d{4}\z/
+      # Case 3: ORCID URL (with or without "www."), extract the numbers with dashes
+      orcid = orcid.split('/').last
+
+    when /\Aorcid\.org\/\d{4}-\d{4}-\d{4}-\d{4}\z/
+      # Case 4: ORCID without scheme (http/https)
+      orcid = orcid.split('/').last
+
+    when /\Awww\.orcid\.org\/\d{4}-\d{4}-\d{4}-\d{4}\z/
+      # Case 5: ORCID with "www." without scheme
+      orcid = orcid.split('/').last
+    end
+
+    return orcid
+  end
+
+  def normalize_ror(ror)
+    case ror
+    when /\A0\w{6}\d{2}\z/
+      # Case 1: 9 characters, starting with '0', 6 alphanumeric, ending with 2 digits
+      ror = ror
+
+    when /\Ahttps:\/\/ror\.org\/(0\w{6}\d{2})\z/
+      # Case 2: Full URL with 'https://ror.org/', extract the ROR ID
+      ror = ror.split('/').last
+
+    when /\Aror\.org\/(0\w{6}\d{2})\z/
+      # Case 3: ROR without scheme (http/https), extract the ROR ID
+      ror = ror.split('/').last
+    end
+
+    return ror
+  end
+
+  def generate_errors(response_errors)
+    errors = []
+    response_errors.values.each_with_index do |v, i|
+      if v[:existence]
+        errors << "#{response_errors.keys[i].capitalize} #{t('agents.errors.required')}"
+      elsif v[:unique_identifiers]
+        errors << t('agents.errors.used_identifier')
+      elsif v[:no_url]
+        errors << t('agents.errors.invalid_url')
+      else
+        errors << JSON.pretty_generate(response_errors)
+      end
+    end
+    return errors
   end
 end

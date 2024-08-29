@@ -8,20 +8,24 @@ export default class extends Controller {
         sortcolumn: String,
         paging: Boolean,
         searching: Boolean,
-        noinitsort: Boolean
+        noinitsort: Boolean,
+        searchPlaceholder: {type: String, default: 'Filter records'},
     }
-    connect(){    
-        let table_component
-        table_component = this.element.childNodes[1]
-        let default_sort_column
-        default_sort_column = parseInt(this.sortcolumnValue, 10)
-        if (this.sortcolumnValue || this.searchingValue){
-            let table = new DataTable('#'+table_component.id, {
+    connect(){
+        const table_component = this.element.querySelector('table')
+        const default_sort_column = parseInt(this.sortcolumnValue, 10)
+
+        if (this.sortcolumnValue || this.searchingValue || this.pagingValue){
+            this.table = new DataTable('#'+table_component.id, {
                 paging: this.pagingValue,
                 info: false,
                 searching: this.searchingValue,
                 autoWidth: true,
-                order: this.noinitsortValue ? [] : [[default_sort_column, 'desc']]
+                order: this.noinitsortValue ? [] : [[default_sort_column, 'desc']],
+                language: {
+                    search: '_INPUT_',
+                    searchPlaceholder: this.searchPlaceholderValue
+                }
             });
         }
     }

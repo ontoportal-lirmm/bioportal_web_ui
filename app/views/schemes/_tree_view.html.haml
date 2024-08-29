@@ -1,12 +1,13 @@
-- if no_schemes?
-  %div
-    = no_schemes_alert
-- else
-  - schemes_labels, main_scheme_label = get_schemes_labels(@schemes, @submission_latest.URI)
-  - selected_scheme_id = params[:schemeid].nil? && !main_scheme_label.nil? ? main_scheme_label["@id"] : CGI.unescape(params[:schemeid] || '')
-  - if main_scheme_label.nil?
-    = no_main_scheme_alert
-  %div
-    = schemes_tree(schemes_labels, main_scheme_label, selected_scheme_id)
+= turbo_frame_tag "schemes_sorted_list_view-page-1" do
+  - if no_schemes?
+    %div
+      = no_schemes_alert
+  - else
+    - schemes_labels, main_scheme_label = get_schemes_labels(@schemes, @submission_latest.URI)
+    - selected_scheme_id = params[:schemeid].nil? && !main_scheme_label.nil? ? main_scheme_label["@id"] : CGI.unescape(params[:schemeid] || '')
+    - if main_scheme_label.nil?
+      = no_main_scheme_alert
+    %div
+      = schemes_tree(schemes_labels, main_scheme_label, selected_scheme_id)
 
 

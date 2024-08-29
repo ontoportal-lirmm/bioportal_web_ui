@@ -1,9 +1,10 @@
 import {Controller} from "@hotwired/stimulus"
 import useAjax from "../../javascript/mixins/useAjax";
+import debounce from 'debounce'
 
 // Connects to data-controller="search-input"
 export default class extends Controller {
-    static targets = ["input", "dropDown", "actionLink", "template", "button"]
+    static targets = ["input", "dropDown", "actionLink", "template", "button", "loader"]
     static values = {
         items: Array,
         ajaxUrl: String,
@@ -11,7 +12,8 @@ export default class extends Controller {
         idKey: String,
         cache: {type: Boolean, default: true},
         selectedItem: Number,
-        searchEndpoint: {type: String, default: '/search'}
+        searchEndpoint: {type: String, default: '/search'},
+        displayAll: Boolean
     }
 
     connect() {
@@ -19,11 +21,18 @@ export default class extends Controller {
         this.dropDown = this.dropDownTarget
         this.actionLinks = this.actionLinkTargets
         this.items = this.itemsValue
+        this.search = debounce(this.search.bind(this), 100);
     }
 
     search() {
         this.selectedItemValue = 0
-        this.#searchInput()
+        this.loaderTarget.classList.remove("d-none")
+        this.buttonTarget.classList.add("d-none")
+        this.searchInput()
+    }
+
+    searchInput() {
+        this.#fetchItems()
     }
 
     prevent(event){
@@ -74,7 +83,7 @@ export default class extends Controller {
         } else {
             useAjax({
                 type: "GET",
-                url: this.ajaxUrlValue + this.#inputValue(),
+                url: this.ajaxUrlValue + encodeURIComponent(this.#inputValue()),
                 dataType: "json",
                 success: (data) => {
                     this.items = data.map(x => { return {...x, link: (this.itemLinkBaseValue + x[this.idKeyValue])}} )
@@ -89,6 +98,8 @@ export default class extends Controller {
     }
 
     #renderLines() {
+        this.loaderTarget.classList.add("d-none")
+        this.buttonTarget.classList.remove("d-none")
         const inputValue = this.#inputValue();
         let results_list = []
         if (inputValue.length > 0) {
@@ -104,17 +115,16 @@ export default class extends Controller {
             this.dropDown.innerHTML = ""
             let breaker = 0
             for (let i = 0; i < this.items.length; i++) {
-                if (breaker === 4) {
+                if (!this.displayAllValue && breaker === 4) {
                     break;
                 }
                 // Get the current item from the ontologies array
                 const item = this.items[i];
 
                 let text =  Object.values(item).reduce((acc, value) => acc + value, "")
-
-
+                
                 // Check if the item contains the substring
-                if (text.toLowerCase().includes(inputValue.toLowerCase())) {
+                if (!this.cacheValue || text.toLowerCase().includes(inputValue.toLowerCase())) {
                     results_list.push(item);
                     breaker = breaker + 1
                 }
@@ -140,22 +150,22 @@ export default class extends Controller {
 
     #renderLine(item) {
         let template = this.templateTarget.content
-        let newElement = template.firstElementChild
-        let string = newElement.outerHTML
-
+        let newElement = template.firstElementChild.outerHTML
         Object.entries(item).forEach( ([key, value]) => {
             key = key.toString().toUpperCase()
             if (key === 'TYPE'){
                 value  = value.toString().split('/').slice(-1)
             }
+            if (key === 'ACRONYM'){
+                value = value ? `(${value.toString()})` : ''
+            }
+            if (key === 'IDENTIFIERS'){
+                value = value ? `- ${value.toString()}` : ''
+            }
             const regex = new RegExp('\\b' + key + '\\b', 'gi');
-            string =  string.replace(regex, value.toString())
+            newElement =  newElement.replace(regex, value ? value.toString() : "")
         })
-
-        return new DOMParser().parseFromString(string, "text/html").body.firstElementChild
-    }
-
-    #searchInput() {
-        this.#fetchItems()
+        
+        return new DOMParser().parseFromString(newElement, "text/html").body.firstElementChild
     }
 }
