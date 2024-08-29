@@ -24,10 +24,11 @@ module SearchAggregator
     /semanticweb/i
   ]
 
-  def aggregate_results(query, results)
+  def aggregate_results(query, results, is_federate)
     ontologies = aggregate_by_ontology(results)
     grouped_results = add_subordinate_ontologies(query, ontologies)
-    all_ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', include_views: true, display_links: false, display_context: false)
+
+    all_ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', include_views: true, display_links: false, display_context: false, federate: is_federate)
 
     grouped_results.map do |group|
       format_search_result(group, all_ontologies)
@@ -59,7 +60,7 @@ module SearchAggregator
         pref_lab.downcase.include?(@search_query.downcase) || @search_query.downcase.include?(pref_lab.downcase)
       end.first || label.first
     end
-    
+
     label
   end
   def search_result_elem(class_object, ontology_acronym, title)
@@ -229,4 +230,3 @@ module SearchAggregator
     stripped_id
   end
 end
-

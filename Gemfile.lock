@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git
-  revision: abea6c217c0ee93bcfd80c47c2af52747365d491
-  branch: development
+  revision: debf991ef77fe6967ffc5e390fad8e4e7455a326
+  branch: feature/federated-search
   specs:
     ontologies_api_client (2.2.0)
       activesupport
@@ -12,6 +12,8 @@ GIT
       lz4-ruby
       multi_json
       oj
+      parallel
+      request_store
       spawnling (= 2.1.5)
 
 GEM
@@ -420,6 +422,8 @@ GEM
     regexp_parser (2.9.2)
     reline (0.5.9)
       io-console (~> 0.5)
+    request_store (1.7.0)
+      rack (>= 1.4)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)

@@ -92,7 +92,7 @@ gem 'will_paginate', '~> 3.0'
 gem 'inline_svg'
 gem "iso-639", "~> 0.3.6"
 gem "flag-icons-rails", "~> 3.4"
-gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'development'
+gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'feature/federated-search'
 
 # Ruby 2.7.8 pinned gems (to remove when migrating to Ruby >= 3.0)
 gem 'ffi', '~> 1.16.3'
