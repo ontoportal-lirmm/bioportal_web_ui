@@ -1,5 +1,5 @@
 module SearchAggregator
-  include UrlsHelper, MultiLanguagesHelper
+  include UrlsHelper, MultiLanguagesHelper, FederationHelper
   extend ActiveSupport::Concern
   BLACKLIST_FIX_STR = [
     "https://",
@@ -64,18 +64,25 @@ module SearchAggregator
     label
   end
   def search_result_elem(class_object, ontology_acronym, title)
-
     label = search_concept_label(class_object.prefLabel)
-
+    internal_class_link = "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{helpers.request_lang&.eql?("ALL") ? '' : "&language="+helpers.request_lang.to_s}"
+    link = is_federation_external_class(class_object) ? class_object.links['ui'] : internal_class_link
+    portal_name = portal_name_from_uri(class_object.links['ui'])
     {
       uri: class_object.id.to_s,
       title: title.empty? ? label : "#{label} - #{title}",
       ontology_acronym: ontology_acronym,
-      link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{helpers.request_lang&.eql?("ALL") ? '' : "&language="+helpers.request_lang.to_s}",
-      definition:  class_object.definition
+      link: link,
+      definition:  class_object.definition,
+      portal_name: is_federation_external_class(class_object) ? portal_name : nil,
+      portal_color: is_federation_external_class(class_object) ? federated_portal_color(portal_name) : nil,
+      portal_light_color: is_federation_external_class(class_object) ? federated_portal_light_color(portal_name) : nil
     }
   end
 
+  def is_federation_external_class(class_object)
+    !class_object.links['self'].include?($REST_URL)
+  end
 
   def ontology_name_acronym(ontologies, selected_acronym)
     ontology = ontologies.select { |x| x.acronym.eql?(selected_acronym.split('/').last) }.first

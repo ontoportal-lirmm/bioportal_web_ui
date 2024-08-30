@@ -1,5 +1,5 @@
 .search-result-component{class: sub_component_class, 'data-controller': 'reveal-component'}
-    %a.title{href: @link}
+    %a.title{href: @link, style: @portal_color ? "color: #{@portal_color} !important" : ''}
         = @title
     - if @uri
         .uri
@@ -10,7 +10,8 @@
     .actions
         = details_button
         = visualize_button
-        = mappings_button
+        - unless @portal_name 
+            = mappings_button
         - if subresults?
             = reveal_ontologies_button("#{subresults.size} #{t('search.result_component.more_from_ontology')}", sub_ontologies_id, 'icons/three-dots.svg')
         - if reuses?

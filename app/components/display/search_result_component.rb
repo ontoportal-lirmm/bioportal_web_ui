@@ -5,7 +5,7 @@ class Display::SearchResultComponent < ViewComponent::Base
 
   renders_many :subresults, Display::SearchResultComponent
   renders_many :reuses, Display::SearchResultComponent
-  def initialize(number: 0,title: nil, ontology_acronym: nil ,uri: nil, definition: nil, link: nil,  is_sub_component: false)
+  def initialize(number: 0,title: nil, ontology_acronym: nil ,uri: nil, definition: nil, link: nil,  is_sub_component: false, portal_name: nil, portal_color: nil, portal_light_color: nil)
       @title = title
       @uri = uri
       @definition = definition
@@ -13,6 +13,9 @@ class Display::SearchResultComponent < ViewComponent::Base
       @is_sub_component = is_sub_component
       @ontology_acronym = ontology_acronym
       @number = number.to_s
+      @portal_name = portal_name
+      @portal_color = portal_color
+      @portal_light_color = portal_light_color
   end
 
   def sub_component_class
@@ -29,9 +32,9 @@ class Display::SearchResultComponent < ViewComponent::Base
 
   def details_button
       link_to_modal(nil, "/ajax/class_details?modal=true&ontology=#{@ontology_acronym}&conceptid=#{@uri}&styled=false", data: { show_modal_title_value: @title, show_modal_size_value: 'modal-xl' }) do
-        content_tag(:div, class: 'button') do
+        content_tag(:div, class: 'button', style: @portal_color ? "background-color: #{@portal_light_color} !important" : '') do
           concat inline_svg_tag('icons/details.svg')
-          concat content_tag(:div, class: 'text') { t('search.result_component.details') }
+          concat content_tag(:div, class: 'text', style: @portal_color ? "color: #{@portal_color} !important" : '') { t('search.result_component.details') }
         end
       end
   end
@@ -53,17 +56,17 @@ class Display::SearchResultComponent < ViewComponent::Base
 
   def visualize_button
       link_to_modal(nil, "/ajax/biomixer/?ontology=#{@ontology_acronym}&conceptid=#{@uri}", data: { show_modal_title_value: @title, show_modal_size_value: 'modal-xl' }) do
-        content_tag(:div, class: 'button') do
+        content_tag(:div, class: 'button', style: @portal_color ? "background-color: #{@portal_light_color} !important" : '') do
           concat inline_svg_tag('icons/visualize.svg')
-          concat content_tag(:div, class: 'text') { t('search.result_component.visualize') }
+          concat content_tag(:div, class: 'text', style: @portal_color ? "color: #{@portal_color} !important" : '') { t('search.result_component.visualize') }
         end
       end
   end
 
   def reveal_ontologies_button(text,id,icon)
-    content_tag(:div, class: 'button icon-right', 'data-action': "click->reveal-component#toggle", 'data-id': id) do
+    content_tag(:div, class: 'button icon-right', 'data-action': "click->reveal-component#toggle", 'data-id': id, style: @portal_color ? "background-color: #{@portal_light_color} !important" : '') do
       inline_svg_tag(icon) +
-      content_tag(:div, class: 'text') do
+      content_tag(:div, class: 'text', style: @portal_color ? "color: #{@portal_color} !important" : '') do
         text
       end +
       inline_svg_tag("icons/arrow-down.svg")

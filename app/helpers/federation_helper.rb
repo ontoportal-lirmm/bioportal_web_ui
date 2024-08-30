@@ -23,6 +23,10 @@ module FederationHelper
     config[:'light-color'] if config
   end
 
+  def portal_name_from_uri(uri)
+    URI.parse(uri).hostname.split('.').first
+  end
+
 
   def ontology_portal_config(id)
     rest_url = id.split('/')[0..-3].join('/')
