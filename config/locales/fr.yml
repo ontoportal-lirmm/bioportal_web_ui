@@ -1530,5 +1530,6 @@ fr:
     accept_button: "Accepter"
     privacy_link: "Vie privé"
   taxonomy:
-    groups_and_categories: Groupes et catégories
+    groups_and_categories: Groupes et Catégories
     description: Dans AgroPortal, les ontologies sont organisées en groupes et étiquetées par catégories. Généralement, les groupes associent des ontologies d'un même projet ou d'une organisation pour une meilleure identification de la provenance. Les catégories concernent les sujets/thèmes et permettent de classer les ontologies. Depuis 2016, les catégories d'AgroPortal ont été établies en coopération avec l'équipe Agricultural Information Management Standards (AIMS) de la FAO. Les groupes et catégories, ainsi que d'autres métadonnées, peuvent être utilisés sur la page « Parcourir » d'AgroPortal pour filtrer la liste des ontologies.
+    show_sub_categories: Afficher les sous-catégories

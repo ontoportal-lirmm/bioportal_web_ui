@@ -16,7 +16,7 @@
   - if @taxonomy.children
     .taxonomy-children-reveal{'data-action': "click->reveal-component#toggle", 'data-id': reveal_id}
       .text
-        Show children
+        = t('taxonomy.show_sub_categories')
       = inline_svg_tag 'icons/arrow-down.svg'
     .taxonomy-children-container
       .taxonomy-children-line
