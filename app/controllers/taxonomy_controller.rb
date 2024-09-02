@@ -23,6 +23,11 @@ class TaxonomyController < ApplicationController
     end
     @categories = LinkedData::Client::Models::Category.all(display: 'name,acronym,description,ontologies,parentCategory')
     @categories = nest_categories_children(@categories)
+    ontologies = LinkedData::Client::Models::Ontology.all
+    @ontologies_names = {}
+    ontologies.each do |o|
+      @ontologies_names[o.id] = o.name
+    end
   end
 
   def nest_categories_children(categories)

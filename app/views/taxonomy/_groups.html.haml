@@ -4,7 +4,7 @@
     - groups_second_row = impairs.map(&:first)
     .first-row
         - groups_first_row.each do |group|
-            = render Display::TaxonomyCardComponent.new(taxonomy: group)
+            = render Display::TaxonomyCardComponent.new(taxonomy: group, ontologies_names: @ontologies_names)
     .second-row
         - groups_second_row.each do |group|
-            = render Display::TaxonomyCardComponent.new(taxonomy: group)
+            = render Display::TaxonomyCardComponent.new(taxonomy: group, ontologies_names: @ontologies_names)

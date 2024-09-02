@@ -1,6 +1,7 @@
 class Display::TaxonomyCardComponent < ViewComponent::Base
-  def initialize(taxonomy:)
+  def initialize(taxonomy: , ontologies_names: )
     @taxonomy = taxonomy
+    @ontologies_names = ontologies_names
   end
 
   def reveal_id

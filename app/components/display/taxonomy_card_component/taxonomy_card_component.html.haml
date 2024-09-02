@@ -12,7 +12,7 @@
     = @taxonomy.description
   .ontologies-cards
     - @taxonomy.ontologies.each do |ontology|
-      = render(ChipButtonComponent.new(text: ontology.split('/').last, type: "static"))
+      = render(ChipButtonComponent.new(url: "/ontologies/#{ontology.split('/').last}", text: ontology.split('/').last, tooltip: @ontologies_names[ontology], type: "clickable"))
   - if @taxonomy.children
     .taxonomy-children-reveal{'data-action': "click->reveal-component#toggle", 'data-id': reveal_id}
       .text
@@ -22,4 +22,4 @@
       .taxonomy-children-line
       .taxonomy-children.d-none{id: reveal_id}
         - @taxonomy.children.each do |child|
-          = render Display::TaxonomyCardComponent.new(taxonomy: child)
+          = render Display::TaxonomyCardComponent.new(taxonomy: child, ontologies_names: @ontologies_names)
