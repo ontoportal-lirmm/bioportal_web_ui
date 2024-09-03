@@ -2,6 +2,7 @@
 
 class Display::HeaderComponent < ViewComponent::Base
 
+  include ComponentsHelper
 
 
   def initialize(text: nil, tooltip: nil)

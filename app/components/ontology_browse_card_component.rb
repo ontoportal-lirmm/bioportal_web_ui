@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class OntologyBrowseCardComponent < ViewComponent::Base
-  include OntologiesHelper
+  include ApplicationHelper, OntologiesHelper, FederationHelper
 
   def initialize(ontology: nil, onto_link: nil, text_color: nil, bg_light_color: nil, portal_name: nil)
     super
@@ -17,11 +17,7 @@ class OntologyBrowseCardComponent < ViewComponent::Base
   end
 
   def external_ontology?
-    !@portal_name.blank?
-  end
-
-  def external_portal_name
-    @portal_name
+    !internal_ontology?(@ontology[:id]) || (Array(@ontology[:sources]).size > 1)
   end
 
   def onto_link
