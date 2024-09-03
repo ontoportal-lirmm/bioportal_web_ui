@@ -1,6 +1,8 @@
 module SubmissionFilter
   extend ActiveSupport::Concern
 
+  include FederationHelper
+
   BROWSE_ATTRIBUTES = ['ontology', 'submissionStatus', 'description', 'pullLocation', 'creationDate',
                        'contact', 'released', 'naturalLanguage', 'hasOntologyLanguage',
                        'hasFormalityLevel', 'isOfType', 'deprecated', 'status', 'metrics']
@@ -43,7 +45,10 @@ module SubmissionFilter
                groups: request_params[:group], categories: request_params[:hasDomain],
                formats: request_params[:hasOntologyLanguage] }
 
-    submissions = filter_using_data(@ontologies, **params)
+    submissions = filter_submissions(@ontologies, **params)
+
+    submissions = merge_by_acronym(submissions)
+
 
     submissions = sort_submission_by(submissions, @sort_by, @search)
 
@@ -60,10 +65,25 @@ module SubmissionFilter
 
   private
 
-  def filter_using_data(ontologies, query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
+  def merge_by_acronym(submissions)
+    merged_submissions = []
+    submissions.group_by { |x| x[:ontology]&.acronym }.each do |acronym, ontologies|
+      if ontologies.size.eql?(1)
+        ontology = ontologies.first
+      else
+        ontology = ontologies.select { |x| helpers.internal_ontology?(x[:id]) }.first || ontologies.first
+      end
+
+      ontology[:sources] = ontologies.map { |x| x[:id] }
+      merged_submissions << ontology
+    end
+    merged_submissions
+  end
+
+  def filter_submissions(ontologies, query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
     submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: true, display_links: false, display_context: false)
 
-    submissions = submissions.map { |x| x[:ontology] ? [x[:ontology][:id], x] : nil}.compact.to_h
+    submissions = submissions.map { |x| x[:ontology] ? [x[:ontology][:id], x] : nil }.compact.to_h
 
     submissions = ontologies.map { |ont| ontology_hash(ont, submissions) }
 
@@ -111,7 +131,7 @@ module SubmissionFilter
   end
 
   def sort_submission_by(submissions, sort_by, query = nil)
-    return submissions.sort_by { |x| x[:rank] ? -x[:rank] : 0}  unless query.blank?
+    return submissions.sort_by { |x| x[:rank] ? -x[:rank] : 0 } unless query.blank?
 
     if sort_by.eql?('visits')
       submissions = submissions.sort_by { |x| -(x[:popularity] || 0) }
@@ -221,7 +241,7 @@ module SubmissionFilter
 
     o[:note_count] = ont.notes&.length || 0
     o[:project_count] = ont.projects&.length || 0
-    o[:popularity] = @analytics[ont.id.to_s] || 0
+    o[:popularity] = @analytics[ont.id.split('/').last.to_s] || 0
     o[:rank] = sub ? sub[:rank] : 0
 
     o
