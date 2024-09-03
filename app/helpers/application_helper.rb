@@ -543,4 +543,11 @@ module ApplicationHelper
       end
     end
   end
+
+  def browse_taxonomy_tooltip(texonomy)
+    content_tag(:div, class: 'd-flex') do
+      content_tag(:div, "More about #{texonomy} in #{portal_name}", class: 'mr-1') +
+      content_tag(:a, 'here', href: "/#{texonomy}", target: '_blank')
+    end
+  end
 end
