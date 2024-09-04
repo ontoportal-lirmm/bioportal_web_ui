@@ -22,7 +22,7 @@
       = properties_dropdown('person_and_organization',t("ontologies.sections.person_and_organization"),'', @agents_properties) do |values|
         = horizontal_list_container(values) do |v|
           = agent_chip_component(v)
-            
+
       = properties_dropdown('link',t("ontologies.sections.other_links"), t("ontologies.sections.info_tooltip_links") , @links_properties) do |values|
         = horizontal_list_container(values) do |v|
           = render LinkFieldComponent.new(value: v, raw: true)
@@ -51,11 +51,10 @@
             = Array(@content_properties['metadataVoc']).map{|x| metadata_vocabulary_display(x)}.join.html_safe
       = render Layout::CardComponent.new do |c|
         - c.header do  |h|
-          - h.text do
-            = t("ontologies.sections.visits")
-            - if visits_data(@ontology)
-              = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", title: t("ontologies.sections.download_as_csv")) do
-                = inline_svg("summary/download.svg", width: '30px', height: '20px')
+          = t("ontologies.sections.visits")
+          - if visits_data(@ontology)
+            = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", title: t("ontologies.sections.download_as_csv")) do
+              = inline_svg("summary/download.svg", width: '30px', height: '20px')
 
         = render Layout::ListComponent.new do |l|
           - l.row do
@@ -64,9 +63,8 @@
       - unless @ontology.view?
         = render Layout::CardComponent.new do |d|
           - d.header do |h|
-            - h.text do
-              = t("ontologies.sections.views", acronym: @ontology.acronym)
-              = new_element_link(t("ontologies.sections.create_new_view"), new_view_path(@ontology.id))
+            = t("ontologies.sections.views", acronym: @ontology.acronym)
+            = new_element_link(t("ontologies.sections.create_new_view"), new_view_path(@ontology.id))
           = render Layout::ListComponent.new do |l|
             - l.row do
               = render partial: 'ontology_views'

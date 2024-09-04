@@ -41,7 +41,7 @@ module ApplicationHelper
   def ontologies_analytics
     begin
       data = LinkedData::Client::Analytics.last_month.onts
-      data.map{|x| [x[:ont].to_s, x[:views]]}.to_h
+      data.map{|x| [x[:ont].split('/').last.to_s, x[:views]]}.to_h
     rescue StandardError
       {}
     end
