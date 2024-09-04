@@ -9,7 +9,7 @@
     .number-of-ontologies
       = "#{@taxonomy.ontologies.length} ontologies"
   .description
-    = @taxonomy.description
+    = render TextAreaFieldComponent.new(value: @taxonomy.description)
   .ontologies-cards
     - @taxonomy.ontologies.each do |ontology|
       = render(ChipButtonComponent.new(url: "/ontologies/#{ontology.split('/').last}", text: ontology.split('/').last, tooltip: @ontologies_names[ontology], type: "clickable"))
