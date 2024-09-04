@@ -51,6 +51,15 @@ class HomeController < ApplicationController
     render 'cookies', layout: nil
   end
 
+  def portal_config
+    @config = $PORTALS_INSTANCES.select { |x| x[:name].downcase.eql?((params[:portal] || helpers.portal_name).downcase) }.first
+    if @config && @config[:api]
+      @portal_config = LinkedData::Client::Models::Ontology.top_level_links(@config[:api]).to_h
+    else
+      @portal_config = {}
+    end
+  end
+
   def tools
     @tools = {
       search: {
