@@ -354,11 +354,11 @@ en:
     notice_feedback: Feedback has been sent
     account_title: Account Information
     agroportal_figures: "%{site} in figures"
-    benefit1: Discover new insights and knowledge by exploring other ontologies or semantic resources in the repository.
-    benefit2: Contribute to knowledge sharing and semantic interoperability in your domain.
-    benefit3: Map your ontology to other relevant ones in the domain and collaborate with other users.
-    benefit4: Get feedback and suggestions from other users who can use and comment on your ontology.
-    benefit5: Precisely describe your ontology with relevant metadata and get a FAIR score for your ontology.
+    benefit1: Browse, search and get recommendations for ontologies relevant to your research.
+    benefit2: Submit and share your ontologies with the community, gaining automatic access to all available services.
+    benefit3: Annotate text using terms from standardized ontologies.
+    benefit4: Retrieve and store information from ontologies directly in your local information system.
+    benefit5: Programmatically access ontologies content to create semantically enriched applications.
     fair_details: See details
     fairness: FAIR Score
     get_annotations: Get annotations
@@ -367,11 +367,11 @@ en:
       tagline: The home of ontologies and semantic artefacts in biodiversity and related domains.
       title: Welcome to %{site}
       welcome: Welcome to %{site},
-    ontology_upload: Do you want to share an ontology?
-    ontology_upload_benefits: 'By uploading and sharing your ontology to %{site}, you can:'
+    ontology_upload: What are the benefits of using %{site}?
+    ontology_upload_benefits: 'By using %{site}, you can:'
     ontology_upload_button: Submit ontology
     discover_ontologies_button: Discover ontologies
-    ontology_upload_desc: Uploading an ontology or another type of semantic artefact (vocabulary, terminology, thesaurus, ...) is a way of sharing your knowledge with others.
+    ontology_upload_desc: BiodivPortal offers access to a wide range of biodiversity-related ontologies, including vocabularies, taxonomies, and thesauri.
     paste_text_prompt: Enter a paragraph of text or some keywords...
     recommender_annotator: Recommender and Annotator
     support_and_collaborations: Support & Collaborations
