@@ -16,8 +16,8 @@ class HomeController < ApplicationController
                    @analytics.keys.size
                  end
 
-    metrics = LinkedData::Client::Models::Metrics.all
-    metrics = metrics.each_with_object(Hash.new(0)) do |h, sum|
+    all_metrics = LinkedData::Client::Models::Metrics.all
+    metrics = all_metrics.each_with_object(Hash.new(0)) do |h, sum|
       h.to_hash.slice(:classes, :properties, :individuals).each { |k, v| sum[k] += v }
     end
     @slices = LinkedData::Client::Models::Slice.all
@@ -39,10 +39,18 @@ class HomeController < ApplicationController
 
     @anal_ont_names = []
     @anal_ont_numbers = []
-    @analytics.sort_by{|ont, count| -count}[0..4].each do |ont, count|
-      @anal_ont_names << ont
-      @anal_ont_numbers << count
+    if @analytics.empty?
+      all_metrics.sort_by{|x| -(x.classes + x.individuals)}[0..4].each do |x|
+        @anal_ont_names << x.links["ontology"].split('/').last
+        @anal_ont_numbers << x.classes + x.individuals
+      end
+    else
+      @analytics.sort_by{|ont, count| -count}[0..4].each do |ont, count|
+        @anal_ont_names << ont
+        @anal_ont_numbers << count
+      end
     end
+
 
   end
 

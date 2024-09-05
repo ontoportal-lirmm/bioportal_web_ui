@@ -1474,6 +1474,7 @@ fr:
     ontology_visits: Visites de l'ontologie
     name: nom
     visits: visites
+    count: concepts
 
   ontologies_selector:
     clear_selection: Effacer la sélection
