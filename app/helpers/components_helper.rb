@@ -90,7 +90,7 @@ module ComponentsHelper
 
 
   def resolvability_check_tag(url)
-    content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;', onClick: "window.open('#{check_resolvability_url(url: url)}', '_blank');")
+    content_tag(:span, check_resolvability_container(url),  class: 'resolvability-check',style: 'display: inline-block;', onClick: "window.open('#{check_resolvability_url(url: url)}', '_blank');")
   end
 
   def rounded_button_component(link)
