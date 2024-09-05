@@ -13,7 +13,7 @@ require 'ontologies_api_client'
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-  include InternationalisationHelper
+  include InternationalisationHelper, MultiLanguagesHelper
 
   before_action :set_locale
 
@@ -26,6 +26,9 @@ class ApplicationController < ActionController::Base
     I18n.locale = cookies[:locale] || detect_locale
     cookies.permanent[:locale] = I18n.locale if cookies[:locale].nil?
     logger.debug "* Locale set to '#{I18n.locale}'"
+
+    I18n.locale = portal_lang if portal_language_enabled?(I18n.locale)
+
     session[:locale] = I18n.locale
   end
 
