@@ -104,8 +104,8 @@ module OntologiesHelper
     end
   end
 
-  def ontologies_filter_url(filters, page: 1, count: false)
-    url = 'ontologies_filter?'
+  def ontologies_with_filters_url(filters, page: 1, count: false)
+    url = '/ontologies_filter?'
     url += "page=#{page}" if page
     url += "count=#{page}" if count
     if filters
