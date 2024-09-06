@@ -15,7 +15,6 @@ class Admin::CategoriesController < ApplicationController
 
   def new
     @category = LinkedData::Client::Models::Category.new
-    @categories_for_select = categories_for_select
     respond_to do |format|
       format.html { render "new", :layout => false }
     end
@@ -23,7 +22,6 @@ class Admin::CategoriesController < ApplicationController
 
   def edit
     @category = _category
-    @categories_for_select = categories_for_select
     @acronyms = @category.ontologies.map { |url| url.match(/\/([^\/]+)$/)[1] }
     @ontologies_category = LinkedData::Client::Models::Ontology.all(include: 'name,acronym').map {|x| ["#{x.name} (#{x.acronym})", x.id.to_s]}
     respond_to do |format|

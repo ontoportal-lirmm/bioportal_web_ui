@@ -543,4 +543,9 @@ module ApplicationHelper
       end
     end
   end
+
+  def categories_select(id: nil, name: nil, selected: 'None')
+    categories_for_select = LinkedData::Client::Models::Category.all.map{|x| ["#{x.name} (#{x.acronym})", x.id]}.unshift(["None", ''])
+    render Input::SelectComponent.new(id: id, name: name, value: categories_for_select, selected: selected)
+  end
 end
