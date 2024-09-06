@@ -13,6 +13,7 @@ class SearchController < ApplicationController
     @advanced_options_open = false
     @search_results = []
     @json_url = json_link("#{rest_url}/search", {})
+    params[:portals] = params[:portals]&.join(',')
 
     return if @search_query.empty?
 
@@ -25,7 +26,7 @@ class SearchController < ApplicationController
     results = LinkedData::Client::Models::Class.search(@search_query, params)
 
     results = results.collection unless is_federate
-    
+
     @advanced_options_open = !search_params_empty?
     @search_results = aggregate_results(@search_query, results, is_federate)
     @json_url = json_link("#{rest_url}/search", params.permit!.to_h)
@@ -148,7 +149,7 @@ class SearchController < ApplicationController
     [
       :ontologies, :categories,
       :also_search_properties, :also_search_obsolete, :also_search_views,
-      :require_exact_match, :require_definition
+      :require_exact_match, :require_definition, :portals
     ]
   end
 

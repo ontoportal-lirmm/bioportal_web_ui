@@ -72,4 +72,14 @@ class Display::SearchResultComponent < ViewComponent::Base
       inline_svg_tag("icons/arrow-down.svg")
     end
   end
+
+  def portal_button(name: nil , color: nil , light_color: nil)
+    content_tag(:div, class: 'button icon-right', style: color ? "background-color: #{light_color} !important" : '') do
+      inline_svg_tag('logos/ontoportal.svg') +
+      content_tag(:div, class: 'text', style: color ? "color: #{color} !important" : '') do
+        name.humanize
+      end
+    end
+
+  end
 end
