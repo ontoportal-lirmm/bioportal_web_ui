@@ -134,8 +134,4 @@ class Admin::CategoriesController < ApplicationController
   def _category(id = params[:id])
     LinkedData::Client::HTTP.get(CATEGORIES_URL+ "/#{id.split('/').last}", { include: ATTRIBUTE_TO_INCLUDE })
   end
-
-  def categories_for_select
-    categories = LinkedData::Client::Models::Category.all.map{|x| ["#{x.name} (#{x.acronym})", x.id]}.unshift(["None", ''])
-  end
 end

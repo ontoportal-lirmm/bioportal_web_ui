@@ -438,6 +438,10 @@ class ApplicationController < ActionController::Base
     return base_url + optional_params_str + "&apikey=#{$API_KEY}"
   end
 
+  def categories_for_select
+    categories = LinkedData::Client::Models::Category.all.map{|x| ["#{x.name} (#{x.acronym})", x.id]}.unshift(["None", ''])
+  end
+
   private
   def not_found_record(exception)
     @error_message = exception.message
