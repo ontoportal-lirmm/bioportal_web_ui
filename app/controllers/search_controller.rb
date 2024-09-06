@@ -18,12 +18,14 @@ class SearchController < ApplicationController
 
     params[:pagesize] = "150"
 
-    is_federate = params[:federate]
+    set_federated_portals
+
+    is_federate = params[:federate] || params[:portals]
 
     results = LinkedData::Client::Models::Class.search(@search_query, params)
 
     results = results.collection unless is_federate
-
+    
     @advanced_options_open = !search_params_empty?
     @search_results = aggregate_results(@search_query, results, is_federate)
     @json_url = json_link("#{rest_url}/search", params.permit!.to_h)

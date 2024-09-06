@@ -468,6 +468,10 @@ class ApplicationController < ActionController::Base
     optional_params_str = filtered_params.map { |param, value| "#{param}=#{value}" }.join("&")
     return base_url + optional_params_str + "&apikey=#{$API_KEY}"
   end
+  
+  def set_federated_portals
+    RequestStore.store[:federated_portals] =  params[:portals]&.split(',')
+  end
 
   private
   def not_found_record(exception)
