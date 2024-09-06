@@ -9,7 +9,7 @@ export default class extends Controller {
     }
     connect(){
         this.contentTarget
-        if(this.contentTarget.offsetHeight<this.heightValue && this.contentTarget.offsetHeight!=0){
+        if(this.contentTarget.offsetHeight<this.heightValue){
             this.revealbuttonTarget.classList.add('d-none') 
         }
     }
