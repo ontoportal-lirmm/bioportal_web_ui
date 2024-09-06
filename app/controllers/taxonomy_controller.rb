@@ -4,14 +4,11 @@ class TaxonomyController < ApplicationController
 
   def index
     initialize_taxonomy
+    @category_section_active = request.path.eql?('/categories')
   end
 
-  def categories
-    initialize_taxonomy
-    @category_section_active = true
-    render 'index'
-  end
-
+  private
+  
   def initialize_taxonomy
     @groups = LinkedData::Client::Models::Group.all
     slices = LinkedData::Client::Models::Slice.all

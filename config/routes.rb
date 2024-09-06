@@ -208,7 +208,7 @@ Rails.application.routes.draw do
   post '/login/send_pass', to: 'login#send_pass'
 
   get '/groups' => 'taxonomy#index'
-  get '/categories' => 'taxonomy#categories'
+  get '/categories' => 'taxonomy#index'
 
   # Search
   get 'search', to: 'search#index'
