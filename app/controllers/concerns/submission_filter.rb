@@ -61,8 +61,8 @@ module SubmissionFilter
     [@page.collection, @page.totalCount, count, filter_params]
   end
 
-  def ontologies_filter_url(filters, page: 1, count: false)
-    helpers.ontologies_filter_url(filters, page: page, count: count)
+  def ontologies_with_filters_url(filters, page: 1, count: false)
+    helpers.ontologies_with_filters_url(filters, page: page, count: count)
   end
 
   private
