@@ -99,41 +99,6 @@ $SITE_NOTICE = {}
 $ORG_SITE = $ORG.nil? || $ORG.empty? ? $SITE : "#{$ORG} #{$SITE}"
 
 $HOME_PAGE_LOGOS = [
-  {
-    img_src: 'logos/supports/numev.png',
-    url: 'http://www.lirmm.fr/numev',
-    target: '_blank'
-  },
-  {
-    img_src: 'logos/supports/anr.png',
-    url: 'https://anr.fr/en',
-    target: '_blank'
-  },
-  {
-    img_src: 'logos/supports/eu.png',
-    url: 'https://commission.europa.eu/research-and-innovation_en',
-    target: '_blank'
-  },
-  {
-    img_src: 'logos/collaboration/d2kab.png',
-    url: 'http://d2kab.mystrikingly.com',
-    target: '_blank'
-  },
-  {
-    img_src: 'logos/collaboration/lirmm.png',
-    url: 'http://www.lirmm.fr',
-    target: '_blank'
-  },
-  {
-    img_src: 'logos/collaboration/inrae.png',
-    url: 'https://www.inrae.fr/enm',
-    target: '_blank'
-  },
-  {
-    img_src: 'logos/collaboration/stanford.png',
-    url: 'https://www.stanford.edu',
-    target: '_blank'
-  }
 ]
 
 $FOOTER_LINKS = {

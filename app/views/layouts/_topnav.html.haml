@@ -52,12 +52,13 @@
               = t('layout.header.support')
           - d.with_section(divide: false) do |s|
             - s.item do
-              = link_to(t('layout.header.submit_feedback'), feedback_path(location: encode_param(request.url)), id: "submitFeedbackMenuItem", class: "pop_window")
+              = link_to(t('layout.header.submit_feedback'), 'https://www.nfdi4biodiversity.org/en/contact/', target: "_blank")
           - d.with_section do |s|
             - s.item do
               = link_to(t('layout.header.documentation'), $FOOTER_LINKS[:sections][:support][:documentation] , target: "_blank")
             - s.item do
-              = link_to(t('layout.header.cite_us'), $FOOTER_LINKS[:sections][:about][:cite_us], target: "_blank")
-            - s.item do
-              = link_to(t('layout.header.release_notes'), $FOOTER_LINKS[:sections][:products][:release_notes], target: "_blank")
+              = link_to(t('layout.header.cite_us'), "/about", target: "_blank")
+            - if $FOOTER_LINKS[:sections][:products][:release_notes]
+              - s.item do
+                = link_to(t('layout.header.release_notes'), $FOOTER_LINKS[:sections][:products][:release_notes], target: "_blank")
 
