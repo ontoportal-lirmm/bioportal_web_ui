@@ -97,3 +97,16 @@
     width: 1px;
     background-color: var(--primary-color);
 }
+
+.taxonomy-section {
+    .tab-content > .tab-pane {
+        visibility: hidden !important;
+        display: block !important;
+        position: absolute;
+    }
+    .tab-content > .active {
+        visibility: visible !important;
+        display: block;
+        position: unset;
+    }
+}
