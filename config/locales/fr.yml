@@ -1302,6 +1302,7 @@ fr:
       community: Communauté
       content: Contenu
       info_tooltip_properties_dropdown: Propriétés de métadonnées englobant principalement la conception, les méthodes et les actions pour créer l'ontologie. Cela inclut des éléments tels que les outils et logiciels utilisés par le créateur de l'ontologie lors de sa configuration.
+      info_tooltip_community_dropdown: Propriétés des métadonnées liées aux informations communautaires telles que le dépôt de code et le suivi des problèmes, la liste de diffusion ou le public cible. Cela inclut également les Groupes dans %{site}. Voir plus d'informations sur les Groupes et les Catégories.
       visits: Visites
       views: Vues de %{acronym}
       create_new_view: Créer une nouvelle vue

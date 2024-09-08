@@ -1276,6 +1276,7 @@ en:
       community: Community
       content: Content
       info_tooltip_properties_dropdown: Metadata properties primarily encompass the design, methods, and actions to create the ontology. This includes elements such as the tools and software employed by the creator of the ontology during its configuration.
+      info_tooltip_community_dropdown: Metadata properties related to community information such as the code repository and issue tracker, the mailing list or the target audience. This includes also the Groups in %{site}. See more information about Groups and Categories.
       visits: Visits
       views: Views of %{acronym}
       create_new_view: Create new view
