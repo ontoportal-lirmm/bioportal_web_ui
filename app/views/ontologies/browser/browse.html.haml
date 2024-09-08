@@ -56,7 +56,11 @@
                       = browse_filter_section_label(key)
                       %span.badge.badge-primary{"data-show-filter-count-target":"countSpan", style: "#{values[2] && values[2].positive? ? '' : 'display: none;'}"}
                         = values[2]
-                    = inline_svg_tag 'arrow-down.svg'
+                    .d-flex.align-items-center
+                      - if key.eql?(:categories) || key.eql?(:groups)
+                        .mr-2
+                          = render Display::InfoTooltipComponent.new(text: browse_taxonomy_tooltip(key.to_s))
+                      = inline_svg_tag 'arrow-down.svg'
                   .collapse{id: "browse-#{key}-filter", class: "#{values[2].positive? ? 'show': ''}"}
                     .browse-filter-checks-container
                       - values.first.each do |object|

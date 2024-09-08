@@ -15,7 +15,6 @@ class Admin::CategoriesController < ApplicationController
 
   def new
     @category = LinkedData::Client::Models::Category.new
-
     respond_to do |format|
       format.html { render "new", :layout => false }
     end

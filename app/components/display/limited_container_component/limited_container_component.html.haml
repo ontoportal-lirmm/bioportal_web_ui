@@ -1,0 +1,6 @@
+%div{'data-controller': 'limited-container', 'data-limited-container-height-value': @max_height}
+    .limited-container-component{'data-limited-container-target': "content", style: "max-height: #{@max_height}px; overflow: hidden;"}
+        = content
+
+    .reveal-button{'data-limited-container-target': "revealbutton", 'data-action': "click->limited-container#toggle"}
+        = revealButton
