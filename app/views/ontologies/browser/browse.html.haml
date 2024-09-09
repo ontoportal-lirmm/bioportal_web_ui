@@ -50,16 +50,19 @@
 
             - @filters.each do |key, values|
               - if session[:user]&.admin? ||  key != :missingStatus
-                %div{data:{controller: "show-filter-count browse-filters", action: "change->show-filter-count#updateCount change->browse-filters#dispatchFilterEvent"}, id: "#{key}_filter_container"}
-                  = render DropdownContainerComponent.new(id: "browse-#{key}-filter", is_open: values[2].positive?) do |d|
-                    - d.title do
-                      = render Display::HeaderComponent.new do
-                        %span
-                          = browse_filter_section_label(key)
-                        %span.badge.badge-primary{"data-show-filter-count-target":"countSpan", style: "#{values[2] && values[2].positive? ? '' : 'display: none;'}"}
-                          = values[2]
-
-                    .browse-filter-checks-container.px-1
+                .browse-filter{data:{controller: "show-filter-count browse-filters", action: "change->show-filter-count#updateCount change->browse-filters#dispatchFilterEvent"}, id: "#{key}_filter_container", style: "#{"border-color: var(--admin-color);" if key == :missingStatus}"}
+                  .browse-filter-title-bar{"data-target" => "#browse-#{key}-filter", "data-toggle" => "collapse"}
+                    %p
+                      = browse_filter_section_label(key)
+                      %span.badge.badge-primary{"data-show-filter-count-target":"countSpan", style: "#{values[2] && values[2].positive? ? '' : 'display: none;'}"}
+                        = values[2]
+                    .d-flex.align-items-center
+                      - if key.eql?(:categories) || key.eql?(:groups)
+                        .mr-2
+                          = render Display::InfoTooltipComponent.new(text: browse_taxonomy_tooltip(key.to_s))
+                      = inline_svg_tag 'arrow-down.svg'
+                  .collapse{id: "browse-#{key}-filter", class: "#{values[2].positive? ? 'show': ''}"}
+                    .browse-filter-checks-container
                       - values.first.each do |object|
                         - title = (key.eql?(:categories) || key.eql?(:groups)) ? nil : ''
                         = group_chip_component(name: key, object: object, checked: [link_last_part(object["id"]),link_last_part(object["value"])].include?(values[1]) , title: title) do |c|

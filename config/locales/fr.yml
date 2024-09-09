@@ -209,6 +209,7 @@ fr:
         description: Description
         created: Créé
         ontologies: Ontologies
+        parent_category: Catégorie parent
       edit:
         edit_category: Modifier la catégorie
         save: Sauvegarder
@@ -1301,6 +1302,7 @@ fr:
       community: Communauté
       content: Contenu
       info_tooltip_properties_dropdown: Propriétés de métadonnées englobant principalement la conception, les méthodes et les actions pour créer l'ontologie. Cela inclut des éléments tels que les outils et logiciels utilisés par le créateur de l'ontologie lors de sa configuration.
+      info_tooltip_community_dropdown: Propriétés des métadonnées liées aux informations communautaires telles que le dépôt de code et le suivi des problèmes, la liste de diffusion ou le public cible. Cela inclut également les Groupes dans %{site}. Voir plus d'informations sur les Groupes et les Catégories.
       visits: Visites
       views: Vues de %{acronym}
       create_new_view: Créer une nouvelle vue
@@ -1530,3 +1532,7 @@ fr:
     paragraph2: "Les cookies sont fonctionnels et non facultatifs. En restant sur %{portal}, vous reconnaissez que les informations vous ont été transmises."
     accept_button: "Accepter"
     privacy_link: "Vie privé"
+  taxonomy:
+    groups_and_categories: Groupes et Catégories
+    description: Dans AgroPortal, les ontologies sont organisées en groupes et étiquetées avec des catégories. Typiquement, les groupes associent des ontologies provenant du même projet ou de la même organisation pour une meilleure identification de la provenance. Tandis que les catégories concernent des sujets/thématiques et permettent de classifier les ontologies. En 2016, les catégories d'AgroPortal ont été établies en coopération avec FAO AIMS. En 2024, nous sommes passés à la nomenclature de l'UNESCO pour les domaines des sciences et des technologies. Les groupes et les catégories, ainsi que d'autres métadonnées, peuvent être utilisés sur la page “Parcourir” d'AgroPortal pour filtrer la liste des ontologies.
+    show_sub_categories: Afficher les sous-catégories

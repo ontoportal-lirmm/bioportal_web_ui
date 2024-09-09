@@ -68,7 +68,7 @@ module SearchAggregator
 
     {
       uri: class_object.id.to_s,
-      title: title.empty? ? label : "#{label} - #{title}",
+      title: title.nil? || title.empty? ? "#{label} - #{ontology_acronym}" : "#{label} - #{title}",
       ontology_acronym: ontology_acronym,
       link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{helpers.request_lang&.eql?("ALL") ? '' : "&language="+helpers.request_lang.to_s}",
       definition:  class_object.definition
@@ -78,7 +78,7 @@ module SearchAggregator
 
   def ontology_name_acronym(ontologies, selected_acronym)
     ontology = ontologies.select { |x| x.acronym.eql?(selected_acronym.split('/').last) }.first
-    "#{ontology.name} (#{ontology.acronym})"
+    "#{ontology.name} (#{ontology.acronym})" if ontology
   end
 
   def aggregate_by_ontology(results)
