@@ -10,11 +10,10 @@
       = "#{@taxonomy.ontologies.length} ontologies"
   .description
     = render TextAreaFieldComponent.new(value: @taxonomy.description)
-  = render Display::LimitedContainerComponent.new(max_height: '90') do |c|
+  .ontologies-cards
     - @taxonomy.ontologies.each do |ontology|
       = render ChipButtonComponent.new(url: "/ontologies/#{ontology.split('/').last}", text: ontology.split('/').last, tooltip: @ontologies_names[ontology], type: "clickable")
-    - c.revealButton do
-      = render ChipButtonComponent.new(text: '...', type: "clickable", tooltip: "See all the ontologies")
+
   - if @taxonomy.children
     .taxonomy-children-reveal{'data-action': "click->reveal-component#toggle", 'data-id': reveal_id}
       .text
