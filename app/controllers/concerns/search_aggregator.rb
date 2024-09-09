@@ -30,8 +30,21 @@ module SearchAggregator
 
     all_ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', include_views: true, display_links: false, display_context: false, federate: is_federate)
 
-    grouped_results.map do |group|
+    search_results = grouped_results.map do |group|
       format_search_result(group, all_ontologies)
+    end
+
+    search_results.each do |element|
+      element[:root][:other_portals] = []
+      element[:reuses].reject! do |reuse|
+        if element[:root][:title] == reuse[:root][:title]
+          portal_name = reuse[:root][:portal_name]
+          element[:root][:other_portals] << {name: portal_name, color: federated_portal_color(portal_name), light_color: federated_portal_light_color(portal_name)}
+          true
+        else
+          false
+        end
+      end
     end
   end
 

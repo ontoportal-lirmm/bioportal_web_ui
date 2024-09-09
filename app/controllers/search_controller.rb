@@ -29,6 +29,8 @@ class SearchController < ApplicationController
 
     @advanced_options_open = !search_params_empty?
     @search_results = aggregate_results(@search_query, results, is_federate)
+
+
     @json_url = json_link("#{rest_url}/search", params.permit!.to_h)
   end
 

@@ -5,7 +5,7 @@ class Display::SearchResultComponent < ViewComponent::Base
 
   renders_many :subresults, Display::SearchResultComponent
   renders_many :reuses, Display::SearchResultComponent
-  def initialize(number: 0,title: nil, ontology_acronym: nil ,uri: nil, definition: nil, link: nil,  is_sub_component: false, portal_name: nil, portal_color: nil, portal_light_color: nil)
+  def initialize(number: 0,title: nil, ontology_acronym: nil ,uri: nil, definition: nil, link: nil,  is_sub_component: false, portal_name: nil, portal_color: nil, portal_light_color: nil, other_portals: [])
       @title = title
       @uri = uri
       @definition = definition
@@ -16,6 +16,7 @@ class Display::SearchResultComponent < ViewComponent::Base
       @portal_name = portal_name
       @portal_color = portal_color
       @portal_light_color = portal_light_color
+      @other_portals = other_portals
   end
 
   def sub_component_class
