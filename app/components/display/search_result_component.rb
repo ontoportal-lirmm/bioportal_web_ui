@@ -78,7 +78,7 @@ class Display::SearchResultComponent < ViewComponent::Base
     content_tag(:div, class: 'button icon-right', style: color ? "background-color: #{light_color} !important" : '') do
       inline_svg_tag('logos/ontoportal.svg') +
       content_tag(:div, class: 'text', style: color ? "color: #{color} !important" : '') do
-        name.humanize
+        name.humanize.gsub("portal", "Portal")
       end
     end
 
