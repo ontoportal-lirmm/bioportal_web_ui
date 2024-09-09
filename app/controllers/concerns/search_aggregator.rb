@@ -1,5 +1,6 @@
 module SearchAggregator
   include UrlsHelper, MultiLanguagesHelper, FederationHelper
+  require 'string-similarity'
   extend ActiveSupport::Concern
   BLACKLIST_FIX_STR = [
     "https://",
@@ -34,18 +35,11 @@ module SearchAggregator
       format_search_result(group, all_ontologies)
     end
 
-    search_results.each do |element|
-      element[:root][:other_portals] = []
-      element[:reuses].reject! do |reuse|
-        if element[:root][:title] == reuse[:root][:title]
-          portal_name = reuse[:root][:portal_name]
-          element[:root][:other_portals] << {name: portal_name, color: federated_portal_color(portal_name), light_color: federated_portal_light_color(portal_name)}
-          true
-        else
-          false
-        end
-      end
+    if is_federate
+      search_results = merge_federated_results(search_results)
+      search_results = sort_results_by_string_similarity(query, search_results)
     end
+    search_results
   end
 
   def format_search_result(result, ontologies)
@@ -248,5 +242,27 @@ module SearchAggregator
     end
 
     stripped_id
+  end
+
+  def merge_federated_results(search_results)
+    search_results.each do |element|
+      element[:root][:other_portals] = []
+      element[:reuses].reject! do |reuse|
+        if element[:root][:title] == reuse[:root][:title]
+          portal_name = reuse[:root][:portal_name]
+          element[:root][:other_portals] << {name: portal_name, color: federated_portal_color(portal_name), light_color: federated_portal_light_color(portal_name)}
+          true
+        else
+          false
+        end
+      end
+    end
+  end
+
+  def sort_results_by_string_similarity(query, search_results)
+    search_results = search_results.sort_by do |entry|
+      root_similarity = String::Similarity.cosine(query, entry[:root][:title].split('-').first.gsub(" ", "").downcase)
+      -root_similarity
+    end
   end
 end

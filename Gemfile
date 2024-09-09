@@ -88,6 +88,9 @@ gem 'view_component', '~> 2.72'
 # Pagination library for Rails
 gem 'will_paginate', '~> 3.0'
 
+# String similarity
+gem 'string-similarity'
+
 # Render SVG files in Rails views
 gem 'inline_svg'
 gem "iso-639", "~> 0.3.6"
