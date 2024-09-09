@@ -25,7 +25,7 @@ import Table_component_controller from '../../components/table_component/table_c
 import clipboard_component_controller from '../../components/clipboard_component/clipboard_component_controller'
 import range_slider_component_controller from '../../components/input/range_slider_component/range_slider_component_controller'
 import RDFHighlighter from '../../components/display/rdf_highlighter_component/rdf_highlighter_component_controller'
-
+import limited_container_component_controller from '../../components/display/limited_container_component/limited_container_component_controller'
 
 application.register("rdf-highlighter", RDFHighlighter)
 application.register('turbo-modal', TurboModalController)
@@ -43,3 +43,4 @@ application.register('reveal-component', Reveal_component_controller)
 application.register('table-component', Table_component_controller)
 application.register('clipboard', clipboard_component_controller)
 application.register('range-slider', range_slider_component_controller)
+application.register('limited-container', limited_container_component_controller)
