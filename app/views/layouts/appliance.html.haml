@@ -26,7 +26,7 @@
 
   %body{:class => "#{controller_name} #{action_name}"}
     = render partial: "layouts/topnav"
-    = turbo_frame_tag :cookies_modal, src: cookies_path if session[:cookies_accepted].nil?
+    = turbo_frame_tag :cookies_modal, src: cookies_path if cookies[:cookies_accepted].nil?
 
     %div.flex-grow-1
       = render partial: "layouts/notices"

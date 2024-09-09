@@ -57,7 +57,7 @@
 </head>
 <body class="<%= controller_name %> <%= action_name %>">
 <%= render partial: 'layouts/topnav' %>
-<%= turbo_frame_tag :cookies_modal, src: cookies_path if session[:cookies_accepted].nil? && !(Rails.env.development? || Rails.env.test?) %>
+<%= turbo_frame_tag :cookies_modal, src: cookies_path if cookies[:cookies_accepted].nil? && !(Rails.env.development? || Rails.env.test?) %>
 
 <div class="flex-grow-1">
 <%= render partial: 'layouts/notices' %>
