@@ -203,6 +203,7 @@ en:
         description: Description
         created: Created
         ontologies: Ontologies
+        parent_category: Parent category
       edit:
         edit_category: Edit category
         save: Save
@@ -1275,6 +1276,7 @@ en:
       community: Community
       content: Content
       info_tooltip_properties_dropdown: Metadata properties primarily encompass the design, methods, and actions to create the ontology. This includes elements such as the tools and software employed by the creator of the ontology during its configuration.
+      info_tooltip_community_dropdown: Metadata properties related to community information such as the code repository and issue tracker, the mailing list or the target audience. This includes also the Groups in %{site}. See more information about Groups and Categories.
       visits: Visits
       views: Views of %{acronym}
       create_new_view: Create new view
@@ -1436,6 +1438,8 @@ en:
     preferred_name: Preferred name
     definitions: Definitions
     parent: Parent
+    domain: Domain
+    range: Range
     no_properties_alert: "%{acronym} does not contain properties"
   visits:
     ontology_visits: Ontology visits
@@ -1489,3 +1493,7 @@ en:
     paragraph2: "The cookies are functional and non-optional. By staying on %{portal}, you acknowledge the information was delivered to you."
     accept_button: "Accept"
     privacy_link: "Privacy policy"
+  taxonomy:
+    groups_and_categories: Groups and Categories
+    description: In AgroPortal, ontologies are organized in groups and tagged with categories. Typically, groups associate ontologies from the same project or organization for better identification of the provenance. Whereas categories are about subjects/topics and enable to classify ontologies. As of 2016, AgroPortal's categories were established in cooperation with FAO AIMS. In 2024, we moved to UNESCO nomenclature for fields of science and technology. Groups and categories, along with other metadata, can be used on the “Browse” page of AgroPortal to filter out the list of ontologies.
+    show_sub_categories: Show sub categories

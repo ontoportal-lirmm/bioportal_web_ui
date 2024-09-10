@@ -780,5 +780,12 @@ module OntologiesHelper
     id.split('/').last
   end
 
+  def browse_taxonomy_tooltip(texonomy)
+    content_tag(:div, class: 'd-flex') do
+      content_tag(:div, "See more information about #{texonomy} in ", class: 'mr-1') +
+        content_tag(:a, 'here', href: "/#{texonomy}", target: '_blank')
+    end
+  end
+
 
 end
