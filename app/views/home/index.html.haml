@@ -65,6 +65,57 @@
 
   .home-section
     %h4
+      = t('home.agroportal_figures', site: portal_name)
+    %hr.home-section-line/
+    .home-statistics-container
+      .home-statistics
+        .home-statistics-item
+          %hr/
+          %div
+            %h4
+              = format_number_abbreviated(@ont_count)
+            %p= t("home.ontologies")
+        .home-statistics-item
+          %hr/
+          %div
+            %h4
+              = format_number_abbreviated(@cls_count)
+            %p= t("home.classes")
+        .home-statistics-item
+          %hr/
+          %div
+            %h4
+              = format_number_abbreviated(@individuals_count)
+            %p= t("home.individuals")
+        .home-statistics-item
+          %hr/
+          %div
+            %h4
+              = format_number_abbreviated(@prop_count)
+            %p= t("home.properties")
+        .home-statistics-item
+          %hr/
+          %div
+            %h4
+              = format_number_abbreviated(@projects_count)
+            %p= t("home.projects")
+        .home-statistics-item
+          %hr/
+          %div
+            %h4
+              = format_number_abbreviated(@map_count)
+            %p= t("home.mappings")
+        .home-statistics-item
+          %hr/
+          %div
+            %h4
+              = format_number_abbreviated(@users_count)
+            %p= t("home.users")
+      .home-statistics-link.justify-content-end{style: @analytics.empty? && "visibility: hidden"}
+        = link_to t("home.see_details"),'/statistics', target: "_blank"
+
+  .home-section
+    %h4
       = t('home.recommender_annotator')
     %hr.home-section-line/
     .home-card{'data-controller': 'sample-text'}
@@ -116,67 +167,17 @@
               %div.home-fair-details
                 %p= t('home.fair_details')
          
-      .home-sub-section-right
-        %h4= t('home.twitter_news')
-        %hr.home-section-line
-        .home-card.home-twitter-news
-          %a.twitter-timeline{"data-height" => "360", :href => "https://twitter.com/lagroportal?ref_src=twsrc%5Etfw"}
-            .home-twitter-loader 
-              = render LoaderComponent.new(type: 'pulsing')
-          %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
+      - unless $TWITTER_NEWS.blank?
+        .home-sub-section-right
+          %h4= t('home.twitter_news')
+          %hr.home-section-line
+          .home-card.home-twitter-news
+            %a.twitter-timeline{"data-height" => "360", :href => $TWITTER_NEWS}
+              .home-twitter-loader
+                = render LoaderComponent.new(type: 'pulsing')
+            %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
 
-  .home-section
-    %h4
-      = t('home.agroportal_figures', site: portal_name)
-    %hr.home-section-line/
-    .home-statistics-container
-      .home-statistics
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@ont_count)
-            %p= t("home.ontologies")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@cls_count)
-            %p= t("home.classes")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@individuals_count)
-            %p= t("home.individuals")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@prop_count)
-            %p= t("home.properties")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@projects_count)
-            %p= t("home.projects")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@map_count)
-            %p= t("home.mappings")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@users_count)
-            %p= t("home.users")
-      .home-statistics-link.justify-content-end{style: @analytics.empty? && "visibility: hidden"}
-        = link_to t("home.see_details"),'/statistics', target: "_blank"
-
-  - if @slices
+  - unless @slices.blank?
     .home-section
       .home-section-title
         .text
