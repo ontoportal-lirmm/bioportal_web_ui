@@ -1,10 +1,10 @@
 GIT
   remote: https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git
-  revision: 24fb2549f7b69841e052491439bc8375ed5acfd9
-  branch: master
+  revision: 15ad7d41d9a414ed3570c073c2b75a3fb4cc19cf
+  branch: development
   specs:
     ontologies_api_client (2.2.0)
-      activesupport
+      activesupport (~> 7.0.4)
       excon
       faraday
       faraday-excon (~> 2.0.0)
@@ -12,6 +12,8 @@ GIT
       lz4-ruby
       multi_json
       oj
+      parallel
+      request_store
       spawnling (= 2.1.5)
 
 GEM
@@ -420,6 +422,8 @@ GEM
     regexp_parser (2.9.2)
     reline (0.5.10)
       io-console (~> 0.5)
+    request_store (1.7.0)
+      rack (>= 1.4)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -485,7 +489,7 @@ GEM
     simplecov-cobertura (2.1.0)
       rexml
       simplecov (~> 0.19)
-    simplecov-html (0.13.0)
+    simplecov-html (0.13.1)
     simplecov_json_formatter (0.1.4)
     snaky_hash (2.0.1)
       hashie
