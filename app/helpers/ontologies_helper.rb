@@ -104,8 +104,8 @@ module OntologiesHelper
     end
   end
 
-  def ontologies_filter_url(filters, page: 1, count: false)
-    url = 'ontologies_filter?'
+  def ontologies_with_filters_url(filters, page: 1, count: false)
+    url = '/ontologies_filter?'
     url += "page=#{page}" if page
     url += "count=#{page}" if count
     if filters
@@ -778,6 +778,13 @@ module OntologiesHelper
 
   def id_to_acronym(id)
     id.split('/').last
+  end
+
+  def browse_taxonomy_tooltip(texonomy)
+    content_tag(:div, class: 'd-flex') do
+      content_tag(:div, "See more information about #{texonomy} in ", class: 'mr-1') +
+        content_tag(:a, 'here', href: "/#{texonomy}", target: '_blank')
+    end
   end
 
 

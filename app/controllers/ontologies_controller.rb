@@ -559,4 +559,15 @@ class OntologiesController < ApplicationController
     end
   end
 
+  def search_first_instance_id
+    query, page, page_size = helpers.search_content_params
+    results, _, _, _ = search_ontologies_content(query: query,
+                        page: page,
+                        page_size: page_size,
+                        filter_by_ontologies: [@ontology.acronym],
+                        filter_by_types: ["NamedIndividual"])
+    results.shift # Remove the ontology entry
+    return !results.blank? ? results.first[:name] : nil
+  end
+
 end

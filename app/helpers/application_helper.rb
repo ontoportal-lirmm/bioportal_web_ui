@@ -41,7 +41,7 @@ module ApplicationHelper
   def ontologies_analytics
     begin
       data = LinkedData::Client::Analytics.last_month.onts
-      data.map{|x| [x[:ont].to_s, x[:views]]}.to_h
+      data.map{|x| [x[:ont].split('/').last.to_s, x[:views]]}.to_h
     rescue StandardError
       {}
     end
@@ -154,35 +154,7 @@ module ApplicationHelper
   def at_slice?
     !@subdomain_filter.nil? && !@subdomain_filter[:active].nil? && @subdomain_filter[:active] == true
   end
-
-
-  # TODO this helper is not used but can be usefully
-  def truncate_with_more(text, options = {})
-    length ||= options[:length] ||= 30
-    trailing_text ||= options[:trailing_text] ||= " ... "
-    link_more ||= options[:link_more] ||= "[more]"
-    link_less ||= options[:link_less] ||= "[less]"
-    more_text = " <a href='javascript:void(0);' class='truncated_more'>#{link_more}</a></span><span class='truncated_less'>#{text} <a href='javascript:void(0);' class='truncated_less'>#{link_less}</a></span>"
-    more = text.length > length ? more_text : "</span>"
-    output = "<span class='more_less_container'><span class='truncated_more'>#{truncate(text, :length => length, :omission => trailing_text)}" + more + "</span>"
-  end
-
-  def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, &block)
-    content_tag(:div, data: { controller: 'tooltip' }, title: tooltip) do
-      check_input(id: id, name: name, value: value, label: label, checked: checked, &block)
-    end
-  end
-
-  def group_chip_component(id: nil, name: , object: , checked: , value: nil, title: nil, &block)
-    title ||= "#{object["name"]} (#{object["id"]})"
-    value ||= (object["value"] || object["acronym"] || object["id"])
-
-    chips_component(id: id || value, name: name, label: object["acronym"],
-                    checked: checked,
-                    value: value, tooltip: title, &block)
-  end
-  alias  :category_chip_component :group_chip_component
-
+  
   def add_comment_button(parent_id, parent_type)
     if session[:user].nil?
       link_to t('application.add_comment'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim"
@@ -571,4 +543,8 @@ module ApplicationHelper
     end
   end
 
+  def categories_select(id: nil, name: nil, selected: 'None')
+    categories_for_select = LinkedData::Client::Models::Category.all.map{|x| ["#{x.name} (#{x.acronym})", x.id]}.unshift(["None", ''])
+    render Input::SelectComponent.new(id: id, name: name, value: categories_for_select, selected: selected)
+  end
 end

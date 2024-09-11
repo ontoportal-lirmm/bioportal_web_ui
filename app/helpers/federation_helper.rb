@@ -1,11 +1,24 @@
 module FederationHelper
 
   def federated_portals
-    $FEDERATED_PORTALS || {}
+    $FEDERATED_PORTALS ||= LinkedData::Client.settings.federated_portals
+  end
+
+  def internal_portal_config(id)
+    return unless internal_ontology?(id)
+
+    {
+      name: portal_name,
+      api: rest_url,
+      apikey: $API_KEY,
+      ui: $UI_URL,
+      color: "var(--primary-color)",
+      'light-color': 'var(--light-color)',
+    }
   end
 
   def federated_portal_config(name_key)
-    $FEDERATED_PORTALS[name_key.to_sym]
+    federated_portals[name_key.to_sym]
   end
 
   def federated_portal_name(key)
@@ -23,14 +36,10 @@ module FederationHelper
     config[:'light-color'] if config
   end
 
-  def portal_name_from_uri(uri)
-    URI.parse(uri).hostname.split('.').first
-  end
-
 
   def ontology_portal_config(id)
     rest_url = id.split('/')[0..-3].join('/')
-    $FEDERATED_PORTALS.select{|_, config| config[:api].start_with?(rest_url)}.first
+    federated_portals.select{|_, config| config[:api].start_with?(rest_url)}.first
   end
 
   def ontology_portal_name(id)
@@ -56,7 +65,7 @@ module FederationHelper
   end
 
   def internal_ontology?(id)
-    id.start_with?(helpers.rest_url)
+    id.start_with?(rest_url)
   end
 
   def federated_ontology?(id)

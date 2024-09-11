@@ -180,33 +180,6 @@ class ApplicationController < ActionController::Base
     helpers.request_portals
   end
 
-  def check_http_file(url)
-    session = Net::HTTP.new(url.host, url.port)
-    session.use_ssl = true if url.port == 443
-    session.start do |http|
-      response_valid = http.head(url.request_uri).code.to_i < 400
-      return response_valid
-    end
-  end
-
-  def check_ftp_file(uri)
-    ftp = Net::FTP.new(uri.host, uri.user, uri.password)
-    ftp.login
-    begin
-      file_exists = ftp.size(uri.path) > 0
-    rescue
-      # Check using another method
-      path = uri.path.split("/")
-      filename = path.pop
-      path = path.join("/")
-      ftp.chdir(path)
-      files = ftp.dir
-      # Dumb check, just see if the filename is somewhere in the list
-      files.each { |file| return true if file.include?(filename) }
-    end
-    file_exists
-  end
-
   def parse_response_body(response)
     return nil if response.nil?
 

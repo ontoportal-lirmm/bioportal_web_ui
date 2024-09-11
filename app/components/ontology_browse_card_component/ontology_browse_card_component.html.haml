@@ -7,7 +7,7 @@
             = ontology[:name]+" ("+ontology[:acronym]+")"
             = private_ontology_icon(ontology[:private])
             - if external_ontology?
-              = render Display::InfoTooltipComponent.new(text: "Federated ontology from #{onto_link}", icon: 'external-link.svg')
+              = render Display::InfoTooltipComponent.new(text: "Federated ontology from #{ontology[:sources].map{|x| link_to(x,x)}.join(', ')}", icon: 'external-link.svg')
             - if session[:user]&.admin?
               - ontology_status = status_string(ontology)
               = render Display::InfoTooltipComponent.new(text: ontology_status, icon: submission_status_icons(ontology_status))
@@ -18,7 +18,7 @@
             = t('components.show_more')
 
 
-          - unless ontology[:fairScore].nil? || ontology[:acronym] == 'AGROVOC'
+          - unless ontology[:fairScore].nil? || ontology[:fairScore].zero? || ontology[:acronym] == 'AGROVOC'
             .browse-fair
               %p.browse-fair-title
                 = t('components.fair_score')
@@ -45,7 +45,7 @@
                                           link: "#{onto_link}?p=notes" )
 
 
-    .d-flex.align-items-baseline.mt-1
+    .d-flex.w-100.mt-1.flex-wrap
       - if ontology[:creationDate]
         %span.mr-1
           = render ChipButtonComponent.new(type: "clickable", style: style_bg) do
@@ -74,13 +74,17 @@
           = render ChipButtonComponent.new(type: "clickable", text: t('components.view'), style: style_bg)
 
       - if external_ontology?
-        %div.mx-1{title: content_tag(:div, "Source #{external_portal_name}"), data:{controller: 'tooltip', 'tooltip-interactive-value': 'true'}}
-          = render ChipButtonComponent.new(type: "clickable" , style: style_bg) do
-            %span.d-inline
-              %span.mr-1
-                = inline_svg 'logo-white.svg', width: "20", height: "20"
-              %span
-                = external_portal_name
+        - ontology[:sources].each do |id|
+          - config = ontology_portal_config(id)&.last || internal_portal_config(id) || {}
+          - unless config.blank?
+            %div.mx-1{title: content_tag(:div, "Source #{config[:name]}"), data:{controller: 'tooltip', 'tooltip-interactive-value': 'true'}}
+              = render ChipButtonComponent.new(type: "clickable" , style: style_bg) do
+                = link_to ontoportal_ui_link(id), target: '_top' do
+                  %span.d-inline
+                    %span.mr-1
+                      = inline_svg 'logo-white.svg', width: "20", height: "20"
+                    %span
+                      = config[:name]
 
       - if session[:user]&.admin?
         %div.mx-1{title: content_tag(:div, debug(ontology), style: 'height: 300px; overflow: scroll'), data:{controller: 'tooltip', 'tooltip-interactive-value': 'true'}}

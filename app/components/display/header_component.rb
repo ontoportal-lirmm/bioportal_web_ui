@@ -4,7 +4,6 @@ class Display::HeaderComponent < ViewComponent::Base
 
   include ComponentsHelper
 
-  renders_one :text
 
 
   def initialize(text: nil, tooltip: nil)
