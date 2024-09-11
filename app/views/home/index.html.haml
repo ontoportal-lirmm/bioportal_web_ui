@@ -23,17 +23,17 @@
       %a.h5{href:"/ontologies/#{@anal_ont_names[0]}", style: "color: white !important"}
         = @anal_ont_names[0]
       %p 
-        = @anal_ont_numbers[0].to_s + " " + t('visits.visits')
+        = format_number_abbreviated(@anal_ont_numbers[0]) + " " + (@analytics.empty? ?  t('visits.count') :  t('visits.visits'))
     .home-bubble.home-bubble-two
       %a.h5{href:"/ontologies/#{@anal_ont_names[1]}", style: "color: white !important"}
         = @anal_ont_names[1]
       %p 
-        = @anal_ont_numbers[1].to_s + " " + t('visits.visits')
+        = format_number_abbreviated(@anal_ont_numbers[1]) + " " + (@analytics.empty? ?  t('visits.count') :  t('visits.visits'))
     .home-bubble.home-bubble-three
       %a.h5{href:"/ontologies/#{@anal_ont_names[2]}", style: "color: white !important"}
         = @anal_ont_names[2]
       %p 
-        = @anal_ont_numbers[2].to_s + " " + t('visits.visits')
+        = format_number_abbreviated(@anal_ont_numbers[2]) + " " + (@analytics.empty? ?  t('visits.count') :  t('visits.visits'))
     %a.home-bubble.home-bubble-four{:href => "/visits"}
       .h5 ...
 
@@ -47,7 +47,7 @@
  
 .home-body-container
   .home-section
-    %h4= t('home.ontology_upload')
+    %h4= t('home.ontology_upload', site: portal_name)
     %hr.home-section-line/
     %p= t('home.ontology_upload_desc')
     %p= t('home.ontology_upload_benefits', site: $SITE)
