@@ -1,5 +1,5 @@
 = turbo_frame_tag :cookies_modal do
-  - if session[:cookies_accepted].nil? # don't re-render if a true/false selected
+  - if cookies[:cookies_accepted].nil? # don't re-render if a true/false selected
     %section.cookies-modal
       %h4
         = t('cookies_modal.title')

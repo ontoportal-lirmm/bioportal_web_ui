@@ -36,7 +36,7 @@
             document.querySelector("[data-target='#projects_section']")?.click()
         }
       = properties_dropdown('methodology',t("ontologies.sections.methodology_and_provenance"), t("ontologies.sections.info_tooltip_properties_dropdown"), @methodology_properties)
-      = properties_dropdown('community',t("ontologies.sections.community"), t("ontologies.sections.info_tooltip_properties_dropdown"), nil ) do |c|
+      = properties_dropdown('community',t("ontologies.sections.community"), t("ontologies.sections.info_tooltip_community_dropdown", site: portal_name), nil ) do |c|
         - properties_list_component(c, @community_properties, truncate: false)
         - unless Array(@ontology.group).empty?
           - c.row do
@@ -44,7 +44,7 @@
               = horizontal_list_container(@ontology.group) do |v|
                 = render ChipButtonComponent.new(text: show_group_name(v), type: "static", tooltip: show_group_name(v))
 
-      = properties_dropdown('content',t("ontologies.sections.content"), t("ontologies.sections.info_tooltip_properties_dropdown"), nil) do |c|
+      = properties_dropdown('content',t("ontologies.sections.content"), t("ontologies.sections.info_tooltip_properties_dropdown", site: portal_name), nil) do |c|
         - properties_list_component(c, @content_properties.reject{|k, v| %w[keyClasses metadataVoc].include?(k.to_s)})
         - c.row do
           = render FieldContainerComponent.new(label: attr_label('metadataVoc', attr_metadata: attr_metadata("metadataVoc"), show_tooltip: false)) do

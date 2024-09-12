@@ -1,4 +1,4 @@
-- if Rails.env.appliance?
+- if session[:user]&.admin? && Rails.env.appliance?
   = license_notification(current_license())
 
 - flash.each do |key, message|

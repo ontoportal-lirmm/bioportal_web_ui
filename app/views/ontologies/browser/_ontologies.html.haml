@@ -1,6 +1,6 @@
 = render InfiniteScrollComponent.new(id: 'ontologies_list',
                                     collection: @ontologies,
-                                    next_url: ontologies_filter_url(@request_params, page: @page.nextPage),
+                                    next_url: ontologies_with_filters_url(@request_params, page: @page.nextPage),
                                     current_page: @page.page, next_page: @page.nextPage) do |c|
 
   - if @page.page.eql?(1)

@@ -17,11 +17,7 @@ class OntologyBrowseCardComponent < ViewComponent::Base
   end
 
   def external_ontology?
-    !@portal_name.blank?
-  end
-
-  def external_portal_name
-    @portal_name
+    !internal_ontology?(@ontology[:id]) || (Array(@ontology[:sources]).size > 1)
   end
 
   def onto_link

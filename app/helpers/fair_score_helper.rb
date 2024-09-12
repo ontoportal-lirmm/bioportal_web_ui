@@ -16,18 +16,22 @@ module FairScoreHelper
     if Rails.cache.exist?("fairness-#{ontologies_acronyms.gsub(',', '-')}-#{apikey}")
       out = read_large_data("fairness-#{ontologies_acronyms.gsub(',', '-')}-#{apikey}")
     else
-      out = "{}"
+      out = '{}'
       begin
         time = Benchmark.realtime do
           conn = Faraday.new do |conn|
             conn.options.timeout = 30
           end
           response = conn.get(get_fairness_service_url(apikey) + "&ontologies=#{ontologies_acronyms}&combined")
-          out = response.body.force_encoding('ISO-8859-1').encode('UTF-8')
-          cache_large_data("fairness-#{ontologies_acronyms.gsub(',', '-')}-#{apikey}", out)
+          if response.status.eql?(200)
+            out = response.body.force_encoding('ISO-8859-1').encode('UTF-8')
+            unless out.empty? || out.strip.eql?('{}')
+              cache_large_data("fairness-#{ontologies_acronyms.gsub(',', '-')}-#{apikey}", out)
+            end
+          end
         end
         puts "Call fairness service for: #{ontologies_acronyms} (#{time}s)"
-      rescue
+      rescue StandardError
         Rails.logger.warn t('fair_score.fairness_unreachable_warning')
       end
     end
@@ -140,7 +144,7 @@ module FairScoreHelper
   def fairness_link(style: '', ontology: nil)
     custom_style = "font-size: 50px; line-height: 0.5; margin-left: 6px; #{style}".strip
     ontology = ontology || 'all'
-    render IconWithTooltipComponent.new(icon: "json.svg",link: "#{get_fairness_service_url}&ontologies=#{ontology}&combined=true", target: '_blank', title: t('fair_score.go_to_api'), size:'small', style: custom_style)  
+    render IconWithTooltipComponent.new(icon: 'json.svg',link: "#{get_fairness_service_url}&ontologies=#{ontology}&combined=true", target: '_blank', title: t('fair_score.go_to_api'), size:'small', style: custom_style)  
   end
 
   private
