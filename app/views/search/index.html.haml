@@ -17,7 +17,7 @@
                 = ontologies_selector(id:'search_page_ontologies' ,name: 'ontologies[]', selected:  params[:ontologies]&.split(','))
             .filter-container
               .title 
-                Results from external portals
+                = t('federation.results_from_external_portals')
               .field.d-flex  
                 - federated_portals.each do |key, config|
                   = group_chip_component(name: "portals[]", object: { "acronym" => config[:name], "value" => key }, checked: request_portals.include?(key.to_s), title: '')

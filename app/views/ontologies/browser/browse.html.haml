@@ -72,7 +72,7 @@
                               %span.show-if-loading
                                 = render LoaderComponent.new(small:true)
           %div{data:{controller: "show-filter-count browse-filters", action: "change->show-filter-count#updateCount change->browse-filters#dispatchFilterEvent"}, id: "portals_filter_container"}
-            = render DropdownContainerComponent.new(id: "browse-portal-filter", is_open: !request_portals.empty?, title: "Results from external portals") do
+            = render DropdownContainerComponent.new(id: "browse-portal-filter", is_open: !request_portals.empty?, title: t('federation.results_from_external_portals')) do
               .browse-filter-checks-container.px-1
                 - federated_portals.each do |key, config|
                   = group_chip_component(name: "portals", object: { "acronym" => config[:name], "value" => key }, checked: request_portals.include?(key.to_s), title: '')
