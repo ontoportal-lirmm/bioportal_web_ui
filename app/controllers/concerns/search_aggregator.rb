@@ -29,7 +29,7 @@ module SearchAggregator
     ontologies = aggregate_by_ontology(results)
     grouped_results = add_subordinate_ontologies(query, ontologies)
 
-    all_ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', include_views: true, display_links: false, display_context: false, federate: is_federate)
+    all_ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', include_views: true, display_links: false, display_context: false)
 
     search_results = grouped_results.map do |group|
       format_search_result(group, all_ontologies)

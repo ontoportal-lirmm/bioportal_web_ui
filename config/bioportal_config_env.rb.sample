@@ -262,7 +262,7 @@ $PORTALS_INSTANCES = [
     name: 'AgroPortal',
     api: 'https://data.agroportal.lirmm.fr',
     ui: 'https://agroportal.lirmm.fr/',
-    color: '#349696',
+    color: '#3CB371',
     apikey: '1de0a270-29c5-4dda-b043-7c3580628cd5',
     'light-color': '#F1F6FA',
   },
@@ -277,14 +277,17 @@ $PORTALS_INSTANCES = [
   {
     name: 'SIFR BioPortal',
     ui: 'https://bioportal.lirmm.fr/',
+    api: 'https://data.bioportal.lirmm.fr/',
+    apikey: '1de0a270-29c5-4dda-b043-7c3580628cd5',
     color: '#74a9cb',
+    'light-color': '#E9F2FA',
   },
   {
     name: 'EcoPortal',
     ui: 'https://ecoportal.lifewatch.eu/',
     api: 'https://data.ecoportal.lifewatch.eu/',
     apikey: "43a437ba-a437-4bf0-affd-ab520e584719",
-    color: '#0d508a',
+    color: '#2076C9',
     'light-color': '#E9F2FA',
   },
   {
@@ -300,25 +303,36 @@ $PORTALS_INSTANCES = [
   {
     name: 'IndustryPortal',
     ui: 'http://industryportal.enit.fr',
+    api: 'https://data.industryportal.enit.fr/',
+    apikey: '019adb70-1d64-41b7-8f6e-8f7e5eb54942',
     color: '#1c0f5d',
+    'light-color': '#F0F5F6',
   },
   {
     name: 'EarthPortal',
     ui: 'https://earthportal.eu/',
     api: 'https://data.earthportal.eu/',
     apikey: "c9147279-954f-41bd-b068-da9b0c441288",
-    color: '#1e2251',
+    color: '#404696',
     'light-color': '#F0F5F6'
+  },
+  {
+    name: 'TestPortal',
+    ui: 'https://testportal.lirmm.fr/',
+    api: 'https://data.testportal.lirmm.fr/',
+    color: '#74a9cb',
+    apikey: '1de0a270-29c5-4dda-b043-7c3580628cd5',
   },
   {
     name: 'BiodivPortal',
     ui: 'https://biodivportal.gfbio.org/',
     api: 'https://data.biodivportal.gfbio.org/',
     apikey: "47a57aa3-7b54-4f34-b695-dbb5f5b7363e",
-    color: '#33691B',
+    color: '#349696',
     'light-color': '#EBF5F5',
   }
 ]
+
 
 $ONTOPORTAL_WEBSITE_LINK = "https://ontoportal.org/"
 $ONTOPORTAL_GITHUB_REPO = "https://github.com/ontoportal"
