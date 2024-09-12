@@ -21,6 +21,10 @@ module FederationHelper
     federated_portals[name_key.to_sym]
   end
 
+  def portal_name_from_uri(uri)
+    URI.parse(uri).hostname.split('.').first
+  end
+
   def federated_portal_name(key)
     config = federated_portal_config(key)
     config ? config[:name] : key

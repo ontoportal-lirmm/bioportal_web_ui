@@ -213,6 +213,50 @@ $HOME_PAGE_LOGOS = [
 
 
 # Federation configuration
+$FEDERATED_PORTALS = {
+  bioportal: {
+    name: "BioPortal",
+    api: 'https://data.bioontology.org/',
+    ui: 'https://bioportal.bioontology.org/',
+    apikey: '8b5b7825-538d-40e0-9e9e-5ab9274a9aeb',
+    color: '#234979',
+    'light-color': '#E9F2FA',
+  },
+  agroportal: {
+    name: "AgroPortal",
+    api: 'https://data.agroportal.lirmm.fr',
+    ui: 'https://agroportal.lirmm.fr',
+    apikey: '1de0a270-29c5-4dda-b043-7c3580628cd5',
+    color: '#349696',
+    'light-color': '#F1F6FA',
+  },
+  ecoportal: {
+    name: "EcoPortal",
+    api: 'https://data.ecoportal.lifewatch.eu/',
+    ui: 'https://ecoportal.lifewatch.eu',
+    apikey: "43a437ba-a437-4bf0-affd-ab520e584719",
+    color: '#2076C9',
+    'light-color': '#E9F2FA',
+  },
+  # earthportal: {
+  #   name: 'EarthPortal',
+  #   api: 'https://earthportal.eu:8443/',
+  #   ui: 'https://earthportal.eu',
+  #   apikey: "c9147279-954f-41bd-b068-da9b0c441288",
+  #   color: '#404696',
+  #   'light-color': '#404696'
+  # },
+  biodivportal: {
+    name: "BioDivPortal",
+    api: 'https://data.biodivportal.gfbio.org/',
+    ui: 'https://biodivportal.gfbio.org/',
+    apikey: "47a57aa3-7b54-4f34-b695-dbb5f5b7363e",
+    color: '#349696',
+    'light-color': '#EBF5F5',
+  }
+}
+
+
 $PORTALS_INSTANCES = [
   {
     name: 'AgroPortal',
