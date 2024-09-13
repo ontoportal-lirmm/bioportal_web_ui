@@ -40,7 +40,7 @@
         .search-page-options{class:  @search_results.empty? ? 'justify-content-end': ''}
           - unless @search_results.empty?
             .search-page-number-of-results
-              = "#{t('search.match_in')} #{@search_results.length} #{t('search.ontologies')}"
+              = "#{t('search.match_in')} #{@search_results.length} #{t('search.ontologies')} (#{sprintf("%.2f", @time)}s)"
           %div.d-flex
             .search-page-json.mx-4.mt-1
               = search_json_link
