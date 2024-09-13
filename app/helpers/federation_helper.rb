@@ -98,4 +98,8 @@ module FederationHelper
       content_tag(:span, federated_portal_name(name), style: color ? "color: #{color}" :  "", class: color ? "" : "text-primary")
     end.compact
   end
+
+  def federatation_enabled?
+    params[:federate] || params[:portals]
+  end
 end

@@ -25,7 +25,7 @@ module SearchAggregator
     /semanticweb/i
   ]
 
-  def aggregate_results(query, results, is_federate)
+  def aggregate_results(query, results)
     ontologies = aggregate_by_ontology(results)
     grouped_results = add_subordinate_ontologies(query, ontologies)
 
@@ -35,7 +35,7 @@ module SearchAggregator
       format_search_result(group, all_ontologies)
     end
 
-    if is_federate
+    if federatation_enabled?
       search_results = merge_federated_results(search_results)
       search_results = sort_results_by_string_similarity(query, search_results)
     end
@@ -72,18 +72,22 @@ module SearchAggregator
   end
   def search_result_elem(class_object, ontology_acronym, title)
     label = search_concept_label(class_object.prefLabel)
-    internal_class_link = "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{helpers.request_lang&.eql?("ALL") ? '' : "&language="+helpers.request_lang.to_s}"
-    link = is_federation_external_class(class_object) ? class_object.links['ui'] : internal_class_link
-    portal_name = portal_name_from_uri(class_object.links['ui'])
+    request_lang = helpers.request_lang&.eql?("ALL") ? '' : "&language=#{helpers.request_lang}"
+    internal_class_link = "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{request_lang}"
+
+    is_external = is_federation_external_class(class_object)
+    link = is_external ? class_object.links['ui'] : internal_class_link
+    portal_name = is_external ? portal_name_from_uri(class_object.links['ui']) : nil
+
     {
       uri: class_object.id.to_s,
-      title: title.nil? || title.empty? ? "#{label} - #{ontology_acronym}" : "#{label} - #{title}",
+      title: title.to_s.empty? ? "#{label} - #{ontology_acronym}" : "#{label} - #{title}",
       ontology_acronym: ontology_acronym,
       link: link,
-      definition:  class_object.definition,
-      portal_name: is_federation_external_class(class_object) ? portal_name : nil,
-      portal_color: is_federation_external_class(class_object) ? federated_portal_color(portal_name) : nil,
-      portal_light_color: is_federation_external_class(class_object) ? federated_portal_light_color(portal_name) : nil
+      definition: class_object.definition,
+      portal_name: portal_name,
+      portal_color: is_external ? federated_portal_color(portal_name) : nil,
+      portal_light_color: is_external ? federated_portal_light_color(portal_name) : nil
     }
   end
 
@@ -248,7 +252,7 @@ module SearchAggregator
     search_results.each do |element|
       element[:root][:other_portals] = []
       element[:reuses].reject! do |reuse|
-        if element[:root][:title] == reuse[:root][:title]
+        if (element[:root][:ontology_acronym] == reuse[:root][:ontology_acronym]) && (element[:root][:uri] == reuse[:root][:uri])
           portal_name = reuse[:root][:portal_name]
           element[:root][:other_portals] << {name: portal_name, color: federated_portal_color(portal_name), light_color: federated_portal_light_color(portal_name)}
           true
