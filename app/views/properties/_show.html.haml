@@ -1,4 +1,4 @@
-= render TurboFrameComponent.new(id: 'property_show') do
+= render TurboFrameComponent.new(id: 'property_show', data: {"turbo-frame-target": "frame"}) do
   - if @property
     - if @property.errors
       = render Display::AlertComponent.new(type:'info', message: @property.errors.join)

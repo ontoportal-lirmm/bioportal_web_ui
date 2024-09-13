@@ -10,5 +10,4 @@
                                    tree_url:  "/ontologies/#{@ontology.acronym}/properties?propertyid=#{escape(params[:propertyid])}&ontology=#{@ontology.acronym}&auto_click=false&language=#{request_lang}")
 
       %div#prop_contents{data: {'container-splitter-target': 'container'}}
-        = render TurboFrameComponent.new(id: "properties_data") do
-          = render partial: 'properties/show', locals: { property: @property, acronym: @ontology}
+        = render partial: 'properties/show', locals: { property: @property, acronym: @ontology}
