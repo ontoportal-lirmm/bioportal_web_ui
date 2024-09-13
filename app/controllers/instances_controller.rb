@@ -39,8 +39,9 @@ class InstancesController < ApplicationController
     get_ontology(params)
     @instance = get_instance_details_json(params[:ontology], params[:id] || params[:instanceid], {include: 'all'})
 
-    redirect_to(ontology_path(id: params[:ontology], p: 'instances', instanceid: params[:id] || params[:instanceid], lang: request_lang)) 
+    redirect_to(ontology_path(id: params[:ontology], p: 'instances', instanceid: params[:id] || params[:instanceid], lang: request_lang)) and return if turbo_frame_request?
 
+    render partial: 'show'
   end
 
   private
