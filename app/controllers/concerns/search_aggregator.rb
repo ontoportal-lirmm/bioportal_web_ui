@@ -72,18 +72,22 @@ module SearchAggregator
   end
   def search_result_elem(class_object, ontology_acronym, title)
     label = search_concept_label(class_object.prefLabel)
-    internal_class_link = "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{helpers.request_lang&.eql?("ALL") ? '' : "&language="+helpers.request_lang.to_s}"
-    link = is_federation_external_class(class_object) ? class_object.links['ui'] : internal_class_link
-    portal_name = portal_name_from_uri(class_object.links['ui'])
+    request_lang = helpers.request_lang&.eql?("ALL") ? '' : "&language=#{helpers.request_lang}"
+    internal_class_link = "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{request_lang}"
+
+    is_external = is_federation_external_class(class_object)
+    link = is_external ? class_object.links['ui'] : internal_class_link
+    portal_name = is_external ? portal_name_from_uri(class_object.links['ui']) : nil
+
     {
       uri: class_object.id.to_s,
-      title: title.nil? || title.empty? ? "#{label} - #{ontology_acronym}" : "#{label} - #{title}",
+      title: title.to_s.empty? ? "#{label} - #{ontology_acronym}" : "#{label} - #{title}",
       ontology_acronym: ontology_acronym,
       link: link,
-      definition:  class_object.definition,
-      portal_name: is_federation_external_class(class_object) ? portal_name : nil,
-      portal_color: is_federation_external_class(class_object) ? federated_portal_color(portal_name) : nil,
-      portal_light_color: is_federation_external_class(class_object) ? federated_portal_light_color(portal_name) : nil
+      definition: class_object.definition,
+      portal_name: portal_name,
+      portal_color: is_external ? federated_portal_color(portal_name) : nil,
+      portal_light_color: is_external ? federated_portal_light_color(portal_name) : nil
     }
   end
 
