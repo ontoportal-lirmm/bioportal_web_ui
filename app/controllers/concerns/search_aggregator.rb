@@ -265,7 +265,7 @@ module SearchAggregator
 
   def sort_results_by_string_similarity(query, search_results)
     search_results = search_results.sort_by do |entry|
-      root_similarity = String::Similarity.cosine(query, entry[:root][:title].split('-').first.gsub(" ", "").downcase)
+      root_similarity = String::Similarity.cosine(query.downcase, entry[:root][:title].split('-').first.gsub(" ", "").downcase)
       -root_similarity
     end
   end
