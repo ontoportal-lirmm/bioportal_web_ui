@@ -12,6 +12,6 @@
       %div#collection_contents{data:{'container-splitter-target': 'container'}}
         = render TurboFrameComponent.new(id: 'collection') do
           - if @collection
-            = render partial: 'collections/collection', locals: {collection: @collection}
+            = render partial: 'collections/show', locals: {collection: @collection}
 
 
