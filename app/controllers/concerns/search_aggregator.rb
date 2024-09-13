@@ -25,7 +25,7 @@ module SearchAggregator
     /semanticweb/i
   ]
 
-  def aggregate_results(query, results, is_federate)
+  def aggregate_results(query, results)
     ontologies = aggregate_by_ontology(results)
     grouped_results = add_subordinate_ontologies(query, ontologies)
 
@@ -35,7 +35,7 @@ module SearchAggregator
       format_search_result(group, all_ontologies)
     end
 
-    if is_federate
+    if federatation_enabled?
       search_results = merge_federated_results(search_results)
       search_results = sort_results_by_string_similarity(query, search_results)
     end
