@@ -1188,7 +1188,7 @@ fr:
     save: Sauvegarder
 
   ontologies:
-    showing_ontologies_size: "Affichage de %{ontologies_size} sur %{analytics_size}"
+    showing_ontologies_size: "Affichage de %{ontologies_size} sur %{analytics_size} de %{portals}"
     filters: Filtres
     no_license: Pas de licence
     view_license: Voir la licence

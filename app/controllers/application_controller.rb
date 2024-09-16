@@ -175,6 +175,9 @@ class ApplicationController < ActionController::Base
   def rest_url
     helpers.rest_url
   end
+  def request_portals
+    helpers.request_portals
+  end
 
   def parse_response_body(response)
     return nil if response.nil?
