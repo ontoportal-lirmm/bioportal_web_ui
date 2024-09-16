@@ -7,4 +7,5 @@ LinkedData::Client.config do |config|
   config.debug_client = $DEBUG_RUBY_CLIENT || false
   config.debug_client_keys = $DEBUG_RUBY_CLIENT_KEYS || []
   config.apikey = $API_KEY
+  config.federated_portals = $PORTALS_INSTANCES ? $PORTALS_INSTANCES.map{|x| x[:api] && x[:apikey] ? [x[:name].downcase.to_sym, x] : nil }.compact.to_h : {}
 end

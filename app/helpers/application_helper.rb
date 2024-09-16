@@ -41,7 +41,7 @@ module ApplicationHelper
   def ontologies_analytics
     begin
       data = LinkedData::Client::Analytics.last_month.onts
-      data.map{|x| [x[:ont].to_s, x[:views]]}.to_h
+      data.map{|x| [x[:ont].split('/').last.to_s, x[:views]]}.to_h
     rescue StandardError
       {}
     end
@@ -154,8 +154,7 @@ module ApplicationHelper
   def at_slice?
     !@subdomain_filter.nil? && !@subdomain_filter[:active].nil? && @subdomain_filter[:active] == true
   end
-
-
+  
   def add_comment_button(parent_id, parent_type)
     if session[:user].nil?
       link_to t('application.add_comment'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim"

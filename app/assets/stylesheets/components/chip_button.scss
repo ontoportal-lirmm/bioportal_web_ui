@@ -10,6 +10,7 @@
 }
 .chip-button-component-container {
   display: inline-block;
+  text-wrap: nowrap !important;
 }
 .chip-button-component-container svg path{
   fill: var(--primary-color);

@@ -88,15 +88,14 @@ gem 'view_component', '~> 2.72'
 # Pagination library for Rails
 gem 'will_paginate', '~> 3.0'
 
+# String similarity
+gem 'string-similarity'
+
 # Render SVG files in Rails views
 gem 'inline_svg'
-
-# ISO language codes and flags
-gem 'flag-icons-rails', '~> 3.4'
-gem 'iso-639', '~> 0.3.6'
-
-# Custom API client
-gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'master'
+gem "iso-639", "~> 0.3.6"
+gem "flag-icons-rails", "~> 3.4"
+gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'feature/federated-search'
 
 # Ruby 2.7.8 pinned gems (to remove when migrating to Ruby >= 3.0)
 gem 'ffi', '~> 1.16.3'
