@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get 'auth/:provider/callback', to: 'login#create_omniauth'
   get 'locale/:language', to: 'language#set_locale_language'
   get 'metadata_export/index'
+  get '/config', to: 'home#portal_config'
 
   get '/notes/new_comment', to: 'notes#new_comment'
   get '/notes/new_proposal', to: 'notes#new_proposal'

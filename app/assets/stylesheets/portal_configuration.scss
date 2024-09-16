@@ -1,0 +1,68 @@
+
+.portal-configuration{
+  padding: 10px;
+  .portal-configuration-title{
+    h3{
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 0;
+    }
+    span{
+      font-size: 16px;
+    }
+  }
+
+  h4, .home-section-title .text{
+    font-size: 15px !important;
+  }
+
+  p {
+    font-size: 14px;
+  }
+  .home-support-items div {
+    font-size: 12px;
+  }
+  .home-support-items a img {
+    height: 48px;
+    width: 48px;
+  }
+  .home-logo-instances-small{
+    padding: 7px;
+    margin: 2px 5px !important;
+    border-radius: 50%;
+    display: inline-block;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .portal-config-ontologies{
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+  }
+  .portal-config-ontologies svg{
+    width: 14px;
+    height: 14px;
+    margin-right: 4px;
+  }
+  .portal-config-ontologies svg path{
+    fill: var(--primary-color);
+  }
+  .portal-description{
+    font-size: 15px;
+    padding: 11px 0;
+  }
+  .portal-config-federated-with{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+  }
+  .portal-config-title-text{
+    font-weight: 500;
+    font-size: 15px !important;
+  }
+}
