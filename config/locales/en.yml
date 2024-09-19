@@ -303,6 +303,7 @@ en:
               and fungi, in an attempt to replace existing methods of chemical control and avoid extensive use of fungicides, which often lead to resistance in plant pathogens.
               In agriculture, plant growth-promoting and biocontrol microorganisms have emerged as safe alternatives to chemical pesticides. Streptomyces spp. and their
               metabolites may have great potential as excellent agents for controlling various fungal and bacterial phytopathogens.
+    select_ontologies: Select ontologies 
   concepts:
     error_valid_concept: "Error: You must provide a valid concept id"
     missing_roots: Missing roots

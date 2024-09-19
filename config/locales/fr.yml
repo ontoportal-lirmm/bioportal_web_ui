@@ -305,6 +305,7 @@ fr:
       et aériennes, dans le but de remplacer les méthodes actuelles de contrôle chimique et d'éviter l'utilisation extensive de fongicides, qui conduisent souvent à une résistance chez les pathogènes des plantes.
       En agriculture, les microorganismes promoteurs de croissance des plantes et de biocontrôle ont émergé comme des alternatives sûres aux pesticides chimiques. Les espèces de Streptomyces et leurs
       métabolites peuvent avoir un grand potentiel en tant qu'agents excellents pour contrôler divers phytopathogènes fongiques et bactériens.
+    select_ontologies: Sélectionner des ontologies
 
   concepts:
     error_valid_concept: "Erreur : Vous devez fournir un identifiant de concept valide"
