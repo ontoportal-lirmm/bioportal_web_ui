@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git
-  revision: 15ad7d41d9a414ed3570c073c2b75a3fb4cc19cf
+  revision: 670ce6adfe77aeda97974414ab0ed4b6c5dc9469
   branch: development
   specs:
     ontologies_api_client (2.2.0)
@@ -302,7 +302,7 @@ GEM
       time
     net-http (0.3.2)
       uri
-    net-imap (0.4.16)
+    net-imap (0.4.15)
       date
       net-protocol
     net-pop (0.1.2)
@@ -458,7 +458,7 @@ GEM
       rubocop-ast (>= 1.32.2, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.32.3)
+    rubocop-ast (1.32.2)
       parser (>= 3.3.1.0)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
