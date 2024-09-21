@@ -189,8 +189,9 @@ class OntologiesController < ApplicationController
 
   def schemes
     @schemes = get_schemes(@ontology)
-    scheme_id = params[:schemeid] || @submission_latest.URI || nil
-    @scheme = get_scheme(@ontology, scheme_id) if scheme_id
+    scheme_id = params[:schemeid] || nil
+    @scheme = scheme_id ? get_scheme(@ontology, scheme_id) : @schemes.first
+ 
 
     render partial: 'ontologies/sections/schemes', layout: 'ontology_viewer'
   end
