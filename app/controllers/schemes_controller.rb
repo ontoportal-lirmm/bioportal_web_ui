@@ -32,9 +32,10 @@ class SchemesController < ApplicationController
   end
 
   def show
-    redirect_to(ontology_path(id: params[:ontology], p: 'schemes', schemeid: params[:id],lang: request_lang)) and return if turbo_frame_request?
+    redirect_to(ontology_path(id: params[:ontology], p: 'schemes', schemeid: params[:id],lang: request_lang)) and return unless turbo_frame_request?
 
     @scheme = get_request_scheme
+    render partial: "ontologies/sections/schemes"
   end
 
   def show_label

@@ -33,9 +33,9 @@ class PropertiesController < ApplicationController
   def show
     @acronym = params[:ontology]
     @property = get_property(params[:id],  @acronym, include: 'all')
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(@acronym).first
 
-    redirect_to(ontology_path(id: params[:ontology], p: 'properties', propertyid: params[:id], lang: request_lang)) and return if turbo_frame_request?
-
+    redirect_to(ontology_path(id: params[:ontology], p: 'properties', propertyid: params[:id], lang: request_lang)) and return unless turbo_frame_request?
     render partial: 'show'
 
   end

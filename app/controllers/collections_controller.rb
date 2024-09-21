@@ -37,9 +37,11 @@ class CollectionsController < ApplicationController
   end
 
   def show
-    redirect_to(ontology_path(id: params[:ontology], p: 'collections', collectionid: params[:id], lang: request_lang)) and return if turbo_frame_request?
+
+    redirect_to(ontology_path(id: params[:ontology], p: 'collections', collectionid: params[:id], lang: request_lang)) and return unless turbo_frame_request?
 
     @collection = get_request_collection
+    render partial: "ontologies/sections/collections"
   end
 
   def show_label
