@@ -1,0 +1,12 @@
+= render TabsContainerComponent.new(type: 'outline') do |c|
+  - ressourceUrl = "#{@ontology.id}/#{@section_title}/#{escape(@section_content["@id"])}?display=all&apikey=#{apikey}"
+  - c.pinned_right do
+    %div{'data-concepts-json-target': 'button'}
+      .concepts_json_button
+        = render RoundedButtonComponent.new(link: ressourceUrl, target: '_blank')
+
+  - c.item(title: t('concepts.details'), path: '#details', selected: true, json_link: ressourceUrl)
+
+  - c.item_content do
+    - singular_title = @section_title.singularize
+    = render partial: "/#{@section_title}/details", locals: { singular_title.to_sym => @section_content }

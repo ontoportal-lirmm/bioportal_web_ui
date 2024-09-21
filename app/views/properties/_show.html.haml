@@ -3,15 +3,4 @@
     - if @property.errors
       = render Display::AlertComponent.new(type:'info', message: @property.errors.join)
     - else
-      - properties = LinkedData::Client::Models::Property.properties_to_hash(@property).first
-      = render TabsContainerComponent.new(type:'outline') do |c|
-        - apikey = "#{get_apikey}"
-        - c.pinned_right do
-          %div{'data-concepts-json-target': 'button'}
-            .concepts_json_button
-              = render RoundedButtonComponent.new(link: "#{@ontology.id}/properties/#{escape(@property.id)}?display=all&apikey=#{apikey}", target:'_blank')
-
-        - c.item(title: t('concepts.details'), path: '#details', selected: true, json_link: "#{@ontology.id}/properties/#{escape(@property.id)}?display=all&apikey=#{apikey}") 
-
-        - c.item_content do
-          = render :partial =>'/properties/details'
+      = render TabsSectionComponent.new(ontology: @ontology,section_title: "properties" , section_content: @property)

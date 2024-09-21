@@ -3,15 +3,4 @@
     - if @scheme.errors
       = render Display::AlertComponent.new(type:'info', message: @scheme.errors.join)
     - else
-
-      = render TabsContainerComponent.new(type:'outline') do |c|
-        - apikey = "#{get_apikey}"
-        - c.pinned_right do
-          %div{'data-concepts-json-target': 'button'}
-            .concepts_json_button
-              = render RoundedButtonComponent.new(link: "#{@ontology.id}/schemes/#{escape(@scheme.id)}?display=all&apikey=#{apikey}", target:'_blank')
-
-        - c.item(title: t('concepts.details'), path: '#details', selected: true, json_link: "#{@ontology.id}/scheme/#{escape(@scheme.id)}?display=all&apikey=#{apikey}") 
-
-        - c.item_content do
-          = render :partial =>'/schemes/scheme', locals: {scheme: @scheme}
+      = render TabsSectionComponent.new(ontology: @ontology,section_title: "schemes" , section_content: @scheme)
