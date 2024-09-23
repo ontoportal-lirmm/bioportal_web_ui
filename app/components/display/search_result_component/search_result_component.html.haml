@@ -1,8 +1,8 @@
-.search-result-component{class: sub_component_class, 'data-controller': 'reveal-component'}
+.search-result-component{class: sub_component_class, 'data-controller': 'reveal-component federation', 'data-federation-config-value': federated_portals.to_h.to_json}
     %a.title{href: @link, style: @portal_color ? "color: #{@portal_color} !important" : '', target: @portal_color ? "_blank" : ''}
         .d-flex.align-items-center
             = @title
-            = inline_svg_tag 'icons/external-link.svg', class: "ml-1 #{@portal_color ? '' : 'd-none'}"
+            = inline_svg_tag 'icons/external-link.svg', class: "ml-1 federated-icon-#{@portal_name} #{@portal_color ? '' : 'd-none'}"
 
     - if @uri
         .uri

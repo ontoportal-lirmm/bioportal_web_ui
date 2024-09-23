@@ -105,7 +105,7 @@ module FederationHelper
 
   def portal_button(name: nil , color: nil , light_color: nil, link: nil, tooltip: nil)
     content_tag(:a, href: link, target: '_blank', 'data-controller': 'tooltip', title: tooltip, class: 'button icon-right', style: color ? "background-color: #{light_color} !important" : '') do
-      inline_svg_tag('logos/ontoportal.svg') +
+      inline_svg_tag('logos/ontoportal.svg', class: "federated-icon-#{name}") +
       content_tag(:div, class: 'text', style: color ? "color: #{color} !important" : '') do
         name.humanize.gsub("portal", "Portal")
       end
