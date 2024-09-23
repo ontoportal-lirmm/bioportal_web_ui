@@ -2,6 +2,7 @@ class Display::SearchResultComponent < ViewComponent::Base
   include UrlsHelper
   include ModalHelper
   include MultiLanguagesHelper
+  include FederationHelper
 
   renders_many :subresults, Display::SearchResultComponent
   renders_many :reuses, Display::SearchResultComponent
@@ -66,21 +67,11 @@ class Display::SearchResultComponent < ViewComponent::Base
 
   def reveal_ontologies_button(text,id,icon)
     content_tag(:div, class: 'button icon-right', 'data-action': "click->reveal-component#toggle", 'data-id': id, style: @portal_color ? "background-color: #{@portal_light_color} !important" : '') do
-      inline_svg_tag(icon) +
+      inline_svg_tag(icon, class: "federated-icon-#{@portal_name}") +
       content_tag(:div, class: 'text', style: @portal_color ? "color: #{@portal_color} !important" : '') do
         text
       end +
-      inline_svg_tag("icons/arrow-down.svg")
+      inline_svg_tag("icons/arrow-down.svg", class: "federated-icon-#{@portal_name}")
     end
-  end
-
-  def portal_button(name: nil , color: nil , light_color: nil)
-    content_tag(:div, class: 'button icon-right', style: color ? "background-color: #{light_color} !important" : '') do
-      inline_svg_tag('logos/ontoportal.svg') +
-      content_tag(:div, class: 'text', style: color ? "color: #{color} !important" : '') do
-        name.humanize.gsub("portal", "Portal")
-      end
-    end
-
   end
 end

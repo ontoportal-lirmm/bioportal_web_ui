@@ -254,7 +254,8 @@ module SearchAggregator
       element[:reuses].reject! do |reuse|
         if (element[:root][:ontology_acronym] == reuse[:root][:ontology_acronym]) && (element[:root][:uri] == reuse[:root][:uri])
           portal_name = reuse[:root][:portal_name]
-          element[:root][:other_portals] << {name: portal_name, color: federated_portal_color(portal_name), light_color: federated_portal_light_color(portal_name)}
+          link = reuse[:root][:link]
+          element[:root][:other_portals] << {name: portal_name, color: federated_portal_color(portal_name), light_color: federated_portal_light_color(portal_name), link: link}
           true
         else
           false

@@ -1,8 +1,8 @@
-.search-result-component{class: sub_component_class, 'data-controller': 'reveal-component'}
+.search-result-component{class: sub_component_class, 'data-controller': 'reveal-component federation', 'data-federation-config-value': federated_portals.to_h.to_json}
     %a.title{href: @link, style: @portal_color ? "color: #{@portal_color} !important" : '', target: @portal_color ? "_blank" : ''}
         .d-flex.align-items-center
             = @title
-            = inline_svg_tag 'icons/external-link.svg', class: "ml-1 #{@portal_color ? '' : 'd-none'}"
+            = inline_svg_tag 'icons/external-link.svg', class: "ml-1 federated-icon-#{@portal_name} #{@portal_color ? '' : 'd-none'}"
 
     - if @uri
         .uri
@@ -19,9 +19,9 @@
         - if reuses?
             = reveal_ontologies_button("#{t('search.result_component.reuses_in')} #{reuses.size} ontologies", reuses_id, 'icons/reuses.svg')
         - if @portal_name
-            = portal_button(name: @portal_name, color: @portal_color, light_color: @portal_light_color)
+            = portal_button(name: @portal_name, color: @portal_color, light_color: @portal_light_color, link: @link)
         - @other_portals.each do |p|
-            = portal_button(name: p[:name], color: p[:color], light_color: p[:light_color])
+            = portal_button(name: p[:name], color: p[:color], light_color: p[:light_color], link: p[:link])
     - if subresults?
         .more-from-ontology.d-none{id: sub_ontologies_id}
             .vertical-line
