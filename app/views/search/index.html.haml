@@ -54,6 +54,8 @@
                 =inline_svg_tag 'icons/hide.svg'
               .text
                 = t('search.hide_advanced_options')
+    - unless @federation_errors.blank?
+      = render Display::AlertComponent.new(message: @federation_errors, type: "warning")
     - if @search_results
       .search-page-results-container
         - number = 0
