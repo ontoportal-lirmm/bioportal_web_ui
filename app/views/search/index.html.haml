@@ -15,10 +15,10 @@
                 = t("search.advanced_options.ontologies")
               .field
                 = ontologies_selector(id:'search_page_ontologies' ,name: 'ontologies[]', selected:  params[:ontologies]&.split(','))
-            .filter-container
+            .filter-container{'data-controller': 'federation', 'data-federation-config-value': federated_portals.to_h.to_json}
               .title 
                 = t('federation.results_from_external_portals')
-              .field.d-flex  
+              .field.d-flex{'data-federation-target': 'chips'}  
                 - federated_portals.each do |key, config|
                   = group_chip_component(name: "portals[]", object: { "acronym" => config[:name], "value" => key }, checked: request_portals.include?(key.to_s), title: '')
           .right
