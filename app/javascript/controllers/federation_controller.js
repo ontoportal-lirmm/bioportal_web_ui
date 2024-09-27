@@ -33,7 +33,9 @@ export default class extends Controller {
               Array.from(chipsInputs).forEach(input => {
                 if (input.value === this.configValue[key].name.toLowerCase()) {
                     input.disabled = true; 
-                    input.parentNode.style.opacity = '0.5'
+                    input.parentNode.style.opacity = '0.5';
+                    input.parentNode.setAttribute('data-controller', 'tooltip');
+                    input.parentNode.setAttribute('title', `${this.configValue[key].name} is currently down`);
                 }
               });
           }.bind(this)
