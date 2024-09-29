@@ -519,8 +519,11 @@ en:
       issues_and_requests: Issues and Requests
       agreements: Legal
       terms: Terms and Conditions
+      terms_anchor: "#h-agroportal-terms-and-conditions-english"
       privacy_policy: Privacy Policy
+      privacy_policy_anchor: "#h-privacy-policy"
       legal_notices: Legal Notices
+      legal_notices_anchor: "#h-legal-notice"
       cite_us: Cite Us
       acknowledgments: Acknowledgments
       about: About
@@ -1494,6 +1497,7 @@ en:
     paragraph2: "The cookies are functional and non-optional. By staying on %{portal}, you acknowledge the information was delivered to you."
     accept_button: "Accept"
     privacy_link: "Privacy policy"
+    privacy_policy_anchor: "#h-privacy-policy"
   taxonomy:
     groups_and_categories: Groups and Categories
     description: In AgroPortal, ontologies are organized in groups and tagged with categories. Typically, groups associate ontologies from the same project or organization for better identification of the provenance. Whereas categories are about subjects/topics and enable to classify ontologies. As of 2016, AgroPortal's categories were established in cooperation with FAO AIMS. In 2024, we moved to UNESCO nomenclature for fields of science and technology. Groups and categories, along with other metadata, can be used on the “Browse” page of AgroPortal to filter out the list of ontologies.
