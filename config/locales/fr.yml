@@ -524,8 +524,11 @@ fr:
       issues_and_requests: Problèmes et demandes
       agreements: Légal
       terms: Termes et conditions
+      terms_anchor: "#h-conditions-generales-dutilisation-dagroportal-francais"
       privacy_policy: Politique de confidentialité
+      privacy_policy_anchor: "#h-vie-privee"
       legal_notices: Mentions légales
+      legal_notices_anchor: "#h-mentions-legales"
       cite_us: Citez-nous
       acknowledgments: Remerciements
       about: À propos

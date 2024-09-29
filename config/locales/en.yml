@@ -519,8 +519,11 @@ en:
       issues_and_requests: Issues and Requests
       agreements: Legal
       terms: Terms and Conditions
+      terms_anchor: "#h-agroportal-terms-and-conditions-english"
       privacy_policy: Privacy Policy
+      privacy_policy_anchor: "#h-privacy-policy"
       legal_notices: Legal Notices
+      legal_notices_anchor: "#h-legal-notice"
       cite_us: Cite Us
       acknowledgments: Acknowledgments
       about: About
