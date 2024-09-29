@@ -26,6 +26,8 @@ class OntologiesController < ApplicationController
 
   before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
   before_action :submission_metadata, only: [:show]
+  before_action :set_federated_portals, only: [:index, :ontologies_filter]
+
   KNOWN_PAGES = Set.new(["terms", "classes", "mappings", "notes", "widgets", "summary", "properties", "instances", "schemes", "collections", "sparql"])
   EXTERNAL_MAPPINGS_GRAPH = "http://data.bioontology.org/metadata/ExternalMappings"
   INTERPORTAL_MAPPINGS_GRAPH = "http://data.bioontology.org/metadata/InterportalMappings"
@@ -49,8 +51,8 @@ class OntologiesController < ApplicationController
       streams = [prepend("ontologies_list_view-page-#{@page.page}", partial: 'ontologies/browser/ontologies')]
       streams += @count_objects.map do |section, values_count|
         values_count.map do |value, count|
-          replace("count_#{section}_#{value}") do
-            helpers.turbo_frame_tag("count_#{section}_#{value}") do
+          replace("count_#{section}_#{link_last_part(value)}") do
+            helpers.turbo_frame_tag("count_#{section}_#{link_last_part(value)}") do
               helpers.content_tag(:span, count.to_s, class: "hide-if-loading #{count.zero? ? 'disabled' : ''}")
             end
           end
@@ -569,4 +571,7 @@ class OntologiesController < ApplicationController
     return !results.blank? ? results.first[:name] : nil
   end
 
+  def set_federated_portals
+    RequestStore.store[:federated_portals] =  params[:portals]&.split(',')
+  end
 end
