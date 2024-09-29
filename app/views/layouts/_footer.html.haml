@@ -22,8 +22,7 @@
           %div
 
             - section_links.each do |section , link|
-              - anchor_key = "layout.footer.#{section}_anchor"
-              - anchor = I18n.exists?(anchor_key) ? t(anchor_key) : ""
+              - anchor = I18n.t("layout.footer.#{section}_anchor", default: "")
               %a{:href => "#{link}#{anchor}", :target => "_blank"}
                 = t("layout.footer."+section.to_s)
           
