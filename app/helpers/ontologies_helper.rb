@@ -550,7 +550,7 @@ module OntologiesHelper
       return alert_component(object.errors.join) if object.errors
 
       ontology_object_tabs_component(ontology_id: ontology_id, objects_title: objects_title, object_id: object["@id"]) do |tabs|
-        ontology_object_tab_component(container_tabs: tabs, title: t('concepts.details'), path: '#details', selected: true) do
+        tab_item_component(container_tabs: tabs, title: t('concepts.details'), path: '#details', selected: true) do
           capture(&block)
         end
       end
@@ -575,10 +575,6 @@ module OntologiesHelper
     end
   end
 
-  def ontology_object_tab_component(container_tabs:, title:, path:, selected: false, json_link: "", &content)
-    container_tabs.item(title: title.html_safe, path: path, selected: selected, json_link: json_link)
-    container_tabs.item_content { capture(&content) }
-  end
 
   def display_complex_text(definitions)
     html = ""

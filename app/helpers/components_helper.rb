@@ -1,6 +1,11 @@
 module ComponentsHelper
   include TermsReuses
 
+  def tab_item_component(container_tabs:, title:, path:, selected: false, json_link: "", &content)
+    container_tabs.item(title: title.html_safe, path: path, selected: selected, json_link: json_link)
+    container_tabs.item_content { capture(&content) }
+  end
+
   def alert_component(message, type: "info")
     render Display::AlertComponent.new(type: type, message: message)
   end
