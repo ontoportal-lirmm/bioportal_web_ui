@@ -1,4 +1,4 @@
-= ontology_object_details_component(frame_id: "collection_show", ontology_id:  @ontology.acronym, objects_title:  "collections", object: @collection) do
+= ontology_object_details_component(frame_id: "collection", ontology_id:  @ontology.acronym, objects_title:  "collections", object: @collection) do
   = render ConceptDetailsComponent.new(id:'collection-label', acronym: @ontology.acronym, concept_id: @collection.id,
                       properties: @collection.properties,
                       top_keys: %w[created modified comment note],
@@ -9,6 +9,6 @@
       - t.add_row({th: t("collections.preferred_name")}, {td: display_in_multiple_languages(get_collection_label(@collection))})
       - t.add_row({th: t("collections.members_count")}) do |r|
         - r.td do
-          = link_to collection["memberCount"],  "/ontologies/" + @ontology.acronym + "/?p=classes&sub_menu=list&concept_collections=" + @collection["@id"], 'data-turbo-frame':'_top'
+          = link_to @collection["memberCount"],  "/ontologies/" + @ontology.acronym + "/?p=classes&sub_menu=list&concept_collections=" + @collection["@id"], 'data-turbo-frame':'_top'
       - t.add_row({th: t("collections.type")}, {td: @collection["@type"]})
 

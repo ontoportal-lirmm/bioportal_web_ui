@@ -530,6 +530,10 @@ module OntologiesHelper
                      data: { controller: "language-change", 'language-change-section-value': section, action: "change->language-change#dispatchLangChangeEvent" }
   end
 
+  def ontology_object_json_link(ontology_acronym, object_type, id)
+    "#{rest_url}/ontologies/#{ontology_acronym}/#{object_type}/#{escape(id)}?display=all&apikey=#{get_apikey}"
+  end
+
   def render_permalink_link
     content_tag(:div, class: 'mx-1') do
       link_to("#classPermalinkModal", class: "class-permalink nav-link", title: t('concepts.permanent_link_class'), aria: { label: t('concepts.permanent_link_class') }, data: { toggle: "modal", current_purl: @current_purl }) do
@@ -544,6 +548,7 @@ module OntologiesHelper
     end
   end
 
+
   def ontology_object_details_component(frame_id: , ontology_id:, objects_title:, object:, &block)
     render TurboFrameComponent.new(id: frame_id, data: {"turbo-frame-target": "frame"}) do
       return if object.nil?
@@ -555,10 +560,6 @@ module OntologiesHelper
         end
       end
     end
-  end
-
-  def ontology_object_json_link(ontology_acronym, object_type, id)
-    "#{rest_url}/ontologies/#{ontology_acronym}/#{object_type}/#{escape(id)}?display=all&apikey=#{get_apikey}"
   end
 
   def ontology_object_tabs_component(ontology_id:, objects_title:, object_id:, &block)
