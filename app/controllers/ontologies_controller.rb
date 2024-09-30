@@ -191,7 +191,7 @@ class OntologiesController < ApplicationController
 
   def schemes
     @schemes = get_schemes(@ontology)
-    scheme_id = params[:schemeid] || nil
+    scheme_id = params[:schemeid] || @submission_latest.URI || nil
     @scheme = scheme_id ? get_scheme(@ontology, scheme_id) : @schemes.first
  
 
