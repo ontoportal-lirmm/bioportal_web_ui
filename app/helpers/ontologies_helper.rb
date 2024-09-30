@@ -551,7 +551,7 @@ module OntologiesHelper
 
   def ontology_object_details_component(frame_id: , ontology_id:, objects_title:, object:, &block)
     render TurboFrameComponent.new(id: frame_id, data: {"turbo-frame-target": "frame"}) do
-      return if object.nil?
+      return if !object.present?
       return alert_component(object.errors.join) if object.errors
 
       ontology_object_tabs_component(ontology_id: ontology_id, objects_title: objects_title, object_id: object["@id"]) do |tabs|
