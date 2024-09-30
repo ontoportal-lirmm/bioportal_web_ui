@@ -111,4 +111,9 @@ module FederationHelper
       end
     end
   end
+
+  def find_portal_name_by_api(api_url)
+    portal = federated_portals.values.find { |portal| portal[:api] == api_url }
+    portal ? portal[:name] : nil
+  end
 end

@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git
-  revision: 4cff0f52f6a9cc539bfa129c1e989dfc02403541
+  revision: 929920411203d25c57e3fd5e264200764181ca3e
   branch: feature/federated-search
   specs:
     ontologies_api_client (2.2.0)
@@ -631,4 +631,4 @@ DEPENDENCIES
   will_paginate (~> 3.0)
 
 BUNDLED WITH
-   2.3.23
+   2.4.22
