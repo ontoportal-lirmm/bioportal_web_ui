@@ -1,4 +1,4 @@
-= ontology_object_details_component(frame_id: "scheme_show", ontology_id:  @ontology.acronym, objects_title:  "schemes", object: @scheme) do
+= ontology_object_details_component(frame_id: "scheme", ontology_id:  @ontology.acronym, objects_title:  "schemes", object: @scheme) do
   = render ConceptDetailsComponent.new(id:'scheme-label', acronym: @ontology.acronym, concept_id: @scheme.id,
                       properties: @scheme.properties,
                       top_keys: %w[description comment],
