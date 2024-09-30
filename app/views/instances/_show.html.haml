@@ -1,22 +1,22 @@
-= ontology_object_details_component(frame_id: params['modal'] ? modal_frame_id : "instance_show", ontology_id:  @ontology.acronym, objects_title:  "instances", object: @instance) do
-  - ontology_acronym = params[:ontology_id] || @ontology.acronym
-  - filter_properties = %w[http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://www.w3.org/2000/01/rdf-schema#label http://www.w3.org/2004/02/skos/core#prefLabel]
-  =  render ConceptDetailsComponent.new(id:'instance-details', acronym: ontology_acronym, concept_id: @instance["@id"]) do |c|
+= ontology_object_details_component(frame_id: params['modal'].eql?('true') ? modal_frame_id : "instance_show", ontology_id:  @ontology.acronym, objects_title:  "instances", object: @instance) do
+  = render ConceptDetailsComponent.new(id: 'instance-details', acronym: @ontology.acronym, concept_id: @instance["@id"]) do |c|
     - c.header(stripped: true) do |t|
-      - t.add_row({th: t("instances.id")}, {td: link_to_with_actions(@instance["@id"], acronym: @ontology.acronym) })
-      - label = @instance['label'] || @instance['prefLabel']
-      - unless label.blank?
-        - t.add_row({th: t('instances.label') }, {td: label.join(',').html_safe})
-      - types = @instance.types.reject{|x| x['NamedIndividual']}
-      - unless types.empty?
-        - t.add_row({th: t('instances.type') }) do |r|
-          - r.td do
-            = types.reject{|x| x['NamedIndividual']}.map {|cls| link_to_class(ontology_acronym,cls)}.join(', ').html_safe
-      - properties = @instance[:properties].to_h.select{|k,v| !filter_properties.include? k.to_s}
-      - properties.each do |prop|
-        - if !prop[1].nil?
-          - t.add_row({th: link_to_property(prop[0], ontology_acronym)}, {td: prop[1].map { |value| instance_property_value(value , ontology_acronym) }.join(', ').html_safe})
+      - t.add_row({ th: t("instances.id") }, { td: link_to_with_actions(@instance["@id"], acronym: @ontology.acronym) })
 
+      - label = @instance['label'] || @instance['prefLabel']
+      - t.add_row({ th: t('instances.label') }, { td: label.join(', ').html_safe }) unless label.blank?
+
+      - types = @instance.types.reject { |x| x['NamedIndividual'] }
+      - unless types.empty?
+        - t.add_row({ th: t('instances.type') }) do |r|
+          - r.td do
+            = types.map { |cls| link_to_class(@ontology.acronym, cls) }.join(', ').html_safe
+
+      - filter_properties = %w[http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://www.w3.org/2000/01/rdf-schema#label http://www.w3.org/2004/02/skos/core#prefLabel]
+      - properties = @instance[:properties].to_h.reject { |k, _| filter_properties.include?(k.to_s) }
+      - properties.each do |prop, values|
+        - if values.present?
+          - t.add_row({ th: link_to_property(prop, @ontology.acronym) }, { td: values.map { |value| instance_property_value(value, @ontology.acronym) }.join(', ').html_safe })
 
 
 
