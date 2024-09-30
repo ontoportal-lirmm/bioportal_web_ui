@@ -1,4 +1,4 @@
-= ontology_object_details_component(frame_id: "property_show", ontology_id:  @ontology.acronym, objects_title:  "properties", object: @property) do
+= ontology_object_details_component(frame_id: "property_show", ontology_id:  @acronym, objects_title:  "properties", object: @property) do
   = render ConceptDetailsComponent.new(id:'property-details', acronym: @acronym, concept_id: @property.id,
                         properties: @property.properties,
                         top_keys: [],
