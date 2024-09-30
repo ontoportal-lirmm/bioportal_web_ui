@@ -10,7 +10,6 @@
                                  tree_url: "/ontologies/#{@ontology.acronym}/collections?#{request.original_url.split('?')[1]}")
     %div#collection_contents{data:{'container-splitter-target': 'container'}}
       = render TurboFrameComponent.new(id: 'collection') do
-        - if @collection
-          = render partial: 'collections/show', locals: {collection: @collection}
+        = render partial: 'collections/show'
 
 
