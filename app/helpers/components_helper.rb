@@ -1,6 +1,10 @@
 module ComponentsHelper
   include TermsReuses
 
+  def alert_component(message, type: "info")
+    render Display::AlertComponent.new(type: type, message: message)
+  end
+
   def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, &block)
     content_tag(:div, data: { controller: 'tooltip' }, title: tooltip) do
       check_input(id: id, name: name, value: value, label: label, checked: checked, &block)
