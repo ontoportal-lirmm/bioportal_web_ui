@@ -1,10 +1,10 @@
 GIT
   remote: https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git
-  revision: f6b39981b3dda17e911c497762681d15210a4ad2
+  revision: d2134bf8738c82c5bbf7971d7295873f8c6d953a
   branch: feature/federated-search
   specs:
     ontologies_api_client (2.2.0)
-      activesupport (~> 7.0.3)
+      activesupport (~> 7.0.4)
       excon
       faraday
       faraday-excon (~> 2.0.0)
@@ -150,14 +150,14 @@ GEM
     debug (1.9.2)
       irb (~> 1.10)
       reline (>= 0.3.8)
-    deepl-rb (2.5.3)
+    deepl-rb (3.0.1)
     diff-lcs (1.5.1)
     docile (1.4.1)
     domain_name (0.6.20240107)
     ed25519 (1.3.0)
     erubi (1.13.0)
     erubis (2.7.0)
-    excon (0.111.0)
+    excon (0.112.0)
     execjs (2.9.1)
     faraday (2.0.1)
       faraday-net_http (~> 2.0)
@@ -176,7 +176,7 @@ GEM
       sass-rails
     globalid (1.2.1)
       activesupport (>= 6.1)
-    graphql (2.3.14)
+    graphql (2.3.16)
       base64
       fiber-storage
     graphql-client (0.23.0)
@@ -203,7 +203,7 @@ GEM
     http-accept (1.7.0)
     http-cookie (1.0.7)
       domain_name (~> 0.5)
-    i18n (1.14.5)
+    i18n (1.14.6)
       concurrent-ruby (~> 1.0)
     i18n-tasks (0.9.37)
       activesupport (>= 4.0.2)
@@ -225,7 +225,7 @@ GEM
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
     io-console (0.7.2)
-    irb (1.14.0)
+    irb (1.14.1)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     iso-639 (0.3.6)
@@ -245,7 +245,7 @@ GEM
       bindata
       faraday (~> 2.0)
       faraday-follow_redirects
-    jwt (2.8.2)
+    jwt (2.9.1)
       base64
     language_server-protocol (3.17.0.3)
     launchy (3.0.1)
@@ -302,7 +302,7 @@ GEM
       time
     net-http (0.3.2)
       uri
-    net-imap (0.4.15)
+    net-imap (0.4.16)
       date
       net-protocol
     net-pop (0.1.2)
@@ -317,7 +317,7 @@ GEM
       net-protocol
     net-ssh (7.2.3)
     netrc (0.11.0)
-    newrelic_rpm (9.13.0)
+    newrelic_rpm (9.14.0)
     nio4r (2.7.3)
     nokogiri (1.15.6-x86_64-linux)
       racc (~> 1.4)
@@ -328,7 +328,7 @@ GEM
       rack (>= 1.2, < 4)
       snaky_hash (~> 2.0)
       version_gem (~> 1.1)
-    oj (3.16.5)
+    oj (3.16.6)
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
     omniauth (2.1.2)
@@ -338,8 +338,8 @@ GEM
     omniauth-github (2.0.1)
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.8)
-    omniauth-google-oauth2 (1.1.3)
-      jwt (>= 2.0)
+    omniauth-google-oauth2 (1.2.0)
+      jwt (>= 2.9)
       oauth2 (~> 2.0)
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.8)
@@ -369,7 +369,7 @@ GEM
     psych (5.1.2)
       stringio
     public_suffix (5.1.1)
-    puma (5.6.8)
+    puma (5.6.9)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.9)
@@ -429,8 +429,8 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    rexml (3.3.7)
-    rouge (4.3.0)
+    rexml (3.3.8)
+    rouge (4.4.0)
     rspec-core (3.13.1)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.3)
@@ -458,7 +458,7 @@ GEM
       rubocop-ast (>= 1.32.2, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.32.2)
+    rubocop-ast (1.32.3)
       parser (>= 3.3.1.0)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
@@ -522,13 +522,12 @@ GEM
     time (0.4.0)
       date
     timeout (0.4.1)
-    turbo-rails (2.0.6)
+    turbo-rails (2.0.10)
       actionpack (>= 6.0.0)
-      activejob (>= 6.0.0)
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    unicode-display_width (2.5.0)
+    unicode-display_width (2.6.0)
     uri (0.13.1)
     version_gem (1.1.4)
     view_component (2.83.0)
@@ -540,7 +539,7 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    webmock (3.23.1)
+    webmock (3.24.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
