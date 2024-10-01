@@ -22,14 +22,9 @@ class SearchController < ApplicationController
     set_federated_portals
     @time = Benchmark.realtime do
       results = LinkedData::Client::Models::Class.search(@search_query, params)
-      if federatation_enabled?
-        @federation_errors = results[:errors].map{|e| find_portal_name_by_api(e.split(' ').last.gsub('search', ''))}
-        @federation_errors = @federation_errors.map{ |p| "#{p} is not responding. " }.join(' ')
-        
-        results = results[:results]
-      else
-        results = results.collection
-      end
+      @federation_errors = results[:errors].map{|e| find_portal_name_by_api(e.split(' ').last.gsub('search', ''))}
+      @federation_errors = @federation_errors.map{ |p| "#{p} is not responding. " }.join(' ')
+      results = results[:results]
       @search_results = aggregate_results(@search_query, results)
     end
     @advanced_options_open = !search_params_empty?
