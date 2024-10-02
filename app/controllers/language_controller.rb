@@ -1,11 +1,12 @@
 class LanguageController < ApplicationController
 
+    include MultiLanguagesHelper
     # set locale to the language selected by the user
     def set_locale_language
         language = params[:language].strip.downcase.to_sym
         supported_languages = I18n.available_locales
-
-        if language
+        
+        if language && portal_language_enabled?(language)
             if supported_languages.include?(language)
                  cookies.permanent[:locale] = language
             else
