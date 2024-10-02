@@ -78,14 +78,8 @@
         - ontology[:sources].each do |id|
           - config = ontology_portal_config(id)&.last || internal_portal_config(id) || {}
           - unless config.blank?
-            %div.mx-1{title: content_tag(:div, "Source #{config[:name]}"), data:{controller: 'tooltip', 'tooltip-interactive-value': 'true'}}
-              = render ChipButtonComponent.new(type: "clickable" , style: style_bg) do
-                = link_to ontoportal_ui_link(id), target: '_top' do
-                  %span.d-inline
-                    %span.mr-1
-                      = inline_svg 'logo-white.svg', width: "20", height: "20"
-                    %span
-                      = config[:name]
+            %span{style: "padding: 3px 0; margin-right: 0.25rem;"}
+              = portal_button(name: config[:name], color: @text_color, light_color: @bg_light_color, link: ontoportal_ui_link(id), tooltip: "Source #{config[:name]}")
 
       - if session[:user]&.admin?
         %div.mx-1{title: content_tag(:div, debug(ontology), style: 'height: 300px; overflow: scroll'), data:{controller: 'tooltip', 'tooltip-interactive-value': 'true'}}
