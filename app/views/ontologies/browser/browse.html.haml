@@ -1,5 +1,5 @@
 .browse-center
-  .browse-container
+  .browse-container{'data-controller': 'federation', 'data-federation-config-value': federated_portals.to_h.to_json}
     .container.align-alert
       - if session[:user]&.admin?
         %div{style:'width: 70%;'}

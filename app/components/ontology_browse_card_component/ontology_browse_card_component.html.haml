@@ -7,7 +7,8 @@
             = ontology[:name]+" ("+ontology[:acronym]+")"
             = private_ontology_icon(ontology[:private])
             - if external_ontology?
-              = render Display::InfoTooltipComponent.new(text: "Federated ontology from #{ontology[:sources].map{|x| link_to(x,x)}.join(', ')}", icon: 'external-link.svg')
+              %div{class: "federated-icon-#{@portal_name&.downcase} d-inline"}
+                = render Display::InfoTooltipComponent.new(text: "Federated ontology from #{ontology[:sources].map{|x| link_to(x,x)}.join(', ')}", icon: 'external-link.svg')
             - if session[:user]&.admin?
               - ontology_status = status_string(ontology)
               = render Display::InfoTooltipComponent.new(text: ontology_status, icon: submission_status_icons(ontology_status))
