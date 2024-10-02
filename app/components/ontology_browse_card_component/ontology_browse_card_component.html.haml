@@ -3,7 +3,7 @@
     .d-flex
       .browse-ontology-description
         .browse-ontology-title-bar
-          %a.browse-ontology-title{:href => onto_link, data: {'turbo': 'false'} , style: style_text}
+          %a.browse-ontology-title{:href => onto_link, data: {'turbo': 'false'} , style: style_text, target: external_ontology? ? '_blank' : ''}
             = ontology[:name]+" ("+ontology[:acronym]+")"
             = private_ontology_icon(ontology[:private])
             - if external_ontology?
