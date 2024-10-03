@@ -1,4 +1,4 @@
-.search-page-container
+.search-page-container{data: {turbo_frame: 'federation_portals_status'}}
   .search-page-subcontainer{'data-controller': 'reveal-component'}
     = form_tag(search_path, method: :get,data:{turbo: true, controller: 'form-url', action: 'submit->form-url#submit'}) do
       = search_page_input_component(placeholder: t('search.search_place_holder'), name: "q", value: @search_query) do
@@ -15,12 +15,13 @@
                 = t("search.advanced_options.ontologies")
               .field
                 = ontologies_selector(id:'search_page_ontologies' ,name: 'ontologies[]', selected:  params[:ontologies]&.split(','))
-            .filter-container{'data-controller': 'federation', 'data-federation-config-value': federated_portals.to_h.to_json}
+            .filter-container
               .title 
                 = t('federation.results_from_external_portals')
-              .field.d-flex{'data-federation-target': 'chips'}  
+              .field.d-flex 
                 - federated_portals.each do |key, config|
-                  = group_chip_component(name: "portals[]", object: { "acronym" => config[:name], "value" => key }, checked: request_portals.include?(key.to_s), title: '')
+                  = render TurboFrameComponent.new(id: "federation_portals_status_#{key}", src: "home/federation_portals_status?key=#{key}&acronym=#{config[:name]}&checked=#{request_portals.include?(key.to_s)}")
+                    
           .right
             .filter-container
               .title
@@ -76,4 +77,3 @@
       .browse-empty-illustration
         %img{:src => "#{asset_path("empty-box.svg")}"}
         %p No result was found
-          
