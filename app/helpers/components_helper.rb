@@ -1,19 +1,19 @@
 module ComponentsHelper
   include TermsReuses
 
-  def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, &block)
+  def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, disabled: false, &block)
     content_tag(:div, data: { controller: 'tooltip' }, title: tooltip) do
-      check_input(id: id, name: name, value: value, label: label, checked: checked, &block)
+      check_input(id: id, name: name, value: value, label: label, checked: checked, disabled: disabled, &block)
     end
   end
 
-  def group_chip_component(id: nil, name: , object: , checked: , value: nil, title: nil, &block)
+  def group_chip_component(id: nil, name: , object: , checked: , value: nil, title: nil, disabled: false, &block)
     title ||= object["name"]
     value ||= (object["value"] || object["acronym"] || object["id"])
 
     chips_component(id: id || value, name: name, label: object["acronym"],
                     checked: checked,
-                    value: value, tooltip: title, &block)
+                    value: value, tooltip: title, disabled: disabled, &block)
   end
   alias  :category_chip_component :group_chip_component
 
@@ -29,7 +29,7 @@ module ComponentsHelper
       end
     end
   end
-  
+
   def search_page_input_component(name:, value: nil, placeholder: , button_icon: 'icons/search.svg', type: 'text', &block)
     content_tag :div, class: 'search-page-input-container', data: { controller: 'reveal' } do
       search_input = content_tag :div, class: 'search-page-input' do
@@ -63,7 +63,7 @@ module ComponentsHelper
           end
         end)
       end
-      
+
       concepts = c.collection
       if concepts && !concepts.empty?
         concepts.each do |concept|
@@ -104,7 +104,7 @@ module ComponentsHelper
   end
 
 
-  def generated_link_to_clipboard(url, acronym) 
+  def generated_link_to_clipboard(url, acronym)
     url = "#{$UI_URL}/ontologies/#{acronym}/#{link_last_part(url)}"
     content_tag(:span, id: "generate_portal_link", style: 'display: inline-block;') do
       render ClipboardComponent.new(icon: 'icons/copy_link.svg', title: "#{t("components.copy_portal_uri", portal_name: portal_name)} #{link_to(url)}", message: url, show_content: false)
@@ -123,7 +123,7 @@ module ComponentsHelper
   def link_to_with_actions(link_to_tag, acronym: nil, url: nil, copy: true, check_resolvability: true, generate_link: true, generate_htaccess: false)
     tag = link_to_tag
     url = link_to_tag if url.nil?
-    
+
     tag += content_tag(:span, class: 'mx-1') do
       concat copy_link_to_clipboard(url) if copy
       concat generated_link_to_clipboard(url, acronym) if generate_link
@@ -136,11 +136,11 @@ module ComponentsHelper
 
   def tree_component(root, selected, target_frame:, sub_tree: false, id: nil, auto_click: false, submission: nil, &child_data_generator)
     root.children.sort! { |a, b| (a.prefLabel || a.id).downcase <=> (b.prefLabel || b.id).downcase }
-    
+
     render TreeViewComponent.new(id: id, sub_tree: sub_tree, auto_click: auto_click) do |tree_child|
       root.children.each do |child|
         children_link, data, href = child_data_generator.call(child)
-  
+
         if children_link.nil? || data.nil? || href.nil?
           raise ArgumentError, t('components.error_block')
         end
