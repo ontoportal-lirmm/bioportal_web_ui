@@ -19,9 +19,9 @@
         - if reuses?
             = reveal_ontologies_button("#{t('search.result_component.reuses_in')} #{reuses.size} ontologies", reuses_id, 'icons/reuses.svg')
         - if @portal_name
-            = portal_button(name: @portal_name, color: @portal_color, light_color: @portal_light_color, link: @link)
+            = portal_button(name: @portal_name, color: @portal_color, light_color: @portal_light_color, link: @link, tooltip: "Source #{@portal_name.humanize.gsub("portal", "Portal")}")
         - @other_portals.each do |p|
-            = portal_button(name: p[:name], color: p[:color], light_color: p[:light_color], link: p[:link])
+            = portal_button(name: p[:name], color: p[:color], light_color: p[:light_color], link: p[:link], tooltip: "Source #{p[:name].humanize.gsub("portal", "Portal")}")
     - if subresults?
         .more-from-ontology.d-none{id: sub_ontologies_id}
             .vertical-line

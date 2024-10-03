@@ -104,8 +104,8 @@ module FederationHelper
   end
 
   def portal_button(name: nil , color: nil , light_color: nil, link: nil, tooltip: nil)
-    content_tag(:a, href: link, target: '_blank', 'data-controller': 'tooltip', title: tooltip, class: 'button icon-right', style: color ? "background-color: #{light_color} !important" : '') do
-      inline_svg_tag('logos/ontoportal.svg', class: "federated-icon-#{name}") +
+    content_tag(:a, href: link, target: '_blank', 'data-controller': 'tooltip', title: tooltip, class: 'federation-portal-button button icon-right', style: color ? "background-color: #{light_color} !important" : '') do
+      inline_svg_tag('logos/ontoportal.svg', class: "federated-icon-#{name.downcase}") +
       content_tag(:div, class: 'text', style: color ? "color: #{color} !important" : '') do
         name.humanize.gsub("portal", "Portal")
       end
@@ -115,5 +115,42 @@ module FederationHelper
   def find_portal_name_by_api(api_url)
     portal = federated_portals.values.find { |portal| portal[:api] == api_url }
     portal ? portal[:name] : nil
+  end
+
+  def federation_portals_status
+    federation_apis = federated_portals.map { |p| [ p.first , p.last[:api] ] }
+
+    tmp_portals_up = Rails.cache.read('federation_portals_up')
+    if tmp_portals_up
+      return tmp_portals_up
+    else
+      portals_up = []
+      federation_apis.each do |portal|
+        begin
+          conn = Faraday.new(url: portal.last) do |f|
+            f.request  :url_encoded
+            f.adapter  Faraday.default_adapter
+            f.options.timeout = 20
+            f.options.open_timeout = 20
+          end
+          response = conn.get
+          if response.success?
+            parsed_response = JSON.parse(response.body)
+            # todo: check if the response is a correct response
+            portals_up << portal.first
+          else
+            raise "API call failed with status #{response.status}"
+          end
+
+        rescue => e
+          # timout or error
+        end
+        Rails.cache.write('federation_portals_up', portals_up, expires_in: 2.hours)
+      end
+
+      return portals_up
+
+    end
+
   end
 end

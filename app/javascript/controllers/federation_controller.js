@@ -8,7 +8,6 @@ export default class extends Controller {
     static targets = ['chips']
     connect() {
       this.#initIconsStyle()
-      this.#initInputChips()
     }
     #initIconsStyle(){
       const style = document.createElement('style');
@@ -20,27 +19,5 @@ export default class extends Controller {
       document.head.appendChild(style);
     }
 
-    #initInputChips(){
-      for (const key in this.configValue) {
-        $.ajax({
-          url: this.configValue[key].api,
-          type: 'GET',
-          success: function(response) {
-              console.log('working');
-          },
-          error: function() {
-              let chipsInputs = this.chipsTarget.querySelectorAll('input') 
-              Array.from(chipsInputs).forEach(input => {
-                if (input.value === this.configValue[key].name.toLowerCase()) {
-                    input.disabled = true; 
-                    input.parentNode.style.opacity = '0.5';
-                    input.parentNode.setAttribute('data-controller', 'tooltip');
-                    input.parentNode.setAttribute('title', `${this.configValue[key].name} is currently down`);
-                }
-              });
-          }.bind(this)
-        });
-      }
-    }
   }
   

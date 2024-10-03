@@ -166,6 +166,13 @@ class HomeController < ApplicationController
     end
   end
 
+  def federation_portals_status
+    @acronym = params[:acronym]
+    @key = params[:key]
+    @checked = params[:checked].eql?('true')
+    render 'home/federation_portals_status'
+  end
+
   private
 
   # Dr. Musen wants 5 specific groups to appear first, sorted by order of importance.

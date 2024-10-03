@@ -154,7 +154,7 @@ module ApplicationHelper
   def at_slice?
     !@subdomain_filter.nil? && !@subdomain_filter[:active].nil? && @subdomain_filter[:active] == true
   end
-  
+
   def add_comment_button(parent_id, parent_type)
     if session[:user].nil?
       link_to t('application.add_comment'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim"
@@ -546,5 +546,15 @@ module ApplicationHelper
   def categories_select(id: nil, name: nil, selected: 'None')
     categories_for_select = LinkedData::Client::Models::Category.all.map{|x| ["#{x.name} (#{x.acronym})", x.id]}.unshift(["None", ''])
     render Input::SelectComponent.new(id: id, name: name, value: categories_for_select, selected: selected)
+  end
+
+  def chips_skelton
+    content_tag(:div, class: 'chips-container loading') do
+      content_tag(:div) do
+        content_tag(:label) do
+          content_tag(:span, '', class: 'skeleton')
+        end
+      end
+    end
   end
 end

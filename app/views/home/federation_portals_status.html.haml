@@ -1,0 +1,6 @@
+- portal_up = federation_portals_status.include?(@key.to_sym)
+= render TurboFrameComponent.new(id:"federation_portals_status_#{@key}") do |container|
+    %div{style: "cursor: default;"}
+        = group_chip_component(name: "portals[]", object: { "acronym" => @acronym, "value" => @key }, checked: @checked, title: "#{!portal_up ? "#{@key.humanize.gsub('portal', 'Portal')} is currently down" : ''}", disabled: !portal_up)
+
+-# TODO put the portal is down tooltip message in local lang files
