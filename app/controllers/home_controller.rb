@@ -167,6 +167,7 @@ class HomeController < ApplicationController
   end
 
   def federation_portals_status
+    @name = params[:name]
     @acronym = params[:acronym]
     @key = params[:key]
     @checked = params[:checked].eql?('true')
