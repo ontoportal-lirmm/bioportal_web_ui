@@ -94,6 +94,7 @@ gem 'inline_svg'
 # ISO language codes and flags
 gem 'flag-icons-rails', '~> 3.4'
 gem 'iso-639', '~> 0.3.6'
+gem 'countries', '~> 5.7'
 
 # Custom API client
 gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'development'
@@ -180,3 +181,4 @@ group :test do
   # Testing framework for Rails
   gem 'rspec-rails'
 end
+
