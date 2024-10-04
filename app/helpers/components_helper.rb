@@ -1,7 +1,16 @@
 module ComponentsHelper
   include TermsReuses
 
-  def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, disabled: false, &block)
+  def tab_item_component(container_tabs:, title:, path:, selected: false, json_link: "", &content)
+    container_tabs.item(title: title.html_safe, path: path, selected: selected, json_link: json_link)
+    container_tabs.item_content { capture(&content) }
+  end
+
+  def alert_component(message, type: "info")
+    render Display::AlertComponent.new(type: type, message: message)
+  end
+
+  def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, disabled: false, &block)   
     content_tag(:div, data: { controller: 'tooltip' }, title: tooltip) do
       check_input(id: id, name: name, value: value, label: label, checked: checked, disabled: disabled, &block)
     end
