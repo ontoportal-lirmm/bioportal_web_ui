@@ -4,7 +4,7 @@ class HomeController < ApplicationController
   layout :determine_layout
 
 
-  include FairScoreHelper
+  include FairScoreHelper, FederationHelper
 
   def index
     @analytics = helpers.ontologies_analytics
@@ -170,6 +170,7 @@ class HomeController < ApplicationController
     @acronym = params[:acronym]
     @key = params[:key]
     @checked = params[:checked].eql?('true')
+    @portal_up = federation_portal_status(portal_name: @key.downcase.to_sym)
     render 'home/federation_portals_status'
   end
 
