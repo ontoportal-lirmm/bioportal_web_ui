@@ -117,39 +117,35 @@ module FederationHelper
     portal ? portal[:name] : nil
   end
 
-  def federation_portals_status
-    federation_apis = federated_portals.map { |p| [ p.first , p.last[:api] ] }
+  def federation_portal_status(portal_name: nil)
+    portal_api = federated_portals[portal_name][:api]
+    tmp_portal_up = Rails.cache.read("federation_portal_up_#{portal_name}")
 
-    tmp_portals_up = Rails.cache.read('federation_portals_up')
-    if tmp_portals_up
-      return tmp_portals_up
+    if !tmp_portal_up.nil?
+      return tmp_portal_up
     else
-      portals_up = []
-      federation_apis.each do |portal|
-        begin
-          conn = Faraday.new(url: portal.last) do |f|
-            f.request  :url_encoded
-            f.adapter  Faraday.default_adapter
-            f.options.timeout = 20
-            f.options.open_timeout = 20
-          end
-          response = conn.get
-          if response.success?
-            parsed_response = JSON.parse(response.body)
-            # todo: check if the response is a correct response
-            portals_up << portal.first
-          else
-            raise "API call failed with status #{response.status}"
-          end
-
-        rescue => e
-          # timout or error
+      portal_up = false
+      begin
+        conn = Faraday.new(url: portal_api) do |f|
+          f.request  :url_encoded
+          f.adapter  Faraday.default_adapter
+          f.options.timeout = 20
+          f.options.open_timeout = 20
         end
-        Rails.cache.write('federation_portals_up', portals_up, expires_in: 2.hours)
+        response = conn.get
+        if response.success?
+          parsed_response = JSON.parse(response.body)
+          # todo: check if the response is a correct response
+          portal_up = true
+        else
+          raise "API call failed with status #{response.status}"
+        end
+
+      rescue => e
+
       end
-
-      return portals_up
-
+      Rails.cache.write("federation_portal_up_#{portal_name}", portal_up, expires_in: 2.hours)
+      return portal_up
     end
 
   end
