@@ -463,6 +463,13 @@
     display: grid;
   }
 }
+.browse-federation-input-chip-container{
+  p{
+    font-size: 14px;
+    font-weight: 400;
+    color: #666666;
+  }
+}
 
 @media only screen and (max-width: 1250px) {
   .browse-first-row {
