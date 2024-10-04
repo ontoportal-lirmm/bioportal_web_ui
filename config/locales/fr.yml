@@ -305,7 +305,7 @@ fr:
       et aériennes, dans le but de remplacer les méthodes actuelles de contrôle chimique et d'éviter l'utilisation extensive de fongicides, qui conduisent souvent à une résistance chez les pathogènes des plantes.
       En agriculture, les microorganismes promoteurs de croissance des plantes et de biocontrôle ont émergé comme des alternatives sûres aux pesticides chimiques. Les espèces de Streptomyces et leurs
       métabolites peuvent avoir un grand potentiel en tant qu'agents excellents pour contrôler divers phytopathogènes fongiques et bactériens.
-
+    select_ontologies: Sélectionner des ontologies
   concepts:
     error_valid_concept: "Erreur : Vous devez fournir un identifiant de concept valide"
     missing_roots: Racines manquantes
@@ -524,8 +524,11 @@ fr:
       issues_and_requests: Problèmes et demandes
       agreements: Légal
       terms: Termes et conditions
+      terms_anchor: "#h-conditions-generales-dutilisation-dagroportal-francais"
       privacy_policy: Politique de confidentialité
+      privacy_policy_anchor: "#h-vie-privee"
       legal_notices: Mentions légales
+      legal_notices_anchor: "#h-mentions-legales"
       cite_us: Citez-nous
       acknowledgments: Remerciements
       about: À propos
@@ -1188,7 +1191,7 @@ fr:
     save: Sauvegarder
 
   ontologies:
-    showing_ontologies_size: "Affichage de %{ontologies_size} sur %{analytics_size}"
+    showing_ontologies_size: "Affichage de %{ontologies_size} sur %{analytics_size} de %{portals}"
     filters: Filtres
     no_license: Pas de licence
     view_license: Voir la licence
@@ -1532,6 +1535,7 @@ fr:
     paragraph2: "Les cookies sont fonctionnels et non facultatifs. En restant sur %{portal}, vous reconnaissez que les informations vous ont été transmises."
     accept_button: "Accepter"
     privacy_link: "Vie privé"
+    privacy_policy_anchor: "#h-vie-privee"
   taxonomy:
     groups_and_categories: Groupes et Catégories
     description: Dans AgroPortal, les ontologies sont organisées en groupes et étiquetées avec des catégories. Typiquement, les groupes associent des ontologies provenant du même projet ou de la même organisation pour une meilleure identification de la provenance. Tandis que les catégories concernent des sujets/thématiques et permettent de classifier les ontologies. En 2016, les catégories d'AgroPortal ont été établies en coopération avec FAO AIMS. En 2024, nous sommes passés à la nomenclature de l'UNESCO pour les domaines des sciences et des technologies. Les groupes et les catégories, ainsi que d'autres métadonnées, peuvent être utilisés sur la page “Parcourir” d'AgroPortal pour filtrer la liste des ontologies.

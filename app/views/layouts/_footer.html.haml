@@ -20,8 +20,10 @@
           %h2
             = t("layout.footer."+key.to_s)
           %div
+
             - section_links.each do |section , link|
-              %a{:href => link, :target => "_blank"}
+              - anchor = I18n.t("layout.footer.#{section}_anchor", default: "")
+              %a{:href => "#{link}#{anchor}", :target => "_blank"}
                 = t("layout.footer."+section.to_s)
           
 

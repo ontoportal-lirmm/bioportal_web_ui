@@ -27,7 +27,7 @@
                 = render(ChipsComponent.new(name: 'exclude_synonyms', label: t('annotator.exclude_synonyms'), checked: params[:exclude_synonyms]))
               
             .select-ontologies
-              = ontologies_selector(id:'annotator_page_ontologies', label: 'Select ontologies' ,name: 'ontologies[]', selected: params[:ontologies]&.split(','))
+              = ontologies_selector(id:'annotator_page_ontologies', label: t('annotator.select_ontologies') ,name: 'ontologies[]', selected: params[:ontologies]&.split(','))
             = show_advanced_options_button(text: t('show_advanced_options'), init: @advanced_options_open)
             = hide_advanced_options_button(text: t('hide_advanced_options'), init: @advanced_options_open)
         .more-advanced-options{'data-reveal-component-target': 'item', class: "#{@advanced_options_open ? '' : 'd-none'}"}
