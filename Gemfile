@@ -101,8 +101,7 @@ gem 'iso-639', '~> 0.3.6'
 gem 'countries', '~> 5.7'
 
 # Custom API client
-gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'development'
-# Ruby 2.7.8 pinned gems (to remove when migrating to Ruby >= 3.0)
+gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'feature/add-rails-performance'
 
 gem 'ffi', '~> 1.16.3'
 gem 'net-ftp', '~> 0.2.0', require: false
@@ -118,6 +117,9 @@ gem 'omniauth-orcid'
 
 # Used to generate colors randomly
 gem "color", "~> 1.8"
+
+# Application performance monitoring
+gem 'rails_performance'
 
 group :staging, :production, :appliance do
   # Application performance monitoring
