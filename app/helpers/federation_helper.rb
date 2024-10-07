@@ -100,7 +100,11 @@ module FederationHelper
   end
 
   def federatation_enabled?
-    params[:federate] || params[:portals]
+    params[:portals]
+  end
+
+  def is_federation_external_class(class_object)
+    !class_object.links['self'].include?($REST_URL)
   end
 
   def portal_button(name: nil , color: nil , light_color: nil, link: nil, tooltip: nil)
@@ -118,35 +122,21 @@ module FederationHelper
   end
 
   def federation_portal_status(portal_name: nil)
-    portal_api = federated_portals[portal_name][:api]
-    tmp_portal_up = Rails.cache.read("federation_portal_up_#{portal_name}")
-
-    if !tmp_portal_up.nil?
-      return tmp_portal_up
-    else
+    Rails.cache.fetch("federation_portal_up_#{portal_name}", expires_in: 2.hours) do
+      portal_api = federated_portals[portal_name][:api]
       portal_up = false
       begin
-        conn = Faraday.new(url: portal_api) do |f|
-          f.request  :url_encoded
-          f.adapter  Faraday.default_adapter
+        response = Faraday.new(url: portal_api) do |f|
+          f.request :url_encoded
+          f.adapter Faraday.default_adapter
           f.options.timeout = 20
           f.options.open_timeout = 20
-        end
-        response = conn.get
-        if response.success?
-          parsed_response = JSON.parse(response.body)
-          # todo: check if the response is a correct response
-          portal_up = true
-        else
-          raise "API call failed with status #{response.status}"
-        end
-
-      rescue => e
-
+        end.head
+        portal_up = response.success?
+      rescue StandardError => e
+        Rails.logger.error("Error checking portal status for #{portal_name}: #{e.message}")
       end
-      Rails.cache.write("federation_portal_up_#{portal_name}", portal_up, expires_in: 2.hours)
-      return portal_up
+      portal_up
     end
-
   end
 end

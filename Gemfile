@@ -88,11 +88,13 @@ gem 'view_component', '~> 2.72'
 # Pagination library for Rails
 gem 'will_paginate', '~> 3.0'
 
-# String similarity
+# String similarity, used by federated search to rank results
 gem 'string-similarity'
 
 # Render SVG files in Rails views
 gem 'inline_svg'
+
+# ISO language codes and flags
 gem "iso-639", "~> 0.3.6"
 gem "flag-icons-rails", "~> 3.4"
 gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'feature/federated-search'

@@ -85,14 +85,11 @@ module SearchAggregator
       ontology_acronym: ontology_acronym,
       link: link,
       definition: class_object.definition,
+      # Used for federation:
       portal_name: portal_name,
       portal_color: is_external ? federated_portal_color(portal_name) : nil,
       portal_light_color: is_external ? federated_portal_light_color(portal_name) : nil
     }
-  end
-
-  def is_federation_external_class(class_object)
-    !class_object.links['self'].include?($REST_URL)
   end
 
   def ontology_name_acronym(ontologies, selected_acronym)
