@@ -88,7 +88,7 @@ gem 'view_component', '~> 2.72'
 # Pagination library for Rails
 gem 'will_paginate', '~> 3.0'
 
-# String similarity
+# String similarity, used by federated search to rank results
 gem 'string-similarity'
 
 # Render SVG files in Rails views
