@@ -100,7 +100,7 @@ module FederationHelper
   end
 
   def federatation_enabled?
-    params[:federate] || params[:portals]
+    params[:portals]
   end
 
   def is_federation_external_class(class_object)
