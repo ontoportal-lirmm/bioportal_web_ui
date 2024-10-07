@@ -10,7 +10,7 @@ module ComponentsHelper
     render Display::AlertComponent.new(type: type, message: message)
   end
 
-  def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, disabled: false, &block)   
+  def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, disabled: false, &block)
     content_tag(:div, data: { controller: 'tooltip' }, title: tooltip) do
       check_input(id: id, name: name, value: value, label: label, checked: checked, disabled: disabled, &block)
     end
@@ -288,5 +288,14 @@ module ComponentsHelper
     end
   end
 
+  def chips_skelton
+    content_tag(:div, class: 'chips-container loading') do
+      content_tag(:div) do
+        content_tag(:label) do
+          content_tag(:span, '', class: 'skeleton')
+        end
+      end
+    end
+  end
 
 end

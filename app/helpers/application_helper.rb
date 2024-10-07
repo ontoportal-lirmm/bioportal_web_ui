@@ -547,14 +547,4 @@ module ApplicationHelper
     categories_for_select = LinkedData::Client::Models::Category.all.map{|x| ["#{x.name} (#{x.acronym})", x.id]}.unshift(["None", ''])
     render Input::SelectComponent.new(id: id, name: name, value: categories_for_select, selected: selected)
   end
-
-  def chips_skelton
-    content_tag(:div, class: 'chips-container loading') do
-      content_tag(:div) do
-        content_tag(:label) do
-          content_tag(:span, '', class: 'skeleton')
-        end
-      end
-    end
-  end
 end
