@@ -1,5 +1,5 @@
 .browse-center
-  .browse-container{'data-controller': 'federation', 'data-federation-config-value': federated_portals.to_h.to_json}
+  .browse-container
     .container.align-alert
       - if session[:user]&.admin?
         %div{style:'width: 70%;'}
@@ -88,7 +88,7 @@
                   = options_for_select(@formats, @selected_format)
                 %select#Sort_by.browse-sort-by-filter{:name => "Sort_by"}
                   = options_for_select(@sorts_options, @sort_by)
-          .browse-ontologies
+          .browse-ontologies{'data-controller': 'federation', 'data-federation-config-value': federated_portals.to_h.to_json}
             = render TurboFrameComponent.new(id: "ontologies_list_view-page-1" , src: "/ontologies_filter?page=1&#{request.original_url.split('?').last}", data:{"turbo-frame-target":"frame", "turbo-frame-url-value": "/ontologies_filter"}) do |list|
               - list.loader do
                 = browser_counter_loader
