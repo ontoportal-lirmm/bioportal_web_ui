@@ -23,12 +23,12 @@ module HomeHelper
   end
 
   def portal_config_tooltip(portal_name, &block)
-    title = render TurboFrameComponent.new(id: "portal_config_tooltip_#{portal_name&.downcase}", src: "/config?portal=#{portal_name&.downcase}", style: "width: 600px !important; max-height: 300px; overflow: scroll")
+    title = federation_portal_status(portal_name: portal_name.downcase) ? render(TurboFrameComponent.new(id: "portal_config_tooltip_#{portal_name&.downcase}", src: "/config?portal=#{portal_name&.downcase}", style: "width: 600px !important; max-height: 300px; overflow: scroll")) : nil
     render Display::InfoTooltipComponent.new(text: title, interactive: true) do
       capture(&block)
     end
   end
-  
+
   def discover_ontologies_button
     render Buttons::RegularButtonComponent.new(id: 'discover-ontologies-button', value: t('home.discover_ontologies_button'), variant: "secondary", state: "regular", href: "/ontologies") do |btn|
       btn.icon_right do
