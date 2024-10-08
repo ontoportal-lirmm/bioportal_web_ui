@@ -155,7 +155,6 @@ module ApplicationHelper
     !@subdomain_filter.nil? && !@subdomain_filter[:active].nil? && @subdomain_filter[:active] == true
   end
 
-
   def add_comment_button(parent_id, parent_type)
     if session[:user].nil?
       link_to t('application.add_comment'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim"

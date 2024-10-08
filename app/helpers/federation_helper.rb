@@ -21,6 +21,10 @@ module FederationHelper
     federated_portals[name_key.to_sym]
   end
 
+  def portal_name_from_uri(uri)
+    URI.parse(uri).hostname.split('.').first
+  end
+
   def federated_portal_name(key)
     config = federated_portal_config(key)
     config ? config[:name] : key
@@ -93,5 +97,47 @@ module FederationHelper
 
       content_tag(:span, federated_portal_name(name), style: color ? "color: #{color}" :  "", class: color ? "" : "text-primary")
     end.compact
+  end
+
+  def federatation_enabled?
+    params[:portals]
+  end
+
+  def is_federation_external_class(class_object)
+    !class_object.links['self'].include?($REST_URL)
+  end
+
+  def portal_button(name: nil , color: nil , light_color: nil, link: nil, tooltip: nil)
+    content_tag(:a, href: link, target: '_blank', 'data-controller': 'tooltip', title: tooltip, class: 'federation-portal-button button icon-right', style: color ? "background-color: #{light_color} !important" : '') do
+      inline_svg_tag('logos/ontoportal.svg', class: "federated-icon-#{name.downcase}") +
+      content_tag(:div, class: 'text', style: color ? "color: #{color} !important" : '') do
+        name.humanize.gsub("portal", "Portal")
+      end
+    end
+  end
+
+  def find_portal_name_by_api(api_url)
+    portal = federated_portals.values.find { |portal| portal[:api] == api_url }
+    portal ? portal[:name] : nil
+  end
+
+  def federation_portal_status(portal_name: nil)
+    Rails.cache.fetch("federation_portal_up_#{portal_name}", expires_in: 2.hours) do
+      portal_api = federated_portals[portal_name]&[:api]
+      return false unless portal_api
+      portal_up = false
+      begin
+        response = Faraday.new(url: portal_api) do |f|
+          f.request :url_encoded
+          f.adapter Faraday.default_adapter
+          f.options.timeout = 20
+          f.options.open_timeout = 20
+        end.head
+        portal_up = response.success?
+      rescue StandardError => e
+        Rails.logger.error("Error checking portal status for #{portal_name}: #{e.message}")
+      end
+      portal_up
+    end
   end
 end

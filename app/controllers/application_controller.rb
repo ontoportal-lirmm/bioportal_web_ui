@@ -175,6 +175,7 @@ class ApplicationController < ActionController::Base
   def rest_url
     helpers.rest_url
   end
+
   def request_portals
     helpers.request_portals
   end
@@ -439,6 +440,10 @@ class ApplicationController < ActionController::Base
     filtered_params = optional_params.reject { |_, value| value.nil? }
     optional_params_str = filtered_params.map { |param, value| "#{param}=#{value}" }.join("&")
     return base_url + optional_params_str + "&apikey=#{$API_KEY}"
+  end
+  
+  def set_federated_portals
+    RequestStore.store[:federated_portals] =  params[:portals]&.split(',')
   end
 
   private

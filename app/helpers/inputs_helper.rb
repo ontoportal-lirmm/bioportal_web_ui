@@ -28,8 +28,8 @@ module InputsHelper
                                       value: value)
   end
 
-  def check_input(id:, name:, value:, label: '', checked: false, &block)
-    render ChipsComponent.new(name: name, id: id, label: label, value: value, checked: checked) do |c|
+  def check_input(id:, name:, value:, label: '', checked: false, disabled: false, &block)
+    render ChipsComponent.new(name: name, id: id, label: label, value: value, checked: checked, disabled: disabled) do |c|
       if block_given?
         capture(c, &block)
       end
