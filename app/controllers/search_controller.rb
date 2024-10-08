@@ -24,7 +24,7 @@ class SearchController < ApplicationController
       results = LinkedData::Client::Models::Class.search(@search_query, params)
       @federation_errors = results[:errors].map{|e| find_portal_name_by_api(e.split(' ').last.gsub('search', ''))}
       @federation_errors = @federation_errors.map{ |p| "#{p} #{t('federation.not_responding')} " }.join(' ')
-      results = results[:results]
+      results = results[:collection]
       @search_results = aggregate_results(@search_query, results)
     end
     @advanced_options_open = !search_params_empty?
