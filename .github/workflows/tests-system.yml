@@ -28,10 +28,10 @@ jobs:
           - "3306:3306"
         env:
           MYSQL_ROOT_PASSWORD: root
-      memcached:
-        image: memcached:1.6
+      redis:
+        image: redis:latest
         ports:
-          - 11211:11211
+          - 6379:6379
       chrome-server:
         image: selenium/standalone-chrome:112.0-chromedriver-112.0-grid-4.9.0-20230421
         options: "--shm-size=2g"
