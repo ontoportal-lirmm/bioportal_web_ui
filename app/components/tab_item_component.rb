@@ -44,12 +44,8 @@ class TabItemComponent < ViewComponent::Base
   end
 
   def call
-    if title && !title.empty?
-      link_to(title, @path, id: "#{item_id}_tab", class: "#{active_class} tab-link", 'data-json-link': @json_link)
-    else
-      link_to(@path, id: "#{item_id}_tab", class: "#{active_class} tab-link", 'data-json-link': @json_link) do
-        content
-      end
+    link_to(@path, id: "#{item_id}_tab", class: "#{active_class} tab-link", 'data-json-link': @json_link) do
+      (title && !title.empty?) ? title.html_safe : content
     end
   end
 

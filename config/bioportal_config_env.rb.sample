@@ -305,8 +305,8 @@ $FOOTER_LINKS = {
     },
     agreements: {
       terms: $TERMS_AND_CONDITIONS_LINK,
-      privacy_policy: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/terms-conditions-naDsDo2Zxq#h-privacy-policy",
-      legal_notices: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/terms-conditions-naDsDo2Zxq#h-legal-notice"
+      privacy_policy: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/terms-conditions-naDsDo2Zxq",
+      legal_notices: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/terms-conditions-naDsDo2Zxq"
     },
     about: {
       about_us: "https://github.com/agroportal/project-management",

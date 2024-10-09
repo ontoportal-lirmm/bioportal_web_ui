@@ -10,4 +10,4 @@
       %div
         = link_button_component(id:'accept-cookie-selector', value: t('cookies_modal.accept_button'), href: cookies_path(cookies: true), size: "slim", variant: 'primary')
       %div.cookie-privacy-link
-        = link_to t('cookies_modal.privacy_link'), $FOOTER_LINKS.dig(:sections, :agreements, :privacy_policy)
+        = link_to t('cookies_modal.privacy_link'), "#{$FOOTER_LINKS.dig(:sections, :agreements, :privacy_policy)}#{t('cookies_modal.privacy_policy_anchor')}"
