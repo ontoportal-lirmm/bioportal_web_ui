@@ -32,7 +32,7 @@
 
 }
 .chips-container.disabled div label > span, .chips-container div label span:has(span.disabled){
-  background-color: #f8f9fa !important;
+    background-color: #f8f9fa !important;
 }
 
 .chips-container div label input[type="checkbox"]:checked ~ span{

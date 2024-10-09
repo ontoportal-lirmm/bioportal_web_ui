@@ -71,7 +71,7 @@ module SubmissionFilter
       if ontologies.size.eql?(1)
         ontology = ontologies.first
       else
-        ontology = ontologies.select { |x| helpers.internal_ontology?(x[:id]) }.first || ontologies.first
+        ontology = ontologies.select { |x| helpers.internal_ontology?(x[:id]) }.first || ontology_from_portal(ontologies, canonical_portal(ontologies))
       end
 
       ontology[:sources] = ontologies.map { |x| x[:id] }

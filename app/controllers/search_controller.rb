@@ -13,14 +13,21 @@ class SearchController < ApplicationController
     @advanced_options_open = false
     @search_results = []
     @json_url = json_link("#{rest_url}/search", {})
+    params[:portals] = params[:portals]&.join(',')
 
     return if @search_query.empty?
 
     params[:pagesize] = "150"
-    results = LinkedData::Client::Models::Class.search(@search_query, params).collection
 
+    set_federated_portals
+    @time = Benchmark.realtime do
+      results = LinkedData::Client::Models::Class.search(@search_query, params)
+      @federation_errors = results[:errors].map{|e| find_portal_name_by_api(e.split(' ').last.gsub('search', ''))}
+      @federation_errors = @federation_errors.map{ |p| "#{p} #{t('federation.not_responding')} " }.join(' ')
+      results = results[:collection]
+      @search_results = aggregate_results(@search_query, results)
+    end
     @advanced_options_open = !search_params_empty?
-    @search_results = aggregate_results(@search_query, results)
     @json_url = json_link("#{rest_url}/search", params.permit!.to_h)
   end
 
@@ -141,7 +148,7 @@ class SearchController < ApplicationController
     [
       :ontologies, :categories,
       :also_search_properties, :also_search_obsolete, :also_search_views,
-      :require_exact_match, :require_definition
+      :require_exact_match, :require_definition, :portals
     ]
   end
 
