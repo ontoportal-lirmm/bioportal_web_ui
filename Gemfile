@@ -90,12 +90,11 @@ gem 'rest-client'
 
 # View components framework for Rails
 gem 'lookbook', '~> 1.5.5'
+
 gem 'view_component', '~> 2.72'
 
 # Pagination library for Rails
 gem 'will_paginate', '~> 3.0'
-gem 'flag-icons-rails', '~> 3.4'
-gem 'inline_svg'
 
 # Render SVG files in Rails views
 gem 'inline_svg'

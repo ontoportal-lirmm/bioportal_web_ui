@@ -36,8 +36,8 @@ class TabsContainerComponent < ViewComponent::Base
 
   def tabs_container_data(item)
     {
-      toggle: 'tab',
-      target: item_target(item),
+      'bs-toggle': 'tab',
+      'bs-target': item_target(item),
       'tab-id': item.id,
       'tab-title': item.page_name,
       'url-parameter': @url_parameter,
