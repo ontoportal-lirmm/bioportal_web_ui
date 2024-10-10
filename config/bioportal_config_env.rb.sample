@@ -301,7 +301,7 @@ $FOOTER_LINKS = {
 
 
 
-$UI_THEME = ENV['UI_THEME'] || 'ontoportal'
+$UI_THEME = ENV['UI_THEME'] || 'bioportal'
 $HOSTNAME = ENV['API_URL']
 
 if $HOSTNAME
