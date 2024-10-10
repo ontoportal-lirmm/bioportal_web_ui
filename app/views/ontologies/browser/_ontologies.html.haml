@@ -8,7 +8,7 @@
       #{t("ontologies.showing_ontologies_size", ontologies_size: @count, analytics_size: @total_ontologies, portals: request_portals_names.join(', ').html_safe).html_safe} (#{sprintf("%.2f", @time)}s)
     - unless @errors.blank?
       %div.my-1
-        = render Display::AlertComponent.new(type: 'danger') do
+        = render Display::AlertComponent.new(type: 'warning') do
           -  @errors.each do |e|
             %div
               = e.errors || e

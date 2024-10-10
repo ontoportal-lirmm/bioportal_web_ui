@@ -15,7 +15,12 @@
                 = t("search.advanced_options.ontologies")
               .field
                 = ontologies_selector(id:'search_page_ontologies' ,name: 'ontologies[]', selected:  params[:ontologies]&.split(','))
-
+            .filter-container
+              .title 
+                = t('federation.results_from_external_portals')
+              .field.d-flex 
+                - federated_portals.each do |key, config|
+                  = group_chip_component(name: "portals[]", object: { "acronym" => config[:name], "value" => key }, checked: request_portals.include?(key.to_s), title: '')
           .right
             .filter-container
               .title
@@ -35,7 +40,7 @@
         .search-page-options{class:  @search_results.empty? ? 'justify-content-end': ''}
           - unless @search_results.empty?
             .search-page-number-of-results
-              = "#{t('search.match_in')} #{@search_results.length} #{t('search.ontologies')}"
+              = "#{t('search.match_in')} #{@search_results.length} #{t('search.ontologies')} #{t('federation.from')} #{request_portals_names.join(', ').html_safe} (#{sprintf("%.2f", @time)}s)".html_safe
           %div.d-flex
             .search-page-json.mx-4.mt-1
               = search_json_link
@@ -49,6 +54,8 @@
                 =inline_svg_tag 'icons/hide.svg'
               .text
                 = t('search.hide_advanced_options')
+    - unless @federation_errors.blank?
+      = render Display::AlertComponent.new(message: @federation_errors, type: "warning")
     - if @search_results
       .search-page-results-container
         - number = 0
@@ -69,4 +76,3 @@
       .browse-empty-illustration
         %img{:src => "#{asset_path("empty-box.svg")}"}
         %p No result was found
-          

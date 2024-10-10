@@ -71,8 +71,8 @@
                               = turbo_frame_tag "count_#{key}_#{link_last_part(object["id"])}", busy: true
                               %span.show-if-loading
                                 = render LoaderComponent.new(small:true)
-          %div{data:{controller: "show-filter-count browse-filters", action: "change->show-filter-count#updateCount change->browse-filters#dispatchFilterEvent"}, id: "portals_filter_container"}
-            = render DropdownContainerComponent.new(id: "browse-portal-filter", is_open: !request_portals.empty?, title: "Results from external portals") do
+          .browse-federation-input-chip-container                    
+            = render DropdownContainerComponent.new(id: "browse-portal-filter", is_open: !request_portals.empty?, title: t('federation.results_from_external_portals')) do
               .browse-filter-checks-container.px-1
                 - federated_portals.each do |key, config|
                   = group_chip_component(name: "portals", object: { "acronym" => config[:name], "value" => key }, checked: request_portals.include?(key.to_s), title: '')
@@ -86,7 +86,7 @@
                   = options_for_select(@formats, @selected_format)
                 %select#Sort_by.browse-sort-by-filter{:name => "Sort_by"}
                   = options_for_select(@sorts_options, @sort_by)
-          .browse-ontologies
+          .browse-ontologies{'data-controller': 'federation', 'data-federation-config-value': federated_portals.to_h.to_json}
             = render TurboFrameComponent.new(id: "ontologies_list_view-page-1" , src: "/ontologies_filter?page=1&#{request.original_url.split('?').last}", data:{"turbo-frame-target":"frame", "turbo-frame-url-value": "/ontologies_filter"}) do |list|
               - list.loader do
                 = browser_counter_loader
