@@ -10,3 +10,18 @@ application.register("language-change", LanguageChangeController)
 import ClipboardController from "./clipboard_controller"
 application.register("clipboard", ClipboardController)
 
+
+import ClassSearchAutoCompleteController from "./class_search_auto_complete_controller"
+application.register("class-search", ClassSearchAutoCompleteController)
+
+import ContainerSplitterController from "./container_splitter_controller"
+application.register("container-splitter", ContainerSplitterController)
+
+import LoadChartController from "./load_chart_controller"
+application.register("load-chart", LoadChartController)
+
+import OntoportalAutocompleteController from "./ontoportal_autocomplete_controller"
+application.register("ontoportal-autocomplete", OntoportalAutocompleteController)
+
+import SimpleTreeController from "./simple_tree_controller"
+application.register("simple-tree", SimpleTreeController)
