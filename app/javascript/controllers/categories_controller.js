@@ -12,8 +12,14 @@ export default class extends Controller {
             const children = parents[input.value]
             allInputs.forEach(i => {
                 if(children.includes(i.value)){
-                    i.checked = true;
-                    i.dispatchEvent(new Event('change', { bubbles: true }));
+                    if(input.checked){
+                        i.checked = true;
+                        i.dispatchEvent(new Event('change', { bubbles: true }));
+                    } else {
+                        i.checked = false;
+                        i.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                    
                 }
             });
         }
