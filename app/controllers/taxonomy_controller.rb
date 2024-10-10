@@ -38,7 +38,7 @@ class TaxonomyController < ApplicationController
         parent[:children] << category
       end
     end
-    categories.reject! { |category| category[:parentCategory].any? }
+    categories.reject! { |category| category[:parentCategory]&.any? }
     categories
   end
 
