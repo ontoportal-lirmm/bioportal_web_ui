@@ -1,0 +1,36 @@
+.chip_button_container {
+  background-color: #f6f6f6;
+  padding: 10px;
+  border-radius: 5px;
+  color: #777777 !important;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 44px;
+  display: inline;
+}
+.chip-button-component-container {
+  display: inline-block;
+}
+.chip-button-component-container svg path{
+  fill: var(--primary-color);
+}
+
+.chip_button_small {
+  font-size: 12px !important;
+  padding: 5px !important;
+  line-height: unset !important;
+}
+
+.chip_button_container_clickable {
+  background-color: var(--light-color);
+  line-height: 44px;
+  padding: 10px;
+  border-radius: 5px;
+  color: var(--primary-color);
+  font-weight: 500;
+  font-size: 15px;
+  display: inline;
+}
+.chip_button_container_clickable a{
+  color: var(--primary-color);
+}

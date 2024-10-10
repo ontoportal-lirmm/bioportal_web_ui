@@ -1,0 +1,26 @@
+:root {
+    --circle-progress-bar-width: 50px;
+    --circle-progress-bar-height: 50px;
+}
+
+.circular-progress {
+    width: var(--circle-progress-bar-width);
+    height: var(--circle-progress-bar-height);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.inner-circle {
+    position: absolute;
+    width: 85%;
+    height: 85%;
+    border-radius: 50%;
+}
+
+.percentage {
+    position: relative;
+    color: rgba(0, 0, 0, 0.8);
+    margin-bottom: 0;
+}

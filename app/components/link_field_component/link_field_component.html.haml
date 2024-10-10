@@ -1,0 +1,8 @@
+- if internal_link?
+  = render ChipButtonComponent.new(type: "clickable") do
+    = link_tag
+- elsif link?(@value.to_s)
+  = render ChipButtonComponent.new(type: "clickable") do
+    = link_tag
+- else
+  = render ChipButtonComponent.new( text:  @value.to_s, type: "static")

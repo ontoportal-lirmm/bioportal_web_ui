@@ -1,0 +1,29 @@
+%div
+  - if label?
+    .text-input-label
+      = @label
+
+  - if content
+    %div{'data-controller': 'tooltip', title: @tooltip ? content_tag(:div, @tooltip, style: 'max-width: 400px;') : nil}
+      = content
+  - else
+    %input.input-field-component.text-input{class: @disabled ? '' : 'not-disabled', name: @name, type: @type, placeholder: @placeholder, style: error_style, id: @id, data: @data, value: @value, disabled: @disabled, min: @min, max: @max, step: @step, 'data-controller': 'tooltip', title: @tooltip ? content_tag(:div, @tooltip, style: 'max-width: 400px;') : nil}
+
+
+
+  - if error?
+    .text-input-error-text
+      = @error_message
+  - if help?
+    .text-input-helper-text
+      = raw @helper_text
+
+
+
+
+
+
+
+
+
+

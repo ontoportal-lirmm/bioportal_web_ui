@@ -1,0 +1,13 @@
+= turbo_frame_tag "#{@id}_view-page-#{@current_page}"  do
+  - if @collection && !@collection.empty?
+    .hide-if-loading
+      = content
+    - if @next_page
+      = turbo_frame_tag "#{@id}_view-page-#{@next_page}",
+                         loading: :lazy, src: @next_url do
+        - if loader?
+          = loader
+        - else
+          Loading ...
+  - elsif @current_page.eql?(1) && error?
+    = error

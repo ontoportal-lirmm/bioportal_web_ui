@@ -1,0 +1,6 @@
+.clipboard-component-resource-content{style: 'position: absolute; right: 2%; top: 5px;'}
+  = render ClipboardComponent.new(message: @content, show_content: false)
+.content-finder-result{data: {controller: 'rdf-highlighter', 'rdf-highlighter-format-value': @format }}
+  %pre.mb-0
+    %code.d-block{style: 'text-wrap: pretty; word-break: break-all', data: {'rdf-highlighter-target': 'content'}}
+      #{@content}

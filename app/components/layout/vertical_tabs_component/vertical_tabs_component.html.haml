@@ -1,0 +1,20 @@
+- if @header
+  %div.mb-2
+    .edit-ontology-title.mx-2{style: 'font-size: 30px'}
+      %div=@header
+      %hr
+
+.d-flex{data: {controller:'tabs-container'}}
+  .tabs-left-column
+    %div.nav.nav-pills.flex-column
+      - @titles.each_with_index  do |key|
+        %a.vertical-tab-item.d-block{href: "##{key.parameterize}-tab", "data-toggle" => "pill", class:  @selected.eql?(key.parameterize) ? 'active show' : '', data: {'tab-id': key.parameterize,  'tab-title': key.titleize, 'url-parameter': @url_parameter, action: 'click->tabs-container#selectTab'}}
+          = key.humanize
+
+  .tabs-right-column.w-100
+    %div.tab-content
+      - item_contents.each_with_index  do |tab, index|
+        .tab-pane.fade.mx-4{id: @titles[index].parameterize+'-tab', class: @selected.eql?(@titles[index].parameterize) ? 'active show' : ''}
+          = tab
+
+

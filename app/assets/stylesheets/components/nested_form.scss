@@ -1,0 +1,55 @@
+.nested-form-input-container .titles{
+  display: flex;
+  font-size: 14px;
+  color: #666666;
+  margin-bottom: 5px;
+  width: 90%;
+  img {
+    width: 15px;
+    height: 15px;
+    vertical-align: text-bottom;
+  }
+}
+
+
+.nested-form-input-container  input:focus{
+  border: 1px solid var(--primary-color) !important;
+}
+
+.nested-form-input-container .delete{
+  display: flex;
+  border: 1px dashed #BDBDBD;
+  justify-content: center;
+  align-items: center;
+  height: 43px;
+  width: 43px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.nested-form-input-container .add-another-object{
+  border: 1px dashed #BDBDBD;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.nested-form-input-container .add-another-object svg path{
+  fill: #DADADA;
+}
+.nested-form-input-container .add-another-object div{
+  color: #DADADA;
+  margin-left: 10px;
+}
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,9 @@
+%turbo-frame{id: "#{@id}", **@html_options}
+  = tree_container do
+    - children.each do |child|
+      = child
+    = content
+
+
+
+

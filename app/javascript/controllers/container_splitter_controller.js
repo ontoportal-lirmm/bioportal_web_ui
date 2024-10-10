@@ -5,6 +5,7 @@ export default class extends Controller {
   static targets = ['container']
 
   connect() {
+    this.element.style.display= 'flex'
     Split(this.containerTargets, {
       elementStyle: function (dimension, size, gutterSize) {
         return {

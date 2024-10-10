@@ -1,0 +1,6 @@
+%div{data: container_data}
+  %div{'data-action': @toggle ? "change->reveal-component#toggle click->reveal-component#toggle" : "change->reveal-component#select"}
+    = button
+  - containers.each_with_index do |c, i|
+    %div{'data-reveal-component-target': "item", 'data-value': @possible_values[i] , class: @possible_values[i].eql?(@selected) ? '' : @hidden_class}
+      = c

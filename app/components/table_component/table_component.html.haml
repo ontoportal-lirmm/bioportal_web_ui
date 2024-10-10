@@ -1,0 +1,11 @@
+%div{'data-controller': 'table-component',
+    'data-table-component-sortcolumn-value': @sort_column, 'data-table-component-paging-value': @paging,
+    'data-table-component-searching-value': @searching, 'data-table-component-noinitsort-value': @no_init_sort,
+    'data-table-component-search-placeholder-value': @search_placeholder}
+  %table.table-content{id: @id ,class: @custom_class + ' ' + stripped_class + ' ' + borderless_class + ' ' + layout_fixed_class + ' ' + mini_class + ' ' + outline_class}
+    %thead
+      = header
+    %tbody{id:"#{@id}_table_body"}
+      - rows.each do |row|
+        = row
+      = content

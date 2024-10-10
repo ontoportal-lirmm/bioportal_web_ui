@@ -1,0 +1,23 @@
+.field-container {
+  margin-bottom: 0.5rem;
+}
+
+
+.field-description_text,
+.field-description_text a {
+  color: #888888 !important;
+  font-size: 15px;
+  margin-bottom: 0;
+}
+
+.field-description_text {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--read-more-line-clamp, 5);
+}
+
+.field-normal_text {
+  font-size: 15px;
+  color: black;
+}

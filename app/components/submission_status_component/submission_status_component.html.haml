@@ -1,0 +1,8 @@
+#submission-status{style: "display: -webkit-inline-box"}
+  - if @submission.version.present?
+    %p= submission_link
+  - else 
+    %p unknown
+  .spacer
+    - submission_status = status_string(@submission)
+    = render Display::InfoTooltipComponent.new(text: submission_status, icon: submission_status_icons(submission_status)) 

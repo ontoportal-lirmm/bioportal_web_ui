@@ -1,0 +1,26 @@
+%div.d-flex{data: {turbo: false}}
+  %div.w-50.mr-3
+    %div
+      %div.card-body
+        %h5.card-title
+          = @title
+        %p.card-text
+          = @description
+
+  %div.w-100.d-flex.justify-content-center
+    %div.card.py-3.px-2{style: "width: 600px"}
+      = render TabsContainerComponent.new(id: @id) do |t|
+        - t.item(title: 'Widget', selected: true)
+        - t.item(title: '') do
+          %span.mx-1
+            See code
+          = inline_svg_tag('json.svg')
+
+        - t.item_content do
+          %div.py-3.d-flex.justify-content-center
+            = widget
+        - t.item_content do
+          = help_text
+
+%hr.divider.w-100
+

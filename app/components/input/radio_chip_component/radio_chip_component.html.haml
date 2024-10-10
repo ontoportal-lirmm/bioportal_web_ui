@@ -1,0 +1,5 @@
+%label.radio{'data-controller': 'radio-chip', class: @name}
+    %input{type:"radio", value: @value, name: @name, 'data-action': 'change->radio-chip#check', checked: @checked, onchange: @onchange}
+    .text
+        = @label
+    %span

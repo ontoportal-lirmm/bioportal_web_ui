@@ -1,0 +1,7 @@
+- if content && !content.to_s.strip.empty?
+  %div.card
+    %div.card-header
+      %a.card-link{'data-toggle'=>'collapse', :href=>"##{@id}"}= @title || header
+    %div.collapse{id: @id, 'data-parent'=> "##{@parent_id}", class: collapsed_class}
+      %div.card-body
+        = content

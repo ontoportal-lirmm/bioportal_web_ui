@@ -8,13 +8,19 @@ export default class extends Controller {
     }
 
     connect() {
-        useBioportalAutoComplete(this.element,
-            "/search/json_search/" + this.ontologyAcronymValue,
-            {objecttypes: this.objectTypesValue},
-            this.onFindValue.bind(this),
-            this.onItemSelect.bind(this),
-            this.#formatItem.bind(this)
-        )
+        jQuery(document).ready(() => {
+            useBioportalAutoComplete(this.element, "/search/json_search/" + this.ontologyAcronymValue,{
+                extraParams: {objecttypes: this.objectTypesValue},
+                selectFirst: true,
+                lineSeparator: "~!~",
+                matchSubset: 0,
+                minChars: 1,
+                maxItemsToShow: 25,
+                onFindValue:  this.onFindValue.bind(this),
+                onItemSelect:  this.onItemSelect.bind(this),
+                formatItem: this.#formatItem.bind(this)
+            })
+        })
     }
 
     onFindValue(li){
