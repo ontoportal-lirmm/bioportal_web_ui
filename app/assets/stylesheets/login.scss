@@ -1,41 +1,63 @@
-.signin {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
+.login-form{
+  margin-top: 10px;
+  padding: 37px 41px;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 20px 50px;
+  border-radius: 14px;
+  max-width: 439px;
+}
+.login-form a{
+    color: var(--primary-color) !important;
+}
+.login-input{
+    box-sizing: border-box;
+    outline: none;
+    padding: 19px;
+    font-size: 16px;
+    border: 1px solid #BDBDBD;
+    border-radius: 9px;
+    width: 357px;
 }
 
-.form-signin {
-  width: 100%;
-  max-width: 400px;
-  padding: 15px;
-  margin: 0 auto;
+.login-input:focus{
+    border: 1px solid var(--primary-color);
+}
+.login-input::placeholder{
+    font-weight: 300;
+    color: #C1C1C1;
+}
 
-  a {
-    text-decoration: none;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-
-  h4, p {
+.login-input-title{
+    font-size: 13px;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #666666;
+}
+.email-input{
+    margin-bottom: 20px;
+}
+.password-input{
+    margin-bottom: 8px;
+}
+.login-forgot-password{
+    font-weight: 500 ;
+    text-align: end;
+    text-decoration:none;
+    font-size: 13px;
+}
+.dont-have-account{
+    font-size: 15px;
+    font-weight: 600;
     text-align: center;
-  }
 }
-
-.form-signin .enable-lists {
-  color: red;
+.login-button-container{
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 357px;
 }
-
-.password-reset {
-  display: flex;
-  justify-content: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
-
-  form {
-    max-width: 640px;
-  }
+.disabled-login-sso{
+    width: 40px;
+    margin: 7px 10px;
+}
+.login-active-sso path{
+    fill: var(--primary-color)
 }

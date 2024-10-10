@@ -30,8 +30,10 @@
   opacity: 60%;
   transition: opacity 0.3s ease;
 
-  a {
+  a, button {
     color: #5e5e5e !important;
+    border: none;
+    background: none;
   }
 }
 

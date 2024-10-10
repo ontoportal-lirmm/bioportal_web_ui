@@ -1,5 +1,4 @@
 - if current_section.eql?(section_title)
   = yield
 - else
-  = turbo_frame_tag section_title, src: "/ontologies/#{@ontology.acronym}?p=#{section_title}" do
-    loading ....
+  = render TurboFrameComponent.new(id: section_title,  src: "/ontologies/#{@ontology.acronym}?p=#{section_title}",  loading: :lazy)

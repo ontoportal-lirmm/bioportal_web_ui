@@ -1,0 +1,42 @@
+.content-finder-container{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 6px;
+}
+
+.content-finder-container .inputs > div{
+    margin:10px 0;
+    text-align: center;
+}
+
+.content-finder-result{
+    text-align: left;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #fff;
+}
+
+.content-finder-html-result{
+    max-width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.hljs-custom-prefixes{
+    color: grey;
+}
+.hljs-custom-symbol{
+    color: red;
+}
+
+.hljs-custom-concepts{
+    color: #770088;
+}
+
+.hljs-subject{
+    color: green;
+}
+
+.hljs-predicate{
+    color: #770088;
+}

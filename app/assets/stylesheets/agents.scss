@@ -1,0 +1,53 @@
+.agents-inputs input {
+  @extend .form-control !optional;
+  height: 100% !important;
+}
+.agent-chip{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.agent-chip-circle svg{
+  height: 15px;
+}
+
+.agent-chip-circle{
+  height: 30px;
+  width: 30px;
+  background-color: rgba(128, 128, 128, 0.08);
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right:10px;
+}
+
+.agent-chip-name{
+  color: #8C8E8D;
+  font-size: 15px;
+}
+.agent-edit-icon{
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+}
+.agent-input-with-icon{
+  padding: 8px;
+  margin-bottom: 0px;
+  border-radius: 5px;
+  width: 100%;
+  color: #5f6573;
+  outline: none;
+  font-size: 15px;
+  font-weight: 500;
+  border: 1px solid #d7d7d7;
+  padding-left: 45px;
+}
+.agent-input-icon{
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  padding: 11px 17px;
+  box-sizing: unset;
+}

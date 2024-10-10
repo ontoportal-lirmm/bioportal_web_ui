@@ -1,0 +1,58 @@
+@media screen and (min-width: 992px) {
+  .ont-metadata {
+    grid-template-columns: 70% 30% !important;
+  }
+
+  .ont-additional-metadata-card {
+    margin-right: 16px;
+  }
+
+  .ont-links-card, .ont-metadatalinks-card, .ont-included-in-data-catalog-card, .ont-logo-depiction-card {
+    margin-bottom: 32px;
+  }
+}
+
+.ont-metadata-card {
+  
+  td:nth-child(1) {
+    background-color: #f0f0f0;
+    white-space: normal !important;
+    text-transform: capitalize;
+  }
+  
+}
+
+.ont-additional-metadata-card {
+  grid-column: 1;
+  grid-row: 2;
+  
+  .logo {
+    height: 40px;
+    border-width: 0px;
+  }
+}
+
+.ont-included-in-data-catalog-card a.btn {
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.ont-subs-card {
+  grid-row: 3;
+}
+
+.ont-views-card {
+  grid-row: 4;
+}
+
+#createNewMappingModal {
+  
+  .modal-header {
+    display: initial !important;
+  }
+  
+  .modal-body {
+    padding: 2rem !important;
+  }
+
+}

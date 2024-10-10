@@ -1,0 +1,34 @@
+.annotator, .ncbo_annotatorplus {
+
+  #annotator-help {
+    display: none;
+  }
+  #annotator-help > i.fa.fa-question-circle {
+    margin-left: .25em;
+    vertical-align: middle;
+  }
+
+  #download_links {
+    margin-top: 1.5em;
+  }
+
+  #annotator_parameters {
+    font-weight: normal;
+  }
+
+  .annotator_spinner {
+    display: none;
+    
+    img {
+      margin-left: 3px;
+      vertical-align: middle;
+    }
+  }
+
+  .annotator_error {
+    color: red;
+    font-style: italic;
+    margin-left: 3px;
+    vertical-align: middle;
+  }
+}
