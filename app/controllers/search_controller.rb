@@ -20,6 +20,9 @@ class SearchController < ApplicationController
     params[:pagesize] = "150"
 
     set_federated_portals
+
+    params[:ontologies] = nil if federatation_enabled?
+
     @time = Benchmark.realtime do
       results = LinkedData::Client::Models::Class.search(@search_query, params)
       @federation_errors = results[:errors].map{|e| find_portal_name_by_api(e.split(' ').last.gsub('search', ''))}
