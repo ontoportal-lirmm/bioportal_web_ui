@@ -35,7 +35,7 @@ gem 'puma', '~> 5.0'
 
 # Use JavaScript with ESM import maps
 # [https://github.com/rails/importmap-rails]
-gem 'importmap-rails'
+gem 'importmap-rails', '2.0.1'
 
 # Hotwire's SPA-like page accelerator
 # [https://turbo.hotwired.dev]
@@ -55,8 +55,9 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
 
-# Memcached client for Ruby
-gem 'dalli'
+# For Rails cache store support
+gem 'redis'
+gem 'redis-rails'
 
 # GraphQL client for Ruby
 gem 'graphql-client'
@@ -65,7 +66,7 @@ gem 'graphql-client'
 gem 'haml', '~> 5.1'
 
 # Internationalization (i18n)
-gem 'i18n'
+gem 'i18n', '~> 1.14.6'
 gem 'rails-i18n', '~> 7.0.0'
 
 # MySQL database adapter
@@ -96,7 +97,7 @@ gem 'flag-icons-rails', '~> 3.4'
 gem 'iso-639', '~> 0.3.6'
 
 # Custom API client
-gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'development'
+gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'feature/add-rails-performance'
 
 # Ruby 2.7.8 pinned gems (to remove when migrating to Ruby >= 3.0)
 gem 'ffi', '~> 1.16.3'
@@ -113,6 +114,9 @@ gem 'omniauth-orcid'
 
 # Used to generate colors randomly
 gem "color", "~> 1.8"
+
+# Application performance monitoring
+gem 'rails_performance'
 
 group :staging, :production, :appliance do
   # Application performance monitoring
