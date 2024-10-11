@@ -109,3 +109,6 @@ application.register('concepts-json', ConceptsJsonButtonController)
 
 import FederationController from "./federation_controller"
 application.register('federation', FederationController)
+
+import CategoriesController from "./categories_controller"
+application.register('categories', CategoriesController)
