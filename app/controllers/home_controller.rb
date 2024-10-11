@@ -4,30 +4,15 @@ class HomeController < ApplicationController
   layout :determine_layout
 
 
-  include FairScoreHelper
+  include FairScoreHelper, MetricsHelper
 
   def index
     @analytics = helpers.ontologies_analytics
-    # Calculate BioPortal summary statistics
 
-    @ont_count = if @analytics.empty?
-                   LinkedData::Client::Models::Ontology.all.size
-                 else
-                   @analytics.keys.size
-                 end
-
-    metrics = LinkedData::Client::Models::Metrics.all
-    metrics = metrics.each_with_object(Hash.new(0)) do |h, sum|
-      h.to_hash.slice(:classes, :properties, :individuals).each { |k, v| sum[k] += v }
-    end
     @slices = LinkedData::Client::Models::Slice.all
 
-    @cls_count = metrics[:classes]
-    @individuals_count = metrics[:individuals]
-    @prop_count = metrics[:properties]
-    @map_count = total_mapping_count
-    @projects_count = LinkedData::Client::Models::Project.all.length
-    @users_count = LinkedData::Client::Models::User.all.length
+    @metrics = portal_metrics(@analytics)
+
 
     @upload_benefits = [
       t('home.benefit1'),
@@ -164,20 +149,5 @@ class HomeController < ApplicationController
     elsif params[:submit_button] == "recommender"
       redirect_to "/recommender?input=#{helpers.escape(params[:input])}"
     end
-  end
-
-  private
-
-  # Dr. Musen wants 5 specific groups to appear first, sorted by order of importance.
-  # Ordering is documented in GitHub: https://github.com/ncbo/bioportal_web_ui/issues/15.
-  # All other groups come after, with agriculture in the last position.
-  def organize_groups
-    # Reference: https://lildude.co.uk/sort-an-array-of-strings-by-severity
-    acronyms = %w[UMLS OBO_Foundry WHO-FIC CTSA caBIG]
-    size = @groups.size
-    @groups.sort_by! { |g| acronyms.find_index(g.acronym[/(UMLS|OBO_Foundry|WHO-FIC|CTSA|caBIG)/]) || size }
-
-    others, agriculture = @groups.partition { |g| g.acronym != 'CGIAR' }
-    @groups = others + agriculture
   end
 end
