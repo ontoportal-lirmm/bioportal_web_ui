@@ -5,7 +5,6 @@ export default class extends Controller {
     static values = {
         config: Object,
       }
-    static targets = ['chips']
     connect() {
       this.#initIconsStyle()
     }
