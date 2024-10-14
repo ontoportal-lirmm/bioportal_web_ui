@@ -7,6 +7,7 @@ class Display::SearchResultComponent < ViewComponent::Base
 
   renders_many :subresults, Display::SearchResultComponent
   renders_many :reuses, Display::SearchResultComponent
+
   def initialize(number: 0,title: nil, ontology_acronym: nil ,uri: nil, definition: nil, link: nil,  is_sub_component: false, portal_name: nil, portal_color: nil, portal_light_color: nil, other_portals: [])
       @title = title
       @uri = uri
@@ -74,5 +75,15 @@ class Display::SearchResultComponent < ViewComponent::Base
       end +
       inline_svg_tag("icons/arrow-down.svg", class: "federated-icon-#{@portal_name}")
     end
+  end
+
+  def external_class?
+    !@portal_name.nil?
+  end
+
+  def all_federated_portals
+    out = Array(@other_portals)
+    out.prepend({name: @portal_name, color: @portal_color, light_color: @portal_light_color, link: @link}) if external_class?
+    out
   end
 end
