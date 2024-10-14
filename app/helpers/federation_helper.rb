@@ -97,18 +97,18 @@ module FederationHelper
     params[:portals]
   end
 
-  def federation_error?
-    !results[:errors].blank?
+  def federation_error?(response)
+    !response[:errors].blank?
   end
 
-  def federation_error
-    federation_errors = results[:errors].map{|e| ontology_portal_name(e.split(' ').last.gsub('search', ''))}
+  def federation_error(response)
+    federation_errors = response[:errors].map{|e| ontology_portal_name(e.split(' ').last.gsub('search', ''))}
     federation_errors.map{ |p| "#{p} #{t('federation.not_responding')} " }.join(' ')
   end
 
   def class_federation_configuration(class_object)
     is_external = federation_external_class?(class_object)
-    portal_name = is_external ? portal_name_from_uri(class_object.links['ui']) : nil
+    portal_name = is_external ? helpers.portal_name_from_uri(class_object.links['ui']) : nil
 
     result = {
       portal_name: portal_name,

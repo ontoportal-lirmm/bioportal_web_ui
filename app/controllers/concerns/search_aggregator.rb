@@ -35,7 +35,7 @@ module SearchAggregator
       format_search_result(group, all_ontologies)
     end
 
-    search_results = merge_sort_federated_results(search_results) if federation_enabled?
+    search_results = merge_sort_federated_results(query, search_results) if federation_enabled?
 
     search_results
   end
@@ -56,7 +56,7 @@ module SearchAggregator
 
   private
 
-  def merge_sort_federated_results(search_results)
+  def merge_sort_federated_results(query, search_results)
     search_results = merge_federated_results(search_results)
     sort_results_by_string_similarity(query, search_results)
   end

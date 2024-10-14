@@ -3,6 +3,7 @@ class Display::SearchResultComponent < ViewComponent::Base
   include ModalHelper
   include MultiLanguagesHelper
   include FederationHelper
+  include ComponentsHelper
 
   renders_many :subresults, Display::SearchResultComponent
   renders_many :reuses, Display::SearchResultComponent
