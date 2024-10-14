@@ -1,7 +1,7 @@
 require 'uri'
 
 class SearchController < ApplicationController
-  include SearchAggregator, SearchContent
+  include SearchAggregator, SearchContent, FederationHelper
 
   skip_before_action :verify_authenticity_token
 
@@ -21,13 +21,14 @@ class SearchController < ApplicationController
 
     set_federated_portals
 
-    params[:ontologies] = nil if federatation_enabled?
+    params[:ontologies] = nil if federation_enabled?
 
     @time = Benchmark.realtime do
       results = LinkedData::Client::Models::Class.search(@search_query, params)
-      @federation_errors = results[:errors].map{|e| find_portal_name_by_api(e.split(' ').last.gsub('search', ''))}
-      @federation_errors = @federation_errors.map{ |p| "#{p} #{t('federation.not_responding')} " }.join(' ')
       results = results[:collection]
+
+      @federation_errors = federation_error if federation_error?
+
       @search_results = aggregate_results(@search_query, results)
     end
     @advanced_options_open = !search_params_empty?

@@ -99,18 +99,18 @@ module FederationHelper
     end.compact
   end
 
-  def federatation_enabled?
+  def federation_enabled?
     params[:portals]
   end
 
-  def is_federation_external_class(class_object)
-    !class_object.links['self'].include?($REST_URL)
+  def federation_error?
+    !results[:errors].blank?
   end
 
-  def portal_button(name: nil , color: nil , light_color: nil, link: nil, tooltip: nil)
-    content_tag(:a, href: link, target: '_blank', 'data-controller': 'tooltip', title: tooltip, class: 'federation-portal-button button icon-right', style: color ? "background-color: #{light_color} !important" : '') do
-      inline_svg_tag('logos/ontoportal.svg', class: "federated-icon-#{name.downcase}") +
-      content_tag(:div, class: 'text', style: color ? "color: #{color} !important" : '') do
+  def federation_error
+    federation_errors = results[:errors].map{|e| ontology_portal_name(e.split(' ').last.gsub('search', ''))}
+    federation_errors.map{ |p| "#{p} #{t('federation.not_responding')} " }.join(' ')
+  end
         name.humanize.gsub("portal", "Portal")
       end
     end
