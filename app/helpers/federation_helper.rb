@@ -21,10 +21,6 @@ module FederationHelper
     federated_portals[name_key.to_sym]
   end
 
-  def portal_name_from_uri(uri)
-    URI.parse(uri).hostname.split('.').first
-  end
-
   def federated_portal_name(key)
     config = federated_portal_config(key)
     config ? config[:name] : key
@@ -48,15 +44,13 @@ module FederationHelper
 
   def ontology_portal_name(id)
     portal_key, _ =  ontology_portal_config(id)
-    portal_key ? federated_portal_name(portal_key) : 'not found'
+    portal_key ? federated_portal_name(portal_key) : nil
   end
-
 
   def ontology_portal_color(id)
     portal_key, _ =  ontology_portal_config(id)
     federated_portal_color(portal_key) if portal_key
   end
-
 
   def ontoportal_ui_link(id)
     portal_key, config =  ontology_portal_config(id)
@@ -111,14 +105,23 @@ module FederationHelper
     federation_errors = results[:errors].map{|e| ontology_portal_name(e.split(' ').last.gsub('search', ''))}
     federation_errors.map{ |p| "#{p} #{t('federation.not_responding')} " }.join(' ')
   end
-        name.humanize.gsub("portal", "Portal")
-      end
-    end
+
+  def class_federation_configuration(class_object)
+    is_external = federation_external_class?(class_object)
+    portal_name = is_external ? portal_name_from_uri(class_object.links['ui']) : nil
+
+    result = {
+      portal_name: portal_name,
+      portal_color: is_external ? federated_portal_color(portal_name) : nil,
+      portal_light_color: is_external ? federated_portal_light_color(portal_name) : nil
+    }
+    result[:link] = class_object.links['ui'] if is_external
+    result
   end
 
-  def find_portal_name_by_api(api_url)
-    portal = federated_portals.values.find { |portal| portal[:api] == api_url }
-    portal ? portal[:name] : nil
+  def federation_external_class?(class_object)
+    !class_object.links['self'].include?($REST_URL)
   end
+
 
 end
