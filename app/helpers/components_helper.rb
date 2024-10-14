@@ -2,12 +2,7 @@ module ComponentsHelper
   include TermsReuses
 
   def portal_button(name: nil , color: nil , light_color: nil, link: nil, tooltip: nil)
-    content_tag(:a, href: link, target: '_blank', 'data-controller': 'tooltip', title: tooltip, class: 'federation-portal-button button icon-right', style: color ? "background-color: #{light_color} !important" : '') do
-      inline_svg_tag('logos/ontoportal.svg', class: "federated-icon-#{name.downcase}") +
-        content_tag(:div, class: 'text', style: color ? "color: #{color} !important" : '') do
-          name.humanize.gsub("portal", "Portal")
-        end
-    end
+    render FederatedPortalButtonComponent.new(name: name, color: color, link: link, tooltip: tooltip, light_color: light_color)
   end
 
   def tab_item_component(container_tabs:, title:, path:, selected: false, json_link: "", &content)

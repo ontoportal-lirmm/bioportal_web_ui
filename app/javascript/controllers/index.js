@@ -106,6 +106,3 @@ application.register('mappings', MappingsController)
 
 import ConceptsJsonButtonController from "./concepts_json_button_controller.js"
 application.register('concepts-json', ConceptsJsonButtonController)
-
-import FederationController from "./federation_portals_colors_controller"
-application.register("federation-portals-colors", FederationController)
