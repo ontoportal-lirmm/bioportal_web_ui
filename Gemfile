@@ -97,6 +97,8 @@ gem 'inline_svg'
 # ISO language codes and flags
 gem "iso-639", "~> 0.3.6"
 gem "flag-icons-rails", "~> 3.4"
+
+# Custom API client
 gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'development'
 
 # Ruby 2.7.8 pinned gems (to remove when migrating to Ruby >= 3.0)
