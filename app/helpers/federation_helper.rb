@@ -123,5 +123,15 @@ module FederationHelper
     !class_object.links['self'].include?($REST_URL)
   end
 
+  def federated_search_counts(search_results)
+    counts = Hash.new(0)
+
+    search_results.each do |result|
+      portal_name = result.dig(:root, :portal_name) || $SITE
+      counts[portal_name] += 1
+    end
+
+    counts
+  end
 
 end
