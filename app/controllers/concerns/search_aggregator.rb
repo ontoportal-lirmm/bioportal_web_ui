@@ -1,5 +1,6 @@
 module SearchAggregator
-  include UrlsHelper, MultiLanguagesHelper
+  include UrlsHelper, MultiLanguagesHelper, FederationHelper
+  require 'string-similarity'
   extend ActiveSupport::Concern
   BLACKLIST_FIX_STR = [
     "https://",
@@ -27,11 +28,16 @@ module SearchAggregator
   def aggregate_results(query, results)
     ontologies = aggregate_by_ontology(results)
     grouped_results = add_subordinate_ontologies(query, ontologies)
+
     all_ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', include_views: true, display_links: false, display_context: false)
 
-    grouped_results.map do |group|
+    search_results = grouped_results.map do |group|
       format_search_result(group, all_ontologies)
     end
+
+    search_results = merge_sort_federated_results(query, search_results) if federation_enabled?
+
+    search_results
   end
 
   def format_search_result(result, ontologies)
@@ -40,15 +46,20 @@ module SearchAggregator
     result = same_ont.shift
     ontology = result.links['ontology'].split('/').last
     {
-      root: search_result_elem(result, ontology, ontology_name_acronym(ontologies, ontology)),
-      descendants: same_ont.map { |x| search_result_elem(x, ontology, '') },
-      reuses: same_cls.map do |x|
-        format_search_result(x, ontologies)
-      end
+    root: search_result_elem(result, ontology, ontology_name_acronym(ontologies, ontology)),
+    descendants: same_ont.map { |x| search_result_elem(x, ontology, '') },
+    reuses: same_cls.map do |x|
+      format_search_result(x, ontologies)
+    end
     }
   end
 
   private
+
+  def merge_sort_federated_results(query, search_results)
+    search_results = merge_federated_results(search_results)
+    sort_results_by_string_similarity(query, search_results)
+  end
 
   def search_concept_label(label)
     label = language_hash(label)
@@ -59,20 +70,25 @@ module SearchAggregator
         pref_lab.downcase.include?(@search_query.downcase) || @search_query.downcase.include?(pref_lab.downcase)
       end.first || label.first
     end
-    
+
     label
   end
+
   def search_result_elem(class_object, ontology_acronym, title)
-
     label = search_concept_label(class_object.prefLabel)
+    request_lang = helpers.request_lang&.eql?("ALL") ? '' : "&language=#{helpers.request_lang}"
 
-    {
+    result = {
       uri: class_object.id.to_s,
-      title: title.nil? || title.empty? ? "#{label} - #{ontology_acronym}" : "#{label} - #{title}",
+      title: title.to_s.empty? ? "#{label} - #{ontology_acronym}" : "#{label} - #{title}",
       ontology_acronym: ontology_acronym,
-      link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{helpers.request_lang&.eql?("ALL") ? '' : "&language="+helpers.request_lang.to_s}",
-      definition:  class_object.definition
+      link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{request_lang}",
+      definition: class_object.definition,
     }
+
+    result.merge!(class_federation_configuration(class_object)) if federation_enabled?
+
+    result
   end
 
 
@@ -228,5 +244,27 @@ module SearchAggregator
 
     stripped_id
   end
-end
 
+  def merge_federated_results(search_results)
+    search_results.each do |element|
+      element[:root][:other_portals] = []
+      element[:reuses].reject! do |reuse|
+        if (element[:root][:ontology_acronym] == reuse[:root][:ontology_acronym]) && (element[:root][:uri] == reuse[:root][:uri])
+          portal_name = reuse[:root][:portal_name]
+          link = reuse[:root][:link]
+          element[:root][:other_portals] << {name: portal_name, color: federated_portal_color(portal_name), light_color: federated_portal_light_color(portal_name), link: link}
+          true
+        else
+          false
+        end
+      end
+    end
+  end
+
+  def sort_results_by_string_similarity(query, search_results)
+    search_results = search_results.sort_by do |entry|
+      root_similarity = String::Similarity.cosine(query.downcase, entry[:root][:title].split('-').first.gsub(" ", "").downcase)
+      -root_similarity
+    end
+  end
+end
