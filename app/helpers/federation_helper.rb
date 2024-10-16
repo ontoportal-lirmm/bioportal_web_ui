@@ -125,18 +125,17 @@ module FederationHelper
 
 
   def canonical_portal(ontologies)
-    portals = federated_portals.map{|portal| portal.first}
     portal_counts = Hash.new(0)
     # Count occurrences of each portal in the pull_location URL
-      portals.each do |portal|
-        if ontology[:pullLocation]&.include?(portal.to_s)
     ontologies.each do |ontology|
+      federated_portals.keys.each do |portal|
+        if ontology[:pullLocation]&.include?(portal.to_s)
           portal_counts[portal] += 1
-      end
         end
+      end
     end
-    canonical_portal = portal_counts.max_by { |_, count| count }&.first
     # Determine the portal with the most occurrences
+    canonical_portal = portal_counts.max_by { |_, count| count }&.first
 
     canonical_portal
   end
