@@ -124,4 +124,23 @@ module FederationHelper
   end
 
 
+  def federation_portal_status(portal_name: nil)
+    Rails.cache.fetch("federation_portal_up_#{portal_name}", expires_in: 2.hours) do
+      portal_api = federated_portals[portal_name][:api]
+      return false unless portal_api
+      portal_up = false
+      begin
+        response = Faraday.new(url: portal_api) do |f|
+          f.adapter Faraday.default_adapter
+          f.request :url_encoded
+          f.options.timeout = 20
+          f.options.open_timeout = 20
+        end.head
+        portal_up = response.success?
+      rescue StandardError => e
+        Rails.logger.error("Error checking portal status for #{portal_name}: #{e.message}")
+      end
+      portal_up
+    end
+  end
 end

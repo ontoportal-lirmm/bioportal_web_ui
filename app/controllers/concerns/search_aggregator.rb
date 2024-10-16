@@ -91,7 +91,6 @@ module SearchAggregator
     result
   end
 
-
   def ontology_name_acronym(ontologies, selected_acronym)
     ontology = ontologies.select { |x| x.acronym.eql?(selected_acronym.split('/').last) }.first
     "#{ontology.name} (#{ontology.acronym})" if ontology

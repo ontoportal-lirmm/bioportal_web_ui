@@ -131,6 +131,7 @@ Rails.application.routes.draw do
   end
 
   get '' => 'home#index'
+  get 'home/federation_portals_status', to: 'home#federation_portals_status'
 
   match 'sparql_proxy', to: 'admin#sparql_endpoint', via: [:get, :post]
 
