@@ -1,6 +1,10 @@
 module ComponentsHelper
   include TermsReuses
 
+  def portal_button(name: nil , color: nil , light_color: nil, link: nil, tooltip: nil)
+    render FederatedPortalButtonComponent.new(name: name, color: color, link: link, tooltip: tooltip, light_color: light_color)
+  end
+
   def tab_item_component(container_tabs:, title:, path:, selected: false, json_link: "", &content)
     container_tabs.item(title: title.html_safe, path: path, selected: selected, json_link: json_link)
     container_tabs.item_content { capture(&content) }

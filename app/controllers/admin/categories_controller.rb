@@ -122,7 +122,7 @@ class Admin::CategoriesController < ApplicationController
   end
 
   def category_params
-    params.require(:category).permit(:acronym, :name, :description, :parentCategory, {ontologies:[]}).to_h
+    params.require(:category).permit(:acronym, :name, :description, {parentCategory: []}, {ontologies:[]}).to_h
   end
 
   def _categories

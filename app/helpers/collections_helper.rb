@@ -4,7 +4,7 @@ module CollectionsHelper
   def get_collections(ontology, add_colors: false)
     collections = ontology.explore.collections(language: request_lang)
     generate_collections_colors(collections) if add_colors
-    collections.sort_by{ |x| x.prefLabel }
+    collections.sort_by{ |x| main_language_label(x.prefLabel) || ''  } if collections
   end
 
   def get_collection(ontology, collection_uri)
