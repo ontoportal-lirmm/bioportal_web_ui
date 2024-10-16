@@ -138,8 +138,12 @@ module FederationHelper
     counts = Hash.new(0)
 
     ontologies.each do |ontology|
-      request_portals.each do |portal|
-        counts[portal.to_s.downcase] += 1 if ontology[:id].include?(portal.to_s.downcase)
+      current_portal, *federation_portals = request_portals
+
+      counts[current_portal.downcase] += 1 if ontology[:id].include?(current_portal.to_s.downcase)
+
+      federation_portals.each do |portal|
+        counts[portal.downcase] += 1 if ontology[:id].include?(federated_portals[portal.downcase.to_sym][:api])
       end
     end
 
