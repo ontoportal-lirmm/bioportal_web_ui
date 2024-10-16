@@ -32,7 +32,8 @@
 
 }
 .chips-container.disabled div label > span, .chips-container div label span:has(span.disabled){
-  opacity: 60%;
+    opacity: 60%;
+    background-color: #f8f9fa !important;
 }
 
 .chips-container div label input[type="checkbox"]:checked ~ span{

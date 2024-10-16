@@ -25,6 +25,7 @@ import Table_component_controller from '../../components/table_component/table_c
 import clipboard_component_controller from '../../components/clipboard_component/clipboard_component_controller'
 import range_slider_component_controller from '../../components/input/range_slider_component/range_slider_component_controller'
 import RDFHighlighter from '../../components/display/rdf_highlighter_component/rdf_highlighter_component_controller'
+import FederationController from "../../components/federated_portal_button_component/federated_portal_button_component_controller"
 
 application.register("rdf-highlighter", RDFHighlighter)
 application.register('turbo-modal', TurboModalController)
@@ -35,10 +36,12 @@ application.register('subscribe-notes', Ontology_subscribe_button_component_cont
 application.register('search-input', Search_input_component_controller)
 application.register('tabs-container', Tabs_container_component_controller)
 application.register('circle-progress-bar', CircleProgressBarComponentController)
-application.register('alert-component', alert_component_controller)
 
+application.register('alert-component', alert_component_controller)
 application.register('progress-pages', Progress_pages_component_controller)
 application.register('reveal-component', Reveal_component_controller)
 application.register('table-component', Table_component_controller)
 application.register('clipboard', clipboard_component_controller)
+
 application.register('range-slider', range_slider_component_controller)
+application.register("federation-portals-colors", FederationController)

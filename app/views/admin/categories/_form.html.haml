@@ -34,7 +34,7 @@
         %th
           = t('admin.categories.form.parent_category')
         %td.top
-          = categories_select(id: 'category_parent_select', name: 'category[parentCategory]', selected: @category&.parentCategory)
+          = categories_select(id: 'category_parent_select', name: 'category[parentCategory][]', selected: @category&.parentCategory)
       - unless new_record
         %tr
           %th
