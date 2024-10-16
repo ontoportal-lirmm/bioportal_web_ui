@@ -134,4 +134,16 @@ module FederationHelper
     counts
   end
 
+  def federated_browse_counts(ontologies)
+    counts = Hash.new(0)
+
+    ontologies.each do |ontology|
+      request_portals.each do |portal|
+        counts[portal.to_s.downcase] += 1 if ontology[:id].include?(portal.to_s.downcase)
+      end
+    end
+
+    counts
+  end
+
 end

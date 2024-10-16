@@ -44,7 +44,7 @@ class OntologiesController < ApplicationController
 
   def ontologies_filter
     @time = Benchmark.realtime do
-      @ontologies, @count, @count_objects, @request_params = submissions_paginate_filter(params)
+      @ontologies, @count, @count_objects, @request_params, @federation_counts = submissions_paginate_filter(params)
     end
 
     if @page.page.eql?(1)
@@ -193,7 +193,7 @@ class OntologiesController < ApplicationController
     @schemes = get_schemes(@ontology)
     scheme_id = params[:schemeid] || @submission_latest.URI || nil
     @scheme = scheme_id ? get_scheme(@ontology, scheme_id) : @schemes.first
- 
+
 
     render partial: 'ontologies/sections/schemes', layout: 'ontology_viewer'
   end
