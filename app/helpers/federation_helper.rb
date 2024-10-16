@@ -75,7 +75,7 @@ module FederationHelper
     [portal_name] + portals
   end
 
-  def request_portals_names
+  def request_portals_names(counts)
     request_portals.map do |x|
       config = federated_portal_config(x)
 
@@ -89,7 +89,7 @@ module FederationHelper
         next nil
       end
 
-      content_tag(:span, federated_portal_name(name), style: color ? "color: #{color}" :  "", class: color ? "" : "text-primary")
+      content_tag(:span, "#{federated_portal_name(name)} (#{counts[federated_portal_name(name).downcase]})", style: color ? "color: #{color}" :  "", class: color ? "" : "text-primary")
     end.compact
   end
 
@@ -127,7 +127,7 @@ module FederationHelper
     counts = Hash.new(0)
 
     search_results.each do |result|
-      portal_name = result.dig(:root, :portal_name) || $SITE
+      portal_name = result.dig(:root, :portal_name) || $SITE.downcase
       counts[portal_name] += 1
     end
 

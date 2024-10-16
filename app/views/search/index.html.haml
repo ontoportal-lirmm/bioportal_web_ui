@@ -40,7 +40,7 @@
         .search-page-options{class:  @search_results.empty? ? 'justify-content-end': ''}
           - unless @search_results.empty?
             .search-page-number-of-results
-              = "#{t('search.match_in')} #{@search_results.length} #{t('search.ontologies')} #{t('federation.from')} #{request_portals_names.join(', ').html_safe} (#{sprintf("%.2f", @time)}s)".html_safe
+              = "#{t('search.match_in')} #{@search_results.length} #{t('search.ontologies')} #{t('federation.from')} #{request_portals_names(@federation_counts).join(', ').html_safe} in #{sprintf("%.2f", @time)}s".html_safe
           %div.d-flex
             .search-page-advanced-button.mr-4{class: @search_results.blank? ? 'd-none' : ''}
               %a.icon{href: @json_url}
