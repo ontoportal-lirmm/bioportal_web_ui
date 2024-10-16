@@ -69,6 +69,7 @@
 .search-page-advanced-button .text{
   margin-left: 10px;
   color: var(--primary-color);
+  margin-top: 2px;
 }
 
 .search-page-advanced-button .icon svg path{
@@ -76,6 +77,7 @@
 }
 .search-page-number-of-results{
   color: #888888;
+  max-width: 800px;
 }
 
 .search-page-result-element{

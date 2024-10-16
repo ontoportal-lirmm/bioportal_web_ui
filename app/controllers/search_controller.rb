@@ -30,6 +30,7 @@ class SearchController < ApplicationController
 
 
       @search_results = aggregate_results(@search_query, results)
+      @federation_counts = federated_search_counts(@search_results)
     end
     @advanced_options_open = !search_params_empty?
     @json_url = json_link("#{rest_url}/search", params.permit!.to_h)
