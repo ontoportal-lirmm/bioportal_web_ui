@@ -3,8 +3,7 @@
 class HomeController < ApplicationController
   layout :determine_layout
 
-
-  include FairScoreHelper, MetricsHelper
+  include FairScoreHelper, FederationHelper,MetricsHelper
 
   def index
     @analytics = helpers.ontologies_analytics

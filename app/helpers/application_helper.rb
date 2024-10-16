@@ -11,6 +11,11 @@ module ApplicationHelper
 
   include ModalHelper, MultiLanguagesHelper, UrlsHelper
 
+  def url_to_endpoint(url)
+    uri = URI.parse(url)
+    endpoint = uri.path.sub(/^\//, '')
+    endpoint
+  end
   RESOLVE_NAMESPACE = {:omv => "http://omv.ontoware.org/2005/05/ontology#", :skos => "http://www.w3.org/2004/02/skos/core#", :owl => "http://www.w3.org/2002/07/owl#",
                        :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#", :rdfs => "http://www.w3.org/2000/01/rdf-schema#", :metadata => "http://data.bioontology.org/metadata/",
                        :metadata_def => "http://data.bioontology.org/metadata/def/", :dc => "http://purl.org/dc/elements/1.1/", :xsd => "http://www.w3.org/2001/XMLSchema#",
@@ -23,15 +28,14 @@ module ApplicationHelper
                        :oboInOwl => "http://www.geneontology.org/formats/oboInOwl#", :idot => "http://identifiers.org/idot/", :sd => "http://www.w3.org/ns/sparql-service-description#",
                        :cclicense => "http://creativecommons.org/licenses/",
                        'skos-xl' => "http://www.w3.org/2008/05/skos-xl#"}
-  def url_to_endpoint(url)
-    uri = URI.parse(url)
-    endpoint = uri.path.sub(/^\//, '')
-    endpoint
-  end
 
   def search_json_link(link = @json_url, style: '')
     custom_style = "font-size: 50px; line-height: 0.5; margin-left: 6px; #{style}".strip
     render IconWithTooltipComponent.new(icon: "json.svg",link: link, target: '_blank', title: t('fair_score.go_to_api'), size:'small', style: custom_style)
+  end
+
+  def portal_name_from_uri(uri)
+    URI.parse(uri).hostname.split('.').first
   end
 
   def resolve_namespaces
@@ -154,7 +158,6 @@ module ApplicationHelper
   def at_slice?
     !@subdomain_filter.nil? && !@subdomain_filter[:active].nil? && @subdomain_filter[:active] == true
   end
-
 
   def add_comment_button(parent_id, parent_type)
     if session[:user].nil?
