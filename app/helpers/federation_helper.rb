@@ -140,6 +140,37 @@ module FederationHelper
     canonical_portal
   end
 
+  def apply_canonical_portal(search_results, all_submissions)
+    search_results.each do |result|
+      next if result[:root][:portal_name].nil? || result[:root][:other_portals].blank?
+
+      root_link = result[:root][:link].split('?').first
+      candidates = [result[:root][:link]] + result[:root][:other_portals].map { |p| p[:link].split('?').first }
+
+      portal_counts = Hash.new(0)
+      candidates.each do |candidate|
+        submission = all_submissions.find { |s| s.id.split('/')[0...-2].join('/') == candidate }
+
+        federated_portals.keys.each do |portal|
+          portal_counts[portal] += 1 if submission&.include?(portal.to_s)
+        end
+      end
+
+      canonical_portal = portal_counts.max_by { |_, count| count }&.first
+      next if canonical_portal.nil? || result[:root][:portal_name].eql?(canonical_portal.to_s)
+
+      canonical_portal_result = result[:root][:other_portals].find { |r| r[:name] == canonical_portal.to_s }
+      swap_portal_attributes(result[:root], canonical_portal_result) if canonical_portal_result
+    end
+  end
+
+  def swap_portal_attributes(root_portal, new_portal)
+    root_portal[:link], new_portal[:link] = new_portal[:link], root_portal[:link]
+    root_portal[:portal_name], new_portal[:portal_name] = new_portal[:portal_name], root_portal[:portal_name]
+    root_portal[:portal_color], new_portal[:portal_color] = new_portal[:portal_color], root_portal[:portal_color]
+    root_portal[:portal_light_color], new_portal[:portal_light_color] = new_portal[:portal_light_color], root_portal[:portal_light_color]
+  end
+
   def ontology_from_portal(ontologies, portal)
     ontologies.select{|o| o[:id].include?(portal.to_s)}.first
   end
