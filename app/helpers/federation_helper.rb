@@ -48,15 +48,13 @@ module FederationHelper
 
   def ontology_portal_name(id)
     portal_key, _ =  ontology_portal_config(id)
-    portal_key ? federated_portal_name(portal_key) : 'not found'
+    portal_key ? federated_portal_name(portal_key) : nil
   end
-
 
   def ontology_portal_color(id)
     portal_key, _ =  ontology_portal_config(id)
     federated_portal_color(portal_key) if portal_key
   end
-
 
   def ontoportal_ui_link(id)
     portal_key, config =  ontology_portal_config(id)
@@ -81,7 +79,7 @@ module FederationHelper
     [portal_name] + portals
   end
 
-  def request_portals_names
+  def request_portals_names(counts)
     request_portals.map do |x|
       config = federated_portal_config(x)
 
@@ -95,9 +93,67 @@ module FederationHelper
         next nil
       end
 
-      content_tag(:span, federated_portal_name(name), style: color ? "color: #{color}" :  "", class: color ? "" : "text-primary")
+      content_tag(:span, "#{federated_portal_name(name)} (#{counts[federated_portal_name(name).downcase]})", style: color ? "color: #{color}" :  "", class: color ? "" : "text-primary")
     end.compact
   end
+
+  def federation_enabled?
+    params[:portals]
+  end
+
+  def federation_error?(response)
+    !response[:errors].blank?
+  end
+
+  def federation_error(response)
+    federation_errors = response[:errors].map{|e| ontology_portal_name(e.split(' ').last.gsub('search', ''))}
+    federation_errors.map{ |p| "#{p} #{t('federation.not_responding')} " }.join(' ')
+  end
+
+  def class_federation_configuration(class_object)
+    is_external = federation_external_class?(class_object)
+    portal_name = is_external ? helpers.portal_name_from_uri(class_object.links['ui']) : nil
+
+    result = {
+      portal_name: portal_name,
+      portal_color: is_external ? federated_portal_color(portal_name) : nil,
+      portal_light_color: is_external ? federated_portal_light_color(portal_name) : nil
+    }
+    result[:link] = class_object.links['ui'] if is_external
+    result
+  end
+
+  def federation_external_class?(class_object)
+    !class_object.links['self'].include?($REST_URL)
+  end
+
+  def federated_search_counts(search_results)
+    counts = Hash.new(0)
+
+    search_results.each do |result|
+      portal_name = result.dig(:root, :portal_name) || $SITE.downcase
+      counts[portal_name] += 1
+    end
+
+    counts
+  end
+
+  def federated_browse_counts(ontologies)
+    counts = Hash.new(0)
+
+    ontologies.each do |ontology|
+      current_portal, *federation_portals = request_portals
+
+      counts[current_portal.downcase] += 1 if ontology[:id].include?(current_portal.to_s.downcase)
+
+      federation_portals.each do |portal|
+        counts[portal.downcase] += 1 if ontology[:id].include?(federated_portals[portal.downcase.to_sym][:api])
+      end
+    end
+
+    counts
+  end
+
 
   def federatation_enabled?
     params[:portals]

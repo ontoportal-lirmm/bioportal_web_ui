@@ -35,10 +35,8 @@ module SearchAggregator
       format_search_result(group, all_ontologies)
     end
 
-    if federatation_enabled?
-      search_results = merge_federated_results(search_results)
-      search_results = sort_results_by_string_similarity(query, search_results)
-    end
+    search_results = merge_sort_federated_results(query, search_results) if federation_enabled?
+
     search_results
   end
 
@@ -48,15 +46,20 @@ module SearchAggregator
     result = same_ont.shift
     ontology = result.links['ontology'].split('/').last
     {
-      root: search_result_elem(result, ontology, ontology_name_acronym(ontologies, ontology)),
-      descendants: same_ont.map { |x| search_result_elem(x, ontology, '') },
-      reuses: same_cls.map do |x|
-        format_search_result(x, ontologies)
-      end
+    root: search_result_elem(result, ontology, ontology_name_acronym(ontologies, ontology)),
+    descendants: same_ont.map { |x| search_result_elem(x, ontology, '') },
+    reuses: same_cls.map do |x|
+      format_search_result(x, ontologies)
+    end
     }
   end
 
   private
+
+  def merge_sort_federated_results(query, search_results)
+    search_results = merge_federated_results(search_results)
+    sort_results_by_string_similarity(query, search_results)
+  end
 
   def search_concept_label(label)
     label = language_hash(label)
@@ -70,26 +73,22 @@ module SearchAggregator
 
     label
   end
+
   def search_result_elem(class_object, ontology_acronym, title)
     label = search_concept_label(class_object.prefLabel)
     request_lang = helpers.request_lang&.eql?("ALL") ? '' : "&language=#{helpers.request_lang}"
-    internal_class_link = "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{request_lang}"
 
-    is_external = is_federation_external_class(class_object)
-    link = is_external ? class_object.links['ui'] : internal_class_link
-    portal_name = is_external ? portal_name_from_uri(class_object.links['ui']) : nil
-
-    {
+    result = {
       uri: class_object.id.to_s,
       title: title.to_s.empty? ? "#{label} - #{ontology_acronym}" : "#{label} - #{title}",
       ontology_acronym: ontology_acronym,
-      link: link,
+      link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{request_lang}",
       definition: class_object.definition,
-      # Used for federation:
-      portal_name: portal_name,
-      portal_color: is_external ? federated_portal_color(portal_name) : nil,
-      portal_light_color: is_external ? federated_portal_light_color(portal_name) : nil
     }
+
+    result.merge!(class_federation_configuration(class_object)) if federation_enabled?
+
+    result
   end
 
   def ontology_name_acronym(ontologies, selected_acronym)
