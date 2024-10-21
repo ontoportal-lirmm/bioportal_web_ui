@@ -65,6 +65,15 @@ class OntologiesController < ApplicationController
     render turbo_stream: streams
   end
 
+  def browse_filters_container
+    @key = params[:key]
+    @categories = LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
+    @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
+    @filters = ontology_filters_init(@categories, @groups)
+    @values = @filters[@key.to_sym]
+    render 'ontologies/browser/browse_filter'
+  end
+
   def classes
     @submission = get_ontology_submission_ready(@ontology)
     get_class(params)
@@ -193,7 +202,7 @@ class OntologiesController < ApplicationController
     @schemes = get_schemes(@ontology)
     scheme_id = params[:schemeid] || @submission_latest.URI || nil
     @scheme = scheme_id ? get_scheme(@ontology, scheme_id) : @schemes.first
- 
+
 
     render partial: 'ontologies/sections/schemes', layout: 'ontology_viewer'
   end
