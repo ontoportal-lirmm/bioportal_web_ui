@@ -17,7 +17,7 @@ class OntologyBrowseCardComponent < ViewComponent::Base
   end
 
   def external_ontology?
-    !internal_ontology?(@ontology[:id]) || (Array(@ontology[:sources]).size > 1)
+    !internal_ontology?(@ontology[:id])
   end
 
   def onto_link
