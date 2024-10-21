@@ -33,7 +33,7 @@
     %div{data: { controller: "turbo-frame history browse-filters" , "turbo-frame-url-value": "/ontologies_filter?page=1&#{request.original_url.split('?').last}", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL changed->turbo-frame#updateFrame"}}
 
       .browse-sub-container
-        .browse-first-row{data:{controller: "browse-filters", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL"}}
+        .browse-first-row{data:{action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL"}}
           %div.pt-1
             = upload_ontology_button
           %div{style:'margin-top: 30px'}
@@ -50,7 +50,7 @@
 
             - @filters.each do |key, values|
               - if session[:user]&.admin? ||  key != :missingStatus
-                .browse-filter{data:{controller: "show-filter-count browse-filters", action: "change->show-filter-count#updateCount change->browse-filters#dispatchFilterEvent"}, id: "#{key}_filter_container", style: "#{"border-color: var(--admin-color);" if key == :missingStatus}"}
+                .browse-filter{data:{controller: "show-filter-count", action: "change->show-filter-count#updateCount change->browse-filters#dispatchFilterEvent"}, id: "#{key}_filter_container", style: "#{"border-color: var(--admin-color);" if key == :missingStatus}"}
                   .browse-filter-title-bar{"data-target" => "#browse-#{key}-filter", "data-toggle" => "collapse"}
                     %p
                       = browse_filter_section_label(key)
@@ -73,7 +73,7 @@
                                 = render LoaderComponent.new(small:true)
           .browse-federation-input-chip-container                    
             = render DropdownContainerComponent.new(id: "browse-portal-filter", is_open: !request_portals.empty?, title: t('federation.results_from_external_portals')) do
-              .browse-filter-checks-container.px-1
+              .browse-filter-checks-container.px-1{'data-action': 'change->browse-filters#federationChange'}
                 - federated_portals.each do |key, config|
                   = group_chip_component(name: "portals", object: { "acronym" => config[:name], "value" => key }, checked: request_portals.include?(key.to_s), title: '')
 
@@ -84,7 +84,7 @@
               .browse-search-filters
                 %select#format.browse-format-filter{:name => "format"}
                   = options_for_select(@formats, @selected_format)
-                %select#Sort_by.browse-sort-by-filter{:name => "Sort_by"}
+                %select#Sort_by.browse-sort-by-filter{name: "Sort_by", 'data-browse-filters-target': "sort"}
                   = options_for_select(@sorts_options, @sort_by)
           .browse-ontologies
             = render TurboFrameComponent.new(id: "ontologies_list_view-page-1" , src: "/ontologies_filter?page=1&#{request.original_url.split('?').last}", data:{"turbo-frame-target":"frame", "turbo-frame-url-value": "/ontologies_filter"}) do |list|

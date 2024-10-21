@@ -2,6 +2,7 @@ import {Controller} from "@hotwired/stimulus"
 import debounce from "debounce"
 // Connects to data-controller="browse-filters"
 export default class extends Controller {
+    static targets = ['sort']
 
     initialize() {
         this.dispatchInputEvent = debounce(this.dispatchInputEvent.bind(this), 700);
@@ -51,6 +52,11 @@ export default class extends Controller {
         }
 
         this.#dispatchEvent(filter, checks)
+    }
+
+    federationChange(event){
+        this.sortTarget.value = "ontology_name"
+        this.sortTarget.dispatchEvent(new Event('change', { bubbles: true }))
     }
 
 
