@@ -73,9 +73,8 @@
                                 = render LoaderComponent.new(small:true)
           .browse-federation-input-chip-container                    
             = render DropdownContainerComponent.new(id: "browse-portal-filter", is_open: !request_portals.empty?, title: t('federation.results_from_external_portals')) do
-              .browse-filter-checks-container.px-1
-                - federated_portals.each do |key, config|
-                  = group_chip_component(name: "portals", object: { "acronym" => config[:name], "value" => key }, checked: request_portals.include?(key.to_s), title: '')
+              .px-1.browse-federation-input-chips
+                = federation_input_chips(name: "portals")
 
         .browse-second-row
           .browse-search-bar
