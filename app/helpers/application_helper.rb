@@ -551,4 +551,12 @@ module ApplicationHelper
     categories_for_select = LinkedData::Client::Models::Category.all.map{|x| ["#{x.name} (#{x.acronym})", x.id]}.unshift(["None", ''])
     render Input::SelectComponent.new(id: id, name: name, value: categories_for_select, selected: selected, multiple: true)
   end
+
+  def federation_portals_status(key,name,aconym,checked,portal_up)
+    render TurboFrameComponent.new(id:"federation_portals_status_#{@key}") do |container|
+      content_tag(:div, style: "cursor: default;") do
+        group_chip_component(name: @name, object: { "acronym" => @acronym, "value" => @key }, checked: @checked, title: "#{!@portal_up ? "#{@key.humanize.gsub('portal', 'Portal')} is currently down" : ''}", disabled: !@portal_up)
+      end
+    end
+  end
 end
