@@ -169,7 +169,7 @@ class HomeController < ApplicationController
   def federation_portals_status
     @name = params[:name]
     @acronym = params[:acronym]
-    @key = params[:key]
+    @key = params[:portal_name]
     @checked = params[:checked].eql?('true')
     @portal_up = federation_portal_status(portal_name: @key.downcase.to_sym)
     render inline: helpers.federation_portals_status(@key,@name,@aconym,@checked,@portal_up)

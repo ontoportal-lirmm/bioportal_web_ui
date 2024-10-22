@@ -564,7 +564,7 @@ module ApplicationHelper
     federated_portals.map do |key, config|
       turbo_frame_component = TurboFrameComponent.new(
         id: "federation_portals_status_#{key}",
-        src: "home/federation_portals_status?name=#{name}&key=#{key}&acronym=#{config[:name]}&checked=#{request_portals.include?(key.to_s)}"
+        src: "status/#{key}?name=#{name}&acronym=#{config[:name]}&checked=#{request_portals.include?(key.to_s)}"
       )
 
       content_tag :div do
