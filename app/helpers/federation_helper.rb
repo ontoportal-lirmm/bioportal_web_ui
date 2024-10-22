@@ -144,7 +144,7 @@ module FederationHelper
     end
   end
 
-  def federation_portals_status(key,name,acronym,checked,portal_up)
+  def federation_chip_component(key, name, acronym, checked, portal_up)
     render TurboFrameComponent.new(id:"federation_portals_status_#{key}") do
       content_tag(:div, style: "cursor: default;") do
         title = "#{!portal_up ? "#{key.humanize.gsub('portal', 'Portal')} #{t('federation.not_responding')}" : ''}"
