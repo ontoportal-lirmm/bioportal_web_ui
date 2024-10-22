@@ -143,4 +143,9 @@ module FederationHelper
       portal_up
     end
   end
+  def init_federation_portals_status
+    content_tag(:div, class: 'd-none') do
+      federation_input_chips
+    end
+    end
 end

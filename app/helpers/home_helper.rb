@@ -52,10 +52,5 @@ module HomeHelper
     content_tag(:div, t('home.ontoportal_description', ontoportal_link: ontoportal_link, github_link: github_link).html_safe, style: "margin-bottom: 20px")
   end
 
-  def init_portals_status
-    content_tag(:div, class: '.d-none') do
-      federation_input_chips
-    end
-  end
 
 end
