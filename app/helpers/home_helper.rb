@@ -24,7 +24,6 @@ module HomeHelper
 
   def portal_config_tooltip(portal_name, &block)
     portal_id = portal_name&.downcase
-    binding.pry
     title = if federation_portal_status(portal_name: portal_id)
       render(
         TurboFrameComponent.new(
@@ -51,6 +50,12 @@ module HomeHelper
     ontoportal_link = link_to("(#{$ONTOPORTAL_WEBSITE_LINK})", $ONTOPORTAL_WEBSITE_LINK, target: '_blank')
     github_link = link_to("(#{$ONTOPORTAL_GITHUB_REPO})", $ONTOPORTAL_GITHUB_REPO, target: '_blank')
     content_tag(:div, t('home.ontoportal_description', ontoportal_link: ontoportal_link, github_link: github_link).html_safe, style: "margin-bottom: 20px")
+  end
+
+  def init_portals_status
+    content_tag(:div, class: '.d-none') do
+      federation_input_chips
+    end
   end
 
 end
