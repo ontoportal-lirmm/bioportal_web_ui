@@ -555,7 +555,7 @@ module ApplicationHelper
   def federation_portals_status(key,name,aconym,checked,portal_up)
     render TurboFrameComponent.new(id:"federation_portals_status_#{@key}") do |container|
       content_tag(:div, style: "cursor: default;") do
-        group_chip_component(name: @name, object: { "acronym" => @acronym, "value" => @key }, checked: @checked, title: "#{!@portal_up ? "#{@key.humanize.gsub('portal', 'Portal')} is currently down" : ''}", disabled: !@portal_up)
+        group_chip_component(name: @name, object: { "acronym" => @acronym, "value" => @key }, checked: @checked, title: "#{!@portal_up ? "#{@key.humanize.gsub('portal', 'Portal')} #{t('federation.not_responding')}" : ''}", disabled: !@portal_up)
       end
     end
   end
