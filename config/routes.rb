@@ -165,7 +165,6 @@ Rails.application.routes.draw do
   get '/ontologies/:acronym/classes/:purl_conceptid', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
   match '/ontologies/:acronym/submissions/:id/edit_metadata' => 'submissions#edit_metadata', via: [:get, :post]
   get '/ontologies_filter', to: 'ontologies#ontologies_filter'
-  get '/ontologies_filters_container', to: 'ontologies#browse_filters_container'
 
 
   get 'ontologies_selector', to: 'ontologies#ontologies_selector'

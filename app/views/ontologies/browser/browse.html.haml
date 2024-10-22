@@ -54,9 +54,7 @@
                   - d.title { browse_filter_section_header(key: key, count: count)}
                   = browse_filter_section_body(key: key, checked_values: checked_values, objects: objects)
 
-            %div{ data:{controller: "browse_filters",
-                  action: "change->browse-filters#dispatchFilterEvent
-                           change->browse-filters#federationChange"}}
+            %div{ data:{action: "change->browse-filters#federationChange"}}
               - objects =  federated_portals.map{|key, config| { "acronym" => config[:name], "value" => key.to_s }}
               = dropdown_component(id: "browse-portal-filter", is_open: !request_portals.empty?, title: t('federation.results_from_external_portals')) do
                 = browse_filter_section_body(key: 'portals', objects: objects, checked_values: request_portals.map(&:to_s), countable: false)

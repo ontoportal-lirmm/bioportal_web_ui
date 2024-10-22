@@ -793,7 +793,6 @@ module OntologiesHelper
     end
   end
 
-  private
 
   def submission_languages(submission = @submission)
     Array(submission&.naturalLanguage).map { |natural_language| natural_language["iso639"] && natural_language.split('/').last }.compact
@@ -812,20 +811,24 @@ module OntologiesHelper
     end
   end
 
-  def browse_chip_filter(key:, object:, values:, countable: true)
-    title = (key.eql?(:categories) || key.eql?(:groups)) ? nil : ''
+  def browse_chip_filter(key:, object:, values:, countable: true, count: nil)
+    title = (key.to_s.eql?("categories") || key.to_s.eql?("groups")) ? nil : ''
     checked = values.any? { |obj| [link_last_part(object["id"]), link_last_part(object["value"])].include?(obj) }
 
     group_chip_component(name: key, object: object, checked: checked, title: title) do |c|
-      c.count { browse_chip_count_badge(key: key, id: object["id"]) } if countable
+      c.count { browse_chip_count_badge(key: key, id: object["id"], count: count) } if countable
     end
   end
 
-  def browse_chip_count_badge(id:, key:)
+  def browse_chip_count_badge(id:, key:, count: nil)
     content_tag :span, class: 'badge badge-light ml-1' do
       turbo_frame_tag("count_#{key}_#{link_last_part(id)}", busy: true) +
-        content_tag(:span, class: 'show-if-loading') do
-          loader_component(small: true, type: nil)
+        if count || count == 0
+          content_tag(:span, count.to_s, class: "hide-if-loading #{count.zero? ? 'disabled' : ''}")
+        else
+          content_tag(:span, class: 'show-if-loading') do
+            loader_component(small: true, type: nil)
+          end
         end
     end
   end
@@ -855,11 +858,18 @@ module OntologiesHelper
     end
   end
 
-  def browse_filter_section_body(checked_values: , key:, objects:, countable: true)
-    content_tag(:div, class: "browse-filter-checks-container px-3")  do
-      objects.each do |object|
-        concat browse_chip_filter(key: key, object: object, values: checked_values, countable: countable)
+  def browse_filter_section_body(checked_values: , key:, objects:, countable: true, counts: nil)
+    output = content_tag(:div, class: "browse-filter-checks-container px-3")  do
+      Array(objects).map do |object|
+        count = counts ? counts[link_last_part(object["id"])] || 0 : nil
+        concat browse_chip_filter(key: key, object: object, values: checked_values, countable: countable, count: count)
       end
+    end
+
+    if key.to_s.include?("categories")
+      turbo_frame_tag('categories_refresh_for_federation') { output.html_safe }
+    else
+      output
     end
   end
 
