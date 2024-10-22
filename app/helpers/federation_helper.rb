@@ -143,9 +143,40 @@ module FederationHelper
       portal_up
     end
   end
+
+  def federation_portals_status(key,name,acronym,checked,portal_up)
+    render TurboFrameComponent.new(id:"federation_portals_status_#{key}") do
+      content_tag(:div, style: "cursor: default;") do
+        title = "#{!portal_up ? "#{key.humanize.gsub('portal', 'Portal')} #{t('federation.not_responding')}" : ''}"
+        group_chip_component(name: name,
+                             object: { "acronym" => acronym, "value" => key },
+                             checked: checked,
+                             title: title ,
+                             disabled: !portal_up)
+      end
+    end
+  end
+
+  def federation_input_chips(name: nil)
+    federated_portals.map do |key, config|
+      turbo_frame_component = TurboFrameComponent.new(
+        id: "federation_portals_status_#{key}",
+        src: "status/#{key}?name=#{name}&acronym=#{config[:name]}&checked=#{request_portals.include?(key.to_s)}"
+      )
+
+      content_tag :div do
+        render(turbo_frame_component) do |container|
+          container.loader do
+            chips_skelton
+          end
+        end
+      end
+    end.join.html_safe
+  end
+
   def init_federation_portals_status
     content_tag(:div, class: 'd-none') do
       federation_input_chips
     end
-    end
+  end
 end
