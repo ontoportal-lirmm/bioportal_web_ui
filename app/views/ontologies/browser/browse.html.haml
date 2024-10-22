@@ -40,13 +40,10 @@
             %p.browse-filters-title= t("ontologies.filters")
             - if session[:user]&.admin?
               %div.browse-filter.admin-border
-                = render SwitchInputComponent.new(id:'filter-private', name:'private_only', checked: @show_private_only) do
-                  = t("ontologies.browser.show_private_ontology")
+                = switch_input(id:'filter-private', name:'private_only', checked: @show_private_only, label: t("ontologies.browser.show_private_ontology"))
             %div.browse-filter
-              = render SwitchInputComponent.new(id:'filter-views', name:'views', checked: @show_views) do
-                = t("ontologies.browser.show_ontology_views")
-              = render SwitchInputComponent.new(id:'filter-retired', name:'retired',checked: @show_retired) do
-                = t("ontologies.browser.show_retired_ontologies")
+              = switch_input(id:'filter-views', name:'views', checked: @show_views, label: t("ontologies.browser.show_ontology_views"))
+              = switch_input(id:'filter-retired', name:'retired',checked: @show_retired , label: t("ontologies.browser.show_retired_ontologies"))
 
             - @filters.each do |key, values|
               - if session[:user]&.admin? ||  key != :missingStatus
@@ -68,13 +65,13 @@
                       .browse-filter-checks-container
                         - values.first.each do |object|
                           - title = (key.eql?(:categories) || key.eql?(:groups)) ? nil : ''
-                          = group_chip_component(name: key, object: object, checked: values[1].any?(link_last_part(object["id"])) ||  values[1].any?(link_last_part(object["value"])) , title: title) do |c|
-                            - c.count do
-                              %span.badge.badge-light.ml-1
-                                = turbo_frame_tag "count_#{key}_#{link_last_part(object["id"])}", busy: true
-                                %span.show-if-loading
-                                  = render LoaderComponent.new(small:true)
-          .browse-federation-input-chip-container                    
+                        = group_chip_component(name: key, object: object, checked: values[1].any?(link_last_part(object["id"])) ||  values[1].any?(link_last_part(object["value"])) , title: title) do |c|
+                          - c.count do
+                            %span.badge.badge-light.ml-1
+                              = turbo_frame_tag "count_#{key}_#{link_last_part(object["id"])}", busy: true
+                              %span.show-if-loading
+                                = render LoaderComponent.new(small:true)
+          .browse-federation-input-chip-container
             = render DropdownContainerComponent.new(id: "browse-portal-filter", is_open: !request_portals.empty?, title: t('federation.results_from_external_portals')) do
               .browse-filter-checks-container.px-1{'data-action': 'change->browse-filters#federationChange'}
                 - federated_portals.each do |key, config|
