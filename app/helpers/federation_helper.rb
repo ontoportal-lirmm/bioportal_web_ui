@@ -123,8 +123,20 @@ module FederationHelper
     !class_object.links['self'].include?($REST_URL)
   end
 
+  def canonical_ontology(ontologies)
+    if ontologies.size.eql?(1)
+      ontologies.first
+    else
+      internal_ontology = ontologies.select { |x| helpers.internal_ontology?(x[:id]) }.first
+      if internal_ontology
+        internal_ontology
+      else
+        external_canonical_ontology_portal(ontologies)
+      end
+    end
+  end
 
-  def canonical_portal(ontologies)
+  def external_canonical_ontology_portal(ontologies)
     portal_counts = Hash.new(0)
     # Count occurrences of each portal in the pull_location URL
     ontologies.each do |ontology|
@@ -135,16 +147,15 @@ module FederationHelper
       end
     end
     # Determine the portal with the most occurrences
-    canonical_portal = portal_counts.max_by { |_, count| count }&.first
+    portal = portal_counts.max_by { |_, count| count }&.first
 
-    canonical_portal
+    ontologies.select{|o| o[:id].include?(portal.to_s)}.first
   end
 
   def apply_canonical_portal(search_results, all_submissions)
     search_results.each do |result|
       next if result[:root][:portal_name].nil? || result[:root][:other_portals].blank?
 
-      root_link = result[:root][:link].split('?').first
       candidates = [result[:root][:link]] + result[:root][:other_portals].map { |p| p[:link].split('?').first }
 
       portal_counts = Hash.new(0)
@@ -169,10 +180,6 @@ module FederationHelper
     root_portal[:portal_name], new_portal[:portal_name] = new_portal[:portal_name], root_portal[:portal_name]
     root_portal[:portal_color], new_portal[:portal_color] = new_portal[:portal_color], root_portal[:portal_color]
     root_portal[:portal_light_color], new_portal[:portal_light_color] = new_portal[:portal_light_color], root_portal[:portal_light_color]
-  end
-
-  def ontology_from_portal(ontologies, portal)
-    ontologies.select{|o| o[:id].include?(portal.to_s)}.first
   end
 
 end
