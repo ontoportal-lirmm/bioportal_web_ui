@@ -1507,3 +1507,4 @@ en:
     results_from_external_portals: Results from external portals
     from: from
     not_responding: is not responding.
+    check_status: Checking %{portal} availability

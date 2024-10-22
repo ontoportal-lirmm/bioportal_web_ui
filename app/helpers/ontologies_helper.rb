@@ -845,10 +845,10 @@ module OntologiesHelper
     labels[key] || key.to_s.underscore.humanize.capitalize
   end
 
-  def browse_filter_section_header(key:, count:)
-    render Display::HeaderComponent.new(tooltip: browse_taxonomy_tooltip(key.to_s)) do
+  def browse_filter_section_header(key: nil, count: nil, title: nil)
+    render Display::HeaderComponent.new(tooltip: key ? browse_taxonomy_tooltip(key.to_s) : nil) do
       content_tag(:span, class: "browse-filter-title-bar") do
-        concat browse_filter_section_label(key)
+        concat title || browse_filter_section_label(key)
 
         concat content_tag(:span, count, class: "badge badge-primary mx-1",
                            "data-show-filter-count-target": "countSpan",

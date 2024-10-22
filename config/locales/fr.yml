@@ -1544,4 +1544,4 @@ fr:
     results_from_external_portals: Résultats provenant de portails externes
     from: de
     not_responding: ne répond pas.
-
+    check_status: Vérification de la disponibilité de %{portal}
