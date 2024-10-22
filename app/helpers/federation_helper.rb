@@ -167,7 +167,7 @@ module FederationHelper
       content_tag :div do
         render(turbo_frame_component) do |container|
           container.loader do
-            chips_skelton
+            render ChipsComponent.new(name: '', loading: true, tooltip: t('federation.check_status', portal: key.to_s.humanize.gsub('portal', 'Portal')))
           end
         end
       end
