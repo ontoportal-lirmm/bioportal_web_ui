@@ -19,10 +19,7 @@
               .title 
                 = t('federation.results_from_external_portals')
               .field.d-flex 
-                - federated_portals.each do |key, config|
-                  = render TurboFrameComponent.new(id: "federation_portals_status_#{key}", src: "home/federation_portals_status?name=portals[]&key=#{key}&acronym=#{config[:name]}&checked=#{request_portals.include?(key.to_s)}") do |container|
-                    - container.loader do
-                      = chips_skelton
+                = federation_input_chips(name: "portals[]")
           .right
             .filter-container
               .title
