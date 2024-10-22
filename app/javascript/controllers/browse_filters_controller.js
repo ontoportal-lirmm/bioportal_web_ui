@@ -47,11 +47,11 @@ export default class extends Controller {
                 filter = "private_only"
                 break;
             default:
-                checks = this.#getSelectedChecks().map(x => x.value)
+                checks = this.#getSelectedChecks(event).map(x => x.value)
                 filter = event.target.name
         }
-
         this.#dispatchEvent(filter, checks)
+        event.stopPropagation()
     }
 
     federationChange(event){
@@ -69,11 +69,10 @@ export default class extends Controller {
                 data: data
             }, bubbles: true
         });
-
         this.element.dispatchEvent(customEvent);
     }
-    #getSelectedChecks() {
-        return Array.from(this.element.querySelectorAll('input:checked'))
+    #getSelectedChecks(event) {
+        return Array.from(event.currentTarget.querySelectorAll('input:checked'))
     }
 
 }

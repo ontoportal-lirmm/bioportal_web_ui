@@ -33,7 +33,7 @@
     %div{data: { controller: "turbo-frame history browse-filters" , "turbo-frame-url-value": "/ontologies_filter?page=1&#{request.original_url.split('?').last}", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL changed->turbo-frame#updateFrame"}}
 
       .browse-sub-container
-        .browse-first-row{data:{action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL"}}
+        .browse-first-row
           %div.pt-1
             = upload_ontology_button
           %div{style:'margin-top: 30px'}
