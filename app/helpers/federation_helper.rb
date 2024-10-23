@@ -36,25 +36,24 @@ module FederationHelper
     config[:'light-color'] if config
   end
 
-
   def ontology_portal_config(id)
     rest_url = id.split('/')[0..-3].join('/')
-    federated_portals.select{|_, config| config[:api].start_with?(rest_url)}.first
+    federated_portals.select { |_, config| config[:api].start_with?(rest_url) }.first
   end
 
   def ontology_portal_name(id)
-    portal_key, _ =  ontology_portal_config(id)
+    portal_key, _ = ontology_portal_config(id)
     portal_key ? federated_portal_name(portal_key) : nil
   end
 
   def ontology_portal_color(id)
-    portal_key, _ =  ontology_portal_config(id)
+    portal_key, _ = ontology_portal_config(id)
     federated_portal_color(portal_key) if portal_key
   end
 
   def ontoportal_ui_link(id)
-    portal_key, config =  ontology_portal_config(id)
-    return nil  unless portal_key
+    portal_key, config = ontology_portal_config(id)
+    return nil unless portal_key
 
     ui_link = config[:ui]
     api_link = config[:api]
@@ -75,8 +74,8 @@ module FederationHelper
     [portal_name] + portals
   end
 
-  def request_portals_names
-    request_portals.map do |x|
+  def request_portals_names(counts, time)
+    output = request_portals.map do |x|
       config = federated_portal_config(x)
 
       if config
@@ -89,8 +88,10 @@ module FederationHelper
         next nil
       end
 
-      content_tag(:span, federated_portal_name(name), style: color ? "color: #{color}" :  "", class: color ? "" : "text-primary")
-    end.compact
+      content_tag(:span, "#{federated_portal_name(name)} (#{counts[federated_portal_name(name).downcase]})", style: color ? "color: #{color}" : "", class: color ? "" : "text-primary")
+    end.compact.join(", ")
+
+    "#{output} in #{sprintf("%.2f", time)}s"
   end
 
   def federation_enabled?
@@ -102,8 +103,18 @@ module FederationHelper
   end
 
   def federation_error(response)
-    federation_errors = response[:errors].map{|e| ontology_portal_name(e.split(' ').last.gsub('search', ''))}
-    federation_errors.map{ |p| "#{p} #{t('federation.not_responding')} " }.join(' ')
+    federation_errors = response[:errors].map { |e| ontology_portal_name(e.split(' ').last.gsub('search', '')) }
+    federation_errors.map { |p| "#{p} #{t('federation.not_responding')} " }.join(' ')
+  end
+
+  def alert_message_if_federation_error(errors, &block)
+    return if errors.blank?
+
+    content_tag(:div, class: 'my-1') do
+      render Display::AlertComponent.new(type: 'warning') do
+        capture(&block)
+      end
+    end
   end
 
   def class_federation_configuration(class_object)
@@ -178,5 +189,33 @@ module FederationHelper
     content_tag(:div, class: 'd-none') do
       federation_input_chips
     end
+  end
+  def federated_search_counts(search_results)
+    ids = search_results.map do |result|
+      result.dig(:root, :ontology_id) || rest_url
+    end
+    counts_ontology_ids_by_portal_name(ids)
+  end
+
+  def federated_browse_counts(ontologies)
+    ids = ontologies.map { |ontology| ontology[:id] }
+    counts_ontology_ids_by_portal_name(ids)
+  end
+
+  private
+
+  def counts_ontology_ids_by_portal_name(portals_ids)
+    counts = Hash.new(0)
+    current_portal, *federation_portals = request_portals
+    portals_ids.each do |id|
+      counts[current_portal.downcase] += 1 if id.include?(current_portal.to_s.downcase)
+
+      federation_portals.each do |portal|
+        portal_api = federated_portals[portal.downcase.to_sym][:api]
+        counts[portal.downcase] += 1 if id.include?(portal_api)
+      end
+    end
+
+    counts
   end
 end

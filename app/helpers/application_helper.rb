@@ -11,11 +11,7 @@ module ApplicationHelper
 
   include ModalHelper, MultiLanguagesHelper, UrlsHelper
 
-  def url_to_endpoint(url)
-    uri = URI.parse(url)
-    endpoint = uri.path.sub(/^\//, '')
-    endpoint
-  end
+
   RESOLVE_NAMESPACE = {:omv => "http://omv.ontoware.org/2005/05/ontology#", :skos => "http://www.w3.org/2004/02/skos/core#", :owl => "http://www.w3.org/2002/07/owl#",
                        :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#", :rdfs => "http://www.w3.org/2000/01/rdf-schema#", :metadata => "http://data.bioontology.org/metadata/",
                        :metadata_def => "http://data.bioontology.org/metadata/def/", :dc => "http://purl.org/dc/elements/1.1/", :xsd => "http://www.w3.org/2001/XMLSchema#",
@@ -59,18 +55,6 @@ module ApplicationHelper
     end
   end
 
-  def rest_hostname
-    extract_hostname(REST_URI)
-  end
-
-  def extract_hostname(url)
-    begin
-      uri = URI.parse(url)
-      uri.hostname
-    rescue URI::InvalidURIError
-      url
-    end
-  end
 
   def omniauth_providers_info
     $OMNIAUTH_PROVIDERS
@@ -83,11 +67,6 @@ module ApplicationHelper
   def omniauth_token_provider(strategy)
     omniauth_provider_info(strategy.to_sym).keys.first
   end
-
-  def encode_param(string)
-    CGI.escape(string)
-  end
-
 
   def current_user
     session[:user]
@@ -102,9 +81,6 @@ module ApplicationHelper
     child.id.to_s.split('/').last
   end
 
-
-
-  # Create a popup button with a ? inside to display help when hovered
   def help_tooltip(content, html_attribs = {}, icon = 'fas fa-question-circle', css_class = nil, text = nil)
     html_attribs["title"] = content
     attribs = []
@@ -145,15 +121,6 @@ module ApplicationHelper
     onts_for_select
   end
 
-  def link_last_part(url)
-    return "" if url.nil?
-
-    if url.include?('#')
-      url.split('#').last
-    else
-      url.split('/').last
-    end
-  end
 
   def at_slice?
     !@subdomain_filter.nil? && !@subdomain_filter[:active].nil? && @subdomain_filter[:active] == true
@@ -185,14 +152,6 @@ module ApplicationHelper
     end
   end
 
-
-  def link?(str)
-    # Regular expression to match strings starting with "http://" or "https://"
-    link_pattern = /\Ahttps?:\/\//
-    str = str&.strip
-    # Check if the string matches the pattern
-    !!(str =~ link_pattern)
-  end
 
   def subscribe_button(ontology_id)
     return if ontology_id.nil?
@@ -363,10 +322,6 @@ module ApplicationHelper
     "#{Rails.configuration.settings.links[:help]}##{anchor}"
   end
 
-  def uri?(url)
-    url =~ /\A#{URI::DEFAULT_PARSER.make_regexp(%w[http https])}\z/
-  end
-
   def extract_label_from(uri)
     label = uri.to_s.chomp('/').chomp('#')
     index = label.index('#')
@@ -506,7 +461,7 @@ module ApplicationHelper
     end
   end
 
-  def empty_state(text)
+  def empty_state(text = t('no_result_was_found'))
     content_tag(:div, class:'browse-empty-illustration') do
       inline_svg_tag('empty-box.svg') +
       content_tag(:p, text)

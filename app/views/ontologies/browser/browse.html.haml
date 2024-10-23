@@ -1,7 +1,7 @@
 .browse-center
   .browse-container
     .container.align-alert
-      - if session[:user]&.admin?
+      - if current_user_admin?
         %div{style:'width: 70%;'}
           = render Display::AlertComponent.new(type: 'info') do
             %span.d-flex.align-items-center
