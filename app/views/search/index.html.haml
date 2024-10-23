@@ -53,8 +53,9 @@
               = text_with_icon(text: t('search.hide_advanced_options'), icon: 'icons/hide.svg')
 
 
-    - unless @federation_errors.blank?
-      = render Display::AlertComponent.new(message: @federation_errors, type: "warning")
+
+
+    = alert_message_if_federation_error(@federation_errors) {@federation_errors}
 
     .search-page-results-container
       - number = 0
@@ -72,4 +73,4 @@
                 - r[:descendants].each { |dd|  b.subresult(dd.merge(is_sub_component: true))}
 
     - if @search_results.empty? && !@search_query.empty?
-      = empty_state(t('no_result_was_found'))
+      = empty_state

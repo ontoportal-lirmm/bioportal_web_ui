@@ -106,6 +106,16 @@ module FederationHelper
     federation_errors.map{ |p| "#{p} #{t('federation.not_responding')} " }.join(' ')
   end
 
+  def alert_message_if_federation_error(errors, &block)
+    return if errors.blank?
+
+    content_tag(:div, class: 'my-1') do
+      render Display::AlertComponent.new(type: 'warning') do
+        capture(&block)
+      end
+    end
+  end
+
   def class_federation_configuration(class_object)
     is_external = federation_external_class?(class_object)
     portal_name = is_external ? helpers.portal_name_from_uri(class_object.links['ui']) : nil

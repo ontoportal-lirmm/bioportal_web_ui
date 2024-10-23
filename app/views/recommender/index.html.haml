@@ -78,7 +78,7 @@
             - btn.icon_left do
               = inline_svg_tag "edit.svg"
     - if @results && @results.empty?
-      = empty_state(t('no_result_was_found'))
+      = empty_state
     - unless @results.nil? || @results.empty?
       .recommender-page-results 
         .title
@@ -122,5 +122,3 @@
             = render Buttons::RegularButtonComponent.new(id:'recommender_go_annotator', value: t('recommender.call_annotator'), variant: "secondary", href: "/annotator?text=#{params[:input]}&ontologies=#{params[:ontologies]}", size: "slim", target: '_blank', state: "regular") do |btn|
               - btn.icon_right do
                 = inline_svg_tag "arrow-right-outlined.svg"
-
-  

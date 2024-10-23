@@ -506,7 +506,7 @@ module ApplicationHelper
     end
   end
 
-  def empty_state(text)
+  def empty_state(text = t('no_result_was_found'))
     content_tag(:div, class:'browse-empty-illustration') do
       inline_svg_tag('empty-box.svg') +
       content_tag(:p, text)

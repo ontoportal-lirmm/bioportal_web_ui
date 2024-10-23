@@ -6,12 +6,12 @@
   - if @page.page.eql?(1)
     = content_tag(:p, class: "browse-desc-text", style: "margin-bottom: 12px !important;") do
       #{t("ontologies.showing_ontologies_size", ontologies_size: @count, analytics_size: @total_ontologies, portals: request_portals_names(@federation_counts).join(', ').html_safe).html_safe} in #{sprintf("%.2f", @time)}s
-    - unless @errors.blank?
-      %div.my-1
-        = render Display::AlertComponent.new(type: 'warning') do
-          -  @errors.each do |e|
-            %div
-              = e.errors || e
+
+    = alert_message_if_federation_error(@errors) do
+      -  @errors.each do |e|
+        %div
+          = e.errors || e
+
   - ontologies = c.collection
   - ontologies.each do |ontology|
     - config = ontology_portal_config(ontology[:id])&.last || {}
@@ -24,6 +24,4 @@
   - c.loader do
     - ontologies_browse_skeleton
   - c.error do
-    .browse-empty-illustration
-      %img{:src => "#{asset_path("empty-box.svg")}"}
-      %p No result was found
+    = empty_state
