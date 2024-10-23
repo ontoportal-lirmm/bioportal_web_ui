@@ -141,7 +141,7 @@ module MappingsHelper
       target_ontology = ontology_to
       target = concept_to_id
     else
-      if helpers.uri?(ontology_to)
+      if helpers.link?(ontology_to)
         target_ontology = LinkedData::Client::Models::Ontology.find(ontology_to)
       else
         target_ontology = LinkedData::Client::Models::Ontology.find_by_acronym(ontology_to).first

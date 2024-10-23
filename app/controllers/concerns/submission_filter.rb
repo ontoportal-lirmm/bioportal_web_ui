@@ -56,7 +56,9 @@ module SubmissionFilter
 
     count = @page.page.eql?(1) ? count_objects(submissions) : {}
 
-    [@page.collection, @page.totalCount, count, filter_params]
+    federation_counts = federated_browse_counts(submissions)
+
+    [@page.collection, @page.totalCount, count, filter_params, federation_counts]
   end
 
   def ontologies_with_filters_url(filters, page: 1, count: false)

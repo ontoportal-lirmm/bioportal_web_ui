@@ -48,7 +48,7 @@ module SearchAggregator
     same_ont = result[:same_ont]
     same_cls = result[:sub_ont]
     result = same_ont.shift
-    ontology = result.links['ontology'].split('/').last
+    ontology = result.links['ontology']
     {
     root: search_result_elem(result, ontology, ontology_name_acronym(ontologies, ontology)),
     descendants: same_ont.map { |x| search_result_elem(x, ontology, '') },
@@ -78,14 +78,14 @@ module SearchAggregator
     label
   end
 
-  def search_result_elem(class_object, ontology_acronym, title)
+  def search_result_elem(class_object, ontology_id, title)
     label = search_concept_label(class_object.prefLabel)
     request_lang = helpers.request_lang&.eql?("ALL") ? '' : "&language=#{helpers.request_lang}"
-
+    ontology_acronym = link_last_part(ontology_id)
     result = {
       uri: class_object.id.to_s,
       title: title.to_s.empty? ? "#{label} - #{ontology_acronym}" : "#{label} - #{title}",
-      ontology_acronym: ontology_acronym,
+      ontology_id: ontology_id,
       link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{request_lang}",
       definition: class_object.definition,
     }
