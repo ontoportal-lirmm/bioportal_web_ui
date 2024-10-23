@@ -135,6 +135,61 @@ module FederationHelper
   end
 
 
+  def federation_portal_status(portal_name: nil)
+    Rails.cache.fetch("federation_portal_up_#{portal_name}", expires_in: 2.hours) do
+      portal_api = federated_portals&.dig(portal_name,:api)
+      return false unless portal_api
+      portal_up = false
+      begin
+        response = Faraday.new(url: portal_api) do |f|
+          f.adapter Faraday.default_adapter
+          f.request :url_encoded
+          f.options.timeout = 20
+          f.options.open_timeout = 20
+        end.head
+        portal_up = response.success?
+      rescue StandardError => e
+        Rails.logger.error("Error checking portal status for #{portal_name}: #{e.message}")
+      end
+      portal_up
+    end
+  end
+
+  def federation_chip_component(key, name, acronym, checked, portal_up)
+    render TurboFrameComponent.new(id:"federation_portals_status_#{key}") do
+      content_tag(:div, style: "cursor: default;") do
+        title = "#{!portal_up ? "#{key.humanize.gsub('portal', 'Portal')} #{t('federation.not_responding')}" : ''}"
+        group_chip_component(name: name,
+                             object: { "acronym" => acronym, "value" => key },
+                             checked: checked,
+                             title: title ,
+                             disabled: !portal_up)
+      end
+    end
+  end
+
+  def federation_input_chips(name: nil)
+    federated_portals.map do |key, config|
+      turbo_frame_component = TurboFrameComponent.new(
+        id: "federation_portals_status_#{key}",
+        src: "status/#{key}?name=#{name}&acronym=#{config[:name]}&checked=#{request_portals.include?(key.to_s)}"
+      )
+
+      content_tag :div do
+        render(turbo_frame_component) do |container|
+          container.loader do
+            render ChipsComponent.new(name: '', loading: true, tooltip: t('federation.check_status', portal: key.to_s.humanize.gsub('portal', 'Portal')))
+          end
+        end
+      end
+    end.join.html_safe
+  end
+
+  def init_federation_portals_status
+    content_tag(:div, class: 'd-none') do
+      federation_input_chips
+    end
+  end
   def federated_search_counts(search_results)
     ids = search_results.map do |result|
       result.dig(:root, :ontology_id) || rest_url

@@ -1542,3 +1542,4 @@ fr:
   federation:
     results_from_external_portals: Résultats provenant de portails externes
     not_responding: ne répond pas.
+    check_status: Vérification de la disponibilité de %{portal}

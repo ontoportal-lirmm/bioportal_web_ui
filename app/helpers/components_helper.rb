@@ -1,6 +1,12 @@
 module ComponentsHelper
   include TermsReuses
 
+  def dropdown_component(id: ,title: nil, tooltip:nil , is_open: false, &block)
+    render DropdownContainerComponent.new(id: id, title: title, tooltip: tooltip, is_open: is_open) do |d|
+      capture(d, &block) if block_given?
+    end
+  end
+
   def portal_button(name: nil , color: nil , light_color: nil, link: nil, tooltip: nil)
     render FederatedPortalButtonComponent.new(name: name, color: color, link: link, tooltip: tooltip, light_color: light_color)
   end
@@ -14,19 +20,19 @@ module ComponentsHelper
     render Display::AlertComponent.new(type: type, message: message)
   end
 
-  def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, &block)
+  def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, disabled: false, &block)
     content_tag(:div, data: { controller: 'tooltip' }, title: tooltip) do
-      check_input(id: id, name: name, value: value, label: label, checked: checked, &block)
+      check_input(id: id, name: name, value: value, label: label, checked: checked, disabled: disabled, &block)
     end
   end
 
-  def group_chip_component(id: nil, name: , object: , checked: , value: nil, title: nil, &block)
+  def group_chip_component(id: nil, name: , object: , checked: , value: nil, title: nil, disabled: false, &block)
     title ||= object["name"]
     value ||= (object["value"] || object["acronym"] || object["id"])
 
     chips_component(id: id || value, name: name, label: object["acronym"],
                     checked: checked,
-                    value: value, tooltip: title, &block)
+                    value: value, tooltip: title, disabled: disabled, &block)
   end
 
   def rdf_highlighter_container(format, content)
@@ -178,8 +184,8 @@ module ComponentsHelper
     content_tag(:canvas, nil, data: data)
   end
 
-  def loader_component(type = 'pulsing')
-    render LoaderComponent.new(type: type)
+  def loader_component(type:'pulsing', small: false )
+    render LoaderComponent.new(type: type, small: small)
   end
 
   def info_tooltip(text, interactive: true)

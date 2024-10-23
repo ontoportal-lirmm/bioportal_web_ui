@@ -451,6 +451,25 @@
   margin-top: 10px;
 }
 
+.browse-federation-input-chips{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 15px 15px 15px;
+  div {
+    flex-grow: 1;
+  }
+
+  label{
+    display: grid;
+  }
+}
+.browse-federation-input-chip-container{
+  p{
+    font-size: 14px;
+    font-weight: 400;
+    color: #666666;
+  }
+}
 
 @media only screen and (max-width: 1250px) {
   .browse-first-row {

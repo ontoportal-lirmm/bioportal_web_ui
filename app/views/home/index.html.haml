@@ -230,6 +230,8 @@
         %a{href:logo[:url], target: "_blanc"}
           %img{src: asset_path(logo[:img_src])}
 
+= init_federation_portals_status
+
 :javascript
   function submitAnnotator(){
   document.getElementById("annotator_submit").click()
@@ -237,4 +239,3 @@
   function submitRecommender(){
   document.getElementById("recommender_submit").click()
   }
-

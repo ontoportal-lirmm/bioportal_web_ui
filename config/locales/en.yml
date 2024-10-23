@@ -1505,3 +1505,4 @@ en:
   federation:
     results_from_external_portals: Results from external portals
     not_responding: is not responding.
+    check_status: Checking %{portal} availability
