@@ -75,8 +75,8 @@ module FederationHelper
     [portal_name] + portals
   end
 
-  def request_portals_names(counts)
-    request_portals.map do |x|
+  def request_portals_names(counts, time)
+    output = request_portals.map do |x|
       config = federated_portal_config(x)
 
       if config
@@ -89,8 +89,10 @@ module FederationHelper
         next nil
       end
 
-      content_tag(:span, "#{federated_portal_name(name)} (#{counts[federated_portal_name(name).downcase]})", style: color ? "color: #{color}" :  "", class: color ? "" : "text-primary")
-    end.compact
+      content_tag(:span, "#{federated_portal_name(name)} (#{counts[federated_portal_name(name).downcase]})", style: color ? "color: #{color}" : "", class: color ? "" : "text-primary")
+    end.compact.join(", ")
+
+    "#{output} in #{sprintf("%.2f", time)}s"
   end
 
   def federation_enabled?

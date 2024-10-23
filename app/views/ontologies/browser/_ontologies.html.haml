@@ -5,7 +5,7 @@
 
   - if @page.page.eql?(1)
     = content_tag(:p, class: "browse-desc-text", style: "margin-bottom: 12px !important;") do
-      #{t("ontologies.showing_ontologies_size", ontologies_size: @count, analytics_size: @total_ontologies, portals: request_portals_names(@federation_counts).join(', ').html_safe).html_safe} in #{sprintf("%.2f", @time)}s
+      = t("ontologies.showing_ontologies_size", ontologies_size: @count, analytics_size: @total_ontologies, portals: request_portals_names(@federation_counts, @time)).html_safe
 
     = alert_message_if_federation_error(@errors) do
       -  @errors.each do |e|

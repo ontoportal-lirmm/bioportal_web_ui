@@ -921,8 +921,7 @@ en:
         classes_with_definitions: Classes with definitions
     show_advanced_options: Show options
     hide_advanced_options: Hide options
-    match_in: Match in
-    ontologies: ontologies
+    match_in: Match in %{results_size} from %{portals}
     result_component:
       details: Details
       visualize: Vizualize
