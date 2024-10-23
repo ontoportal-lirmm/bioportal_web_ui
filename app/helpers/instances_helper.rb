@@ -57,7 +57,7 @@ module InstancesHelper
   end
 
   def instance_property_value(property, ontology_acronym)
-    if uri?(property)
+    if link?(property)
       instance, types = get_instance_and_type(property, ontology_acronym)
       return link_to_instance(instance, ontology_acronym) unless instance.empty?
     end

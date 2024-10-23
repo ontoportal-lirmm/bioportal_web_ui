@@ -135,43 +135,43 @@
           %hr/
           %div
             %h4
-              = format_number_abbreviated(@metrics[:ontologies_count])
+              = format_number_abbreviated(@ont_count)
             %p= t("home.ontologies")
         .home-statistics-item
           %hr/
           %div
             %h4
-              = format_number_abbreviated(@metrics[:class_count])
+              = format_number_abbreviated(@cls_count)
             %p= t("home.classes")
         .home-statistics-item
           %hr/
           %div
             %h4
-              = format_number_abbreviated(@metrics[:individuals_count])
+              = format_number_abbreviated(@individuals_count)
             %p= t("home.individuals")
         .home-statistics-item
           %hr/
           %div
             %h4
-              = format_number_abbreviated(@metrics[:properties_count])
+              = format_number_abbreviated(@prop_count)
             %p= t("home.properties")
         .home-statistics-item
           %hr/
           %div
             %h4
-              = format_number_abbreviated(@metrics[:projects_count])
+              = format_number_abbreviated(@projects_count)
             %p= t("home.projects")
         .home-statistics-item
           %hr/
           %div
             %h4
-              = format_number_abbreviated(@metrics[:mappings_count])
+              = format_number_abbreviated(@map_count)
             %p= t("home.mappings")
         .home-statistics-item
           %hr/
           %div
             %h4
-              = format_number_abbreviated(@metrics[:users_count])
+              = format_number_abbreviated(@users_count)
             %p= t("home.users")
       .home-statistics-link.justify-content-end{style: @analytics.empty? && "visibility: hidden"}
         = link_to t("home.see_details"),'/statistics', target: "_blank"
@@ -230,12 +230,7 @@
         %a{href:logo[:url], target: "_blanc"}
           %img{src: asset_path(logo[:img_src])}
 
--# This section is hidden, used to initialize the cache of federation portals status
-.d-none
-  - federated_portals.each do |key, config|
-    = render TurboFrameComponent.new(id: "federation_portals_status_#{key}", src: "home/federation_portals_status?name=portals[]&key=#{key}&acronym=#{config[:name]}&checked=#{request_portals.include?(key.to_s)}") do |container|
-      - container.loader do
-        = chips_skelton
+= init_federation_portals_status
 
 :javascript
   function submitAnnotator(){
@@ -244,4 +239,3 @@
   function submitRecommender(){
   document.getElementById("recommender_submit").click()
   }
-

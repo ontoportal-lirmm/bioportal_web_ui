@@ -23,7 +23,16 @@ module HomeHelper
   end
 
   def portal_config_tooltip(portal_name, &block)
-    title = federation_portal_status(portal_name: portal_name.downcase) ? render(TurboFrameComponent.new(id: "portal_config_tooltip_#{portal_name&.downcase}", src: "/config?portal=#{portal_name&.downcase}", style: "width: 600px !important; max-height: 300px; overflow: scroll")) : nil
+    portal_id = portal_name&.downcase
+    title = if federation_portal_status(portal_name: portal_id)
+      render(
+        TurboFrameComponent.new(
+          id: "portal_config_tooltip_#{portal_id}",
+          src: "/config?portal=#{portal_id}",
+          style: "width: 600px !important; max-height: 300px; overflow: scroll"
+        )
+      )
+    end
     render Display::InfoTooltipComponent.new(text: title, interactive: true) do
       capture(&block)
     end
@@ -42,5 +51,6 @@ module HomeHelper
     github_link = link_to("(#{$ONTOPORTAL_GITHUB_REPO})", $ONTOPORTAL_GITHUB_REPO, target: '_blank')
     content_tag(:div, t('home.ontoportal_description', ontoportal_link: ontoportal_link, github_link: github_link).html_safe, style: "margin-bottom: 20px")
   end
+
 
 end

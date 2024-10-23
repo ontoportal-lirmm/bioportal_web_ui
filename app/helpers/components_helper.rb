@@ -1,6 +1,12 @@
 module ComponentsHelper
   include TermsReuses
 
+  def dropdown_component(id: ,title: nil, tooltip:nil , is_open: false, &block)
+    render DropdownContainerComponent.new(id: id, title: title, tooltip: tooltip, is_open: is_open) do |d|
+      capture(d, &block) if block_given?
+    end
+  end
+
   def portal_button(name: nil , color: nil , light_color: nil, link: nil, tooltip: nil)
     render FederatedPortalButtonComponent.new(name: name, color: color, link: link, tooltip: tooltip, light_color: light_color)
   end
@@ -28,8 +34,6 @@ module ComponentsHelper
                     checked: checked,
                     value: value, tooltip: title, disabled: disabled, &block)
   end
-  alias  :category_chip_component :group_chip_component
-
 
   def rdf_highlighter_container(format, content)
     render Display::RdfHighlighterComponent.new(format: format, text: content)
@@ -101,7 +105,6 @@ module ComponentsHelper
     end
   end
 
-
   def resolvability_check_tag(url)
     content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;', onClick: "window.open('#{check_resolvability_url(url: url)}', '_blank');")
   end
@@ -115,7 +118,6 @@ module ComponentsHelper
       render ClipboardComponent.new(title: t("components.copy_original_uri"), message: url, show_content: show_content)
     end
   end
-
 
   def generated_link_to_clipboard(url, acronym)
     url = "#{$UI_URL}/ontologies/#{acronym}/#{link_last_part(url)}"
@@ -131,7 +133,6 @@ module ComponentsHelper
       end
     end
   end
-
 
   def link_to_with_actions(link_to_tag, acronym: nil, url: nil, copy: true, check_resolvability: true, generate_link: true, generate_htaccess: false)
     tag = link_to_tag
@@ -183,8 +184,8 @@ module ComponentsHelper
     content_tag(:canvas, nil, data: data)
   end
 
-  def loader_component(type = 'pulsing')
-    render LoaderComponent.new(type: type)
+  def loader_component(type:'pulsing', small: false )
+    render LoaderComponent.new(type: type, small: small)
   end
 
   def info_tooltip(text, interactive: true)
@@ -268,13 +269,11 @@ module ComponentsHelper
     end
   end
 
-
   def regular_button(id, value, variant: "secondary", state: "regular", size: "slim", &block)
     render Buttons::RegularButtonComponent.new(id:id, value: value, variant: variant, state: state, size: size) do |btn|
       capture(btn, &block) if block_given?
     end
   end
-
 
   def form_save_button
     render Buttons::RegularButtonComponent.new(id: 'save-button', value: t('components.save_button'), variant: "primary", size: "slim", type: "submit") do |btn|
@@ -292,14 +291,9 @@ module ComponentsHelper
     end
   end
 
-  def chips_skelton
-    content_tag(:div, class: 'chips-container loading') do
-      content_tag(:div) do
-        content_tag(:label) do
-          content_tag(:span, '', class: 'skeleton')
-        end
-      end
+  def text_with_icon(text:, icon:)
+    content_tag(:div, class: 'd-flex align-items-center icon') do
+      inline_svg_tag(icon, height: '18', weight: '18') + content_tag(:div, class: 'text') {text}
     end
   end
-
 end

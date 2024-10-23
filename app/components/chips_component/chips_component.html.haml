@@ -1,9 +1,13 @@
-.chips-container{class: @disabled ?  'disabled' : '', 'data-controller': 'tooltip', title: @tooltip}
+.chips-container{class: "#{disabled_class_name} #{loading_class_name}", 'data-controller': 'tooltip', title: @tooltip}
   %div
-    %label{:for => "chips-#{@id}-check"}
-      %input{:id => "chips-#{@id}-check", :name => @name, :type => "checkbox", :value => @value, checked: checked?, disabled: @disabled}
-      %span
-        = inline_svg_tag 'check.svg', class: 'chips-check-icon'
-        %div
-          = @label
-        = count
+    - if @loading
+      %label
+        %span.skeleton
+    - else
+      %label{:for => "chips-#{@id}-check"}
+        %input{:id => "chips-#{@id}-check", :name => @name, :type => "checkbox", :value => @value, checked: checked?, disabled: @disabled}
+        %span
+          = inline_svg_tag 'check.svg', class: 'chips-check-icon'
+          %div
+            = @label
+          = count
