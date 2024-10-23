@@ -36,25 +36,24 @@ module FederationHelper
     config[:'light-color'] if config
   end
 
-
   def ontology_portal_config(id)
     rest_url = id.split('/')[0..-3].join('/')
-    federated_portals.select{|_, config| config[:api].start_with?(rest_url)}.first
+    federated_portals.select { |_, config| config[:api].start_with?(rest_url) }.first
   end
 
   def ontology_portal_name(id)
-    portal_key, _ =  ontology_portal_config(id)
+    portal_key, _ = ontology_portal_config(id)
     portal_key ? federated_portal_name(portal_key) : nil
   end
 
   def ontology_portal_color(id)
-    portal_key, _ =  ontology_portal_config(id)
+    portal_key, _ = ontology_portal_config(id)
     federated_portal_color(portal_key) if portal_key
   end
 
   def ontoportal_ui_link(id)
-    portal_key, config =  ontology_portal_config(id)
-    return nil  unless portal_key
+    portal_key, config = ontology_portal_config(id)
+    return nil unless portal_key
 
     ui_link = config[:ui]
     api_link = config[:api]
@@ -104,8 +103,8 @@ module FederationHelper
   end
 
   def federation_error(response)
-    federation_errors = response[:errors].map{|e| ontology_portal_name(e.split(' ').last.gsub('search', ''))}
-    federation_errors.map{ |p| "#{p} #{t('federation.not_responding')} " }.join(' ')
+    federation_errors = response[:errors].map { |e| ontology_portal_name(e.split(' ').last.gsub('search', '')) }
+    federation_errors.map { |p| "#{p} #{t('federation.not_responding')} " }.join(' ')
   end
 
   def alert_message_if_federation_error(errors, &block)
