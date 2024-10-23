@@ -141,9 +141,7 @@ module FederationHelper
     # Count occurrences of each portal in the pull_location URL
     ontologies.each do |ontology|
       federated_portals.keys.each do |portal|
-        if ontology[:pullLocation]&.include?(portal.to_s)
-          portal_counts[portal] += 1
-        end
+        portal_counts[portal] += 1 if ontology[:pullLocation]&.include?(portal.to_s)
       end
     end
     # Determine the portal with the most occurrences
@@ -156,14 +154,18 @@ module FederationHelper
     search_results.each do |result|
       next if result[:root][:portal_name].nil? || result[:root][:other_portals].blank?
 
-      candidates = [result[:root][:link]] + result[:root][:other_portals].map { |p| p[:link].split('?').first }
+      candidates = [result[:root][:link].split('?').first] + result[:root][:other_portals].map { |p| p[:link].split('?').first }
 
       portal_counts = Hash.new(0)
-      candidates.each do |candidate|
-        submission = all_submissions.find { |s| s.id.split('/')[0...-2].join('/') == candidate }
 
-        federated_portals.keys.each do |portal|
-          portal_counts[portal] += 1 if submission&.include?(portal.to_s)
+      candidates.each do |candidate|
+
+        submission = all_submissions.find { |s| s.id&.include?(candidate.split('/').last) }
+
+        if submission
+          federated_portals.keys.each do |portal|
+            portal_counts[portal] += 1 if submission[:pullLocation]&.include?(portal.to_s)
+          end
         end
       end
 
@@ -173,6 +175,7 @@ module FederationHelper
       canonical_portal_result = result[:root][:other_portals].find { |r| r[:name] == canonical_portal.to_s }
       swap_portal_attributes(result[:root], canonical_portal_result) if canonical_portal_result
     end
+    return search_results
   end
 
   def swap_portal_attributes(root_portal, new_portal)
