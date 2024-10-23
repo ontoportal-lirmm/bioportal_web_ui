@@ -5,7 +5,7 @@ module UrlsHelper
         endpoint
     end
     def rest_hostname
-        extract_hostname(REST_URI)
+        extract_hostname($REST_URL)
     end
 
     def extract_hostname(url)
