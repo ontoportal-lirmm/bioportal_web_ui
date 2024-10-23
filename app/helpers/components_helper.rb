@@ -286,7 +286,7 @@ module ComponentsHelper
   end
 
   def text_with_icon(text:, icon:)
-    content_tag(:div, class: 'icon') do
+    content_tag(:div, class: 'd-flex align-items-center icon') do
       inline_svg_tag(icon, height: '18', weight: '18') + content_tag(:div, class: 'text') {text}
     end
   end
