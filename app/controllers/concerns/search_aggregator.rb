@@ -31,15 +31,17 @@ module SearchAggregator
 
     all_ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', include_views: true, display_links: false, display_context: false)
 
-    all_submissions = LinkedData::Client::Models::OntologySubmission.all(include: 'pullLocation', include_views: true, display_links: false, display_context: false)
 
     search_results = grouped_results.map do |group|
       format_search_result(group, all_ontologies)
     end
 
-    search_results = merge_sort_federated_results(query, search_results) if federation_enabled?
+    if federation_enabled?
+      search_results = merge_sort_federated_results(query, search_results) if federation_enabled?
+      search_results = swap_canonical_portal_results_first(search_results)
+    end
 
-    swap_canonical_portal_results_first(search_results, all_submissions)
+    search_results
   end
 
   def format_search_result(result, ontologies)
@@ -268,7 +270,9 @@ module SearchAggregator
     end
   end
 
-  def swap_canonical_portal_results_first(search_results, all_submissions)
+  def swap_canonical_portal_results_first(search_results)
+    all_submissions = LinkedData::Client::Models::OntologySubmission.all(include: 'pullLocation', include_views: true, display_links: false, display_context: false)
+
     search_results.each do |result|
       next if result[:root][:portal_name].nil? || result[:root][:other_portals].blank?
 
