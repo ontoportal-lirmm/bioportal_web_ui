@@ -25,14 +25,6 @@ module UrlsHelper
         !!(str =~ link_pattern)
     end
 
-    def uri?(url)
-        url =~ /\A#{URI::DEFAULT_PARSER.make_regexp(%w[http https])}\z/
-    end
-
-    def encode_param(string)
-        CGI.escape(string)
-    end
-
     def link_last_part(url)
         return "" if url.nil?
 
@@ -49,5 +41,9 @@ module UrlsHelper
 
     def unescape(string)
         CGI.unescape(string) if string
+    end
+
+    def encode_param(string)
+        escape(string)
     end
 end
