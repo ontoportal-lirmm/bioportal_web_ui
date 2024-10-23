@@ -39,9 +39,7 @@ module SearchAggregator
 
     search_results = merge_sort_federated_results(query, search_results) if federation_enabled?
 
-    search_results = apply_canonical_portal(search_results, all_submissions)
-
-    search_results
+    swap_canonical_portal_results_first(search_results, all_submissions)
   end
 
   def format_search_result(result, ontologies)
@@ -255,12 +253,46 @@ module SearchAggregator
         if (element[:root][:ontology_acronym] == reuse[:root][:ontology_acronym]) && (element[:root][:uri] == reuse[:root][:uri])
           portal_name = reuse[:root][:portal_name]
           link = reuse[:root][:link]
-          element[:root][:other_portals] << {name: portal_name, color: federated_portal_color(portal_name), light_color: federated_portal_light_color(portal_name), link: link}
+          element[:root][:other_portals] << {
+            name: portal_name,
+            color: federated_portal_color(portal_name),
+            light_color: federated_portal_light_color(portal_name),
+            link: link,
+            ontology_id: reuse[:root][:ontology_id]
+          }
           true
         else
           false
         end
       end
+    end
+  end
+
+  def swap_canonical_portal_results_first(search_results, all_submissions)
+    search_results.each do |result|
+      next if result[:root][:portal_name].nil? || result[:root][:other_portals].blank?
+
+      result_ontology_ids = [result[:root][:ontology_id]] + result[:root][:other_portals].map { |p| p[:ontology_id] }
+
+      result_submissions = all_submissions.select do |submission|
+        result_ontology_ids.any? { |ontology_id| submission.id.include?(ontology_id) }
+      end
+
+      canonical_portal = most_referred_portal(result_submissions)
+      is_internal_ontology = result[:root][:portal_name].eql?(canonical_portal.to_s)
+
+      next if canonical_portal.nil? || is_internal_ontology
+
+      canonical_portal_result = result[:root][:other_portals].find { |r| r[:name] == canonical_portal.to_s }
+      swap_portal_attributes(result[:root], canonical_portal_result) if canonical_portal_result
+    end
+    search_results
+  end
+
+
+  def swap_portal_attributes(root_portal, new_portal)
+    [:link, :portal_name, :portal_color, :portal_light_color].each do |attribute|
+      root_portal[attribute], new_portal[attribute] = new_portal[attribute], root_portal[attribute]
     end
   end
 

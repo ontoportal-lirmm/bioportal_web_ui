@@ -148,51 +148,6 @@ module FederationHelper
     end
   end
 
-  def count_portals(ontologies_list)
-    portal_counts = Hash.new(0)
-    ontologies_list.each do |ontology|
-      federated_portals.keys.each do |portal|
-        portal_counts[portal] += 1 if ontology[:pullLocation]&.include?(portal.to_s)
-      end
-    end
-    portal_counts
-  end
-
-  def external_canonical_ontology_portal(ontologies)
-    portal_counts = count_portals(ontologies)
-    portal = portal_counts.max_by { |_, count| count }&.first
-    ontologies.select{|o| o[:id].include?(portal.to_s)}.first
-  end
-
-  def apply_canonical_portal(search_results, all_submissions)
-    search_results.each do |result|
-      next if result[:root][:portal_name].nil? || result[:root][:other_portals].blank?
-
-      candidates = [result[:root][:link].split('?').first] + result[:root][:other_portals].map { |p| p[:link].split('?').first }
-
-      ontologies_list = []
-      candidates.each do |candidate|
-        submission = all_submissions.find { |s| s.id&.include?(candidate.split('/').last) }
-        ontologies_list << submission if submission
-      end
-
-      portal_counts = count_portals(ontologies_list)
-
-      canonical_portal = portal_counts.max_by { |_, count| count }&.first
-      next if canonical_portal.nil? || result[:root][:portal_name].eql?(canonical_portal.to_s)
-
-      canonical_portal_result = result[:root][:other_portals].find { |r| r[:name] == canonical_portal.to_s }
-      swap_portal_attributes(result[:root], canonical_portal_result) if canonical_portal_result
-    end
-    return search_results
-  end
-
-  def swap_portal_attributes(root_portal, new_portal)
-    [:link, :portal_name, :portal_color, :portal_light_color].each do |attribute|
-      root_portal[attribute], new_portal[attribute] = new_portal[attribute], root_portal[attribute]
-    end
-  end
-
   def federation_portal_status(portal_name: nil)
     Rails.cache.fetch("federation_portal_up_#{portal_name}", expires_in: 2.hours) do
       portal_api = federated_portals&.dig(portal_name,:api)
@@ -248,6 +203,7 @@ module FederationHelper
       federation_input_chips
     end
   end
+
   def federated_search_counts(search_results)
     ids = search_results.map do |result|
       result.dig(:root, :ontology_id) || rest_url
@@ -276,4 +232,20 @@ module FederationHelper
 
     counts
   end
+
+  def external_canonical_ontology_portal(ontologies)
+    canonical_portal = most_referred_portal(ontologies)
+    ontologies.select{|o| o[:id].include?(canonical_portal.to_s)}.first
+  end
+
+  def most_referred_portal(ontology_submissions)
+    portal_counts = Hash.new(0)
+    ontology_submissions.each do |submission|
+      federated_portals.keys.each do |portal|
+        portal_counts[portal] += 1 if submission[:pullLocation]&.include?(portal.to_s)
+      end
+    end
+    portal_counts.max_by { |_, count| count }&.first
+  end
+
 end
