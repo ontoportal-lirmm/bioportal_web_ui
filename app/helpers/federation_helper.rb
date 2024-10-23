@@ -1,4 +1,5 @@
 module FederationHelper
+  include ApplicationHelper
 
   def federated_portals
     $FEDERATED_PORTALS ||= LinkedData::Client.settings.federated_portals
