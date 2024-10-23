@@ -49,15 +49,28 @@ class OntologiesController < ApplicationController
 
     if @page.page.eql?(1)
       streams = [prepend("ontologies_list_view-page-#{@page.page}", partial: 'ontologies/browser/ontologies')]
+
       streams += @count_objects.map do |section, values_count|
         values_count.map do |value, count|
           replace("count_#{section}_#{link_last_part(value)}") do
             helpers.turbo_frame_tag("count_#{section}_#{link_last_part(value)}") do
-              helpers.content_tag(:span, count.to_s, class: "hide-if-loading #{count.zero? ? 'disabled' : ''}")
+            helpers.content_tag(:span, count.to_s, class: "hide-if-loading #{count.zero? ? 'disabled' : ''}")
             end
           end
         end
       end.flatten
+
+      unless request_portals.empty?
+        streams += [
+          replace('categories_refresh_for_federation') do
+            key = "categories"
+            objects, checked_values, _ = @filters[key.to_sym]
+            helpers.browse_filter_section_body(checked_values: checked_values,
+                                               key: key, objects: objects,
+                                               counts: @count_objects[key.to_sym])
+          end
+        ]
+      end
     else
       streams = [replace("ontologies_list_view-page-#{@page.page}", partial: 'ontologies/browser/ontologies')]
     end
