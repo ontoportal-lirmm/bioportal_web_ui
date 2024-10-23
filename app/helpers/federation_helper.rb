@@ -136,17 +136,19 @@ module FederationHelper
     end
   end
 
-  def external_canonical_ontology_portal(ontologies)
+  def count_portals(ontologies_list)
     portal_counts = Hash.new(0)
-    # Count occurrences of each portal in the pull_location URL
-    ontologies.each do |ontology|
+    ontologies_list.each do |ontology|
       federated_portals.keys.each do |portal|
         portal_counts[portal] += 1 if ontology[:pullLocation]&.include?(portal.to_s)
       end
     end
-    # Determine the portal with the most occurrences
-    portal = portal_counts.max_by { |_, count| count }&.first
+    portal_counts
+  end
 
+  def external_canonical_ontology_portal(ontologies)
+    portal_counts = count_portals(ontologies)
+    portal = portal_counts.max_by { |_, count| count }&.first
     ontologies.select{|o| o[:id].include?(portal.to_s)}.first
   end
 
@@ -156,18 +158,13 @@ module FederationHelper
 
       candidates = [result[:root][:link].split('?').first] + result[:root][:other_portals].map { |p| p[:link].split('?').first }
 
-      portal_counts = Hash.new(0)
-
+      ontologies_list = []
       candidates.each do |candidate|
-
         submission = all_submissions.find { |s| s.id&.include?(candidate.split('/').last) }
-
-        if submission
-          federated_portals.keys.each do |portal|
-            portal_counts[portal] += 1 if submission[:pullLocation]&.include?(portal.to_s)
-          end
-        end
+        ontologies_list << submission if submission
       end
+
+      portal_counts = count_portals(ontologies_list)
 
       canonical_portal = portal_counts.max_by { |_, count| count }&.first
       next if canonical_portal.nil? || result[:root][:portal_name].eql?(canonical_portal.to_s)
