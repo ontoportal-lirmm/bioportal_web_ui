@@ -55,11 +55,11 @@ module MetricsHelper
       unless stats.blank?
         stats = stats.to_h.compact
         # Some of the mapping counts are erroneously stored as strings
-        stats.select!{ |acronym, count| ontologies_acronym.include?(acronym.to_s) } unless ontologies_acronym.empty?
+        stats.select!{ |acronym, count| ontologies_acronym.include?(acronym.to_s) } if helpers.at_slice?
         stats.transform_values!(&:to_i)
         total_count = stats.values.sum
       end
-    rescue StandardError
+    rescue StandardError => e
       LOG.add :error, e.message
     end
 
