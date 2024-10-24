@@ -15,11 +15,12 @@
                 = t("search.advanced_options.ontologies")
               .field
                 = ontologies_selector(id:'search_page_ontologies' ,name: 'ontologies[]', selected:  params[:ontologies]&.split(','))
-            .filter-container
-              .title 
-                = t('federation.results_from_external_portals')
-              .field.d-flex 
-                = federation_input_chips(name: "portals[]")
+            - if @federation_enabled
+              .filter-container
+                .title 
+                  = t('federation.results_from_external_portals')
+                .field.d-flex 
+                  = federation_input_chips(name: "portals[]")
           .right
             .filter-container
               .title
