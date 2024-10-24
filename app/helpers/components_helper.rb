@@ -34,6 +34,7 @@ module ComponentsHelper
                     checked: checked,
                     value: value, tooltip: title, disabled: disabled, &block)
   end
+  alias  :category_chip_component :group_chip_component
 
   def rdf_highlighter_container(format, content)
     render Display::RdfHighlighterComponent.new(format: format, text: content)
