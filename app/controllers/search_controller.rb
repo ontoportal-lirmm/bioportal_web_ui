@@ -8,6 +8,7 @@ class SearchController < ApplicationController
   layout :determine_layout
 
   def index
+    @federation_enabled = federation_enabled?
     @search_query = params[:query] || params[:q] || ''
     params[:query] = nil
     @advanced_options_open = false
@@ -21,7 +22,7 @@ class SearchController < ApplicationController
 
     set_federated_portals
 
-    params[:ontologies] = nil if federation_enabled?
+    params[:ontologies] = nil if federation_portals_enabled?
 
     @time = Benchmark.realtime do
       results = LinkedData::Client::Models::Class.search(@search_query, params)
