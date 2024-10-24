@@ -417,6 +417,11 @@ module ApplicationHelper
     $SITE
   end
 
+  def current_slice_name
+    name = @subdomain_filter[:name]
+    name.blank? ? nil : name
+  end
+
   def navitems
     items = [["/ontologies", t('layout.header.browse')],
              ["/mappings", t('layout.header.mappings')],
