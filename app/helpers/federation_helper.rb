@@ -135,6 +135,18 @@ module FederationHelper
     !class_object.links['self'].include?($REST_URL)
   end
 
+  def canonical_ontology(ontologies)
+    if ontologies.size.eql?(1)
+      ontologies.first
+    else
+      internal_ontology = ontologies.select { |x| helpers.internal_ontology?(x[:id]) }.first
+      if internal_ontology
+        internal_ontology
+      else
+        external_canonical_ontology_portal(ontologies)
+      end
+    end
+  end
 
   def federation_portal_status(portal_name: nil)
     Rails.cache.fetch("federation_portal_up_#{portal_name}", expires_in: 2.hours) do
@@ -191,6 +203,7 @@ module FederationHelper
       federation_input_chips
     end
   end
+
   def federated_search_counts(search_results)
     ids = search_results.map do |result|
       result.dig(:root, :ontology_id) || rest_url
@@ -219,4 +232,20 @@ module FederationHelper
 
     counts
   end
+
+  def external_canonical_ontology_portal(ontologies)
+    canonical_portal = most_referred_portal(ontologies)
+    ontologies.select{|o| o[:id].include?(canonical_portal.to_s)}.first
+  end
+
+  def most_referred_portal(ontology_submissions)
+    portal_counts = Hash.new(0)
+    ontology_submissions.each do |submission|
+      federated_portals.keys.each do |portal|
+        portal_counts[portal] += 1 if submission[:pullLocation]&.include?(portal.to_s)
+      end
+    end
+    portal_counts.max_by { |_, count| count }&.first
+  end
+
 end
