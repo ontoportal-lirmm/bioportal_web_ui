@@ -8,13 +8,13 @@ class Display::SearchResultComponent < ViewComponent::Base
   renders_many :subresults, Display::SearchResultComponent
   renders_many :reuses, Display::SearchResultComponent
 
-  def initialize(number: 0,title: nil, ontology_acronym: nil ,uri: nil, definition: nil, link: nil,  is_sub_component: false, portal_name: nil, portal_color: nil, portal_light_color: nil, other_portals: [])
+  def initialize(number: 0,title: nil, ontology_id: nil ,uri: nil, definition: nil, link: nil,  is_sub_component: false, portal_name: nil, portal_color: nil, portal_light_color: nil, other_portals: [])
       @title = title
       @uri = uri
       @definition = definition
       @link = link
       @is_sub_component = is_sub_component
-      @ontology_acronym = ontology_acronym
+      @ontology_acronym = ontology_id&.split('/')&.last
       @number = number.to_s
       @portal_name = portal_name
       @portal_color = portal_color

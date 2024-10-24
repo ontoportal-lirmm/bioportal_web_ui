@@ -100,8 +100,8 @@ gem "flag-icons-rails", "~> 3.4"
 
 # Custom API client
 gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'development'
-
 # Ruby 2.7.8 pinned gems (to remove when migrating to Ruby >= 3.0)
+
 gem 'ffi', '~> 1.16.3'
 gem 'net-ftp', '~> 0.2.0', require: false
 gem 'net-http', '~> 0.3.2'
