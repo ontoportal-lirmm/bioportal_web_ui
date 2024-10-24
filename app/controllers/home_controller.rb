@@ -3,31 +3,15 @@
 class HomeController < ApplicationController
   layout :determine_layout
 
-
-  include FairScoreHelper, FederationHelper
+  include FairScoreHelper, FederationHelper,MetricsHelper
 
   def index
     @analytics = helpers.ontologies_analytics
-    # Calculate BioPortal summary statistics
 
-    @ont_count = if @analytics.empty?
-                   LinkedData::Client::Models::Ontology.all.size
-                 else
-                   @analytics.keys.size
-                 end
-
-    metrics = LinkedData::Client::Models::Metrics.all
-    metrics = metrics.each_with_object(Hash.new(0)) do |h, sum|
-      h.to_hash.slice(:classes, :properties, :individuals).each { |k, v| sum[k] += v }
-    end
     @slices = LinkedData::Client::Models::Slice.all
 
-    @cls_count = metrics[:classes]
-    @individuals_count = metrics[:individuals]
-    @prop_count = metrics[:properties]
-    @map_count = total_mapping_count
-    @projects_count = LinkedData::Client::Models::Project.all.length
-    @users_count = LinkedData::Client::Models::User.all.length
+    @metrics = portal_metrics(@analytics)
+
 
     @upload_benefits = [
       t('home.benefit1'),
@@ -165,6 +149,7 @@ class HomeController < ApplicationController
       redirect_to "/recommender?input=#{helpers.escape(params[:input])}"
     end
   end
+
 
   def federation_portals_status
     @name = params[:name]
