@@ -38,7 +38,7 @@ class OntologiesController < ApplicationController
     @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
 
     @filters = ontology_filters_init(@categories, @groups)
-    @federation_enabled = federation_portals_enabled?
+    @federation_enabled = federation_enabled?
     init_filters(params)
     render 'ontologies/browser/browse'
   end
