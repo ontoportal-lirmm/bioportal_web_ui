@@ -36,8 +36,8 @@ module SearchAggregator
       format_search_result(group, all_ontologies)
     end
 
-    if federation_enabled?
-      search_results = merge_sort_federated_results(query, search_results) if federation_enabled?
+    if federation_portals_enabled?
+      search_results = merge_sort_federated_results(query, search_results) if federation_portals_enabled?
       search_results = swap_canonical_portal_results_first(search_results)
     end
 
@@ -90,7 +90,7 @@ module SearchAggregator
       definition: class_object.definition,
     }
 
-    result.merge!(class_federation_configuration(class_object)) if federation_enabled?
+    result.merge!(class_federation_configuration(class_object)) if federation_portals_enabled?
 
     result
   end

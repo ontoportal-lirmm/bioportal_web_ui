@@ -21,7 +21,7 @@ class SearchController < ApplicationController
 
     set_federated_portals
 
-    params[:ontologies] = nil if federation_enabled?
+    params[:ontologies] = nil if federation_portals_enabled?
 
     @time = Benchmark.realtime do
       results = LinkedData::Client::Models::Class.search(@search_query, params)
@@ -34,6 +34,7 @@ class SearchController < ApplicationController
     end
     @advanced_options_open = !search_params_empty?
     @json_url = json_link("#{rest_url}/search", params.permit!.to_h)
+    @federation_enabled = federation_enabled?
   end
 
   def json_search

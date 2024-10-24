@@ -95,9 +95,14 @@ module FederationHelper
     "#{output} in #{sprintf("%.2f", time)}s"
   end
 
-  def federation_enabled?
+  def federation_portals_enabled?
     params[:portals]
   end
+
+  def federation_enabled?
+    !federated_portals.blank?
+  end
+
 
   def federation_error?(response)
     !response[:errors].blank?
