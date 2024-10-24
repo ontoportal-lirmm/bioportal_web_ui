@@ -8,15 +8,17 @@ export default class extends Controller {
 
   connect () {
     setTimeout(() => {
-      let activeElem = this.element.querySelector('.tree-link.active');
-      if (activeElem) {
-        activeElem.scrollIntoView({ block: 'center' });
-        window.scrollTo({top: 0,});
-        if (this.autoClickValue) {
-          activeElem.click();
+      if(window.location.href.includes('p=classes')){
+        let activeElem = this.element.querySelector('.tree-link.active');
+        if (activeElem) {
+          activeElem.scrollIntoView({ block: 'center' });
+          window.scrollTo({top: 0,});
+          if (this.autoClickValue) {
+            activeElem.click();
+          }
         }
+        this.#onClickTooManyChildrenInit();
       }
-      this.#onClickTooManyChildrenInit();
     }, 0);   
   }
 
