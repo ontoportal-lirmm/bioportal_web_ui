@@ -14,7 +14,7 @@ module MetricsHelper
     individuals_count = metrics[:individuals]
     prop_count = metrics[:properties]
     map_count = total_mapping_count(ontologies_acronym)
-    projects_count = LinkedData::Client::Models::Project.all.length
+    projects_count = projects_count(ontologies_acronym)
     users_count = LinkedData::Client::Models::User.all.length
 
     {
@@ -42,7 +42,12 @@ module MetricsHelper
 
   private
 
-  def total_mapping_count
+  def projects_count(ontologies_acronym = [])
+    projects = LinkedData::Client::Models::Project.all
+    projects.select! { |p| ontologies_acronym.intersection(p.ontologyUsed.map{|x| x.split('/').last}).any? } unless ontologies_acronym.empty?
+    projects.size
+  end
+
   def total_mapping_count(ontologies_acronym = [])
     total_count = 0
     begin
