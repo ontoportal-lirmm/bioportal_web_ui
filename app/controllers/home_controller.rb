@@ -149,4 +149,29 @@ class HomeController < ApplicationController
       redirect_to "/recommender?input=#{helpers.escape(params[:input])}"
     end
   end
+
+
+  def federation_portals_status
+    @name = params[:name]
+    @acronym = params[:acronym]
+    @key = params[:portal_name]
+    @checked = params[:checked].eql?('true')
+    @portal_up = federation_portal_status(portal_name: @key.downcase.to_sym)
+    render inline: helpers.federation_chip_component(@key, @name, @acronym, @checked, @portal_up)
+  end
+
+  private
+
+  # Dr. Musen wants 5 specific groups to appear first, sorted by order of importance.
+  # Ordering is documented in GitHub: https://github.com/ncbo/bioportal_web_ui/issues/15.
+  # All other groups come after, with agriculture in the last position.
+  def organize_groups
+    # Reference: https://lildude.co.uk/sort-an-array-of-strings-by-severity
+    acronyms = %w[UMLS OBO_Foundry WHO-FIC CTSA caBIG]
+    size = @groups.size
+    @groups.sort_by! { |g| acronyms.find_index(g.acronym[/(UMLS|OBO_Foundry|WHO-FIC|CTSA|caBIG)/]) || size }
+
+    others, agriculture = @groups.partition { |g| g.acronym != 'CGIAR' }
+    @groups = others + agriculture
+  end
 end

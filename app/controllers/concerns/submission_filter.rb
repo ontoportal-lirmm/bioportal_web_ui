@@ -56,7 +56,9 @@ module SubmissionFilter
 
     count = @page.page.eql?(1) ? count_objects(submissions) : {}
 
-    [@page.collection, @page.totalCount, count, filter_params]
+    federation_counts = federated_browse_counts(submissions)
+
+    [@page.collection, @page.totalCount, count, filter_params, federation_counts]
   end
 
   def ontologies_with_filters_url(filters, page: 1, count: false)
@@ -68,17 +70,13 @@ module SubmissionFilter
   def merge_by_acronym(submissions)
     merged_submissions = []
     submissions.group_by { |x| x[:ontology]&.acronym }.each do |acronym, ontologies|
-      if ontologies.size.eql?(1)
-        ontology = ontologies.first
-      else
-        ontology = ontologies.select { |x| helpers.internal_ontology?(x[:id]) }.first || ontologies.first
-      end
-
+      ontology = canonical_ontology(ontologies)
       ontology[:sources] = ontologies.map { |x| x[:id] }
       merged_submissions << ontology
     end
     merged_submissions
   end
+
 
   def filter_submissions(ontologies, query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
     submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: true, display_links: false, display_context: false)
