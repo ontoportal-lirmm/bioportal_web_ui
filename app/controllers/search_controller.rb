@@ -48,7 +48,8 @@ class SearchController < ApplicationController
       params.delete("ontologies")
     end
     search_page = LinkedData::Client::Models::Class.search(params[:q], params)
-    @results = search_page.collection
+
+    @results = search_page[:collection]
 
     response = ""
     obsolete_response = ""
