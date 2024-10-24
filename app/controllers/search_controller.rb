@@ -8,6 +8,7 @@ class SearchController < ApplicationController
   layout :determine_layout
 
   def index
+    @federation_enabled = federation_enabled?
     @search_query = params[:query] || params[:q] || ''
     params[:query] = nil
     @advanced_options_open = false
@@ -34,7 +35,6 @@ class SearchController < ApplicationController
     end
     @advanced_options_open = !search_params_empty?
     @json_url = json_link("#{rest_url}/search", params.permit!.to_h)
-    @federation_enabled = federation_enabled?
   end
 
   def json_search
