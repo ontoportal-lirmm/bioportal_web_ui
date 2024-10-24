@@ -13,8 +13,8 @@ module MetricsHelper
     cls_count = metrics[:classes]
     individuals_count = metrics[:individuals]
     prop_count = metrics[:properties]
-    map_count = total_mapping_count
-    projects_count = LinkedData::Client::Models::Project.all.length
+    map_count = total_mapping_count(ontologies_acronym)
+    projects_count = projects_count(ontologies_acronym)
     users_count = LinkedData::Client::Models::User.all.length
 
     {
@@ -42,18 +42,24 @@ module MetricsHelper
 
   private
 
-  def total_mapping_count
-    total_count = 0
+  def projects_count(ontologies_acronym = [])
+    projects = LinkedData::Client::Models::Project.all
+    projects.select! { |p| ontologies_acronym.intersection(p.ontologyUsed.map{|x| x.split('/').last}).any? } unless ontologies_acronym.empty?
+    projects.size
+  end
 
+  def total_mapping_count(ontologies_acronym = [])
+    total_count = 0
     begin
       stats = LinkedData::Client::HTTP.get(MappingStatistics::MAPPING_STATISTICS_URL)
       unless stats.blank?
         stats = stats.to_h.compact
         # Some of the mapping counts are erroneously stored as strings
+        stats.select!{ |acronym, count| ontologies_acronym.include?(acronym.to_s) } if helpers.at_slice?
         stats.transform_values!(&:to_i)
         total_count = stats.values.sum
       end
-    rescue StandardError
+    rescue StandardError => e
       LOG.add :error, e.message
     end
 
@@ -61,4 +67,3 @@ module MetricsHelper
   end
 
 end
-
