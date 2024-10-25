@@ -1,4 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
+
+const TREE_VIEW_PAGES = ['classes', 'properties', 'schemes', 'collections', 'instances']
+
 // Connects to data-controller="simple-tree"
 export default class extends Controller {
 
@@ -26,8 +29,8 @@ export default class extends Controller {
   #centerTreeView() {
     setTimeout(() => {
       const location = window.location.href;
-      const isTreeViewPage = ['classes', 'properties', 'schemes', 'collections', 'instances']
-        .some(param => location.includes(`p=${param}`));
+
+      const isTreeViewPage = TREE_VIEW_PAGES.some(param => location.includes(`p=${param}`));
 
       if (isTreeViewPage) {
         const activeElem = this.element.querySelector('.tree-link.active');
