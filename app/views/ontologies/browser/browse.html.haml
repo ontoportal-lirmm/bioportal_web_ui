@@ -54,7 +54,7 @@
                   - d.title { browse_filter_section_header(key: key, count: count)}
                   = browse_filter_section_body(key: key, checked_values: checked_values, objects: objects)
 
-            - if @federation_enabled
+            - if federation_enabled?
               %div{ data:{action: "change->browse-filters#federationChange"}}
                 = dropdown_component(id: "browse-portal-filter", is_open: !request_portals.empty?) do |d|
                   - d.title { browse_filter_section_header(title: t('federation.results_from_external_portals'))}

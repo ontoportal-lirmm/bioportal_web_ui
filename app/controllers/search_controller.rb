@@ -8,7 +8,6 @@ class SearchController < ApplicationController
   layout :determine_layout
 
   def index
-    @federation_enabled = federation_enabled?
     @search_query = params[:query] || params[:q] || ''
     params[:query] = nil
     @advanced_options_open = false
