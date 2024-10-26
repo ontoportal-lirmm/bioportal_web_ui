@@ -95,7 +95,7 @@ module FederationHelper
     "#{output} in #{sprintf("%.2f", time)}s"
   end
 
-  def federation_portals_enabled?
+  def federated_request?
     params[:portals]
   end
 
