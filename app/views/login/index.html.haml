@@ -1,10 +1,9 @@
 - @title = t('login.title')
-- unless @errors.nil?
-  %div{:style => "color:red;"}
-    = t('login.invalid_login')
-    %ul
+.d-flex.justify-content-center.mt-4
+  - unless @errors.nil?
+    = render Display::AlertComponent.new(type: "danger", closable: false) do
       - for error in @errors
-        %li= error
+        %div=error
 .d-flex.justify-content-center
   .login-form
     = form_for(:user, :url => {:controller => 'login',:action=>'create'}) do |f|

@@ -28,8 +28,8 @@ module InputsHelper
                                       value: value)
   end
 
-  def check_input(id:, name:, value:, label: '', checked: false, &block)
-    render ChipsComponent.new(name: name, id: id, label: label, value: value, checked: checked) do |c|
+  def check_input(id:, name:, value:, label: '', checked: false, disabled: false, &block)
+    render ChipsComponent.new(name: name, id: id, label: label, value: value, checked: checked, disabled: disabled) do |c|
       if block_given?
         capture(c, &block)
       end
@@ -46,10 +46,10 @@ module InputsHelper
                                    helper_text:  help)
   end
 
-  def text_area_input(name:, value:, label: nil, help: nil)
+  def text_area_input(name:, value:, label: nil, help: nil, resize: nil)
     render Input::TextAreaComponent.new(label: input_label(label, name), name: name, value: value,
                                         error_message: input_error_message(name),
-                                        helper_text: help)
+                                        helper_text: help, resize: resize)
   end
 
   def date_input(name:, value:, label: nil, help: nil, max_date: nil)

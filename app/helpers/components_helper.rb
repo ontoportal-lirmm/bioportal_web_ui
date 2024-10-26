@@ -1,4 +1,40 @@
 module ComponentsHelper
+  include TermsReuses
+
+  def dropdown_component(id: ,title: nil, tooltip:nil , is_open: false, &block)
+    render DropdownContainerComponent.new(id: id, title: title, tooltip: tooltip, is_open: is_open) do |d|
+      capture(d, &block) if block_given?
+    end
+  end
+
+  def portal_button(name: nil , color: nil , light_color: nil, link: nil, tooltip: nil)
+    render FederatedPortalButtonComponent.new(name: name, color: color, link: link, tooltip: tooltip, light_color: light_color)
+  end
+
+  def tab_item_component(container_tabs:, title:, path:, selected: false, json_link: "", &content)
+    container_tabs.item(title: title.html_safe, path: path, selected: selected, json_link: json_link)
+    container_tabs.item_content { capture(&content) }
+  end
+
+  def alert_component(message, type: "info")
+    render Display::AlertComponent.new(type: type, message: message)
+  end
+
+  def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, disabled: false, &block)
+    content_tag(:div, data: { controller: 'tooltip' }, title: tooltip) do
+      check_input(id: id, name: name, value: value, label: label, checked: checked, disabled: disabled, &block)
+    end
+  end
+
+  def group_chip_component(id: nil, name: , object: , checked: , value: nil, title: nil, disabled: false, &block)
+    title ||= object["name"]
+    value ||= (object["value"] || object["acronym"] || object["id"])
+
+    chips_component(id: id || value, name: name, label: object["acronym"],
+                    checked: checked,
+                    value: value, tooltip: title, disabled: disabled, &block)
+  end
+  alias  :category_chip_component :group_chip_component
 
   def rdf_highlighter_container(format, content)
     render Display::RdfHighlighterComponent.new(format: format, text: content)
@@ -11,7 +47,7 @@ module ComponentsHelper
       end
     end
   end
-  
+
   def search_page_input_component(name:, value: nil, placeholder: , button_icon: 'icons/search.svg', type: 'text', &block)
     content_tag :div, class: 'search-page-input-container', data: { controller: 'reveal' } do
       search_input = content_tag :div, class: 'search-page-input' do
@@ -29,7 +65,7 @@ module ComponentsHelper
     end
   end
 
-  def paginated_list_component(id:, results:, next_page_url:, child_url:, child_turbo_frame:, child_param:, open_in_modal: false , selected: nil, auto_click: false)
+  def paginated_list_component(id:, results:, next_page_url:, child_url:, child_turbo_frame:, child_param:, open_in_modal: false , selected: nil, auto_click: false, submission: nil)
     render(TreeInfiniteScrollComponent.new(
       id:  id,
       collection: results.collection,
@@ -59,7 +95,8 @@ module ComponentsHelper
             selected: selected.blank? ? false : concept.id.eql?(selected) ,
             target_frame: child_turbo_frame,
             data: data,
-            open_in_modal: open_in_modal
+            open_in_modal: open_in_modal,
+            is_reused: concept_reused?(submission: submission, concept_id: concept.id)
           )))
         end
       end
@@ -68,7 +105,6 @@ module ComponentsHelper
       end
     end
   end
-
 
   def resolvability_check_tag(url)
     content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;', onClick: "window.open('#{check_resolvability_url(url: url)}', '_blank');")
@@ -84,10 +120,9 @@ module ComponentsHelper
     end
   end
 
-
-  def generated_link_to_clipboard(url, acronym) 
+  def generated_link_to_clipboard(url, acronym)
     url = "#{$UI_URL}/ontologies/#{acronym}/#{link_last_part(url)}"
-    content_tag(:span, style: 'display: inline-block;') do
+    content_tag(:span, id: "generate_portal_link", style: 'display: inline-block;') do
       render ClipboardComponent.new(icon: 'icons/copy_link.svg', title: "#{t("components.copy_portal_uri", portal_name: portal_name)} #{link_to(url)}", message: url, show_content: false)
     end
   end
@@ -100,11 +135,10 @@ module ComponentsHelper
     end
   end
 
-
   def link_to_with_actions(link_to_tag, acronym: nil, url: nil, copy: true, check_resolvability: true, generate_link: true, generate_htaccess: false)
     tag = link_to_tag
     url = link_to_tag if url.nil?
-    
+
     tag += content_tag(:span, class: 'mx-1') do
       concat copy_link_to_clipboard(url) if copy
       concat generated_link_to_clipboard(url, acronym) if generate_link
@@ -115,7 +149,7 @@ module ComponentsHelper
     tag.html_safe
   end
 
-  def tree_component(root, selected, target_frame:, sub_tree: false, id: nil, auto_click: false, &child_data_generator)
+  def tree_component(root, selected, target_frame:, sub_tree: false, id: nil, auto_click: false, submission: nil, &child_data_generator)
     root.children.sort! { |a, b| (a.prefLabel || a.id).downcase <=> (b.prefLabel || b.id).downcase }
 
     render TreeViewComponent.new(id: id, sub_tree: sub_tree, auto_click: auto_click) do |tree_child|
@@ -130,9 +164,9 @@ module ComponentsHelper
                          children_href: children_link, selected: child.id.eql?(selected&.id),
                          muted: child.isInActiveScheme&.empty?,
                          target_frame: target_frame,
-                         data: data) do
+                         data: data, is_reused: concept_reused?(submission: submission, concept_id: child.id)) do
           tree_component(child, selected, target_frame: target_frame, sub_tree: true,
-                         id: id, auto_click: auto_click, &child_data_generator)
+                         id: id, auto_click: auto_click, submission: submission, &child_data_generator)
         end
       end
     end
@@ -151,8 +185,8 @@ module ComponentsHelper
     content_tag(:canvas, nil, data: data)
   end
 
-  def loader_component(type = 'pulsing')
-    render LoaderComponent.new(type: type)
+  def loader_component(type:'pulsing', small: false )
+    render LoaderComponent.new(type: type, small: small)
   end
 
   def info_tooltip(text, interactive: true)
@@ -230,13 +264,11 @@ module ComponentsHelper
     end
   end
 
-
   def regular_button(id, value, variant: "secondary", state: "regular", size: "slim", &block)
     render Buttons::RegularButtonComponent.new(id:id, value: value, variant: variant, state: state, size: size) do |btn|
       capture(btn, &block) if block_given?
     end
   end
-
 
   def form_save_button
     render Buttons::RegularButtonComponent.new(id: 'save-button', value: t('components.save_button'), variant: "primary", size: "slim", type: "submit") do |btn|
@@ -254,4 +286,9 @@ module ComponentsHelper
     end
   end
 
+  def text_with_icon(text:, icon:)
+    content_tag(:div, class: 'd-flex align-items-center icon') do
+      inline_svg_tag(icon, height: '18', weight: '18') + content_tag(:div, class: 'text') {text}
+    end
+  end
 end

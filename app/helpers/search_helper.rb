@@ -8,7 +8,7 @@ module SearchHelper
 
   def render_search_paginated_list(container_id:, next_page_url:, child_url:, child_turbo_frame:,
                          child_param:, show_count: nil, lang: request_lang,
-                         auto_click: false, results: , next_page: ,total_count: )
+                         auto_click: false, results: , next_page: ,total_count:, submission: @submission )
     query, page, _ = search_content_params
 
     @results = OpenStruct.new
@@ -34,7 +34,7 @@ module SearchHelper
                                                                                         child_param: child_param,
                                                                                         child_turbo_frame: child_turbo_frame,
                                                                                         open_in_modal: show_count,
-                                                                                        selected: selected))
+                                                                                        selected: selected, submission: submission))
       ]
     else
       render inline: paginated_list_component(id: container_id,
@@ -45,7 +45,7 @@ module SearchHelper
                                                       child_turbo_frame: child_turbo_frame,
                                                       open_in_modal: show_count,
                                                       selected: selected,
-                                                      auto_click: auto_click)
+                                                      auto_click: auto_click, submission: submission)
     end
   end
 end

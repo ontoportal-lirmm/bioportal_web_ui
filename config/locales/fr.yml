@@ -210,6 +210,7 @@ fr:
         description: Description
         created: Créé
         ontologies: Ontologies
+        parent_category: Catégorie parent
       edit:
         edit_category: Modifier la catégorie
         save: Sauvegarder
@@ -305,7 +306,7 @@ fr:
       et aériennes, dans le but de remplacer les méthodes actuelles de contrôle chimique et d'éviter l'utilisation extensive de fongicides, qui conduisent souvent à une résistance chez les pathogènes des plantes.
       En agriculture, les microorganismes promoteurs de croissance des plantes et de biocontrôle ont émergé comme des alternatives sûres aux pesticides chimiques. Les espèces de Streptomyces et leurs
       métabolites peuvent avoir un grand potentiel en tant qu'agents excellents pour contrôler divers phytopathogènes fongiques et bactériens.
-
+    select_ontologies: Sélectionner des ontologies
   concepts:
     error_valid_concept: "Erreur : Vous devez fournir un identifiant de concept valide"
     missing_roots: Racines manquantes
@@ -398,7 +399,8 @@ fr:
       error_on_form: Erreurs sur le formulaire
       leave_your_feedback: Laissez votre retour
       feedback_hi_text: Salut
-      feedback_info_text: vous pouvez utiliser le formulaire ci-dessous ou nous envoyer un email directement à
+      feedback_info_text: Vous pouvez utiliser le formulaire ci-dessous, nous envoyer un email directement à
+      feedback_info_text_rest: ou nous laisser une github issue ici
       email: Email
       name: Nom
       proposition_url_page: URL de la page Erreur/Proposition
@@ -413,6 +415,11 @@ fr:
       feedback_complete:
         title: Retour envoyé avec succès
         message: Merci d'avoir pris le temps de partager votre retour avec nous. Notre équipe de support examinera votre message et vous répondra dès que possible. Nous apprécions votre opinion et sommes reconnaissants de votre aide pour améliorer nos services. Merci de votre soutien !
+    suggest_slice: Proposer un nouveau groupe/slice
+    slices_description: Les "slices" permettent aux utilisateurs d'interagir (à la fois via l'API ou l'interface utilisateur) uniquement avec un sous-ensemble d'ontologies dans AgroPortal. Si vous parcourez une slice, toutes les fonctionnalités du portail seront limitées au sous-ensemble choisi; cela permet aux utilisateurs de se concentrer sur leurs cas d'utilisation spécifiques. Sur AgroPortal, les slices et les groupes sont synchronisés, de sorte que chaque groupe a une slice correspondante affichant uniquement les ontologies de ce groupe.
+    ontoportal_description: "L'OntoPortal Alliance %{ontoportal_link} est un consortium d'équipes de recherche et d'infrastructure dédiées à promouvoir le développement de portails d'ontologies et de catalogues d'artefacts sémantiques basés sur le logiciel OntoPortal %{github_link} ouvert et collaboratif. Ci-dessous se trouvent les portails publics et ouverts actuels construits avec la technologie maintenue par l'Alliance."
+    viewing_slice: "Affichage de la slice:"
+    view_full_site: Voir le site complet
 
   landscape:
     #select_ontologies: Commencez à taper pour sélectionner des ontologies ou laissez vide pour les utiliser toutes
@@ -515,10 +522,14 @@ fr:
       wiki: Wiki
       documentation: Documentation
       agro_documentation: Documentation d'AgroPortal
+      issues_and_requests: Problèmes et demandes
       agreements: Légal
       terms: Termes et conditions
+      terms_anchor: "#h-conditions-generales-dutilisation-dagroportal-francais"
       privacy_policy: Politique de confidentialité
+      privacy_policy_anchor: "#h-vie-privee"
       legal_notices: Mentions légales
+      legal_notices_anchor: "#h-mentions-legales"
       cite_us: Citez-nous
       acknowledgments: Remerciements
       about: À propos
@@ -544,7 +555,7 @@ fr:
     enter_email: Entrez votre nom d'utilisateur
     enter_password: Entrez votre mot de passe
     forgot_password: Mot de passe oublié ?
-    invalid_login: Erreurs sur le formulaire
+    private_ontology: Cette ontologie est privée. Veuillez vous connecter.
     no_account: Vous n'avez pas de compte ?
     password: Mot de passe
     register: S'inscrire
@@ -657,6 +668,10 @@ fr:
 
 
   agents:
+    errors:
+      required: est requis et ne peut pas être vide
+      used_identifier: Cet identifiant est déjà utilisé par un autre agent
+      invalid_url: L'identifiant doit être une URL ORCID/ROR valide
     not_found_agent: Agent avec id %{id}
     add_agent: Nouvel agent ajouté avec succès
     update_agent: Agent mis à jour avec succès
@@ -685,6 +700,7 @@ fr:
     index:
       create_new_agent: Créer un nouvel agent
       first_name: Prénom
+      acronym: Acronyme
       usages: Utilisations
       actions: Actions
       no_agents: Il n'y a actuellement aucun agent.
@@ -922,8 +938,7 @@ fr:
         classes_with_definitions: Classes avec définitions
     show_advanced_options: Afficher les options
     hide_advanced_options: Cacher les options
-    match_in: Correspondance dans
-    ontologies: ontologies
+    match_in: Correspondance dans %{results_size} ontologies de %{portals}
     result_component:
       details: Détails
       visualize: Visualiser
@@ -957,7 +972,7 @@ fr:
       synonym: Synonyme
       definition: Définition
       parent: Parent
-      save: sauvegarder
+      save: Sauvegarder
     note_line:
       alert_text: "Êtes-vous sûr de vouloir supprimer la note <span style='color:red;font-weight:bold;'> ''%{subject}''</span> créée par <span style='color:red;font-weight:bold;'>%{creator}</span>?<br/><b>Cette action NE PEUT PAS être annulée !!!</b>"
       delete: Supprimer
@@ -968,8 +983,8 @@ fr:
     reply:
       about_note_decorator: à propos de %{note_decorator}
       comment: Commentaire
-      save: sauvegarder
-      cancel: annuler
+      save: Sauvegarder
+      cancel: Annuler
 
   ontolobridge:
     problem_of_creating_new_term: "Problème de création d'un nouveau terme %{endpoint} : %{class} - %{message}"
@@ -1099,21 +1114,21 @@ fr:
     submit: Soumettre
 
   check_resolvability:
-    check_resolvability_message_1: "L'URL est résolvable et supporte les formats suivants : %{supported_format}"
-    check_resolvability_message_2: "L'URL est résolvable mais n'est pas négociable en contenu, supporte uniquement : %{supported_format}"
-    check_resolvability_message_3: L'URL n'est pas résolvable et n'est pas négociable en contenu (retourne %{status}).
+    check_resolvability_message_1: "L'URI est résolvable et supporte les formats suivants : %{supported_format}"
+    check_resolvability_message_2: "L'URI est résolvable mais n'est pas négociable en contenu, supporte uniquement : %{supported_format}"
+    check_resolvability_message_3: L'URI n'est pas résolvable et n'est pas négociable en contenu (retourne %{status}).
     uri_placeholder: Tapez une URI pour tester sa résolvabilité
     show_help: Afficher l'aide
     format_not_specified: Format non spécifié
     how_it_works:
       title: Comment ça fonctionne
       content_1: |
-        L'outil de vérification de la résolvabilité vous permet de tester si une URL donnée est résolvable. Il est basé sur la méthode HTTP HEAD.
-        Nous vérifions la résolvabilité d'une URL en envoyant une requête HEAD à l'URL et en vérifiant si le code de statut de la réponse est 200 (OK) et
+        L'outil de vérification de la résolvabilité vous permet de tester si une URI donnée est résolvable. Il est basé sur la méthode HTTP HEAD.
+        Nous vérifions la résolvabilité d'une URI en envoyant une requête HEAD à l'URI et en vérifiant si le code de statut de la réponse est 200 (OK) et
         si le type de contenu retourné est égal à l'un des %{resolvability_formats} suivants.
       content_2: |
-        Nous avons un délai d'attente fixé à %{resolvability_timeout} secondes, donc si l'URL n'est pas résolvable dans ce délai, la vérification échouera.
-        Et un nombre maximal de redirections fixé à %{resolvability_max_redirections}, donc si l'URL n'est pas résolvable dans ce nombre de redirections, la vérification échouera.
+        Nous avons un délai d'attente fixé à %{resolvability_timeout} secondes, donc si l'URI n'est pas résolvable dans ce délai, la vérification échouera.
+        Et un nombre maximal de redirections fixé à %{resolvability_max_redirections}, donc si l'URI n'est pas résolvable dans ce nombre de redirections, la vérification échouera.
     resolving_uri:
       title: Résolution d'une URI
       content: |
@@ -1176,7 +1191,7 @@ fr:
     save: Sauvegarder
 
   ontologies:
-    showing_ontologies_size: "Affichage de %{ontologies_size} sur %{analytics_size}"
+    showing_ontologies_size: "Affichage de %{ontologies_size} sur %{analytics_size} de %{portals}"
     filters: Filtres
     no_license: Pas de licence
     view_license: Voir la licence
@@ -1290,6 +1305,7 @@ fr:
       community: Communauté
       content: Contenu
       info_tooltip_properties_dropdown: Propriétés de métadonnées englobant principalement la conception, les méthodes et les actions pour créer l'ontologie. Cela inclut des éléments tels que les outils et logiciels utilisés par le créateur de l'ontologie lors de sa configuration.
+      info_tooltip_community_dropdown: Propriétés des métadonnées liées aux informations communautaires telles que le dépôt de code et le suivi des problèmes, la liste de diffusion ou le public cible. Cela inclut également les Groupes dans %{site}. Voir plus d'informations sur les Groupes et les Catégories.
       visits: Visites
       views: Vues de %{acronym}
       create_new_view: Créer une nouvelle vue
@@ -1457,6 +1473,8 @@ fr:
     preferred_name: Nom préféré
     definitions: Définitions
     parent: Parent
+    domain: Domaine
+    range: Étendue
     no_properties_alert: "%{acronym} ne contient pas de propriétés"
 
   visits:
@@ -1504,12 +1522,25 @@ fr:
         Il vérifie si un URI donné est accessible et si le contenu associé peut être négocié en fonction des préférences du client.
         Cette fonctionnalité garantit la fiabilité et l'accessibilité des ressources liées dans l'écosystème RDF, aidant ainsi à maintenir l'intégrité des données et facilitant l'intégration transparente avec des ressources externes.
 
+  feedback_mail:
+    name: "Nom: %{name}"
+    email: "E-mail: %{email}"
+    location: "Emplacement: %{location}"
+    tags: Tags
+    feedback: Feedback
 
   cookies_modal:
     title: "Gérer le consentement des cookies"
-    paragraph1: "Nous utilisons des cookies pour vous aider à naviguer efficacement et à effectuer certaines fonctions. Vous trouverez des informations détaillées sur tous les cookies dans le lien \"Déclaration de confidentialité\"."
-    paragraph2: "Nous utilisons également des cookies tiers qui nous aident à analyser comment vous utilisez ce site Web, à stocker vos préférences et à fournir le contenu qui vous est pertinent. Ces cookies ne seront stockés dans votre navigateur qu'avec votre consentement préalable."
-    paragraph3: "Veuillez noter que la désactivation de ces cookies peut affecter votre expérience de navigation."
+    paragraph1: "%{portal} utilise des cookies pour vous aider à naviguer efficacement et pour mesurer l'audience. Vous trouverez des informations détaillées sur tous les cookies dans le lien \"Vie privé\""
+    paragraph2: "Les cookies sont fonctionnels et non facultatifs. En restant sur %{portal}, vous reconnaissez que les informations vous ont été transmises."
     accept_button: "Accepter"
-    deny_button: "Refuser"
-    privacy_link: "Déclaration de confidentialité"
+    privacy_link: "Vie privé"
+    privacy_policy_anchor: "#h-vie-privee"
+  taxonomy:
+    groups_and_categories: Groupes et Catégories
+    description: Dans AgroPortal, les ontologies sont organisées en groupes et étiquetées avec des catégories. Typiquement, les groupes associent des ontologies provenant du même projet ou de la même organisation pour une meilleure identification de la provenance. Tandis que les catégories concernent des sujets/thématiques et permettent de classifier les ontologies. En 2016, les catégories d'AgroPortal ont été établies en coopération avec FAO AIMS. En 2024, nous sommes passés à la nomenclature de l'UNESCO pour les domaines des sciences et des technologies. Les groupes et les catégories, ainsi que d'autres métadonnées, peuvent être utilisés sur la page “Parcourir” d'AgroPortal pour filtrer la liste des ontologies.
+    show_sub_categories: Afficher les sous-catégories
+  federation:
+    results_from_external_portals: Résultats provenant de portails externes
+    not_responding: ne répond pas.
+    check_status: Vérification de la disponibilité de %{portal}

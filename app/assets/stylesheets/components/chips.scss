@@ -32,7 +32,8 @@
 
 }
 .chips-container.disabled div label > span, .chips-container div label span:has(span.disabled){
-  background-color: #f8f9fa !important;
+    opacity: 60%;
+    background-color: #f8f9fa !important;
 }
 
 .chips-container div label input[type="checkbox"]:checked ~ span{
@@ -42,4 +43,40 @@
 
 .chips-container div label input[type="checkbox"]:checked ~ span .chips-check-icon{
     display:unset;
+}
+
+.chips-container.loading div {
+    cursor: default;
+    opacity: 0.6; 
+}
+
+.chips-container .skeleton {
+    width: 80px; 
+    height: 36px; 
+    background-color: #e0e0e0; 
+    border-radius: 5px; 
+    animation: shimmer 4s infinite; 
+    position: relative; 
+    overflow: hidden; 
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200px 0; 
+    }
+    100% {
+        background-position: 200px 0; 
+    }
+}
+
+.chips-container .skeleton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.2) 100%);
+    animation: shimmer 4s infinite; 
+    border-radius: 5px; 
 }

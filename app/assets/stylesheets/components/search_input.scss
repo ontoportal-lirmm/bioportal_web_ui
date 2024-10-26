@@ -9,6 +9,12 @@
   position: absolute;
 }
 
+.search-container.search-container-scroll{
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+
 .search-content{
   display: flex;
   flex-wrap: wrap;

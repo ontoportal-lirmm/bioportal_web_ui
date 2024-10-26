@@ -1,20 +1,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" <%="xml:lang=\"#{I18n.locale}\""%> lang="<%=I18n.locale%>">
+<html xmlns="http://www.w3.org/1999/xhtml" <%= "xml:lang=\"#{I18n.locale}\"" %> lang="<%= I18n.locale %>">
 <head>
-	<%= render partial: 'ga_tracking' %>
-	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <%= render partial: 'ga_tracking' %>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
 
-	<!-- Force IE to use latest rendering engine -->
-	<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+  <!-- Force IE to use latest rendering engine -->
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
 
-	<% unless Rails.env.appliance? %>
+  <% unless Rails.env.appliance? %>
     <!-- Google Webmaster Tools verifications -->
-  	<meta name="google-site-verification" content="IBxfKu6VbYH9atd5OLu2zXVD2ZRWi9SgMKTi8nvw3ks" />
+    <meta name="google-site-verification" content="IBxfKu6VbYH9atd5OLu2zXVD2ZRWi9SgMKTi8nvw3ks"/>
   <% end %>
-	<meta name="turbo-cache-control" content="no-cache">
-	<%= csrf_meta_tag %>
+  <meta name="turbo-cache-control" content="no-cache">
+  <%= csrf_meta_tag %>
 
-	<title><%if @title.nil?%><%=$ORG_SITE%><%else%><%="#{@title} | #{$ORG_SITE}"%><%end%></title>
+  <title>
+    <% if @title.nil? %><%= $ORG_SITE %>
+    <% else %><%= "#{@title} | #{$ORG_SITE}" %>
+    <% end %></title>
 
 	<link rel="shortcut icon" href="/fav.ico" type="image/x-icon" />
 	<!-- Fonts -->
@@ -27,19 +30,34 @@
   <%= javascript_include_tag "vendor" %>
 
   <script>
-    jQuery(document).data({bp: {config: <%=bp_config_json.html_safe%>, user: <%=(session[:user] || {}).to_hash.to_json.html_safe%>}});
-    jQuery(document).data().bp.ontology = <%=@ontology.to_json.html_safe%> || {};
-    jQuery(document).data().bp.submission_latest = <%=@submission_latest.to_json.html_safe%> || {};
-    jQuery(document).data().bp.ontolobridge_ontologies = <%=$NEW_TERM_REQUEST_ONTOLOGIES.to_json.html_safe%> || [];
-    jQuery(document).data().bp.ont_viewer = {};
-    jQuery(document).data().bp.ont_chart = {};
+      jQuery(document).data({
+          bp: {
+              config: <%=bp_config_json.html_safe%>,
+              user: <%=(session[:user] || {}).to_hash.to_json.html_safe%>
+          }
+      });
+      jQuery(document).data().bp.ontology =
+      <%=@ontology.to_json.html_safe%> ||
+      {
+      }
+      ;
+      jQuery(document).data().bp.submission_latest =
+      <%=@submission_latest.to_json.html_safe%> ||
+      {
+      }
+      ;
+      jQuery(document).data().bp.ontolobridge_ontologies =
+      <%=$NEW_TERM_REQUEST_ONTOLOGIES.to_json.html_safe%> ||
+      [];
+      jQuery(document).data().bp.ont_viewer = {};
+      jQuery(document).data().bp.ont_chart = {};
   </script>
 
-  <!-- BioPortal-specific JavaScript is loaded in _footer.html.erb. -->  
+  <!-- BioPortal-specific JavaScript is loaded in _footer.html.erb. -->
 </head>
 <body class="<%= controller_name %> <%= action_name %>">
-  <%=render partial: 'layouts/topnav'%>
-	<%= turbo_frame_tag :cookies_modal, src: cookies_path if session[:cookies_accepted].nil? %>
+<%= render partial: 'layouts/topnav' %>
+<%= turbo_frame_tag :cookies_modal, src: cookies_path if cookies[:cookies_accepted].nil? && !(Rails.env.development? || Rails.env.test?) %>
 
-	<div class="flex-grow-1">
-    <%=render partial: 'layouts/notices'%>
+<div class="flex-grow-1">
+<%= render partial: 'layouts/notices' %>

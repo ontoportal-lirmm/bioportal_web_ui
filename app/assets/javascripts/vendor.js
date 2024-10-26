@@ -16,7 +16,6 @@
 //= require bootstrap-sprockets
 // Other
 //= require jquery.dataTables
-//= require chosen.jquery
 //= require autocomplete
 // Alertify is used the admin page
 //= require alertify

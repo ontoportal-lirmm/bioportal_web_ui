@@ -26,7 +26,7 @@ export default class extends Controller {
         ontology_name: key.split('/').pop(),
         ontology_mappings: value,
       }))
-
+      this.bubblesTarget.innerHTML = ''
       useMappingsDrawBubbles(data, width, height, margin, this.bubblesTarget, normalization_ratio, logScaleFactor)
 
       this.#centerScroll(this.frameTarget)

@@ -35,6 +35,8 @@ module SubmissionInputsHelper
     end
 
     def label
+      return attr_key unless @attr_metadata
+
       @label || @attr_metadata['label'] || @attr_metadata['attribute'].humanize
     end
 
@@ -97,7 +99,7 @@ module SubmissionInputsHelper
         url_input(name: name, label: label, value: @submission.URI)
       elsif long_text
         text_area_input(name: name, label: label,
-                        value: attr.values)
+                        value: attr.values, resize: true)
       else
         text_input(name: name, label: label,
                    value: attr.values, help: help)
@@ -233,7 +235,7 @@ module SubmissionInputsHelper
       end
       c.container do
         content_tag(:div) do
-          render SelectInputComponent.new(id: 'viewOfSelect', values: onts_for_select, name: 'ontology[viewOf]', selected: ontology.viewOf)
+          render SelectInputComponent.new(id: 'viewOfSelect', values: onts_for_select, name: 'ontology[viewOf]', selected: ontology.viewOf&.split('/')&.last)
         end
       end
     end
@@ -420,12 +422,14 @@ module SubmissionInputsHelper
     end
   end
 
-  def generate_ontology_select_input(name, label, selected, multiple)
+  def generate_ontology_select_input(name, label, selected, multiple, reject_ontology: @ontology)
     unless @ontology_acronyms
       @ontology_acronyms = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', display_links: false, display_context: false, include_views: true)
                                                                .map { |x| ["#{x.name} (#{x.acronym})", x.id.to_s] }
       @ontology_acronyms << ['', '']
     end
+
+    @ontology_acronyms = @ontology_acronyms.reject { |acronym, id| id == reject_ontology.id }
 
     input = ''
 
@@ -444,7 +448,7 @@ module SubmissionInputsHelper
 
     generate_list_field_input(attr, name, label, values, helper_text: helper_text) do |value, row_name, id|
       if long_text
-        text_area_tag(row_name, value, class: 'input-field-component', label: '')
+        text_area_tag(row_name, value, class: 'input-field-component', label: '', style: 'resize: vertical;')
       else
         text_input(label: '', name: row_name, value: value)
       end

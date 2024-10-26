@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get 'locale/:language', to: 'language#set_locale_language'
   get 'metadata_export/index'
   get 'metadata_export/datacite_export'
+  get '/config', to: 'home#portal_config'
 
   get '/notes/new_comment', to: 'notes#new_comment'
   get '/notes/new_proposal', to: 'notes#new_proposal'
@@ -145,12 +146,13 @@ Rails.application.routes.draw do
   end
 
   get '' => 'home#index'
+  get 'status/:portal_name', to: 'home#federation_portals_status'
 
   match 'sparql_proxy', to: 'admin#sparql_endpoint', via: [:get, :post]
 
   # Top-level pages
   match '/feedback', to: 'home#feedback', via: [:get, :post]
-  get '/account' => 'home#account'
+  get '/account' => 'users#show'
   get '/help' => 'home#help'
   get '/about' => 'static_pages#aboutus'
   get '/team' => 'static_pages#team'
@@ -174,7 +176,6 @@ Rails.application.routes.draw do
   get '/ontologies/:acronym/:id/serialize/:output_format' => 'ontologies#content_serializer', :id => /.+/
   get '/ontologies/:acronym/htaccess' => 'ontologies_redirection#generate_htaccess'
 
-  get '/ontologies/virtual/:ontology' => 'ontologies#virtual', :as => :ontology_virtual
   get '/ontologies/success/:id' => 'ontologies#submit_success'
   match '/ontologies/:acronym' => 'ontologies#update', via: [:get, :post]
   match '/ontologies/:acronym/submissions/:id' => 'submissions#update', via: [:get, :post]
@@ -182,29 +183,23 @@ Rails.application.routes.draw do
   match '/ontologies/:ontology_id/submissions' => 'submissions#create', :ontology_id => /.+/, via: [:post]
   match '/ontologies/:ontology_id/submissions' => 'submissions#index', :ontology_id => /.+/, via: [:get]
   get '/ontologies/:acronym/classes/:purl_conceptid', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
-  get '/ontologies/:acronym/: f', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
   match '/ontologies/:acronym/submissions/:id/edit_metadata' => 'submissions#edit_metadata', via: [:get, :post]
   get '/ontologies_filter', to: 'ontologies#ontologies_filter'
 
 
   get 'ontologies_selector', to: 'ontologies#ontologies_selector'
   get 'ontologies_selector/results', to: 'ontologies#ontologies_selector_results'
+
   # Notes
   get 'ontologies/:ontology/notes/:noteid', to: 'notes#virtual_show', as: :note_virtual, noteid: /.+/
   get 'ontologies/:ontology/notes', to: 'notes#virtual_show'
 
   get '/ontologies/:acronym/:id' => 'ontologies_redirection#redirect', :id => /.+/
 
-
   # Ajax
-  get '/ajax/' => 'ajax_proxy#get', :as => :ajax
   get '/ajax/class_details' => 'concepts#details'
   get '/ajax/mappings/get_concept_table' => 'mappings#get_concept_table'
-  get '/ajax/json_ontology' => 'ajax_proxy#json_ontology'
-  get '/ajax/json_class' => 'ajax_proxy#json_class'
-  get '/ajax/jsonp' => 'ajax_proxy#jsonp'
   get '/ajax/notes/delete' => 'notes#destroy'
-  get '/ajax/notes/concept_list' => 'notes#show_concept_list'
   get '/ajax/classes/label' => 'concepts#show_label'
   get '/ajax/classes/definition' => 'concepts#show_definition'
   get '/ajax/classes/treeview' => 'concepts#show_tree'
@@ -223,10 +218,14 @@ Rails.application.routes.draw do
   get '/ajax/ontologies', to: "ontologies#ajax_ontologies"
   get '/ajax/agents', to: "agents#ajax_agents"
   get '/ajax/images/show' => 'application#show_image_modal'
+
   # User
   post '/accounts/:id/custom_ontologies' => 'users#custom_ontologies', :as => :custom_ontologies
   get '/login_as/:login_as' => 'login#login_as', constraints: { login_as: /[\d\w\.\-\%\+ ]+/ }
   post '/login/send_pass', to: 'login#send_pass'
+
+  get '/groups' => 'taxonomy#index'
+  get '/categories' => 'taxonomy#index'
 
   # Search
   get 'search', to: 'search#index'
@@ -235,36 +234,8 @@ Rails.application.routes.draw do
   get 'check_resolvability' => 'check_resolvability#index'
   get 'check_url_resolvability' => 'check_resolvability#check_resolvability'
 
-  # Ontolobridge
-  # post '/ontolobridge/:save_new_term_instructions' => 'ontolobridge#save_new_term_instructions'
-
-  ###########################################################################################################
   # Install the default route as the lowest priority.
   get '/:controller(/:action(/:id))'
-  ###########################################################################################################
-
-  #####
-  ## OLD ROUTES
-  ## All of these should redirect to new addresses in the controller method or using the redirect controller
-  #####
-
-  # Redirects from old URL locations
-  get '/annotate' => 'redirect#index', :url => '/annotator'
-  get '/visconcepts/:ontology/' => 'redirect#index', :url => '/visualize/'
-  get '/ajax/terms/label' => 'redirect#index', :url => '/ajax/classes/label'
-  get '/ajax/terms/definition' => 'redirect#index', :url => '/ajax/classes/definition'
-  get '/ajax/terms/treeview' => 'redirect#index', :url => '/ajax/classes/treeview'
-  get '/ajax/term_details/:ontology' => 'redirect#index', :url => '/ajax/class_details'
-  get '/ajax/json_term' => 'redirect#index', :url => '/ajax/json_class'
-
-  # Visualize
-  get '/visualize/:ontology' => 'ontologies#visualize', :as => :visualize, :constraints => { ontology: /[^\/?]+/ }
-  get '/visualize/:ontology/:conceptid' => 'ontologies#visualize', :as => :uri, :constraints => { ontology: /[^\/?]+/, conceptid: /[^\/?]+/ }
-  get '/visualize' => 'ontologies#visualize', :as => :visualize_concept, :constraints => { ontology: /[^\/?]+/, id: /[^\/?]+/, ontologyid: /[^\/?]+/, conceptid: /[^\/?]+/ }
-
-  get '/exhibit/:ontology/:id' => 'concepts#exhibit'
-
 
   mount Lookbook::Engine, at: "/lookbook"
-
 end

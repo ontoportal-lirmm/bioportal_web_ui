@@ -4,7 +4,7 @@ module CollectionsHelper
   def get_collections(ontology, add_colors: false)
     collections = ontology.explore.collections(language: request_lang)
     generate_collections_colors(collections) if add_colors
-    collections
+    collections.sort_by{ |x| main_language_label(x.prefLabel) || ''  } if collections
   end
 
   def get_collection(ontology, collection_uri)
@@ -64,7 +64,7 @@ module CollectionsHelper
     pref_label_lang, pref_label_html = get_collection_label(collection)
     tooltip  = pref_label_lang.to_s.eql?('@none') ? '' :  "data-controller='tooltip' data-tooltip-position-value='right' title='#{pref_label_lang.upcase}'"
     <<-EOS
-          <a id="#{collection['@id']}" href="#{collection_path(collection['@id'], request_lang)}" 
+          <a id="#{collection['@id']}" href="#{collection_path(collection['@id'], request_lang)}"
             data-turbo="true" data-turbo-frame="collection" data-collectionid="#{collection['@id']}"
            #{tooltip}
             class="#{selected_collection_id.eql?(collection['@id']) ? 'active' : nil}">
@@ -75,10 +75,19 @@ module CollectionsHelper
 
   private
 
+  require 'color'
+
+  def random_color
+    hue = rand(0..360)
+    saturation = rand(50..100) # Higher saturation for more vibrant colors
+    lightness = rand(30..70) # Middle lightness to avoid extremes
+
+    Color::HSL.new(hue, saturation, lightness).html
+  end
+
   def generate_collections_colors(collections)
     collections.each do |c|
-      c.color = format('#%06x', (rand * 0xffffff))
+      c.color = random_color
     end
   end
 end
-

@@ -14,7 +14,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
 
   def teardown
     delete_agents
-    delete_users
+    delete_user(@logged_user) if @logged_user
   end
 
   test "go admin page and create an agent person and edit it" do
@@ -41,7 +41,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
     click_on "Persons & organizations"
 
     # Creation test
-    create_agent_flow(@new_organization, person_count: 0, organization_count: 3)
+    create_agent_flow(@new_organization, person_count: 0, organization_count: 1)
 
     # Edition test
     @new_organization2 = fixtures(:agents)[:organization2]
@@ -50,7 +50,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
     @new_organization2.id = edit_link['href'].split('/')[-2]
     edit_link.click
 
-    edit_agent_flow(@new_organization2, person_count: 0, organization_count: 5)
+    edit_agent_flow(@new_organization2, person_count: 0, organization_count: 1)
   end
 
 
@@ -61,21 +61,21 @@ class AgentFlowsTest < ApplicationSystemTestCase
     # Creation test
     click_on "Create New Agent"
     wait_for_text "TYPE"
-    agent_fill(new_agent)
+    agent_fill(new_agent, is_affiliation: false)
     sleep 1
     assert_text "New Agent added successfully"
     find('.close').click
     within "table#admin_agents" do
       assert_selector '.human',  count: person_count + organization_count #  all created  agents
       assert_text new_agent.name
-      new_agent.identifiers.map{|x| "https://orcid.org/#{x["notation"]}"}.each do |orcid|
+      new_agent.identifiers.map{|x| "https://#{new_agent.agentType.eql?('organization') ? 'ror' : 'orcid'}.org/#{x["notation"]}"}.each do |orcid|
         assert_text orcid
       end
 
       assert_text 'person', count: person_count
       assert_text 'organization', count: organization_count
 
-      new_agent.affiliations.map do |aff|
+      Array(new_agent.affiliations).map do |aff|
         aff["identifiers"] = aff["identifiers"].each{|x| x["schemaAgency"] = 'ORCID'}
         assert_text aff['name']
       end
@@ -87,16 +87,17 @@ class AgentFlowsTest < ApplicationSystemTestCase
     agent_fill(agent, parent_id: agent.id)
     # assert_text "New Agent added successfully"
     find('.close').click
+    sleep 1
     within "table#admin_agents" do
       assert_selector '.human',  count: person_count + organization_count # all created  agents
       assert_text agent.name
-      agent.identifiers.map{|x| "https://orcid.org/#{x["notation"]}"}.each do |orcid|
+      agent.identifiers.map{|x| "https://#{agent.agentType.eql?('organization') ? 'ror' : 'orcid'}.org/#{x["notation"]}"}.each do |orcid|
         assert_text orcid
       end
       assert_text 'person', count: person_count
       assert_text 'organization', count: organization_count
 
-      agent.affiliations.map do |aff|
+      Array(agent.affiliations).map do |aff|
         aff["identifiers"] = aff["identifiers"].each{|x| x["schemaAgency"] = 'ORCID'}
         assert_text aff['name']
       end

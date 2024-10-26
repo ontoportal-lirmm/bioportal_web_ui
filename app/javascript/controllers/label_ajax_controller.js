@@ -11,27 +11,29 @@ export default class extends Controller {
     }
 
     connect() {
-        this.linkA = jQuery(this.element);
+        setTimeout(() => {
+            this.linkA = jQuery(this.element);
 
-        if (this.linkA.hasClass('ajax-modified-cls')) {
-            return true
-        }
+            if (this.linkA.hasClass('ajax-modified-cls')) {
+                return true
+            }
 
-        this.cls_id = this.clsIdValue;
-        this.ont_acronym = this.ontologyAcronymValue;
-
-        let ajax_uri = new URL(this.ajaxUrlValue, document.location.origin)
-
-        ajax_uri.searchParams.set('ontology', this.ont_acronym)
-        ajax_uri.searchParams.set('id', this.cls_id)
-
-
-        this.request = useAjax({
-            url: ajax_uri.pathname + ajax_uri.search,
-            timeout: ajax_process_timeout * 1000,
-            success: this.#ajaxSuccess.bind(this),
-            error: this.#ajaxError.bind(this)
-        });
+            this.cls_id = this.clsIdValue;
+            this.ont_acronym = this.ontologyAcronymValue;
+    
+            let ajax_uri = new URL(this.ajaxUrlValue, document.location.origin)
+    
+            ajax_uri.searchParams.set('ontology', this.ont_acronym)
+            ajax_uri.searchParams.set('id', this.cls_id)
+    
+    
+            this.request = useAjax({
+                url: ajax_uri.pathname + ajax_uri.search,
+                timeout: ajax_process_timeout * 1000,
+                success: this.#ajaxSuccess.bind(this),
+                error: this.#ajaxError.bind(this)
+            });
+          },1)
     }
 
     abort() {

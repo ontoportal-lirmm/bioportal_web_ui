@@ -54,7 +54,7 @@
       - l.row do
         = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.categories_and_subjects")) do
           = horizontal_list_container(show_ontology_domains(domains).uniq) do |v|
-            = render ChipButtonComponent.new(text: show_category_name(v), type: "static")
+            = category_name_chip_component(v)
 
     - if  @submission_latest&.pullLocation
       - l.row do

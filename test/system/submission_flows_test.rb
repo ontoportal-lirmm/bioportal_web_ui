@@ -43,7 +43,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_selector '.alert-message', text: "The ontology is processing."
 
     @new_ontology.hasDomain.each do |cat|
-      assert_text cat.name
+      assert_text cat.acronym.titleize
     end
 
 
@@ -143,12 +143,12 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_text "#{ontology_2.name} (#{@new_ontology.acronym})"
 
     selected_categories.each do |cat|
-      assert_text cat.name
+      assert_text cat.acronym.titleize
     end
 
     assert_text submission_2.URI
     assert_text submission_2.versionIRI
-    assert_selector '#submission-status', text: submission_2.version
+    assert_selector '.submission-status', text: submission_2.version
     assert_selector ".flag-icon-fr" # todo fix this
     submission_2.identifier.each do |id|
       assert_text id
@@ -203,11 +203,14 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     open_dropdown "#projects_section"
     usage_properties = [
       :coverage, :knownUsage,
-      :hasDomain, :example
+      :example
     ]
     usage_properties.each do |property|
       Array(submission_2[property]).each { |v| assert_text v } # check
     end
+
+    has_domain_values = ["Has Domain2.1", "Has Domain2.2", "Has Domain2.3"]
+    has_domain_values.each { |v| assert_text v }
 
     submission_2.designedForOntologyTask.each do |task|
       assert_text task.delete(' ') # TODO fix in the UI the disaply of taskes
@@ -329,7 +332,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_equal existent_submission.pullLocation, find_field('submission[pullLocation]').value
 
     click_button 'Next'
-    
+
     assert_equal Date.parse(existent_submission.modificationDate).to_s, find('[name="submission[modificationDate]"]', visible: false).value
     assert_equal existent_submission.contact.map(&:values).flatten.sort, all('[name^="submission[contact]"]').map(&:value).sort
 
@@ -349,7 +352,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_selector '.alert-message', text: "The ontology is processing."
 
     ontology_2.hasDomain.each do |cat|
-      assert_text cat.name
+      assert_text cat.acronym.titleize
     end
 
     refute_text 'Version IRI'

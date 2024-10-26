@@ -8,7 +8,9 @@
     - if @ontology.viewOf
       = inline_svg_tag 'arrow-right-outlined.svg'
       %div
-        = @ontology.viewOf.split('/').last
+        - viewOfAcronym = @ontology.viewOf.split('/').last
+        %a{href: "/ontologies/#{viewOfAcronym}"}
+          = viewOfAcronym
     = inline_svg_tag 'arrow-right-outlined.svg'
     %div
       = @ontology.acronym

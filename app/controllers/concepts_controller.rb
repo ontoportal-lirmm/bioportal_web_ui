@@ -4,6 +4,7 @@ class ConceptsController < ApplicationController
   include MappingsHelper
   include ConceptsHelper
   include TurboHelper
+  include TermsReuses
 
   layout 'ontology'
 
@@ -44,9 +45,7 @@ class ConceptsController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     @ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
 
-    # Get the latest 'ready' submission, or fallback to any latest submission
-    # TODO: change the logic here if the fallback will crash the visualization
-    @submission = get_ontology_submission_ready(@ontology)  # application_controller
+    @submission = @ontology.explore.latest_submission(include: 'all')
 
     @concept = @ontology.explore.single_class({full: true}, params[:id])
     concept_not_found(params[:id]) if @concept.nil?
@@ -57,7 +56,7 @@ class ConceptsController < ApplicationController
     render turbo_stream: [
       replace(helpers.child_id(@concept) + '_open_link') { TreeLinkComponent.tree_close_icon },
       replace(helpers.child_id(@concept) + '_childs') do
-        helpers.concepts_tree_component(@concept, @concept, @ontology.acronym, Array(@schemes), request_lang, sub_tree: true)
+        helpers.concepts_tree_component(@concept, @concept, @ontology.acronym, Array(@schemes), request_lang, sub_tree: true, submission: @submission)
       end
     ]
   end
@@ -66,41 +65,24 @@ class ConceptsController < ApplicationController
     cls_id = params[:concept] || params[:id]  # cls_id should be a full URI
     ont_id = params[:ontology]  # ont_id could be a full URI or an acronym
 
-    if ont_id.to_i > 0
-      params_cleanup_new_api()
-      stop_words = ["controller", "action"]
-      redirect_to "#{request.path}#{params_string_for_redirect(params, stop_words: stop_words)}", :status => :moved_permanently
-      return
-    end
-
     render LabelLinkComponent.inline(cls_id, helpers.main_language_label(concept_label(ont_id, cls_id)))
   end
 
   def show_definition
-    if params[:ontology].to_i > 0
-      params_cleanup_new_api()
-      stop_words = ["controller", "action"]
-      redirect_to "#{request.path}#{params_string_for_redirect(params, stop_words: stop_words)}", :status => :moved_permanently
-      return
-    end
+
     @ontology = LinkedData::Client::Models::Ontology.find(params[:ontology])
     cls = @ontology.explore.single_class(params[:concept])
     render :text => cls.definition
   end
 
   def show_tree
-    if params[:ontology].to_i > 0
-      params_cleanup_new_api()
-      stop_words = ["controller", "action"]
-      redirect_to "#{request.path}#{params_string_for_redirect(params, stop_words: stop_words)}", :status => :moved_permanently
-      return
-    end
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
+    @submission = @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri')
     if @ontology.nil? || @ontology.errors
       ontology_not_found(params[:ontology])
     else
       get_class(params) #application_controller
-      
+
       not_found(t('concepts.missing_roots')) if @root.nil?
 
       render inline: helpers.concepts_tree_component(@root, @concept,
@@ -114,6 +96,7 @@ class ConceptsController < ApplicationController
     if @ontology.nil?
       ontology_not_found(params[:ontology])
     else
+      @submission = @ontology.explore.latest_submission(include: 'uriRegexPattern,preferredNamespaceUri')
       page = params[:page]
       @last_date = params[:last_date]
       auto_click = page.to_s.eql?('1')
@@ -139,12 +122,6 @@ class ConceptsController < ApplicationController
   end
 
   def property_tree
-    if params[:ontology].to_i > 0
-      params_cleanup_new_api()
-      stop_words = ["controller", "action"]
-      redirect_to "#{request.path}#{params_string_for_redirect(params, stop_words: stop_words)}", :status => :moved_permanently
-      return
-    end
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     ontology_not_found(params[:ontology]) if @ontology.nil?
     @root = @ontology.property_tree
@@ -153,15 +130,7 @@ class ConceptsController < ApplicationController
 
   # Renders a details pane for a given ontology/concept
   def details
-    concept_not_found('') if params[:conceptid].nil? || params[:conceptid].empty?
-
-    if params[:ontology].to_i > 0
-      orig_id = params[:ontology]
-      params_cleanup_new_api()
-      options = {stop_words: ["controller", "action", "id"]}
-      redirect_to "#{request.path.sub(orig_id, params[:ontology])}#{params_string_for_redirect(params, options)}", :status => :moved_permanently
-      return
-    end
+    concept_not_found(params[:conceptid]) if params[:conceptid].blank?
 
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     ontology_not_found(params[:ontology]) if @ontology.nil?
@@ -169,12 +138,8 @@ class ConceptsController < ApplicationController
     @concept = @ontology.explore.single_class({full: true}, CGI.unescape(params[:conceptid]))
     concept_not_found(CGI.unescape(params[:conceptid])) if @concept.nil? || @concept.errors
     @container_id = params[:modal] ? 'application_modal_content' : 'concept_details'
-    
-    if params[:styled].eql?("true")
-      render :partial => "details", :layout => "partial"
-    else
-      render :partial => "details"
-    end
+
+    render :partial => "details"
   end
 
 

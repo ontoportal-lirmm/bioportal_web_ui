@@ -17,8 +17,9 @@ module PropertiesHelper
     }
     [children_link, data, href]
   end
-  def property_tree_component(root, selected_concept, acronym, language, sub_tree: false, id: nil, auto_click: false)
-    tree_component(root, selected_concept, target_frame: 'property_show', sub_tree: sub_tree, id: id, auto_click: auto_click) do |child|
+
+  def property_tree_component(root, selected_concept, acronym, language, sub_tree: false, id: nil, auto_click: false, submission: @submission)
+    tree_component(root, selected_concept, target_frame: 'property_show', sub_tree: sub_tree, id: id, auto_click: false, submission: submission) do |child|
       property_tree_data(acronym, child, language)
     end
   end
@@ -31,5 +32,9 @@ module PropertiesHelper
     render Display::AlertComponent.new do
       t('properties.no_properties_alert', acronym: @ontology.acronym)
     end
+  end
+
+  def get_property(id, acronym = params[:acronym], lang = request_lang, include: nil)
+    LinkedData::Client::HTTP.get("/ontologies/#{acronym}/properties/#{helpers.encode_param(id)}", { lang: lang , include: include})
   end
 end
