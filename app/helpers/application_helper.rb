@@ -106,8 +106,8 @@ module ApplicationHelper
     end
   end
 
-  def onts_for_select
-    ontologies ||= LinkedData::Client::Models::Ontology.all(include: "acronym,name")
+  def onts_for_select(include_views: false)
+    ontologies ||= LinkedData::Client::Models::Ontology.all({include: "acronym,name", include_views: include_views})
     onts_for_select = [['', '']]
     ontologies.each do |ont|
       next if ( ont.acronym.nil? or ont.acronym.empty? )
