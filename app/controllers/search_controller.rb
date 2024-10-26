@@ -26,7 +26,7 @@ class SearchController < ApplicationController
     @time = Benchmark.realtime do
       results = LinkedData::Client::Models::Class.search(@search_query, params)
       @federation_errors = federation_error(results) if federation_error?(results)
-      results = results[:collection]
+      results = results.collection
 
 
       @search_results = aggregate_results(@search_query, results)
@@ -48,6 +48,7 @@ class SearchController < ApplicationController
       params.delete("ontologies")
     end
     search_page = LinkedData::Client::Models::Class.search(params[:q], params)
+
     @results = search_page.collection
 
     response = ""
