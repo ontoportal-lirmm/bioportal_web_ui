@@ -4,7 +4,7 @@ GIT
   branch: master
   specs:
     ontologies_api_client (2.2.0)
-      activesupport
+      activesupport (~> 7.0.4)
       excon
       faraday
       faraday-excon (~> 2.0.0)
@@ -12,6 +12,8 @@ GIT
       lz4-ruby
       multi_json
       oj
+      parallel
+      request_store
       spawnling (= 2.1.5)
 
 GEM
@@ -448,6 +450,8 @@ GEM
     regexp_parser (2.9.2)
     reline (0.5.10)
       io-console (~> 0.5)
+    request_store (1.7.0)
+      rack (>= 1.4)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -596,6 +600,7 @@ GEM
 PLATFORMS
   x86_64-darwin-23
   x86_64-linux
+  x86_64-linux-musl
 
 DEPENDENCIES
   bcrypt_pbkdf (>= 1.0, < 2.0)
