@@ -190,7 +190,7 @@ module FederationHelper
     federated_portals.map do |key, config|
       turbo_frame_component = TurboFrameComponent.new(
         id: "federation_portals_status_#{key}",
-        src: "status/#{key}?name=#{name}&acronym=#{config[:name]}&checked=#{request_portals.include?(key.to_s)}"
+        src: "/status/#{key}?name=#{name}&acronym=#{config[:name]}&checked=#{request_portals.include?(key.to_s)}"
       )
 
       content_tag :div do
