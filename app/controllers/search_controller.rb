@@ -21,7 +21,7 @@ class SearchController < ApplicationController
 
     set_federated_portals
 
-    params[:ontologies] = nil if federation_enabled?
+    params[:ontologies] = nil if federated_request?
 
     @time = Benchmark.realtime do
       results = LinkedData::Client::Models::Class.search(@search_query, params)

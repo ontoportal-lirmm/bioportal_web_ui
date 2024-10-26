@@ -54,11 +54,12 @@
                   - d.title { browse_filter_section_header(key: key, count: count)}
                   = browse_filter_section_body(key: key, checked_values: checked_values, objects: objects)
 
-            %div{ data:{action: "change->browse-filters#federationChange"}}
-              = dropdown_component(id: "browse-portal-filter", is_open: !request_portals.empty?) do |d|
-                - d.title { browse_filter_section_header(title: t('federation.results_from_external_portals'))}
-                .px-1.browse-federation-input-chips
-                  = federation_input_chips(name: "portals")
+            - if federation_enabled?
+              %div{ data:{action: "change->browse-filters#federationChange"}}
+                = dropdown_component(id: "browse-portal-filter", is_open: !request_portals.empty?) do |d|
+                  - d.title { browse_filter_section_header(title: t('federation.results_from_external_portals'))}
+                  .px-1.browse-federation-input-chips
+                    = federation_input_chips(name: "portals")
 
         .browse-second-row
           .browse-search-bar
