@@ -27,13 +27,13 @@
       ORCID ID
       %font.register-optional 
       = t('register.optional')
-    %img.register-input-icon{:src => "#{asset_path("orcid.svg")}"}/
+    = inline_svg_tag 'orcid.svg', class: 'register-input-icon'
     = text_field :user, :orcidId, value: @user.orcidId, class: "register-input-long register-input-with-icon"
     %p.register-input-title
       Github ID
       %font.register-optional 
       = t('register.optional')
-    %img.register-input-icon{:src => "#{asset_path("github-icon.svg")}"}/
+    = inline_svg_tag 'github-icon.svg', class: 'register-input-icon'
     = text_field :user, :githubId, value: @user.githubId, class: "register-input-long register-input-with-icon"
     %p.register-input-title
       = t('register.email')

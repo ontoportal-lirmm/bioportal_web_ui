@@ -25,7 +25,7 @@ export default class extends Controller {
     let activeCollections = this.#getMatchedCollections(collectionElem, collections, this.selected)
 
     this.#removeColors(collectionElem)
-    this.#addColorsTags(collectionElem, this.#getCollectionColors(activeCollections))
+    this.#addColorsTags(collectionElem, this.#getCollections(activeCollections))
   }
 
   collectionTargetConnected (collectionElem) {
@@ -48,7 +48,10 @@ export default class extends Controller {
     if (options) {
       Array.from(options.options).forEach(s => {
         if (s.value !== '') {
-          out[s.value] = s.dataset.color
+          out[s.value] = {
+            color: s.dataset.color,
+            title: s.textContent
+          }
         }
       })
     }
@@ -60,9 +63,11 @@ export default class extends Controller {
     return selected.filter(c => collections.includes(c))
   }
 
-  #getCollectionColors (collectionsIds) {
-    return Object.entries(this.allCollections).filter(([key]) => collectionsIds.includes(key)).map(x => x[1])
+  #getCollections(collectionsIds) {
+    return Object.entries(this.allCollections).filter(([key]) => collectionsIds.includes(key))
   }
+
+
 
   #getElemCollections (elem) {
     return JSON.parse(elem.dataset.collectionsValue)
@@ -72,20 +77,23 @@ export default class extends Controller {
     return JSON.parse(elem.dataset.activeCollectionsValue)
   }
 
-  #addColorsTags (elem, colors) {
+  #addColorsTags (elem, collections) {
     const colorsContainer = document.createElement('span')
-    colors.forEach(c => this.#elemAddColorTag(colorsContainer, c))
+    collections.forEach(c => this.#elemAddColorTag(colorsContainer, c[1].title, c[1].color))
     elem.appendChild(colorsContainer)
   }
 
-  #elemAddColorTag (elem, color) {
+  #elemAddColorTag (elem, title, color) {
     const span = document.createElement('span')
+    span.dataset.controller = 'tooltip'
+    span.title = title
     span.style.backgroundColor = color
     span.style.height = '10px'
     span.style.width = '10px'
     span.style.borderRadius = '50%'
     span.style.display = 'inline-block'
     span.className += 'mx-1'
+
     elem.appendChild(span)
   }
 }

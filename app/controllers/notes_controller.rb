@@ -160,11 +160,6 @@ class NotesController < ApplicationController
     end
   end
 
-  def show_concept_list
-    params[:p] = "classes"
-    params[:t] = "notes"
-    redirect_new_api
-  end
 
   private
 

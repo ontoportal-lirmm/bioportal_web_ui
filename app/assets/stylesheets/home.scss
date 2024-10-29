@@ -150,7 +150,59 @@ i.fa.fa-caret-square-o-down {
   margin-bottom: 5px;
   font-weight: 700;
 }
-
+.home-section-title{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+.home-section-title .text{
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+.home-slice > a{
+  display: flex;
+  align-items: center;
+}
+.home-slice-icon{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.home-slice-icon svg{
+  width: 40px;
+  height: 40px;
+}
+.home-slices-container{
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.home-section-description{
+  color: #888888;
+}
+.home-slice{
+  border: 1px solid var(--primary-color);
+  border-radius: 8px;
+  padding: 4px 15px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+.home-ontoportal-instances{
+  margin-top: 50px;
+  background: #FBFBFB;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.ontoportal-instances-container{
+  padding: 0 50px;
+  width: 1248px;
+  padding-bottom: 20px;
+}
+.home-section-title.ontoportal{
+  margin-top: 20px;
+}
 .home-section-line{
   width: 60px;
   margin-top: 3px;
@@ -169,17 +221,26 @@ i.fa.fa-caret-square-o-down {
 }
 .home-statistics-container > div {
   display: flex;
-  align-items: center;
+  align-items: start;
+  justify-content: center;
   flex-wrap: wrap;
 }
 .home-agroportal-figures{
   margin-bottom: 20px;
 }
-
+.home-slice-name{
+  font-size: 16px;
+  font-weight: 400;
+  margin-left: 10px;
+}
+.home-slice-ontologies{
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: -18px;
+}
 .home-statistics-container > div > p {
   font-size: 20px;
   font-weight: 600;
-  margin-left: 18px;
   margin-bottom: 0;
 }
 .home-statistics-item{
@@ -414,7 +475,6 @@ i.fa.fa-caret-square-o-down {
 }
 .home-support-items{
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
   img{
     object-fit: scale-down;
@@ -429,8 +489,8 @@ i.fa.fa-caret-square-o-down {
   border-radius: 50%;
   display: block;
 }
-.home-support-items  > *:not(:first-child){
-  margin-left: 40px;
+.home-support-items > div, .home-support-items > a {
+  margin-right: 40px;
 }
 .home-support-items a{
   margin-bottom: 40px;

@@ -72,15 +72,34 @@ module MultiLanguagesHelper
   def content_languages(submission = @submission || @submission_latest)
     current_lang = request_lang.downcase
     submission_lang = submission_languages(submission)
+
+    submission_lang = [current_lang.to_s]  if submission_lang.empty?
+
     # Transform each language into a select option
     submission_lang = submission_lang.map do |lang|
-      lang = lang.split('/').last.upcase
-      lang = ISO_639.find(lang.to_s.downcase)
-      next nil unless lang
-      [lang.alpha2, lang.english_name]
+      code, name = find_language_code_name(lang)
+      next nil unless code
+      [code, name]
     end.compact
 
     [submission_lang, current_lang]
+  end
+
+  def find_language_code_name(language)
+    original_lang = language.to_s.split('/').last.upcase
+    lang, country = original_lang.split('-')
+
+    if country
+      lang = ISO3166::Country.find_country_by_alpha2(country)
+      return nil unless lang
+
+      [original_lang, lang.nationality]
+    else
+      lang = ISO_639.find(lang.to_s.downcase)
+      return nil unless lang
+
+      [lang.alpha2, lang.english_name]
+    end
   end
 
   def content_language_help_text
@@ -96,7 +115,7 @@ module MultiLanguagesHelper
     languages, selected = content_languages
     render Input::LanguageSelectorComponent.new(id: id, name: name, enable_all: true,
                                                 languages: languages,
-                                                selected: selected || 'all',
+                                                selected: selected || request_lang,
                                                 'data-tooltip-interactive-value': true,
                                                 'data-select-input-searchable-value': false,
                                                 title: content_language_help_text)
@@ -163,7 +182,7 @@ module MultiLanguagesHelper
       content_tag(:div) do
         raw(label.map do |key, value|
           Array(value).map do |v|
-            content_tag(:div) do
+            content_tag(:div, class: 'definition') do
               concat content_tag(:span, v)
               concat content_tag(:span, key.upcase, class: 'badge badge-secondary ml-1') unless key.to_s.upcase.eql?('NONE') || key.to_s.upcase.eql?('@NONE')
             end

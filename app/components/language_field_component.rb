@@ -3,7 +3,7 @@ require 'iso-639'
 
 class LanguageFieldComponent < ViewComponent::Base
 
-  include FlagIconsRails::Rails::ViewHelpers
+  include FlagIconsRails::Rails::ViewHelpers, MultiLanguagesHelper
 
   def initialize(value:, label: nil, auto_label: false, icon: nil)
     super
@@ -11,12 +11,9 @@ class LanguageFieldComponent < ViewComponent::Base
     @lang_code = nil
     @label = label
     @icon = icon
-
-    iso = ISO_639.find(value.to_s.split('/').last)
-    if iso
-      @lang_code = iso.alpha2
-      @label ||= iso.english_name if auto_label
-    end
+    @lang_code, label = find_language_code_name(value)
+    @label ||= label if auto_label
+    @lang_code = @lang_code.split('-').last if @lang_code
   end
 
   def lang_code

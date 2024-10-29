@@ -1,4 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
+
+const TREE_VIEW_PAGES = ['classes', 'properties', 'schemes', 'collections', 'instances']
+
 // Connects to data-controller="simple-tree"
 export default class extends Controller {
 
@@ -7,18 +10,7 @@ export default class extends Controller {
   }
 
   connect () {
-    let activeElem = this.element.querySelector('a.active')
-    if (activeElem) {
-      this.element.scrollTo({
-        top: activeElem.offsetTop,
-        behavior: 'smooth'
-      });
-
-      if (this.autoClickValue) {
-        activeElem.click()
-      }
-    }
-    this.#onClickTooManyChildrenInit()
+    this.#centerTreeView()
   }
 
   select (event) {
@@ -32,6 +24,29 @@ export default class extends Controller {
     event.target.classList.toggle('fa-chevron-right')
     event.target.classList.toggle('fa-chevron-down')
     event.target.nextElementSibling.nextElementSibling.classList.toggle('hidden')
+  }
+
+  #centerTreeView() {
+    setTimeout(() => {
+      const location = window.location.href;
+
+      const isTreeViewPage = TREE_VIEW_PAGES.some(param => location.includes(`p=${param}`));
+
+      if (isTreeViewPage) {
+        const activeElem = this.element.querySelector('.tree-link.active');
+        
+        if (activeElem) {
+          activeElem.scrollIntoView({ block: 'center' });
+          window.scrollTo({ top: 0 });
+          
+          if (this.autoClickValue) {
+            activeElem.click();
+          }
+        }
+        
+        this.#onClickTooManyChildrenInit();
+      }
+    }, 0);
   }
 
   #onClickTooManyChildrenInit () {

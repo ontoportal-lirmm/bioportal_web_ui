@@ -1,3 +1,6 @@
+$DEBUG_API_CLIENT = false
+$API_CLIENT_INVALIDATE_CACHE = false
+
 # Organization info
 $ORG = ENV['ORG']
 $ORG_URL = ENV['ORG_URL']
@@ -43,9 +46,6 @@ $NCBO_API_KEY = ENV['NCBO_API_KEY']
 # Fairness Assessment.
 $FAIRNESS_DISABLED = ENV['FAIRNESS_DISABLED']
 $FAIRNESS_URL = ENV['FAIRNESS_URL']
-
-
-
 
 # Used to define other bioportal that can be mapped to
 # Example to map to ncbo bioportal : {"ncbo" => {"api" => "http://data.bioontology.org", "ui" => "http://bioportal.bioontology.org", "apikey" => ""}
@@ -220,52 +220,85 @@ $HOME_PAGE_LOGOS = [
 
 $PORTALS_INSTANCES = [
   {
-    color: '#31b403',
-    portal: 'AgroPortal',
-    link: 'https://agroportal.lirmm.fr/'
+    name: 'AgroPortal',
+    api: 'https://data.agroportal.lirmm.fr',
+    ui: 'https://agroportal.lirmm.fr/',
+    color: '#3CB371',
+    apikey: '1de0a270-29c5-4dda-b043-7c3580628cd5',
+    'light-color': '#F1F6FA',
   },
   {
+    name: 'BioPortal',
+    ui: 'https://bioportal.bioontology.org/',
+    api: 'https://data.bioontology.org/',
+    apikey: '8b5b7825-538d-40e0-9e9e-5ab9274a9aeb',
     color: '#234979',
-    portal: 'BioPortal',
-    link: 'https://bioportal.bioontology.org/'
+    'light-color': '#E9F2FA',
   },
   {
+    name: 'SIFR BioPortal',
+    ui: 'https://bioportal.lirmm.fr/',
+    api: 'https://data.bioportal.lirmm.fr/',
+    apikey: '1de0a270-29c5-4dda-b043-7c3580628cd5',
     color: '#74a9cb',
-    portal: 'SIFR BioPortal',
-    link: 'https://bioportal.lirmm.fr/'
+    'light-color': '#E9F2FA',
   },
   {
-    color: '#0d508a',
-    portal: 'EcoPortal',
-    link: 'https://ecoportal.lifewatch.eu/'
+    name: 'EcoPortal',
+    ui: 'https://ecoportal.lifewatch.eu/',
+    api: 'https://data.ecoportal.lifewatch.eu/',
+    apikey: "43a437ba-a437-4bf0-affd-ab520e584719",
+    color: '#2076C9',
+    'light-color': '#E9F2FA',
   },
   {
+    name: 'MedPortal',
+    ui: 'http://medportal.bmicc.cn/',
     color: '#234979',
-    portal: 'MedPortal',
-    link: 'http://medportal.bmicc.cn/'
   },
   {
+    name: 'MatPortal',
+    ui: 'https://matportal.org/',
     color: '#009574',
-    portal: 'MatPortal',
-    link: 'https://matportal.org/'
   },
   {
+    name: 'IndustryPortal',
+    ui: 'http://industryportal.enit.fr',
+    api: 'https://data.industryportal.enit.fr/',
+    apikey: '019adb70-1d64-41b7-8f6e-8f7e5eb54942',
     color: '#1c0f5d',
-    portal: 'IndustryPortal',
-    link: 'http://industryportal.enit.fr'
+    'light-color': '#F0F5F6',
   },
   {
-    color: '#1e2251',
-    portal: 'EarthPortal',
-    link: 'https://earthportal.eu/'
+    name: 'EarthPortal',
+    ui: 'https://earthportal.eu/',
+    api: 'https://data.earthportal.eu/',
+    apikey: "c9147279-954f-41bd-b068-da9b0c441288",
+    color: '#404696',
+    'light-color': '#F0F5F6'
   },
   {
-    color: '#33691B',
-    portal: 'BiodivPortal',
-    link: 'https://biodivportal.gfbio.org/'
+    name: 'TestPortal',
+    ui: 'https://testportal.lirmm.fr/',
+    api: 'https://data.testportal.lirmm.fr/',
+    color: '#74a9cb',
+    apikey: '1de0a270-29c5-4dda-b043-7c3580628cd5',
+  },
+  {
+    name: 'BiodivPortal',
+    ui: 'https://biodivportal.gfbio.org/',
+    api: 'https://data.biodivportal.gfbio.org/',
+    apikey: "47a57aa3-7b54-4f34-b695-dbb5f5b7363e",
+    color: '#349696',
+    'light-color': '#EBF5F5',
   }
 ]
 
+
+$ONTOPORTAL_WEBSITE_LINK = "https://ontoportal.org/"
+$ONTOPORTAL_GITHUB_REPO = "https://github.com/ontoportal"
+
+$GITHUB_ISSUES = "https://github.com/agroportal/project-management/issues"
 $FOOTER_LINKS = {
   social: [
     { logo: "social/people.svg", link: "https://github.com/orgs/agroportal/people" },
@@ -281,17 +314,18 @@ $FOOTER_LINKS = {
       api: "https://data.agroportal.lirmm.fr/",
       tools: "/tools",
       sparql: "https://sparql.agroportal.lirmm.fr/test/",
-      ontoportal: "https://ontoportal.org/"
+      ontoportal: $ONTOPORTAL_WEBSITE_LINK
     },
     support: {
       contact_us: "https://#{$SITE}.lirmm.fr/feedback",
       documentation: "https://ontoportal.github.io/documentation/",
-      agro_documentation: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/public-documentation-QMpsC9aVBb"
+      agro_documentation: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/public-documentation-QMpsC9aVBb",
+      issues_and_requests: $GITHUB_ISSUES 
     },
     agreements: {
       terms: $TERMS_AND_CONDITIONS_LINK,
-      privacy_policy: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/terms-conditions-naDsDo2Zxq#h-privacy-policy",
-      legal_notices: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/terms-conditions-naDsDo2Zxq#h-legal-notice"
+      privacy_policy: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/terms-conditions-naDsDo2Zxq",
+      legal_notices: "https://doc.jonquetlab.lirmm.fr/share/e6158eda-c109-4385-852c-51a42de9a412/doc/terms-conditions-naDsDo2Zxq"
     },
     about: {
       about_us: "https://github.com/agroportal/project-management",
@@ -314,3 +348,4 @@ if $HOSTNAME
     require_relative "bioportal_config_development_#{$HOSTNAME}"
   end
 end
+

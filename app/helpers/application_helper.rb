@@ -11,6 +11,7 @@ module ApplicationHelper
 
   include ModalHelper, MultiLanguagesHelper, UrlsHelper
 
+
   RESOLVE_NAMESPACE = {:omv => "http://omv.ontoware.org/2005/05/ontology#", :skos => "http://www.w3.org/2004/02/skos/core#", :owl => "http://www.w3.org/2002/07/owl#",
                        :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#", :rdfs => "http://www.w3.org/2000/01/rdf-schema#", :metadata => "http://data.bioontology.org/metadata/",
                        :metadata_def => "http://data.bioontology.org/metadata/def/", :dc => "http://purl.org/dc/elements/1.1/", :xsd => "http://www.w3.org/2001/XMLSchema#",
@@ -23,15 +24,14 @@ module ApplicationHelper
                        :oboInOwl => "http://www.geneontology.org/formats/oboInOwl#", :idot => "http://identifiers.org/idot/", :sd => "http://www.w3.org/ns/sparql-service-description#",
                        :cclicense => "http://creativecommons.org/licenses/",
                        'skos-xl' => "http://www.w3.org/2008/05/skos-xl#"}
-  def url_to_endpoint(url)
-    uri = URI.parse(url)
-    endpoint = uri.path.sub(/^\//, '')
-    endpoint
-  end
 
   def search_json_link(link = @json_url, style: '')
     custom_style = "font-size: 50px; line-height: 0.5; margin-left: 6px; #{style}".strip
     render IconWithTooltipComponent.new(icon: "json.svg",link: link, target: '_blank', title: t('fair_score.go_to_api'), size:'small', style: custom_style)
+  end
+
+  def portal_name_from_uri(uri)
+    URI.parse(uri).hostname.split('.').first
   end
 
   def resolve_namespaces
@@ -41,7 +41,7 @@ module ApplicationHelper
   def ontologies_analytics
     begin
       data = LinkedData::Client::Analytics.last_month.onts
-      data.map{|x| [x[:ont].to_s, x[:views]]}.to_h
+      data.map{|x| [x[:ont].split('/').last.to_s, x[:views]]}.to_h
     rescue StandardError
       {}
     end
@@ -55,18 +55,6 @@ module ApplicationHelper
     end
   end
 
-  def rest_hostname
-    extract_hostname(REST_URI)
-  end
-
-  def extract_hostname(url)
-    begin
-      uri = URI.parse(url)
-      uri.hostname
-    rescue URI::InvalidURIError
-      url
-    end
-  end
 
   def omniauth_providers_info
     $OMNIAUTH_PROVIDERS || []
@@ -78,44 +66,6 @@ module ApplicationHelper
 
   def omniauth_token_provider(strategy)
     omniauth_provider_info(strategy.to_sym).keys.first
-  end
-
-  def isOwner?(id)
-    unless session[:user].nil?
-      if session[:user].admin?
-        return true
-      elsif session[:user].id.eql?(id)
-        return true
-      else
-        return false
-      end
-    end
-  end
-
-
-
-  def encode_param(string)
-    CGI.escape(string)
-  end
-
-  def clean(string)
-    string = string.gsub("\"",'\'')
-    return string.gsub("\n",'')
-  end
-
-  def clean_id(string)
-    new_string = string.gsub(":","").gsub("-","_").gsub(".","_")
-    return new_string
-  end
-
-  def to_param(string)
-     "#{encode_param(string.gsub(" ","_"))}"
-  end
-
-  def get_username(user_id)
-    user = LinkedData::Client::Models::User.find(user_id)
-    username = user.nil? ? user_id : user.username
-    username
   end
 
   def current_user
@@ -131,29 +81,6 @@ module ApplicationHelper
     child.id.to_s.split('/').last
   end
 
-  def loading_spinner(padding = false, include_text = true)
-    loading_text = include_text ? t('application.loading') : ""
-    if padding
-      raw('<div style="padding: 1em;">' + image_tag("spinners/spinner_000000_16px.gif", style: "vertical-align: text-bottom;") + loading_text + '</div>')
-    else
-      raw(image_tag("spinners/spinner_000000_16px.gif", style: "vertical-align: text-bottom;") + loading_text)
-    end
-  end
-
-
-
-  def help_icon(link, html_attribs = {})
-    html_attribs["title"] ||= "Help"
-    attribs = []
-    html_attribs.each {|k,v| attribs << "#{k.to_s}='#{v}'"}
-    return <<-BLOCK
-          <a target="_blank" href='#{link}' class='pop_window help_link' #{attribs.join(" ")}>
-            <span class="pop_window ui-icon ui-icon-help"></span>
-          </a>
-    BLOCK
-  end
-
-  # Create a popup button with a ? inside to display help when hovered
   def help_tooltip(content, html_attribs = {}, icon = 'fas fa-question-circle', css_class = nil, text = nil)
     html_attribs["title"] = content
     attribs = []
@@ -179,8 +106,8 @@ module ApplicationHelper
     end
   end
 
-  def onts_for_select
-    ontologies ||= LinkedData::Client::Models::Ontology.all(include: "acronym,name")
+  def onts_for_select(include_views: false)
+    ontologies ||= LinkedData::Client::Models::Ontology.all({include: "acronym,name", include_views: include_views})
     onts_for_select = [['', '']]
     ontologies.each do |ont|
       next if ( ont.acronym.nil? or ont.acronym.empty? )
@@ -194,83 +121,10 @@ module ApplicationHelper
     onts_for_select
   end
 
-  def link_last_part(url)
-    return "" if url.nil?
-
-    if url.include?('#')
-      url.split('#').last
-    else
-      url.split('/').last
-    end
-  end
-
-  def get_categories_data(categories = nil)
-    @categories_for_select = []
-    @categories_map = {}
-    categories ||= LinkedData::Client::Models::Category.all(include: "name,ontologies")
-    categories.each do |c|
-      @categories_for_select << [ c.name, c.id ]
-      @categories_map[c.id] = ontologies_to_acronyms(c.ontologies) # c.ontologies is a list of URIs
-    end
-    @categories_for_select.sort! { |a,b| a[0].downcase <=> b[0].downcase }
-    @categories_for_js = @categories_map.to_json
-  end
-
-  def get_groups_data(groups = nil)
-    @groups_map = {}
-    @groups_for_select = []
-    groups ||= LinkedData::Client::Models::Group.all(include: "acronym,name,ontologies")
-    groups.each do |g|
-      next if ( g.acronym.nil? or g.acronym.empty? )
-      @groups_for_select << [ g.name + " (#{g.acronym})", g.acronym ]
-      @groups_map[g.acronym] = ontologies_to_acronyms(g.ontologies) # g.ontologies is a list of URIs
-    end
-    @groups_for_select.sort! { |a,b| a[0].downcase <=> b[0].downcase }
-    @groups_for_js = @groups_map.to_json
-  end
-
-
-
-
-  def ontologies_to_acronyms(ontologyIDs)
-    acronyms = []
-    ontologyIDs.each do |id|
-      acronyms << @onts_uri2acronym_map[id]  # hash generated in get_ontologies_data
-    end
-    return acronyms.compact # remove nil values from any failures to convert ontology URI to acronym
-  end
 
   def at_slice?
     !@subdomain_filter.nil? && !@subdomain_filter[:active].nil? && @subdomain_filter[:active] == true
   end
-
-
-  # TODO this helper is not used but can be usefully
-  def truncate_with_more(text, options = {})
-    length ||= options[:length] ||= 30
-    trailing_text ||= options[:trailing_text] ||= " ... "
-    link_more ||= options[:link_more] ||= "[more]"
-    link_less ||= options[:link_less] ||= "[less]"
-    more_text = " <a href='javascript:void(0);' class='truncated_more'>#{link_more}</a></span><span class='truncated_less'>#{text} <a href='javascript:void(0);' class='truncated_less'>#{link_less}</a></span>"
-    more = text.length > length ? more_text : "</span>"
-    output = "<span class='more_less_container'><span class='truncated_more'>#{truncate(text, :length => length, :omission => trailing_text)}" + more + "</span>"
-  end
-
-  def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, &block)
-    content_tag(:div, data: { controller: 'tooltip' }, title: tooltip) do
-      check_input(id: id, name: name, value: value, label: label, checked: checked, &block)
-    end
-  end
-
-  def group_chip_component(id: nil, name: , object: , checked: , value: nil, title: nil, &block)
-    title ||= object["name"]
-    value ||= (object["value"] || object["acronym"] || object["id"])
-
-    chips_component(id: id || value, name: name, label: object["acronym"],
-                    checked: checked,
-                    value: value, tooltip: title, &block)
-  end
-  alias  :category_chip_component :group_chip_component
 
   def add_comment_button(parent_id, parent_type)
     if session[:user].nil?
@@ -289,7 +143,6 @@ module ApplicationHelper
     end
   end
 
-
   def add_proposal_button(parent_id, parent_type)
     if session[:user].nil?
       link_to t('application.add_proposal'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim"
@@ -299,14 +152,6 @@ module ApplicationHelper
     end
   end
 
-
-  def link?(str)
-    # Regular expression to match strings starting with "http://" or "https://"
-    link_pattern = /\Ahttps?:\/\//
-    str = str&.strip
-    # Check if the string matches the pattern
-    !!(str =~ link_pattern)
-  end
 
   def subscribe_button(ontology_id)
     return if ontology_id.nil?
@@ -329,10 +174,8 @@ module ApplicationHelper
     end
   end
 
-
   def subscribed_to_ontology?(ontology_acronym, user)
-    user.bring(:subscription) if user.subscription.nil?
-    # user.subscription is an array of subscriptions like {ontology: ontology_id, notification_type: "NOTES"}
+    user = LinkedData::Client::Models::User.find(user.username, {include: 'subscription'}) if user.subscription.nil?
     return false if user.subscription.nil? or user.subscription.empty?
     user.subscription.each do |sub|
       #sub = {ontology: ontology_acronym, notification_type: "NOTES"}
@@ -380,8 +223,6 @@ module ApplicationHelper
     bootstrap_alert_class[flash_key]
   end
 
-  ###BEGIN ruby equivalent of JS code in bp_ajax_controller.
-  ###Note: this code is used in concepts/_details partial.
   def bp_ont_link(ont_acronym)
     return "/ontologies/#{ont_acronym}"
   end
@@ -433,7 +274,7 @@ module ApplicationHelper
       cls_url = "/ontologies/#{ont_acronym}?p=classes&conceptid=#{CGI.escape(cls_id)}"
       label_ajax_link(link, cls_id, ont_acronym, ajax_url , cls_url ,target)
     else
-      content_tag(:div, auto_link(cls_id, :all, target: '_blank'))
+      content_tag(:div, cls_id)
     end
   end
 
@@ -458,7 +299,6 @@ module ApplicationHelper
     label_ajax_link(link, collection, ont_acronym, ajax_url, collection_url, target)
   end
 
-
   def get_link_for_label_xl_ajax(label_xl, ont_acronym, cls_id, modal: true)
     link = label_xl
     ajax_uri = "/ajax/label_xl/label?cls_id=#{CGI.escape(cls_id)}"
@@ -474,16 +314,12 @@ module ApplicationHelper
 
   end
 
-  ###END ruby equivalent of JS code in bp_ajax_controller.
   def ontology_viewer_page_name(ontology_name, concept_label, page)
     ontology_name + " | "  + " #{page.capitalize}"
   end
+
   def help_path(anchor: nil)
     "#{Rails.configuration.settings.links[:help]}##{anchor}"
-  end
-
-  def uri?(url)
-    url =~ /\A#{URI::DEFAULT_PARSER.make_regexp(%w[http https])}\z/
   end
 
   def extract_label_from(uri)
@@ -536,6 +372,11 @@ module ApplicationHelper
     $SITE
   end
 
+  def current_slice_name
+    name = @subdomain_filter[:name]
+    name.blank? ? nil : name
+  end
+
   def navitems
     items = [
       ["/ontologies", t('layout.header.browse')],
@@ -546,7 +387,6 @@ module ApplicationHelper
       ["http://vocbench.lifewatchitaly.eu/", "Vocbench"]
     ]
   end
-
 
   def beta_badge(text = t('application.beta_badge_text'), tooltip: t('application.beta_badge_tooltip'))
     return unless text
@@ -589,7 +429,6 @@ module ApplicationHelper
     "#{protocol}://#{cleaned_path}"
   end
 
-
   def prefix_property_url(key_string, key = nil)
     namespace_key, _ = RESOLVE_NAMESPACE.find { |_, value| key_string.include?(value) }
 
@@ -630,17 +469,16 @@ module ApplicationHelper
     end
   end
 
-  def empty_state(text)
+  def empty_state(text = t('no_result_was_found'))
     content_tag(:div, class:'browse-empty-illustration') do
       inline_svg_tag('empty-box.svg') +
       content_tag(:p, text)
     end
   end
 
-
-  def ontologies_selector(id:, label: nil, name: nil, selected: nil, placeholder: nil, multiple: true)
+  def ontologies_selector(id:, label: nil, name: nil, selected: nil, placeholder: nil, multiple: true, ontologies: onts_for_select)
     content_tag(:div) do
-      render(Input::SelectComponent.new(id: id, label: label, name: name, value: onts_for_select, multiple: multiple, selected: selected, placeholder: placeholder)) +
+      render(Input::SelectComponent.new(id: id, label: label, name: name, value: ontologies, multiple: multiple, selected: selected, placeholder: placeholder)) +
       content_tag(:div, class: 'ontologies-selector-button', 'data-controller': 'ontologies-selector', 'data-ontologies-selector-id-value': id) do
         content_tag(:div, t('ontologies_selector.clear_selection'), class: 'clear-selection', 'data-action': 'click->ontologies-selector#clear') +
         link_to_modal(t('ontologies_selector.ontologies_advanced_selection'), "/ontologies_selector?id=#{id}", data: { show_modal_title_value: t('ontologies_selector.ontologies_advanced_selection')})
@@ -648,8 +486,8 @@ module ApplicationHelper
     end
   end
 
-  def link_button_component(href: , value: , id:, size: nil)
-    render Buttons::RegularButtonComponent.new(id:id, value: value, variant: "primary", type: 'link', href: href, size: size)
+  def link_button_component(href: , value: , id:, size: nil, variant: 'primary')
+    render Buttons::RegularButtonComponent.new(id:id, value: value, variant: variant, type: 'link', href: href, size: size)
   end
 
   def save_button_component(class_name: nil, id: , value:, data: nil, size: nil, type: nil)
@@ -672,6 +510,10 @@ module ApplicationHelper
     end
   end
 
+  def categories_select(id: nil, name: nil, selected: 'None')
+    categories_for_select = LinkedData::Client::Models::Category.all.map{|x| ["#{x.name} (#{x.acronym})", x.id]}.unshift(["None", ''])
+    render Input::SelectComponent.new(id: id, name: name, value: categories_for_select, selected: selected, multiple: true)
+  end
 
 
 end

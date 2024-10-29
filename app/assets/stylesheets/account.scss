@@ -229,6 +229,15 @@
   justify-content: center;
 }
 
+.account-page-custom-ontologies{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.account-page-custom-ontologies > div{
+  margin-right: 10px;
+}
+
 @media only screen and (max-width: 1200px) {
   .account-page-first-row {
     width: 47vw;

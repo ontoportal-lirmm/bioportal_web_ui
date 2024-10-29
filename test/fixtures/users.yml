@@ -1,3 +1,7 @@
+admin:
+  username: johndoe
+  email: admin@example.com
+  password: password
 john:
   firstName: John
   lastName: Doe

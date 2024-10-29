@@ -13,4 +13,4 @@
           - scheme.id = scheme['@id']
           - tree_child.child(child: scheme, href: collection_path(collection['@id'], request_lang),
                            children_href: '#', selected: scheme.id.eql?(selected_collection_id),
-                           target_frame: 'collection', data: {collectionid: collection['@id']})
+                           target_frame: 'collection', data: {collectionid: collection['@id']}, is_reused: concept_reused?(submission: @submission, concept_id: scheme.id))

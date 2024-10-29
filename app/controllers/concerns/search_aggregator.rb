@@ -1,5 +1,6 @@
 module SearchAggregator
-  include UrlsHelper
+  include UrlsHelper, MultiLanguagesHelper, FederationHelper
+  require 'string-similarity'
   extend ActiveSupport::Concern
   BLACKLIST_FIX_STR = [
     "https://",
@@ -27,56 +28,76 @@ module SearchAggregator
   def aggregate_results(query, results)
     ontologies = aggregate_by_ontology(results)
     grouped_results = add_subordinate_ontologies(query, ontologies)
+
     all_ontologies = LinkedData::Client::Models::Ontology.all(include: 'acronym,name', include_views: true, display_links: false, display_context: false)
 
-    grouped_results.map do |group|
+
+    search_results = grouped_results.map do |group|
       format_search_result(group, all_ontologies)
     end
+
+    if federated_request?
+      search_results = merge_sort_federated_results(query, search_results)
+      search_results = swap_canonical_portal_results_first(search_results)
+    end
+
+    search_results
   end
 
   def format_search_result(result, ontologies)
     same_ont = result[:same_ont]
     same_cls = result[:sub_ont]
     result = same_ont.shift
-    ontology = result.links['ontology'].split('/').last
+    ontology = result.links['ontology']
     {
-      root: search_result_elem(result, ontology, ontology_name_acronym(ontologies, ontology)),
-      descendants: same_ont.map { |x| search_result_elem(x, ontology, '') },
-      reuses: same_cls.map do |x|
-        format_search_result(x, ontologies)
-      end
+    root: search_result_elem(result, ontology, ontology_name_acronym(ontologies, ontology)),
+    descendants: same_ont.map { |x| search_result_elem(x, ontology, '') },
+    reuses: same_cls.map do |x|
+      format_search_result(x, ontologies)
+    end
     }
   end
 
   private
 
-  def search_result_elem(class_object, ontology_acronym, title)
-    label = concept_label(class_object.prefLabel)
-    {
-      uri: class_object.id.to_s,
-      title: title.empty? ? label : "#{label} - #{title}",
-      ontology_acronym: ontology_acronym,
-      link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{helpers.request_lang&.eql?("ALL") ? '' : "&language="+helpers.request_lang.to_s}",
-      definition: Array(class_object.definition)
-    }
+  def merge_sort_federated_results(query, search_results)
+    search_results = merge_federated_results(search_results)
+    sort_results_by_string_similarity(query, search_results)
   end
 
-  def concept_label(pref_labels_list, obsolete = false, max_length = 60)
-    # select closest to query
-    selected = pref_labels_list.select do |pref_lab|
-      pref_lab.downcase.include?(@search_query.downcase) || @search_query.downcase.include?(pref_lab.downcase)
-    end.first
+  def search_concept_label(label)
+    label = language_hash(label)
 
-    selected ||= (pref_labels_list&.first || '')
+    if label.is_a?(Hash)
+      label = label.values.flatten
+      label = label.select do |pref_lab|
+        pref_lab.downcase.include?(@search_query.downcase) || @search_query.downcase.include?(pref_lab.downcase)
+      end.first || label.first
+    end
 
-    selected = selected[0..max_length] if selected.size > max_length
-    selected = "<span class='obsolete_class' title='obsolete class'>#{selected}</span>".html_safe if obsolete
-    selected
+    label
+  end
+
+  def search_result_elem(class_object, ontology_id, title)
+    label = search_concept_label(class_object.prefLabel)
+    request_lang = helpers.request_lang&.eql?("ALL") ? '' : "&language=#{helpers.request_lang}"
+    ontology_acronym = link_last_part(ontology_id)
+    result = {
+      uri: class_object.id.to_s,
+      title: title.to_s.empty? ? "#{label} - #{ontology_acronym}" : "#{label} - #{title}",
+      ontology_id: ontology_id,
+      link: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{escape(class_object.id)}#{request_lang}",
+      definition: class_object.definition,
+    }
+
+    result.merge!(class_federation_configuration(class_object)) if federated_request?
+
+    result
   end
 
   def ontology_name_acronym(ontologies, selected_acronym)
     ontology = ontologies.select { |x| x.acronym.eql?(selected_acronym.split('/').last) }.first
-    "#{ontology.name} (#{ontology.acronym})"
+    "#{ontology.name} (#{ontology.acronym})" if ontology
   end
 
   def aggregate_by_ontology(results)
@@ -226,5 +247,63 @@ module SearchAggregator
 
     stripped_id
   end
-end
 
+  def merge_federated_results(search_results)
+    search_results.each do |element|
+      element[:root][:other_portals] = []
+      element[:reuses].reject! do |reuse|
+        if (element[:root][:ontology_acronym] == reuse[:root][:ontology_acronym]) && (element[:root][:uri] == reuse[:root][:uri])
+          portal_name = reuse[:root][:portal_name]
+          link = reuse[:root][:link]
+          element[:root][:other_portals] << {
+            name: portal_name,
+            color: federated_portal_color(portal_name),
+            light_color: federated_portal_light_color(portal_name),
+            link: link,
+            ontology_id: reuse[:root][:ontology_id]
+          }
+          true
+        else
+          false
+        end
+      end
+    end
+  end
+
+  def swap_canonical_portal_results_first(search_results)
+    all_submissions = LinkedData::Client::Models::OntologySubmission.all(include: 'pullLocation', include_views: true, display_links: false, display_context: false)
+
+    search_results.each do |result|
+      next if result[:root][:portal_name].nil? || result[:root][:other_portals].blank?
+
+      result_ontology_ids = [result[:root][:ontology_id]] + result[:root][:other_portals].map { |p| p[:ontology_id] }
+
+      result_submissions = all_submissions.select do |submission|
+        result_ontology_ids.any? { |ontology_id| submission.id.include?(ontology_id) }
+      end
+
+      canonical_portal = most_referred_portal(result_submissions)
+      is_internal_ontology = result[:root][:portal_name].eql?(canonical_portal.to_s)
+
+      next if canonical_portal.nil? || is_internal_ontology
+
+      canonical_portal_result = result[:root][:other_portals].find { |r| r[:name] == canonical_portal.to_s }
+      swap_portal_attributes(result[:root], canonical_portal_result) if canonical_portal_result
+    end
+    search_results
+  end
+
+
+  def swap_portal_attributes(root_portal, new_portal)
+    [:link, :portal_name, :portal_color, :portal_light_color].each do |attribute|
+      root_portal[attribute], new_portal[attribute] = new_portal[attribute], root_portal[attribute]
+    end
+  end
+
+  def sort_results_by_string_similarity(query, search_results)
+    search_results = search_results.sort_by do |entry|
+      root_similarity = String::Similarity.cosine(query.downcase, entry[:root][:title].split('-').first.gsub(" ", "").downcase)
+      -root_similarity
+    end
+  end
+end

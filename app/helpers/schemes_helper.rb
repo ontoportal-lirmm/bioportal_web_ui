@@ -77,7 +77,7 @@ module SchemesHelper
     [schemes_labels, main_scheme, selected_scheme]
   end
 
-  def schemes_tree(schemes_labels, main_scheme_label, selected_scheme_id)
+  def schemes_tree(schemes_labels, main_scheme_label, selected_scheme_id, submission: @submission_latest)
     selected_scheme = nil
     schemes = sorted_labels(schemes_labels).map do |s|
       next nil unless main_scheme_label.nil? || s['prefLabel'] != main_scheme_label['prefLabel']
@@ -104,9 +104,7 @@ module SchemesHelper
     root = OpenStruct.new
     root.children = children
     selected_scheme = selected_scheme || main_scheme || root.children.first
-
-
-    tree_component(root, selected_scheme, target_frame: 'scheme', auto_click: false) do |child|
+    tree_component(root, selected_scheme, target_frame: 'scheme', auto_click: false, submission: submission) do |child|
       href = scheme_path(child['@id'], request_lang) rescue  ''
       data = { schemeid: (child['@id'] rescue '')}
       ["#", data, href]
