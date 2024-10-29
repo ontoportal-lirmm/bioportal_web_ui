@@ -62,7 +62,7 @@ class ProjectsController < ApplicationController
     @project = projects.first
     @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
     @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
-    @usedOntologies = @project.ontologyUsed || []
+    @usedOntologies = @project.ontologyUsed&.map{|o| o.split('/').last}
     @ontologies = LinkedData::Client::Models::Ontology.all
   end
 
@@ -160,10 +160,10 @@ class ProjectsController < ApplicationController
   def project_params
     p = params.require(:project).permit(:name, :acronym, :institution, :contacts, { creator:[] }, :homePage,
                                         :description, { ontologyUsed:[] })
-
+                                        
     p[:creator]&.reject!(&:blank?)
-    p[:ontologyUsed]&.reject!(&:blank?)
-    p.to_h
+    p[:ontologyUsed] ||= []
+    p = p.to_h
   end
 
   def flash_error(msg)
