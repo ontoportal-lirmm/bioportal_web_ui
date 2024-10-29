@@ -15,7 +15,7 @@
                 = t("search.advanced_options.ontologies")
               .field
                 = ontologies_selector(id:'search_page_ontologies' ,name: 'ontologies[]', selected:  params[:ontologies]&.split(','), ontologies: onts_for_select(include_views: true))
-             - if federation_enabled?
+            - if federation_enabled?
               .filter-container
                 .title 
                   = t('federation.results_from_external_portals')
