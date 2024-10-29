@@ -1,4 +1,5 @@
 module CollectionsHelper
+  include MultiLanguagesHelper
 
 
   def get_collections(ontology, add_colors: false)
