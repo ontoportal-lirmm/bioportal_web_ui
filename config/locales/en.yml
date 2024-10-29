@@ -326,7 +326,7 @@ en:
     permanent_link_class: Get a permanent link to this class
     request_term:
       new_term_instructions: |
-        <p>This ontology integrates with OntoloBridge, allowing community users to suggest additions to the public ontology. Complete the template below to submit a term request directly to the Ontology Manager.</p>
+        <p>This semantic resource integrates with OntoloBridge, allowing community users to suggest additions to the public semantic resource. Complete the template below to submit a term request directly to the semantic resource Manager.</p>
           <blockquote>
             <p>Term label (required)<br>Suggested term name. If a term can be described with more than one synonym, enter only the preferred name here.</p>
           </blockquote>
@@ -334,7 +334,7 @@ en:
             <p>Term Description (required)<br>A brief definition, description, or usage of the suggested term. Synonyms of additional terms may be listed in this section.</p>
           </blockquote>
           <blockquote>
-            <p>Superclass (required)<br>The parent term of the suggested term. The parent term must be an existing entry in the current ontology. The superclass can be selected directly from the class tree.</p>
+            <p>Superclass (required)<br>The parent term of the suggested term. The parent term must be an existing entry in the current semantic resource. The superclass can be selected directly from the class tree.</p>
           </blockquote>
           <blockquote>
             <p>References (optional)<br>Provide evidence that the requested term exists, such as IDs of articles or links to other resources describing the term.</p>
@@ -411,7 +411,7 @@ en:
         message: Thank you for taking the time to share your feedback with us. Our support team will review your message and get back to you as soon as possible with a response. We value your opinion and appreciate your help in improving our services. Thank you for your support!
     suggest_slice: Suggest a new group/slice
     slices_description: Slices allow users to interact (both via API or UI) only with a subset of ontologies in AgroPortal. If browsing the slice, all the portal features will be restricted to the chosen subset, enabling users to focus on their specific use cases. On AgroPortal, slices and groups are synchronized, so every group has a corresponding slice displaying only the ontologies from that group.
-    ontoportal_description: "The OntoPortal Alliance %{ontoportal_link} is a consortium of research and infrastructure teams dedicated to promoting the development of ontology repositories and semantic artefact catalogues based on the open, collaboratively developed OntoPortal software %{github_link}. Hereafter are the current public and open repositories built with the technology maintained by the Alliance."
+    ontoportal_description: "The OntoPortal Alliance %{ontoportal_link} is a consortium of research and infrastructure teams dedicated to promoting the development of semantic resource repositories and semantic artefact catalogues based on the open, collaboratively developed OntoPortal software %{github_link}. Hereafter are the current public and open repositories built with the technology maintained by the Alliance."
     viewing_slice: "Viewing the slice:"
     view_full_site: View full website
   landscape:
@@ -546,7 +546,7 @@ en:
     enter_email: Enter your username
     enter_password: Enter your password
     forgot_password: Forgot password?
-    private_ontology: This ontology is private. Please login.
+    private_ontology: This semantic resource is private. Please login.
     no_account: Do not have an account?
     password: Password
     register: Register
@@ -919,7 +919,7 @@ en:
         classes_with_definitions: Classes with definitions
     show_advanced_options: Show options
     hide_advanced_options: Hide options
-    match_in: Match in %{results_size} ontologies from %{portals}
+    match_in: Match in %{results_size} semantic resources from %{portals}
     ontologies: semantic resources
     result_component:
       details: Details
@@ -1040,11 +1040,11 @@ en:
       and top concept assertion. %{link}
     ontology_obo_language_link: the OBOinOWL parser.
     ontology_obo_language_help: >
-      OBO ontologies submitted to %{portal_name} will be parsed by the OWL-API which integrates %{link} 
+      OBO semantic resources submitted to %{portal_name} will be parsed by the OWL-API which integrates %{link} 
       The resulting RDF triples will then be loaded in %{portal_name} triple-store.
     ontology_owl_language_link: the Protégé
     ontology_owl_language_help: >
-      OWL ontologies submitted to %{portal_name} will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with
+      OWL semantic resources submitted to %{portal_name} will be parsed by the OWL-API. An easy way to verify if your semantic resource will parse is to open it with
       %{link}
       software which does use the same component.
 
@@ -1232,7 +1232,7 @@ en:
     processing_message: |
       We will now put your semantic resource in the queue to be processed. Please keep in mind that it may take up to several
       hours before %{site} users will be able to explore and search your semantic resource.
-    notification_message: "When your ontology is ready for viewing, you will receive an email notification and it will be available here:"
+    notification_message: "When your semantic resource is ready for viewing, you will receive an email notification and it will be available here:"
     contact_support_at: "If you have any questions or problems, please email the %{site} support team at:"
     collecting_data_message: We are still collecting data for %{acronym}
     submit_new_ontology: Submit new semantic resource
@@ -1277,7 +1277,7 @@ en:
       methodology_and_provenance: Methodology and provenance
       community: Community
       content: Content
-      info_tooltip_properties_dropdown: Metadata properties primarily encompass the design, methods, and actions to create the ontology. This includes elements such as the tools and software employed by the creator of the ontology during its configuration.
+      info_tooltip_properties_dropdown: Metadata properties primarily encompass the design, methods, and actions to create the semantic resource. This includes elements such as the tools and software employed by the creator of the semantic resource during its configuration.
       info_tooltip_community_dropdown: Metadata properties related to community information such as the code repository and issue tracker, the mailing list or the target audience. This includes also the Groups in %{site}. See more information about Groups and Categories.
       visits: Visits
       views: Views of %{acronym}
@@ -1499,7 +1499,7 @@ en:
     privacy_link: "Privacy Statement"
   taxonomy:
     groups_and_categories: Groups and Categories
-    description: In AgroPortal, ontologies are organized in groups and tagged with categories. Typically, groups associate ontologies from the same project or organization for better identification of the provenance. Whereas categories are about subjects/topics and enable to classify ontologies. As of 2016, AgroPortal's categories were established in cooperation with FAO AIMS. In 2024, we moved to UNESCO nomenclature for fields of science and technology. Groups and categories, along with other metadata, can be used on the “Browse” page of AgroPortal to filter out the list of ontologies.
+    description: In AgroPortal, semantic resources are organized in groups and tagged with categories. Typically, groups associate semantic resources from the same project or organization for better identification of the provenance. Whereas categories are about subjects/topics and enable to classify semantic resources. As of 2016, AgroPortal's categories were established in cooperation with FAO AIMS. In 2024, we moved to UNESCO nomenclature for fields of science and technology. Groups and categories, along with other metadata, can be used on the “Browse” page of AgroPortal to filter out the list of semantic resources.
     show_sub_categories: Show sub categories
 
   federation:
