@@ -26,13 +26,13 @@ class ProjectsController < ApplicationController
       redirect_to projects_path
       return
     end
-    
+
     @project = projects.first
     @ontologies_used = []
     onts_used = @project.ontologyUsed
     onts_used.each do |ont_used|
       ont = LinkedData::Client::Models::Ontology.find(ont_used)
-      unless ont.nil?
+      unless ont.nil? || ont.errors
         @ontologies_used << Hash["name", ont.name, "acronym", ont.acronym]
       end
     end
@@ -76,7 +76,7 @@ class ProjectsController < ApplicationController
 
     @project = LinkedData::Client::Models::Project.new(values: project_params)
     @project_saved = @project.save
-    
+
     # Project successfully created.
     if response_success?(@project_saved)
       flash[:notice] = t('projects.project_successfully_created')
