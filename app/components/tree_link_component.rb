@@ -2,26 +2,19 @@
 
 class TreeLinkComponent < ViewComponent::Base
   include MultiLanguagesHelper, ModalHelper, ApplicationHelper
-  def initialize(child:, href:, children_href: , selected: false , data: {}, muted: false, target_frame: nil, open_in_modal: false, is_reused: nil)
+
+  def initialize(child:, href:, children_href:, selected: false, data: {}, muted: false, target_frame: nil, open_in_modal: false, is_reused: nil)
+    super
+
     @child = child
     @active_style = selected ? 'active' : ''
-    #@icons = child.relation_icon(node)
     @muted_style = muted ? 'text-muted' : ''
     @href = href
     @children_link = children_href
-    label = (@child.prefLabel || @child.label) rescue @child.id
-    if label.nil?
-      @pref_label_html = link_last_part(child.id)
-    else
-      pref_label_lang, @pref_label_html = select_language_label(label)
-      pref_label_lang = pref_label_lang.to_s.upcase
-      @tooltip = pref_label_lang.eql?("@NONE") ? "" : pref_label_lang
 
-      if child.obsolete?
-        @pref_label_html = "<span class='obsolete_class'>#{@pref_label_html}</span>".html_safe
-      end
-    end
-    @data ||= { controller: 'tooltip', 'tooltip-position-value': 'right', turbo: true, 'turbo-frame': target_frame, action: 'click->simple-tree#select'}
+    @pref_label_html, @tooltip = node_label(child)
+
+    @data ||= { controller: 'tooltip', 'tooltip-position-value': 'right', turbo: true, 'turbo-frame': target_frame, action: 'click->simple-tree#select' }
 
     @data.merge!(data) do |_, old, new|
       "#{old} #{new}"
@@ -31,7 +24,6 @@ class TreeLinkComponent < ViewComponent::Base
 
     @is_reused = is_reused
   end
-
 
   # This gives a very hacky short code to use to uniquely represent a class
   # based on its parent in a tree. Used for unique ids in HTML for the tree view
@@ -49,7 +41,7 @@ class TreeLinkComponent < ViewComponent::Base
   end
 
   def border_left
-    !@child.hasChildren  ?  'pl-3 tree-border-left' :  ''
+    !@child.hasChildren ? 'pl-3 tree-border-left' : ''
   end
 
   def li_id
@@ -73,6 +65,28 @@ class TreeLinkComponent < ViewComponent::Base
       end
     end
 
+  end
+
+  private
+
+  def node_label(child)
+    label = begin
+              child.prefLabel || child.label
+            rescue
+              child.id
+            end
+
+    if label.nil?
+      pref_label_html = link_last_part(child.id)
+    else
+      pref_label_lang, pref_label_html = select_language_label(label)
+      pref_label_lang = pref_label_lang.to_s.upcase
+      tooltip = pref_label_lang.eql?("@NONE") ? "" : pref_label_lang
+
+      pref_label_html = "<span class='obsolete_class'>#{pref_label_html}</span>".html_safe if child.obsolete?
+    end
+
+    [pref_label_html, tooltip]
   end
 
 end
