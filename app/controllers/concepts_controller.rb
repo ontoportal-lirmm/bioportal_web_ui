@@ -45,14 +45,15 @@ class ConceptsController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     @ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
 
-    @submission = @ontology.explore.latest_submission(include: 'all')
+    @submission = @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri')
 
-    @concept = @ontology.explore.single_class({full: true}, params[:id])
+    @concept = @ontology.explore.single_class({dispay: 'prefLabel'}, params[:id])
+
     concept_not_found(params[:id]) if @concept.nil?
     @schemes = params[:concept_schemes].split(',')
 
     @concept.children = @concept.explore.children(pagesize: 750, concept_schemes: Array(@schemes).join(','), language: request_lang, display: 'prefLabel,obsolete,hasChildren').collection || []
-    @concept.children.sort! { |x, y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase } unless @concept.children.empty?
+
     render turbo_stream: [
       replace(helpers.child_id(@concept) + '_open_link') { TreeLinkComponent.tree_close_icon },
       replace(helpers.child_id(@concept) + '_childs') do
