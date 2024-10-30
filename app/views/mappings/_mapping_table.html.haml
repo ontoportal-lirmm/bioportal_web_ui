@@ -1,17 +1,14 @@
 = check_box_tag "delete_mappings_permission", @delete_mapping_permission, @delete_mapping_permission, style: "display: none;"
 %div#concept_mappings_tables_div
   = render_alerts_container(MappingsController)
-  %table#concept_mappings_table.table-content-stripped.table-content
+  %table#concept_mappings_table.table-content-stripped.table-content.table-mini
     %thead
       %tr
         %th= t("mappings.mapping_table.mapping_to")
         %th= t("mappings.count.ontology")
-        - unless @mappings.all? { |obj| obj.process&.dig(:relation).nil? }
-          %th= t("mappings.mapping_table.relations")
         %th= t("mappings.mapping_table.type")
-        %th= t("mappings.mapping_table.source")
         - if current_user_admin? && !@mappings.all? { |obj| !obj.source.eql?('REST') }
-          %th{:class => 'delete_mappings_column'}= t("mappings.mapping_table.actions")
+          %th{:class => 'delete_mappings_column'}
     %tbody#concept_mappings_table_content
       - @mappings.each do |map|
         = render partial: 'mappings/show_line' , locals: {map: map, concept: @concept}
