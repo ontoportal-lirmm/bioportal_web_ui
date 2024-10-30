@@ -95,9 +95,14 @@ module FederationHelper
     "#{output} in #{sprintf("%.2f", time)}s"
   end
 
-  def federation_enabled?
+  def federated_request?
     params[:portals]
   end
+
+  def federation_enabled?
+    !federated_portals.blank?
+  end
+
 
   def federation_error?(response)
     !response[:errors].blank?
@@ -185,7 +190,7 @@ module FederationHelper
     federated_portals.map do |key, config|
       turbo_frame_component = TurboFrameComponent.new(
         id: "federation_portals_status_#{key}",
-        src: "status/#{key}?name=#{name}&acronym=#{config[:name]}&checked=#{request_portals.include?(key.to_s)}"
+        src: "/status/#{key}?name=#{name}&acronym=#{config[:name]}&checked=#{request_portals.include?(key.to_s)}"
       )
 
       content_tag :div do

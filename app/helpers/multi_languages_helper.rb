@@ -77,13 +77,29 @@ module MultiLanguagesHelper
 
     # Transform each language into a select option
     submission_lang = submission_lang.map do |lang|
-      lang = lang.split('/').last.upcase
-      lang = ISO_639.find(lang.to_s.downcase)
-      next nil unless lang
-      [lang.alpha2, lang.english_name]
+      code, name = find_language_code_name(lang)
+      next nil unless code
+      [code, name]
     end.compact
 
     [submission_lang, current_lang]
+  end
+
+  def find_language_code_name(language)
+    original_lang = language.to_s.split('/').last.upcase
+    lang, country = original_lang.split('-')
+
+    if country
+      lang = ISO3166::Country.find_country_by_alpha2(country)
+      return nil unless lang
+
+      [original_lang, lang.nationality]
+    else
+      lang = ISO_639.find(lang.to_s.downcase)
+      return nil unless lang
+
+      [lang.alpha2, lang.english_name]
+    end
   end
 
   def content_language_help_text

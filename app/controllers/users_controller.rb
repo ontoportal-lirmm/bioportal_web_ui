@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  before_action :verify_owner, only: [:edit, :show, :subscribe, :un_subscribe]
+  before_action :verify_owner, only: [:edit, :subscribe, :un_subscribe]
   before_action :authorize_admin, only: [:index,:subscribe, :un_subscribe]
   layout :determine_layout
 

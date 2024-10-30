@@ -47,7 +47,7 @@ module SubmissionFilter
 
     submissions = filter_submissions(@ontologies, **params)
 
-    submissions = merge_by_acronym(submissions)
+    submissions = merge_by_acronym(submissions) if federation_enabled?
 
 
     submissions = sort_submission_by(submissions, @sort_by, @search)
