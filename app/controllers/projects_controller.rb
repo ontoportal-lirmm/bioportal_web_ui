@@ -26,13 +26,13 @@ class ProjectsController < ApplicationController
       redirect_to projects_path
       return
     end
-    
+
     @project = projects.first
     @ontologies_used = []
     onts_used = @project.ontologyUsed
     onts_used.each do |ont_used|
       ont = LinkedData::Client::Models::Ontology.find(ont_used)
-      unless ont.nil?
+      unless ont.nil? || ont.errors
         @ontologies_used << Hash["name", ont.name, "acronym", ont.acronym]
       end
     end
@@ -62,7 +62,7 @@ class ProjectsController < ApplicationController
     @project = projects.first
     @user_select_list = LinkedData::Client::Models::User.all.map {|u| [u.username, u.id]}
     @user_select_list.sort! {|a,b| a[1].downcase <=> b[1].downcase}
-    @usedOntologies = @project.ontologyUsed || []
+    @usedOntologies = @project.ontologyUsed&.map{|o| o.split('/').last}
     @ontologies = LinkedData::Client::Models::Ontology.all
   end
 
@@ -76,7 +76,7 @@ class ProjectsController < ApplicationController
 
     @project = LinkedData::Client::Models::Project.new(values: project_params)
     @project_saved = @project.save
-    
+
     # Project successfully created.
     if response_success?(@project_saved)
       flash[:notice] = t('projects.project_successfully_created')
@@ -160,10 +160,10 @@ class ProjectsController < ApplicationController
   def project_params
     p = params.require(:project).permit(:name, :acronym, :institution, :contacts, { creator:[] }, :homePage,
                                         :description, { ontologyUsed:[] })
-
+                                        
     p[:creator]&.reject!(&:blank?)
-    p[:ontologyUsed]&.reject!(&:blank?)
-    p.to_h
+    p[:ontologyUsed] ||= []
+    p = p.to_h
   end
 
   def flash_error(msg)
