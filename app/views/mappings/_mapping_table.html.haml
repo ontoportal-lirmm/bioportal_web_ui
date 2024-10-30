@@ -10,7 +10,7 @@
           %th= t("mappings.mapping_table.relations")
         %th= t("mappings.mapping_table.type")
         %th= t("mappings.mapping_table.source")
-        - if current_user_admin?
+        - if current_user_admin? && !@mappings.all? { |obj| !obj.source.eql?('REST') }
           %th{:class => 'delete_mappings_column'}= t("mappings.mapping_table.actions")
     %tbody#concept_mappings_table_content
       - @mappings.each do |map|
