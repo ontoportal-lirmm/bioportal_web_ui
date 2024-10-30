@@ -3,7 +3,7 @@
 class TreeLinkComponent < ViewComponent::Base
   include MultiLanguagesHelper, ModalHelper, ApplicationHelper
 
-  def initialize(child:, href:, children_href:, selected: false, data: {}, muted: false, target_frame: nil, open_in_modal: false, is_reused: nil)
+  def initialize(child:, href:, children_href:, selected: false, data: {}, tooltip: nil , muted: false, target_frame: nil, open_in_modal: false, is_reused: nil)
     super
 
     @child = child
@@ -13,7 +13,7 @@ class TreeLinkComponent < ViewComponent::Base
     @children_link = children_href
 
     @pref_label_html, @tooltip = node_label(child)
-
+    @tooltip = "#{tooltip} #{@tooltip}" if tooltip
     @data ||= { controller: 'tooltip', 'tooltip-position-value': 'right', turbo: true, 'turbo-frame': target_frame, action: 'click->simple-tree#select' }
 
     @data.merge!(data) do |_, old, new|
