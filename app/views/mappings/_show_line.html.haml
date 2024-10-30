@@ -1,5 +1,6 @@
 - process = map.process || {}
-- source = "#{map.source} #{process[:source_name]}"
+- type_tooltip = "#{map.source} #{process[:source_name]}".strip
+- type = "#{type_tooltip[0]}#{type_tooltip[-1]}".upcase #take the first and last letters
 - relations = process[:relation]&.each { |relation| get_prefixed_uri(relation)}
 - map_id = map.id.to_s.split("/").last
 - target_concept = map.classes.select {|target_concept| target_concept.id != concept.id && target_concept.links['ontology'] != concept.links['ontology']}.first || map.classes.last
@@ -9,7 +10,8 @@
   - ont_name = target_concept.links['ontology']
   - ont_acronym = ont_name
   - ont_link = link_to ont_acronym , get_inter_portal_ui_link(target_concept.links['ontology'], process["name"]), target: '_blank'
-  - type = 'Inter-portal'
+  - source = 'I-P'
+  - source_tooltip = "Internal portal"
 - elsif internal_mapping?(target_concept)
   - begin
     - ont = target_concept.explore.ontology
@@ -19,30 +21,36 @@
     - ont_name =   target_concept.links['ontology'] || target_concept.id
     - ont_link =   ont_name
   - cls_link = raw(get_link_for_cls_ajax(target_concept.id, ont_name, '_top'))
-  - type = 'Internal'
+  - source = inline_svg_tag 'summary/homepage.svg', class: 'mappings-table-icon'
+  - source_tooltip = "Internal"
 - else
   - cls_label = get_label_for_external_cls(target_concept.links["self"])
   - cls_link = raw("<a href='#{target_concept.links["self"]}' target='_blank'>#{cls_label}</a>")
   - ont_name = target_concept.links['ontology']
   - ont_link = link_to ont_name, target_concept.links['ontology'], target: "_blank"
-  - type = 'External'
+  - source = inline_svg_tag 'icons/external-link.svg', class: 'mappings-table-icon', width: '20px', height: '20px'
+  - source_tooltip = "External"
   
 %tr.human{:id => map_id}
-  %td
+  %td.mappings-table-mapping-to
     = cls_link
-  %td
+  %td{style: "width: 30%"}
     = ont_link
+  - if relations
+    %td
+      - relations&.each do  |r|
+        = r
+        %br/
+
   %td
-    - relations&.each do  |r|
-      = r
-      %br/
+    .d-flex.justify-content-center{'data-controller': 'tooltip', title: type_tooltip, style: 'font-weight: bold;'}
+      = type
   %td
-    #{source}
-    - if !process.nil?
-      - if translation?(process["relation"])
-        %img{:src => asset_path('sifr/english_language_flag.png'), :style => "padding: 5px", :align => "right", :title => "Traduction"}
-  %td
-    = type
+    .d-flex.justify-content-center{'data-controller': 'tooltip', title: source_tooltip}
+      #{source}
+      - if !process.nil?
+        - if translation?(process["relation"])
+          %img{:src => asset_path('sifr/english_language_flag.png'), :style => "padding: 5px", :align => "right", :title => "Traduction"}
   - if current_user_admin?
     %td{:class => 'delete_mappings_column'}
       - if map.id && !map.id.empty? && session[:user] && (session[:user].id.to_i == map.creator || session[:user].admin?) && map.source.eql?('REST')
@@ -54,3 +62,4 @@
                   data: { show_modal_title_value: t("mappings.show_line.edit_mapping", preflabel: @concept.prefLabel)},
                   )
           = button_to t("mappings.show_line.delete_button"), CGI.unescape(mapping_path(map.id)), method: :delete, class:'btn btn-link',  form: {data: { turbo: true, turbo_confirm: t("mappings.show_line.turbo_confirm"), turbo_frame: '_top'}}
+  
