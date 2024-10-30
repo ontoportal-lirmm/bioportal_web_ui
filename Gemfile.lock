@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/lifewatch-eric/ontologies_api_ruby_client.git
-  revision: 2e9540fe610faacfb0502d9136bb5f7f81f752db
+  revision: 36cbe8703376cb74c9e7b897740ec382e50ba72a
   branch: master
   specs:
     ontologies_api_client (2.2.0)
@@ -325,7 +325,7 @@ GEM
     net-ssh (7.3.0)
     netrc (0.11.0)
     newrelic_rpm (9.14.0)
-    nio4r (2.7.3)
+    nio4r (2.7.4)
     nokogiri (1.15.6-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.15.6-x86_64-linux)
@@ -427,7 +427,7 @@ GEM
     rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
       nokogiri (~> 1.14)
-    rails-i18n (7.0.9)
+    rails-i18n (7.0.10)
       i18n (>= 0.7, < 2)
       railties (>= 6.0.0, < 8)
     railties (7.0.4)
