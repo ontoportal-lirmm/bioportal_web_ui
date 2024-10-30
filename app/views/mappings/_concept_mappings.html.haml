@@ -2,7 +2,7 @@
   = "#{@mappings.size}"
 
 = turbo_frame_tag @type.eql?('modal') ? 'application_modal_content' : 'concept_mappings' do
-  %div{:style => "padding: 1%; width: 98%"}
+  %div.p-1
     - if session[:user].nil?
       = link_to "Create New Mapping", "/login?redirect=/ontologies/#{@ontology.acronym}/?p=classes&t=mappings&conceptid=#{escape(@concept.id)}", :method => :get, :class => "btn btn-default mb-3"
     - else
