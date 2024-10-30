@@ -153,7 +153,7 @@ module MultiLanguagesHelper
       end
     end
 
-    concept_value || concept.to_a.first
+    concept_value || concept.reject { |k| k.to_s.eql?('@none') }.first || concept.first
   end
 
   def main_language_label(label)
