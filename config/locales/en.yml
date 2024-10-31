@@ -572,6 +572,7 @@ en:
     date: Date
     ontology_visits: Ontology visits
   mappings:
+    create_new_mapping: Créer un nouveau mapping
     all: All
     description: Dive into an overview of the mappings in the bubble view, efficiently locate a specific ontology in the table view or upload your own mappings.
     tabs:

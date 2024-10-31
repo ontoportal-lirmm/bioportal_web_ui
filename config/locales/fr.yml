@@ -580,6 +580,7 @@ fr:
     ontology_visits: Visites d'ontologies
 
   mappings:
+    create_new_mapping: 
     all: Tous
     description: Plongez dans une vue d'ensemble des mappings dans la vue en bulles, localisez efficacement une ontologie spécifique dans la vue en tableau ou téléchargez vos propres mappings.
     tabs:

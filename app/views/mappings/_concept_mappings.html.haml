@@ -6,12 +6,12 @@
     - if session[:user].nil?
       = link_to "Create New Mapping", "/login?redirect=/ontologies/#{@ontology.acronym}/?p=classes&t=mappings&conceptid=#{escape(@concept.id)}", :method => :get, :class => "btn btn-default mb-3"
     - else
-      %div{style: 'width: 225px; margin: 0 0 10px 0;'}
+      %div{style: 'width: 250px; margin: 0 0 10px 0;'}
         = link_to_modal(nil,
                   new_mapping_path(ontology_from: "#{@ontology.id}", conceptid_from: "#{@concept.id}"),
                   data: { show_modal_title_value: "Create a new mapping for #{@concept.prefLabel}" },
                   ) do
-          = render Buttons::RegularButtonComponent.new(id:'new_mapping_btn' , value:'Create new mapping', variant: 'secondary', size: 'slim', state: 'no-anim')
+          = render Buttons::RegularButtonComponent.new(id:'new_mapping_btn' , value:t('mappings.create_new_mapping'), variant: 'secondary', size: 'slim', state: 'no-anim')
 
     #mapping_details
       = render :partial => '/mappings/mapping_table'
