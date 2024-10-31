@@ -67,7 +67,7 @@ module MappingsHelper
       'SAME_URI' => t('mappings.types_description.same_uri'),
       'SKOS' => t('mappings.types_description.skos')
     }
-    type_tooltip = "#{map.source} #{relations.join(', ')} : #{types_description[type]} #{process[:source_name]}".strip
+    type_tooltip = content_tag(:div, "#{map.source} #{relations.join(', ')} : #{types_description[type]} #{process[:source_name]}".strip, style: 'width: 300px')
     [type, type_tooltip]
   end
 
