@@ -572,12 +572,19 @@ en:
     date: Date
     ontology_visits: Ontology visits
   mappings:
+    create_new_mapping: Create new mapping
     all: All
     description: Dive into an overview of the mappings in the bubble view, efficiently locate a specific ontology in the table view or upload your own mappings.
     tabs:
       bubble_view: Bubbles view
       table_view: Table view
       upload_mappings: Upload mappings
+    types_description:
+      cui: Created between 2 concepts that have the same CUI (Concept Unique Identifiers)
+      loom: Lexical mappings created between 2 concepts with very similar labels (preferred name)
+      rest: A mapping added by a user using the REST API (or the UI, which is calling the API to create it)
+      same_uri: Created between 2 concepts with the same URI.
+      skos: Mappings based on SKOS relationships, (e.g. skos:exactMatch or skos:closeMatch)
     filter_ontologies: Filter ontologies in the bubble view
     filter_bubbles: Filter bubbles
     external_mappings: "External Mappings (%{number_with_delimiter})"
