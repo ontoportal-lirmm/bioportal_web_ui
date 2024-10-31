@@ -13,11 +13,11 @@
   - if current_user_admin?
     %td{:class => 'delete_mappings_column'}
       - if map.id && !map.id.empty? && session[:user] && (session[:user].id.to_i == map.creator || session[:user].admin?) && map.source.eql?('REST')
-        %div.d-flex
+        %div.d-flex.mappings-table-actions
           = link_to_modal(nil,
                   mapping_path(map_id, {conceptid_from: @concept.id}),
                   class: 'btn btn-link p-0 mr-1',
                   data: { show_modal_title_value: t("mappings.show_line.edit_mapping", preflabel: @concept.prefLabel)},
                   ) do
-            = inline_svg_tag "edit.svg", width: '16px', height: '16px'
+            = inline_svg_tag "edit.svg", width: '15px', height: '15px'
           = button_to inline_svg_tag('icons/delete.svg', width: '16px', heigth: '16px'), CGI.unescape(mapping_path(map.id)), class: 'btn btn-link p-0', method: :delete,  form: {data: { turbo: true, turbo_confirm: t("mappings.show_line.turbo_confirm"), turbo_frame: '_top'}}
