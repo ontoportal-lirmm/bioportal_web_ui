@@ -46,7 +46,6 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
       assert_text cat.acronym.titleize
     end
 
-
     assert_text @new_submission.URI
     assert_text @new_submission.description
     assert_text @new_submission.pullLocation
@@ -103,7 +102,6 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
       click_on "Licensing"
       submission_licensing_edit_fill(ontology_2, submission_2)
 
-
       # Persons and organizations tab
       click_on "Persons and organizations"
       submission_agent_edit_fill(submission_2)
@@ -148,7 +146,10 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
 
     assert_text submission_2.URI
     assert_text submission_2.versionIRI
+
+    wait_for '.submission-status'
     assert_selector '.submission-status', text: submission_2.version
+
     assert_selector ".flag-icon-fr" # todo fix this
     submission_2.identifier.each do |id|
       assert_text id
@@ -258,7 +259,6 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_text "rdfs"
     assert_text "dct"
 
-
     open_dropdown "#configuration"
 
     submission_2.keyClasses.each do |key|
@@ -341,9 +341,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     sleep 0.5
     click_button 'Back'
 
-
     fill_ontology(ontology_2, submission_2, add_submission: true)
-
 
     assert_selector 'h2', text: 'Ontology submitted successfully!'
     click_on current_url.gsub("/ontologies/success/#{existent_ontology.acronym}", '') + ontology_path(existent_ontology.acronym)
@@ -362,7 +360,6 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_text submission_2.description
     assert_text submission_2.pullLocation
 
-
     # check
     assert_selector '.fas.fa-key' if submission_2.status.eql?('private')
 
@@ -379,7 +376,6 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     ontology_2.group.each do |group|
       assert_text group.name
     end
-
 
     open_dropdown "#dates"
     assert_date submission_2.modificationDate
@@ -482,7 +478,6 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     wait_for_text "Contact"
 
     list_inputs "#submissioncontact_from_group_input", "submission[contact]", submission.contact
-
 
     agent1 = fixtures(:agents)[:agent1]
     agent2 = fixtures(:agents)[:agent2]
@@ -624,7 +619,6 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
       list_checks new_ontology.hasDomain.map(&:acronym), @categories.map(&:acronym)
       list_checks new_ontology.group.map(&:acronym), @groups.map(&:acronym)
 
-
       click_button 'Next'
 
       # Page 2
@@ -644,9 +638,9 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
 
       # Page 3
       if add_submission
-       date_picker_fill_in 'submission[modificationDate]', new_submission.modificationDate
+        date_picker_fill_in 'submission[modificationDate]', new_submission.modificationDate
       else
-       date_picker_fill_in 'submission[released]', new_submission.released
+        date_picker_fill_in 'submission[released]', new_submission.released
       end
 
       list_inputs "#submissioncontact_from_group_input", "submission[contact]", new_submission.contact

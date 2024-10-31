@@ -16,17 +16,27 @@ module ApplicationTestHelpers
     def sign_in_as(username)
       user = fixtures(:users)[username]
       logged_in_user = LinkedData::Client::Models::User.authenticate(user.username, user.password)
-      if logged_in_user && !logged_in_user.errors
-        logged_in_user = create_user(user)
-      end
+      logged_in_user = create_user(user) if logged_in_user && !logged_in_user.errors
       logged_in_user
     end
 
     def create_user(user, admin: false)
-      admin_user = LinkedData::Client::Models::User.authenticate('admin', 'password') if admin
+      admin_user = LinkedData::Client::Models::User.authenticate('admin', 'password')
       existent_user = LinkedData::Client::Models::User.find_by_username(user.username).first
 
-      existent_user.delete if existent_user
+      conn = Faraday.new(url: LinkedData::Client.settings.rest_url) do |faraday|
+        faraday.request :url_encoded
+        faraday.response :logger
+        faraday.adapter Faraday.default_adapter
+        faraday.headers = {
+          "Accept" => "application/json",
+          "Authorization" => "apikey token=#{admin_user.apikey}",
+          "User-Agent" => "NCBO API Ruby Client v0.1.0"
+        }
+
+      end
+
+      conn.delete("/users/#{user.username}") if existent_user
 
       values = user.to_h
       values[:role] = ["ADMINISTRATOR"] if admin
@@ -34,17 +44,6 @@ module ApplicationTestHelpers
 
       if admin
         # Overwrite the normal ".save" to accept creating admin user
-        conn = Faraday.new(url: LinkedData::Client.settings.rest_url) do |faraday|
-          faraday.request :url_encoded
-          faraday.response :logger
-          faraday.adapter Faraday.default_adapter
-          faraday.headers = {
-            "Accept" => "application/json",
-            "Authorization" => "apikey token=#{admin_user.apikey}",
-            "User-Agent" => "NCBO API Ruby Client v0.1.0"
-          }
-
-        end
         conn.post(existent_user.class.collection_path, existent_user.to_hash.to_json, 'Content-Type' => 'application/json')
       else
         existent_user.save
@@ -61,7 +60,22 @@ module ApplicationTestHelpers
     end
 
     def delete_user(user)
-      LinkedData::Client::Models::User.find_by_username(user.username).first&.delete
+      admin_user = LinkedData::Client::Models::User.authenticate('admin', 'password')
+      existent_user = LinkedData::Client::Models::User.find_by_username(user.username).first
+
+      conn = Faraday.new(url: LinkedData::Client.settings.rest_url) do |faraday|
+        faraday.request :url_encoded
+        faraday.response :logger
+        faraday.adapter Faraday.default_adapter
+        faraday.headers = {
+          "Accept" => "application/json",
+          "Authorization" => "apikey token=#{admin_user.apikey}",
+          "User-Agent" => "NCBO API Ruby Client v0.1.0"
+        }
+
+      end
+
+      conn.delete("/users/#{user.username}") if existent_user
     end
   end
 

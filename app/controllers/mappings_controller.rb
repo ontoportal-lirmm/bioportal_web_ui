@@ -342,4 +342,56 @@ class MappingsController < ApplicationController
     end
     errors
   end
+
+  def set_mapping_target(concept_to_id:, ontology_to:, mapping_type: )
+    case mapping_type
+    when 'interportal'
+      @map_to_interportal, @map_to_interportal_ontology = ontology_to.match(%r{(.*)/ontologies/(.*)}).to_a[1..]
+      @map_to_interportal_class = concept_to_id
+    when 'external'
+      @map_to_external_ontology = ontology_to
+      @map_to_external_class = concept_to_id
+    else
+      @map_to_bioportal_ontology_id = ontology_to
+      @map_to_bioportal_full_id = concept_to_id
+    end
+  end
+
+  def get_mappings_target_params
+    mapping_type = Array(params[:mapping_type]).first
+    external = true
+    case mapping_type
+    when 'interportal'
+      ontology_to = "#{params[:map_to_interportal]}/ontologies/#{params[:map_to_interportal_ontology]}"
+      concept_to_id = params[:map_to_interportal_class]
+    when 'external'
+      ontology_to = params[:map_to_external_ontology]
+      concept_to_id = params[:map_to_external_class]
+    else
+      ontology_to = params[:map_to_bioportal_ontology_id]
+      concept_to_id = params[:map_to_bioportal_full_id]
+      external = false
+    end
+    [ontology_to, concept_to_id, external]
+  end
+
+  def get_mappings_target
+    ontology_to, concept_to_id, external_mapping = get_mappings_target_params
+    target = ''
+    if external_mapping
+      target_ontology = ontology_to
+      target = concept_to_id
+    else
+      if helpers.link?(ontology_to)
+        target_ontology = LinkedData::Client::Models::Ontology.find(ontology_to)
+      else
+        target_ontology = LinkedData::Client::Models::Ontology.find_by_acronym(ontology_to).first
+      end
+      if target_ontology
+        target = target_ontology.explore.single_class(concept_to_id).id
+        target_ontology = target_ontology.id
+      end
+    end
+    [target_ontology, target, external_mapping]
+  end
 end

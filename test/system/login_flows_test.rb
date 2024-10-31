@@ -22,8 +22,6 @@ class LoginFlowsTest < ApplicationSystemTestCase
     new_user = @user_john
     delete_user(new_user)
 
-    LinkedData::Client::Models::User.find_by_username(new_user.username).first&.delete
-
     fill_in 'user_firstName', with: new_user.firstName
     fill_in 'user_lastName', with: new_user.lastName
     fill_in 'user_username', with: new_user.username

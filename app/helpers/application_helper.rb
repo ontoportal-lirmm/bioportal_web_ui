@@ -107,14 +107,14 @@ module ApplicationHelper
   end
 
   def onts_for_select(include_views: false)
-    ontologies ||= LinkedData::Client::Models::Ontology.all({include: "acronym,name", include_views: include_views})
+    ontologies ||= LinkedData::Client::Models::Ontology.all({include: "acronym,name,viewOf", include_views: include_views})
     onts_for_select = [['', '']]
     ontologies.each do |ont|
       next if ( ont.acronym.nil? or ont.acronym.empty? )
       acronym = ont.acronym
       name = ont.name
       abbreviation = acronym.empty? ? "" : "(#{acronym})"
-      ont_label = "#{name.strip} #{abbreviation}"
+      ont_label = "#{name.strip} #{abbreviation}#{ont.viewOf ? ' [view]' : ''}"
       onts_for_select << [ont_label, acronym]
     end
     onts_for_select.sort! { |a,b| a[0].downcase <=> b[0].downcase }
