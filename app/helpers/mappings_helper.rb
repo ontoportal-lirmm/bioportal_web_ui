@@ -129,7 +129,7 @@ module MappingsHelper
   def get_inter_portal_ui_link(uri, process_name)
     process_name = '' if process_name.nil?
     interportal_acronym = process_name.split(' ')[2]
-    if interportal_acronym.nil? || interportal_acronym.empty?
+    if interportal_acronym.nil? || interportal_acronym.empty? || INTERPORTAL_HASH[interportal_acronym].nil?
       uri
     else
       uri.sub!(INTERPORTAL_HASH[interportal_acronym]['api'], INTERPORTAL_HASH[interportal_acronym]['ui'])
