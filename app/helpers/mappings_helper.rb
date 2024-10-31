@@ -61,11 +61,11 @@ module MappingsHelper
              map.source
            end
     types_description = {
-      'CUI' => 'Created between 2 concepts that have the same CUI (Concept Unique Identifiers)',
-      'LOOM' => 'Lexical mappings created between 2 concepts with very similar labels (preferred name)',
-      'REST' => 'A mapping added by a user using the REST API (or the UI, which is calling the API to create it)',
-      'SAME_URI' => 'Created between 2 concepts with the same URI.',
-      'SKOS' => 'Mappings based on SKOS relationships, (e.g. skos:exactMatch or skos:closeMatch)'
+      'CUI' => t('mappings.types_description.cui'),
+      'LOOM' => t('mappings.types_description.loom'),
+      'REST' => t('mappings.types_description.rest'),
+      'SAME_URI' => t('mappings.types_description.same_uri'),
+      'SKOS' => t('mappings.types_description.skos')
     }
     type_tooltip = "#{map.source} #{relations.join(', ')} : #{types_description[type]} #{process[:source_name]}".strip
     [type, type_tooltip]
