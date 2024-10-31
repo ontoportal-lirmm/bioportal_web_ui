@@ -320,6 +320,28 @@ div#map_from_concept_details_table, div#map_to_concept_details_table {
 
 #concept_mappings_table {
   width: 100%;
+  word-break: break-word;
+  font-size: 13px;
+}
+.mappings-table-mapping-to{
+  width: 45%;
+}
+.mappings-table-mapping-to .chip-button-component-container{
+  text-wrap: wrap !important;
+}
+.mappings-table-mapping-to a{
+  background-color: unset;
+  line-height: unset;
+  padding: unset;
+  font-weight: unset;
+  font-size: unset;
+}
+.mappings-table-icon{
+  width: 18px;
+  height: 18px;
+}
+.mappings-table-icon path{
+  fill: var(--gray-color);
 }
 
 .summary-mappings-tab-table {
@@ -341,4 +363,7 @@ div#map_from_concept_details_table, div#map_to_concept_details_table {
   padding: 10px;
   outline: none;
   margin-left: 0 !important;
+}
+.mappings-table-actions svg path{
+  fill: var(--primary-color);
 }
