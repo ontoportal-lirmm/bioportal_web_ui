@@ -32,7 +32,6 @@ export default class extends Controller {
             this.urlValue = this.#updatedPageUrl(data)
 
             this.frame.src  = this.urlValue
-
         }
     }
 
@@ -44,7 +43,7 @@ export default class extends Controller {
 
         if (currentDisplayedUrl.toString().includes(this.urlValue)){
             return true
-        } else if (currentDisplayedUrl.searchParams.get('p') === initUrl.searchParams.get('p')){
+        } else if (currentDisplayedUrl.searchParams.has('p') && currentDisplayedUrl.searchParams.get('p') === initUrl.searchParams.get('p')){
             // this is a custom fix for only the ontology viewer page,
             // that use the parameter ?p=section to tell which section is displayed
             return true

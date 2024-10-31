@@ -22,17 +22,17 @@
     .home-bubble.home-bubble-one
       %a.h5{href:"/ontologies/#{@anal_ont_names[0]}", style: "color: white !important"}
         = @anal_ont_names[0]
-      %p 
+      %p
         = @anal_ont_numbers[0].to_s + " " + t('visits.visits')
     .home-bubble.home-bubble-two
       %a.h5{href:"/ontologies/#{@anal_ont_names[1]}", style: "color: white !important"}
         = @anal_ont_names[1]
-      %p 
+      %p
         = @anal_ont_numbers[1].to_s + " " + t('visits.visits')
     .home-bubble.home-bubble-three
       %a.h5{href:"/ontologies/#{@anal_ont_names[2]}", style: "color: white !important"}
         = @anal_ont_names[2]
-      %p 
+      %p
         = @anal_ont_numbers[2].to_s + " " + t('visits.visits')
     %a.home-bubble.home-bubble-four{:href => "/visits"}
       .h5 ...
@@ -44,7 +44,7 @@
       %p
         = t('home.index.tagline')
       = ontologies_content_autocomplete
- 
+
 .home-body-container
   .home-section
     %h4= t('home.ontology_upload')
@@ -115,19 +115,19 @@
             %a{:href => "/landscape#fairness_assessment"}
               %div.home-fair-details
                 %p= t('home.fair_details')
-         
+
       .home-sub-section-right
         %h4= t('home.twitter_news')
         %hr.home-section-line
         .home-card.home-twitter-news
           %a.twitter-timeline{"data-height" => "360", :href => "https://twitter.com/lagroportal?ref_src=twsrc%5Etfw"}
-            .home-twitter-loader 
+            .home-twitter-loader
               = render LoaderComponent.new(type: 'pulsing')
           %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
 
   .home-section
     %h4
-      = t('home.agroportal_figures', site: portal_name)
+      = t('home.agroportal_figures', site: current_slice_name || portal_name)
     %hr.home-section-line/
     .home-statistics-container
       .home-statistics
@@ -135,54 +135,54 @@
           %hr/
           %div
             %h4
-              = format_number_abbreviated(@ont_count)
+              = format_number_abbreviated(@metrics[:ontologies_count])
             %p= t("home.ontologies")
         .home-statistics-item
           %hr/
           %div
             %h4
-              = format_number_abbreviated(@cls_count)
+              = format_number_abbreviated(@metrics[:class_count])
             %p= t("home.classes")
         .home-statistics-item
           %hr/
           %div
             %h4
-              = format_number_abbreviated(@individuals_count)
+              = format_number_abbreviated(@metrics[:individuals_count])
             %p= t("home.individuals")
         .home-statistics-item
           %hr/
           %div
             %h4
-              = format_number_abbreviated(@prop_count)
+              = format_number_abbreviated(@metrics[:properties_count])
             %p= t("home.properties")
         .home-statistics-item
           %hr/
           %div
             %h4
-              = format_number_abbreviated(@projects_count)
+              = format_number_abbreviated(@metrics[:projects_count])
             %p= t("home.projects")
         .home-statistics-item
           %hr/
           %div
             %h4
-              = format_number_abbreviated(@map_count)
+              = format_number_abbreviated(@metrics[:mappings_count])
             %p= t("home.mappings")
         .home-statistics-item
           %hr/
           %div
             %h4
-              = format_number_abbreviated(@users_count)
+              = format_number_abbreviated(@metrics[:users_count])
             %p= t("home.users")
       .home-statistics-link.justify-content-end{style: @analytics.empty? && "visibility: hidden"}
         = link_to t("home.see_details"),'/statistics', target: "_blank"
 
-  - if @slices
+  - if slices_enabled?
     .home-section
       .home-section-title
         .text
           = "#{portal_name} slices"
         %hr.home-section-line/
-      .home-section-description 
+      .home-section-description
         .div
           = t('home.slices_description')
       .home-slices-container
@@ -194,8 +194,8 @@
                 .home-slice-ontologies
                   = slice.ontologies.length
                 = inline_svg 'icons/slices.svg', width: "70", height: "70"
-              
-              .home-slice-name 
+
+              .home-slice-name
                 = "#{slice.name} (#{slice.acronym})"
         = render Buttons::RegularButtonComponent.new(id:'regular-button', value: t('home.suggest_slice'), variant: "secondary", state: "regular", href: '/feedback') do |btn|
           - btn.icon_right do
@@ -208,17 +208,18 @@
           = t('home.ontoportal_instances')
         %hr.home-section-line/
 
-      .home-section-description 
+      .home-section-description
         .div
           = home_ontoportal_description
       .home-support-items
         - $PORTALS_INSTANCES&.each do |portal|
-          %div.text-center
-            = link_to portal[:link], target: '_blank', class: 'home-logo-instances', style: "background-color: #{portal[:color]}" do
-              = inline_svg 'logo-white.svg', width: "35", height: "26"
-            %p{style: "color: #{portal[:color]}"} 
-              = portal[:portal]
-  
+          = portal_config_tooltip(portal[:name]) do
+            %div.text-center
+              = link_to portal[:ui], target: '_blank', class: 'home-logo-instances', style: "background-color: #{portal[:color]}" do
+                = inline_svg('logo-white.svg', width: "35", height: "26")
+              %p{style: "color: #{portal[:color]}"}
+                = portal[:name]
+
   .home-section
     .home-section-title
       .text
@@ -229,6 +230,8 @@
         %a{href:logo[:url], target: "_blanc"}
           %img{src: asset_path(logo[:img_src])}
 
+= init_federation_portals_status
+
 :javascript
   function submitAnnotator(){
   document.getElementById("annotator_submit").click()
@@ -236,4 +239,3 @@
   function submitRecommender(){
   document.getElementById("recommender_submit").click()
   }
-

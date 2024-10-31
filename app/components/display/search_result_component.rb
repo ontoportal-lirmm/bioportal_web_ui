@@ -2,17 +2,24 @@ class Display::SearchResultComponent < ViewComponent::Base
   include UrlsHelper
   include ModalHelper
   include MultiLanguagesHelper
+  include FederationHelper
+  include ComponentsHelper
 
   renders_many :subresults, Display::SearchResultComponent
   renders_many :reuses, Display::SearchResultComponent
-  def initialize(number: 0,title: nil, ontology_acronym: nil ,uri: nil, definition: nil, link: nil,  is_sub_component: false)
+
+  def initialize(number: 0,title: nil, ontology_id: nil ,uri: nil, definition: nil, link: nil,  is_sub_component: false, portal_name: nil, portal_color: nil, portal_light_color: nil, other_portals: [])
       @title = title
       @uri = uri
       @definition = definition
       @link = link
       @is_sub_component = is_sub_component
-      @ontology_acronym = ontology_acronym
+      @ontology_acronym = ontology_id&.split('/')&.last
       @number = number.to_s
+      @portal_name = portal_name
+      @portal_color = portal_color
+      @portal_light_color = portal_light_color
+      @other_portals = other_portals
   end
 
   def sub_component_class
@@ -61,12 +68,22 @@ class Display::SearchResultComponent < ViewComponent::Base
   end
 
   def reveal_ontologies_button(text,id,icon)
-    content_tag(:div, class: 'button icon-right', 'data-action': "click->reveal-component#toggle", 'data-id': id) do
-      inline_svg_tag(icon) +
-      content_tag(:div, class: 'text') do
+    content_tag(:div, class: 'button icon-right', 'data-action': "click->reveal-component#toggle", 'data-id': id, style: @portal_color ? "background-color: #{@portal_light_color} !important" : '') do
+      inline_svg_tag(icon, class: "federated-icon-#{@portal_name}") +
+      content_tag(:div, class: 'text', style: @portal_color ? "color: #{@portal_color} !important" : '') do
         text
       end +
-      inline_svg_tag("icons/arrow-down.svg")
+      inline_svg_tag("icons/arrow-down.svg", class: "federated-icon-#{@portal_name}")
     end
+  end
+
+  def external_class?
+    !@portal_name.nil?
+  end
+
+  def all_federated_portals
+    out = Array(@other_portals)
+    out.prepend({name: @portal_name, color: @portal_color, light_color: @portal_light_color, link: @link}) if external_class?
+    out
   end
 end

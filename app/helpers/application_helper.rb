@@ -11,6 +11,7 @@ module ApplicationHelper
 
   include ModalHelper, MultiLanguagesHelper, UrlsHelper
 
+
   RESOLVE_NAMESPACE = {:omv => "http://omv.ontoware.org/2005/05/ontology#", :skos => "http://www.w3.org/2004/02/skos/core#", :owl => "http://www.w3.org/2002/07/owl#",
                        :rdf => "http://www.w3.org/1999/02/22-rdf-syntax-ns#", :rdfs => "http://www.w3.org/2000/01/rdf-schema#", :metadata => "http://data.bioontology.org/metadata/",
                        :metadata_def => "http://data.bioontology.org/metadata/def/", :dc => "http://purl.org/dc/elements/1.1/", :xsd => "http://www.w3.org/2001/XMLSchema#",
@@ -23,15 +24,14 @@ module ApplicationHelper
                        :oboInOwl => "http://www.geneontology.org/formats/oboInOwl#", :idot => "http://identifiers.org/idot/", :sd => "http://www.w3.org/ns/sparql-service-description#",
                        :cclicense => "http://creativecommons.org/licenses/",
                        'skos-xl' => "http://www.w3.org/2008/05/skos-xl#"}
-  def url_to_endpoint(url)
-    uri = URI.parse(url)
-    endpoint = uri.path.sub(/^\//, '')
-    endpoint
-  end
 
   def search_json_link(link = @json_url, style: '')
     custom_style = "font-size: 50px; line-height: 0.5; margin-left: 6px; #{style}".strip
     render IconWithTooltipComponent.new(icon: "json.svg",link: link, target: '_blank', title: t('fair_score.go_to_api'), size:'small', style: custom_style)
+  end
+
+  def portal_name_from_uri(uri)
+    URI.parse(uri).hostname.split('.').first
   end
 
   def resolve_namespaces
@@ -41,7 +41,7 @@ module ApplicationHelper
   def ontologies_analytics
     begin
       data = LinkedData::Client::Analytics.last_month.onts
-      data.map{|x| [x[:ont].to_s, x[:views]]}.to_h
+      data.map{|x| [x[:ont].split('/').last.to_s, x[:views]]}.to_h
     rescue StandardError
       {}
     end
@@ -55,18 +55,6 @@ module ApplicationHelper
     end
   end
 
-  def rest_hostname
-    extract_hostname(REST_URI)
-  end
-
-  def extract_hostname(url)
-    begin
-      uri = URI.parse(url)
-      uri.hostname
-    rescue URI::InvalidURIError
-      url
-    end
-  end
 
   def omniauth_providers_info
     $OMNIAUTH_PROVIDERS
@@ -79,11 +67,6 @@ module ApplicationHelper
   def omniauth_token_provider(strategy)
     omniauth_provider_info(strategy.to_sym).keys.first
   end
-
-  def encode_param(string)
-    CGI.escape(string)
-  end
-
 
   def current_user
     session[:user]
@@ -98,9 +81,6 @@ module ApplicationHelper
     child.id.to_s.split('/').last
   end
 
-
-
-  # Create a popup button with a ? inside to display help when hovered
   def help_tooltip(content, html_attribs = {}, icon = 'fas fa-question-circle', css_class = nil, text = nil)
     html_attribs["title"] = content
     attribs = []
@@ -126,35 +106,28 @@ module ApplicationHelper
     end
   end
 
-  def onts_for_select
-    ontologies ||= LinkedData::Client::Models::Ontology.all(include: "acronym,name")
+  def onts_for_select(include_views: false)
+    ontologies ||= LinkedData::Client::Models::Ontology.all({include: "acronym,name,viewOf", include_views: include_views})
     onts_for_select = [['', '']]
     ontologies.each do |ont|
       next if ( ont.acronym.nil? or ont.acronym.empty? )
       acronym = ont.acronym
       name = ont.name
       abbreviation = acronym.empty? ? "" : "(#{acronym})"
-      ont_label = "#{name.strip} #{abbreviation}"
+      ont_label = "#{name.strip} #{abbreviation}#{ont.viewOf ? ' [view]' : ''}"
       onts_for_select << [ont_label, acronym]
     end
     onts_for_select.sort! { |a,b| a[0].downcase <=> b[0].downcase }
     onts_for_select
   end
 
-  def link_last_part(url)
-    return "" if url.nil?
-
-    if url.include?('#')
-      url.split('#').last
-    else
-      url.split('/').last
-    end
+  def slices_enabled?
+    $ENABLE_SLICES.eql?(true)
   end
 
   def at_slice?
     !@subdomain_filter.nil? && !@subdomain_filter[:active].nil? && @subdomain_filter[:active] == true
   end
-
 
   def add_comment_button(parent_id, parent_type)
     if session[:user].nil?
@@ -182,14 +155,6 @@ module ApplicationHelper
     end
   end
 
-
-  def link?(str)
-    # Regular expression to match strings starting with "http://" or "https://"
-    link_pattern = /\Ahttps?:\/\//
-    str = str&.strip
-    # Check if the string matches the pattern
-    !!(str =~ link_pattern)
-  end
 
   def subscribe_button(ontology_id)
     return if ontology_id.nil?
@@ -360,10 +325,6 @@ module ApplicationHelper
     "#{Rails.configuration.settings.links[:help]}##{anchor}"
   end
 
-  def uri?(url)
-    url =~ /\A#{URI::DEFAULT_PARSER.make_regexp(%w[http https])}\z/
-  end
-
   def extract_label_from(uri)
     label = uri.to_s.chomp('/').chomp('#')
     index = label.index('#')
@@ -412,6 +373,11 @@ module ApplicationHelper
 
   def portal_name
     $SITE
+  end
+
+  def current_slice_name
+    name = @subdomain_filter[:name]
+    name.blank? ? nil : name
   end
 
   def navitems
@@ -503,7 +469,7 @@ module ApplicationHelper
     end
   end
 
-  def empty_state(text)
+  def empty_state(text = t('no_result_was_found'))
     content_tag(:div, class:'browse-empty-illustration') do
       inline_svg_tag('empty-box.svg') +
       content_tag(:p, text)
@@ -546,6 +512,7 @@ module ApplicationHelper
 
   def categories_select(id: nil, name: nil, selected: 'None')
     categories_for_select = LinkedData::Client::Models::Category.all.map{|x| ["#{x.name} (#{x.acronym})", x.id]}.unshift(["None", ''])
-    render Input::SelectComponent.new(id: id, name: name, value: categories_for_select, selected: selected)
+    render Input::SelectComponent.new(id: id, name: name, value: categories_for_select, selected: selected, multiple: true)
   end
+
 end

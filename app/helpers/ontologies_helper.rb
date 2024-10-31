@@ -71,31 +71,9 @@ module OntologiesHelper
       end)
     end
   end
+
   def private_ontology_icon(is_private)
     raw(content_tag(:i, '', class: 'fas fa-key', title: t('ontologies.private_ontology'))) if is_private
-  end
-  def browse_filter_section_label(key)
-    labels = {
-      categories: t('ontologies.categories'),
-      groups: t('ontologies.groups'),
-      hasFormalityLevel: t('ontologies.formality_levels'),
-      isOfType: t('ontologies.ontology_types'),
-      naturalLanguage: t('ontologies.natural_languages')
-    }
-
-    labels[key] || key.to_s.underscore.humanize.capitalize
-  end
-
-  def browser_counter_loader
-    content_tag(:div, class: "browse-desc-text", style: "margin-bottom: 15px;") do
-      content_tag(:div, class: "d-flex align-items-center") do
-        str = content_tag(:span, t('ontologies.showing'))
-        str += content_tag(:span, "", class: "p-1 p-2", style: "color: #a7a7a7;") do
-          render LoaderComponent.new(small: true)
-        end
-        str
-      end
-    end
   end
 
   def ontologies_browse_skeleton(pagesize = 5)
@@ -530,6 +508,51 @@ module OntologiesHelper
                      data: { controller: "language-change", 'language-change-section-value': section, action: "change->language-change#dispatchLangChangeEvent" }
   end
 
+  def ontology_object_json_link(ontology_acronym, object_type, id)
+    "#{rest_url}/ontologies/#{ontology_acronym}/#{object_type}/#{escape(id)}?display=all&apikey=#{get_apikey}"
+  end
+
+  def render_permalink_link
+    content_tag(:div, class: 'mx-1') do
+      link_to("#classPermalinkModal", class: "class-permalink nav-link", title: t('concepts.permanent_link_class'), aria: { label: t('concepts.permanent_link_class') }, data: { toggle: "modal", current_purl: @current_purl }) do
+        content_tag(:i, '', class: "fas fa-link", aria: { hidden: "true" })
+      end
+    end
+  end
+
+  def render_concepts_json_button(link)
+    content_tag(:div, class: 'concepts_json_button') do
+      render RoundedButtonComponent.new(link: link, target: '_blank')
+    end
+  end
+
+
+  def ontology_object_details_component(frame_id: , ontology_id:, objects_title:, object:, &block)
+    render TurboFrameComponent.new(id: frame_id, data: {"turbo-frame-target": "frame"}) do
+      return if !object.present?
+      return alert_component(object.errors.join) if object.errors
+
+      ontology_object_tabs_component(ontology_id: ontology_id, objects_title: objects_title, object_id: object["@id"]) do |tabs|
+        tab_item_component(container_tabs: tabs, title: t('concepts.details'), path: '#details', selected: true) do
+          capture(&block)
+        end
+      end
+    end
+  end
+
+  def ontology_object_tabs_component(ontology_id:, objects_title:, object_id:, &block)
+    resource_url = ontology_object_json_link(ontology_id, objects_title, object_id)
+    render TabsContainerComponent.new(type: 'outline') do |c|
+      concat(c.pinned_right do
+        content_tag(:div, '', 'data-concepts-json-target': 'button') do
+          concat(render_permalink_link) if $PURL_ENABLED
+          concat(render_concepts_json_button(resource_url))
+        end
+      end)
+
+      capture(c, &block)
+    end
+  end
 
 
   def display_complex_text(definitions)
@@ -770,7 +793,6 @@ module OntologiesHelper
     end
   end
 
-  private
 
   def submission_languages(submission = @submission)
     Array(submission&.naturalLanguage).map { |natural_language| natural_language["iso639"] && natural_language.split('/').last }.compact
@@ -780,12 +802,87 @@ module OntologiesHelper
     id.split('/').last
   end
 
-  def browse_taxonomy_tooltip(texonomy)
-    content_tag(:div, class: 'd-flex') do
-      content_tag(:div, "See more information about #{texonomy} in ", class: 'mr-1') +
-        content_tag(:a, 'here', href: "/#{texonomy}", target: '_blank')
+  def browse_taxonomy_tooltip(taxonomy_type)
+    return nil unless taxonomy_type.eql?("categories") || taxonomy_type.eql?("groups")
+
+    content_tag(:div, class: '') do
+      content_tag(:span, "See more information about #{taxonomy_type} in ", class: 'mr-1') +
+        content_tag(:a, 'here', href: "/#{taxonomy_type}", target: '_blank')
     end
   end
 
+  def browse_chip_filter(key:, object:, values:, countable: true, count: nil)
+    title = (key.to_s.eql?("categories") || key.to_s.eql?("groups")) ? nil : ''
+    checked = values.any? { |obj| [link_last_part(object["id"]), link_last_part(object["value"])].include?(obj) }
+
+    group_chip_component(name: key, object: object, checked: checked, title: title) do |c|
+      c.count { browse_chip_count_badge(key: key, id: object["id"], count: count) } if countable
+    end
+  end
+
+  def browse_chip_count_badge(id:, key:, count: nil)
+    content_tag :span, class: 'badge badge-light ml-1' do
+      turbo_frame_tag("count_#{key}_#{link_last_part(id)}", busy: true) +
+        if count || count == 0
+          content_tag(:span, count.to_s, class: "hide-if-loading #{count.zero? ? 'disabled' : ''}")
+        else
+          content_tag(:span, class: 'show-if-loading') do
+            loader_component(small: true, type: nil)
+          end
+        end
+    end
+  end
+
+  def browse_filter_section_label(key)
+    labels = {
+      categories: t('ontologies.categories'),
+      groups: t('ontologies.groups'),
+      hasFormalityLevel: t('ontologies.formality_levels'),
+      isOfType: t('ontologies.ontology_types'),
+      naturalLanguage: t('ontologies.natural_languages')
+    }
+
+    labels[key] || key.to_s.underscore.humanize.capitalize
+  end
+
+  def browse_filter_section_header(key: nil, count: nil, title: nil)
+    render Display::HeaderComponent.new(tooltip: key ? browse_taxonomy_tooltip(key.to_s) : nil) do
+      content_tag(:span, class: "browse-filter-title-bar") do
+        concat title || browse_filter_section_label(key)
+
+        concat content_tag(:span, count, class: "badge badge-primary mx-1",
+                           "data-show-filter-count-target": "countSpan",
+                           style: "#{count&.positive? ? '' : 'display: none;'}")
+      end
+
+    end
+  end
+
+  def browse_filter_section_body(checked_values: , key:, objects:, countable: true, counts: nil)
+    output = content_tag(:div, class: "browse-filter-checks-container px-3")  do
+      Array(objects).map do |object|
+        count = counts ? counts[link_last_part(object["id"])] || 0 : nil
+        concat browse_chip_filter(key: key, object: object, values: checked_values, countable: countable, count: count)
+      end
+    end
+
+    if key.to_s.include?("categories")
+      turbo_frame_tag('categories_refresh_for_federation') { output.html_safe }
+    else
+      output
+    end
+  end
+
+  def browser_counter_loader
+    content_tag(:div, class: "browse-desc-text", style: "margin-bottom: 15px;") do
+      content_tag(:div, class: "d-flex align-items-center") do
+        str = content_tag(:span, t('ontologies.showing'))
+        str += content_tag(:span, "", class: "p-1 p-2", style: "color: #a7a7a7;") do
+          render LoaderComponent.new(small: true)
+        end
+        str
+      end
+    end
+  end
 
 end

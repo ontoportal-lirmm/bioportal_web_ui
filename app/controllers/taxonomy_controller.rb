@@ -8,7 +8,6 @@ class TaxonomyController < ApplicationController
   end
 
   private
-  
   def initialize_taxonomy
     @groups = LinkedData::Client::Models::Group.all
     slices = LinkedData::Client::Models::Slice.all
@@ -33,13 +32,13 @@ class TaxonomyController < ApplicationController
       category_index[category[:id]] = category
     end
     categories.each do |category|
-      if category.parentCategory
-        parent = category_index[category.parentCategory]
+      category[:parentCategory].each do |parent_id|
+        parent = category_index[parent_id]
         parent[:children] ||= []
         parent[:children] << category
       end
     end
-    categories.reject! { |category| category.parentCategory }
+    categories.reject! { |category| category[:parentCategory]&.any? }
     categories
   end
 

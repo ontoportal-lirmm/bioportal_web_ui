@@ -26,6 +26,8 @@ class OntologiesController < ApplicationController
 
   before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
   before_action :submission_metadata, only: [:show]
+  before_action :set_federated_portals, only: [:index, :ontologies_filter]
+
   KNOWN_PAGES = Set.new(["terms", "classes", "mappings", "notes", "widgets", "summary", "properties", "instances", "schemes", "collections", "sparql"])
   EXTERNAL_MAPPINGS_GRAPH = "http://data.bioontology.org/metadata/ExternalMappings"
   INTERPORTAL_MAPPINGS_GRAPH = "http://data.bioontology.org/metadata/InterportalMappings"
@@ -42,20 +44,33 @@ class OntologiesController < ApplicationController
 
   def ontologies_filter
     @time = Benchmark.realtime do
-      @ontologies, @count, @count_objects, @request_params = submissions_paginate_filter(params)
+      @ontologies, @count, @count_objects, @request_params, @federation_counts = submissions_paginate_filter(params)
     end
 
     if @page.page.eql?(1)
       streams = [prepend("ontologies_list_view-page-#{@page.page}", partial: 'ontologies/browser/ontologies')]
+
       streams += @count_objects.map do |section, values_count|
         values_count.map do |value, count|
-          replace("count_#{section}_#{value}") do
-            helpers.turbo_frame_tag("count_#{section}_#{value}") do
-              helpers.content_tag(:span, count.to_s, class: "hide-if-loading #{count.zero? ? 'disabled' : ''}")
+          replace("count_#{section}_#{link_last_part(value)}") do
+            helpers.turbo_frame_tag("count_#{section}_#{link_last_part(value)}") do
+            helpers.content_tag(:span, count.to_s, class: "hide-if-loading #{count.zero? ? 'disabled' : ''}")
             end
           end
         end
       end.flatten
+
+      unless request_portals.empty?
+        streams += [
+          replace('categories_refresh_for_federation') do
+            key = "categories"
+            objects, checked_values, _ = @filters[key.to_sym]
+            helpers.browse_filter_section_body(checked_values: checked_values,
+                                               key: key, objects: objects,
+                                               counts: @count_objects[key.to_sym])
+          end
+        ]
+      end
     else
       streams = [replace("ontologies_list_view-page-#{@page.page}", partial: 'ontologies/browser/ontologies')]
     end
@@ -190,7 +205,8 @@ class OntologiesController < ApplicationController
   def schemes
     @schemes = get_schemes(@ontology)
     scheme_id = params[:schemeid] || @submission_latest.URI || nil
-    @scheme = get_scheme(@ontology, scheme_id) if scheme_id
+    @scheme = scheme_id ? get_scheme(@ontology, scheme_id) : @schemes.first
+
 
     render partial: 'ontologies/sections/schemes', layout: 'ontology_viewer'
   end

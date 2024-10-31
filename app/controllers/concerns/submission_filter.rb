@@ -1,7 +1,7 @@
 module SubmissionFilter
   extend ActiveSupport::Concern
 
-  include SearchContent
+  include FederationHelper
 
   BROWSE_ATTRIBUTES = ['ontology', 'submissionStatus', 'description', 'pullLocation', 'creationDate',
                        'contact', 'released', 'naturalLanguage', 'hasOntologyLanguage',
@@ -21,17 +21,19 @@ module SubmissionFilter
     filter_params = params.permit(@filters.keys).to_h
     init_filters(params)
 
-    @analytics = Rails.cache.fetch("ontologies_analytics-#{Time.now.year}-#{Time.now.month}") do
+    @analytics = Rails.cache.fetch("ontologies_analytics-#{Time.now.year}-#{Time.now.month}-#{request_portals.join('-')}") do
       helpers.ontologies_analytics
     end
 
     @ontologies = LinkedData::Client::Models::Ontology.all(include: 'all', also_include_views: true, display_links: false, display_context: false)
 
+    @ontologies, @errors = @ontologies.partition { |x| !x.errors }
+
     # get fair scores of all ontologies
     @fair_scores = fairness_service_enabled? ? get_fair_score('all') : nil
 
     @total_ontologies = @ontologies.size
-    search_backend = params[:search_backend]
+
     params = { query: @search,
                status: request_params[:status],
                show_views: @show_views,
@@ -43,22 +45,20 @@ module SubmissionFilter
                groups: request_params[:group], categories: request_params[:hasDomain],
                formats: request_params[:hasOntologyLanguage] }
 
+    submissions = filter_submissions(@ontologies, **params)
 
-    if search_backend.eql?('index')
-      submissions = filter_using_index(**params)
-      submissions = @ontologies.map{ |ont| ontology_hash(ont, submissions) }
-    else
-      submissions = filter_using_data(@ontologies, **params)
-    end
+    submissions = merge_by_acronym(submissions) if federation_enabled?
+
 
     submissions = sort_submission_by(submissions, @sort_by, @search)
-
 
     @page = paginate_submissions(submissions, request_params[:page].to_i, request_params[:pagesize].to_i)
 
     count = @page.page.eql?(1) ? count_objects(submissions) : {}
 
-    [@page.collection, @page.totalCount, count, filter_params]
+    federation_counts = federated_browse_counts(submissions)
+
+    [@page.collection, @page.totalCount, count, filter_params, federation_counts]
   end
 
   def ontologies_with_filters_url(filters, page: 1, count: false)
@@ -67,49 +67,47 @@ module SubmissionFilter
 
   private
 
-  def filter_using_index(query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
-    search_ontologies(
-      query: query,
-      status: status,
-      show_views: show_views,
-      private_only: private_only,
-      languages: languages,
-      page_size: page_size,
-      formality_level: formality_level,
-      is_of_type: is_of_type,
-      groups: groups, categories: categories,
-      formats: formats
-    )
-
+  def merge_by_acronym(submissions)
+    merged_submissions = []
+    submissions.group_by { |x| x[:ontology]&.acronym }.each do |acronym, ontologies|
+      ontology = canonical_ontology(ontologies)
+      ontology[:sources] = ontologies.map { |x| x[:id] }
+      merged_submissions << ontology
+    end
+    merged_submissions
   end
 
-  def filter_using_data(ontologies, query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
+
+  def filter_submissions(ontologies, query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
     submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: true, display_links: false, display_context: false)
+
+    submissions = submissions.map { |x| x[:ontology] ? [x[:ontology][:id], x] : nil }.compact.to_h
+
     submissions = ontologies.map { |ont| ontology_hash(ont, submissions) }
 
     submissions.map do |s|
-      out = ((s.ontology.viewingRestriction.eql?('public') && !private_only) || private_only && s.ontology.viewingRestriction.eql?('private'))
-      out = out && (groups.blank? || (s.ontology.group.map { |x| helpers.link_last_part(x) } & groups.split(',')).any?)
-      out = out && (categories.blank? || (s.ontology.hasDomain.map { |x| helpers.link_last_part(x) } & categories.split(',')).any?)
-      out = out && (status.blank? || status.eql?('alpha,beta,production,retired') || status.split(',').include?(s.status))
-      out = out && (formats.blank? || formats.split(',').any? { |f| s.hasOntologyLanguage.eql?(f) })
-      out = out && (is_of_type.blank? || is_of_type.split(',').any? { |f| helpers.link_last_part(s.isOfType).eql?(f) })
-      out = out && (formality_level.blank? || formality_level.split(',').any? { |f| helpers.link_last_part(s.hasFormalityLevel).eql?(f) })
-      out = out && (languages.blank? || languages.split(',').any? { |f| s.naturalLanguage.any? { |n| helpers.link_last_part(n).eql?(f) } })
-      out = out && (s.ontology.viewOf.blank? || (show_views && !s.ontology.viewOf.blank?))
+      out = ((s[:ontology].viewingRestriction.eql?('public') && !private_only) || private_only && s[:ontology].viewingRestriction.eql?('private'))
+      out = out && (groups.blank? || (s[:ontology].group.map { |x| helpers.link_last_part(x) } & groups.split(',')).any?)
+      out = out && (categories.blank? || (s[:ontology].hasDomain.map { |x| helpers.link_last_part(x) } & categories.split(',')).any?)
+      out = out && (status.blank? || status.eql?('alpha,beta,production,retired') || status.split(',').include?(s[:status]))
+      out = out && (formats.blank? || formats.split(',').any? { |f| s[:hasOntologyLanguage].eql?(f) })
+      out = out && (is_of_type.blank? || is_of_type.split(',').any? { |f| helpers.link_last_part(s[:isOfType]).eql?(f) })
+      out = out && (formality_level.blank? || formality_level.split(',').any? { |f| helpers.link_last_part(s[:hasFormalityLevel]).eql?(f) })
+      out = out && (languages.blank? || languages.split(',').any? { |f| Array(s[:naturalLanguage]).any? { |n| helpers.link_last_part(n).eql?(f) } })
+      out = out && (s[:ontology].viewOf.blank? || (show_views && !s[:ontology].viewOf.blank?))
 
-      out = out && (query.blank? || [s.description, s.ontology.name, s.ontology.acronym].any? { |x| (x|| '').downcase.include?(query.downcase) })
+      out = out && (query.blank? || [s[:description], s[:ontology].name, s[:ontology].acronym].any? { |x| (x || '').downcase.include?(query.downcase) })
 
       if out
         s[:rank] = 0
 
         next s if query.blank?
 
-        s[:rank] += 3 if s.ontology.acronym && s.ontology.acronym.downcase.include?(query.downcase)
+        s[:rank] += 3 if s[:ontology].acronym && s[:ontology].acronym.downcase.include?(query.downcase)
 
-        s[:rank] += 2 if s.ontology.name && s.ontology.name.downcase.include?(query.downcase)
+        s[:rank] += 2 if s[:ontology].name && s[:ontology].name.downcase.include?(query.downcase)
 
-        s[:rank] += 1 if s.description && s.description.downcase.include?(query.downcase)
+        s[:rank] += 1 if s[:description] && s[:description].downcase.include?(query.downcase)
 
         s
       else
@@ -131,7 +129,7 @@ module SubmissionFilter
   end
 
   def sort_submission_by(submissions, sort_by, query = nil)
-    return submissions.sort_by { |x| x[:rank] ? -x[:rank] : 0}  unless query.blank?
+    return submissions.sort_by { |x| x[:rank] ? -x[:rank] : 0 } unless query.blank?
 
     if sort_by.eql?('visits')
       submissions = submissions.sort_by { |x| -(x[:popularity] || 0) }
@@ -209,13 +207,17 @@ module SubmissionFilter
       @filters[:search] = params[:search]
     end
 
+    unless params[:portals].blank?
+      @filters[:portals] = params[:portals]
+    end
+
     request_params.delete(:order_by) if %w[visits fair].include?(request_params[:sort_by].to_s)
     request_params
   end
 
   def ontology_hash(ont, submissions)
     o = {}
-    sub = submissions.select{|x| x.ontology&.id.eql?(ont.id)}.first
+    sub = submissions[ont.id]
 
     o[:ontology] = ont
 
@@ -225,7 +227,7 @@ module SubmissionFilter
 
     o[:hasOntologyLanguage] = sub&.hasOntologyLanguage
 
-    if sub&.metrics
+    if sub&.metrics && !sub.metrics.is_a?(String)
       o[:class_count] = sub.metrics.classes
       o[:individual_count] = sub.metrics.individuals
     else
@@ -237,10 +239,10 @@ module SubmissionFilter
 
     o[:note_count] = ont.notes&.length || 0
     o[:project_count] = ont.projects&.length || 0
-    o[:popularity] = @analytics[ont.acronym] || 0
-    o[:rank] = sub&[:rank] || 0
+    o[:popularity] = @analytics[ont.id.split('/').last.to_s] || 0
+    o[:rank] = sub ? sub[:rank] : 0
 
-    OpenStruct.new(o)
+    o
   end
 
   def add_submission_attributes(ont_hash, sub)
@@ -346,10 +348,12 @@ module SubmissionFilter
 
   def object_filter(objects, object_name, name_key = 'acronym')
     checks = params[object_name]&.split(',') || []
-    checks = checks.map { |x| check_id(x, objects, name_key) }.compact
+    checks = checks.map { |x| helpers.link_last_part(check_id(x, objects, name_key)) }.compact
 
-    ids = objects.map { |x| x['id'] }
+    objects.uniq! { |x| helpers.link_last_part(x['id']) }
+    ids = objects.map { |x| helpers.link_last_part(x['id']) }
     count = ids.count { |x| checks.include?(x) }
+
     [objects, checks, count]
   end
 
@@ -370,7 +374,7 @@ module SubmissionFilter
       object_names.each do |name|
         values = Array(ontology[name])
         values.each do |v|
-          v.gsub!('http://data.bioontology.org', rest_url)
+          v = helpers.link_last_part(v)
 
           objects_count[name] = {} unless objects_count[name]
           objects_count[name][v] = (objects_count[name][v] || 0) + 1

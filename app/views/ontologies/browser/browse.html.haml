@@ -1,7 +1,7 @@
 .browse-center
   .browse-container
     .container.align-alert
-      - if session[:user]&.admin?
+      - if current_user_admin?
         %div{style:'width: 70%;'}
           = render Display::AlertComponent.new(type: 'info') do
             %span.d-flex.align-items-center
@@ -33,44 +33,33 @@
     %div{data: { controller: "turbo-frame history browse-filters" , "turbo-frame-url-value": "/ontologies_filter?page=1&#{request.original_url.split('?').last}", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL changed->turbo-frame#updateFrame"}}
 
       .browse-sub-container
-        .browse-first-row{data:{controller: "browse-filters", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL"}}
+        .browse-first-row
           %div.pt-1
             = upload_ontology_button
           %div{style:'margin-top: 30px'}
             %p.browse-filters-title= t("ontologies.filters")
-            - if session[:user]&.admin?
+            - if current_user_admin?
               %div.browse-filter.admin-border
-                = render SwitchInputComponent.new(id:'filter-private', name:'private_only', checked: @show_private_only) do
-                  = t("ontologies.browser.show_private_ontology")
+                = switch_input(id:'filter-private', name:'private_only', checked: @show_private_only, label: t("ontologies.browser.show_private_ontology"))
             %div.browse-filter
-              = render SwitchInputComponent.new(id:'filter-views', name:'views', checked: @show_views) do
-                = t("ontologies.browser.show_ontology_views")
-              = render SwitchInputComponent.new(id:'filter-retired', name:'retired',checked: @show_retired) do
-                = t("ontologies.browser.show_retired_ontologies")
+              = switch_input(id:'filter-views', name:'views', checked: @show_views, label: t("ontologies.browser.show_ontology_views"))
+              = switch_input(id:'filter-retired', name:'retired',checked: @show_retired , label: t("ontologies.browser.show_retired_ontologies"))
 
             - @filters.each do |key, values|
-              - if session[:user]&.admin? ||  key != :missingStatus
-                .browse-filter{data:{controller: "show-filter-count browse-filters", action: "change->show-filter-count#updateCount change->browse-filters#dispatchFilterEvent"}, id: "#{key}_filter_container", style: "#{"border-color: var(--admin-color);" if key == :missingStatus}"}
-                  .browse-filter-title-bar{"data-target" => "#browse-#{key}-filter", "data-toggle" => "collapse"}
-                    %p
-                      = browse_filter_section_label(key)
-                      %span.badge.badge-primary{"data-show-filter-count-target":"countSpan", style: "#{values[2] && values[2].positive? ? '' : 'display: none;'}"}
-                        = values[2]
-                    .d-flex.align-items-center
-                      - if key.eql?(:categories) || key.eql?(:groups)
-                        .mr-2
-                          = render Display::InfoTooltipComponent.new(text: browse_taxonomy_tooltip(key.to_s))
-                      = inline_svg_tag 'arrow-down.svg'
-                  .collapse{id: "browse-#{key}-filter", class: "#{values[2].positive? ? 'show': ''}"}
-                    .browse-filter-checks-container
-                      - values.first.each do |object|
-                        - title = (key.eql?(:categories) || key.eql?(:groups)) ? nil : ''
-                        = group_chip_component(name: key, object: object, checked: values[1]&.include?(object["id"]) || values[1]&.include?(object["value"]) , title: title) do |c|
-                          - c.count do
-                            %span.badge.badge-light.ml-1
-                              = turbo_frame_tag "count_#{key}_#{object["id"]}", busy: true
-                              %span.show-if-loading
-                                = render LoaderComponent.new(small:true)
+              %div{ id: "#{key}_filter_container", data:{controller: "browse_filters show-filter-count",
+                  action: "change->show-filter-count#updateCount
+                           change->browse-filters#dispatchFilterEvent"}}
+                - objects, checked_values, count = values
+                = dropdown_component(id: "browse-#{key}-filter", is_open: count.positive?) do |d|
+                  - d.title { browse_filter_section_header(key: key, count: count)}
+                  = browse_filter_section_body(key: key, checked_values: checked_values, objects: objects)
+
+            - if federation_enabled?
+              %div{ data:{action: "change->browse-filters#federationChange"}}
+                = dropdown_component(id: "browse-portal-filter", is_open: !request_portals.empty?) do |d|
+                  - d.title { browse_filter_section_header(title: t('federation.results_from_external_portals'))}
+                  .px-1.browse-federation-input-chips
+                    = federation_input_chips(name: "portals")
 
         .browse-second-row
           .browse-search-bar
@@ -79,11 +68,10 @@
               .browse-search-filters
                 %select#format.browse-format-filter{:name => "format"}
                   = options_for_select(@formats, @selected_format)
-                %select#Sort_by.browse-sort-by-filter{:name => "Sort_by"}
+                %select#Sort_by.browse-sort-by-filter{name: "Sort_by", 'data-browse-filters-target': "sort"}
                   = options_for_select(@sorts_options, @sort_by)
           .browse-ontologies
             = render TurboFrameComponent.new(id: "ontologies_list_view-page-1" , src: "/ontologies_filter?page=1&#{request.original_url.split('?').last}", data:{"turbo-frame-target":"frame", "turbo-frame-url-value": "/ontologies_filter"}) do |list|
               - list.loader do
                 = browser_counter_loader
                 - ontologies_browse_skeleton
-

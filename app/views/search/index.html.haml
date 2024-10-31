@@ -14,8 +14,13 @@
               .title
                 = t("search.advanced_options.ontologies")
               .field
-                = ontologies_selector(id:'search_page_ontologies' ,name: 'ontologies[]', selected:  params[:ontologies]&.split(','))
-
+                = ontologies_selector(id:'search_page_ontologies' ,name: 'ontologies[]', selected:  params[:ontologies]&.split(','), ontologies: onts_for_select(include_views: true))
+            - if federation_enabled?
+              .filter-container
+                .title 
+                  = t('federation.results_from_external_portals')
+                .field.d-flex 
+                  = federation_input_chips(name: "portals[]")
           .right
             .filter-container
               .title
@@ -35,38 +40,37 @@
         .search-page-options{class:  @search_results.empty? ? 'justify-content-end': ''}
           - unless @search_results.empty?
             .search-page-number-of-results
-              = "#{t('search.match_in')} #{@search_results.length} #{t('search.ontologies')}"
+              = t('search.match_in', results_size: @search_results.length, portals: request_portals_names(@federation_counts, @time)).html_safe
           %div.d-flex
-            .search-page-json.mx-4.mt-1
-              = search_json_link
+            .search-page-advanced-button.mr-4{class: @search_results.blank? ? 'd-none' : ''}
+              %a.d-flex{href: @json_url, target: '_blank'}
+                = text_with_icon(text: "API JSON", icon: 'json.svg')
+
             .search-page-advanced-button.show-options{class: "#{@advanced_options_open ? 'd-none' : ''}",'data': {'action': 'click->reveal-component#show', 'reveal-component-target': 'showButton'}}
-              .icon
-                =inline_svg_tag 'icons/settings.svg'
-              .text
-                = t('search.show_advanced_options')
+              = text_with_icon(text: t('search.show_advanced_options'), icon: 'icons/settings.svg')
+
             .search-page-advanced-button.hide-options{class: "#{@advanced_options_open ? '' : 'd-none'}", 'data': {'action': 'click->reveal-component#hide', 'reveal-component-target': 'hideButton'}}
-              .icon
-                =inline_svg_tag 'icons/hide.svg'
-              .text
-                = t('search.hide_advanced_options')
-    - if @search_results
-      .search-page-results-container
-        - number = 0
-        - @search_results.each do |result|
-          .search-page-result-element
-            - number = number + 1
-            - descendants = result[:descendants]
-            - reuses = result[:reuses]
-            - result[:root][:number] = number
-            = render Display::SearchResultComponent.new(result[:root]) do |c|
-              - descendants.each { |d| c.subresult(d.merge(is_sub_component: true))}
-              - reuses.each do |r|
-                - number = number + 1
-                - c.reuse(r[:root].merge(is_sub_component: true, number: number)) do |b|
-                  - r[:descendants].each { |dd|  b.subresult(dd.merge(is_sub_component: true))}
+              = text_with_icon(text: t('search.hide_advanced_options'), icon: 'icons/hide.svg')
+
+
+
+
+    = alert_message_if_federation_error(@federation_errors) {@federation_errors}
+
+    .search-page-results-container
+      - number = 0
+      - @search_results.each do |result|
+        .search-page-result-element
+          - number = number + 1
+          - descendants = result[:descendants]
+          - reuses = result[:reuses]
+          - result[:root][:number] = number
+          = render Display::SearchResultComponent.new(result[:root]) do |c|
+            - descendants.each { |d| c.subresult(d.merge(is_sub_component: true))}
+            - reuses.each do |r|
+              - number = number + 1
+              - c.reuse(r[:root].merge(is_sub_component: true, number: number)) do |b|
+                - r[:descendants].each { |dd|  b.subresult(dd.merge(is_sub_component: true))}
 
     - if @search_results.empty? && !@search_query.empty?
-      .browse-empty-illustration
-        %img{:src => "#{asset_path("empty-box.svg")}"}
-        %p No result was found
-          
+      = empty_state
