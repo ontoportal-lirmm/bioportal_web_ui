@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 module ConceptsHelper
-  include TermsReuses
+  include TermsReuses, UrlsHelper
+
+  def concept_path(id, ontology_id, language)
+    "/ontologies/#{ontology_id}?p=classes&conceptid=#{escape(id)}&language=#{language}"
+  end
+
   def concept_link(acronym, child, language)
     child.id.eql?('bp_fake_root') ? '#' : "/ontologies/#{acronym}/concepts/show?id=#{CGI.escape(child.id)}&language=#{language}"
   end
