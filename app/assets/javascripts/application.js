@@ -12,7 +12,6 @@
 //
 //= require bioportal
 //= require admin/licenses
-//= require bp_ajax_controller
 //= require bp_notes
 //= require bp_form_complete
 //= require bp_admin
@@ -20,5 +19,3 @@
 //= require projects
 //= require Chart.min
 //= require application_esbuild
-
-
