@@ -41,4 +41,12 @@ class LabelFetcherComponent < ViewComponent::Base
     end
 
   end
+
+  def link_with_icon
+    if @id.eql?(@label)
+      ExternalLinkTextComponent.new(text: @label).call
+    else
+      InternalLinkTextComponent.new(text: @label).call
+    end
+  end
 end

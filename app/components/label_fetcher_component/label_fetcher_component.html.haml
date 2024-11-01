@@ -6,5 +6,5 @@
     %span
       = render ChipButtonComponent.new(url: @link,
                                          type: 'clickable',
-                                         text: render(LabelLinkComponent.new(id: @id, text: @label)),
+                                         text: link_with_icon,
                                          target: @target)
