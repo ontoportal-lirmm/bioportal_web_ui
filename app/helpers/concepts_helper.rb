@@ -81,13 +81,8 @@ module ConceptsHelper
   def concept_label(ont_id, cls_id)
     @ontology = LinkedData::Client::Models::Ontology.find(ont_id)
     @ontology ||= LinkedData::Client::Models::Ontology.find_by_acronym(ont_id).first
-    ontology_not_found(ont_id) unless @ontology
-    # Retrieve a class prefLabel or return the class ID (URI)
-    # - mappings may contain class URIs that are not in bioportal (e.g. obo-xrefs)
+    ontology_not_found(ont_id) if @ontology.nil? || @ontology.errors
     cls = @ontology.explore.single_class({language: request_lang, include: 'prefLabel'}, cls_id)
-    # TODO: log any cls.errors
-    # TODO: NCBO-402 might be implemented here, but it throws off a lot of ajax result rendering.
-    #cls_label = cls.prefLabel({:use_html => true}) || cls_id
     cls.prefLabel || cls_id
   end
 
