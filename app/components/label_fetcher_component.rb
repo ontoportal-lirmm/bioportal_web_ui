@@ -11,7 +11,7 @@ class LabelFetcherComponent < ViewComponent::Base
     @open_in_modal = open_in_modal
     @target = target
 
-    if label.nil? || label.eql?(id)
+    if internal_link?(id, label)
       @link = id
       @target ||= '_blank'
       @label = id
@@ -20,6 +20,10 @@ class LabelFetcherComponent < ViewComponent::Base
       @target ||= '_top'
     end
 
+  end
+
+  def internal_link?(id, label)
+    label.nil? || label.eql?(id)
   end
 
   def label_fetcher_container(&block)
