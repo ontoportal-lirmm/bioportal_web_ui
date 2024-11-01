@@ -55,7 +55,6 @@ module ApplicationHelper
     end
   end
 
-
   def omniauth_providers_info
     $OMNIAUTH_PROVIDERS
   end
@@ -75,7 +74,6 @@ module ApplicationHelper
   def current_user_admin?
     session[:user] && session[:user].admin?
   end
-
 
   def child_id(child)
     child.id.to_s.split('/').last
@@ -155,7 +153,6 @@ module ApplicationHelper
     end
   end
 
-
   def subscribe_button(ontology_id)
     return if ontology_id.nil?
     render TurboFrameComponent.new(id: 'subscribe_button', src: ontology_subscriptions_path(ontology_id: ontology_id.split('/').last), class: 'ml-1') do |t|
@@ -226,21 +223,6 @@ module ApplicationHelper
     bootstrap_alert_class[flash_key]
   end
 
-  def label_ajax_data_h(cls_id, ont_acronym, ajax_uri, cls_url)
-    { data:
-        {
-          'label-ajax-cls-id-value': cls_id,
-          'label-ajax-ontology-acronym-value': ont_acronym,
-          'label-ajax-ajax-url-value': ajax_uri,
-          'label-ajax-cls-id-url-value': cls_url
-        }
-    }
-  end
-
-  def label_ajax_data(cls_id, ont_acronym, ajax_uri, cls_url)
-    label_ajax_data_h(cls_id, ont_acronym, ajax_uri, cls_url)
-  end
-
   def label_ajax_link(id, ont_acronym, ajax_uri, target)
     ajax_uri = if ajax_uri.include?('?')
                  "#{ajax_uri}&ontology=#{ont_acronym}&id=#{escape(id)}"
@@ -252,7 +234,6 @@ module ApplicationHelper
       ajax_link_chip(id, ajax_src: ajax_uri, target: target)
     end
   end
-
 
   def get_link_for_cls_ajax(cls_id, ont_acronym, target = nil)
     if cls_id.start_with?('http://') || cls_id.start_with?('https://')
