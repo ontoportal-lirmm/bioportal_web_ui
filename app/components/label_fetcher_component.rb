@@ -3,20 +3,21 @@
 class LabelFetcherComponent < ViewComponent::Base
   include UrlsHelper, Turbo::FramesHelper, ModalHelper
 
-  def initialize(id:, label: nil, link: nil, ajax_src: nil, open_in_modal: false)
+  def initialize(id:, label: nil, link: nil, ajax_src: nil, open_in_modal: false, target: nil)
     super
     @id = id
     @link = link
     @ajax_src = ajax_src
     @open_in_modal = open_in_modal
+    @target = target
 
     if label.nil? || label.eql?(id)
       @link = id
-      @target = '_blank'
+      @target ||= '_blank'
       @label = id
     else
       @label = label
-      @target = '_top'
+      @target ||= '_top'
     end
 
   end
@@ -24,7 +25,7 @@ class LabelFetcherComponent < ViewComponent::Base
   def label_fetcher_container(&block)
     id = "#{escape(@id)}_label"
     if @ajax_src
-      render(TurboFrameComponent.new(id: id, src: @ajax_src, loading: 'lazy')) do |t|
+      render(TurboFrameComponent.new(id: id, src: "#{@ajax_src}&target=#{@target}", loading: 'lazy')) do |t|
         t.loader do
           render ChipButtonComponent.new(url: @id, text: "#{@id} #{render(LoaderComponent.new(small: true))}", type: 'clickable', target: '_blank')
         end
