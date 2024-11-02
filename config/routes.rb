@@ -21,9 +21,7 @@ Rails.application.routes.draw do
   resources :agents, constraints: { id: /.+/ }
   post 'agents/:id', to: 'agents#update', constraints: { id: /.+/ }
 
-  resources :ontolobridge do
-    post :save_new_term_instructions, on: :collection
-  end
+
 
   resources :projects, constraints: { id: /[^\/]+/ }
 
@@ -219,8 +217,4 @@ Rails.application.routes.draw do
   get 'check_resolvability' => 'check_resolvability#index'
   get 'check_url_resolvability' => 'check_resolvability#check_resolvability'
 
-  # Install the default route as the lowest priority.
-  get '/:controller(/:action(/:id))'
-
-  mount Lookbook::Engine, at: "/lookbook"
 end

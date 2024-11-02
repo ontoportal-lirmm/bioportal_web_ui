@@ -93,10 +93,6 @@ $MULTIPLE_RECOGNIZERS = false
 # ["CPT","ICD10","ICNP","ICPC2P","MDDB","MEDDRA","MSHFRE","MSHSPA_1","NDDF","NDFRT","NIC","RCD","SCTSPA","SNOMEDCT","WHO-ART"]
 $RESTRICTED_DOWNLOADS = []
 
-# Ontolobridge endpoint url
-$ONTOLOBRIDGE_BASE_URL = 'https://ontolobridge.ccs.miami.edu/api-test/requests'
-# Ontolobridge authentication token
-$ONTOLOBRIDGE_AUTHENTICATION_TOKEN = 'Token Uq2pae73ktMtmgjUgtnhEOuHxr9sZeuK'
 
 # Ontologies for which to enable the new term request (Ontolobridge) tab
 $NEW_TERM_REQUEST_ONTOLOGIES = []
@@ -331,7 +327,7 @@ $FOOTER_LINKS = {
 
 
 
-$UI_THEME = ENV['UI_THEME'] || 'ontoportal'
+$UI_THEME = ENV['UI_THEME'] || 'bioportal'
 $HOSTNAME = ENV['API_URL']
 
 if $HOSTNAME
