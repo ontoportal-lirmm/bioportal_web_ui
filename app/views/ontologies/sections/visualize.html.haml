@@ -8,10 +8,6 @@
       %div#concept_content.d-flex.flex-column{data:{'container-splitter-target': 'container'}}
         = render partial: 'concepts/show'
 
-    - form_for(:search, :url => {:controller =>'search',:action=>'fetch_results'},:html=>{:id=>'search_form'}) do |f|
-      %input{:name => "search[ontologies][]", :type => "hidden", :value => @ontology.acronym}/
-      = hidden_field :search, :search_type, :value=>"contains"
-      = hidden_field :search, :keyword, :value=>"",:id=>"search_keyword"
   - else
     = render Display::AlertComponent.new(type: 'danger') do
       =  @concept.nil? ? t("ontologies.sections.no_class_concept_found") : @error
