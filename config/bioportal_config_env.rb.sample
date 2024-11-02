@@ -93,10 +93,6 @@ $MULTIPLE_RECOGNIZERS = false
 # ["CPT","ICD10","ICNP","ICPC2P","MDDB","MEDDRA","MSHFRE","MSHSPA_1","NDDF","NDFRT","NIC","RCD","SCTSPA","SNOMEDCT","WHO-ART"]
 $RESTRICTED_DOWNLOADS = []
 
-
-# Ontologies for which to enable the new term request (Ontolobridge) tab
-$NEW_TERM_REQUEST_ONTOLOGIES = []
-
 # Legacy REST core service address (BioPortal v3.x and lower)
 $LEGACY_REST_URL = 'http://example.org:8080/bioportal'
 
@@ -327,7 +323,7 @@ $FOOTER_LINKS = {
 
 
 
-$UI_THEME = ENV['UI_THEME'] || 'bioportal'
+$UI_THEME = ENV['UI_THEME'] || 'ontoportal'
 $HOSTNAME = ENV['API_URL']
 
 if $HOSTNAME
@@ -337,4 +333,3 @@ if $HOSTNAME
     require_relative "bioportal_config_development_#{$HOSTNAME}"
   end
 end
-

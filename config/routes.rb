@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   match 'cookies', to: 'home#set_cookies', via: [:post, :get]
 
   root to: 'home#index'
-  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
+  mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
   get'/tools', to: 'home#tools'
   get 'auth/:provider/callback', to: 'login#create_omniauth'
@@ -142,8 +142,8 @@ Rails.application.routes.draw do
   get 'statistics/index'
 
   # Error pages
-  match "/404", to: "errors#not_found", via: :all
-  match "/500", to: "errors#internal_server_error", via: :all
+  match '/404', to: 'errors#not_found', via: :all
+  match '/500', to: 'errors#internal_server_error', via: :all
 
   # Robots.txt
   get '/robots.txt' => 'robots#index'
@@ -186,16 +186,16 @@ Rails.application.routes.draw do
   get '/ajax/classes/date_sorted_list' => 'concepts#show_date_sorted_list'
   get '/ajax/properties/children' => 'properties#show_children'
   get '/ajax/properties/tree' => 'concepts#property_tree'
-  get 'ajax/schemes/label', to: "schemes#show_label"
-  get 'ajax/collections/label', to: "collections#show_label"
-  get 'ajax/label_xl/label', to: "label_xl#show_label"
-  get 'ajax/label_xl', to: "label_xl#show"
+  get 'ajax/schemes/label', to: 'schemes#show_label'
+  get 'ajax/collections/label', to: 'collections#show_label'
+  get 'ajax/label_xl/label', to: 'label_xl#show_label'
+  get 'ajax/label_xl', to: 'label_xl#show'
   get '/ajax/biomixer' => 'concepts#biomixer'
   get '/ajax/fair_score/html' => 'fair_score#details_html'
   get '/ajax/submission/show_licenses/:id' => 'ontologies#show_licenses'
   get '/ajax/fair_score/json' => 'fair_score#details_json'
-  get '/ajax/ontologies', to: "ontologies#ajax_ontologies"
-  get '/ajax/agents', to: "agents#ajax_agents"
+  get '/ajax/ontologies', to: 'ontologies#ajax_ontologies'
+  get '/ajax/agents', to: 'agents#ajax_agents'
   get '/ajax/images/show' => 'application#show_image_modal'
 
   # User
@@ -217,4 +217,5 @@ Rails.application.routes.draw do
   get 'check_resolvability' => 'check_resolvability#index'
   get 'check_url_resolvability' => 'check_resolvability#check_resolvability'
 
+  mount Lookbook::Engine, at: '/lookbook'
 end
