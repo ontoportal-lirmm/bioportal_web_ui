@@ -581,12 +581,20 @@ fr:
     ontology_visits: Visites d'ontologies
 
   mappings:
+    create_new_mapping: Créer un nouveau mapping
     all: Tous
     description: Plongez dans une vue d'ensemble des mappings dans la vue en bulles, localisez efficacement une ontologie spécifique dans la vue en tableau ou téléchargez vos propres mappings.
     tabs:
       bubble_view: Vue en bulles
       table_view: Vue en tableau
       upload_mappings: Télécharger des mappings
+    types_description:
+      cui: Créé entre 2 concepts ayant le même CUI (Identifiants Uniques de Concepts)
+      loom: Mappings lexicaux créés entre 2 concepts avec des libellés très similaires (nom préféré)
+      rest: Un mapping ajouté par un utilisateur via l'API REST (ou l'interface utilisateur, qui appelle l'API pour le créer)
+      same_uri: Créé entre 2 concepts ayant la même URI.
+      skos: Mapping basés sur des relations SKOS (par exemple, skos:exactMatch ou skos:closeMatch)
+
     filter_ontologies: Filtrer les ontologies dans la vue en bulles
     filter_bubbles: Filtrer les bulles
     external_mappings: "Mappings externes (%{number_with_delimiter})"
