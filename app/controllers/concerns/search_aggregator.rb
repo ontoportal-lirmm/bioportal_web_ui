@@ -252,7 +252,7 @@ module SearchAggregator
     search_results.each do |element|
       element[:root][:other_portals] = []
       element[:reuses].reject! do |reuse|
-        if (element[:root][:ontology_acronym] == reuse[:root][:ontology_acronym]) && (element[:root][:uri] == reuse[:root][:uri])
+        if (element[:root][:ontology_id].split('/').last == reuse[:root][:ontology_id].split('/').last) && (element[:root][:uri] == reuse[:root][:uri])
           portal_name = reuse[:root][:portal_name]
           link = reuse[:root][:link]
           element[:root][:other_portals] << {
