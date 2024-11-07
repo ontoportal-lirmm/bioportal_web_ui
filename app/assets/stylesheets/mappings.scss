@@ -364,3 +364,6 @@ div#map_from_concept_details_table, div#map_to_concept_details_table {
   outline: none;
   margin-left: 0 !important;
 }
+.mappings-table-actions svg path{
+  fill: var(--primary-color);
+}

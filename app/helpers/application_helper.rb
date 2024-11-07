@@ -121,6 +121,9 @@ module ApplicationHelper
     onts_for_select
   end
 
+  def slices_enabled?
+    $ENABLE_SLICES.eql?(true)
+  end
 
   def at_slice?
     !@subdomain_filter.nil? && !@subdomain_filter[:active].nil? && @subdomain_filter[:active] == true

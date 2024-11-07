@@ -266,6 +266,9 @@
   z-index: 1;
 
 }
+.browse-filter .switch-filter > p, .switch-filter > div{
+  max-width: 207px;
+}
 
 .browse-search-bar input:focus {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
