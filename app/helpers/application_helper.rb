@@ -175,10 +175,9 @@ module ApplicationHelper
   end
 
   def subscribed_to_ontology?(ontology_acronym, user)
-    user = LinkedData::Client::Models::User.find(user.username, {include: 'subscription'}) if user.subscription.nil?
+    user = LinkedData::Client::Models::User.find(user.username, {include: 'all'}) if user.subscription.nil?
     return false if user.subscription.nil? or user.subscription.empty?
     user.subscription.each do |sub|
-      #sub = {ontology: ontology_acronym, notification_type: "NOTES"}
       sub_ont_acronym = sub[:ontology] ?  sub[:ontology].split('/').last : nil #  make sure we get the acronym, even if it's a full URI
       return true if sub_ont_acronym == ontology_acronym
     end
