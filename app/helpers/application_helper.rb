@@ -185,11 +185,6 @@ module ApplicationHelper
     return false
   end
 
-  def ontolobridge_instructions_template(ontology)
-    ont_data = Ontology.find_by(acronym: ontology.acronym)
-    ont_data.nil? || ont_data.new_term_instructions.empty? ? t('concepts.request_term.new_term_instructions') : ont_data.new_term_instructions
-  end
-
   # http://stackoverflow.com/questions/1293573/rails-smart-text-truncation
   def smart_truncate(s, opts = {})
     opts = {:words => 20}.merge(opts)

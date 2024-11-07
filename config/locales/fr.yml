@@ -312,40 +312,13 @@ fr:
     date_sorted_list_error: Les Classes/Concepts n'ont pas défini de dates de <strong>création</strong> ou de <strong>modifications</strong> avec dcterms
     list_error: La Collection n'a défini aucun membre
     close: Fermer
-    request_terms_instructions: |
-      Le texte ci-dessous est affiché à l'utilisateur comme les instructions sur la manière de demander de nouveaux termes pour votre ontologie.
-      Vous pouvez changer ce texte pour l'ontologie %{acronym} en cliquant n'importe où sur le texte existant pour
-      ouvrir la boîte de dialogue d'édition.
-      Cliquez sur 'Soumettre les changements' pour sauvegarder ou sur 'Annuler' pour abandonner vos changements.
-    submit_changes: Soumettre les changements
-    cancel: Annuler
-    request_new_term: Demander un nouveau terme
     use_jump_to: Utilisez le "Jump To" pour trouver une classe et afficher les détails, la visualisation, les notes et les mappages
     instances: Instances
     notes: Notes
     details: Détails
     visualization: Visualisation
     mappings: Alignements
-    new_term_requests: Nouvelles demandes de termes
     permanent_link_class: Obtenir un lien permanent vers cette classe
-    request_term:
-      new_term_instructions: |
-        <p>Cette ontologie s'intègre avec OntoloBridge, permettant aux utilisateurs de la communauté de suggérer des ajouts à l'ontologie publique. Complétez le modèle ci-dessous pour soumettre directement une demande de terme au Gestionnaire de l'Ontologie.</p>
-          <blockquote>
-            <p>Libellé du terme (obligatoire)<br>Nom suggéré pour le terme. Si un terme peut être décrit avec plus d'un synonyme, entrez uniquement le nom préféré ici.</p>
-          </blockquote>
-          <blockquote>
-            <p>Description du terme (obligatoire)<br>Une brève définition, description ou utilisation du terme suggéré. Les synonymes d'autres termes peuvent être listés dans cette section.</p>
-          </blockquote>
-          <blockquote>
-            <p>Superclasse (obligatoire)<br>Le terme parent du terme suggéré. Le terme parent doit être une entrée existante dans l'ontologie actuelle. La superclasse peut être sélectionnée directement à partir de l'arbre des classes.</p>
-          </blockquote>
-          <blockquote>
-            <p>Références (optionnel)<br>Fournissez des preuves que le terme demandé existe, telles que des IDs d'articles ou des liens vers d'autres ressources décrivant le terme.</p>
-          </blockquote>
-          <blockquote>
-            <p>Justification (optionnel)<br>Fournissez ici toute information supplémentaire concernant le terme demandé.</p>
-          </blockquote>
 
   home:
     ontoportal_instances: "Autres installations d’OntoPortal"
@@ -992,11 +965,6 @@ fr:
       comment: Commentaire
       save: Sauvegarder
       cancel: Annuler
-
-  ontolobridge:
-    problem_of_creating_new_term: "Problème de création d'un nouveau terme %{endpoint} : %{class} - %{message}"
-    new_term_instructions_saved: Instructions de demande de nouveau terme pour %{acronym} enregistrées
-    error_saving_new_term_instructions: Impossible d'enregistrer les nouvelles instructions de terme pour %{acronym} en raison d'une erreur serveur
 
   submissions:
     filter:

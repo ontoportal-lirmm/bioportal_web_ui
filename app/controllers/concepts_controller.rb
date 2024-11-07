@@ -23,7 +23,6 @@ class ConceptsController < ApplicationController
     redirect_to(ontology_path(id: params[:ontology], p: 'classes', conceptid: params[:id], lang: request_lang)) and return unless turbo_frame_request?
 
     @submission = get_ontology_submission_ready(@ontology)
-    @ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
     @concept = @ontology.explore.single_class({full: true, language: request_lang}, params[:id])
     @instances_concept_id = @concept.id
 
@@ -43,7 +42,6 @@ class ConceptsController < ApplicationController
 
     # Note that find_by_acronym includes views by default
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-    @ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
 
     @submission = @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri')
 
