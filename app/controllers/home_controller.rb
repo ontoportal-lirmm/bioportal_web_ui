@@ -3,12 +3,10 @@
 class HomeController < ApplicationController
   layout :determine_layout
 
-
-  include FairScoreHelper
+  include FairScoreHelper, FederationHelper,MetricsHelper
 
   def index
     @analytics = helpers.ontologies_analytics
-    # Calculate BioPortal summary statistics
 
     @ont_count = if @analytics.empty?
                    LinkedData::Client::Models::Ontology.all.size
@@ -22,12 +20,8 @@ class HomeController < ApplicationController
     end
     @slices = LinkedData::Client::Models::Slice.all
 
-    @cls_count = metrics[:classes]
-    @individuals_count = metrics[:individuals]
-    @prop_count = metrics[:properties]
-    @map_count = total_mapping_count
-    @projects_count = LinkedData::Client::Models::Project.all.length
-    @users_count = LinkedData::Client::Models::User.all.length
+    @metrics = portal_metrics(@analytics)
+
 
     @upload_benefits = [
       t('home.benefit1'),
@@ -41,7 +35,7 @@ class HomeController < ApplicationController
     @anal_ont_numbers = []
     if @analytics.empty?
       all_metrics.sort_by{|x| -(x.classes + x.individuals)}[0..4].each do |x|
-        @anal_ont_names << x.links["ontology"].split('/').last
+        @anal_ont_names << x.id.split('/')[-4]
         @anal_ont_numbers << x.classes + x.individuals
       end
     else
@@ -55,8 +49,17 @@ class HomeController < ApplicationController
   end
 
   def set_cookies
-    session[:cookies_accepted] = params[:cookies] if params[:cookies]
+    cookies.permanent[:cookies_accepted] = params[:cookies] if params[:cookies]
     render 'cookies', layout: nil
+  end
+
+  def portal_config
+    @config = $PORTALS_INSTANCES.select { |x| x[:name].downcase.eql?((params[:portal] || helpers.portal_name).downcase) }.first
+    if @config && @config[:api]
+      @portal_config = LinkedData::Client::Models::Ontology.top_level_links(@config[:api]).to_h
+    else
+      @portal_config = {}
+    end
   end
 
   def tools
@@ -163,6 +166,16 @@ class HomeController < ApplicationController
     elsif params[:submit_button] == "recommender"
       redirect_to "/recommender?input=#{helpers.escape(params[:input])}"
     end
+  end
+
+
+  def federation_portals_status
+    @name = params[:name]
+    @acronym = params[:acronym]
+    @key = params[:portal_name]
+    @checked = params[:checked].eql?('true')
+    @portal_up = federation_portal_status(portal_name: @key.downcase.to_sym)
+    render inline: helpers.federation_chip_component(@key, @name, @acronym, @checked, @portal_up)
   end
 
   private
