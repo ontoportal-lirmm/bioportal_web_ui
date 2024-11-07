@@ -10,21 +10,21 @@ export default class extends Controller {
         const allInputs = this.chipsTarget.querySelectorAll('input')
         const children = this.#categories_with_parents()
         const parents = this.#categories_with_children(children)
-        
-        if(input.value in parents){
-            const parentChildren = parents[input.value]
+
+        if(this.#id_to_acronym(input.value) in parents){
+            const parentChildren = parents[this.#id_to_acronym(input.value)]
             allInputs.forEach(i => {
-                if(parentChildren.includes(i.value) && !input.checked){
+                if(parentChildren.includes(this.#id_to_acronym(i.value)) && !input.checked){
                     i.checked = false;
                     i.dispatchEvent(new Event('change', { bubbles: true })); 
                 }
 
             });
         }
-        if(input.value in children){
-            const childParents = children[input.value]
+        if(this.#id_to_acronym(input.value) in children){
+            const childParents = children[this.#id_to_acronym(input.value)]
             allInputs.forEach(i => {
-                if(childParents.includes(i.value) && input.checked){
+                if(childParents.includes(this.#id_to_acronym(i.value)) && input.checked){
                     i.checked = true;
                     i.dispatchEvent(new Event('change', { bubbles: true })); 
                 }
@@ -54,5 +54,9 @@ export default class extends Controller {
             });
         });
         return parents
+    }
+
+    #id_to_acronym(id){
+        return id.split('/').pop();
     }
 }

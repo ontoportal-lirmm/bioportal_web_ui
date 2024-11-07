@@ -130,12 +130,14 @@ module SubmissionInputsHelper
     categories ||= LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
 
     render Input::InputFieldComponent.new(name: '', label: 'Categories') do
-      content_tag(:div, class: 'upload-ontology-chips-container') do
+      content_tag(:div, class: 'upload-ontology-chips-container', 'data-controller': 'parent-categories-selector', 'data-parent-categories-selector-categories-value': "#{categories.to_json}", 'data-parent-categories-selector-target': "chips") do
         hidden_field_tag('ontology[hasDomain][]') +
-          categories.map do |category|
+        categories.map do |category|
+          content_tag(:div, 'data-action': 'click->parent-categories-selector#check') do
             category_chip_component(id: category[:acronym], name: "ontology[hasDomain][]",
                                     object: category, value: category[:id],
                                     checked: ontology.hasDomain&.any? { |x| x.eql?(category[:id]) })
+            end
           end.join.html_safe
       end
     end
