@@ -15,7 +15,6 @@ class Admin::CategoriesController < ApplicationController
 
   def new
     @category = LinkedData::Client::Models::Category.new
-
     respond_to do |format|
       format.html { render "new", :layout => false }
     end
@@ -123,7 +122,7 @@ class Admin::CategoriesController < ApplicationController
   end
 
   def category_params
-    params.require(:category).permit(:acronym, :name, :description, :parentCategory, {ontologies:[]}).to_h
+    params.require(:category).permit(:acronym, :name, :description, {parentCategory: []}, {ontologies:[]}).to_h
   end
 
   def _categories

@@ -41,7 +41,7 @@ class InstancesController < ApplicationController
 
     redirect_to(ontology_path(id: params[:ontology], p: 'instances', instanceid: params[:id] || params[:instanceid], lang: request_lang)) and return unless turbo_frame_request?
 
-    render partial: 'instances/details', layout: nil
+    render partial: 'show'
   end
 
   private

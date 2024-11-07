@@ -266,6 +266,9 @@
   z-index: 1;
 
 }
+.browse-filter .switch-filter > p, .switch-filter > div{
+  max-width: 207px;
+}
 
 .browse-search-bar input:focus {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
@@ -451,6 +454,25 @@
   margin-top: 10px;
 }
 
+.browse-federation-input-chips{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 15px 15px 15px;
+  div {
+    flex-grow: 1;
+  }
+
+  label{
+    display: grid;
+  }
+}
+.browse-federation-input-chip-container{
+  p{
+    font-size: 14px;
+    font-weight: 400;
+    color: #666666;
+  }
+}
 
 @media only screen and (max-width: 1250px) {
   .browse-first-row {

@@ -176,6 +176,10 @@ class ApplicationController < ActionController::Base
     helpers.rest_url
   end
 
+  def request_portals
+    helpers.request_portals
+  end
+
   def parse_response_body(response)
     return nil if response.nil?
 
@@ -383,23 +387,6 @@ class ApplicationController < ActionController::Base
     return apikey
   end
 
-  def total_mapping_count
-    total_count = 0
-
-    begin
-      stats = LinkedData::Client::HTTP.get("#{REST_URI}/mappings/statistics/ontologies")
-      unless stats.blank?
-        stats = stats.to_h.compact
-        # Some of the mapping counts are erroneously stored as strings
-        stats.transform_values!(&:to_i)
-        total_count = stats.values.sum
-      end
-    rescue
-      LOG.add :error, e.message
-    end
-
-    return total_count
-  end
 
   def determine_layout
     if Rails.env.appliance?
@@ -436,6 +423,10 @@ class ApplicationController < ActionController::Base
     filtered_params = optional_params.reject { |_, value| value.nil? }
     optional_params_str = filtered_params.map { |param, value| "#{param}=#{value}" }.join("&")
     return base_url + optional_params_str + "&apikey=#{$API_KEY}"
+  end
+  
+  def set_federated_portals
+    RequestStore.store[:federated_portals] =  params[:portals]&.split(',')
   end
 
   private

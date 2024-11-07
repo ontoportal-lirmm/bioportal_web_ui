@@ -1,0 +1,10 @@
+.taxonomy-section
+    - pairs, impairs = taxonomies.each_with_index.partition { |_, index| index.even? }
+    - taxonomies_first_row = pairs.map(&:first)
+    - taxonomies_second_row = impairs.map(&:first)
+    .first-row
+        - taxonomies_first_row.each do |taxonomy|
+            = render Display::TaxonomyCardComponent.new(taxonomy: taxonomy, ontologies_names: @ontologies_names)
+    .second-row
+        - taxonomies_second_row.each do |taxonomy|
+            = render Display::TaxonomyCardComponent.new(taxonomy: taxonomy, ontologies_names: @ontologies_names)

@@ -209,6 +209,7 @@ fr:
         description: Description
         created: Créé
         ontologies: Ontologies
+        parent_category: Catégorie parent
       edit:
         edit_category: Modifier la catégorie
         save: Sauvegarder
@@ -304,47 +305,20 @@ fr:
       et aériennes, dans le but de remplacer les méthodes actuelles de contrôle chimique et d'éviter l'utilisation extensive de fongicides, qui conduisent souvent à une résistance chez les pathogènes des plantes.
       En agriculture, les microorganismes promoteurs de croissance des plantes et de biocontrôle ont émergé comme des alternatives sûres aux pesticides chimiques. Les espèces de Streptomyces et leurs
       métabolites peuvent avoir un grand potentiel en tant qu'agents excellents pour contrôler divers phytopathogènes fongiques et bactériens.
-
+    select_ontologies: Sélectionner des ontologies
   concepts:
     error_valid_concept: "Erreur : Vous devez fournir un identifiant de concept valide"
     missing_roots: Racines manquantes
     date_sorted_list_error: Les Classes/Concepts n'ont pas défini de dates de <strong>création</strong> ou de <strong>modifications</strong> avec dcterms
     list_error: La Collection n'a défini aucun membre
     close: Fermer
-    request_terms_instructions: |
-      Le texte ci-dessous est affiché à l'utilisateur comme les instructions sur la manière de demander de nouveaux termes pour votre ontologie.
-      Vous pouvez changer ce texte pour l'ontologie %{acronym} en cliquant n'importe où sur le texte existant pour
-      ouvrir la boîte de dialogue d'édition.
-      Cliquez sur 'Soumettre les changements' pour sauvegarder ou sur 'Annuler' pour abandonner vos changements.
-    submit_changes: Soumettre les changements
-    cancel: Annuler
-    request_new_term: Demander un nouveau terme
     use_jump_to: Utilisez le "Jump To" pour trouver une classe et afficher les détails, la visualisation, les notes et les mappages
     instances: Instances
     notes: Notes
     details: Détails
     visualization: Visualisation
     mappings: Alignements
-    new_term_requests: Nouvelles demandes de termes
     permanent_link_class: Obtenir un lien permanent vers cette classe
-    request_term:
-      new_term_instructions: |
-        <p>Cette ontologie s'intègre avec OntoloBridge, permettant aux utilisateurs de la communauté de suggérer des ajouts à l'ontologie publique. Complétez le modèle ci-dessous pour soumettre directement une demande de terme au Gestionnaire de l'Ontologie.</p>
-          <blockquote>
-            <p>Libellé du terme (obligatoire)<br>Nom suggéré pour le terme. Si un terme peut être décrit avec plus d'un synonyme, entrez uniquement le nom préféré ici.</p>
-          </blockquote>
-          <blockquote>
-            <p>Description du terme (obligatoire)<br>Une brève définition, description ou utilisation du terme suggéré. Les synonymes d'autres termes peuvent être listés dans cette section.</p>
-          </blockquote>
-          <blockquote>
-            <p>Superclasse (obligatoire)<br>Le terme parent du terme suggéré. Le terme parent doit être une entrée existante dans l'ontologie actuelle. La superclasse peut être sélectionnée directement à partir de l'arbre des classes.</p>
-          </blockquote>
-          <blockquote>
-            <p>Références (optionnel)<br>Fournissez des preuves que le terme demandé existe, telles que des IDs d'articles ou des liens vers d'autres ressources décrivant le terme.</p>
-          </blockquote>
-          <blockquote>
-            <p>Justification (optionnel)<br>Fournissez ici toute information supplémentaire concernant le terme demandé.</p>
-          </blockquote>
 
   home:
     ontoportal_instances: "Autres installations d’OntoPortal"
@@ -523,8 +497,11 @@ fr:
       issues_and_requests: Problèmes et demandes
       agreements: Légal
       terms: Termes et conditions
+      terms_anchor: "#h-conditions-generales-dutilisation-dagroportal-francais"
       privacy_policy: Politique de confidentialité
+      privacy_policy_anchor: "#h-vie-privee"
       legal_notices: Mentions légales
+      legal_notices_anchor: "#h-mentions-legales"
       cite_us: Citez-nous
       acknowledgments: Remerciements
       about: À propos
@@ -576,12 +553,20 @@ fr:
     ontology_visits: Visites d'ontologies
 
   mappings:
+    create_new_mapping: Créer un nouveau mapping
     all: Tous
     description: Plongez dans une vue d'ensemble des mappings dans la vue en bulles, localisez efficacement une ontologie spécifique dans la vue en tableau ou téléchargez vos propres mappings.
     tabs:
       bubble_view: Vue en bulles
       table_view: Vue en tableau
       upload_mappings: Télécharger des mappings
+    types_description:
+      cui: Créé entre 2 concepts ayant le même CUI (Identifiants Uniques de Concepts)
+      loom: Mappings lexicaux créés entre 2 concepts avec des libellés très similaires (nom préféré)
+      rest: Un mapping ajouté par un utilisateur via l'API REST (ou l'interface utilisateur, qui appelle l'API pour le créer)
+      same_uri: Créé entre 2 concepts ayant la même URI.
+      skos: Mapping basés sur des relations SKOS (par exemple, skos:exactMatch ou skos:closeMatch)
+
     filter_ontologies: Filtrer les ontologies dans la vue en bulles
     filter_bubbles: Filtrer les bulles
     external_mappings: "Mappings externes (%{number_with_delimiter})"
@@ -933,8 +918,7 @@ fr:
         classes_with_definitions: Classes avec définitions
     show_advanced_options: Afficher les options
     hide_advanced_options: Cacher les options
-    match_in: Correspondance dans
-    ontologies: ontologies
+    match_in: Correspondance dans %{results_size} ontologies de %{portals}
     result_component:
       details: Détails
       visualize: Visualiser
@@ -981,11 +965,6 @@ fr:
       comment: Commentaire
       save: Sauvegarder
       cancel: Annuler
-
-  ontolobridge:
-    problem_of_creating_new_term: "Problème de création d'un nouveau terme %{endpoint} : %{class} - %{message}"
-    new_term_instructions_saved: Instructions de demande de nouveau terme pour %{acronym} enregistrées
-    error_saving_new_term_instructions: Impossible d'enregistrer les nouvelles instructions de terme pour %{acronym} en raison d'une erreur serveur
 
   submissions:
     filter:
@@ -1187,7 +1166,7 @@ fr:
     save: Sauvegarder
 
   ontologies:
-    showing_ontologies_size: "Affichage de %{ontologies_size} sur %{analytics_size}"
+    showing_ontologies_size: "Affichage de %{ontologies_size} sur %{analytics_size} de %{portals}"
     filters: Filtres
     no_license: Pas de licence
     view_license: Voir la licence
@@ -1301,6 +1280,7 @@ fr:
       community: Communauté
       content: Contenu
       info_tooltip_properties_dropdown: Propriétés de métadonnées englobant principalement la conception, les méthodes et les actions pour créer l'ontologie. Cela inclut des éléments tels que les outils et logiciels utilisés par le créateur de l'ontologie lors de sa configuration.
+      info_tooltip_community_dropdown: Propriétés des métadonnées liées aux informations communautaires telles que le dépôt de code et le suivi des problèmes, la liste de diffusion ou le public cible. Cela inclut également les Groupes dans %{site}. Voir plus d'informations sur les Groupes et les Catégories.
       visits: Visites
       views: Vues de %{acronym}
       create_new_view: Créer une nouvelle vue
@@ -1531,3 +1511,12 @@ fr:
     paragraph2: "Les cookies sont fonctionnels et non facultatifs. En restant sur %{portal}, vous reconnaissez que les informations vous ont été transmises."
     accept_button: "Accepter"
     privacy_link: "Vie privé"
+    privacy_policy_anchor: "#h-vie-privee"
+  taxonomy:
+    groups_and_categories: Groupes et Catégories
+    description: Dans AgroPortal, les ontologies sont organisées en groupes et étiquetées avec des catégories. Typiquement, les groupes associent des ontologies provenant du même projet ou de la même organisation pour une meilleure identification de la provenance. Tandis que les catégories concernent des sujets/thématiques et permettent de classifier les ontologies. En 2016, les catégories d'AgroPortal ont été établies en coopération avec FAO AIMS. En 2024, nous sommes passés à la nomenclature de l'UNESCO pour les domaines des sciences et des technologies. Les groupes et les catégories, ainsi que d'autres métadonnées, peuvent être utilisés sur la page “Parcourir” d'AgroPortal pour filtrer la liste des ontologies.
+    show_sub_categories: Afficher les sous-catégories
+  federation:
+    results_from_external_portals: Résultats provenant de portails externes
+    not_responding: ne répond pas.
+    check_status: Vérification de la disponibilité de %{portal}
