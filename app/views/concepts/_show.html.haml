@@ -1,4 +1,4 @@
-= render TurboFrameComponent.new(id: 'concept_show', data: {controller:'labels-ajax-container', 'action': 'turbo:before-fetch-request->labels-ajax-container#abortAll', 'labels-ajax-container-label-ajax-outlet': '#concept_show a[data-controller="label-ajax"]'}) do
+= render TurboFrameComponent.new(id: 'concept_show') do
   - if @concept.id.eql?("bp_fake_root")
     = render Display::AlertComponent.new do
       = t('concepts.use_jump_to')

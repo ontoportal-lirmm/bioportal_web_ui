@@ -8,5 +8,9 @@
     - else
       %div.p-3
         = render LoaderComponent.new(type: 'pulsing')
-  %div{'data-turbo-frame-error-target': 'errorMessage', style:'display: none; width: 100%'}
-    = render Display::AlertComponent.new(type:'danger')
+  %span{'data-turbo-frame-error-target': 'errorMessage', style:'display: none; width: 100%'}
+    - if error?
+      = error
+    - else
+      %div
+        = render Display::AlertComponent.new(type:'danger')

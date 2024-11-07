@@ -77,24 +77,10 @@ module MappingsHelper
     uri
   end
 
-  # method to get (using http) prefLabel for interportal classes
-  # Using bp_ajax_controller.ajax_process_interportal_cls will try to resolve class labels.
-  def ajax_to_inter_portal_cls(cls)
-    inter_portal_acronym = get_inter_portal_acronym(cls.links['ui'])
-    href_cls = " href='#{cls.links["ui"]}' "
-    if inter_portal_acronym
-      data_cls = " data-cls='#{cls.links["self"]}?apikey=' "
-      portal_cls = " portal-cls='#{inter_portal_acronym}' "
-      raw("<a class='interportalcls4ajax' #{data_cls} #{portal_cls} #{href_cls} target='_blank'>#{cls.id}</a>")
-    else
-      raw("<a #{href_cls} target='_blank'>#{cls.id}</a>")
-    end
-
-  end
-
   def ajax_to_internal_cls(cls)
-    link_to("#{cls.id}<span href='/ajax/classes/label?ontology=#{cls.links["ontology"]}&concept=#{escape(cls.id)}' class='get_via_ajax'></span>".html_safe,
-            ontology_path(cls.explore.ontology.acronym, p: 'classes', conceptid: cls.id), target: '_blank')
+    cls_id = cls.id
+    ont_acronym = cls.links['ontology'].split('/').last
+    get_link_for_cls_ajax(cls_id, ont_acronym, '_blank')
   end
 
   # to get the apikey from the interportal instance of the interportal class.
@@ -111,18 +97,15 @@ module MappingsHelper
     end
   end
 
-  # method to extract the prefLabel from the external class URI
-  def get_label_for_external_cls(class_uri)
-    prefLabel = if class_uri.include? '#'
-                  class_uri.split('#')[-1]
-                else
-                  class_uri.split('/')[-1]
-                end
-    return prefLabel
-  end
-
   def ajax_to_external_cls(cls)
-    raw("<a href='#{cls.links['self']}' target='_blank'>#{get_label_for_external_cls(cls.id)}</a>")
+    class_uri = cls.id
+    text = if class_uri.include? '#'
+             class_uri.split('#')[-1]
+           else
+             class_uri.split('/')[-1]
+           end
+    text = render(ExternalLinkTextComponent.new(text: text))
+    link_to text, cls.links['self'], target: '_blank'
   end
 
   # Replace the inter_portal mapping ontology URI (that link to the API) by the link to the ontology in the UI

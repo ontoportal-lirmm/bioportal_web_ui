@@ -4,6 +4,7 @@ class TurboFrameComponent < ViewComponent::Base
   include Turbo::FramesHelper
 
   renders_one :loader
+  renders_one :error
 
   def initialize(id:, src: '', **html_options)
     @id = id

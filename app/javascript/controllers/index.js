@@ -34,12 +34,6 @@ application.register("form-options-display", FormDisplayController)
 import HistoryController from "./history_controller"
 application.register("history", HistoryController)
 
-import LabelAjaxController from "./label_ajax_controller"
-application.register("label-ajax", LabelAjaxController)
-
-import LabelsAjaxContainerController from "./labels_ajax_container_controller"
-application.register("labels-ajax-container", LabelsAjaxContainerController)
-
 import LanguageChangeController from "./language_change_controller"
 application.register("language-change", LanguageChangeController)
 

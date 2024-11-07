@@ -1,0 +1,10 @@
+= label_fetcher_container do
+  - if @open_in_modal
+    = render ChipButtonComponent.new(type: 'clickable') do
+      = link_to_modal(@label, @link)
+  - else
+    %span
+      = render ChipButtonComponent.new(url: @link,
+                                         type: 'clickable',
+                                         text: link_with_icon,
+                                         target: @target)

@@ -23,9 +23,9 @@ class SchemesController < ApplicationController
 
 
       render inline: helpers.render_search_paginated_list(container_id: 'schemes_sorted_list',
-                         next_page_url: "/ontologies/#{@ontology.acronym}/schemes",
-                         child_url: "/ontologies/#{@ontology.acronym}/schemes/show", child_turbo_frame: 'scheme',
-                         child_param: :schemeid,
+                                                          next_page_url: "/ontologies/#{@ontology.acronym}/schemes",
+                                                          child_url: "/ontologies/#{@ontology.acronym}/schemes/show", child_turbo_frame: 'scheme',
+                                                          child_param: :schemeid,
                          results:  results, next_page:  next_page, total_count: total_count)
 
     end
@@ -35,7 +35,7 @@ class SchemesController < ApplicationController
     redirect_to(ontology_path(id: params[:ontology], p: 'schemes', schemeid: params[:id],lang: request_lang)) and return unless turbo_frame_request?
 
     @scheme = get_request_scheme
-    
+
     render partial: "schemes/show"
   end
 
@@ -43,8 +43,9 @@ class SchemesController < ApplicationController
     scheme = get_request_scheme
     scheme_label = scheme ? scheme['prefLabel'] : params[:id]
     scheme_label = scheme_label.nil? || scheme_label.empty? ? params[:id] : scheme_label
-
-    render LabelLinkComponent.inline(params[:id], helpers.main_language_label(scheme_label))
+    label = helpers.main_language_label(scheme_label)
+    link = scheme_path(scheme_id: params[:id], ontology_id: params[:ontology_id])
+    render(inline: helpers.ajax_link_chip(params[:id], label, link, external: scheme.blank?), layout: false)
   end
 
   private

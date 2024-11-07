@@ -276,7 +276,6 @@ class OntologiesController < ApplicationController
       params[:p] = "summary"
     end
 
-    #@ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
 
     # Get the latest submission (not necessarily the latest 'ready' submission)
 
