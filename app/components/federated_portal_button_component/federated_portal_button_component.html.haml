@@ -1,0 +1,7 @@
+%span{'data-controller': 'federation-portals-colors',
+      'data-federation-portals-colors-color-value': color,
+      'data-federation-portals-colors-portal-name-value': name.downcase}
+%a{ href: link, target: '_blank', 'data-controller' => 'tooltip', title: tooltip, class: 'federation-portal-button button icon-right', style: color ? "background-color: #{light_color} !important" : '' }
+  = inline_svg_tag('logos/ontoportal.svg', class: "federated-icon-#{name.downcase}")
+  %div{ class: 'text', style: color ? "color: #{color} !important" : '' }
+    = name.humanize.gsub("portal", "Portal")

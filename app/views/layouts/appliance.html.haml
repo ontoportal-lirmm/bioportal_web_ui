@@ -21,12 +21,11 @@
       jQuery(document).data({bp: {config: #{bp_config_json.html_safe}, user: #{(session[:user] || {}).to_hash.to_json.html_safe}}});
       jQuery(document).data().bp.ontology = #{@ontology.to_json.html_safe} || {};
       jQuery(document).data().bp.submission_latest = #{@submission_latest.to_json.html_safe} || {};
-      jQuery(document).data().bp.ont_viewer = {};
       jQuery(document).data().bp.ont_chart = {};
 
   %body{:class => "#{controller_name} #{action_name}"}
     = render partial: "layouts/topnav"
-    = turbo_frame_tag :cookies_modal, src: cookies_path if session[:cookies_accepted].nil?
+    = turbo_frame_tag :cookies_modal, src: cookies_path if cookies[:cookies_accepted].nil?
 
     %div.flex-grow-1
       = render partial: "layouts/notices"
@@ -35,4 +34,3 @@
       = yield
 
     = render partial: "layouts/footer"
-
