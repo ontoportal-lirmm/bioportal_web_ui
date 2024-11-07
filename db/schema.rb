@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2020_09_21_120918) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_30_210229) do
   create_table "analytics", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "segment"
     t.string "action"

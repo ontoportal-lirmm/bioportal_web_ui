@@ -2,17 +2,16 @@
   = "#{@mappings.size}"
 
 = turbo_frame_tag @type.eql?('modal') ? 'application_modal_content' : 'concept_mappings' do
-  %div{:style => "padding: 1%; width: 98%"}
+  %div.p-1
     - if session[:user].nil?
       = link_to "Create New Mapping", "/login?redirect=/ontologies/#{@ontology.acronym}/?p=classes&t=mappings&conceptid=#{escape(@concept.id)}", :method => :get, :class => "btn btn-default mb-3"
     - else
-      = link_to_modal("Create New Mapping",
-                new_mapping_path(ontology_from: "#{@ontology.id}", conceptid_from: "#{@concept.id}"),
-                id: "new_mapping_btn",
-                role: "button",
-                class: "btn btn-default mb-3",
-                data: { show_modal_title_value: "Create a new mapping for #{@concept.prefLabel}" },
-                )
+      %div{style: 'width: 250px; margin: 0 0 10px 0;'}
+        = link_to_modal(nil,
+                  new_mapping_path(ontology_from: "#{@ontology.id}", conceptid_from: "#{@concept.id}"),
+                  data: { show_modal_title_value: "Create a new mapping for #{@concept.prefLabel}" },
+                  ) do
+          = render Buttons::RegularButtonComponent.new(id:'new_mapping_btn' , value:t('mappings.create_new_mapping'), variant: 'secondary', size: 'slim', state: 'no-anim')
 
     #mapping_details
       = render :partial => '/mappings/mapping_table'

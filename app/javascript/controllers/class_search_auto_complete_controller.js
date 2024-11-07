@@ -11,14 +11,9 @@ export default class extends OntoportalAutocompleteController {
 
     onFindValue(li) {
         if (li == null) {
-            // User performs a search
-            let search = confirm("Class could not be found.\n\nPress OK to go to the Search page or Cancel to continue browsing");
-
-            if (search) {
-                jQuery("#search_keyword").val(jQuery("#search_box").val());
-                jQuery("#search_form").submit();
-                return
-            }
+            // No result found
+            // TODO in this case show a message to redirect to the global search page
+            return
         }
 
         // Appropriate value selected

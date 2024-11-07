@@ -3,11 +3,12 @@
     .d-flex
       .browse-ontology-description
         .browse-ontology-title-bar
-          %a.browse-ontology-title{:href => onto_link, data: {'turbo': 'false'} , style: style_text}
+          %a.browse-ontology-title{:href => onto_link, data: {'turbo': 'false'} , style: style_text, target: external_ontology? ? '_blank' : ''}
             = ontology[:name]+" ("+ontology[:acronym]+")"
             = private_ontology_icon(ontology[:private])
             - if external_ontology?
-              = render Display::InfoTooltipComponent.new(text: "Federated ontology from #{ontology[:sources].map{|x| link_to(x,x)}.join(', ')}", icon: 'external-link.svg')
+              %div{class: "federated-icon-#{@portal_name&.downcase} d-inline"}
+                = render Display::InfoTooltipComponent.new(text: "Federated ontology from #{ontology[:sources].map{|x| link_to(x,x)}.join(', ')}", icon: 'external-link.svg')
             - if session[:user]&.admin?
               - ontology_status = status_string(ontology)
               = render Display::InfoTooltipComponent.new(text: ontology_status, icon: submission_status_icons(ontology_status))
@@ -73,18 +74,12 @@
         %span.mx-1{data:{controller:'tooltip'}, title: t('components.view_of_the_ontology', ontology: ontology[:viewOfOnt].split('/').last )}
           = render ChipButtonComponent.new(type: "clickable", text: t('components.view'), style: style_bg)
 
-      - if external_ontology?
-        - ontology[:sources].each do |id|
-          - config = ontology_portal_config(id)&.last || internal_portal_config(id) || {}
-          - unless config.blank?
-            %div.mx-1{title: content_tag(:div, "Source #{config[:name]}"), data:{controller: 'tooltip', 'tooltip-interactive-value': 'true'}}
-              = render ChipButtonComponent.new(type: "clickable" , style: style_bg) do
-                = link_to ontoportal_ui_link(id), target: '_top' do
-                  %span.d-inline
-                    %span.mr-1
-                      = inline_svg 'logo-white.svg', width: "20", height: "20"
-                    %span
-                      = config[:name]
+
+      - ontology[:sources]&.each do |id|
+        - config = ontology_portal_config(id)&.last || internal_portal_config(id) || {}
+        - unless config.blank?
+          %span{style: "padding: 3px 0; margin-right: 0.25rem;"}
+            = portal_button(name: config[:name], color: config[:color], light_color: config[:"light-color"], link: ontoportal_ui_link(id), tooltip: "Source #{config[:name]}")
 
       - if session[:user]&.admin?
         %div.mx-1{title: content_tag(:div, debug(ontology), style: 'height: 300px; overflow: scroll'), data:{controller: 'tooltip', 'tooltip-interactive-value': 'true'}}

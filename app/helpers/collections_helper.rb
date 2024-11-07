@@ -1,10 +1,11 @@
 module CollectionsHelper
+  include MultiLanguagesHelper, UrlsHelper
 
 
   def get_collections(ontology, add_colors: false)
     collections = ontology.explore.collections(language: request_lang)
     generate_collections_colors(collections) if add_colors
-    collections.sort_by{ |x| x.prefLabel }
+    collections.sort_by{ |x| main_language_label(x.prefLabel) || ''  } if collections
   end
 
   def get_collection(ontology, collection_uri)
@@ -48,8 +49,8 @@ module CollectionsHelper
     end
   end
 
-  def collection_path(collection_id = '', language = '')
-    "/ontologies/#{@ontology.acronym}/collections/show?id=#{escape(collection_id)}&language=#{language}"
+  def collection_path(collection_id: '', ontology_id: @ontology.acronym, language: request_lang)
+    "/ontologies/#{ontology_id}/collections/show?id=#{escape(collection_id)}&language=#{language}"
   end
 
   def request_collection_id
@@ -64,8 +65,8 @@ module CollectionsHelper
     pref_label_lang, pref_label_html = get_collection_label(collection)
     tooltip  = pref_label_lang.to_s.eql?('@none') ? '' :  "data-controller='tooltip' data-tooltip-position-value='right' title='#{pref_label_lang.upcase}'"
     <<-EOS
-          <a id="#{collection['@id']}" href="#{collection_path(collection['@id'], request_lang)}" 
-            data-turbo="true" data-turbo-frame="collection" data-collectionid="#{collection['@id']}"
+          <a id="#{collection['@id']}" href="#{collection_path(collection_id: collection['@id'], ontology_id: @ontology.acronym, language: request_lang)}"
+            data-turbo="true" data-turbo-frame="collection" data-collectionid="#{collection['@id']}" 
            #{tooltip}
             class="#{selected_collection_id.eql?(collection['@id']) ? 'active' : nil}">
               #{pref_label_html}
@@ -91,4 +92,3 @@ module CollectionsHelper
     end
   end
 end
-
