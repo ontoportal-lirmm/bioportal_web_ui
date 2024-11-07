@@ -30,7 +30,6 @@ class DataciteCreatorService < ApplicationService
         attributes: json_metadata
       }
     }
-
     url = URI(@url)
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
@@ -42,6 +41,7 @@ class DataciteCreatorService < ApplicationService
     request.body = data_cite_hash.to_json
 
     response = http.request(request)
+
     json_response = response.read_body
     # convert response as json if response is a string containing a json
     json_response = JSON.parse(json_response) if json_response.is_a?(String) && json_response.start_with?('{')
