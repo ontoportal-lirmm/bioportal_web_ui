@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Connects to data-controller="categories"
+// Connects to data-controller="parent-categories-selector"
 export default class extends Controller {
     static targets = ['chips']
     static values = { categories: Array}
