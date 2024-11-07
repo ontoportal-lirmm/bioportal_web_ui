@@ -11,7 +11,7 @@ class LabelXlController < ApplicationController
     label_xl_label = params[:id] if label_xl_label.nil? || label_xl_label.empty?
     label = helpers.main_language_label(label_xl_label)
     link = "/ajax/label_xl/?id=#{escape(params[:id])}&ontology=#{params[:ontology_id]}&cls_id=#{escape(params[:cls_id])}"
-    render(inline: helpers.ajax_link_chip(params[:id], label, link, open_in_modal: true), layout: false)
+    render(inline: helpers.ajax_link_chip(params[:id], label, link, open_in_modal: true, external: label_xl.blank?), layout: false)
   end
 
   private

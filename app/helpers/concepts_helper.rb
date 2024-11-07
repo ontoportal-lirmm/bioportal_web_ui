@@ -83,7 +83,7 @@ module ConceptsHelper
     @ontology ||= LinkedData::Client::Models::Ontology.find_by_acronym(ont_id).first
     ontology_not_found(ont_id) if @ontology.nil? || @ontology.errors
     cls = @ontology.explore.single_class({language: request_lang, include: 'prefLabel'}, cls_id)
-    cls.prefLabel || cls_id
+    cls&.prefLabel || cls_id
   end
 
   def concept_id_param_exist?(params)

@@ -52,7 +52,7 @@ class CollectionsController < ApplicationController
 
     label = helpers.main_language_label(collection_label)
     link = collection_path(collection_id: params[:id], ontology_id: params[:ontology_id], language: request_lang)
-    render(inline: helpers.ajax_link_chip(params[:id], label, link), layout: false)
+    render(inline: helpers.ajax_link_chip(params[:id], label, link, external: collection.blank?), layout: false)
   end
 
   def show_members

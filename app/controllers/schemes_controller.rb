@@ -45,7 +45,7 @@ class SchemesController < ApplicationController
     scheme_label = scheme_label.nil? || scheme_label.empty? ? params[:id] : scheme_label
     label = helpers.main_language_label(scheme_label)
     link = scheme_path(scheme_id: params[:id], ontology_id: params[:ontology_id])
-    render(inline: helpers.ajax_link_chip(params[:id], label, link), layout: false)
+    render(inline: helpers.ajax_link_chip(params[:id], label, link, external: scheme.blank?), layout: false)
   end
 
   private
