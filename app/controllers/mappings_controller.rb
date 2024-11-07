@@ -118,7 +118,7 @@ class MappingsController < ApplicationController
       ontology_acronym = @ontology.acronym
       @ontology_name = ontology_acronym
     end
-    if @target_ontology.nil?
+    if @target_ontology.nil? || @target_ontology.errors
       if params[:target] == EXTERNAL_MAPPINGS_GRAPH
         target_acronym = EXTERNAL_URL_PARAM_STR
         @target_ontology_name = t('mappings.external_mappings')
@@ -132,7 +132,6 @@ class MappingsController < ApplicationController
     end
 
     ontologies = [ontology_acronym, target_acronym]
-
     @mapping_pages = LinkedData::Client::HTTP.get("#{MAPPINGS_URL}", { page: page, ontologies: ontologies.join(',') })
     not_found(@mapping_pages.errors) if @mapping_pages.respond_to?(:errors)
     @mappings = @mapping_pages.collection

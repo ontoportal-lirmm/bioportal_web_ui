@@ -1,7 +1,6 @@
 class CollectionsController < ApplicationController
   include CollectionsHelper,SearchContent
 
-
   def index
     acronym = params[:ontology]
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
@@ -47,11 +46,13 @@ class CollectionsController < ApplicationController
 
   def show_label
     collection_label = ''
-    collection  = get_request_collection
-    collection_label =  collection['prefLabel'] if collection
-    collection_label = params[:id]  if collection_label.nil? || collection_label.empty?
+    collection = get_request_collection
+    collection_label = collection['prefLabel'] if collection
+    collection_label = params[:id] if collection_label.nil? || collection_label.empty?
 
-    render LabelLinkComponent.inline(params[:id], helpers.main_language_label(collection_label))
+    label = helpers.main_language_label(collection_label)
+    link = collection_path(collection_id: params[:id], ontology_id: params[:ontology_id], language: request_lang)
+    render(inline: helpers.ajax_link_chip(params[:id], label, link, external: collection.blank?), layout: false)
   end
 
   def show_members
