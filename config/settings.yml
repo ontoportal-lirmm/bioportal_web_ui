@@ -21,7 +21,7 @@ shared:
     virtual_appliance: 'https://ontoportal.github.io/administration/'
     widgets: 'http://www.bioontology.org/wiki/NCBO_Widgets'
     mappings: 'https://www.bioontology.org/wiki/BioPortal_Help#Mappings_Tab'
-    metadata_help: 'https://doc.jonquetlab.lirmm.fr/share/32c082ff-97f5-45f4-bafe-05f41c9a5ce4'
+    metadata_help: 'https://ontoportal.github.io/documentation/user_guide/metadata_schema/EcoPortal'
     wiki: 'https://github.com/lifewatch-eric/documentation/wiki'
     youtube: 'https://www.youtube.com/channel/UCP6ag3SoJ6oeisE7ibg4-pg'
 

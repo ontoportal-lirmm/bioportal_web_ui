@@ -143,7 +143,7 @@ module OntologiesHelper
         data-sharer='#{sharer.downcase}'
         data-title='#{ont.name}'
         data-url='#{CGI::escapeHTML($UI_URL + ontology_path(ont.acronym))}'>
-        #{sharer.downcase.eql?('twitter') ? inline_svg_tag('icons/x', width: '21px', height: '18px') : "<i class=\"fab fa-lg fa-#{sharer.downcase} mt-2\"></i>"}
+        #{sharer.downcase.eql?('twitter') ? inline_svg_tag('icons/x.svg', width: '21px', height: '18px') : "<i class=\"fab fa-lg fa-#{sharer.downcase} mt-2\"></i>"}
       </a>
     HTML
              .html_safe
