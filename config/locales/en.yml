@@ -1426,6 +1426,7 @@ en:
     ontology_visits: Ontology visits
     name: name
     visits: visits
+    count: concepts
   ontologies_selector:
     clear_selection: Clear selection
     ontologies_advanced_selection: Ontologies advanced selection
