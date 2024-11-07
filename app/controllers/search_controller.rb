@@ -1,7 +1,7 @@
 require 'uri'
 
 class SearchController < ApplicationController
-  include SearchAggregator, SearchContent
+  include SearchAggregator, SearchContent, FederationHelper
 
   skip_before_action :verify_authenticity_token
 
@@ -13,14 +13,26 @@ class SearchController < ApplicationController
     @advanced_options_open = false
     @search_results = []
     @json_url = json_link("#{rest_url}/search", {})
+    params[:portals] = params[:portals]&.join(',')
 
     return if @search_query.empty?
 
     params[:pagesize] = "150"
-    results = LinkedData::Client::Models::Class.search(@search_query, params).collection
 
+    set_federated_portals
+
+    params[:ontologies] = nil if federated_request?
+
+    @time = Benchmark.realtime do
+      results = LinkedData::Client::Models::Class.search(@search_query, params)
+      @federation_errors = federation_error(results) if federation_error?(results)
+      results = results.collection
+
+
+      @search_results = aggregate_results(@search_query, results)
+      @federation_counts = federated_search_counts(@search_results)
+    end
     @advanced_options_open = !search_params_empty?
-    @search_results = aggregate_results(@search_query, results)
     @json_url = json_link("#{rest_url}/search", params.permit!.to_h)
   end
 
@@ -36,6 +48,7 @@ class SearchController < ApplicationController
       params.delete("ontologies")
     end
     search_page = LinkedData::Client::Models::Class.search(params[:q], params)
+
     @results = search_page.collection
 
     response = ""
@@ -141,7 +154,7 @@ class SearchController < ApplicationController
     [
       :ontologies, :categories,
       :also_search_properties, :also_search_obsolete, :also_search_views,
-      :require_exact_match, :require_definition
+      :require_exact_match, :require_definition, :portals
     ]
   end
 

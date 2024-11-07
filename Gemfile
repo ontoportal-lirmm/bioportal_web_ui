@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 # Main Rails gem
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '7.0.3'
+gem 'rails', '7.0.4'
 
 # JavaScript bundling for Rails
 gem 'jsbundling-rails'
@@ -88,17 +88,21 @@ gem 'view_component', '~> 2.72'
 # Pagination library for Rails
 gem 'will_paginate', '~> 3.0'
 
+# String similarity, used by federated search to rank results
+gem 'string-similarity'
+
 # Render SVG files in Rails views
 gem 'inline_svg'
 
 # ISO language codes and flags
 gem 'flag-icons-rails', '~> 3.4'
 gem 'iso-639', '~> 0.3.6'
+gem 'countries', '~> 5.7'
 
 # Custom API client
-gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'master'
-
+gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'development'
 # Ruby 2.7.8 pinned gems (to remove when migrating to Ruby >= 3.0)
+
 gem 'ffi', '~> 1.16.3'
 gem 'net-ftp', '~> 0.2.0', require: false
 gem 'net-http', '~> 0.3.2'
@@ -110,6 +114,9 @@ gem 'omniauth-github'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-keycloak'
 gem 'omniauth-orcid'
+
+# Used to generate colors randomly
+gem "color", "~> 1.8"
 
 group :staging, :production, :appliance do
   # Application performance monitoring

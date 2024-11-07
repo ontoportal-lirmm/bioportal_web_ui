@@ -44,7 +44,7 @@
       %p
         = t('home.index.tagline')
       = ontologies_content_autocomplete
- 
+
 .home-body-container
   .home-section
     %h4= t('home.ontology_upload', site: portal_name)
@@ -177,13 +177,13 @@
                 = render LoaderComponent.new(type: 'pulsing')
             %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
 
-  - unless @slices.blank?
+  - if slices_enabled?
     .home-section
       .home-section-title
         .text
           = "#{portal_name} slices"
         %hr.home-section-line/
-      .home-section-description 
+      .home-section-description
         .div
           = t('home.slices_description')
       .home-slices-container
@@ -195,8 +195,8 @@
                 .home-slice-ontologies
                   = slice.ontologies.length
                 = inline_svg 'icons/slices.svg', width: "70", height: "70"
-              
-              .home-slice-name 
+
+              .home-slice-name
                 = "#{slice.name} (#{slice.acronym})"
         = render Buttons::RegularButtonComponent.new(id:'regular-button', value: t('home.suggest_slice'), variant: "secondary", state: "regular", href: '/feedback') do |btn|
           - btn.icon_right do
@@ -209,17 +209,18 @@
           = t('home.ontoportal_instances')
         %hr.home-section-line/
 
-      .home-section-description 
+      .home-section-description
         .div
           = home_ontoportal_description
       .home-support-items
         - $PORTALS_INSTANCES&.each do |portal|
-          %div.text-center
-            = link_to portal[:link], target: '_blank', class: 'home-logo-instances', style: "background-color: #{portal[:color]}" do
-              = inline_svg 'logo-white.svg', width: "35", height: "26"
-            %p{style: "color: #{portal[:color]}"} 
-              = portal[:portal]
-  
+          = portal_config_tooltip(portal[:name]) do
+            %div.text-center
+              = link_to portal[:ui], target: '_blank', class: 'home-logo-instances', style: "background-color: #{portal[:color]}" do
+                = inline_svg('logo-white.svg', width: "35", height: "26")
+              %p{style: "color: #{portal[:color]}"}
+                = portal[:name]
+
   .home-section
     .home-section-title
       .text
@@ -230,6 +231,8 @@
         %a{href:logo[:url], target: "_blanc"}
           %img{src: asset_path(logo[:img_src])}
 
+= init_federation_portals_status
+
 :javascript
   function submitAnnotator(){
   document.getElementById("annotator_submit").click()
@@ -237,4 +240,3 @@
   function submitRecommender(){
   document.getElementById("recommender_submit").click()
   }
-

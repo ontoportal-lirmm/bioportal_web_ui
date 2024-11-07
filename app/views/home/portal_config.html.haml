@@ -1,0 +1,42 @@
+= turbo_frame_tag "portal_config_tooltip_#{params[:portal]}" do
+  .portal-configuration
+    .home-section-description.mb-1
+      .div.d-flex.align-items-center
+        %div
+          %div.text-center
+            = link_to @portal_config[:ui] || @config[:ui], target: '_blank', class: 'home-logo-instances mr-1 m-0', style: "background-color: #{@portal_config[:color] || @config[:color]}" do
+              = inline_svg 'logo-white.svg', width: "35", height: "26"
+        %div
+          %div.portal-configuration-title{style: "color: #{@portal_config[:color] || @config[:color]}"}
+            %h3
+              = @portal_config[:title] || @config[:name]
+            - if  @portal_config[:numberOfArtefacts]
+              .portal-config-ontologies
+                = inline_svg_tag 'icons/ontology.svg'
+                %span
+                  = "#{@portal_config[:numberOfArtefacts]} ontologies"
+    - if @portal_config[:description]
+      .portal-description
+        = @portal_config[:description]
+    - if @portal_config[:federated_portals]
+      %div.mb-1
+        .home-section-title
+          .text
+            Federated with
+        .d-flex.flex-wrap.my-1
+          - @portal_config[:federated_portals].to_h.values.compact.each do |portal|
+            .portal-config-federated-with
+              = link_to portal[:ui], target: '_blank', class: 'home-logo-instances-small', style: "background-color: #{portal[:color]};" do
+                = inline_svg 'logo-white.svg', width: "18", height: "13"
+              %p{style: "color: #{portal[:color]}"}
+                = portal[:name]
+
+    - if @portal_config[:fundedBy]
+      %div.mb-1
+        .home-section-title
+          .portal-config-title-text
+            = t('home.support_and_collaborations')
+        .home-support-items.d-flex.flex-wrap.my-1
+          - @portal_config[:fundedBy]&.each do |logo|
+            %a.mx-2.my-1{href:logo[:url], target: "_blanc"}
+              %img{src: asset_path(logo[:img_src]),  width: "18", height: "13"}
