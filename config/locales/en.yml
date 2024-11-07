@@ -203,6 +203,7 @@ en:
         description: Description
         created: Created
         ontologies: Ontologies
+        parent_category: Parent category
       edit:
         edit_category: Edit category
         save: Save
@@ -302,6 +303,7 @@ en:
               and fungi, in an attempt to replace existing methods of chemical control and avoid extensive use of fungicides, which often lead to resistance in plant pathogens.
               In agriculture, plant growth-promoting and biocontrol microorganisms have emerged as safe alternatives to chemical pesticides. Streptomyces spp. and their
               metabolites may have great potential as excellent agents for controlling various fungal and bacterial phytopathogens.
+    select_ontologies: Select ontologies
   concepts:
     error_valid_concept: "Error: You must provide a valid concept id"
     missing_roots: Missing roots
@@ -517,8 +519,11 @@ en:
       issues_and_requests: Issues and Requests
       agreements: Legal
       terms: Terms and Conditions
+      terms_anchor: "#h-agroportal-terms-and-conditions-english"
       privacy_policy: Privacy Policy
+      privacy_policy_anchor: "#h-privacy-policy"
       legal_notices: Legal Notices
+      legal_notices_anchor: "#h-legal-notice"
       cite_us: Cite Us
       acknowledgments: Acknowledgments
       about: About
@@ -567,12 +572,19 @@ en:
     date: Date
     ontology_visits: Ontology visits
   mappings:
+    create_new_mapping: Create new mapping
     all: All
     description: Dive into an overview of the mappings in the bubble view, efficiently locate a specific ontology in the table view or upload your own mappings.
     tabs:
       bubble_view: Bubbles view
       table_view: Table view
       upload_mappings: Upload mappings
+    types_description:
+      cui: Created between 2 concepts that have the same CUI (Concept Unique Identifiers)
+      loom: Lexical mappings created between 2 concepts with very similar labels (preferred name)
+      rest: A mapping added by a user using the REST API (or the UI, which is calling the API to create it)
+      same_uri: Created between 2 concepts with the same URI.
+      skos: Mappings based on SKOS relationships, (e.g. skos:exactMatch or skos:closeMatch)
     filter_ontologies: Filter ontologies in the bubble view
     filter_bubbles: Filter bubbles
     external_mappings: "External Mappings (%{number_with_delimiter})"
@@ -916,8 +928,7 @@ en:
         classes_with_definitions: Classes with definitions
     show_advanced_options: Show options
     hide_advanced_options: Hide options
-    match_in: Match in
-    ontologies: ontologies
+    match_in: Match in %{results_size} ontologies from %{portals}
     result_component:
       details: Details
       visualize: Vizualize
@@ -1161,7 +1172,7 @@ en:
     update_the_current_displayed_content: "will update the current displayed content to all the following submissions:"
     save: Save
   ontologies:
-    showing_ontologies_size: "Showing %{ontologies_size} of %{analytics_size}"
+    showing_ontologies_size: "Showing %{ontologies_size} of %{analytics_size} from %{portals}"
     filters: Filters
     no_license: No license
     view_license: View license
@@ -1275,6 +1286,7 @@ en:
       community: Community
       content: Content
       info_tooltip_properties_dropdown: Metadata properties primarily encompass the design, methods, and actions to create the ontology. This includes elements such as the tools and software employed by the creator of the ontology during its configuration.
+      info_tooltip_community_dropdown: Metadata properties related to community information such as the code repository and issue tracker, the mailing list or the target audience. This includes also the Groups in %{site}. See more information about Groups and Categories.
       visits: Visits
       views: Views of %{acronym}
       create_new_view: Create new view
@@ -1436,6 +1448,8 @@ en:
     preferred_name: Preferred name
     definitions: Definitions
     parent: Parent
+    domain: Domain
+    range: Range
     no_properties_alert: "%{acronym} does not contain properties"
   visits:
     ontology_visits: Ontology visits
@@ -1490,3 +1504,13 @@ en:
     paragraph2: "The cookies are functional and non-optional. By staying on %{portal}, you acknowledge the information was delivered to you."
     accept_button: "Accept"
     privacy_link: "Privacy policy"
+    privacy_policy_anchor: "#h-privacy-policy"
+  taxonomy:
+    groups_and_categories: Groups and Categories
+    description: In AgroPortal, ontologies are organized in groups and tagged with categories. Typically, groups associate ontologies from the same project or organization for better identification of the provenance. Whereas categories are about subjects/topics and enable to classify ontologies. As of 2016, AgroPortal's categories were established in cooperation with FAO AIMS. In 2024, we moved to UNESCO nomenclature for fields of science and technology. Groups and categories, along with other metadata, can be used on the “Browse” page of AgroPortal to filter out the list of ontologies.
+    show_sub_categories: Show sub categories
+
+  federation:
+    results_from_external_portals: Results from external portals
+    not_responding: is not responding.
+    check_status: Checking %{portal} availability

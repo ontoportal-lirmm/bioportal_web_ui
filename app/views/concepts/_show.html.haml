@@ -4,63 +4,32 @@
       = t('concepts.use_jump_to')
   - else
     %div{'data-controller': 'concepts-json', 'data-action': 'click->concepts-json#update'}
-      = render TabsContainerComponent.new(type:'outline') do |c|
-        - c.pinned_right do
-          - if $PURL_ENABLED
-            %div.mx-1
-              = link_to("#classPermalinkModal", class: "class-permalink nav-link", title: t('concepts.permanent_link_class'), aria: {label: t('concepts.permanent_link_class')}, data: {toggle: "modal", current_purl: "#{@current_purl}"}) do
-                %i{class: "fas fa-link", aria: {hidden: "true"}}
-          %div{'data-concepts-json-target': 'button'}
-            .concepts_json_button
-              = render RoundedButtonComponent.new(link: "#{@ontology.id}/classes/#{escape(@concept.id)}?display=all&apikey=#{get_apikey}", target:'_blank')
+      = ontology_object_tabs_component(ontology_id: @ontology.acronym, objects_title: "classes", object_id: @concept.id) do |c|
         - apikey = "apikey=#{get_apikey}"
         - baseClassUrl = "#{@ontology.id}/classes/#{escape(@concept.id)}"
-        - c.item(title: t('concepts.details'), path: '#details', selected: true, json_link: "#{baseClassUrl}?#{apikey}&display=all")
-
-        - unless skos?
-          - c.item(id: 'instances', path: '#instances', json_link: "#{baseClassUrl}/instances?#{apikey}") do
-            = t('concepts.instances')
-            (
-            %span#concept_instances_sorted_list_count
-            )
-
-        - c.item(title: t('concepts.visualization'), path: '#visualization')
-
-        - c.item(id: 'notes', path: '#notes', json_link: "#{baseClassUrl}/notes?#{apikey}") do
-          = t('concepts.notes')
-          %span#note_count_wrapper
-            (
-            %span#note_count= @notes.length
-            )
-        - c.item(id: 'mappings', path: '#mappings', json_link: "#{baseClassUrl}/mappings?#{apikey}") do
-          .d-flex
-            #{t('concepts.mappings')}
-            (
-            = concept_mappings_loader(ontology_acronym: @ontology.acronym, concept_id: @concept.id)
-            )
-
-        - if @enable_ontolobridge
-          - c.item(title: t('concepts.new_term_requests'), path: '#request_term')
-
-        - c.item_content do
+        - tab_item_component(container_tabs: c, title: t('concepts.details'), path: '#details', selected: true, json_link: "#{baseClassUrl}?#{apikey}&display=all") do
           = render :partial =>'/concepts/details'
 
         - unless skos?
-          - c.item_content do
+          - count_span = content_tag(:span, "#{t('concepts.instances')} (#{content_tag(:span, "", id: 'concept_instances_sorted_list_count')})".html_safe)
+          - tab_item_component(container_tabs: c, title: count_span, path: '#instances', json_link: "#{baseClassUrl}/instances?#{apikey}") do
             = render :partial =>'instances/instances' , locals: {id: "class-instances-data-table"}
-        - c.item_content do
+
+
+        - tab_item_component(container_tabs: c, title: t('concepts.visualization'), path: '#visualization') do
           = render :partial =>'/concepts/biomixer'
 
-        - c.item_content do
+
+        - count_span = content_tag(:span, "#{t('concepts.notes')} (#{content_tag(:span, @notes.length, id: 'note_count')})".html_safe)
+        - tab_item_component(container_tabs: c, title: count_span, path: '#notes', json_link: "#{baseClassUrl}/notes?#{apikey}") do
           = render :partial =>'/notes/list'
 
-        - c.item_content do
+
+        - count_span = content_tag(:span, "#{t('concepts.mappings')} (#{content_tag(:span, concept_mappings_loader(ontology_acronym: @ontology.acronym, concept_id: @concept.id))})".html_safe, class: "d-flex")
+        - tab_item_component(container_tabs: c, title: count_span, path: '#mappings', json_link: "#{baseClassUrl}/mappings?#{apikey}") do
           = render TurboFrameComponent.new(id:'concept_mappings',
           src:"/ajax/mappings/get_concept_table?ontologyid=#{@ontology.acronym}&conceptid=#{CGI.escape(@concept.id)}")
 
-        - if @enable_ontolobridge
-          - c.item_content do
-            = render :partial =>'/concepts/request_term'
 
     :javascript
       jQuery(document).ready(function(){

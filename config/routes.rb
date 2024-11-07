@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get 'auth/:provider/callback', to: 'login#create_omniauth'
   get 'locale/:language', to: 'language#set_locale_language'
   get 'metadata_export/index'
+  get '/config', to: 'home#portal_config'
 
   get '/notes/new_comment', to: 'notes#new_comment'
   get '/notes/new_proposal', to: 'notes#new_proposal'
@@ -130,6 +131,7 @@ Rails.application.routes.draw do
   end
 
   get '' => 'home#index'
+  get 'status/:portal_name', to: 'home#federation_portals_status'
 
   match 'sparql_proxy', to: 'admin#sparql_endpoint', via: [:get, :post]
 
@@ -207,6 +209,9 @@ Rails.application.routes.draw do
   post '/accounts/:id/custom_ontologies' => 'users#custom_ontologies', :as => :custom_ontologies
   get '/login_as/:login_as' => 'login#login_as', constraints: { login_as: /[\d\w\.\-\%\+ ]+/ }
   post '/login/send_pass', to: 'login#send_pass'
+
+  get '/groups' => 'taxonomy#index'
+  get '/categories' => 'taxonomy#index'
 
   # Search
   get 'search', to: 'search#index'
