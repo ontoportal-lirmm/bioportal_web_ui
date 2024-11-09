@@ -12,7 +12,6 @@
 //
 //= require bioportal
 //= require admin/licenses
-//= require bp_notes
 //= require bp_form_complete
 //= require bp_admin
 //= require concepts
