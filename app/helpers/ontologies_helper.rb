@@ -529,12 +529,15 @@ module OntologiesHelper
 
   def ontology_object_details_component(frame_id: , ontology_id:, objects_title:, object:, &block)
     render TurboFrameComponent.new(id: frame_id, data: {"turbo-frame-target": "frame"}) do
-      return if !object.present?
-      return alert_component(object.errors.join) if object.errors
+      return unless object.present?
 
-      ontology_object_tabs_component(ontology_id: ontology_id, objects_title: objects_title, object_id: object["@id"]) do |tabs|
-        tab_item_component(container_tabs: tabs, title: t('concepts.details'), path: '#details', selected: true) do
-          capture(&block)
+      if object.errors
+        alert_component(object.errors.join)
+      else
+        ontology_object_tabs_component(ontology_id: ontology_id, objects_title: objects_title, object_id: object["@id"]) do |tabs|
+          tab_item_component(container_tabs: tabs, title: t('concepts.details'), path: '#details', selected: true) do
+            capture(&block)
+          end
         end
       end
     end
