@@ -280,8 +280,8 @@ module ComponentsHelper
     end
   end
 
-  def form_save_button
-    render Buttons::RegularButtonComponent.new(id: 'save-button', value: t('components.save_button'), variant: "primary", size: "slim", type: "submit") do |btn|
+  def form_save_button(enable_loading: true)
+    render Buttons::RegularButtonComponent.new(id: 'save-button', value: t('components.save_button'), variant: "primary", size: "slim", type: "submit", state: enable_loading ? 'animate' : '') do |btn|
       btn.icon_left do
         inline_svg_tag "check.svg"
       end
