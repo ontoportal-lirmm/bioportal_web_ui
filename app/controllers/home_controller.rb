@@ -24,9 +24,10 @@ class HomeController < ApplicationController
     @anal_ont_names = []
     @anal_ont_numbers = []
     if @analytics.empty?
+      all_metrics = LinkedData::Client::Models::Metrics.all
       all_metrics.sort_by{|x| -(x.classes + x.individuals)}[0..4].each do |x|
-        @anal_ont_names << x.links["ontology"].split('/').last
-        @anal_ont_numbers << x.classes + x.individuals
+        @anal_ont_names << x.id.split('/')[-4]
+        @anal_ont_numbers << (x.classes + x.individuals) || 0
       end
     else
       @analytics.sort_by{|ont, count| -count}[0..4].each do |ont, count|
