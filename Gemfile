@@ -95,9 +95,9 @@ gem 'string-similarity'
 gem 'inline_svg'
 
 # ISO language codes and flags
+gem 'countries', '~> 5.7'
 gem 'flag-icons-rails', '~> 3.4'
 gem 'iso-639', '~> 0.3.6'
-gem 'countries', '~> 5.7'
 
 # Custom API client
 gem 'ontologies_api_client', git: 'https://github.com/lifewatch-eric/ontologies_api_ruby_client.git', branch: 'master'
@@ -108,14 +108,14 @@ gem 'net-http', '~> 0.3.2'
 
 # Multi-Provider Authentication
 gem 'omniauth'
-gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-github'
 gem 'omniauth-google-oauth2'
-gem 'omniauth-keycloak'
+gem 'omniauth-keycloak', '~> 1.4'
 gem 'omniauth-orcid'
+gem 'omniauth-rails_csrf_protection', '~> 1.0', '>= 1.0.1'
 
 # Used to generate colors randomly
-gem "color", "~> 1.8"
+gem 'color', '~> 1.8'
 
 group :staging, :production, :appliance do
   # Application performance monitoring
@@ -157,9 +157,9 @@ group :development do
 
   # Internationalization tasks
   # gem 'i18n-debug'
+  gem 'deepl-rb'
   gem 'i18n-tasks'
   gem 'i18n-tasks-csv', '~> 1.1'
-  gem 'deepl-rb'
 
   # Email preview in the browser
   gem 'letter_opener_web', '~> 2.0'
