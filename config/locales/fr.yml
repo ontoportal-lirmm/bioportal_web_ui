@@ -1514,7 +1514,7 @@ fr:
     privacy_policy_anchor: "#h-vie-privee"
   taxonomy:
     groups_and_categories: Groupes et Catégories
-    description: "Dans %{portal}, les ontologies sont organisées en groupes et étiquetées avec des catégories. Typiquement, les groupes associent des ontologies provenant du même projet ou de la même organisation pour une meilleure identification de la provenance. Tandis que les catégories concernent des sujets/thématiques et permettent de classifier les ontologies. En 2016, les catégories d'AgroPortal ont été établies en coopération avec FAO AIMS. En 2024, nous sommes passés à la nomenclature de l'UNESCO pour les domaines des sciences et des technologies. Les groupes et les catégories, ainsi que d'autres métadonnées, peuvent être utilisés sur la page “Parcourir” d'AgroPortal pour filtrer la liste des ontologies."
+    description: "Dans %{portal}, les ontologies sont organisées en groupes et étiquetées avec des catégories. Typiquement, les groupes associent des ontologies provenant du même projet ou de la même organisation pour une meilleure identification de la provenance. Tandis que les catégories concernent des sujets/thématiques et permettent de classifier les ontologies. En 2016, les catégories d'AgroPortal ont été établies en coopération avec FAO AIMS. En 2024, nous sommes passés au Thésaurus de l'UNESCO (https://vocabularies.unesco.org). Les groupes et les catégories, ainsi que d'autres métadonnées, peuvent être utilisés sur la page “Parcourir” d'AgroPortal pour filtrer la liste des ontologies."
     show_sub_categories: Afficher les sous-catégories
   federation:
     results_from_external_portals: Résultats provenant de portails externes
