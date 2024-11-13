@@ -48,8 +48,10 @@ class HomeController < ApplicationController
     @config = $PORTALS_INSTANCES.select { |x| x[:name].downcase.eql?((params[:portal] || helpers.portal_name).downcase) }.first
     if @config && @config[:api]
       @portal_config = LinkedData::Client::Models::Ontology.top_level_links(@config[:api]).to_h
+      return @portal_config = {} if @portal_config.any?{|_, value| value.blank?}
+      return @portal_config
     else
-      @portal_config = {}
+      return @portal_config = {}
     end
   end
 
