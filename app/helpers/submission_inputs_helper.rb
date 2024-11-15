@@ -108,12 +108,12 @@ module SubmissionInputsHelper
 
   end
 
-  def ontology_name_input(ontology = @ontology)
-    text_input(name: 'ontology[name]', value: ontology.name)
+  def ontology_name_input(ontology = @ontology, label: 'Name')
+    text_input(name: 'ontology[name]', value: ontology.name, label: label_required(label))
   end
 
-  def ontology_acronym_input(ontology = @ontology, update: @is_update_ontology)
-    out = text_input(name: 'ontology[acronym]', value: ontology.acronym, disabled: update)
+  def ontology_acronym_input(ontology = @ontology, update: @is_update_ontology, label: 'Acronym')
+    out = text_input(name: 'ontology[acronym]', value: ontology.acronym, disabled: update, label: label_required(label))
     out += hidden_field_tag('ontology[acronym]', ontology.acronym) if update
     out
   end
@@ -123,7 +123,7 @@ module SubmissionInputsHelper
       users_list = LinkedData::Client::Models::User.all(include: "username").map { |u| [u.username, u.id] }
       users_list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
     end
-    select_input(label: t('submission_inputs.administrators'), name: "ontology[administeredBy]", values: users_list, selected: ontology.administeredBy || session[:user].id, multiple: true)
+    select_input(label: label_required(t('submission_inputs.administrators')), name: "ontology[administeredBy]", values: users_list, selected: ontology.administeredBy || session[:user].id, multiple: true)
   end
 
   def ontology_categories_input(ontology = @ontology, categories = @categories)
@@ -213,7 +213,7 @@ module SubmissionInputsHelper
 
     render(Layout::RevealComponent.new(possible_values: %w[private public], selected: ontology.viewingRestriction)) do |c|
       c.button do
-        select_input(label: t('submission_inputs.visibility'), name: "ontology[viewingRestriction]", required: true,
+        select_input(label: label_required(t('submission_inputs.visibility')), name: "ontology[viewingRestriction]", required: true,
                      values: %w[public private],
                      selected: ontology.viewingRestriction)
       end
@@ -248,7 +248,7 @@ module SubmissionInputsHelper
 
       render NestedFormInputsComponent.new(object_name: 'contact', default_empty_row: true) do |c|
         c.header do
-          content_tag(:div, name.blank? ? '' : t('submission_inputs.contact_name', name: name), class: 'w-50') + content_tag(:div, name.blank? ? '' : t('submission_inputs.contact_email', name: name), class: 'w-50')
+          content_tag(:div, name.blank? ? '' : label_required(t('submission_inputs.contact_name', name: name)), class: 'w-50') + content_tag(:div, name.blank? ? '' : label_required(t('submission_inputs.contact_email', name: name)), class: 'w-50')
         end
 
         c.template do
@@ -529,6 +529,13 @@ module SubmissionInputsHelper
       end
 
       help_text
+    end
+  end
+
+  def label_required(label)
+    content_tag(:div) do
+      label.html_safe +
+      content_tag(:span, '*', style: 'color: var(--error-color);')
     end
   end
 end
