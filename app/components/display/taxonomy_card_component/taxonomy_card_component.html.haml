@@ -4,12 +4,22 @@
       = "#{@taxonomy.name} (#{@taxonomy.acronym})"
     %a{href: "https://#{@taxonomy.acronym}.#{$UI_URL.sub("https://", "")}"}
       = inline_svg_tag('icons/slices.svg', class: "taxonomy-slice-svg #{@taxonomy.is_slice ? '' : 'd-none'}")
+  
+  - if link?(@taxonomy.description)
+    .descriptionlink
+      %a.category-link{href: @taxonomy.description, target: '_blank'}
+        = @taxonomy.description
+        = inline_svg_tag 'icons/external-link.svg'
+  
   %a.ontologies{href: "/ontologies?#{@taxonomy.id.split('/')[-2]}=#{@taxonomy.acronym}"}
     = inline_svg_tag('icons/ontology.svg')
     .number-of-ontologies
       = "#{@taxonomy.ontologies.length} ontologies"
-  .description
-    = render TextAreaFieldComponent.new(value: @taxonomy.description)
+
+  - unless link?(@taxonomy.description)
+    .description.mb-1
+      = render TextAreaFieldComponent.new(value: @taxonomy.description)
+
   .ontologies-cards
     - @taxonomy.ontologies.each_with_index do |ontology, index|
       - if index>10
