@@ -5,7 +5,7 @@
     %a{href: "https://#{@taxonomy.acronym}.#{$UI_URL.sub("https://", "")}"}
       = inline_svg_tag('icons/slices.svg', class: "taxonomy-slice-svg #{@taxonomy.is_slice ? '' : 'd-none'}")
   
-  - if description_is_url?
+  - if link?(@taxonomy.description)
     .descriptionlink
       %a.category-link{href: @taxonomy.description, target: '_blank'}
         = @taxonomy.description
@@ -16,7 +16,7 @@
     .number-of-ontologies
       = "#{@taxonomy.ontologies.length} ontologies"
 
-  - unless description_is_url?
+  - unless link?(@taxonomy.description)
     .description.mb-1
       = render TextAreaFieldComponent.new(value: @taxonomy.description)
 
