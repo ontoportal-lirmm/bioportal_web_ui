@@ -16,7 +16,7 @@ module DoiRequestAdministration
 
       doi_requests_data_parsed = JSON.parse(doi_requests_data, symbolize_names: true)
 
-      doi_requests_result = doi_requests_data_parsed.map{ |req| new_doi_request_hash(req) }
+      doi_requests_result = doi_requests_data_parsed.map { |req| new_doi_request_hash(req) }
 
       response[:doi_requests] = doi_requests_result
       response[:success] = 'DOI requests list generated'
@@ -27,14 +27,14 @@ module DoiRequestAdministration
     response
   end
 
-  def process_identifier_requests(success_keyword, error_keyword, action)
+  def process_identifier_requests(success_keyword, error_keyword, action, current_user, portal_name)
 
     response = { errors: '', success: '' }
 
     if params['doi_requests'].nil? || params['doi_requests'].empty?
       response[:errors] = 'No doi_requests parameter passed. Syntax: ?doi_requests=req1,req2,...,reqN'
     else
-      doi_requests = params['doi_requests'].split(',').map { |o| o.strip }
+      doi_requests = params['doi_requests'].split(',').map(&:strip)
       doi_requests.each do |request_id|
         begin
           doi_request = LinkedData::Client::Models::IdentifierRequest.find(request_id)
@@ -44,7 +44,7 @@ module DoiRequestAdministration
               error_response = nil
               case action
               when 'process'
-                error_response = process_doi(doi_request)
+                error_response = process_doi(doi_request, current_user, portal_name)
               when 'reject'
                 error_response = change_request_status(doi_request, 'REJECTED') unless error_response
               else
@@ -64,38 +64,40 @@ module DoiRequestAdministration
           else
             response[:errors] << "Request #{request_id} was not found in the system, "
           end
-        rescue Exception => e
+        rescue StandardError => e
           response[:errors] << "Problem #{error_keyword} Request #{request_id} - #{e.class}: #{e.message}, "
         end
       end
       response[:success] = response[:success][0...-2] unless response[:success].empty?
       response[:errors] = response[:errors][0...-2] unless response[:errors].empty?
     end
-   response
+    response
   end
 
   private
 
-  def process_doi(doi_request)
-    doi_req_submission =  doi_request.submission
+  def process_doi(doi_request, current_user, portal_name)
+    doi_req_submission = doi_request.submission
     ont_submission_id = doi_req_submission.submissionId
-    hash_metadata = data_cite_metadata_json(doi_req_submission.ontology, ont_submission_id)
+    hash_metadata = data_cite_metadata_json(doi_req_submission.ontology, ont_submission_id, current_user, portal_name)
     if doi_request.requestType == 'DOI_CREATE'
       satisfy_doi_creation_request(doi_request, hash_metadata, doi_req_submission)
     elsif doi_request.requestType == 'DOI_UPDATE'
-      #satisfy_doi_update_request(doi_request, hash_metadata)
+      # satisfy_doi_update_request(doi_request, hash_metadata)
     end
   end
 
-  def data_cite_metadata_json( ontology, ont_submission_id)
+  def data_cite_metadata_json(ontology, ont_submission_id, current_user, portal_name)
     ontology_acronym = ontology.acronym
     sub_metadata_url = SUB_DATA_CITE_METADATA_URL.call(ontology_acronym, ont_submission_id)
     hash_metadata = LinkedData::Client::HTTP.get(sub_metadata_url, {}, raw: true)
     json = JSON.parse(hash_metadata, symbolize_names: true)
 
-    json[:titles].each {|t| t.delete(:titleType) if t[:titleType].blank? }
-    #json[:title] = ontology_name
-    json[:url] = json[:url] || (helpers.ontologies_url + '/' +ontology_acronym)
+    json[:titles].each { |t| t.delete(:titleType) if t[:titleType].blank? }
+    json[:publisher] ||= portal_name
+    json[:creators] ||= [{ name: current_user }]
+
+    json[:url] = json[:url] || (helpers.ontologies_url + '/' + ontology_acronym)
     json
   end
 
@@ -122,12 +124,11 @@ module DoiRequestAdministration
     return errors unless error_hash && error_hash.length > 0
 
     errors = error_hash[:error]
-    errors.to_a.map{|x,y| "#{x}: #{y}"}
+    errors.to_a.map { |x, y| "#{x}: #{y}" }
   end
 
   def satisfy_doi_creation_request(doi_request, hash_metadata, submission)
     return OpenStruct.new({ errors: ['Ontology submission not found'] }) if submission.nil?
-
 
     dc_response = DataciteCreatorService.new(hash_metadata).call
 
@@ -152,7 +153,7 @@ module DoiRequestAdministration
   end
 
   def satisfy_doi_update_request(doi_request, hash_metadata)
-    #Ecoportal::DataciteSrv.update_doi_information_to_datacite(hash_metadata.to_json)
+    # Ecoportal::DataciteSrv.update_doi_information_to_datacite(hash_metadata.to_json)
   end
 
   def change_request_status(doi_request, new_status)

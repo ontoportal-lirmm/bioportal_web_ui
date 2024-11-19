@@ -125,8 +125,7 @@ module FederationHelper
 
   def class_federation_configuration(class_object)
     is_external = federation_external_class?(class_object)
-    portal_name = is_external ? helpers.portal_name_from_uri(class_object.links['ui']) : nil
-
+    portal_name = is_external ? helpers.portal_name_from_uri(class_object.links['ui']) : helpers.portal_name
     result = {
       portal_name: portal_name,
       portal_color: is_external ? federated_portal_color(portal_name) : nil,

@@ -298,7 +298,10 @@ class AdminController < ApplicationController
     if params['actions'].nil? || params['actions'].empty?
       response[:errors] = "No operation 'actions' was specified in params for request processing"
     else
-      response = process_identifier_requests('processed', 'processing', params['actions'])
+      response = process_identifier_requests('processed', 'processing',
+                                             params['actions'],
+                                             helpers.current_user.name,
+                                             helpers.portal_name)
     end
 
     if !response[:errors].blank?

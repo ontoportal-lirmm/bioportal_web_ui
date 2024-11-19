@@ -19,13 +19,15 @@
         = t('login.no_account')
         %a.text-decoration-none{:href => new_user_path}= t('login.register')
     %hr.divider.w-100.mb-4.mt-4
-    %div.d-flex.justify-content-around.flew-wrap
+    %p.dont-have-account
+      Or connect using
+    %div.d-flex.justify-content-center.flew-wrap
       - omniauth_providers_info.each do |provider, config|
         - if config[:enable]
           = button_to  "/auth/#{config[:name] || config[:strategy] || provider}",
-                      class: 'btn btn-lg',disabled: !config[:enable] ,style:'width: 70px', title: t('login.login_with_provider', provider: provider.to_s.humanize), 'data-turbo': false do; 
+                      class: 'btn btn-lg', disabled: !config[:enable] , title: t('login.login_with_provider', provider: provider.to_s.humanize), 'data-turbo': false do;
             - if config[:icon]
-              = inline_svg "icons/#{config[:icon]}", class: 'login-active-sso'
+              = inline_svg "#{config[:icon]}", class: 'login-active-sso'
             - else
               = provider.to_s.humanize
         - else

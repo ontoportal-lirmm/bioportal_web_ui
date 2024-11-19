@@ -66,7 +66,7 @@
     - l.row do
       %section.ont-metadata-card.ont-socialshare-card
         %div.ont-section-toolbar
-          %span.pb-2 Share on socials
+          %span Share on socials
           = social_share_link(@ontology, "Facebook")
           = social_share_link(@ontology, "Twitter")
           = social_share_link(@ontology, "LinkedIn")
@@ -85,4 +85,3 @@
     %div.text-center.w-50
       = link_to_modal(nil, metadata_export_datacite_export_path(ontology: @ontology.acronym), {data: {show_modal_title_value: "DataCite metadata", show_modal_size_value: 'modal-xl' }}) do
         Export to DataCite
-      

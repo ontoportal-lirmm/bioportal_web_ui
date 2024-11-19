@@ -386,7 +386,7 @@ en:
         message: Thank you for taking the time to share your feedback with us. Our support team will review your message and get back to you as soon as possible with a response. We value your opinion and appreciate your help in improving our services. Thank you for your support!
     suggest_slice: Suggest a new group/slice
     slices_description: Slices allow users to interact (both via API or UI) only with a subset of ontologies in AgroPortal. If browsing the slice, all the portal features will be restricted to the chosen subset, enabling users to focus on their specific use cases. On AgroPortal, slices and groups are synchronized, so every group has a corresponding slice displaying only the ontologies from that group.
-    ontoportal_description: "The OntoPortal Alliance %{ontoportal_link} is a consortium of research and infrastructure teams dedicated to promoting the development of ontology repositories and semantic artefact catalogues based on the open, collaboratively developed OntoPortal software %{github_link}. Hereafter are the current public and open repositories built with the technology maintained by the Alliance."
+    ontoportal_description: "The OntoPortal Alliance %{ontoportal_link} is a consortium of research and infrastructure teams dedicated to promoting the development of semantic resource repositories and semantic artefact catalogues based on the open, collaboratively developed OntoPortal software %{github_link}. Hereafter are the current public and open repositories built with the technology maintained by the Alliance."
     viewing_slice: "Viewing the slice:"
     view_full_site: View full website
   landscape:
@@ -521,7 +521,7 @@ en:
     enter_email: Enter your username
     enter_password: Enter your password
     forgot_password: Forgot password?
-    private_ontology: This ontology is private. Please login.
+    private_ontology: This semantic resource is private. Please login.
     no_account: Do not have an account?
     password: Password
     register: Register
@@ -558,7 +558,7 @@ en:
       rest: A mapping added by a user using the REST API (or the UI, which is calling the API to create it)
       same_uri: Created between 2 concepts with the same URI.
       skos: Mappings based on SKOS relationships, (e.g. skos:exactMatch or skos:closeMatch)
-    filter_ontologies: Filter ontologies in the bubble view
+    filter_ontologies: Filter semantic resources in the bubble view
     filter_bubbles: Filter bubbles
     external_mappings: "External Mappings (%{number_with_delimiter})"
     interportal_mappings: "Interportal Mappings - %{acronym} (%{number_with_delimiter})"
@@ -901,7 +901,7 @@ en:
         classes_with_definitions: Classes with definitions
     show_advanced_options: Show options
     hide_advanced_options: Hide options
-    match_in: Match in %{results_size} ontologies from %{portals}
+    match_in: Match in %{results_size} semantic resources from %{portals}
     ontologies: semantic resources
     result_component:
       details: Details
@@ -1018,11 +1018,11 @@ en:
       and top concept assertion. %{link}
     ontology_obo_language_link: the OBOinOWL parser.
     ontology_obo_language_help: >
-      OBO ontologies submitted to %{portal_name} will be parsed by the OWL-API which integrates %{link} 
+      OBO semantic resources submitted to %{portal_name} will be parsed by the OWL-API which integrates %{link} 
       The resulting RDF triples will then be loaded in %{portal_name} triple-store.
     ontology_owl_language_link: the Protégé
     ontology_owl_language_help: >
-      OWL ontologies submitted to %{portal_name} will be parsed by the OWL-API. An easy way to verify if your ontology will parse is to open it with
+      OWL semantic resources submitted to %{portal_name} will be parsed by the OWL-API. An easy way to verify if your semantic resource will parse is to open it with
       %{link}
       software which does use the same component.
 
@@ -1210,7 +1210,7 @@ en:
     processing_message: |
       We will now put your semantic resource in the queue to be processed. Please keep in mind that it may take up to several
       hours before %{site} users will be able to explore and search your semantic resource.
-    notification_message: "When your ontology is ready for viewing, you will receive an email notification and it will be available here:"
+    notification_message: "When your semantic resource is ready for viewing, you will receive an email notification and it will be available here:"
     contact_support_at: "If you have any questions or problems, please email the %{site} support team at:"
     collecting_data_message: We are still collecting data for %{acronym}
     submit_new_ontology: Submit new semantic resource
@@ -1255,7 +1255,7 @@ en:
       methodology_and_provenance: Methodology and provenance
       community: Community
       content: Content
-      info_tooltip_properties_dropdown: Metadata properties primarily encompass the design, methods, and actions to create the ontology. This includes elements such as the tools and software employed by the creator of the ontology during its configuration.
+      info_tooltip_properties_dropdown: Metadata properties primarily encompass the design, methods, and actions to create the semantic resource. This includes elements such as the tools and software employed by the creator of the semantic resource during its configuration.
       info_tooltip_community_dropdown: Metadata properties related to community information such as the code repository and issue tracker, the mailing list or the target audience. This includes also the Groups in %{site}. See more information about Groups and Categories.
       visits: Visits
       views: Views of %{acronym}
