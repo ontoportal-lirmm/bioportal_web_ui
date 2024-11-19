@@ -5,7 +5,7 @@
                 = t('taxonomy.groups_and_categories')
             .line
         .taxonomy-page-decription
-            = t('taxonomy.description')
+            = t('taxonomy.description', portal: portal_name)
 
         = render TabsContainerComponent.new do |c|
             - c.item(title: 'Groups', selected: !@category_section_active)

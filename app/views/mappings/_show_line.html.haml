@@ -1,56 +1,23 @@
-- process = map.process || {}
-- source = "#{map.source} #{process[:source_name]}"
-- relations = process[:relation]&.each { |relation| get_prefixed_uri(relation)}
+- type, type_tooltip = mapping_type_tooltip(map)
+- cls_link, ont_link, source_tooltip = mapping_links(map, concept)
 - map_id = map.id.to_s.split("/").last
-- target_concept = map.classes.select {|target_concept| target_concept.id != concept.id && target_concept.links['ontology'] != concept.links['ontology']}.first || map.classes.last
 
-- if inter_portal_mapping?(target_concept)
-  - cls_link = ajax_to_inter_portal_cls(target_concept)
-  - ont_name = target_concept.links['ontology']
-  - ont_acronym = ont_name
-  - ont_link = link_to ont_acronym , get_inter_portal_ui_link(target_concept.links['ontology'], process["name"]), target: '_blank'
-  - type = 'Inter-portal'
-- elsif internal_mapping?(target_concept)
-  - begin
-    - ont = target_concept.explore.ontology
-    - ont_name = ont.acronym
-    - ont_link =  link_to ont_name, ontology_path(ont_name), 'data-turbo-frame':'_top'
-  - rescue
-    - ont_name =   target_concept.links['ontology'] || target_concept.id
-    - ont_link =   ont_name
-  - cls_link = raw(get_link_for_cls_ajax(target_concept.id, ont_name, '_top'))
-  - type = 'Internal'
-- else
-  - cls_label = get_label_for_external_cls(target_concept.links["self"])
-  - cls_link = raw("<a href='#{target_concept.links["self"]}' target='_blank'>#{cls_label}</a>")
-  - ont_name = target_concept.links['ontology']
-  - ont_link = link_to ont_name, target_concept.links['ontology'], target: "_blank"
-  - type = 'External'
-  
 %tr.human{:id => map_id}
-  %td
+  %td.mappings-table-mapping-to
     = cls_link
-  %td
+  %td.mappings-table-mapping-to
     = ont_link
   %td
-    - relations&.each do  |r|
-      = r
-      %br/
-  %td
-    #{source}
-    - if !process.nil?
-      - if translation?(process["relation"])
-        %img{:src => asset_path('sifr/english_language_flag.png'), :style => "padding: 5px", :align => "right", :title => "Traduction"}
-  %td
-    = type
+    = render ChipButtonComponent.new(class: 'chip_button_small mr-1', text: type, tooltip:"#{source_tooltip} mapping of type #{type_tooltip}")
+
   - if current_user_admin?
     %td{:class => 'delete_mappings_column'}
       - if map.id && !map.id.empty? && session[:user] && (session[:user].id.to_i == map.creator || session[:user].admin?) && map.source.eql?('REST')
-        %div.d-flex
-          = link_to_modal(t("mappings.show_line.edit_modal"),
+        %div.d-flex.mappings-table-actions
+          = link_to_modal(nil,
                   mapping_path(map_id, {conceptid_from: @concept.id}),
-                  role: "button",
-                  class: "btn btn-link",
+                  class: 'btn btn-link p-0 mr-1',
                   data: { show_modal_title_value: t("mappings.show_line.edit_mapping", preflabel: @concept.prefLabel)},
-                  )
-          = button_to t("mappings.show_line.delete_button"), CGI.unescape(mapping_path(map.id)), method: :delete, class:'btn btn-link',  form: {data: { turbo: true, turbo_confirm: t("mappings.show_line.turbo_confirm"), turbo_frame: '_top'}}
+                  ) do
+            = inline_svg_tag "edit.svg", width: '15px', height: '15px'
+          = button_to inline_svg_tag('icons/delete.svg', width: '16px', heigth: '16px'), CGI.unescape(mapping_path(map.id)), class: 'btn btn-link p-0', method: :delete,  form: {data: { turbo: true, turbo_confirm: t("mappings.show_line.turbo_confirm"), turbo_frame: '_top'}}

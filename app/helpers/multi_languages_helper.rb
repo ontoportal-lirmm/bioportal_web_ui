@@ -22,6 +22,10 @@ module MultiLanguagesHelper
     }
   end
 
+  def portal_language_enabled?(lang)
+    portal_languages.reject { |_k, x| x[:disabled] }.keys.include?(lang)
+  end
+
   def portal_language_selector
     languages = portal_languages
     selected_language = portal_lang
@@ -153,7 +157,7 @@ module MultiLanguagesHelper
       end
     end
 
-    concept_value || concept.to_a.first
+    concept_value || concept.reject { |k| k.to_s.eql?('@none') }.first || concept.first
   end
 
   def main_language_label(label)
