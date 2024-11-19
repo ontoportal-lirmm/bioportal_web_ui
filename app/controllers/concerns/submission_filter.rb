@@ -72,6 +72,7 @@ module SubmissionFilter
     submissions.group_by { |x| x[:ontology]&.acronym }.each do |acronym, ontologies|
       ontology = canonical_ontology(ontologies)
       ontology[:sources] = ontologies.map { |x| x[:id] }
+      ontology[:sources].reject! { |id| id.include?(portal_name.downcase) } if ontology[:sources].size.eql?(1)
       merged_submissions << ontology
     end
     merged_submissions

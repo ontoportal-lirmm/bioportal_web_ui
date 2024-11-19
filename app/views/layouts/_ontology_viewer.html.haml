@@ -4,26 +4,6 @@
 
 = render :partial =>'layouts/header'
 %div#bd.bg-white.ontology-viewer
-  :javascript
-    // Ontology viewer vars
-    jQuery(document).data().bp.ont_viewer = {};
-    jQuery(document).data().bp.ont_viewer.ontology_id = jQuery(document).data().bp.ontology.acronym;
-    jQuery(document).data().bp.ont_viewer.ontology_version_id = jQuery(document).data().bp.submission_latest.submissionId;
-    jQuery(document).data().bp.ont_viewer.ontology_name = "#{@ontology.name}";
-    jQuery(document).data().bp.ont_viewer.org_site = "#{$ORG_SITE}";
-    jQuery(document).data().bp.ont_viewer.concept_id = "#{params[:conceptid] || (@concept ? @concept.id : 'root')}";
-    jQuery(document).data().bp.ont_viewer.content_section = "#{sanitize(h(content_section))}";
-    jQuery(document).data().bp.ont_viewer.concept_param = "#{"conceptid=\#{params[:conceptid]}" unless params[:conceptid].nil? || params[:conceptid].empty?}";
-    jQuery(document).data().bp.ont_viewer.concept_name = "#{@concept.prefLabel unless @concept.nil?}";
-    jQuery(document).data().bp.ont_viewer.metadata_only = "#{@ontology.summaryOnly}";
-    jQuery(document).data().bp.ont_viewer.current_purl = "#{@current_purl}";
-    jQuery(document).data().bp.ont_viewer.purl_prefix = "#{($PURL_ENABLED ? $PURL_PREFIX+"/"+@ontology.acronym : '')}";
-    jQuery(document).data().bp.ont_viewer.concept_name_title = (jQuery(document).data().bp.ont_viewer.concept_name == "") ?
-        "" : " - " + jQuery(document).data().bp.ont_viewer.concept_name;
-
-
-
-
   = modal_frame_container
 
   = render partial: 'concepts/perma_link_modal'

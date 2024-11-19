@@ -4,7 +4,7 @@
       = @text || content
   - elsif !content
     %a.chip_button_container_clickable{@html_options}
-      = @text
+      = @text.html_safe
   - else
     %span.chip_button_container_clickable{@html_options}
       = content

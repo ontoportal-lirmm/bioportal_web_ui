@@ -108,7 +108,7 @@ module ComponentsHelper
   end
 
   def resolvability_check_tag(url)
-    content_tag(:span, check_resolvability_container(url), style: 'display: inline-block;', onClick: "window.open('#{check_resolvability_url(url: url)}', '_blank');")
+    content_tag(:span, check_resolvability_container(url),  class: 'resolvability-check',style: 'display: inline-block;', onClick: "window.open('#{check_resolvability_url(url: url)}', '_blank');")
   end
 
   def rounded_button_component(link)
@@ -173,6 +173,10 @@ module ComponentsHelper
         end
       end
     end
+  end
+
+  def ajax_link_chip(id, label = nil, link = nil, external: false, open_in_modal: false, ajax_src: nil, target: '_blank')
+    render LabelFetcherComponent.new(id: id, label: label, link: link, open_in_modal: open_in_modal, ajax_src: ajax_src, target: target, external: external)
   end
 
   def chart_component(title: '', type:, labels:, datasets:, index_axis: 'x', show_legend: false)
@@ -273,8 +277,8 @@ module ComponentsHelper
     end
   end
 
-  def form_save_button
-    render Buttons::RegularButtonComponent.new(id: 'save-button', value: t('components.save_button'), variant: "primary", size: "slim", type: "submit") do |btn|
+  def form_save_button(enable_loading: true)
+    render Buttons::RegularButtonComponent.new(id: 'save-button', value: t('components.save_button'), variant: "primary", size: "slim", type: "submit", state: enable_loading ? 'animate' : '') do |btn|
       btn.icon_left do
         inline_svg_tag "check.svg"
       end

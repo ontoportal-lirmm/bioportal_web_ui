@@ -1,4 +1,4 @@
-= render Input::InputFieldComponent.new(label: t("ontologies.location"), name: '') do
+= render Input::InputFieldComponent.new(label: label_required(t("ontologies.location")), name: '') do
   .location-choice
     %input{type: "radio", name: "submission[isRemote]", value: "3", checked: summary_only?, id: "metadata_only", onchange: "displayMetadataOnlyForm()"}
     %label.title{for: "metadata_only"}

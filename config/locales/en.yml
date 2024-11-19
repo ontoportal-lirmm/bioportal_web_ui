@@ -308,40 +308,15 @@ en:
     date_sorted_list_error: The Classes/Concepts didn't define <strong>creation</strong> or <strong>modifications</strong> dates with dcterms
     list_error: The Collection didn't define any member
     close: Close
-    request_terms_instructions: |
-      The text below is displayed to the user as the instructions on how to request new terms for your semantic resource.
-      You can change this text for %{acronym} semantic resource by clicking anywhere on the existing text to 
-      bring up the editing dialog.
-      Click 'Submit Changes' to save or 'Cancel' to discard your changes.
     submit_changes: Submit Changes
-    cancel: Cancel
-    request_new_term: Request New Term
     use_jump_to: Use the "Jump To" to find a class and display details, visualization, notes, and mappings
     instances: Instances
     notes: Notes
     details: Details
     visualization: Visualization
     mappings: Mappings
-    new_term_requests: New Term Requests
     permanent_link_class: Get a permanent link to this class
-    request_term:
-      new_term_instructions: |
-        <p>This semantic resource integrates with OntoloBridge, allowing community users to suggest additions to the public semantic resource. Complete the template below to submit a term request directly to the semantic resource Manager.</p>
-          <blockquote>
-            <p>Term label (required)<br>Suggested term name. If a term can be described with more than one synonym, enter only the preferred name here.</p>
-          </blockquote>
-          <blockquote>
-            <p>Term Description (required)<br>A brief definition, description, or usage of the suggested term. Synonyms of additional terms may be listed in this section.</p>
-          </blockquote>
-          <blockquote>
-            <p>Superclass (required)<br>The parent term of the suggested term. The parent term must be an existing entry in the current semantic resource. The superclass can be selected directly from the class tree.</p>
-          </blockquote>
-          <blockquote>
-            <p>References (optional)<br>Provide evidence that the requested term exists, such as IDs of articles or links to other resources describing the term.</p>
-          </blockquote>
-          <blockquote>
-            <p>Justification (optional)<br>Provide here any additional information about the requested term.</p>
-          </blockquote>
+
   home:
     bug: Bug
     proposition: Proposition
@@ -973,10 +948,6 @@ en:
       comment: Comment
       save: Save
       cancel: Cancel
-  ontolobridge:
-    problem_of_creating_new_term: "Problem creating a new term %{endpoint}: %{class} - %{message}"
-    new_term_instructions_saved: New term request instructions for %{acronym} saved
-    error_saving_new_term_instructions: Unable to save new term instructions for %{acronym} due to a server error
   submissions:
     filter:
       all_formats: All formats
@@ -1454,6 +1425,7 @@ en:
     ontology_visits: Semantic resource visits
     name: name
     visits: visits
+    count: concepts
   ontologies_selector:
     clear_selection: Clear selection
     ontologies_advanced_selection: Semantic resources advanced selection
@@ -1506,7 +1478,7 @@ en:
     privacy_link: "Privacy Statement"
   taxonomy:
     groups_and_categories: Groups and Categories
-    description: In AgroPortal, semantic resources are organized in groups and tagged with categories. Typically, groups associate semantic resources from the same project or organization for better identification of the provenance. Whereas categories are about subjects/topics and enable to classify semantic resources. As of 2016, AgroPortal's categories were established in cooperation with FAO AIMS. In 2024, we moved to UNESCO nomenclature for fields of science and technology. Groups and categories, along with other metadata, can be used on the “Browse” page of AgroPortal to filter out the list of semantic resources.
+    description: "In %{portal}, ontologies are organized in groups and tagged with categories. Typically, groups associate ontologies from the same project or organization for better identification of the provenance. Whereas categories are about subjects/topics and enable to classify ontologies. As of 2016, %{portal}'s categories were established in cooperation with FAO AIMS. In 2024, we moved to UNESCO Thesaurus (https://vocabularies.unesco.org). Groups and categories, along with other metadata, can be used on the “Browse” page of %{portal} to filter out the list of ontologies."
     show_sub_categories: Show sub categories
 
   federation:

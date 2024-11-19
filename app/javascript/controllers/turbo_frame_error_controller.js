@@ -34,7 +34,10 @@ export default class extends Turbo_frame_controller {
     Array.from(styles).forEach(e => el.removeChild(e))
 
     let body = el.querySelector('h1')
-    this.errorMessageTarget.firstElementChild.querySelector('.alert-message').innerHTML =  (body ? body.innerText : el.innerHTML)
+    let alertContainer = this.errorMessageTarget.firstElementChild?.querySelector('.alert-message')
+    if(alertContainer){
+      alertContainer.innerHTML =  (body ? body.innerText : el.innerHTML)
+    }
     $(this.errorMessageTarget).show()
   }
 
