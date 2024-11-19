@@ -26,7 +26,7 @@ Rails.application.routes.draw do
 
   resources :projects, constraints: { id: /[^\/]+/ }
 
-  resources :users, path: :accounts, constraints: { id: /[\d\w\.\-\%\+ ]+/ }
+  resources :users, path: :accounts, constraints: { id: /[\d\w\.\@\-\%\+ ]+/ }
 
   get '/users/subscribe/:username', to: 'users#subscribe'
   get '/users/un-subscribe/:email', to: 'users#un_subscribe'
@@ -219,7 +219,7 @@ Rails.application.routes.draw do
 
   # User
   post '/accounts/:id/custom_ontologies' => 'users#custom_ontologies', :as => :custom_ontologies
-  get '/login_as/:login_as' => 'login#login_as', constraints: { login_as: /[\d\w\.\-\%\+ ]+/ }
+  get '/login_as/:login_as' => 'login#login_as', constraints: { login_as: /[\d\w\.\@\-\%\+ ]+/ }
   post '/login/send_pass', to: 'login#send_pass'
 
   get '/groups' => 'taxonomy#index'
