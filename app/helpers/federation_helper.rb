@@ -53,6 +53,10 @@ module FederationHelper
   end
 
   def ontoportal_ui_link(id)
+    if id.include?($REST_URL)
+      return id.gsub($REST_URL,'')
+    end
+
     portal_key, config = ontology_portal_config(id)
     return nil unless portal_key
 
