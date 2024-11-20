@@ -32,7 +32,7 @@ class TaxonomyController < ApplicationController
       category_index[category[:id]] = category
     end
     categories.each do |category|
-      category[:parentCategory].each do |parent_id|
+      category[:parentCategory]&.each do |parent_id|
         parent = category_index[parent_id]
         parent[:children] ||= []
         parent[:children] << category
