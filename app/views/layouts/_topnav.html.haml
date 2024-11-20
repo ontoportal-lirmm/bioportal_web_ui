@@ -44,8 +44,6 @@
               - s.item do
                 = link_to(t('layout.header.logout'), logout_path)
 
-        = portal_language_selector
-
         = render DropdownButtonComponent.new do |d|
           - d.header do
             = link_to("#", id: "supportMenuDropdownLink", class: "nav-link top-nav-nav-link supportMenuDropdownLink", role: "button") do
@@ -62,4 +60,3 @@
               = link_to(t('layout.header.release_notes'), $FOOTER_LINKS[:sections][:products][:release_notes], target: "_blank")
             - s.item do
               = link_to(t('taxonomy.groups_and_categories'), '/groups')
-

@@ -323,7 +323,7 @@ module ApplicationHelper
       ["/recommender", t("layout.header.recommender")],
       ["/annotator", t("layout.header.annotator")],
       ["/landscape", t("layout.header.landscape")],
-      ["http://vocbench.lifewatchitaly.eu/", "Vocbench"]
+      ["http://vocbench.lifewatchitaly.eu/", "VocBench"]
     ]
   end
 
