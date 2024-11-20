@@ -4,9 +4,9 @@ module AutoCompleteHelper
     render OntologySearchInputComponent.new
   end
 
-  def ontologies_content_autocomplete(id: '', name: '', search: '', ontologies: [], types: [], search_icon_type: 'home')
+  def ontologies_content_autocomplete(id: '', name: '', placeholder: nil, search: '', ontologies: [], types: [], search_icon_type: 'home')
     render SearchInputComponent.new(id: id, name: name, ajax_url: "#{ajax_search_ontologies_content_path}?ontologies=#{ontologies.join(',')}&types=#{types.join(',')}&search=#{search}",
-                                    item_base_url: "", id_key: 'id', placeholder: t("ontologies.ontology_search_prompt"),
+                                    item_base_url: "", id_key: 'id', placeholder: placeholder || t("ontologies.ontology_search_prompt"),
                                     use_cache: false, search_icon_type: search_icon_type,
                                     actions_links: { search_ontology_content: "/search?query=o", browse_all_ontologies: "/ontologies?search=o" }) do |s|
       s.template do

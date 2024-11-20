@@ -1174,6 +1174,7 @@ en:
     outside: outside
     relation_with_other_ontologies: Relation with other semantic resources either in %{inside} or %{outside}
     ontology_search_prompt: 'Search a semantic resource or a term (e.g., Environmental impact)'
+    ontology_search_topnav: 'Search...'
     views: Views
     create_new_view: Create new view
     expand_all: Expand All
