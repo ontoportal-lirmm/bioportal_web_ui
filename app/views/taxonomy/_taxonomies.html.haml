@@ -1,10 +1,19 @@
 .taxonomy-section
-    - pairs, impairs = taxonomies.each_with_index.partition { |_, index| index.even? }
-    - taxonomies_first_row = pairs.map(&:first)
-    - taxonomies_second_row = impairs.map(&:first)
-    .first-row
-        - taxonomies_first_row.each do |taxonomy|
-            = render Display::TaxonomyCardComponent.new(taxonomy: taxonomy, ontologies_names: @ontologies_names)
-    .second-row
-        - taxonomies_second_row.each do |taxonomy|
-            = render Display::TaxonomyCardComponent.new(taxonomy: taxonomy, ontologies_names: @ontologies_names)
+    - if taxonomies.blank?
+        .taxonomy-empty-illustration
+            = inline_svg_tag 'empty-box.svg'
+            .taxonomy-empty-illustration-text
+                No group is created yet
+            - if session[:user]&.admin?
+                .taxonomy-empty-illustration-button
+                    = render Buttons::RegularButtonComponent.new(id:'create-taxonomy', value: "Create #{type}", variant: "secondary", size: "slim", href: "/admin?section=#{type}")
+    - else
+        - pairs, impairs = taxonomies.each_with_index.partition { |_, index| index.even? }
+        - taxonomies_first_row = pairs.map(&:first)
+        - taxonomies_second_row = impairs.map(&:first)
+        .first-row
+            - taxonomies_first_row.each do |taxonomy|
+                = render Display::TaxonomyCardComponent.new(taxonomy: taxonomy, ontologies_names: @ontologies_names)
+        .second-row
+            - taxonomies_second_row.each do |taxonomy|
+                = render Display::TaxonomyCardComponent.new(taxonomy: taxonomy, ontologies_names: @ontologies_names)
