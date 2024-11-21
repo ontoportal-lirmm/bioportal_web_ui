@@ -253,12 +253,15 @@ class ApplicationController < ActionController::Base
   end
 
   def authorize_admin
-    admin = session[:user] && session[:user].admin?
-    redirect_to_home unless admin
+    redirect_to_home unless current_user_admin?
   end
 
   def current_user_admin?
-    session[:user] && session[:user].admin?
+    session[:user]&.admin? || current_login_as_admin?
+  end
+
+  def current_login_as_admin?
+    session[:admin_user]&.admin?
   end
 
   def ontology_restricted?(acronym)

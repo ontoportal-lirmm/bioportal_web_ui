@@ -63,7 +63,18 @@
 }
 .taxonomy-card .description{
     color: #666666;
-    padding-bottom: 5px;
+}
+
+.taxonomy-card .descriptionlink svg{
+    margin: 0px 2px;
+    height: 19px;
+}
+
+.taxonomy-card .descriptionlink svg path{
+    fill: #666666;
+}
+.category-link{
+    color: #666666 !important;
 }
 .taxonomy-slice-svg{
     width: 35px;

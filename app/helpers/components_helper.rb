@@ -172,6 +172,10 @@ module ComponentsHelper
     end
   end
 
+  def ajax_link_chip(id, label = nil, link = nil, external: false, open_in_modal: false, ajax_src: nil, target: '_blank')
+    render LabelFetcherComponent.new(id: id, label: label, link: link, open_in_modal: open_in_modal, ajax_src: ajax_src, target: target, external: external)
+  end
+
   def chart_component(title: '', type:, labels:, datasets:, index_axis: 'x', show_legend: false)
     data = {
       controller: 'load-chart',
@@ -276,8 +280,8 @@ module ComponentsHelper
     end
   end
 
-  def form_save_button
-    render Buttons::RegularButtonComponent.new(id: 'save-button', value: t('components.save_button'), variant: "primary", size: "slim", type: "submit") do |btn|
+  def form_save_button(enable_loading: true)
+    render Buttons::RegularButtonComponent.new(id: 'save-button', value: t('components.save_button'), variant: "primary", size: "slim", type: "submit", state: enable_loading ? 'animate' : '') do |btn|
       btn.icon_left do
         inline_svg_tag "check.svg"
       end

@@ -23,7 +23,6 @@ class ConceptsController < ApplicationController
     redirect_to(ontology_path(id: params[:ontology], p: 'classes', conceptid: params[:id], lang: request_lang)) and return unless turbo_frame_request?
 
     @submission = get_ontology_submission_ready(@ontology)
-    @ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
     @concept = @ontology.explore.single_class({full: true, language: request_lang}, params[:id])
     @instances_concept_id = @concept.id
 
@@ -43,7 +42,6 @@ class ConceptsController < ApplicationController
 
     # Note that find_by_acronym includes views by default
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-    @ob_instructions = helpers.ontolobridge_instructions_template(@ontology)
 
     @submission = @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri')
 
@@ -63,10 +61,18 @@ class ConceptsController < ApplicationController
   end
 
   def show_label
-    cls_id = params[:concept] || params[:id]  # cls_id should be a full URI
-    ont_id = params[:ontology]  # ont_id could be a full URI or an acronym
+    cls_id = params[:concept] || params[:id]
+    ont_id = params[:ontology]
+    pref_label = begin
+                   concept_label(ont_id, cls_id)
+                 rescue
+                   cls_id
+                 end
+    cls = @ontology.explore&.single_class({ language: request_lang, include: 'prefLabel' }, cls_id)
+    label = helpers.main_language_label(pref_label)
+    link = concept_path(cls_id, ont_id, request_lang)
 
-    render LabelLinkComponent.inline(cls_id, helpers.main_language_label(concept_label(ont_id, cls_id)))
+    render(inline: helpers.ajax_link_chip(cls_id, label, link, external: cls.nil? || cls.errors), layout: nil)
   end
 
   def show_definition
@@ -87,8 +93,8 @@ class ConceptsController < ApplicationController
       not_found(t('concepts.missing_roots')) if @root.nil?
 
       render inline: helpers.concepts_tree_component(@root, @concept,
-                                      @ontology.acronym, Array(params[:concept_schemes]&.split(',')), request_lang,
-                                      id: 'concepts_tree_view', auto_click: params[:auto_click] || true)
+                                                     @ontology.acronym, Array(params[:concept_schemes]&.split(',')), request_lang,
+                                                     id: 'concepts_tree_view', auto_click: params[:auto_click] || true)
     end
   end
 

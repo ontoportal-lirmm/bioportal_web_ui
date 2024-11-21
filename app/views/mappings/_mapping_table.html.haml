@@ -14,7 +14,3 @@
         = render partial: 'mappings/show_line' , locals: {map: map, concept: @concept}
       %tr.empty-state
         %td.text-center{:colspan => "6"}= t("mappings.mapping_table.no_mappings")
-:javascript
-  jQuery(document).ready(function(){
-    ajax_process_init();
-  })

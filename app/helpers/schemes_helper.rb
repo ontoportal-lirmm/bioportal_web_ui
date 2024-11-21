@@ -1,4 +1,5 @@
 module SchemesHelper
+  include UrlsHelper
 
   def get_schemes(ontology)
     ontology.explore.schemes(language: request_lang)
@@ -47,8 +48,8 @@ module SchemesHelper
     t("ontology_details.sections.#{section}")
   end
 
-  def scheme_path(scheme_id = '', language = '')
-    "/ontologies/#{@ontology.acronym}/schemes/show?id=#{escape(scheme_id)}&lang=#{language}"
+  def scheme_path(ontology_id: @ontology.acronym, scheme_id: '', language: request_lang)
+    "/ontologies/#{ontology_id}/schemes/show?id=#{escape(scheme_id)}&lang=#{language}"
   end
 
   def no_main_scheme?
@@ -64,6 +65,7 @@ module SchemesHelper
       t('schemes.no_main_scheme_alert')
     end
   end
+
   def no_schemes_alert
     render Display::AlertComponent.new do
       t('schemes.no_schemes_alert', acronym: @ontology.acronym)
@@ -88,7 +90,6 @@ module SchemesHelper
       scheme
     end.compact
 
-
     main_scheme = nil
     if main_scheme_label.nil?
       children = schemes
@@ -105,8 +106,8 @@ module SchemesHelper
     root.children = children
     selected_scheme = selected_scheme || main_scheme || root.children.first
     tree_component(root, selected_scheme, target_frame: 'scheme', auto_click: false, submission: submission) do |child|
-      href = scheme_path(child['@id'], request_lang) rescue  ''
-      data = { schemeid: (child['@id'] rescue '')}
+      href = scheme_path(scheme_id: child['@id'], ontology_id: @ontology.acronym, language: request_lang)
+      data = { schemeid: child['@id']}
       ["#", data, href]
     end
   end
