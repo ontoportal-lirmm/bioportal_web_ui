@@ -15,9 +15,7 @@
             %tr
               - map.classes.each do |cls|
                 %td
-                  - if inter_portal_mapping?(cls)
-                    = ajax_to_inter_portal_cls(cls)
-                  - elsif internal_mapping?(cls)
+                  - if internal_mapping?(cls)
                     = ajax_to_internal_cls(cls)
                   - else
                     = ajax_to_external_cls(cls)
@@ -25,8 +23,3 @@
                 #{map.source} #{(map.process || {})[:source_name]}
       .mappings-table-pagination
         = will_paginate @page_results, :update => 'mappings', :params => { :target => params[:target] }
-
-  :javascript
-    jQuery(document).ready(function(){
-      ajax_process_init();  // see bp_ajax_controller.js
-    })

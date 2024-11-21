@@ -50,4 +50,4 @@
       .form-group
         = text_field_tag 'proposal[parent]','', placeholder: t('notes.new_proposal.parent'), class: "form-control", required: true
 
-    = submit_tag t('notes.new_proposal.save') , class:'btn btn-success btn-block'
+    = form_save_button(enable_loading: false)

@@ -9,7 +9,7 @@ module ApplicationHelper
   REST_URI = $REST_URL
   API_KEY = $API_KEY
 
-  include ModalHelper, MultiLanguagesHelper, UrlsHelper
+  include ModalHelper, MultiLanguagesHelper, UrlsHelper, ComponentsHelper
 
 
   RESOLVE_NAMESPACE = {:omv => "http://omv.ontoware.org/2005/05/ontology#", :skos => "http://www.w3.org/2004/02/skos/core#", :owl => "http://www.w3.org/2002/07/owl#",
@@ -19,7 +19,7 @@ module ApplicationHelper
                         :umls => "http://bioportal.bioontology.org/ontologies/umls/", :door => "http://kannel.open.ac.uk/ontology#", :dct => "http://purl.org/dc/terms/",
                         :void => "http://rdfs.org/ns/void#", :foaf => "http://xmlns.com/foaf/0.1/", :vann => "http://purl.org/vocab/vann/", :adms => "http://www.w3.org/ns/adms#",
                         :voaf => "http://purl.org/vocommons/voaf#", :dcat => "http://www.w3.org/ns/dcat#", :mod => "http://www.isibang.ac.in/ns/mod#", :prov => "http://www.w3.org/ns/prov#",
-                       :cc => "http://creativecommons.org/ns#", :schema => "http://schema.org/", :doap => "http://usefulinc.com/ns/doap#", :bibo => "http://purl.org/ontology/bibo/",
+                        :cc => "http://creativecommons.org/ns#", :schema => "http://schema.org/", :doap => "http://usefulinc.com/ns/doap#", :bibo => "http://purl.org/ontology/bibo/",
                        :wdrs => "http://www.w3.org/2007/05/powder-s#", :cito => "http://purl.org/spar/cito/", :pav => "http://purl.org/pav/", :nkos => "http://w3id.org/nkos/nkostype#",
                        :oboInOwl => "http://www.geneontology.org/formats/oboInOwl#", :idot => "http://identifiers.org/idot/", :sd => "http://www.w3.org/ns/sparql-service-description#",
                        :cclicense => "http://creativecommons.org/licenses/",
@@ -55,7 +55,6 @@ module ApplicationHelper
     end
   end
 
-
   def omniauth_providers_info
     $OMNIAUTH_PROVIDERS || {}
   end
@@ -75,7 +74,6 @@ module ApplicationHelper
   def current_user_admin?
     session[:user] && session[:user].admin?
   end
-
 
   def child_id(child)
     child.id.to_s.split('/').last
@@ -131,7 +129,7 @@ module ApplicationHelper
 
   def add_comment_button(parent_id, parent_type)
     if session[:user].nil?
-      link_to t('application.add_comment'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim"
+      link_to t('application.add_comment'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim", data: {'turbo-frame': '_top'}
     else
       link_to_modal t('application.add_comment'), notes_new_comment_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
                     class: "secondary-button regular-button slim", data: { show_modal_title_value: t('application.add_new_comment')}
@@ -148,13 +146,12 @@ module ApplicationHelper
 
   def add_proposal_button(parent_id, parent_type)
     if session[:user].nil?
-      link_to t('application.add_proposal'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim"
+      link_to t('application.add_proposal'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim",  data: {'turbo-frame': '_top'}
     else
       link_to_modal t('application.add_proposal'), notes_new_proposal_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
                     class: "secondary-button regular-button slim", data: { show_modal_title_value: t('application.add_new_proposal')}
     end
   end
-
 
   def subscribe_button(ontology_id)
     return if ontology_id.nil?
@@ -178,19 +175,13 @@ module ApplicationHelper
   end
 
   def subscribed_to_ontology?(ontology_acronym, user)
-    user = LinkedData::Client::Models::User.find(user.username, {include: 'subscription'}) if user.subscription.nil?
+    user = LinkedData::Client::Models::User.find(user.username, {include: 'all'}) if user.subscription.nil?
     return false if user.subscription.nil? or user.subscription.empty?
     user.subscription.each do |sub|
-      #sub = {ontology: ontology_acronym, notification_type: "NOTES"}
       sub_ont_acronym = sub[:ontology] ?  sub[:ontology].split('/').last : nil #  make sure we get the acronym, even if it's a full URI
       return true if sub_ont_acronym == ontology_acronym
     end
     return false
-  end
-
-  def ontolobridge_instructions_template(ontology)
-    ont_data = Ontology.find_by(acronym: ontology.acronym)
-    ont_data.nil? || ont_data.new_term_instructions.empty? ? t('concepts.request_term.new_term_instructions') : ont_data.new_term_instructions
   end
 
   # http://stackoverflow.com/questions/1293573/rails-smart-text-truncation
@@ -226,95 +217,40 @@ module ApplicationHelper
     bootstrap_alert_class[flash_key]
   end
 
-  def bp_ont_link(ont_acronym)
-    return "/ontologies/#{ont_acronym}"
-  end
+  def label_ajax_link(id, ont_acronym, ajax_uri, target)
+    ajax_uri = if ajax_uri.include?('?')
+                 "#{ajax_uri}&ontology=#{ont_acronym}&id=#{escape(id)}"
+               else
+                 "#{ajax_uri}?ontology=#{ont_acronym}&id=#{escape(id)}"
+               end
 
-  def bp_class_link(cls_id, ont_acronym)
-    return "#{bp_ont_link(ont_acronym)}?p=classes&conceptid=#{escape(cls_id)}&language=#{request_lang}"
-  end
-
-  def bp_scheme_link(scheme_id, ont_acronym)
-    return "#{bp_ont_link(ont_acronym)}?p=schemes&schemeid=#{escape(scheme_id)}"
-  end
-
-  def bp_label_xl_link(label_xl_id, ont_acronym)
-    return "#{bp_ont_link(ont_acronym)}/?label_xl_id=#{escape(label_xl_id)}"
-  end
-
-  def bp_collection_link(collection_id, ont_acronym)
-    "#{bp_ont_link(ont_acronym)}?p=collection&collectionid=#{escape(collection_id)}"
-  end
-
-  def label_ajax_data_h(cls_id, ont_acronym, ajax_uri, cls_url)
-    { data:
-        {
-          'label-ajax-cls-id-value': cls_id,
-          'label-ajax-ontology-acronym-value': ont_acronym,
-          'label-ajax-ajax-url-value': ajax_uri,
-          'label-ajax-cls-id-url-value': cls_url
-        }
-    }
-  end
-
-  def label_ajax_data(cls_id, ont_acronym, ajax_uri, cls_url)
-    label_ajax_data_h(cls_id, ont_acronym, ajax_uri, cls_url)
-  end
-
-  def label_ajax_link(link, cls_id, ont_acronym, ajax_uri, cls_url, target = nil)
-    data = label_ajax_data(cls_id, ont_acronym, ajax_uri, cls_url)
-    options = {  'data-controller': 'label-ajax' }.merge(data)
-    options = options.merge({ target: target }) if target
-    content_tag(:span, class: 'mx-1') do
-      render ChipButtonComponent.new(url: link, text: cls_id, type: 'clickable', **options)
+    content_tag(:span, class: 'concepts-mapping-count') do
+      ajax_link_chip(id, ajax_src: ajax_uri, target: target)
     end
   end
 
   def get_link_for_cls_ajax(cls_id, ont_acronym, target = nil)
     if cls_id.start_with?('http://') || cls_id.start_with?('https://')
-      link = bp_class_link(cls_id, ont_acronym)
       ajax_url = '/ajax/classes/label'
-      cls_url = "/ontologies/#{ont_acronym}?p=classes&conceptid=#{CGI.escape(cls_id)}"
-      label_ajax_link(link, cls_id, ont_acronym, ajax_url , cls_url ,target)
+      label_ajax_link(cls_id, ont_acronym, ajax_url, target)
     else
       content_tag(:div, cls_id)
     end
   end
 
-  def get_link_for_ont_ajax(ont_acronym)
-    # ajax call will replace the acronym with an ontology name (triggered by class='ont4ajax')
-    href_ont = " href='#{bp_ont_link(ont_acronym)}' "
-    data_ont = " data-ont='#{ont_acronym}' "
-    return "<a class='ont4ajax' #{data_ont} #{href_ont}>#{ont_acronym}</a>"
-  end
-
   def get_link_for_scheme_ajax(scheme, ont_acronym, target = '_blank')
-    link = bp_scheme_link(scheme, ont_acronym)
     ajax_url = "/ajax/schemes/label?language=#{request_lang}"
-    scheme_url = "?p=schemes&schemeid=#{CGI.escape(scheme)}"
-    label_ajax_link(link, scheme, ont_acronym, ajax_url, scheme_url, target)
+    label_ajax_link(scheme, ont_acronym, ajax_url, target)
   end
 
   def get_link_for_collection_ajax(collection, ont_acronym, target = '_blank')
-    link = bp_collection_link(collection, ont_acronym)
     ajax_url = "/ajax/collections/label?language=#{request_lang}"
-    collection_url = "?p=collections&collectionid=#{CGI.escape(collection)}"
-    label_ajax_link(link, collection, ont_acronym, ajax_url, collection_url, target)
+    label_ajax_link(collection, ont_acronym, ajax_url, target)
   end
 
-  def get_link_for_label_xl_ajax(label_xl, ont_acronym, cls_id, modal: true)
-    link = label_xl
-    ajax_uri = "/ajax/label_xl/label?cls_id=#{CGI.escape(cls_id)}"
-    label_xl_url = "/ajax/label_xl/?id=#{CGI.escape(label_xl)}&ontology=#{ont_acronym}&cls_id=#{CGI.escape(cls_id)}"
-    data = label_ajax_data_h(label_xl, ont_acronym, ajax_uri, label_xl_url)
-    data[:data][:controller] = 'label-ajax'
-    if modal
-      link_to_modal(cls_id, link, {data: data[:data] , class: 'btn btn-sm btn-light m-1'})
-    else
-      link_to(link,'', {data: data[:data], class: 'btn btn-sm btn-light m-1', target: '_blank'})
-    end
-
-
+  def get_link_for_label_xl_ajax(label_xl, ont_acronym, cls_id, target = nil)
+    ajax_url = "/ajax/label_xl/label?cls_id=#{CGI.escape(cls_id)}"
+    label_ajax_link(label_xl, ont_acronym, ajax_url, target)
   end
 
   def ontology_viewer_page_name(ontology_name, concept_label, page)
@@ -449,14 +385,14 @@ module ApplicationHelper
   def show_advanced_options_button(text: nil, init: nil)
     content_tag(:div, class: "#{init ? 'd-none' : ''} advanced-options-button", 'data-action': 'click->reveal-component#show', 'data-reveal-component-target': 'showButton') do
       inline_svg_tag('icons/settings.svg') +
-      content_tag(:div, text, class: 'text')
+        content_tag(:div, text, class: 'text')
     end
   end
 
   def hide_advanced_options_button(text: nil, init: nil)
     content_tag(:div, class: "#{init ? '' : 'd-none'} advanced-options-button", 'data-action': 'click->reveal-component#hide', 'data-reveal-component-target': 'hideButton') do
       inline_svg_tag('icons/hide.svg') +
-      content_tag(:div, text, class: 'text')
+        content_tag(:div, text, class: 'text')
     end
   end
 

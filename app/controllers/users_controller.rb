@@ -226,6 +226,7 @@ class UsersController < ApplicationController
 
   def verify_owner
     return if current_user_admin?
+
     if session[:user].nil? || (!session[:user].id.eql?(params[:id]) && !session[:user].username.eql?(params[:id]))
       redirect_to controller: 'login', action: 'index', redirect: "/accounts/#{params[:id]}"
     end
