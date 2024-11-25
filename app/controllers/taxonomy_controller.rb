@@ -34,6 +34,7 @@ class TaxonomyController < ApplicationController
     categories.each do |category|
       category[:parentCategory]&.each do |parent_id|
         parent = category_index[parent_id]
+        next if parent.nil?
         parent[:children] ||= []
         parent[:children] << category
       end
