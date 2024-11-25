@@ -221,7 +221,9 @@ module FederationHelper
   end
 
   def federated_browse_counts(ontologies)
-    ids = ontologies.map { |ontology| ontology[:id] }
+    ids = ontologies.flat_map do |ontology|
+      [ontology[:id]] + (ontology[:sources] || [])
+    end.uniq
     counts_ontology_ids_by_portal_name(ids)
   end
 
