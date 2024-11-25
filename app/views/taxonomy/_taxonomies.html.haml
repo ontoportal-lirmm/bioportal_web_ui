@@ -1,9 +1,8 @@
 .taxonomy-section
-    - taxonomies = []
     - if taxonomies.blank?
         .taxonomy-empty-illustration
             = empty_state(t('taxonomy.no_taxonomy_created', type: type))
-            - if true
+            - if current_user_admin?
                 .taxonomy-empty-illustration-button
                     = render Buttons::RegularButtonComponent.new(id:'create-taxonomy', value: "Create #{type}", variant: "secondary", size: "slim", href: "/admin?section=#{type}")
     - else
