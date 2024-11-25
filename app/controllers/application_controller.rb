@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
     cookies.permanent[:locale] = I18n.locale if cookies[:locale].nil?
     logger.debug "* Locale set to '#{I18n.locale}'"
 
-    I18n.locale = portal_lang unless portal_language_enabled?(I18n.locale)
+    I18n.locale = portal_lang if portal_language_enabled?(I18n.locale)
 
     session[:locale] = I18n.locale
   end
@@ -430,7 +430,7 @@ class ApplicationController < ActionController::Base
     optional_params_str = filtered_params.map { |param, value| "#{param}=#{value}" }.join("&")
     return base_url + optional_params_str + "&apikey=#{$API_KEY}"
   end
-
+  
   def set_federated_portals
     RequestStore.store[:federated_portals] =  params[:portals]&.split(',')
   end
