@@ -1,10 +1,9 @@
 .taxonomy-section
+    - taxonomies = []
     - if taxonomies.blank?
         .taxonomy-empty-illustration
-            = inline_svg_tag 'empty-box.svg'
-            .taxonomy-empty-illustration-text
-                No group is created yet
-            - if session[:user]&.admin?
+            = empty_state("No #{type} is created yet")
+            - if true
                 .taxonomy-empty-illustration-button
                     = render Buttons::RegularButtonComponent.new(id:'create-taxonomy', value: "Create #{type}", variant: "secondary", size: "slim", href: "/admin?section=#{type}")
     - else
