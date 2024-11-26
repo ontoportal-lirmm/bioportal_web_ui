@@ -3,7 +3,10 @@ module FederationHelper
 
   def federated_portals
     $FEDERATED_PORTALS ||= LinkedData::Client.settings.federated_portals
-    normalize_portals($FEDERATED_PORTALS)
+    $FEDERATED_PORTALS.each do |key, portal|
+      portal[:ui] += "/" unless portal[:ui].end_with?("/")
+      portal[:api] += "/" unless portal[:api].end_with?("/")
+    end
     $FEDERATED_PORTALS
   end
 
@@ -257,13 +260,6 @@ module FederationHelper
       end
     end
     portal_counts.max_by { |_, count| count }&.first
-  end
-
-  def normalize_portals(portals)
-    portals.each do |_, portal|
-      portal[:ui] += "/" unless portal[:ui].end_with?("/")
-      portal[:api] += "/" unless portal[:api].end_with?("/")
-    end
   end
 
 end
