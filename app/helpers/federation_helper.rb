@@ -3,6 +3,11 @@ module FederationHelper
 
   def federated_portals
     $FEDERATED_PORTALS ||= LinkedData::Client.settings.federated_portals
+    $FEDERATED_PORTALS.each do |key, portal|
+      portal[:ui] += "/" unless portal[:ui].end_with?("/")
+      portal[:api] += "/" unless portal[:api].end_with?("/")
+    end
+    $FEDERATED_PORTALS
   end
 
   def internal_portal_config(id)
@@ -63,7 +68,7 @@ module FederationHelper
     ui_link = config[:ui]
     api_link = config[:api]
 
-    id.gsub(api_link, "#{ui_link}/") rescue id
+    id.gsub(api_link, "#{ui_link}") rescue id
   end
 
   def internal_ontology?(id)
