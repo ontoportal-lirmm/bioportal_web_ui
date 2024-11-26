@@ -18,8 +18,10 @@ export default class extends OntoportalAutocompleteController {
 
         // Appropriate value selected
         if (li.extra) {
-            let sValue = jQuery("#jump_to_concept_id").val()
-            Turbo.visit("/ontologies/" + jQuery(document).data().bp.ontology.acronym + "/?p=classes&conceptid=" + encodeURIComponent(sValue) + "&jump_to_nav=true")
+            let sValue = jQuery("#jump_to_concept_id").val();
+            let acronym = jQuery(document).data().bp.ontology.acronym;
+            let newUrl = "/ontologies/" + acronym + "/?p=classes&conceptid=" + encodeURIComponent(sValue) + "&jump_to_nav=true";
+            window.location.href = newUrl
         }
     }
 
