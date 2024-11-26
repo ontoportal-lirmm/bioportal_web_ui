@@ -63,7 +63,7 @@ module FederationHelper
     ui_link = config[:ui]
     api_link = config[:api]
 
-    id.gsub(api_link, "#{ui_link}/") rescue id
+    id.gsub(api_link, "#{ui_link}") rescue id
   end
 
   def internal_ontology?(id)
