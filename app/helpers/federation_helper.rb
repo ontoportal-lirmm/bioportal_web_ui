@@ -238,8 +238,9 @@ module FederationHelper
       counts[current_portal.downcase] += 1 if id.include?(current_portal.to_s.downcase)
 
       federation_portals.each do |portal|
-        portal_api = federated_portals[portal.downcase.to_sym][:name].downcase
-        counts[portal.downcase] += 1 if id.include?(portal_api)
+        portal_api = federated_portals[portal.downcase.to_sym][:api].sub(/^https?:\/\//, '')
+        portal_ui = federated_portals[portal.downcase.to_sym][:ui].sub(/^https?:\/\//, '')
+        counts[portal.downcase] += 1 if (id.include?(portal_api) || id.include?(portal_ui))
       end
     end
 
