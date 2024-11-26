@@ -109,4 +109,23 @@
     background-color: var(--primary-color);
 }
 
+.taxonomy-empty-illustration{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    .browse-empty-illustration {
+        margin-top: 40px;
+    }
+}
+
+
+.taxonomy-empty-illustration-text{
+    color: var(--gray-color);
+
+}
+.taxonomy-empty-illustration-button{
+    width: 168px;
+}
 

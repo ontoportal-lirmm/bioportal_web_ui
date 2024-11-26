@@ -1,10 +1,17 @@
 .taxonomy-section
-    - pairs, impairs = taxonomies.each_with_index.partition { |_, index| index.even? }
-    - taxonomies_first_row = pairs.map(&:first)
-    - taxonomies_second_row = impairs.map(&:first)
-    .first-row
-        - taxonomies_first_row.each do |taxonomy|
-            = render Display::TaxonomyCardComponent.new(taxonomy: taxonomy, ontologies_names: @ontologies_names)
-    .second-row
-        - taxonomies_second_row.each do |taxonomy|
-            = render Display::TaxonomyCardComponent.new(taxonomy: taxonomy, ontologies_names: @ontologies_names)
+    - if taxonomies.blank?
+        .taxonomy-empty-illustration
+            = empty_state(t('taxonomy.no_taxonomy_created', type: type))
+            - if current_user_admin?
+                .taxonomy-empty-illustration-button
+                    = regular_button('create-taxonomy', "Create #{type}", variant: "secondary", size: "slim", href: "/admin?section=#{type}")
+    - else
+        - pairs, impairs = taxonomies.each_with_index.partition { |_, index| index.even? }
+        - taxonomies_first_row = pairs.map(&:first)
+        - taxonomies_second_row = impairs.map(&:first)
+        .first-row
+            - taxonomies_first_row.each do |taxonomy|
+                = render Display::TaxonomyCardComponent.new(taxonomy: taxonomy, ontologies_names: @ontologies_names)
+        .second-row
+            - taxonomies_second_row.each do |taxonomy|
+                = render Display::TaxonomyCardComponent.new(taxonomy: taxonomy, ontologies_names: @ontologies_names)
