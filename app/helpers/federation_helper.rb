@@ -219,14 +219,18 @@ module FederationHelper
   end
 
   def federated_search_counts(search_results)
-    ids = search_results.map do |result|
-      result.dig(:root, :ontology_id) || rest_url
-    end
+    ids = search_results.flat_map do |result|
+      ontology_id = result.dig(:root, :ontology_id) || rest_url
+      other_portal_ids = result.dig(:root, :other_portals)&.map { |portal| portal[:link].split('?').first } || []
+      [ontology_id] + other_portal_ids
+    end.uniq
     counts_ontology_ids_by_portal_name(ids)
   end
 
   def federated_browse_counts(ontologies)
-    ids = ontologies.map { |ontology| ontology[:id] }
+    ids = ontologies.flat_map do |ontology|
+      [ontology[:id]] + (ontology[:sources] || [])
+    end.uniq
     counts_ontology_ids_by_portal_name(ids)
   end
 
@@ -239,8 +243,9 @@ module FederationHelper
       counts[current_portal.downcase] += 1 if id.include?(current_portal.to_s.downcase)
 
       federation_portals.each do |portal|
-        portal_api = federated_portals[portal.downcase.to_sym][:api]
-        counts[portal.downcase] += 1 if id.include?(portal_api)
+        portal_api = federated_portals[portal.downcase.to_sym][:api].sub(/^https?:\/\//, '')
+        portal_ui = federated_portals[portal.downcase.to_sym][:ui].sub(/^https?:\/\//, '')
+        counts[portal.downcase] += 1 if (id.include?(portal_api) || id.include?(portal_ui))
       end
     end
 
