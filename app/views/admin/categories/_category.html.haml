@@ -1,7 +1,7 @@
 %tr.human{:id => category.id.split('/').last}
   - count = category.ontologies&.size || 0
   - is_parent = @parents_list.keys.include?(category.id)
-  - parent_error_message = "Can't delete category, used as a parent category for: "
+  - parent_error_message = t('admin.categories.category_used_parent')
   - @parents_list[category.id].each do |c|
     - parent_error_message = "#{parent_error_message} #{c}"
   %td
