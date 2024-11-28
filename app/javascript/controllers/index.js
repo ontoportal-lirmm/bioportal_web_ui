@@ -100,3 +100,6 @@ application.register('mappings', MappingsController)
 
 import ConceptsJsonButtonController from "./concepts_json_button_controller.js"
 application.register('concepts-json', ConceptsJsonButtonController)
+
+import ParentCategoriesSelectorController from "./parent_categories_selector_controller.js"
+application.register('parent-categories-selector', ParentCategoriesSelectorController)
