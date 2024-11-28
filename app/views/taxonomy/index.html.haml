@@ -5,16 +5,16 @@
                 = t('taxonomy.groups_and_categories')
             .line
         .taxonomy-page-decription
-            = t('taxonomy.description')
+            = t('taxonomy.description', portal: portal_name)
 
         = render TabsContainerComponent.new do |c|
             - c.item(title: 'Groups', selected: !@category_section_active)
             - c.item_content do
-                = render partial: '/taxonomy/taxonomies', locals: { taxonomies: @groups }
+                = render partial: '/taxonomy/taxonomies', locals: { taxonomies: @groups, type: 'groups' }
 
             - c.item(title: 'Categories', selected: @category_section_active)
             - c.item_content do
-                = render partial: '/taxonomy/taxonomies', locals: { taxonomies: @categories }
+                = render partial: '/taxonomy/taxonomies', locals: { taxonomies: @categories, type: 'categories' }
 :javascript
     document.getElementById('categories_tab').addEventListener('click', function(event) {
         window.history.pushState({ path: '/categories' }, '', '/categories');

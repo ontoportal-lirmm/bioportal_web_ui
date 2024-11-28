@@ -11,4 +11,4 @@
       %div.form-group
         %textarea.form-control.reply_body{cols: "1", name: "body", required: true, placeholder: t('notes.new_comment.comment'), rows: "1", style: "height: 100px;", tabindex: "0"}
 
-      = submit_tag t('notes.new_comment.save') , class:'btn btn-success btn-block'
+      = form_save_button(enable_loading: false)

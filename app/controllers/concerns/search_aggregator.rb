@@ -251,23 +251,34 @@ module SearchAggregator
   def merge_federated_results(search_results)
     search_results.each do |element|
       element[:root][:other_portals] = []
-      element[:reuses].reject! do |reuse|
-        if (element[:root][:ontology_acronym] == reuse[:root][:ontology_acronym]) && (element[:root][:uri] == reuse[:root][:uri])
-          portal_name = reuse[:root][:portal_name]
-          link = reuse[:root][:link]
-          element[:root][:other_portals] << {
-            name: portal_name,
-            color: federated_portal_color(portal_name),
-            light_color: federated_portal_light_color(portal_name),
-            link: link,
-            ontology_id: reuse[:root][:ontology_id]
-          }
-          true
-        else
-          false
+      element_ontology_id = element[:root][:ontology_id].split('/').last
+      element_uri = element[:root][:uri]
+      [element[:reuses], search_results].each do |collection|
+        collection.reject! do |entry|
+          next if entry == element
+
+          entry_ontology_id = entry[:root][:ontology_id].split('/').last
+          entry_uri = entry[:root][:uri]
+
+          if element_ontology_id == entry_ontology_id && element_uri == entry_uri
+            element[:root][:other_portals] << build_other_portal_entry(entry)
+            true
+          else
+            false
+          end
         end
       end
     end
+  end
+
+  def build_other_portal_entry(reuse)
+    {
+      name: reuse[:root][:portal_name],
+      color: federated_portal_color(reuse[:root][:portal_name]),
+      light_color: federated_portal_light_color(reuse[:root][:portal_name]),
+      link: reuse[:root][:link],
+      ontology_id: reuse[:root][:ontology_id]
+    }
   end
 
   def swap_canonical_portal_results_first(search_results)
