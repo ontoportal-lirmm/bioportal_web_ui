@@ -136,7 +136,8 @@
               %img{:src => asset_path("play-white.svg")}/
   .home-section
     .home-section-sub-sections-container
-      .home-sub-section-left
+      - is_twitter_enabled = !$TWITTER_NEWS.blank?
+      .home-sub-section-left{class: (is_twitter_enabled ? '' : 'full-width')}
         %div.align-items
           %h4.margin-items= t('home.fairness')
           = render Display::InfoTooltipComponent.new(text: t('home.info_tooltip_text') )
@@ -166,14 +167,15 @@
               %div.home-fair-details
                 %p= t('home.fair_details')
 
-      .home-sub-section-right
-        %h4= t('home.twitter_news')
-        %hr.home-section-line
-        .home-card.home-twitter-news
-          %a.twitter-timeline{"data-height" => "360", :href => "https://twitter.com/lagroportal?ref_src=twsrc%5Etfw"}
-            .home-twitter-loader
-              = render LoaderComponent.new(type: 'pulsing')
-          %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
+      - if is_twitter_enabled
+        .home-sub-section-right
+          %h4= t('home.twitter_news')
+          %hr.home-section-line
+          .home-card.home-twitter-news
+            %a.twitter-timeline{"data-height" => "360", :href => $TWITTER_NEWS}
+              .home-twitter-loader
+                = render LoaderComponent.new(type: 'pulsing')
+            %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
 
   - if slices_enabled?
     .home-section
