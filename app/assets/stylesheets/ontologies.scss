@@ -111,6 +111,9 @@ $widget-table-border-color: #EFEFEF;
 .ont-section-toolbar {
   display: flex;
   align-items: center;
+  svg{
+    fill: var(--primary-color);
+  }
 }
 
 .ont-metadata-card {
