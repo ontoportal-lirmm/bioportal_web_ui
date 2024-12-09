@@ -508,6 +508,7 @@ en:
       at: at
       visit_the_site: visit the full site
   login:
+    title: "Sign in to your account"
     invalid_account_combination: "Invalid account name/password combination"
     authentication_failed: "%{provider} authentication failed"
     admin_logged_out: Logged out <b>%{old_user}</b>, returned to <b>%{user}</b>
@@ -525,7 +526,6 @@ en:
     no_account: Do not have an account?
     password: Password
     register: Register
-    title: Login
     username_or_email: Username
     login_with_provider: Login with %{provider}
     reset_password_message: A password reset email has been sent to your email address, please follow the instructions to reset your password.

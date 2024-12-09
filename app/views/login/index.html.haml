@@ -6,6 +6,12 @@
         %div=error
 .d-flex.justify-content-center
   .login-form
+    .d-flex.justify-content-center
+      .register-title-container
+        %h2.register-title
+          = t('login.title')
+        %hr#register-title-line/
+      %div
     = form_for(:user, :url => {:controller => 'login',:action=>'create'}) do |f|
       %p.login-input-title= t('login.username_or_email')
       = text_field 'user', 'username', class: "login-input email-input", placeholder: t('login.enter_email')
@@ -20,16 +26,13 @@
         %a.text-decoration-none{:href => new_user_path}= t('login.register')
     %hr.divider.w-100.mb-4.mt-4
     %p.dont-have-account
-      Or connect using
-    %div.d-flex.justify-content-center.flew-wrap
+      Or sign in with
+    %div
       - omniauth_providers_info.each do |provider, config|
         - if config[:enable]
           = button_to  "/auth/#{config[:name] || config[:strategy] || provider}",
-                      class: 'btn btn-lg', disabled: !config[:enable] , title: t('login.login_with_provider', provider: provider.to_s.humanize), 'data-turbo': false do;
-            - if config[:icon]
-              = inline_svg "#{config[:icon]}", class: 'login-active-sso'
-            - else
-              = provider.to_s.humanize
+                      class: 'primary-button regular-button d-inline ', disabled: !config[:enable] , title: t('login.login_with_provider', provider: provider.to_s.humanize), 'data-turbo': false do
+            LifeWatch ERIC
         - else
           .disabled-login-sso
             = render Display::InfoTooltipComponent.new(text: "#{provider.to_s.humanize} is disabled") do
