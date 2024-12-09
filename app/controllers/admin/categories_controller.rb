@@ -11,6 +11,15 @@ class Admin::CategoriesController < ApplicationController
 
   def index
     @categories = _categories
+
+    @parents_list = Hash.new { |hash, key| hash[key] = [] }
+    @categories.each do |category|
+      category.parentCategory.each do |parent|
+        @parents_list[parent] << category.acronym
+      end
+    end
+
+
   end
 
   def new
