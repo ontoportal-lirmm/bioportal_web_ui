@@ -5,7 +5,7 @@ module FairScoreHelper
   end
 
   def fairness_service_enabled?
-    !$FAIRNESS_DISABLED
+    $FAIRNESS_DISABLED == 'false' || !$FAIRNESS_DISABLED
   end
 
   def get_fairness_service_url(apikey = user_apikey)
