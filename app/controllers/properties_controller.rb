@@ -77,12 +77,10 @@ class PropertiesController < ApplicationController
   private
 
   def index_tree(container_id)
-    if !params[:propertyid].blank?
-      @root = OpenStruct.new({ children: property_tree(params[:propertyid], params[:ontology]) })
-      not_found(@root.children.errors.join) if @root.children.respond_to?(:errors)
-
+    if !params[:propertyid].blank? && (@root= OpenStruct.new({ children: property_tree(params[:propertyid], params[:ontology]) }))  && !@root.children.respond_to?(:errors)
       @property = get_property(params[:propertyid], params[:ontology])
     else
+
       @root = OpenStruct.new({ children: property_roots(params[:ontology]) })
       not_found(@root.children.errors.join) if @root.children.respond_to?(:errors)
 
