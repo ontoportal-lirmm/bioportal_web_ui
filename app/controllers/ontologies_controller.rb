@@ -60,11 +60,12 @@ class OntologiesController < ApplicationController
         end
       end.flatten
 
-      unless request_portals.empty?
+      unless request_portals.length == 1
         streams += [
           replace('categories_refresh_for_federation') do
             key = "categories"
             objects, checked_values, _ = @filters[key.to_sym]
+            objects = keep_only_root_categories(objects)
             helpers.browse_filter_section_body(checked_values: checked_values,
                                                key: key, objects: objects,
                                                counts: @count_objects[key.to_sym])
@@ -588,4 +589,9 @@ class OntologiesController < ApplicationController
     return !results.blank? ? results.first[:name] : nil
   end
 
+  def keep_only_root_categories(categories)
+    categories.select do |category|
+      category.id.start_with?(rest_url) || category.parentCategory.blank?
+    end
+  end
 end

@@ -251,18 +251,21 @@ module SearchAggregator
   def merge_federated_results(search_results)
     search_results.each do |element|
       element[:root][:other_portals] = []
+      element_ontology_id = element[:root][:ontology_id].split('/').last
+      element_uri = element[:root][:uri]
+      [element[:reuses], search_results].each do |collection|
+        collection.reject! do |entry|
+          next if entry == element
 
-      element[:reuses].reject! do |reuse|
-        element_ontology_id = element[:root][:ontology_id].split('/').last
-        element_uri = element[:root][:uri]
-        reuse_ontology_id = reuse[:root][:ontology_id].split('/').last
-        reuse_uri = reuse[:root][:uri]
+          entry_ontology_id = entry[:root][:ontology_id].split('/').last
+          entry_uri = entry[:root][:uri]
 
-        if element_ontology_id == reuse_ontology_id && element_uri == reuse_uri
-          element[:root][:other_portals] << build_other_portal_entry(reuse)
-          true
-        else
-          false
+          if element_ontology_id == entry_ontology_id && element_uri == entry_uri
+            element[:root][:other_portals] << build_other_portal_entry(entry)
+            true
+          else
+            false
+          end
         end
       end
     end
