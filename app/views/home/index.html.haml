@@ -136,8 +136,7 @@
               %img{:src => asset_path("play-white.svg")}/
   .home-section
     .home-section-sub-sections-container
-      - is_twitter_enabled = !$TWITTER_NEWS.blank?
-      .home-sub-section-left{class: (is_twitter_enabled ? '' : 'full-width')}
+      .home-sub-section-left
         %div.align-items
           %h4.margin-items= t('home.fairness')
           = render Display::InfoTooltipComponent.new(text: t('home.info_tooltip_text') )
@@ -166,8 +165,7 @@
             %a{:href => "/landscape#fairness_assessment"}
               %div.home-fair-details
                 %p= t('home.fair_details')
-
-      - if is_twitter_enabled
+      - if !$TWITTER_NEWS.blank?
         .home-sub-section-right
           %h4= t('home.twitter_news')
           %hr.home-section-line

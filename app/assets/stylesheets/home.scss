@@ -412,11 +412,6 @@ i.fa.fa-caret-square-o-down {
 }
 .home-sub-section-left{
   width: 550px;
-  flex-grow: 0;
-}
-.home-sub-section-left.full-width {
-  width: 100%; /* Takes the full width when the right section is absent */
-  flex-grow: 1; /* Allows the left section to stretch and fill available space */
 }
 
 .home-sub-section-right{
@@ -428,7 +423,7 @@ i.fa.fa-caret-square-o-down {
   font-weight: 700;
 }
 .home-fair-scores{
-  /* height: 550px; */
+  height: 360px;
   padding-top: 35px;
 }
 .home-twitter-news{
