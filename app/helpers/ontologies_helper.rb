@@ -817,9 +817,10 @@ module OntologiesHelper
   def browse_chip_filter(key:, object:, values:, countable: true, count: nil)
     title = (key.to_s.eql?("categories") || key.to_s.eql?("groups")) ? nil : ''
     checked = values.any? { |obj| [link_last_part(object["id"]), link_last_part(object["value"])].include?(obj) }
-
-    group_chip_component(name: key, object: object, checked: checked, title: title) do |c|
-      c.count { browse_chip_count_badge(key: key, id: object["id"], count: count) } if countable
+    content_tag(:div, (key.to_s.eql?("categories") ? { 'data-action' => 'click->parent-categories-selector#check' } : {})) do
+      group_chip_component(name: key, object: object, checked: checked, title: title) do |c|
+        c.count { browse_chip_count_badge(key: key, id: object["id"], count: count) } if countable
+      end
     end
   end
 
