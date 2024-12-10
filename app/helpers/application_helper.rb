@@ -451,7 +451,7 @@ module ApplicationHelper
     render Input::SelectComponent.new(id: id, name: name, value: categories_for_select, selected: selected, multiple: true)
   end
 
-  def is_parent?(parents_list, category)
+  def category_is_parent?(parents_list, category)
     is_parent = parents_list.keys.include?(category.id)
     parent_error_message = t('admin.categories.category_used_parent')
     parents_list[category.id].each do |c|

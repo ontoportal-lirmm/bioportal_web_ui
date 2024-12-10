@@ -1,6 +1,6 @@
 %tr.human{:id => category.id.split('/').last}
   - count = category.ontologies&.size || 0 
-  - is_parent, parent_error_message = is_parent?(@parents_list, category)
+  - is_parent, parent_error_message = category_is_parent?(@parents_list, category)
   %td
     %div{style: 'width: 250px'}
       %div.text-truncate{title: category.name}
@@ -27,4 +27,3 @@
             = link_to t('admin.categories.delete'), "", class: 'btn btn-link disabled'
         - else
           = button_to t('admin.categories.delete'), CGI.unescape(admin_category_path(category.id.split('/').last)), method: :delete, class: 'btn btn-link',  form: {data: { turbo: true, turbo_confirm: t('admin.categories.turbo_confirm'), turbo_frame: '_top'}}
-          
