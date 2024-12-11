@@ -165,15 +165,15 @@
             %a{:href => "/landscape#fairness_assessment"}
               %div.home-fair-details
                 %p= t('home.fair_details')
-
-      .home-sub-section-right
-        %h4= t('home.twitter_news')
-        %hr.home-section-line
-        .home-card.home-twitter-news
-          %a.twitter-timeline{"data-height" => "360", :href => "https://twitter.com/lagroportal?ref_src=twsrc%5Etfw"}
-            .home-twitter-loader
-              = render LoaderComponent.new(type: 'pulsing')
-          %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
+      - if !$TWITTER_NEWS.blank?
+        .home-sub-section-right
+          %h4= t('home.twitter_news')
+          %hr.home-section-line
+          .home-card.home-twitter-news
+            %a.twitter-timeline{"data-height" => "360", :href => $TWITTER_NEWS}
+              .home-twitter-loader
+                = render LoaderComponent.new(type: 'pulsing')
+            %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
 
   - if slices_enabled?
     .home-section
