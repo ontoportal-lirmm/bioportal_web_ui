@@ -97,7 +97,7 @@ module DoiRequestAdministration
     json[:publisher] ||= portal_name
     json[:creators] ||= [{ name: current_user }]
 
-    json[:url] = json[:url] || (helpers.ontologies_url + '/' + ontology_acronym)
+    json[:url] = "#{helpers.ontologies_url}/#{ontology_acronym}"
     json
   end
 
