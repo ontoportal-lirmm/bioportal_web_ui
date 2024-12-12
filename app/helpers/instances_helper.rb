@@ -52,7 +52,7 @@ module InstancesHelper
 
   def link_to_property(property, ontology_acronym)
     link_to extract_label_from(property),
-            ontology_path(ontology_acronym, p: 'properties'),
+            ontology_path(ontology_acronym, p: 'properties', propertyid: property),
             { target: '_blank'}
   end
 
