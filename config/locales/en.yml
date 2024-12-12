@@ -194,6 +194,7 @@ en:
       problem_of_updating: Problem updating the category - %{message}
       category_deleted_successfully: Category successfully deleted in %{time}s
       problem_of_deleting: Problem deleting the category - %{message}
+      category_used_parent: "Can't delete category, used as a parent category for:"
       edit_button: "Edit"
       delete: Delete
       info_error_delete: Can't delete this category because still used

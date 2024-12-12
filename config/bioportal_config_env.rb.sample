@@ -8,6 +8,9 @@ $ORG_URL = ENV['ORG_URL']
 # Site name (required)
 $SITE = ENV['SITE']
 
+# Twitter section
+$TWITTER_NEWS = ENV["TWITTER_NEWS"]
+
 # Full string for site, EX: "NCBO BioPortal", do not modify
 $ORG_SITE = $ORG.nil? || $ORG.empty? ? $SITE : "#{$ORG} #{$SITE}"
 

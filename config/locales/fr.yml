@@ -200,6 +200,7 @@ fr:
       problem_of_updating: Problème lors de la mise à jour de la catégorie - %{message}
       category_deleted_successfully: Catégorie supprimée avec succès en %{time}s
       problem_of_deleting: Problème lors de la suppression de la catégorie - %{message}
+      category_used_parent: "Impossible de supprimer la catégorie, utilisée comme catégorie parente pour:"
       edit_button: Éditer
       delete: Supprimer
       info_error_delete: Impossible de supprimer cette catégorie car elle est encore utilisée

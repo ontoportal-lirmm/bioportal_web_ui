@@ -13,7 +13,7 @@
       %tbody
         - count = 0
         - @analytics.onts.each do |visits|
-          - ont = @ontologies_hash[visits[:ont].to_s]
+          - ont = @ontologies_hash[visits[:ont].to_s.split('/').last]
           - next if ont.nil?
           - count += 1
           %tr
