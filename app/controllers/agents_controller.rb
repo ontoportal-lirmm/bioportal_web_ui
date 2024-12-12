@@ -18,7 +18,7 @@ class AgentsController < ApplicationController
   end
 
   def ajax_agents
-    filters = { query: params[:query], qf: "identifiers_texts^20 acronym_text^15 name_text^10 email_text^10"}
+    filters = { query: "#{params[:query]}*", qf: "identifiers_texts^20 acronym_text^15 name_text^10 email_text^10"}
     @agents = LinkedData::Client::HTTP.get('/search/agents', filters)
     agents_json = @agents.collection.map do |x|
       {

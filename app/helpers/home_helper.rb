@@ -13,6 +13,8 @@ module HomeHelper
 
 
   def format_number_abbreviated(number)
+    number = 0 if number.nil?
+
     if number >= 1_000_000
       (number / 1_000_000).to_s + 'M'
     elsif number >= 1_000

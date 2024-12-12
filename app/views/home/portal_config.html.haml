@@ -4,21 +4,21 @@
       .div.d-flex.align-items-center
         %div
           %div.text-center
-            = link_to @portal_config[:ui] || @config[:ui], target: '_blank', class: 'home-logo-instances mr-1 m-0', style: "background-color: #{@portal_config[:color] || @config[:color]}" do
+            = link_to @portal_config[:ui] || @config[:ui], target: '_blank', class: 'home-logo-instances mr-1 m-0', style: "background-color: #{@color}" do
               = inline_svg 'logo-white.svg', width: "35", height: "26"
         %div
-          %div.portal-configuration-title{style: "color: #{@portal_config[:color] || @config[:color]}"}
+          %div.portal-configuration-title{style: "color: #{@color}"}
             %h3
-              = @portal_config[:title] || @config[:name]
+              = @name
             - if  @portal_config[:numberOfArtefacts]
               .portal-config-ontologies
                 = inline_svg_tag 'icons/ontology.svg'
                 %span
                   = "#{@portal_config[:numberOfArtefacts]} ontologies"
-    - if @portal_config[:description]
+    - if @portal_config[:description].present?
       .portal-description
         = @portal_config[:description]
-    - if @portal_config[:federated_portals]
+    - if @portal_config[:federated_portals].present?
       %div.mb-1
         .home-section-title
           .text
@@ -31,7 +31,7 @@
               %p{style: "color: #{portal[:color]}"}
                 = portal[:name]
 
-    - if @portal_config[:fundedBy]
+    - if @portal_config[:fundedBy].present?
       %div.mb-1
         .home-section-title
           .portal-config-title-text

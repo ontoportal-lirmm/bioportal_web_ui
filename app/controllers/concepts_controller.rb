@@ -63,8 +63,12 @@ class ConceptsController < ApplicationController
   def show_label
     cls_id = params[:concept] || params[:id]
     ont_id = params[:ontology]
-    pref_label = concept_label(ont_id, cls_id)
-    cls = @ontology.explore.single_class({ language: request_lang, include: 'prefLabel' }, cls_id)
+    pref_label = begin
+                   concept_label(ont_id, cls_id)
+                 rescue
+                   cls_id
+                 end
+    cls = @ontology.explore&.single_class({ language: request_lang, include: 'prefLabel' }, cls_id)
     label = helpers.main_language_label(pref_label)
     link = concept_path(cls_id, ont_id, request_lang)
 

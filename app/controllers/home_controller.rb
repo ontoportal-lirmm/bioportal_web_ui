@@ -23,10 +23,19 @@ class HomeController < ApplicationController
 
     @anal_ont_names = []
     @anal_ont_numbers = []
-    @analytics.sort_by{|ont, count| -count}[0..4].each do |ont, count|
-      @anal_ont_names << ont
-      @anal_ont_numbers << count
+    if @analytics.empty?
+      all_metrics = LinkedData::Client::Models::Metrics.all
+      all_metrics.sort_by{|x| -(x.classes + x.individuals)}[0..4].each do |x|
+        @anal_ont_names << x.id.split('/')[-4]
+        @anal_ont_numbers << (x.classes + x.individuals) || 0
+      end
+    else
+      @analytics.sort_by{|ont, count| -count}[0..4].each do |ont, count|
+        @anal_ont_names << ont
+        @anal_ont_numbers << count
+      end
     end
+
 
   end
 
@@ -39,6 +48,8 @@ class HomeController < ApplicationController
     @config = $PORTALS_INSTANCES.select { |x| x[:name].downcase.eql?((params[:portal] || helpers.portal_name).downcase) }.first
     if @config && @config[:api]
       @portal_config = LinkedData::Client::Models::Ontology.top_level_links(@config[:api]).to_h
+      @color = @portal_config[:color].present? ? @portal_config[:color] : @config[:color]
+      @name = @portal_config[:title].present? ? @portal_config[:title] : @config[:name]
     else
       @portal_config = {}
     end

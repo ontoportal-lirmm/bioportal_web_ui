@@ -57,12 +57,19 @@ class CollectionsController < ApplicationController
 
   def show_members
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id] || params[:ontology]).first
-    @submission = @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri')
-    @collection = get_request_collection
+    @submission = @ontology.explore.latest_submission(include: 'uriRegexPattern,preferredNamespaceUri')
     page = params[:page] || '1'
     @auto_click = page.to_s.eql?('1')
-    @page = @collection.explore.members({page: page, language: request_lang})
-    @concepts = @page.collection
+    @collection = get_request_collection(@ontology)
+
+    if @collection
+      @page = @collection.explore.members({ page: page, language: request_lang })
+      @concepts = @page.collection
+    else
+      @page = OpenStruct.new({ nextPage: 1, page: 1 })
+      @concepts = []
+    end
+
     if @ontology.nil?
       ontology_not_found params[:ontology]
     else
@@ -72,14 +79,12 @@ class CollectionsController < ApplicationController
 
   private
 
-  def get_request_collection
+  def get_request_collection(ontology = nil)
     params[:id] = request_collection_id
 
-    if params[:id].nil? || params[:id].empty?
-      render plain: t('collections.error_valid_collection')
-      return
-    end
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id] || params[:ontology]).first
+    return nil if params[:id].nil? || params[:id].empty?
+
+    @ontology = ontology || LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id] || params[:ontology]).first
     ontology_not_found(params[:ontology_id]) if @ontology.nil?
     get_collection(@ontology, params[:id])
   end

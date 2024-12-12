@@ -3,6 +3,11 @@ module FederationHelper
 
   def federated_portals
     $FEDERATED_PORTALS ||= LinkedData::Client.settings.federated_portals
+    $FEDERATED_PORTALS.each do |key, portal|
+      portal[:ui] += "/" unless portal[:ui].end_with?("/")
+      portal[:api] += "/" unless portal[:api].end_with?("/")
+    end
+    $FEDERATED_PORTALS
   end
 
   def internal_portal_config(id)
@@ -53,13 +58,17 @@ module FederationHelper
   end
 
   def ontoportal_ui_link(id)
+    if id.include?($REST_URL)
+      return id.gsub($REST_URL,'')
+    end
+
     portal_key, config = ontology_portal_config(id)
     return nil unless portal_key
 
     ui_link = config[:ui]
     api_link = config[:api]
 
-    id.gsub(api_link, "#{ui_link}/") rescue id
+    id.gsub(api_link, "#{ui_link}") rescue id
   end
 
   def internal_ontology?(id)
@@ -210,14 +219,18 @@ module FederationHelper
   end
 
   def federated_search_counts(search_results)
-    ids = search_results.map do |result|
-      result.dig(:root, :ontology_id) || rest_url
-    end
+    ids = search_results.flat_map do |result|
+      ontology_id = result.dig(:root, :ontology_id) || rest_url
+      other_portal_ids = result.dig(:root, :other_portals)&.map { |portal| portal[:link].split('?').first } || []
+      [ontology_id] + other_portal_ids
+    end.uniq
     counts_ontology_ids_by_portal_name(ids)
   end
 
   def federated_browse_counts(ontologies)
-    ids = ontologies.map { |ontology| ontology[:id] }
+    ids = ontologies.flat_map do |ontology|
+      [ontology[:id]] + (ontology[:sources] || [])
+    end.uniq
     counts_ontology_ids_by_portal_name(ids)
   end
 
@@ -230,8 +243,9 @@ module FederationHelper
       counts[current_portal.downcase] += 1 if id.include?(current_portal.to_s.downcase)
 
       federation_portals.each do |portal|
-        portal_api = federated_portals[portal.downcase.to_sym][:api]
-        counts[portal.downcase] += 1 if id.include?(portal_api)
+        portal_api = federated_portals[portal.downcase.to_sym][:api].sub(/^https?:\/\//, '')
+        portal_ui = federated_portals[portal.downcase.to_sym][:ui].sub(/^https?:\/\//, '')
+        counts[portal.downcase] += 1 if (id.include?(portal_api) || id.include?(portal_ui))
       end
     end
 

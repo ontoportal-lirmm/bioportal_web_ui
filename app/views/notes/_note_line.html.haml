@@ -21,6 +21,6 @@
   - if parent_type.eql?('ontology')
     - row.td do
       - if note.relatedClass && note.relatedClass.length > 0
-        %a{href: "/ontologies/#{ontology_acronym}?p=classes&conceptid=#{CGI.escape(note.relatedClass.first)}", 'data-turbo': 'false'}= note.relatedClass.first
+        = get_link_for_cls_ajax(note.relatedClass.first, ontology_acronym, '_top')
   - row.td do
     = DateTime.parse(note.created).strftime("%Y-%m-%d")
