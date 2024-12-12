@@ -17,6 +17,7 @@ class FairScoreController < ApplicationController
   def get_fair
     ontology_not_found('') if params[:ontologies].nil? || params[:ontologies].empty?
     @ontologies = params[:ontologies]
+    @groups = LinkedData::Client::Models::Group.all
     begin
       if @ontologies.include? ','
         @fair_scores_data = create_fair_scores_data(get_fair_combined_score(@ontologies), @ontologies.split(',').length)
