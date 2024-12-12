@@ -62,56 +62,6 @@
         = upload_ontology_button
       .discover-ontologies
         = discover_ontologies_button
-  .home-section
-    %h4
-      = t('home.agroportal_figures', site: current_slice_name || portal_name)
-    %hr.home-section-line/
-    .home-statistics-container
-      .home-statistics
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@metrics[:ontologies_count])
-            %p= t("home.ontologies")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@metrics[:class_count])
-            %p= t("home.classes")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@metrics[:individuals_count])
-            %p= t("home.individuals")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@metrics[:properties_count])
-            %p= t("home.properties")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@metrics[:projects_count])
-            %p= t("home.projects")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@metrics[:mappings_count])
-            %p= t("home.mappings")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@metrics[:users_count])
-            %p= t("home.users")
-      .home-statistics-link.justify-content-end{style: @analytics.empty? && "visibility: hidden"}
-        = link_to t("home.see_details"),'/statistics', target: "_blank"
 
   .home-section
     %h4
