@@ -879,6 +879,7 @@ en:
       save_custom_semantic_resources: Save custom ontologies
       not_subscribed: Not subscribed to any ontology
       submitted_semantic_resources: Submitted Ontologies
+      accessible_semantic_resources: Accessible Ontologies
       upload_semantic_resources: Upload Ontologies
       projects_created: Projects Created
       no_project_created: No project created
@@ -886,6 +887,7 @@ en:
       subscribe: Subscribe
       subscriptions: Subscriptions
       no_uploaded_resources: You didn't upload any ontology yet
+      no_accessible_resources: You do not have access to other ontologies. You can only access ontologies you own.
       notes: Notes
   search:
     no_search_class_provided: No search class provided
