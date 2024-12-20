@@ -120,6 +120,20 @@
                       %a{href: "/ontologies/#{view.match(/\/([^\/]+)$/)[1]}"}= view.match(/\/([^\/]+)$/)[1]
 
         .account-page-card
+          %h4.account-page-card-title= t('users.show.accessible_semantic_resources')
+          .account-page-small-cards-container
+            - if @accessed_ontologies.nil? || @accessed_ontologies.empty?
+              = t('users.show.no_accessible_resources')
+            - else
+              - @accessed_ontologies.each do |ont|
+                .account-page-submitted-ontology{data: {controller: 'tooltip'}, title: ont.name}
+                  %a{href: "/ontologies/#{ont.acronym}"}= ont.acronym
+                - unless ont.views.nil? || ont.views.empty?
+                  - ont.views.each do |view|
+                    .account-page-submitted-ontology{data: {controller: 'tooltip'}, title: ont.name}
+                      %a{href: "/ontologies/#{view.match(/\/([^\/]+)$/)[1]}"}= view.match(/\/([^\/]+)$/)[1]
+
+        .account-page-card
           %h4.account-page-card-title= t('users.show.projects_created')
           .account-page-small-cards-container
             - if @user_projects.nil? || @user_projects.empty?
