@@ -38,10 +38,9 @@
             = upload_ontology_button
           %div{style:'margin-top: 30px'}
             %p.browse-filters-title= t("ontologies.filters")
-            - if current_user_admin?
-              %div.browse-filter.admin-border
-                = switch_input(id:'filter-private', name:'private_only', checked: @show_private_only, label: t("ontologies.browser.show_private_ontology"))
+             
             %div.browse-filter
+              = switch_input(id:'filter-private', name:'private_only', checked: @show_private_only, label: t("ontologies.browser.show_private_ontology"))
               = switch_input(id:'filter-views', name:'views', checked: @show_views, label: t("ontologies.browser.show_ontology_views"))
               = switch_input(id:'filter-retired', name:'retired',checked: @show_retired , label: t("ontologies.browser.show_retired_ontologies"))
 
