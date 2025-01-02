@@ -901,7 +901,6 @@ fr:
       subscribe: S'abonner
       subscriptions: Abonnements
       no_uploaded_resources: Vous n'avez encore téléchargé aucune ontologie
-      no_accessible_resources: Vous n'avez pas accès aux d'autres ontologies. Vous ne pouvez accéder qu'aux ontologies dont vous êtes propriétaire.
       notes: Notes
 
   search:

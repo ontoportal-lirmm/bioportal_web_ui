@@ -887,7 +887,6 @@ en:
       subscribe: Subscribe
       subscriptions: Subscriptions
       no_uploaded_resources: You didn't upload any ontology yet
-      no_accessible_resources: You do not have access to other ontologies. You can only access ontologies you own.
       notes: Notes
   search:
     no_search_class_provided: No search class provided
