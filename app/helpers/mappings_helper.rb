@@ -20,24 +20,18 @@ module MappingsHelper
     process = mapping.process || {}
 
     if inter_portal_mapping?(target_concept)
-      cls_link = ajax_to_inter_portal_cls(target_concept)
+      cls_link = target_concept.id
       ont_name = target_concept.links['ontology']
       ont_link = link_to ont_name, get_inter_portal_ui_link(ont_name, process['name']), target: '_blank'
       source_tooltip = 'Internal-portal'
     elsif internal_mapping?(target_concept)
-      begin
-        ont = target_concept.explore.ontology
-        ont_name = ont.acronym
-        ont_link = link_to ont_name, ontology_path(ont_name), 'data-turbo-frame': '_top'
-      rescue
-        ont_name = target_concept.links['ontology'] || target_concept.id
-        ont_link = ont_name
-      end
+      ont_name = target_concept.links['ontology'].split('/').last
+      ont_link = link_to ont_name, ontology_path(ont_name), 'data-turbo-frame': '_top'
       cls_link = raw(get_link_for_cls_ajax(target_concept.id, ont_name, '_top'))
       source_tooltip = 'Internal'
     else
       cls_label = ExternalLinkTextComponent.new(text: target_concept.links['self']).call
-      cls_link = raw("<a href='#{target_concept.links["self"]}' target='_blank'>#{cls_label}</a>")
+      cls_link = raw("<a href='#{target_concept.links['self']}' target='_blank'>#{cls_label}</a>")
       ont_name = target_concept.links['ontology']
       ont_link = link_to ExternalLinkTextComponent.new(text: ont_name).call, target_concept.links['ontology'],
                          target: '_blank'

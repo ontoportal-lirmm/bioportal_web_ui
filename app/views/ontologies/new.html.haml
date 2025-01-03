@@ -39,7 +39,7 @@
                         .upload-ontology-field-container
                           - @submission.valid = nil unless @submission.status&.eql?('retired')
                           = attribute_input("valid")
-                  .upload-ontology-field-container
+                  .upload-ontology-field-container.mt-3
                     = render partial: 'ontologies/submission_location_form'
 
                 - c.page do

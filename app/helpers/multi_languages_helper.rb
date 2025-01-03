@@ -22,6 +22,10 @@ module MultiLanguagesHelper
     }
   end
 
+  def portal_language_enabled?(lang)
+    portal_languages.reject { |_k, x| x[:disabled] }.keys.include?(lang)
+  end
+
   def portal_language_selector
     languages = portal_languages
     selected_language = portal_lang

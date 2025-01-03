@@ -88,10 +88,11 @@
               = t('users.edit.last_name')
               %font{:color => "red"} *
             = text_field :user, :lastName, value: @user.lastName, class: "register-input-short"
-        %p.register-input-title
-          = t('users.edit.username')
-          %font{:color => "red"} *
-        = text_field :user, :username, value: @user.username, class: "register-input-long"
+        %div.hidden
+          %p.register-input-title
+            = t('users.edit.username')
+            %font{:color => "red"} *
+          = text_field :user, :username, value: @user.username, class: "register-input-long"
         %p.register-input-title
           = t('users.edit.email')
           %font{:color => "red"} *

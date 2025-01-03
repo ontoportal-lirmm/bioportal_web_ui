@@ -3,10 +3,10 @@
   .summary-page-center
     .summary-page-first-row
       = render partial: 'ontologies/sections/metadata/ontology_description_section'
+      = render partial: 'ontologies/sections/metadata/ontology_metrics_section'
       = render partial: 'ontologies/sections/metadata/ontology_fairness_section'
       = render partial: 'ontologies/sections/metadata/ontology_relations_network'
       = render partial: 'ontologies/sections/metadata/ontology_submissions_section'
-      = render partial: 'ontologies/sections/metadata/ontology_metrics_section'
     .summary-page-second-row
       = ontology_depiction_card
       = properties_card(t('ontologies.sections.identifiers'),t("ontologies.sections.identifiers"), @identifiers) do |values|

@@ -193,6 +193,7 @@ en:
       problem_of_updating: Problem updating the category - %{message}
       category_deleted_successfully: Category successfully deleted in %{time}s
       problem_of_deleting: Problem deleting the category - %{message}
+      category_used_parent: "Can't delete category, used as a parent category for:"
       edit_button: "Edit"
       delete: Delete
       info_error_delete: Can't delete this category because still used
@@ -1426,6 +1427,7 @@ en:
     ontology_visits: Ontology visits
     name: name
     visits: visits
+    count: concepts
   ontologies_selector:
     clear_selection: Clear selection
     ontologies_advanced_selection: Ontologies advanced selection
@@ -1477,9 +1479,9 @@ en:
     privacy_policy_anchor: "#h-privacy-policy"
   taxonomy:
     groups_and_categories: Groups and Categories
-    description: In AgroPortal, ontologies are organized in groups and tagged with categories. Typically, groups associate ontologies from the same project or organization for better identification of the provenance. Whereas categories are about subjects/topics and enable to classify ontologies. As of 2016, AgroPortal's categories were established in cooperation with FAO AIMS. In 2024, we moved to UNESCO nomenclature for fields of science and technology. Groups and categories, along with other metadata, can be used on the “Browse” page of AgroPortal to filter out the list of ontologies.
+    description: "In %{portal}, ontologies are organized in groups and tagged with categories. Typically, groups associate ontologies from the same project or organization for better identification of the provenance. Whereas categories are about subjects/topics and enable to classify ontologies. As of 2016, %{portal}'s categories were established in cooperation with FAO AIMS. In 2024, we moved to UNESCO Thesaurus (https://vocabularies.unesco.org). Groups and categories, along with other metadata, can be used on the “Browse” page of %{portal} to filter out the list of ontologies."
     show_sub_categories: Show sub categories
-
+    no_taxonomy_created: "No %{type} are created yet"
   federation:
     results_from_external_portals: Results from external portals
     not_responding: is not responding.

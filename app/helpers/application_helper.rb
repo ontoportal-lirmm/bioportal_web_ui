@@ -129,7 +129,7 @@ module ApplicationHelper
 
   def add_comment_button(parent_id, parent_type)
     if session[:user].nil?
-      link_to t('application.add_comment'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim"
+      link_to t('application.add_comment'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim", data: {'turbo-frame': '_top'}
     else
       link_to_modal t('application.add_comment'), notes_new_comment_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
                     class: "secondary-button regular-button slim", data: { show_modal_title_value: t('application.add_new_comment')}
@@ -146,7 +146,7 @@ module ApplicationHelper
 
   def add_proposal_button(parent_id, parent_type)
     if session[:user].nil?
-      link_to t('application.add_proposal'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim"
+      link_to t('application.add_proposal'),  login_index_path(redirect: request.url), class: "secondary-button regular-button slim",  data: {'turbo-frame': '_top'}
     else
       link_to_modal t('application.add_proposal'), notes_new_proposal_path(parent_id: parent_id, parent_type: parent_type, ontology_id: @ontology.acronym),
                     class: "secondary-button regular-button slim", data: { show_modal_title_value: t('application.add_new_proposal')}
@@ -175,10 +175,9 @@ module ApplicationHelper
   end
 
   def subscribed_to_ontology?(ontology_acronym, user)
-    user = LinkedData::Client::Models::User.find(user.username, {include: 'subscription'}) if user.subscription.nil?
+    user = LinkedData::Client::Models::User.find(user.username, {include: 'all'}) if user.subscription.nil?
     return false if user.subscription.nil? or user.subscription.empty?
     user.subscription.each do |sub|
-      #sub = {ontology: ontology_acronym, notification_type: "NOTES"}
       sub_ont_acronym = sub[:ontology] ?  sub[:ontology].split('/').last : nil #  make sure we get the acronym, even if it's a full URI
       return true if sub_ont_acronym == ontology_acronym
     end
@@ -450,6 +449,15 @@ module ApplicationHelper
   def categories_select(id: nil, name: nil, selected: 'None')
     categories_for_select = LinkedData::Client::Models::Category.all.map{|x| ["#{x.name} (#{x.acronym})", x.id]}.unshift(["None", ''])
     render Input::SelectComponent.new(id: id, name: name, value: categories_for_select, selected: selected, multiple: true)
+  end
+
+  def category_is_parent?(parents_list, category)
+    is_parent = parents_list.keys.include?(category.id)
+    parent_error_message = t('admin.categories.category_used_parent')
+    parents_list[category.id].each do |c|
+      parent_error_message = "#{parent_error_message} #{c}"
+    end
+    [is_parent,parent_error_message]
   end
 
   def categories_with_children(categories)
