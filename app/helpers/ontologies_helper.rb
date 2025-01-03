@@ -1,6 +1,6 @@
 require 'iso-639'
 module OntologiesHelper
-
+  include ApplicationHelper
   REST_URI = $REST_URL
   API_KEY = $API_KEY
   LANGUAGE_FILTERABLE_SECTIONS = %w[classes schemes collections instances properties].freeze
@@ -799,10 +799,6 @@ module OntologiesHelper
 
   def submission_languages(submission = @submission)
     Array(submission&.naturalLanguage).map { |natural_language| natural_language["iso639"] && natural_language.split('/').last }.compact
-  end
-
-  def id_to_acronym(id)
-    id.split('/').last
   end
 
   def browse_taxonomy_tooltip(taxonomy_type)
