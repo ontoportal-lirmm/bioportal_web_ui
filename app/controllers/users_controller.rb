@@ -40,6 +40,7 @@ class UsersController < ApplicationController
     @user_ontologies ||= []
 
     @admin_ontologies = @ontologies.select {|o| o.administeredBy.include? @user.id }
+    @accessed_ontologies = @ontologies.select {|o| o.acl.include? @user.id }
 
     projects = LinkedData::Client::Models::Project.all;
     @user_projects = projects.select {|p| p.creator.include? @user.id }
