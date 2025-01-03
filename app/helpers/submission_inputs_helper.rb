@@ -1,7 +1,7 @@
 module SubmissionInputsHelper
 
   class SubmissionMetadataInput
-    include MetadataHelper
+    include MetadataHelper, ApplicationHelper
 
     def initialize(attribute_key:, attr_metadata:, submission: nil, label: nil)
       @attribute_key = attribute_key
@@ -128,9 +128,10 @@ module SubmissionInputsHelper
 
   def ontology_categories_input(ontology = @ontology, categories = @categories)
     categories ||= LinkedData::Client::Models::Category.all(display_links: false, display_context: false)
+    categories_children = categories_with_children(categories)
 
     render Input::InputFieldComponent.new(name: '', label: 'Categories') do
-      content_tag(:div, class: 'upload-ontology-chips-container', 'data-controller': 'parent-categories-selector', 'data-parent-categories-selector-categories-value': "#{categories.to_json}", 'data-parent-categories-selector-target': "chips") do
+      content_tag(:div, class: 'upload-ontology-chips-container', 'data-controller': 'parent-categories-selector', 'data-parent-categories-selector-categories-children-value': "#{categories_children.to_json}", 'data-parent-categories-selector-target': "chips") do
         hidden_field_tag('ontology[hasDomain][]') +
         categories.map do |category|
           content_tag(:div, 'data-action': 'click->parent-categories-selector#check') do

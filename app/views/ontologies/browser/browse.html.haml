@@ -44,7 +44,7 @@
             %div.browse-filter
               = switch_input(id:'filter-views', name:'views', checked: @show_views, label: t("ontologies.browser.show_ontology_views"))
               = switch_input(id:'filter-retired', name:'retired',checked: @show_retired , label: t("ontologies.browser.show_retired_ontologies"))
-            %div{'data-controller': 'parent-categories-selector', 'data-parent-categories-selector-categories-value': "#{@categories.to_json}"}
+            %div{'data-controller': 'parent-categories-selector', 'data-parent-categories-selector-categories-children-value': "#{categories_with_children(@categories).to_json}"}
               - @filters.each do |key, values|
                 %div{ id: "#{key}_filter_container", data:{controller: "browse_filters show-filter-count", 
                     action: "change->show-filter-count#updateCount

@@ -3,13 +3,12 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="parent-categories-selector"
 export default class extends Controller {
     static targets = ['chips']
-    static values = { categories: Array}
+    static values = { categoriesChildren: Object}
 
     check(event){
         const input = event.currentTarget.querySelector('input')
         const allInputs = this.chipsTarget.querySelectorAll('input')
-        const parents = this.#categories_with_children()
-
+        const parents = this.categoriesChildrenValue
         if(this.#id_to_acronym(input.value) in parents){
             const parentChildren = parents[this.#id_to_acronym(input.value)]
             allInputs.forEach(i => {
@@ -24,24 +23,6 @@ export default class extends Controller {
                 }
             });
         }
-    }
-
-    #categories_with_children(){        
-        const parentToChildren = {};
-        this.categoriesValue.forEach(category => {
-        if (category.parentCategory) {
-            category.parentCategory.forEach(parentId => {
-            const parentAcronym = this.#id_to_acronym(parentId);
-            const childAcronym = this.#id_to_acronym(category.id);
-
-            if (!parentToChildren[parentAcronym]) {
-                parentToChildren[parentAcronym] = [];
-            }
-            parentToChildren[parentAcronym].push(childAcronym);
-            });
-        }
-        });
-        return parentToChildren
     }
 
     #id_to_acronym(id){
