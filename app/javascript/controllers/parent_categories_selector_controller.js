@@ -11,7 +11,14 @@ export default class extends Controller {
         const parents = this.categoriesChildrenValue;
         const children = this.categoriesParentsValue;
         const browseLogic = !this.hasCategoriesParentsValue;
-    
+
+        // Browse page logic: 
+            // - Selecting a category will auto select all its children
+            // - Deselecting a category will auto deselect all its children
+        // Upload/Edit forms logic: 
+            // - Selecting a category will auto select its parents
+            // - Deselecting a category will auto deselect its children
+
         const inputAcronym = this.#id_to_acronym(input.value);
     
         if (browseLogic) {
