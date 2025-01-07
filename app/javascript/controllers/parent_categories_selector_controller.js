@@ -5,49 +5,39 @@ export default class extends Controller {
     static targets = ['chips']
     static values = { categoriesChildren: Object, categoriesParents: Object}
 
-    check(event){
-        const input = event.currentTarget.querySelector('input')
-        const allInputs = this.chipsTarget.querySelectorAll('input')
-        const parents = this.categoriesChildrenValue
-        const children = this.categoriesParentsValue
-        const browse_logic = !this.hasCategoriesParentsValue
-
-        if(browse_logic){
-            if(this.#id_to_acronym(input.value) in parents){
-                const parentChildren = parents[this.#id_to_acronym(input.value)]
-                allInputs.forEach(i => {
-                    if(parentChildren.includes(this.#id_to_acronym(i.value))){
-                        if(input.checked){
-                            i.checked = true;
-                            i.dispatchEvent(new Event('change', { bubbles: true })); 
-                        } else {
-                            i.checked = false;
-                            i.dispatchEvent(new Event('change', { bubbles: true })); 
-                        }
-                    }
-                });
+    check(event) {
+        const input = event.currentTarget.querySelector('input');
+        const allInputs = this.chipsTarget.querySelectorAll('input');
+        const parents = this.categoriesChildrenValue;
+        const children = this.categoriesParentsValue;
+        const browseLogic = !this.hasCategoriesParentsValue;
+    
+        const inputAcronym = this.#id_to_acronym(input.value);
+    
+        if (browseLogic) {
+            if (inputAcronym in parents) {
+                const parentChildren = parents[inputAcronym];
+                this.#toggleInputState(allInputs, i => parentChildren.includes(this.#id_to_acronym(i.value)), input.checked);
             }
         } else {
-            if(this.#id_to_acronym(input.value) in parents){
-                const parentChildren = parents[this.#id_to_acronym(input.value)]
-                allInputs.forEach(i => {
-                    if(parentChildren.includes(this.#id_to_acronym(i.value)) && !input.checked){
-                        i.checked = false;
-                        i.dispatchEvent(new Event('change', { bubbles: true })); 
-                    }
-    
-                });
+            if (inputAcronym in parents) {
+                const parentChildren = parents[inputAcronym];
+                this.#toggleInputState(allInputs, i => parentChildren.includes(this.#id_to_acronym(i.value)), false);
             }
-            if(this.#id_to_acronym(input.value) in children){
-                const childParents = children[this.#id_to_acronym(input.value)]
-                allInputs.forEach(i => {
-                    if(childParents.includes(this.#id_to_acronym(i.value)) && input.checked){
-                        i.checked = true;
-                        i.dispatchEvent(new Event('change', { bubbles: true })); 
-                    }
-                });
+            if (inputAcronym in children) {
+                const childParents = children[inputAcronym];
+                this.#toggleInputState(allInputs, i => childParents.includes(this.#id_to_acronym(i.value)), true);
             }
         }
+    }
+
+    #toggleInputState(inputs, condition, state) {
+        inputs.forEach(input => {
+            if (condition(input)) {
+                input.checked = state;
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
     }
 
     #id_to_acronym(id){
