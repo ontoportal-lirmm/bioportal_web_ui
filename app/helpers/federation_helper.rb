@@ -163,7 +163,7 @@ module FederationHelper
   end
 
   def federation_portal_status(portal_name: nil)
-    Rails.cache.fetch("federation_portal_up_#{portal_name}", expires_in: 2.hours) do
+    Rails.cache.fetch("federation_portal_up_#{portal_name}", expires_in: 10.minutes) do
       portal_api = federated_portals&.dig(portal_name,:api)
       return false unless portal_api
       portal_up = false
