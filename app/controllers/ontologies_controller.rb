@@ -588,6 +588,7 @@ class OntologiesController < ApplicationController
 
   def keep_only_root_categories(categories)
     categories.select do |category|
+      next unless category.id
       category.id.start_with?(rest_url) || category.parentCategory.blank?
     end
   end
