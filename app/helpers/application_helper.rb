@@ -473,6 +473,16 @@ module ApplicationHelper
     parent_to_children
   end
 
+  def categories_with_parents(categories_children)
+    categories_parents = Hash.new { |hash, key| hash[key] = [] }
+    categories_children.each do |child, parents|
+      parents.each do |parent|
+        categories_parents[parent] << child
+      end
+    end
+    categories_parents
+  end
+
   def id_to_acronym(id)
     id.split('/').last
   end
