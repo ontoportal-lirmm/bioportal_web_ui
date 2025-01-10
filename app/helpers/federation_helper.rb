@@ -260,8 +260,8 @@ module FederationHelper
   def most_referred_portal(ontology_submissions)
     portal_counts = Hash.new(0)
     ontology_submissions.each do |submission|
-      federated_portals.keys.each do |portal|
-        portal_counts[portal] += 1 if submission[:pullLocation]&.include?(portal.to_s)
+      request_portals.each do |portal|
+        portal_counts[portal.downcase] += 1 if submission[:pullLocation]&.include?(portal.downcase)
       end
     end
     portal_counts.max_by { |_, count| count }&.first
