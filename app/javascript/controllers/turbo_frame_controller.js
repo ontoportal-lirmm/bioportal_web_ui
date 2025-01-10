@@ -32,10 +32,10 @@ export default class extends Controller {
             this.urlValue = this.#updatedPageUrl(data)
             
             this.frame.src  = this.urlValue
-            
-            setTimeout(() => {
-                this.frame.setAttribute('busy', 'true')
-            }, 0);
+
+            requestAnimationFrame(() => {
+                this.frame.setAttribute('busy', 'true');
+            });
         }
     }
 
