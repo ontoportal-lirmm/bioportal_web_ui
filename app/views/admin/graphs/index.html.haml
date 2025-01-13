@@ -1,0 +1,32 @@
+= turbo_frame_tag 'graphs-admin' do
+  = render_alerts_container
+  %div#site-admin-clear-caches.my-2
+  %div
+    %div.d-flex.justify-content-between.w-100
+      %div
+        %p Total graphs: #{@graphs.size}
+        %p Total triples: #{@graphs.reduce(0){|sum, (k,v)| sum + v[0]}}
+        %p Total zombie graphs: #{@graphs.reduce(0){|sum, (k,v)| sum + (v[1] ? 1 : 0)}}
+      %div
+        = form_with url: admin_index_batch_path, method: 'post', data:{turbo: true, turbo_frame: '_top'} do
+          = regular_button('graphs-genrate', 'Generate Graphs count report')
+    %div
+      = render TableComponent.new(id: 'search_collections', custom_class: 'border rounded', paging: true, searching: true, sort_column: 1) do |t|
+        - t.header do |h|
+          - h.th { "#" }
+          - h.th { "Graph URI" }
+          - h.th { "Triples count" }
+          - h.th { "Zombie graph?" }
+          - h.th { t('admin.search.index.actions') }
+        - @graphs.each_with_index do |graph_count, i|
+          - graph, values = graph_count
+          - t.row do |r|
+            - r.td{ i.to_s }
+            - r.td{ graph }
+            - r.td{ values[0].to_s}
+            - r.td{ values[1].to_s}
+            - r.td do
+              .d-flex.align-items-center
+                - if values[1]
+                  %span
+                    = action_button('Delete', "/admin/graphs/#{graph}", method: :delete)

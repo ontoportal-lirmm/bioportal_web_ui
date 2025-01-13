@@ -89,8 +89,13 @@ Rails.application.routes.draw do
       post ':collection/init_schema', to: 'search#init_schema'
       get ':collection/schema', to: 'search#show'
       get ':collection/data', to: 'search#search'
-    end
 
+    end
+    scope :graphs do
+      get '/', to: 'graphs#index'
+      post '/', to: 'graphs#generate'
+      delete '/', to: 'graphs#delete'
+    end
   end
 
   post 'admin/clearcache', to: 'admin#clearcache'
