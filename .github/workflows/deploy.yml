@@ -11,25 +11,17 @@
 # SSH_JUMPHOST - ssh jump/proxy host though which deployments have to though if UI nodes live on private network.
 # SSH_JUMPHOST_USER - username  to use to connect to the ssh jump/proxy.
 #
-# DEPLOY_ENC_KEY - key for decrypting deploymnet ssh key residing in config/
+# DEPLOY_ENC_KEY - key for decrypting deployment ssh key residing in config/
 # this SSH key is used for accessing jump host, UI nodes, and private github repo.
 
 name: Capistrano Deployment
 # Controls when the action will run.
 on:
-  push:
-    branches:
-      - stage
-      - test
   # Allows running this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       BRANCH:
         description: "Branch/tag to deploy"
-        options:
-          - stage
-          - test
-          - master
         default: stage
         required: true
       environment:
@@ -39,20 +31,17 @@ on:
           - staging
           - agroportal
           - test
-        default: stage
+        default: staging
 jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      BUNDLE_WITHOUT: default #install gems required primarely for deployment in order to speed up workflow
+      BUNDLE_WITHOUT: default # install gems required primarily for deployment in order to speed up workflow
       PRIVATE_CONFIG_REPO: ${{ format('git@github.com:{0}.git', secrets.CONFIG_REPO) }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: set branch/tag and environment to deploy from inputs
         run: |
-          # workflow_dispatch default input doesn't get set on push so we need to set defaults
-          # via shell parameter expansion
-          # https://dev.to/mrmike/github-action-handling-input-default-value-5f2g
           USER_INPUT_BRANCH=${{ inputs.branch }}
           echo "BRANCH=${USER_INPUT_BRANCH:github.head_ref:-master}" >> $GITHUB_ENV
 
