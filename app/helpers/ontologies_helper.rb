@@ -1,6 +1,5 @@
 require 'iso-639'
 module OntologiesHelper
-  include ApplicationHelper
   REST_URI = $REST_URL
   API_KEY = $API_KEY
   LANGUAGE_FILTERABLE_SECTIONS = %w[classes schemes collections instances properties].freeze
