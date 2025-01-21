@@ -93,8 +93,8 @@ Rails.application.routes.draw do
     end
     scope :graphs do
       get '/', to: 'graphs#index'
-      post '/', to: 'graphs#generate'
-      delete '/', to: 'graphs#delete'
+    end
+
     end
   end
 
