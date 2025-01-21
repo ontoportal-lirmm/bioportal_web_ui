@@ -1,5 +1,8 @@
 class AdminController < ApplicationController
-  include TurboHelper, HomeHelper, SparqlHelper
+  include AdminHelper
+  include SparqlHelper
+  include HomeHelper
+  include TurboHelper
   layout :determine_layout
   before_action :cache_setup
 
@@ -16,7 +19,7 @@ class AdminController < ApplicationController
     user_name = params["username"]
 
     unless user_name.blank?
-      user = LinkedData::Client::Models::User.find(user_name, {include: 'all', apikey: apikey})
+      user = LinkedData::Client::Models::User.find(user_name, { include: 'all', apikey: apikey })
       render(inline: 'Query not permitted') && return if user.nil?
     end
 
@@ -24,13 +27,13 @@ class AdminController < ApplicationController
 
     unless graph.blank?
       acronym = graph.split('/')[-3]
-      @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym, {apikey: apikey}).first
-      render(inline: t('admin.query_not_permitted')) && return  if @ontology.nil? || @ontology.errors
+      @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym, { apikey: apikey }).first
+      render(inline: t('admin.query_not_permitted')) && return if @ontology.nil? || @ontology.errors
     end
 
     response = helpers.ontology_sparql_query(params[:query], graph)
 
-    render inline:  response
+    render inline: response
   end
 
   def index
@@ -38,7 +41,8 @@ class AdminController < ApplicationController
     @ontology_visits = ontology_visits_data
     @users_visits = user_visits_data
     @page_visits = page_visits_data
-    @ontologies_problems_count = _ontologies_report[:ontologies]&.select{|a,v| v[:problem]}&.size || 0
+    @users_count = user_count
+    @ontologies_problems_count = _ontologies_report[:ontologies]&.select { |a, v| v[:problem] }&.size || 0
 
     if session[:user].nil? || !session[:user].admin?
       redirect_to :controller => 'login', :action => 'index', :redirect => '/admin'
@@ -47,12 +51,11 @@ class AdminController < ApplicationController
     end
   end
 
-
   def update_check_enabled
     enabled = LinkedData::Client::HTTP.get("#{ADMIN_URL}update_check_enabled", {}, raw: false)
 
     if enabled
-      response = {update_info: Hash.new, errors: nil, success: '', notices: ''}
+      response = { update_info: Hash.new, errors: nil, success: '', notices: '' }
       json = LinkedData::Client::HTTP.get("#{ADMIN_URL}update_info", params, raw: true)
 
       begin
@@ -74,21 +77,18 @@ class AdminController < ApplicationController
       else
         output = []
 
-        output << response[:update_info]["notes"]  if response[:update_info]["update_available"]
+        output << response[:update_info]["notes"] if response[:update_info]["update_available"]
 
         output << t('admin.current_version', version: response[:update_info]['current_version'])
         output << t('admin.appliance_id', id: response[:update_info]['appliance_id'])
 
-
-        render_turbo_stream *output.map{|message|   alert(id: 'update_check_frame', type: 'info') {message} }
-
+        render_turbo_stream *output.map { |message| alert(id: 'update_check_frame', type: 'info') { message } }
 
       end
     else
       render_turbo_stream alert(id: 'update_check_frame', type: 'info') { 'not enabled' }
     end
   end
-
 
   def parse_log
     @acronym = params["acronym"]
@@ -108,7 +108,7 @@ class AdminController < ApplicationController
   end
 
   def clearcache
-    response = {errors: nil, success: ''}
+    response = { errors: nil, success: '' }
 
     if @cache.respond_to?(:flush_all)
       begin
@@ -134,7 +134,7 @@ class AdminController < ApplicationController
   end
 
   def resetcache
-    response = {errors: nil, success: ''}
+    response = { errors: nil, success: '' }
 
     if @cache.respond_to?(:reset)
       begin
@@ -144,7 +144,7 @@ class AdminController < ApplicationController
         response[:errors] = t('admin.cache_reset_error', message: e.message)
       end
     else
-      response[:errors] =  t('admin.no_reset_command')
+      response[:errors] = t('admin.no_reset_command')
     end
 
     respond_to do |format|
@@ -159,7 +159,7 @@ class AdminController < ApplicationController
   end
 
   def clear_goo_cache
-    response = {errors: nil, success: ''}
+    response = { errors: nil, success: '' }
 
     begin
       response_raw = LinkedData::Client::HTTP.post("#{ADMIN_URL}clear_goo_cache", params, raw: true)
@@ -181,7 +181,7 @@ class AdminController < ApplicationController
   end
 
   def clear_http_cache
-    response = {errors: nil, success: ''}
+    response = { errors: nil, success: '' }
 
     begin
       response_raw = LinkedData::Client::HTTP.post("#{ADMIN_URL}clear_http_cache", params, raw: true)
@@ -207,7 +207,7 @@ class AdminController < ApplicationController
   end
 
   def refresh_ontologies_report
-    response = {errors: '', success: ''}
+    response = { errors: '', success: '' }
 
     begin
       response_raw = LinkedData::Client::HTTP.post(ONTOLOGIES_URL, params, raw: true)
@@ -221,7 +221,7 @@ class AdminController < ApplicationController
         if params["ontologies"].nil? || params["ontologies"].empty?
           response[:success] = t('admin.refresh_report_without_ontologies')
         else
-          ontologies = params["ontologies"].split(",").map {|o| o.strip}
+          ontologies = params["ontologies"].split(",").map { |o| o.strip }
           response[:success] = t('admin.refresh_report_with_ontologies', ontologies: ontologies.join(", "))
         end
       end
@@ -231,7 +231,6 @@ class AdminController < ApplicationController
     end
     render :json => response
   end
-
 
   def process_ontologies
     _process_ontologies('enqued for processing', 'processing', :_process_ontology)
@@ -266,12 +265,12 @@ class AdminController < ApplicationController
         response[:errors] << t('admin.ontology_not_found', ont: ont)
       end
     rescue Exception => e
-      response[:errors] << t('admin.problem_deleting_submission', id: params["id"], ont: ont, class: e.class, message: e.message )
+      response[:errors] << t('admin.problem_deleting_submission', id: params["id"], ont: ont, class: e.class, message: e.message)
     end
 
     if params[:turbo_stream]
       if response[:errors].empty?
-        render_turbo_stream( alert_success { response[:success] }, remove('submission_' + submission_id.to_s))
+        render_turbo_stream(alert_success { response[:success] }, remove('submission_' + submission_id.to_s))
 
       else
         render_turbo_stream alert_error { response[:errors] }
@@ -282,7 +281,6 @@ class AdminController < ApplicationController
 
   end
 
-
   private
 
   def cache_setup
@@ -290,7 +288,7 @@ class AdminController < ApplicationController
   end
 
   def _ontologies_report
-    response = {ontologies: Hash.new, report_date_generated: REPORT_NEVER_GENERATED, errors: '', success: ''}
+    response = { ontologies: Hash.new, report_date_generated: REPORT_NEVER_GENERATED, errors: '', success: '' }
     start = Time.now
 
     begin
@@ -310,7 +308,7 @@ class AdminController < ApplicationController
     response
   end
 
-  def _process_errors(errors, response, remove_trailing_comma=true)
+  def _process_errors(errors, response, remove_trailing_comma = true)
     if errors.is_a?(Hash)
       errors.each do |_, v|
         if v.kind_of?(Array)
@@ -321,7 +319,7 @@ class AdminController < ApplicationController
         end
       end
     elsif errors.kind_of?(Array)
-      errors.each {|err| response[:errors] << "#{err}, "}
+      errors.each { |err| response[:errors] << "#{err}, " }
     end
     response[:errors] = response[:errors][0...-2] if remove_trailing_comma
   end
@@ -336,12 +334,12 @@ class AdminController < ApplicationController
   end
 
   def _process_ontologies(success_keyword, error_keyword, process_proc)
-    response = {errors: '', success: ''}
+    response = { errors: '', success: '' }
 
     if params["ontologies"].nil? || params["ontologies"].empty?
       response[:errors] = t('admin.no_ontologies_parameter_passed')
     else
-      ontologies = params["ontologies"].split(",").map {|o| o.strip}
+      ontologies = params["ontologies"].split(",").map { |o| o.strip }
 
       ontologies.each do |ont|
         begin
@@ -367,7 +365,6 @@ class AdminController < ApplicationController
     end
     render :json => response
   end
-
 
   def user_visits_data
     begin
@@ -403,7 +400,7 @@ class AdminController < ApplicationController
     aggregated_data = {}
     analytics.each do |acronym, years_data|
       current_year_count = 0
-      previous_year_count  = 0
+      previous_year_count = 0
       years_data.each do |year, months_data|
         previous_year_count += current_year_count
         current_year_count = 0
@@ -422,7 +419,6 @@ class AdminController < ApplicationController
         @new_ontologies_count << [acronym]
       end
     end
-
 
     aggregated_data.sort.each do |year, year_data|
       year_data.each do |month, value|
