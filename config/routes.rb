@@ -97,7 +97,6 @@ Rails.application.routes.draw do
   end
 
   post 'admin/clearcache', to: 'admin#clearcache'
-  post 'admin/resetcache', to: 'admin#resetcache'
   post 'admin/clear_goo_cache', to: 'admin#clear_goo_cache'
   post 'admin/clear_http_cache', to: 'admin#clear_http_cache'
   get 'admin/ontologies_report', to: 'admin#ontologies_report'
