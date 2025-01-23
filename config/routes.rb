@@ -87,6 +87,7 @@ Rails.application.routes.draw do
 
     scope :graphs do
       get '/', to: 'graphs#index'
+      post '/', to: 'graphs#create'
     end
 
     scope :logs do
