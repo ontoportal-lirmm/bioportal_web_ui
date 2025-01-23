@@ -25,6 +25,8 @@ module AdminHelper
   def user_count
     user_count = LinkedData::Client::HTTP.get(Admin::LogsController::USERS_QUERY_COUNT.dup, {}, raw: true)
     user_count = MultiJson.load(user_count)
+    return [] if user_count.is_a?(Hash) && user_count['errors']
+
     user_count.sort_by! { |uc| uc['count'] }.reverse!
     user_count.map! { |uc| [uc['user'].split('/').last, uc['count']] }.to_h
   end
