@@ -23,7 +23,12 @@ module AdminHelper
   end
 
   def user_count
-    user_count = LinkedData::Client::HTTP.get(Admin::LogsController::USERS_QUERY_COUNT.dup, {}, raw: true)
+    begin
+      user_count = LinkedData::Client::HTTP.get(Admin::LogsController::USERS_QUERY_COUNT.dup, {}, raw: true)
+    rescue
+      user_count = '[]'
+    end
+
     user_count = MultiJson.load(user_count)
     return [] if user_count.is_a?(Hash) && user_count['errors']
 

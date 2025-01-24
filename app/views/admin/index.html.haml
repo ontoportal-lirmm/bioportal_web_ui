@@ -21,13 +21,14 @@
         - else
           = render 'analytics'
 
-        %div
-          %div.my-2
-            %div.card.p-2
-              = chart_component(title: 'Users API usage the last 30 days', type: 'bar',
-                                    labels: @users_count.keys,
-                                    datasets: visits_chart_dataset_array({'SPARQL Calls': @users_count.values}),
-                                    index_axis: 'y')
+        - unless @users_count.empty?
+          %div
+            %div.my-2
+              %div.card.p-2
+                = chart_component(title: 'Users API usage the last 30 days', type: 'bar',
+                                      labels: @users_count.keys,
+                                      datasets: visits_chart_dataset_array({'SPARQL Calls': @users_count.values}),
+                                      index_axis: 'y')
       - t.item_content do
         = render 'main'
       - t.item_content do
