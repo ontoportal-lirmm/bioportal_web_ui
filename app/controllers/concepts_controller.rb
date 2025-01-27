@@ -23,7 +23,7 @@ class ConceptsController < ApplicationController
     redirect_to(ontology_path(id: params[:ontology], p: 'classes', conceptid: params[:id], lang: request_lang)) and return unless turbo_frame_request?
 
     @submission = get_ontology_submission_ready(@ontology)
-    @concept = @ontology.explore.single_class({full: true, language: request_lang}, params[:id])
+    @concept = @ontology.explore.single_class({ full: true, language: request_lang }, params[:id])
     @instances_concept_id = @concept.id
 
     concept_not_found(params[:id]) if @concept.nil?
@@ -40,22 +40,21 @@ class ConceptsController < ApplicationController
       return
     end
 
-    # Note that find_by_acronym includes views by default
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-
-    @submission = @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri')
-
-    @concept = @ontology.explore.single_class({dispay: 'prefLabel'}, params[:id])
-
-    concept_not_found(params[:id]) if @concept.nil?
+    @submission = LinkedData::Client::Models::Ontology.explore(params[:ontology])
+                                                      .latest_submission
+                                                      .get(include: 'uriRegexPattern,preferredNamespaceUri')
     @schemes = params[:concept_schemes].split(',')
 
-    @concept.children = @concept.explore.children(pagesize: 750, concept_schemes: Array(@schemes).join(','), language: request_lang, display: 'prefLabel,obsolete,hasChildren').collection || []
+    @concept = LinkedData::Client::Models::Class.new(values: { id: params[:id] })
 
+    @concept.children = LinkedData::Client::Models::Ontology.explore(params[:ontology])
+                                                            .classes(params[:id])
+                                                            .children
+                                                            .get(pagesize: 750, concept_schemes: Array(@schemes).join(','), language: request_lang, display: 'prefLabel,obsolete,hasChildren').collection || []
     render turbo_stream: [
       replace(helpers.child_id(@concept) + '_open_link') { TreeLinkComponent.tree_close_icon },
       replace(helpers.child_id(@concept) + '_childs') do
-        helpers.concepts_tree_component(@concept, @concept, @ontology.acronym, Array(@schemes), request_lang, sub_tree: true, submission: @submission)
+        helpers.concepts_tree_component(@concept, @concept, params[:ontology], Array(@schemes), request_lang, sub_tree: true, submission: @submission)
       end
     ]
   end
@@ -84,11 +83,11 @@ class ConceptsController < ApplicationController
 
   def show_tree
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-    @submission = @ontology.explore.latest_submission(include:'uriRegexPattern,preferredNamespaceUri')
+    @submission = @ontology.explore.latest_submission(include: 'uriRegexPattern,preferredNamespaceUri')
     if @ontology.nil? || @ontology.errors
       ontology_not_found(params[:ontology])
     else
-      get_class(params) #application_controller
+      get_class(params) # application_controller
 
       not_found(t('concepts.missing_roots')) if @root.nil?
 
@@ -109,8 +108,8 @@ class ConceptsController < ApplicationController
       auto_click = page.to_s.eql?('1')
       params = {
         page: page,
-        sortby:'modified,created',
-        order:'desc,desc',
+        sortby: 'modified,created',
+        order: 'desc,desc',
         display: 'prefLabel,modified,created',
         language: request_lang
       }
@@ -142,32 +141,27 @@ class ConceptsController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     ontology_not_found(params[:ontology]) if @ontology.nil?
 
-    @concept = @ontology.explore.single_class({full: true}, CGI.unescape(params[:conceptid]))
+    @concept = @ontology.explore.single_class({ full: true }, CGI.unescape(params[:conceptid]))
     concept_not_found(CGI.unescape(params[:conceptid])) if @concept.nil? || @concept.errors
     @container_id = params[:modal] ? 'application_modal_content' : 'concept_details'
 
     render :partial => "details"
   end
 
-
   def biomixer
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
     ontology_not_found(params[:ontology]) if @ontology.nil?
 
-    @concept = @ontology.explore.single_class({full: true}, params[:conceptid])
+    @concept = @ontology.explore.single_class({ full: true }, params[:conceptid])
     concept_not_found(params[:conceptid]) if @concept.nil?
 
     render partial: "biomixer", layout: false
   end
 
-
   private
 
-
-
-
   def filter_concept_with_no_date(concepts)
-    concepts.filter { |c| !concept_date(c).nil?}
+    concepts.filter { |c| !concept_date(c).nil? }
   end
 
   def concepts_to_years_months(concepts)
