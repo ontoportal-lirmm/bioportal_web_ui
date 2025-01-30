@@ -27,8 +27,19 @@ class FederationTest < ApplicationSystemTestCase
   end
 
 
-  test "perform federated search in browse page and make sure duplicates are managed correctly" do
-    visit "#{@ontologies_path}?sort_by=ontology_name&portals=agroportal%2Cecoportal%2Cearthportal%2Cbiodivportal"
+  test "perform federated browse and make sure federation is working" do
+    visit "#{@ontologies_path}"
+    loop do
+      loading_element = find_all(".browse-sket").any?
+      break unless loading_element
+      page.execute_script("window.scrollBy(0, window.innerHeight)")
+      sleep 0.3
+    end
+    results_count_no_federation = first('.browse-desc-text').text.scan(/\d+/).first.to_i
+
+    visit "#{@ontologies_path}?sort_by=ontology_name&portals=agroportal"
+
+    # Scroll all down to display all the results
     loop do
       loading_element = find_all(".browse-sket").any?
 
@@ -39,11 +50,12 @@ class FederationTest < ApplicationSystemTestCase
       sleep 0.3
     end
 
+    results_count_federation = first('.browse-desc-text').text.scan(/\d+/).first.to_i
+
+    assert_not_equal results_count_no_federation, results_count_federation
+
     ontologies_titles = all(".browse-ontology-title").map { |a| a.text.strip }
 
     assert_equal ontologies_titles.count, ontologies_titles.uniq.count, "There are duplicated results !"
   end
-
-
-
 end
