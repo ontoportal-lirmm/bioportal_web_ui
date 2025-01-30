@@ -10,9 +10,15 @@ class FederationTest < ApplicationSystemTestCase
 
   end
 
-  test "perform federated search in search page and make sure duplicates are managed correctly" do
+  test "perform federated search in search page and make sure federation is working" do
+
+    visit "#{@search_path}?q=#{@query}"
+    results_count_no_federation = find('.search-page-number-of-results').text.scan(/\d+/).first.to_i
+
     visit "#{@search_path}?q=#{@query}&lang=all&portals%5B%5D=agroportal&portals%5B%5D=ecoportal&portals%5B%5D=earthportal&portals%5B%5D=biodivportal"
-    assert_selector ".search-page-number-of-results"
+    results_count_federation = find('.search-page-number-of-results').text.scan(/\d+/).first.to_i
+
+    assert_not_equal results_count_no_federation, results_count_federation
 
     results_titles = all("a.title div").map { |div| div.text.strip }
 
