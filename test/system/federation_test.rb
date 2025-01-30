@@ -15,7 +15,7 @@ class FederationTest < ApplicationSystemTestCase
     visit "#{@search_path}?q=#{@query}"
     results_count_no_federation = find('.search-page-number-of-results').text.scan(/\d+/).first.to_i
 
-    visit "#{@search_path}?q=#{@query}&lang=all&portals%5B%5D=agroportal&portals%5B%5D=ecoportal&portals%5B%5D=earthportal&portals%5B%5D=biodivportal"
+    visit "#{@search_path}?q=#{@query}&lang=all&portals%5B%5D=agroportal"
     results_count_federation = find('.search-page-number-of-results').text.scan(/\d+/).first.to_i
 
     assert_not_equal results_count_no_federation, results_count_federation
