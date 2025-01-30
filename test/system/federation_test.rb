@@ -28,6 +28,7 @@ class FederationTest < ApplicationSystemTestCase
 
 
   test "perform federated browse and make sure federation is working" do
+    ###### Federation non activated
     visit "#{@ontologies_path}"
     loop do
       loading_element = find_all(".browse-sket").any?
@@ -36,6 +37,17 @@ class FederationTest < ApplicationSystemTestCase
       sleep 0.3
     end
     results_count_no_federation = first('.browse-desc-text').text.scan(/\d+/).first.to_i
+
+    find("[data-target='#browse-categories-filter']").click
+    loop do
+      loading_element = find_all(".browse-sket").any?
+      break unless loading_element
+    end
+
+    number_categories_no_federation = all("input", visible: :all).count
+
+
+    ### Federation activated
 
     visit "#{@ontologies_path}?sort_by=ontology_name&portals=agroportal"
 
@@ -57,5 +69,18 @@ class FederationTest < ApplicationSystemTestCase
     ontologies_titles = all(".browse-ontology-title").map { |a| a.text.strip }
 
     assert_equal ontologies_titles.count, ontologies_titles.uniq.count, "There are duplicated results !"
+
+
+    find("[data-target='#browse-categories-filter']").click
+
+    loop do
+      loading_element = find_all(".browse-sket").any?
+      break unless loading_element
+    end
+
+    number_categories_federation = all("input", visible: :all).count
+
+    assert_not_equal number_categories_no_federation, number_categories_federation
+
   end
 end
