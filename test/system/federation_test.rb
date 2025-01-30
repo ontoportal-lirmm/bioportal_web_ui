@@ -5,9 +5,7 @@ class FederationTest < ApplicationSystemTestCase
   setup do
     @search_path = "/search"
     @query = "test"
-
     @ontologies_path = "/ontologies"
-
   end
 
   test "perform federated search in search page and make sure federation is working" do
@@ -30,7 +28,7 @@ class FederationTest < ApplicationSystemTestCase
   test "perform federated browse and make sure federation is working" do
     ###### Federation non activated
     visit "#{@ontologies_path}"
-    loop do
+    loop do # make sure page is not still loading
       loading_element = find_all(".browse-sket").any?
       break unless loading_element
       page.execute_script("window.scrollBy(0, window.innerHeight)")
@@ -39,7 +37,7 @@ class FederationTest < ApplicationSystemTestCase
     results_count_no_federation = first('.browse-desc-text').text.scan(/\d+/).first.to_i
 
     find("[data-target='#browse-categories-filter']").click
-    loop do
+    loop do # make sure page is not still loading
       loading_element = find_all(".browse-sket").any?
       break unless loading_element
     end
@@ -51,8 +49,8 @@ class FederationTest < ApplicationSystemTestCase
 
     visit "#{@ontologies_path}?sort_by=ontology_name&portals=agroportal"
 
-    # Scroll all down to display all the results
-    loop do
+
+    loop do # Scroll all down to display all the results
       loading_element = find_all(".browse-sket").any?
 
       break unless loading_element
