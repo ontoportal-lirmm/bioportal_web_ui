@@ -22,4 +22,19 @@ module AdminHelper
                 form: {data: { turbo: true, turbo_confirm: t('admin.turbo_confirm', name: name), turbo_frame: '_top'}}
 
   end
+
+  def portal_config_container
+    attribute_to_delete = ["context", "links", "@id", "@type"]
+    attribute_to_not_modify = ["id", "federated_portals", "fundedBy", "keyword", "numberOfArtefacts", "metrics", "numberOfClasses", "numberOfIndividuals", "numberOfProperties", "numberOfAxioms", "numberOfObjectProperties", "numberOfDataProperties", "numberOfLabels", "numberOfDeprecated", "numberOfUsingProjects", "numberOfEndorsements", "numberOfMappings", "numberOfUsers", "numberOfAgents" ]
+    root_url = "#{rest_url}/?display=all"
+    attributes_catalog = LinkedData::Client::HTTP.get(root_url, {display: :all})
+    attribute_to_delete.each do |attr|
+      attributes_catalog.delete_field(attr.to_sym)
+    end
+    attribute_to_not_modify.each do |attr|
+      attributes_catalog.delete_field(attr.to_sym)
+    end
+    @config = attributes_catalog
+    render partial: 'admin/portal_config/metadata_tab'
+  end
 end

@@ -156,7 +156,7 @@ fr:
       valid_till: Valide jusqu'à
       days_remaining: Jours restants
       renew_license: Renouveler la licence
-
+      portal_config: Configurations du portail 
     groups:
       group_created: Groupe créé avec succès en %{time}s
       group_error_creation: Problème lors de la création du groupe - %{message}

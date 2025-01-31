@@ -104,6 +104,7 @@ Rails.application.routes.draw do
   put 'admin/ontologies', to: 'admin#process_ontologies'
   get 'admin/update_check_enabled', to: 'admin#update_check_enabled'
   get 'admin/ontologies/:acronym/log', to: 'admin#parse_log'
+  post 'admin/change_configs', to: 'admin#change_portal_config'
 
   resources :subscriptions
 

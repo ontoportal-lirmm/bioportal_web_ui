@@ -282,6 +282,21 @@ class AdminController < ApplicationController
 
   end
 
+  def change_portal_config
+    config_params = params.except(:controller, :action, :format, :authenticity_token, :commit)
+    root_url = "#{rest_url}/"
+    begin
+      response = LinkedData::Client::HTTP.patch(root_url, JSON.parse(config_params.to_json))
+      if response.success?
+        flash[:notice] = 'Configuration updated successfully'
+      else
+        flash[:alert] = "Update failed: #{response.body}"
+      end
+    rescue StandardError => e
+      flash[:error] = "An error occurred: #{e.message}"
+    end
+
+  end
 
   private
 
