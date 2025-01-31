@@ -20,10 +20,10 @@ module TurboHelper
     alert(id: id, type:'success', &block)
   end
   def prepend(id, options = {}, &block)
-    turbo_stream.prepend(id, options, &block)
+    turbo_stream.prepend(id, **options, &block)
   end
   def replace(id, options = {}, &block)
-    turbo_stream.replace(id, options, &block)
+    turbo_stream.replace(id, **options, &block)
   end
 
   def remove(id)
