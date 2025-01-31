@@ -66,6 +66,6 @@
 @import "bootstrap_overrides";
 
 
-<% if (ui_theme = $UI_THEME.to_s.parameterize).present? && File.exists?(Rails.root.join('app', 'assets', 'stylesheets', 'themes', ui_theme)) %>
+<% if (ui_theme = $UI_THEME.to_s.parameterize).present? && File.exist?(Rails.root.join('app', 'assets', 'stylesheets', 'themes', ui_theme)) %>
   @import "themes/<%= ui_theme %>/main";
 <% end %>
