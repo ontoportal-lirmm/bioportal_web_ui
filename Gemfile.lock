@@ -1,11 +1,11 @@
 GIT
   remote: https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git
-  revision: 7423b46ff6fa7e5ef0f1d36548f7c04466939f71
-  branch: development
+  revision: ba4e729462c8887d744ca1cbccfdd96da5947328
+  branch: fix/federation-requests-timeout
   specs:
     ontologies_api_client (2.2.0)
       activesupport (~> 7.0.4)
-      excon
+      excon (= 0.112.0)
       faraday
       faraday-excon (~> 2.0.0)
       faraday-multipart

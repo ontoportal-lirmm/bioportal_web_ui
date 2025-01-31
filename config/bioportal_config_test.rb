@@ -228,6 +228,8 @@ $PORTALS_INSTANCES = [
   {
     name: 'IndustryPortal',
     ui: 'http://industryportal.enit.fr',
+    api: 'data.industryportale.test.enit.fr',
+    apikey: '019adb70-1d64-41b7-8f6e-8f7e5eb54942',
     color: '#1c0f5d'
   },
   {

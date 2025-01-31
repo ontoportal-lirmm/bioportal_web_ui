@@ -81,4 +81,23 @@ class FederationTest < ApplicationSystemTestCase
     assert_not_equal number_categories_no_federation, number_categories_federation
 
   end
+
+  test 'federated_search_when_portal_down' do
+    visit "#{@search_path}?q=#{@query}&lang=all&portals%5B%5D=industryportal"
+    assert_selector ".alert-warning-type", visible: true
+  end
+
+  test 'federated_browse_when_portal_down' do
+    visit "#{@ontologies_path}?sort_by=ontology_name&portals=industryportal"
+    loop do
+      loading_element = find_all(".browse-sket").any?
+
+      break unless loading_element
+
+      page.execute_script("window.scrollBy(0, window.innerHeight)")
+
+      sleep 0.3
+    end
+    assert_selector ".alert-warning-type", visible: true
+  end
 end
