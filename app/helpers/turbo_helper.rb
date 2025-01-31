@@ -20,9 +20,12 @@ module TurboHelper
     alert(id: id, type:'success', &block)
   end
   def prepend(id, options = {}, &block)
+    options = { inline: options } if options.is_a?(String)
+
     turbo_stream.prepend(id, **options, &block)
   end
   def replace(id, options = {}, &block)
+    options = { inline: options } if options.is_a?(String)
     turbo_stream.replace(id, **options, &block)
   end
 

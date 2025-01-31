@@ -184,3 +184,5 @@ group :test do
   # Testing framework for Rails
   gem 'rspec-rails'
 end
+
+gem 'concurrent-ruby', '1.3.4'
