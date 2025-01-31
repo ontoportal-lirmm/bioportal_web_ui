@@ -962,7 +962,7 @@ fr:
     thread:
       submitted_by: soumis par
     reply:
-      about_note_decorator: à propos de %{note_decorator}
+      about_note_decorator: "%{note_decorator}"
       comment: Commentaire
       save: Sauvegarder
       cancel: Annuler
