@@ -38,14 +38,14 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       timeout: 5s
       retries: 3
 
   cache:
     image: memcached:latest
     restart: unless-stopped
-    command: ["-m", "1024"]
+    command: [ "-m", "1024" ]
     networks:
       - default
     ports:
