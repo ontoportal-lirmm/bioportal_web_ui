@@ -166,7 +166,7 @@ module MultiLanguagesHelper
   end
 
   # @param label String | Array | OpenStruct
-  def display_in_multiple_languages(label)
+  def display_in_multiple_languages(label, show_max: 5, style_as_badge: false)
     if label.blank?
       return render Display::AlertComponent.new(message: t('ontology_details.concept.no_preferred_name_for_selected_language'),
                                                 type: "warning",

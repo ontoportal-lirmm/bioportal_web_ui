@@ -1,24 +1,9 @@
-# This file configures the New Relic Agent.  New Relic monitors Ruby, Java,
-# .NET, PHP, Python, Node, and Go applications with deep visibility and low
-# overhead.  For more information, visit www.newrelic.com.
-#
-# Generated December 31, 2022
-#
-# This configuration file is custom generated for NewRelic Administration
-#
-# For full documentation of agent configuration options, please refer to
-# https://docs.newrelic.com/docs/agents/ruby-agent/installation-configuration/ruby-agent-configuration
-
 common: &default_settings
-  # Required license key associated with your New Relic account.
-  license_key: <%= Rails.application.credentials[:newrelic][:license_key] %>
-
-  # Your application name. Renaming here affects where data displays in New
-  # Relic.  For more details, see https://docs.newrelic.com/docs/apm/new-relic-apm/maintenance/renaming-applications
-  app_name: <%= Rails.application.credentials[:newrelic][:app_name] %>
+  license_key: <%= Rails.application.credentials.dig(:newrelic, :license_key) %>
+  app_name: <%= Rails.application.credentials.dig(:newrelic, :app_name) %>
 
   distributed_tracing:
-    enabled: true
+    enabled: false
 
   # To disable the agent regardless of other settings, uncomment the following:
   # agent_enabled: false
@@ -32,12 +17,12 @@ common: &default_settings
     enabled: true
     forwarding:
       # If `true`, the agent captures log records emitted by this application.
-      enabled: true
+      enabled: false
       # Defines the maximum number of log records to buffer in memory at a time.
       max_samples_stored: 10000
     metrics:
       # If `true`, the agent captures metrics related to logging for this application.
-      enabled: true
+      enabled: false
     local_decorating:
       # If `true`, the agent decorates logs with metadata to link to entities, hosts, traces, and spans.
       # This requires a log forwarder to send your log files to New Relic.
@@ -48,4 +33,6 @@ common: &default_settings
 # RAILS_ENV or RACK_ENV (as appropriate) is used to determine the environment.
 # If your application has other named environments, configure them here.
 appliance:
+  <<: *default_settings
+development:
   <<: *default_settings
