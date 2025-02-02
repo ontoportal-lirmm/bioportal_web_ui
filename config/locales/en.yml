@@ -879,6 +879,7 @@ en:
       save_custom_semantic_resources: Save custom ontologies
       not_subscribed: Not subscribed to any ontology
       submitted_semantic_resources: Submitted Ontologies
+      accessible_semantic_resources: Accessible Ontologies
       upload_semantic_resources: Upload Ontologies
       projects_created: Projects Created
       no_project_created: No project created

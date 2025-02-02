@@ -460,4 +460,31 @@ module ApplicationHelper
     [is_parent,parent_error_message]
   end
 
+  def categories_with_children(categories)
+    parent_to_children = Hash.new { |hash, key| hash[key] = [] }
+    categories.each do |category|
+      next unless category.parentCategory
+      category.parentCategory.each do |parent_id|
+        parent_acronym = id_to_acronym(parent_id)
+        child_acronym = id_to_acronym(category.id)
+        parent_to_children[parent_acronym] << child_acronym
+      end
+    end
+    parent_to_children
+  end
+
+  def categories_with_parents(categories_children)
+    categories_parents = Hash.new { |hash, key| hash[key] = [] }
+    categories_children.each do |child, parents|
+      parents.each do |parent|
+        categories_parents[parent] << child
+      end
+    end
+    categories_parents
+  end
+
+  def id_to_acronym(id)
+    id.split('/').last
+  end
+
 end

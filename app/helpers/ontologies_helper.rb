@@ -1,6 +1,5 @@
 require 'iso-639'
 module OntologiesHelper
-
   REST_URI = $REST_URL
   API_KEY = $API_KEY
   LANGUAGE_FILTERABLE_SECTIONS = %w[classes schemes collections instances properties].freeze
@@ -801,10 +800,6 @@ module OntologiesHelper
     Array(submission&.naturalLanguage).map { |natural_language| natural_language["iso639"] && natural_language.split('/').last }.compact
   end
 
-  def id_to_acronym(id)
-    id.split('/').last
-  end
-
   def browse_taxonomy_tooltip(taxonomy_type)
     return nil unless taxonomy_type.eql?("categories") || taxonomy_type.eql?("groups")
 
@@ -817,9 +812,10 @@ module OntologiesHelper
   def browse_chip_filter(key:, object:, values:, countable: true, count: nil)
     title = (key.to_s.eql?("categories") || key.to_s.eql?("groups")) ? nil : ''
     checked = values.any? { |obj| [link_last_part(object["id"]), link_last_part(object["value"])].include?(obj) }
-
-    group_chip_component(name: key, object: object, checked: checked, title: title) do |c|
-      c.count { browse_chip_count_badge(key: key, id: object["id"], count: count) } if countable
+    content_tag(:div, (key.to_s.eql?("categories") ? { 'data-action' => 'click->parent-categories-selector#check' } : {})) do
+      group_chip_component(name: key, object: object, checked: checked, title: title) do |c|
+        c.count { browse_chip_count_badge(key: key, id: object["id"], count: count) } if countable
+      end
     end
   end
 
