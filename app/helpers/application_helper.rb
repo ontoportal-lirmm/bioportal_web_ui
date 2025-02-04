@@ -405,11 +405,8 @@ module ApplicationHelper
     end
   end
 
-  def empty_state(text = t('no_result_was_found'))
-    content_tag(:div, class:'browse-empty-illustration') do
-      inline_svg_tag('empty-box.svg') +
-      content_tag(:p, text)
-    end
+  def empty_state(text: t('no_result_was_found'))
+    render Display::EmptyStateComponent.new(text: text)
   end
 
   def ontologies_selector(id:, label: nil, name: nil, selected: nil, placeholder: nil, multiple: true, ontologies: onts_for_select)

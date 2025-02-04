@@ -394,6 +394,10 @@ module OntologiesHelper
     ontology_data_sections.include?(section_title)
   end
 
+  def lazy_load_section?(section_title)
+    !(ontology_data_section?(section_title) || section_title.eql?('summary'))
+  end
+
   def section_data(section_title)
     if ontology_data_section?(section_title)
       url_value = selected_section?(section_title) ? request.fullpath : "/ontologies/#{@ontology.acronym}?p=#{section_title}"
@@ -403,12 +407,13 @@ module OntologiesHelper
     end
   end
 
-  def lazy_load_section(section_title, &block)
+  def lazy_load_section(section_title, lazy_load: true, &block)
     if current_section.eql?(section_title)
       block.call
     else
       render TurboFrameComponent.new(id: section_title, src: "/ontologies/#{@ontology.acronym}?p=#{section_title}",
-                                     loading: Rails.env.development? ? "lazy" : "eager",
+
+                                     loading: Rails.env.development? || lazy_load ? "lazy" : "eager",
                                      target: '_top', data: { "turbo-frame-target": "frame" })
     end
   end

@@ -47,7 +47,7 @@
         .annotator-page-button
           = render Buttons::RegularButtonComponent.new(id:'annotator', value: t('annotator.get_annotation'), variant: "primary", type: 'submit')
     - if @results && @results.empty?
-      = empty_state(t('no_result_was_found'))
+      = empty_state(text: t('no_result_was_found'))
     - unless @results.nil? || @results.empty?
       .annotator-page-results
         .cont
