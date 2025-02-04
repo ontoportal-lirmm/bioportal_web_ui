@@ -14,7 +14,6 @@ module InternationalisationHelper
       original_translation = I18n.t(key, **options)
       downcase_translation = original_translation.downcase
     rescue StandardError => e
-      binding.pry
       return e.message
     end
 
