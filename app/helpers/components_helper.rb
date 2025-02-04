@@ -25,6 +25,11 @@ module ComponentsHelper
       check_input(id: id, name: name, value: value, label: label, checked: checked, disabled: disabled, &block)
     end
   end
+  def list_items_component(max_items:, &block)
+    render ListItemsShowMoreComponent.new(max_items: max_items) do |r|
+      capture(r, &block)
+    end
+  end
 
   def group_chip_component(id: nil, name: , object: , checked: , value: nil, title: nil, disabled: false, &block)
     title ||= object["name"]
@@ -111,7 +116,7 @@ module ComponentsHelper
   end
 
   def rounded_button_component(link)
-    render RoundedButtonComponent.new(link: link, target: '_blank',size: 'small',title: t("components.go_to_api"))
+    render RoundedButtonComponent.new(link: link, target: '_blank', size: 'small', title: t("components.go_to_api"))
   end
 
   def copy_link_to_clipboard(url, show_content: false)

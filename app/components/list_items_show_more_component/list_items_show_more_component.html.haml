@@ -1,0 +1,14 @@
+%div{data: {controller: 'reveal-component'}}
+  - containers[..@max_items].each do |item|
+    = item
+
+  - if (@max_items + 1) < containers.size
+    - Array(containers[@max_items+1..]).each do |item|
+      %span{'data-reveal-component-target': "item", class: 'd-none'}
+        = item
+    %div{'data-reveal-component-target': "showButton", 'data-action': "click->reveal-component#show" }
+      %span.btn-link
+        See more
+    %div.d-none{'data-reveal-component-target': "hideButton", 'data-action': "click->reveal-component#hide" }
+      %span.btn-link
+        See less

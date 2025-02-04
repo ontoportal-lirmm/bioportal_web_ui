@@ -26,7 +26,7 @@ module HomeHelper
 
   def portal_config_tooltip(portal_name, &block)
     portal_id = portal_name&.downcase
-    title = if federation_portal_status(portal_name: portal_id)
+    title = if (federation_portal_status(portal_name: portal_id) || portal_id.eql?(portal_name&.downcase))
       render(
         TurboFrameComponent.new(
           id: "portal_config_tooltip_#{portal_id}",

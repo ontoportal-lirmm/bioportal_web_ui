@@ -10,14 +10,14 @@ class ConceptDetailsComponent < ViewComponent::Base
 
   attr_reader :concept_properties
 
-  def initialize(id:, acronym:, concept_id: nil , properties: nil, top_keys: [], bottom_keys: [], exclude_keys: [])
+  def initialize(id:, acronym:, concept_id: nil, properties: nil, top_keys: [], bottom_keys: [], exclude_keys: [])
     @acronym = acronym
     @properties = properties
     @top_keys = top_keys
     @bottom_keys = bottom_keys
     @exclude_keys = exclude_keys
     @id = id
-    @concept_id=concept_id
+    @concept_id = concept_id
 
     @concept_properties = concept_properties2hash(@properties) if @properties
   end
@@ -55,8 +55,8 @@ class ConceptDetailsComponent < ViewComponent::Base
       end
 
       out << [
-        { th:  content_tag(:span, remove_owl_notation(key), title: url, 'data-controller': 'tooltip') },
-        { td: content_tag(:span, ajax_links.join.html_safe) }
+        { th: content_tag(:span, remove_owl_notation(key), title: url, 'data-controller': 'tooltip') },
+        { td: list_items_component(max_items: 5) { |r| ajax_links.map { |val| r.container { val.html_safe } } } }
       ]
     end
     out
@@ -81,7 +81,7 @@ class ConceptDetailsComponent < ViewComponent::Base
   private
 
   def link_to_format_modal(format, icon)
-    link_to_modal(nil, "/ontologies/#{@acronym}/#{escape(@concept_id)}/serialize/#{format}",{ id: "resource_content_#{format}", data: {show_modal_title_value: @concept_id, show_modal_size_value: 'modal-xl'}}) do
+    link_to_modal(nil, "/ontologies/#{@acronym}/#{escape(@concept_id)}/serialize/#{format}", { id: "resource_content_#{format}", data: { show_modal_title_value: @concept_id, show_modal_size_value: 'modal-xl' } }) do
       inline_svg("icons/#{icon}.svg", width: '50px', height: '50px')
     end
   end

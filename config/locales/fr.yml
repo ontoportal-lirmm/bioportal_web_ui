@@ -892,7 +892,8 @@ fr:
       note_feature_logged_in: "Note : cette fonctionnalité ne fonctionne que lorsque vous êtes connecté."
       save_custom_semantic_resources: Sauvegarder les ontologies personnalisées
       not_subscribed: Non abonné à aucune ontologie
-      submitted_semantic_resources: Ressources Ontologies
+      submitted_semantic_resources: Ontologies Soumises
+      accessible_semantic_resources: Ontologies Accessibles
       upload_semantic_resources: Télécharger ontologies
       projects_created: Projets Créés
       no_project_created: Aucun projet créé

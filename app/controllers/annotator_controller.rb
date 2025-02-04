@@ -74,7 +74,7 @@ class AnnotatorController < ApplicationController
       end
 
       # if we are in a slice, pass the ontologies of this slice in the params
-      
+
       if at_slice?
         slice_ontologies_acronyms = @subdomain_filter[:ontologies].map{ |id| link_last_part(id)}
         if api_params[:ontologies]
@@ -89,7 +89,7 @@ class AnnotatorController < ApplicationController
       annotations = LinkedData::Client::HTTP.get(uri, api_params)
       @ontologies = LinkedData::Client::Models::Ontology.all({:include_views => true}).map{ |o| [o.id.to_s, o]}.to_h
 
-      @semantic_types = get_semantic_types 
+      @semantic_types = get_semantic_types
       @results = []
       annotations.each do |annotation|
         if annotation.annotations.empty?
@@ -199,7 +199,7 @@ class AnnotatorController < ApplicationController
     end
     @semantic_groups.each_pair do |group, label|
         @semantic_groups_for_select << ["#{label} (#{group})", group]
-    end 
+    end
     @semantic_types_for_select.sort! {|a,b| a[0] <=> b[0]}
     @semantic_groups_for_select.sort! {|a,b| a[0] <=> b[0]}
     @ancestors_levels = ['None', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'All']
@@ -216,7 +216,7 @@ class AnnotatorController < ApplicationController
       params[:fast_context].nil? &&
       params[:lemmatize].nil?
   end
-  
+
 
   def remove_special_chars(input)
     regex = /^[a-zA-Z0-9\s]*$/
@@ -227,4 +227,3 @@ class AnnotatorController < ApplicationController
   end
 
 end
-
