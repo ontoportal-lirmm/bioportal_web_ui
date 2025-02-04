@@ -85,8 +85,6 @@ en:
     cache_flush_success: UI cache successfully flushed
     cache_flush_error: "Problem flushing the UI cache - %{class}: %{message}"
     no_flush_command: "The UI cache does not respond to the 'flush_all' command"
-    cache_reset_success: UI cache connection successfully reset
-    cache_reset_error: Problem resetting the UI cache connection - %{message}
     no_reset_command: The UI cache does not respond to the 'reset' command
     clear_goo_cache_success: Goo cache successfully flushed
     clear_goo_cache_error: "Problem flushing the Goo cache - %{class}: %{message}"

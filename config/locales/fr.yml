@@ -90,8 +90,6 @@ fr:
     cache_flush_success: Cache de l'interface utilisateur vidé avec succès
     cache_flush_error: "Problème lors du vidage du cache de l'interface utilisateur - %{class} : %{message}"
     no_flush_command: "Le cache de l'interface utilisateur ne répond pas à la commande 'flush_all'"
-    cache_reset_success: Connexion au cache de l'interface utilisateur réinitialisée avec succès
-    cache_reset_error: Problème lors de la réinitialisation de la connexion au cache de l'interface utilisateur - %{message}
     no_reset_command: Le cache de l'interface utilisateur ne répond pas à la commande 'reset'
     clear_goo_cache_success: Cache Goo vidé avec succès
     clear_goo_cache_error: "Problème lors du vidage du cache Goo - %{class} : %{message}"

@@ -110,9 +110,9 @@ class AdminController < ApplicationController
   def clearcache
     response = {errors: nil, success: ''}
 
-    if @cache.respond_to?(:flush_all)
+    if @cache.respond_to?(:flushdb)
       begin
-        @cache.flush_all
+        @cache.flushdb
         response[:success] = t('admin.cache_flush_success')
       rescue Exception => e
         response[:errors] = t('admin.cache_flush_error', class: e.class, message: e.message)
@@ -130,33 +130,8 @@ class AdminController < ApplicationController
         end
       end
     end
-
   end
 
-  def resetcache
-    response = {errors: nil, success: ''}
-
-    if @cache.respond_to?(:reset)
-      begin
-        @cache.reset
-        response[:success] = t('admin.cache_reset_success')
-      rescue Exception => e
-        response[:errors] = t('admin.cache_reset_error', message: e.message)
-      end
-    else
-      response[:errors] =  t('admin.no_reset_command')
-    end
-
-    respond_to do |format|
-      format.turbo_stream do
-        if response[:errors]
-          render_turbo_stream alert(type: 'danger') { response[:errors].to_s }
-        else
-          render_turbo_stream alert(type: 'success') { response[:success] }
-        end
-      end
-    end
-  end
 
   def clear_goo_cache
     response = {errors: nil, success: ''}
@@ -286,7 +261,7 @@ class AdminController < ApplicationController
   private
 
   def cache_setup
-    @cache = Rails.cache.instance_variable_get("@data")
+    @cache = Rails.cache.redis
   end
 
   def _ontologies_report
