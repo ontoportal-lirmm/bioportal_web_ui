@@ -168,8 +168,8 @@ div.synonym-change-request button {
 }
 
 #details_content .chip-button-component-container {
-  word-break: break-word !important; /* Prevent breaking in the middle of words */
-  overflow-wrap: break-word !important; /* Ensure words wrap properly */
-  white-space: normal !important; /* Allow text to wrap */
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  white-space: normal !important;
 }
 
