@@ -652,10 +652,16 @@ module OntologiesHelper
   end
 
   def upload_ontology_button
-    href = session[:user].nil? ? "/login?redirect=#{new_ontology_path}" : new_ontology_path
+    return if $READ_ONLY_PORTAL && !session[:user]&.admin?
+
+    href = if session[:user].nil?
+             "/login?redirect=#{new_ontology_path}"
+           else
+             new_ontology_path
+           end
+  
     render_button(href)
   end
-  
   private
   
   def render_button(href)
