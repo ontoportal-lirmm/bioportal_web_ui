@@ -1236,7 +1236,7 @@ en:
       show_private_ontology: Show private ontology only
       show_ontology_views: Show ontology views
       show_retired_ontologies: Show retired ontologies
-      search_placeholder: Start typing to filter ontologies, e.g., ITIS...
+      search_placeholder: Start typing to filter ontologies, e.g., NCBITAXON...
     sections:
       classes: Classes
       individuals: Individuals
