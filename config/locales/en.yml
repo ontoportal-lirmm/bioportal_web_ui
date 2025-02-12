@@ -1336,7 +1336,7 @@ en:
         submissions_link_title: Set of all the files that have been submitted to %{site}. Each previous metadata record is accessible but only the content of the latest parsed file is accessible via %{site} services
         relations_network: Ontology relations network
         general_information: General information
-        initial_created_on: Initial created on
+        initial_created_on: Last modified on
         additional_information: For additional information, contact
         categories_and_subjects: Categories and subjects
         keywords_and_classes: Keywords and classes
