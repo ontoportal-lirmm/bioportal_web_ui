@@ -1259,7 +1259,7 @@ fr:
       show_private_ontology: Afficher uniquement les ontologies privées
       show_ontology_views: Afficher les vues d'ontologie
       show_retired_ontologies: Afficher les ontologies abandonner
-      search_placeholder: Commencez à taper pour filtrer les ontologies, par ex., AGROVOC...
+      search_placeholder: Commencez à taper pour filtrer les ontologies, par ex., NCBITAXON...
     sections:
       classes: Classes
       individuals: Individus
