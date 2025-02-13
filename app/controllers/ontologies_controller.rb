@@ -168,9 +168,6 @@ class OntologiesController < ApplicationController
   end
 
   def new
-    if $READ_ONLY_PORTAL && !session[:user]&.admin?
-      redirect_to "/login?redirect=#{new_ontology_path}"
-    end
     @ontology = LinkedData::Client::Models::Ontology.new
     @ontology.viewOf = params.dig(:ontology, :viewOf)
     @submission = LinkedData::Client::Models::OntologySubmission.new

@@ -245,11 +245,9 @@ class ApplicationController < ActionController::Base
     redirect_to "/"
   end
 
-  # Verifies if user is logged in
+  # Verifies if user is logged in and not in read-only mode
   def authorize_and_redirect
-    unless session[:user]
-      redirect_to_home
-    end
+    redirect_to_home if !session[:user] || read_only_enabled?
   end
 
   def authorize_admin
