@@ -660,18 +660,14 @@ module OntologiesHelper
              new_ontology_path
            end
   
-    render_button(href)
-  end
-  private
-  
-  def render_button(href)
-    render Buttons::RegularButtonComponent.new(
-      id: "upload-ontology-button",
-      value: t('home.ontology_upload_button'),
+    render = regular_button( 
+      "upload-ontology-button", 
+      t('home.ontology_upload_button'), 
       variant: "secondary",
       state: "regular",
-      href: href
-    ) do |btn|
+      size: nil, 
+      href: href) 
+      do |btn|
       btn.icon_left do
         inline_svg_tag "upload.svg"
       end
