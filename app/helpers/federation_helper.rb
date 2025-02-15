@@ -118,7 +118,7 @@ module FederationHelper
   end
 
   def federation_error(response)
-    federation_errors = response[:errors].map { |e| ontology_portal_name(e.split(' ').last.gsub('search', '')) }
+    federation_errors = response[:errors].map { |e| e.split(' ').last }
     federation_errors.map { |p| "#{p} #{t('federation.not_responding')} " }.join(' ')
   end
 
