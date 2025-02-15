@@ -947,7 +947,7 @@ en:
     thread:
       submitted_by: submitted by
     reply:
-      about_note_decorator: about %{note_decorator}
+      about_note_decorator: "%{note_decorator}"
       comment: Comment
       save: Save
       cancel: Cancel
