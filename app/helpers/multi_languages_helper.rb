@@ -1,4 +1,5 @@
 module MultiLanguagesHelper
+  include OntologiesHelper, ComponentsHelper
   def portal_lang
     session[:locale] || 'en'
   end
@@ -165,22 +166,22 @@ module MultiLanguagesHelper
   end
 
   # @param label String | Array | OpenStruct
-  def display_in_multiple_languages(label)
+  def display_in_multiple_languages(label, style_as_badge: false, show_max: 5)
     if label.blank?
       return render Display::AlertComponent.new(message: t('ontology_details.concept.no_preferred_name_for_selected_language'),
                                                 type: "warning",
                                                 closable: true)
     end
 
-
-
     label = label.to_h.reject { |key, _| %i[links context].include?(key) } if label.is_a?(OpenStruct)
 
     if label.is_a?(String)
       content_tag(:p, label)
     elsif label.is_a?(Array)
-      content_tag(:div) do
-        raw(label.map { |x| content_tag(:div, x) }.join)
+      list_items_component(max_items: show_max) do |r|
+        label.map do |x|
+          r.container { content_tag(:span, x, class: style_as_badge ? 'badge bg-secondary' : '').html_safe }
+        end
       end
     else
       content_tag(:div) do

@@ -118,7 +118,7 @@ module FederationHelper
   end
 
   def federation_error(response)
-    federation_errors = response[:errors].map { |e| ontology_portal_name(e.split(' ').last.gsub('search', '')) }
+    federation_errors = response[:errors].map { |e| e.split(' ').last }
     federation_errors.map { |p| "#{p} #{t('federation.not_responding')} " }.join(' ')
   end
 
@@ -163,7 +163,7 @@ module FederationHelper
   end
 
   def federation_portal_status(portal_name: nil)
-    Rails.cache.fetch("federation_portal_up_#{portal_name}", expires_in: 2.hours) do
+    Rails.cache.fetch("federation_portal_up_#{portal_name}", expires_in: 10.minutes) do
       portal_api = federated_portals&.dig(portal_name,:api)
       return false unless portal_api
       portal_up = false
@@ -260,8 +260,8 @@ module FederationHelper
   def most_referred_portal(ontology_submissions)
     portal_counts = Hash.new(0)
     ontology_submissions.each do |submission|
-      federated_portals.keys.each do |portal|
-        portal_counts[portal] += 1 if submission[:pullLocation]&.include?(portal.to_s)
+      request_portals.each do |portal|
+        portal_counts[portal.downcase] += 1 if submission[:pullLocation]&.include?(portal.downcase)
       end
     end
     portal_counts.max_by { |_, count| count }&.first

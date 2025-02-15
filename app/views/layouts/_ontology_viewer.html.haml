@@ -32,7 +32,7 @@
             - t.item_content do
               %div.p-1{data: section_data(section_title)}
                 = language_selector_hidden_tag(section_title) if ontology_data_section?(section_title)
-                = lazy_load_section(section_title) { yield }
+                = lazy_load_section(section_title, lazy_load:  lazy_load_section?(section_title)) { yield }
 
 
   = render partial: "layouts/footer"

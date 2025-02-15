@@ -38,21 +38,22 @@
             = upload_ontology_button
           %div{style:'margin-top: 30px'}
             %p.browse-filters-title= t("ontologies.filters")
-            - if current_user_admin?
-              %div.browse-filter.admin-border
-                = switch_input(id:'filter-private', name:'private_only', checked: @show_private_only, label: t("ontologies.browser.show_private_ontology"))
+             
             %div.browse-filter
+              - if session[:user]
+                = switch_input(id:'filter-private', name:'private_only', checked: @show_private_only, label: t("ontologies.browser.show_private_ontology"))
               = switch_input(id:'filter-views', name:'views', checked: @show_views, label: t("ontologies.browser.show_ontology_views"))
               = switch_input(id:'filter-retired', name:'retired',checked: @show_retired , label: t("ontologies.browser.show_retired_ontologies"))
-
-            - @filters.each do |key, values|
-              %div{ id: "#{key}_filter_container", data:{controller: "browse_filters show-filter-count",
-                  action: "change->show-filter-count#updateCount
-                           change->browse-filters#dispatchFilterEvent"}}
-                - objects, checked_values, count = values
-                = dropdown_component(id: "browse-#{key}-filter", is_open: count.positive?) do |d|
-                  - d.title { browse_filter_section_header(key: key, count: count)}
-                  = browse_filter_section_body(key: key, checked_values: checked_values, objects: objects)
+            %div{'data-controller': 'parent-categories-selector', 'data-parent-categories-selector-categories-children-value': "#{categories_with_children(@categories).to_json}"}
+              - @filters.each do |key, values|
+                %div{ id: "#{key}_filter_container", data:{controller: "browse_filters show-filter-count", 
+                    action: "change->show-filter-count#updateCount
+                            change->browse-filters#dispatchFilterEvent"}}
+                  %div{key.eql?(:categories) ? {'data-parent-categories-selector-target': "chips"} : {}}
+                    - objects, checked_values, count = values
+                    = dropdown_component(id: "browse-#{key}-filter", is_open: count.positive?) do |d|
+                      - d.title { browse_filter_section_header(key: key, count: count)}
+                      = browse_filter_section_body(key: key, checked_values: checked_values, objects: objects)
 
             - if federation_enabled?
               %div{ data:{action: "change->browse-filters#federationChange"}}
@@ -60,6 +61,7 @@
                   - d.title { browse_filter_section_header(title: t('federation.results_from_external_portals'))}
                   .px-1.browse-federation-input-chips
                     = federation_input_chips(name: "portals")
+
 
         .browse-second-row
           .browse-search-bar
