@@ -167,3 +167,11 @@ div.synonym-change-request button {
   margin-top: -4px;
 }
 
+.concept_details_component{
+  .chip-button-component-container{
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+  }
+}
+
