@@ -244,12 +244,21 @@ class ApplicationController < ActionController::Base
   def redirect_to_home # Redirect to Home Page
     redirect_to "/"
   end
-
-  # Verifies if user is logged in and not in read-only mode
-  def authorize_and_redirect
-    redirect_to_home if !session[:user] || read_only_enabled?
+  
+  # Redirects to home if the application is in read-only mode.  
+  def authorize_read_only
+    if read_only_enabled?
+      redirect_to_home and return
+    end
   end
 
+  # Verifies if user is logged in
+  def authorize_and_redirect
+    unless session[:user]
+      redirect_to_home
+    end
+  end
+  
   def authorize_admin
     redirect_to_home unless current_user_admin?
   end
