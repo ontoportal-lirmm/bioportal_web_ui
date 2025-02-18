@@ -659,20 +659,19 @@ module OntologiesHelper
            else
              new_ontology_path
            end
-  
-    render = regular_button( 
-      "upload-ontology-button", 
-      t('home.ontology_upload_button'), 
+
+    render = regular_button(
+      "upload-ontology-button",
+      t('home.ontology_upload_button'),
       variant: "secondary",
       state: "regular",
-      size: nil, 
-      href: href) 
-      do |btn|
-      btn.icon_left do
-        inline_svg_tag "upload.svg"
+      size: nil,
+      href: href) do |btn|
+        btn.icon_left do
+          inline_svg_tag "upload.svg"
+        end
       end
     end
-  end
 
   def submission_json_button
     render RoundedButtonComponent.new(link: "#{(@submission_latest || @ontology).id}?display=all",
