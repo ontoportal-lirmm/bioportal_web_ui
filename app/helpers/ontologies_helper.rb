@@ -652,20 +652,26 @@ module OntologiesHelper
   end
 
   def upload_ontology_button
-    if session[:user].nil?
-      render Buttons::RegularButtonComponent.new(id: "upload-ontology-button", value: t('home.ontology_upload_button'), variant: "secondary", state: "regular", href: "/login?redirect=/ontologies/new") do |btn|
-        btn.icon_left do
-          inline_svg_tag "upload.svg"
-        end
-      end
-    else
-      render Buttons::RegularButtonComponent.new(id: "upload-ontology-button", value: t('home.ontology_upload_button'), variant: "secondary", state: "regular", href: new_ontology_path) do |btn|
+    return if read_only_enabled?
+
+    href = if session[:user].nil?
+             "/login?redirect=#{new_ontology_path}"
+           else
+             new_ontology_path
+           end
+
+    render = regular_button(
+      "upload-ontology-button",
+      t('home.ontology_upload_button'),
+      variant: "secondary",
+      state: "regular",
+      size: nil,
+      href: href) do |btn|
         btn.icon_left do
           inline_svg_tag "upload.svg"
         end
       end
     end
-  end
 
   def submission_json_button
     render RoundedButtonComponent.new(link: "#{(@submission_latest || @ontology).id}?display=all",
