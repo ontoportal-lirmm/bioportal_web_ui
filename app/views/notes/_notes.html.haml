@@ -1,26 +1,12 @@
-- colspan = 7
-- colspan = 8 if parent_type.eql?('ontology')
-.notes_list_container
-  %div.d-flex{style:"font-size: .9em;"}
-    .add_comment.mx-1
-      = add_comment_button(parent_id, parent_type)
-    .add_proposal.mx-1
-      = add_proposal_button(parent_id, parent_type)
+.ontology-notes-container
+  .left-column 
+    = render TabsContainerComponent.new do |c|
+      - c.item(title: 'Comment', selected: true)
+      - c.item_content do
+        first tab
 
-  = render_alerts_container("notes_#{parent_type}_list_table_alerts")
-
-  .ont_notes_table_container
-    - cols = [ (current_user_admin? ? 'Action' : nil), 'Subject', 'Author', 'Type', (parent_type.eql?('ontology') ? 'Class' : nil),'Created'].compact
-    = render TableComponent.new(id:"#{parent_type}_notes", searching: true, paging: true, sort_column: @notes.empty? ? nil : (cols.size - 1).to_s, custom_class: 'border rounded p-1') do |t|
-      - t.header do |row|
-        - row.create(*cols.map{|col| {th: col}})
-
-      - if @notes.nil? || @notes.empty?
-        - t.row do |row|
-          - row.td(colspan: colspan) do
-            %div.text-center
-              = t('notes.no_notes')
-
-      - else
-        - @notes.each do |note|
-          = render partial: 'notes/note_line', locals: {note: note, ontology_acronym: @ontology.acronym, parent_type: parent_type}
+      - c.item(title: 'Proposale')
+      - c.item_content do
+        second tab
+  .right-column
+    tt
