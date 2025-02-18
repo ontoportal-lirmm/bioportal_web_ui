@@ -247,7 +247,7 @@ class ApplicationController < ActionController::Base
   
   # Redirects to home if the application is in read-only mode.  
   def authorize_read_only
-    if read_only_enabled?
+    if helpers.read_only_enabled?
       redirect_to_home and return
     end
   end
