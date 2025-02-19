@@ -42,7 +42,7 @@
                 
           .note-right-column
             - note.relatedClass.each do |cls|
-              = get_link_for_cls_ajax(cls , note.relatedOntology)
+              = get_link_for_cls_ajax(cls, note.relatedOntology.first)
 
 
             

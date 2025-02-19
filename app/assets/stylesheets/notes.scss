@@ -34,6 +34,17 @@
       flex-direction: column;
       gap: 6px;
     }
+    .note-right-column{
+      width: 40%;
+      display: flex;
+      justify-content: end;
+      gap: 5px;
+      .chip-button-component-container{
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
+        white-space: normal !important;
+      }
+    }
 
     .social-actions{
       display: flex;
