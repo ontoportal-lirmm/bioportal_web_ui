@@ -83,6 +83,8 @@ Rails.application.routes.draw do
     match 'groups/synchronize_groups' => 'groups#synchronize_groups', via: [:post]
     resources :groups, only: [:index, :create, :new, :edit, :update, :destroy]
     resources :categories, only: [:index, :create, :new, :edit, :update, :destroy]
+    resources :api_configuration, only: [:index]
+    post 'change_configs', to: 'api_configuration#update_api_configs'
     scope :search do
       get '/', to: 'search#index'
       post 'index_batch', to: 'search#index_batch'
@@ -104,7 +106,6 @@ Rails.application.routes.draw do
   put 'admin/ontologies', to: 'admin#process_ontologies'
   get 'admin/update_check_enabled', to: 'admin#update_check_enabled'
   get 'admin/ontologies/:acronym/log', to: 'admin#parse_log'
-  post 'admin/change_configs', to: 'admin#change_portal_config'
 
   resources :subscriptions
 

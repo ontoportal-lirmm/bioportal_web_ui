@@ -151,7 +151,7 @@ en:
       valid_till: Valid till
       days_remaining: Days remaining
       renew_license: Renew license
-      portal_config: Portal configurations
+      api_config: API configurations
     groups:
       group_created: Group successfully created in %{time}s
       group_error_creation: Problem creating the group  - %{message}
