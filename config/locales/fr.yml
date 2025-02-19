@@ -963,6 +963,7 @@ fr:
       show_ontology_views: Afficher les vues de l'ontologie
       show_private_ontology: Afficher seulement les ontologies privées
       show_retired_ontologies: Afficher les ontologies retirées
+    taxonomy_information_tooltip: Voir plus d'informations sur les %{taxonomy_type} dans       
     categories: Catégories
     change_notes: Notes de changement
     collapse_all: Tout replier

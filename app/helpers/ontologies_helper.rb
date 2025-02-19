@@ -815,7 +815,7 @@ module OntologiesHelper
     return nil unless taxonomy_type.eql?("categories") || taxonomy_type.eql?("groups")
 
     content_tag(:div, class: '') do
-      content_tag(:span, "See more information about #{taxonomy_type} in ", class: 'mr-1') +
+      content_tag(:span, t('ontologies.taxonomy_information_tooltip', taxonomy_type: taxonomy_type), class: 'mr-1') +
         content_tag(:a, 'here', href: "/#{taxonomy_type}", target: '_blank')
     end
   end

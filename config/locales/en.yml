@@ -928,6 +928,7 @@ en:
       show_ontology_views: Show ontology views
       show_private_ontology: Show private ontology only
       show_retired_ontologies: Show retired ontologies
+    taxonomy_information_tooltip: See more information about %{taxonomy_type} in 
     categories: Categories
     change_notes: Change notes
     collapse_all: Collapse All
