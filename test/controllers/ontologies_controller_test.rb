@@ -55,7 +55,7 @@ class OntologiesControllerTest < ActionDispatch::IntegrationTest
 
   test 'test get STY in xml format' do
     get '/ontologies/STY', headers: { 'Accept' => 'application/xml' }
-    assert_equal 500, response.status # STY has only Turtle
+    assert_response :success
   end
 
   test 'test get STY in csv format' do
