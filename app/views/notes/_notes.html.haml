@@ -9,31 +9,38 @@
       - c.item_content do
         second tab
   .right-column
-    
-    .note
-      .note-left-column
-        .note-header
-          .note-creator
-            Clement Jonquet
-          .note-icon
-            = inline_svg_tag 'icons/comment.svg'
-          .note-date
-            2 Months ago
-        .note-content
-          .note-object
-            Duplicate modelling wiith classes and instances
-          .note-body
-            We found out that picomole, nanomole and micromole are duplicated as instances of the class "Substance unit" and subclasses of this same class.
-        .social-actions
-          .vote-button
-            .up-button
-              = inline_svg_tag 'icons/arrow.svg'
-            .count
-              Vote
-            .down-button
-              = inline_svg_tag 'icons/arrow.svg'
-          .replies
-          
-            
-      .note-right-column
-        ttt
+    - if @notes.nil? || @notes.empty?
+      empty state here
+    - else
+      - @notes.each_with_index do |note, index|
+        -# todo we should hide the note if the user is not an admin and note.archived is nil
+        .note 
+          .note-left-column
+            .note-header
+              .note-creator
+                = get_name(note.creator)
+              .note-icon
+                = inline_svg_tag 'icons/comment.svg' # todo: check note.proposal if nil or not to display the suitable icon and we need to add a tooltip also
+              - # todo: need to calculate based on the creation date, note.created
+              .note-date
+                2 Months ago
+            .note-content
+              .note-object
+                = note.subject
+              .note-body
+                = note.body
+            .social-actions
+              .vote-button
+                .up-button
+                  = inline_svg_tag 'icons/arrow.svg'
+                .count
+                  Vote
+                .down-button
+                  = inline_svg_tag 'icons/arrow.svg'
+              .replies
+              
+                
+          .note-right-column
+            ttt
+        - unless index == @notes.length - 1
+          .notes-devider
