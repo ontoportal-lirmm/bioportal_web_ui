@@ -11,6 +11,75 @@
     width: 100%;
     border: 1px solid #DFDFDF;
     border-radius: 5px;
+    padding: 10px 15px;
   }
+  .tabs-container .tab-items{
+    width: 100%;
+    justify-content: space-between;    
+  }
+  .tabs-container .tab-items > div{
+    margin-right: 0px;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .note{
+    font-size: 15px;
+    display: flex;
+    .note-left-column{
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .social-actions{
+      display: flex;
+    }
+
+    .note-header{
+      display: flex;
+      gap: 12px;
+      .note-creator{
+        font-weight: 500;
+      }
+      .note-date{
+        color: var(--gray-color);
+      }
+    }
+    .note-content{
+      color: var(--gray-color);
+    }
+    .note-object{
+      font-weight: 500;
+    }
+    .vote-button{
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      color: #888888;
+      background: #F2F2F2;
+      padding: 7px 15px;
+      border-radius: 30px;
+      .up-button{
+        cursor: pointer;
+      }
+      .up-button:hover svg{
+        transition: fill 0.3s ease-in-out;
+        fill: var(--primary-color);
+      }
+      .down-button{
+        cursor: pointer;
+        transform: scaleY(-1);
+        margin-top: 4px;
+      }
+      .down-button:hover svg{
+        transition: fill 0.3s ease-in-out;
+        fill: var(--secondary-color);
+      }
+    }
+  }
+  
 }
 
