@@ -27,6 +27,7 @@
   .note{
     font-size: 15px;
     display: flex;
+    justify-content: space-between;
     margin: 10px 15px;
     .note-left-column{
       display: flex;
@@ -60,7 +61,7 @@
       align-items: center;
       color: #888888;
       background: #F2F2F2;
-      padding: 7px 15px;
+      padding: 5px 12px;
       border-radius: 30px;
       .up-button{
         cursor: pointer;
