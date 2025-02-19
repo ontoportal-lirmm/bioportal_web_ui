@@ -1,0 +1,30 @@
+= turbo_frame_tag 'api-config' do
+  - if flash[:notice]
+    = render NotificationComponent.new(title: "success", comment: "Updated successfully!", type: "success", auto_remove: true)
+
+  - if flash[:alert]
+    .mb-2
+      = render NotificationComponent.new(title: "success", comment: "Failed to update configuration", type: "error", auto_remove: true)
+
+  -# .mb-3
+  -#   %input#search-config.form-control{ type: "text", placeholder: "Search for a field..." }
+  
+  = form_with url: admin_change_configs_path, method: :post, local: false, turbo: true, html: { id: 'config-form' } do |f|
+    - attributes_metadata.each do |attr_metadata|
+      - key = attr_metadata.attribute
+      - value_attrs = attributes_values[key.to_sym]
+      - label_tooltip = attr_metadata_header_label(attr_metadata)
+      .form-group
+        - if attr_metadata.enforce.include?("string")
+          = text_input(name: "config[#{key}]", value: value_attrs, label: label_tooltip)
+        - elsif attr_metadata.enforce.include?("url")
+          = url_input(name: "config[#{key}]", value: value_attrs, label: label_tooltip)
+        - elsif attr_metadata.enforce.include?("integer")
+          = text_input(name: "#{key.to_s}", value: value_attrs, label: label_tooltip, disabled: true)
+        - elsif attr_metadata.enforce.include?("boolean")
+          = switch_input(id: "config-boolean-#{key}", name: "config[#{key}]", label: label_tooltip, checked: (value_attrs == true), value: (value_attrs == true).to_s, boolean_switch: true)
+        - elsif attr_metadata.enforce.include?("date")
+          = date_input(name: "config[#{key}]", value: (Date.parse(value_attrs).to_s rescue value_attrs), label: label_tooltip, max_date: Date.today)
+
+    %div.mt-2{ style: "position: fixed; bottom: 20px; right: 20px; z-index: 1000;" }
+      = save_button_component(type: 'submit', id: 'change-configs-save-btn', value: "Save")
