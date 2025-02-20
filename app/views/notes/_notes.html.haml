@@ -3,11 +3,23 @@
     = render TabsContainerComponent.new do |c|
       - c.item(title: 'Comment', selected: true)
       - c.item_content do
-        first tab
+        .note-inputs
+          = render Input::TextInputComponent.new(name: "name", placeholder: "Subject")
+          = render Input::TextInputComponent.new(name: "name", placeholder: "Related object (class, property ...)")
+          = render Input::TextAreaComponent.new(name: "name", placeholder: "Leave a comment ...", rows: 6)
+          = render Buttons::RegularButtonComponent.new(id:'add-comment', value: "Add comment", variant: "secondary", size: "slim")
 
       - c.item(title: 'Proposale')
       - c.item_content do
-        second tab
+        .note-inputs
+          = render Input::SelectComponent.new(id: "proposal-type", name: 'proposal-type', value: ['New class', 'New relationship', 'Change property value'], selected: 'New class')
+          = render Input::TextInputComponent.new(name: "name", placeholder: "Class id")
+          = render Input::TextInputComponent.new(name: "name", placeholder: "Label")
+          = render Input::TextInputComponent.new(name: "name", placeholder: "Synonyms")
+          = render Input::TextInputComponent.new(name: "name", placeholder: "Definition")
+          = render Input::TextInputComponent.new(name: "name", placeholder: "Parent")
+          = render Input::TextAreaComponent.new(name: "name", placeholder: "Comment", rows: 6)
+          = render Buttons::RegularButtonComponent.new(id:'add-comment', value: "Add proposal", variant: "secondary", size: "slim")
   .right-column
     - if @notes.nil? || @notes.empty?
       empty state here
@@ -39,7 +51,7 @@
                   = inline_svg_tag 'icons/arrow.svg'
               .replies
                 = inline_svg_tag 'icons/reply.svg'
-                Replies              
+                Replies
                 
           .note-right-column
             - note.relatedClass.each do |cls|

@@ -6,6 +6,7 @@
     min-width: 35%;
     border: 1px solid #DFDFDF;
     border-radius: 5px;
+    height: fit-content;
   }
   .right-column{
     width: 100%;
@@ -109,6 +110,13 @@
     padding: 5px 12px;
     color: #888888;
     cursor: pointer;
+  }
+  .note-inputs{
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
   }
   
 }
