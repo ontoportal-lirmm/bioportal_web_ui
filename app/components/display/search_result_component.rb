@@ -52,6 +52,9 @@ class Display::SearchResultComponent < ViewComponent::Base
             t.loader do
              render LoaderComponent.new(small: true)
             end
+            t.error do
+              "-1"
+            end
           end + content_tag(:div, 'mappings', class: 'ml-1')
         end
       end
