@@ -48,6 +48,7 @@
 
     .social-actions{
       display: flex;
+      gap: 10px;
     }
 
     .note-header{
@@ -98,6 +99,16 @@
     background: #DFDFDF;
     border-radius: 10px;
     margin: 10px 0;
+  }
+  .replies{
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    background: #F2F2F2;
+    border-radius: 30px;
+    padding: 5px 12px;
+    color: #888888;
+    cursor: pointer;
   }
   
 }
