@@ -75,7 +75,7 @@
     }
     .vote-button{
       display: flex;
-      gap: 7px;
+      gap: 3px;
       align-items: center;
       color: #888888;
       background: #F2F2F2;
@@ -84,18 +84,18 @@
       .up-button{
         cursor: pointer;
       }
-      .up-button:hover svg{
-        transition: fill 0.3s ease-in-out;
-        fill: var(--primary-color);
+      .up-button:hover svg path{
+        transition: stroke 0.3s ease-in-out;
+        stroke: var(--primary-color);
       }
       .down-button{
         cursor: pointer;
         transform: scaleY(-1);
-        margin-top: 4px;
+        margin-top: 2px;
       }
-      .down-button:hover svg{
-        transition: fill 0.3s ease-in-out;
-        fill: var(--secondary-color);
+      .down-button:hover svg path{
+        transition: stroke 0.3s ease-in-out;
+        stroke: var(--secondary-color);
       }
     }
   }
@@ -130,7 +130,8 @@
     justify-content: space-between;
     width: 100%;
     align-items: center;
-    padding: 12px 15px 10px 15px;
+    padding: 12px 15px 8px 15px;
+    font-size: 14px;
   }
   .title-line{
     color: #777777;

@@ -46,13 +46,13 @@
                 = note.subject
               .note-body
                 = note.body
-            .social-actions
-              .vote-button
-                .up-button
+            .social-actions{'data-controller': 'community'}
+              .vote-button{'data-community-target': 'vote'}
+                .up-button{'data-action': 'click->community#up'}
                   = inline_svg_tag 'icons/arrow.svg'
                 .count
                   Vote
-                .down-button
+                .down-button{'data-action': 'click->community#down'}
                   = inline_svg_tag 'icons/arrow.svg'
               .replies
                 = inline_svg_tag 'icons/reply.svg'
