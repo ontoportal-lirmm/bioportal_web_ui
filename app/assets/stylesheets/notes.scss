@@ -4,6 +4,10 @@
   gap: 10px; 
   .left-column{
     min-width: 35%;
+    display: flex;
+    flex-direction: column;
+  }
+  .note-inputs-container{
     border: 1px solid #DFDFDF;
     border-radius: 5px;
     height: fit-content;
@@ -117,8 +121,26 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-
   }
-  
+  .header-component{
+    padding: 0;
+  }
+  .reviews-dropdown-title{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    padding: 12px 15px 10px 15px;
+  }
+  .title-line{
+    color: #777777;
+    font-weight: 500;
+  }
+  .reviews-average{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #777777;
+  }
 }
 
