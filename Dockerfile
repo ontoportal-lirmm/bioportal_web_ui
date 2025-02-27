@@ -18,7 +18,8 @@ ENV RAILS_LOG_TO_STDOUT="1" \
     RAILS_ENV="production" \
     NODE_ENV="production" \
     BUNDLE_PATH=/usr/local/bundle \
-    BUNDLE_WITHOUT="development test"
+    BUNDLE_WITHOUT="development test" \
+    SECRET_KEY_BASE_DUMMY=1
 
 COPY Gemfile* .
 RUN gem install bundler
@@ -35,9 +36,8 @@ RUN cp config/bioportal_config_env.rb.sample config/bioportal_config_production.
  && cp config/bioportal_config_env.rb.sample config/bioportal_config_test.rb \
  && cp config/database.yml.sample config/database.yml
 
-# RUN if [ "${RAILS_ENV}" != "development" ]; then \
-#   bundle exec bootsnap precompile --gemfile app/ lib/ && \
-#   SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile; fi
+RUN if [ "${RAILS_ENV}" != "development" ]; then \
+  bundle exec bootsnap precompile --gemfile app/ lib/ ; fi
 
 EXPOSE 3000
 
