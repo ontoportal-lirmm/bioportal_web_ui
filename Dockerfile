@@ -37,7 +37,8 @@ RUN cp config/bioportal_config_env.rb.sample config/bioportal_config_production.
  && cp config/database.yml.sample config/database.yml
 
 RUN if [ "${RAILS_ENV}" != "development" ]; then \
-  bundle exec bootsnap precompile --gemfile app/ lib/ ; fi
+  bundle exec bootsnap precompile --gemfile app/ lib/ && \
+  SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile; fi
 
 EXPOSE 3000
 
