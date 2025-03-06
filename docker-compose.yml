@@ -96,9 +96,12 @@ services:
   test:
     <<: *default-app
     depends_on:
-      - db
-      - cache
-      - chrome-server
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_started
+      chrome-server:
+        condition: service_started
     network_mode: "host"
     environment:
       BUNDLE_WITHOUT: ""

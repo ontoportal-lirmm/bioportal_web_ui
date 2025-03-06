@@ -54,7 +54,7 @@ class LoginFlowsTest < ApplicationSystemTestCase
     assert_selector '.title', text: 'Username:'
     assert_selector '.info', text: new_user.username
 
-    assert_selector '.title', text: 'ORCID ID:'
+    assert_selector '.title', text: 'ORCID:'
     assert_selector '.info', text: new_user.orcidId
 
     assert_selector '.title', text: 'GitHub ID:'
