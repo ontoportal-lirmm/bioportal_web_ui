@@ -70,7 +70,7 @@ class LoginFlowsTest < ActionDispatch::IntegrationTest
     assert_select '.title', text: 'ORCID:'
     assert_select '.info', text: new_user.orcidId
 
-    assert_select '.title', text: 'GitHub ID:'
+    assert_select '.title', text: 'GitHub account:'
     assert_select '.info', text: new_user.githubId
   end
 
