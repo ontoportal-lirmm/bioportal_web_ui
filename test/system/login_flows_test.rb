@@ -63,7 +63,7 @@ class LoginFlowsTest < ApplicationSystemTestCase
     assert_selector '.account-page-card-title', text: 'API Key'
     assert_selector '.account-page-card-title', text: 'Subscriptions'
     assert_selector '.account-page-card-title', text: 'Submitted ontologies'
-    assert_selector '.account-page-card-title', text: 'Projects Created'
+    assert_selector '.account-page-card-title', text: 'Projects created'
   end
 
   test "go to login page and click save" do
