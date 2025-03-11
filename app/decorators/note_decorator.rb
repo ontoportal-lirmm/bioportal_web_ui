@@ -1,6 +1,10 @@
 class NoteDecorator < BaseDecorator
   include ApplicationHelper, NotesHelper
 
+  def get_username(creator)
+    LinkedData::Client::Models::User.find(creator, {include: 'all', apikey: apikey}).username
+ end 
+
   def author
     view_context.content_tag(:span, get_username(creator), class: "note_author")
   end
