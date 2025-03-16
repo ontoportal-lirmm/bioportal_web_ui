@@ -1,3 +1,19 @@
+# Workflow to deploy OntoPortal UI to stage/prod systems
+#
+# Required github secrets:
+#
+# CONFIG_REPO - github repo containing config and customizations for UI. Format 'author/private_config_repo'
+# it is used for getting capistrano deployment configuration for stages on the github actions runner and
+# PRIVATE_CONFIG_REPO env var is constructed from it which is used by capistrano on the UI hosts for pulling configs.
+#
+# GH_PAT - github Personal Access Token for accessing private config repo
+#
+# SSH_JUMPHOST - ssh jump/proxy host though which deployments have to though if UI nodes live on private network.
+# SSH_JUMPHOST_USER - username  to use to connect to the ssh jump/proxy.
+#
+# DEPLOY_ENC_KEY - key for decrypting deploymnet ssh key residing in config/
+# this SSH key is used for accessing jump host, UI nodes, and private github repo.
+
 name: Capistrano Deployment
 
 # Controls when the action will run.
@@ -11,16 +27,22 @@ on:
     inputs:
       BRANCH:
         description: "Branch/tag to deploy"
+        type: choice
+        options:
+          - master
+          - stage
+          - test
         default: stage
         required: true
       environment:
         description: "Target environment to deploy to"
         type: choice
         options:
-          - staging
           - agroportal
+          - staging
           - test
         default: staging
+        required: true
 
 jobs:
   deploy:
@@ -33,13 +55,26 @@ jobs:
     steps:
       - name: Set branch/tag and environment to deploy from inputs
         run: |
-          # Set default branch/tag for push events
-          BRANCH=${{ github.head_ref || 'master' }}
-          echo "BRANCH=$BRANCH" >> $GITHUB_ENV
+          # workflow_dispatch default input doesn't get set on push so we need to set defaults
+          # via shell parameter expansion
+          # https://dev.to/mrmike/github-action-handling-input-default-value-5f2g
+          USER_INPUT_BRANCH=${{ inputs.branch }}
+          echo "BRANCH=${USER_INPUT_BRANCH:github.head_ref}" >> $GITHUB_ENV
 
-          # Set default environment for push events
+          # Set default environment
           if [ "${{ github.event_name }}" = "push" ]; then
-            TARGET="staging" # Default to staging for push
+            # Set TARGET based on the branch
+            case "$BRANCH" in
+              "stage")
+                TARGET="staging"
+                ;;
+              "test")
+                TARGET="test"
+                ;;
+              *)
+                TARGET="staging" # Default fallback
+                ;;
+            esac
           else
             TARGET=${{ inputs.environment }}
           fi
