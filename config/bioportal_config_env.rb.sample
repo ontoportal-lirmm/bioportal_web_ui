@@ -1,5 +1,6 @@
 $DEBUG_API_CLIENT = false
 $API_CLIENT_INVALIDATE_CACHE = false
+$READ_ONLY_PORTAL = ENV["READ_ONLY_PORTAL"].to_s.downcase == "true"
 
 # Organization info
 $ORG = ENV['ORG']

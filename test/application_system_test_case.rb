@@ -136,7 +136,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   end
 
   def agent_search(name)
-    sleep 1
+    wait_for(".search-inputs:last-of-type")
     within(".search-inputs:last-of-type") do
       input = find("input[name^='agent']")
       agent_id = input[:name].split('agent').last

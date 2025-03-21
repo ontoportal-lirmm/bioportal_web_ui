@@ -1,5 +1,5 @@
 x-app: &default-app
-  image: agroportal/ontoportal_web_ui:master
+  image: agroportal/ontoportal_web_ui:latest
   env_file:
     - ".env"
   tty: true
@@ -95,10 +95,15 @@ services:
 
   test:
     <<: *default-app
+    volumes:
+      - .:/app
     depends_on:
-      - db
-      - cache
-      - chrome-server
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_started
+      chrome-server:
+        condition: service_started
     network_mode: "host"
     environment:
       BUNDLE_WITHOUT: ""
@@ -108,10 +113,10 @@ services:
   chrome-server:
     image: selenium/standalone-chrome:112.0-chromedriver-112.0-grid-4.9.0-20230421
     shm_size: 2g
-    network_mode: 'host'
-#    ports:
-#      - "4444:4444"
-#      - "7900:7900"
+#    network_mode: 'host'
+    ports:
+      - "4444:4444"
+      - "7900:7900"
 
 volumes:
   mysql-data:

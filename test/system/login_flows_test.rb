@@ -54,16 +54,16 @@ class LoginFlowsTest < ApplicationSystemTestCase
     assert_selector '.title', text: 'Username:'
     assert_selector '.info', text: new_user.username
 
-    assert_selector '.title', text: 'ORCID ID:'
+    assert_selector '.title', text: 'ORCID:'
     assert_selector '.info', text: new_user.orcidId
 
-    assert_selector '.title', text: 'GitHub ID:'
+    assert_selector '.title', text: 'GitHub account:'
     assert_selector '.info', text: new_user.githubId
 
     assert_selector '.account-page-card-title', text: 'API Key'
     assert_selector '.account-page-card-title', text: 'Subscriptions'
-    assert_selector '.account-page-card-title', text: 'Submitted Ontologies'
-    assert_selector '.account-page-card-title', text: 'Projects Created'
+    assert_selector '.account-page-card-title', text: 'Submitted ontologies'
+    assert_selector '.account-page-card-title', text: 'Projects created'
   end
 
   test "go to login page and click save" do

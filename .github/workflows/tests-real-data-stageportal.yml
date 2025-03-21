@@ -38,7 +38,7 @@ jobs:
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7.8
+          ruby-version: 3.1.0
           bundler-cache: true
       # Add or replace database setup steps here
       - name: set up config file

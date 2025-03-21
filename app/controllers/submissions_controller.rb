@@ -2,8 +2,9 @@ class SubmissionsController < ApplicationController
   include SubmissionsHelper, SubmissionUpdater, OntologyUpdater
   layout :determine_layout
   before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
+  before_action :authorize_read_only, :only => [:new, :create, :edit, :update]
   before_action :submission_metadata, only: [:create, :edit, :new, :update, :index]
-
+  
 
   def index
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first

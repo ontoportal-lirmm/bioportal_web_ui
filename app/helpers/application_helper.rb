@@ -30,6 +30,10 @@ module ApplicationHelper
     render IconWithTooltipComponent.new(icon: "json.svg",link: link, target: '_blank', title: t('fair_score.go_to_api'), size:'small', style: custom_style)
   end
 
+  def read_only_enabled?
+    $READ_ONLY_PORTAL && !current_user_admin?
+  end
+
   def portal_name_from_uri(uri)
     URI.parse(uri).hostname.split('.').first
   end
