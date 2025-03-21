@@ -3,10 +3,15 @@ module InternationalisationHelper
   # Implement logic to make the term 'ontology' configurable throughout the portal,
   # allowing it to be replaced with the variable $RESOURCE_TERM
   def self.t(*args)
-    return I18n.t(*args) unless $RESOURCE_TERM
+    key, options = args
+    options ||= {}
+
+    return I18n.t(key, **options) unless $RESOURCE_TERM
 
     begin
-      original_translation = I18n.t(*args)
+      key, options = args
+      options ||= {}
+      original_translation = I18n.t(key, **options)
       downcase_translation = original_translation.downcase
     rescue StandardError => e
       return e.message
@@ -32,7 +37,7 @@ module InternationalisationHelper
       replacement = resources if downcase_translation.include?(plural_term)
       original_translation.gsub(plural_term, replacement)
     else
-      I18n.t(*args)
+      I18n.t(key, **options)
     end
   end
 
