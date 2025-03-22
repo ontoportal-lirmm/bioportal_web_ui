@@ -3,15 +3,21 @@ module SparqlHelper
     unless graph.blank?
       graph = graph.gsub($REST_URL, 'http://data.bioontology.org')
 
-      if query.match?(/FROM <[^>]+>/i)
-        # Use a regular expression to replace all instances of FROM <uri>
-        query = query.gsub(/FROM <[^>]+>/i, "")
-      else
-        query = query.gsub("WHERE", "FROM <#{graph}> WHERE")
+      query.gsub!(/WHERE/i, "FROM <#{graph}> WHERE")
+
+      # Use a regular expression to replace all instances of FROM <uri>
+      # Will change any FROM "anything" or GRAPH "anything" and transform it to FROM <a secure graph uri> or GRAPH <a secure graph uri>
+      query.gsub!(/FROM\s+\S+/i, "FROM <#{graph}>")
+      query.gsub!(/GRAPH\s+\S+/i, "GRAPH <#{graph}>")
+
+      # If there's no WHERE but there's a closing brace,
+      if !query.match?(/WHERE/i) && query.include?("{") && query.include?("}")
+        last_brace_index = query.index("{")
+        query = query[0..last_brace_index-1] + " FROM <#{graph}> " + query[last_brace_index..-1]
       end
 
-      query = query.gsub(/GRAPH <[^>]+>/i, "")
     end
+
     query
   end
   def ontology_sparql_query(query, graph = '')
