@@ -1489,6 +1489,7 @@ fr:
     match_in: Correspondance dans
     no_search_class_provided: Aucune classe à rechercher fournie
     ontologies: ontologies
+    from: de
     result_component:
       details: Détails
       more_from_ontology: de plus sur cette ontologie
