@@ -2,14 +2,12 @@ module SparqlHelper
   def change_from_clause(query, graph)
     unless graph.blank?
       graph = graph.gsub($REST_URL, 'http://data.bioontology.org')
-      if query.match?(/FROM\s+\S+/i)
-        # Use a regular expression to replace all instances of FROM <uri>
-        # Will change FROM "anything" and transform it to FROM <a secure graph uri>
-        query.gsub!(/FROM\s+\S+/i, "FROM <#{graph}>")
-      else
-        query = query.gsub("WHERE", "FROM <#{graph}> WHERE")
-      end
 
+      query.gsub!("WHERE", "FROM <#{graph}> WHERE")
+
+      # Use a regular expression to replace all instances of FROM <uri>
+      # Will change any FROM "anything" or GRAPH "anything" and transform it to FROM <a secure graph uri> or GRAPH <a secure graph uri>
+      query.gsub!(/FROM\s+\S+/i, "FROM <#{graph}>")
       query.gsub!(/GRAPH\s+\S+/i, "GRAPH <#{graph}>")
     end
 
@@ -51,7 +49,7 @@ module SparqlHelper
     endpoint = $SPARQL_URL.gsub('test', 'sparql')
     begin
       conn = Faraday.new do |conn|
-        conn.options.timeout = 10
+        conn.options.timeout = 60
       end
       response = conn.get("#{endpoint}?query=#{encode_param(query)}")
       response.body.force_encoding('ISO-8859-1').encode('UTF-8')
