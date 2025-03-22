@@ -10,8 +10,9 @@ module SparqlHelper
         query = query.gsub("WHERE", "FROM <#{graph}> WHERE")
       end
 
-      query = query.gsub(/GRAPH <[^>]+>/i, "")
+      query.gsub!(/GRAPH\s+\S+/i, "GRAPH <#{graph}>")
     end
+
     query
   end
   def ontology_sparql_query(query, graph = '')
@@ -50,7 +51,7 @@ module SparqlHelper
     endpoint = $SPARQL_URL.gsub('test', 'sparql')
     begin
       conn = Faraday.new do |conn|
-        conn.options.timeout = 60
+        conn.options.timeout = 10
       end
       response = conn.get("#{endpoint}?query=#{encode_param(query)}")
       response.body.force_encoding('ISO-8859-1').encode('UTF-8')
