@@ -2,9 +2,10 @@ module SparqlHelper
   def change_from_clause(query, graph)
     unless graph.blank?
       graph = graph.gsub($REST_URL, 'http://data.bioontology.org')
-      if query.match?(/FROM <[^>]+>/i)
+      if query.match?(/FROM\s+\S+/i)
         # Use a regular expression to replace all instances of FROM <uri>
-        query = query.gsub(/FROM <[^>]+>/i, "FROM <#{graph}>")
+        # Will change FROM "anything" and transform it to FROM <a secure graph uri>
+        query.gsub!(/FROM\s+\S+/i, "FROM <#{graph}>")
       else
         query = query.gsub("WHERE", "FROM <#{graph}> WHERE")
       end
