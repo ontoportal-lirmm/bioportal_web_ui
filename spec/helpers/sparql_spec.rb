@@ -1,0 +1,188 @@
+require 'spec_helper'
+require_relative '../../app/helpers/sparql_helper'
+require 'active_support'
+require 'pry'
+
+describe 'change_from_clause' do
+  include SparqlHelper
+
+  before do
+    $REST_URL = 'http://example.org'
+  end
+
+  let(:graph) { 'http://test.graph/ontology' }
+  let(:trusted_graph) { 'http://secure.bioportal.org/trusted/graph' }
+
+  let(:expected_query) do
+    <<~EXPECTED.strip
+      PREFIX meta: <http://data.bioontology.org/metadata/>
+      SELECT DISTINCT ?id ?apikey ?email
+      FROM <http://secure.bioportal.org/trusted/graph> WHERE {
+        ?id a <http://data.bioontology.org/metadata/User> .
+        ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
+      }
+    EXPECTED
+  end
+
+  let(:expected_query_with_graph) do
+    <<~EXPECTED.strip
+      PREFIX meta: <http://data.bioontology.org/metadata/>
+      SELECT DISTINCT ?x ?y ?Z FROM <http://secure.bioportal.org/trusted/graph> WHERE {
+        GRAPH <http://secure.bioportal.org/trusted/graph> {
+          ?x ?y ?Z
+        }
+      }
+    EXPECTED
+  end
+
+  it 'work with no FROM and no GRAPH and no WHERE' do
+    query = <<~SPARQL.strip
+      PREFIX meta: <http://data.bioontology.org/metadata/>
+      SELECT DISTINCT ?id ?apikey ?email
+      WHERE {
+        ?id a <http://data.bioontology.org/metadata/User> .
+        ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
+      }
+    SPARQL
+
+    check_query(query.dup, expected_query)
+  end
+
+  it 'handle normal FROM clause' do
+    query = <<~SPARQL
+      PREFIX meta: <http://data.bioontology.org/metadata/>
+      SELECT DISTINCT ?id ?apikey ?email
+      FROM <http://data.bioontology.org/metadata/User> WHERE {
+        ?id a <http://data.bioontology.org/metadata/User> .
+        ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
+      }
+    SPARQL
+
+    check_query(query, expected_query)
+  end
+
+  it 'handle prefix FROM clause' do
+    query = <<~SPARQL.strip
+      PREFIX meta: <http://data.bioontology.org/metadata/>
+      SELECT DISTINCT ?id ?apikey ?email
+      FROM meta:User WHERE {
+        ?id a <http://data.bioontology.org/metadata/User> .
+        ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
+      }
+    SPARQL
+
+    check_query(query, expected_query)
+  end
+
+  it 'handles normal GRAPH' do
+    query = <<~SPARQL.strip
+      PREFIX meta: <http://data.bioontology.org/metadata/>
+      SELECT DISTINCT ?x ?y ?Z {  # This is a comment
+        GRAPH <http://data.bioontology.org/metadata/User>{
+          ?x ?y ?Z
+        }
+      }
+    SPARQL
+
+    check_query(query, expected_query_with_graph)
+  end
+
+  it 'handles prefixed GRAPH' do
+    query = <<~SPARQL.strip
+      PREFIX meta: <http://data.bioontology.org/metadata/> 
+      SELECT DISTINCT ?x ?y ?Z {  # This is a comment
+        GRAPH meta:User{ 
+          ?x ?y ?Z 
+        }
+      }
+    SPARQL
+
+    check_query(query, expected_query_with_graph)
+  end
+
+  it 'handles combination of FROMs and GRAPHs' do
+    query = <<~SPARQL.strip
+      PREFIX meta: <http://data.bioontology.org/metadata/>
+      SELECT DISTINCT ?x ?y ?Z FROM meta:User FROM <http://data.bioontology.org/metadata/User>{  # This is a comment
+        GRAPH meta:User{
+          ?x ?y ?Z
+        }
+
+        GRAPH meta:User2 {
+          ?x ?y ?Z
+        }
+      }
+    SPARQL
+
+    expected_result = <<~EXPECTED.strip
+      PREFIX meta: <http://data.bioontology.org/metadata/>
+      SELECT DISTINCT ?x ?y ?Z FROM <http://secure.bioportal.org/trusted/graph> FROM <http://secure.bioportal.org/trusted/graph>{
+        GRAPH <http://secure.bioportal.org/trusted/graph> {
+          ?x ?y ?Z
+        }
+        GRAPH <http://secure.bioportal.org/trusted/graph> {
+          ?x ?y ?Z
+        }
+      }
+    EXPECTED
+
+    check_query(query, expected_result)
+  end
+
+  it 'handles removing comments from query' do
+    query = <<~SPARQL
+      PREFIX meta: <http://data.bioontology.org/metadata/>
+      ### FROM U HAVE BEEN PWNED
+      SELECT DISTINCT ?id ?apikey ?email # {} WHAT ABOUT A COMMENT HERE
+      {
+         ?id a <http://data.bioontology.org/metadata/User> .
+         ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
+      }
+      # {} PWND AGAIN SORRY
+    SPARQL
+    result = change_from_clause(query, trusted_graph)
+    expect(result).to_not include("#")
+  end
+
+  it 'handle sub queries' do
+    query = <<~SPARQL.strip
+      PREFIX meta: <http://data.bioontology.org/metadata/>
+      SELECT DISTINCT ?id ?apikey ?email
+      WHERE {
+        ?id a <http://data.bioontology.org/metadata/User> .
+        ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
+        {
+         select ?id ?email from meta:User where { graph <http://data.bioontology.org/metadata/User> { ?id ?s ?p}}
+        }
+        {
+         select ?id ?email from meta:User where { graph <http://data.bioontology.org/metadata/User> { ?id ?s ?p}}
+        }
+      }
+    SPARQL
+
+    expected_result = <<~EXPECTED.strip
+      PREFIX meta: <http://data.bioontology.org/metadata/>
+      SELECT DISTINCT ?id ?apikey ?email FROM <http://secure.bioportal.org/trusted/graph> WHERE {
+        ?id a <http://data.bioontology.org/metadata/User> .
+        ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
+        {
+         select ?id ?email FROM <http://secure.bioportal.org/trusted/graph> where { GRAPH <http://secure.bioportal.org/trusted/graph> { ?id ?s ?p}}
+        }
+        {
+         select ?id ?email FROM <http://secure.bioportal.org/trusted/graph> where { GRAPH <http://secure.bioportal.org/trusted/graph> { ?id ?s ?p}}
+        }
+      }
+    EXPECTED
+    check_query(query.dup, expected_result)
+  end
+
+  private
+
+  def check_query(query, expected)
+    new_graph = 'http://secure.bioportal.org/trusted/graph'
+    result = change_from_clause(query, new_graph)
+    expect(result.lines.map(&:rstrip).join("\n"))
+      .to eq(expected.lines.map(&:rstrip).join("\n"))
+  end
+end
+
