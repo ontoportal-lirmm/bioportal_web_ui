@@ -38,7 +38,7 @@ describe 'change_from_clause' do
   it 'work with no FROM and no GRAPH and no WHERE' do
     query = <<~SPARQL.strip
       PREFIX meta: <http://data.bioontology.org/metadata/>
-      SELECT DISTINCT ?id ?apikey ?email
+      SELECT DISTINCT ?id ?apikey ?email# {} WHAT ABOUT A COMMENT HERE
       WHERE {
         ?id a <http://data.bioontology.org/metadata/User> .
         ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
@@ -53,6 +53,19 @@ describe 'change_from_clause' do
       PREFIX meta: <http://data.bioontology.org/metadata/>
       SELECT DISTINCT ?id ?apikey ?email
       FROM <http://data.bioontology.org/metadata/User> WHERE {
+        ?id a <http://data.bioontology.org/metadata/User> .
+        ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
+      }
+    SPARQL
+
+    check_query(query, expected_query)
+  end
+
+  it 'handle normal FROM clause with no space' do
+    query = <<~SPARQL
+      PREFIX meta: <http://data.bioontology.org/metadata/>
+      SELECT DISTINCT ?id ?apikey ?email 
+      FROM<http://data.bioontology.org/metadata/User> WHERE {
         ?id a <http://data.bioontology.org/metadata/User> .
         ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
       }
@@ -87,6 +100,19 @@ describe 'change_from_clause' do
     check_query(query, expected_query_with_graph)
   end
 
+  it 'handles normal GRAPH with no space' do
+    query = <<~SPARQL.strip
+      PREFIX meta: <http://data.bioontology.org/metadata/>
+      SELECT DISTINCT ?x ?y ?Z {  # This is a comment
+        GRAPH<http://data.bioontology.org/metadata/User>{
+          ?x ?y ?Z
+        }
+      }
+    SPARQL
+
+    check_query(query, expected_query_with_graph)
+  end
+
   it 'handles prefixed GRAPH' do
     query = <<~SPARQL.strip
       PREFIX meta: <http://data.bioontology.org/metadata/> 
@@ -103,7 +129,8 @@ describe 'change_from_clause' do
   it 'handles combination of FROMs and GRAPHs' do
     query = <<~SPARQL.strip
       PREFIX meta: <http://data.bioontology.org/metadata/>
-      SELECT DISTINCT ?x ?y ?Z FROM meta:User FROM <http://data.bioontology.org/metadata/User>{  # This is a comment
+      SELECT DISTINCT ?x ?y ?Z FROM meta:User FROM <http://data.bioontology.org/metadata/User>{# This is a comment
+
         GRAPH meta:User{
           ?x ?y ?Z
         }
@@ -141,7 +168,7 @@ describe 'change_from_clause' do
       # {} PWND AGAIN SORRY
     SPARQL
     result = change_from_clause(query, trusted_graph)
-    expect(result).to_not include("#")
+    expect(result).to_not include('#')
   end
 
   it 'handle sub queries' do
@@ -175,12 +202,58 @@ describe 'change_from_clause' do
     EXPECTED
     check_query(query.dup, expected_result)
   end
+  it 'handle number in select' do
+    query = <<~SPARQL.strip
+      PREFIX meta: <http://data.bioontology.org/metadata/>
+      SELECT DISTINCT ?id ?apikey ?email
+      1337# {} WHAT ABOUT A COMMENT HERE
+      {
+         ?id a <http://data.bioontology.org/metadata/User> .
+         ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
+       }
+    SPARQL
+
+    expected_result = <<~EXPECTED.strip
+      PREFIX meta: <http://data.bioontology.org/metadata/>
+      SELECT DISTINCT ?id ?apikey ?email
+      1337 FROM <http://secure.bioportal.org/trusted/graph> WHERE {
+         ?id a <http://data.bioontology.org/metadata/User> .
+         ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
+       }
+    EXPECTED
+    check_query(query, expected_result)
+  end
+
+  it 'handle fake from or graph' do
+    query = <<~SPARQL.strip
+      PREFIX meta: <http://data.bioontology.org/metadata/>
+      SELECT DISTINCT ?id ?apikey ?email
+      FROM <http://data.bioontology.org/metadata/where/select/graph> FROM <http://data.bioontology.org/metadata/User> WHERE {
+      {
+         ?id a <http://data.bioontology.org/metadata/User> .
+         ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
+       }
+    SPARQL
+
+    expected_result = <<~EXPECTED.strip
+      PREFIX meta: <http://data.bioontology.org/metadata/>
+      SELECT DISTINCT ?id ?apikey ?email
+      FROM <http://secure.bioportal.org/trusted/graph> FROM <http://secure.bioportal.org/trusted/graph> WHERE {
+      {
+         ?id a <http://data.bioontology.org/metadata/User> .
+         ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
+       }
+    EXPECTED
+
+    check_query(query, expected_result)
+  end
 
   private
 
   def check_query(query, expected)
     new_graph = 'http://secure.bioportal.org/trusted/graph'
     result = change_from_clause(query, new_graph)
+    puts result
     expect(result.lines.map(&:rstrip).join("\n"))
       .to eq(expected.lines.map(&:rstrip).join("\n"))
   end

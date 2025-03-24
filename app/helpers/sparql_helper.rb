@@ -4,7 +4,7 @@ module SparqlHelper
     query.gsub!(/^\s*#.*$/, '')
 
     # Remove inline comments (# to end of line)
-    query.gsub!(/\s#.*$/, '')
+    query.gsub!(/\s?#.*$/, '')
 
     # Clean up any blank lines that might have been created
     query.gsub!(/\n\s*\n+/, "\n")
@@ -12,13 +12,15 @@ module SparqlHelper
     unless graph.blank?
       graph = graph.gsub($REST_URL, 'http://data.bioontology.org')
 
-      if query.match?(/FROM\s+\S+[^{ \n]/i) #  match FROM <URI> and FROM meta:User
-        query.gsub!(/FROM\s+\S+[^{ \n]/i, "FROM <#{graph}>")
-      elsif query.match?(/WHERE\s+\S+/i) # match WHERE without FROM
+      if query.match?(/(?<=\s|^)FROM\s*\S+[^{ \n]/i)
+        #  match FROM <URI> and FROM meta:User (only after space or start of line)
+        query.gsub!(/(?<=\s|^)FROM\s*\S+[^{ \n]/i, "FROM <#{graph}>")
+      elsif query.match?(/WHERE\s+\S+/i)
+        # match WHERE without FROM
         query.gsub!(/WHERE/i, "FROM <#{graph}> WHERE")
       end
-
-      query.gsub!(/GRAPH\s+[^\{]+\{/i, "GRAPH <#{graph}> {") # match GRAPH <URI> and GRAPH meta:User
+      # match GRAPH <URI> and GRAPH meta:User (only after space or start of line)
+      query.gsub!(/(?<=\s|^)GRAPH\s*[^\{]+\{/i, "GRAPH <#{graph}> {")
 
       if query.match?(/SELECT.*\s*\S*\{/im) # match SELECT without FROM and WHERE
         query.sub!(/(SELECT.*?\s*\S*)\{/im) do |match|
