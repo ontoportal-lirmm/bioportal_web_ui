@@ -1437,6 +1437,7 @@ en:
     match_in: Match in
     no_search_class_provided: No search class provided
     ontologies: ontologies
+    from: from
     result_component:
       details: Details
       more_from_ontology: more from this ontology
