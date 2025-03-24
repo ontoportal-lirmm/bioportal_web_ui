@@ -35,6 +35,26 @@ describe 'change_from_clause' do
     EXPECTED
   end
 
+  it 'work in normal case' do
+    query = <<~SPARQL.strip
+      PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+      SELECT * WHERE {
+        ?sub ?pred ?obj .
+      } LIMIT 10
+    SPARQL
+
+    expected_result = <<~EXPECTED.strip
+      PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+      SELECT * FROM <#{trusted_graph}> WHERE {
+        ?sub ?pred ?obj .
+      } LIMIT 10
+    EXPECTED
+
+    check_query(query, expected_result)
+  end
+
   it 'work with no FROM and no GRAPH and no WHERE' do
     query = <<~SPARQL.strip
       PREFIX meta: <http://data.bioontology.org/metadata/>
@@ -158,17 +178,29 @@ describe 'change_from_clause' do
 
   it 'handles removing comments from query' do
     query = <<~SPARQL
-      PREFIX meta: <http://data.bioontology.org/metadata/>
+      PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> # {} FROM U HAVE BEEN PWNED 
+      PREFIX meta: <http://data.bioontology.org/metadata/> # {} FROM U HAVE BEEN PWNED
       ### FROM U HAVE BEEN PWNED
-      SELECT DISTINCT ?id ?apikey ?email # {} WHAT ABOUT A COMMENT HERE
-      {
-         ?id a <http://data.bioontology.org/metadata/User> .
+      SELECT DISTINCT ?id ?apikey ?email# {} WHAT ABOUT A COMMENT HERE
+      { # {} PWND
+         ?id a <http://data.bioontology.org/metadata/User> . # {} PWND
          ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
+         ?id <http://www.w3.org/1999/02/22-rdf-syntax-ns#label> label . # {} PWND
       }
       # {} PWND AGAIN SORRY
     SPARQL
     result = change_from_clause(query, trusted_graph)
-    expect(result).to_not include('#')
+    expected_result = <<~EXPECTED.strip
+      PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+      PREFIX meta: <http://data.bioontology.org/metadata/> 
+      SELECT DISTINCT ?id ?apikey ?email FROM <http://secure.bioportal.org/trusted/graph> WHERE { 
+         ?id a <http://data.bioontology.org/metadata/User> . 
+         ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
+         ?id <http://www.w3.org/1999/02/22-rdf-syntax-ns#label> label . 
+      }
+    EXPECTED
+    puts result
+    expect(result.strip).to eq(expected_result)
   end
 
   it 'handle sub queries' do

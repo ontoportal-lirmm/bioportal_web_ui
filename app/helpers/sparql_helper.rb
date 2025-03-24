@@ -4,7 +4,7 @@ module SparqlHelper
     query.gsub!(/^\s*#.*$/, '')
 
     # Remove inline comments (# to end of line)
-    query.gsub!(/\s?#.*$/, '')
+    query.gsub!(/#(?![^<>]*>).*?$/, '')
 
     # Clean up any blank lines that might have been created
     query.gsub!(/\n\s*\n+/, "\n")
