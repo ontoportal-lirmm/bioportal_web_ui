@@ -244,6 +244,13 @@ class ApplicationController < ActionController::Base
   def redirect_to_home # Redirect to Home Page
     redirect_to "/"
   end
+  
+  # Redirects to home if the application is in read-only mode.  
+  def authorize_read_only
+    if helpers.read_only_enabled?
+      redirect_to_home and return
+    end
+  end
 
   # Verifies if user is logged in
   def authorize_and_redirect
@@ -251,7 +258,7 @@ class ApplicationController < ActionController::Base
       redirect_to_home
     end
   end
-
+  
   def authorize_admin
     redirect_to_home unless current_user_admin?
   end

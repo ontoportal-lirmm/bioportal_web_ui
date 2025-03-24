@@ -20,7 +20,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
   test "go admin page and create an agent person and edit it" do
     visit admin_index_url
     click_on "Persons & organizations"
-    wait_for_text "Create New Agent"
+    wait_for_text "Create new agent"
 
     # Creation test
     create_agent_flow(@new_person, person_count: 1, organization_count: 2)
@@ -56,14 +56,14 @@ class AgentFlowsTest < ApplicationSystemTestCase
 
   private
   def create_agent_flow(new_agent, person_count: , organization_count:)
-    wait_for_text "Create New Agent"
+    wait_for_text "Create new agent"
 
     # Creation test
-    click_on "Create New Agent"
+    click_on "Create new agent"
     wait_for_text "TYPE"
     agent_fill(new_agent, is_affiliation: false)
     sleep 1
-    assert_text "New Agent added successfully"
+    assert_text "New agent added successfully"
     find('.close').click
     within "table#admin_agents" do
       assert_selector '.human',  count: person_count + organization_count #  all created  agents
@@ -85,7 +85,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
   def edit_agent_flow(agent, person_count: , organization_count: )
     wait_for_text "TYPE"
     agent_fill(agent, parent_id: agent.id)
-    # assert_text "New Agent added successfully"
+    # assert_text "New agent added successfully"
     find('.close').click
     sleep 1
     within "table#admin_agents" do

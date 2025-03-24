@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 # Main Rails gem
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '7.0.4'
+gem 'rails', '7.0.8'
 
 # JavaScript bundling for Rails
 gem 'jsbundling-rails'
@@ -186,3 +186,7 @@ group :test do
 end
 
 gem 'concurrent-ruby', '1.3.4'
+
+# pinned gems for Centos 7 to remove when no more needed
+gem 'nokogiri', '~> 1.13.10'
+gem 'rexml'
