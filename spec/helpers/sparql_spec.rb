@@ -185,7 +185,7 @@ describe 'change_from_clause' do
       { # {} PWND
          ?id a <http://data.bioontology.org/metadata/User> . # {} PWND
          ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
-         ?id <http://www.w3.org/1999/02/22-rdf-syntax-ns#label> label . # {} PWND
+         ?id <http://www.w3.org/1999/02/22-rdf-syntax-ns#label> ?label . # {} PWND
       }
       # {} PWND AGAIN SORRY
     SPARQL
@@ -196,7 +196,7 @@ describe 'change_from_clause' do
       SELECT DISTINCT ?id ?apikey ?email FROM <http://secure.bioportal.org/trusted/graph> WHERE { 
          ?id a <http://data.bioontology.org/metadata/User> . 
          ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
-         ?id <http://www.w3.org/1999/02/22-rdf-syntax-ns#label> label . 
+         ?id <http://www.w3.org/1999/02/22-rdf-syntax-ns#label> ?label . 
       }
     EXPECTED
     puts result
@@ -206,29 +206,31 @@ describe 'change_from_clause' do
   it 'handle sub queries' do
     query = <<~SPARQL.strip
       PREFIX meta: <http://data.bioontology.org/metadata/>
-      SELECT DISTINCT ?id ?apikey ?email
+      SELECT DISTINCT ?id ?apikey
       WHERE {
         ?id a <http://data.bioontology.org/metadata/User> .
         ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
         {
-         select ?id ?email from meta:User where { graph <http://data.bioontology.org/metadata/User> { ?id ?s ?p}}
+         select ?id {  ?id ?s ?p }
         }
+
         {
-         select ?id ?email from meta:User where { graph <http://data.bioontology.org/metadata/User> { ?id ?s ?p}}
+         select ?id { graph meta:User {?id ?s ?p} }
         }
       }
     SPARQL
 
     expected_result = <<~EXPECTED.strip
       PREFIX meta: <http://data.bioontology.org/metadata/>
-      SELECT DISTINCT ?id ?apikey ?email FROM <http://secure.bioportal.org/trusted/graph> WHERE {
+      SELECT DISTINCT ?id ?apikey
+      FROM <http://secure.bioportal.org/trusted/graph> WHERE {
         ?id a <http://data.bioontology.org/metadata/User> .
         ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
         {
-         select ?id ?email FROM <http://secure.bioportal.org/trusted/graph> where { GRAPH <http://secure.bioportal.org/trusted/graph> { ?id ?s ?p}}
+         select ?id {  ?id ?s ?p }
         }
         {
-         select ?id ?email FROM <http://secure.bioportal.org/trusted/graph> where { GRAPH <http://secure.bioportal.org/trusted/graph> { ?id ?s ?p}}
+         select ?id { GRAPH <http://secure.bioportal.org/trusted/graph> {?id ?s ?p} }
         }
       }
     EXPECTED
@@ -239,28 +241,21 @@ describe 'change_from_clause' do
       PREFIX meta: <http://data.bioontology.org/metadata/>
       SELECT DISTINCT ?id ?apikey ?email
       1337# {} WHAT ABOUT A COMMENT HERE
+      WHERE
       {
          ?id a <http://data.bioontology.org/metadata/User> .
          ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
        }
     SPARQL
 
-    expected_result = <<~EXPECTED.strip
-      PREFIX meta: <http://data.bioontology.org/metadata/>
-      SELECT DISTINCT ?id ?apikey ?email
-      1337 FROM <http://secure.bioportal.org/trusted/graph> WHERE {
-         ?id a <http://data.bioontology.org/metadata/User> .
-         ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
-       }
-    EXPECTED
-    check_query(query, expected_result)
+    expect { check_query(query, expected_query) }.to raise_error(StandardError)
   end
 
   it 'handle fake from or graph' do
     query = <<~SPARQL.strip
       PREFIX meta: <http://data.bioontology.org/metadata/>
       SELECT DISTINCT ?id ?apikey ?email
-      FROM <http://data.bioontology.org/metadata/where/select/graph> FROM <http://data.bioontology.org/metadata/User> WHERE {
+      FROM <http://data.bioontology.org/metadata/where/select/graph> FROM <http://data.bioontology.org/metadata/User> WHERE 
       {
          ?id a <http://data.bioontology.org/metadata/User> .
          ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
@@ -270,7 +265,7 @@ describe 'change_from_clause' do
     expected_result = <<~EXPECTED.strip
       PREFIX meta: <http://data.bioontology.org/metadata/>
       SELECT DISTINCT ?id ?apikey ?email
-      FROM <http://secure.bioportal.org/trusted/graph> FROM <http://secure.bioportal.org/trusted/graph> WHERE {
+      FROM <http://secure.bioportal.org/trusted/graph> FROM <http://secure.bioportal.org/trusted/graph> WHERE
       {
          ?id a <http://data.bioontology.org/metadata/User> .
          ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
@@ -278,6 +273,22 @@ describe 'change_from_clause' do
     EXPECTED
 
     check_query(query, expected_result)
+  end
+
+  it "handle invalid queries" do
+    query = <<~SPARQL.strip
+      SELECT DISTINCT ?id ?apikey ?email
+      1337<#\{
+      1337
+      {
+         ?id a <http://data.bioontology.org/metadata/User> .
+         ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
+         ?id <http://data.bioontology.org/metadata/email> ?email .
+         ?id <http://data.bioontology.org/metadata/role> <http://data.bioontology.org/roles/ADMINISTRATOR> .
+      }
+    SPARQL
+
+    expect { change_from_clause(query, trusted_graph) }.to raise_error(StandardError)
   end
 
   private

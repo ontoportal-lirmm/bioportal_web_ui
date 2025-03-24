@@ -1,11 +1,8 @@
+require 'sparql/grammar'
 module SparqlHelper
   def change_from_clause(query, graph)
-    # Remove single-line comments (lines starting with #)
-    query.gsub!(/^\s*#.*$/, '')
-
-    # Remove inline comments (# to end of line)
-    query.gsub!(/#(?![^<>]*>).*?$/, '')
-
+    validate_sparql_query(query)
+    query = remove_sparql_comments(query)
     # Clean up any blank lines that might have been created
     query.gsub!(/\n\s*\n+/, "\n")
 
@@ -35,13 +32,42 @@ module SparqlHelper
       end
     end
 
+    validate_sparql_query(query)
     query
   end
 
   def ontology_sparql_query(query, graph = '')
     query = change_from_clause(query, graph)
     sparql_query(query)
+  rescue StandardError
+    'Failed to parse query'
   end
+
+  def sparql_query(query)
+    return 'No SPARQL endpoint configured' if $SPARQL_URL.blank?
+    return 'INSERT Queries not permitted' unless is_allowed_query?(query)
+
+    endpoint = $SPARQL_URL.gsub('test', 'sparql')
+    begin
+      conn = Faraday.new do |conn|
+        conn.options.timeout = 10
+      end
+      response = conn.get("#{endpoint}?query=#{encode_param(query)}")
+      response.body.force_encoding('ISO-8859-1').encode('UTF-8')
+    rescue StandardError
+      'Query timeout'
+    end
+  end
+
+  def sparql_query_container(username: current_user&.username, graph: nil, apikey: get_apikey)
+    content_tag(:div, '', data: { controller: 'sparql',
+                                  'sparql-proxy-value': '/sparql_proxy/',
+                                  'sparql-apikey-value': apikey,
+                                  'sparql-username-value': username,
+                                  'sparql-graph-value': graph })
+  end
+
+  private
 
   def is_allowed_query?(sparql_query)
     forbidden_operations = [
@@ -71,27 +97,34 @@ module SparqlHelper
     true
   end
 
-  def sparql_query(query)
-    return 'No SPARQL endpoint configured' if $SPARQL_URL.blank?
-    return 'INSERT Queries not permitted' unless is_allowed_query?(query)
-    endpoint = $SPARQL_URL.gsub('test', 'sparql')
-    begin
-      conn = Faraday.new do |conn|
-        conn.options.timeout = 10
+  def remove_sparql_comments(query)
+    # Remove everything from # to end of line, unless the # is inside angle brackets
+    lines = query.split("\n")
+    cleaned_lines = lines.map do |line|
+      inside_uri = false
+      comment_start = nil
+
+      line.each_char.with_index do |char, i|
+        if char == '<'
+          inside_uri = true
+        elsif char == '>'
+          inside_uri = false
+        elsif char == '#' && !inside_uri
+          comment_start = i
+          break
+        end
       end
-      response = conn.get("#{endpoint}?query=#{encode_param(query)}")
-      response.body.force_encoding('ISO-8859-1').encode('UTF-8')
-    rescue
-      'Query timeout'
+
+      comment_start ? line[0...comment_start] : line
     end
+
+    cleaned_lines.join("\n")
   end
 
-  def sparql_query_container(username: current_user&.username, graph: nil, apikey: get_apikey)
-    content_tag(:div, '', data: { controller: 'sparql',
-                                  'sparql-proxy-value': '/sparql_proxy/',
-                                  'sparql-apikey-value': apikey,
-                                  'sparql-username-value': username,
-                                  'sparql-graph-value': graph })
+  def validate_sparql_query(query)
+    SPARQL::Grammar.parse(query)
+  rescue StandardError => e
+    raise StandardError, "Failed to parse query: #{e.message}"
   end
 
 end
