@@ -22,7 +22,7 @@ module SparqlHelper
       # match SELECT without FROM and WHERE and ignore the { inside quotes
       if query.match?(/(SELECT.*?\s*\S*)(?<!["'\s])\s*\{(?![^"]*["'])/im)
         query.sub!(/(SELECT.*?\s*\S*)(?<!["'\s])\s*\{(?![^"]*["'])/im) do |match|
-          if match.downcase.match?(/(?<!["'\s])\s*FROM(?![^"]*["'])/i)
+          if match.downcase.match?(/(?<!["'(\s])\s*FROM(?![^"]*["')])/i)
             match
           else
             out = "#{$1}"

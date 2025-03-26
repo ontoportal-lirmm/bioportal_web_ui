@@ -293,7 +293,7 @@ describe 'change_from_clause' do
 
   it 'handle fake select binding' do
     query = <<~SPARQL.strip
-      SELECT  ?id ?email ?apikey ("{" AS ?PWNED) ('{' AS ?PWNED2) ('  FROM  ' AS ?FROM) ('GRAPH' AS ?GRAPH) ('WHERE' AS ?WHERE_) ('  {  ' AS ?bracket) 
+      SELECT  ?id ?email ?apikey ("{" AS ?PWNED) ('{"()(' AS ?PWNED2) ('  FROM  ' AS ?FROM) (  ' ) FROM  ' AS ?FROM2 ) ('GRAPH' AS ?GRAPH) ('WHERE' AS ?WHERE_) ('  {  ' AS ?bracket) 
       ("  { " AS ?bracket2)
       {
          ?id a <http://data.bioontology.org/metadata/User> .
@@ -302,7 +302,7 @@ describe 'change_from_clause' do
     SPARQL
 
     expected_result = <<~EXPECTED.strip
-      SELECT  ?id ?email ?apikey ("{" AS ?PWNED) ('{' AS ?PWNED2) ('  FROM  ' AS ?FROM) ('GRAPH' AS ?GRAPH) ('' AS ?_) ('  {  ' AS ?bracket) 
+      SELECT  ?id ?email ?apikey ("{" AS ?PWNED) ('{"()(' AS ?PWNED2) ('  FROM  ' AS ?FROM) (  ' ) FROM  ' AS ?FROM2 ) ('GRAPH' AS ?GRAPH) ('' AS ?_) ('  {  ' AS ?bracket) 
       ("  { " AS ?bracket2) FROM <http://secure.bioportal.org/trusted/graph> WHERE {
          ?id a <http://data.bioontology.org/metadata/User> .
          ?id <http://data.bioontology.org/metadata/apikey> ?apikey .
@@ -311,6 +311,8 @@ describe 'change_from_clause' do
 
     check_query(query, expected_result)
   end
+
+
 
   private
 
