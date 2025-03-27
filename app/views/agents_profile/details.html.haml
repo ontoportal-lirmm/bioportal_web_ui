@@ -1,0 +1,34 @@
+%script{src: asset_path('chart.js')}
+
+.d-flex.justify-content-center
+  .agents-page-subcontainer
+    .agents-page-title    
+      = "#{@agent.name} (#{@agent.agentType.capitalize()})"
+      .row
+        .col-md-7
+          .agents-page-text-area
+            %div.textarea
+              = render SummarySectionComponent.new(title: "Metadata") do |c|
+                = render Layout::ListComponent.new do |l|
+                  - properties_list_component(l, @agent_properties)
+            %div.textarea{'data-controller': 'agent-submissions', 
+                        'data-agent-submissions-ontologies-list-value': "#{@ontologies_mapping_count.to_h.to_json}",
+                        'data-agent-submissions-api-url-value': rest_url}
+              = render SummarySectionComponent.new(title: "Contributed in") do |c|
+                %div
+                  = render partial: '/agents_profile/bubble_view'
+
+        .col-md-5
+          .agents-page-text-area
+            = render SummarySectionComponent.new(title: "Statistics") do |c|
+              .chart-container
+                %canvas#contributionChart
+
+        
+:javascript
+    // Get data from Ruby stats object
+    const contributionData = {
+      creator: #{@agent_stats[:creator_count]},
+      contributor: #{@agent_stats[:contributor_count]},
+      publisher: #{@agent_stats[:publisher_count]}
+    };

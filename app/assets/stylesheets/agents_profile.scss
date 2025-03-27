@@ -1,0 +1,65 @@
+.agents-page-container{
+    display:flex;
+    justify-content:center;
+  }
+  .agents-page-container a{
+    color: var(--primary-color) !important;
+  }
+  .agents-page-subcontainer{
+    width: 1248px;
+    padding: 20px 50px;
+  }
+  .agents-page-title{
+    font-size: 25px;
+    font-weight: 700;
+  }
+  .agents-page-title .line{
+    height: 2px;
+    width: 57px;
+    background-color: var(--primary-color);
+    border-radius: 10px;
+  }
+  .agents-page-decription{
+    color: #888888;
+    margin-top: 20px;
+  }
+
+  .agents-page-text-area{
+    border: 1px solid #ccc; /* Adds a border around the box */
+    border-radius: 8px; /* Rounded corners for the box */
+    padding: 20px; /* Adds space inside the box */
+    margin-top: 30px; 
+  }
+  .textarea{
+    font-size: 16px;
+    outline: none;
+    padding: 10px;
+    width: 630px;
+    border: none;
+  }
+
+  .chart-container {
+      width: 100%;
+      max-width: 500px;
+      margin: 20px 0;
+
+      canvas {
+          display: block;
+          margin: 0 auto;
+      }
+  }
+
+  .stats {
+      margin-top: 20px;
+      text-align: center;
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 300px;
+
+      p {
+          margin: 8px 0;
+          font-size: 16px;
+      }
+  }

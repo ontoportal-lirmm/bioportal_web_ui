@@ -20,8 +20,7 @@ Rails.application.routes.draw do
   post 'agents/:id/usages', to: 'agents#update_agent_usages', constraints: { id: /.+/ }
   resources :agents, constraints: { id: /.+/ }
   post 'agents/:id', to: 'agents#update', constraints: { id: /.+/ }
-
-
+  get 'agents_profile/:id', to: 'agents_profile#details', constraints: { id: /.+/ }
 
   resources :projects, constraints: { id: /[^\/]+/ }
 

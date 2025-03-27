@@ -1,0 +1,9 @@
+.agents-page-container
+  .agents-page-subcontainer
+    .agents-page-title
+      .text
+        = "Agents"
+      .line
+    .agents-page-decription
+      = t('agents.description')
+    = render TurboFrameComponent.new(id: 'agents-list', src: agents_path, loading: 'lazy')
