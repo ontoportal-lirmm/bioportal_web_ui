@@ -94,6 +94,8 @@ application.register('form-url', FormUrlController)
 import OntologiesSelector from "./ontologies_selector_controller"
 application.register("ontologies-selector", OntologiesSelector)
 
+import ChartController from "./agents_statistics_chart"
+application.register('mappings', ChartController)
 
 import MappingsController from "./mappings_visualization_controller"
 application.register('mappings', MappingsController)
