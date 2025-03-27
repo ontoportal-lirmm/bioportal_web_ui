@@ -1,7 +1,6 @@
 class AgentsProfileController < ApplicationController
 
     layout :determine_layout
-    MAPPINGS_URL = "#{LinkedData::Client.settings.rest_url}/mappings"
 
     def index
     end
@@ -12,13 +11,12 @@ class AgentsProfileController < ApplicationController
       @agent_stats = AgentStatisticsCalculatorComponent.new(@agent).stats
 
       mapping = { "http://omv.ontoware.org/2005/05/ontology#hasContributor" => "Contributor", "http://omv.ontoware.org/2005/05/ontology#hasCreator" => "Creator", "http://purl.org/dc/terms/publisher" => "Publisher" }
-      @ontologies_mapping_count = @agent.usages.to_h.each_with_object({}) do |(key, value), hash|
+      @agentOntologies = @agent.usages.to_h.each_with_object({}) do |(key, value), hash|
         if (match = key.to_s.match(%r{/ontologies/([^/]+)/submissions}))
           ontology_acronym = match[1]
           hash[ontology_acronym] = value.map { |url| mapping[url] }
         end
       end
-      p @ontologies_mapping_count
 
     end
   
@@ -68,7 +66,6 @@ class AgentsProfileController < ApplicationController
                         when "ROR" then "https://ror.org/#{notation}"
                         else notation
                         end
-
         end
       end
     end

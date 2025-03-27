@@ -32,16 +32,11 @@ class AgentStatisticsCalculatorComponent
         total: total,
         creator_count: creator_count,
         contributor_count: contributor_count,
-        creator_percent: calculate_percent(creator_count, total),
-        contributor_percent: calculate_percent(contributor_count, total),
         publisher_count: publisher_count,
-        publisher_percent: calculate_percent(publisher_count, total)
       }
     end
   
     private
   
-    def calculate_percent(count, total)
-      total.positive? ? ((count.to_f / total) * 100).round : 0
-    end
+
   end

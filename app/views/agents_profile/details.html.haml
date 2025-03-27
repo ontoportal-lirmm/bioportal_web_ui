@@ -9,7 +9,7 @@
               - properties_list_component(l, @agent_properties)
         %br
         %div{'data-controller': 'agent-submissions', 
-                    'data-agent-submissions-ontologies-list-value': "#{@ontologies_mapping_count.to_h.to_json}",
+                    'data-agent-submissions-ontologies-list-value': "#{@agentOntologies.to_h.to_json}",
                     'data-agent-submissions-api-url-value': rest_url}
           = render SummarySectionComponent.new(title: t("agents.profile.contributed_in")) do |c|
             %div

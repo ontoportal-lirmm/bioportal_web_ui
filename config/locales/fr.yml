@@ -261,7 +261,7 @@ fr:
     profile:
       contributed_in: A contribué dans
       metadata: Métadonnées
-      statistics: statistics
+      statistics: Statistics
     save: Sauvegarder
     see_usages_count: Voir les utilisations (%{count})
     turbo_confirm: Êtes-vous sûr ?
