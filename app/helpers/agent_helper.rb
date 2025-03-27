@@ -236,17 +236,28 @@ module AgentHelper
       agent_icon = agent.agentType.eql?("organization") ? organization_icon : person_icon
       title = agent_tooltip(agent)
     end
-    render_chip_component(title, agent_icon, name)
+    agent_page_url = agent.id.include?('/Agents/') ? "#{$UI_URL}/agents_profile/#{agent.id.split('/').last}" : nil
+    render_chip_component(title, agent_icon, name, agent_page_url)
   end
 
 
-  def render_chip_component(title,agent_icon,name)
-    render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: title , class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do
-      content_tag(:div, class: 'agent-chip') do
-        content_tag(:div, agent_icon, class: 'agent-chip-circle') +
-        content_tag(:div, name, class: 'agent-chip-name text-truncate')
-      end
+  def render_chip_component(title, agent_icon, name, url)
+    chip_content = content_tag(:div, class: 'agent-chip') do
+      content_tag(:div, agent_icon, class: 'agent-chip-circle') +
+      content_tag(:div, name, class: 'agent-chip-name text-truncate')
     end
+  
+    chip = render ChipButtonComponent.new(
+      type: "static",
+      'data-controller': 'tooltip',
+      title: title,
+      class: 'text-truncate',
+      style: 'max-width: 280px; display:block; line-height: unset'
+    ) do
+      chip_content
+    end
+  
+    url.present? ? link_to(chip, url, class: 'text-decoration-none', target: '_blank', rel: 'noopener noreferrer') : chip
   end
 
   def orcid_number(orcid)
