@@ -2,7 +2,7 @@
   %td
     %div{style: 'width: 250px'}
       %div.text-truncate{title: agent.name}
-        = link_to agent.name, "#{$UI_URL}/agents_profile/#{agent.id.split('/').last}"
+        = link_to agent.name, "#{$UI_URL}/agents_profile/#{agent.id.split('/').last}", target: "_blank"
   %td
     = agent.acronym
   %td

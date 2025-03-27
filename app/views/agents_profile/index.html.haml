@@ -1,9 +1,3 @@
-.agents-page-container
-  .agents-page-subcontainer
-    .agents-page-title
-      .text
-        = "Agents"
-      .line
-    .agents-page-decription
-      = t('agents.description')
-    = render TurboFrameComponent.new(id: 'agents-list', src: agents_path, loading: 'lazy')
+.container.d-flex.flex-column.py-4{ style: "width: 1248px;" }
+  = render PageHeaderComponent.new(title: "Agents" , description: t('agents.description'))
+  = render TurboFrameComponent.new(id: 'agents-list', src: agents_path, loading: 'lazy')

@@ -1,23 +1,24 @@
-
-      .row
-        .col-md-7
-          .agents-page-text-area
-            %div.textarea
-              = render SummarySectionComponent.new(title: "Metadata") do |c|
-                = render Layout::ListComponent.new do |l|
-                  - properties_list_component(l, @agent_properties)
-            %div.textarea{'data-controller': 'agent-submissions', 
-                        'data-agent-submissions-ontologies-list-value': "#{@ontologies_mapping_count.to_h.to_json}",
-                        'data-agent-submissions-api-url-value': rest_url}
-              = render SummarySectionComponent.new(title: "Contributed in") do |c|
-                %div
-                  = render partial: '/agents_profile/bubble_view'
-
-        .col-md-5
-          .agents-page-text-area
-            = render SummarySectionComponent.new(title: "Statistics") do |c|
-              .chart-container
-                %canvas#contributionChart
+.container.d-flex.flex-column.py-4{ style: "width: 1248px;" }
+  = render PageHeaderComponent.new(title: "#{@agent.name} (#{@agent.agentType.capitalize()})" , description: nil)
+  .row
+    .col-md-7
+      %div.agents-page-section
+        %div
+          = render SummarySectionComponent.new(title: t("agents.profile.metadata")) do |c|
+            = render Layout::ListComponent.new do |l|
+              - properties_list_component(l, @agent_properties)
+        %br
+        %div{'data-controller': 'agent-submissions', 
+                    'data-agent-submissions-ontologies-list-value': "#{@ontologies_mapping_count.to_h.to_json}",
+                    'data-agent-submissions-api-url-value': rest_url}
+          = render SummarySectionComponent.new(title: t("agents.profile.contributed_in")) do |c|
+            %div
+              = render partial: '/agents_profile/bubble_view'
+    .col-md-5
+      .agents-page-section
+        = render SummarySectionComponent.new(title: t("agents.profile.statistics")) do |c|
+          .chart-container
+            %canvas#contributionChart
 
         
 :javascript

@@ -16,8 +16,8 @@ export default class extends Controller {
   connect () {
     this.drawBubbles = (ontologiesList) => {
       const zoomRatio = this.zoomRatioValue
-      const width = 600 * zoomRatio
-      const height = 600 * zoomRatio
+      const width = 580 * zoomRatio
+      const height = 580 * zoomRatio
       const margin = 1
       const logScaleFactor = 10
       const normalization_ratio =  this.#normalizationRatio(ontologiesList)
