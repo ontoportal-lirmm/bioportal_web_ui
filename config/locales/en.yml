@@ -253,7 +253,7 @@ en:
     profile:
       contributed_in: Contributed in
       metadata: Metadata
-      statistics: Statistiques
+      statistics: statistics
     save: Save
     see_usages_count: See usages (%{count})
     turbo_confirm: Are you sure?
