@@ -8,9 +8,9 @@
             = render Layout::ListComponent.new do |l|
               - properties_list_component(l, @agent_properties)
         %br
-        %div{'data-controller': 'agent-submissions', 
-                    'data-agent-submissions-ontologies-list-value': "#{@agentOntologies.to_h.to_json}",
-                    'data-agent-submissions-api-url-value': rest_url}
+        %div{'data-controller': 'agent-bubbles-submissions', 
+                    'data-agent-bubbles-submissions-ontologies-list-value': "#{@agentOntologies.to_h.to_json}",
+                    'data-agent-bubbles-submissions-api-url-value': rest_url}
           = render SummarySectionComponent.new(title: t("agents.profile.contributed_in")) do |c|
             %div
               = render partial: '/agents_profile/bubble_view'

@@ -42,7 +42,7 @@ export function useAgentSubmissionsDrawBubbles(data, width, height, margin, bubb
     .enter().append('g')
     .attr('class', d => d.children ? 'node submissions-bubble' : 'leaf submissions-bubble')
     .attr('transform', d => `translate(${d.x},${d.y})`)
-    .attr('data-action', 'click->agent-submissions#selectBubble')
+    .attr('data-action', 'click->agent-bubbles-submissions#selectBubble')
     .attr('data-acronym', d => d.data.ontology_name)
     .attr('data-enabled', d => 'true');
 

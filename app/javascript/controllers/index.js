@@ -100,8 +100,8 @@ application.register('mappings', ChartController)
 import MappingsController from "./mappings_visualization_controller"
 application.register('mappings', MappingsController)
 
-import AgentSubmissions from "./agent_submissions_bubble_visualization_controller"
-application.register('agent-submissions', AgentSubmissions)
+import AgentBubblesSubmissions from "./agent_submissions_bubble_visualization_controller"
+application.register('agent-bubbles-submissions', AgentBubblesSubmissions)
 
 import ConceptsJsonButtonController from "./concepts_json_button_controller.js"
 application.register('concepts-json', ConceptsJsonButtonController)
