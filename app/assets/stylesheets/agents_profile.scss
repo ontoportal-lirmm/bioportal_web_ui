@@ -10,6 +10,19 @@
   align-items: center;
 }
   
+.clickable-identifier-icon {
+  width: 24px;
+  height: 24px;
+  transition: opacity 0.2s;
+}
+.clickable-identifier-icon path{
+  fill: var(--primary-color)
+}
+
+.clickable-identifier-icon:hover {
+  opacity: 1;
+}
+
 
 .chart-container {
     width: 100%;

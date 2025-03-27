@@ -101,7 +101,18 @@ module AgentHelper
 
 
   def display_identifiers(identifiers, link: true)
-    schemes_urls = { ORCID: 'https://orcid.org/', ISNI: 'https://isni.org/', ROR: 'https://ror.org/', GRID: 'https://www.grid.ac/' }
+    schemes_urls = { 
+      ORCID: 'https://orcid.org/', 
+      ISNI: 'https://isni.org/', 
+      ROR: 'https://ror.org/', 
+      GRID: 'https://www.grid.ac/' 
+    }
+    
+    schemes_icons = {
+      ORCID: 'orcid.svg',
+      ROR: 'ror.svg',
+    }
+    
     Array(identifiers).map do |i|
       if i["schemaAgency"]
         schema_agency, notation = [i["schemaAgency"], i["notation"]]
@@ -109,8 +120,18 @@ module AgentHelper
         schema_agency, notation = (i["id"] || i["@id"]).split('Identifiers/').last.delete(' ').split(':')
       end
       value = "#{schemes_urls[schema_agency.to_sym]}#{notation}"
-      identifier_link(value, link_to: link)
-    end.join(', ')
+      icon = schemes_icons[schema_agency.to_sym]
+      
+      if link
+        link_to(value, target: '_blank', rel: 'noopener noreferrer', title: "#{schema_agency}: #{notation}") do
+          inline_svg_tag("icons/#{icon}", class: 'clickable-identifier-icon')
+        end
+      else
+        content_tag(:span, title: "#{schema_agency}: #{notation}") do
+          inline_svg_tag("icons/#{icon}", class: 'identifier-icon')
+        end
+      end
+    end.join(' ').html_safe
   end
 
   def agent_field_name(name, name_prefix = '')
