@@ -1498,6 +1498,10 @@ fr:
     search_place_holder: Entrez un terme, e.g., hauteur de plante
     show_advanced_options: Afficher les options
   show_advanced_options: Afficher les options avancées
+  sparql_endpoint:
+    description: Interrogez des ensembles de données structurés à l'aide de SPARQL
+      pour récupérer, filtrer et manipuler efficacement les vocabulaires.
+    title: Éditeur de requêtes SPARQL
   statistics:
     date: Date
     lead: "(dernières %{last_years} années)"

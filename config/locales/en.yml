@@ -1446,6 +1446,10 @@ en:
     search_place_holder: Enter a term, e.g., plant height
     show_advanced_options: Show options
   show_advanced_options: Show advanced options
+  sparql_endpoint:
+    description: 'Query structured datasets using SPARQL to retrieve, filter, and
+      manipulate Vocabularies efficiently. '
+    title: SPARQL Query Editor
   statistics:
     date: Date
     lead: "(last %{last_years} years)"
