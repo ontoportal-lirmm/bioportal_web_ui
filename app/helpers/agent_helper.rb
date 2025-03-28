@@ -100,7 +100,7 @@ module AgentHelper
   end
 
 
-  def display_identifiers(identifiers, link: true)
+  def display_identifiers(identifiers, link: true, icon: true)
     schemes_urls = { 
       ORCID: 'https://orcid.org/', 
       ISNI: 'https://isni.org/', 
@@ -119,20 +119,28 @@ module AgentHelper
       else
         schema_agency, notation = (i["id"] || i["@id"]).split('Identifiers/').last.delete(' ').split(':')
       end
-      value = "#{schemes_urls[schema_agency.to_sym]}#{notation}"
-      icon = schemes_icons[schema_agency.to_sym]
       
+      value = "#{schemes_urls[schema_agency.to_sym]}#{notation}"
+      icon_path = schemes_icons[schema_agency.to_sym]
+      
+      if icon && icon_path
+        content = inline_svg_tag("icons/#{icon_path}", class: 'identifier-icon')
+      else
+        content = notation
+      end
+
       if link
         link_to(value, target: '_blank', rel: 'noopener noreferrer', title: "#{schema_agency}: #{notation}") do
-          inline_svg_tag("icons/#{icon}", class: 'clickable-identifier-icon')
+          content
         end
       else
         content_tag(:span, title: "#{schema_agency}: #{notation}") do
-          inline_svg_tag("icons/#{icon}", class: 'identifier-icon')
+          content
         end
       end
     end.join(' ').html_safe
   end
+  
 
   def agent_field_name(name, name_prefix = '')
     name_prefix&.empty? ? name : "#{name_prefix}[#{name}]"
@@ -203,8 +211,7 @@ module AgentHelper
     name = agent.name
     email = agent.email unless agent.class.eql?(LinkedData::Client::Models::Agent)
     type = agent.agentType
-    identifiers = display_identifiers(agent.identifiers, link: false)
-    identifiers = orcid_number(identifiers)
+    identifiers = display_identifiers(agent.identifiers, link: false, icon: false)
     if agent.affiliations && agent.affiliations != []
       affiliations = ""
       agent.affiliations.each do |affiliation|
