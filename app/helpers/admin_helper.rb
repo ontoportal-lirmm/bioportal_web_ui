@@ -4,7 +4,6 @@ module AdminHelper
     current_section.eql?(section_title)
   end
 
-
   def new_ontologies_created_title
     content_tag(:div,
                 t('admin.new_ontologies_created_title', count: @new_ontologies_count.join(', ')),
@@ -19,7 +18,22 @@ module AdminHelper
 
   def action_button(name, link, method: :post, class_style: 'btn btn-link')
     button_to name, link, method: method, class: class_style,
-                form: {data: { turbo: true, turbo_confirm: t('admin.turbo_confirm', name: name), turbo_frame: '_top'}}
+              form: { data: { turbo: true, turbo_confirm: t('admin.turbo_confirm', name: name), turbo_frame: '_top' } }
 
   end
+
+  def user_count
+    begin
+      user_count = LinkedData::Client::HTTP.get(Admin::LogsController::USERS_QUERY_COUNT.dup, {}, raw: true)
+    rescue
+      user_count = '[]'
+    end
+
+    user_count = MultiJson.load(user_count)
+    return [] if user_count.is_a?(Hash) && user_count['errors']
+
+    user_count.sort_by! { |uc| uc['count'] }.reverse!
+    user_count.map! { |uc| [uc['user'].split('/').last, uc['count']] }.to_h
+  end
+
 end
