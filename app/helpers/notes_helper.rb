@@ -129,7 +129,7 @@ module NotesHelper
       return t('notes.change_property_value_proposal')
     end
   end
-  
+
 
   def delete_button
     user = session[:user]
@@ -140,6 +140,16 @@ module NotesHelper
     spinner = '<span class="delete_notes_spinner" style="display: none;">' + image_tag("spinners/spinner_000000_16px.gif", style: "vertical-align: text-bottom;") + '</span>'
     error = "<span style='color: red;' class='delete_notes_error'></span>"
     return "<a href='#' onclick='deleteNotes(this);return false;' style='display: inline-block !important;' class='notes_delete link_button' #{params}>Delete selected notes</a> #{spinner} #{error}"
+  end
+
+  def reviews_dropdown_title
+    content_tag(:div, class:'reviews-dropdown-title') do
+      content_tag(:div, 'Add a review for AGROVOC', class: 'title-line') +
+      content_tag(:div, class: 'reviews-average') do
+        content_tag(:div, '4.6/5') +
+        inline_svg_tag('icons/star.svg')
+      end
+    end
   end
 
 end
