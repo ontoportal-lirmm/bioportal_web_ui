@@ -3,6 +3,7 @@ require 'cgi'
 
 class AnnotatorController < ApplicationController
   layout :determine_layout
+  include AnnotatorHelper
   include ApplicationHelper
 
   ANNOTATOR_URI = $ANNOTATOR_URL
@@ -10,6 +11,8 @@ class AnnotatorController < ApplicationController
   before_action :initialize_options, only: [:index]
 
   def index
+    @results_table_header = annotator_results_table_header
+    @advanced_options_open = !empty_advanced_options
     set_annotator_info('/annotator', 'Annotator', ANNOTATOR_URI)
   end
 
@@ -22,49 +25,21 @@ class AnnotatorController < ApplicationController
   end
 
   def annotator_results(uri)
-    @advanced_options_open = false
     @annotator_ontologies = LinkedData::Client::Models::Ontology.all
+    # TODO remove this
+    @ontologies = LinkedData::Client::Models::Ontology.all({ include_views: true }).map { |o| [o.id.to_s, o] }.to_h
+
     return unless params[:text] && !params[:text].empty?
 
     @init_whole_word_only = true
-    api_params = {
-      text: remove_special_chars(params[:text]),
-      ontologies: params[:ontologies],
-      whole_word_only: params[:whole_word_only],
-      longest_only: params[:longest_only],
-      expand_mappings: params[:expand_mappings],
-      exclude_numbers: params[:exclude_numbers],
-      exclude_synonyms: params[:exclude_synonyms],
-      semantic_types: params[:semantic_types],
-      semantic_groups: params[:semantic_groups],
-      class_hierarchy_max_level: params[:class_hierarchy_max_level],
-      score_threshold: params[:score_threshold],
-      confidence_threshold: params[:confidence_threshold],
-      fast_context: params[:fast_context],
-      lemmatize: params[:lemmatize]
-    }
-    api_params[:score] = params[:score] unless params[:score].eql?('none')
+    api_params = get_api_params
     @json_link = json_link(uri, api_params)
     @rdf_link = "#{@json_link}&format=rdf"
-    @results_table_header = [
-      t('annotator.class'), t('annotator.ontology'), t('annotator.context')
-    ]
-
-    if params[:fast_context]
-      @results_table_header += [t('annotator.negation'), t('annotator.experiencer'), t('annotator.temporality'), t('annotator.certainty')]
-    end
 
     @direct_results = 0
-
     @parents_results = 0
-    if params[:score].nil? || params[:score].eql?('none')
-      params[:score] = nil
-    else
-      @results_table_header.push(t('annotator.score'))
-    end
 
     # if we are in a slice, pass the ontologies of this slice in the params
-
     if at_slice?
       slice_ontologies_acronyms = @subdomain_filter[:ontologies].map { |id| link_last_part(id) }
       if api_params[:ontologies]
@@ -76,43 +51,17 @@ class AnnotatorController < ApplicationController
       api_params[:ontologies] = filtered_ontologies.join(',')
     end
 
-    annotations = LinkedData::Client::HTTP.get(uri, api_params)
-    @ontologies = LinkedData::Client::Models::Ontology.all({ include_views: true }).map { |o| [o.id.to_s, o] }.to_h
-
+    params[:score] = nil if params[:score].nil? || params[:score].eql?('none')
+    annotations = find_annotations(uri, api_params)
     @semantic_types = get_semantic_types
     @results = []
     annotations.each do |annotation|
+      @direct_results += 1
       if annotation.annotations.empty?
-        row = {
-          class: annotation_class_info(annotation.annotatedClass),
-          ontology: annotation_ontology_info(annotation.annotatedClass.links),
-          context: '',
-          type: 'direct'
-        }
-        unless params[:score].eql?('none')
-          row[:score] = annotation.score.nil? ? '' : format('%.2f', annotation.score)
-        end
-        @direct_results += 1
-        @results.push(row)
+        @results.push(direct_annotation(annotation))
       else
-        row = {
-          class: annotation_class_info(annotation.annotatedClass),
-          ontology: annotation_ontology_info(annotation.annotatedClass.links['ontology']),
-          context: [],
-          type: 'direct'
-        }
-        unless params[:score].eql?('none')
-          row[:score] = annotation.score.nil? ? '' : format('%.2f', annotation.score)
-        end
-        annotation.annotations.each do |a|
-          row[:context].push(a)
-          next unless params[:fast_context]
-
-          row[:negation] = a.negationContext
-          row[:experiencer] = a.experiencerContext
-          row[:temporality] = a.temporalityContext
-          row[:certainty] = a.certaintyContext
-        end
+        row = direct_annotation(annotation)
+        add_context_annotations(annotation, row)
         index = @results.find_index { |result| result[:class] == row[:class] }
         if index
           @results[index][:context].unshift(*row[:context])
@@ -120,37 +69,21 @@ class AnnotatorController < ApplicationController
         else
           @results.push(row)
         end
-        @direct_results += 1
       end
 
       annotation.hierarchy.each do |parent|
-        row = {
-          class: annotation_class_info(parent.annotatedClass),
-          ontology: annotation_ontology_info(parent.annotatedClass.links['ontology']),
-          context: [{ child: annotation_class_info(annotation.annotatedClass), level: parent.distance }],
-          type: 'parent'
-        }
-        unless params[:score].eql?('none')
-          row[:score] = parent.score.nil? ? '' : format('%.2f', parent.score)
-        end
+        row = parent_annotation(parent, annotation)
         index = @results.find_index { |result| result[:class] == row[:class] }
         if index
           @results[index][:context] += row[:context]
           @results[index][:score] = @results[index][:score].to_i + row[:score].to_i
         else
-          if params[:fast_context]
-            row[:negation] = annotation.annotations[0].negationContext
-            row[:experiencer] = annotation.annotations[0].experiencerContext
-            row[:temporality] = annotation.annotations[0].temporalityContext
-            row[:certainty] = annotation.annotations[0].certaintyContext
-          end
+          add_fast_context(row, annotation.annotations[0])
           @results.push(row)
         end
         @parents_results += 1
       end
     end
-    @advanced_options_open = !empty_advanced_options
-
   end
 
   def get_semantic_types
