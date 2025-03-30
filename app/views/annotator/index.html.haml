@@ -20,11 +20,11 @@
               = t('annotator.options')
             .prefrences
               .chips
-                = render(ChipsComponent.new(name: 'whole_word_only', label: t('annotator.whole_word_only'), checked: @init_whole_word_only.nil? || params[:whole_word_only]))
-                = render(ChipsComponent.new(name: 'longest_only', label: t('annotator.match_longest_only'), checked: params[:longest_only]))
-                = render(ChipsComponent.new(name: 'expand_mappings', label: t('annotator.include_mappings'), checked: params[:expand_mappings]))
-                = render(ChipsComponent.new(name: 'exclude_numbers', label: t('annotator.exclude_numbers'), checked: params[:exclude_numbers]))
-                = render(ChipsComponent.new(name: 'exclude_synonyms', label: t('annotator.exclude_synonyms'), checked: params[:exclude_synonyms]))
+                = check_input(name: 'whole_word_only', label: t('annotator.whole_word_only'), checked: @init_whole_word_only.nil? || params[:whole_word_only])
+                = check_input(name: 'longest_only', label: t('annotator.match_longest_only'), checked: params[:longest_only])
+                = check_input(name: 'expand_mappings', label: t('annotator.include_mappings'), checked: params[:expand_mappings])
+                = check_input(name: 'exclude_numbers', label: t('annotator.exclude_numbers'), checked: params[:exclude_numbers])
+                = check_input(name: 'exclude_synonyms', label: t('annotator.exclude_synonyms'), checked: params[:exclude_synonyms])
               
             .select-ontologies
               = ontologies_selector(id:'annotator_page_ontologies', label: t('annotator.select_ontologies') ,name: 'ontologies[]', selected: params[:ontologies]&.split(','))
@@ -32,20 +32,13 @@
             = hide_advanced_options_button(text: t('hide_advanced_options'), init: @advanced_options_open)
         .more-advanced-options{'data-reveal-component-target': 'item', class: "#{@advanced_options_open ? '' : 'd-none'}"}
           .filters_line
-            = render Input::SelectComponent.new(label: t('annotator.select_umls_sementic_types'), id: 'umls_semantic_types', name: 'semantic_types[]', value: @semantic_types_for_select, multiple: true, selected: params[:semantic_types]&.split(','))
-            = render Input::SelectComponent.new(label: t('annotator.select_umls_sementic_groups'), id: 'umls_semantic_groups', name: 'semantic_groups[]', value: @semantic_groups_for_select, multiple: true, selected: params[:semantic_groups]&.split(','))
-            = render Input::SelectComponent.new(label: t('annotator.include_ancestors'), id: 'ancestors_level', name: 'class_hierarchy_max_level', value: @ancestors_levels, selected: params[:class_hierarchy_max_level])
-          .filters_line
-            - include_score_helper = 'Score annotations following previous NCBO 2009 measure (old) or Score annotations following C-Value measure (cvalue) or Score annotations following C-Value measure with hierarchy expansion (cvalueh).'
-
-            = render Input::SelectComponent.new(label: t('annotator.include_score'), id: 'include_score', name: 'score', value: @include_score, tooltip: include_score_helper, selected: params[:score])
-            = render Input::NumberComponent.new(label: t('annotator.score_threshold'), name: "score_threshold", value: params[:score_threshold] || 0, tooltip: 'Specify minimum score value for annotations.')
-            = render Input::NumberComponent.new(label: t('annotator.confidence_threshold'), name: 'confidence_threshold', value: params[:confidence_threshold] || 0, tooltip: 'Specify the minimum position in the score distribution (between 1 and 100).')
-          .chips
-            = render(ChipsComponent.new(name: 'fast_context', label: t('annotator.fastcontext'), checked: params[:fast_context]))
-            = render(ChipsComponent.new(name: 'lemmatize', label: t('annotator.lemmatize'), checked: params[:lemmatize]))
+            = select_input(label: t('annotator.select_umls_sementic_types'), id: 'umls_semantic_types', name: 'semantic_types[]', values: @semantic_types_for_select, multiple: true, selected: params[:semantic_types]&.split(','))
+            = select_input(label: t('annotator.select_umls_sementic_groups'), id: 'umls_semantic_groups', name: 'semantic_groups[]', values: @semantic_groups_for_select, multiple: true, selected: params[:semantic_groups]&.split(','))
+            = select_input(label: t('annotator.include_ancestors'), id: 'ancestors_level', name: 'class_hierarchy_max_level', values: @ancestors_levels, selected: params[:class_hierarchy_max_level])
+          = render partial: 'annotator/annotator_plus_inputs'
         .annotator-page-button
-          = render Buttons::RegularButtonComponent.new(id:'annotator', value: t('annotator.get_annotation'), variant: "primary", type: 'submit')
+          = form_save_button(size: nil, id: 'annotator', value: t('annotator.get_annotation'))
+
     - if @results && @results.empty?
       = empty_state(text: t('no_result_was_found'))
     - unless @results.nil? || @results.empty?
@@ -65,7 +58,8 @@
               - t.row do |r|
                 - r.td do
                   .class
-                    = link_to result[:class][:text], result[:class][:link]
+                    - cls = result[:class]
+                    = get_link_for_cls_ajax(cls[:id], cls[:ont_acronym], '_blank')
                 - r.td do
                   = link_to result[:ontology][:text], result[:ontology][:link]
                 - r.td do
@@ -73,10 +67,12 @@
                     - if !context[:child]
                       .annotation-context{'data-from': context[:from], 'data-to': context[:to], 'data-annotator-target': 'context'}
                     - else
-                      .annotation-parent
+                      .annotation-parent.align-items-center.d-flex
+                        - cls = context[:child]
                         .text
-                          Parent of: 
-                        = link_to context[:child][:text], context[:child][:link]
+                          Parent of:
+                        %span
+                          = get_link_for_cls_ajax(cls[:id], cls[:ont_acronym], '_blank')
                         .gray
                           |
                         .text
