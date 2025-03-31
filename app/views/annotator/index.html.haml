@@ -70,7 +70,7 @@
             - @results.each do |result|
               - t.row do |r|
                 - ontology = result[:ontology]
-                - config = ontology_portal_config(ontology[:id]).last
+                - config = ontology_portal_config(ontology[:id])&.last || internal_portal_config(ontology[:id]) || {}
                 - r.td(width: "40%") do
                   .class{class: "federated-icon-#{config[:name].downcase}"}
                     - cls = result[:class]
