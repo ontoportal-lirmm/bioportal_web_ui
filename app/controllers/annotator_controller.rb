@@ -4,6 +4,7 @@ require 'cgi'
 class AnnotatorController < ApplicationController
   layout :determine_layout
   include AnnotatorHelper
+  include FederationHelper
   include ApplicationHelper
 
   ANNOTATOR_URI = $ANNOTATOR_URL
@@ -13,7 +14,10 @@ class AnnotatorController < ApplicationController
   def index
     @results_table_header = annotator_results_table_header
     @advanced_options_open = !empty_advanced_options
-    set_annotator_info('/annotator', 'Annotator', ANNOTATOR_URI)
+    @time = Benchmark.realtime do
+      set_annotator_info('/annotator', 'Annotator', ANNOTATOR_URI)
+    end
+    @federation_counts = counts_ontology_ids_by_portal_name(@results.map { |x| x[:ontology][:id] })
   end
 
   private
@@ -52,13 +56,15 @@ class AnnotatorController < ApplicationController
     end
 
     params[:score] = nil if params[:score].nil? || params[:score].eql?('none')
+    params[:portals] = params[:portals]&.join(',')
+    set_federated_portals
     annotations = find_annotations(uri, api_params)
     @semantic_types = get_semantic_types
     @results = []
     annotations.each do |annotation|
-      @direct_results += 1
-      if annotation.annotations.empty?
+      if Array(annotation.annotations).empty?
         @results.push(direct_annotation(annotation))
+        @direct_results += 1
       else
         row = direct_annotation(annotation)
         add_context_annotations(annotation, row)
@@ -68,10 +74,11 @@ class AnnotatorController < ApplicationController
           @results[index][:score] = @results[index][:score].to_i + row[:score].to_i
         else
           @results.push(row)
+          @direct_results += 1
         end
       end
 
-      annotation.hierarchy.each do |parent|
+      Array(annotation.hierarchy).each do |parent|
         row = parent_annotation(parent, annotation)
         index = @results.find_index { |result| result[:class] == row[:class] }
         if index
@@ -101,16 +108,25 @@ class AnnotatorController < ApplicationController
   end
 
   def annotation_class_info(cls)
+    return { text: '', link: '' } if cls.nil?
+
+    ont_acronym = cls.links['ontology'].split('/').last
     {
+      id: cls.id,
+      ont_acronym: ont_acronym,
       text: cls.prefLabel,
-      link: url_to_endpoint(cls.links['self'])
+      link: url_to_endpoint(cls.links['ui'])
     }
   end
 
   def annotation_ontology_info(ontology_url)
+    return { text: '', link: '' } if ontology_url.nil?
+
+    ontology = @ontologies[ontology_url]
     {
-      text: @ontologies[ontology_url].name,
-      link: url_to_endpoint(ontology_url)
+      id: ontology_url,
+      text: ontology ? ontology.acronym : ontology_url,
+      link: ontology ? url_to_endpoint(ontology_url) : ontology_url
     }
   end
 
@@ -133,14 +149,13 @@ class AnnotatorController < ApplicationController
   end
 
   def empty_advanced_options
-    params[:semantic_types].nil? &&
-      params[:semantic_groups].nil? &&
+    keys = [:semantic_types, :semantic_groups, :class_hierarchy_max_level, :score, :score_threshold,
+            :confidence_threshold, :fast_context, :lemmatize]
+    keys.all? { |key| params[key].nil? } || (
       params[:class_hierarchy_max_level] == 'None' &&
-      (params[:score].nil? || params[:score] == 'none') &&
-      params[:score_threshold] == '0' &&
-      params[:confidence_threshold] == '0' &&
-      params[:fast_context].nil? &&
-      params[:lemmatize].nil?
+        (params[:score].nil? || params[:score] == 'none') &&
+        params[:score_threshold] == '0' &&
+        params[:confidence_threshold] == '0')
   end
 
   def remove_special_chars(input)

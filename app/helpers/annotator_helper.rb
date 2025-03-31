@@ -21,7 +21,13 @@ module AnnotatorHelper
   end
 
   def find_annotations(uri, api_params)
-    LinkedData::Client::HTTP.get(uri, api_params)
+    if request_portals.size == 1
+      LinkedData::Client::HTTP.get(uri, api_params)
+    else
+      LinkedData::Client::Models::Class.federated_get(api_params) do |url|
+        "#{url}/annotator"
+      end
+    end
   end
 
   def annotator_results_table_header
@@ -38,9 +44,11 @@ module AnnotatorHelper
   end
 
   def direct_annotation(annotation)
+    ontology = annotation.annotatedClass.links['ontology'] rescue nil
+
     row = {
       class: annotation_class_info(annotation.annotatedClass),
-      ontology: annotation_ontology_info(annotation.annotatedClass.links['ontology']),
+      ontology: annotation_ontology_info(ontology),
       context: [],
       type: 'direct'
     }
