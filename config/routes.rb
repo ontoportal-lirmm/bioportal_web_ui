@@ -110,8 +110,6 @@ Rails.application.routes.draw do
   resources :recommender
 
   get '/annotator', to: 'annotator#index'
-  get '/annotatorplus', to: 'annotator#annotator_plus'
-  get '/ncbo_annotatorplus', to: 'annotator#ncbo_annotator_plus'
 
 
   resources :virtual_appliance

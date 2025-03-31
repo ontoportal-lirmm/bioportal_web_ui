@@ -10,7 +10,7 @@ module InputsHelper
   end
 
   def select_input(name:, values:, id: nil, label: nil, selected: nil, multiple: false, help: nil, open_to_add: false, required: false,
-                   placeholder: nil,
+                   placeholder: nil, tooltip: nil,
                    data: {})
     render Input::SelectComponent.new(label: input_label(label, name), id: id || name, name: name, value: values,
                                       selected: selected,
@@ -19,6 +19,7 @@ module InputsHelper
                                       open_to_add_values: open_to_add,
                                       required: required,
                                       placeholder:  placeholder,
+                                      tooltip: tooltip,
                                       data: data)
   end
 
@@ -28,11 +29,9 @@ module InputsHelper
                                       value: value)
   end
 
-  def check_input(id:, name:, value:, label: '', checked: false, disabled: false, &block)
+  def check_input(id: nil, name:, value: nil, label: '', checked: false, disabled: false, &block)
     render ChipsComponent.new(name: name, id: id, label: label, value: value, checked: checked, disabled: disabled) do |c|
-      if block_given?
-        capture(c, &block)
-      end
+      capture(c, &block) if block_given?
     end
   end
 

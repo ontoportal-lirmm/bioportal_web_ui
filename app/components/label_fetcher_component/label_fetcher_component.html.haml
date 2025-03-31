@@ -2,9 +2,12 @@
   - if @open_in_modal
     = render ChipButtonComponent.new(type: 'clickable') do
       = link_to_modal(@label, @link)
-  - else
+  - elsif @chip
     %span
       = render ChipButtonComponent.new(url: @link,
                                          type: 'clickable',
                                          text: link_with_icon,
-                                         target: @target)
+                                         target: @target, color: @color)
+  - else
+    %span.d-flex.align-items-center
+      = link_to(link_with_icon, @link, style: @color ? "color: #{@color} !important" : '', target: @target)

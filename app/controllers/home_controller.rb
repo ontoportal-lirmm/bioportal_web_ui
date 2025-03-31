@@ -44,8 +44,6 @@ class HomeController < ApplicationController
         @anal_ont_numbers << count
       end
     end
-
-
   end
 
   def set_cookies

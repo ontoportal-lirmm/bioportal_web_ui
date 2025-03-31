@@ -1,10 +1,14 @@
 .annotator-page-container{
   display:flex;
   justify-content:center;
+
+  .chip_button_container_clickable {
+    white-space: preserve-spaces;
+  }
 }
-.annotator-page-container a{
-  color: var(--primary-color) !important;
-}
+//.annotator-page-container a{
+//  color: var(--primary-color) !important;
+//}
 .annotator-page-subcontainer{
   width: 1248px;
   padding: 20px 50px;
@@ -74,14 +78,14 @@
 
 .annotator-page-options .section-text{
   font-weight: 600;
-  
+
 }
 .annotator-page-options .title{
   margin-top: 10px;
   color: #888888;
   font-size: 14px;
   font-weight: 500;
-  margin-bottom: 5px; 
+  margin-bottom: 5px;
 }
 
 .annotator-page-options .chips{
@@ -195,9 +199,6 @@
   margin-right: 8px;
 }
 
-.annotation-parent a{
-  text-decoration: underline !important;
-}
 .annotator-page-options .prefrences{
   margin-top: 10px;
 }
@@ -211,13 +212,19 @@
 }
 .annotator-table-container{
   margin-top: 20px;
+  tr {
+    font-size: 15px !important;
+    .class{
+      color: var(--primary-color);
+    }
+  }
 }
-.annotator-table-container .class{
-  width: 250px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+//.annotator-table-container .class{
+//  width: 250px;
+//  white-space: nowrap;
+//  overflow: hidden;
+//  text-overflow: ellipsis;
+//}
 .annotation-parent + div{
   margin-top: 5px;
 }

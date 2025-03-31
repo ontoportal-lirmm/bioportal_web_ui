@@ -564,7 +564,8 @@ fr:
     include_email: Veuillez inclure votre email
     include_name: Veuillez inclure votre nom
     index:
-      tagline: Le foyer des ontologies et des artefacts sémantiques dans la biodiversité et les domaines connexes.
+      tagline: Le foyer des ontologies et des artefacts sémantiques dans l'agroalimentaire
+        et les domaines connexes.
       title: Bienvenue sur %{site}
       welcome: Bienvenue sur %{site},
     individuals: Individus
@@ -607,43 +608,8 @@ fr:
       correspondante affichant uniquement les ontologies de ce groupe.
     suggest_slice: Proposer un nouveau groupe/slice
     support_and_collaborations: Support & Collaborations
-    see_details: Voir les détails
-    info_tooltip_text: "Vous voyez les scores moyens pour toutes les ontologies publiques dans Biodivportal. Les scores FAIR sont calculés avec la méthodologie O'FAIRe. Plus de détails ici : https://github.com/agroportal/fairness"
-    average: Moyenne
-    min: Min
-    max: Max
-    ontologies: Ontologies
-    classes: Classes
-    individuals: Individus
-    properties: Propriétés
-    projects: Projets
-    mappings: Alignements
-    users: Utilisateurs
     twitter_news: Nouvelles
-    feedback:
-      error_on_form: Erreurs sur le formulaire
-      leave_your_feedback: Laissez votre retour
-      feedback_hi_text: Salut
-      feedback_info_text: Vous pouvez utiliser le formulaire ci-dessous, nous envoyer un email directement à
-      feedback_info_text_rest: ou nous laisser une github issue ici
-      email: Email
-      name: Nom
-      proposition_url_page: URL de la page Erreur/Proposition
-      feedback: Retour
-      tags: Tags
-      bug: Bug
-      proposition: Proposition
-      question: Question
-      ontology_submissions_request: Demande de soumissions d'ontologie
-      optional: (optionnel)
-      send: Envoyer
-      feedback_complete:
-        title: Retour envoyé avec succès
-        message: Merci d'avoir pris le temps de partager votre retour avec nous. Notre équipe de support examinera votre message et vous répondra dès que possible. Nous apprécions votre opinion et sommes reconnaissants de votre aide pour améliorer nos services. Merci de votre soutien !
-    suggest_slice: Proposer un nouveau groupe/slice
-    slices_description: Les "slices" permettent aux utilisateurs d'interagir (à la fois via l'API ou l'interface utilisateur) uniquement avec un sous-ensemble d'ontologies dans BiodivPortal. Si vous parcourez une slice, toutes les fonctionnalités du portail seront limitées au sous-ensemble choisi; cela permet aux utilisateurs de se concentrer sur leurs cas d'utilisation spécifiques. Sur BiodivPortal, les slices et les groupes sont synchronisés, de sorte que chaque groupe a une slice correspondante affichant uniquement les ontologies de ce groupe.
-    ontoportal_description: "L'OntoPortal Alliance %{ontoportal_link} est un consortium d'équipes de recherche et d'infrastructure dédiées à promouvoir le développement de portails d'ontologies et de catalogues d'artefacts sémantiques basés sur le logiciel OntoPortal %{github_link} ouvert et collaboratif. Ci-dessous se trouvent les portails publics et ouverts actuels construits avec la technologie maintenue par l'Alliance."
-    viewing_slice: "Affichage de la slice:"
+    users: Utilisateurs
     view_full_site: Voir le site complet
     viewing_slice: 'Affichage de la slice:'
   instances:
@@ -792,35 +758,8 @@ fr:
       recommender: Recommandeur
       release_notes: Notes de version
       search_prompt: Rechercher dans %{portal_name} ...
-      submit_feedback: Envoyer un retour
-      support: Aides
-      cite_us: Citez-nous
-    footer:
-      products: Produits
-      ontoportal: OntoPortal
-      release_notes: Notes de version
-      api: API
-      tools: Outils
-      sparql: SPARQL
-      support: Aides
-      contact_us: Contactez-nous
-      wiki: Wiki
-      documentation: Documentation
-      agro_documentation: Documentation d'BiodivPortal
-      issues_and_requests: Problèmes et demandes
-      agreements: Légal
-      terms: Termes et conditions
-      terms_anchor: "#h-conditions-generales-dutilisation-dagroportal-francais"
-      privacy_policy: Politique de confidentialité
-      privacy_policy_anchor: "#h-vie-privee"
-      legal_notices: Mentions légales
-      legal_notices_anchor: "#h-mentions-legales"
-      cite_us: Citez-nous
-      acknowledgments: Remerciements
-      about: À propos
-      about_us: À propos de nous
-      projects: D2KAB
-      team: Équipe
+      submit_feedback: Soumettre un retour d'expérience
+      support: Support
     notices:
       at: à
       slice: Slice
@@ -1024,7 +963,7 @@ fr:
       show_ontology_views: Afficher les vues de l'ontologie
       show_private_ontology: Afficher seulement les ontologies privées
       show_retired_ontologies: Afficher les ontologies retirées
-    taxonomy_information_tooltip: Voir plus d'informations sur les %{taxonomy_type} dans       
+    taxonomy_information_tooltip: Voir plus d'informations sur les %{taxonomy_type} dans
     categories: Catégories
     change_notes: Notes de changement
     collapse_all: Tout replier
@@ -1671,463 +1610,113 @@ fr:
         ou JSON. Cette fonctionnalité permet aux utilisateurs d''exporter les données
         RDF vers des syntaxes adaptées à différents usages.
 
-  ontoportal_virtual_appliance:
-    problem_adding_account: "Problème lors de l'ajout du compte <strong>%{id}</strong> : le compte n'existe pas"
-    require_login: Vous devez être connecté pour accéder à cette section
-    title: Téléchargement de l'appliance virtuelle OntoPortal
-    intro_paragraph:
-      main: |
-        La distribution de l'appliance virtuelle OntoPortal contient une version pré-installée,
-        pré-configurée du logiciel open source NCBO couramment utilisé
-        sur un système d'exploitation Linux.
-    included_software: "Les logiciels suivants sont inclus dans l'image :"
-    ontologies_api: API des Ontologies (service REST)
-    annotator: Annotateur
-    recommender: Recommandeur
-    web_user_interface: Interface utilisateur web de BioPortal (incluant la visualisation d'ontologies, widgets et UI d'Annotateur)
-    see_documentation: Veuillez consulter notre
-    more_information: pour plus d'informations sur l'utilisation de l'Appliance.
-    download_button_text: Télécharger la dernière version d'OntoPortal
-    archives:
-      title: Archives
-      archival_distribution: |
-        L'appliance virtuelle OntoPortal 2.5 n'est plus proposée aux nouveaux
-        utilisateurs. Cette distribution d'archives est disponible uniquement en tant que sauvegarde pour
-        ceux qui se sont inscrits à l'Appliance avant juin 2020
-      version: version 2.5
-    admin_add_users:
-      title: "Admin : Ajouter des utilisateurs"
-      label_account_name: "Nom du compte :"
-      add_user_button: Ajouter un utilisateur
-      accounts_with_access: "Comptes avec accès"
-      export_users_link: "Exporter les utilisateurs de l'Appliance en CSV"
-      bioportal_user: ID utilisateur BioPortal
-
-  submission_inputs:
-    edit_ontology_title: Edition de l'ontologie
-    metadata_selector_label: "Filtrer les propriétés à afficher"
-    metadata_selector_placeholder: "Commencez à taper pour sélectionner les propriétés"
-    administrators: Administrateurs
-    ontology_skos_language_link: Veuillez vous référer à la documentation pour plus de détails.
-    ontology_skos_language_help: >
-      Les vocabulaires SKOS soumis à %{portal_name} doivent suivre quelques contraintes (par exemple, contenir au minimum un skos:ConceptScheme également typé comme owl:Ontology)
-      et assertion de concept principal. %{link}
-    ontology_obo_language_link: le parser OBOinOWL.
-    ontology_obo_language_help: >
-      Les ontologies OBO soumises à %{portal_name} seront analysées par l'OWL-API qui intègre %{link}
-      Les triplets RDF résultants seront ensuite chargés dans le triple-store de %{portal_name}.
-    ontology_owl_language_link: le Protégé
-    ontology_owl_language_help: >
-      Les ontologies OWL soumises à %{portal_name} seront analysées par l'OWL-API. Une manière simple de vérifier si votre ontologie sera analysée est de l'ouvrir avec
-      %{link}
-      logiciel qui utilise le même composant.
-    ontology_umls_language_link: par l'outil UMLS2RDF.
-    ontology_umls_language_help: >
-      Les ressources UMLS-RRF sont généralement produites %{link}
-    groups: Groupes
-    visibility: Visibilité
-    accounts_allowed: Ajouter ou supprimer des comptes autorisés à voir cette ontologie dans %{portal_name}.
-    ontology_view_of_another_ontology: Cette ontologie est-elle une vue d'une autre ontologie ?
-    contact: Contact
-    equivalents: Équivalents
-    validators: Validateurs
-    help_text: Texte d'aide
-    contact_name: "Nom du %{name}"
-    contact_email: "Email du %{name}"
-    edit_metadata_instruction: "Modifiez les métadonnées de votre ontologie ici. Certaines de ces valeurs sont utilisées par les fonctionnalités de %{portal_name}, notamment pour l'évaluation de la FAIRness. %{link}"
-    edit_metadata_instruction_link: "Consultez ici les lignes directrices et recommandations pour les métadonnées."
-    license_help: "%{portal_name} nécessite une URI pour la licence. Si vous ne trouvez pas votre choix ici, %{link}"
-    license_help_link: "Veuillez choisir une URI à partir d'ici."
-    deprecated_help: "Une ontologie avec le statut 'retired' doit nécessairement être également dépréciée, mais pas l'inverse."
-    known_usage_help: "Considérez également de déclarer %{metadata_knownUsage_help}"
-    known_usage_help_link: "les projets utilisant l'ontologie"
-    help_creator: "Les propriétés suivantes prennent pour valeur un 'agent' dans %{portal_name} (soit une personne, soit une organisation). Ces agents sont partagés sur toutes les ontologies et sont suggérés avec l'autocomplétion s'ils existent déjà. Modifier un agent ici le modifiera pour toutes les ontologies auxquelles cet agent est impliqué."
-    version_help: "Pour plus d'informations sur la manière d'encoder les informations de version dans une ontologie, consultez %{link}"
-    version_helper_link: "les lignes directrices et recommandations."
-  instances:
-    id: ID
-    type: Type
-    label: Label
-  collections:
-    error_valid_collection: "Erreur : Vous devez fournir un identifiant de collection valide"
-    no_collections_alert: "%{acronym} ne contient pas de collections (skos:Collection)"
-    id: ID
-    preferred_name: Nom préféré
-    members_count: Nombre de membres
-    type: Type
-
-  change_requests:
-    change_request_success_message: Votre demande de modification a été soumise avec succès ! Voir le %{url} sur GitHub.
-    label: Étiquette
-    type: Type
-    comment: Commentaire
-    close: Fermer
-    submit: Soumettre
-
-  check_resolvability:
-    check_resolvability_message_1: "L'URI est résolvable et supporte les formats suivants : %{supported_format}"
-    check_resolvability_message_2: "L'URI est résolvable mais n'est pas négociable en contenu, supporte uniquement : %{supported_format}"
-    check_resolvability_message_3: L'URI n'est pas résolvable et n'est pas négociable en contenu (retourne %{status}).
-    uri_placeholder: Tapez une URI pour tester sa résolvabilité
-    show_help: Afficher l'aide
-    format_not_specified: Format non spécifié
-    how_it_works:
-      title: Comment ça fonctionne
-      content_1: |
-        L'outil de vérification de la résolvabilité vous permet de tester si une URI donnée est résolvable. Il est basé sur la méthode HTTP HEAD.
-        Nous vérifions la résolvabilité d'une URI en envoyant une requête HEAD à l'URI et en vérifiant si le code de statut de la réponse est 200 (OK) et
-        si le type de contenu retourné est égal à l'un des %{resolvability_formats} suivants.
-      content_2: |
-        Nous avons un délai d'attente fixé à %{resolvability_timeout} secondes, donc si l'URI n'est pas résolvable dans ce délai, la vérification échouera.
-        Et un nombre maximal de redirections fixé à %{resolvability_max_redirections}, donc si l'URI n'est pas résolvable dans ce nombre de redirections, la vérification échouera.
-    resolving_uri:
-      title: Résolution d'une URI
-      content: |
-        Dans le contexte du web sémantique, la déréférenciation se réfère au processus de résolution et d'obtention des données réelles associées à un identifiant de ressource uniforme (URI). En termes plus simples, cela implique de suivre un lien représenté par une URI/IRI pour récupérer des informations ou des ressources liées à cet identifiant.
-        Dans le Web sémantique, les URI sont utilisées pour identifier de manière unique les ressources, et la déréférenciation permet aux systèmes d'accéder et de récupérer des données liées à ces ressources. Lorsqu'une URI/IRI est déréférencée, cela conduit généralement à la récupération de données RDF (Resource Description Framework) ou d'autres informations structurées qui décrivent la ressource dans un format lisible par machine. Cela permet aux systèmes de comprendre et de traiter le sens des données liées, facilitant l'échange et l'intégration d'informations sur le web.
-    content_negotiation:
-      title: Négociation de contenu
-      content: |
-        La négociation de contenu, dans le contexte du Web sémantique, fait référence au mécanisme par lequel deux parties communicantes, telles qu'un client et un serveur, s'accordent sur la représentation la plus appropriée d'une ressource pendant le processus de déréférenciation d'une URI ou IRI. Cette négociation vise à assurer une communication efficace entre différents systèmes qui peuvent préférer différents formats de données ou langues.
-        En d'autres termes, lorsqu'un client demande une ressource en déréférençant une URI, il indique ses préférences pour le format ou la langue des données de réponse à travers des en-têtes HTTP ou d'autres mécanismes de négociation. Le serveur, à son tour, examine ces préférences et sélectionne la représentation la plus appropriée de la ressource en fonction de ce qui est disponible.
-        différents formats peuvent être convenus entre un client et un serveur lors de l'accès aux données liées. Les formats courants incluent :
-
-        RDF/XML : représentation basée sur XML des données du Framework de Description de Ressource.
-        Turtle : format de sérialisation lisible par l'homme pour RDF.
-        JSON-LD : format basé sur JSON pour les données liées.
-        N-Triples et N-Quads : formats de texte pour exprimer des triplets et quads RDF.
-        HTML : langage de balisage pour les pages web, également utilisé pour intégrer des données RDF.
-        RDFa : intégration de données RDF dans HTML ou XML à l'aide d'attributs.
-        Résultats de requête SPARQL XML et JSON : formats pour représenter les résultats de requête SPARQL.
-
-  errors:
-    error_message: Nous sommes désolés mais quelque chose a mal tourné.
-    notification_error: Nous avons été informés de cette erreur.
-    go_home_button: Aller à l'accueil
-    send_feedback_button: Envoyer un retour
-    not_found_page: Page non trouvée
-
-  schemes:
-    error_valid_scheme_id: "Erreur : Vous devez fournir un identifiant de schéma valide"
-    no_main_scheme_alert: aucun schéma principal défini dans l'attribut URI
-    no_schemes_alert: "%{acronym} ne contient pas de schémas (skos:ConceptScheme)"
-    id: ID
-    preferred_name: Nom préféré
-    type: Type
-
-  fair_score:
-    fairness_unreachable_warning: Problème d'accès au service FAIRness
-    go_to_api: Aller à l'API
-    mod_link: MOD1.4
-    see_the_used_properties: voir les propriétés utilisées
-    metadata_properties: Les propriétés de métadonnées listées ci-dessous sont extraites de %{mod_link}.
-    ontology_repository: Ce dépôt d'ontologies implémente %{mod_link} mais n'encode pas nécessairement les métadonnées avec les mêmes propriétés (%{submission_link}).
-    see_possible_credits: Voir les crédits possibles
-    see_metadata_used_properties: Voir les propriétés de métadonnées utilisées
-    not_found: non trouvé
-    "null": "null"
-    view_fair_scores_definitions: "Vous voyez le score d'évaluation de l'équité FAIR pour cette ontologie dans BiodivPortal. Les scores FAIR sont calculés avec la méthodologie O'FAIRe. Plus de détails ici : https://github.com/agroportal/fairness"
-
-  ontologies_metadata_curator:
-    #bulk_edit: Commencer l'édition en masse
-    #use_the_bulk_edit: Pour utiliser l'édition en masse, sélectionnez dans le tableau les soumissions (les lignes) et les propriétés de métadonnées (les colonnes) que vous souhaitez éditer
-    start_the_bulk_edit: Sélectionnez dans le tableau les soumissions (lignes) et les propriétés de métadonnées (colonnes) pour commencer l'édition en masse
-    alert_success_submissions: Les soumissions ont été mises à jour avec succès
-    ontologies: Ontologies
-    get_values: Obtenir les valeurs
-    select_ontologies_and_metadata: sélectionner les ontologies et les propriétés de métadonnées
-    include_all_submissions: Inclure toutes les soumissions
-    apply_the_change_for_all: Appliquer le changement pour tous
-    update_the_current_displayed_content: "mettra à jour le contenu actuellement affiché pour toutes les soumissions suivantes :"
-    save: Sauvegarder
-
-  ontologies:
-    showing_ontologies_size: "Affichage de %{ontologies_size} sur %{analytics_size} de %{portals}"
-    filters: Filtres
-    no_license: Pas de licence
-    view_license: Voir la licence
-    access_rights_information: Informations supplémentaires sur la licence et les droits d'accès
-    referred_to: Peut également être désigné comme
-    private_ontology: Ontologie Privée
-    formality_levels: Niveaux de formalité
-    categories: Catégories
-    groups: Groupes
-    ontology_types: Types d'ontologies
-    natural_languages: Langues naturelles
-    showing: Affichage
-    metadata_properties: des propriétés de métadonnées de %{acronym} sont remplies
-    home_page: Page d'accueil
-    ontology_processing_failed: "Le traitement de l'ontologie a échoué, avec les statuts actuels : %{status}"
-    ontology_parsing_succeeded: "L'analyse de l'ontologie a réussi, mais certaines étapes de traitement ont échoué, voici les statuts actuels : %{status}"
-    upload_an_ontology: Téléchargez une ontologie. Des sections comme %{ontology} seront disponibles une fois terminées.
-    new_ontology_is_processing: L'ontologie est en cours de traitement. Des sections comme %{ontology} seront disponibles une fois le traitement terminé.
-    ontology_is_processing: L'ontologie est en cours de traitement. Des sections comme %{ontology} seront mis a jours une fois le traitement terminé.
-    contact_support: Contacter le support
-    edit_natural_languages: Modifier les langues naturelles de %{acronym}
-    edit_available_languages: Cliquez ici pour modifier les langues disponibles
-    add_new_submission: Ajouter une nouvelle soumission
-    edit_metadata: Modifier les métadonnées
-    projects_using_ontology: Projets utilisant %{acronym}
-    create_new_project: Créer un nouveau projet
-    no_projects_using_ontology: Aucun projet n'utilise %{acronym}
-    outside: extérieur
-    relation_with_other_ontologies: Relation avec d'autres ontologies soit à l'intérieur soit à l'extérieur
-    ontology_search_prompt: 'Rechercher une ontologie ou un terme (par exemple, hauteur de plante)'
-    views: Vues
-    create_new_view: Créer une nouvelle vue
-    expand_all: Tout déplier
-    collapse_all: Tout replier
-    administrator: "Administrateur :"
-    create_new_view_submission: créer une nouvelle soumission de vue
-    description: "Description :"
-    definition: "Définition :"
-    created_by: "Créé par :"
-    submission: Soumission
-    release_date: Date de publication
-    upload_date: Date de téléchargement
-    downloads: Téléchargements
-    admin_links: Liens administratifs
-    edit_link: Éditer
-    no_views: Aucune vue disponible pour %{acronym}.
-    fairness_assessment_questions: Questions d'évaluation FAIR O'FAIRe
-    see_details: Voir les détails
-    collecting_data: Nous collectons encore des données pour %{acronym}
-    location: Emplacement
-    allow_users: Permettre aux utilisateurs de voir uniquement le résumé de la métadonnée de votre ontologie.
-    metadata_only: Métadonnées uniquement (Pas de fichier)
-    load_from_url: Charger depuis une URL
-    new_versions_loaded: De nouvelles versions chargées chaque nuit.
-    upload_local_file: Télécharger un fichier local
-    ontology_submitted: Ontologie soumise avec succès !
-    users_can_see: Les utilisateurs peuvent maintenant voir
-    your_ontology: votre ontologie
-    exploring_and_searching: |
-      dans notre liste d'ontologies mais ils ne peuvent pas l'explorer ou la rechercher. Pour permettre l'exploration et la recherche,
-      veuillez télécharger une version complète de votre ontologie.
-    submitting_ontology_view: Merci d'avoir soumis votre vue d'ontologie à %{site}.
-    submitting_ontology: Merci d'avoir soumis votre ontologie à %{site}.
-    processing_message: |
-      Nous allons maintenant mettre votre ontologie dans la file d'attente pour être traitée. Veuillez garder à l'esprit que cela peut prendre plusieurs
-      heures avant que les utilisateurs de %{site} puissent explorer et rechercher votre ontologie.
-    notification_message: "Lorsque votre ontologie sera prête à être consultée, vous recevrez une notification par email et elle sera disponible ici :"
-    contact_support_at: "Si vous avez des questions ou des problèmes, veuillez envoyer un email à l'équipe de support de %{site} à :"
-    collecting_data_message: Nous collectons encore des données pour %{acronym}
-    submit_new_ontology: Soumettre une nouvelle ontologie
-    go_to_api: Aller à l'API
-    details: Détails
-    general_information: Informations générales
-    dates_and_contacts: Dates et contacts
-    uri: URI
-    change_notes: Notes de changement
-    modification_date: Date de modification
-    date_of_original_creation: Date de création originale
-    concepts_browsers:
-      select_scheme: Veuillez sélectionner un schéma à afficher
-      missing_roots: Racines manquantes pour %{acronym} (skos:topConceptOf)
-      select_collection: Veuillez sélectionner une collection à afficher
-      placeholder_jump: Aller à
-      label_jump: "Aller à :"
-      filter: Filtre
-    browser:
-      admin_welcome: Bienvenue admin, cette coloration indique les fonctionnalités réservées aux administrateurs
-      show_private_ontology: Afficher uniquement les ontologies privées
-      show_ontology_views: Afficher les vues d'ontologie
-      show_retired_ontologies: Afficher les ontologies abandonner
-      search_placeholder: Commencez à taper pour filtrer les ontologies, par ex., NCBITAXON...
-    sections:
-      classes: Classes
-      individuals: Individus
-      properties: Propriétés
-      maximum_depth: Profondeur maximale
-      maximum_number_of_children: Nombre maximum d'enfants
-      average_number_of_children: Nombre moyen d'enfants
-      classes_with_a_single_child: Classes avec un seul enfant
-      classes_with_more_than_25_children: Classes avec plus de 25 enfants
-      classes_with_no_definition: Classes sans définition
-      identifiers: Identifiants
-      identifiers_tooltip: Identifiants principaux de l'ontologie.
-      dates: Dates
-      person_and_organization: Personnes et organisations
-      other_links: Autres liens
-      info_tooltip_links: Propriétés de métadonnées qui mettent en évidence les liens permettant l'accès aux ensembles de données, le téléchargement de ressources sémantiques, etc.
-      projects_and_usage_information: Informations sur les projets et l'utilisation
-      info_tooltip_projects: Détails concernant l'utilisation de l'ontologie.
-      methodology_and_provenance: Méthodologie et provenance
-      community: Communauté
-      content: Contenu
-      info_tooltip_properties_dropdown: Propriétés de métadonnées englobant principalement la conception, les méthodes et les actions pour créer l'ontologie. Cela inclut des éléments tels que les outils et logiciels utilisés par le créateur de l'ontologie lors de sa configuration.
-      info_tooltip_community_dropdown: Propriétés des métadonnées liées aux informations communautaires telles que le dépôt de code et le suivi des problèmes, la liste de diffusion ou le public cible. Cela inclut également les Groupes dans %{site}. Voir plus d'informations sur les Groupes et les Catégories.
-      visits: Visites
-      views: Vues de %{acronym}
-      create_new_view: Créer une nouvelle vue
-      configuration_metadata: Métadonnées de configuration
-      info_tooltip_configuration: Regroupe toutes les propriétés de métadonnées utilisées par le portail pour configurer le comportement de la ressource
-      label_groups: Groupes
-      download_as_csv: Télécharger en CSV
-      scroll_down_to_see_more: Faites défiler vers le bas pour en voir plus
-      widgets: Les widgets ne sont disponibles que pour les ontologies stockées dans %{site}.
-      add_acronym_widgets: Ajouter des widgets web %{acronym} à votre site
-      widget_block_component_title_1: Aller à
-      widget_block_component_description_1: Tapez un nom de classe de %{acronym} et allez-y dans %{site}
-      download: Téléchargez le
-      put_on_server: et mettez-le sur votre serveur.
-      copy_and_paste: Copiez le code ci-dessous et collez-le sur votre page HTML
-      note: "Note :"
-      use_quick_jump: Si vous souhaitez utiliser Quick Jump pour plusieurs ontologies
-      enter_list_of_ontologies: Vous pouvez entrer une liste d'identifiants d'ontologie séparés par des virgules
-      set_the_variable: "Vous pouvez régler la variable sur 'all' pour rechercher dans toutes les ontologies de %{site} :"
-      include_definitions: "Pour inclure des définitions dans le menu déroulant Aller à, ajoutez la variable suivante en Javascript :"
-      info_pasted_code: Dans le code que vous venez de coller, assurez-vous de changer le chemin vers le fichier quick_jump.js pour le pointer vers l'emplacement où vous avez mis le fichier (relatif à votre fichier HTML)
-      example_to_use_code: "Par exemple, si vous mettez le fichier quick_jump.js dans le même répertoire que votre fichier HTML, voici le code que vous utiliseriez :"
-      help_visit: Pour plus d'aide, visitez
-      widget_block_component_title_2: Autocomplétion
-      widget_block_component_description_2: Remplissez vos champs de formulaire avec des classes de %{acronym}
-      example_1: Exemple 1 (commencez à taper le nom de la classe pour obtenir son URI complet)
-      example_2: Exemple 2 (obtenez l'ID d'une classe)
-      example_3: Exemple 3 (obtenez le nom préféré d'une classe)
-      include_file: Dans l'en-tête de la page où vous souhaitez le champ de formulaire, incluez le
-      use_widget: "Sur votre formulaire, pour les champs où vous souhaitez utiliser le widget de sélection de classe, spécifiez la classe du champ dans le format suivant :"
-      for_example: Par exemple,
-      use_ontology: utilisera NCI Thesaurus (l'identifiant de l'ontologie est NCIT) et mettra l'URI de la classe dans le champ après que l'utilisateur ait sélectionné la classe dans la liste déroulante.
-      use_list: "En plus des identifiants d'ontologie uniques, vous pouvez utiliser une liste :"
-      or: OU
-      use_all_to_search: "utilisez 'all' pour rechercher dans toutes les ontologies de %{site} :"
-      autocomplete_widget_accesses: Le widget d'autocomplétion accède au contenu de l'ontologie de la dernière version de l'ontologie.
-      use_following_parameters: "Vous pouvez utiliser les paramètres suivants pour sélectionner quelle valeur sera placée dans le champ de saisie visible par l'utilisateur :"
-      uri: uri
-      shortid: shortid
-      name: nom
-      class_uri_description: "Mettez l'URI complet de la classe (par exemple,"
-      class_uri_example: 'mettez l’URI complet de la classe (par exemple, %{link})'
-      class_shortid_description: mettez l'identifiant court de la classe, tel qu'utilisé dans %{site} (par exemple, "Common_Neoplasm");
-      class_name_description: mettez le nom préféré de la classe (par exemple, "Common Neoplasm");
-      hidden_elements_description: "En plus de l'élément de saisie que vous avez défini, quatre éléments de formulaire cachés sont créés puis définis lorsque l'utilisateur sélectionne une classe dans la liste. Par exemple, si vous créez un champ avec ce code :"
-      hidden_elements_example: "L'attribut 'name' est utilisé pour créer les quatre champs suivants (notez comment le 'a' de l'attribut name est ajouté à l'attribut id) :"
-      additional_parameters: Les paramètres supplémentaires sont documentés sur le
-      more_help_visit: Pour plus d'aide, visitez
-      widget_block_component_title_3: Visualisation
-      widget_block_component_description_3: Affichez une visualisation pour une classe donnée dans %{acronym}
-      widget_block_component_title_4: Widget Arbre
-      widget_block_component_description_4: Affichez un arbre de classe avec un champ de recherche pour %{acronym}
-      can_also_view: Vous pouvez également voir une
-      detailed_demonstration: démonstration détaillée
-      ncbo_widget_wiki: Wiki des Widgets NCBO
-      file: fichier.
-      no_class_concept_found: Aucune classe/concept trouvé
-      instances_search_placeholder: Rechercher une instance dans %{acronym}
-      properties_search_placeholder: Rechercher une propriété dans %{acronym}
-      schemes_search_placeholder: Rechercher un schéma dans %{acronym}
-      collections_search_placeholder: Rechercher une collection dans %{acronym}
-
-      metadata:
-        fair_score_title: Score FAIR
-        total_score: "Score total : %{score} ( %{normalized_score}%)"
-
-        metrics: Métriques
-        metrics_link_title: Informations et diagrammes d'évolution sur les métriques et autres mesures de l'ontologie.
-        see_all_metrics: Voir toutes les métriques de %{acronym}
-        show_modal_title_1: Toutes les métriques de %{acronym}
-        not_calculated_metrics: Nous n'avons pas encore calculé de métriques pour %{acronym}
-        show_modal_title_2: "Évolution du nombre de %{metric} dans %{acronym} par soumissions."
-
-        submissions: Soumissions
-        submissions_link_title: Ensemble de tous les fichiers qui ont été soumis à %{site}. Chaque enregistrement de métadonnées précédent est accessible mais seul le contenu du dernier fichier analysé est accessible via les services de %{site}
-
-        relations_network: Réseau de relations des ontologies
-
-        general_information: Informations générales
-        initial_created_on: Créé initialement le
-        additional_information: Pour des informations supplémentaires, contactez
-        categories_and_subjects: Catégories et sujets
-        keywords_and_classes: Mots-clés et classes
-        languages: Langues
-        pull_location: Emplacement de tirage
-        export_metadata: Exporter toutes les métadonnées
-        abstract: Résumé
-        description: Description
-
-    htaccess_modal_title: "Règles de redirection pour l'ontologie %{acronym}"
-    instructions_servers: Instructions pour les servers %{server}
-    htaccess_redirection_description: "Nous proposons une solution transparente pour rendre les URI de votre ontologie résolubles et le contenu négociable en autorisant la redirection d'URL de vos URI d'ontologie vers nos URI de BiodivPortal. Pour faciliter ce processus, nous vous avons fourni un ensemble de règles de réécriture .htaccess. En suivant les instructions simples ci-dessous, vous serez en mesure de mettre en œuvre ces règles rapidement et efficacement, garantissant ainsi une redirection fluide"
-    
-    redirection_note: >
-      Cette redirection fonctionne uniquement pour les uri sous la forme: url/path/resource_id.
-      Cela ne fonctionnera pas pour les URIS sous la forme: url/path/to/something#resource_id OR url/path/to/something:resource_id
-    htaccess_redirection:
-      instruction_1: "Accéder au fichier .htaccess:"
-      instruction_1_content: "Localisez le fichier .htaccess dans le répertoire racine de votre site Web, s'il n'existe pas, créez-en un. Ce fichier contrôle le comportement de votre serveur Web et est souvent utilisé pour la réécriture et la redirection d'URL"
-      instruction_2: "Copiez et collez les règles de redirection dans le fichier .htaccess:"
-      instruction_2_content: "Copiez les règles de redirection fournies dans le rectangle noir. Ouvrez le fichier .htaccess et collez les règles de redirection copiées dans le fichier"
-      instruction_3: "Activer le module de réécriture (Linux):"
-      instruction_3_content: "vous devrez vous assurer que le module Apache appelé 'rewrite' est activé en exécutant la commande `sudo a2enmod rewrite`"
-    
-    nginx_redirection:
-      instruction_1: "Accéder au fichier de configuration Nginx:"
-      instruction_1_content: "L'emplacement de ce fichier peut varier en fonction de votre système, mais les emplacements courants incluent /etc/nginx/nginx.conf, /etc/nginx/sites-available/default ou /usr/local/etc/nginx/nginx. conf."
-      instruction_2: "Localisez le bloc de serveur ou le bloc d'emplacement dans lequel vous souhaitez activer la réécriture d'URL:"
-      instruction_2_content: "C'est généralement dans le bloc serveur { ... }."
-      instruction_3: "Copier et coller les règles de redirection:"
-      instruction_3_content: "Copiez les règles de redirection fournies dans le rectangle noir. Dans le bloc approprié, ajoutez les règles copiées pour activer la réécriture d'URL"
-      instruction_4: "Testez la configuration pour les erreurs de syntaxe:"
-      instruction_4_content: "Exécutez la commande suivante pour tester la configuration de redirection `sudo nginx -t`"
-      instruction_5: "Redémarrez Nginx pour appliquer les modifications:"
-      instruction_5_content: "Redémarrez le serveur nginx pour appliquer la redirection à l'aide de cette commande `sudo systemctl reload nginx`"
-
-
-
-
-  components:
-    check_resolvability: vérification de la résolvabilité...
-    error_block: le bloc child_data_generator n'a pas fourni tous les arguments enfants
-    empty_field: Les champs %{properties} sont vides
-    save_button: Sauvegarder
-    cancel_button: Annuler
-    go_to_api: Aller à l'API
-    file_input_message: Déposez votre fichier ici ou, parcourez les fichiers sur votre appareil.
-    all_languages: Toutes les langues
-    select_language: Sélectionnez une langue
-    back: Retour
-    next: Suivant
-    finish: Terminer
-    creative_commons_license: Licence Creative Commons
-    open_source_license: Licence Open Source
-    show_more: "+ Afficher plus ..."
-    show_less: "- Afficher moins ..."
-    fair_score: Score FAIR
-    details_details: Détails FAIR ...
-    projects: projets
-    notes: notes
-    concepts: concepts
-    instances: instances
-    classes: classes
-    submitted: Soumis
-    by: par
-    creation_date: Date de création %{date}
-    view_of_the_ontology: "Vue de l'ontologie %{ontology}"
-    view: Vue
-    debug: Débogage
-    loading: Chargement
-    unwatch: Ne plus surveiller
-    watch: Surveiller
-    resource: "%{sub_text} cette ressource"
-    notified_of_all_updates: Soyez le premier à surveiller cette ressource et soyez informé de toutes ses mises à jour
-    join_the_count: Rejoignez les %{count} utilisateurs, surveillant cette ressource et soyez informé de toutes ses mises à jour
-    see_more: Voir plus...
-    see_less: Voir moins...
-    tree_view_empty: Pas de résultat
-    copy_original_uri: Copier l'URI d'origine
-    copy_portal_uri: Copier l'URI de %{portal_name}
-
-  properties:
-    id: ID
-    type: Type
-    preferred_name: Nom préféré
-    definitions: Définitions
-    parent: Parent
-    domain: Domaine
-    range: Étendue
-    no_properties_alert: "%{acronym} ne contient pas de propriétés"
-
+        '
+      title: Convertisseur de contenu (à venir)
+    search:
+      description: Cet outil permet aux utilisateurs de rechercher n'importe quelle
+        Resource RDF dans le portail. Les utilisateurs peuvent rechercher soit par
+        l'identifiant unique (URI) associé à la Resource RDF, soit par son libellé.
+      title: Rechercher du contenu (à venir)
+    url_checker:
+      description: Cet outil vérifie la résolvabilité des Identifiants Uniformes de
+        Ressource (URI) et leur négociabilité de contenu. Il vérifie si un URI donné
+        est accessible et si le contenu associé peut être négocié en fonction des
+        préférences du client.
+      title: Vérificateur de la résolvabilité d'URI
+  users:
+    account_successfully_created: Compte créé
+    account_successfully_updated: Compte mis à jour
+    custom_ontologies_cleared: Ontologies personnalisées effacées
+    custom_ontologies_saved: Ontologies personnalisées enregistrées
+    edit:
+      admin_privileges: Êtes-vous sûr de vouloir révoquer les privilèges d'administrateur
+        de cet utilisateur ?
+      change_password: Changer le mot de passe
+      confirm_password: Confirmer le mot de passe
+      edit_information: Modifier les informations personnelles
+      email: Email
+      errors_creating_account: 'Erreurs lors de la création de votre compte :'
+      first_name: Prénom
+      github_id: Compte GitHub
+      last_name: Nom
+      new_password: Nouveau mot de passe
+      orcid_id: ORCID
+      user_to_admin: Êtes-vous sûr de vouloir promouvoir cet utilisateur comme administrateur
+        ?
+      username: Nom d'utilisateur
+    error_saving_custom_ontologies: Erreur lors de l'enregistrement de l'ensemble
+      personnalisé d'ontologies, veuillez réessayer
+    error_subscribe: Quelque chose s'est mal passé ...
+    first_name_required: Le champ Prénom est requis
+    index:
+      actions: Actions
+      created: Créé le
+      delete: Supprimer
+      detail: Détail
+      email: Email
+      error_delete_message: Impossible de supprimer cet utilisateur car il est encore
+        utilisé
+      first_name: Prénom
+      last_name: Nom
+      login_as: Se connecter comme
+      ontologies: Ontologies
+      project: Projet
+      roles: Rôles
+      turbo_confirm: Êtes-vous sûr ?
+      username: Nom d'utilisateur
+    last_name_required: Le champ Nom est requis
+    not_permitted: Non autorisé
+    recaptcha_validation: Veuillez remplir le texte approprié à partir de l'image
+      fournie
+    show:
+      accessible_semantic_resources: Ontologies Accessibles
+      api_documentation: Documentation de l'API
+      api_key_description: Votre clé API peut être utilisée pour accéder aux services
+        Web de %{portal}
+      custom_semantic_resource: Ensemble personnalisé d'ontologies
+      customize_portal_display: 'Personnalisez votre affichage sur %{portal} : Choisissez
+        les ontologies que vous souhaitez voir sur %{portal}, les autres ontologies
+        seront cachées.'
+      email: 'Email :'
+      first_name: 'Prénom :'
+      github_id: 'Compte GitHub :'
+      last_name: 'Nom :'
+      mailing_list_description: S'inscrire à la liste de diffusion de %{portal}.
+      mailing_list_subscription: Inscription à la liste de diffusion
+      modify_custom_semantic_resource: |
+        visiter le site principal
+        pour modifier votre ensemble d'ontologies personnalisées.
+      my_account: Mon compte
+      no_project_created: Aucun projet créé
+      no_semantic_resources: Vous n'avez encore sélectionné aucune ontologie
+      no_uploaded_resources: Vous n'avez encore téléchargé aucune ontologie
+      not_subscribed: Non abonné à aucune ontologie
+      note_feature_logged_in: 'Note : cette fonctionnalité ne fonctionne que lorsque
+        vous êtes connecté.'
+      notes: Notes
+      orcid_id: 'ORCID :'
+      please: S'il vous plait
+      projects_created: Projets créés
+      save_custom_semantic_resources: Sauvegarder les ontologies personnalisées
+      select_semantic_resources: Sélectionner des ontologies
+      submitted_semantic_resources: Ressources ontologies
+      subscribe: S'abonner
+      subscriptions: Abonnements
+      unsubscribe: Se désabonner
+      upload_semantic_resources: Télécharger des ontologies
+      username: 'Nom d''utilisateur :'
+    subscribe_flash_message: 'Vous vous êtes %{action} %{to_or_from} à notre liste
+      de diffusion : %{list}'
+    user_deleted_successfully: Utilisateur supprimé
+    valid_email_adresse: Veuillez entrer une adresse email valide
+    validate_email_address: Veuillez entrer une adresse email
+    validate_orcid: Veuillez entrer un ORCID valide
+    validate_password: Veuillez entrer un mot de passe
+    validate_password_confirmation: Votre mot de passe et la confirmation du mot de
+      passe ne correspondent pas
+    validate_terms_and_conditions: L'acceptation des termes et conditions est requise,
+      veuillez cocher la case pour continuer.
+    validate_username: veuillez entrer un nom d'utilisateur valide
   visits:
     count: concepts
     name: nom

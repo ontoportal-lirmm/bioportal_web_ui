@@ -221,22 +221,24 @@ module ApplicationHelper
     bootstrap_alert_class[flash_key]
   end
 
-  def label_ajax_link(id, ont_acronym, ajax_uri, target)
+  def label_ajax_link(id, ont_acronym, ajax_uri, target, link: nil, color: nil, chip: true)
     ajax_uri = if ajax_uri.include?('?')
-                 "#{ajax_uri}&ontology=#{ont_acronym}&id=#{escape(id)}"
+                 "#{ajax_uri}&ontology=#{ont_acronym}&id=#{escape(id)}&color=#{encode_param(color)}&chip=#{chip}"
                else
-                 "#{ajax_uri}?ontology=#{ont_acronym}&id=#{escape(id)}"
+                 "#{ajax_uri}?ontology=#{ont_acronym}&id=#{escape(id)}&color=#{encode_param(color)}&chip=#{chip}"
                end
 
     content_tag(:span, class: 'concepts-mapping-count') do
-      ajax_link_chip(id, ajax_src: ajax_uri, target: target)
+      ajax_link_chip(id, id.split('/').last,
+                     link || id,
+                     ajax_src: ajax_uri, target: target, chip: chip, color: color)
     end
   end
 
-  def get_link_for_cls_ajax(cls_id, ont_acronym, target = nil)
+  def get_link_for_cls_ajax(cls_id, ont_acronym, target = nil, link: nil,  chip: true, color: nil)
     if cls_id.start_with?('http://') || cls_id.start_with?('https://')
       ajax_url = '/ajax/classes/label'
-      label_ajax_link(cls_id, ont_acronym, ajax_url, target)
+      label_ajax_link(cls_id, ont_acronym, ajax_url, target, link: link, chip: chip, color: color)
     else
       content_tag(:div, cls_id)
     end

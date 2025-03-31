@@ -515,21 +515,8 @@ en:
     benefit5: Precisely describe your ontology with relevant metadata and get a FAIR
       score for your ontology.
     bug: Bug
-    proposition: Proposition
-    question: Question
-    ontology_submissions_request: Ontology submissions request
-    include_name: Please include your name
-    include_email: Please include your email
-    include_comment: Please include your comment
-    fill_text: Please fill in the proper text from the supplied image
-    notice_feedback: Feedback has been sent
-    account_title: Account Information
-    agroportal_figures: "%{site} in figures"
-    benefit1: Browse, search and get recommendations for ontologies relevant to your research.
-    benefit2: Submit and share your ontologies with the community, gaining automatic access to all available services.
-    benefit3: Annotate text using terms from standardized ontologies.
-    benefit4: Retrieve and store information from ontologies directly in your local information system.
-    benefit5: Programmatically access ontologies content to create semantically enriched applications.
+    classes: Classes
+    discover_ontologies_button: Discover ontologies
     fair_details: See details
     fairness: FAIR Score
     feedback:
@@ -562,14 +549,33 @@ en:
     include_email: Please include your email
     include_name: Please include your name
     index:
-      tagline: The home of ontologies and semantic artefacts in biodiversity and related domains.
+      tagline: The home of ontologies and semantic artefacts in agri-food and related
+        domains.
       title: Welcome to %{site}
       welcome: Welcome to %{site},
-    ontology_upload: What are the benefits of using %{site}?
-    ontology_upload_benefits: 'By using %{site}, you can:'
+    individuals: Individuals
+    info_tooltip_text: 'You are seing the average scores for all the public ontologies
+      in AgroPortal. FAIR scores are computed with the O''FAIRe methodology. More
+      details here: https://github.com/agroportal/fairness'
+    mappings: Mappings
+    max: Max
+    min: Min
+    notice_feedback: Feedback has been sent
+    ontologies: Ontologies
+    ontology_submissions_request: Ontology submissions request
+    ontology_upload: Do you want to share an ontology?
+    ontology_upload_benefits: 'By uploading and sharing your ontology to %{site},
+      you can:'
     ontology_upload_button: Submit ontology
-    discover_ontologies_button: Discover ontologies
-    ontology_upload_desc: BiodivPortal offers access to a wide range of biodiversity-related ontologies, including vocabularies, taxonomies, and thesauri.
+    ontology_upload_desc: Uploading an ontology or another semantic artefact (vocabulary,
+      terminology, thesaurus, ...) is a way of sharing your knowledge with others.
+    ontoportal_description: The OntoPortal Alliance %{ontoportal_link} is a consortium
+      of research and infrastructure teams dedicated to promoting the development
+      of ontology repositories and semantic artefact catalogues based on the open,
+      collaboratively developed OntoPortal software %{github_link}. Hereafter are
+      the current public and open repositories built with the technology maintained
+      by the Alliance.
+    ontoportal_instances: Other OntoPortal instances
     paste_text_prompt: Enter a paragraph of text or some keywords...
     projects: Projects
     properties: Properties
@@ -585,44 +591,8 @@ en:
       that group.
     suggest_slice: Suggest a new group/slice
     support_and_collaborations: Support & Collaborations
-    ontoportal_instances: Other OntoPortal Instances
-    see_details: See details
-    info_tooltip_text: "You are seing the average scores for all the public ontologies in BiodivPortal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
-    average: Average
-    min: Min
-    max: Max
-    ontologies: Ontologies
-    classes: Classes
-    individuals: Individuals
-    properties: Properties
-    projects: Projects
-    mappings: Mappings
-    users: Users
     twitter_news: News
-    feedback:
-      error_on_form: Errors On Form
-      leave_your_feedback: Leave your feedback
-      feedback_hi_text: Hi
-      feedback_info_text: You can use the form below, email us directly at
-      feedback_info_text_rest: or leave us a github issue here
-      email: Email
-      name: Name
-      proposition_url_page: Error/Proposition page URL
-      feedback: Feedback
-      tags: Tags
-      bug: Bug
-      proposition: Proposition
-      question: Question
-      ontology_submissions_request: Ontology submissions request
-      optional: (optional)
-      send: Send
-      feedback_complete:
-        title: Feedback sent successfully
-        message: Thank you for taking the time to share your feedback with us. Our support team will review your message and get back to you as soon as possible with a response. We value your opinion and appreciate your help in improving our services. Thank you for your support!
-    suggest_slice: Suggest a new group/slice
-    slices_description: Slices allow users to interact (both via API or UI) only with a subset of ontologies in Biodivportal. If browsing the slice, all the portal features will be restricted to the chosen subset, enabling users to focus on their specific use cases. On BiodivPortal, slices and groups are synchronized, so every group has a corresponding slice displaying only the ontologies from that group.
-    ontoportal_description: "The OntoPortal Alliance %{ontoportal_link} is a consortium of research and infrastructure teams dedicated to promoting the development of ontology repositories and semantic artefact catalogues based on the open, collaboratively developed OntoPortal software %{github_link}. Hereafter are the current public and open repositories built with the technology maintained by the Alliance."
-    viewing_slice: "Viewing the slice:"
+    users: Users
     view_full_site: View full website
     viewing_slice: 'Viewing the slice:'
   instances:
@@ -765,33 +735,6 @@ en:
       search_prompt: Search in %{portal_name} ...
       submit_feedback: Send Feedback
       support: Support
-      cite_us: Cite Us
-    footer:
-      products: Products
-      ontoportal: OntoPortal
-      release_notes: Release Notes
-      api: API
-      tools: Tools
-      sparql: SPARQL
-      support: Support
-      contact_us: Contact Us
-      wiki: Wiki
-      documentation: Documentation
-      agro_documentation: BiodivPortal documentation
-      issues_and_requests: Issues and Requests
-      agreements: Legal
-      terms: Terms and Conditions
-      terms_anchor: "#h-agroportal-terms-and-conditions-english"
-      privacy_policy: Privacy Policy
-      privacy_policy_anchor: "#h-privacy-policy"
-      legal_notices: Legal Notices
-      legal_notices_anchor: "#h-legal-notice"
-      cite_us: Cite Us
-      acknowledgments: Acknowledgments
-      about: About
-      about_us: About Us
-      projects: D2KAB
-      team: Team
     notices:
       at: at
       slice: Slice
@@ -985,7 +928,7 @@ en:
       show_ontology_views: Show ontology views
       show_private_ontology: Show private ontology only
       show_retired_ontologies: Show retired ontologies
-    taxonomy_information_tooltip: See more information about %{taxonomy_type} in 
+    taxonomy_information_tooltip: See more information about %{taxonomy_type} in
     categories: Categories
     change_notes: Change notes
     collapse_all: Collapse All
@@ -1478,8 +1421,6 @@ en:
     preferred_name: Preferred name
     type: Type
   search:
-    no_search_class_provided: No search class provided
-    search_place_holder: Enter a term, e.g. honey bee
     advanced_options:
       include_in_search_title: Include in search
       include_in_search_values:
@@ -1624,397 +1565,101 @@ en:
         the repository. Users can search by either the unique identifier (URI) associated
         with the RDF Resource or by its label.
 
-    groups: Groups
-    visibility: Visibility
-    accounts_allowed: Add or remove accounts that are allowed to see this ontology in %{portal_name}.
-    ontology_view_of_another_ontology: Is this ontology a view of another ontology?
-    contact: Contact
-    equivalents: Equivalents
-    validators: Validators
-    help_text: Help text
-    contact_name: "%{name} Name"
-    contact_email: "%{name} Email"
-    edit_metadata_instruction: "Edit the metadata of your ontology here. Some of these values are used by %{portal_name} functionalities, including for FAIRness assessment. %{link}"
-    edit_metadata_instruction_link: "See guidelines and recommendations for metadata here."
-    license_help: "%{portal_name} requires an URI for the license. If you do not find your choice here, %{link}"
-    license_help_link: "Please pick up an URI from here."
-    deprecated_help: "An ontology with status retired shall necessarily be also deprecated, but not the opposite."
-    known_usage_help: "Consider also declaring %{metadata_knownUsage_help}"
-    known_usage_help_link: "the projects that are using the ontology"
-    help_creator: "The following properties take for value an 'agent' in %{portal_name} (either a person or an organization). These agents are shared over all the ontologies and suggested with autocompletion if they already exist. Editing an agent here will change it to all the ontologies that agent is involved in."
-    version_help: "For more information on how to encode versioning information in an ontology, see %{link}"
-    version_helper_link: "guidelines and recommendations."
-  instances:
-    id: ID
-    type: Type
-    label: Label
-  collections:
-    error_valid_collection: "Error: You must provide a valid collection id"
-    no_collections_alert: "%{acronym} does not contain collections (skos:Collection)"
-    id: ID
-    preferred_name: Preferred name
-    members_count: Members count
-    type: Type
-  change_requests:
-    change_request_success_message: Your change request was successfully submitted! View the %{url} on GitHub.
-    label: Label
-    type: Type
-    comment: Comment
-    close: Close
-    submit: Submit
-  check_resolvability:
-    check_resolvability_message_1: "The URI is resolvable and support the following formats: %{supported_format}"
-    check_resolvability_message_2: "The URI resolvable but is not content negotiable, support only: %{supported_format}"
-    check_resolvability_message_3: The URI is not resolvable and not content negotiable (returns %{status}).
-    uri_placeholder: Type a URI to test its resolvability
-    show_help: Show help
-    format_not_specified: Format not specified
-    how_it_works:
-      title: How it works
-      content_1: |
-        The check resolvability tool allows you to test if a given URI is resolvable. It is based on the HTTP HEAD method.
-        We check the resolvability of a URI by sending a HEAD request to the URI and checking if the response status code is 200 (OK) and
-        the returned content type is equal to one of the following %{resolvability_formats}.
-      content_2: |
-        We have a timeout set to %{resolvability_timeout} seconds, so if the URI is not resolvable within that time, the check will fail.
-        And a max redirections set to %{resolvability_max_redirections}, so if the URI is not resolvable within that number of redirections, the check will fail.
-    resolving_uri:
-      title: Resolving a URI
-      content: |
-        In the context of web semantics, dereferencing refers to the process of resolving and obtaining the actual data associated with a Uniform Resource Identifier (URI). In simpler terms, it involves following a link represented by a URI/IRI to retrieve information or resources linked to that identifier.
-        In the Semantic Web, URIs are used to uniquely identify resources, and dereferencing allows systems to access and retrieve data related to those resources. When a URI/IRI is dereferenced, it typically leads to the retrieval of RDF (Resource Description Framework) data or other structured information that describes the resource in a machine-readable format. This enables systems to understand and process the meaning of the linked data, facilitating the exchange and integration of information on the web.
-    content_negotiation:
-      title: Content negotiation
-      content: |
-        Content negotiation in the context of the Semantic Web refers to the mechanism by which two communicating parties, such as a client and a server, agree on the most suitable representation of a resource during the process of dereferencing a URI or IRI. This negotiation aims to ensure effective communication between different systems that may prefer different data formats or languages.
-        In other words, when a client requests a resource by dereferencing a URI, it indicates its preferences for the format or language of the response data through HTTP headers or other negotiation mechanisms. The server, in turn, examines these preferences and selects the most appropriate representation of the resource based on what is available.
-        different formats can be agreed upon between a client and server when accessing linked data. Common formats include:
-
-        RDF/XML: XML-based representation of Resource Description Framework data.
-        Turtle: Human-readable serialization format for RDF.
-        JSON-LD: JSON-based format for linked data.
-        N-Triples and N-Quads: Text formats for expressing RDF triples and quads.
-        HTML: Markup language for web pages, also used to embed RDF data.
-        RDFa: Embedding RDF data in HTML or XML using attributes.
-        SPARQL Query Results XML and JSON: Formats for representing SPARQL query results.
-
-  errors:
-    error_message: We're sorry but something has gone wrong.
-    notification_error: We have been notified of this error.
-    go_home_button: Go home
-    send_feedback_button: Send a feedback
-    not_found_page: Page not found
-  schemes:
-    error_valid_scheme_id: "Error: You must provide a valid scheme id"
-    no_main_scheme_alert: no main scheme defined in the URI attribute
-    no_schemes_alert: "%{acronym} does not contain schemes (skos:ConceptScheme)"
-    id: ID
-    preferred_name: Preferred name
-    type: Type
-  fair_score:
-    fairness_unreachable_warning: FAIRness service issue unreachable
-    go_to_api: Go to API
-    mod_link: MOD1.4
-    see_the_used_properties: see the used properties
-    metadata_properties: Metadata properties listed in the following are picked from %{mod_link}.
-    ontology_repository: This ontology repository implements %{mod_link} but does not necessarily encode metadata with the same properties (%{submission_link}).
-    see_possible_credits: See possible credits
-    see_metadata_used_properties: See metadata used properties
-    not_found: not found
-    "null": "null"
-    view_fair_scores_definitions: "You are seeing the FAIRness assessment score for this ontology in Biodivportal. FAIR scores are computed with the O'FAIRe methodology. More details here: https://github.com/agroportal/fairness"
-  ontologies_metadata_curator:
-    #bulk_edit: Start bulk edit
-    #use_the_bulk_edit: To use the bulk edit select in the table submissions (the rows) and metadata properties (the columns) for which you want to edit
-    start_the_bulk_edit: Select in the table submissions (rows) and metadata properties (columns) to start the bulk edit
-    alert_success_submissions: Submissions were successfully updated
-    ontologies: Ontologies
-    get_values: Get values
-    select_ontologies_and_metadata: select ontologies and the metadata properties
-    include_all_submissions: Include all submissions
-    apply_the_change_for_all: Apply the change for all
-    update_the_current_displayed_content: "will update the current displayed content to all the following submissions:"
-    save: Save
-  ontologies:
-    showing_ontologies_size: "Showing %{ontologies_size} of %{analytics_size} from %{portals}"
-    filters: Filters
-    no_license: No license
-    view_license: View license
-    access_rights_information: Additional license and access rights information
-    referred_to: It can also be referred to as
-    private_ontology: Private Ontology
-    formality_levels: Formality levels
-    categories: Categories
-    groups: Groups
-    ontology_types: Ontology types
-    natural_languages: Natural languages
-    showing: Showing
-    metadata_properties: of %{acronym}  metadata properties are filled
-    home_page: Home Page
-    ontology_processing_failed: "The ontology processing failed, with the current statuses: %{status}"
-    ontology_parsing_succeeded: "The ontology parsing succeeded, but some processing steps failed, here are the current statuses: %{status}"
-    upload_an_ontology: Upload an ontology. Sections such as %{ontology} will be available once done.
-    new_ontology_is_processing: The ontology is processing. Sections such as %{ontology} will be available  once processing is complete.
-    ontology_is_processing: The ontology is processing. Sections such as %{ontology} will be updated once processing is complete.
-    contact_support: Contact support
-    edit_natural_languages: Edit natural languages of %{acronym}
-    edit_available_languages: Click here to edit available languages
-    add_new_submission: Add new submission
-    edit_metadata: Edit metadata
-    go_to_api: Go to API
-    projects_using_ontology: Projects using %{acronym}
-    create_new_project: Create new project
-    no_projects_using_ontology: No projects using %{acronym}
-    outside: outside
-    relation_with_other_ontologies: Relation with other ontologies either in %{inside} or %{outside}
-    ontology_search_prompt: 'Search an ontology or a term (e.g., plant height)'
-    views: Views
-    create_new_view: Create new view
-    expand_all: Expand All
-    collapse_all: Collapse All
-    administrator: "Administrator:"
-    create_new_view_submission: create new view submission
-    description: "Description:"
-    definition: "Definition:"
-    created_by: "Created By:"
-    submission: Submission
-    release_date: Release Date
-    upload_date: Upload Date
-    downloads: Downloads
-    admin_links: Admin Links
-    edit_link: Edit
-    no_views: No views available for %{acronym}.
-    fairness_assessment_questions: O'FAIRe FAIRness assessment questions
-    see_details: See details
-    collecting_data: We are still collecting data for %{acronym}
-    location: Location
-    allow_users: Allow users to view the metadata of your ontology (Summary) only.
-    metadata_only: Metadata only (No file)
-    load_from_url: Load from URL
-    new_versions_loaded: New versions loaded on a nightly basis.
-    upload_local_file: Upload local file
-    ontology_submitted: Ontology submitted successfully!
-    users_can_see: Users can now see
-    your_ontology: your ontology
-    exploring_and_searching: |
-      in our ontology list but they cannot explore or search it. To enable exploring and searching,
-      please upload a full version of your ontology.
-    submitting_ontology_view: Thank you for submitting your ontology view to %{site}.
-    submitting_ontology: Thank you for submitting your ontology to %{site}.
-    processing_message: |
-      We will now put your ontology in the queue to be processed. Please keep in mind that it may take up to several
-      hours before %{site} users will be able to explore and search your ontology.
-    notification_message: "When your ontology is ready for viewing, you will receive an email notification and it will be available here:"
-    contact_support_at: "If you have any questions or problems, please email the %{site} support team at:"
-    collecting_data_message: We are still collecting data for %{acronym}
-    submit_new_ontology: Submit new ontology
-    details: Details
-    general_information: General information
-    dates_and_contacts: Dates and contacts
-    uri: URI
-    change_notes: Change notes
-    modification_date: Modification date
-    date_of_original_creation: Date of original creation
-    concepts_browsers:
-      select_scheme: Please select a scheme to display
-      missing_roots: Missing roots for %{acronym} (skos:topConceptOf)
-      select_collection: Please select a collection to display
-      placeholder_jump: Jump to
-      label_jump: "Jump to:"
-      filter: Filter
-    browser:
-      admin_welcome: Welcome admin,this coloring indicates admin-only features
-      show_private_ontology: Show private ontology only
-      show_ontology_views: Show ontology views
-      show_retired_ontologies: Show retired ontologies
-      search_placeholder: Start typing to filter ontologies, e.g., NCBITAXON...
-    sections:
-      classes: Classes
-      individuals: Individuals
-      properties: Properties
-      maximum_depth: Maximum depth
-      maximum_number_of_children: Maximum number of children
-      average_number_of_children: Average number of children
-      classes_with_a_single_child: Classes with a single child
-      classes_with_more_than_25_children: Classes with more than 25 children
-      classes_with_no_definition: Classes with no definition
-      identifiers: Identifiers
-      identifiers_tooltip: Principal identifiers of the ontology.
-      dates: Dates
-      person_and_organization: Persons and organizations
-      other_links: Other links
-      info_tooltip_links: Metadata properties that highlight the links enabling access to datasets, downloading ontologies, etc
-      projects_and_usage_information: Projects and usage information
-      info_tooltip_projects: Details pertaining to the utilization of the ontology.
-      methodology_and_provenance: Methodology and provenance
-      community: Community
-      content: Content
-      info_tooltip_properties_dropdown: Metadata properties primarily encompass the design, methods, and actions to create the ontology. This includes elements such as the tools and software employed by the creator of the ontology during its configuration.
-      info_tooltip_community_dropdown: Metadata properties related to community information such as the code repository and issue tracker, the mailing list or the target audience. This includes also the Groups in %{site}. See more information about Groups and Categories.
-      visits: Visits
-      views: Views of %{acronym}
-      create_new_view: Create new view
-      configuration_metadata: Configuration metadata
-      info_tooltip_configuration: Regroup all the metadata properties used by the portal to configure the behavior of the resource
-      label_groups: Groups
-      download_as_csv: Download as CSV
-      scroll_down_to_see_more: Scroll down to see more
-
-      widgets: Widgets are only available for ontologies stored in %{site}.
-      add_acronym_widgets: Add %{acronym} Web Widgets to your site
-      widget_block_component_title_1: Jump To
-      widget_block_component_description_1: Type a class name from %{acronym} and jump to it in %{site}
-      download: Download the
-      put_on_server: and put it on your server.
-      copy_and_paste: Copy the code below and paste it to your HTML page
-      note: "Note:"
-      use_quick_jump: If you would like to use Quick Jump across multiple ontologies
-      enter_list_of_ontologies: You can enter a comma-separated list of ontology ids
-      set_the_variable: "You can set the variable to 'all' to search all ontologies in %{site}:"
-      include_definitions: "To include definitions in the Jump To drop-down, add the following variable in Javascript:"
-      info_pasted_code: In the code that you just pasted, make sure to change the path to the quick_jump.js file to point to the location where you put the file (relative to your HTML file)
-      example_to_use_code: "For example, if you put the quick_jump.js file in the same directory as your HTML file, this is the code you would use:"
-      help_visit: For more help visit
-      widget_block_component_title_2: Autocomplete
-      widget_block_component_description_2: Fill your form fields with classes from %{acronym}
-      example_1: Example 1 (start typing the class name to get its full URI)
-      example_2: Example 2 (get the ID for a class)
-      example_3: Example 3 (get the preferred name for a class)
-      include_file: In the header for the page where you want the form field, include the
-      use_widget: "On your form, for the fields where you want to use the class-selection widget, specify the field's class in the following format:"
-      for_example: For example,
-      use_ontology: will use NCI Thesaurus (ontology id is NCIT) and will put the class URI in the field after the user selects the class from the pull-down list.
-      use_list: "In addition to single ontology ids, you can use a list:"
-      or: OR
-      use_all_to_search: "use 'all' to search across all %{site} ontologies:"
-      autocomplete_widget_accesses: The autocomplete widget accesses ontology content from the latest version of the ontology.
-      use_following_parameters: "You can use the following parameters to select which value will be placed into the user-visible input field:"
-      uri: uri
-      shortid: shortid
-      name: name
-      class_uri_description: "Put the complete URI of the class (e.g.,"
-      class_uri_example: 'put the complete URI of the class (e.g., %{link})'
-      class_shortid_description: put the short id of the class, as used in %{site} (e.g., "Common_Neoplasm");
-      class_name_description: put the preferred name of the class (e.g., "Common Neoplasm");
-      hidden_elements_description: "In addition to the input element you defined, there are four hidden form elements that are created and then set when a user selects a class from the list. For example, if you create a field with this code:"
-      hidden_elements_example: "The 'name' attribute is used to create the four following fields (note how the 'a' from the name attribute is appended to the id attribute):"
-      additional_parameters: Additional parameters are documented on the
-      more_help_visit: For more help visit
-      widget_block_component_title_3: Visualization
-      widget_block_component_description_3: Display a visualization for a given class in %{acronym}
-      widget_block_component_title_4: Tree Widget
-      widget_block_component_description_4: Display a class tree with a search field for %{acronym}
-      can_also_view: You can also view a
-      detailed_demonstration: detailed demonstration
-      ncbo_widget_wiki: NCBO Widget Wiki
-      file: file.
-      no_class_concept_found: No class/concept found
-      instances_search_placeholder: Search an Instance in %{acronym}
-      properties_search_placeholder: Search a property in %{acronym}
-      schemes_search_placeholder: Search a scheme in %{acronym}
-      collections_search_placeholder: Search a collection in %{acronym}
-
-      metadata:
-        fair_score_title: FAIR score
-        total_score: "Total score : %{score} ( %{normalized_score}%)"
-        metrics: Metrics
-        metrics_link_title: Information and evolution diagrams about metrics and other measurements of the ontology.
-        see_all_metrics: See all the metrics of %{acronym}
-        show_modal_title_1: All the metrics of %{acronym}
-        not_calculated_metrics: We have not yet calculated metrics for %{acronym}
-        show_modal_title_2: "Evolution of the number of %{metric} in %{acronym} per submissions."
-        submissions: Submissions
-        submissions_link_title: Set of all the files that have been submitted to %{site}. Each previous metadata record is accessible but only the content of the latest parsed file is accessible via %{site} services
-        relations_network: Ontology relations network
-        general_information: General information
-        initial_created_on: Last modified on
-        additional_information: For additional information, contact
-        categories_and_subjects: Categories and subjects
-        keywords_and_classes: Keywords and classes
-        languages: Languages
-        pull_location: Pull location
-        export_metadata: Export all metadata
-        abstract: Abstract
-        description: Description
-  
-    htaccess_modal_title: "Rewrite rules for %{acronym} ontology"
-    instructions_servers: Instructions for %{server} servers
-    htaccess_redirection_description: "We offer a seamless solution to make your ontology URIs resolvable and content negotiable by allowing URL redirection for your ontology URIs to our BiodivPortal URIs. To facilitate this process, we've provided you with a set of .htaccess rewrite rules. By following the simple instructions below, you'll be able to implement these rules swiftly and efficiently, ensuring smooth redirection"
-    
-    redirection_note: |
-      This redirection works only for uri with the form of:  url/path/resource_id
-      This will not work for uris in the form of: url/path/to/something#resource_id OR url/path/to/something:resource_id
-    htaccess_redirection:
-      instruction_1: "Access .htaccess File:"
-      instruction_1_content: "Locate the .htaccess file in the root directory of your website, if it doesn't exist create one. This file controls how your web server behaves and is often used for URL rewriting and redirection."
-      instruction_2: "Copy and Paste Redirect Rules in the .htaccess file:"
-      instruction_2_content: "Copy the rewrite rules provided in the black rectangle. Open the .htaccess file and paste the copied redirect rules into the file"
-      instruction_3: "Enable rewrite module (Linux):"
-      instruction_3_content: "you'll need to ensure that the Apache module called 'rewrite' is enabled by running the command `sudo a2enmod rewrite`"
-
-    
-    nginx_redirection:
-      instruction_1: "Access Nginx configuration file:"
-      instruction_1_content: "The location of this file can vary depending on your system, but common locations include /etc/nginx/nginx.conf, /etc/nginx/sites-available/default or /usr/local/etc/nginx/nginx.conf."
-      instruction_2: "Locate the server block or location block where you want to enable URL rewriting:"
-      instruction_2_content: "This is typically within the server { ... } block."
-      instruction_3: "Copy and Paste Redirect Rules :"
-      instruction_3_content: "Copy the rewrite rules provided in the black rectangle. Inside the appropriate block, add the copied rules to enable URL rewriting"
-      instruction_4: "Test the configuration for syntax errors:"
-      instruction_4_content: "Run the following command to test the redirection configuration `sudo nginx -t`"
-      instruction_5: "Reload Nginx to apply the changes:"
-      instruction_5_content: "Restart the nginx server to apply the redirection using this command `sudo systemctl reload nginx`"
-
-  components:
-    check_resolvability: checking resolvability...
-    error_block: child_data_generator block did not provide all the child arguements
-    empty_field: The fields %{properties} are empty
-    save_button: Save
-    cancel_button: Cancel
-    go_to_api: Go to API
-    file_input_message: Drop your file here or, browse files on your device.
-    all_languages: All languages
-    select_anguage: Select a language
-    back: Back
-    next: Next
-    finish: Finish
-    creative_commons_license: Creative Commons License
-    open_source_license: Open Source License
-    show_more: "+ Show more ..."
-    show_less: "- Show less ..."
-    fair_score: FAIR score
-    details_details: FAIR details ...
-    projects: projects
-    notes: notes
-    concepts: concepts
-    instances: instances
-    classes: classes
-    submitted: Submitted
-    by: by
-    creation_date: Creation date %{date}
-    view_of_the_ontology: "View of the ontology %{ontology}"
-    view: View
-    debug: Debug
-    loading: Loading
-    unwatch: Unwatch
-    watch: Watch
-    resource: "%{sub_text} this resource"
-    notified_of_all_updates: Be the first to watch this resource and  be notified of all its updates
-    join_the_count: Join the %{count} users, watching this resource and  be notified of all its updates
-    see_more: See more...
-    see_less: See less...
-    tree_view_empty: No result found
-    copy_original_uri: Copy original URI
-    copy_portal_uri: Copy %{portal_name} URI
-  properties:
-    id: ID
-    type: Type
-    preferred_name: Preferred name
-    definitions: Definitions
-    parent: Parent
-    domain: Domain
-    range: Range
-    no_properties_alert: "%{acronym} does not contain properties"
+        '
+      title: Search content (coming)
+    url_checker:
+      description: This tool verifies the resolvability of Uniform Resource Identifiers
+        (URIs) and their content negotiability. It checks whether a given URI is accessible
+        and whether the content associated with it can be negotiated based on the
+        client's preferences.
+      title: URI resolvability checker
+  users:
+    account_successfully_created: Account was successfully created
+    account_successfully_updated: Account was successfully updated
+    custom_ontologies_cleared: Custom Ontologies were cleared
+    custom_ontologies_saved: Custom Ontologies were saved
+    edit:
+      admin_privileges: Are you sure you want to revoke admin privileges for this
+        user?
+      change_password: Change password
+      confirm_password: Confirm password
+      edit_information: Edit personal information
+      email: Email
+      errors_creating_account: 'Errors creating your account:'
+      first_name: First name
+      github_id: Github account
+      last_name: Last name
+      new_password: New password
+      orcid_id: ORCID
+      user_to_admin: Are you sure you want to make this user an admin?
+      username: Username
+    error_saving_custom_ontologies: Error saving Custom Ontologies, please try again
+    error_subscribe: Something went wrong ...
+    first_name_required: First name field is required
+    index:
+      actions: Actions
+      created: Created At
+      delete: Delete
+      detail: Detail
+      email: Email
+      error_delete_message: Can't delete this user because still used
+      first_name: First name
+      last_name: Last name
+      login_as: Login as
+      ontologies: Ontologies
+      project: Project
+      roles: Roles
+      turbo_confirm: Are you sure?
+      username: Username
+    last_name_required: Last name field is required
+    not_permitted: Not permitted
+    recaptcha_validation: Please fill in the proper text from the supplied image
+    show:
+      accessible_semantic_resources: Accessible Ontologies
+      api_documentation: API documentation
+      api_key_description: Your API Key can be used to access  %{portal} Web services
+      custom_semantic_resource: Custom ontology set
+      customize_portal_display: 'Customize your %{portal} display: Pick the ontologies
+        that you want to see on %{portal} will hide all other ontologies.'
+      email: 'Email:'
+      first_name: 'First name:'
+      github_id: 'GitHub account:'
+      last_name: 'Last name:'
+      mailing_list_description: Register to the %{portal} mailing list.
+      mailing_list_subscription: Mailing list subscription
+      modify_custom_semantic_resource: |
+        visit the main site
+        to modify your Custom Ontology Set.
+      my_account: My account
+      no_project_created: No project created
+      no_semantic_resources: You haven't picked any ontologies yet
+      no_uploaded_resources: You didn't upload any ontology yet
+      not_subscribed: Not subscribed to any ontology
+      note_feature_logged_in: 'Note: this feature works only when you are logged in.'
+      notes: Notes
+      orcid_id: 'ORCID:'
+      please: Please
+      projects_created: Projects created
+      save_custom_semantic_resources: Save custom ontologies
+      select_semantic_resources: Select ontologies
+      submitted_semantic_resources: Submitted ontologies
+      subscribe: Subscribe
+      subscriptions: Subscriptions
+      unsubscribe: Unsubscribe
+      upload_semantic_resources: Upload Ontologies
+      username: 'Username:'
+    subscribe_flash_message: 'You have successfully  %{action} %{to_or_from} our user
+      mailing list: %{list}'
+    user_deleted_successfully: User deleted successfully
+    valid_email_adresse: Please enter a valid email adresse
+    validate_email_address: Please enter an email address
+    validate_orcid: Please enter a valid ORCID
+    validate_password: Please enter a password
+    validate_password_confirmation: Your Password and Password Confirmation do not
+      match
+    validate_terms_and_conditions: Accepting the terms and conditions is required,
+      please check the box to proceed.
+    validate_username: please enter a valid username
   visits:
     count: concepts
     name: name
