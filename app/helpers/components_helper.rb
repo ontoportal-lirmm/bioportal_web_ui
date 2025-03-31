@@ -179,10 +179,16 @@ module ComponentsHelper
     end
   end
 
-  def ajax_link_chip(id, label = nil, link = nil, external: false, open_in_modal: false, ajax_src: nil, target: '_blank', lazy: true)
+  def ajax_link_chip(id, label = nil, link = nil,
+                     external: false, open_in_modal: false,
+                     ajax_src: nil, target: '_blank',
+                     chip: true,
+                     color: nil)
     render LabelFetcherComponent.new(id: id, label: label, link: link,
                                      open_in_modal: open_in_modal, ajax_src: ajax_src,
-                                     target: target, external: external, lazy: lazy)
+                                     target: target, external: external,
+                                     chip: chip,
+                                     color: color)
   end
 
   def chart_component(title: '', type:, labels:, datasets:, index_axis: 'x', show_legend: false)

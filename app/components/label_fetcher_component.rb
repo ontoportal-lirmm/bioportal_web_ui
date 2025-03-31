@@ -3,7 +3,11 @@
 class LabelFetcherComponent < ViewComponent::Base
   include UrlsHelper, Turbo::FramesHelper, ModalHelper
 
-  def initialize(id:, label: nil, link: nil, ajax_src: nil, open_in_modal: false, target: nil, external: false)
+  def initialize(id:, label: nil, link: nil, ajax_src: nil,
+                 open_in_modal: false, target: nil,
+                 external: false,
+                 chip: true,
+                 color: nil)
     super
     @id = id
     @link = link
@@ -12,6 +16,8 @@ class LabelFetcherComponent < ViewComponent::Base
     @target = target
     @external = external
     @label = label
+    @chip = chip
+    @color = color
 
     if external_link?
       @link = id
@@ -26,12 +32,20 @@ class LabelFetcherComponent < ViewComponent::Base
     (@label.nil? || @label.eql?(@id)) && @external
   end
 
+  def loading_url
+    "#{@id} #{render(LoaderComponent.new(small: true))}".html_safe
+  end
+
   def label_fetcher_container(&block)
     id = "#{escape(@id)}_label"
     if @ajax_src
-      render(TurboFrameComponent.new(id: id, src: "#{@ajax_src}&target=#{@target}", loading: 'lazy')) do |t|
+      render(TurboFrameComponent.new(id: id, src: "#{@ajax_src}&target=#{@target}", loading: @lazy ? 'lazy' : 'eager')) do |t|
         t.loader do
-          render ChipButtonComponent.new(url: @id, text: "#{@id} #{render(LoaderComponent.new(small: true))}", type: 'clickable', target: '_blank')
+          if @chip
+            render ChipButtonComponent.new(url: @id, text: loading_url, type: 'clickable', target: '_blank')
+          else
+            link_to(loading_url, @id, style: "color: #{@color} !important")
+          end
         end
 
         t.error do
