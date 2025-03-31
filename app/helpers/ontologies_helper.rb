@@ -394,6 +394,10 @@ module OntologiesHelper
     ontology_data_sections.include?(section_title)
   end
 
+  def lazy_load_section?(section_title)
+    !(ontology_data_section?(section_title) || section_title.eql?('summary'))
+  end
+
   def section_data(section_title)
     if ontology_data_section?(section_title)
       url_value = selected_section?(section_title) ? request.fullpath : "/ontologies/#{@ontology.acronym}?p=#{section_title}"
@@ -403,12 +407,13 @@ module OntologiesHelper
     end
   end
 
-  def lazy_load_section(section_title, &block)
+  def lazy_load_section(section_title, lazy_load: true, &block)
     if current_section.eql?(section_title)
       block.call
     else
       render TurboFrameComponent.new(id: section_title, src: "/ontologies/#{@ontology.acronym}?p=#{section_title}",
-                                     loading: Rails.env.development? ? "lazy" : "eager",
+
+                                     loading: Rails.env.development? || lazy_load ? "lazy" : "eager",
                                      target: '_top', data: { "turbo-frame-target": "frame" })
     end
   end
@@ -647,20 +652,26 @@ module OntologiesHelper
   end
 
   def upload_ontology_button
-    if session[:user].nil?
-      render Buttons::RegularButtonComponent.new(id: "upload-ontology-button", value: t('home.ontology_upload_button'), variant: "secondary", state: "regular", href: "/login?redirect=/ontologies/new") do |btn|
-        btn.icon_left do
-          inline_svg_tag "upload.svg"
-        end
-      end
-    else
-      render Buttons::RegularButtonComponent.new(id: "upload-ontology-button", value: t('home.ontology_upload_button'), variant: "secondary", state: "regular", href: new_ontology_path) do |btn|
+    return if read_only_enabled?
+
+    href = if session[:user].nil?
+             "/login?redirect=#{new_ontology_path}"
+           else
+             new_ontology_path
+           end
+
+    render = regular_button(
+      "upload-ontology-button",
+      t('home.ontology_upload_button'),
+      variant: "secondary",
+      state: "regular",
+      size: nil,
+      href: href) do |btn|
         btn.icon_left do
           inline_svg_tag "upload.svg"
         end
       end
     end
-  end
 
   def submission_json_button
     render RoundedButtonComponent.new(link: "#{(@submission_latest || @ontology).id}?display=all",
@@ -804,7 +815,7 @@ module OntologiesHelper
     return nil unless taxonomy_type.eql?("categories") || taxonomy_type.eql?("groups")
 
     content_tag(:div, class: '') do
-      content_tag(:span, "See more information about #{taxonomy_type} in ", class: 'mr-1') +
+      content_tag(:span, t('ontologies.taxonomy_information_tooltip', taxonomy_type: taxonomy_type), class: 'mr-1') +
         content_tag(:a, 'here', href: "/#{taxonomy_type}", target: '_blank')
     end
   end

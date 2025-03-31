@@ -1,359 +1,611 @@
 ---
 fr:
-  show_advanced_options: Afficher les options avancées
-  hide_advanced_options: Masquer les options avancées
-  no_result_was_found: Aucun résultat n'a été trouvé
-
   activaterecord:
     errors:
       models:
         license:
           attributes:
             encrypted_key:
+              appliance_id_mismatch: ne correspond pas à l'ID de la machine virtuelle.
               invalid_license_key: est une clé de licence invalide.
-              no_appliance_id_for_comparison: n'a pas pu être validée. Impossible de récupérer l'ID de l'appliance virtuelle.
-              appliance_id_mismatch: ne correspond pas à l'ID de l'appliance virtuelle.
-
-
-  # Rendre le terme de ressource 'ontologie' configurable dans tout le portail, permettant de le remplacer par des termes alternatifs tels que 'semantic_resource', 'vocabulary', 'terminology', ou 'semantic_artefact'
-  resource_term:
-    ontology: ontologie
-    ontology_plural: ontologies
-    ontology_single: une ontologie
-
-    semantic_resource: ressource sémantique
-    semantic_resource_plural: ressources sémantiques
-    semantic_resource_single: une ressource sémantique
-
-    vocabulary: vocabulaire
-    vocabulary_plural: vocabulaires
-    vocabulary_single: un vocabulaire
-
-    terminology: terminologie
-    terminology_plural: terminologies
-    terminology_single: une terminologie
-
-    semantic_artefact: artefact sémantique
-    semantic_artefact_plural: artefacts sémantiques
-    semantic_artefact_single: un artefact sémantique
-
-  date:
-    formats:
-      year_month_day_concise: "%Y-%m-%d" # 2017-03-01
-      month_day_year: "%b %-d, %Y" # Mar 1, 2017
-      monthfull_day_year: "%-d %B %Y" # Mars 1, 2017
-
-  language:
-    translation_not_available: "Traduction en %{language} non disponible"
-    portal_language_help_text: Indiquez la langue dans laquelle les interfaces doivent apparaître
-    search_language_help_text: Indiquez la langue dans laquelle effectuer la recherche, en restreignant la correspondance de texte exclusivement à des termes dans cette langue
-    content_language_help_text_1: Indiquez la langue dans laquelle le contenu de cette ressource sera affiché.
-    content_language_help_text_2: Les langues disponibles sont spécifiées par l'administrateur de la ressource.
-
-  application:
-    powered_by: Propulsé par BioPortal
-    projects: Projets
-    loading: Chargement en cours...
-    errors_in_fields: Erreurs dans les champs %{errors}
-    add_comment: Ajouter un commentaire
-    add_new_comment: Ajouter un nouveau commentaire
-    reply: Répondre
-    add_proposal: Ajouter une proposition
-    add_new_proposal: Ajouter une nouvelle proposition
-    watching: Surveillance
-    beta_badge_text: Version bêta
-    beta_badge_tooltip: Cette fonctionnalité est expérimentale et peut comporter des problèmes
-    ontology_not_found: Ontologie %{acronym} non trouvée
-    concept_not_found: Concept %{concept} non trouvé
-    error_load: "Erreur : échec du chargement"
-    not_found_message: Non trouvé
-    try_again: Une erreur s'est produite, veuillez réessayer
-    provide_ontology_or_concept: Veuillez fournir un identifiant d'ontologie ou un identifiant de concept avec un identifiant d'ontologie.
-    search_for_class: Veuillez rechercher une classe à l'aide du champ Jump To ci-dessus
-    missing_roots_for_ontology: Racines manquantes pour %{acronym}
-    missing_roots: Racines manquantes
-    missing_class: Classe manquante %{root_child}
-    missing_class_ontology: Classe manquante %{acronym} / %{concept_id}
-    error_simplify_class: "Échec de la simplification de la classe : %{cls}"
-    no_cache: "Pas de cache ou cache expiré pour l'ontologie : %{id}"
-    incomplete_simple_ontology: "Ontologie simple incomplète : %{id}, %{ont}"
-  label_xl:
-    error_valid_label_xl: "Erreur : Vous devez fournir un identifiant de label_xl valide"
-
+              no_appliance_id_for_comparison: n'a pas pu être validée. Impossible
+                de récupérer l'ID de la machine virtuelle.
   admin:
-    query_not_permitted: Requête non autorisée
-    update_info_successfully: Informations de mise à jour récupérées avec succès
-    error_update_info: Problème lors de la récupération des informations de mise à jour - %{message}
-    current_version: "Version actuelle : %{version}"
-    appliance_id: "ID de l'appareil : %{id}"
-    no_record_exists: Aucun enregistrement existant pour l'ontologie %{acronym}
-    cache_flush_success: Cache de l'interface utilisateur vidé avec succès
-    cache_flush_error: "Problème lors du vidage du cache de l'interface utilisateur - %{class} : %{message}"
-    no_flush_command: "Le cache de l'interface utilisateur ne répond pas à la commande 'flush_all'"
-    cache_reset_success: Connexion au cache de l'interface utilisateur réinitialisée avec succès
-    cache_reset_error: Problème lors de la réinitialisation de la connexion au cache de l'interface utilisateur - %{message}
-    no_reset_command: Le cache de l'interface utilisateur ne répond pas à la commande 'reset'
-    clear_goo_cache_success: Cache Goo vidé avec succès
-    clear_goo_cache_error: "Problème lors du vidage du cache Goo - %{class} : %{message}"
-    clear_http_cache_success: Cache HTTP vidé avec succès
-    clear_http_cache_error: "Problème lors du vidage du cache HTTP - %{class} : %{message}"
-    refresh_report_without_ontologies: Rafraîchissement du rapport des ontologies commencé avec succès
-    refresh_report_with_ontologies: "Rafraîchissement du rapport pour les ontologies : %{ontologies} commencé avec succès"
-    submission_deleted_successfully: Soumission %{id} pour l'ontologie %{ont} supprimée avec succès
-    submission_not_found: Soumission %{id} pour l'ontologie %{ont} non trouvée dans le système
-    ontology_not_found: Ontologie %{ont} non trouvée dans le système
-    problem_deleting_submission: "Problème lors de la suppression de la soumission %{id} pour l'ontologie %{ont} - %{class} : %{message}"
-    problem_refreshing_report: "Problème lors du rafraîchissement du rapport - %{class} : %{message}"
-    report_successfully_regenerated: Rapport régénéré avec succès le %{report_date_generated}
-    ontologies_report_retrieved: Rapport des Ontologies - %{ontologies} ontologies récupérées en %{time}s"
-    problem_retrieving_ontologies: Problème lors de la récupération du rapport des ontologies - %{message}
-    no_ontologies_parameter_passed: "Aucun paramètre d'ontologies passé. Syntaxe : ?ontologies=ONT1,ONT2,...,ONTN"
-    ontology_process_success: "Ontologie %{ont} %{success_keyword} avec succès,"
-    ontology_not_found_system: "Ontologie %{ont} non trouvée dans le système, "
-    ontology_process_error: "Problème %{error_keyword} l'ontologie %{ont} - %{class} : %{message},"
-    new_ontologies_created_title: "Les ontologies suivantes : %{count} ont été créées cette année"
-    turbo_confirm: "Êtes-vous sûr de vouloir %{name} ?"
     analytics:
-      total_ontologies: Ontologies Totales
-      ontologies_count: "%{size} nouvelle ontologie cette année"
-      ontologies_with_errors: Ontologies avec erreurs
-      total_visits: Visites totales
       active_users: Utilisateurs actifs
-      visit_users: "%{visits} utilisateurs depuis le mois dernier"
-      ontology_visits: Visites d'ontologies
-      unique_users_visits: Visites d'utilisateurs uniques
+      ontologies_count: "%{size} nouvelle(s) ontologie(s) cette année"
+      ontologies_with_errors: Ontologies avec des erreurs
+      ontology_visits: Visites de l'ontologie
       page_visits: Visites de page de ce mois
-    main:
-      cache_management: GESTION DU CACHE
-      clear_cache: Vider le cache de l'UI
-      reset_cache: Réinitialiser la connexion au cache de l'UI
-      clear_goo_cache: Vider le cache GOO
-      clear_http_cache: Vider le cache HTTP
-      version_management: GESTION DE VERSION
-      checking_for_updates: Vérification des mises à jour ...
-    memcache:
-      title: Statistiques Memcache
-    parse_log:
-      title: Journal d'analyse pour %{acronym}
-      log_file: "Fichier journal : %{path}"
-    index:
-      title: Administration
-      administration_console: Console d'administration
-      analytics: Analytique
-      site_administration: Administration du site
-      ontology_administration: Administration des ontologies
-      licensing: Licences
-      users: Utilisateurs
-      metadata_administration: Administration des métadonnées
-      groups: Groupes
-      categories: Catégories
-      persons_and_organizations: Personnes et Organisations
-      sparql: SPARQL
-      search: Recherche et Indexation
-      report_generated_on: "Rapport généré le :"
-      licensed_to: Licencié à
-      appliance_id: ID de l'appareil
-      valid_till: Valide jusqu'à
-      days_remaining: Jours restants
-      renew_license: Renouveler la licence
-
-    groups:
-      group_created: Groupe créé avec succès en %{time}s
-      group_error_creation: Problème lors de la création du groupe - %{message}
-      group_added_successfully: Nouveau groupe ajouté avec succès
-      group_updated_successfully: Groupe mis à jour avec succès en %{time}s
-      problem_of_updating: Problème lors de la mise à jour du groupe - %{message}
-      group_deleted_successfully: Groupe supprimé avec succès en %{time}s
-      problem_of_deleting: Problème lors de la suppression du groupe - %{message}
-      synchronization_of_groups: Synchronisation des groupes commencée avec succès
-      error_parsing: "Erreur d'analyse de la réponse JSON - %{class} : %{message}"
-      problem_synchronizing_groups: "Problème lors de la synchronisation des groupes - %{class} : %{message}"
-      edit_button: Éditer
-      delete: Supprimer
-      info_error_delete: "Impossible de supprimer ce groupe car il est encore utilisé"
-      turbo_confirm: Êtes-vous sûr ?
-      form:
-        acronym: Acronyme
-        name: Nom
-        description: Description
-        created: Créé
-        ontologies: Ontologies
-      new:
-        create_new_group: Créer un nouveau groupe
-        create_group: Créer groupe
-      index:
-        create_a_new_group: Créer un nouveau groupe
-        synchronize_groups_slices: Synchroniser les groupes avec les tranches
-        id: ID
-        count: COMPTE
-        actions: Actions
-        no_agents: Il n'y a actuellement aucun agent.
-      edit:
-        edit_group: Modifier le groupe
-        save: Sauvegarder
+      total_ontologies: Ontologies totales
+      total_visits: Nombre total de visites
+      unique_users_visits: Visites d'utilisateurs uniques
+      visit_users: "%{visits} utilisateurs depuis le mois dernier"
+    appliance_id: 'ID de la machine virtuelle : %{id}'
+    cache_flush_error: 'Problème lors du vidage du cache de l''interface utilisateur
+      - %{class} : %{message}'
+    cache_flush_success: Cache de l'UI vidé
+    cache_reset_error: Problème lors de la réinitialisation de la connexion au cache
+      de l'interface utilisateur - %{message}
+    cache_reset_success: Connexion au cache de l'interface utilisateur réinitialisée
     categories:
-      category_created: Catégorie créée avec succès en %{time}s
+      category_added_successfully: Nouvelle catégorie ajoutée
+      category_created: Catégorie créée en %{time}s
+      category_deleted_successfully: Catégorie supprimée en %{time}s
       category_error_creation: Problème lors de la création de la catégorie - %{message}
-      category_added_successfully: Nouvelle catégorie ajoutée avec succès
-      category_updated_successfully: Catégorie mise à jour avec succès en %{time}s
-      problem_of_updating: Problème lors de la mise à jour de la catégorie - %{message}
-      category_deleted_successfully: Catégorie supprimée avec succès en %{time}s
-      problem_of_deleting: Problème lors de la suppression de la catégorie - %{message}
-      category_used_parent: "Impossible de supprimer la catégorie, utilisée comme catégorie parente pour:"
-      edit_button: Éditer
+      category_updated_successfully: Catégorie mise à jour en %{time}s
+      category_used_parent: 'Impossible de supprimer la catégorie, utilisée comme
+        catégorie parente pour:'
       delete: Supprimer
-      info_error_delete: Impossible de supprimer cette catégorie car elle est encore utilisée
-      turbo_confirm: Êtes-vous sûr ?
-      form:
-        acronym: Acronyme
-        name: Nom
-        description: Description
-        created: Créé
-        ontologies: Ontologies
-        parent_category: Catégorie parent
       edit:
         edit_category: Modifier la catégorie
         save: Sauvegarder
-      new:
-        create_new_category: Créer une nouvelle catégorie
-        create_category: Créer catégorie
+      edit_button: Éditer
+      form:
+        acronym: Acronyme
+        created: Créé
+        description: Description
+        name: Nom
+        ontologies: Ontologies
+        parent_category: Catégorie parent
       index:
+        actions: Actions
+        count: Nombre
         create_a_new_category: Créer une nouvelle catégorie
         id: ID
-        count: COMPTE
-        actions: Actions
         no_categories: Il n'y a actuellement aucune catégorie.
-    licenses:
-      license_notification:
-        license_contact: >
-          Pour plus d'informations, envoyez un e-mail à <a href="mailto:support@ontoportal.org">support@ontoportal.org</a> ou visitez <a href="https://ontoportal.org/licensing" target="_blank">https://ontoportal.org/licensing</a>.
-        license_obtain: >
-          Si vous êtes le propriétaire de cette installation d'OntoPortal, vous pouvez visiter <a href="https://license.ontoportal.org" target="_blank">https://license.ontoportal.org</a> pour obtenir une licence.
-        license_expired: >
-          Nous sommes désolés, mais la licence de cette installation d'OntoPortal a expiré. Si vous êtes le propriétaire de cette installation d'OntoPortal, veuillez visiter <a href="https://license.ontoportal.org" target="_blank">https://license.ontoportal.org</a> pour renouveler votre licence.
-        license_trial:
-          one:
-            Cette installation de l'Appliance OntoPortal est une licence d'essai, qui expirera dans 1 jour.
-          other:
-            Cette installation de l'Appliance OntoPortal est une licence d'essai, qui expirera dans %{count} jours.
-      create:
-        success: Licence renouvelée avec succès !
-      label_close: Fermer
+      info_error_delete: Impossible de supprimer cette catégorie car elle est encore
+        utilisée
+      new:
+        create_category: Créer la catégorie
+        create_new_category: Créer une nouvelle catégorie
+      problem_of_deleting: Problème lors de la suppression de la catégorie - %{message}
+      problem_of_updating: Problème lors de la mise à jour de la catégorie - %{message}
+      turbo_confirm: Êtes-vous sûr ?
+    clear_goo_cache_error: 'Problème lors du vidage du cache Goo - %{class} : %{message}'
+    clear_goo_cache_success: Cache Goo vidé
+    clear_http_cache_error: 'Problème lors du vidage du cache HTTP - %{class} : %{message}'
+    clear_http_cache_success: Cache HTTP vidé
+    current_version: 'Version actuelle : %{version}'
+    error_update_info: Problème lors de la récupération des informations de mise à
+      jour - %{message}
+    groups:
+      delete: Supprimer
+      edit:
+        edit_group: Modifier le groupe
+        save: Sauvegarder
+      edit_button: Éditer
+      error_parsing: 'Erreur de traitement de la réponse JSON - %{class} : %{message}'
       form:
-        license_from_being_saved: "a empêché cette licence d'être sauvegardée :"
+        acronym: Acronyme
+        created: Créé
+        description: Description
+        name: Nom
+        ontologies: Ontologies
+      group_added_successfully: Nouveau groupe ajouté
+      group_created: Groupe créé en %{time}s
+      group_deleted_successfully: Groupe supprimé en %{time}s
+      group_error_creation: Problème lors de la création du groupe - %{message}
+      group_updated_successfully: Groupe mis à jour en %{time}s
+      index:
+        actions: Actions
+        count: Nombre
+        create_a_new_group: Créer un nouveau groupe
+        id: ID
+        no_agents: Il n'y a actuellement aucun agent.
+        synchronize_groups_slices: Synchroniser les groupes avec les slices
+      info_error_delete: Impossible de supprimer ce groupe car il est encore utilisé
+      new:
+        create_group: Créer un groupe
+        create_new_group: Créer un nouveau groupe
+      problem_of_deleting: Problème lors de la suppression du groupe - %{message}
+      problem_of_updating: Problème lors de la mise à jour du groupe - %{message}
+      problem_synchronizing_groups: 'Problème lors de la synchronisation des groupes
+        - %{class} : %{message}'
+      synchronization_of_groups: Synchronisation des groupes avec les slices commencée
+      turbo_confirm: Êtes-vous sûr ?
+    index:
+      administration_console: Console d'administration
+      analytics: Analytique
+      appliance_id: ID de l'appareil
+      categories: Catégories
+      days_remaining: Jours restants
+      groups: Groupes
+      licensed_to: Licencie attribuée à
+      licensing: Licences
+      metadata_administration: Administration des métadonnées
+      ontology_administration: Administration des ontologies
+      persons_and_organizations: Personnes et Organisations
+      renew_license: Renouveler la licence
+      report_generated_on: 'Rapport généré le :'
+      search: Recherche et Indexation
+      site_administration: Administration du portail
+      sparql: SPARQL
+      title: Administration
+      users: Utilisateurs
+      valid_till: Valide jusqu'à
+    licenses:
+      create:
+        success: Licence renouvelée
+      form:
+        license_from_being_saved: 'A empêché cette licence d''être sauvegardée :'
         paste_your_license: Collez votre clé de licence dans la zone de texte
         submit: Soumettre
+      label_close: Fermer
+      license_notification:
+        license_contact: 'Pour plus d''informations, envoyez un e-mail à <a href="mailto:support@ontoportal.org">support@ontoportal.org</a>
+          ou visitez <a href="https://ontoportal.org/licensing" target="_blank">https://ontoportal.org/licensing</a>.
+
+          '
+        license_expired: Nous sommes désolés, mais la licence de cette installation
+          d'OntoPortal a expiré. Si vous êtes le propriétaire de cette installation
+          d'OntoPortal, veuillez visiter <a href="https://license.ontoportal.org"
+          target="_blank">https://license.ontoportal.org</a> pour renouveler votre
+          licence.
+        license_obtain: Si vous êtes le propriétaire de cette installation d'OntoPortal,
+          vous pouvez visiter <a href="https://license.ontoportal.org" target="_blank">https://license.ontoportal.org</a>
+          pour obtenir une licence.
+        license_trial:
+          one: Cette installation de la machine virtuelle OntoPortal a une licence
+            provisoire, qui expirera dans %{count} jours.
+          other: Cette installation de la machine virtuelle OntoPortal a une licence
+            provisoire, qui expirera dans %{count} jours.
+    main:
+      cache_management: Gestion du cache
+      checking_for_updates: Vérification des mises à jour ...
+      clear_cache: Vider le cache de l'UI
+      clear_goo_cache: Vider le cache GOO
+      clear_http_cache: Vider le cache HTTP
+      reset_cache: 'Réinitialiser la connexion au cache de l''UI '
+      version_management: Gestion des versions
+    memcache:
+      title: Statistiques Memcache
+    new_ontologies_created_title: 'Les ontologies suivantes : %{count} ont été créées
+      cette année'
+    no_flush_command: Le cache de l'interface utilisateur ne répond pas à la commande
+      'flush_all'
+    no_ontologies_parameter_passed: 'Aucun paramètre d''ontologies passé. Syntaxe
+      : ?ontologies=ONT1,ONT2,...,ONTN'
+    no_record_exists: Aucun enregistrement existant pour l'ontologie %{acronym}
+    no_reset_command: Le cache de l'interface utilisateur ne répond pas à la commande
+      'reset'
+    ontologies_report_retrieved: Rapport des ontologies - %{ontologies} ontologies
+      récupérées en %{time}s"
+    ontology_not_found: Ontologie %{ont} non trouvée
+    ontology_not_found_system: Ontologie %{ont} non trouvée,
+    ontology_process_error: 'Problème %{error_keyword} l''ontologie %{ont} - %{class}
+      : %{message},'
+    ontology_process_success: Ontologie %{ont} %{success_keyword} avec succès,
+    parse_log:
+      log_file: 'Fichier journal : %{path}'
+      title: Journal de traitement pour %{acronym}
+    problem_deleting_submission: 'Problème lors de la suppression de la soumission
+      %{id} pour l''ontologie %{ont} - %{class} : %{message}'
+    problem_refreshing_report: 'Problème lors du rafraîchissement du rapport - %{class}
+      : %{message}'
+    problem_retrieving_ontologies: Problème lors de la récupération du rapport des
+      ontologies - %{message}
+    query_not_permitted: Requête non autorisée
+    refresh_report_with_ontologies: 'Rafraîchissement du rapport pour les ontologies
+      : %{ontologies} commencé'
+    refresh_report_without_ontologies: Rafraîchissement du rapport des ontologies
+      commencé
+    report_successfully_regenerated: Rapport régénéré le %{report_date_generated}
     search:
       index:
-        index_data: "DONNÉES INDEXES"
-        collections_management: "GESTION DES COLLECTIONS"
-        name: "Nom"
-        actions: "Actions"
-        select_model: "Sélectionnez un modèle à indexer"
-        ontology: "Ontologie"
-        agent: "Agent"
-        ontology_submission: "Soumission"
-        generate_schema: "Générer le schéma"
-        see_schema: "Voir le schéma"
-        see_indexed_data: "Voir les données indexées"
-      show:
-        field_name: "Nom du champ"
-        type: "Type"
-        multi_valued: "Multivalué"
-        indexed: "Indexé"
-        stored: "Stocké"
+        actions: Actions
+        agent: Agent
+        collections_management: Gestion des collections
+        generate_schema: Générer le schéma
+        index_data: Données Indexées
+        name: Nom
+        ontology: Ontologie
+        ontology_submission: Soumission
+        see_indexed_data: Voir les données indexées
+        see_schema: Voir le schéma
+        select_model: Sélectionnez un modèle à indexer
       search:
-        search_query: "Requête de recherche"
-        page: "Page"
-        page_size: "Taille de la page"
-        found_documents: "Trouvé %{count} documents"
-        id: "ID"
-        properties: "Propriétés"
+        found_documents: "%{count} documents trouvés"
+        id: ID
+        page: Page
+        page_size: Taille de la page
+        properties: Propriétés
+        search_query: Recherche
+        show_less: "- Afficher moins..."
         show_more: "+ Afficher plus ..."
-        show_less: "- Afficher moins ..."
-
+      show:
+        field_name: Nom du champ
+        indexed: Indexé
+        multi_valued: Multivalué
+        stored: Stocké
+        type: Type
+    submission_deleted_successfully: Soumission %{id} pour l'ontologie %{ont} supprimée
+    submission_not_found: Soumission %{id} pour l'ontologie %{ont} non trouvée
+    turbo_confirm: Êtes-vous sûr de vouloir %{name} ?
+    update_info_successfully: Informations de mise à jour récupérées
+  agents:
+    add_agent: Nouvel agent ajouté
+    agent_already_deleted: Agent %{id} déjà supprimé
+    agent_deleted_successfully: Agent %{id} supprimé
+    agent_usages_updated: Utilisations de l'agent mises à jour
+    delete: Supprimer
+    delete_error: Impossible de supprimer cet %{agent} car il est encore utilisé
+    errors:
+      invalid_url: L'identifiant doit être une URL ORCID/ROR valide
+      required: est requis et ne peut pas être vide
+      used_identifier: Cet identifiant est déjà utilisé par un autre agent
+    form:
+      acronym: Acronyme
+      affiliations: Affiliations
+      creator: Créateur
+      email: Email
+      homepage: Page d'accueil
+      identifiers: Identifiants
+      name: Nom
+      organization: Organisation
+      person: Personne
+      type: Type
+    index:
+      acronym: Acronyme
+      actions: Actions
+      create_new_agent: Créer un nouvel agent
+      first_name: Prénom
+      no_agents: Il n'y a actuellement aucun agent.
+      usages: Utilisations
+    modal_title: Utilisations de l'agent "%{name}"
+    not_found_agent: Agent avec id %{id}
+    not_used: Non utilisé
+    ontology_not_valid: 'l''ontologie n''est pas valide, voici les erreurs : '
+    save: Sauvegarder
+    see_usages_count: Voir les utilisations (%{count})
+    turbo_confirm: Êtes-vous sûr ?
+    update_agent: Agent mis à jour
   annotator:
-    title: Annotateur
-    description: Obtenez des annotations pour le texte avec des classes d'ontologie
-    input_hint: Entrez ou collez un texte à annoter...
-    options: Options
-    whole_word_only: Mot entier seulement
-    match_longest_only: Correspondance uniquement avec le plus long
-    include_mappings: Inclure les mappings
-    exclude_numbers: Exclure les chiffres
-    exclude_synonyms: Exclure les synonymes
-    select_umls_sementic_types: Sélectionner les types sémantiques UMLS
-    select_umls_sementic_groups: Sélectionner les groupes sémantiques UMLS
-    include_ancestors: Inclure les ancêtres jusqu'au niveau
-    include_score: Inclure le score
-    score_threshold: Filtrer par seuil de score
-    confidence_threshold: Filtrer par seuil de confiance
-    fastcontext: FastContext
-    lemmatize: Lématiser
-    context: Contexte
+    api_documentation: Documentation de l'API de l'annotateur
     certainty: Certitude
     class: Classe
-    ontology: Ontologie
-    negation: "Négation"
-    temporality: "Temporalité"
-    experiencer: Experiencer
-    score: Score
-    api_documentation: "Documentation de l'API de l'annotateur"
+    confidence_threshold: Filtrer par seuil de confiance
+    context: Contexte
+    description: Obtenez des annotations avec des classes d'ontologie pour le texte
+      donné
+    exclude_numbers: Exclure les nombres
+    exclude_synonyms: Exclure les synonymes
+    experiencer: Personne concernée
+    fastcontext: FastContext
     get_annotation: Obtenir des annotations
-    total_results: Résultats totaux
+    include_ancestors: Inclure les ancêtres jusqu'au niveau
+    include_mappings: Inclure les mappings
+    include_score: Inclure le score
+    input_hint: Entrez ou collez un texte à annoter...
     insert_sample_text: Insérer un texte d'exemple
-    sample_text: Il y a eu de nombreuses études récentes sur l'utilisation d'antagonistes microbiens pour contrôler les maladies causées par des bactéries phytopathogènes telluriques
-      et aériennes, dans le but de remplacer les méthodes actuelles de contrôle chimique et d'éviter l'utilisation extensive de fongicides, qui conduisent souvent à une résistance chez les pathogènes des plantes.
-      En agriculture, les microorganismes promoteurs de croissance des plantes et de biocontrôle ont émergé comme des alternatives sûres aux pesticides chimiques. Les espèces de Streptomyces et leurs
-      métabolites peuvent avoir un grand potentiel en tant qu'agents excellents pour contrôler divers phytopathogènes fongiques et bactériens.
+    lemmatize: Lématiser
+    match_longest_only: Mot le le plus long uniquement
+    negation: Négation
+    ontology: Ontologie
+    options: Options
+    sample_text: There has been many recent studies on the use of microbial antagonists
+      to control diseases incited by soilborne and airborne plant pathogenic bacteria
+      and fungi, in an attempt to replace existing methods of chemical control and
+      avoid extensive use of fungicides, which often lead to resistance in plant pathogens.
+      In agriculture, plant growth-promoting and biocontrol microorganisms have emerged
+      as safe alternatives to chemical pesticides. Streptomyces spp. and their metabolites
+      may have great potential as excellent agents for controlling various fungal
+      and bacterial phytopathogens.
+    score: Score
+    score_threshold: Filtrer par seuil de score
     select_ontologies: Sélectionner des ontologies
-  concepts:
-    error_valid_concept: "Erreur : Vous devez fournir un identifiant de concept valide"
-    missing_roots: Racines manquantes
-    date_sorted_list_error: Les Classes/Concepts n'ont pas défini de dates de <strong>création</strong> ou de <strong>modifications</strong> avec dcterms
-    list_error: La Collection n'a défini aucun membre
+    select_umls_sementic_groups: Sélectionner les groupes sémantiques UMLS
+    select_umls_sementic_types: Sélectionner les types sémantiques UMLS
+    temporality: Temporalité
+    title: Annotateur
+    total_results: Résultats totaux
+    whole_word_only: Mot entier seulement
+  application:
+    add_comment: Ajouter un commentaire
+    add_new_comment: Ajouter un nouveau commentaire
+    add_new_proposal: Ajouter une nouvelle proposition
+    add_proposal: Ajouter une proposition
+    beta_badge_text: Version bêta
+    beta_badge_tooltip: Cette fonctionnalité est expérimentale et peut avoir des problèmes
+    concept_not_found: Concept %{concept} non trouvé
+    error_load: 'Erreur : échec du chargement'
+    error_simplify_class: 'Échec de la simplification de la classe : %{cls}'
+    errors_in_fields: Erreurs dans les champs %{errors}
+    incomplete_simple_ontology: 'Ontologie simple incomplète : %{id}, %{ont}'
+    loading: Chargement en cours...
+    missing_class: Classe manquante %{root_child}
+    missing_class_ontology: Classe manquante %{acronym} / %{concept_id}
+    missing_roots: Racines manquantes %{id}
+    missing_roots_for_ontology: Racines manquantes pour %{acronym}
+    no_cache: 'Pas de cache ou cache expiré pour l''ontologie : %{id}'
+    not_found_message: Non trouvé
+    ontology_not_found: Ontologie %{acronym} non trouvée
+    powered_by: Basé sur OntoPortal
+    projects: Projets
+    provide_ontology_or_concept: Veuillez fournir un identifiant d'ontologie ou un
+      identifiant de concept avec un identifiant d'ontologie.
+    reply: Répondre
+    search_for_class: Veuillez rechercher une classe à l'aide du champ Jump To ci-dessus
+    try_again: Une erreur s'est produite, veuillez réessayer
+    watching: Surveiller
+  change_requests:
+    change_request_success_message: Votre demande de modification a été soumise! Voir
+      le %{url} sur GitHub.
     close: Fermer
-    use_jump_to: Utilisez le "Jump To" pour trouver une classe et afficher les détails, la visualisation, les notes et les mappages
-    instances: Instances
-    notes: Notes
+    comment: Commentaire
+    label: Libellé
+    submit: Soumettre
+    type: Type
+  check_resolvability:
+    check_resolvability_message_1: 'L''URL est résolvable et supporte les formats
+      suivants : %{supported_format}'
+    check_resolvability_message_2: 'L''URL est résolvable mais sont contenu n''est
+      pas négociable, elle supporte uniquement : %{supported_format}'
+    check_resolvability_message_3: L'URL n'est pas résolvable et sont contenu n'est
+      pas négociable (elle retourne %{status}).
+    content_negotiation:
+      content: La négociation de contenu, dans le contexte du Web sémantique, fait
+        référence au mécanisme par lequel deux parties communicantes, telles qu'un
+        client et un serveur, s'accordent sur la représentation la plus appropriée
+        d'une ressource pendant le processus de déréférenciation d'une URI ou IRI.
+        En d'autres termes, lorsqu'un client demande une ressource en déréférençant
+        une URI, il indique ses préférences pour le format des données de réponse
+        à travers des en-têtes HTTP. Le serveur, à son tour, examine ces préférences
+        et sélectionne la représentation la plus appropriée de la ressource en fonction
+        de ce qui est disponible.
+      title: Négociation de contenu
+    format_not_specified: Format non spécifié
+    how_it_works:
+      content_1: |
+        L'outil de vérification de la résolvabilité vous permet de tester si une URL donnée est résolvable. Il est basé sur la méthode HTTP HEAD.
+        Nous vérifions la résolvabilité d'une URL en envoyant une requête HEAD à l'URL et en vérifiant si le code de statut de la réponse est 200 (OK) et
+        si le type de contenu retourné est égal à l'un des %{resolvability_formats} suivants.
+      content_2: |
+        Nous avons un délai d'attente fixé à %{resolvability_timeout} secondes, donc si l'URL n'est pas résolvable dans ce délai, la vérification échouera.
+        Et un nombre maximal de redirections fixé à %{resolvability_max_redirections}, donc si l'URL n'est pas résolvable dans ce nombre de redirections, la vérification échouera.
+      title: Comment ça fonctionne
+    resolving_uri:
+      content: |-
+        Dans le contexte du web sémantique, le déréférencement se réfère au processus de résolution et d'obtention des données réelles associées à un identifiant de ressource uniforme (URI). En termes plus simples, cela implique de suivre un lien représenté par une URI/IRI pour récupérer des informations ou des ressources liées à cet identifiant.
+        Dans le Web sémantique, les URI sont utilisés pour identifier de manière unique les ressources, et le déréférencement permet aux systèmes d'accéder et de récupérer des données liées à ces ressources. Lorsqu'une URI/IRI est déréférencé, cela conduit généralement à la récupération de données RDF (Resource Description Framework) ou d'autres informations structurées qui décrivent la ressource dans un format lisible par une machine. Cela permet aux systèmes de comprendre et de traiter le sens des données liées, facilitant l'échange et l'intégration d'informations sur le web.
+      title: Résolution d'une URI
+    show_help: Afficher l'aide
+    uri_placeholder: Tapez une URI pour tester sa résolvabilité
+  collections:
+    error_valid_collection: 'Erreur : Vous devez fournir un identifiant de collection
+      valide'
+    id: ID
+    members_count: Nombre de membres
+    no_collections_alert: "%{acronym} ne contient pas de collections (skos:Collection)"
+    preferred_name: Nom préféré
+    type: Type
+  components:
+    all_languages: Toutes les langues
+    back: Retour
+    by: par
+    cancel_button: Annuler
+    check_resolvability: vérification de la résolvabilité...
+    classes: classes
+    concepts: concepts
+    copy_original_uri: Copier l'URI d'origine
+    copy_portal_uri: Copier l'URI de %{portal_name}
+    creation_date: Date de création %{date}
+    creative_commons_license: Licence Creative Commons
+    debug: Débogage
+    details_details: FAIR en détail...
+    empty_field: Les champs %{properties} sont vides
+    error_block: le bloc child_data_generator n'a pas fourni tous les arguments enfants
+    fair_score: Score FAIR
+    file_input_message: Glissez-déposez votre fichier ici ou parcourez les fichiers
+      sur votre appareil.
+    finish: Terminer
+    go_to_api: Aller à l'API
+    instances: instances
+    join_the_count: Rejoignez les %{count} utilisateurs, surveillant cette ressource
+      et soyez informé de toutes ses mises à jour
+    loading: Chargement
+    next: Suivant
+    notes: notes
+    notified_of_all_updates: Soyez le premier à surveiller cette ressource et soyez
+      informé de toutes ses mises à jour
+    open_source_license: Licence Open Source
+    projects: projets
+    resource: "%{sub_text} cette ressource"
+    save_button: Sauvegarder
+    see_less: Voir moins...
+    see_more: Voir plus...
+    select_anguage: Sélectionnez une langue
+    select_language: Sélectionnez une langue
+    show_less: "- Afficher moins..."
+    show_more: "+ Afficher plus ..."
+    submitted: Soumis
+    tree_view_empty: Pas de résultat
+    unwatch: Ne plus surveiller
+    view: Vue
+    view_of_the_ontology: Vue de l'ontologie %{ontology}
+    watch: Surveiller
+  concepts:
+    cancel: Annuler
+    close: Fermer
+    date_sorted_list_error: Les classes ou concepts ne fournissent pas de dates de
+      <strong>création</strong> (dc:created) ou de <strong>modification</strong> (cd:modified).
     details: Détails
-    visualization: Visualisation
+    error_valid_concept: 'Erreur : Vous devez fournir un identifiant de concept valide'
+    instances: Instances
+    list_error: La collection ne contient aucun membre
     mappings: Alignements
+    missing_roots: Racines manquantes
+    new_term_requests: Nouvelles demandes de termes
+    notes: Notes
     permanent_link_class: Obtenir un lien permanent vers cette classe
-
+    request_new_term: Proposer une nouvelle classe ou classe
+    request_term:
+      new_term_instructions: |-
+        <p>Cette ontologie s'intègre avec OntoloBridge, permettant aux utilisateurs de la communauté de suggérer des ajouts à l'ontologie publique. Complétez le modèle ci-dessous pour soumettre directement une demande de terme au Gestionnaire de l'Ontologie.</p>
+          <blockquote>
+            <p>Libellé du terme (obligatoire)<br>Nom suggéré pour le terme. Si un terme peut être décrit avec plus d'un synonyme, entrez uniquement le nom préféré ici.</p>
+          </blockquote>
+          <blockquote>
+            <p>Description du terme (obligatoire)<br>Une brève définition, description ou utilisation du terme suggéré. Les synonymes d'autres termes peuvent être listés dans cette section.</p>
+          </blockquote>
+          <blockquote>
+            <p>Superclasse (obligatoire)<br>Le terme parent du terme suggéré. Le terme parent doit être une entrée existante dans l'ontologie actuelle. La superclasse peut être sélectionnée directement à partir de l'arbre des classes.</p>
+          </blockquote>
+          <blockquote>
+            <p>Références (optionnel)<br>Fournissez des preuves que le terme demandé existe, telles tels que des IDs d'articles ou des liens vers d'autres ressources décrivant le terme.</p>
+          </blockquote>
+          <blockquote>
+            <p>Justification (optionnel)<br>Fournissez ici toute information supplémentaire concernant le terme demandé.</p>
+          </blockquote>
+    request_terms_instructions: |
+      Le texte ci-dessous est affiché à l'utilisateur comme les instructions sur la manière de demander de nouveaux termes pour votre ontologie.
+      Vous pouvez changer ce texte pour l'ontologie %{acronym} en cliquant n'importe où sur le texte existant pour ouvrir la boîte de dialogue d'édition.
+      Cliquez sur 'Soumettre les changements' pour sauvegarder ou sur 'Annuler' pour abandonner vos changements.
+    submit_changes: Soumettre les changements
+    use_jump_to: Utilisez le "Jump To" pour trouver une classe et afficher les détails,
+      la visualisation, les notes et les mappings
+    visualization: Visualisation
+  cookies_modal:
+    accept_button: Accepter
+    paragraph1: '%{portal} utilise des cookies pour vous aider à naviguer efficacement
+      et pour mesurer l''audience. Vous trouverez des informations détaillées sur
+      tous les cookies dans le lien "Vie privé"'
+    paragraph2: Les cookies sont fonctionnels et non facultatifs. En restant sur %{portal},
+      vous reconnaissez que les informations vous ont été transmises.
+    privacy_link: Vie privé
+    privacy_policy_anchor: "#h-vie-privee"
+    title: Gérer le consentement des cookies
+  date:
+    formats:
+      month_day_year: "%-d %b %Y"
+      monthfull_day_year: "%-d %b %Y"
+      year_month_day_concise: "%d-%m-%Y"
+  errors:
+    error_message: Nous sommes désolés mais quelque chose a mal tourné.
+    go_home_button: Accueil
+    not_found_page: Page non trouvée
+    notification_error: Nous avons été informés de cette erreur.
+    send_feedback_button: Soumettre un retour d'expérience
+  fair_score:
+    fairness_unreachable_warning: Problème d'accès au service d'évaluation du niveau
+      de FAIRness
+    go_to_api: Aller à l'API
+    metadata_properties: Les propriétés de métadonnées listées ci-dessous sont extraites
+      de %{mod_link}.
+    mod_link: MOD1.4
+    not_found: non trouvé
+    'null': 'null'
+    ontology_repository: Ce portail d'ontologies implémente %{mod_link} mais n'encode
+      pas nécessairement les métadonnées avec les mêmes propriétés (%{submission_link}).
+    see_metadata_used_properties: Voir les propriétés de métadonnées utilisées
+    see_possible_credits: Voir les crédits possibles
+    see_the_used_properties: voir les propriétés utilisées
+    view_fair_scores_definitions: 'Vous voyez le score d''évaluation de l''adéquation
+      avec les principes FAIR pour cette ontologie dans AgroPortal. Les scores FAIR
+      sont calculés avec la méthodologie O''FAIRe. Plus de détails ici : https://github.com/agroportal/fairness'
+  federation:
+    check_status: Vérification de la disponibilité de %{portal}
+    not_responding: ne répond pas.
+    results_from_external_portals: Résultats provenant de portails externes
+  feedback_mail:
+    email: 'E-mail: %{email}'
+    feedback: Feedback
+    location: 'Emplacement: %{location}'
+    name: 'Nom: %{name}'
+    tags: Tags
+  hide_advanced_options: Masquer les options avancées
   home:
-    ontoportal_instances: "Autres installations d’OntoPortal"
-    bug: Bug
-    proposition: Proposition
-    question: Question
-    ontology_submissions_request: Demande de soumissions d'ontologie
-    include_name: Veuillez inclure votre nom
-    include_email: Veuillez inclure votre email
-    include_comment: Veuillez inclure votre commentaire
-    fill_text: Veuillez remplir le texte approprié à partir de l'image fournie
-    notice_feedback: Le retour a été envoyé
     account_title: Informations sur le compte
     agroportal_figures: "%{site} en chiffres"
-    benefit1: Découvrir de nouvelles perspectives et connaissances en explorant d'autres ontologies ou ressources sémantiques dans le répertoire.
-    benefit2: Contribuez au partage de connaissances et à l'interopérabilité sémantique dans votre domaine.
-    benefit3: Cartographiez votre ontologie avec d'autres ontologies pertinentes dans le domaine et collaborez avec d'autres utilisateurs.
-    benefit4: Obtenir des retours et des suggestions d'autres utilisateurs qui peuvent utiliser et commenter votre ontologie.
-    benefit5: Décrire précisément votre ontologie avec des métadonnées pertinentes et obtenir votre score FAIR.
+    average: Moyenne
+    benefit1: Découvrir de nouvelles connaissances en explorant d'autres ontologies
+      ou ressources sémantiques dans le portail.
+    benefit2: Contribuez au partage de connaissances et à l'interopérabilité sémantique
+      dans votre domaine.
+    benefit3: Aliogner votre ontologie avec d'autres ontologies pertinentes dans le
+      domaine et collaborez avec d'autres utilisateurs.
+    benefit4: Obtenir des retours d'expérience et des suggestions d'autres utilisateurs
+      qui peuvent utiliser et commenter votre ontologie.
+    benefit5: Décrire précisément votre ontologie avec des métadonnées pertinentes
+      et obtenir son score FAIR.
+    bug: Bug
+    classes: Classes
+    discover_ontologies_button: Découvrir des ontologies
     fair_details: Voir les détails
     fairness: Score FAIR
+    feedback:
+      bug: Bug
+      email: Email
+      error_on_form: Erreurs dans le formulaire
+      feedback: Commentaires
+      feedback_complete:
+        message: Merci d'avoir pris le temps de partager votre retour avec nous. Notre
+          équipe de support examinera votre message et vous répondra dès que possible.
+          Nous apprécions votre opinion et sommes reconnaissants de votre aide pour
+          améliorer nos services. Merci de votre soutien !
+        title: Commentaire envoyé
+      feedback_hi_text: Bonjour
+      feedback_info_text: vous pouvez utiliser le formulaire ci-dessous ou nous envoyer
+        un email directement à
+      feedback_info_text_rest: ou nous laisser une github issue ici
+      leave_your_feedback: Laissez votre commentaire
+      name: Nom
+      ontology_submissions_request: Demande de soumissions d'ontologie
+      optional: "(optionnel)"
+      proposition: Proposition
+      proposition_url_page: URL de la page en erreur ou proposition
+      question: Question
+      send: Envoyer
+      tags: Tags
+    fill_text: Veuillez remplir le texte approprié à partir de l'image fournie
     get_annotations: Obtenir des annotations
     get_recommendations: Obtenir des recommandations
+    include_comment: Veuillez inclure votre commentaire
+    include_email: Veuillez inclure votre email
+    include_name: Veuillez inclure votre nom
     index:
       tagline: Le foyer des ontologies et des artefacts sémantiques dans la biodiversité et les domaines connexes.
       title: Bienvenue sur %{site}
       welcome: Bienvenue sur %{site},
+    individuals: Individus
+    info_tooltip_text: 'Vous voyez les scores moyens pour toutes les ontologies publiques
+      dans AgroPortal. Les scores FAIR sont calculés avec la méthodologie O''FAIRe.
+      Plus de détails ici : https://github.com/agroportal/fairness'
+    mappings: Alignements
+    max: Max
+    min: Min
+    notice_feedback: Le retour d'expéreince a été envoyé
+    ontologies: Ontologies
+    ontology_submissions_request: Demande de soumissions d'ontologie
     ontology_upload: Vous souhaitez partager une ontologie ?
-    ontology_upload_benefits: 'En téléchargeant et partageant votre ontologie sur %{site}, vous pourrez:'
+    ontology_upload_benefits: 'En téléchargeant et partageant votre ontologie sur
+      %{site}, vous pourrez :'
     ontology_upload_button: Soumettre une ontologie
-    discover_ontologies_button: Découvrir des ontologies
-    ontology_upload_desc: Télécharger une ontologie ou un autre type d'artefact sémantique (vocabulaire, terminologie, thésaurus, ...) est un moyen de partager vos connaissances avec les autres.
-    paste_text_prompt: Entrez un paragraphe de texte ou quelques mots-clés...
+    ontology_upload_desc: Déposer une ontologie ou un autre artefact sémantique (vocabulaire,
+      terminologie, thésaurus, ...) est un moyen de partager vos connaissances avec
+      les autres.
+    ontoportal_description: L'OntoPortal Alliance %{ontoportal_link} est un consortium
+      d'équipes de recherche et d'infrastructure dédiées à promouvoir le développement
+      de portails d'ontologies et de catalogues d'artefacts sémantiques basés sur
+      le logiciel OntoPortal %{github_link} ouvert et collaboratif. Ci-dessous se
+      trouvent les portails publics et ouverts actuels construits avec la technologie
+      maintenue par l'Alliance.
+    ontoportal_instances: Autres installations d’OntoPortal
+    paste_text_prompt: Entrez un court texte ou quelques mots-clés...
+    projects: Projets
+    properties: Propriétés
+    proposition: Proposition
+    question: Question
     recommender_annotator: Recommandeur et Annotateur
+    see_details: Voir les détails
+    slices_description: Les "slices" permettent aux utilisateurs d'interagir (à la
+      fois via l'API ou l'interface utilisateur) uniquement avec un sous-ensemble
+      d'ontologies dans AgroPortal. Si vous parcourez une slice, toutes les fonctionnalités
+      du portail seront limitées au sous-ensemble choisi; cela permet aux utilisateurs
+      de se concentrer sur leurs cas d'utilisation spécifiques. Sur AgroPortal, les
+      slices et les groupes sont synchronisés, de sorte que chaque groupe a une slice
+      correspondante affichant uniquement les ontologies de ce groupe.
+    suggest_slice: Proposer un nouveau groupe/slice
     support_and_collaborations: Support & Collaborations
     see_details: Voir les détails
     info_tooltip_text: "Vous voyez les scores moyens pour toutes les ontologies publiques dans Biodivportal. Les scores FAIR sont calculés avec la méthodologie O'FAIRe. Plus de détails ici : https://github.com/agroportal/fairness"
@@ -393,91 +645,151 @@ fr:
     ontoportal_description: "L'OntoPortal Alliance %{ontoportal_link} est un consortium d'équipes de recherche et d'infrastructure dédiées à promouvoir le développement de portails d'ontologies et de catalogues d'artefacts sémantiques basés sur le logiciel OntoPortal %{github_link} ouvert et collaboratif. Ci-dessous se trouvent les portails publics et ouverts actuels construits avec la technologie maintenue par l'Alliance."
     viewing_slice: "Affichage de la slice:"
     view_full_site: Voir le site complet
-
+    viewing_slice: 'Affichage de la slice:'
+  instances:
+    id: ID
+    label: Label
+    type: Type
+  label_xl:
+    error_valid_label_xl: 'Erreur : Vous devez fournir un identifiant de label_xl
+      valide'
   landscape:
-    #select_ontologies: Commencez à taper pour sélectionner des ontologies ou laissez vide pour les utiliser toutes
-    classes: Nombre de classes
-    individuals: Nombre d'individus
-    properties: Nombre de propriétés
-    max_depth: Profondeur maximale
-    max_child_count: Nombre maximal d'enfants
-    average_child_count: Nombre moyen d'enfants
-    classes_with_one_child: Classes avec un enfant
-    classes_with_more_than_25_children: Classes avec plus de 25 enfants
-    classes_with_no_definition: Classes sans définition
-    number_of_xioms_triples: Nombre d'axiomes (triplets)
-    projects_count: "%{count} projets"
-    notes_count: "%{count} notes"
-    reviews_count: "%{count} critiques"
     as_contact_count: "%{count} comme contact"
     as_contributor_count: "%{count} comme contributeur"
     as_creator_count: "%{count} comme créateur"
-    as_curator_count: "%{count} comme conservateur"
-    contributions: "Contributions : %{title}"
-    published_ontologies: publié %{count} ontologies
-    funded_ontologies: financé %{count} ontologies
-    endorsed_ontologies: approuvé %{count} ontologies
-    number_of_ontologies_using_format: Nombre d'ontologies utilisant ce format
-    number_of_ontologies_of_type: Nombre d'ontologies de ce type d'ontologie
-    number_of_ontologies_of_formality_level: Nombre d'ontologies de ce niveau de formalité
-    number_of_ontologies_in_catalog: Nombre d'ontologies dans ce catalogue
-    number_of_ontologies: Nombre d'ontologies
-    number_of_ontologies_with_class_count_in_range: Nombre d'ontologies avec un nombre de classes dans cette plage
+    as_curator_count: "%{count} comme curateur"
     average: Moyenne
-    fairness_interface_introduction: Cette interface montre comment une ontologie ou un groupe a répondu avec succès aux questions d'évaluation de l'équité FAIR d'O’FAIRe
-    fairness_interface_details: Voir les détails pour chaque ontologie sur les pages de résumé de l'ontologie spécifique
-    fairness_interface_hover_instruction: survolez un principe pour voir les détails
+    average_child_count: Nombre moyen d'enfants
     average_metrics: Métriques moyennes
     category: catégorie
+    classes: Nombre de classes
+    classes_with_more_than_25_children: Classes avec plus de 25 enfants
+    classes_with_no_definition: Classes sans définition
+    classes_with_one_child: Classes avec un enfant
+    contributions: 'Contributions : %{title}'
+    endorsed_ontologies: "%{count} ontologies approuvées"
+    fairness_interface_details: Voir les détails pour chaque ontologie sur les pages
+      de résumé de l'ontologie spécifique
+    fairness_interface_hover_instruction: survolez un principe pour voir les détails
+    fairness_interface_introduction: Comment une ontologie ou un groupe a répondu
+      avec succès aux questions d'évaluation de FAIRness d'O’FAIRe
     filter_network: Filtrer le réseau
-    funding_endorsing_organizations: Organisations finançant et approuvant le plus d'ontologies
+    funded_ontologies: financé %{count} ontologies
+    funding_endorsing_organizations: Organisations finançant et approuvant le plus
+      d'ontologies
     group: groupe
     groups_and_categories: Groupes et Catégories
-    intro: Visualiser le panorama de toutes les ontologies sur %{site} via l'agrégation des métadonnées.
+    individuals: Nombre d'individus
+    intro: Visualiser le panorama de toutes les ontologies sur %{site} via l'agrégation
+      des métadonnées.
+    max_child_count: Nombre maximal d'enfants
+    max_depth: Profondeur maximale
     more_properties_charts: Plus de graphiques de propriétés
     most_active_ontologies: Ontologies les plus actives
     most_active_organizations: Organisations les plus actives
     most_active_people: Personnes les plus actives
-    most_active_people_as_reviewer: Compte utilisateur le plus actif
-    most_mentioned_people: Personnes les plus mentionnées comme contact, créateur, contributeur ou conservateur
-    most_mentioned_people_as_reviewer: Compte utilisateur ayant publié des notes, critiques et projets
+    most_active_people_as_reviewer: Comptes des utilisateurs les plus actif
+    most_mentioned_people: Personnes les plus mentionnées comme contact, créateur,
+      contributeur ou curateur
+    most_mentioned_people_as_reviewer: Comptes utilisateur ayant publié des notes,
+      commentaires et projets
+    notes_count: "%{count} notes"
+    number_of_ontologies: Nombre d'ontologies
+    number_of_ontologies_in_catalog: Nombre d'ontologies dans ce catalogue
+    number_of_ontologies_of_formality_level: Nombre d'ontologies de ce niveau de formalité
+    number_of_ontologies_of_type: Nombre d'ontologies de ce type d'ontologie
+    number_of_ontologies_using_format: Nombre d'ontologies utilisant ce format
+    number_of_ontologies_with_class_count_in_range: Nombre d'ontologies avec un nombre
+      de classes dans cette plage
+    number_of_xioms_triples: Nombre d'axiomes (triplets)
     ontologies_activity_on: Activité des ontologies
     ontologies_by: Ontologies par %{type}
     ontologies_contributors: Contributeurs au développement des ontologies
-    ontologies_count_by_catalog: Nombre d'ontologies dans chaque catalogue d'artefacts sémantiques
+    ontologies_count_by_catalog: Nombre d'ontologies dans chaque catalogue d'artefacts
+      sémantiques
     ontologies_formats: Langage de représentation
     ontologies_languages: Langues naturelles
     ontologies_licenses: Licences
-    ontologies_with_notes_reviews_projects: Ontologies avec notes, critiques et projets
+    ontologies_properties: Propriétés des ontologies
+    ontologies_with_notes_reviews_projects: Ontologies avec des notes, commentaires
+      et projets
     ontology_fairness_evaluator: Évaluateur de l'équité FAIR des ontologies (O’FAIRe)
     ontology_formality_levels: Niveaux de formalité
-    ontology_properties_pie_charts: Graphiques à secteurs relatifs aux propriétés de description des objets (c.-à-d., les propriétés de métadonnées utilisées pour décrire les objets d'ontologie).
-    ontology_relations_network: Réseau de relations d'ontologie
+    ontology_properties_pie_charts: Graphiques relatifs aux propriétés de description
+      des objets (c.-à-d., les propriétés de métadonnées utilisées pour décrire les
+      objets d'ontologie).
+    ontology_relations_network: Réseau des relations des ontologies
     ontology_tools: Outils les plus utilisés pour construire des ontologies
-    owl_ontology_author_uris: Propriétés utilisées pour spécifier l'auteur d'un objet
-    owl_ontology_definition_uris: Propriétés utilisées pour spécifier la définition d'objets
-    owl_ontology_preflabel_uris: Propriétés utilisées pour spécifier le libellé préféré d'objets
-    owl_ontology_synonym_uris: Propriétés utilisées pour spécifier les synonymes d'objet
-    properties_usage_proportion: Graphiques à secteurs liés aux valeurs les plus fréquentes pour certaines propriétés de métadonnées
+    owl_ontology_author_uris: Propriétés utilisées pour spécifier l'auteur des objets
+    owl_ontology_definition_uris: Propriétés utilisées pour spécifier la définition
+      des objets
+    owl_ontology_preflabel_uris: Propriétés utilisées pour spécifier le libellé préféré
+      des objets
+    owl_ontology_synonym_uris: Propriétés utilisées pour spécifier les synonymes des
+      objets
+    projects_count: "%{count} projets"
+    properties: Nombre de propriétés
+    properties_usage_proportion: Graphiques à secteurs liés aux valeurs les plus fréquentes
+      pour certaines propriétés de métadonnées
     properties_use: Utilisation de la propriété
-    relations_between_stored_ontologies: Ensemble de relations entre les ontologies de %{site} telles que capturées par les métadonnées. Les ontologies en vert sont stockées dans le répertoire tandis que celles en bleu sont des ressources externes.
+    published_ontologies: "%{count} ontologies publiées"
+    relations_between_stored_ontologies: Ensemble de relations entre les ontologies
+      de %{site} telles que déclarées dans les métadonnées. Les ontologies en vert
+      sont stockées dans le répertoire tandis que celles en bleu sont des ressources
+      externes.
+    reviews_count: "%{count} commentaires"
     size: taille
-    title: "Paysage"
-    ontologies_properties: Propriétés des ontologies
-
+    title: Panorama
+  language:
+    content_language_help_text_1: Indiquez la langue dans laquelle le contenu de cette
+      ressource sera affichée.
+    content_language_help_text_2: Les langues disponibles sont définies par l'administrateur
+      de la ressource.
+    portal_language_help_text: Indiquez la langue dans laquelle les interfaces doivent
+      apparaître
+    search_language_help_text: Indiquez la langue dans laquelle effectuer la recherche,
+      en restreignant les résultats à des termes dans cette langue
+    translation_not_available: Traduction en %{language} non disponible
   layout:
+    footer:
+      about: À propos
+      about_us: À propos de nous
+      acknowledgments: Remerciements
+      agreements: Légal
+      agro_documentation: Documentation d'AgroPortal
+      api: API
+      cite_us: Nous citer
+      contact_us: Contactez-nous
+      documentation: Documentation
+      issues_and_requests: Problèmes et demandes
+      legal_notices: Mentions légales
+      legal_notices_anchor: "#h-mentions-legales"
+      ontoportal: OntoPortal
+      privacy_policy: Politique de confidentialité
+      privacy_policy_anchor: "#h-vie-privee"
+      products: Produits
+      projects: D2KAB
+      release_notes: Notes de version
+      sparql: SPARQL
+      support: Support
+      team: Équipe
+      terms: Termes et conditions
+      terms_anchor: "#h-conditions-generales-dutilisation-dagroportal-francais"
+      tools: Outils
+      wiki: Wiki
     header:
       account_setting: Paramètres du compte
       annotator: Annotateur
       browse: Parcourir
+      cite_us: Nous citer
       documentation: Documentation
       help: Aide
-      landscape: Paysage
+      landscape: Panorama
       login: Connexion
       logout: Déconnexion
       mappings: Alignements
-      recommender: Recommandeur
       publications: Publications
+      recommender: Recommandeur
       release_notes: Notes de version
       search_prompt: Rechercher dans %{portal_name} ...
       submit_feedback: Envoyer un retour
@@ -510,195 +822,523 @@ fr:
       projects: D2KAB
       team: Équipe
     notices:
-      slice: Tranche
       at: à
+      slice: Slice
       visit_the_site: visitez le site complet
-
   login:
-    invalid_account_combination: "Combinaison nom de compte/mot de passe invalide"
-    authentication_failed: "L'authentification %{provider} a échoué"
     admin_logged_out: Déconnecté <b>%{old_user}</b>, retourné à <b>%{user}</b>
-    user_logged_out: Vous vous êtes déconnecté avec succès
-    try_again_notice: ". Veuillez réessayer."
-    reset_password_again: ". Veuillez réinitialiser votre mot de passe à nouveau."
-    custom_ontology_set: "L'affichage est maintenant basé sur votre <a href='/account#custom_ontology_set'>Ensemble d'Ontologies Personnalisé</a>."
-    welcome: "Bienvenue <b>"
-    error_account_name: Veuillez entrer un nom de compte
-    error_password: Veuillez entrer un mot de passe
+    authentication_failed: L'authentification %{provider} a échoué
+    back_home_button: Retour à l'accueil
+    custom_ontology_set: L'affichage est maintenant basé sur votre <a href='/account#custom_ontology_set'>Ensemble
+      personnalisé d'ontologies</a>.
+    email: Email
+    email_address_associated: Entrez l'adresse email associée à votre compte et nous
+      vous enverrons un email avec les instructions pour réinitialiser votre mot de
+      passe.
+    email_placeholder: Entrez l'email
     enter_email: Entrez votre nom d'utilisateur
     enter_password: Entrez votre mot de passe
+    error_account_name: Veuillez entrer un nom de compte
+    error_password: Veuillez entrer un mot de passe
     forgot_password: Mot de passe oublié ?
-    private_ontology: Cette ontologie est privée. Veuillez vous connecter.
+    invalid_account_combination: Combinaison nom de compte/mot de passe invalide
+    invalid_login: Erreurs dans le formulaire
+    login_with_provider: Se connecter avec %{provider}
     no_account: Vous n'avez pas de compte ?
     password: Mot de passe
-    register: S'inscrire
-    title: Connexion
-    username_or_email: Nom d'utilisateur
-    login_with_provider: Se connecter avec %{provider}
-    reset_password_message: Un email de réinitialisation de mot de passe a été envoyé à votre adresse email, veuillez suivre les instructions pour réinitialiser votre mot de passe.
-    back_home_button: Retour à l'accueil
+    private_ontology: Cette ontologie est privée. Veuillez vous connecter.
     recover_password: Récupérer le mot de passe
-    email: Email
-    user: utilisateur
-    email_address_associated: Entrez l'adresse email associée à votre compte et nous vous enverrons un email avec les instructions pour réinitialiser votre mot de passe.
-    email_placeholder: Entrez l'email
+    register: S'inscrire
+    reset_password_again: ". Veuillez à nouveau réinitialiser votre mot de passe."
+    reset_password_message: Un email de réinitialisation de mot de passe a été envoyé
+      à votre adresse email, veuillez suivre les instructions pour réinitialiser votre
+      mot de passe.
     send_instructions: Envoyer les instructions
-
-  statistics:
-    title: "Statistiques de %{portal}"
-    lead: (dernières %{last_years} années)
-    ontologies: Ontologies
-    users: Utilisateurs
-    projects: Projets
-    date: Date
-    ontology_visits: Visites d'ontologies
-
+    title: Connexion
+    try_again_notice: ". Veuillez réessayer."
+    user: Utilisateur
+    user_logged_out: Vous vous êtes déconnecté avec succès
+    username_or_email: Nom d'utilisateur
+    welcome: Bienvenue <b>
   mappings:
-    create_new_mapping: Créer un nouveau mapping
     all: Tous
-    description: Plongez dans une vue d'ensemble des mappings dans la vue en bulles, localisez efficacement une ontologie spécifique dans la vue en tableau ou téléchargez vos propres mappings.
-    tabs:
-      bubble_view: Vue en bulles
-      table_view: Vue en tableau
-      upload_mappings: Télécharger des mappings
-    types_description:
-      cui: Créé entre 2 concepts ayant le même CUI (Identifiants Uniques de Concepts)
-      loom: Mappings lexicaux créés entre 2 concepts avec des libellés très similaires (nom préféré)
-      rest: Un mapping ajouté par un utilisateur via l'API REST (ou l'interface utilisateur, qui appelle l'API pour le créer)
-      same_uri: Créé entre 2 concepts ayant la même URI.
-      skos: Mapping basés sur des relations SKOS (par exemple, skos:exactMatch ou skos:closeMatch)
-
-    filter_ontologies: Filtrer les ontologies dans la vue en bulles
-    filter_bubbles: Filtrer les bulles
-    external_mappings: "Mappings externes (%{number_with_delimiter})"
-    interportal_mappings: "Mappings interportails - %{acronym} (%{number_with_delimiter})"
-    test_bulk_load: Ceci sont les mappings créés pour tester le chargement en masse
-    mapping_created: Mapping créé
-    mapping_updated: Mapping mis à jour
-    mapping_deleted: "%{map_id} supprimé avec succès"
-    mapping_not_found: "Mapping %{id} non trouvé"
-    error_of_source_and_target: Les concepts source et cible doivent être spécifiés
-    mapping_issue: "Problème de mapping avec '%{mapping}' : %{message}"
-    find_mappings: Trouver tous les mappings d'une classe/concept
-    intro: Trouver tous les mappings d'une ontologie
-    loading_mappings: Chargement des mappings...
-    no_mappings_available: Aucun mapping disponible
-    title: Mappings
-    upload_mappings: Télécharger des mappings
-    select_ontologies_list: Sélectionner les ontologies
     bubble_view_legend:
-      bubble_size: "Taille de la bulle :"
-      bubble_size_desc: "Le nombre total de correspondances avec toutes les autres ontologies."
-      color_degree: "Degré de couleur :"
-      color_degree_desc: "Le nombre de correspondances avec l'ontologie sélectionnée."
-      yellow_bubble: "Bulle jaune : "
-      selected_bubble: "La bulle sélectionnée."
-      less_mappings: "Moins de correspondances"
-      more_mappings: "Plus de correspondances"
-    count:
-      ontology: Ontologie
-      mappings: Mappings
-      no_mappings: Il n'y a aucun mapping vers ou depuis cette ontologie
-    form:
-      source_class: Classe source
-      mapping_name: Description du mapping (nom)
-      contact_info: Informations de contact
-      mapping_source_name: Nom source (ID de l'ensemble de mappings)
-      mapping_comment: Commentaire
-      mapping_relation: Type de relation de mapping
-      save: Enregistrer
-    mapping_table:
-      mapping_to: Mapping vers
-      relations: Relations
-      source: Source
-      type: Type
-      actions: Actions
-      no_mappings: Il n'y a actuellement aucun mapping pour cette classe.
-    mapping_type_selector:
-      mapping_type: Type de mapping
-      internal: Interne
-      interportal: Interportail
-      external: Externe
-      target_class: Classe cible
-      details: Détails
-      ontology_acronym: Ontologie (acronyme)
-      class: Classe
-      ontology_acronym_placeholder: Entrez l'ACRONYM de l'ontologie
-      class_uri_placeholder: Entrez l'URI de la classe
-      ontology_uri_placeholder: Entrez l'URI de l'ontologie
-    show_line:
-      edit_modal: Modifier
-      delete_button: Supprimer
-      turbo_confirm: Êtes-vous sûr(e) ?
-      edit_mapping: Modifier le mapping pour %{preflabel}
-    show:
-      no_mappings_found: Aucun mapping trouvé
+      bubble_size: 'Taille de la bulle :'
+      bubble_size_desc: Le nombre total de correspondances avec toutes les autres
+        ontologies.
+      color_degree: 'Degré de couleur :'
+      color_degree_desc: Le nombre de correspondances avec l'ontologie sélectionnée.
+      less_mappings: Moins de correspondances
+      more_mappings: Plus de correspondances
+      selected_bubble: La bulle sélectionnée.
+      yellow_bubble: 'Bulle jaune :'
     bulk_loader:
+      loaded_mappings:
+        actions: Actions
+        id: Id
+        mappings_created: "%{size} mappings créés"
+        properties: Propriétés
+        relation: Relation
+        see_other_properties: Voir d'autres propriétés
+        source: Source
+        target: Cible
       loader:
         example_of_valid_file: Voir un exemple de fichier valide
         save: Enregistrer
-      loaded_mappings:
-        mappings_created: "%{size} mappings créés avec succès"
-        id: ID
-        source: Source
-        target: Cible
-        relation: Relation
-        properties: Propriétés
-        actions: Actions
-        see_other_properties: Voir d'autres propriétés
-
-
-  agents:
-    errors:
-      required: est requis et ne peut pas être vide
-      used_identifier: Cet identifiant est déjà utilisé par un autre agent
-      invalid_url: L'identifiant doit être une URL ORCID/ROR valide
-    not_found_agent: Agent avec id %{id}
-    add_agent: Nouvel agent ajouté avec succès
-    update_agent: Agent mis à jour avec succès
-    agent_usages_updated: Utilisations de l'agent mises à jour avec succès
-    agent_already_deleted: Agent %{id} déjà supprimé
-    agent_deleted_successfully: Agent %{id} supprimé avec succès
-    ontology_not_valid: "l'ontologie n'est pas valide, voici les erreurs : "
-    save: Sauvegarder
-    not_used: Non utilisé
-    see_usages_count: Voir les utilisations (%{count})
-    delete: Supprimer
-    delete_error: "Impossible de supprimer cet %{agent} car encore utilisé"
-    turbo_confirm: Êtes-vous sûr ?
-    modal_title: "Utilisations de l'agent \"%{name}\""
+    count:
+      mappings: Mappings
+      no_mappings: Il n'y a aucun mapping vers ou depuis cette ontologie.
+      ontology: Ontologie
+    create_new_mapping: Créer un nouveau mapping
+    description: Plongez dans une vue d'ensemble des mappings avec la vue en bulles,
+      localisez efficacement une ontologie spécifique dans la vue en tableau ou téléchargez
+      vos propres mappings.
+    error_of_source_and_target: Les classes ou concepts source et cible doivent être
+      spécifiés
+    external_mappings: Mappings externes (%{number_with_delimiter})
+    filter_bubbles: Filtrer les bulles
+    filter_ontologies: Filtrer les ontologies dans la vue en bulles
+    find_mappings: Trouver tous les mappings d'une classe/concept
     form:
-      type: Type
-      person: Personne
-      organization: Organisation
-      name: Nom
-      email: Email
-      acronym: Acronyme
-      homepage: Page d'accueil
-      creator: Créateur
-      identifiers: Identifiants
-      affiliations: Affiliations
-    index:
-      create_new_agent: Créer un nouvel agent
-      first_name: Prénom
-      acronym: Acronyme
-      usages: Utilisations
+      contact_info: Informations de contact
+      mapping_comment: Commentaire
+      mapping_name: Description de l'alignement (nom)
+      mapping_relation: Type de relation de mapping
+      mapping_source_name: Nom source (ID de l'ensemble de mappings)
+      save: Enregistrer
+      source_class: Classe source
+    interportal_mappings: Mappings interportails - %{acronym} (%{number_with_delimiter})
+    intro: Trouver tous les mappings d'une ontologie
+    loading_mappings: Chargement des mappings...
+    mapping_created: Mapping créé
+    mapping_deleted: "%{map_id} supprimé"
+    mapping_issue: 'Problème de mapping avec ''%{mapping}'' : %{message}'
+    mapping_not_found: Mapping %{id} non trouvé
+    mapping_table:
       actions: Actions
-      no_agents: Il n'y a actuellement aucun agent.
-
-  ontology_details:
+      mapping_to: Mapping vers
+      no_mappings: Il n'y a actuellement aucun mapping pour cette classe ou concept.
+      relations: Relations
+      source: Source
+      type: Type
+    mapping_type_selector:
+      class: Classe
+      class_uri_placeholder: Entrez l'URI de la classe
+      details: Détails
+      external: Externe
+      internal: Interne
+      interportal: Interportail
+      mapping_type: Type de mapping
+      ontology_acronym: Ontologie (acronyme)
+      ontology_acronym_placeholder: Entrez l'acronyme de l'ontologie
+      ontology_uri_placeholder: Entrez l'URI de l'ontologie
+      target_class: Classe cible
+    mapping_updated: Mapping mis à jour
+    no_mappings_available: Aucun mapping disponible
+    select_ontologies_list: Sélectionner les ontologies
+    show:
+      no_mappings_found: Aucun mapping trouvé
+    show_line:
+      delete_button: Supprimer
+      edit_mapping: Modifier le mapping pour %{preflabel}
+      edit_modal: Modifier
+      turbo_confirm: Êtes-vous sûr ?
+    tabs:
+      bubble_view: Vue en bulles
+      table_view: Vue en tableau
+      upload_mappings: Charger des mappings
+    test_bulk_load: Ce sont les mappings créés pour tester le chargement en masse
+    title: Mappings
+    types_description:
+      cui: Créé entre 2 concepts ayant le même CUI (Identifiants Uniques de Concepts)
+      loom: Mappings lexicaux créés entre 2 concepts avec des libellés très similaires
+        (nom préféré)
+      rest: Un mapping ajouté par un utilisateur via l'API REST (ou l'interface utilisateur,
+        qui appelle l'API pour le créer)
+      same_uri: Créé entre 2 concepts ayant la même URI.
+      skos: Mapping basés sur des relations SKOS (par exemple, skos:exactMatch ou
+        skos:closeMatch)
+    upload_mappings: Charger des mappings
+  no_result_was_found: Aucun résultat n'a été trouvé
+  notes:
+    change_property_value_proposal: Proposition de changement de valeur de propriété
+    comment: Commentaire
+    filter_hide_archived: Masquer les archivées
+    new_class_proposal: Proposition de nouvelle classe ou concept
+    new_comment:
+      comment: Commentaire
+      save: Sauvegarder
+      subject: Sujet
+    new_comment_added: Nouveau commentaire ajouté
+    new_proposal:
+      class_id: ID de la classe
+      definition: Définition
+      label: Libellé
+      new_target: Nouvelle cible
+      new_value: Nouvelle valeur
+      old_target: Ancienne cible
+      old_value: Ancienne valeur
+      parent: Parent
+      property_id: ID de la propriété
+      reason_for_change: Raison du changement
+      relationship_type: Type de relation
+      save: sauvegarder
+      synonym: Synonyme
+    new_relationship_proposal: Proposition de nouvelle relation
+    no_notes: Aucune note à afficher
+    note_deleted_successfully: Note %{note_id} a été supprimée
+    note_line:
+      alert_text: Êtes-vous sûr de vouloir supprimer la note <span style='color:red;font-weight:bold;'>
+        ''%{subject}''</span> créée par <span style='color:red;font-weight:bold;'>%{creator}</span>?<br/><b>Cette
+        action NE PEUT PAS être annulée !!!</b>
+      archived: archivée
+      comment: Commentaire
+      delete: Supprimer
+    note_not_found: Note %{note_id} n'a pas été trouvée dans le système
+    reply:
+      about_note_decorator: À propos de %{note_decorator}
+      cancel: Annuler
+      comment: Commentaire
+      save: sauvegarder
+    thread:
+      submitted_by: soumis par
+  ontolobridge:
+    error_saving_new_term_instructions: Impossible d'enregistrer les nouvelles instructions
+      de terme pour %{acronym} en raison d'une erreur serveur
+    new_term_instructions_saved: Instructions de demande de nouveau terme pour %{acronym}
+      enregistrées
+    problem_of_creating_new_term: 'Problème de création d''un nouveau terme %{endpoint}
+      : %{class} - %{message}'
+  ontologies:
+    access_rights_information: Informations supplémentaires sur la licence et les
+      droits d'accès
+    add_new_submission: Ajouter une nouvelle soumission
+    admin_links: Liens d'administratiion
+    administrator: 'Administrateur :'
+    allow_users: Permettre aux utilisateurs de voir uniquement le résumé de la métadonnée
+      de votre ontologie.
+    browser:
+      admin_welcome: Bienvenue admin, cette couleur indique les fonctionnalités réservées
+        aux administrateurs
+      search_placeholder: Filtrer les ontologies, e.g., AGROVOC, plante
+      show_ontology_views: Afficher les vues de l'ontologie
+      show_private_ontology: Afficher seulement les ontologies privées
+      show_retired_ontologies: Afficher les ontologies retirées
+    taxonomy_information_tooltip: Voir plus d'informations sur les %{taxonomy_type} dans       
+    categories: Catégories
+    change_notes: Notes de changement
+    collapse_all: Tout replier
+    collecting_data: Nous collectons encore des données pour %{acronym}
+    collecting_data_message: Nous collectons encore des données pour %{acronym}
+    concepts_browsers:
+      filter: Filtre
+      label_jump: 'Aller à :'
+      missing_roots: Racines manquantes pour %{acronym} (skos:topConceptOf)
+      placeholder_jump: Aller à
+      select_collection: Veuillez sélectionner une collection à afficher
+      select_scheme: Veuillez sélectionner un schéma à afficher
+    contact_support: Contacter le support
+    contact_support_at: 'Si vous avez des questions ou des problèmes, veuillez envoyer
+      un email à l''équipe de support de %{site} à :'
+    create_new_project: Créer un nouveau projet
+    create_new_view: Créer une nouvelle vue
+    create_new_view_submission: Créer une nouvelle soumission d'une vue
+    created_by: 'Créé par :'
+    date_of_original_creation: Date de création originale
+    dates_and_contacts: Dates et contacts
+    definition: 'Définition :'
+    description: 'Description :'
+    details: Détails
+    downloads: Téléchargements
+    edit_available_languages: Cliquez ici pour modifier les langues disponibles
+    edit_link: Éditer
+    edit_metadata: Modifier les métadonnées
+    edit_natural_languages: Modifier les langues naturelles de %{acronym}
+    expand_all: Tout déplier
+    exploring_and_searching: |-
+      dans notre liste d'ontologies mais ils ne peuvent pas l'explorer ou la rechercher. Pour permettre l'exploration et la recherche,
+      veuillez télécharger une version complète de votre ontologie.
+    fairness_assessment_questions: Questions d'évaluation du nveau de FAIRness O'FAIRe
+    filters: Filtres
+    formality_levels: Niveaux de formalité
+    general_information: Informations générales
+    go_to_api: Aller à l'API
+    groups: Groupes
+    home_page: Page d'accueil
+    htaccess_modal_title: Règles de redirection pour l'ontologie %{acronym}
+    htaccess_redirection:
+      instruction_1: 'Accéder au fichier .htaccess:'
+      instruction_1_content: Localisez le fichier .htaccess dans le répertoire racine
+        de votre site Web, s'il n'existe pas, créez-en un. Ce fichier contrôle le
+        comportement de votre serveur Web et est souvent utilisé pour la réécriture
+        et la redirection d'URL
+      instruction_2: 'Copiez et collez les règles de redirection dans le fichier .htaccess:'
+      instruction_2_content: Copiez les règles de redirection fournies dans le rectangle
+        noir. Ouvrez le fichier .htaccess et collez les règles de redirection copiées
+        dans le fichier
+      instruction_3: 'Activer le module de réécriture (Linux):'
+      instruction_3_content: vous devrez vous assurer que le module Apache appelé
+        'rewrite' est activé en exécutant la commande `sudo a2enmod rewrite`
+    htaccess_redirection_description: Nous proposons une solution transparente pour
+      rendre les URI de votre ontologie résolubles et le contenu négociable en autorisant
+      la redirection d'URL de vos URI d'ontologie vers nos URI d'Agroportal. Pour
+      faciliter ce processus, nous vous avons fourni un ensemble de règles de réécriture
+      .htaccess. En suivant les instructions simples ci-dessous, vous serez en mesure
+      de mettre en œuvre ces règles rapidement et efficacement, garantissant ainsi
+      une redirection fluide
+    instructions_servers: Instructions pour les servers %{server}
+    load_from_url: Charger depuis une URL
+    location: Emplacement
+    metadata_only: Métadonnées uniquement (Pas de fichier)
+    metadata_properties: des propriétés de métadonnées de %{acronym} sont remplies
+    modification_date: Date de modification
+    natural_languages: Langues naturelles
+    new_ontology_is_processing: L'ontologie est en cours de traitement. Des sections
+      comme %{ontology} seront disponibles une fois le traitement terminé.
+    new_versions_loaded: Nouvelles soumissions chargées chaque nuit.
+    nginx_redirection:
+      instruction_1: 'Accéder au fichier de configuration Nginx:'
+      instruction_1_content: L'emplacement de ce fichier peut varier en fonction de
+        votre système, mais les emplacements courants incluent /etc/nginx/nginx.conf,
+        /etc/nginx/sites-available/default ou /usr/local/etc/nginx/nginx. conf.
+      instruction_2: 'Localisez le bloc de serveur ou le bloc d''emplacement dans
+        lequel vous souhaitez activer la réécriture d''URL:'
+      instruction_2_content: C'est généralement dans le bloc serveur { ... }.
+      instruction_3: 'Copier et coller les règles de redirection:'
+      instruction_3_content: Copiez les règles de redirection fournies dans le rectangle
+        noir. Dans le bloc approprié, ajoutez les règles copiées pour activer la réécriture
+        d'URL
+      instruction_4: 'Testez la configuration pour les erreurs de syntaxe:'
+      instruction_4_content: Exécutez la commande suivante pour tester la configuration
+        de redirection `sudo nginx -t`
+      instruction_5: 'Redémarrez Nginx pour appliquer les modifications:'
+      instruction_5_content: Redémarrez le serveur nginx pour appliquer la redirection
+        à l'aide de cette commande `sudo systemctl reload nginx`
+    no_license: Pas de licence
+    no_projects_using_ontology: Aucun projet n'utilise %{acronym}
+    no_views: Aucune vue disponible pour %{acronym}.
+    notification_message: 'Lorsque votre ontologie sera prête à être consultée, vous
+      recevrez une notification par email et elle sera disponible ici :'
+    ontology_is_processing: L'ontologie est en cours de traitement. Des sections comme
+      %{ontology} seront mis a jours une fois le traitement terminé.
+    ontology_parsing_succeeded: 'L''analyse de l''ontologie a réussi, mais certaines
+      étapes de traitement ont échoué, voici les statuts actuels : %{status}'
+    ontology_processing_failed: 'Le traitement de l''ontologie a échoué, avec les
+      statuts suivants : %{status}'
+    ontology_search_prompt: Rechercher une ontologie ou un terme (e.g., hauteur de
+      plante)
+    ontology_submitted: Ontologie soumise avec succès !
+    ontology_types: Types d'ontologies
+    outside: extérieur
+    private_ontology: Ontologie privée
+    processing_message: |
+      Nous allons maintenant mettre votre ontologie dans la file d'attente pour être traitée. Veuillez garder à l'esprit que cela peut prendre plusieurs
+      heures avant que les utilisateurs de %{site} puissent explorer et rechercher votre ontologie.
+    projects_using_ontology: Projets utilisant %{acronym}
+    redirection_note: 'Cette redirection fonctionne uniquement pour les uri sous la
+      forme: url/path/resource_id. Cela ne fonctionnera pas pour les URIS sous la
+      forme: url/path/to/something#resource_id OR url/path/to/something:resource_id'
+    referred_to: Peut également être désigné comme
+    relation_with_other_ontologies: Relation avec d'autres ontologies soit %{inside}
+      soit %{outside}
+    release_date: Date de publication
     sections:
+      add_acronym_widgets: Ajouter des widgets web à votre site pour l'ontologie %{acronym}
+      additional_parameters: Les paramètres supplémentaires sont documentés sur le
+      autocomplete_widget_accesses: Le widget d'autocomplétion accède au contenu de
+        l'ontologie de la dernière version de l'ontologie.
+      average_number_of_children: Nombre moyen d'enfants
+      can_also_view: Vous pouvez également voir une
+      class_name_description: mettez le nom préféré de la classe (par exemple, "Common
+        Neoplasm");
+      class_shortid_description: mettez l'identifiant court de la classe, tel qu'utilisé
+        dans %{site} (par exemple, "Common_Neoplasm");
+      class_uri_description: Indiquez l'URI complet de la classe (par exemple,
+      class_uri_example: mettez l’URI complet de la classe (par exemple, %{link})
       classes: Classes
-      summary: Résumé
+      classes_with_a_single_child: Classes avec un seul enfant
+      classes_with_more_than_25_children: Classes avec plus de 25 enfants
+      classes_with_no_definition: Classes sans définition
+      collections_search_placeholder: Rechercher une collection dans %{acronym}
+      community: Communauté
+      configuration_metadata: Métadonnées de configuration
+      content: Contenu
+      copy_and_paste: Copiez le code ci-dessous et collez-le sur votre page HTML
+      create_new_view: Créer une nouvelle vue
+      dates: Dates
+      detailed_demonstration: démonstration détaillée
+      download: Téléchargez le
+      download_as_csv: Télécharger en CSV
+      enter_list_of_ontologies: Vous pouvez entrer une liste d'identifiants d'ontologie
+        séparés par des virgules
+      example_1: Exemple 1 (commencez à taper le nom de la classe pour obtenir son
+        URI complet)
+      example_2: Exemple 2 (obtenez l'ID d'une classe)
+      example_3: Exemple 3 (obtenez le nom préféré d'une classe)
+      example_to_use_code: 'Par exemple, si vous mettez le fichier quick_jump.js dans
+        le même répertoire que votre fichier HTML, voici le code que vous utiliseriez
+        :'
+      file: fichier.
+      for_example: Par exemple,
+      help_visit: Pour plus d'aide, visitez
+      hidden_elements_description: 'En plus de l''élément de saisie que vous avez
+        défini, quatre éléments de formulaire cachés sont créés puis définis lorsque
+        l''utilisateur sélectionne une classe dans la liste. Par exemple, si vous
+        créez un champ avec ce code :'
+      hidden_elements_example: 'L''attribut ''name'' est utilisé pour créer les quatre
+        champs suivants (notez comment le ''a'' de l''attribut name est ajouté à l''attribut
+        id) :'
+      identifiers: Identifiants
+      identifiers_tooltip: Identifiants principaux de l'ontologie.
+      include_definitions: 'Pour inclure des définitions dans le menu déroulant Aller
+        à, ajoutez la variable suivante en Javascript :'
+      include_file: 'Dans l''en-tête de la page là où vous souhaitez le champ du formulaire,
+        inclure '
+      individuals: Individus
+      info_pasted_code: Dans le code que vous venez de coller, assurez-vous de changer
+        le chemin vers le fichier quick_jump.js pour le faire pointer vers l'emplacement
+        où vous avez mis le fichier (relatif à votre fichier HTML)
+      info_tooltip_community_dropdown: Propriétés des métadonnées liées aux informations
+        communautaires telles que le dépôt de code et le suivi des problèmes, la liste
+        de diffusion ou le public cible. Cela inclut également les Groupes dans %{site}.
+        Voir plus d'informations sur les Groupes et les Catégories.
+      info_tooltip_configuration: Regroupe toutes les propriétés de métadonnées utilisées
+        par le portail pour configurer le comportement de la ressource
+      info_tooltip_links: Propriétés de métadonnées qui mettent en évidence les liens
+        permettant l'accès aux ensembles de données, le téléchargement de ressources
+        sémantiques, etc.
+      info_tooltip_projects: Détails concernant l'utilisation de l'ontologie.
+      info_tooltip_properties_dropdown: Propriétés de métadonnées englobant principalement
+        la conception, les méthodes et les actions pour créer l'ontologie. Cela inclut
+        des éléments tels que les outils et logiciels utilisés par le créateur de
+        l'ontologie lors de sa configuration.
+      instances_search_placeholder: Rechercher une instance dans %{acronym}
+      label_groups: Groupes
+      maximum_depth: Profondeur maximale
+      maximum_number_of_children: Nombre maximum d'enfants
+      metadata:
+        abstract: Résumé
+        additional_information: Pour des informations supplémentaires, contactez
+        categories_and_subjects: Catégories et sujets
+        description: Description
+        export_metadata: Exporter toutes les métadonnées
+        fair_score_title: Score FAIR
+        general_information: Informations générales
+        initial_created_on: Créé initialement le
+        keywords_and_classes: Mots-clés et classes
+        languages: Langues
+        metrics: Métriques
+        metrics_link_title: Informations et diagrammes d'évolution sur les métriques
+          et autres mesures de l'ontologie.
+        not_calculated_metrics: Nous n'avons pas encore calculé de métriques pour
+          %{acronym}
+        pull_location: Adress de récupération
+        relations_network: Réseau de relations des ontologies
+        see_all_metrics: Voir toutes les métriques de %{acronym}
+        show_modal_title_1: Toutes les métriques de %{acronym}
+        show_modal_title_2: Évolution du nombre de %{metric} dans %{acronym} par soumissions.
+        submissions: Soumissions
+        submissions_link_title: Ensemble de tous les fichiers qui ont été soumis à
+          %{site}. Chaque enregistrement de métadonnées précédent est accessible mais
+          seul le contenu du dernier fichier analysé est accessible via les services
+          de %{site}
+        total_score: 'Score total : %{score} ( %{normalized_score}%)'
+      methodology_and_provenance: Méthodologie et provenance
+      more_help_visit: Pour plus d'aide, visitez
+      name: nom
+      ncbo_widget_wiki: Wiki des widgets
+      no_class_concept_found: Aucune classe/concept trouvé
+      note: 'Note :'
+      or: OU
+      other_links: Autres liens
+      person_and_organization: Personnes et organisations
+      projects_and_usage_information: Informations sur les projets et l'utilisation
       properties: Propriétés
-      instances: Instances
-      notes: Notes
-      mappings: Alignements
-      widgets: Widgets
-      sparql: SPARQL
-      concepts: Concepts
-      schemes: Schémas
-      collections: Collections
+      properties_search_placeholder: Rechercher une propriété dans %{acronym}
+      put_on_server: et mettez-le sur votre serveur.
+      schemes_search_placeholder: Rechercher un schéma dans %{acronym}
+      scroll_down_to_see_more: Faites défiler vers le bas pour en voir plus
+      set_the_variable: 'Vous pouvez régler la variable sur ''all'' pour rechercher
+        dans toutes les ontologies de %{site} :'
+      shortid: shortid
+      uri: uri
+      use_all_to_search: 'utilisez ''all'' pour rechercher dans toutes les ontologies
+        de %{site} :'
+      use_following_parameters: 'Vous pouvez utiliser les paramètres suivants pour
+        sélectionner quelle valeur sera placée dans le champ de saisie visible par
+        l''utilisateur :'
+      use_list: 'En plus des identifiants d''ontologie uniques, vous pouvez utiliser
+        une liste :'
+      use_ontology: utilisera une ontologie (l'identifiant de l'ontologie est son
+        acronyme) et mettra l'URI de la classe dans le champ après que l'utilisateur
+        ait sélectionné la classe dans la liste déroulante.
+      use_quick_jump: Si vous souhaitez utiliser Quick Jump pour plusieurs ontologies
+      use_widget: 'Sur votre formulaire, pour les champs où vous souhaitez utiliser
+        le widget de sélection de classe, spécifiez la classe du champ dans le format
+        suivant :'
+      views: Vues de %{acronym}
+      visits: Visites
+      widget_block_component_description_1: Tapez un nom de classe de %{acronym} et
+        allez dans %{site}
+      widget_block_component_description_2: Remplissez vos champs de formulaire avec
+        des classes de %{acronym}
+      widget_block_component_description_3: Afficher une visualisation pour une classe/concept
+        dans %{acronym}
+      widget_block_component_description_4: Afficher la hierachie des classes/concepts
+        et un champ de recherche pour l'ontologie %{acronym}
+      widget_block_component_title_1: Aller à
+      widget_block_component_title_2: Autocomplétion
+      widget_block_component_title_3: Visualisation
+      widget_block_component_title_4: Widget de la hierarchie
+      widgets: Les widgets ne sont disponibles que pour les ontologies stockées dans
+        %{site}.
+    see_details: Voir les détails
+    showing: Affichage
+    showing_ontologies_size: Affichage de %{ontologies_size} sur %{analytics_size} de %{portals}
+    submission: Soumission
+    submit_new_ontology: Soumettre une nouvelle ontologie
+    submitting_ontology: Merci d'avoir soumis votre ontologie à %{site}.
+    submitting_ontology_view: Merci d'avoir soumis votre vue d'ontologie à %{site}.
+    upload_an_ontology: Téléchargement de l'ontologie. Des sections comme %{ontology}
+      seront disponibles une fois terminées.
+    upload_date: Date de téléchargement
+    upload_local_file: Télécharger un fichier local
+    uri: URI
+    users_can_see: Les utilisateurs peuvent maintenant voir
+    view_license: Voir la licence
+    views: Vues
+    your_ontology: votre ontologie
+  ontologies_metadata_curator:
+    alert_success_submissions: Les soumissions ont été mises à jour
+    apply_the_change_for_all: Appliquer le changement pour tous
+    get_values: Obtenir les valeurs
+    include_all_submissions: Inclure toutes les soumissions
+    ontologies: Ontologies
+    save: Sauvegarder
+    select_ontologies_and_metadata: Sélectionner les ontologies et les propriétés
+      de métadonnées
+    start_the_bulk_edit: Sélectionnez dans le tableau les soumissions (lignes) et
+      les propriétés de métadonnées (colonnes) pour commencer l'édition groupée
+    update_the_current_displayed_content: 'mettra à jour le contenu actuellement affiché
+      pour toutes les soumissions suivantes :'
+  ontologies_selector:
+    apply: Appliquer
+    cancel: Annuler
+    clear_selection: Effacer la sélection
+    hide_retired_ontologies: Masquer les ontologies retirées
+    ontologies_advanced_selection: Sélection avancée des ontologies
+    search_hint: Filtrer les ontologies...
+    select_all: Tout sélectionner
+    show_ontology_view: Afficher les vues de l'ontologie
+    tabs_title:
+      categories: Catégories
+      formality_levels: Niveaux de formalité
+      format: Format
+      groups: Groupes
+      natural_languages: Langues naturelles
+      ontology_types: Types d'ontologie
+    unselect_all: Tout désélectionner
+  ontology_details:
     concept:
       definitions: Définitions
       id: ID
@@ -709,103 +1349,155 @@ fr:
       preferred_name: Nom préféré
       synonyms: Synonymes
       type: Type
+    header:
+      last_submission_date: Date de la dernière soumission
     metadata:
       additional_metadata: Métadonnées supplémentaires
-    header:
-      last_submission_date: Date de la dernière soumission le
-
+    sections:
+      classes: Classes
+      collections: Collections
+      concepts: Concepts
+      instances: Instances
+      mappings: Alignements
+      notes: Notes
+      properties: Propriétés
+      schemes: Schémas
+      sparql: SPARQL
+      summary: Résumé
+      widgets: Widgets
+  ontoportal_virtual_appliance:
+    admin_add_users:
+      accounts_with_access: Comptes avec accès
+      add_user_button: Ajouter un utilisateur
+      bioportal_user: Compte utilisateur BioPortal
+      export_users_link: Exporter les utilisateurs de l'Appliance en CSV
+      label_account_name: 'Nom du compte :'
+      title: 'Admin : Ajouter des utilisateurs'
+    annotator: Annotateur
+    archives:
+      archival_distribution: |
+        La machine virtuelle OntoPortal 2.5 n'est plus proposée aux nouveaux
+        utilisateurs. Cette distribution d'archives est disponible uniquement en tant que sauvegarde pour
+        ceux qui se sont inscrits avant juin 2020
+      title: Archives
+      version: version 2.5
+    download_button_text: Télécharger la dernière version d'OntoPortal
+    included_software: 'Les logiciels suivants sont inclus dans l''installation la
+      machine virtuelle :'
+    intro_paragraph:
+      main: |
+        La distribution de la machine virtuelle OntoPortal contient une version pré-installée,
+        pré-configurée du logiciel open source NCBO couramment utilisé
+        sur un système d'exploitation Linux.
+    more_information: pour plus d'informations sur l'utilisation de la machine virtuelle.
+    ontologies_api: Ontologies API (Web service REST)
+    problem_adding_account: 'Problème lors de l''ajout du compte <strong>%{id}</strong>
+      : le compte n''existe pas'
+    recommender: Recommandeur
+    require_login: Vous devez être connecté pour accéder à cette section
+    see_documentation: Veuillez consulter notre
+    title: Téléchargement de la machine virtuelle OntoPortal
+    web_user_interface: Interface utilisateur web de BioPortal (incluant la visualisation
+      d'ontologies, widgets et UI d'Annotateur)
   projects:
-    project_not_found: "Projet non trouvé : %{id}"
-    project_successfully_created: Projet créé avec succès
-    error_unique_acronym: Le projet avec l'acronyme %{acronym} existe déjà. Veuillez entrer un acronyme unique.
-    project_successfully_updated: Projet mis à jour avec succès
-    error_delete_project: "Échec de la suppression du projet : %{errors}"
-    project_successfully_deleted: Projet supprimé avec succès
     contacts: Contacts
     create_new_project: Créer un nouveau projet
     created: Créé
     creator: Utilisateur
-    delete_admin_only: Supprimer (admin seulement)
+    delete_admin_only: Supprimer (administrateur seulement)
     delete_confirm: Êtes-vous sûr ?
     description: Description
     description_text: Texte de la description
+    edit:
+      cancel: Annuler
+      editing_project: Édition du projet
+      title: Édition du projet %{name}
+      update_project: Mettre à jour le Projet
     edit_text: Éditer
+    error_delete_project: 'Échec de la suppression du projet : %{errors}'
+    error_unique_acronym: Le projet avec l'acronyme %{acronym} existe déjà. Veuillez
+      entrer un acronyme différent.
+    form:
+      acronym: 'Acronyme : *'
+      administrators: 'Administrateurs : *'
+      description: Description :*
+      errors_on_form: Erreurs dans le formulaire
+      example: 'Exemple :'
+      home_page: 'Page d''accueil : *'
+      name: 'Nom : *'
+      select_administrators: Sélectionner les administrateurs
+      select_ontologies: Sélectionner les ontologies utilisées
     home_page: Page d'accueil
     index:
       intro: Parcourez une sélection de projets utilisant les ontologies de %{site}
     institutions: Institutions
+    new:
+      create_project: Créer le un nouveau Projet projet
+      new_project: Nouveau projet
+      title: Ajouter un projet
     ontologies: Ontologies
     project_description: Description du Projet
+    project_not_found: 'Projet non trouvé : %{id}'
+    project_successfully_created: Projet créé
+    project_successfully_deleted: Projet supprimé
+    project_successfully_updated: Projet mis à jour
     self: Projets
-    title: Liste des Projets
-    view_projects_help: Voir l'aide des projets
-
     show:
-      title: Projet %{name}
-      edit_project: Éditer le Projet
-      description: "Description :"
-      institution: "Institution :"
-      contacts: "Contacts :"
-      home_page: "Page d'accueil :"
+      contacts: 'Contacts :'
+      description: 'Description :'
+      edit_project: Éditer le projet
+      home_page: 'Page d''accueil :'
+      institution: 'Institution :'
+      no_ontologies_associated: Aucune ontologie n'est actuellement associée à ce
+        projet
       ontologies_used: Ontologies utilisées
-      no_ontologies_associated: Aucune ontologie n'est actuellement associée à ce projet
-
-    form:
-      errors_on_form: Erreurs sur le formulaire
-      name: "Nom : *"
-      acronym: "Acronyme : *"
-      administrators: "Administrateurs : *"
-      home_page: "Page d'accueil : *"
-      example: "Exemple :"
-      description: "Description :*"
-      select_ontologies: Sélectionner les ontologies utilisées
-      select_administrators: Sélectionner les administrateurs
-
-    edit:
-      title: Édition du Projet %{name}
-      editing_project: Édition du projet
-      cancel: Annuler
-      update_project: Mettre à jour le Projet
-
-    new:
-      title: Ajoutez votre projet
-      new_project: Nouveau projet
-      create_project: Créer le Projet
-
+      title: Projet %{name}
+    title: Liste des projets
+    view_projects_help: Voir l'aide des projets
+  properties:
+    definitions: Définitions
+    domain: Domaine
+    id: ID
+    no_properties_alert: "%{acronym} ne contient pas de propriétés"
+    parent: Parent
+    preferred_name: Nom préféré
+    range: Étendue
+    type: Type
   recommender:
-    title: Recommandeur
-    intro: Obtenez des recommandations pour les ontologies les plus pertinentes à partir d'un extrait de texte ou d'une liste de mots-clés
-    options: Options
-    input: Entrée
-    text: Texte
-    keywords: Mots-clés
-    output: Sortie
-    ontologies: Ontologies
-    ontology_sets: Ensembles d'ontologies
-    hint: Collez un paragraphe de texte ou quelques mots-clés ...
-    weights_configuration: Configuration des poids
-    coverage: Couverture
     acceptance: Acceptation
-    knowledge_detail: Détail des connaissances
-    specialization: Spécialisation
-    ontologies_configuration: Configuration des ontologies
-    max_ont_set: Nombre maximum d'ontologies par ensemble
-    select_ontologies: Sélectionner des ontologies
-    get_recommendations: Obtenir des recommandations
-    edit: Éditer
-    results_title: Ontologies recommandées
-    call_annotator: Appeler l'annotateur avec la même entrée
+    call_annotator: Appeler l'Annotateur avec la même entrée
     cite: Citer
+    coverage: Couverture
+    edit: Éditer
+    get_recommendations: Obtenir des recommandations
+    hint: Collez un court texte ou quelques mots-clés ...
+    input: Entrée
+    intro: Obtenez des recommandations d'ontologies à partir d'un extrait de texte
+      ou d'une liste de mots-clés
+    keywords: Mots-clés
+    knowledge_detail: Détail des connaissances
+    max_ont_set: Nombre maximum d'ontologies par ensemble
+    ontologies: Ontologies
+    ontologies_configuration: Configuration des ontologies
+    ontology_sets: Ensembles d'ontologies
+    options: Options
+    output: Résultat
     results_table:
-      ontology: Ontologie
-      final_score: Score final
-      coverage_score: Score de couverture
       acceptance_score: Score d'acceptation
-      detail_score: Score de détail
-      specialization_score: Score de spécialisation
       annotations: Annotations
-
+      coverage_score: Score de couverture
+      detail_score: Score de détail
+      final_score: Score final
+      ontology: Ontologie
+      specialization_score: Score de spécialisation
+    results_title: Ontologies recommandées
+    select_ontologies: Sélectionner des ontologies
+    specialization: Spécialisation
+    text: Texte
+    title: Recommandeur
+    weights_configuration: Configuration des poids
   register:
+    accept_terms_and_conditions: Je reconnais et j'accepte
     account_errors: 'Erreurs lors de la création de votre compte :'
     confirm_password: Confirmez le mot de passe
     create_account: Créer un nouveau compte
@@ -813,189 +1505,171 @@ fr:
     first_name: Prénom
     last_name: Nom
     mailing_list: S'inscrire à la liste de diffusion de %{site}
-    accept_terms_and_conditions: Je reconnais et j'accepte
-    terms_and_conditions: les termes et conditions de %{site}.
-    optional: "(Optionnel)"
+    optional: "(optionnel)"
     password: Mot de passe
+    terms_and_conditions: Les termes et conditions de %{site}.
     title: S'inscrire
     username: Nom d'utilisateur
-
-  users:
-    account_successfully_created: Compte créé avec succès
-    account_successfully_updated: Compte mis à jour avec succès
-    user_deleted_successfully: Utilisateur supprimé avec succès
-    not_permitted: Non autorisé
-    error_saving_custom_ontologies: Erreur lors de l'enregistrement des Ontologies Personnalisées, veuillez réessayer
-    custom_ontologies_cleared: Ontologies Personnalisées effacées
-    custom_ontologies_saved: Ontologies Personnalisées enregistrées
-    subscribe_flash_message: "Vous vous êtes %{action} %{to_or_from} notre liste de diffusion : %{list}"
-    error_subscribe: Quelque chose s'est mal passé ...
-    validate_email_address: Veuillez entrer une adresse email
-    validate_password: Veuillez entrer un mot de passe
-    validate_password_confirmation: Votre mot de passe et la confirmation du mot de passe ne correspondent pas
-    recaptcha_validation: Veuillez remplir le texte approprié à partir de l'image fournie
-    validate_orcid: Veuillez entrer un ORCID valide.
-    validate_username: veuillez entrer un nom d'utilisateur valide
-    valid_email_adresse: Veuillez entrer une adresse email valide
-    validate_terms_and_conditions: L'acceptation des termes et conditions est requise, veuillez cocher la case pour continuer.
-    first_name_required: Le champ du prénom est requis
-    last_name_required: Le champ du nom est requis
-    index:
-      first_name: Prénom
-      last_name: Nom
-      username: Nom d'utilisateur
-      email: Email
-      roles: Rôles
-      ontologies: Ontologies
-      project: Projet
-      created: Créé le
-      actions: Actions
-      detail: Détail
-      delete: Supprimer
-      login_as: Se connecter comme
-      error_delete_message: Impossible de supprimer cet utilisateur car encore utilisé
-      turbo_confirm: Êtes-vous sûr ?
-    edit:
-      user_to_admin: Êtes-vous sûr de vouloir rendre cet utilisateur administrateur ?
-      admin_privileges: Êtes-vous sûr de vouloir révoquer les privilèges d'administrateur de cet utilisateur ?
-      errors_creating_account: "Erreurs lors de la création de votre compte :"
-      edit_information: Modifier les informations personnelles
-      first_name: Prénom
-      last_name: Nom
-      username: Nom d'utilisateur
-      email: Email
-      orcid_id: ID ORCID
-      github_id: ID Github
-      new_password: Nouveau mot de passe
-      confirm_password: Confirmer le mot de passe
-      change_password: Changer le mot de passe
-    show:
-      my_account: Mon compte
-      first_name: "Prénom :"
-      last_name: "Nom :"
-      username: "Nom d'utilisateur :"
-      email: "Email :"
-      orcid_id: "ID ORCID :"
-      github_id: "ID GitHub :"
-      mailing_list_subscription: Inscription à la liste de diffusion
-      mailing_list_description: S'inscrire à la liste de diffusion des annonces de %{portal}.
-      api_key_description: Votre clé API peut être utilisée pour accéder aux services Web de %{portal}
-      api_documentation: Documentation de l'API
-      custom_semantic_resource: Ensemble d'ontologies personnalisées
-      please: Veuillez
-      modify_custom_semantic_resource: |
-        visiter le site principal
-        pour modifier votre Ensemble d'ontologies Personnalisées.
-      customize_portal_display: "Personnalisez votre affichage sur %{portal} : Choisissez les ontologies que vous souhaitez voir sur %{portal}, les autres ontologies seront cachées."
-      select_semantic_resources: Sélectionner des ontologies
-      no_semantic_resources: Vous n'avez encore sélectionné aucune ontologie
-      note_feature_logged_in: "Note : cette fonctionnalité ne fonctionne que lorsque vous êtes connecté."
-      save_custom_semantic_resources: Sauvegarder les ontologies personnalisées
-      not_subscribed: Non abonné à aucune ontologie
-      submitted_semantic_resources: Ontologies Soumises
-      accessible_semantic_resources: Ontologies Accessibles
-      upload_semantic_resources: Télécharger ontologies
-      projects_created: Projets Créés
-      no_project_created: Aucun projet créé
-      unsubscribe: Se désabonner
-      subscribe: S'abonner
-      subscriptions: Abonnements
-      no_uploaded_resources: Vous n'avez encore téléchargé aucune ontologie
-      notes: Notes
-
+  resource_term:
+    ontology: ontologie
+    ontology_plural: ontologies
+    ontology_single: une ontologie
+    semantic_artefact: artefact sémantique
+    semantic_artefact_plural: artefacts sémantiques
+    semantic_artefact_single: un artefact sémantique
+    semantic_resource: ressource sémantique
+    semantic_resource_plural: ressources sémantiques
+    semantic_resource_single: une ressource sémantique
+    terminology: terminologie
+    terminology_plural: terminologies
+    terminology_single: une terminologie
+    vocabulary: vocabulaire
+    vocabulary_plural: vocabulaires
+    vocabulary_single: un vocabulaire
+  schemes:
+    error_valid_scheme_id: 'Erreur : Vous devez fournir un identifiant de schéma valide'
+    id: ID
+    no_main_scheme_alert: Aucun schéma principal défini dans la propriété URI
+    no_schemes_alert: "%{acronym} ne contient pas de schémas (skos:ConceptScheme)"
+    preferred_name: Nom préféré
+    type: Type
   search:
-    no_search_class_provided: Aucune classe de recherche fournie
-    search_place_holder: Entrez un terme, par ex. hauteur de plante
     advanced_options:
-      search_language: Langue de recherche
-      ontologies: Ontologies
       include_in_search_title: Inclure dans la recherche
       include_in_search_values:
-        property_values: Valeurs des propriétés
         obolete_classses: Classes obsolètes
-        ontology_views: Vues d'ontologie
-      show_only_title: Afficher uniquement
+        ontology_views: Vues de l'ontologie
+        property_values: Valeurs des propriétés
+      ontologies: Ontologies
+      search_language: Langue de recherche
+      show_only_title: Afficher seulement
       show_only_values:
-        exact_matches: Correspondances exactes
         classes_with_definitions: Classes avec définitions
-    show_advanced_options: Afficher les options
+        exact_matches: Correspondances exactes
     hide_advanced_options: Cacher les options
-    match_in: Correspondance dans %{results_size} ontologies de %{portals}
+    match_in: Correspondance dans
+    no_search_class_provided: Aucune classe à rechercher fournie
+    ontologies: ontologies
+    from: de
     result_component:
       details: Détails
+      more_from_ontology: de plus sur cette ontologie
+      reuses_in: Réutilisé dans
       visualize: Visualiser
-      more_from_ontology: de plus de cette ontologie
-      reuses_in: Réutiliser dans
+    search_place_holder: Entrez un terme, e.g., hauteur de plante
+    show_advanced_options: Afficher les options
+  show_advanced_options: Afficher les options avancées
+  statistics:
+    date: Date
+    lead: "(dernières %{last_years} années)"
+    ontologies: Ontologies
+    ontology_visits: Visites de l'ontologie
+    projects: Projets
+    title: Statistiques de %{portal}
+    users: Utilisateurs
+  submission_inputs:
+    accounts_allowed: Ajouter ou supprimer des comptes autorisés à voir cette ontologie
+      dans %{portal_name}.
+    administrators: Administrateurs
+    contact: Contact
+    contact_email: Email de %{name}
+    contact_name: Nom du %{name}
+    deprecated_help: Une ontologie avec le statut <strong>retired</strong> (retirée)
+      doit nécessairement être également <strong>deprecated</strong> (dépréciée),
+      mais pas l'inverse.
+    edit_metadata_instruction: Modifiez les métadonnées de votre ontologie ici. Certaines
+      de ces valeurs sont utilisées par les fonctionnalités de %{portal_name}, notamment
+      pour l'évaluation de la FAIRness. %{link}
+    edit_metadata_instruction_link: Vous pouvez consulter les recommandations pour
+      les métadonnées ici.
+    edit_ontology_title: Edition de l'ontologie
+    equivalents: Équivalents
+    groups: Groupes
+    help_creator: Les propriétés suivantes prennent pour valeur un 'agent' dans %{portal_name}
+      (soit une personne, soit une organisation). Ces agents sont partagés sur toutes
+      les ontologies et sont suggérés avec l'autocomplétion s'ils existent déjà. Modifier
+      un agent ici le modifiera pour toutes les ontologies auxquelles cet agent est
+      associé.
+    help_text: Texte d'aide
+    known_usage_help: Pensez également de déclarer %{metadata_knownUsage_help}
+    known_usage_help_link: les projets utilisant l'ontologie
+    license_help: "%{portal_name} nécessite une URI pour la licence. Si vous ne trouvez
+      pas votre choix ici, %{link}, contactez le support."
+    license_help_link: Veuillez choisir une URI à partir d'ici.
+    metadata_selector_label: Filtrer les propriétés à afficher
+    metadata_selector_placeholder: Sélectionner les propriétés
+    ontology_obo_language_help: Les ontologies OBO soumises à %{portal_name} seront
+      analysées par l'OWL-API qui intègre %{link}. Les triplets RDF résultants seront
+      ensuite chargés dans le triple-store de %{portal_name}.
+    ontology_obo_language_link: le parser OBOinOWL.
+    ontology_owl_language_help: Les ontologies OWL soumises à %{portal_name} seront
+      analysées par l'OWL-API. Une manière simple de vérifier si votre ontologie sera
+      analysée est de l'ouvrir avec %{link}, logiciel qui utilise le même composant.
+    ontology_owl_language_link: le Protégé
+    ontology_skos_language_help: Les vocabulaires SKOS soumis à %{portal_name} doivent
+      suivre quelques contraintes (par exemple, contenir au minimum un skos:ConceptScheme
+      également typé comme owl:Ontology) ainsi qu'un ensemble de top concepts %{link}
+    ontology_skos_language_link: Veuillez vous référer à la documentation pour plus
+      de détails.
+    ontology_umls_language_help: 'Les ressources UMLS-RRF sont généralement produites
+      %{link}
 
-  notes:
-    no_notes: Aucune note à afficher
-    filter_hide_archived: Masquer les archivés
-    new_class_proposal: Proposition de Nouvelle Classe
-    new_relationship_proposal: Proposition de Nouvelle Relation
-    change_property_value_proposal: Proposition de Changement de Valeur de Propriété
-    new_comment_added: Nouveau commentaire ajouté avec succès
-    note_deleted_successfully: Note %{note_id} a été supprimée avec succès
-    note_not_found: Note %{note_id} n'a pas été trouvée dans le système
-    comment: Commentaire
-    new_comment:
-      subject: Sujet
-      comment: Commentaire
-      save: Sauvegarder
-    new_proposal:
-      reason_for_change: Raison du changement
-      new_target: Nouvelle cible
-      old_target: Ancienne cible
-      relationship_type: Type de relation
-      property_id: ID de la propriété
-      new_value: Nouvelle valeur
-      old_value: Ancienne valeur
-      class_id: ID de la classe
-      label: Étiquette
-      synonym: Synonyme
-      definition: Définition
-      parent: Parent
-      save: Sauvegarder
-    note_line:
-      alert_text: "Êtes-vous sûr de vouloir supprimer la note <span style='color:red;font-weight:bold;'> ''%{subject}''</span> créée par <span style='color:red;font-weight:bold;'>%{creator}</span>?<br/><b>Cette action NE PEUT PAS être annulée !!!</b>"
-      delete: Supprimer
-      archived: archivé
-      comment: Commentaire
-    thread:
-      submitted_by: soumis par
-    reply:
-      about_note_decorator: à propos de %{note_decorator}
-      comment: Commentaire
-      save: Sauvegarder
-      cancel: Annuler
-
+      '
+    ontology_umls_language_link: par l'outil UMLS2RDF.
+    ontology_view_of_another_ontology: Cette ontologie est-elle une vue d'une autre
+      ontologie ?
+    validators: Validateurs
+    version_help: Pour plus d'informations sur la manière d'encoder les informations
+      de version dans une ontologie, consultez %{link}
+    version_helper_link: recommandations.
+    visibility: Visibilité
   submissions:
-    filter:
-      all_formats: Tous les formats
-      sort_by_name: Trier par nom
-      sort_by_classes: Trier par nombre de classes
-      sort_by_instances_concepts: Trier par nombre d'instances/concepts
-      sort_by_submitted_date: Trier par date de soumission
-      sort_by_creation_date: Trier par date de création
-      sort_by_fair_score: Trier par score FAIR
-      sort_by_popularity: Trier par popularité
-      sort_by_notes: Trier par notes
-      sort_by_projects: Trier par projets
-    no_submissions_for_ontology: "Aucune soumission pour l'ontologie : %{ontology}"
-    submission_updated_successfully: Soumission mise à jour avec succès
-    save_button: Sauvegarder
-    id: ID
-    version: Version
     actions: Actions
-    modified: Modifié
-    submitted: Soumis
-    download: Télécharger
-    toggle_dropdown: Basculer le menu déroulant
-    go_to_api: Aller à l'API
-    edit_button: Éditer
     delete_submission_alert:
-      content_1: "Êtes-vous sûr de vouloir supprimer la soumission <span style='color:red;font-weight:bold;'>"
+      content_1: Êtes-vous sûr de vouloir supprimer la soumission <span style='color:red;font-weight:bold;'>
       content_2: "</span> pour l'ontologie <span style='color:red;font-weight:bold;'>"
       content_3: "</span> ?<br/><b>Cette action est IRREVERSIBLE !!!</b>"
+    download: Télécharger
+    edit_button: Éditer
+    filter:
+      all_formats: Tous les formats
+      sort_by_classes: Trier par nombre de classes
+      sort_by_creation_date: Trier par date de création
+      sort_by_fair_score: Trier par score FAIR
+      sort_by_instances_concepts: Trier par nombre d'instances/concepts
+      sort_by_name: Trier par nom
+      sort_by_notes: Trier par notes
+      sort_by_popularity: Trier par popularité
+      sort_by_projects: Trier par projets
+      sort_by_submitted_date: Trier par date de soumission
+    go_to_api: Aller à l'API
+    id: ID
+    modified: Modifié
+    no_submissions_for_ontology: 'Aucune soumission pour l''ontologie : %{ontology}'
+    save_button: Sauvegarder
+    submission_updated_successfully: Soumission mise à jour
+    submitted: Soumis
+    toggle_dropdown: Basculer le menu déroulant
+    version: Version
+  taxonomy:
+    description: Dans %{portal}, les ontologies sont organisées en groupes et étiquetées
+      avec des catégories. Typiquement, les groupes associent des ontologies provenant
+      du même projet ou de la même organisation pour une meilleure identification
+      de la provenance. Tandis que les catégories concernent des sujets/thématiques
+      et permettent de classifier les ontologies. En 2016, les catégories d'%{portal}
+      ont été établies en coopération avec FAO AIMS. En 2024, nous sommes passés au
+      Thésaurus de l'UNESCO (https://vocabularies.unesco.org). Les groupes et les
+      catégories, ainsi que d'autres métadonnées, peuvent être utilisés sur la page
+      “Parcourir” d'%{portal} pour filtrer la liste des ontologies.
+    groups_and_categories: Groupes et Catégories
+    no_taxonomy_created: Aucun %{type} n'a encore été créé
+    show_sub_categories: Afficher les sous-catégories
+  tools:
+    converter:
+      description: 'L''outil de conversion de contenu offre la possibilité de d''exporter
+        n''importe quel resource RDF en divers formats tels que RDF/XML, Turtle, Ntriples
+        ou JSON. Cette fonctionnalité permet aux utilisateurs d''exporter les données
+        RDF vers des syntaxes adaptées à différents usages.
 
   ontoportal_virtual_appliance:
     problem_adding_account: "Problème lors de l'ajout du compte <strong>%{id}</strong> : le compte n'existe pas"
@@ -1455,72 +2129,7 @@ fr:
     no_properties_alert: "%{acronym} ne contient pas de propriétés"
 
   visits:
-    ontology_visits: Visites de l'ontologie
-    name: nom
-    visits: visites
     count: concepts
-
-  ontologies_selector:
-    clear_selection: Effacer la sélection
-    ontologies_advanced_selection: Sélection avancée des ontologies
-    search_hint: Filtrer les ontologies...
-    show_ontology_view: Afficher les vues d'ontologie
-    hide_retired_ontologies: Masquer les ontologies abandonner
-    tabs_title:
-      categories: Catégories
-      groups: Groupes
-      format: Format
-      natural_languages: Langues naturelles
-      formality_levels: Niveaux de formalité
-      ontology_types: Types d'ontologie
-    select_all: Tout sélectionner
-    cancel: Annuler
-    apply: Appliquer
-    unselect_all: Tout désélectionner
-
-  tools:
-    search:
-      title: "Rechercher du contenu (à venir)"
-      description: >
-        Cet outil/service permet aux utilisateurs de rechercher n'importe quel élément du Cadre de Description des Ressources (RDF) dans le portail.
-        Les utilisateurs peuvent rechercher soit par l'identifiant unique (URI) associé à l'élément RDF, soit par son libellé.
-        Il facilite la navigation efficace et la récupération d'éléments RDF spécifiques, améliorant ainsi l'expérience utilisateur et la productivité au sein du portail.
-
-    converter:
-      title: "Convertisseur de contenu (à venir)"
-      description: >
-        L'outil/service de conversion de contenu offre la possibilité de convertir n'importe quel élément RDF en divers formats tels que RDF/XML, Turtle, Ntriples ou JSON.
-        Cette fonctionnalité permet aux utilisateurs de transformer les données RDF en formats adaptés à différents usages ou compatibles avec divers systèmes et applications.
-        Il favorise l'interopérabilité et la flexibilité dans la manipulation des données RDF au sein de l'écosystème du portail.
-
-    url_checker:
-      title: "Vérificateur de résolvabilité d'URI"
-      description: >
-        Cet outil/service vérifie la résolvabilité des Identifiants Uniformes de Ressource (URI) et leur négociabilité de contenu.
-        Il vérifie si un URI donné est accessible et si le contenu associé peut être négocié en fonction des préférences du client.
-        Cette fonctionnalité garantit la fiabilité et l'accessibilité des ressources liées dans l'écosystème RDF, aidant ainsi à maintenir l'intégrité des données et facilitant l'intégration transparente avec des ressources externes.
-
-  feedback_mail:
-    name: "Nom: %{name}"
-    email: "E-mail: %{email}"
-    location: "Emplacement: %{location}"
-    tags: Tags
-    feedback: Feedback
-
-  cookies_modal:
-    title: "Gérer le consentement des cookies"
-    paragraph1: "%{portal} utilise des cookies pour vous aider à naviguer efficacement et pour mesurer l'audience. Vous trouverez des informations détaillées sur tous les cookies dans le lien \"Vie privé\""
-    paragraph2: "Les cookies sont fonctionnels et non facultatifs. En restant sur %{portal}, vous reconnaissez que les informations vous ont été transmises."
-    accept_button: "Accepter"
-    privacy_link: "Vie privé"
-    privacy_policy_anchor: "#h-vie-privee"
-  taxonomy:
-    groups_and_categories: Groupes et Catégories
-    description: "Dans %{portal}, les ontologies sont organisées en groupes et étiquetées avec des catégories. Typiquement, les groupes associent des ontologies provenant du même projet ou de la même organisation pour une meilleure identification de la provenance. Tandis que les catégories concernent des sujets/thématiques et permettent de classifier les ontologies. En 2016, les catégories d'%{portal} ont été établies en coopération avec FAO AIMS. En 2024, nous sommes passés au Thésaurus de l'UNESCO (https://vocabularies.unesco.org). Les groupes et les catégories, ainsi que d'autres métadonnées, peuvent être utilisés sur la page “Parcourir” d'%{portal} pour filtrer la liste des ontologies."
-    show_sub_categories: Afficher les sous-catégories
-    no_taxonomy_created: "Aucun %{type} n'a encore été créé"
-
-  federation:
-    results_from_external_portals: Résultats provenant de portails externes
-    not_responding: ne répond pas.
-    check_status: Vérification de la disponibilité de %{portal}
+    name: nom
+    ontology_visits: Visites de l'ontologie
+    visits: visites

@@ -6,9 +6,9 @@ module MappingStatistics
 
   MAPPINGS_URL = "#{LinkedData::Client.settings.rest_url}/mappings"
 
-  MAPPING_STATISTICS_URL = "#{LinkedData::Client.settings.rest_url}/mappings/statistics/ontologies/"
+  MAPPING_STATISTICS_URL = "#{LinkedData::Client.settings.rest_url}/mappings/statistics/ontologies"
   MAPPING_STATISTICS_EXTERNAL = "#{LinkedData::Client.settings.rest_url}/mappings/statistics/external"
-  MAPPING_STATISTICS_INTERNAL = "#{LinkedData::Client.settings.rest_url}/mappings/statistics/interportal/"
+  MAPPING_STATISTICS_INTERNAL = "#{LinkedData::Client.settings.rest_url}/mappings/statistics/interportal"
 
   EXTERNAL_MAPPINGS_GRAPH = "http://data.bioontology.org/metadata/ExternalMappings"
   INTERPORTAL_MAPPINGS_GRAPH = "http://data.bioontology.org/metadata/InterportalMappings"
@@ -48,9 +48,9 @@ module MappingStatistics
     if ontology_label[-1] == "external"
       counts = LinkedData::Client::HTTP.get(MAPPING_STATISTICS_EXTERNAL)
     elsif ontology_label[0] == "interportal"
-      counts = LinkedData::Client::HTTP.get("#{MAPPING_STATISTICS_INTERNAL}#{ontology_label[-1]}")
+      counts = LinkedData::Client::HTTP.get("#{MAPPING_STATISTICS_INTERNAL}/#{ontology_label[-1]}")
     else
-      counts = LinkedData::Client::HTTP.get("#{MAPPING_STATISTICS_URL}#{source_acronym}")
+      counts = LinkedData::Client::HTTP.get("#{MAPPING_STATISTICS_URL}/#{source_acronym}")
     end
     counts
   end

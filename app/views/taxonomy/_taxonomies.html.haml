@@ -1,7 +1,7 @@
 .taxonomy-section
     - if taxonomies.blank?
         .taxonomy-empty-illustration
-            = empty_state(t('taxonomy.no_taxonomy_created', type: type))
+            = empty_state(text: t('taxonomy.no_taxonomy_created', type: type))
             - if current_user_admin?
                 .taxonomy-empty-illustration-button
                     = regular_button('create-taxonomy', "Create #{type}", variant: "secondary", size: "slim", href: "/admin?section=#{type}")

@@ -187,4 +187,7 @@ end
 
 gem 'concurrent-ruby', '1.3.4'
 
+# pinned gems for Centos 7 to remove when no more needed
+gem 'nokogiri', '~> 1.13.10'
 gem 'rexml'
+gem "sparql", "~> 3.3"

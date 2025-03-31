@@ -30,6 +30,10 @@ module ApplicationHelper
     render IconWithTooltipComponent.new(icon: "json.svg",link: link, target: '_blank', title: t('fair_score.go_to_api'), size:'small', style: custom_style)
   end
 
+  def read_only_enabled?
+    $READ_ONLY_PORTAL && !current_user_admin?
+  end
+
   def portal_name_from_uri(uri)
     URI.parse(uri).hostname.split('.').first
   end
@@ -405,11 +409,8 @@ module ApplicationHelper
     end
   end
 
-  def empty_state(text = t('no_result_was_found'))
-    content_tag(:div, class:'browse-empty-illustration') do
-      inline_svg_tag('empty-box.svg') +
-      content_tag(:p, text)
-    end
+  def empty_state(text: t('no_result_was_found'))
+    render Display::EmptyStateComponent.new(text: text)
   end
 
   def ontologies_selector(id:, label: nil, name: nil, selected: nil, placeholder: nil, multiple: true, ontologies: onts_for_select)
