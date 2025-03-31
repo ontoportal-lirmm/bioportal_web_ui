@@ -70,8 +70,10 @@ class ConceptsController < ApplicationController
     cls = @ontology.explore&.single_class({ language: request_lang, include: 'prefLabel' }, cls_id)
     label = helpers.main_language_label(pref_label)
     link = concept_path(cls_id, ont_id, request_lang)
-
-    render(inline: helpers.ajax_link_chip(cls_id, label, link, external: cls.nil? || cls.errors), layout: nil)
+    color = params[:color]
+    chip = params[:chip].eql?('true')
+    render(inline: helpers.ajax_link_chip(cls_id, label, link, external: cls.nil? || cls.errors, color: color, chip: chip),
+           layout: nil)
   end
 
   def show_definition

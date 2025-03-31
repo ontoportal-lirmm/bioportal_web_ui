@@ -1,13 +1,13 @@
 module ComponentsHelper
   include TermsReuses
 
-  def dropdown_component(id: ,title: nil, tooltip:nil , is_open: false, &block)
+  def dropdown_component(id:, title: nil, tooltip: nil, is_open: false, &block)
     render DropdownContainerComponent.new(id: id, title: title, tooltip: tooltip, is_open: is_open) do |d|
       capture(d, &block) if block_given?
     end
   end
 
-  def portal_button(name: nil , color: nil , light_color: nil, link: nil, tooltip: nil)
+  def portal_button(name: nil, color: nil, light_color: nil, link: nil, tooltip: nil)
     render FederatedPortalButtonComponent.new(name: name, color: color, link: link, tooltip: tooltip, light_color: light_color)
   end
 
@@ -20,18 +20,19 @@ module ComponentsHelper
     render Display::AlertComponent.new(type: type, message: message)
   end
 
-  def chips_component(id: , name: , label: , value: , checked: false , tooltip: nil, disabled: false, &block)
+  def chips_component(id:, name:, label:, value:, checked: false, tooltip: nil, disabled: false, &block)
     content_tag(:div, data: { controller: 'tooltip' }, title: tooltip) do
       check_input(id: id, name: name, value: value, label: label, checked: checked, disabled: disabled, &block)
     end
   end
+
   def list_items_component(max_items:, &block)
     render ListItemsShowMoreComponent.new(max_items: max_items) do |r|
       capture(r, &block)
     end
   end
 
-  def group_chip_component(id: nil, name: , object: , checked: , value: nil, title: nil, disabled: false, &block)
+  def group_chip_component(id: nil, name:, object:, checked:, value: nil, title: nil, disabled: false, &block)
     title ||= object["name"]
     value ||= (object["value"] || object["acronym"] || object["id"])
 
@@ -39,7 +40,8 @@ module ComponentsHelper
                     checked: checked,
                     value: value, tooltip: title, disabled: disabled, &block)
   end
-  alias  :category_chip_component :group_chip_component
+
+  alias :category_chip_component :group_chip_component
 
   def rdf_highlighter_container(format, content)
     render Display::RdfHighlighterComponent.new(format: format, text: content)
@@ -53,26 +55,26 @@ module ComponentsHelper
     end
   end
 
-  def search_page_input_component(name:, value: nil, placeholder: , button_icon: 'icons/search.svg', type: 'text', &block)
+  def search_page_input_component(name:, value: nil, placeholder:, button_icon: 'icons/search.svg', type: 'text', &block)
     content_tag :div, class: 'search-page-input-container', data: { controller: 'reveal' } do
       search_input = content_tag :div, class: 'search-page-input' do
         concat text_field_tag(name, value, type: type, placeholder: placeholder)
         concat(content_tag(:div, class: 'search-page-button') do
-          render Buttons::RegularButtonComponent.new(id:'search-page-button', value: "Search", variant: "primary", type: "submit") do |btn|
-            btn.icon_right { inline_svg_tag button_icon}
+          render Buttons::RegularButtonComponent.new(id: 'search-page-button', value: "Search", variant: "primary", type: "submit") do |btn|
+            btn.icon_right { inline_svg_tag button_icon }
           end
         end)
       end
 
-      options = block_given? ?  capture(&block) : ''
+      options = block_given? ? capture(&block) : ''
 
       (search_input + options).html_safe
     end
   end
 
-  def paginated_list_component(id:, results:, next_page_url:, child_url:, child_turbo_frame:, child_param:, open_in_modal: false , selected: nil, auto_click: false, submission: nil)
+  def paginated_list_component(id:, results:, next_page_url:, child_url:, child_turbo_frame:, child_param:, open_in_modal: false, selected: nil, auto_click: false, submission: nil)
     render(TreeInfiniteScrollComponent.new(
-      id:  id,
+      id: id,
       collection: results.collection,
       next_url: next_page_url,
       current_page: results.page,
@@ -91,13 +93,13 @@ module ComponentsHelper
       if concepts && !concepts.empty?
         concepts.each do |concept|
           concept.id = concept["@id"] unless concept.id
-          data = {  child_param => concept.id }
+          data = { child_param => concept.id }
           href = child_url.include?('?') ? "#{child_url}&id=#{escape(concept.id)}" : "#{child_url}?id=#{escape(concept.id)}"
           concat(render(TreeLinkComponent.new(
             child: concept,
             href: href,
             children_href: '#',
-            selected: selected.blank? ? false : concept.id.eql?(selected) ,
+            selected: selected.blank? ? false : concept.id.eql?(selected),
             target_frame: child_turbo_frame,
             data: data,
             open_in_modal: open_in_modal,
@@ -112,7 +114,7 @@ module ComponentsHelper
   end
 
   def resolvability_check_tag(url)
-    content_tag(:span, check_resolvability_container(url),  class: 'resolvability-check',style: 'display: inline-block;', onClick: "window.open('#{check_resolvability_url(url: url)}', '_blank');")
+    content_tag(:span, check_resolvability_container(url), class: 'resolvability-check', style: 'display: inline-block;', onClick: "window.open('#{check_resolvability_url(url: url)}', '_blank');")
   end
 
   def rounded_button_component(link)
@@ -134,7 +136,7 @@ module ComponentsHelper
 
   def htaccess_tag(acronym)
     content_tag(:span, 'data-controller': 'tooltip', style: 'display: inline-block; width: 18px;', title: "See #{t("ontologies.htaccess_modal_title", acronym: acronym)}") do
-      link_to_modal(nil, "/ontologies/#{acronym}/htaccess", data: {show_modal_title_value: "#{t("ontologies.htaccess_modal_title", acronym: acronym)}", show_modal_size_value: 'modal-xl'}) do
+      link_to_modal(nil, "/ontologies/#{acronym}/htaccess", data: { show_modal_title_value: "#{t("ontologies.htaccess_modal_title", acronym: acronym)}", show_modal_size_value: 'modal-xl' }) do
         inline_svg_tag("icons/copy_link.svg")
       end
     end
@@ -177,8 +179,16 @@ module ComponentsHelper
     end
   end
 
-  def ajax_link_chip(id, label = nil, link = nil, external: false, open_in_modal: false, ajax_src: nil, target: '_blank')
-    render LabelFetcherComponent.new(id: id, label: label, link: link, open_in_modal: open_in_modal, ajax_src: ajax_src, target: target, external: external)
+  def ajax_link_chip(id, label = nil, link = nil,
+                     external: false, open_in_modal: false,
+                     ajax_src: nil, target: '_blank',
+                     chip: true,
+                     color: nil)
+    render LabelFetcherComponent.new(id: id, label: label, link: link,
+                                     open_in_modal: open_in_modal, ajax_src: ajax_src,
+                                     target: target, external: external,
+                                     chip: chip,
+                                     color: color)
   end
 
   def chart_component(title: '', type:, labels:, datasets:, index_axis: 'x', show_legend: false)
@@ -194,7 +204,7 @@ module ComponentsHelper
     content_tag(:canvas, nil, data: data)
   end
 
-  def loader_component(type:'pulsing', small: false )
+  def loader_component(type: 'pulsing', small: false)
     render LoaderComponent.new(type: type, small: small)
   end
 
@@ -213,7 +223,7 @@ module ComponentsHelper
         content = if block_given?
                     capture(values, &block)
                   else
-                    if Array(values).any?{|v| link?(v)}
+                    if Array(values).any? { |v| link?(v) }
                       horizontal_list_container(values, truncate: truncate) { |v| link?(v) ? render(LinkFieldComponent.new(value: v)) : v }
                     else
                       Array(values).join(', ')
@@ -280,13 +290,15 @@ module ComponentsHelper
   end
 
   def regular_button(id, value, variant: "secondary", state: "regular", size: "slim", href: nil, &block)
-    render Buttons::RegularButtonComponent.new(id:id, value: value, variant: variant, state: state, size: size, href: href) do |btn|
+    render Buttons::RegularButtonComponent.new(id: id, value: value, variant: variant, state: state, size: size, href: href) do |btn|
       capture(btn, &block) if block_given?
     end
   end
 
-  def form_save_button(enable_loading: true)
-    render Buttons::RegularButtonComponent.new(id: 'save-button', value: t('components.save_button'), variant: "primary", size: "slim", type: "submit", state: enable_loading ? 'animate' : '') do |btn|
+  def form_save_button(id: nil, value: nil, size: "slim", enable_loading: true)
+    id ||= 'save-button'
+    value ||= t('components.save_button')
+    render Buttons::RegularButtonComponent.new(id: id, value: value,  variant: "primary", size: size, type: "submit", state: enable_loading ? 'animate' : '') do |btn|
       btn.icon_left do
         inline_svg_tag "check.svg"
       end
@@ -303,7 +315,7 @@ module ComponentsHelper
 
   def text_with_icon(text:, icon:)
     content_tag(:div, class: 'd-flex align-items-center icon') do
-      inline_svg_tag(icon, height: '18', weight: '18') + content_tag(:div, class: 'text') {text}
+      inline_svg_tag(icon, height: '18', weight: '18') + content_tag(:div, class: 'text') { text }
     end
   end
 end

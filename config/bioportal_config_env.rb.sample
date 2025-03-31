@@ -35,10 +35,6 @@ $REST_URL = ENV['API_URL']
 # Annotator REST service address
 # $ANNOTATOR_URL = "http://services.stageportal.lirmm.fr/annotator"
 $ANNOTATOR_URL = $PROXY_URL = ENV['ANNOTATOR_URL']
-# NCBO annotator URL and apikey
-$NCBO_ANNOTATORPLUS_ENABLED = ENV['NCBO_ANNOTATORPLUS_ENABLED']
-$NCBO_ANNOTATOR_URL = ENV['NCBO_ANNOTATOR_URL']
-$NCBO_API_KEY = ENV['NCBO_API_KEY']
 
 # Fairness Assessment.
 $FAIRNESS_DISABLED = ENV['FAIRNESS_DISABLED']

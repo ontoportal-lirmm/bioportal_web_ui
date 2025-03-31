@@ -1,0 +1,8 @@
+.filters_line
+  - include_score_helper = 'Score annotations following previous NCBO 2009 measure (old) or Score annotations following C-Value measure (cvalue) or Score annotations following C-Value measure with hierarchy expansion (cvalueh).'
+  = select_input(label: t('annotator.include_score'), id: 'include_score', name: 'score', values: @include_score, tooltip: include_score_helper, selected: params[:score])
+  = render Input::NumberComponent.new(label: t('annotator.score_threshold'), name: "score_threshold", value: params[:score_threshold] || 0, tooltip: 'Specify minimum score value for annotations.')
+  = render Input::NumberComponent.new(label: t('annotator.confidence_threshold'), name: 'confidence_threshold', value: params[:confidence_threshold] || 0, tooltip: 'Specify the minimum position in the score distribution (between 1 and 100).')
+.chips
+  = check_input(name: 'fast_context', label: t('annotator.fastcontext'), checked: params[:fast_context])
+  = check_input(name: 'lemmatize', label: t('annotator.lemmatize'), checked: params[:lemmatize])

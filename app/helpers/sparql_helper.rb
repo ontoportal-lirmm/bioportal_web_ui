@@ -19,9 +19,10 @@ module SparqlHelper
       # match GRAPH <URI> and GRAPH meta:User (only after space or start of line)
       query.gsub!(/(?<=\s|^)GRAPH\s*[^\{]+\{/i, "GRAPH <#{graph}> {")
 
-      if query.match?(/SELECT.*\s*\S*\{/im) # match SELECT without FROM and WHERE
-        query.sub!(/(SELECT.*?\s*\S*)\{/im) do |match|
-          if match.downcase.include?('from')
+      # match SELECT without FROM and WHERE and ignore the { inside quotes
+      if query.match?(/(SELECT.*?\s*\S*)(?<!["'\s])\s*\{(?![^"]*["'])/im)
+        query.sub!(/(SELECT.*?\s*\S*)(?<!["'\s])\s*\{(?![^"]*["'])/im) do |match|
+          if match.downcase.match?(/(?<!["'(\s])\s*FROM(?![^"]*["')])/i)
             match
           else
             out = "#{$1}"
