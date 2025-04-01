@@ -259,9 +259,9 @@ fr:
     not_used: Non utilisé
     ontology_not_valid: 'l''ontologie n''est pas valide, voici les erreurs : '
     profile:
-      contributed_in: A contribué dans
+      contributed_in: A un role dans
       metadata: Métadonnées
-      statistics: statistiques
+      statistics: Statistiques
     save: Sauvegarder
     see_usages_count: Voir les utilisations (%{count})
     turbo_confirm: Êtes-vous sûr ?

@@ -251,9 +251,9 @@ en:
     not_used: Not used
     ontology_not_valid: 'ontology is not valid, here are the errors: '
     profile:
-      contributed_in: Contributed in
+      contributed_in: Has a role in
       metadata: Metadata
-      statistics: statistics
+      statistics: Statistics
     save: Save
     see_usages_count: See usages (%{count})
     turbo_confirm: Are you sure?
