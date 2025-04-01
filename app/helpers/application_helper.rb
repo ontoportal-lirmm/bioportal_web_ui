@@ -60,7 +60,7 @@ module ApplicationHelper
   end
 
   def omniauth_providers_info
-    $OMNIAUTH_PROVIDERS
+    $OMNIAUTH_PROVIDERS || {}
   end
 
   def omniauth_provider_info(strategy)
@@ -453,6 +453,8 @@ module ApplicationHelper
   end
 
   def category_is_parent?(parents_list, category)
+    return [false, nil] if parents_list.nil?
+
     is_parent = parents_list.keys.include?(category.id)
     parent_error_message = t('admin.categories.category_used_parent')
     parents_list[category.id].each do |c|
