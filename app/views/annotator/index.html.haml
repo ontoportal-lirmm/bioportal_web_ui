@@ -45,11 +45,11 @@
         .annotator-page-button
           = form_save_button(size: nil, id: 'annotator', value: t('annotator.get_annotation'))
 
-    = alert_message_if_federation_error(@federation_errors) {@federation_errors}
 
     - if @results && @results.empty?
       = empty_state(text: t('no_result_was_found'))
 
+    = alert_message_if_federation_error(@federation_errors) { @federation_errors.join('<br/>').html_safe }
 
     - unless @results.nil? || @results.empty?
       .annotator-page-results

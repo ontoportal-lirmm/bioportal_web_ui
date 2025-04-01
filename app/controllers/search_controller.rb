@@ -25,7 +25,6 @@ class SearchController < ApplicationController
 
     @time = Benchmark.realtime do
       results = LinkedData::Client::Models::Class.search(@search_query, params)
-      @federation_errors = federation_error(results) if federation_error?(results)
       results = results.collection
 
 
