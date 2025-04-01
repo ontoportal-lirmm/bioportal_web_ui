@@ -17,7 +17,6 @@ class AnnotatorController < ApplicationController
     @time = Benchmark.realtime do
       set_annotator_info('/annotator', 'Annotator', ANNOTATOR_URI)
     end
-    @federation_counts = counts_ontology_ids_by_portal_name(@results.map { |x| x[:ontology][:id] })
   end
 
   private
@@ -26,12 +25,34 @@ class AnnotatorController < ApplicationController
     @form_url = url
     @page_name = page_name
     annotator_results(uri)
+    @results ||= []
+    add_pull_locations(@results)
+    @results = merge_annotator_results(@results)
+    @federation_counts = counts_ontology_ids_by_portal_name(
+      Array(@results).map { |x| Array(x[:ontologies]).map { |o| o[:id] } }.flatten
+    )
+  end
+
+  def merge_annotator_results(results)
+    results.group_by { |x| [x[:class][:id], x[:ontology][:id].split('/').last] }.map do |_, x|
+      ontologies = x.map { |y| y[:ontology] }
+      canonical_ontology = canonical_ontology(ontologies)
+      out = x.select { |y| y[:ontology][:id] == canonical_ontology[:id] }.first
+      out[:ontologies] = ontologies
+      out[:ontology] = canonical_ontology
+      out
+    end
+  end
+
+  def add_pull_locations(results)
+    all_submissions = LinkedData::Client::Models::OntologySubmission.all(include: 'pullLocation', include_views: true, display_links: false, display_context: false)
+    results.each do |x|
+      o = x[:ontology]
+      o[:pullLocation] = all_submissions.select { |s| s.id.split('/')[-3].eql?(o[:id].split('/').last) }.first&.pullLocation
+    end
   end
 
   def annotator_results(uri)
-    @annotator_ontologies = LinkedData::Client::Models::Ontology.all
-    # TODO remove this
-    @ontologies = LinkedData::Client::Models::Ontology.all({ include_views: true }).map { |o| [o.id.to_s, o] }.to_h
 
     return unless params[:text] && !params[:text].empty?
 
@@ -58,10 +79,16 @@ class AnnotatorController < ApplicationController
     params[:score] = nil if params[:score].nil? || params[:score].eql?('none')
     params[:portals] = params[:portals]&.join(',')
     set_federated_portals
+    @ontologies = LinkedData::Client::Models::Ontology.all({ include_views: true }).map { |o| [o.id.to_s, o] }.to_h
     annotations = find_annotations(uri, api_params)
+    @federation_errors = []
+    Array(annotations).each do |annotation|
+      @federation_errors << annotation.errors if federation_error?(annotation)
+    end
     @semantic_types = get_semantic_types
     @results = []
     annotations.each do |annotation|
+      next if annotation.nil? || annotation.errors
       if Array(annotation.annotations).empty?
         @results.push(direct_annotation(annotation))
         @direct_results += 1
@@ -96,10 +123,12 @@ class AnnotatorController < ApplicationController
   def get_semantic_types
     semantic_types = {}
     sty_ont = LinkedData::Client::Models::Ontology.find_by_acronym('STY').first
-    return semantic_types if sty_ont.nil? || sty_ont.errors
-    # The first 500 items should be more than sufficient to get all semantic types.
 
-    sty_classes = sty_ont.explore.classes({'pagesize'=>500, include: 'prefLabel'})
+    return semantic_types if sty_ont.nil? || sty_ont.errors
+
+    # The first 500 items should be more than sufficient to get all semantic types.
+    sty_classes = sty_ont.explore.classes({ 'pagesize' => 500, include: 'prefLabel' })
+
     Array(sty_classes.collection).each do |cls|
       code = cls.id.split('/').last
       semantic_types[code] = cls.prefLabel
@@ -108,25 +137,26 @@ class AnnotatorController < ApplicationController
   end
 
   def annotation_class_info(cls)
-    return { text: '', link: '' } if cls.nil?
+    return nil if cls.nil?
 
     ont_acronym = cls.links['ontology'].split('/').last
+
     {
       id: cls.id,
       ont_acronym: ont_acronym,
       text: cls.prefLabel,
-      link: url_to_endpoint(cls.links['ui'])
+      link: cls.links['ui']
     }
   end
 
   def annotation_ontology_info(ontology_url)
-    return { text: '', link: '' } if ontology_url.nil?
+    return nil if ontology_url.nil?
 
     ontology = @ontologies[ontology_url]
     {
       id: ontology_url,
-      text: ontology ? ontology.acronym : ontology_url,
-      link: ontology ? url_to_endpoint(ontology_url) : ontology_url
+      text: ontology.name,
+      link: ontology_url
     }
   end
 

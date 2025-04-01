@@ -45,11 +45,11 @@
         .annotator-page-button
           = form_save_button(size: nil, id: 'annotator', value: t('annotator.get_annotation'))
 
-    = alert_message_if_federation_error(@federation_errors) {@federation_errors}
 
     - if @results && @results.empty?
       = empty_state(text: t('no_result_was_found'))
 
+    = alert_message_if_federation_error(@federation_errors) { @federation_errors.join('<br/>').html_safe }
 
     - unless @results.nil? || @results.empty?
       .annotator-page-results
@@ -69,25 +69,17 @@
                   = header
             - @results.each do |result|
               - t.row do |r|
-                - ontology = result[:ontology]
-                - config = ontology_portal_config(ontology[:id]).last
                 - r.td(width: "40%") do
-                  .class{class: "federated-icon-#{config[:name].downcase}"}
-                    - cls = result[:class]
-                    = get_link_for_cls_ajax(cls[:id],
-                                            cls[:ont_acronym], '_blank',
-                                            link: cls[:link],
-                                            color: config[:color], chip: false)
+                  = annotator_class_label_fetcher(result[:class], result[:ontology])
                 - r.td do
-                  - ontology = result[:ontology]
-                  = link_to ontoportal_ui_link(ontology[:id]) do
-                    %div
-                      -if internal_ontology?(ontology[:id])
-                        = result[:ontology][:text]
-                      - else
-                        %div.d-flex.align-items-center
-                          = federation_link(title: result[:ontology][:id].split('/').last, color: config[:color], name: config[:name])
-                          = portal_button(name: config[:name], color: config[:color], light_color: config[:'light-color'])
+                  %div.d-flex.flex-column
+                    - Array(result[:ontologies]).each do |ontology|
+                      = link_to ontoportal_ui_link(ontology[:id]) do
+                        %div.my-1
+                          - if internal_ontology?(ontology[:id])
+                            = ontology[:text]
+                          - else
+                            = annotator_external_ontology(ontology)
                 - r.td do
                   - result[:context].each do |context|
                     - if !context[:child]
@@ -119,18 +111,10 @@
                     = result[:score] 
         .annotator-bottom-actions
           .json-button
-            = render Buttons::RegularButtonComponent.new(id:'annotator_json', value: "JSON", variant: "secondary", href: @json_link, size: "slim", target: '_blank', state: "regular") do |btn|
-              - btn.icon_left do
-                = inline_svg_tag "json.svg"
+            = annotator_json_button
           .rdf-button
-            = render Buttons::RegularButtonComponent.new(id:'annotator_rdf', value: "RDF", variant: "secondary", href: @rdf_link, size: "slim", target: '_blank', state: "regular") do |btn|
-              - btn.icon_left do
-                = inline_svg_tag "summary/sparql.svg"
+            = annotator_rdf_button
           .cite-us-button
-            = render Buttons::RegularButtonComponent.new(id:'annotator_cite_us', value: t('recommender.cite'), variant: "secondary", href: $CITE_ANNOTATOR, size: "slim", target: '_blank', state: "regular") do |btn|
-              - btn.icon_left do
-                = inline_svg_tag "icons/cite.svg"
+            = annotator_cite_us_button
           .annotator-doc
-            = render Buttons::RegularButtonComponent.new(id:'annotator_api_doc', value: t('annotator.api_documentation'), variant: "secondary", href: $ANNOTATOR_API_DOC, size: "slim", target: '_blank', state: "regular") do |btn|
-              - btn.icon_left do
-                = inline_svg_tag "summary/documentation.svg"
+            = annotator_doc_button

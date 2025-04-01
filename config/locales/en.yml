@@ -1619,8 +1619,7 @@ en:
       api_documentation: API documentation
       api_key_description: Your API Key can be used to access  %{portal} Web services
       custom_semantic_resource: Custom ontology set
-      customize_portal_display: 'Customize your %{portal} display: Pick the ontologies
-        that you want to see on %{portal} will hide all other ontologies.'
+      customize_portal_display: 'Customize your %{portal} display: Pick the ontologies that you want to see on %{portal} will hide all other ontologies.'
       email: 'Email:'
       first_name: 'First name:'
       github_id: 'GitHub account:'

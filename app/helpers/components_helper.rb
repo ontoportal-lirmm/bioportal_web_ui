@@ -289,8 +289,10 @@ module ComponentsHelper
     end
   end
 
-  def regular_button(id, value, variant: "secondary", state: "regular", size: "slim", href: nil, &block)
-    render Buttons::RegularButtonComponent.new(id: id, value: value, variant: variant, state: state, size: size, href: href) do |btn|
+  def regular_button(id, value, variant: "secondary", state: "regular", size: "slim", href: nil, target: nil, &block)
+    render Buttons::RegularButtonComponent.new(id: id, value: value,
+                                               target: target,
+                                               variant: variant, state: state, size: size, href: href) do |btn|
       capture(btn, &block) if block_given?
     end
   end
