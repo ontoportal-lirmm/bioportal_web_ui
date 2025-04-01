@@ -18,12 +18,17 @@
               = render partial: '/agents_profile/bubble_view'
     .col-md-5
       - unless !hasUsages
-      .agents-page-section
-        = render SummarySectionComponent.new(title: t("agents.profile.statistics")) do |c|
-          .chart-container
-            %canvas#contributionChart
-
-        
+        .agents-page-section
+          = render SummarySectionComponent.new(title: t("agents.profile.statistics")) do |c|
+            .chart-container
+              %canvas#contributionChart
+          - unless @agent.keywords.nil? || @agent.keywords.empty?
+            .agents-page-section
+              = render SummarySectionComponent.new(title: "Keywords") do |c|
+                .agents-page-small-cards-container 
+                  - @agent.keywords.each do |keyword|
+                    .agents-page-submitted-ontology
+                      = keyword
 :javascript
     // Get data from Ruby stats object
     const contributionData = {
