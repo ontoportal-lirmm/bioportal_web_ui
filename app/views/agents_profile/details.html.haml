@@ -1,3 +1,4 @@
+- hasUsages = !(@agent.usages.nil? || @agent.usages.empty?)
 .container.d-flex.flex-column.py-4{ style: "width: 1248px;" }
   = render PageHeaderComponent.new(title: "#{@agent.name} (#{@agent.agentType.capitalize()})" , description: nil)
   .row
@@ -8,6 +9,7 @@
             = render Layout::ListComponent.new do |l|
               - properties_list_component(l, @agent_properties)
         %br
+      - unless !hasUsages
         %div{'data-controller': 'agent-bubbles-submissions', 
                     'data-agent-bubbles-submissions-ontologies-list-value': "#{@agentOntologies.to_h.to_json}",
                     'data-agent-bubbles-submissions-api-url-value': rest_url}
@@ -15,6 +17,7 @@
             %div
               = render partial: '/agents_profile/bubble_view'
     .col-md-5
+      - unless !hasUsages
       .agents-page-section
         = render SummarySectionComponent.new(title: t("agents.profile.statistics")) do |c|
           .chart-container
