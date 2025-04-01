@@ -4,6 +4,7 @@ require 'cgi'
 class AnnotatorController < ApplicationController
   layout :determine_layout
   include AnnotatorHelper
+  include FederationHelper
   include ApplicationHelper
 
   ANNOTATOR_URI = $ANNOTATOR_URL
@@ -13,7 +14,9 @@ class AnnotatorController < ApplicationController
   def index
     @results_table_header = annotator_results_table_header
     @advanced_options_open = !empty_advanced_options
-    set_annotator_info('/annotator', 'Annotator', ANNOTATOR_URI)
+    @time = Benchmark.realtime do
+      set_annotator_info('/annotator', 'Annotator', ANNOTATOR_URI)
+    end
   end
 
   private
@@ -22,12 +25,34 @@ class AnnotatorController < ApplicationController
     @form_url = url
     @page_name = page_name
     annotator_results(uri)
+    @results ||= []
+    add_pull_locations(@results)
+    @results = merge_annotator_results(@results)
+    @federation_counts = counts_ontology_ids_by_portal_name(
+      Array(@results).map { |x| Array(x[:ontologies]).map { |o| o[:id] } }.flatten
+    )
+  end
+
+  def merge_annotator_results(results)
+    results.group_by { |x| [x[:class][:id], x[:ontology][:id].split('/').last] }.map do |_, x|
+      ontologies = x.map { |y| y[:ontology] }
+      canonical_ontology = canonical_ontology(ontologies)
+      out = x.select { |y| y[:ontology][:id] == canonical_ontology[:id] }.first
+      out[:ontologies] = ontologies
+      out[:ontology] = canonical_ontology
+      out
+    end
+  end
+
+  def add_pull_locations(results)
+    all_submissions = LinkedData::Client::Models::OntologySubmission.all(include: 'pullLocation', include_views: true, display_links: false, display_context: false)
+    results.each do |x|
+      o = x[:ontology]
+      o[:pullLocation] = all_submissions.select { |s| s.id.split('/')[-3].eql?(o[:id].split('/').last) }.first&.pullLocation
+    end
   end
 
   def annotator_results(uri)
-    @annotator_ontologies = LinkedData::Client::Models::Ontology.all
-    # TODO remove this
-    @ontologies = LinkedData::Client::Models::Ontology.all({ include_views: true }).map { |o| [o.id.to_s, o] }.to_h
 
     return unless params[:text] && !params[:text].empty?
 
@@ -52,13 +77,16 @@ class AnnotatorController < ApplicationController
     end
 
     params[:score] = nil if params[:score].nil? || params[:score].eql?('none')
+    params[:portals] = params[:portals]&.join(',')
+    set_federated_portals
+    @ontologies = LinkedData::Client::Models::Ontology.all({ include_views: true }).map { |o| [o.id.to_s, o] }.to_h
     annotations = find_annotations(uri, api_params)
     @semantic_types = get_semantic_types
     @results = []
     annotations.each do |annotation|
-      @direct_results += 1
-      if annotation.annotations.empty?
+      if Array(annotation.annotations).empty?
         @results.push(direct_annotation(annotation))
+        @direct_results += 1
       else
         row = direct_annotation(annotation)
         add_context_annotations(annotation, row)
@@ -68,10 +96,11 @@ class AnnotatorController < ApplicationController
           @results[index][:score] = @results[index][:score].to_i + row[:score].to_i
         else
           @results.push(row)
+          @direct_results += 1
         end
       end
 
-      annotation.hierarchy.each do |parent|
+      Array(annotation.hierarchy).each do |parent|
         row = parent_annotation(parent, annotation)
         index = @results.find_index { |result| result[:class] == row[:class] }
         if index
@@ -89,10 +118,12 @@ class AnnotatorController < ApplicationController
   def get_semantic_types
     semantic_types = {}
     sty_ont = LinkedData::Client::Models::Ontology.find_by_acronym('STY').first
-    return semantic_types if sty_ont.nil?
+
+    return semantic_types if sty_ont.nil? || sty_ont.errors
 
     # The first 500 items should be more than sufficient to get all semantic types.
     sty_classes = sty_ont.explore.classes({ 'pagesize' => 500, include: 'prefLabel' })
+
     Array(sty_classes.collection).each do |cls|
       code = cls.id.split('/').last
       semantic_types[code] = cls.prefLabel
@@ -101,16 +132,26 @@ class AnnotatorController < ApplicationController
   end
 
   def annotation_class_info(cls)
+    return { text: '', link: '' } if cls.nil?
+
+    ont_acronym = cls.links['ontology'].split('/').last
+
     {
+      id: cls.id,
+      ont_acronym: ont_acronym,
       text: cls.prefLabel,
-      link: url_to_endpoint(cls.links['self'])
+      link: cls.links['ui']
     }
   end
 
   def annotation_ontology_info(ontology_url)
+    return { text: '', link: '' } if ontology_url.nil?
+
+    ontology = @ontologies[ontology_url]
     {
-      text: @ontologies[ontology_url].name,
-      link: url_to_endpoint(ontology_url)
+      id: ontology_url,
+      text: ontology.name,
+      link: ontology_url
     }
   end
 
@@ -133,14 +174,13 @@ class AnnotatorController < ApplicationController
   end
 
   def empty_advanced_options
-    params[:semantic_types].nil? &&
-      params[:semantic_groups].nil? &&
+    keys = [:semantic_types, :semantic_groups, :class_hierarchy_max_level, :score, :score_threshold,
+            :confidence_threshold, :fast_context, :lemmatize]
+    keys.all? { |key| params[key].nil? } || (
       params[:class_hierarchy_max_level] == 'None' &&
-      (params[:score].nil? || params[:score] == 'none') &&
-      params[:score_threshold] == '0' &&
-      params[:confidence_threshold] == '0' &&
-      params[:fast_context].nil? &&
-      params[:lemmatize].nil?
+        (params[:score].nil? || params[:score] == 'none') &&
+        params[:score_threshold] == '0' &&
+        params[:confidence_threshold] == '0')
   end
 
   def remove_special_chars(input)
