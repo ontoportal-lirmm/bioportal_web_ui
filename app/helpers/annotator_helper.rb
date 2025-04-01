@@ -79,4 +79,55 @@ module AnnotatorHelper
     row[:certainty] = annotation.certaintyContext
   end
 
+  def annotator_json_button
+    regular_button('annotator_json', 'JSON', variant: 'secondary', href: @json_link, size: 'slim', target: '_blank', state: 'regular') do |btn|
+      btn.icon_left do
+        inline_svg_tag 'json.svg'
+      end
+    end
+  end
+
+  def annotator_rdf_button
+    regular_button('annotator_rdf', 'RDF', variant: 'secondary', href: @rdf_link, size: 'slim', target: '_blank', state: 'regular') do |btn|
+      btn.icon_left do
+        inline_svg_tag 'summary/sparql.svg'
+      end
+    end
+  end
+
+  def annotator_cite_us_button
+    regular_button('annotator_cite_us', 'Cite us', variant: 'secondary', href: $CITE_ANNOTATOR, size: 'slim', target: '_blank', state: 'regular') do |btn|
+      btn.icon_left do
+        inline_svg_tag 'icons/cite.svg'
+      end
+    end
+  end
+
+  def annotator_doc_button
+    regular_button('annotator_doc', 'Documentation', variant: 'secondary', href: $ANNOTATOR_DOC, size: 'slim', target: '_blank', state: 'regular') do |btn|
+      btn.icon_left do
+        inline_svg_tag 'summary/documentation.svg'
+      end
+    end
+  end
+
+  def annotator_class_label_fetcher(cls, ontology)
+    config = ontology_portal_config(ontology[:id])&.last || internal_portal_config(ontology[:id]) || {}
+    return cls[:id] unless config
+
+    link_to cls[:link] do
+      content_tag(:div, class: "class federated-icon-#{config[:name]&.downcase}") do
+        federation_link(title: cls[:text], color: config[:color], name: config[:name])
+      end
+    end
+  end
+
+  def annotator_external_ontology(ontology)
+    config = ontology_portal_config(ontology[:id])&.last || internal_portal_config(ontology[:id]) || {}
+    content_tag(:div, class: 'd-flex align-items-center') do
+      out = federation_link(title: ontology[:text], color: config[:color], name: config[:name])
+      out += portal_button(name: config[:name], color: config[:color], light_color: config[:'light-color'])
+      out.html_safe
+    end
+  end
 end

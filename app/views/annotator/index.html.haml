@@ -93,18 +93,10 @@
                     = result[:score] 
         .annotator-bottom-actions
           .json-button
-            = render Buttons::RegularButtonComponent.new(id:'annotator_json', value: "JSON", variant: "secondary", href: @json_link, size: "slim", target: '_blank', state: "regular") do |btn|
-              - btn.icon_left do
-                = inline_svg_tag "json.svg"
+            = annotator_json_button
           .rdf-button
-            = render Buttons::RegularButtonComponent.new(id:'annotator_rdf', value: "RDF", variant: "secondary", href: @rdf_link, size: "slim", target: '_blank', state: "regular") do |btn|
-              - btn.icon_left do
-                = inline_svg_tag "summary/sparql.svg"
+            = annotator_rdf_button
           .cite-us-button
-            = render Buttons::RegularButtonComponent.new(id:'annotator_cite_us', value: t('recommender.cite'), variant: "secondary", href: $CITE_ANNOTATOR, size: "slim", target: '_blank', state: "regular") do |btn|
-              - btn.icon_left do
-                = inline_svg_tag "icons/cite.svg"
+            = annotator_cite_us_button
           .annotator-doc
-            = render Buttons::RegularButtonComponent.new(id:'annotator_api_doc', value: t('annotator.api_documentation'), variant: "secondary", href: $ANNOTATOR_API_DOC, size: "slim", target: '_blank', state: "regular") do |btn|
-              - btn.icon_left do
-                = inline_svg_tag "summary/documentation.svg"
+            = annotator_doc_button
