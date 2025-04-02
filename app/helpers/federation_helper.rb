@@ -223,19 +223,20 @@ module FederationHelper
     counts_ontology_ids_by_portal_name(ids)
   end
 
-  def federation_link(title:, name: nil, color: nil)
+  def federation_link(id:, title:, name: nil, color: nil)
     content_tag(:span, class: '', style: color ? "color: #{color} !important" : '',
                 'data-controller': 'federation-portals-colors',
                 'data-federation-portals-colors-color-value': color,
                 'data-federation-portals-colors-portal-name-value': name.downcase) do
       content_tag(:div, class: 'd-flex align-items-center') do
         out = title
-        out += inline_svg_tag 'icons/external-link.svg', class: "ml-1 federated-icon-#{name.downcase} #{color ? '' : 'd-none'}"
+        unless internal_ontology?(id)
+          out += inline_svg_tag 'icons/external-link.svg', class: "ml-1 federated-icon-#{name.downcase} #{color ? '' : 'd-none'}"
+        end
         out.html_safe
       end
     end
   end
-
 
   private
 
