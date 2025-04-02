@@ -1,62 +1,67 @@
 = render_in_modal do
-    = form_tag('/ontologies_selector/results', method: :get, novalidate: true, data: {turbo_frame: 'selector_results_frame'}) do
-        .d-flex.align-items-center.justify-content-center{'data-controller': 'ontologies-selector', 'data-ontologies-selector-id-value': @select_id, 'data-ontologies-selector-select-all-value': t('ontologies_selector.select_all'), 'data-ontologies-selector-unselect-all-value': t('ontologies_selector.unselect_all')}
-            .ontologies-selector-container
-                .ontologies-selector-input
-                    = text_input(label: '', placeholder: t('ontologies_selector.search_hint'), name: 'input', data: {action: 'input->ontologies-selector#input'})
-                    = inline_svg_tag 'icons/search.svg'
-                .ontologies-selector-options{'data-action': 'change->ontologies-selector#change'}
-                    .switch-filters 
-                        .show-ontology-views
-                            .text
-                                = t('ontologies_selector.show_ontology_view')
-                            = render SwitchInputComponent.new(id: 'show-ontology-views', name: 'showOntologyViews')
-                        .show-retired-ontologies
-                            .text
-                                = t('ontologies_selector.hide_retired_ontologies')
-                            = render SwitchInputComponent.new(id: 'show-retired-ontologies', name: 'showRetiredOntologies')
-                    - formats = @formats.drop(1)
-                    %div{'data-ontologies-selector-target': 'table'}
-                        = render TabsContainerComponent.new do |c|         
-                            = c.item(title: t('ontologies_selector.tabs_title.categories'), selected: true)
-                            = c.item_content do
-                                .chips.categories
-                                    - @filters[:categories][0].each do |item|
-                                        = chips_component(label: item.acronym, id: item.acronym, value: item.id, name: 'categories[]', tooltip: item.name)
-                            = c.item(title: t('ontologies_selector.tabs_title.groups'))
-                            = c.item_content do
-                                .chips.groups
-                                    - @filters[:groups][0].each do |item|
+  %div{'data-controller': 'ontologies-selector', 'data-ontologies-selector-id-value': @select_id, 'data-ontologies-selector-select-all-value': t('ontologies_selector.select_all'), 'data-ontologies-selector-unselect-all-value': t('ontologies_selector.unselect_all')}
+    = form_tag('/ontologies_selector/results', method: :get, novalidate: true, data: {turbo_frame: 'selector_results_frame', 'ontologies-selector-target': 'form'}) do
+      .ontologies-selector-container
+        .ontologies-selector-input
+          = text_input(label: '', placeholder: t('ontologies_selector.search_hint'), name: 'input', data: {action: 'input->ontologies-selector#input'})
+          = inline_svg_tag 'icons/search.svg'
+        .ontologies-selector-options{'data-action': 'change->ontologies-selector#change'}
+          .switch-filters
+            .show-ontology-views
+              .text
+                = t('ontologies_selector.show_ontology_view')
+              = render SwitchInputComponent.new(id: 'show-ontology-views', name: 'showOntologyViews')
+            .show-retired-ontologies
+              .text
+                = t('ontologies_selector.hide_retired_ontologies')
+              = render SwitchInputComponent.new(id: 'show-retired-ontologies', name: 'showRetiredOntologies')
+          - formats = @formats.drop(1)
+          %div{'data-ontologies-selector-target': 'table'}
+            = render TabsContainerComponent.new do |c|
+              = c.item(title: t('ontologies_selector.tabs_title.categories'), selected: true)
+              = c.item_content do
+                .chips.categories
+                  - @filters[:categories][0].each do |item|
+                    = chips_component(label: item.acronym, id: item.acronym, value: item.acronym, name: 'categories[]', tooltip: item.name)
+              = c.item(title: t('ontologies_selector.tabs_title.groups'))
+              = c.item_content do
+                .chips.groups
+                  - @filters[:groups][0].each do |item|
 
-                                        = chips_component(label: item.acronym, id: item.acronym, value: item.id, name: 'groups[]', tooltip: item.name)
+                    = chips_component(label: item.acronym, id: item.acronym, value: item.id, name: 'groups[]', tooltip: item.name)
 
-                            = c.item(title: t('ontologies_selector.tabs_title.format'))
-                            = c.item_content do
-                                .chips.format
-                                    - formats.each do |item|
-                                        = chips_component(label: item, id: item, name: 'formats[]', value: item)
+              = c.item(title: t('ontologies_selector.tabs_title.format'))
+              = c.item_content do
+                .chips.format
+                  - formats.each do |item|
+                    = chips_component(label: item, id: item, name: 'formats[]', value: item)
 
-                            = c.item(title: t('ontologies_selector.tabs_title.natural_languages'))
-                            = c.item_content do
-                                .chips.natural-language
-                                    - @filters[:naturalLanguage][0].each do |item|
-                                        = chips_component(label: item["acronym"], id: item["acronym"], name: 'naturalLanguage[]', value: item['id'])
-                            
-                            = c.item(title: t('ontologies_selector.tabs_title.formality_levels'))
-                            = c.item_content do
-                                .chips
-                                    - @filters[:hasFormalityLevel][0].each do |item|
-                                        = chips_component(label: item["name"],id: item["acronym"], name: 'formalityLevel[]', value: item["id"])
-                            
-                            = c.item(title: t('ontologies_selector.tabs_title.ontology_types'))
-                            = c.item_content do
-                                .chips
-                                    - @filters[:isOfType][0].each do |item|
-                                        = chips_component(label: item["name"],id: item["acronym"], name: 'isOfType[]', value: item["id"])
-                %input.d-none{type: 'submit', 'data-ontologies-selector-target': 'submit'}
-                = render TurboFrameComponent.new(id: 'selector_results_frame', src: '/ontologies_selector/results') do |container|
-                    - container.loader do
-                        = render LoaderComponent.new(type: 'pulsing') 
+              = c.item(title: t('ontologies_selector.tabs_title.natural_languages'))
+              = c.item_content do
+                .chips.natural-language
+                  - @filters[:naturalLanguage][0].each do |item|
+                    = chips_component(label: item["acronym"], id: item["acronym"], name: 'naturalLanguage[]', value: item['id'])
+
+              = c.item(title: t('ontologies_selector.tabs_title.formality_levels'))
+              = c.item_content do
+                .chips
+                  - @filters[:hasFormalityLevel][0].each do |item|
+                    = chips_component(label: item["name"],id: item["acronym"], name: 'formalityLevel[]', value: item["id"])
+
+              = c.item(title: t('ontologies_selector.tabs_title.ontology_types'))
+              = c.item_content do
+                .chips
+                  - @filters[:isOfType][0].each do |item|
+                    = chips_component(label: item["name"],id: item["acronym"], name: 'isOfType[]', value: item["id"])
+
+              - if federation_enabled?
+                = c.item(title: t('federation.results_from_external_portals'))
+                = c.item_content do
+                  .field.d-flex.chips
+                    = federation_input_chips(name: "portals[]")
+        = render TurboFrameComponent.new(id: 'selector_results_frame', src: '/ontologies_selector/results', data: {'ontologies-selector-target': 'frame'}) do |container|
+          - container.loader do
+            = render LoaderComponent.new(type: 'pulsing')
                         
                     
                 

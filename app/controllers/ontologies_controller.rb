@@ -26,7 +26,7 @@ class OntologiesController < ApplicationController
 
   before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
   before_action :submission_metadata, only: [:show]
-  before_action :set_federated_portals, only: [:index, :ontologies_filter]
+  before_action :set_federated_portals, only: [:index, :ontologies_filter,:ontologies_selector, :ontologies_selector_results]
   before_action :authorize_read_only, :only => [:new, :create, :edit, :update]
 
   KNOWN_PAGES = Set.new(["terms", "classes", "mappings", "notes", "widgets", "summary", "properties", "instances", "schemes", "collections", "sparql"])
@@ -467,6 +467,7 @@ class OntologiesController < ApplicationController
     @ontologies = LinkedData::Client::Models::Ontology.all(include_views: params[:showOntologyViews])
     @total_ontologies_number = @ontologies.length
     @input = params[:input] || ''
+    @ontologies.sort_by! { |ontology| ontology.name.downcase }
     @ontologies = @ontologies.select { |ontology| ontology.name.downcase.include?(@input.downcase) || ontology.acronym.downcase.include?(@input.downcase) }
 
     if params[:groups]
@@ -477,7 +478,7 @@ class OntologiesController < ApplicationController
 
     if params[:categories]
       @ontologies = @ontologies.select do |ontology|
-        (ontology.hasDomain & params[:categories]).any?
+        (ontology.hasDomain.map{|x| x.split('/').last} & params[:categories]).any?
       end
     end
 
@@ -504,7 +505,7 @@ class OntologiesController < ApplicationController
         submissions.any? { |submission| submission.ontology.id == ontology.id }
       end
     end
-    render 'ontologies/ontologies_selector/ontologies_selector_results'
+    render 'ontologies/ontologies_selector/ontologies_selector_results', layout: false
   end
 
   private

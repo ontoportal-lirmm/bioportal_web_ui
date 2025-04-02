@@ -439,7 +439,8 @@ class ApplicationController < ActionController::Base
   end
 
   def set_federated_portals
-    RequestStore.store[:federated_portals] =  params[:portals]&.split(',')
+    params[:portals] = params[:portals]&.join(',')
+    RequestStore.store[:federated_portals] = params[:portals]&.split(',')
   end
 
   private

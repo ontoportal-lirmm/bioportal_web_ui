@@ -895,4 +895,13 @@ module OntologiesHelper
     end
   end
 
+  def ontology_select_result(ontology)
+    config = ontology_portal_config(ontology.id)&.last || internal_portal_config(ontology.id) || {}
+    label = "#{ontology.name} (#{ontology.acronym})"
+    chips_component(id: "selector[#{ontology.id}]", value: ontology.id, name: ontology.acronym) do
+      content_tag :div, class: 'd-flex align-items-center justify-content-between' do
+        federation_link(id: ontology.id, title: label, color: config[:color], name: config[:name]) + portal_button(name: config[:name], color: config[:color], light_color: config[:'light-color'])
+      end
+    end
+  end
 end

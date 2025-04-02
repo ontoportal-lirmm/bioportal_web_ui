@@ -1,19 +1,20 @@
 = render TurboFrameComponent.new(id:'selector_results_frame') do |container|
-    .ontologies-selector-results
-        .horizontal-line                  
-        .results-number
-            = t("ontologies.showing_ontologies_size", ontologies_size: @ontologies.length, analytics_size: @total_ontologies_number, portals: portal_name)
-            %span.select-all{'data-action': 'click->ontologies-selector#selectall'}
-                = t('ontologies_selector.select_all')
-        .ontologies
-            - @ontologies.each do |ontology|
-                .ontology{'data-ontologies-selector-target': 'ontology'}
-                    = chips_component(id: "selector[#{ontology.acronym}]",value: ontology.acronym, label: "#{ontology.name} (#{ontology.acronym})", name: ontology.acronym)
-        .horizontal-line                    
-        .save-cancel-buttons
-            = cancel_button_component(class_name: 'button', id:'cancel-selector', value: t('ontologies_selector.cancel'), data: {action: "click->turbo-modal#hide", 'ontologies-selector-target': 'exit'})
-            = save_button_component(class_name: 'button', id:'apply-selector', value: t('ontologies_selector.apply'), data: {action: "click->ontologies-selector#apply"})
+  .ontologies-selector-results
+    .results-number
+      .horizontal-line
+      = t("ontologies.showing_ontologies_size", ontologies_size: @ontologies.length, analytics_size: @total_ontologies_number, portals: portal_name)
+      %span.select-all{'data-action': 'click->ontologies-selector#selectall'}
+        = t('ontologies_selector.select_all')
+    .ontologies
+      - @ontologies.each do |ontology|
+        .ontology{'data-ontologies-selector-target': 'ontology'}
+          = ontology_select_result(ontology)
+
+    .horizontal-line
+    .save-cancel-buttons
+      = cancel_button_component(class_name: 'button', id:'cancel-selector', value: t('ontologies_selector.cancel'), data: {action: "click->turbo-modal#hide", 'ontologies-selector-target': 'exit'})
+      = save_button_component(class_name: 'button', id:'apply-selector', value: t('ontologies_selector.apply'), data: {action: "click->ontologies-selector#apply"})
 
 
-    - container.loader do
-        = render LoaderComponent.new(type: 'pulsing') 
+  - container.loader do
+    = render LoaderComponent.new(type: 'pulsing')
