@@ -20,7 +20,7 @@ module ComponentsHelper
     render Display::AlertComponent.new(type: type, message: message)
   end
 
-  def chips_component(id:, name:, label:, value:, checked: false, tooltip: nil, disabled: false, &block)
+  def chips_component(id:, name:, label: nil, value:, checked: false, tooltip: nil, disabled: false, &block)
     content_tag(:div, data: { controller: 'tooltip' }, title: tooltip) do
       check_input(id: id, name: name, value: value, label: label, checked: checked, disabled: disabled, &block)
     end
