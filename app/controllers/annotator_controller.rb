@@ -77,10 +77,9 @@ class AnnotatorController < ApplicationController
     end
 
     params[:score] = nil if params[:score].nil? || params[:score].eql?('none')
-    params[:portals] = params[:portals]&.join(',')
     set_federated_portals
     @ontologies = LinkedData::Client::Models::Ontology.all({ include_views: true }).map { |o| [o.id.to_s, o] }.to_h
-    annotations = find_annotations(uri, api_params)
+    annotations = find_annotations(uri, api_params, @ontologies)
     @federation_errors = []
     Array(annotations).each do |annotation|
       @federation_errors << annotation.errors if federation_error?(annotation)
@@ -89,9 +88,10 @@ class AnnotatorController < ApplicationController
     @results = []
     annotations.each do |annotation|
       next if annotation.nil? || annotation.errors
+
+      @direct_results += 1
       if Array(annotation.annotations).empty?
         @results.push(direct_annotation(annotation))
-        @direct_results += 1
       else
         row = direct_annotation(annotation)
         add_context_annotations(annotation, row)
