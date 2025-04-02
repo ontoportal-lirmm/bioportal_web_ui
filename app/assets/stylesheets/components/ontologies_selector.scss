@@ -1,5 +1,5 @@
 .ontologies-selector-container{
-    width: 800px;
+    width: 100%;
     padding: 0 10px;
     
 }
@@ -61,11 +61,8 @@
 .ontologies-selector-results .chips-container > div{
     margin-right: 0;
 }
-.ontologies-selector-results .ontologies svg{
-    display: none !important;
-}
 .ontologies-selector-results .ontologies{
-    max-height: 300px;
+    max-height: 50vh;
     overflow-y: scroll;
 }
 .save-cancel-buttons{
