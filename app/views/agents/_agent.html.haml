@@ -1,12 +1,12 @@
 %tr.human{:id => agent_table_line_id(agent_id(agent))}
   %td
-    %div{style: 'width: 250px'}
+    %div.agents-table-name-field
       %div.text-truncate{title: agent.name}
-        = agent.name
+        = link_to agent.name, "/agents/#{agent.id.split('/').last}/profile", target: "_blank"
+        %span.clickable-identifier-icon
+          = raw display_identifiers(agent.identifiers)
   %td
     = agent.acronym
-  %td
-    = raw display_identifiers(agent.identifiers)
   %td
     = raw agent.affiliations.map{|i| display_agent(i)}.join(', ')
   %td
