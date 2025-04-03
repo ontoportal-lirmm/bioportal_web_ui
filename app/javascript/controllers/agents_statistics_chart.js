@@ -1,34 +1,33 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    // Calculate totals and percentages
-    const total = contributionData.creator + contributionData.contributor + (contributionData.publisher || 0);
-    const creatorPercent = Math.round((contributionData.creator / total) * 100);
-    const contributorPercent = Math.round((contributionData.contributor / total) * 100);
-    const publisherPercent = 100 - creatorPercent - contributorPercent;
-    
-    // Chart data configuration
+    // Define contribution types and colors
+    const contributionTypes = [
+        { key: "creator", label: "Creator", color: "#4e79a7" },
+        { key: "contributor", label: "Contributor", color: "#f28e2b" },
+        { key: "publisher", label: "Publisher", color: "#e15759" },
+        { key: "fundedBy", label: "Funded By", color: "#76b7b2" },
+        { key: "copyrightHolder", label: "Copyright Holder", color: "#59a14f" },
+        { key: "translator", label: "Translator", color: "#edc949" },
+        { key: "endorsedBy", label: "Endorsed By", color: "#af7aa1" }
+    ];
+    console.log(contributionData)
+    // Filter out undefined or zero contributions
+    const filteredContributions = contributionTypes.filter(type => contributionData[type.key] && contributionData[type.key] > 0);
+
+    // Calculate total
+    const total = filteredContributions.reduce((sum, type) => sum + (contributionData[type.key] || 0), 0);
+
+    // Prepare chart data
     const chartData = {
-        labels: [
-            `Creator (${contributionData.creator})`, 
-            `Contributor (${contributionData.contributor})`,
-            `Publisher (${contributionData.publisher})`
-        ],
+        labels: filteredContributions.map(type => `${type.label} (${contributionData[type.key]})`),
         datasets: [{
-            data: [
-                contributionData.creator, 
-                contributionData.contributor,
-                contributionData.publisher || 0
-            ],
-            backgroundColor: [
-                '#4e79a7', // creator color
-                '#f28e2b', // contributor color
-                '#e15759'  // publisher color
-            ],
+            data: filteredContributions.map(type => contributionData[type.key]),
+            backgroundColor: filteredContributions.map(type => type.color),
             borderWidth: 1,
             borderColor: '#fff'
         }]
     };
-    
+
     // Create the chart
     const ctx = document.getElementById('contributionChart').getContext('2d');
     const contributionChart = new Chart(ctx, {
