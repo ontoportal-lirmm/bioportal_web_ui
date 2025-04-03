@@ -100,7 +100,7 @@ export function useAgentSubmissionsDrawBubbles(data, width, height, margin, bubb
   }
     // Function to display Agent Role
   function displagentRole(d) {
-    return (d.r > d.data.ontology_name.length * 5 && d.r > 50) ? d.data.role : '';
+    return (d.r > d.data.ontology_name.length * 5 && d.r > 80) ? d.data.role : '';
   }
 
   // Tooltip functions

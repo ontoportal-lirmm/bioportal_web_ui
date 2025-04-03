@@ -7,16 +7,16 @@ class AgentsProfileController < ApplicationController
 
     def details
       @agent = find_agent(id = params[:id])
-      @agent_properties = agent_to_hash(@agent)   
+      @agent_properties = agent_to_hash(@agent)
       @agent_stats = AgentStatisticsCalculatorComponent.new(@agent).stats
 
-      mapping = { "http://omv.ontoware.org/2005/05/ontology#hasContributor" => "Contributor", "http://omv.ontoware.org/2005/05/ontology#hasCreator" => "Creator", "http://purl.org/dc/terms/publisher" => "Publisher" }
+      mapping = { "http://omv.ontoware.org/2005/05/ontology#hasContributor" => "Contributor", "http://omv.ontoware.org/2005/05/ontology#hasCreator" => "Creator", "http://purl.org/dc/terms/publisher" => "Publisher", "http://xmlns.com/foaf/0.1/fundedBy" => "Funded By", "http://schema.org/copyrightHolder" =>  "Copyright Holder", "http://schema.org/translator" => "Translator", "http://omv.ontoware.org/2005/05/ontology#endorsedBy" => "Endorsed By", "http://purl.org/pav/curatedBy" => "Curator"}
       @agentOntologies = @agent.usages.to_h.each_with_object({}) do |(key, value), hash|
         if (match = key.to_s.match(%r{/ontologies/([^/]+)/submissions}))
           ontology_acronym = match[1]
           hash[ontology_acronym] = value.map { |url| mapping[url] }
         end
-      end
+      end      
 
     end
   
@@ -33,7 +33,7 @@ class AgentsProfileController < ApplicationController
       {}.tap do |hash|
         attributes.each do |attr|
           next unless agent.instance_variable_defined?(attr)
-    
+          
           value = agent.instance_variable_get(attr)
     
           value = case value
@@ -41,7 +41,7 @@ class AgentsProfileController < ApplicationController
                   when OpenStruct then value.to_h
                   else value
                   end
-    
+                  
           key = keep_at_prefix ? attr.to_s : attr.to_s.delete('@')
           if key == "identifiers" && value.is_a?(Array)
             hash[key] = transform_identifiers(value)
