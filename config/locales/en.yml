@@ -254,6 +254,7 @@ en:
       contributed_in: Has a role in
       metadata: Metadata
       statistics: Statistics
+      no_contributions: This agent has no contributions in %{portalName} 
     save: Save
     see_usages_count: See usages (%{count})
     turbo_confirm: Are you sure?

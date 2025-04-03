@@ -262,6 +262,7 @@ fr:
       contributed_in: A un role dans
       metadata: Métadonnées
       statistics: Statistiques
+      no_contributions: Cet agent n'a aucune contribution dans %{portalName} 
     save: Sauvegarder
     see_usages_count: Voir les utilisations (%{count})
     turbo_confirm: Êtes-vous sûr ?
