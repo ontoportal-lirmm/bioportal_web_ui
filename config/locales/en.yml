@@ -222,8 +222,6 @@ en:
     agent_usages_updated: Agent usages successfully updated
     delete: Delete
     delete_error: Can't delete this %{agent} because still used
-    description: Discover the people and organizations that contribute, create, and
-      publish vocabularies
     errors:
       invalid_url: The identifier must be a valid ORCID/ROR URL
       required: is required and cannot be empty
@@ -250,11 +248,6 @@ en:
     not_found_agent: Agent with id %{id}
     not_used: Not used
     ontology_not_valid: 'ontology is not valid, here are the errors: '
-    profile:
-      contributed_in: Has a role in
-      metadata: Metadata
-      statistics: Statistics
-      no_contributions: This agent has no contributions in %{portalName} 
     save: Save
     see_usages_count: See usages (%{count})
     turbo_confirm: Are you sure?
