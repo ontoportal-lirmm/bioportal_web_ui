@@ -11,15 +11,24 @@
 
 %div
   %div.mx-1
-    - sections = [t('admin.index.analytics'), t('admin.index.site_administration'),t('admin.index.ontology_administration'),  t('admin.index.licensing'), t('admin.index.users'), t('admin.index.metadata_administration'), t('admin.index.groups'), t('admin.index.categories'), t('admin.index.persons_and_organizations'), t('admin.index.sparql'), t('admin.index.search')]
+    - sections = [t('admin.index.analytics'), t('admin.index.site_administration'),t('admin.index.ontology_administration'),  t('admin.index.licensing'), t('admin.index.users'), t('admin.index.metadata_administration'), t('admin.index.groups'), t('admin.index.categories'), t('admin.index.persons_and_organizations'), t('admin.index.sparql'), t('admin.index.search'), 'Graphs', 'SPARQL logs']
     - selected = params[:section] || sections.first.downcase
     = render Layout::VerticalTabsComponent.new(header:  t('admin.index.administration_console'), titles: sections, selected: selected, url_parameter: 'section') do |t|
       - t.item_content do
         - if @ontology_visits[:visits].empty?
-          %div.d-flex.justify-content-center
+          %div.d-flex.justify-content-center.card.p-2.text-center
             Google analytics not enabled
-        - else 
+        - else
           = render 'analytics'
+
+        - unless @users_count.empty?
+          %div
+            %div.my-2
+              %div.card.p-2
+                = chart_component(title: 'Users API usage the last 30 days', type: 'bar',
+                                      labels: @users_count.keys,
+                                      datasets: visits_chart_dataset_array({'SPARQL Calls': @users_count.values}),
+                                      index_axis: 'y')
       - t.item_content do
         = render 'main'
       - t.item_content do
@@ -63,3 +72,7 @@
         = sparql_query_container
       - t.item_content do
         = render TurboFrameComponent.new(id: 'search-admin', src: '/admin/search', loading: 'lazy')
+      - t.item_content do
+        = render TurboFrameComponent.new(id: 'graphs-admin', src: '/admin/graphs', loading: 'lazy')
+      - t.item_content do
+        = render TurboFrameComponent.new(id: 'logs-admin', src: '/admin/logs', loading: 'lazy')
