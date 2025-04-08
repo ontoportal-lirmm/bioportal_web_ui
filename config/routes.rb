@@ -133,6 +133,9 @@ Rails.application.routes.draw do
 
   match 'sparql_proxy', to: 'admin#sparql_endpoint', via: [:get, :post]
 
+  # SPARQL Endpoint routes
+  get 'sparql', to: 'sparql_endpoint#index', as: 'sparql_endpoint'
+
   # Top-level pages
   match '/feedback', to: 'home#feedback', via: [:get, :post]
   get '/account' => 'users#show'
