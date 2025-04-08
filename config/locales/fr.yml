@@ -230,8 +230,6 @@ fr:
     agent_usages_updated: Utilisations de l'agent mises à jour
     delete: Supprimer
     delete_error: Impossible de supprimer cet %{agent} car il est encore utilisé
-    description: Découvrez les personnes et les organisations qui contribuent, créent
-      et publient des vocabulaires.
     errors:
       invalid_url: L'identifiant doit être une URL ORCID/ROR valide
       required: est requis et ne peut pas être vide
@@ -258,11 +256,6 @@ fr:
     not_found_agent: Agent avec id %{id}
     not_used: Non utilisé
     ontology_not_valid: 'l''ontologie n''est pas valide, voici les erreurs : '
-    profile:
-      contributed_in: A un role dans
-      metadata: Métadonnées
-      statistics: Statistiques
-      no_contributions: Cet agent n'a aucune contribution dans %{portalName} 
     save: Sauvegarder
     see_usages_count: Voir les utilisations (%{count})
     turbo_confirm: Êtes-vous sûr ?
