@@ -43,13 +43,11 @@ services:
       retries: 3
 
   cache:
-    image: memcached:latest
-    restart: unless-stopped
-    command: [ "-m", "1024" ]
-    networks:
-      - default
+    image: "redis:latest"
     ports:
-      - "11211:11211"
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
   node:
     <<: *default-app
     command: "yarn build --watch"
@@ -125,3 +123,4 @@ volumes:
   assets:
   node:
   app_ui:
+  redis_data:
