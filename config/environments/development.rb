@@ -34,7 +34,7 @@ Rails.application.configure do
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true
 
-    config.cache_store = :memory_store
+    config.cache_store = :redis_cache_store, { url: "redis://#{ENV.fetch("CACHE_HOST", "localhost")}:6379/1", namespace: 'bioportal_web_ui' }
     config.public_file_server.headers = {
       "Cache-Control" => "public, max-age=#{2.days.to_i}"
     }
@@ -70,8 +70,8 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
-  # memcache setup
-  config.cache_store = ActiveSupport::Cache::MemCacheStore.new('cache:11211', namespace: 'BioPortal')
+  # cache setup
+  config.cache_store = :redis_cache_store, { url: "redis://#{ENV.fetch("CACHE_HOST", "localhost")}:6379/1", namespace: 'bioportal_web_ui' }
 
   # Silence cache output
   config.cache_store.logger = Logger.new("/dev/null") if config.cache_store.respond_to?(:logger)
