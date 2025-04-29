@@ -488,4 +488,13 @@ module ApplicationHelper
     id.split('/').last
   end
 
+  def get_name(id)
+    user = LinkedData::Client::Models::User.find(id, {include: 'all'})
+    if user.firstName || user.lastName
+      return "#{user.firstName} #{user.lastName}"
+    else
+      user.username
+    end
+  end
+
 end
