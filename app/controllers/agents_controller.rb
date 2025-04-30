@@ -7,14 +7,71 @@ class AgentsController < ApplicationController
   end
 
   def show
-    # we use :agent_id not :id
-    @agent = LinkedData::Client::Models::Agent.find(params[:agent_id].split('/').last)
-    not_found(t('agents.not_found_agent', id: params[:agent_id])) if @agent.nil?
+        # we use :agent_id not :id
+        @agent = LinkedData::Client::Models::Agent.find(params[:agent_id].split('/').last)
+        not_found(t('agents.not_found_agent', id: params[:agent_id])) if @agent.nil?
+    
+        @agent_id = params[:id] || agent_id(@agent)
+        @name_prefix = params[:name_prefix]
+        @edit_on_modal = params[:edit_on_modal]&.eql?('true')
+        @deletable = params[:deletable]&.eql?('true')
+  end
 
-    @agent_id = params[:id] || agent_id(@agent)
-    @name_prefix = params[:name_prefix]
-    @edit_on_modal = params[:edit_on_modal]&.eql?('true')
-    @deletable = params[:deletable]&.eql?('true')
+  def ajax_agents_list
+    page = params[:page] || 1
+    page_size = params[:pagesize].to_i
+    query = params[:search].presence
+    if query
+      agents = search_agents(query)
+    else
+      options = { page: page, include: 'all' }
+      options[:pagesize] = page_size unless page_size == -1
+      agents = LinkedData::Client::Models::Agent.all(options).first
+    end
+
+    partial_path = "agents_profile/table"
+    agent_data = agents.collection.map do |agent|
+      # Fallback logic for search result structure
+      name = agent.respond_to?(:name) ? agent.name : agent.name_text
+      identifiers = agent.respond_to?(:identifiers) ? agent.identifiers : []
+      acronym = agent.respond_to?(:acronym) ? agent.acronym : nil
+      agent_type = agent.respond_to?(:agentType) ? agent.agentType : agent.agentType_t
+      affiliations = agent.respond_to?(:affiliations) ? agent.affiliations : []
+      usages = agent.respond_to?(:usages) ? agent.usages : []
+      
+      # Render with adjusted mock agent if needed
+      mock_agent = OpenStruct.new(
+        name: name,
+        acronym: acronym,
+        agentType: agent_type,
+        affiliations: affiliations,
+        identifiers: identifiers,
+        usages: usages,
+        id: agent.id
+      )
+  
+      {
+        name: render_to_string(partial: "#{partial_path}/name", locals: { agent: mock_agent }),
+        acronym: acronym,
+        agentType: agent_type,
+        affiliations: render_to_string(partial: "#{partial_path}/affiliations", locals: { agent: mock_agent }),
+        usages: render_to_string(partial: "#{partial_path}/usages", locals: { agent: mock_agent }),
+        actions: render_to_string(partial: "#{partial_path}/actions", locals: { agent: mock_agent })
+      }
+    end
+
+    render json: {
+      collection: agent_data,
+      recordsTotal: agents.totalCount,
+      recordsFiltered: agents.totalCount,
+    }
+  end
+  
+  
+
+  def search_agents(query)
+    filters = { query: "#{query}*", qf: "identifiers_texts^20 acronym_text^15 agentType_t^10 name_text^10 email_text^10"}
+    LinkedData::Client::HTTP.get('/search/agents', filters)
   end
 
   def ajax_agents
