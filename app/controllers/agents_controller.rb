@@ -3,7 +3,6 @@ class AgentsController < ApplicationController
   before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
 
   def index
-    @agents = LinkedData::Client::Models::Agent.all(include: 'all')
   end
 
   def show
