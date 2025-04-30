@@ -1,0 +1,73 @@
+- hasUsages = !(@agent.usages.nil? || @agent.usages.empty?)
+.container.d-flex.flex-column.py-4{ style: "width: 1248px;" }
+  .agents-details-path
+    %a{href: "/agents_profile"} Agents
+    = inline_svg_tag 'arrow-right-outlined.svg'
+    %div
+      = @agent.name
+  
+  - agent_type_icon = inline_svg_tag "icons/#{@agent.agentType}.svg", class: ('agent-type-icon' if @agent.agentType == 'organization')
+  = render PageHeaderComponent.new(title: "#{@agent.name} #{agent_type_icon}".html_safe, description: nil)
+  .row
+    .col-md-7
+      - has_metadata = @agent.identifiers.present? || @agent.email.present? || @agent.keywords.present? || @agent.affiliations.present?
+      - if has_metadata
+        %div.agents-page-section
+          %div
+            = render SummarySectionComponent.new(title: t("agents.profile.metadata")) do |c|
+              %div{ style: 'padding: 20px 0px 0px 0px;' }
+
+                = render Layout::ListComponent.new do |l|
+                  - unless @agent.identifiers.nil? || @agent.identifiers.empty?
+                    - l.row do
+                      = render FieldContainerComponent.new(label: t("agents.form.identifiers")) do
+                        = raw display_identifiers(@agent.identifiers, icon:false)
+                        %span.clickable-identifier-icon
+                          = raw display_identifiers(@agent.identifiers)
+                  - unless @agent.email.blank?
+                    - l.row do
+                      = render FieldContainerComponent.new(label: t("agents.form.email")) do
+                        = mail_to @agent.email, @agent.email
+                  - unless @agent.keywords.nil? || @agent.keywords.empty?
+                    - l.row do
+                      = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.keywords_and_classes")) do
+                        = horizontal_list_container(@agent.keywords) do |v|
+                          = render ChipButtonComponent.new(text: v, type: "static")
+                  - unless @agent.affiliations.nil? || @agent.affiliations.empty?
+                    - l.row do
+                      = render FieldContainerComponent.new(label: t("agents.form.affiliations")) do
+                        = raw @agent.affiliations.map{|i| display_agent(i)}.join(', ')
+          
+      %br
+      %div{'data-controller': 'agent-bubbles-submissions', 
+                  'data-agent-bubbles-submissions-ontologies-list-value': "#{@agentOntologies.to_h.to_json}",
+                  'data-agent-bubbles-submissions-api-url-value': rest_url}
+        = render SummarySectionComponent.new(title: t("agents.profile.contributed_in")) do |c|
+          - if hasUsages
+            %div
+              = render partial: '/agents_profile/bubble_view'
+          
+          - else
+            .account-page-no-ontology.w-100
+              %img{:src => "#{asset_path("empty-box.svg")}"}/
+              %p= t('agents.profile.no_contributions', portalName: $SITE)
+
+
+        
+    .col-md-5
+      - unless !hasUsages
+        .agents-page-section
+          = render SummarySectionComponent.new(title: t("agents.profile.statistics")) do |c|
+            .chart-container
+              %canvas#contributionChart
+:javascript
+  // Get data from Ruby stats object
+  const contributionData = {
+    creator: #{@agent_stats[:creator_count] || 0},
+    contributor: #{@agent_stats[:contributor_count] || 0},
+    publisher: #{@agent_stats[:publisher_count] || 0},
+    fundedBy: #{@agent_stats[:funded_by_count] || 0},
+    copyrightHolder: #{@agent_stats[:copyright_holder_count] || 0},
+    translator: #{@agent_stats[:translator_count] || 0},
+    endorsedBy: #{@agent_stats[:endorsed_by_count] || 0}
+  };
