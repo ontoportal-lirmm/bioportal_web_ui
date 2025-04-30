@@ -10,13 +10,17 @@
     = rounded_button_component("#{$REST_URL}/agents?display=all&apikey=#{get_apikey}")
 
   = render_alerts_container(AgentsController)
-  = render TableComponent.new(id: 'admin-agents-table', borderless: true, outline: true, paging: true, searching: true, sort_column: '0', server_side: true, ajax_url: '/ajax/agents/list', search_placeholder: "search agents", columns: ['name', 'acronym', 'affiliations', 'agentType', 'usages', 'actions']) do |t|
+  - columns_names = ['name', 'acronym', 'affiliations', 'agentType', 'usages']
+  - if session[:user] && session[:user].admin?
+    - columns_names << 'actions'
+  = render TableComponent.new(id: 'admin-agents-table', borderless: true, outline: true, paging: true, searching: true, sort_column: '0', server_side: true, ajax_url: '/ajax/agents/list', search_placeholder: "search agents", columns: columns_names) do |t|
     - t.header do |h|
       - h.th {t("agents.form.name")}
       - h.th {t("agents.form.acronym")}
       - h.th {t("agents.form.affiliations")}
       - h.th {t("agents.form.type")}
       - h.th {t("agents.index.usages")}
+      - if session[:user] && session[:user].admin?
       - h.th {t("agents.index.actions")}
 
     = render partial: 'agents/agent' , collection: @agents
