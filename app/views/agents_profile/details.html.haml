@@ -36,7 +36,7 @@
                   - unless @agent.affiliations.nil? || @agent.affiliations.empty?
                     - l.row do
                       = render FieldContainerComponent.new(label: t("agents.form.affiliations")) do
-                        = raw @agent.affiliations.map{|i| display_agent(i)}.join(', ')
+                        = raw @agent.affiliations.map{|i| display_agent(i)}.join('')
           
       %br
       %div{'data-controller': 'agent-bubbles-submissions', 
