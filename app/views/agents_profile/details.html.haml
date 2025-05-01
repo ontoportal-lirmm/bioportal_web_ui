@@ -28,11 +28,6 @@
                     - l.row do
                       = render FieldContainerComponent.new(label: t("agents.form.email")) do
                         = mail_to @agent.email, @agent.email
-                  - unless @agent.keywords.nil? || @agent.keywords.empty?
-                    - l.row do
-                      = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.keywords_and_classes")) do
-                        = horizontal_list_container(@agent.keywords) do |v|
-                          = render ChipButtonComponent.new(text: v, type: "static")
                   - unless @agent.affiliations.nil? || @agent.affiliations.empty?
                     - l.row do
                       = render FieldContainerComponent.new(label: t("agents.form.affiliations")) do
@@ -60,6 +55,12 @@
           = render SummarySectionComponent.new(title: t("agents.profile.statistics")) do |c|
             .chart-container
               %canvas#contributionChart
+      %br
+      - unless @agent.keywords.nil? || @agent.keywords.empty?
+        = render SummarySectionComponent.new(title: "Keywords") do |c|
+          %div{ style: 'padding: 5px 5px 0px 5px;' }
+            = horizontal_list_container(@agent.keywords) do |v|
+              = render ChipButtonComponent.new(text: v, type: "static")
 :javascript
   // Get data from Ruby stats object
   const contributionData = {
