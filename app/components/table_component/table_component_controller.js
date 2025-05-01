@@ -58,5 +58,22 @@
 
         
       }
+      // Trigger search when the user types at least 3 characters
+      const searchInput = document.querySelector('#admin-agents-table_filter input')
+
+      if (searchInput) {
+        let lastSearchValue = ''
+      
+        searchInput.addEventListener('input', () => {
+          const value = searchInput.value
+          // Check if the input value has changed and is at least 3 characters long
+          if ((value.length >= 3) || (value.length === 0 && lastSearchValue.length !== 0)) {
+            this.table.search(value).draw()
+          }
+        
+          lastSearchValue = value
+        })
+      }
+
     }
   }
