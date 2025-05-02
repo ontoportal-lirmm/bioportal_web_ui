@@ -34,21 +34,8 @@
                         = raw @agent.affiliations.map{|i| display_agent(i)}.join('')
           
       %br
-      %div{'data-controller': 'agent-bubbles-submissions', 
-                  'data-agent-bubbles-submissions-ontologies-list-value': "#{@agentOntologies.to_h.to_json}",
-                  'data-agent-bubbles-submissions-api-url-value': rest_url}
-        = render SummarySectionComponent.new(title: t("agents.profile.contributed_in")) do |c|
-          - if hasUsages
-            %div
-              = render partial: '/agents_profile/bubble_view'
-          
-          - else
-            .account-page-no-ontology.w-100
-              %img{:src => "#{asset_path("empty-box.svg")}"}/
-              %p= t('agents.profile.no_contributions', portalName: $SITE)
-
-
-        
+      = render SummarySectionComponent.new(title: t("agents.profile.contributed_in")) do |c|
+        = render RoleSelectorComponent.new(agentOntologies: @agentOntologies)
     .col-md-5
       - unless !hasUsages
         .agents-page-section

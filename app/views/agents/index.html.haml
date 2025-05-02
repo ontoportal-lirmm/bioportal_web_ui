@@ -7,8 +7,6 @@
                   class: "btn btn-default mb-3",
                   data: { show_modal_title_value: t("agents.index.create_new_agent"), show_modal_size_value: 'modal-xl' },
                   )
-    = rounded_button_component("#{$REST_URL}/agents?display=all&apikey=#{get_apikey}")
-
   = render_alerts_container(AgentsController)
   - columns_names = ['name', 'acronym', 'affiliations', 'agentType', 'usages']
   - if session[:user] && session[:user].admin?
@@ -21,7 +19,7 @@
       - h.th {t("agents.form.type")}
       - h.th {t("agents.index.usages")}
       - if session[:user] && session[:user].admin?
-      - h.th {t("agents.index.actions")}
+        - h.th {t("agents.index.actions")}
 
     = render partial: 'agents/agent' , collection: @agents
     %tr.empty-state
