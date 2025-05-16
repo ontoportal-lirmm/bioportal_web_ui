@@ -6,8 +6,18 @@
     %div
       = @agent.name
   
-  - agent_type_icon = inline_svg_tag "icons/#{@agent.agentType}.svg", class: ('agent-type-icon' if @agent.agentType == 'organization')
-  = render PageHeaderComponent.new(title: "#{@agent.name} #{agent_type_icon}".html_safe, description: nil)
+  - agent_type_icon = inline_svg_tag "icons/#{@agent.agentType}.svg"
+  .d-flex.justify-content-between
+    .d-flex
+      .agent-chip-circle
+        = agent_type_icon
+      = render PageHeaderComponent.new(title: "#{@agent.name}", description: nil)
+    .d-flex.align-items-center
+      = render RoundedButtonComponent.new(link: @agent.id, target: '_blank', size: 'medium', title: t("components.go_to_api"))
+      - if current_user_admin? || @agent.creator.eql?(current_user&.id.to_s) 
+        .span.m-2
+        = agents_edit_button
+
   .row
     .col-md-7
       - has_metadata = @agent.identifiers.present? || @agent.email.present? || @agent.keywords.present? || @agent.affiliations.present?

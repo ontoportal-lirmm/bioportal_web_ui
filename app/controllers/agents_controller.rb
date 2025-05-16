@@ -14,7 +14,7 @@ class AgentsController < ApplicationController
         @name_prefix = params[:name_prefix]
         @edit_on_modal = params[:edit_on_modal]&.eql?('true')
         @deletable = params[:deletable]&.eql?('true')
-  end
+    end  
 
   def ajax_agents_list
     page = params[:page] || 1
@@ -23,12 +23,12 @@ class AgentsController < ApplicationController
     if query
       agents = search_agents(query)
     else
-      options = { page: page, include: 'all' }
+      options = { page: page, include: 'agentType,name,homepage,acronym,email,identifiers,affiliations,usages' }
       options[:pagesize] = page_size unless page_size == -1
-      agents = LinkedData::Client::Models::Agent.all(options).first
+  agents = LinkedData::Client::Models::Agent.all(options).first
     end
 
-    partial_path = "agents_profile/table"
+    partial_path = "agents/table"
     agent_data = agents.collection.map do |agent|
       # Fallback logic for search result structure
       name = agent.respond_to?(:name) ? agent.name : agent.name_text
@@ -74,15 +74,23 @@ class AgentsController < ApplicationController
   end
 
   def ajax_agents
-    filters = { query: "#{params[:query]}*", qf: "identifiers_texts^20 acronym_text^15 name_text^10 email_text^10"}
-    @agents = LinkedData::Client::HTTP.get('/search/agents', filters)
-    agents_json = @agents.collection.map do |x|
+    # filters = { query: "#{params[:query]}*", qf: "identifiers_texts^20 acronym_text^15 name_text^10 email_text^10"}
+    # @agents = LinkedData::Client::HTTP.get('/search/agents', filters)
+    query = params[:query].presence
+    if query
+      agents = search_agents(query)
+    end
+    
+    #binding.pry
+
+    agents_json = agents.collection.map do |agent
+      |
       {
-        id: x.resource_id,
-        name: x.name_text,
-        type: x.agentType_t,
-        identifiers: x.identifiers_texts&.join(', '),
-        acronym: x.acronym_text
+        id: agent.id,
+        name: agent.name,
+        type: agent.agentType,
+        identifiers: agent.identifiers&.join(', '),
+        acronym: agent.acronym_text
       }
     end
 

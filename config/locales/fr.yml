@@ -225,6 +225,7 @@ fr:
     update_info_successfully: Informations de mise à jour récupérées
   agents:
     add_agent: Nouvel agent ajouté
+    edit_agent: Modifier l'agent 
     agent_already_deleted: Agent %{id} déjà supprimé
     agent_deleted_successfully: Agent %{id} supprimé
     agent_usages_updated: Utilisations de l'agent mises à jour
