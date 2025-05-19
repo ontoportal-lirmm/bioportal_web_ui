@@ -1,7 +1,7 @@
 - hasUsages = !(@agent.usages.nil? || @agent.usages.empty?)
 .container.d-flex.flex-column.py-4{ style: "width: 1248px;" }
   .agents-details-path
-    %a{href: "/agents_profile"} Agents
+    %a{href: agents_list_path} Agents
     = inline_svg_tag 'arrow-right-outlined.svg'
     %div
       = @agent.name

@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get '/notes/new_reply', to: 'notes#new_reply'
   delete '/notes', to: 'notes#destroy'
   resources :notes, constraints: { id: /.+/ }
+  get 'agents_list', to: 'agents_profile#index', as: 'agents_list'
   get 'agents/:id/profile', to: 'agents_profile#details',  constraints: { id: /[0-9a-f\-]+/ }  
   get 'agents/show_search', to: 'agents#show_search'
   get 'agents/:id/usages', to: 'agents#agent_usages', constraints: { id: /.+/ }
