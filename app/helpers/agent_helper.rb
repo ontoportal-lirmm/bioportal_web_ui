@@ -141,7 +141,10 @@ module AgentHelper
     end.join(' ').html_safe
   end
   
-
+  def render_agent_partial(partial, agent)
+    render_to_string(partial: partial, locals: { agent: agent })
+  end
+  
   def agent_field_name(name, name_prefix = '')
     name_prefix&.empty? ? name : "#{name_prefix}[#{name}]"
   end
