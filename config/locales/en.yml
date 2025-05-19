@@ -247,6 +247,8 @@ en:
       first_name: First name
       no_agents: There are currently no  agents.
       usages: Usages
+    profile:
+      keywords : Keywords
     modal_title: Agent "%{name}" usages
     not_found_agent: Agent with id %{id}
     not_used: Not used
