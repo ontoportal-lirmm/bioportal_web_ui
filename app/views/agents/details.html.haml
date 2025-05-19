@@ -1,7 +1,7 @@
 - hasUsages = !(@agent.usages.nil? || @agent.usages.empty?)
 .container.d-flex.flex-column.py-4{ style: "width: 1248px;" }
   .agents-details-path
-    %a{href: agents_list_path} Agents
+    %a{href: agents_path} Agents
     = inline_svg_tag 'arrow-right-outlined.svg'
     %div
       = @agent.name
@@ -50,7 +50,14 @@
       - unless !hasUsages
         .agents-page-section
           = render SummarySectionComponent.new(title: t("agents.profile.statistics")) do |c|
-            .chart-container
+            .chart-container{"data-controller": "agents-statistics", 
+                            "data-agents-statistics-creator-value": "#{@agent_stats&.dig(:creator_count) || 0}",
+                            "data-agents-statistics-contributor-value": "#{@agent_stats&.dig(:contributor_count) || 0}",
+                            "data-agents-statistics-publisher-value": "#{@agent_stats&.dig(:publisher_count) || 0}",
+                            "data-agents-statistics-funded-by-value": "#{@agent_stats&.dig(:funded_by_count) || 0}",
+                            "data-agents-statistics-copyright-holder-value": "#{@agent_stats&.dig(:copyright_holder_count) || 0}",
+                            "data-agents-statistics-translator-value": "#{@agent_stats&.dig(:translator_count) || 0}",
+                            "data-agents-statistics-endorsed-by-value": "#{@agent_stats&.dig(:endorsed_by_count) || 0}"}
               %canvas#contributionChart
       %br
       - unless @agent.keywords.nil? || @agent.keywords.empty?

@@ -1,68 +1,69 @@
 class AgentsController < ApplicationController
   include TurboHelper, AgentHelper
   before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
-
+      layout :determine_layout, only: [:index, :details]
   def index
   end
 
+  def details
+    @agent = find_agent(params[:id])
+    not_found(t('agents.not_found_agent', id: params[:id])) if @agent.status == 404
+
+    @agent_stats = AgentStatisticsCalculatorComponent.new(@agent).stats
+
+    mapping = {
+      "http://omv.ontoware.org/2005/05/ontology#hasContributor" => "Contributor",
+      "http://omv.ontoware.org/2005/05/ontology#hasCreator" => "Creator",
+      "http://purl.org/dc/terms/publisher" => "Publisher",
+      "http://xmlns.com/foaf/0.1/fundedBy" => "Funded By",
+      "http://schema.org/copyrightHolder" => "Copyright Holder",
+      "http://schema.org/translator" => "Translator",
+      "http://omv.ontoware.org/2005/05/ontology#endorsedBy" => "Endorsed By",
+      "http://purl.org/pav/curatedBy" => "Curator"
+    }
+
+    @agentOntologies = @agent.usages.to_h.each_with_object({}) do |(key, value), hash|
+      if (match = key.to_s.match(%r{/ontologies/([^/]+)/submissions}))
+        ontology_acronym = match[1]
+        hash[ontology_acronym] = value.map { |url| mapping[url] }
+      end
+    end
+  end
+
   def show
-        # we use :agent_id not :id
-        @agent = LinkedData::Client::Models::Agent.find(params[:agent_id].split('/').last)
-        not_found(t('agents.not_found_agent', id: params[:agent_id])) if @agent.nil?
-    
-        @agent_id = params[:id] || agent_id(@agent)
-        @name_prefix = params[:name_prefix]
-        @edit_on_modal = params[:edit_on_modal]&.eql?('true')
-        @deletable = params[:deletable]&.eql?('true')
-    end  
+    @agent = LinkedData::Client::Models::Agent.find(params[:agent_id].split('/').last)
+    not_found(t('agents.not_found_agent', id: params[:agent_id])) if @agent.nil?
+
+    @agent_id = params[:id] || agent_id(@agent)
+    @name_prefix = params[:name_prefix]
+    @edit_on_modal = params[:edit_on_modal]&.eql?('true')
+    @deletable = params[:deletable]&.eql?('true')
+  end
+
+  def find_agent(id = params[:id])
+    id = helpers.unescape(id)
+    @agent = LinkedData::Client::Models::Agent.find(id.split('/').last, { include: 'all' })
+    not_found("Agent with id #{id} not found") if @agent.nil?
+    @agent
+  end
 
   def ajax_agents_list
     page = params[:page] || 1
     page_size = params[:pagesize].to_i
     query = params[:search].presence
-    if query
-      agents = search_agents(query)
+
+    # Fetch agents based on search query or pagination
+    agents = if query
+      search_agents(query)
     else
-      options = { page: page, include: 'agentType,name,homepage,acronym,email,identifiers,affiliations,usages' }
-      options[:pagesize] = page_size unless page_size == -1
-  agents = LinkedData::Client::Models::Agent.all(options).first
+      fetch_paginated_agents(page, page_size)
     end
 
-    partial_path = "agents/table"
-    agent_data = agents.collection.map do |agent|
-      # Fallback logic for search result structure
-      name = agent.respond_to?(:name) ? agent.name : agent.name_text
-      identifiers = agent.respond_to?(:identifiers) ? agent.identifiers : []
-      acronym = agent.respond_to?(:acronym) ? agent.acronym : nil
-      agent_type = agent.respond_to?(:agentType) ? agent.agentType : agent.agentType_t
-      affiliations = agent.respond_to?(:affiliations) ? agent.affiliations : []
-      usages = agent.respond_to?(:usages) ? agent.usages : []
-      
-      # Render with adjusted mock agent if needed
-      mock_agent = OpenStruct.new(
-        name: name,
-        acronym: acronym,
-        agentType: agent_type,
-        affiliations: affiliations,
-        identifiers: identifiers,
-        usages: usages,
-        id: agent.id
-      )
-  
-      {
-        name: render_to_string(partial: "#{partial_path}/name", locals: { agent: mock_agent }),
-        acronym: acronym,
-        agentType: agent_type,
-        affiliations: render_to_string(partial: "#{partial_path}/affiliations", locals: { agent: mock_agent }),
-        usages: render_to_string(partial: "#{partial_path}/usages", locals: { agent: mock_agent }),
-        actions: render_to_string(partial: "#{partial_path}/actions", locals: { agent: mock_agent })
-      }
-    end
-
+    # Prepare data for response
     render json: {
-      collection: agent_data,
+      collection: prepare_agent_data(agents.collection),
       recordsTotal: agents.totalCount,
-      recordsFiltered: agents.totalCount,
+      recordsFiltered: agents.totalCount
     }
   end
   
@@ -106,6 +107,8 @@ class AgentsController < ApplicationController
     @name_prefix = params[:name_prefix] || ''
     @show_affiliations = params[:show_affiliations].nil? || params[:show_affiliations]&.eql?('true')
     @deletable = params[:deletable]&.eql?('true')
+    render 'agents/new', layout: nil
+ 
   end
 
   def create
@@ -136,6 +139,7 @@ class AgentsController < ApplicationController
     @name_prefix = params[:name_prefix] || ''
     @show_affiliations = params[:show_affiliations].nil? || params[:show_affiliations].eql?('true')
     @deletable = params[:deletable].to_s.eql?('true')
+    render 'agents/edit', layout: nil
   end
 
   def show_search
@@ -246,6 +250,48 @@ class AgentsController < ApplicationController
   end
 
   private
+  def fetch_paginated_agents(page, page_size)
+    options = { 
+      page: page, 
+      include: 'agentType,name,homepage,acronym,email,identifiers,affiliations,usages' 
+    }
+    
+    # Only set page size if it's not -1 (which typically means "all")
+    options[:pagesize] = page_size if page_size > 0
+    
+    LinkedData::Client::Models::Agent.all(options).first
+  end
+  
+  # Normalize agent data structure to handle different response formats (This will be improved after the agents search endpoint is finished)
+  def normalize_agent(agent)
+    OpenStruct.new(
+      id: agent.id,
+      name: agent.respond_to?(:name) ? agent.name : agent.name_text,
+      acronym: agent.respond_to?(:acronym) ? agent.acronym : nil,
+      agentType: agent.respond_to?(:agentType) ? agent.agentType : agent.agentType_t,
+      affiliations: agent.respond_to?(:affiliations) ? agent.affiliations : [],
+      identifiers: agent.respond_to?(:identifiers) ? agent.identifiers : [],
+      usages: agent.respond_to?(:usages) ? agent.usages : []
+    )
+  end
+  
+  # Process collection of agents into format needed for the frontend
+  def prepare_agent_data(collection)
+    partial_path = "agents/table"
+    
+    collection.map do |agent|
+      normalized_agent = normalize_agent(agent)
+      
+      {
+        name: render_agent_partial("#{partial_path}/name", normalized_agent),
+        acronym: normalized_agent.acronym,
+        agentType: normalized_agent.agentType,
+        affiliations: render_agent_partial("#{partial_path}/affiliations", normalized_agent),
+        usages: render_agent_partial("#{partial_path}/usages", normalized_agent),
+        actions: render_agent_partial("#{partial_path}/actions", normalized_agent)
+      }
+    end
+  end
 
   def replace_agent_form(agent, agent_id: nil, frame_id: nil, parent_id:, partial: 'agents/agent_show', name_prefix: '', deletable: true)
 
