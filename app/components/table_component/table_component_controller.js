@@ -59,7 +59,7 @@
         
       }
       // Trigger search when the user types at least 3 characters
-      const searchInput = document.querySelector('#admin-agents-table_filter input')
+      const searchInput = document.querySelector('.dataTables_filter input')
 
       if (searchInput) {
         let lastSearchValue = ''
