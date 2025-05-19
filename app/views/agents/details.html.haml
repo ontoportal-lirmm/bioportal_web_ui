@@ -1,0 +1,72 @@
+- hasUsages = !(@agent.usages.nil? || @agent.usages.empty?)
+.container.d-flex.flex-column.py-4{ style: "width: 1248px;" }
+  .agents-details-path
+    %a{href: agents_path} Agents
+    = inline_svg_tag 'arrow-right-outlined.svg'
+    %div
+      = @agent.name
+  
+  - agent_type_icon = inline_svg_tag "icons/#{@agent.agentType}.svg"
+  .d-flex.justify-content-between
+    .d-flex
+      .agent-chip-circle
+        = agent_type_icon
+      = render PageHeaderComponent.new(title: "#{@agent.name}", description: nil)
+    .d-flex.align-items-center
+      = render RoundedButtonComponent.new(link: @agent.id, target: '_blank', size: 'medium', title: t("components.go_to_api"))
+      - if current_user_admin? || @agent.creator.eql?(current_user&.id.to_s) 
+        .span.m-2
+        = agents_edit_button
+
+  .row
+    .col-md-7
+      - has_metadata = @agent.identifiers.present? || @agent.email.present? || @agent.keywords.present? || @agent.affiliations.present?
+      - if has_metadata
+        %div.agents-page-section
+          %div
+            = render SummarySectionComponent.new(title: t("agents.profile.metadata")) do |c|
+              %div{ style: 'padding: 20px 0px 0px 0px;' }
+
+                = render Layout::ListComponent.new do |l|
+                  - unless @agent.identifiers.nil? || @agent.identifiers.empty?
+                    - l.row do
+                      = render FieldContainerComponent.new(label: t("agents.form.identifiers")) do
+                        = raw display_identifiers(@agent.identifiers, icon:false)
+                        %span.clickable-identifier-icon
+                          = raw display_identifiers(@agent.identifiers)
+                  - unless @agent.email.blank?
+                    - l.row do
+                      = render FieldContainerComponent.new(label: t("agents.form.email")) do
+                        = mail_to @agent.email, @agent.email
+                  - unless @agent.homepage.blank?
+                    - l.row do
+                      = render FieldContainerComponent.new(label: t("agents.form.homepage")) do
+                        .chip_button_container_clickable
+                          = render LinkFieldComponent.new(value: @agent.homepage, enable_copy: false)
+                  - unless @agent.affiliations.nil? || @agent.affiliations.empty?
+                    - l.row do
+                      = render FieldContainerComponent.new(label: t("agents.form.affiliations")) do
+                        = raw @agent.affiliations.map{|i| display_agent(i)}.join('')
+          
+      %br
+      = render SummarySectionComponent.new(title: t("agents.profile.contributed_in")) do |c|
+        = render RoleSelectorComponent.new(agentOntologies: @agentOntologies)
+    .col-md-5
+      - unless !hasUsages
+        .agents-page-section
+          = render SummarySectionComponent.new(title: t("agents.profile.statistics")) do |c|
+            .chart-container 
+              %canvas#contributionChart{'data-controller': 'agents-statistics',
+                                        'data-agents-statistics-contributor-value': @agent_stats[:contributor_count],
+                                        'data-agents-statistics-creator-value': @agent_stats[:creator_count],
+                                        'data-agents-statistics-publisher-value': @agent_stats[:publisher_count],
+                                        'data-agents-statistics-funded-by-value': @agent_stats[:funded_by_count],
+                                        'data-agents-statistics-copyright-holder-value': @agent_stats[:copyright_holder_count],
+                                        'data-agents-statistics-translator-value': @agent_stats[:translator_count],
+                                        'data-agents-statistics-endorsed-by-value': @agent_stats[:endorsed_by_count]}
+      %br
+      - unless @agent.keywords.nil? || @agent.keywords.empty?
+        = render SummarySectionComponent.new(title: t("agents.profile.keywords")) do |c|
+          %div{ style: 'padding: 5px 5px 0px 5px;' }
+            = horizontal_list_container(@agent.keywords) do |v|
+              = render ChipButtonComponent.new(text: v, type: "static")

@@ -41,7 +41,7 @@ module AgentHelper
 
   def link_to_agent_edit_modal(agent, parent_id = nil)
 
-    link_to_modal(nil, edit_agent_path(agent_id(agent), parent_id: parent_id, show_affiliations: parent_id.nil? || parent_id.empty?), class: 'btn btn-sm btn-light', data: { show_modal_title_value: "Edit agent #{agent.name}" }) do
+    link_to_modal(nil, edit_agent_path(agent_id(agent), parent_id: parent_id, show_affiliations: parent_id.nil? || parent_id.empty?), class: 'btn btn-sm btn-light', data: { show_modal_title_value: "#{t('agents.edit_agent')} #{agent.name}" }) do
       content_tag(:i, '', class: 'far fa-edit')
     end
   end
@@ -141,7 +141,10 @@ module AgentHelper
     end.join(' ').html_safe
   end
   
-
+  def render_agent_partial(partial, agent)
+    render_to_string(partial: partial, locals: { agent: agent })
+  end
+  
   def agent_field_name(name, name_prefix = '')
     name_prefix&.empty? ? name : "#{name_prefix}[#{name}]"
   end
@@ -293,5 +296,43 @@ module AgentHelper
   end
 
 
+  def agents_create_button
+    link_to_modal(
+      nil,
+      new_agent_path,
+      id: "new_agent_btn",
+      role: "button",
+      data: {
+        show_modal_title_value: t("agents.index.create_new_agent"),
+        show_modal_size_value: "modal-xl"
+      }
+    ) do
+      regular_button(
+        "new_agent_btn",
+        t("agents.index.create_new_agent"),
+        variant: "secondary",
+        state: "regular",
+        size: nil
+      ) do |btn|
+        btn.icon_left do
+          inline_svg_tag "upload.svg"
+        end
+      end
+    end
+  end
+  def agents_edit_button
+    link_to_modal(
+      nil,
+      edit_agent_path,
+      id: "edit_agent_btn",
+      role: "button",
+      data: {
+        show_modal_title_value: t('agents.edit_agent'),
+        show_modal_size_value: "modal-xl"
+      }
+    ) do
+      render PillButtonComponent.new(text: "#{inline_svg_tag 'edit.svg'} #{t('agents.edit_agent')}".html_safe) 
+    end
+  end
 
 end

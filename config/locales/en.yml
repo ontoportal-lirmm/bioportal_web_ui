@@ -217,6 +217,7 @@ en:
     update_info_successfully: Update information successfully retrieved
   agents:
     add_agent: New agent added successfully
+    edit_agent: Edit agent  
     agent_already_deleted: Agent %{id} already deleted
     agent_deleted_successfully: Agent %{id} deleted successfully
     agent_usages_updated: Agent usages successfully updated
@@ -246,6 +247,8 @@ en:
       first_name: First name
       no_agents: There are currently no  agents.
       usages: Usages
+    profile:
+      keywords : Keywords
     modal_title: Agent "%{name}" usages
     not_found_agent: Agent with id %{id}
     not_used: Not used

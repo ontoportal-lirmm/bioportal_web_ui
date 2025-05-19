@@ -6,5 +6,5 @@ class PageHeaderComponent < ViewComponent::Base
       @title = title
       @description = description
     end  
-  end
+end
   
