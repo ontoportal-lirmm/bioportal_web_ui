@@ -2,8 +2,8 @@
   .d-flex.justify-content-between
     = render PageHeaderComponent.new(title: "Agents" , description: t('agents.description'))
     .d-flex.align-items-center
-      = render RoundedButtonComponent.new(link: "#{ENV['API_URL']}/agents", target: '_blank', size: 'medium', title: t("components.go_to_api"))
-    - if session[:user]
-      .span.m-2
-      = agents_create_button
+      = render RoundedButtonComponent.new(link: "#{ENV['REST_URL']}/agents", target: '_blank', size: 'medium', title: t("components.go_to_api"))
+      - if session[:user]
+        .span.m-2
+        = agents_create_button
   = render TurboFrameComponent.new(id: 'agents-list', src: agents_path, loading: 'lazy')
