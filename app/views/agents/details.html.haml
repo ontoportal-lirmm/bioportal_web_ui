@@ -55,29 +55,18 @@
       - unless !hasUsages
         .agents-page-section
           = render SummarySectionComponent.new(title: t("agents.profile.statistics")) do |c|
-            .chart-container{"data-controller": "agents-statistics", 
-                            "data-agents-statistics-creator-value": "#{@agent_stats&.dig(:creator_count) || 0}",
-                            "data-agents-statistics-contributor-value": "#{@agent_stats&.dig(:contributor_count) || 0}",
-                            "data-agents-statistics-publisher-value": "#{@agent_stats&.dig(:publisher_count) || 0}",
-                            "data-agents-statistics-funded-by-value": "#{@agent_stats&.dig(:funded_by_count) || 0}",
-                            "data-agents-statistics-copyright-holder-value": "#{@agent_stats&.dig(:copyright_holder_count) || 0}",
-                            "data-agents-statistics-translator-value": "#{@agent_stats&.dig(:translator_count) || 0}",
-                            "data-agents-statistics-endorsed-by-value": "#{@agent_stats&.dig(:endorsed_by_count) || 0}"}
-              %canvas#contributionChart
+            .chart-container 
+              %canvas#contributionChart{'data-controller': 'agents-statistics',
+                                        'data-agents-statistics-contributor-value': @agent_stats[:contributor_count],
+                                        'data-agents-statistics-creator-value': @agent_stats[:creator_count],
+                                        'data-agents-statistics-publisher-value': @agent_stats[:publisher_count],
+                                        'data-agents-statistics-funded-by-value': @agent_stats[:funded_by_count],
+                                        'data-agents-statistics-copyright-holder-value': @agent_stats[:copyright_holder_count],
+                                        'data-agents-statistics-translator-value': @agent_stats[:translator_count],
+                                        'data-agents-statistics-endorsed-by-value': @agent_stats[:endorsed_by_count]}
       %br
       - unless @agent.keywords.nil? || @agent.keywords.empty?
         = render SummarySectionComponent.new(title: t("agents.profile.keywords")) do |c|
           %div{ style: 'padding: 5px 5px 0px 5px;' }
             = horizontal_list_container(@agent.keywords) do |v|
               = render ChipButtonComponent.new(text: v, type: "static")
-:javascript
-  // Get data from Ruby stats object
-  const contributionData = {
-    creator: #{@agent_stats[:creator_count] || 0},
-    contributor: #{@agent_stats[:contributor_count] || 0},
-    publisher: #{@agent_stats[:publisher_count] || 0},
-    fundedBy: #{@agent_stats[:funded_by_count] || 0},
-    copyrightHolder: #{@agent_stats[:copyright_holder_count] || 0},
-    translator: #{@agent_stats[:translator_count] || 0},
-    endorsedBy: #{@agent_stats[:endorsed_by_count] || 0}
-  };
