@@ -54,7 +54,7 @@
               %canvas#contributionChart
       %br
       - unless @agent.keywords.nil? || @agent.keywords.empty?
-        = render SummarySectionComponent.new(title: "Keywords") do |c|
+        = render SummarySectionComponent.new(title: t("agents.profile.keywords")) do |c|
           %div{ style: 'padding: 5px 5px 0px 5px;' }
             = horizontal_list_container(@agent.keywords) do |v|
               = render ChipButtonComponent.new(text: v, type: "static")
