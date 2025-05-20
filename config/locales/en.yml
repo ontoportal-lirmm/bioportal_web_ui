@@ -247,8 +247,6 @@ en:
       first_name: First name
       no_agents: There are currently no  agents.
       usages: Usages
-    profile:
-      keywords : Keywords
     modal_title: Agent "%{name}" usages
     not_found_agent: Agent with id %{id}
     not_used: Not used
@@ -258,6 +256,7 @@ en:
       metadata: Metadata
       statistics: Statistics
       no_contributions: This agent has no contributions in %{portalName} 
+      keywords : Keywords
     save: Save
     see_usages_count: See usages (%{count})
     turbo_confirm: Are you sure?
