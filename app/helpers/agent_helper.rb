@@ -267,7 +267,7 @@ module AgentHelper
       agent_icon = agent.agentType.eql?("organization") ? organization_icon : person_icon
       title = agent_tooltip(agent)
     end
-    agent_page_url = agent.id.include?('/Agents/') ? "/agents/#{agent.id.split('/').last}/profile" : nil
+    agent_page_url = agent.id.include?('/Agents/') ? agents_path + "/#{agent.id.split('/').last}" : nil
     render_chip_component(title, agent_icon, name, agent_page_url)
   end
 
