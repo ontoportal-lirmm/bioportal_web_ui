@@ -144,6 +144,10 @@ module AgentHelper
   def render_agent_partial(partial, agent)
     render_to_string(partial: partial, locals: { agent: agent })
   end
+
+  def agents_rest_url
+    rest_url + agents_path + "?page=1&pagesize=10"
+  end
   
   def agent_field_name(name, name_prefix = '')
     name_prefix&.empty? ? name : "#{name_prefix}[#{name}]"
