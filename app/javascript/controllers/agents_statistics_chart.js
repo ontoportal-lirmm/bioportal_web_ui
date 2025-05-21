@@ -38,7 +38,6 @@ export default class extends Controller {
       { key: "translator", label: "Translator", color: "#edc949" },
       { key: "endorsedBy", label: "Endorsed By", color: "#af7aa1" }
     ];
-    console.log(contributionData)
 
     const filteredContributions = contributionTypes.filter(
       type => contributionData[type.key] && contributionData[type.key] > 0
