@@ -124,7 +124,7 @@ class AgentsController < ApplicationController
       success_message = t('agents.add_agent')
       streams = [alert_success(id: alert_id) { success_message }]
 
-      streams << prepend('admin_agents_table_body', partial: 'agents/agent', locals: { agent: new_agent })
+      streams << prepend('admin-agents-table_table_body', partial: 'agents/agent', locals: { agent: new_agent })
       streams << replace_agent_form(new_agent, agent_id: nil, frame_id: params[:id],
                                     parent_id: parent_id, name_prefix: name_prefix,
                                     deletable: deletable
@@ -283,6 +283,7 @@ class AgentsController < ApplicationController
       normalized_agent = normalize_agent(agent)
       
       {
+        id: "#{agent.id.split('/').last}_agent_table_item",
         name: render_agent_partial("#{partial_path}/name", normalized_agent),
         acronym: normalized_agent.acronym,
         agentType: normalized_agent.agentType,

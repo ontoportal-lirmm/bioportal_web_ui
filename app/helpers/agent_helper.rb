@@ -17,7 +17,7 @@ module AgentHelper
   end
 
   def agent_table_line_id(id)
-    "#{id}_table_item"
+    "#{id}_agent_table_item"
   end
 
   def agent_frame_id(agent, parent_id)

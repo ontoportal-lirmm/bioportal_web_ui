@@ -20,8 +20,6 @@
         - h.th {t("agents.index.usages")}
         - if current_user_admin?
           - h.th {t("agents.index.actions")}
-
-      = render partial: 'agents/agent' , collection: @agents
       %tr.empty-state
         %td.text-center{:colspan => "6"}= t("agents.index.no_agents")
     :javascript
