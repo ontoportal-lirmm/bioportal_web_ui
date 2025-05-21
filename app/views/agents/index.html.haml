@@ -2,7 +2,7 @@
   .d-flex.justify-content-between
     = render PageHeaderComponent.new(title: "Agents" , description: t('agents.description'))
     .d-flex.align-items-center
-      = render RoundedButtonComponent.new(link: "#{rest_url}/agents", target: '_blank', size: 'medium', title: t("components.go_to_api"))
+      = render RoundedButtonComponent.new(link: agents_rest_url, target: '_blank', size: 'medium', title: t("components.go_to_api"))
       - if session[:user]
         .span.m-2
         = agents_create_button
@@ -20,8 +20,6 @@
         - h.th {t("agents.index.usages")}
         - if current_user_admin?
           - h.th {t("agents.index.actions")}
-
-      = render partial: 'agents/agent' , collection: @agents
       %tr.empty-state
         %td.text-center{:colspan => "6"}= t("agents.index.no_agents")
     :javascript

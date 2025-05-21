@@ -30,6 +30,7 @@
           ],
           searching: this.searchingValue,
           autoWidth: true,
+          rowId: 'id',
           serverSide: this.serverSideValue,
           processing: true,
           ajax: this.serverSideValue ? {

@@ -17,7 +17,7 @@ module AgentHelper
   end
 
   def agent_table_line_id(id)
-    "#{id}_table_item"
+    "#{id}_agent_table_item"
   end
 
   def agent_frame_id(agent, parent_id)
@@ -144,6 +144,10 @@ module AgentHelper
   def render_agent_partial(partial, agent)
     render_to_string(partial: partial, locals: { agent: agent })
   end
+
+  def agents_rest_url
+    rest_url + agents_path + "?page=1&pagesize=10"
+  end
   
   def agent_field_name(name, name_prefix = '')
     name_prefix&.empty? ? name : "#{name_prefix}[#{name}]"
@@ -267,7 +271,7 @@ module AgentHelper
       agent_icon = agent.agentType.eql?("organization") ? organization_icon : person_icon
       title = agent_tooltip(agent)
     end
-    agent_page_url = agent.id.include?('/Agents/') ? "/agents/#{agent.id.split('/').last}/profile" : nil
+    agent_page_url = agent.id.include?('/Agents/') ? agents_path + "/#{agent.id.split('/').last}" : nil
     render_chip_component(title, agent_icon, name, agent_page_url)
   end
 
