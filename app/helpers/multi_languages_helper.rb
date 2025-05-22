@@ -17,7 +17,7 @@ module MultiLanguagesHelper
   def portal_languages
     {
       en: { badge: nil, disabled: false },
-      fr: { badge: 'beta', disabled: false },
+      fr: { badge: nil, disabled: false },
       it: { badge: 'coming', disabled: true },
       de: { badge: 'coming', disabled: true }
     }
@@ -166,7 +166,7 @@ module MultiLanguagesHelper
   end
 
   # @param label String | Array | OpenStruct
-  def display_in_multiple_languages(label)
+  def display_in_multiple_languages(label, style_as_badge: false, show_max: 5)
     if label.blank?
       return render Display::AlertComponent.new(message: t('ontology_details.concept.no_preferred_name_for_selected_language'),
                                                 type: "warning",
