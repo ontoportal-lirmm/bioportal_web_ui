@@ -22,7 +22,7 @@
       
         this.table = new DataTable(`#${table.id}`, {
           paging: this.pagingValue,
-          columns: this.columnsValue.map(name => ({ data: name })),
+          ...(this.columnsValue?.length > 0 && { columns: this.columnsValue.map(name => ({ data: name })) }),
           info: false,
           lengthMenu: [
             [10, 25, 50, 100],
