@@ -54,7 +54,7 @@ class AgentsController < ApplicationController
 
     # Fetch agents based on search query or pagination
     agents = if query
-      search_agents(query)
+      search_agents(query, options: { page: page, pagesize: page_size })
     else
       fetch_paginated_agents(page, page_size)
     end
@@ -69,21 +69,21 @@ class AgentsController < ApplicationController
   
   
 
-  def search_agents(query)
-    filters = { query: "#{query}*", qf: "identifiers_texts^20 acronym_text^15 agentType_t^10 name_text^10 email_text^10"}
+  def search_agents(query, options: { page: 1, pagesize: 10 })
+    filters = {
+      query: "#{query}*",
+      qf: "identifiers_texts^20 acronym_text^15 name_text^10 email_text^10",
+      page: options[:page],
+      pagesize: options[:pagesize],
+    }
     LinkedData::Client::HTTP.get('/search/agents', filters)
   end
 
   def ajax_agents
-    # filters = { query: "#{params[:query]}*", qf: "identifiers_texts^20 acronym_text^15 name_text^10 email_text^10"}
-    # @agents = LinkedData::Client::HTTP.get('/search/agents', filters)
     query = params[:query].presence
     if query
       agents = search_agents(query)
     end
-    
-    #binding.pry
-
     agents_json = agents.collection.map do |agent
       |
       {
