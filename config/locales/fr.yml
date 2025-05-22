@@ -770,6 +770,7 @@ fr:
       search_prompt: Rechercher dans %{portal_name} ...
       submit_feedback: Soumettre un retour d'expérience
       support: Support
+      agents : Agents
     notices:
       at: à
       slice: Slice

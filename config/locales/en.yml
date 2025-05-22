@@ -744,6 +744,7 @@ en:
       search_prompt: Search in %{portal_name} ...
       submit_feedback: Send Feedback
       support: Support
+      agents : Agents
     notices:
       at: at
       slice: Slice
