@@ -19,7 +19,7 @@ class AgentsController < ApplicationController
       "http://schema.org/copyrightHolder" => "Copyright Holder",
       "http://schema.org/translator" => "Translator",
       "http://omv.ontoware.org/2005/05/ontology#endorsedBy" => "Endorsed By",
-      "http://purl.org/pav/curatedBy" => "Curator"
+      "http://purl.org/pav/curatedBy" => "Curated By"
     }
 
     @agentOntologies = @agent.usages.to_h.each_with_object({}) do |(key, value), hash|
