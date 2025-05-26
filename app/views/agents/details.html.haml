@@ -63,10 +63,27 @@
                                         'data-agents-statistics-funded-by-value': @agent_stats[:funded_by_count],
                                         'data-agents-statistics-copyright-holder-value': @agent_stats[:copyright_holder_count],
                                         'data-agents-statistics-translator-value': @agent_stats[:translator_count],
-                                        'data-agents-statistics-endorsed-by-value': @agent_stats[:endorsed_by_count]}
+                                        'data-agents-statistics-endorsed-by-value': @agent_stats[:endorsed_by_count],
+                                        'data-agents-statistics-curated-by-value': @agent_stats[:curated_by_count]}
       %br
-      - unless @agent.keywords.nil? || @agent.keywords.empty?
-        = render SummarySectionComponent.new(title: t("agents.profile.keywords")) do |c|
-          %div{ style: 'padding: 5px 5px 0px 5px;' }
-            = horizontal_list_container(@agent.keywords) do |v|
-              = render ChipButtonComponent.new(text: v, type: "static")
+      - has_tags = @agent.keywords.present? || @agent.groups.present? || @agent.categories.present? 
+      - if  has_tags
+        = render SummarySectionComponent.new(title: t("agents.profile.tags")) do |c|
+          %div{ style: 'padding: 20px 0px 0px 0px;' }
+            = render Layout::ListComponent.new do |l|
+              - l.row do 
+                = render FieldContainerComponent.new(label: t("agents.profile.keywords")) do
+                  = horizontal_list_container(@agent.keywords) do |v|    
+                    = render ChipButtonComponent.new(text: v, type: "static")
+              - unless @agent.groups.nil? || @agent.groups.empty?
+                - l.row do 
+                  = render FieldContainerComponent.new(label: t("admin.index.groups")) do
+                    = horizontal_list_container(@agent.groups) do |v|
+                      - group_acronym = v.split("/").last
+                      = render ChipButtonComponent.new(text: group_acronym, url: ontologies_browse_path + "?groups=" + group_acronym, type: "clickable", target: "_blank")
+              - unless @agent.categories.nil? || @agent.categories.empty?
+                - l.row do 
+                  = render FieldContainerComponent.new(label: t("admin.index.categories")) do
+                    = horizontal_list_container(@agent.categories) do |v|
+                      - category_acronym = v.split("/").last
+                      = render ChipButtonComponent.new(text: category_acronym, url: ontologies_browse_path + "?categories=" + category_acronym, type: "clickable", target: "_blank")

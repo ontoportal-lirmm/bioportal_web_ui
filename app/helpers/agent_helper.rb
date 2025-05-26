@@ -338,5 +338,7 @@ module AgentHelper
       render PillButtonComponent.new(text: "#{inline_svg_tag 'edit.svg'} #{t('agents.edit_agent')}".html_safe) 
     end
   end
-
+  def ontologies_browse_path
+   "/ontologies"
+  end
 end
