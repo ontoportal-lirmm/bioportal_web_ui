@@ -40,9 +40,9 @@ class AgentsController < ApplicationController
     @deletable = params[:deletable]&.eql?('true')
   end
 
-  def find_agent(id = params[:id])
+  def find_agent(id = params[:id], include_params = 'all')
     id = helpers.unescape(id)
-    @agent = LinkedData::Client::Models::Agent.find(id.split('/').last, { include: 'all' })
+    @agent = LinkedData::Client::Models::Agent.find(id.split('/').last, { include: include_params })
     not_found("Agent with id #{id} not found") if @agent.nil?
     @agent
   end
@@ -169,7 +169,7 @@ class AgentsController < ApplicationController
     else
       success_message = t('agents.update_agent')
       table_line_id = agent_table_line_id(agent_id(agent))
-      agent = find_agent_display_all(agent.id.split('/').last)
+      agent = find_agent(agent.id.split('/').last)
       streams = [alert_success(id: alert_id) { success_message },
                  replace(table_line_id, partial: 'agents/agent', locals: { agent: agent })
       ]
@@ -181,14 +181,14 @@ class AgentsController < ApplicationController
   end
 
   def agent_usages
-    @agent = find_agent_display_all
+    @agent = find_agent(params[:id], include_params = 'usages')
     @ontology_acronyms = LinkedData::Client::Models::Ontology.all(include: 'acronym', display_links: false, display_context: false, include_views: true).map(&:acronym)
     not_found(t('agents.not_found_agent', id: @agent.id)) if @agent.nil?
     render partial: 'agents/agent_usage'
   end
 
   def update_agent_usages
-    agent = find_agent_display_all
+    agent = find_agent(params[:id])
     responses, new_usages = update_agent_usages_action(agent, agent_usages_params)
     parent_id = params[:parent_id]
     alert_id = agent_alert_container_id(agent, parent_id)
@@ -403,13 +403,6 @@ class AgentsController < ApplicationController
       affiliation[:identifiers] = affiliation[:identifiers].values if affiliation.is_a?(Hash) && affiliation[:identifiers]
     end
     p
-  end
-
-  def find_agent_display_all(id = params[:id])
-    # TODO fix in the api client, the find with params
-    LinkedData::Client::Models::Agent.where({ display: 'all' }) do |obj|
-      obj.id.to_s.eql?("#{rest_url}/Agents/#{id}")
-    end.first
   end
 
   def normalize_orcid(orcid)
