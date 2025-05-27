@@ -253,10 +253,14 @@ en:
     ontology_not_valid: 'ontology is not valid, here are the errors: '
     profile:
       contributed_in: Has a role in
+      collaborated_with: Collaborated with
+      collaborated_on: Collaborated on
+      affiliated_agents: Affiliated agents
       metadata: Metadata
       statistics: Statistics
       no_contributions: This agent has no contributions in %{portalName} 
       keywords : Keywords
+      tags : Tags
     save: Save
     see_usages_count: See usages (%{count})
     turbo_confirm: Are you sure?

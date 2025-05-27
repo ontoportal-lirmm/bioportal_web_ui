@@ -6,6 +6,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .agent-chip-circle svg{
@@ -26,6 +27,21 @@
 .agent-chip-name{
   color: #8C8E8D;
   font-size: 15px;
+}
+.agent-chip-badge {
+  position: absolute;
+  z-index: 10; 
+  top: -15px;
+  right: -12px;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 10px;
+  height: 16px;
+  width: 16px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .agent-edit-icon{
   display: flex !important;
@@ -141,3 +157,6 @@
   font-weight: 600;
   margin-bottom: 25px;
 } 
+.agents-chips-container{
+  padding: 10px;
+}

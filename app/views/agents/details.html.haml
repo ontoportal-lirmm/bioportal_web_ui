@@ -47,7 +47,17 @@
                     - l.row do
                       = render FieldContainerComponent.new(label: t("agents.form.affiliations")) do
                         = raw @agent.affiliations.map{|i| display_agent(i)}.join('')
-          
+      - if !is_organization?(@agent) && @agent.relatedAgents.present?
+        %br
+        = render SummarySectionComponent.new(title: t("agents.profile.collaborated_with")) do |c|
+          %div.agents-chips-container
+            - sorted_related_agents = @agent.relatedAgents.sort_by { |i| -i.usages.count }
+            = raw sorted_related_agents.map { |i| display_agent(i) }.join('')
+      - if is_organization?(@agent) && @agent.affiliatedAgents.present?
+        %br
+        = render SummarySectionComponent.new(title: t("agents.profile.affiliated_agents")) do |c|
+          %div.agents-chips-container
+            = raw @agent.affiliatedAgents.map { |i| display_agent(i) }.join('')
       %br
       = render SummarySectionComponent.new(title: t("agents.profile.contributed_in")) do |c|
         = render RoleSelectorComponent.new(agentOntologies: @agentOntologies)
