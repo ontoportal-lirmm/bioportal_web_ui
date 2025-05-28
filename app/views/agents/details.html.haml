@@ -47,6 +47,9 @@
                     - l.row do
                       = render FieldContainerComponent.new(label: t("agents.form.affiliations")) do
                         = raw @agent.affiliations.map{|i| display_agent(i)}.join('')
+      %br
+      = render SummarySectionComponent.new(title: t("agents.profile.contributed_in")) do |c|
+        = render RoleSelectorComponent.new(agentOntologies: @agentOntologies)
       - if !is_organization?(@agent) && @agent.relatedAgents.present?
         %br
         = render SummarySectionComponent.new(title: t("agents.profile.collaborated_with")) do |c|
@@ -58,9 +61,6 @@
         = render SummarySectionComponent.new(title: t("agents.profile.affiliated_agents")) do |c|
           %div.agents-chips-container
             = raw @agent.affiliatedAgents.map { |i| display_agent(i) }.join('')
-      %br
-      = render SummarySectionComponent.new(title: t("agents.profile.contributed_in")) do |c|
-        = render RoleSelectorComponent.new(agentOntologies: @agentOntologies)
     .col-md-5
       - unless !hasUsages
         .agents-page-section
@@ -83,7 +83,8 @@
             = render Layout::ListComponent.new do |l|
               - l.row do 
                 = render FieldContainerComponent.new(label: t("agents.profile.keywords")) do
-                  = horizontal_list_container(@agent.keywords) do |v|    
+                  - keywords =  @agent.keywords.map{|x| x.split(',')}.flatten
+                  = horizontal_list_container(keywords) do |v|    
                     = render ChipButtonComponent.new(text: v, type: "static")
               - unless @agent.groups.nil? || @agent.groups.empty?
                 - l.row do 
