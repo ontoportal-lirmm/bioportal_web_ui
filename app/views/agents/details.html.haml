@@ -20,7 +20,7 @@
 
   .row
     .col-md-7
-      - has_metadata = @agent.identifiers.present? || @agent.email.present? || @agent.keywords.present? || @agent.affiliations.present?
+      - has_metadata = @agent.identifiers.present? || @agent.affiliations.present? || @agent.homepage.present? || @agent.email.present? || @agent.affiliations.present?
       - if has_metadata
         %div.agents-page-section
           %div
