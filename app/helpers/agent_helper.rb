@@ -281,16 +281,12 @@ module AgentHelper
       title = agent_tooltip(agent)
     end
     agent_page_url = agent.id.include?('/Agents/') ? agents_path + "/#{agent.id.split('/').last}" : nil
-    agent_relation_number = agent.usages&.size || nil
-    render_chip_component(title, agent_icon, name, agent_page_url, agent_relation_number)
+    render_chip_component(title, agent_icon, name, agent_page_url)
   end
 
 
-  def render_chip_component(title, agent_icon, name, url, agent_relation_number = nil)
+  def render_chip_component(title, agent_icon, name, url)
     chip_content = content_tag(:div, class: 'agent-chip') do
-      badge_html = agent_relation_number.present? ? content_tag(:span, agent_relation_number, class: 'agent-chip-badge') : ''.html_safe
-    
-      badge_html +
       content_tag(:div, agent_icon, class: 'agent-chip-circle') +
       content_tag(:div, name, class: 'agent-chip-name text-truncate')
     end
