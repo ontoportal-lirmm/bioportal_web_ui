@@ -9,7 +9,8 @@ export default class extends Controller {
         fundedBy: Number,
         copyrightHolder: Number,
         translator: Number,
-        endorsedBy: Number
+        endorsedBy: Number,
+        curatedBy: Number
     }  
 
   connect() {
@@ -25,8 +26,9 @@ export default class extends Controller {
       fundedBy: this.fundedByValue,
       copyrightHolder: this.copyrightHolderValue,
       translator: this.translatorValue,
-      endorsedBy: this.endorsedByValue
-    }    
+      endorsedBy: this.endorsedByValue,
+      curatedBy: this.curatedByValue
+    }        
 
     // Define contribution types and colors
     const contributionTypes = [
@@ -36,7 +38,8 @@ export default class extends Controller {
       { key: "fundedBy", label: "Funded By", color: "#76b7b2" },
       { key: "copyrightHolder", label: "Copyright Holder", color: "#59a14f" },
       { key: "translator", label: "Translator", color: "#edc949" },
-      { key: "endorsedBy", label: "Endorsed By", color: "#af7aa1" }
+      { key: "endorsedBy", label: "Endorsed By", color: "#af7aa1" },
+      { key: "curatedBy", label:"Curated By", color: "#008080" }
     ];
 
     const filteredContributions = contributionTypes.filter(

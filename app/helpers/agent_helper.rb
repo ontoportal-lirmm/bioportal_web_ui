@@ -215,24 +215,33 @@ module AgentHelper
   end
 
   def agent_tooltip(agent)
-    name = agent.name
-    email = agent.email unless agent.class.eql?(LinkedData::Client::Models::Agent)
-    type = agent.agentType
-    identifiers = display_identifiers(agent.identifiers, link: false, icon: false)
-    if agent.affiliations && agent.affiliations != []
-      affiliations = ""
-      agent.affiliations.each do |affiliation|
-        affiliations = "#{affiliations} #{affiliation.acronym || affiliation.name}"
+    if agent.usages.nil? || agent.usages.empty?
+      name = agent.name
+      email = agent.email unless agent.class.eql?(LinkedData::Client::Models::Agent)
+      type = agent.agentType
+      identifiers = display_identifiers(agent.identifiers, link: false, icon: false)
+      if agent.affiliations && agent.affiliations != []
+        affiliations = ""
+        agent.affiliations.each do |affiliation|
+          affiliations = "#{affiliations} #{affiliation.acronym || affiliation.name}"
+        end
+      end
+      person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
+      organization_icon = inline_svg_tag 'icons/organization.svg', class: 'agent-type-icon'
+      ror_icon = inline_svg_tag 'icons/ror.svg', class: 'agent-dependency-icon ror'
+      orcid_icon = inline_svg_tag 'icons/orcid.svg', class: 'agent-dependency-icon'
+      agent_icon = type == "organization" ? organization_icon : person_icon
+      identifiers_icon = type == "organization" ? ror_icon : orcid_icon
+      tooltip_html = generate_agent_tooltip(agent_icon, name, email, identifiers, affiliations, identifiers_icon)
+      return tooltip_html
+    else
+      render FieldContainerComponent.new(label: t("agents.profile.collaborated_on")) do
+        horizontal_list_container(agent.usages) do |sub|
+          acronym = sub.to_s.sub(/\/submissions\/\d+$/, "").split(/[\/\s]/).last
+          render ChipButtonComponent.new(text: acronym, type: "clickable")
+        end 
       end
     end
-    person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
-    organization_icon = inline_svg_tag 'icons/organization.svg', class: 'agent-type-icon'
-    ror_icon = inline_svg_tag 'icons/ror.svg', class: 'agent-dependency-icon ror'
-    orcid_icon = inline_svg_tag 'icons/orcid.svg', class: 'agent-dependency-icon'
-    agent_icon = type == "organization" ? organization_icon : person_icon
-    identifiers_icon = type == "organization" ? ror_icon : orcid_icon
-    tooltip_html = generate_agent_tooltip(agent_icon, name, email, identifiers, affiliations, identifiers_icon)
-    return tooltip_html
   end
 
   def generate_agent_tooltip(agent_icon, name, email = nil, identifiers = nil, affiliations = nil, identifiers_icon = nil)
@@ -338,5 +347,7 @@ module AgentHelper
       render PillButtonComponent.new(text: "#{inline_svg_tag 'edit.svg'} #{t('agents.edit_agent')}".html_safe) 
     end
   end
-
+  def ontologies_browse_path
+   "/ontologies"
+  end
 end

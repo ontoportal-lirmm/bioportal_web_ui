@@ -60,7 +60,7 @@
         
       }
       // Trigger search when the user types at least 3 characters
-      const searchInput = document.querySelector('.dataTables_filter input')
+      const searchInput = document.querySelector(`#${table.id}_filter input`)
 
       if (searchInput) {
         let lastSearchValue = ''

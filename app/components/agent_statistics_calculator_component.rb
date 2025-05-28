@@ -6,7 +6,8 @@ class AgentStatisticsCalculatorComponent
     /fundedBy/ => :funded_by_count,
     /copyrightHolder/ => :copyright_holder_count,
     /translator/ => :translator_count,
-    /endorsedBy/ => :endorsed_by_count
+    /endorsedBy/ => :endorsed_by_count,
+    /curatedBy/ => :endorsed_by_count
   }.freeze
 
   def initialize(agent)

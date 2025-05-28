@@ -27,6 +27,7 @@
   color: #8C8E8D;
   font-size: 15px;
 }
+
 .agent-edit-icon{
   display: flex !important;
   flex-direction: column;
@@ -136,3 +137,11 @@
   color: #888888 !important;
 }
 
+.agents-page-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 25px;
+} 
+.agents-chips-container{
+  padding: 10px;
+}
