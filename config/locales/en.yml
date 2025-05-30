@@ -118,6 +118,7 @@ en:
       title: Administration
       users: Users
       valid_till: Valid till
+      api_config: API configurations
     licenses:
       create:
         success: License renewed successfully

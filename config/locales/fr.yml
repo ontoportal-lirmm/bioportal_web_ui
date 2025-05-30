@@ -124,6 +124,7 @@ fr:
       title: Administration
       users: Utilisateurs
       valid_till: Valide jusqu'à
+      api_config: Configurations du l'API
     licenses:
       create:
         success: Licence renouvelée
