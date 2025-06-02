@@ -1,0 +1,36 @@
+= turbo_frame_tag 'api-config' do
+  - if flash[:notice]
+    = render NotificationComponent.new(title: "success", comment: "Updated successfully!", type: "success", auto_remove: true)
+
+  - if flash[:alert]
+    .mb-2
+      = render NotificationComponent.new(title: "success", comment: "Failed to update configuration", type: "error", auto_remove: true)
+
+  = rounded_button_component("#{$REST_URL}/?apikey=#{get_apikey}")
+
+  = form_with url: admin_api_configuration_path("fake_id"), method: :patch, local: false, turbo: true, html: { id: 'config-form' } do |f|
+    - attributes_metadata.each do |attr_metadata|
+      - key = attr_metadata.attribute
+      - value_attrs = attributes_values[key.to_sym]
+      - label_tooltip = attr_metadata_header_label(attr_metadata)
+      .form-group
+        - if attr_metadata.enforce.include?("string")
+          = text_input(name: "config[#{key}]", value: value_attrs || "", label: label_tooltip)
+        - elsif attr_metadata.enforce.include?("url")
+          = url_input(name: "config[#{key}]", value: value_attrs || "", label: label_tooltip)
+        - elsif attr_metadata.enforce.include?("integer")
+          = text_input(name: "#{key.to_s}", value: value_attrs || 0, label: label_tooltip, disabled: true)
+        - elsif attr_metadata.enforce.include?("boolean")
+          = switch_input(id: "config-boolean-#{key}", name: "config[#{key}]", label: label_tooltip, checked: (value_attrs == true), value: (value_attrs == true).to_s, boolean_switch: true)
+        - elsif attr_metadata.enforce.include?("date")
+          = date_input(name: "config[#{key}]", value: (Date.parse(value_attrs).to_s rescue value_attrs), label: label_tooltip, max_date: Date.today)
+        - elsif attr_metadata.enforce.include?("list")
+          - if attr_metadata.enforcedValues.nil?
+            = hidden_field_tag "config[#{key}][]", "", id: "empty_config_#{key}"
+            = select_input(name: "config[#{key}]", values: value_attrs || [], selected: value_attrs, label: label_tooltip, multiple: true, open_to_add: true)
+          - else
+            = render Input::InputFieldComponent.new(name: "list_fields", label: label_tooltip) do
+              = link_to_modal("Edit #{key.to_s.humanize}", admin_edit_nested_form_api_configuration_path(key), { id: "edit_nested_form_#{key}", data: { show_modal_title_value: "#{label_tooltip}", show_modal_size_value: 'modal-xl' } })        
+                    
+    .save-button{ style: "bottom: 20px; right: 20px;" }
+      = form_save_button
