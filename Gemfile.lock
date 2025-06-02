@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git
-  revision: dc74be505d4e8e147e17df1c9af60b8b6b36c7bf
-  branch: feature/add-catalog-model
+  revision: 6257685e57442d7683288fa8216ff0e0d5900900
+  branch: development
   specs:
     ontologies_api_client (2.2.0)
       activesupport (~> 7.0.4)

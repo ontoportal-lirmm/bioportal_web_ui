@@ -6,6 +6,8 @@
     .mb-2
       = render NotificationComponent.new(title: "success", comment: "Failed to update configuration", type: "error", auto_remove: true)
 
+  = rounded_button_component("#{$REST_URL}/?apikey=#{get_apikey}")
+
   = form_with url: admin_api_configuration_path("fake_id"), method: :patch, local: false, turbo: true, html: { id: 'config-form' } do |f|
     - attributes_metadata.each do |attr_metadata|
       - key = attr_metadata.attribute
@@ -24,6 +26,7 @@
           = date_input(name: "config[#{key}]", value: (Date.parse(value_attrs).to_s rescue value_attrs), label: label_tooltip, max_date: Date.today)
         - elsif attr_metadata.enforce.include?("list")
           - if attr_metadata.enforcedValues.nil?
+            = hidden_field_tag "config[#{key}][]", "", id: "empty_config_#{key}"
             = select_input(name: "config[#{key}]", values: value_attrs || [], selected: value_attrs, label: label_tooltip, multiple: true, open_to_add: true)
           - else
             = render Input::InputFieldComponent.new(name: "list_fields", label: label_tooltip) do

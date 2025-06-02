@@ -8,7 +8,7 @@ module Admin
     CATALOG_METADATA_URL = "#{LinkedData::Client.settings.rest_url}/catalog_metadata"
     ATTRIBUTES_TO_INCLUDE = %w[
       acronym title color description identifier status accessRights 
-      keyword license landingPage created federated_portals fundedBy
+      keyword license created federated_portals fundedBy
     ].freeze
 
     def index
@@ -67,8 +67,8 @@ module Admin
       session[:catalog_data] = @catalog_data # Cache in session for popup usage
     rescue StandardError => e
       Rails.logger.error("Failed to load catalog metadata: #{e.message}")
-      @catalog_metadata = []
-      session[:catalog_metadata] = @catalog_metadata
+      @catalog_data = []
+      session[:catalog_data] = @catalog_data
     end
 
     def load_catalog_metadata
@@ -91,28 +91,14 @@ module Admin
 
     # This method sanitizes the config parameters before sending them to the API.
     # we are handling the attributes that are expected to be lists because they can have multiple entries
-    # and we need to ensure they are processed correctly
+    # and we need to ensure they are processed correctly i.e don't have nil or empty values
     def sanitize_config_params
       config = params.require(:config).permit!.to_h
-      
-      %w[federated_portals fundedBy].each do |key|
+      %w[language keyword federated_portals fundedBy].each do |key|
         next unless config.key?(key)
-        
-        config[key] = process_list_attribute(config[key])
+        config[key] = Array(config[key]).reject(&:blank?)
       end
-      
       config
-    end
-
-    # Processes attributes that are expected to be lists due to it's format
-    # fromat returned from the modal is like this: { "federated_portals": { "empty": true, "value": ["0" => {...}, "1" => {...}] } }
-    def process_list_attribute(attribute_data)
-      return [] if attribute_data.keys == ["empty"]
-      
-      attribute_data.to_h
-                   .reject { |k, _| k == "empty" }
-                   .values
-                   .map(&:to_h)
     end
 
     # this is for extracting field names from the metadata enforcedValues of the key (federated_portals, fundedBy)
