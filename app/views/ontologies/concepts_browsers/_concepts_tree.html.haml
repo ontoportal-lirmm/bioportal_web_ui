@@ -13,7 +13,7 @@
         = render partial: 'ontologies/concepts_browsers/collections_picker',
                        locals: {multiple: true, id: 'collection-color-filter',
                        data: {action: 'changed->skos-collection-colors#updateCollectionTags' ,
-                        'skos-collection-colors-enable-colors-value': 'true'}}
+                        'skos-collections-selector-enable-colors-value': 'true'}}
   -# Class tree
   %div#sd_content.px-1{style: 'overflow-y: scroll; height: 60vh;'}
     - if skos? && @roots&.empty?
