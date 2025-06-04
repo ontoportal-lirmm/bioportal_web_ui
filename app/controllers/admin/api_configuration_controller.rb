@@ -61,7 +61,8 @@ module Admin
       params = { 
         include: ATTRIBUTES_TO_INCLUDE.join(','), 
         display_links: false, 
-        display_context: false 
+        display_context: false,
+        _ts: Time.now.to_i
       }
       @catalog_data = LinkedData::Client::HTTP.get(CATALOG_PATH, params).to_hash
       session[:catalog_data] = @catalog_data # Cache in session for popup usage

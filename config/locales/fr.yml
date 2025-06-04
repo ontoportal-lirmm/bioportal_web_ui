@@ -125,6 +125,8 @@ fr:
       users: Utilisateurs
       valid_till: Valide jusqu'à
       api_config: Configurations du l'API
+    api_configuration:
+      edit_button: Éditer
     licenses:
       create:
         success: Licence renouvelée

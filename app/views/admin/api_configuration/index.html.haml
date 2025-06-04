@@ -6,7 +6,11 @@
     .mb-2
       = render NotificationComponent.new(title: "success", comment: "Failed to update configuration", type: "error", auto_remove: true)
 
-  = rounded_button_component("#{$REST_URL}/?apikey=#{get_apikey}")
+  %div.mb-3
+    %div.api-configuration-page-decription
+      = t('admin.index.api_config')
+      .btn
+        = rounded_button_component("#{$REST_URL}?apikey=#{get_apikey}&_ts=#{Time.now.to_i}")
 
   = form_with url: admin_api_configuration_path("fake_id"), method: :patch, local: false, turbo: true, html: { id: 'config-form' } do |f|
     - attributes_metadata.each do |attr_metadata|
@@ -30,7 +34,7 @@
             = select_input(name: "config[#{key}]", values: value_attrs || [], selected: value_attrs, label: label_tooltip, multiple: true, open_to_add: true)
           - else
             = render Input::InputFieldComponent.new(name: "list_fields", label: label_tooltip) do
-              = link_to_modal("Edit #{key.to_s.humanize}", admin_edit_nested_form_api_configuration_path(key), { id: "edit_nested_form_#{key}", data: { show_modal_title_value: "#{label_tooltip}", show_modal_size_value: 'modal-xl' } })        
+              = link_to_modal("#{t('admin.api_configuration.edit_button')} #{key.to_s.humanize}", admin_edit_nested_form_api_configuration_path(key), { id: "edit_nested_form_#{key}", data: { show_modal_title_value: "#{label_tooltip}", show_modal_size_value: 'modal-xl' } })        
                     
     .save-button{ style: "bottom: 20px; right: 20px;" }
       = form_save_button
