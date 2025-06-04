@@ -34,7 +34,7 @@
             = select_input(name: "config[#{key}]", values: value_attrs || [], selected: value_attrs, label: label_tooltip, multiple: true, open_to_add: true)
           - else
             = render Input::InputFieldComponent.new(name: "list_fields", label: label_tooltip) do
-              = link_to_modal("Edit #{key.to_s.humanize}", admin_edit_nested_form_api_configuration_path(key), { id: "edit_nested_form_#{key}", data: { show_modal_title_value: "#{label_tooltip}", show_modal_size_value: 'modal-xl' } })        
+              = link_to_modal("#{t('admin.api_configuration.edit_button')} #{key.to_s.humanize}", admin_edit_nested_form_api_configuration_path(key), { id: "edit_nested_form_#{key}", data: { show_modal_title_value: "#{label_tooltip}", show_modal_size_value: 'modal-xl' } })        
                     
     .save-button{ style: "bottom: 20px; right: 20px;" }
       = form_save_button

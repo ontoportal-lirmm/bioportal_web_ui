@@ -119,6 +119,8 @@ en:
       users: Users
       valid_till: Valid till
       api_config: API configurations
+    api_configuration:
+      edit_button: Edit
     licenses:
       create:
         success: License renewed successfully
