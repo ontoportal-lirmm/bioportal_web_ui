@@ -217,11 +217,14 @@ en:
     update_info_successfully: Update information successfully retrieved
   agents:
     add_agent: New agent added successfully
+    edit_agent: Edit agent  
     agent_already_deleted: Agent %{id} already deleted
     agent_deleted_successfully: Agent %{id} deleted successfully
     agent_usages_updated: Agent usages successfully updated
     delete: Delete
     delete_error: Can't delete this %{agent} because still used
+    description: Discover the agents and organizations that contribute, create, and
+      publish semantic artefacts in %{portalName}. 
     errors:
       invalid_url: The identifier must be a valid ORCID/ROR URL
       required: is required and cannot be empty
@@ -248,6 +251,16 @@ en:
     not_found_agent: Agent with id %{id}
     not_used: Not used
     ontology_not_valid: 'ontology is not valid, here are the errors: '
+    profile:
+      contributed_in: Has a role in
+      collaborated_with: Collaborated with
+      collaborated_on: Collaborated on
+      affiliated_agents: Affiliated agents
+      metadata: Metadata
+      statistics: Statistics
+      no_contributions: This agent has no contributions in %{portalName} 
+      keywords : Keywords
+      tags : Tags
     save: Save
     see_usages_count: See usages (%{count})
     turbo_confirm: Are you sure?
@@ -735,6 +748,7 @@ en:
       search_prompt: Search in %{portal_name} ...
       submit_feedback: Send Feedback
       support: Support
+      agents : Agents
     notices:
       at: at
       slice: Slice

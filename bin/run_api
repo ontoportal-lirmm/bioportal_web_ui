@@ -42,7 +42,7 @@ done
 
 
 if [ ! -d "tmp/ontoportal_docker" ]; then
-  git clone --depth=1 -b  main https://github.com/ontoportal-lirmm/ontoportal_docker.git tmp/ontoportal_docker
+  git clone --depth=1 -b  development https://github.com/ontoportal-lirmm/ontoportal_docker.git tmp/ontoportal_docker
 fi
 
 # If an option is not provided, check and use the corresponding value from the environment variables
