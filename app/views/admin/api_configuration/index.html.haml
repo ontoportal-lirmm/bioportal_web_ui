@@ -6,7 +6,11 @@
     .mb-2
       = render NotificationComponent.new(title: "success", comment: "Failed to update configuration", type: "error", auto_remove: true)
 
-  = rounded_button_component("#{$REST_URL}/?apikey=#{get_apikey}")
+  %div.mb-3
+    %div.api-configuration-page-decription
+      = t('admin.index.api_config')
+      .btn
+        = rounded_button_component("#{$REST_URL}?apikey=#{get_apikey}&_ts=#{Time.now.to_i}")
 
   = form_with url: admin_api_configuration_path("fake_id"), method: :patch, local: false, turbo: true, html: { id: 'config-form' } do |f|
     - attributes_metadata.each do |attr_metadata|
