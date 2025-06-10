@@ -22,6 +22,3 @@
           - h.th {t("agents.index.actions")}
       %tr.empty-state
         %td.text-center{:colspan => "6"}= t("agents.index.no_agents")
-    :javascript
-      $.fn.dataTable.ext.errMode = 'none';
-      $("#admin_agents").dataTable()
