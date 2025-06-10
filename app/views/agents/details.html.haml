@@ -42,7 +42,8 @@
                     - l.row do
                       = render FieldContainerComponent.new(label: t("agents.form.homepage")) do
                         .chip_button_container_clickable
-                          = render LinkFieldComponent.new(value: @agent.homepage, enable_copy: false)
+                          = link_to @agent.homepage, target: "_blank" do
+                            = render ExternalLinkTextComponent.new(text: @agent.homepage)
                   - unless @agent.affiliations.nil? || @agent.affiliations.empty?
                     - l.row do
                       = render FieldContainerComponent.new(label: t("agents.form.affiliations")) do
