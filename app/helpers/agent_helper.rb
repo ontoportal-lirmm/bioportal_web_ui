@@ -328,7 +328,7 @@ module AgentHelper
         size: nil
       ) do |btn|
         btn.icon_left do
-          inline_svg_tag "upload.svg"
+          inline_svg_tag "icons/plus.svg"
         end
       end
     end
