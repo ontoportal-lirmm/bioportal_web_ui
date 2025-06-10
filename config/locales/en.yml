@@ -223,8 +223,7 @@ en:
     agent_usages_updated: Agent usages successfully updated
     delete: Delete
     delete_error: Can't delete this %{agent} because still used
-    description: Discover the agents and organizations that contribute, create, and
-      publish semantic artefacts in %{portalName}. 
+    description: Discover the persons and organizations who create, contribute, publish or are somehow related to ontologies in %{portalName}.
     errors:
       invalid_url: The identifier must be a valid ORCID/ROR URL
       required: is required and cannot be empty

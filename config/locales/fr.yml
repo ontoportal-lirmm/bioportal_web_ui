@@ -231,8 +231,7 @@ fr:
     agent_usages_updated: Utilisations de l'agent mises à jour
     delete: Supprimer
     delete_error: Impossible de supprimer cet %{agent} car il est encore utilisé
-    description: Découvrez les agents et les organisations qui contribuent, créent
-      et publient des vocabulaires sur %{portalName}.
+    description: Découvrez les personnes et les organisations qui créent, contribuent, publient ou sont liées aux ontologies dans %{portalName}.
     errors:
       invalid_url: L'identifiant doit être une URL ORCID/ROR valide
       required: est requis et ne peut pas être vide
