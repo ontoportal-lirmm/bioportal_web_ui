@@ -254,9 +254,9 @@ en:
     ontology_not_valid: 'ontology is not valid, here are the errors: '
     profile:
       contributed_in: Has a role in (%{ontologiesCount})
-      collaborated_with: Collaborated with
+      collaborators: Collaborators (%{collaboratorsCount})
       collaborated_on: Collaborated on
-      affiliated_agents: Affiliated agents
+      affiliated_agents: Affiliated agents (%{affiliatedAgentsCount})
       metadata: Information
       statistics: Statistics
       no_contributions: This agent has no contributions in %{portalName} 
