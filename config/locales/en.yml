@@ -253,7 +253,7 @@ en:
     not_used: Not used
     ontology_not_valid: 'ontology is not valid, here are the errors: '
     profile:
-      contributed_in: Has a role in
+      contributed_in: Has a role in (%{ontologiesCount})
       collaborated_with: Collaborated with
       collaborated_on: Collaborated on
       affiliated_agents: Affiliated agents
