@@ -13,7 +13,7 @@
         = agent_type_icon
       = render PageHeaderComponent.new(title: "#{@agent.name}", description: nil)
     .d-flex.align-items-center
-      = render RoundedButtonComponent.new(link: @agent.id, target: '_blank', size: 'medium', title: t("components.go_to_api"))
+      = render RoundedButtonComponent.new(link: @agent.id + "?display=all", target: '_blank', size: 'medium', title: t("components.go_to_api"))
       - if current_user_admin? || @agent.creator.eql?(current_user&.id.to_s) 
         .span.m-2
         = agents_edit_button
@@ -30,7 +30,7 @@
                 = render Layout::ListComponent.new do |l|
                   - unless @agent.identifiers.nil? || @agent.identifiers.empty?
                     - l.row do
-                      = render FieldContainerComponent.new(label: t("agents.form.identifiers")) do
+                      = render FieldContainerComponent.new(label: t("agents.profile.identifier")) do
                         = raw display_identifiers(@agent.identifiers, icon:false)
                         %span.clickable-identifier-icon
                           = raw display_identifiers(@agent.identifiers)
@@ -42,25 +42,26 @@
                     - l.row do
                       = render FieldContainerComponent.new(label: t("agents.form.homepage")) do
                         .chip_button_container_clickable
-                          = render LinkFieldComponent.new(value: @agent.homepage, enable_copy: false)
+                          = link_to @agent.homepage, target: "_blank" do
+                            = render ExternalLinkTextComponent.new(text: @agent.homepage)
                   - unless @agent.affiliations.nil? || @agent.affiliations.empty?
                     - l.row do
                       = render FieldContainerComponent.new(label: t("agents.form.affiliations")) do
                         = raw @agent.affiliations.map{|i| display_agent(i)}.join('')
       %br
-      = render SummarySectionComponent.new(title: t("agents.profile.contributed_in")) do |c|
+      = render SummarySectionComponent.new(title: t("agents.profile.contributed_in", ontologiesCount: @agentOntologies.count)) do |c|
         = render RoleSelectorComponent.new(agentOntologies: @agentOntologies)
       - if !is_organization?(@agent) && @agent.relatedAgents.present?
         %br
-        = render SummarySectionComponent.new(title: t("agents.profile.collaborated_with")) do |c|
+        = render SummarySectionComponent.new(title: t("agents.profile.collaborators", collaboratorsCount: @agent.relatedAgents.count)) do |c|
           %div.agents-chips-container
             - sorted_related_agents = @agent.relatedAgents.sort_by { |i| -i.usages.count }
-            = raw sorted_related_agents.map { |i| display_agent(i) }.join('')
+            = raw sorted_related_agents.map { |i| display_agent(i, target: nil) }.join('')
       - if is_organization?(@agent) && @agent.affiliatedAgents.present?
         %br
-        = render SummarySectionComponent.new(title: t("agents.profile.affiliated_agents")) do |c|
+        = render SummarySectionComponent.new(title: t("agents.profile.affiliated_agents", affiliatedAgentsCount: @agent.affiliatedAgents.count)) do |c|
           %div.agents-chips-container
-            = raw @agent.affiliatedAgents.map { |i| display_agent(i) }.join('')
+            = raw @agent.affiliatedAgents.map { |i| display_agent(i, target: nil) }.join('')
     .col-md-5
       - unless !hasUsages
         .agents-page-section

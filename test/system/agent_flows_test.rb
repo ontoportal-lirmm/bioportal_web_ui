@@ -18,8 +18,10 @@ class AgentFlowsTest < ApplicationSystemTestCase
   end
 
   test "go admin page and create an agent person and edit it" do
-    visit admin_index_url
-    click_on "Persons & organizations"
+    visit root_url
+    click_on "Support"
+    click_link(href: '/agents')
+
     wait_for_text "Create new agent"
 
     # Creation test
@@ -59,17 +61,20 @@ class AgentFlowsTest < ApplicationSystemTestCase
     wait_for_text "Create new agent"
 
     # Creation test
-    click_on "Create new agent"
+
+    find("a", text: "Create new agent", match: :first).click
+
     wait_for_text "TYPE"
     agent_fill(new_agent, is_affiliation: false)
     sleep 1
     assert_text "New agent added successfully"
     find('.close').click
-    within "table#admin_agents" do
+    within "table#admin-agents-table" do
+      puts "Person count: #{person_count}, Organization count: #{organization_count}"
       assert_selector '.human',  count: person_count + organization_count #  all created  agents
       assert_text new_agent.name
       new_agent.identifiers.map{|x| "https://#{new_agent.agentType.eql?('organization') ? 'ror' : 'orcid'}.org/#{x["notation"]}"}.each do |orcid|
-        assert_text orcid
+        assert_selector "a[href='#{orcid}']"
       end
 
       assert_text 'person', count: person_count
@@ -88,11 +93,11 @@ class AgentFlowsTest < ApplicationSystemTestCase
     # assert_text "New agent added successfully"
     find('.close').click
     sleep 1
-    within "table#admin_agents" do
+    within "table#admin-agents-table" do
       assert_selector '.human',  count: person_count + organization_count # all created  agents
       assert_text agent.name
       agent.identifiers.map{|x| "https://#{agent.agentType.eql?('organization') ? 'ror' : 'orcid'}.org/#{x["notation"]}"}.each do |orcid|
-        assert_text orcid
+        assert_selector "a[href='#{orcid}']"
       end
       assert_text 'person', count: person_count
       assert_text 'organization', count: organization_count

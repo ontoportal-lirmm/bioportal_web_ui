@@ -210,8 +210,8 @@ module AgentHelper
     end.join('. ').html_safe
   end
 
-  def display_agent(agent, link: true)
-    agent_chip_component(agent)
+  def display_agent(agent, link: true, target: '_blank')
+    agent_chip_component(agent, target)
   end
 
   def agent_tooltip(agent)
@@ -267,7 +267,7 @@ module AgentHelper
   end
 
 
-  def agent_chip_component(agent)
+  def agent_chip_component(agent, target = '_blank')
     person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
     organization_icon = inline_svg_tag 'icons/organization.svg', class: 'agent-type-icon'
     agent_icon =  person_icon
@@ -281,11 +281,11 @@ module AgentHelper
       title = agent_tooltip(agent)
     end
     agent_page_url = agent.id.include?('/Agents/') ? agents_path + "/#{agent.id.split('/').last}" : nil
-    render_chip_component(title, agent_icon, name, agent_page_url)
+    render_chip_component(title, agent_icon, name, agent_page_url, target)
   end
 
 
-  def render_chip_component(title, agent_icon, name, url)
+  def render_chip_component(title, agent_icon, name, url, target= '_blank')
     chip_content = content_tag(:div, class: 'agent-chip') do
       content_tag(:div, agent_icon, class: 'agent-chip-circle') +
       content_tag(:div, name, class: 'agent-chip-name text-truncate')
@@ -301,7 +301,7 @@ module AgentHelper
       chip_content
     end
   
-    url.present? ? link_to(chip, url, class: 'text-decoration-none', target: '_blank', rel: 'noopener noreferrer') : chip
+    url.present? ? link_to(chip, url, class: 'text-decoration-none', target: target, rel: 'noopener noreferrer') : chip
   end
 
   def orcid_number(orcid)
@@ -328,7 +328,7 @@ module AgentHelper
         size: nil
       ) do |btn|
         btn.icon_left do
-          inline_svg_tag "upload.svg"
+          inline_svg_tag "icons/plus.svg"
         end
       end
     end
