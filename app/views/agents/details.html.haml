@@ -30,7 +30,7 @@
                 = render Layout::ListComponent.new do |l|
                   - unless @agent.identifiers.nil? || @agent.identifiers.empty?
                     - l.row do
-                      = render FieldContainerComponent.new(label: t("agents.form.identifiers")) do
+                      = render FieldContainerComponent.new(label: t("agents.profile.identifier")) do
                         = raw display_identifiers(@agent.identifiers, icon:false)
                         %span.clickable-identifier-icon
                           = raw display_identifiers(@agent.identifiers)

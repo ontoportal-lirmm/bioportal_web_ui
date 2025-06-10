@@ -235,6 +235,7 @@ en:
       email: Email
       homepage: Homepage
       identifiers: Identifiers
+      identifier: Identifier
       name: Name
       organization: Organization
       person: Person

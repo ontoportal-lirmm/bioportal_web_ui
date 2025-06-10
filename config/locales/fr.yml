@@ -269,6 +269,7 @@ fr:
       no_contributions: Cet agent n'a aucune contribution dans %{portalName} 
       keywords: Mots-clés
       tags : Tags
+      identifier: Identifiant
     save: Sauvegarder
     see_usages_count: Voir les utilisations (%{count})
     turbo_confirm: Êtes-vous sûr ?
