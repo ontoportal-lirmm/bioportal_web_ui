@@ -13,7 +13,7 @@
         = agent_type_icon
       = render PageHeaderComponent.new(title: "#{@agent.name}", description: nil)
     .d-flex.align-items-center
-      = render RoundedButtonComponent.new(link: @agent.id, target: '_blank', size: 'medium', title: t("components.go_to_api"))
+      = render RoundedButtonComponent.new(link: @agent.id + "?display=all", target: '_blank', size: 'medium', title: t("components.go_to_api"))
       - if current_user_admin? || @agent.creator.eql?(current_user&.id.to_s) 
         .span.m-2
         = agents_edit_button
