@@ -261,7 +261,7 @@ en:
       statistics: Statistics
       no_contributions: This agent has no contributions in %{portalName} 
       keywords : Keywords
-      tags : Tags
+      tags : Related themes
       identifier: identifier
     save: Save
     see_usages_count: See usages (%{count})

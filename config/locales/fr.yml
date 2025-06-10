@@ -268,7 +268,7 @@ fr:
       statistics: Statistiques
       no_contributions: Cet agent n'a aucune contribution dans %{portalName} 
       keywords: Mots-clés
-      tags : Tags
+      tags : Themes liés
       identifier: Identifiant
     save: Sauvegarder
     see_usages_count: Voir les utilisations (%{count})
