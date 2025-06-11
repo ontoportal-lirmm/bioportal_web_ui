@@ -10,6 +10,7 @@
       noinitsort: Boolean,
       searchPlaceholder: { type: String, default: 'Search' },
       serverSide: Boolean,
+      ordering: Boolean,
       ajaxUrl: String,
       columns: Array
     }
@@ -28,6 +29,7 @@
             [10, 25, 50, 100],
             [10, 25, 50, 100]
           ],
+          ordering: this.orderingValue,
           searching: this.searchingValue,
           autoWidth: true,
           rowId: 'id',
