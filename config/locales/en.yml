@@ -217,11 +217,13 @@ en:
     update_info_successfully: Update information successfully retrieved
   agents:
     add_agent: New agent added successfully
+    edit_agent: Edit agent  
     agent_already_deleted: Agent %{id} already deleted
     agent_deleted_successfully: Agent %{id} deleted successfully
     agent_usages_updated: Agent usages successfully updated
     delete: Delete
     delete_error: Can't delete this %{agent} because still used
+    description: Discover the persons and organizations who create, contribute, publish or are somehow related to ontologies in %{portalName}.
     errors:
       invalid_url: The identifier must be a valid ORCID/ROR URL
       required: is required and cannot be empty
@@ -233,6 +235,7 @@ en:
       email: Email
       homepage: Homepage
       identifiers: Identifiers
+      identifier: Identifier
       name: Name
       organization: Organization
       person: Person
@@ -244,10 +247,22 @@ en:
       first_name: First name
       no_agents: There are currently no  agents.
       usages: Usages
+      search_placeholder: Search an agent
     modal_title: Agent "%{name}" usages
     not_found_agent: Agent with id %{id}
     not_used: Not used
     ontology_not_valid: 'ontology is not valid, here are the errors: '
+    profile:
+      contributed_in: Has a role in (%{ontologiesCount})
+      collaborators: Collaborators (%{collaboratorsCount})
+      collaborated_on: Collaborated on
+      affiliated_agents: Affiliated agents (%{affiliatedAgentsCount})
+      metadata: Information
+      statistics: Statistics
+      no_contributions: This agent has no contributions in %{portalName} 
+      keywords : Keywords
+      tags : Related themes
+      identifier: identifier
     save: Save
     see_usages_count: See usages (%{count})
     turbo_confirm: Are you sure?
@@ -735,6 +750,7 @@ en:
       search_prompt: Search in %{portal_name} ...
       submit_feedback: Send Feedback
       support: Support
+      agents : Agents
     notices:
       at: at
       slice: Slice

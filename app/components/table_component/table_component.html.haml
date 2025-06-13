@@ -1,7 +1,14 @@
 %div{'data-controller': 'table-component',
-    'data-table-component-sortcolumn-value': @sort_column, 'data-table-component-paging-value': @paging,
-    'data-table-component-searching-value': @searching, 'data-table-component-noinitsort-value': @no_init_sort,
-    'data-table-component-search-placeholder-value': @search_placeholder}
+    'data-table-component-sortcolumn-value': @sort_column,
+    'data-table-component-paging-value': @paging,
+    'data-table-component-searching-value': @searching,
+    'data-table-component-noinitsort-value': @no_init_sort,
+    'data-table-component-search-placeholder-value': @search_placeholder,
+    'data-table-component-server-side-value': @server_side,
+    'data-table-component-ajax-url-value': @ajax_url,
+    'data-table-component-columns-value': @columns,
+    'data-table-component-ordering-value': @ordering,
+    }
   %table.table-content{id: @id ,class: @custom_class + ' ' + stripped_class + ' ' + borderless_class + ' ' + layout_fixed_class + ' ' + mini_class + ' ' + outline_class}
     %thead
       = header

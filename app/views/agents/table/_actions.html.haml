@@ -1,0 +1,14 @@
+- if agent.id && !agent.id.empty? && session[:user] && session[:user].admin?
+  %div.d-flex{style: 'width: 100px'}
+    %span.mx-1
+      = link_to_agent_edit_modal(agent)
+    %span
+      - count = agent_usages_count(agent)
+      - delete_path = CGI.unescape(agent_path(agent.id.split('/').last))
+      - btn_classes = 'btn btn-link p-0 border-0 bg-transparent'
+      - if count.zero?
+        = button_to delete_path, method: :delete, class: btn_classes, form: { data: { turbo: true, turbo_confirm: t("agents.turbo_confirm"), turbo_frame: '_top' } } do
+          = inline_svg 'icons/delete.svg'
+      - else
+        = button_tag class: btn_classes, disabled: true do
+          = inline_svg 'icons/delete.svg'

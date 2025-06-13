@@ -1,0 +1,9 @@
+
+%div{style: 'padding: 10px;' }
+  - if @agentOntologies.nil? || @agentOntologies.empty?
+    .account-page-no-ontology.w-100
+      %img{:src => "#{asset_path("empty-box.svg")}"}/
+      %p= t('agents.profile.no_contributions', portalName: $SITE)
+  - else
+    - @agentOntologies.each do |ont|
+      = render ChipButtonComponent.new(url: "/ontologies/#{ont[0]}", text: ont[0], type: "clickable", tooltip: ont[1].join(", "), target: "_blank", style: "margin: 5px;")

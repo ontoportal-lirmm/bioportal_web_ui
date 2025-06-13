@@ -8,8 +8,8 @@ class TableComponent < ViewComponent::Base
   def initialize(id: '', stripped: true, borderless: false, custom_class: '', layout_fixed: false,
                  small_text: false, outline: false, sort_column: nil,
                  paging: false, searching: false, search_placeholder: nil,
-                 no_init_sort: false)
-    super
+                 no_init_sort: false, server_side: false, ajax_url: nil, columns: [], ordering: true)
+    super()
     @id = id
     @stripped = stripped
     @borderless = borderless
@@ -20,8 +20,13 @@ class TableComponent < ViewComponent::Base
     @searching = searching
     @paging = paging
     @no_init_sort = no_init_sort
-    @custom_class =custom_class
+    @custom_class = custom_class
     @search_placeholder = search_placeholder
+    @server_side = server_side
+    @ajax_url = ajax_url
+    @columns = columns
+    @ordering = ordering
+
   end
 
   def stripped_class
