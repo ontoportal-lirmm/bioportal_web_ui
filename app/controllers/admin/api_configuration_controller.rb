@@ -25,6 +25,7 @@ module Admin
         flash.now[:notice] = true
         @catalog_data = load_catalog_data # Refresh data after update
         session[:catalog_data] = @catalog_data # Update session cache
+        @catalog_metadata = session[:catalog_metadata] || load_catalog_metadata
       else
         flash.now[:alert] = true
       end
@@ -34,7 +35,7 @@ module Admin
           render turbo_stream: turbo_stream.replace(
             "api-config", 
             render_to_string("admin/api_configuration/index", locals: {
-              attributes_metadata: session[:catalog_metadata], 
+              attributes_metadata: @catalog_metadata,
               attributes_values: @catalog_data
             })
           )
