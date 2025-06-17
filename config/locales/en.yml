@@ -243,7 +243,7 @@ en:
     index:
       acronym: Acronym
       actions: Actions
-      create_new_agent: Create new agent
+      create_new_agent: Create agent
       first_name: First name
       no_agents: There are currently no  agents.
       usages: Usages
