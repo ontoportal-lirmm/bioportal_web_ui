@@ -271,7 +271,7 @@ fr:
       tags : Themes liés
       identifier: Identifiant
     save: Sauvegarder
-    see_usages_count: Voir les utilisations (%{count})
+    see_usages_count: Utilisations (%{count})
     turbo_confirm: Êtes-vous sûr ?
     update_agent: Agent mis à jour
   annotator:

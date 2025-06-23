@@ -264,7 +264,7 @@ en:
       tags : Related themes
       identifier: identifier
     save: Save
-    see_usages_count: See usages (%{count})
+    see_usages_count: Usages (%{count})
     turbo_confirm: Are you sure?
     update_agent: Agent successfully updated
   annotator:
