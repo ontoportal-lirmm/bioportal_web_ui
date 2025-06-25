@@ -1173,13 +1173,14 @@ fr:
       metadata:
         abstract: Résumé
         additional_information: Pour des informations supplémentaires, contactez
-        categories_and_subjects: Catégories et sujets
+        categories: Catégories
+        subjects: Sujets
         description: Description
         export_metadata: Exporter toutes les métadonnées
         fair_score_title: Score FAIR
         general_information: Informations générales
         initial_created_on: Créé initialement le
-        keywords_and_classes: Mots-clés et classes
+        keywords: Mots-clés
         languages: Langues
         metrics: Métriques
         metrics_link_title: Informations et diagrammes d'évolution sur les métriques

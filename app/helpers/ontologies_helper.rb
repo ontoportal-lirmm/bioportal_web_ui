@@ -301,24 +301,65 @@ module OntologiesHelper
     "<a href='#{ont_url}/?p=#{page_name}'>#{link_name}</a>"
   end
 
-  def category_name_chip_component(domain)
-    text = domain.split('/').last.titleize
-
-
-    return render(ChipButtonComponent.new(text: text, tooltip: domain,  type: "static")) unless link?(domain)
-
-
-    acronym = domain.split('/').last.upcase.strip
-    category = LinkedData::Client::Models::Category.find(acronym)
-
-    if category.name
-      render ChipButtonComponent.new(text: text, tooltip: category.name,  type: "static")
-    else
-      render ChipButtonComponent.new(text: text, tooltip: domain,  url: domain, type: "clickable", target: '_blank')
+  def category_chip(domain)
+    acronym = domain.split('/').last.strip
+    begin
+      category = LinkedData::Client::Models::Category.find(acronym)
+      return if category.nil? || category.status == 404
+    
+      render ChipButtonComponent.new(
+        text: acronym.upcase,
+        tooltip: category.name, 
+        type: "clickable",
+        url: categories_browse_url(category.acronym),
+        target: "_blank"
+      )
+    rescue => e
+      Rails.logger.warn("Failed to fetch category for '#{acronym}': #{e.message}")
+      nil
     end
-
   end
 
+  def subject_chip(subject)
+    begin
+      agroportal_uri = "https://data.agroportal.lirmm.fr/ontologies/AGROVOC/classes/#{CGI.escape(subject)}"
+      response = LinkedData::Client::HTTP.get(
+        agroportal_uri,
+        params = {
+          lang: "en",
+          display_context: false,
+          display_links: false,
+          include: "prefLabel"
+        }
+      )
+
+      if response.prefLabel
+        text = response.prefLabel
+        url = agroportal_uri.sub('data.', '')
+      else
+        text = subject.split('/').last.strip
+        url = subject
+      end
+
+      render ChipButtonComponent.new(
+        text: text.downcase,
+        tooltip: subject,
+        url: url,
+        type: "clickable",
+        target: "_blank"
+      )
+    rescue => e
+      Rails.logger.warn("Failed to fetch prefLabel from AGROVOC for '#{subject}': #{e.message}")
+      nil
+    end
+  end
+
+  def keyword_chip(keyword)
+    render ChipButtonComponent.new(
+      text: keyword.downcase,
+      type: "static"
+    )
+  end
 
   def show_ontology_domains(domains)
     if domains.length == 1 && domains[0].include?(',')

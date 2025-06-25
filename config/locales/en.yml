@@ -1131,13 +1131,14 @@ en:
       metadata:
         abstract: Abstract
         additional_information: For additional information, contact
-        categories_and_subjects: Categories and subjects
+        categories: Categories
+        subjects: Subjects
         description: Description
         export_metadata: Export all metadata
         fair_score_title: FAIR score
         general_information: General information
         initial_created_on: Initial created on
-        keywords_and_classes: Keywords and classes
+        keywords: Keywords
         languages: Languages
         metrics: Metrics
         metrics_link_title: Information and evolution diagrams about metrics and other
