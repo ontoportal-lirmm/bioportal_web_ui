@@ -225,11 +225,13 @@ fr:
     update_info_successfully: Informations de mise à jour récupérées
   agents:
     add_agent: Nouvel agent ajouté
+    edit_agent: Modifier l'agent 
     agent_already_deleted: Agent %{id} déjà supprimé
     agent_deleted_successfully: Agent %{id} supprimé
     agent_usages_updated: Utilisations de l'agent mises à jour
     delete: Supprimer
     delete_error: Impossible de supprimer cet %{agent} car il est encore utilisé
+    description: Découvrez les personnes et les organisations qui créent, contribuent, publient ou sont liées aux ontologies dans %{portalName}.
     errors:
       invalid_url: L'identifiant doit être une URL ORCID/ROR valide
       required: est requis et ne peut pas être vide
@@ -248,16 +250,28 @@ fr:
     index:
       acronym: Acronyme
       actions: Actions
-      create_new_agent: Créer un nouvel agent
+      create_new_agent: Créer un agent
       first_name: Prénom
       no_agents: Il n'y a actuellement aucun agent.
       usages: Utilisations
+      search_placeholder: Rechercher un agent
     modal_title: Utilisations de l'agent "%{name}"
     not_found_agent: Agent avec id %{id}
     not_used: Non utilisé
     ontology_not_valid: 'l''ontologie n''est pas valide, voici les erreurs : '
+    profile:
+      contributed_in: A un role dans (%{ontologiesCount})
+      collaborators: Collaborateurs (%{collaboratorsCount})
+      collaborated_on: Ont collaboré sur
+      affiliated_agents: Agents affiliés (%{affiliatedAgentsCount})
+      metadata: Informations
+      statistics: Statistiques
+      no_contributions: Cet agent n'a aucune contribution dans %{portalName} 
+      keywords: Mots-clés
+      tags : Themes liés
+      identifier: Identifiant
     save: Sauvegarder
-    see_usages_count: Voir les utilisations (%{count})
+    see_usages_count: Utilisations (%{count})
     turbo_confirm: Êtes-vous sûr ?
     update_agent: Agent mis à jour
   annotator:
@@ -760,6 +774,7 @@ fr:
       search_prompt: Rechercher dans %{portal_name} ...
       submit_feedback: Soumettre un retour d'expérience
       support: Support
+      agents : Agents
     notices:
       at: à
       slice: Slice
@@ -1158,13 +1173,14 @@ fr:
       metadata:
         abstract: Résumé
         additional_information: Pour des informations supplémentaires, contactez
-        categories_and_subjects: Catégories et sujets
+        categories: Catégories
+        subjects: Sujets
         description: Description
         export_metadata: Exporter toutes les métadonnées
         fair_score_title: Score FAIR
         general_information: Informations générales
         initial_created_on: Créé initialement le
-        keywords_and_classes: Mots-clés et classes
+        keywords: Mots-clés
         languages: Langues
         metrics: Métriques
         metrics_link_title: Informations et diagrammes d'évolution sur les métriques

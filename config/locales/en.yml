@@ -217,11 +217,13 @@ en:
     update_info_successfully: Update information successfully retrieved
   agents:
     add_agent: New agent added successfully
+    edit_agent: Edit agent  
     agent_already_deleted: Agent %{id} already deleted
     agent_deleted_successfully: Agent %{id} deleted successfully
     agent_usages_updated: Agent usages successfully updated
     delete: Delete
     delete_error: Can't delete this %{agent} because still used
+    description: Discover the persons and organizations who create, contribute, publish or are somehow related to ontologies in %{portalName}.
     errors:
       invalid_url: The identifier must be a valid ORCID/ROR URL
       required: is required and cannot be empty
@@ -233,6 +235,7 @@ en:
       email: Email
       homepage: Homepage
       identifiers: Identifiers
+      identifier: Identifier
       name: Name
       organization: Organization
       person: Person
@@ -240,16 +243,28 @@ en:
     index:
       acronym: Acronym
       actions: Actions
-      create_new_agent: Create new agent
+      create_new_agent: Create agent
       first_name: First name
       no_agents: There are currently no  agents.
       usages: Usages
+      search_placeholder: Search an agent
     modal_title: Agent "%{name}" usages
     not_found_agent: Agent with id %{id}
     not_used: Not used
     ontology_not_valid: 'ontology is not valid, here are the errors: '
+    profile:
+      contributed_in: Has a role in (%{ontologiesCount})
+      collaborators: Collaborators (%{collaboratorsCount})
+      collaborated_on: Collaborated on
+      affiliated_agents: Affiliated agents (%{affiliatedAgentsCount})
+      metadata: Information
+      statistics: Statistics
+      no_contributions: This agent has no contributions in %{portalName} 
+      keywords : Keywords
+      tags : Related themes
+      identifier: identifier
     save: Save
-    see_usages_count: See usages (%{count})
+    see_usages_count: Usages (%{count})
     turbo_confirm: Are you sure?
     update_agent: Agent successfully updated
   annotator:
@@ -735,6 +750,7 @@ en:
       search_prompt: Search in %{portal_name} ...
       submit_feedback: Send Feedback
       support: Support
+      agents : Agents
     notices:
       at: at
       slice: Slice
@@ -1115,13 +1131,14 @@ en:
       metadata:
         abstract: Abstract
         additional_information: For additional information, contact
-        categories_and_subjects: Categories and subjects
+        categories: Categories
+        subjects: Subjects
         description: Description
         export_metadata: Export all metadata
         fair_score_title: FAIR score
         general_information: General information
         initial_created_on: Initial created on
-        keywords_and_classes: Keywords and classes
+        keywords: Keywords
         languages: Languages
         metrics: Metrics
         metrics_link_title: Information and evolution diagrams about metrics and other

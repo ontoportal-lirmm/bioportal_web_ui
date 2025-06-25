@@ -1,13 +1,36 @@
 class AgentsController < ApplicationController
   include TurboHelper, AgentHelper
   before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
-
+      layout :determine_layout, only: [:index, :details]
   def index
-    @agents = LinkedData::Client::Models::Agent.all(include: 'all')
+  end
+
+  def details
+    @agent = find_agent(params[:id])
+    not_found(t('agents.not_found_agent', id: params[:id])) if @agent.status == 404
+
+    @agent_stats = AgentStatisticsCalculatorComponent.new(@agent).stats
+
+    mapping = {
+      'http://omv.ontoware.org/2005/05/ontology#hasContributor' => 'Contributor',
+      'http://omv.ontoware.org/2005/05/ontology#hasCreator' => 'Creator',
+      'http://purl.org/dc/terms/publisher' => 'Publisher',
+      'http://xmlns.com/foaf/0.1/fundedBy' => 'Funded By',
+      'http://schema.org/copyrightHolder' => 'Copyright Holder',
+      'http://schema.org/translator' => 'Translator',
+      'http://omv.ontoware.org/2005/05/ontology#endorsedBy' => 'Endorsed By',
+      'http://purl.org/pav/curatedBy' => 'Curated By'
+    }
+
+    @agentOntologies = @agent.usages.to_h.each_with_object({}) do |(key, value), hash|
+      if (match = key.to_s.match(%r{/ontologies/([^/]+)/submissions}))
+        ontology_acronym = match[1]
+        hash[ontology_acronym] = value.map { |url| mapping[url] }
+      end
+    end
   end
 
   def show
-    # we use :agent_id not :id
     @agent = LinkedData::Client::Models::Agent.find(params[:agent_id].split('/').last)
     not_found(t('agents.not_found_agent', id: params[:agent_id])) if @agent.nil?
 
@@ -17,16 +40,58 @@ class AgentsController < ApplicationController
     @deletable = params[:deletable]&.eql?('true')
   end
 
+  def find_agent(id = params[:id], include_params = 'all')
+    id = helpers.unescape(id)
+    @agent = LinkedData::Client::Models::Agent.find(id.split('/').last, { include: include_params })
+    not_found("Agent with id #{id} not found") if @agent.nil?
+    @agent
+  end
+
+  def ajax_agents_list
+    page = params[:page] || 1
+    page_size = params[:pagesize].to_i
+    query = params[:search].presence
+
+    # Fetch agents based on search query or pagination
+    agents = if query
+      search_agents(query, options: { page: page, pagesize: page_size })
+    else
+      fetch_paginated_agents(page, page_size)
+    end
+
+    # Prepare data for response
+    render json: {
+      collection: prepare_agent_data(agents.collection),
+      recordsTotal: agents.totalCount,
+      recordsFiltered: agents.totalCount
+    }
+  end
+  
+  
+
+  def search_agents(query, options: { page: 1, pagesize: 10 })
+    filters = {
+      query: "#{query}*",
+      qf: "identifiers_texts^20 acronym_text^15 name_text^10 email_text^10",
+      page: options[:page],
+      pagesize: options[:pagesize],
+    }
+    LinkedData::Client::HTTP.get('/search/agents', filters)
+  end
+
   def ajax_agents
-    filters = { query: "#{params[:query]}*", qf: "identifiers_texts^20 acronym_text^15 name_text^10 email_text^10"}
-    @agents = LinkedData::Client::HTTP.get('/search/agents', filters)
-    agents_json = @agents.collection.map do |x|
+    query = params[:query].presence
+    if query
+      agents = search_agents(query)
+    end
+    agents_json = agents.collection.map do |agent
+      |
       {
-        id: x.resource_id,
-        name: x.name_text,
-        type: x.agentType_t,
-        identifiers: x.identifiers_texts&.join(', '),
-        acronym: x.acronym_text
+        id: agent.id,
+        name: agent.name,
+        type: agent.agentType,
+        identifiers: agent.identifiers&.join(', '),
+        acronym: agent.acronym_text
       }
     end
 
@@ -42,6 +107,8 @@ class AgentsController < ApplicationController
     @name_prefix = params[:name_prefix] || ''
     @show_affiliations = params[:show_affiliations].nil? || params[:show_affiliations]&.eql?('true')
     @deletable = params[:deletable]&.eql?('true')
+    render 'agents/new', layout: nil
+ 
   end
 
   def create
@@ -57,7 +124,7 @@ class AgentsController < ApplicationController
       success_message = t('agents.add_agent')
       streams = [alert_success(id: alert_id) { success_message }]
 
-      streams << prepend('admin_agents_table_body', partial: 'agents/agent', locals: { agent: new_agent })
+      streams << prepend('admin-agents-table_table_body', partial: 'agents/agent', locals: { agent: new_agent })
       streams << replace_agent_form(new_agent, agent_id: nil, frame_id: params[:id],
                                     parent_id: parent_id, name_prefix: name_prefix,
                                     deletable: deletable
@@ -72,6 +139,7 @@ class AgentsController < ApplicationController
     @name_prefix = params[:name_prefix] || ''
     @show_affiliations = params[:show_affiliations].nil? || params[:show_affiliations].eql?('true')
     @deletable = params[:deletable].to_s.eql?('true')
+    render 'agents/edit', layout: nil
   end
 
   def show_search
@@ -101,7 +169,7 @@ class AgentsController < ApplicationController
     else
       success_message = t('agents.update_agent')
       table_line_id = agent_table_line_id(agent_id(agent))
-      agent = find_agent_display_all(agent.id.split('/').last)
+      agent = find_agent(agent.id.split('/').last)
       streams = [alert_success(id: alert_id) { success_message },
                  replace(table_line_id, partial: 'agents/agent', locals: { agent: agent })
       ]
@@ -113,14 +181,14 @@ class AgentsController < ApplicationController
   end
 
   def agent_usages
-    @agent = find_agent_display_all
+    @agent = find_agent(params[:id], include_params = 'usages')
     @ontology_acronyms = LinkedData::Client::Models::Ontology.all(include: 'acronym', display_links: false, display_context: false, include_views: true).map(&:acronym)
     not_found(t('agents.not_found_agent', id: @agent.id)) if @agent.nil?
     render partial: 'agents/agent_usage'
   end
 
   def update_agent_usages
-    agent = find_agent_display_all
+    agent = find_agent(params[:id])
     responses, new_usages = update_agent_usages_action(agent, agent_usages_params)
     parent_id = params[:parent_id]
     alert_id = agent_alert_container_id(agent, parent_id)
@@ -182,6 +250,49 @@ class AgentsController < ApplicationController
   end
 
   private
+  def fetch_paginated_agents(page, page_size)
+    options = { 
+      page: page, 
+      include: 'agentType,name,homepage,acronym,email,identifiers,affiliations,usages' 
+    }
+    
+    # Only set page size if it's not -1 (which typically means "all")
+    options[:pagesize] = page_size if page_size > 0
+    
+    LinkedData::Client::Models::Agent.all(options).first
+  end
+  
+  # Normalize agent data structure to handle different response formats (This will be improved after the agents search endpoint is finished)
+  def normalize_agent(agent)
+    OpenStruct.new(
+      id: agent.id,
+      name: agent.respond_to?(:name) ? agent.name : agent.name_text,
+      acronym: agent.respond_to?(:acronym) ? agent.acronym : nil,
+      agentType: agent.respond_to?(:agentType) ? agent.agentType : agent.agentType_t,
+      affiliations: agent.respond_to?(:affiliations) ? agent.affiliations : [],
+      identifiers: agent.respond_to?(:identifiers) ? agent.identifiers : [],
+      usages: agent.respond_to?(:usages) ? agent.usages : []
+    )
+  end
+  
+  # Process collection of agents into format needed for the frontend
+  def prepare_agent_data(collection)
+    partial_path = "agents/table"
+    
+    collection.map do |agent|
+      normalized_agent = normalize_agent(agent)
+      
+      {
+        id: "#{agent.id.split('/').last}_agent_table_item",
+        name: render_agent_partial("#{partial_path}/name", normalized_agent),
+        acronym: normalized_agent.acronym,
+        agentType: normalized_agent.agentType,
+        affiliations: render_agent_partial("#{partial_path}/affiliations", normalized_agent),
+        usages: render_agent_partial("#{partial_path}/usages", normalized_agent),
+        actions: render_agent_partial("#{partial_path}/actions", normalized_agent)
+      }
+    end
+  end
 
   def replace_agent_form(agent, agent_id: nil, frame_id: nil, parent_id:, partial: 'agents/agent_show', name_prefix: '', deletable: true)
 
@@ -292,13 +403,6 @@ class AgentsController < ApplicationController
       affiliation[:identifiers] = affiliation[:identifiers].values if affiliation.is_a?(Hash) && affiliation[:identifiers]
     end
     p
-  end
-
-  def find_agent_display_all(id = params[:id])
-    # TODO fix in the api client, the find with params
-    LinkedData::Client::Models::Agent.where({ display: 'all' }) do |obj|
-      obj.id.to_s.eql?("#{rest_url}/Agents/#{id}")
-    end.first
   end
 
   def normalize_orcid(orcid)

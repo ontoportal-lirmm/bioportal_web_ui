@@ -1,28 +1,23 @@
-= turbo_frame_tag 'agents-list' do
-  .d-flex
-    = link_to_modal(t("agents.index.create_new_agent"),
-                  new_agent_path,
-                  id: "new_agent_btn",
-                  role: "button",
-                  class: "btn btn-default mb-3",
-                  data: { show_modal_title_value: t("agents.index.create_new_agent"), show_modal_size_value: 'modal-xl' },
-                  )
-    = rounded_button_component("#{$REST_URL}/agents?display=all&apikey=#{get_apikey}")
-
-  = render_alerts_container(AgentsController)
-  = render TableComponent.new(id: 'admin_agents', custom_class: 'border rounded p-1') do |t|
-    - t.header do |h|
-      - h.th {t("agents.index.first_name")}
-      - h.th {t("agents.index.acronym")}
-      - h.th {t("agents.form.identifiers")}
-      - h.th {t("agents.form.affiliations")}
-      - h.th {t("agents.form.type")}
-      - h.th {t("agents.index.usages")}
-      - h.th {t("agents.index.actions")}
-
-    = render partial: 'agents/agent' , collection: @agents
-    %tr.empty-state
-      %td.text-center{:colspan => "6"}= t("agents.index.no_agents")
-  :javascript
-    $.fn.dataTable.ext.errMode = 'none';
-    $("#admin_agents").dataTable()
+.container.d-flex.flex-column.py-4{ style: "width: 1248px;" }
+  .d-flex.justify-content-between
+    = render PageHeaderComponent.new(title: "Agents" , description: t('agents.description', portalName: $SITE))
+    .d-flex.align-items-center
+      = render RoundedButtonComponent.new(link: agents_rest_url, target: '_blank', size: 'medium', title: t("components.go_to_api"))
+      - if session[:user]
+        .span.m-2
+        = agents_create_button
+  = turbo_frame_tag 'agents-list' do
+    = render_alerts_container(AgentsController)
+    - columns_names = ['name', 'acronym', 'affiliations', 'usages']
+    - if session[:user] && session[:user].admin?
+      - columns_names << 'actions'
+    = render TableComponent.new(id: 'admin-agents-table', borderless: true, outline: true, paging: true, searching: true, sort_column: '0', server_side: true, ajax_url: '/ajax/agents/list', search_placeholder: t('agents.index.search_placeholder'), columns: columns_names, ordering: false) do |t|
+      - t.header do |h|
+        - h.th {t("agents.form.name")}
+        - h.th {t("agents.form.acronym")}
+        - h.th {t("agents.form.affiliations")}
+        - h.th {t("agents.index.usages")}
+        - if current_user_admin?
+          - h.th {t("agents.index.actions")}
+      %tr.empty-state
+        %td.text-center{:colspan => "6"}= t("agents.index.no_agents")
