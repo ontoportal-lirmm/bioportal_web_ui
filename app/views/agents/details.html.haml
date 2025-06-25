@@ -54,14 +54,18 @@
       - if !is_organization?(@agent) && @agent.relatedAgents.present?
         %br
         = render SummarySectionComponent.new(title: t("agents.profile.collaborators", collaboratorsCount: @agent.relatedAgents.count)) do |c|
-          %div.agents-chips-container
+          %div.agents-chips-container.d-flex.flex-wrap
             - sorted_related_agents = @agent.relatedAgents.sort_by { |i| -i.usages.count }
-            = raw sorted_related_agents.map { |i| display_agent(i, target: nil) }.join('')
+            - sorted_related_agents.each do |agent|
+              %div.mb-2.mr-2
+                = display_agent(agent, target: nil)
       - if is_organization?(@agent) && @agent.affiliatedAgents.present?
         %br
         = render SummarySectionComponent.new(title: t("agents.profile.affiliated_agents", affiliatedAgentsCount: @agent.affiliatedAgents.count)) do |c|
-          %div.agents-chips-container
-            = raw @agent.affiliatedAgents.map { |i| display_agent(i, target: nil) }.join('')
+          %div.agents-chips-container.d-flex.flex-wrap
+            - @agent.affiliatedAgents.each do  |agent| 
+              %div.mb-2.mr-2
+                = display_agent(agent, target: nil)
     .col-md-5
       - unless !hasUsages
         .agents-page-section

@@ -295,7 +295,6 @@ module AgentHelper
       type: "static",
       'data-controller': 'tooltip',
       title: title,
-      class: 'text-truncate',
       style: 'max-width: 280px; display:block; line-height: unset'
     ) do
       chip_content
