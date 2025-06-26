@@ -49,7 +49,7 @@
                       = render FieldContainerComponent.new(label: t("agents.form.affiliations")) do
                         = raw @agent.affiliations.map{|i| display_agent(i, target: nil)}.join('')
       %br
-      = render SummarySectionComponent.new(title: t("agents.profile.contributed_in", ontologiesCount: @agentOntologies.count)) do |c|
+      = render SummarySectionComponent.new(title: t("agents.profile.contributed_in", ontologiesCount: @agentOntologies.count), html_options: { id: "agent-roles" }) do |c|
         = render RoleSelectorComponent.new(agentOntologies: @agentOntologies)
       - if !is_organization?(@agent) && @agent.relatedAgents.present?
         %br
