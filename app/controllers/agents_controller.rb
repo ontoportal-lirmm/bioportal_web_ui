@@ -12,14 +12,14 @@ class AgentsController < ApplicationController
     @agent_stats = AgentStatisticsCalculatorComponent.new(@agent).stats
 
     mapping = {
-      "http://omv.ontoware.org/2005/05/ontology#hasContributor" => "Contributor",
-      "http://omv.ontoware.org/2005/05/ontology#hasCreator" => "Creator",
-      "http://purl.org/dc/terms/publisher" => "Publisher",
-      "http://xmlns.com/foaf/0.1/fundedBy" => "Funded By",
-      "http://schema.org/copyrightHolder" => "Copyright Holder",
-      "http://schema.org/translator" => "Translator",
-      "http://omv.ontoware.org/2005/05/ontology#endorsedBy" => "Endorsed By",
-      "http://purl.org/pav/curatedBy" => "Curated By"
+      'http://omv.ontoware.org/2005/05/ontology#hasContributor' => 'Contributor',
+      'http://omv.ontoware.org/2005/05/ontology#hasCreator' => 'Creator',
+      'http://purl.org/dc/terms/publisher' => 'Publisher',
+      'http://xmlns.com/foaf/0.1/fundedBy' => 'Funded By',
+      'http://schema.org/copyrightHolder' => 'Copyright Holder',
+      'http://schema.org/translator' => 'Translator',
+      'http://omv.ontoware.org/2005/05/ontology#endorsedBy' => 'Endorsed By',
+      'http://purl.org/pav/curatedBy' => 'Curated By'
     }
 
     @agentOntologies = @agent.usages.to_h.each_with_object({}) do |(key, value), hash|

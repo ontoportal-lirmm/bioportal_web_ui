@@ -49,19 +49,23 @@
                       = render FieldContainerComponent.new(label: t("agents.form.affiliations")) do
                         = raw @agent.affiliations.map{|i| display_agent(i, target: nil)}.join('')
       %br
-      = render SummarySectionComponent.new(title: t("agents.profile.contributed_in", ontologiesCount: @agentOntologies.count)) do |c|
+      = render SummarySectionComponent.new(title: t("agents.profile.contributed_in", ontologiesCount: @agentOntologies.count), html_options: { id: "agent-roles" }) do |c|
         = render RoleSelectorComponent.new(agentOntologies: @agentOntologies)
       - if !is_organization?(@agent) && @agent.relatedAgents.present?
         %br
         = render SummarySectionComponent.new(title: t("agents.profile.collaborators", collaboratorsCount: @agent.relatedAgents.count)) do |c|
-          %div.agents-chips-container
+          %div.agents-chips-container.d-flex.flex-wrap
             - sorted_related_agents = @agent.relatedAgents.sort_by { |i| -i.usages.count }
-            = raw sorted_related_agents.map { |i| display_agent(i, target: nil) }.join('')
+            - sorted_related_agents.each do |agent|
+              %div.mb-2.mr-2
+                = display_agent(agent, target: nil)
       - if is_organization?(@agent) && @agent.affiliatedAgents.present?
         %br
         = render SummarySectionComponent.new(title: t("agents.profile.affiliated_agents", affiliatedAgentsCount: @agent.affiliatedAgents.count)) do |c|
-          %div.agents-chips-container
-            = raw @agent.affiliatedAgents.map { |i| display_agent(i, target: nil) }.join('')
+          %div.agents-chips-container.d-flex.flex-wrap
+            - @agent.affiliatedAgents.each do  |agent| 
+              %div.mb-2.mr-2
+                = display_agent(agent, target: nil)
     .col-md-5
       - unless !hasUsages
         .agents-page-section
@@ -86,16 +90,10 @@
                 = render FieldContainerComponent.new(label: t("agents.profile.keywords")) do
                   - keywords =  @agent.keywords.map{|x| x.split(',')}.flatten
                   = horizontal_list_container(keywords) do |v|    
-                    = render ChipButtonComponent.new(text: v, type: "static")
-              - unless @agent.groups.nil? || @agent.groups.empty?
-                - l.row do 
-                  = render FieldContainerComponent.new(label: t("admin.index.groups")) do
-                    = horizontal_list_container(@agent.groups) do |v|
-                      - group_acronym = v.split("/").last
-                      = render ChipButtonComponent.new(text: group_acronym, url: ontologies_browse_path + "?groups=" + group_acronym, type: "clickable", target: "_blank")
+                    = keyword_chip(v)
               - unless @agent.categories.nil? || @agent.categories.empty?
                 - l.row do 
                   = render FieldContainerComponent.new(label: t("admin.index.categories")) do
                     = horizontal_list_container(@agent.categories) do |v|
                       - category_acronym = v.split("/").last
-                      = render ChipButtonComponent.new(text: category_acronym, url: ontologies_browse_path + "?categories=" + category_acronym, type: "clickable", target: "_blank")
+                      = category_chip(category_acronym)
