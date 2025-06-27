@@ -1,0 +1,38 @@
+= turbo_frame_tag 'graphs-admin' do
+  = render_alerts_container
+  %div#site-admin-clear-caches.my-2
+  %div
+    %div
+
+    - unless @zombie_graphs.empty?
+      %div.my-1
+        = render Display::AlertComponent.new(id: 'graphs-admin-zombie', type: 'danger') do
+          There are #{@zombie_graphs.size} zombie graphs in the system. Please check the list below and take action.
+
+    - unless @empty_ontologies.empty?
+      %div.my-1
+        = render Display::AlertComponent.new(id: 'graphs-admin-empty-ontologies', type: 'danger') do
+          There are #{@empty_ontologies.size} ontologies with no graphs in the system: #{@empty_ontologies.map{|o| o[:acronym]}.join(", ")}
+
+
+    %div.d-flex.justify-content-between.w-100
+      %div
+        %p Total graphs: #{@graphs.size}
+        %p Total triples: #{@graphs.reduce(0){|sum, (k,v)| sum + v[0]}}
+      %div
+        = form_with url: '/admin/graphs/', method: 'post', data:{turbo: true, turbo_frame: '_top', turbo_confirm: 'This may take a while, are you sure you want to run this?'} do
+          = regular_button('graphs-generate', 'Generate Graphs count report', type: 'submit')
+    %div
+      = render TableComponent.new(id: 'graphs_table', paging: true, searching: true, sort_column: 1) do |t|
+        - t.header do |h|
+          - h.th { "#" }
+          - h.th { "Graph URI" }
+          - h.th { "Triples count" }
+          - h.th { "Zombie graph?" }
+        - @graphs.each_with_index do |graph_count, i|
+          - graph, values = graph_count
+          - t.row do |r|
+            - r.td{ i.to_s }
+            - r.td{ graph }
+            - r.td{ values[0].to_s}
+            - r.td{ values[1].to_s}

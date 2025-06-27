@@ -1,0 +1,19 @@
+= turbo_frame_tag 'logs-admin' do
+  %div
+    Total logs in the last 24 hours: #{@logs.totalCount}
+  %div
+    = render TableComponent.new(id: 'logs_table', paging: true, searching: true, sort_column: 1) do |t|
+      - t.header do |h|
+        - h.th { "Query" }
+        - h.th { "User" }
+        - h.th { "Cached" }
+        - h.th { "Time (s)" }
+      - @logs.collection.each do |log|
+        - t.row do |r|
+          - r.td do
+            = render TextAreaFieldComponent.new do
+              %code
+                = log.query
+          - r.td{ log.user.split('/').last }
+          - r.td{ log.cached.to_s }
+          - r.td{ log.execution_time }

@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   root to: 'home#index'
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
-  get'/tools', to: 'home#tools'
+  get '/tools', to: 'home#tools'
   get 'auth/:provider/callback', to: 'login#create_omniauth'
   get 'locale/:language', to: 'language#set_locale_language'
   get 'metadata_export/index'
@@ -42,11 +42,9 @@ Rails.application.routes.draw do
 
   resources :concepts
 
-
   scope :ontologies do
     get ':ontology/concepts' => 'concepts#index'
     get ':ontology/concepts/show', to: 'concepts#show'
-
 
     get ':ontology/instances', to: 'instances#index'
     get ':ontology/instances/show', to: 'instances#show'
@@ -61,7 +59,6 @@ Rails.application.routes.draw do
     get ':ontology/collections/show', to: 'collections#show'
   end
 
-
   resources :ontologies do
     resources :submissions do
       get 'edit_properties'
@@ -71,8 +68,6 @@ Rails.application.routes.draw do
     get 'metrics_evolution'
     get 'subscriptions'
   end
-
-
 
   resources :login
 
@@ -89,8 +84,17 @@ Rails.application.routes.draw do
       post ':collection/init_schema', to: 'search#init_schema'
       get ':collection/schema', to: 'search#show'
       get ':collection/data', to: 'search#search'
+
     end
 
+    scope :graphs do
+      get '/', to: 'graphs#index'
+      post '/', to: 'graphs#create'
+    end
+
+    scope :logs do
+      get '/', to: 'logs#index'
+    end
   end
 
   post 'admin/clearcache', to: 'admin#clearcache'
@@ -112,7 +116,6 @@ Rails.application.routes.draw do
   get '/annotator', to: 'annotator#index'
   get '/annotatorplus', to: 'annotator#annotator_plus'
   get '/ncbo_annotatorplus', to: 'annotator#ncbo_annotator_plus'
-
 
   resources :virtual_appliance
 
@@ -164,7 +167,6 @@ Rails.application.routes.draw do
   get '/ontologies/:acronym/classes/:purl_conceptid', to: 'ontologies#show', constraints: { purl_conceptid: /[^\/]+/ }
   match '/ontologies/:acronym/submissions/:id/edit_metadata' => 'submissions#edit_metadata', via: [:get, :post]
   get '/ontologies_filter', to: 'ontologies#ontologies_filter'
-
 
   get 'ontologies_selector', to: 'ontologies#ontologies_selector'
   get 'ontologies_selector/results', to: 'ontologies#ontologies_selector_results'
