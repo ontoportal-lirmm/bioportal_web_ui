@@ -118,9 +118,11 @@ en:
       title: Administration
       users: Users
       valid_till: Valid till
-      api_config: API configurations
+      api_config: Site description
     api_configuration:
       edit_button: Edit
+      configuration_updated_successfully: Configuration updated successfully
+      configuration_update_error: Problem updating the configuration
     licenses:
       create:
         success: License renewed successfully

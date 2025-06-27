@@ -124,9 +124,11 @@ fr:
       title: Administration
       users: Utilisateurs
       valid_till: Valide jusqu'à
-      api_config: Configurations du l'API
+      api_config: Description du site
     api_configuration:
       edit_button: Éditer
+      configuration_updated_successfully: Configuration de l'API mise à jour avec succès
+      configuration_update_error: Problème lors de la mise à jour de la configuration
     licenses:
       create:
         success: Licence renouvelée
