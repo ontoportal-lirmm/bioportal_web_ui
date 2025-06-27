@@ -137,7 +137,9 @@ module Admin
         end
       end
 
-      config["rightsHolder"] = config["rightsHolder"][0] if config["rightsHolder"].present?
+      if config["rightsHolder"]
+        config["rightsHolder"] = config["rightsHolder"].presence&.first || ""
+      end
 
       config
     end
