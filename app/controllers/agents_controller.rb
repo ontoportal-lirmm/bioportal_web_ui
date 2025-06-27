@@ -93,11 +93,6 @@ class AgentsController < ApplicationController
         type: agent.agentType,
         identifiers: agent.identifiers&.join(', '),
         acronym: agent.acronym_text
-        id: agent.id,
-        name: agent.name,
-        type: agent.agentType,
-        identifiers: agent.identifiers&.join(', '),
-        acronym: agent.acronym_text
       }
     end
 
