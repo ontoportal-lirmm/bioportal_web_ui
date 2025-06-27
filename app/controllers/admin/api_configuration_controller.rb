@@ -76,20 +76,14 @@ module Admin
       attributes_groups.values.flatten
     end
 
-    def agents_list
-      %w[rightsHolder contactPoint creator contributor curatedBy translator publisher endorsedBy]      
-    end
     def load_catalog_data
       params = { 
-        include: (list_included_attributes - agents_list).join(','),
+        include: (list_included_attributes).join(','),
         display_links: false, 
         display_context: false,
         _ts: Time.now.to_i
       }
       @catalog_data = LinkedData::Client::HTTP.get(CATALOG_PATH, params).to_hash
-      params[:include] = agents_list.join(',')
-      @catalog_agents = LinkedData::Client::HTTP.get(CATALOG_PATH, params).to_hash
-      @catalog_data.merge!(@catalog_agents.to_hash)
       session[:catalog_data] = @catalog_data # Cache in session for popup usage
     rescue StandardError => e
       Rails.logger.error("Failed to load catalog metadata: #{e.message}")

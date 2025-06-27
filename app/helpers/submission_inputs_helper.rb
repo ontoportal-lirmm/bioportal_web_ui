@@ -384,7 +384,6 @@ module SubmissionInputsHelper
   end
 
   def generate_list_field_input(attr, name, label, values, helper_text: nil, &block)
-    binding.pry
     render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.attr), helper_text: helper_text) do
       render NestedFormInputsComponent.new do |c|
         c.header do
