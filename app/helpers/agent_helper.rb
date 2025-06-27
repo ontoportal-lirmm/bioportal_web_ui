@@ -146,7 +146,7 @@ module AgentHelper
   end
 
   def agents_rest_url
-    rest_url + agents_path + "?page=1&pagesize=10"
+    rest_url + agents_path + "?page=1&pagesize=10" + "&apikey=#{get_apikey}"
   end
   
   def agent_field_name(name, name_prefix = '')
