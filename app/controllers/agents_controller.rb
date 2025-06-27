@@ -87,12 +87,6 @@ class AgentsController < ApplicationController
     end
     agents_json = agents.collection.map do |agent
       |
-    query = params[:query].presence
-    if query
-      agents = search_agents(query)
-    end
-    agents_json = agents.collection.map do |agent
-      |
       {
         id: agent.id,
         name: agent.name,
