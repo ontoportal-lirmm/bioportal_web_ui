@@ -81,19 +81,25 @@
                                         'data-agents-statistics-endorsed-by-value': @agent_stats[:endorsed_by_count],
                                         'data-agents-statistics-curated-by-value': @agent_stats[:curated_by_count]}
       %br
-      - has_tags = @agent.keywords.present? || @agent.groups.present? || @agent.categories.present? 
+      - has_tags = @agent.keywords.present? || @agent.subjects.present? || @agent.categories.present? 
       - if  has_tags
         = render SummarySectionComponent.new(title: t("agents.profile.tags")) do |c|
           %div{ style: 'padding: 20px 0px 0px 0px;' }
             = render Layout::ListComponent.new do |l|
-              - l.row do 
-                = render FieldContainerComponent.new(label: t("agents.profile.keywords")) do
-                  - keywords =  @agent.keywords.map{|x| x.split(',')}.flatten
-                  = horizontal_list_container(keywords) do |v|    
-                    = keyword_chip(v)
               - unless @agent.categories.nil? || @agent.categories.empty?
                 - l.row do 
-                  = render FieldContainerComponent.new(label: t("admin.index.categories")) do
+                  = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.categories")) do
                     = horizontal_list_container(@agent.categories) do |v|
                       - category_acronym = v.split("/").last
                       = category_chip(category_acronym)
+              - unless @agent.subjects.nil? || @agent.subjects.empty?
+                - l.row do 
+                  = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.subjects")) do
+                    = horizontal_list_container(@agent.subjects) do |subject|
+                      = subject_chip(subject)
+              - unless @agent.categories.nil? || @agent.categories.empty?
+                - l.row do 
+                  = render FieldContainerComponent.new(label: t("agents.profile.keywords")) do
+                    - keywords =  @agent.keywords.map{|x| x.split(',')}.flatten
+                    = horizontal_list_container(keywords) do |v|    
+                      = keyword_chip(v)
