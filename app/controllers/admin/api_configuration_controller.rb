@@ -6,35 +6,34 @@ module Admin
 
     CATALOG_PATH = "#{LinkedData::Client.settings.rest_url}/"
     CATALOG_METADATA_URL = "#{LinkedData::Client.settings.rest_url}/catalog_metadata"
-    ATTRIBUTES_TO_INCLUDE = %w[
-      acronym title color description identifier status accessRights 
-      keyword license created federated_portals fundedBy
-    ].freeze
 
     def index
-      render 'index', locals: { 
+      render 'index', locals: {
+        attributes_groups: attributes_groups,
         attributes_metadata: @catalog_metadata, 
-        attributes_values: @catalog_data 
+        attributes_values: @catalog_data
       }
     end
 
     def update
       config = sanitize_config_params
-      
+
       if update_remote_config(config)
         flash.now[:notice] = true
-        @catalog_data = load_catalog_data # Refresh data after update
-        session[:catalog_data] = @catalog_data # Update session cache
-        @catalog_metadata = session[:catalog_metadata] || load_catalog_metadata
       else
         flash.now[:alert] = true
       end
+      
+      @catalog_data = load_catalog_data # Refresh data after update
+      session[:catalog_data] = @catalog_data # Update session cache
+      @catalog_metadata = session[:catalog_metadata] || load_catalog_metadata
 
       respond_to do |format|
         format.turbo_stream do
           render turbo_stream: turbo_stream.replace(
             "api-config", 
             render_to_string("admin/api_configuration/index", locals: {
+              attributes_groups: attributes_groups,
               attributes_metadata: @catalog_metadata,
               attributes_values: @catalog_data
             })
@@ -58,14 +57,39 @@ module Admin
 
     private
 
+    def attributes_groups
+      {
+        general: %w[acronym title identifier versionInfo status],
+        licensing: %w[accessRights rightsHolder license morePermissions],
+        description: %w[description comment keyword alternative hiddenLabel bibliographicCitation isReferencedBy],
+        dates: %w[created modified],
+        persons_and_organizations: %w[creator contributor publisher contactPoint curatedBy translator endorsedBy fundedBy funding],
+        community: %w[audience publishingPrinciples repository bugDatabase mailingList toDoList award],
+        usage: %w[knownUsage coverage example],
+        methodology_and_provenance: %w[accrualMethod accrualPeriodicity accrualPolicy],
+        media: %w[associatedMedia depiction logo],
+        other: %w[color federated_portals relation]
+      }
+    end
+
+    def list_included_attributes
+      attributes_groups.values.flatten
+    end
+
+    def agents_list
+      %w[rightsHolder contactPoint creator contributor curatedBy translator publisher endorsedBy]      
+    end
     def load_catalog_data
       params = { 
-        include: ATTRIBUTES_TO_INCLUDE.join(','), 
+        include: (list_included_attributes - agents_list).join(','),
         display_links: false, 
         display_context: false,
         _ts: Time.now.to_i
       }
       @catalog_data = LinkedData::Client::HTTP.get(CATALOG_PATH, params).to_hash
+      params[:include] = agents_list.join(',')
+      @catalog_agents = LinkedData::Client::HTTP.get(CATALOG_PATH, params).to_hash
+      @catalog_data.merge!(@catalog_agents.to_hash)
       session[:catalog_data] = @catalog_data # Cache in session for popup usage
     rescue StandardError => e
       Rails.logger.error("Failed to load catalog metadata: #{e.message}")
@@ -75,7 +99,8 @@ module Admin
 
     def load_catalog_metadata
       catalog_metadata_list = LinkedData::Client::HTTP.get(CATALOG_METADATA_URL, {})
-      @catalog_metadata = catalog_metadata_list.select { |metadata| ATTRIBUTES_TO_INCLUDE.include?(metadata.attribute) }
+      filtered = catalog_metadata_list.select { |metadata| list_included_attributes.include?(metadata.attribute) }
+      @catalog_metadata = filtered.index_by(&:attribute)
       session[:catalog_metadata] = @catalog_metadata # Cache in session for popup usage
     rescue StandardError => e
       Rails.logger.error("Failed to load catalog metadata: #{e.message}")
@@ -91,21 +116,34 @@ module Admin
       false
     end
 
-    # This method sanitizes the config parameters before sending them to the API.
-    # we are handling the attributes that are expected to be lists because they can have multiple entries
-    # and we need to ensure they are processed correctly i.e don't have nil or empty values
     def sanitize_config_params
       config = params.require(:config).permit!.to_h
-      %w[language keyword federated_portals fundedBy].each do |key|
-        next unless config.key?(key)
-        config[key] = Array(config[key]).reject(&:blank?)
+
+      list_included_attributes.each do |key|
+        raw_value = config[key.to_s]
+        next if raw_value.nil?
+
+        # Handle hash of indexed agent objects
+        if raw_value.is_a?(Hash)
+          config[key] = raw_value.values.map do |v|
+            v.is_a?(Hash) ? v["id"] : nil
+          end.compact
+        end
+
+        # Handle regular arrays (remove blanks)
+        if raw_value.is_a?(Array)
+          config[key] = raw_value.reject(&:blank?)
+        end
       end
+
+      config["rightsHolder"] = config["rightsHolder"][0] if config["rightsHolder"].present?
+
       config
     end
 
-    # this is for extracting field names from the metadata enforcedValues of the key (federated_portals, fundedBy)
+
     def extract_field_names_for_key(key)
-      metadata = @catalog_metadata.find { |m| m.attribute.to_sym == key }
+      metadata = @catalog_metadata[key.to_s]
       return [] unless metadata&.enforcedValues
       
       metadata.enforcedValues.flat_map do |field|

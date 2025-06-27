@@ -324,7 +324,8 @@ module SubmissionInputsHelper
                                                          agent: agent,
                                                          name_prefix: attr.name,
                                                          parent_id: "submission_#{attr_key}",
-                                                         edit_on_modal: false, deletable: true }
+                                                         editable: true, edit_on_modal: false, 
+                                                         deletable: true }
         else
           render AgentSearchInputComponent.new(id: random_id, agent_type: agent_type(attr.metadata),
                                                parent_id: "submission_#{attr_key}",
@@ -383,6 +384,7 @@ module SubmissionInputsHelper
   end
 
   def generate_list_field_input(attr, name, label, values, helper_text: nil, &block)
+    binding.pry
     render Input::InputFieldComponent.new(name: '', error_message: attribute_error(attr.attr), helper_text: helper_text) do
       render NestedFormInputsComponent.new do |c|
         c.header do

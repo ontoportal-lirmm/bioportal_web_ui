@@ -176,3 +176,19 @@ div.groupFormError {
     padding: 0.25rem 0.75rem;
   }
 }
+
+.api-configuration-tabs-container {
+  & > .tabs-container > div {
+    display: block;
+    width: 1248px;
+  }
+
+  & > .tab-content {
+    display: flex;
+    justify-content: left;
+
+    & > .tab-pane {
+      width: 1000px;
+    }
+  }
+}

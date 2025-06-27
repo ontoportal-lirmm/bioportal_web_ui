@@ -13,20 +13,35 @@ class AgentsController < ApplicationController
 
     @agent_id = params[:id] || agent_id(@agent)
     @name_prefix = params[:name_prefix]
+    @editable = params[:editable]&.eql?('true')
     @edit_on_modal = params[:edit_on_modal]&.eql?('true')
     @deletable = params[:deletable]&.eql?('true')
   end
 
+
+  def search_agents(query, options: { page: 1, pagesize: 10 })
+    filters = {
+      query: "#{query}*",
+      qf: "identifiers_texts^20 acronym_text^15 name_text^10 email_text^10",
+      page: options[:page],
+      pagesize: options[:pagesize],
+    }
+    LinkedData::Client::HTTP.get('/search/agents', filters)
+  end
+
   def ajax_agents
-    filters = { query: "#{params[:query]}*", qf: "identifiers_texts^20 acronym_text^15 name_text^10 email_text^10"}
-    @agents = LinkedData::Client::HTTP.get('/search/agents', filters)
-    agents_json = @agents.collection.map do |x|
+    query = params[:query].presence
+    if query
+      agents = search_agents(query)
+    end
+    agents_json = agents.collection.map do |agent
+      |
       {
-        id: x.resource_id,
-        name: x.name_text,
-        type: x.agentType_t,
-        identifiers: x.identifiers_texts&.join(', '),
-        acronym: x.acronym_text
+        id: agent.id,
+        name: agent.name,
+        type: agent.agentType,
+        identifiers: agent.identifiers&.join(', '),
+        acronym: agent.acronym_text
       }
     end
 
@@ -79,11 +94,13 @@ class AgentsController < ApplicationController
     parent_id = params[:parent_id]
     name_prefix = params[:name_prefix]
     agent_type = params[:agent_type]
+    agent_editable = params[:editable]&.eql?('true')
     agent_deletable = params[:deletable].to_s.eql?('true')
 
     attribute_template_output = helpers.agent_search_input(id, agent_type,
                                                            parent_id: parent_id,
                                                            name_prefix: name_prefix,
+                                                           editable: agent_editable,
                                                            deletable: agent_deletable)
     render_turbo_stream(replace(helpers.agent_id_frame_id(id, parent_id)) {  render_to_string(inline: attribute_template_output) } )
 
@@ -106,7 +123,7 @@ class AgentsController < ApplicationController
                  replace(table_line_id, partial: 'agents/agent', locals: { agent: agent })
       ]
 
-      streams << replace_agent_form(agent, agent_id: agent_id(agent.id), name_prefix: params[:name_prefix] , parent_id: parent_id, deletable: deletable) if params[:parent_id]
+      streams << replace_agent_form(agent, agent_id: agent_id(agent.id), name_prefix: params[:name_prefix] , parent_id: parent_id, editable: true, deletable: deletable) if params[:parent_id]
 
       render_turbo_stream(*streams)
     end
@@ -183,13 +200,13 @@ class AgentsController < ApplicationController
 
   private
 
-  def replace_agent_form(agent, agent_id: nil, frame_id: nil, parent_id:, partial: 'agents/agent_show', name_prefix: '', deletable: true)
+  def replace_agent_form(agent, agent_id: nil, frame_id: nil, parent_id:, partial: 'agents/agent_show', name_prefix: '', editable: true, deletable: true)
 
     frame_id = frame_id ? agent_id_frame_id(frame_id, parent_id) : agent_frame_id(agent, parent_id)
 
     replace(frame_id, partial: partial, layout: false ,
             locals: { agent_id: agent_id, agent: agent, name_prefix: name_prefix, parent_id: parent_id,
-                      edit_on_modal: false,
+                      editable: editable, edit_on_modal: false,
                       deletable: deletable})
   end
 
