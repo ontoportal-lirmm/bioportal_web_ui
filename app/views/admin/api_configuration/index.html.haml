@@ -49,7 +49,7 @@
                             - if value_attr
                               = render partial: 'agents/agent_show', locals: { agent_id: "NEW_RECORD", parent_id: key.to_s, agent: value_attr, name_prefix: "config[#{key}]", editable: false, deletable: true }
                             - else
-                              = agent_search_input(id: "NEW_RECORD", agent_type: "", parent_id: key.to_s, name_prefix: "config[#{key}]", editable: false, deletable: true)
+                              = agent_search_input("0", "", parent_id: key.to_s, name_prefix: "config[#{key}]", editable: false, deletable: true)
                       - else
                         = render Input::InputFieldComponent.new(name: "config[#{key}]", error_message: attribute_error(key.to_s)) do
                           = render NestedAgentSearchInputComponent.new(label: label_tooltip, agents: value_attr || [], agent_type: "", name_prefix: "config[#{key}]", editable: false, parent_id: key.to_s, create_new_agent_action: false)
