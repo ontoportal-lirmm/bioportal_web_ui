@@ -1,0 +1,9 @@
+.d-flex.justify-content-between.agents-table-name-field
+  %div.text-truncate{title: agent.name}
+    = link_to agent.name,  agents_path + "/#{agent.id.split('/').last}", data: { turbo: false }
+  %span.d-flex.align-items-center
+    %span.m-1.clickable-identifier-icon
+      = raw display_identifiers(agent.identifiers)
+    %span.agent-chip-circle{ title: agent.agentType }
+      - agent_type_icon = inline_svg_tag "icons/#{agent.agentType}.svg"
+      = agent_type_icon

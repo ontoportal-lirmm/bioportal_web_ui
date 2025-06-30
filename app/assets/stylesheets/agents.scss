@@ -27,6 +27,7 @@
   color: #8C8E8D;
   font-size: 15px;
 }
+
 .agent-edit-icon{
   display: flex !important;
   flex-direction: column;
@@ -50,4 +51,100 @@
   position: absolute;
   padding: 11px 17px;
   box-sizing: unset;
+}
+.agents-table-name-field{
+  width : 450px;
+}
+
+.agents-page-section{
+  margin-top: 30px; 
+}
+.agents-bubble-view-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+  
+.clickable-identifier-icon svg{
+  width: 25px;
+  height: 25px;
+  margin-left: 10px;
+  opacity: 0.8;
+
+}
+.agents-page-small-cards-container{
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.agents-page-submitted-ontology {
+  background-color: #F6F6F6;
+  padding: 10px;
+  border-radius: 5px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.clickable-identifier-icon path{
+  fill: var(--primary-color);
+
+
+}
+
+.clickable-identifier-icon svg:hover{
+  opacity: 1;
+}
+
+
+.chart-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 20px 0;
+    
+    canvas {
+        display: block;
+        margin: 0 auto;
+    }
+}
+
+.stats {
+    margin-top: 20px;
+    text-align: center;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 300px;
+    
+    p {
+        margin: 8px 0;
+        font-size: 16px;
+    }
+}
+
+.agents-details-path{
+  display: flex;
+  align-items: center;
+  color: #888888;
+  margin-bottom: 20px;
+}
+.agents-details-path svg{
+  margin: 0 12px;
+}
+.agents-details-path a{
+  text-decoration: underline !important;
+  color: #888888 !important;
+}
+
+.agents-page-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 25px;
+} 
+.agents-chips-container{
+  padding: 15px;
+}
+.agent-chip-wrapper{
+  margin: 5px;
 }

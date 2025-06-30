@@ -17,7 +17,7 @@ module AgentHelper
   end
 
   def agent_table_line_id(id)
-    "#{id}_table_item"
+    "#{id}_agent_table_item"
   end
 
   def agent_frame_id(agent, parent_id)
@@ -41,7 +41,7 @@ module AgentHelper
 
   def link_to_agent_edit_modal(agent, parent_id = nil)
 
-    link_to_modal(nil, edit_agent_path(agent_id(agent), parent_id: parent_id, show_affiliations: parent_id.nil? || parent_id.empty?), class: 'btn btn-sm btn-light', data: { show_modal_title_value: "Edit agent #{agent.name}" }) do
+    link_to_modal(nil, edit_agent_path(agent_id(agent), parent_id: parent_id, show_affiliations: parent_id.nil? || parent_id.empty?), class: 'btn btn-sm btn-light', data: { show_modal_title_value: "#{t('agents.edit_agent')} #{agent.name}" }) do
       content_tag(:i, '', class: 'far fa-edit')
     end
   end
@@ -100,19 +100,55 @@ module AgentHelper
   end
 
 
-  def display_identifiers(identifiers, link: true)
-    schemes_urls = { ORCID: 'https://orcid.org/', ISNI: 'https://isni.org/', ROR: 'https://ror.org/', GRID: 'https://www.grid.ac/' }
+  def display_identifiers(identifiers, link: true, icon: true)
+    schemes_urls = { 
+      ORCID: 'https://orcid.org/', 
+      ISNI: 'https://isni.org/', 
+      ROR: 'https://ror.org/', 
+      GRID: 'https://www.grid.ac/' 
+    }
+    
+    schemes_icons = {
+      ORCID: 'orcid.svg',
+      ROR: 'ror.svg',
+    }
+    
     Array(identifiers).map do |i|
       if i["schemaAgency"]
         schema_agency, notation = [i["schemaAgency"], i["notation"]]
       else
         schema_agency, notation = (i["id"] || i["@id"]).split('Identifiers/').last.delete(' ').split(':')
       end
+      
       value = "#{schemes_urls[schema_agency.to_sym]}#{notation}"
-      identifier_link(value, link_to: link)
-    end.join(', ')
+      icon_path = schemes_icons[schema_agency.to_sym]
+      
+      if icon && icon_path
+        content = inline_svg_tag("icons/#{icon_path}", class: 'identifier-icon')
+      else
+        content = notation
+      end
+
+      if link
+        link_to(value, target: '_blank', rel: 'noopener noreferrer', title: "#{schema_agency}: #{notation}") do
+          content
+        end
+      else
+        content_tag(:span, title: "#{schema_agency}: #{notation}") do
+          content
+        end
+      end
+    end.join(' ').html_safe
+  end
+  
+  def render_agent_partial(partial, agent)
+    render_to_string(partial: partial, locals: { agent: agent })
   end
 
+  def agents_rest_url
+    rest_url + agents_path + "?page=1&pagesize=10"
+  end
+  
   def agent_field_name(name, name_prefix = '')
     name_prefix&.empty? ? name : "#{name_prefix}[#{name}]"
   end
@@ -174,30 +210,38 @@ module AgentHelper
     end.join('. ').html_safe
   end
 
-  def display_agent(agent, link: true)
-    agent_chip_component(agent)
+  def display_agent(agent, link: true, target: '_blank')
+    agent_chip_component(agent, target)
   end
 
   def agent_tooltip(agent)
-    name = agent.name
-    email = agent.email unless agent.class.eql?(LinkedData::Client::Models::Agent)
-    type = agent.agentType
-    identifiers = display_identifiers(agent.identifiers, link: false)
-    identifiers = orcid_number(identifiers)
-    if agent.affiliations && agent.affiliations != []
-      affiliations = ""
-      agent.affiliations.each do |affiliation|
-        affiliations = "#{affiliations} #{affiliation.acronym || affiliation.name}"
+    if agent.usages.nil? || agent.usages.empty?
+      name = agent.name
+      email = agent.email unless agent.class.eql?(LinkedData::Client::Models::Agent)
+      type = agent.agentType
+      identifiers = display_identifiers(agent.identifiers, link: false, icon: false)
+      if agent.affiliations && agent.affiliations != []
+        affiliations = ""
+        agent.affiliations.each do |affiliation|
+          affiliations = "#{affiliations} #{affiliation.acronym || affiliation.name}"
+        end
+      end
+      person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
+      organization_icon = inline_svg_tag 'icons/organization.svg', class: 'agent-type-icon'
+      ror_icon = inline_svg_tag 'icons/ror.svg', class: 'agent-dependency-icon ror'
+      orcid_icon = inline_svg_tag 'icons/orcid.svg', class: 'agent-dependency-icon'
+      agent_icon = type == "organization" ? organization_icon : person_icon
+      identifiers_icon = type == "organization" ? ror_icon : orcid_icon
+      tooltip_html = generate_agent_tooltip(agent_icon, name, email, identifiers, affiliations, identifiers_icon)
+      return tooltip_html
+    else
+      render FieldContainerComponent.new(label: t("agents.profile.collaborated_on")) do
+        horizontal_list_container(agent.usages) do |sub|
+          acronym = sub.to_s.sub(/\/submissions\/\d+$/, "").split(/[\/\s]/).last
+          render ChipButtonComponent.new(text: acronym, type: "clickable")
+        end 
       end
     end
-    person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
-    organization_icon = inline_svg_tag 'icons/organization.svg', class: 'agent-type-icon'
-    ror_icon = inline_svg_tag 'icons/ror.svg', class: 'agent-dependency-icon ror'
-    orcid_icon = inline_svg_tag 'icons/orcid.svg', class: 'agent-dependency-icon'
-    agent_icon = type == "organization" ? organization_icon : person_icon
-    identifiers_icon = type == "organization" ? ror_icon : orcid_icon
-    tooltip_html = generate_agent_tooltip(agent_icon, name, email, identifiers, affiliations, identifiers_icon)
-    return tooltip_html
   end
 
   def generate_agent_tooltip(agent_icon, name, email = nil, identifiers = nil, affiliations = nil, identifiers_icon = nil)
@@ -223,7 +267,7 @@ module AgentHelper
   end
 
 
-  def agent_chip_component(agent)
+  def agent_chip_component(agent, target = '_blank')
     person_icon = inline_svg_tag 'icons/person.svg' , class: 'agent-type-icon'
     organization_icon = inline_svg_tag 'icons/organization.svg', class: 'agent-type-icon'
     agent_icon =  person_icon
@@ -236,17 +280,27 @@ module AgentHelper
       agent_icon = agent.agentType.eql?("organization") ? organization_icon : person_icon
       title = agent_tooltip(agent)
     end
-    render_chip_component(title, agent_icon, name)
+    agent_page_url = agent.id.include?('/Agents/') ? agents_path + "/#{agent.id.split('/').last}" : nil
+    render_chip_component(title, agent_icon, name, agent_page_url, target)
   end
 
 
-  def render_chip_component(title,agent_icon,name)
-    render ChipButtonComponent.new(type: "static",'data-controller':' tooltip', title: title , class: 'text-truncate', style: 'max-width: 280px; display:block; line-height: unset') do
-      content_tag(:div, class: 'agent-chip') do
-        content_tag(:div, agent_icon, class: 'agent-chip-circle') +
-        content_tag(:div, name, class: 'agent-chip-name text-truncate')
-      end
+  def render_chip_component(title, agent_icon, name, url, target= '_blank')
+    chip_content = content_tag(:div, class: 'agent-chip') do
+      content_tag(:div, agent_icon, class: 'agent-chip-circle') +
+      content_tag(:div, name, class: 'agent-chip-name text-truncate')
     end
+  
+    chip = render ChipButtonComponent.new(
+      type: "static",
+      'data-controller': 'tooltip',
+      title: title,
+      style: 'max-width: 280px; display:block; line-height: unset'
+    ) do
+      chip_content
+    end
+  
+    url.present? ? link_to(chip, url, class: 'text-decoration-none', target: target, rel: 'noopener noreferrer') : chip
   end
 
   def orcid_number(orcid)
@@ -254,5 +308,45 @@ module AgentHelper
   end
 
 
-
+  def agents_create_button
+    link_to_modal(
+      nil,
+      new_agent_path,
+      id: "new_agent_btn",
+      role: "button",
+      data: {
+        show_modal_title_value: t("agents.index.create_new_agent"),
+        show_modal_size_value: "modal-xl"
+      }
+    ) do
+      regular_button(
+        "new_agent_btn",
+        t("agents.index.create_new_agent"),
+        variant: "secondary",
+        state: "regular",
+        size: nil
+      ) do |btn|
+        btn.icon_left do
+          inline_svg_tag "icons/plus.svg"
+        end
+      end
+    end
+  end
+  def agents_edit_button
+    link_to_modal(
+      nil,
+      edit_agent_path,
+      id: "edit_agent_btn",
+      role: "button",
+      data: {
+        show_modal_title_value: t('agents.edit_agent'),
+        show_modal_size_value: "modal-xl"
+      }
+    ) do
+      render PillButtonComponent.new(text: "#{inline_svg_tag 'edit.svg'} #{t('agents.edit_agent')}".html_safe) 
+    end
+  end
+  def ontologies_browse_path
+   "/ontologies"
+  end
 end
