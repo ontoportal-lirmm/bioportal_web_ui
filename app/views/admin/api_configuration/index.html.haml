@@ -7,7 +7,7 @@
       = render Display::AlertComponent.new(message: t('admin.api_configuration.configuration_update_error'), closable: true, type: "danger")
 
   %div.mb-3
-    %div.api-configuration-page-decription
+    %div.api-configuration-page-description
       = t('admin.index.api_config')
       .btn
         = rounded_button_component("#{$REST_URL}?apikey=#{get_apikey}&_ts=#{Time.now.to_i}&display=all")

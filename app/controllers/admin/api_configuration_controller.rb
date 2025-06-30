@@ -137,7 +137,7 @@ module Admin
         end
       end
 
-      if config["rightsHolder"]Add commentMore actions
+      if config["rightsHolder"]
         config["rightsHolder"] = config["rightsHolder"].presence&.first || ""
       end
 
