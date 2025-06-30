@@ -36,6 +36,7 @@ class AgentsController < ApplicationController
 
     @agent_id = params[:id] || agent_id(@agent)
     @name_prefix = params[:name_prefix]
+    @editable = params[:editable]&.eql?('true')
     @edit_on_modal = params[:edit_on_modal]&.eql?('true')
     @deletable = params[:deletable]&.eql?('true')
   end
@@ -147,11 +148,13 @@ class AgentsController < ApplicationController
     parent_id = params[:parent_id]
     name_prefix = params[:name_prefix]
     agent_type = params[:agent_type]
+    agent_editable = params[:editable]&.eql?('true')
     agent_deletable = params[:deletable].to_s.eql?('true')
 
     attribute_template_output = helpers.agent_search_input(id, agent_type,
                                                            parent_id: parent_id,
                                                            name_prefix: name_prefix,
+                                                           editable: agent_editable,
                                                            deletable: agent_deletable)
     render_turbo_stream(replace(helpers.agent_id_frame_id(id, parent_id)) {  render_to_string(inline: attribute_template_output) } )
 
@@ -174,7 +177,7 @@ class AgentsController < ApplicationController
                  replace(table_line_id, partial: 'agents/agent', locals: { agent: agent })
       ]
 
-      streams << replace_agent_form(agent, agent_id: agent_id(agent.id), name_prefix: params[:name_prefix] , parent_id: parent_id, deletable: deletable) if params[:parent_id]
+      streams << replace_agent_form(agent, agent_id: agent_id(agent.id), name_prefix: params[:name_prefix] , parent_id: parent_id, editable: true, deletable: deletable) if params[:parent_id]
 
       render_turbo_stream(*streams)
     end
@@ -300,7 +303,7 @@ class AgentsController < ApplicationController
 
     replace(frame_id, partial: partial, layout: false ,
             locals: { agent_id: agent_id, agent: agent, name_prefix: name_prefix, parent_id: parent_id,
-                      edit_on_modal: false,
+                      editable: editable, edit_on_modal: false,
                       deletable: deletable})
   end
 

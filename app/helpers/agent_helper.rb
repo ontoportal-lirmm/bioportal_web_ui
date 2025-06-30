@@ -53,18 +53,18 @@ module AgentHelper
   end
 
 
-  def link_to_search_agent(id, parent_id , name_prefix, agent_type, deletable)
-    link_to("/agents/show_search?id=#{id}&parent_id=#{parent_id}&agent_type=#{agent_type}&deletable=#{deletable}&name_prefix=#{name_prefix}", class: 'btn btn-sm btn-light') do
+  def link_to_search_agent(id, parent_id , name_prefix, agent_type, editable, deletable)
+    link_to("/agents/show_search?id=#{id}&parent_id=#{parent_id}&agent_type=#{agent_type}&editable=#{editable}&deletable=#{deletable}&name_prefix=#{name_prefix}", class: 'btn btn-sm btn-light') do
       inline_svg_tag "x.svg", width: "25", height: "25"
     end
   end
 
-  def agent_search_input(id, agent_type, parent_id: , name_prefix:, deletable: false)
+  def agent_search_input(id, agent_type, parent_id: , name_prefix:, editable: true, deletable: false)
     render TurboFrameComponent.new(id: agent_id_frame_id(id, parent_id)) do
       render AgentSearchInputComponent.new(id: id, agent_type: agent_type,
                                            name_prefix: name_prefix,
                                            parent_id: parent_id, deletable: deletable,
-                                           edit_on_modal: false)
+                                           editable: editable, edit_on_modal: false)
     end
   end
 

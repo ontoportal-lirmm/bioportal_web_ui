@@ -5,7 +5,7 @@ FROM ruby:${RUBY_VERSION}-slim-bookworm
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-     build-essential libxml2 libxslt-dev libmariadb-dev \
+     build-essential libxml2 libxslt-dev libmariadb-dev libyaml-dev \
      git curl libffi-dev pkg-config \
   && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key -o /etc/apt/keyrings/nodesource.asc \
   && echo 'deb [signed-by=/etc/apt/keyrings/nodesource.asc] https://deb.nodesource.com/node_20.x nodistro main' | tee /etc/apt/sources.list.d/nodesource.list \

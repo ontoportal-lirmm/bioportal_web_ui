@@ -22,4 +22,5 @@ module AdminHelper
                 form: {data: { turbo: true, turbo_confirm: t('admin.turbo_confirm', name: name), turbo_frame: '_top'}}
 
   end
+
 end

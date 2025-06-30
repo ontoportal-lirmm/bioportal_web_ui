@@ -118,6 +118,15 @@ en:
       title: Administration
       users: Users
       valid_till: Valid till
+      catalog_config: Site description
+    catalog_configuration:
+      description_text: |
+        Use this page to configure the current site %{portal_name} information.
+        This description will be served by the API (root endpoint) to describe the site metadata.
+        It's used for the OntoPortal federation. For the moment, these data values complement but do not replace the configuration files
+      edit_button: Edit
+      configuration_updated_successfully: Configuration updated successfully
+      configuration_update_error: Problem updating the configuration
     licenses:
       create:
         success: License renewed successfully

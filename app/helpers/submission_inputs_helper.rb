@@ -324,7 +324,8 @@ module SubmissionInputsHelper
                                                          agent: agent,
                                                          name_prefix: attr.name,
                                                          parent_id: "submission_#{attr_key}",
-                                                         edit_on_modal: false, deletable: true }
+                                                         editable: true, edit_on_modal: false, 
+                                                         deletable: true }
         else
           render AgentSearchInputComponent.new(id: random_id, agent_type: agent_type(attr.metadata),
                                                parent_id: "submission_#{attr_key}",
