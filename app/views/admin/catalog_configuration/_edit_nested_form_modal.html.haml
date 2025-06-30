@@ -1,5 +1,5 @@
 = render_in_modal do
-  = form_with url: admin_api_configuration_path("fake_id"), method: :patch, local: false, turbo: true do |f|
+  = form_with url: admin_catalog_configuration_path, method: :patch, local: false, turbo: true do |f|
     = hidden_field_tag "config[#{@key}][]", "", id: "empty_config_#{@key}"
     = render NestedFormInputsComponent.new(object_name: "portal") do |c|
       - c.header do
@@ -15,9 +15,13 @@
             - end.join.html_safe
 
       - c.template do
-        - unique_id = Time.now.to_i
-        - input_fields = @field_names.map { |field_name| "<input class='form-control w-50 mx-1' name='config[#{@key}][][#{field_name}]' placeholder='#{field_name.to_s.humanize}' required/>" }.join
-        = raw "<div class='d-flex'>#{input_fields}</div>".html_safe
+        = content_tag(:div, class: 'd-flex my-1') do
+          - @field_names.map do |field_name|
+            - content_tag(:div, class: 'w-50 mx-1') do
+              = text_input(label: '', name: "config[#{@key}][][#{field_name}]", value: "", placeholder: "#{field_name.to_s.humanize}")
+          - end.join.html_safe
+
+
 
     %div.mt-2{style: 'display: flex; justify-content: flex-end;'}
       %button.btn.btn-secondary{ type: "button", "data-action": "turbo-modal#hide" }

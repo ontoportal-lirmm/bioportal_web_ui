@@ -1,23 +1,22 @@
-= turbo_frame_tag 'api-config' do
+= turbo_frame_tag 'catalog-config' do
   - if flash[:notice]
     .mb-2
-      = render Display::AlertComponent.new(message: t('admin.api_configuration.configuration_updated_successfully'), closable: true, type: "success")
+      = render Display::AlertComponent.new(message: t('admin.catalog_configuration.configuration_updated_successfully'), closable: true, type: "success")
   - if flash[:alert]
     .mb-2
-      = render Display::AlertComponent.new(message: t('admin.api_configuration.configuration_update_error'), closable: true, type: "danger")
+      = render Display::AlertComponent.new(message: t('admin.catalog_configuration.configuration_update_error'), closable: true, type: "danger")
 
   %div.mb-3
-    %div.api-configuration-page-description
-      = t('admin.index.api_config')
+    %div.catalog-configuration-page-description
+      = t('admin.index.catalog_config')
       .btn
         = rounded_button_component("#{$REST_URL}?apikey=#{get_apikey}&_ts=#{Time.now.to_i}&display=all")
-      - description = "Use this page to configure the current site (portalName) information.\n This description will be served by the API (root endpoint) to describe the site metadata.\n It's used for the OntoPortal federation. For the moment, these data values complement but do not replace the configuration files"
-      = description_tooltip(t('admin.index.api_config'), description)
+      = description_tooltip(t('admin.index.catalog_config'), t('admin.catalog_configuration.description_text', portal_name: portal_name))
 
   %div.mb-3
-    = form_with url: admin_api_configuration_path("fake_id"), method: :patch, local: false, turbo: true, html: { id: 'config-form' } do |f|
-      - sections = attributes_groups.keys
-      %div.api-configuration-tabs-container 
+    = form_with url: admin_catalog_configuration_path, method: :patch, local: false, turbo: true, html: { id: 'config-form' } do |f|
+      - sections = @catalog_groups.keys
+      %div.catalog-configuration-tabs-container 
         = render TabsContainerComponent.new(id: "description-site-tabs_") do |c|
           - sections.each do |section_title|
             - c.item(id: section_title.to_s, title: section_title.to_s.humanize, path: "##{section_title.to_s}", 
@@ -25,12 +24,12 @@
                       page_name: section_title.to_s)
             - c.item_content do
               %div.p-1
-                - attributes = attributes_groups[section_title]
+                - attributes = @catalog_groups[section_title]
                 - attributes.each do |attr|
                   - key = attr.to_s
-                  - attr_metadata = attributes_metadata[key]
+                  - attr_metadata = @catalog_metadata[key]
                   - label_tooltip = attr_metadata_header_label(attr_metadata)
-                  - value_attr = attributes_values[key.to_sym]
+                  - value_attr = @catalog_data[key.to_sym]
                   .form-group
                     - if attr_metadata.enforce.include?("string")
                       = text_input(name: "config[#{key}]", value: value_attr || "", label: label_tooltip)
@@ -45,9 +44,9 @@
                     - elsif attr_metadata.enforce.include?("Agent")
                       - if attr_metadata.enforce.include?("no_list")
                         = render Input::InputFieldComponent.new(name: nil, label: label_tooltip, error_message: attribute_error(key.to_s)) do
-                          = render TurboFrameComponent.new(id: "#{key}_NEW_RECORD") do
+                          = render TurboFrameComponent.new(id: "#{key}_0") do
                             - if value_attr
-                              = render partial: 'agents/agent_show', locals: { agent_id: "NEW_RECORD", parent_id: key.to_s, agent: value_attr, name_prefix: "config[#{key}]", editable: false, deletable: true }
+                              = render partial: 'agents/agent_show', locals: { agent_id: "0", parent_id: key.to_s, agent: value_attr, name_prefix: "config[#{key}]", editable: false, deletable: true }
                             - else
                               = agent_search_input("0", "", parent_id: key.to_s, name_prefix: "config[#{key}]", editable: false, deletable: true)
                       - else
@@ -65,7 +64,7 @@
                                 = text_input(name: "config[#{key}][]", value: val || "")
                       - else
                         = render Input::InputFieldComponent.new(name: "list_fields_#{key}", label: label_tooltip) do
-                          = link_to_modal("#{t('admin.api_configuration.edit_button')}", admin_edit_nested_form_api_configuration_path(key), { id: "edit_nested_form_#{key}", data: { show_modal_title_value: "#{label_tooltip}", show_modal_size_value: 'modal-xl' } })              
+                          = link_to_modal("#{t('admin.catalog_configuration.edit_button')}", admin_edit_nested_form_catalog_configuration_path(key), { id: "edit_nested_form_#{key}", data: { show_modal_title_value: "#{label_tooltip}", show_modal_size_value: 'modal-xl' } })              
     
       .save-button
         = form_save_button
