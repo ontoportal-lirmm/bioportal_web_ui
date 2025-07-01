@@ -58,11 +58,11 @@ class AgentFlowsTest < ApplicationSystemTestCase
 
   private
   def create_agent_flow(new_agent, person_count: , organization_count:)
-    wait_for_text "Create new agent"
+    wait_for_text "Create agent"
 
     # Creation test
 
-    find("a", text: "Create new agent", match: :first).click
+    find("a", text: "Create agent", match: :first).click
 
     wait_for_text "TYPE"
     agent_fill(new_agent, is_affiliation: false)

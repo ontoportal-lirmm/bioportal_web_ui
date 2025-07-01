@@ -141,7 +141,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     assert_text "#{ontology_2.name} (#{@new_ontology.acronym})"
 
     selected_categories.each do |cat|
-      assert_text cat.acronym.titleize
+      assert_text cat.acronym.upcase
     end
 
     assert_text submission_2.URI
