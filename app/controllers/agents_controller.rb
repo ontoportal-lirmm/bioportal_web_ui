@@ -297,7 +297,7 @@ class AgentsController < ApplicationController
     end
   end
 
-  def replace_agent_form(agent, agent_id: nil, frame_id: nil, parent_id:, partial: 'agents/agent_show', name_prefix: '', deletable: true)
+  def replace_agent_form(agent, agent_id: nil, frame_id: nil, parent_id:, partial: 'agents/agent_show', name_prefix: '', editable: true, deletable: true)
 
     frame_id = frame_id ? agent_id_frame_id(frame_id, parent_id) : agent_frame_id(agent, parent_id)
 
