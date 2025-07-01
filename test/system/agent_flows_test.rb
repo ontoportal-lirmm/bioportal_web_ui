@@ -22,7 +22,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
     click_on "Support"
     click_link(href: '/agents')
 
-    wait_for_text "Create new agent"
+    wait_for_text "Create agent"
 
     # Creation test
     create_agent_flow(@new_person, person_count: 1, organization_count: 2)
