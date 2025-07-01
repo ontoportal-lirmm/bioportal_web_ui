@@ -306,8 +306,7 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     ontology_2[:group] = @groups.sample(2)
     submission_2[:isRemote] = '1'
 
-    new_ontology1 = @new_ontology
-    existent_ontology = new_ontology1
+    existent_ontology = @new_ontology
     existent_submission = @new_submission
     existent_submission[:submissionStatus] = %w[ERROR_RDF UPLOADED]
     create_ontology(existent_ontology, existent_submission)
