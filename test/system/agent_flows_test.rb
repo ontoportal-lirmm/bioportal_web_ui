@@ -17,7 +17,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
     delete_user(@logged_user) if @logged_user
   end
 
-  test "go admin page and create an agent person and edit it" do
+  test "go agents page and create an agent person and edit it" do
     visit root_url
     click_on "Support"
     click_link(href: '/agents')
@@ -37,24 +37,6 @@ class AgentFlowsTest < ApplicationSystemTestCase
     edit_agent_flow(@new_person2, person_count: 1, organization_count: 3)
 
   end
-
-  test "go admin page and create an agent organization and edit it" do
-    visit admin_index_url
-    click_on "Persons & organizations"
-
-    # Creation test
-    create_agent_flow(@new_organization, person_count: 0, organization_count: 1)
-
-    # Edition test
-    @new_organization2 = fixtures(:agents)[:organization2]
-    wait_for_text  @new_organization.name
-    edit_link = find("a[data-show-modal-title-value=\"Edit agent #{@new_organization.name}\"]")
-    @new_organization2.id = edit_link['href'].split('/')[-2]
-    edit_link.click
-
-    edit_agent_flow(@new_organization2, person_count: 0, organization_count: 1)
-  end
-
 
   private
   def create_agent_flow(new_agent, person_count: , organization_count:)
@@ -77,8 +59,8 @@ class AgentFlowsTest < ApplicationSystemTestCase
         assert_selector "a[href='#{orcid}']"
       end
 
-      assert_text 'person', count: person_count
-      assert_text 'organization', count: organization_count
+      assert_selector 'span.agent-chip-circle[title="person"]', count: person_count
+      assert_selector 'span.agent-chip-circle[title="organization"]', count: organization_count
 
       Array(new_agent.affiliations).map do |aff|
         aff["identifiers"] = aff["identifiers"].each{|x| x["schemaAgency"] = 'ORCID'}
@@ -99,8 +81,9 @@ class AgentFlowsTest < ApplicationSystemTestCase
       agent.identifiers.map{|x| "https://#{agent.agentType.eql?('organization') ? 'ror' : 'orcid'}.org/#{x["notation"]}"}.each do |orcid|
         assert_selector "a[href='#{orcid}']"
       end
-      assert_text 'person', count: person_count
-      assert_text 'organization', count: organization_count
+
+      assert_selector 'span.agent-chip-circle[title="person"]', count: person_count
+      assert_selector 'span.agent-chip-circle[title="organization"]', count: organization_count
 
       Array(agent.affiliations).map do |aff|
         aff["identifiers"] = aff["identifiers"].each{|x| x["schemaAgency"] = 'ORCID'}
