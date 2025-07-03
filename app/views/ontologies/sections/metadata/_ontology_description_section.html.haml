@@ -39,23 +39,28 @@
             = render LanguageFieldComponent.new(value: v)
 
 
+    - categories = Array(@ontology&.hasDomain) 
+    - subjects = Array(@submission_latest&.hasDomain)
+    - unless categories.empty?
+      - l.row do
+        = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.categories")) do
+          = horizontal_list_container(show_ontology_domains(categories).uniq) do |v|
+            = category_chip(v)
+    - unless subjects.empty?
+      - l.row do
+        = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.subjects")) do
+          = horizontal_list_container(show_ontology_domains(subjects).uniq) do |v|
+            = subject_chip(v)
     - unless  Array(@submission_latest&.keywords).empty? && Array(@submission_latest&.keyClasses).empty?
       - l.row do
-        = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.keywords_and_classes")) do
-          - values = (Array(@submission_latest&.keywords) + Array(@submission_latest&.keyClasses))
+        = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.keywords")) do
+          - values = Array(@submission_latest&.keywords)
           - values =  values.map{|x| x.split(',')}.flatten
           = horizontal_list_container(values) do |v|
             - if link?(v)
               = raw get_link_for_cls_ajax(v, @ontology.acronym, '_blank')
             - else
               = render ChipButtonComponent.new(text: v, type: "static")
-    - domains = Array(@ontology&.hasDomain) + Array(@submission_latest&.hasDomain)
-    - unless domains.empty?
-      - l.row do
-        = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.categories_and_subjects")) do
-          = horizontal_list_container(show_ontology_domains(domains).uniq) do |v|
-            = category_name_chip_component(v)
-
     - if  @submission_latest&.pullLocation
       - l.row do
         = admin_block(class_css: '') do

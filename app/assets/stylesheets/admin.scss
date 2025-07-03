@@ -162,3 +162,33 @@ div.groupFormError {
   color: red;
   padding-top: 3px;
 }
+
+.catalog-configuration-page-description{
+  background-color: #f7f9fa;
+  color: #637282;
+  display: flex;
+  font-weight: 500;
+  padding: 8px;
+  align-items: center;
+  
+  .btn, .button {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.75rem;
+  }
+}
+
+.catalog-configuration-tabs-container {
+  & > .tabs-container > div {
+    display: block;
+    width: 1248px;
+  }
+
+  & > .tab-content {
+    display: flex;
+    justify-content: left;
+
+    & > .tab-pane {
+      width: 1000px;
+    }
+  }
+}

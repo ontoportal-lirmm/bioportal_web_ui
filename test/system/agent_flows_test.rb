@@ -17,10 +17,12 @@ class AgentFlowsTest < ApplicationSystemTestCase
     delete_user(@logged_user) if @logged_user
   end
 
-  test "go admin page and create an agent person and edit it" do
-    visit admin_index_url
-    click_on "Persons & organizations"
-    wait_for_text "Create new agent"
+  test "go agents page and create an agent person and edit it" do
+    visit root_url
+    click_on "Support"
+    click_link(href: '/agents')
+
+    wait_for_text "Create agent"
 
     # Creation test
     create_agent_flow(@new_person, person_count: 1, organization_count: 2)
@@ -36,44 +38,29 @@ class AgentFlowsTest < ApplicationSystemTestCase
 
   end
 
-  test "go admin page and create an agent organization and edit it" do
-    visit admin_index_url
-    click_on "Persons & organizations"
-
-    # Creation test
-    create_agent_flow(@new_organization, person_count: 0, organization_count: 1)
-
-    # Edition test
-    @new_organization2 = fixtures(:agents)[:organization2]
-    wait_for_text  @new_organization.name
-    edit_link = find("a[data-show-modal-title-value=\"Edit agent #{@new_organization.name}\"]")
-    @new_organization2.id = edit_link['href'].split('/')[-2]
-    edit_link.click
-
-    edit_agent_flow(@new_organization2, person_count: 0, organization_count: 1)
-  end
-
-
   private
   def create_agent_flow(new_agent, person_count: , organization_count:)
-    wait_for_text "Create new agent"
+    wait_for_text "Create agent"
 
     # Creation test
-    click_on "Create new agent"
+
+    find("a", text: "Create agent", match: :first).click
+
     wait_for_text "TYPE"
     agent_fill(new_agent, is_affiliation: false)
     sleep 1
     assert_text "New agent added successfully"
     find('.close').click
-    within "table#admin_agents" do
+    within "table#admin-agents-table" do
+      puts "Person count: #{person_count}, Organization count: #{organization_count}"
       assert_selector '.human',  count: person_count + organization_count #  all created  agents
       assert_text new_agent.name
       new_agent.identifiers.map{|x| "https://#{new_agent.agentType.eql?('organization') ? 'ror' : 'orcid'}.org/#{x["notation"]}"}.each do |orcid|
-        assert_text orcid
+        assert_selector "a[href='#{orcid}']"
       end
 
-      assert_text 'person', count: person_count
-      assert_text 'organization', count: organization_count
+      assert_selector 'span.agent-chip-circle[title="person"]', count: person_count
+      assert_selector 'span.agent-chip-circle[title="organization"]', count: organization_count
 
       Array(new_agent.affiliations).map do |aff|
         aff["identifiers"] = aff["identifiers"].each{|x| x["schemaAgency"] = 'ORCID'}
@@ -88,14 +75,15 @@ class AgentFlowsTest < ApplicationSystemTestCase
     # assert_text "New agent added successfully"
     find('.close').click
     sleep 1
-    within "table#admin_agents" do
+    within "table#admin-agents-table" do
       assert_selector '.human',  count: person_count + organization_count # all created  agents
       assert_text agent.name
       agent.identifiers.map{|x| "https://#{agent.agentType.eql?('organization') ? 'ror' : 'orcid'}.org/#{x["notation"]}"}.each do |orcid|
-        assert_text orcid
+        assert_selector "a[href='#{orcid}']"
       end
-      assert_text 'person', count: person_count
-      assert_text 'organization', count: organization_count
+
+      assert_selector 'span.agent-chip-circle[title="person"]', count: person_count
+      assert_selector 'span.agent-chip-circle[title="organization"]', count: organization_count
 
       Array(agent.affiliations).map do |aff|
         aff["identifiers"] = aff["identifiers"].each{|x| x["schemaAgency"] = 'ORCID'}

@@ -1,0 +1,105 @@
+- hasUsages = !(@agent.usages.nil? || @agent.usages.empty?)
+.container.d-flex.flex-column.py-4{ style: "width: 1248px;" }
+  .agents-details-path
+    %a{href: agents_path} Agents
+    = inline_svg_tag 'arrow-right-outlined.svg'
+    %div
+      = @agent.name
+  
+  - agent_type_icon = inline_svg_tag "icons/#{@agent.agentType}.svg"
+  .d-flex.justify-content-between
+    .d-flex
+      .agent-chip-circle
+        = agent_type_icon
+      = render PageHeaderComponent.new(title: "#{@agent.name}", description: nil)
+    .d-flex.align-items-center
+      = render RoundedButtonComponent.new(link: @agent.id + "?apikey=#{get_apikey}&display=all", target: '_blank', size: 'medium', title: t("components.go_to_api"))
+      - if current_user_admin? || @agent.creator.eql?(current_user&.id.to_s) 
+        .span.m-2
+        = agents_edit_button
+
+  .row
+    .col-md-7
+      - has_metadata = @agent.identifiers.present? || @agent.affiliations.present? || @agent.homepage.present? || @agent.email.present? || @agent.affiliations.present?
+      - if has_metadata
+        %div.agents-page-section
+          %div
+            = render SummarySectionComponent.new(title: t("agents.profile.metadata")) do |c|
+              %div{ style: 'padding: 20px 0px 0px 0px;' }
+
+                = render Layout::ListComponent.new do |l|
+                  - unless @agent.identifiers.nil? || @agent.identifiers.empty?
+                    - l.row do
+                      = render FieldContainerComponent.new(label: t("agents.profile.identifier")) do
+                        = raw display_identifiers(@agent.identifiers, icon:false)
+                        %span.clickable-identifier-icon
+                          = raw display_identifiers(@agent.identifiers)
+                  - unless @agent.email.blank?
+                    - l.row do
+                      = render FieldContainerComponent.new(label: t("agents.form.email")) do
+                        = mail_to @agent.email, @agent.email
+                  - unless @agent.homepage.blank?
+                    - l.row do
+                      = render FieldContainerComponent.new(label: t("agents.form.homepage")) do
+                        .chip_button_container_clickable
+                          = link_to @agent.homepage, target: "_blank" do
+                            = render ExternalLinkTextComponent.new(text: @agent.homepage)
+                  - unless @agent.affiliations.nil? || @agent.affiliations.empty?
+                    - l.row do
+                      = render FieldContainerComponent.new(label: t("agents.form.affiliations")) do
+                        = raw @agent.affiliations.map{|i| display_agent(i, target: nil)}.join('')
+      %br
+      = render SummarySectionComponent.new(title: t("agents.profile.contributed_in", ontologiesCount: @agentOntologies.count), html_options: { id: "agent-roles" }) do |c|
+        = render RoleSelectorComponent.new(agentOntologies: @agentOntologies)
+      - if !is_organization?(@agent) && @agent.relatedAgents.present?
+        %br
+        = render SummarySectionComponent.new(title: t("agents.profile.collaborators", collaboratorsCount: @agent.relatedAgents.count)) do |c|
+          %div.agents-chips-container.d-flex.flex-wrap
+            - sorted_related_agents = @agent.relatedAgents.sort_by { |i| -i.usages.count }
+            - sorted_related_agents.each do |agent|
+              %div.mb-2.mr-2
+                = display_agent(agent, target: nil)
+      - if is_organization?(@agent) && @agent.affiliatedAgents.present?
+        %br
+        = render SummarySectionComponent.new(title: t("agents.profile.affiliated_agents", affiliatedAgentsCount: @agent.affiliatedAgents.count)) do |c|
+          %div.agents-chips-container.d-flex.flex-wrap
+            - @agent.affiliatedAgents.each do  |agent| 
+              %div.mb-2.mr-2
+                = display_agent(agent, target: nil)
+    .col-md-5
+      - unless !hasUsages
+        .agents-page-section
+          = render SummarySectionComponent.new(title: t("agents.profile.statistics")) do |c|
+            .chart-container 
+              %canvas#contributionChart{'data-controller': 'agents-statistics',
+                                        'data-agents-statistics-contributor-value': @agent_stats[:contributor_count],
+                                        'data-agents-statistics-creator-value': @agent_stats[:creator_count],
+                                        'data-agents-statistics-publisher-value': @agent_stats[:publisher_count],
+                                        'data-agents-statistics-funded-by-value': @agent_stats[:funded_by_count],
+                                        'data-agents-statistics-copyright-holder-value': @agent_stats[:copyright_holder_count],
+                                        'data-agents-statistics-translator-value': @agent_stats[:translator_count],
+                                        'data-agents-statistics-endorsed-by-value': @agent_stats[:endorsed_by_count],
+                                        'data-agents-statistics-curated-by-value': @agent_stats[:curated_by_count]}
+      %br
+      - has_tags = @agent.keywords.present? || @agent.subjects.present? || @agent.categories.present? 
+      - if  has_tags
+        = render SummarySectionComponent.new(title: t("agents.profile.tags")) do |c|
+          %div{ style: 'padding: 20px 0px 0px 0px;' }
+            = render Layout::ListComponent.new do |l|
+              - unless @agent.categories.nil? || @agent.categories.empty?
+                - l.row do 
+                  = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.categories")) do
+                    = horizontal_list_container(@agent.categories) do |v|
+                      - category_acronym = v.split("/").last
+                      = category_chip(category_acronym)
+              - unless @agent.subjects.nil? || @agent.subjects.empty?
+                - l.row do 
+                  = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.subjects")) do
+                    = horizontal_list_container(@agent.subjects) do |subject|
+                      = subject_chip(subject)
+              - unless @agent.categories.nil? || @agent.categories.empty?
+                - l.row do 
+                  = render FieldContainerComponent.new(label: t("agents.profile.keywords")) do
+                    - keywords =  @agent.keywords.map{|x| x.split(',')}.flatten
+                    = horizontal_list_container(keywords) do |v|    
+                      = keyword_chip(v)

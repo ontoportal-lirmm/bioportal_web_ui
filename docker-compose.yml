@@ -1,5 +1,5 @@
 x-app: &default-app
-  image: agroportal/ontoportal_web_ui:latest
+  image: agroportal/ontoportal_web_ui:development
   env_file:
     - ".env"
   tty: true
@@ -113,7 +113,7 @@ services:
   chrome-server:
     image: selenium/standalone-chrome:112.0-chromedriver-112.0-grid-4.9.0-20230421
     shm_size: 2g
-#    network_mode: 'host'
+    network_mode: 'host'
     ports:
       - "4444:4444"
       - "7900:7900"

@@ -1,0 +1,15 @@
+.page-title {
+  font-size: 25px;
+  font-weight: 700;
+   max-width: 800px;           /* Set your desired width */
+}
+.page-title-line{
+  height: 2px;
+  width: 57px;
+  background-color: var(--primary-color);
+  border-radius: 10px;
+}
+.page-description {
+  color: #888888;
+  margin: 20px 0;
+}
