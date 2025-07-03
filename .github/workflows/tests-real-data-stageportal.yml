@@ -39,7 +39,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.0
-          bundler-cache: true
+          bundler-cache: false
       # Add or replace database setup steps here
       - name: set up config file
         run: cp config/database.yml.sample config/database.yml
