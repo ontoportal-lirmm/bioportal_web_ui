@@ -172,6 +172,8 @@ group :test do
   # WebDriver for system testing
   gem 'selenium-webdriver'
 
+  gem 'rubocop', require: false
+
   # Code coverage generation
   gem 'simplecov', require: false
   gem 'simplecov-cobertura' # for codecov.io

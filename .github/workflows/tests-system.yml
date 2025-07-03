@@ -46,7 +46,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.0
-          bundler-cache: false
+          bundler-cache: true
 
       - name: Run OntoPortal API
         run: bin/run_api -k ${{ env.REMOTE_API_KEY }} -r agroportal -t master -s STY -u ${{ env.REMOTE_API_URL }}
