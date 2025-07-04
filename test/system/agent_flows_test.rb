@@ -51,7 +51,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
     sleep 1
     assert_text "New agent added successfully"
     find('.close').click
-    within "table#admin-agents-table" do
+    within "table#agents-table" do
       puts "Person count: #{person_count}, Organization count: #{organization_count}"
       assert_selector '.human',  count: person_count + organization_count #  all created  agents
       assert_text new_agent.name
@@ -75,7 +75,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
     # assert_text "New agent added successfully"
     find('.close').click
     sleep 1
-    within "table#admin-agents-table" do
+    within "table#agents-table" do
       assert_selector '.human',  count: person_count + organization_count # all created  agents
       assert_text agent.name
       agent.identifiers.map{|x| "https://#{agent.agentType.eql?('organization') ? 'ror' : 'orcid'}.org/#{x["notation"]}"}.each do |orcid|
