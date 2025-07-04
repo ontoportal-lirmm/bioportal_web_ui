@@ -58,7 +58,7 @@
       - t.item_content do
         = render TurboFrameComponent.new(id: 'categories-list', src: admin_categories_path, loading: 'lazy')
       - t.item_content do
-        = render TurboFrameComponent.new(id: 'agents-list', src: agents_path, loading: 'lazy')
+        = render TurboFrameComponent.new(id: 'agents-list', src: admin_agents_path, loading: 'lazy')
       - t.item_content do
         = sparql_query_container
       - t.item_content do
