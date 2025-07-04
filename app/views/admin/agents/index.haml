@@ -10,7 +10,7 @@
           = agents_create_button
 
     = render_alerts_container(AgentsController)
-    = render TableComponent.new(id: 'admin_agents_table', borderless: true, outline: true) do |t|
+    = render TableComponent.new(id: 'agents-table', borderless: true, outline: true) do |t|
       - t.header do |h|
         - h.th {t("agents.form.name")}
         - h.th {t("agents.form.acronym")}
