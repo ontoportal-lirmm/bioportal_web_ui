@@ -1,0 +1,26 @@
+
+= turbo_frame_tag 'agents-list' do
+  .d-flex.flex-column.py-4
+    .d-flex.justify-content-between
+      = render PageHeaderComponent.new(title: "Agents" , description: t('agents.description', portalName: $SITE))
+      .d-flex.align-items-center
+        = render RoundedButtonComponent.new(link: agents_rest_url, target: '_blank', size: 'medium', title: t("components.go_to_api"))
+        - if session[:user]
+          .span.m-2
+          = agents_create_button
+
+    = render_alerts_container(AgentsController)
+    = render TableComponent.new(id: 'agents-table', borderless: true, outline: true) do |t|
+      - t.header do |h|
+        - h.th {t("agents.form.name")}
+        - h.th {t("agents.form.acronym")}
+        - h.th {t("agents.form.affiliations")}
+        - h.th {t("agents.index.usages")}
+        - if current_user_admin?
+          - h.th {t("agents.index.actions")}
+      = render partial: 'agents/agent', collection: @agents
+      %tr.empty-state
+        %td.text-center{:colspan => "6"}= t("agents.index.no_agents")
+    :javascript
+      $.fn.dataTable.ext.errMode = 'none';
+      $("#admin_agents_table").dataTable()
