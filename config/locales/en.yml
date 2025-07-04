@@ -118,8 +118,12 @@ en:
       title: Administration
       users: Users
       valid_till: Valid till
-      api_config: Site description
-    api_configuration:
+      catalog_config: Site description
+    catalog_configuration:
+      description_text: |
+        Use this page to configure the current site %{portal_name} information.
+        This description will be served by the API (root endpoint) to describe the site metadata.
+        It's used for the OntoPortal federation. For the moment, these data values complement but do not replace the configuration files
       edit_button: Edit
       configuration_updated_successfully: Configuration updated successfully
       configuration_update_error: Problem updating the configuration
@@ -252,7 +256,7 @@ en:
       first_name: First name
       no_agents: There are currently no  agents.
       usages: Usages
-      search_placeholder: Search an agent
+      search_placeholder: Search agents
     modal_title: Agent "%{name}" usages
     not_found_agent: Agent with id %{id}
     not_used: Not used

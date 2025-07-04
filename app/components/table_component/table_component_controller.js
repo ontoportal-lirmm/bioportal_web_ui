@@ -59,9 +59,9 @@
           }
         })
 
-        
+        DataTable.ext.errMode = 'none';
+      
       }
-      // Trigger search when the user types at least 3 characters
       const searchInput = document.querySelector(`#${table.id}_filter input`)
 
       if (searchInput) {

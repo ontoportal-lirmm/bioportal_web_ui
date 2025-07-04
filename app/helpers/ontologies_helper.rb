@@ -342,7 +342,7 @@ module OntologiesHelper
       end
 
       render ChipButtonComponent.new(
-        text: text.downcase,
+        text: text.titleize,
         tooltip: subject,
         url: url,
         type: "clickable",

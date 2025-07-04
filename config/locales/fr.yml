@@ -124,8 +124,12 @@ fr:
       title: Administration
       users: Utilisateurs
       valid_till: Valide jusqu'à
-      api_config: Description du site
-    api_configuration:
+      catalog_config: Description du site
+    catalog_configuration:
+      description_text: |
+        Utilisez cette page pour configurer les informations du site actuel %{portal_name}.
+        Cette description sera fournie par l'API (point de terminaison racine) pour décrire les métadonnées du site.
+        Elle est utilisée pour la fédération OntoPortal. Pour l'instant, ces valeurs de données complètent, sans les remplacer, les fichiers de configuration.
       edit_button: Éditer
       configuration_updated_successfully: Configuration de l'API mise à jour avec succès
       configuration_update_error: Problème lors de la mise à jour de la configuration
@@ -259,7 +263,7 @@ fr:
       first_name: Prénom
       no_agents: Il n'y a actuellement aucun agent.
       usages: Utilisations
-      search_placeholder: Rechercher un agent
+      search_placeholder: Rechercher des agents
     modal_title: Utilisations de l'agent "%{name}"
     not_found_agent: Agent avec id %{id}
     not_used: Non utilisé
@@ -273,7 +277,7 @@ fr:
       statistics: Statistiques
       no_contributions: Cet agent n'a aucune contribution dans %{portalName} 
       keywords: Mots-clés
-      tags : Themes liés
+      tags : Thèmes liés
       identifier: Identifiant
     save: Sauvegarder
     see_usages_count: Utilisations (%{count})

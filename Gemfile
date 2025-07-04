@@ -119,12 +119,10 @@ gem 'omniauth-orcid'
 gem "color", "~> 1.8"
 
 group :staging, :production, :appliance do
-  # Application performance monitoring
-  gem 'newrelic_rpm'
-
-  # Error monitoring
-  gem 'bugsnag', '~> 6.26'
-
+  # Monitoring and performance profiling
+  gem "stackprof", "~> 0.2.27"
+  gem "sentry-ruby", "~> 5.23"
+  gem "sentry-rails", "~> 5.23"
   # Logs in JSON format, useful for shipping logs to logstash
   # gem 'rackstash', git: 'https://github.com/planio-gmbh/rackstash.git'
   # gem 'logstash-logger'

@@ -97,8 +97,8 @@ resource_content_formats:
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
         <skos:prefLabel xml:lang="en">Entity</skos:prefLabel>
         <skos:notation>T071</skos:notation>
-        <metadata_def:mappingSameURI rdf:resource="http://purl.bioontology.org/ontology/STY/T071"/>
         <metadata_def:mappingLoom>entity</metadata_def:mappingLoom>
+        <metadata_def:mappingSameURI rdf:resource="http://purl.bioontology.org/ontology/STY/T071"/>
       </owl:Class>
       <rdf:Description rdf:about="http://purl.bioontology.org/ontology/STY/T072">
         <rdfs:subClassOf>
@@ -117,8 +117,8 @@ resource_content_formats:
     <http://purl.bioontology.org/ontology/STY/T071> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/2002/07/owl#Thing> .
     <http://purl.bioontology.org/ontology/STY/T071> <http://www.w3.org/2004/02/skos/core#prefLabel> "Entity"@en .
     <http://purl.bioontology.org/ontology/STY/T071> <http://www.w3.org/2004/02/skos/core#notation> "T071" .
-    <http://purl.bioontology.org/ontology/STY/T071> <http://data.bioontology.org/metadata/def/mappingSameURI> <http://purl.bioontology.org/ontology/STY/T071> .
     <http://purl.bioontology.org/ontology/STY/T071> <http://data.bioontology.org/metadata/def/mappingLoom> "entity" .
+    <http://purl.bioontology.org/ontology/STY/T071> <http://data.bioontology.org/metadata/def/mappingSameURI> <http://purl.bioontology.org/ontology/STY/T071> .
     <http://purl.bioontology.org/ontology/STY/T072> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.bioontology.org/ontology/STY/T071> .
     <http://purl.bioontology.org/ontology/STY/T077> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://purl.bioontology.org/ontology/STY/T071> .
     <http://purl.bioontology.org/ontology/STY/T071> <http://data.bioontology.org/metadata/def/mappingSameURI> <http://purl.bioontology.org/ontology/STY/T071> .

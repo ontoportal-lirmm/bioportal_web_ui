@@ -83,8 +83,9 @@ Rails.application.routes.draw do
     match 'groups/synchronize_groups' => 'groups#synchronize_groups', via: [:post]
     resources :groups, only: [:index, :create, :new, :edit, :update, :destroy]
     resources :categories, only: [:index, :create, :new, :edit, :update, :destroy]
-    resources :api_configuration, only: [:index, :update]
-    get 'api_configuration/edit_nested_form/:key', to: 'api_configuration#edit_nested_form', as: 'edit_nested_form_api_configuration'
+    resources :agents, only: [:index]
+    resource :catalog_configuration, only: [:show, :update], controller: 'catalog_configuration'
+    get 'catalog_configuration/edit_nested_form/:key', to: 'catalog_configuration#edit_nested_form', as: 'edit_nested_form_catalog_configuration'
     scope :search do
       get '/', to: 'search#index'
       post 'index_batch', to: 'search#index_batch'
