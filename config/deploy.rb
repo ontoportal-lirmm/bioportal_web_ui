@@ -30,6 +30,9 @@ set :default_env, {
   'PATH' => "/usr/local/rbenv/shims:/usr/local/rbenv/bin:/usr/bin:$PATH"
 }
 
+# set bundle options
+set :bundle_flags, "--verbose"
+
 # Default value for keep_releases is 5
 set :keep_releases, 5
 set :bundle_without, 'development:test'
