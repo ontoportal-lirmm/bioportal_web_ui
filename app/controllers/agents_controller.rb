@@ -7,6 +7,7 @@ class AgentsController < ApplicationController
 
   def details
     @agent = find_agent(params[:id])
+    @title = @agent.acronym || @agent.name
     not_found(t('agents.not_found_agent', id: params[:id])) if @agent.status == 404
 
     @agent_stats = AgentStatisticsCalculatorComponent.new(@agent).stats
@@ -125,7 +126,7 @@ class AgentsController < ApplicationController
       success_message = t('agents.add_agent')
       streams = [alert_success(id: alert_id) { success_message }]
 
-      streams << prepend('admin-agents-table_table_body', partial: 'agents/agent', locals: { agent: new_agent })
+      streams << prepend('agents-table_table_body', partial: 'agents/agent', locals: { agent: new_agent })
       streams << replace_agent_form(new_agent, agent_id: nil, frame_id: params[:id],
                                     parent_id: parent_id, name_prefix: name_prefix,
                                     deletable: deletable

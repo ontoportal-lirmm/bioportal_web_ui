@@ -24,7 +24,13 @@
           .text
             Federated with
         .d-flex.flex-wrap.my-1
-          - @portal_config[:federated_portals].to_h.values.compact.each do |portal|
+          -# Handling portals that implement MOD-API
+          - if @portal_config[:federated_portals].is_a?(Array)
+            - federated_portals = @portal_config[:federated_portals]
+          - elsif @portal_config[:federated_portals].is_a?(OpenStruct)
+            - federated_portals = @portal_config[:federated_portals].to_h.values.compact
+
+          - federated_portals.each do |portal|
             .portal-config-federated-with
               = link_to portal[:ui], target: '_blank', class: 'home-logo-instances-small', style: "background-color: #{portal[:color]};" do
                 = inline_svg 'logo-white.svg', width: "18", height: "13"

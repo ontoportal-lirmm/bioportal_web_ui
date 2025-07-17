@@ -10,7 +10,7 @@
           = agents_create_button
 
     = render_alerts_container(AgentsController)
-    = render TableComponent.new(id: 'admin_agents_table', borderless: true, outline: true) do |t|
+    = render TableComponent.new(id: 'agents-table', borderless: true, outline: true) do |t|
       - t.header do |h|
         - h.th {t("agents.form.name")}
         - h.th {t("agents.form.acronym")}
@@ -23,4 +23,4 @@
         %td.text-center{:colspan => "6"}= t("agents.index.no_agents")
     :javascript
       $.fn.dataTable.ext.errMode = 'none';
-      $("#admin_agents_table").dataTable()
+      $("#agents-table").dataTable()
