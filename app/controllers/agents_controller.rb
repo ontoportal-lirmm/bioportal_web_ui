@@ -7,6 +7,7 @@ class AgentsController < ApplicationController
 
   def details
     @agent = find_agent(params[:id])
+    @title = @agent.acronym || @agent.name
     not_found(t('agents.not_found_agent', id: params[:id])) if @agent.status == 404
 
     @agent_stats = AgentStatisticsCalculatorComponent.new(@agent).stats
