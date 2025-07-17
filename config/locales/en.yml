@@ -271,7 +271,7 @@ en:
       no_contributions: This agent has no contributions in %{portalName} 
       keywords : Keywords
       tags : Related themes
-      identifier: identifier
+      identifier: Identifier
     save: Save
     see_usages_count: Usages (%{count})
     turbo_confirm: Are you sure?
