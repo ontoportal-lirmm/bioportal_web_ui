@@ -5,46 +5,39 @@ class OntologiesMetadataCuratorController < ApplicationController
   before_action :submission_metadata, only: [:result, :edit, :update, :show_metadata_by_ontology]
 
   def result
+    start_time = Time.now
     @ontologies_ids = params[:ontology] ? Array(params[:ontology][:ontologyId]) : []
     @metadata_sel = params[:search] ? params[:search][:metadata] : []
-    @show_submissions = !params[:show_submissions].nil?
+    return if @metadata_sel.empty?
     @submissions = []
     @ontologies = []
-    display_attribute = equivalent_properties(@metadata_sel) + %w[submissionId]
+    select_all_ontologies = params[:select_all_ontologies]&.eql?('true')
+    show_all_submissions = !params[:show_submissions].nil?
+    submission_display_attribute = equivalent_properties(@metadata_sel) + %w[submissionId]
+    ontology_display_attribute = equivalent_ontology_properties(@metadata_sel) + %w[acronym]
 
-    if @show_submissions
-      if @ontologies_ids.nil? || @ontologies_ids.empty?
-        @ontologies = LinkedData::Client::Models::Ontology.all
-      else
-        @ontologies_ids.each do |data|
-          @ontologies << LinkedData::Client::Models::Ontology.find_by_acronym(data).first
-        end
+    if select_all_ontologies
+      @ontologies = LinkedData::Client::Models::Ontology.all(display_links: false, display_context: false, include: ontology_display_attribute.join(','))
+      @ontologies_ids = @ontologies.map(&:acronym)
+    elsif !@ontologies_ids.nil? || !@ontologies_ids.empty?
+      @ontologies_ids.each do |data|
+        @ontologies << LinkedData::Client::Models::Ontology.find_by_acronym(data, {display_links: false, display_context: false, include: ontology_display_attribute.join(',')}).first
       end
-      @ontologies.each do |ont|
-        submissions = ont.explore.submissions({ include: display_attribute.join(',') })
-        submissions.each { |sub| append_submission(ont, sub) }
-      end
-    else
-      @submissions = LinkedData::Client::Models::OntologySubmission.all(acronym: @ontologies_ids.join('|'), display_links: false, display_context: false, include: display_attribute.join(','))
-      @submissions.reject! { |x| !@ontologies_ids.include?(x.id.split('/')[-3]) } unless @ontologies_ids.empty?
-      @submissions.sort_by! { |x| x.id }
     end
 
-
-
+    return if @ontologies.empty?
+    return if select_all_ontologies && show_all_submissions # To not overwhelm our server
+    
+    @hash = build_hash_submissions(show_all_submissions: show_all_submissions, display_attribute: submission_display_attribute)
+    
+    Rails.logger.info "Getting ontologies submission took: #{Time.now - start_time} seconds"
 
     respond_to do |format|
       format.html { redirect_to admin_index_path }
       format.turbo_stream { render turbo_stream: [
-        replace("selection_metadata_form", partial: "ontologies_metadata_curator/metadata_table")
-      # TODO put again when bulk edit fixed
-      # replace('edit_metadata_btn') do
-      #     "
-      #      #{helpers.button_tag(t('ontologies_metadata_curator.bulk_edit'), onclick: 'showEditForm(event)', class: "btn btn-outline-primary mx-1 w-100")}
-      #      #{raw helpers.help_tooltip(t('ontologies_metadata_curator.use_the_bulk_edit'))}
-      #     ".html_safe
-      #   end
-      ] }
+          replace("selection_metadata_form", partial: "ontologies_metadata_curator/metadata_table")
+        ]
+      }
     end
   end
 
@@ -63,8 +56,7 @@ class OntologiesMetadataCuratorController < ApplicationController
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(acronym).first
     @submission = @ontology.explore.submissions({ display: "#{attribute},submissionId" }, submission_id)
     id = attribute_input_frame_id(acronym, submission_id, attribute)
-    render_turbo_stream replace(id, partial: 'ontologies_metadata_curator/attribute', locals: { id: id, attribute: attribute,
-                                                                                                submission: @submission, ontology: @ontology })
+    render_turbo_stream replace(id, partial: 'ontologies_metadata_curator/attribute', locals: { id: id, attribute: attribute, submission: @submission, ontology: @ontology })
   end
 
   def edit
@@ -119,12 +111,33 @@ class OntologiesMetadataCuratorController < ApplicationController
   private
 
 
-  def append_submission(ontology, submission)
-    sub = submission
-    return if sub.nil?
+  def build_hash_submissions(show_all_submissions: false, display_attribute: [])
+    acronym_ontolog_submissions_hash = {}
+    
+    if show_all_submissions
+      @ontologies.each do |ontology|
+        submissions = ontology.explore.submissions({ include: display_attribute.join(',') })
+        acronym_ontolog_submissions_hash[ontology.acronym] = {
+          ontology: ontology,
+          submissions: submissions
+        }
+      end
+    else
+      # Get all submissions for the selected ontologies
+      submissions = LinkedData::Client::Models::OntologySubmission.all( acronym: @ontologies_ids.join('|'), display_links: false, display_context: false, include: display_attribute.join(','))
+      submissions.reject! { |x| !@ontologies_ids.include?(x.id.split('/')[-3]) } unless @ontologies_ids.empty?
+      # Filter and group submissions by ontology acronym
+      submissions_by_ontology = submissions.group_by { |sub| sub.id.split('/')[-3] }     
+      # Build the hash with the same structure
+      @ontologies.each do |ontology|
+        acronym_ontolog_submissions_hash[ontology.acronym] = {
+          ontology: ontology,
+          submissions: (submissions_by_ontology[ontology.acronym] || []).sort_by(&:id)
+        }
+      end
+    end
 
-    sub.ontology = ontology
-    @submissions << sub
+    return acronym_ontolog_submissions_hash
   end
 
 end

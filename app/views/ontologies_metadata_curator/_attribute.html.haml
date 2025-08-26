@@ -1,9 +1,15 @@
-- acronym = ontology ? ontology.acronym : submission.id.split('/')[-3]
+- acronym = ontology.acronym
+- id = attribute_input_frame_id(acronym, submission.submissionId, attribute)
+- from_ontology = true
 = render TurboFrameComponent.new(id: id) do
   %div.d-flex.justify-content-between.align-items-center
     %div.d-flex.justify-content-between
       %div
-        - equivalents = equivalent_properties(attribute)
+        - equivalents = equivalent_ontology_properties(attribute)
+        - if equivalents.empty?
+          - equivalents = equivalent_properties(attribute)
+          - from_ontology = false
+
         - equivalents.each do |attr|
           %div.d-flex
             - if equivalents.size > 1
@@ -20,17 +26,20 @@
                 - elsif attribute == "ontology"
                   = acronym
                 - else
-                  - values = submission.instance_values[attribute.to_s]
-                  - if values.is_a?(String) && %w[http https].include?(values[0..3])
-                    = render LinkFieldComponent.new(value: values, raw: true, check_resolvability: true)
+                  - if from_ontology
+                    - values = ontology.instance_values[attr.to_s]
                   - else
-                    - Array(values).each do |value|
-                      - if value.is_a?(LinkedData::Client::Models::Agent)
-                        %div
-                          = display_agent(value, link: false)
-                      - else
-                        %p
-                          = value
+                    - values = submission.instance_values[attr.to_s]
+                  - Array(values).each do |value|
+                    - if values.is_a?(String) && %w[http https].include?(values[0..3])
+                      = render LinkFieldComponent.new(value: values, raw: true, check_resolvability: true)
+                    - elsif value.is_a?(LinkedData::Client::Models::Agent)
+                      %div
+                        = display_agent(value, link: false)
+                    - else
+                      %p
+                        = value
             %div
-              = edit_submission_property_link(acronym, submission.submissionId, attribute) do
-                %i.far.fa-edit
+              - if !from_ontology
+                = edit_submission_property_link(acronym, submission.submissionId, attribute) do
+                  %i.far.fa-edit
