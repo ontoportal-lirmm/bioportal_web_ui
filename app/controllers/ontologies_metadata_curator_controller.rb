@@ -8,12 +8,13 @@ class OntologiesMetadataCuratorController < ApplicationController
     start_time = Time.now
     @ontologies_ids = params[:ontology] ? Array(params[:ontology][:ontologyId]) : []
     @metadata_sel = params[:search] ? params[:search][:metadata] : []
-    return if @metadata_sel.empty?
     @submissions = []
     @ontologies = []
-    select_all_ontologies = params[:select_all_ontologies]&.eql?('true')
+    select_all_ontologies = @ontologies_ids.empty?
     show_all_submissions = !params[:show_submissions].nil?
-    submission_display_attribute = equivalent_properties(@metadata_sel) + %w[submissionId]
+    return if @metadata_sel.empty?
+    return if select_all_ontologies && show_all_submissions # To not overwhelm our server for getting all submissions of all ontologies
+
     ontology_display_attribute = equivalent_ontology_properties(@metadata_sel) + %w[acronym]
 
     if select_all_ontologies
@@ -21,13 +22,13 @@ class OntologiesMetadataCuratorController < ApplicationController
       @ontologies_ids = @ontologies.map(&:acronym)
     elsif !@ontologies_ids.nil? || !@ontologies_ids.empty?
       @ontologies_ids.each do |data|
-        @ontologies << LinkedData::Client::Models::Ontology.find_by_acronym(data, {display_links: false, display_context: false, include: ontology_display_attribute.join(',')}).first
+        @ontologies << LinkedData::Client::Models::Ontology.find_by_acronym(data, {include: ontology_display_attribute.join(',')}).first
       end
     end
 
     return if @ontologies.empty?
-    return if select_all_ontologies && show_all_submissions # To not overwhelm our server
     
+    submission_display_attribute = equivalent_properties(@metadata_sel) + %w[submissionId]
     @hash = build_hash_submissions(show_all_submissions: show_all_submissions, display_attribute: submission_display_attribute)
     
     Rails.logger.info "Getting ontologies submission took: #{Time.now - start_time} seconds"
