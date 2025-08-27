@@ -10,17 +10,6 @@ class HomeController < ApplicationController
 
     @slices = LinkedData::Client::Models::Slice.all
 
-    @metrics = portal_metrics(@analytics)
-
-
-    @upload_benefits = [
-      t('home.benefit1'),
-      t('home.benefit2'),
-      t('home.benefit3'),
-      t('home.benefit4'),
-      t('home.benefit5')
-    ]
-
     @anal_ont_names = []
     @anal_ont_numbers = []
     if @analytics.empty?
@@ -37,6 +26,15 @@ class HomeController < ApplicationController
     end
 
 
+  end
+
+  # Add a new action for the metrics frame
+  def metrics
+    @analytics = helpers.ontologies_analytics
+    @metrics = portal_metrics(@analytics)
+    respond_to do |format|
+      format.html { render partial: 'metrics', layout: false }
+    end
   end
 
   def set_cookies
