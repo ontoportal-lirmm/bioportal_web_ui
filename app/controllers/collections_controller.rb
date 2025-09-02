@@ -57,6 +57,7 @@ class CollectionsController < ApplicationController
 
   def show_members
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id] || params[:ontology]).first
+    ontology_not_found(params[:ontology_id] || params[:ontology]) if @ontology.nil? || @ontology.errors
     @submission = @ontology.explore.latest_submission(include: 'uriRegexPattern,preferredNamespaceUri')
     page = params[:page] || '1'
     @auto_click = page.to_s.eql?('1')
@@ -69,12 +70,7 @@ class CollectionsController < ApplicationController
       @page = OpenStruct.new({ nextPage: 1, page: 1 })
       @concepts = []
     end
-
-    if @ontology.nil?
-      ontology_not_found params[:ontology]
-    else
-      render partial: 'concepts/list'
-    end
+    render partial: 'concepts/list'
   end
 
   private
