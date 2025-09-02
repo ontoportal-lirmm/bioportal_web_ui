@@ -44,7 +44,7 @@ class AgentsController < ApplicationController
   def find_agent(id = params[:id], include_params = 'all')
     id = helpers.unescape(id)
     @agent = LinkedData::Client::Models::Agent.find(id.split('/').last, { include: include_params })
-    not_found("Agent with id #{id} not found") if @agent.nil?
+    not_found("Agent with id #{id} not found") if @agent.nil? || @agent.errors
     @agent
   end
 
