@@ -155,10 +155,10 @@ class ConceptsController < ApplicationController
 
   def biomixer
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-    ontology_not_found(params[:ontology]) if @ontology.nil?
+    ontology_not_found(params[:ontology]) if @ontology.nil? || @ontology.errors
 
     @concept = @ontology.explore.single_class({ full: true }, params[:conceptid])
-    concept_not_found(params[:conceptid]) if @concept.nil?
+    concept_not_found(params[:conceptid]) if @concept.nil? || @concept.errors
 
     render partial: "biomixer", layout: false
   end
