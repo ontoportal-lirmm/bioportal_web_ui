@@ -12,6 +12,7 @@ class NotesController < ApplicationController
     id = clean_note_id(params[:id])
 
     @note = LinkedData::Client::Models::Note.get(id, include_threads: true)
+    not_found(t('notes.note_not_found', note_id: id)) if @note.nil? || @note.errors
     @note_decorator = NoteDecorator.new(@note, view_context)
     @ontology = (@note.explore.relatedOntology || []).first
 
