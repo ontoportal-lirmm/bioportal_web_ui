@@ -31,10 +31,10 @@ class OntologiesRedirectionController < ApplicationController
     # GET /ontologies/:acronym/htaccess
     def generate_htaccess
         ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:acronym]).first
-        if @ontology.nil? || @ontology.errors
+        if ontology.nil? || ontology.errors
             ontology_not_found(params[:acronym])
         else
-                subminssions_params = ontology.explore.latest_submission(include: 'URI,preferredNamespaceUri')
+            subminssions_params = ontology.explore.latest_submission(include: 'URI,preferredNamespaceUri')
             ontology_uri = subminssions_params.URI
             preferred_name_space_uri = subminssions_params.preferredNamespaceUri
             ontology_portal_url = "#{$UI_URL}/ontologies/#{params[:acronym]}"
