@@ -16,32 +16,28 @@ class LoginController < ApplicationController
 
   # logs in a user
   def create
-    if is_email(params[:user][:username])
-      username = LinkedData::Client::Models::User.find_by_email(params[:user][:username]).first.username
-    else
-      username = params[:user][:username]
-    end
     @errors = validate(params[:user])
-    if @errors.size < 1
-      logged_in_user = LinkedData::Client::Models::User.authenticate(username, params[:user][:password])
-      if logged_in_user && !logged_in_user.errors
-        login(logged_in_user)
-        redirect = "/"
 
-        if session[:redirect]
-          redirect = CGI.unescape(session[:redirect])
-        end
+    username = if is_email(params[:user][:username])
+                LinkedData::Client::Models::User.find_by_email(params[:user][:username]).first&.username
+              else
+                params[:user][:username]
+              end
 
-        redirect_to redirect, allow_other_host: true
-      else
-        @errors << t('login.invalid_account_combination')
-        render :action => 'index'
-      end
+    @errors << t("login.invalid_account_combination") if username.nil?
+
+    return render :action => 'index' if @errors.any?
+
+    logged_in_user = LinkedData::Client::Models::User.authenticate(username, params[:user][:password])
+    if logged_in_user && !logged_in_user.errors
+      login(logged_in_user)
+      redirect = session[:redirect] ? CGI.unescape(session[:redirect]) : "/"
+      redirect_to redirect, allow_other_host: true
     else
+      @errors << t('login.invalid_account_combination')
       render :action => 'index'
     end
   end
-
 
   def create_omniauth
     auth_data = request.env['omniauth.auth']
