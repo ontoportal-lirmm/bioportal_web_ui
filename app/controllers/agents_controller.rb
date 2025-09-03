@@ -185,8 +185,8 @@ class AgentsController < ApplicationController
 
   def agent_usages
     @agent = find_agent(params[:id], include_params = 'usages')
+    not_found(t('agents.not_found_agent', id: params[:id])) if @agent.nil? || @agent.errors
     @ontology_acronyms = LinkedData::Client::Models::Ontology.all(include: 'acronym', display_links: false, display_context: false, include_views: true).map(&:acronym)
-    not_found(t('agents.not_found_agent', id: @agent.id)) if @agent.nil?
     render partial: 'agents/agent_usage'
   end
 
