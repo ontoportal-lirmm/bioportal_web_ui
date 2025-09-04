@@ -89,7 +89,8 @@ module SubmissionFilter
     submissions = ontologies.map { |ont| ontology_hash(ont, submissions) }
 
     submissions.map do |s|
-      out = ((s[:ontology].viewingRestriction.eql?('public') && !private_only) || private_only && s[:ontology].viewingRestriction.eql?('private'))
+      out = true
+      out &&= s[:ontology].viewingRestriction.eql?('private') if private_only
       out &&= s[:ontology].administeredBy.include?(current_user.id) if user_ontologies_only
       out &&= (groups.blank? || (s[:ontology].group.map { |x| helpers.link_last_part(x) } & groups.split(',')).any?)
       out &&= (categories.blank? || (s[:ontology].hasDomain.map { |x| helpers.link_last_part(x) } & categories.split(',')).any?)

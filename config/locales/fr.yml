@@ -984,6 +984,7 @@ fr:
       admin_welcome: Bienvenue admin, cette couleur indique les fonctionnalités réservées
         aux administrateurs
       search_placeholder: Filtrer les ontologies, e.g., AGROVOC, plante
+      show_my_ontologies: Afficher toutes mes ontologies
       show_ontology_views: Afficher les vues de l'ontologie
       show_private_ontology: Afficher seulement les ontologies privées
       show_retired_ontologies: Afficher les ontologies retirées
