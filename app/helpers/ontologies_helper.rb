@@ -322,7 +322,7 @@ module OntologiesHelper
 
   def subject_chip(subject)
     begin
-      agroportal_uri = "https://data.agroportal.lirmm.fr/ontologies/AGROVOC/classes/#{CGI.escape(subject)}"
+      agroportal_uri = "https://data.agroportal.lirmm.fr/ontologies/AGROVOC/classes/#{CGI.escape(subject.strip)}"
       response = LinkedData::Client::HTTP.get(
         agroportal_uri,
         params = {

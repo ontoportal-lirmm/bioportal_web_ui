@@ -124,14 +124,13 @@ module SubmissionUpdater
     end
     p = params.permit(attributes.uniq)
     p['pullLocation'] = '' if p['isRemote']&.eql?('3')
-
-    p = p.to_h.transform_values do |v|
-      if v.is_a? Hash
-        v.values.reject(&:empty?)
-      elsif v.is_a? Array
-        v.reject(&:empty?)
+    p = p.to_h.transform_values do |value|
+      if value.is_a?(Hash)
+        value.transform_values { |val| val.strip }.reject { |_, val| val.respond_to?(:empty?) && val.empty? }.values
+      elsif value.is_a?(Array)
+        value.map { |el| el.strip }.reject { |el| el.respond_to?(:empty?) && el.empty? }
       else
-        v
+        value.strip
       end
     end
 
