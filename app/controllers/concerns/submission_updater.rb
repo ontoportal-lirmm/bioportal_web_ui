@@ -126,11 +126,9 @@ module SubmissionUpdater
     p['pullLocation'] = '' if p['isRemote']&.eql?('3')
     p = p.to_h.transform_values do |value|
       if value.is_a?(Hash)
-        value.transform_values { |val| val.strip }.reject { |_, val| val.respond_to?(:empty?) && val.empty? }.values
-      elsif value.is_a?(Array)
-        value.map { |el| el.strip }.reject { |el| el.respond_to?(:empty?) && el.empty? }
+        value.values.map { |v| normalize(v) }.reject { |v| v.respond_to?(:empty?) && v.empty? }
       else
-        value.strip
+        normalize(value)
       end
     end
 
@@ -151,4 +149,19 @@ module SubmissionUpdater
 
     p
   end
+
+  # this function will strip the values of all the types to ensure no spaces are kept in the user input
+  def normalize(value)
+    case value
+    when String
+      value.strip
+    when Array
+      value.map { |el| normalize(el) }.reject { |el| el.respond_to?(:empty?) && el.empty? }
+    when Hash
+      value.transform_values { |v| normalize(v) }.reject { |_, v| v.respond_to?(:empty?) && v.empty? }
+    else
+      value
+    end
+  end
+
 end
