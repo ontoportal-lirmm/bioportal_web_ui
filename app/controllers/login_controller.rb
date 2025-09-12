@@ -10,7 +10,7 @@ class LoginController < ApplicationController
       orig_params = Hash[uri.query.split("&").map {|e| e.split("=",2)}].symbolize_keys
       session[:redirect] = orig_params[:redirect]
     else
-      session[:redirect] = request.referer
+      session[:redirect] = "/my-ontologies"
     end
   end
 
@@ -31,7 +31,7 @@ class LoginController < ApplicationController
     logged_in_user = LinkedData::Client::Models::User.authenticate(username, params[:user][:password])
     if logged_in_user && !logged_in_user.errors
       login(logged_in_user)
-      redirect = session[:redirect] ? CGI.unescape(session[:redirect]) : "/"
+      redirect = session[:redirect] ? CGI.unescape(session[:redirect]) : "/my-ontologies"
       redirect_to redirect, allow_other_host: true
     else
       @errors << t('login.invalid_account_combination')

@@ -79,25 +79,33 @@ module SubmissionFilter
   end
 
 
-  def filter_submissions(ontologies, query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
-    submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: true, display_links: false, display_context: false)
+  def filter_submissions(ontologies, query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:, user: false)
+    submissions = []
+    if user
+      # Getting only the submission of the logged in user
+      submissions = LinkedData::Client::Models::OntologySubmission.all(acronym: ontologies.map { |o| o[:acronym] }.join('|'), include: BROWSE_ATTRIBUTES.join(','), include_status: "ANY", also_include_views: true, display_links: false, display_context: false)    
+    else
+      status_to_include = current_user_admin? ? "ANY" : "READY"
+      submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), include_status: status_to_include, also_include_views: true, display_links: false, display_context: false)
+    end
 
     submissions = submissions.map { |x| x[:ontology] ? [x[:ontology][:id], x] : nil }.compact.to_h
 
     submissions = ontologies.map { |ont| ontology_hash(ont, submissions) }
 
     submissions.map do |s|
-      out = ((s[:ontology].viewingRestriction.eql?('public') && !private_only) || private_only && s[:ontology].viewingRestriction.eql?('private'))
-      out = out && (groups.blank? || (s[:ontology].group.map { |x| helpers.link_last_part(x) } & groups.split(',')).any?)
-      out = out && (categories.blank? || (s[:ontology].hasDomain.map { |x| helpers.link_last_part(x) } & categories.split(',')).any?)
-      out = out && (status.blank? || status.eql?('alpha,beta,production,retired') || status.split(',').include?(s[:status]))
-      out = out && (formats.blank? || formats.split(',').any? { |f| s[:hasOntologyLanguage].eql?(f) })
-      out = out && (is_of_type.blank? || is_of_type.split(',').any? { |f| helpers.link_last_part(s[:isOfType]).eql?(f) })
-      out = out && (formality_level.blank? || formality_level.split(',').any? { |f| helpers.link_last_part(s[:hasFormalityLevel]).eql?(f) })
-      out = out && (languages.blank? || languages.split(',').any? { |f| Array(s[:naturalLanguage]).any? { |n| helpers.link_last_part(n).eql?(f) } })
-      out = out && (s[:ontology].viewOf.blank? || (show_views && !s[:ontology].viewOf.blank?))
+      out = true
+      out &&= s[:ontology].viewingRestriction.eql?('private') if private_only
+      out &&= (groups.blank? || (s[:ontology].group.map { |x| helpers.link_last_part(x) } & groups.split(',')).any?)
+      out &&= (categories.blank? || (s[:ontology].hasDomain.map { |x| helpers.link_last_part(x) } & categories.split(',')).any?)
+      out &&= (status.blank? || status.eql?('alpha,beta,production,retired') || status.split(',').include?(s[:status]))
+      out &&= (formats.blank? || formats.split(',').any? { |f| s[:hasOntologyLanguage].eql?(f) })
+      out &&= (is_of_type.blank? || is_of_type.split(',').any? { |f| helpers.link_last_part(s[:isOfType]).eql?(f) })
+      out &&= (formality_level.blank? || formality_level.split(',').any? { |f| helpers.link_last_part(s[:hasFormalityLevel]).eql?(f) })
+      out &&= (languages.blank? || languages.split(',').any? { |f| Array(s[:naturalLanguage]).any? { |n| helpers.link_last_part(n).eql?(f) } })
+      out &&= (s[:ontology].viewOf.blank? || (show_views && !s[:ontology].viewOf.blank?))
 
-      out = out && (query.blank? || [s[:description], s[:ontology].name, s[:ontology].acronym].any? { |x| (x || '').downcase.include?(query.downcase) })
+      out &&= (query.blank? || [s[:description], s[:ontology].name, s[:ontology].acronym].any? { |x| (x || '').downcase.include?(query.downcase) })
 
       if out
         s[:rank] = 0
@@ -184,10 +192,9 @@ module SubmissionFilter
     end
 
     if params[:show_retired].blank?
-      @filters[:show_retired] = ''
       request_params[:status] = 'alpha,beta,production'
     else
-      request_params[:status] = 'alpha,beta,production,retired'
+      request_params[:status] = 'retired'
       @filters[:show_retired] = 'true'
     end
 

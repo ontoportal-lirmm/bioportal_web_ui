@@ -1,0 +1,51 @@
+.browse-center
+  .browse-container
+    .container.align-alert
+      - if current_user_admin?
+        %div{style: 'width: 70%;'}
+          = render Display::AlertComponent.new(type: 'info') do
+            %span.d-flex.align-items-center
+              %svg{fill: "none", height: "11", viewBox: "0 0 11 11", width: "11", xmlns: "http://www.w3.org/2000/svg"}
+                %circle{cx: "5.5", cy: "5.5", fill: "var(--admin-color)", r: "5.5"}
+              %p{style: "margin: 10px"}= t("ontologies.browser.admin_welcome")
+
+    .browse-submit-new-ontology-and-you-are-admin-container
+    %a#back_top_btn.btn.btn-primary.btn-floating.btn-lg
+      %i.fas.fa-arrow-up.text-white
+
+
+    - request_params = request.original_url.split("?").last || ""
+    %div{data: { controller: "turbo-frame history browse-filters" , "turbo-frame-url-value": "/user_ontologies_filter?page=1&#{request_params}", action: "change->browse-filters#dispatchFilterEvent changed->history#updateURL changed->turbo-frame#updateFrame"}}
+      .browse-sub-container
+        .browse-first-row
+          %div.pt-1
+            = upload_ontology_button
+          
+          %div{style:'margin-top: 30px'}
+            %p.browse-filters-title= t("ontologies.filters")
+          
+          %div.browse-filter
+            = switch_input(id: 'filter-private', name: 'private_only', checked: @show_private_only, label: t("ontologies.browser.show_private_ontology"))
+            = switch_input(id: 'filter-views', name: 'views', checked: @show_views, label: t("ontologies.browser.show_ontology_views"))
+            = switch_input(id: 'filter-retired', name: 'retired', checked: @show_retired, label: t("ontologies.browser.show_retired_ontologies"))
+
+          %div{style:'margin-top: 30px'}
+            %p.browse-filters-title= t("ontologies.filters")
+            = render "my_ontologies/filters", filters: @filters, show_private_only: @show_private_only, show_views: @show_views, show_retired: @show_retired
+
+        .browse-second-row
+          .browse-search-bar
+            .browse-search-container
+              %input{:name => "search", :placeholder => t("ontologies.browser.search_placeholder"), :type => "text", :value => @search, data: {action: "input->browse-filters#dispatchInputEvent"}}
+              .browse-search-filters
+                %select#format.browse-format-filter{:name => "format"}
+                  = options_for_select(@formats, @selected_format)
+                %select#Sort_by.browse-sort-by-filter{name: "Sort_by", 'data-browse-filters-target': "sort"}
+                  = options_for_select(@sorts_options, @sort_by)
+
+          .browse-ontologies
+            = render TurboFrameComponent.new(id: "ontologies_list_view-page-1" , src: "/user_ontologies_filter?page=1&#{request_params}", data:{"turbo-frame-target":"frame", "turbo-frame-url-value": "/user_ontologies_filter"}) do |list|
+              - list.loader do
+                = browser_counter_loader
+
+

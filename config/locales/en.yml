@@ -745,6 +745,7 @@ en:
     header:
       account_setting: Account settings
       annotator: Annotator
+      user_ontologies: My ontologies
       browse: Browse
       cite_us: Cite Us
       documentation: Documentation
@@ -953,6 +954,9 @@ en:
       show_ontology_views: Show ontology views
       show_private_ontology: Show private ontology only
       show_retired_ontologies: Show retired ontologies
+    user_ontologies:
+      no_ontology_found: "Ready to contribute?\n Submit your first ontology and start building your collection."
+
     taxonomy_information_tooltip: See more information about %{taxonomy_type} in 
     categories: Categories
     change_notes: Change notes
@@ -1210,6 +1214,7 @@ en:
       widgets: Widgets are only available for ontologies stored in %{site}.
     see_details: See details
     showing: Showing
+    showing_ontologies_user_size: Showing %{ontologies_size} of %{analytics_size} ontology in %{time}s
     showing_ontologies_size: Showing %{ontologies_size} of %{analytics_size} from %{portals}
     submission: Submission
     submit_new_ontology: Submit new ontology
@@ -1546,16 +1551,17 @@ en:
     download: Download
     edit_button: Edit
     filter:
-      all_formats: All formats
-      sort_by_classes: Sort by classes count
-      sort_by_creation_date: Sort by creation date
-      sort_by_fair_score: Sort by FAIR score
-      sort_by_instances_concepts: Sort by instances/concepts count
-      sort_by_name: Sort by name
-      sort_by_notes: Sort by notes
-      sort_by_popularity: Sort by popularity
-      sort_by_projects: Sort by projects
-      sort_by_submitted_date: Sort by submitted date
+      all_formats: Formats
+      sort: Sort
+      sort_by_classes: Classes count
+      sort_by_creation_date: Creation date
+      sort_by_fair_score: FAIR score
+      sort_by_instances_concepts: Instances count
+      sort_by_name: Name
+      sort_by_notes: Notes
+      sort_by_popularity: Popularity
+      sort_by_projects: Projects
+      sort_by_submitted_date: Submitted date
     go_to_api: Go to API
     id: ID
     modified: Modified

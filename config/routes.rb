@@ -61,6 +61,9 @@ Rails.application.routes.draw do
     get ':ontology/collections/show', to: 'collections#show'
   end
 
+  # user ontologies
+  resources :my_ontologies, only: [:index, :new]
+  get '/user_ontologies_filter', to: 'my_ontologies#user_ontologies_filter'
 
   resources :ontologies do
     resources :submissions do
