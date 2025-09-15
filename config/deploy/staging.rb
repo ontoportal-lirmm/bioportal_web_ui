@@ -6,7 +6,7 @@
 # Don't declare `role :all`, it's a meta role
 role :app, %w{stageportal.lirmm.fr}
 role :db, %w{stageportal.lirmm.fr} # sufficient to run db:migrate only on one system
-set :branch, ENV.include?('BRANCH') ? ENV['BRANCH'] : 'stage'
+set :branch, ENV.include?('BRANCH') ? ENV['BRANCH'] : 'development'
 # Extended Server Syntax
 # ======================
 # This can be used to drop a more detailed server
