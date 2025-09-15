@@ -952,6 +952,7 @@ en:
       admin_welcome: Welcome admin,this coloring indicates admin-only features
       search_placeholder: Filter ontologies, e.g., AGROVOC, plant
       show_ontology_views: Show ontology views
+      show_public_ontology: Show public ontology only
       show_private_ontology: Show private ontology only
       show_retired_ontologies: Show retired ontologies
     user_ontologies:

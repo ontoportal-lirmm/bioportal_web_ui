@@ -10,6 +10,7 @@ module SubmissionFilter
   def init_filters(params)
     @show_views = params[:show_views]&.eql?('true')
     @show_private_only = params[:private_only]&.eql?('true')
+    @show_public_only = params[:public_only]&.eql?('true')
     @show_retired = params[:show_retired]&.eql?('true')
     @selected_format = params[:format]
     @sort_by = params[:sort_by].blank? ? 'visits' : params[:sort_by]
@@ -37,6 +38,7 @@ module SubmissionFilter
     params = { query: @search,
                status: request_params[:status],
                show_views: @show_views,
+               public_only: @show_public_only,
                private_only: @show_private_only,
                languages: request_params[:naturalLanguage],
                page_size: @total_ontologies,
@@ -79,7 +81,7 @@ module SubmissionFilter
   end
 
 
-  def filter_submissions(ontologies, query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:, user: false)
+  def filter_submissions(ontologies, query:, status:, show_views:, public_only:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:, user: false)
     submissions = []
     if user
       # Getting only the submission of the logged in user
@@ -95,6 +97,7 @@ module SubmissionFilter
 
     submissions.map do |s|
       out = true
+      out &&= s[:ontology].viewingRestriction.eql?('public') if public_only
       out &&= s[:ontology].viewingRestriction.eql?('private') if private_only
       out &&= (groups.blank? || (s[:ontology].group.map { |x| helpers.link_last_part(x) } & groups.split(',')).any?)
       out &&= (categories.blank? || (s[:ontology].hasDomain.map { |x| helpers.link_last_part(x) } & categories.split(',')).any?)
@@ -179,6 +182,7 @@ module SubmissionFilter
 
     filters_boolean_map = {
       show_views: { api_key: :also_include_views, default: 'true' },
+      public_only: { api_key: :viewingRestriction, default: 'public' },
       private_only: { api_key: :viewingRestriction, default: 'private' },
       show_retired: { api_key: :status, default: 'retired' }
     }
@@ -315,6 +319,7 @@ module SubmissionFilter
 
     @formats = [[t("submissions.filter.all_formats"), ''], 'OBO', 'OWL', 'SKOS', 'UMLS']
     @sorts_options = [
+      [t("submissions.filter.sort"), ''],
       [t("submissions.filter.sort_by_name"), 'ontology_name'],
       [t("submissions.filter.sort_by_classes"), 'metrics_classes'],
       [t("submissions.filter.sort_by_instances_concepts"), 'metrics_individuals'],

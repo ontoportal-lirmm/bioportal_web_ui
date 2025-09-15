@@ -986,6 +986,7 @@ fr:
         aux administrateurs
       search_placeholder: Filtrer les ontologies, e.g., AGROVOC, plante
       show_ontology_views: Afficher les vues de l'ontologie
+      show_public_ontology: Afficher seulement les ontologies publiques
       show_private_ontology: Afficher seulement les ontologies privées
       show_retired_ontologies: Afficher les ontologies retirées
     user_ontologies:

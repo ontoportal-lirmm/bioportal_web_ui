@@ -74,6 +74,7 @@ class MyOntologiesController < ApplicationController
       query: @search,
       status: request_params[:status],
       show_views: @show_views,
+      public_only: @show_public_only,
       private_only: @show_private_only,
       languages: request_params[:naturalLanguage],
       page_size: @total_ontologies,
