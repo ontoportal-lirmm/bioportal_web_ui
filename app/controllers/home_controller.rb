@@ -19,7 +19,7 @@ class HomeController < ApplicationController
         @anal_ont_numbers << (x.classes + x.individuals) || 0
       end
     else
-      @analytics.sort_by{|ont, count| -count}[0..4].each do |ont, count|
+      @analytics.first(3).each do |ont, count|
         @anal_ont_names << ont
         @anal_ont_numbers << count
       end
