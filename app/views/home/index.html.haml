@@ -19,23 +19,24 @@
   .home-bubbles
     .home-random-bubbles
       %img{:src => asset_path("home-random-bubbles.svg")}/
-    .home-bubble.home-bubble-one
-      %a.h5{href:"/ontologies/#{@anal_ont_names[0]}", style: "color: white !important"}
-        = @anal_ont_names[0]
-      %p 
-        = format_number_abbreviated(@anal_ont_numbers[0]) + " " + (@analytics.empty? ?  t('visits.count') :  t('visits.visits'))
-    .home-bubble.home-bubble-two
-      %a.h5{href:"/ontologies/#{@anal_ont_names[1]}", style: "color: white !important"}
-        = @anal_ont_names[1]
-      %p 
-        = format_number_abbreviated(@anal_ont_numbers[1]) + " " + (@analytics.empty? ?  t('visits.count') :  t('visits.visits'))
-    .home-bubble.home-bubble-three
-      %a.h5{href:"/ontologies/#{@anal_ont_names[2]}", style: "color: white !important"}
-        = @anal_ont_names[2]
-      %p 
-        = format_number_abbreviated(@anal_ont_numbers[2]) + " " + (@analytics.empty? ?  t('visits.count') :  t('visits.visits'))
-    %a.home-bubble.home-bubble-four{:href => "/visits"}
-      .h5 ...
+    - unless @anal_ont_names.empty?
+      .home-bubble.home-bubble-one
+        %a.h5{href:"/ontologies/#{@anal_ont_names[0]}", style: "color: white !important"}
+          = @anal_ont_names[0]
+        %p 
+          = format_number_abbreviated(@anal_ont_numbers[0]) + " " + t('visits.visits')
+      .home-bubble.home-bubble-two
+        %a.h5{href:"/ontologies/#{@anal_ont_names[1]}", style: "color: white !important"}
+          = @anal_ont_names[1]
+        %p 
+          = format_number_abbreviated(@anal_ont_numbers[1]) + " " + t('visits.visits')
+      .home-bubble.home-bubble-three
+        %a.h5{href:"/ontologies/#{@anal_ont_names[2]}", style: "color: white !important"}
+          = @anal_ont_names[2]
+        %p 
+          = format_number_abbreviated(@anal_ont_numbers[2]) + " " + t('visits.visits')
+      %a.home-bubble.home-bubble-four{:href => "/visits"}
+        .h5 ...
 
   .home-header-title-container
     .home-header-title
