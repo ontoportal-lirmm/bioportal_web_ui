@@ -181,7 +181,7 @@ module SubmissionsHelper
 
   def equivalent_properties(attr_labels)
     labels = Array(attr_labels)
-    labels.map { |x| equivalent_property(x) }.flatten
+    labels.map { |x| equivalent_property(x) }.compact.flatten
   end
 
   def submission_properties
@@ -194,9 +194,21 @@ module SubmissionsHelper
 
     out
   end
+  
+  def equivalent_ontology_property(attr)
+    equivalents = ontology_properties
+    found = equivalents.select { |x| x.is_a?(Array) ? x[1].eql?(attr.to_sym) : x.eql?(attr)}
+    
+    found.empty? ? nil : found.first.is_a?(Array) ? found.first[1] : found.first
+  end
+
+  def equivalent_ontology_properties(attr_labels)
+    labels = Array(attr_labels)
+    labels.map { |x| equivalent_ontology_property(x) }.compact.flatten
+  end
+
   def ontology_properties
-    ['acronym', 'name', [t('submission_inputs.visibility'), :viewingRestriction], 'viewOf', 'groups', 'categories',
-     [t('submission_inputs.administrators'), 'administeredBy']]
+    ['acronym', 'name', [t('submission_inputs.visibility'), :viewingRestriction], 'viewOf', ['Groups', :group], ['Categories', :hasDomain], [t('submission_inputs.administrators'), :administeredBy]]
   end
 
   def submission_editable_properties

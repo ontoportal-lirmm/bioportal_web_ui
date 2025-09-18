@@ -15,6 +15,22 @@
         - @metadata_sel.each do |meta|
           - h.th do
             %div
-              %h6{style:'margin-top: 0.2rem'}=attr_label(meta, attr_metadata: attr_metadata(meta))
+              - attr_metadata = attr_metadata(meta)
+              - if attr_metadata
+                %h6{style:'margin-top: 0.2rem'}=attr_label(meta, attr_metadata: attr_metadata)
+              - else
+                %h6{style:'margin-top: 0.2rem'}=meta
 
-      = render partial: 'submission', collection: @submissions, locals: {attributes: @metadata_sel}
+      - @hash.each do |acronym, data|
+        - ontology = data[:ontology]
+        - submissions = data[:submissions] || []
+        - submissions.each do |submission|
+          - submission_id = submission.submissionId
+          - id = ontology_submission_id_label(acronym, submission_id)
+          %tr{id: id+'_row'}
+            %th{scope:"row", style: 'width: 5%'}
+              %div
+                %h6{style:'margin-top: 0.2rem'}=id
+            - @metadata_sel.each do |meta|
+              %td{style: "width: #{95 / @metadata_sel.size}%; vertical-align: top; word-break: break-word;"}
+                = render partial: "ontologies_metadata_curator/attribute", locals: { attribute: meta, submission: submission , ontology: ontology}
