@@ -1,0 +1,236 @@
+.sparql-page-container{
+  display:flex;
+  justify-content:center;
+}
+.sparql-page-container a{
+  color: var(--primary-color) !important;
+}
+.sparql-page-subcontainer{
+  width: 1248px;
+  padding: 20px 50px;
+}
+.sparql-page-title{
+  font-size: 25px;
+  font-weight: 700;
+}
+.sparql-page-title .line{
+  height: 2px;
+  width: 57px;
+  background-color: var(--primary-color);
+  border-radius: 10px;
+}
+.sparql-page-decription{
+  color: #888888;
+  margin-top: 20px;
+}
+.sparql-page-inputs{
+  margin-top: 20px;
+}
+.sparql-page-inputs .inputs{
+  display: flex;
+}
+.sparql-page-text-area{
+  border: 1px solid #ccc; /* Adds a border around the box */
+  border-radius: 8px; /* Rounded corners for the box */
+  padding: 20px; /* Adds space inside the box */
+  margin-top: 30px; 
+}
+.sparql-page-text-area textarea{
+  font-size: 16px;
+  outline: none;
+  padding: 20px;
+  width: 630px;
+  border: none;
+  margin-right: 30px;
+}
+.sparql-page-text-area .insert-sample-text-button{
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 20px 20px 20px;
+}
+.sparql-page-text-area .insert-sample-text-button .button{
+  display: flex;
+  align-items: center;
+}
+.sparql-page-text-area .insert-sample-text-button .button:hover{
+  cursor: pointer;
+}
+.sparql-page-text-area .insert-sample-text-button .button .text{
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primary-color);
+  margin-right: 10px;
+}
+.sparql-page-text-area .insert-sample-text-button .button svg{
+  width: 16px;
+  height: 16px;
+}
+.sparql-page-text-area .insert-sample-text-button .button svg path{
+  fill: var(--primary-color);
+}
+.sparql-page-options{
+  width: 100%;
+}
+
+.sparql-page-options .section-text{
+  font-weight: 600;
+  
+}
+.sparql-page-options .title{
+  margin-top: 10px;
+  color: #888888;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 5px; 
+}
+
+.sparql-page-options .chips{
+  display: flex;
+}
+.sparql-page-options input{
+  accent-color: var(--primary-color) revert;
+}
+.sparql-page-options .radios{
+  display: flex;
+}
+
+.sparql-page-options .advanced-options-button{
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+}
+.sparql-page-options .advanced-options-button:hover{
+  cursor: pointer;
+}
+.sparql-page-options .advanced-options-button .text{
+  margin-left: 10px;
+  color: var(--primary-color);
+  font-size: 14px;
+}
+
+.sparql-page-options .advanced-options-button svg path{
+  fill: var(--primary-color);
+}
+.sparql-page-button{
+  margin-top: 27px;
+  width: 630px;
+}
+
+.sparql-page-options .chips{
+  display: flex;
+  flex-wrap: wrap;
+}
+.sparql-page-options .select-ontologies{
+  margin: 10px 0;
+}
+.sparql-page-options .preftitle{
+  font-size: 14px;
+  color: #666666;
+  margin-bottom: 5px;
+}
+.sparql-page-container .advanced-options-button{
+  color: var(--primary-color);
+  font-size: 14px;
+  margin-top: 5px !important;
+}
+.sparql-page-container .advanced-options-button:hover{
+  cursor: pointer;
+}
+.sparql-page-container .advanced-options-button svg{
+  margin-left: 5px;
+}
+.sparql-page-container .advanced-options-button svg path{
+  fill: var(--primary-color);
+}
+.sparql-page-container .advanced-options-button.hide-button svg{
+  transform: scaleY(-1);
+}
+.annotation-context{
+  color: gray;
+  font-weight: 400;
+}
+.sparql-page-container .highlighted-annotation{
+  color: black;
+  font-weight: 600;
+}
+.sparql-page-results .cont{
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sparql-page-results .title{
+  font-size: 18px;
+  font-weight: 600;
+}
+.sparql-page-results .details{
+  color: #888888;
+}
+.sparql-page-container .more-advanced-options{
+  margin-top: 20px;
+}
+.sparql-page-container .more-advanced-options .filters_line{
+  display: flex;
+  margin-top: 20px;
+}
+.sparql-page-container .more-advanced-options .filters_line div{
+  width: 100%;
+}
+
+.sparql-page-container .more-advanced-options .filters_line > :not(:first-child) {
+  margin-left: 20px;
+}
+.sparql-page-container .more-advanced-options .chips{
+  display: flex;
+  margin-top: 20px;
+}
+.annotation-parent{
+  display: flex;
+  white-space: nowrap;
+}
+.annotation-parent div, .annotation-parent a{
+  margin-right: 11px;
+}
+.annotation-parent .text{
+  margin-right: 8px;
+}
+
+.annotation-parent a{
+  text-decoration: underline !important;
+}
+.sparql-page-options .prefrences{
+  margin-top: 10px;
+}
+
+.annotation-parent .level{
+  font-weight: 600;
+  color: var(--primary-color);
+}
+.annotation-parent .gray{
+  color: #888888;
+}
+.sparql-table-container{
+  margin-top: 20px;
+}
+.sparql-table-container .class{
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.annotation-parent + div{
+  margin-top: 5px;
+}
+.sparql-bottom-actions{
+  margin-top: 20px;
+  display: flex;
+}
+.sparql-bottom-actions div{
+  display: inline-block;
+}
+.sparql-bottom-actions div + div{
+  margin-left: 20px;
+}
+.sparql-bottom-actions .rdf-button svg, .sparql-doc svg{
+  width: 21px;
+}
