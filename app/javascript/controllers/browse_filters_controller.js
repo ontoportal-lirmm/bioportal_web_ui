@@ -42,6 +42,10 @@ export default class extends Controller {
                 checks = event.target.checked ?  ['true'] : []
                 filter = "show_retired"
                 break;
+            case "public_only":
+                checks = event.target.checked ?  ['true'] : []
+                filter = "public_only"
+                break;
             case "private_only":
                 checks = event.target.checked ?  ['true'] : []
                 filter = "private_only"

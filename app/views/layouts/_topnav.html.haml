@@ -5,18 +5,19 @@
         %img{:src => asset_path("logo-white.svg")}/
         %p
           = portal_name
-      %input#nav-menu{:type => "checkbox", 'data-topnav-responsiveness-target': 'navMenu'}
-      %label.menu-btn{:for => "nav-menu"}
-        %i.fas.fa-bars
     .nav-items
       %ul.top-nav-ul
+        - if !session[:user].nil?
+          %li.nav-ul-li
+            %a{href: "/my-ontologies", class: ("active" if current_page?("/my-ontologies"))}= t('layout.header.user_ontologies')
+
         - navitems.each do |navItem|
           %li.nav-ul-li
             %a{href: navItem[0], class: ("active" if current_page?(navItem[0]))} #{navItem[1]}
         - if !session[:user].nil? && session[:user].admin?
           %li.nav-ul-li
             %a{href: "/admin", class: ("active" if current_page?("/admin"))} Admin
-      .right-nav-items
+      .right-nav-items{style: "margin-left: 10px;"} 
         - if current_page?('/')
           .nav-search-container{style:'visibility: hidden'}
             %input
