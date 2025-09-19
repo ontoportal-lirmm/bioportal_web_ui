@@ -52,11 +52,15 @@ class MyOntologiesController < ApplicationController
     filter_params  = params.permit(@filters.keys).to_h
 
     user_created_ontologies = fetch_user_ontologies
-    @fair_scores = fairness_service_enabled? ? get_fair_score("all") : nil
     @analytics = {}
-    submissions = filter_submissions(user_created_ontologies, **build_filter_options(request_params), user: true)
-    submissions = merge_by_acronym(submissions) if federation_enabled?
-    submissions = sort_submission_by(submissions, @sort_by, @search)
+    submissions = []
+
+    unless user_created_ontologies.empty?
+      @fair_scores = fairness_service_enabled? ? get_fair_score("all") : nil
+      submissions = filter_submissions(user_created_ontologies, **build_filter_options(request_params), user: true)
+      submissions = merge_by_acronym(submissions) if federation_enabled?
+      submissions = sort_submission_by(submissions, @sort_by, @search)
+    end
 
     page = paginate_submissions(submissions, request_params[:page].to_i, request_params[:pagesize].to_i)
     page

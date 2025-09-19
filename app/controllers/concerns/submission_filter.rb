@@ -11,6 +11,7 @@ module SubmissionFilter
     @show_views = params[:show_views]&.eql?('true')
     @show_private_only = params[:private_only]&.eql?('true')
     @user_ontologies_only = params[:user_ontologies_only]&.eql?('true')
+    @show_public_only = params[:public_only]&.eql?('true')
     @show_retired = params[:show_retired]&.eql?('true')
     @selected_format = params[:format]
     @sort_by = params[:sort_by].blank? ? 'visits' : params[:sort_by]
@@ -81,7 +82,7 @@ module SubmissionFilter
   end
 
 
-  def filter_submissions(ontologies, query:, status:, show_views:, private_only:, public_only: nil, user_ontologies_only: nil, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:, user: false)
+  def filter_submissions(ontologies, query:, status:, show_views:, private_only:, public_only: false, user_ontologies_only: false, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:, user: false)
     if user
       # Getting only the submission of the logged in user
       submissions = LinkedData::Client::Models::OntologySubmission.all(acronym: ontologies.map { |o| o[:acronym] }.join('|'), include: BROWSE_ATTRIBUTES.join(','), include_status: "ANY", also_include_views: true, display_links: false, display_context: false)    
