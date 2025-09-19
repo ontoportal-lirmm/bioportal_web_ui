@@ -38,7 +38,6 @@ module SubmissionFilter
     params = { query: @search,
                status: request_params[:status],
                show_views: @show_views,
-               public_only: @show_public_only,
                private_only: @show_private_only,
                user_ontologies_only: @user_ontologies_only,
                languages: request_params[:naturalLanguage],
@@ -82,8 +81,14 @@ module SubmissionFilter
   end
 
 
-  def filter_submissions(ontologies, query:, status:, show_views:, private_only:, user_ontologies_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
-    submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: true, display_links: false, display_context: false)
+  def filter_submissions(ontologies, query:, status:, show_views:, private_only:, public_only: nil, user_ontologies_only: nil, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:, user: false)
+    if user
+      # Getting only the submission of the logged in user
+      submissions = LinkedData::Client::Models::OntologySubmission.all(acronym: ontologies.map { |o| o[:acronym] }.join('|'), include: BROWSE_ATTRIBUTES.join(','), include_status: "ANY", also_include_views: true, display_links: false, display_context: false)    
+    else
+      status_to_include = current_user_admin? ? "ANY" : "READY"
+      submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), include_status: status_to_include, also_include_views: true, display_links: false, display_context: false)
+    end
 
     submissions = submissions.map { |x| x[:ontology] ? [x[:ontology][:id], x] : nil }.compact.to_h
 
@@ -92,6 +97,7 @@ module SubmissionFilter
     submissions.map do |s|
       out = true
       out &&= s[:ontology].viewingRestriction.eql?('private') if private_only
+      out &&= s[:ontology].viewingRestriction.eql?('public') if public_only
       out &&= s[:ontology].administeredBy.include?(current_user.id) if user_ontologies_only
       out &&= (groups.blank? || (s[:ontology].group.map { |x| helpers.link_last_part(x) } & groups.split(',')).any?)
       out &&= (categories.blank? || (s[:ontology].hasDomain.map { |x| helpers.link_last_part(x) } & categories.split(',')).any?)
