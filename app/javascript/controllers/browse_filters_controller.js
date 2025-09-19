@@ -50,6 +50,10 @@ export default class extends Controller {
                 checks = event.target.checked ?  ['true'] : []
                 filter = "private_only"
                 break;
+            case "user_ontologies_only":
+                checks = event.target.checked ?  ['true'] : []
+                filter = "user_ontologies_only"
+                break;
             default:
                 checks = this.#getSelectedChecks(event).map(x => x.value)
                 filter = event.target.name

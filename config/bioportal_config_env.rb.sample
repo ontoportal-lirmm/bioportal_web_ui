@@ -171,39 +171,44 @@ $RESOURCE_TERM = ENV['RESOURCE_TERM'] || 'ontology'
 
 $HOME_PAGE_LOGOS = [
     {
-      img_src: 'logos/supports/numev.png',
+      img_src: 'logos/supports/numev.webp',
       url: 'http://www.lirmm.fr/numev',
       target: '_blank'
     },
     {
-      img_src: 'logos/supports/anr.png',
+      img_src: 'logos/supports/anr.webp',
       url: 'https://anr.fr/en',
       target: '_blank'
     },
     {
-      img_src: 'logos/supports/eu.png',
+      img_src: 'logos/supports/eu.webp',
       url: 'https://commission.europa.eu/research-and-innovation_en',
       target: '_blank'
     },
     {
-      img_src: 'logos/collaboration/d2kab.png',
+      img_src: 'logos/collaboration/d2kab.webp',
       url: 'http://d2kab.mystrikingly.com',
       target: '_blank'
     },
     {
-      img_src: 'logos/collaboration/lirmm.png',
-      url: 'http://www.lirmm.fr',
-      target: '_blank'
+      img_src: 'logos/collaboration/um_logo.webp',
+      url: 'https://www.umontpellier.fr/',
+      target: '_blank',
     },
     {
-      img_src: 'logos/collaboration/inrae.png',
+      img_src: 'logos/collaboration/inrae.webp',
       url: 'https://www.inrae.fr/enm',
       target: '_blank'
     },
     {
-      img_src: 'logos/collaboration/stanford.png',
+      img_src: 'logos/collaboration/stanford.webp',
       url: 'https://www.stanford.edu',
       target: '_blank'
+    },
+    {
+      img_src: 'logos/collaboration/ontoportal.webp',
+      url: 'https://ontoportal.org/',
+      target: '_blank',
     }
 ]
 
