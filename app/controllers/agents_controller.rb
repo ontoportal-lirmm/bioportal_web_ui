@@ -7,6 +7,7 @@ class AgentsController < ApplicationController
 
   def details
     @agent = find_agent(params[:id])
+    @title = @agent.acronym || @agent.name
     not_found(t('agents.not_found_agent', id: params[:id])) if @agent.status == 404
 
     @agent_stats = AgentStatisticsCalculatorComponent.new(@agent).stats
@@ -44,7 +45,7 @@ class AgentsController < ApplicationController
   def find_agent(id = params[:id], include_params = 'all')
     id = helpers.unescape(id)
     @agent = LinkedData::Client::Models::Agent.find(id.split('/').last, { include: include_params })
-    not_found("Agent with id #{id} not found") if @agent.nil?
+    not_found("Agent with id #{id} not found") if @agent.nil? || @agent.errors
     @agent
   end
 
@@ -185,8 +186,8 @@ class AgentsController < ApplicationController
 
   def agent_usages
     @agent = find_agent(params[:id], include_params = 'usages')
+    not_found(t('agents.not_found_agent', id: params[:id])) if @agent.nil? || @agent.errors
     @ontology_acronyms = LinkedData::Client::Models::Ontology.all(include: 'acronym', display_links: false, display_context: false, include_views: true).map(&:acronym)
-    not_found(t('agents.not_found_agent', id: @agent.id)) if @agent.nil?
     render partial: 'agents/agent_usage'
   end
 

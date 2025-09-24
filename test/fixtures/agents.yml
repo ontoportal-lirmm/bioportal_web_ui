@@ -8,7 +8,7 @@ agent1:
     - name: "Research Institute X"
       agentType: "organization"
       identifiers:
-        - notation: "1234-5678"
+        - notation: "013meh722"
       affiliations: [ ]
       email: "x@example.com"
       acronym: "RI-X"
@@ -17,7 +17,7 @@ agent1:
     - name: "Research Institute Y"
       agentType: "organization"
       identifiers:
-        - notation: "1234-5679"
+        - notation: "013meh723"
       affiliations: [ ]
       email: "y@example.com"
       acronym: "RI-Y"
@@ -32,7 +32,7 @@ agent2:
     - name: "Tech Innovators Ltd."
       agentType: "organization"
       identifiers:
-        - notation: "9876-5432"
+        - notation: "013meh724"
       affiliations: [ ]
       email: "alice.smith@example.com"
       acronym: "TI Ltd."
@@ -49,7 +49,7 @@ agent3:
       agentType: "organization"
       identifiers:
         - schemaAgency: "ROR"
-          notation: "3456-7890"
+          notation: "013meh725"
       affiliations: [ ]
       email: "robert.johnson@example.com"
       acronym: "SH Inc."
@@ -66,7 +66,7 @@ agent4:
       agentType: "organization"
       identifiers:
         - schemaAgency: "ROR"
-          notation: "5678-9012"
+          notation: "013meh726"
       affiliations: [ ]
       email: "emily.brown@example.com"
       acronym: "HSC"
@@ -84,7 +84,7 @@ agent5:
       agentType: "organization"
       identifiers:
         - schemaAgency: "ROR"
-          notation: "6789-0123"
+          notation: "013meh727"
       affiliations: [ ]
       email: "michael.taylor@example.com"
       acronym: "ERF"
@@ -94,7 +94,7 @@ organization1:
     name: "Tech Solutions Group"
     agentType: "organization"
     identifiers:
-        - notation: "1234-5678"
+        - notation: "00cvxb145"
     email: "info@techsolutionsgroup.com"
     acronym: "TSG"
     homepage: "https://www.techsolutionsgroup.com/"
@@ -103,7 +103,7 @@ organization2:
   name: "Quantum Dynamics Solutions"
   agentType: "organization"
   identifiers:
-    - notation: "5678-9012"
+    - notation: "04fa4r544"
   email: "info@quantumdynamics.com"
   acronym: "QDS"
   homepage: "https://www.quantumdynamics.com/"
@@ -112,7 +112,7 @@ organization3:
   name: "BioTech Solutions Inc."
   agentType: "organization"
   identifiers:
-    - notation: "2345-6789"
+    - notation: "02y5tk845"
   email: "info@biotechsolutions.com"
   acronym: "BSI"
   homepage: "https://www.biotechsolutions.com/"

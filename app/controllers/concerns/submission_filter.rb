@@ -10,6 +10,7 @@ module SubmissionFilter
   def init_filters(params)
     @show_views = params[:show_views]&.eql?('true')
     @show_private_only = params[:private_only]&.eql?('true')
+    @user_ontologies_only = params[:user_ontologies_only]&.eql?('true')
     @show_retired = params[:show_retired]&.eql?('true')
     @selected_format = params[:format]
     @sort_by = params[:sort_by].blank? ? 'visits' : params[:sort_by]
@@ -38,6 +39,7 @@ module SubmissionFilter
                status: request_params[:status],
                show_views: @show_views,
                private_only: @show_private_only,
+               user_ontologies_only: @user_ontologies_only,
                languages: request_params[:naturalLanguage],
                page_size: @total_ontologies,
                formality_level: request_params[:hasFormalityLevel],
@@ -79,7 +81,7 @@ module SubmissionFilter
   end
 
 
-  def filter_submissions(ontologies, query:, status:, show_views:, private_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
+  def filter_submissions(ontologies, query:, status:, show_views:, private_only:, user_ontologies_only:, languages:, page_size:, formality_level:, is_of_type:, groups:, categories:, formats:)
     submissions = LinkedData::Client::Models::OntologySubmission.all(include: BROWSE_ATTRIBUTES.join(','), also_include_views: true, display_links: false, display_context: false)
 
     submissions = submissions.map { |x| x[:ontology] ? [x[:ontology][:id], x] : nil }.compact.to_h
@@ -87,17 +89,19 @@ module SubmissionFilter
     submissions = ontologies.map { |ont| ontology_hash(ont, submissions) }
 
     submissions.map do |s|
-      out = ((s[:ontology].viewingRestriction.eql?('public') && !private_only) || private_only && s[:ontology].viewingRestriction.eql?('private'))
-      out = out && (groups.blank? || (s[:ontology].group.map { |x| helpers.link_last_part(x) } & groups.split(',')).any?)
-      out = out && (categories.blank? || (s[:ontology].hasDomain.map { |x| helpers.link_last_part(x) } & categories.split(',')).any?)
-      out = out && (status.blank? || status.eql?('alpha,beta,production,retired') || status.split(',').include?(s[:status]))
-      out = out && (formats.blank? || formats.split(',').any? { |f| s[:hasOntologyLanguage].eql?(f) })
-      out = out && (is_of_type.blank? || is_of_type.split(',').any? { |f| helpers.link_last_part(s[:isOfType]).eql?(f) })
-      out = out && (formality_level.blank? || formality_level.split(',').any? { |f| helpers.link_last_part(s[:hasFormalityLevel]).eql?(f) })
-      out = out && (languages.blank? || languages.split(',').any? { |f| Array(s[:naturalLanguage]).any? { |n| helpers.link_last_part(n).eql?(f) } })
-      out = out && (s[:ontology].viewOf.blank? || (show_views && !s[:ontology].viewOf.blank?))
+      out = true
+      out &&= s[:ontology].viewingRestriction.eql?('private') if private_only
+      out &&= s[:ontology].administeredBy.include?(current_user.id) if user_ontologies_only
+      out &&= (groups.blank? || (s[:ontology].group.map { |x| helpers.link_last_part(x) } & groups.split(',')).any?)
+      out &&= (categories.blank? || (s[:ontology].hasDomain.map { |x| helpers.link_last_part(x) } & categories.split(',')).any?)
+      out &&= (status.blank? || status.eql?('alpha,beta,production,retired') || status.split(',').include?(s[:status]))
+      out &&= (formats.blank? || formats.split(',').any? { |f| s[:hasOntologyLanguage].eql?(f) })
+      out &&= (is_of_type.blank? || is_of_type.split(',').any? { |f| helpers.link_last_part(s[:isOfType]).eql?(f) })
+      out &&= (formality_level.blank? || formality_level.split(',').any? { |f| helpers.link_last_part(s[:hasFormalityLevel]).eql?(f) })
+      out &&= (languages.blank? || languages.split(',').any? { |f| Array(s[:naturalLanguage]).any? { |n| helpers.link_last_part(n).eql?(f) } })
+      out &&= (s[:ontology].viewOf.blank? || (show_views && !s[:ontology].viewOf.blank?))
 
-      out = out && (query.blank? || [s[:description], s[:ontology].name, s[:ontology].acronym].any? { |x| (x || '').downcase.include?(query.downcase) })
+      out &&= (query.blank? || [s[:description], s[:ontology].name, s[:ontology].acronym].any? { |x| (x || '').downcase.include?(query.downcase) })
 
       if out
         s[:rank] = 0

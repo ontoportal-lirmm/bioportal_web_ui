@@ -20,27 +20,22 @@ name: Capistrano Deployment
 on:
   push:
     branches:
-      - stage
+      - development
       - test
   # Allows running this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       BRANCH:
-        description: "Branch/tag to deploy"
-        type: choice
-        options:
-          - master
-          - stage
-          - test
-        default: stage
+        description: "Branch/tag to deploy (test, development, master)"
+        default: development
         required: true
       environment:
         description: "Target environment to deploy to"
         type: choice
         options:
-          - agroportal
-          - staging
           - test
+          - staging
+          - agroportal
         default: staging
         required: true
 
@@ -58,14 +53,14 @@ jobs:
           # workflow_dispatch default input doesn't get set on push so we need to set defaults
           # via shell parameter expansion
           # https://dev.to/mrmike/github-action-handling-input-default-value-5f2g
-          USER_INPUT_BRANCH=${{ inputs.branch }}
-          echo "BRANCH=${USER_INPUT_BRANCH:github.head_ref}" >> $GITHUB_ENV
+          USER_INPUT_BRANCH=${{ inputs.BRANCH }}
+          echo "BRANCH=${USER_INPUT_BRANCH:-${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}}" >> $GITHUB_ENV
 
           # Set default environment
           if [ "${{ github.event_name }}" = "push" ]; then
             # Set TARGET based on the branch
             case "$BRANCH" in
-              "stage")
+              "development")
                 TARGET="staging"
                 ;;
               "test")

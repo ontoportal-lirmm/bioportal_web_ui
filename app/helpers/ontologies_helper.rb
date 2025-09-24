@@ -322,7 +322,7 @@ module OntologiesHelper
 
   def subject_chip(subject)
     begin
-      agroportal_uri = "https://data.agroportal.lirmm.fr/ontologies/AGROVOC/classes/#{CGI.escape(subject)}"
+      agroportal_uri = "https://data.agroportal.lirmm.fr/ontologies/AGROVOC/classes/#{CGI.escape(subject.strip)}"
       response = LinkedData::Client::HTTP.get(
         agroportal_uri,
         params = {
@@ -715,7 +715,7 @@ module OntologiesHelper
     end
 
   def submission_json_button
-    render RoundedButtonComponent.new(link: "#{(@submission_latest || @ontology).id}?display=all",
+    render RoundedButtonComponent.new(link: "#{(@submission_latest || @ontology).id}?display=all&apikey=#{get_apikey}",
                                       target: '_blank',
                                       size: 'medium',
                                       title: t('ontologies.go_to_api'))

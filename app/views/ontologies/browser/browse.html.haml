@@ -41,6 +41,7 @@
              
             %div.browse-filter
               - if session[:user]
+                = switch_input(id:'filter-user-ontologies', name:'user_ontologies_only', checked: @user_ontologies_only, label: t("ontologies.browser.show_my_ontologies"))
                 = switch_input(id:'filter-private', name:'private_only', checked: @show_private_only, label: t("ontologies.browser.show_private_ontology"))
               = switch_input(id:'filter-views', name:'views', checked: @show_views, label: t("ontologies.browser.show_ontology_views"))
               = switch_input(id:'filter-retired', name:'retired',checked: @show_retired , label: t("ontologies.browser.show_retired_ontologies"))

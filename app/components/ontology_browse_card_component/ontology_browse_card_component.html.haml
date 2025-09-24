@@ -54,8 +54,9 @@
             %span.browse-uploaded-date{data:{controller: 'timeago', 'timeago-datetime-value': ontology[:creationDate], 'timeago-add-suffix-value': 'true'}}
             - if ontology[:contact]
               %span.mx-1= t('components.by')
-              %span.browse-uploaded-date.text-truncate
-                = ontology[:contact].titleize
+              %span.contact-name-wrapper
+                %span.browse-uploaded-date.text-truncate
+                  = ontology[:contact].titleize
 
       - if ontology[:released]
         - date = render DateTimeFieldComponent.new(value: ontology[:released])

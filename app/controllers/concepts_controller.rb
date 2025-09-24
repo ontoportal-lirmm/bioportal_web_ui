@@ -83,10 +83,10 @@ class ConceptsController < ApplicationController
 
   def show_tree
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-    @submission = @ontology.explore.latest_submission(include: 'uriRegexPattern,preferredNamespaceUri')
     if @ontology.nil? || @ontology.errors
       ontology_not_found(params[:ontology])
     else
+      @submission = @ontology.explore.latest_submission(include: 'uriRegexPattern,preferredNamespaceUri')
       get_class(params) # application_controller
 
       not_found(t('concepts.missing_roots')) if @root.nil?
@@ -99,7 +99,7 @@ class ConceptsController < ApplicationController
 
   def show_date_sorted_list
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-    if @ontology.nil?
+    if @ontology.nil? || @ontology.errors
       ontology_not_found(params[:ontology])
     else
       @submission = @ontology.explore.latest_submission(include: 'uriRegexPattern,preferredNamespaceUri')
@@ -115,7 +115,12 @@ class ConceptsController < ApplicationController
       }
       if @last_date
         params.merge!(last_date: @last_date)
-        @last_date = Date.parse(@last_date)
+        begin
+          @last_date = Date.parse(@last_date)
+        rescue StandardError => e
+          logger.warn("date parsing error: #{e.message}")
+          @last_date = nil
+        end
       end
 
       @page = @ontology.explore.classes(params)
@@ -150,10 +155,10 @@ class ConceptsController < ApplicationController
 
   def biomixer
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
-    ontology_not_found(params[:ontology]) if @ontology.nil?
+    ontology_not_found(params[:ontology]) if @ontology.nil? || @ontology.errors
 
     @concept = @ontology.explore.single_class({ full: true }, params[:conceptid])
-    concept_not_found(params[:conceptid]) if @concept.nil?
+    concept_not_found(params[:conceptid]) if @concept.nil? || @concept.errors
 
     render partial: "biomixer", layout: false
   end
@@ -161,7 +166,7 @@ class ConceptsController < ApplicationController
   private
 
   def filter_concept_with_no_date(concepts)
-    concepts.filter { |c| !concept_date(c).nil? }
+    concepts.present? ? concepts.filter { |c| !concept_date(c).nil? } : []
   end
 
   def concepts_to_years_months(concepts)
