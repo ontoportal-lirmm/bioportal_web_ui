@@ -15,8 +15,10 @@ class Admin::LicensesController < ApplicationController
     respond_to do |format|
       if @license.save
          format.js { flash.now[:notice] = t(".success") }
+         format.html { redirect_to request.referer, notice: "Success" }
       else
         format.js { render :new }
+        format.html { redirect_to request.referer, alert: "Error" }
       end
     end
   end
