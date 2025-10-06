@@ -35,20 +35,7 @@
           %p.tab_description{:style => "clear:both;"}
           %table#adminOntologies.border.rounded.p-1
       - t.item_content do
-        %div#renew-license-notice
-          %table.table.table-sm.table-bordered.mt-5#license-table
-            %thead
-              %tr
-                %th{scope: "col"}= t('admin.index.licensed_to')
-                %th{scope: "col"}= t('admin.index.appliance_id')
-                %th{scope: "col"}= t('admin.index.valid_till')
-                %th{scope: "col"}= t('admin.index.days_remaining')
-            %tbody
-
-        %div.mb-5#renew-license-button
-          = link_to(t('admin.index.renew_license'), new_admin_license_path, class: "btn btn-primary", role: "button", remote: "true")
-
-        %div.mb-5#renew-license-form
+        = render TurboFrameComponent.new(id: 'licenses-tab', src: admin_licenses_path, loading: 'lazy')
       - t.item_content do
         = render TurboFrameComponent.new(id: 'users-list', src: users_path, loading: 'lazy')
       - t.item_content do

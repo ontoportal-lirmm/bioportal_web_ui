@@ -1,6 +1,6 @@
 ---
 fr:
-  activaterecord:
+  activerecord:
     errors:
       models:
         license:
@@ -8,8 +8,7 @@ fr:
             encrypted_key:
               appliance_id_mismatch: ne correspond pas à l'ID de la machine virtuelle.
               invalid_license_key: est une clé de licence invalide.
-              no_appliance_id_for_comparison: n'a pas pu être validée. Impossible
-                de récupérer l'ID de la machine virtuelle.
+              no_appliance_id_for_comparison: n'a pas pu être validée. Impossible de récupérer l'ID de la machine virtuelle.
   admin:
     analytics:
       active_users: Utilisateurs actifs
