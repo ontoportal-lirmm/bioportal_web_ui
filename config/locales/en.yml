@@ -1,6 +1,6 @@
 ---
 en:
-  activaterecord:
+  activerecord:
     errors:
       models:
         license:
@@ -8,8 +8,7 @@ en:
             encrypted_key:
               appliance_id_mismatch: is an appliance id mismatch.
               invalid_license_key: is an invalid license key.
-              no_appliance_id_for_comparison: Could not be validated. Unable to retrieve
-                virtual appliance ID.
+              no_appliance_id_for_comparison: Could not be validated. Unable to retrieve virtual appliance ID.
   admin:
     analytics:
       active_users: Active users
