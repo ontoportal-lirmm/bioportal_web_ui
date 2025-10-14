@@ -39,7 +39,6 @@ class OntologiesController < ApplicationController
     @groups = LinkedData::Client::Models::Group.all(display_links: false, display_context: false)
 
     @filters = ontology_filters_init(@categories, @groups)
-    init_filters(params)
     render 'ontologies/browser/browse'
   end
 
@@ -433,14 +432,18 @@ class OntologiesController < ApplicationController
 
   def metrics
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
-    @metrics = @ontology.explore.metrics(display_context: false, display_links: false)
-    render partial: 'ontologies/sections/metrics'
+    if @ontology.nil? || @ontology.errors
+      ontology_not_found(params[:ontology])
+    else
+      @metrics = @ontology.explore.metrics(display_context: false, display_links: false)
+      render partial: 'ontologies/sections/metrics'
+    end
   end
 
   def metrics_evolution
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
     key = params[:metrics_key]
-    ontology_not_found(params[:ontology_id]) if @ontology.nil?
+    ontology_not_found(params[:ontology_id]) if @ontology.nil? || @ontology.errors
 
     # Retrieve submissions in descending submissionId order (should be reverse chronological order)
     @submissions = @ontology.explore.submissions({ include: "metrics" })

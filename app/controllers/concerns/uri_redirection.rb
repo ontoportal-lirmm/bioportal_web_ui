@@ -23,6 +23,7 @@ module UriRedirection
   def redirect_to_file
     # check for hasOntologySyntax field for turtle format
     ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
+    return ontology_not_found(params[:id]) if ontology.nil? || ontology.errors
     ontology_syntax = ontology.explore.latest_submission(include: 'hasOntologySyntax').hasOntologySyntax
 
     return not_acceptable("Invalid requested format, valid format are: HTML, JSON, XML, CSV.\nNTriples and Turtle format is available for some resources\nYou can download the original file you can get it from: #{rest_url}/ontologies/#{params[:id]}/download\n") if accept_header.nil? || (ontology_syntax != "http://www.w3.org/ns/formats/Turtle" && accept_header== "text/turtle") || (ontology_syntax != "http://www.w3.org/ns/formats/N-Triples" && accept_header== "application/ntriples")
@@ -51,7 +52,7 @@ module UriRedirection
   def find_type_by_search(id, acronym)
     # search for URIs that ends with "/id" or "#id"
     result = search_content(q: "*##{id} || *\/#{id}", qf: "resource_id", page: 1, pagesize: 10, ontologies: acronym)
-
+    return [nil, nil] if result.nil? || result.errors      
     find_exact_resource = result[:collection].select { |x| helpers.link_last_part(x[:resource_id]).eql?(id) }.first
 
     if !find_exact_resource

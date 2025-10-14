@@ -1,6 +1,6 @@
 ---
 fr:
-  activaterecord:
+  activerecord:
     errors:
       models:
         license:
@@ -8,8 +8,7 @@ fr:
             encrypted_key:
               appliance_id_mismatch: ne correspond pas à l'ID de la machine virtuelle.
               invalid_license_key: est une clé de licence invalide.
-              no_appliance_id_for_comparison: n'a pas pu être validée. Impossible
-                de récupérer l'ID de la machine virtuelle.
+              no_appliance_id_for_comparison: n'a pas pu être validée. Impossible de récupérer l'ID de la machine virtuelle.
   admin:
     analytics:
       active_users: Utilisateurs actifs
@@ -542,7 +541,7 @@ fr:
     agroportal_figures: "%{site} en chiffres"
     average: Moyenne
     benefit1: Découvrir de nouvelles connaissances en explorant d'autres ontologies
-      ou ressources sémantiques dans le portail.
+      ou artefacts sémantiques dans le portail.
     benefit2: Contribuez au partage de connaissances et à l'interopérabilité sémantique
       dans votre domaine.
     benefit3: Aliogner votre ontologie avec d'autres ontologies pertinentes dans le
@@ -633,6 +632,7 @@ fr:
     support_and_collaborations: Support & Collaborations
     twitter_news: Nouvelles
     users: Utilisateurs
+    agents: Agents
     view_full_site: Voir le site complet
     viewing_slice: 'Affichage de la slice:'
   instances:
@@ -984,6 +984,7 @@ fr:
       admin_welcome: Bienvenue admin, cette couleur indique les fonctionnalités réservées
         aux administrateurs
       search_placeholder: Filtrer les ontologies, e.g., AGROVOC, plante
+      show_my_ontologies: Afficher mes ontologies seulement
       show_ontology_views: Afficher les vues de l'ontologie
       show_private_ontology: Afficher seulement les ontologies privées
       show_retired_ontologies: Afficher les ontologies retirées

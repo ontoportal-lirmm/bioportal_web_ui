@@ -117,7 +117,7 @@ module AgentHelper
       if i["schemaAgency"]
         schema_agency, notation = [i["schemaAgency"], i["notation"]]
       else
-        schema_agency, notation = (i["id"] || i["@id"]).split('Identifiers/').last.delete(' ').split(':')
+        schema_agency, notation = (i["id"] || i["@id"])&.split('Identifiers/')&.last&.delete(' ')&.split(':') || [nil, nil]
       end
       
       value = "#{schemes_urls[schema_agency.to_sym]}#{notation}"

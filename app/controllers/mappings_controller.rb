@@ -155,10 +155,13 @@ class MappingsController < ApplicationController
   end
 
   def get_concept_table
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontologyid]).first
-    @concept = @ontology.explore.single_class({ full: true }, params[:conceptid])
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontologyid])&.first
+    return ontology_not_found(params[:ontologyid]) if @ontology.nil? || @ontology.respond_to?(:errors) && @ontology.errors.present?
 
-    @mappings = @concept.explore.mappings
+    @concept = @ontology.explore.single_class({ full: true }, params[:conceptid])
+    return not_found if @concept.nil? || @concept.respond_to?(:errors) && @concept.errors.present?
+
+    @mappings = @concept.explore.mappings || []
     @type = params[:type]
     @delete_mapping_permission = check_delete_mapping_permission(@mappings)
     render partial: 'mappings/concept_mappings', layout: false

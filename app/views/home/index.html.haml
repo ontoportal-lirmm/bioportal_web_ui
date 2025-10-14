@@ -19,23 +19,24 @@
   .home-bubbles
     .home-random-bubbles
       %img{:src => asset_path("home-random-bubbles.svg")}/
-    .home-bubble.home-bubble-one
-      %a.h5{href:"/ontologies/#{@anal_ont_names[0]}", style: "color: white !important"}
-        = @anal_ont_names[0]
-      %p 
-        = format_number_abbreviated(@anal_ont_numbers[0]) + " " + (@analytics.empty? ?  t('visits.count') :  t('visits.visits'))
-    .home-bubble.home-bubble-two
-      %a.h5{href:"/ontologies/#{@anal_ont_names[1]}", style: "color: white !important"}
-        = @anal_ont_names[1]
-      %p 
-        = format_number_abbreviated(@anal_ont_numbers[1]) + " " + (@analytics.empty? ?  t('visits.count') :  t('visits.visits'))
-    .home-bubble.home-bubble-three
-      %a.h5{href:"/ontologies/#{@anal_ont_names[2]}", style: "color: white !important"}
-        = @anal_ont_names[2]
-      %p 
-        = format_number_abbreviated(@anal_ont_numbers[2]) + " " + (@analytics.empty? ?  t('visits.count') :  t('visits.visits'))
-    %a.home-bubble.home-bubble-four{:href => "/visits"}
-      .h5 ...
+    - unless @anal_ont_names.empty?
+      .home-bubble.home-bubble-one
+        %a.h5{href:"/ontologies/#{@anal_ont_names[0]}", style: "color: white !important"}
+          = @anal_ont_names[0]
+        %p 
+          = format_number_abbreviated(@anal_ont_numbers[0]) + " " + t('visits.visits')
+      .home-bubble.home-bubble-two
+        %a.h5{href:"/ontologies/#{@anal_ont_names[1]}", style: "color: white !important"}
+          = @anal_ont_names[1]
+        %p 
+          = format_number_abbreviated(@anal_ont_numbers[1]) + " " + t('visits.visits')
+      .home-bubble.home-bubble-three
+        %a.h5{href:"/ontologies/#{@anal_ont_names[2]}", style: "color: white !important"}
+          = @anal_ont_names[2]
+        %p 
+          = format_number_abbreviated(@anal_ont_numbers[2]) + " " + t('visits.visits')
+      %a.home-bubble.home-bubble-four{:href => "/visits"}
+        .h5 ...
 
   .home-header-title-container
     .home-header-title
@@ -52,7 +53,8 @@
     %p= t('home.ontology_upload_desc')
     %p= t('home.ontology_upload_benefits', site: $SITE)
     .home-upload-benifits
-      - @upload_benefits.each do |benefit|
+      - upload_benefits = [ t('home.benefit1'), t('home.benefit2'), t('home.benefit3'), t('home.benefit4'), t('home.benefit5')]
+      - upload_benefits.each do |benefit|
         %div
           = inline_svg_tag 'check-outlined.svg'
           %p
@@ -66,52 +68,19 @@
     %h4
       = t('home.agroportal_figures', site: current_slice_name || portal_name)
     %hr.home-section-line/
-    .home-statistics-container
-      .home-statistics
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@metrics[:ontologies_count])
-            %p= t("home.ontologies")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@metrics[:class_count])
-            %p= t("home.classes")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@metrics[:individuals_count])
-            %p= t("home.individuals")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@metrics[:properties_count])
-            %p= t("home.properties")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@metrics[:projects_count])
-            %p= t("home.projects")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@metrics[:mappings_count])
-            %p= t("home.mappings")
-        .home-statistics-item
-          %hr/
-          %div
-            %h4
-              = format_number_abbreviated(@metrics[:users_count])
-            %p= t("home.users")
-      .home-statistics-link.justify-content-end{style: @analytics.empty? && "visibility: hidden"}
-        = link_to t("home.see_details"),'/statistics', target: "_blank"
+    = turbo_frame_tag "metrics_frame", src: home_metrics_path, loading: "lazy" do
+      .home-statistics-container
+        .home-statistics
+          - 7.times do
+            .home-statistics-item
+              %hr
+              %div
+                %h4
+                  .placeholder{style: "width: 60px; height: 24px; background: #f0f0f0; display: inline-block;"}
+                %p
+                  .placeholder{style: "width: 80px; height: 16px; background: #f0f0f0; display: inline-block;"}
+        .home-statistics-link.justify-content-end{style: @analytics.empty? && "visibility: hidden"}
+          = link_to t("home.see_details"),'/statistics', target: "_blank"
 
   .home-section
     %h4

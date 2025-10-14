@@ -38,7 +38,7 @@ class SearchController < ApplicationController
 
   def json_search
     if params[:q].nil?
-      render :text => t('search.no_search_class_provided')
+      render :plain => t('search.no_search_class_provided')
       return
     end
     check_params_query(params)

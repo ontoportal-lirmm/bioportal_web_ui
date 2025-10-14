@@ -1,6 +1,6 @@
 ---
 en:
-  activaterecord:
+  activerecord:
     errors:
       models:
         license:
@@ -8,8 +8,7 @@ en:
             encrypted_key:
               appliance_id_mismatch: is an appliance id mismatch.
               invalid_license_key: is an invalid license key.
-              no_appliance_id_for_comparison: Could not be validated. Unable to retrieve
-                virtual appliance ID.
+              no_appliance_id_for_comparison: Could not be validated. Unable to retrieve virtual appliance ID.
   admin:
     analytics:
       active_users: Active users
@@ -271,7 +270,7 @@ en:
       no_contributions: This agent has no contributions in %{portalName} 
       keywords : Keywords
       tags : Related themes
-      identifier: identifier
+      identifier: Identifier
     save: Save
     see_usages_count: Usages (%{count})
     turbo_confirm: Are you sure?
@@ -529,7 +528,7 @@ en:
     agroportal_figures: "%{site} in figures"
     average: Average
     benefit1: Discover new insights and knowledge by exploring other ontologies or
-      semantic resources in the repository.
+      semantic artefacts in the repository.
     benefit2: Contribute to knowledge sharing and semantic interoperability in your
       domain.
     benefit3: Map your ontology to other relevant ones in the domain and collaborate
@@ -617,6 +616,7 @@ en:
     support_and_collaborations: Support & Collaborations
     twitter_news: News
     users: Users
+    agents: Agents
     view_full_site: View full website
     viewing_slice: 'Viewing the slice:'
   instances:
@@ -950,6 +950,7 @@ en:
     browser:
       admin_welcome: Welcome admin,this coloring indicates admin-only features
       search_placeholder: Filter ontologies, e.g., AGROVOC, plant
+      show_my_ontologies: Show my ontologies only
       show_ontology_views: Show ontology views
       show_private_ontology: Show private ontology only
       show_retired_ontologies: Show retired ontologies

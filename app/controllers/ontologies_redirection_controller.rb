@@ -11,6 +11,7 @@ class OntologiesRedirectionController < ApplicationController
 
         if resource_id.nil?
             @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:acronym]).first
+            return ontology_not_found(params[:acronym]) if @ontology.nil? || @ontology.errors
             @submission_latest = @ontology.explore.latest_submission(include: "URI")
             resource_id = @submission_latest.URI
         end
@@ -30,15 +31,19 @@ class OntologiesRedirectionController < ApplicationController
     # GET /ontologies/:acronym/htaccess
     def generate_htaccess
         ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:acronym]).first
-        subminssions_params = ontology.explore.latest_submission(include: 'URI,preferredNamespaceUri')
-        ontology_uri = subminssions_params.URI
-        preferred_name_space_uri = subminssions_params.preferredNamespaceUri
-        ontology_portal_url = "#{$UI_URL}/ontologies/#{params[:acronym]}"
-        
-        @htaccess_content = generate_htaccess_content(ontology_portal_url, ontology_uri, preferred_name_space_uri)
-        @nginx_content = generate_nginx_content(ontology_portal_url, ontology_uri, preferred_name_space_uri)
+        if ontology.nil? || ontology.errors
+            ontology_not_found(params[:acronym])
+        else
+            subminssions_params = ontology.explore.latest_submission(include: 'URI,preferredNamespaceUri')
+            ontology_uri = subminssions_params.URI
+            preferred_name_space_uri = subminssions_params.preferredNamespaceUri
+            ontology_portal_url = "#{$UI_URL}/ontologies/#{params[:acronym]}"
+            
+            @htaccess_content = generate_htaccess_content(ontology_portal_url, ontology_uri, preferred_name_space_uri)
+            @nginx_content = generate_nginx_content(ontology_portal_url, ontology_uri, preferred_name_space_uri)
 
-        render 'ontologies/htaccess', layout: nil
+            render 'ontologies/htaccess', layout: nil
+        end
     end
 
     # GET /ontologies/ACRONYM/download?format=FORMAT
