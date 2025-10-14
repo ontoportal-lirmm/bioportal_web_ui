@@ -1,0 +1,20 @@
+= turbo_frame_tag 'licenses-tab' do
+
+    %div#renew-license-notice
+        %table.table.table-sm.table-bordered.mt-5#license-table
+            %thead
+                %tr
+                    %th{scope: "col"}= t('admin.index.licensed_to')
+                    %th{scope: "col"}= t('admin.index.appliance_id')
+                    %th{scope: "col"}= t('admin.index.valid_till')
+                    %th{scope: "col"}= t('admin.index.days_remaining')
+            %tbody
+                - @licenses.each do |license|
+                    %tr
+                        %td= license.organization
+                        %td= license.appliance_id
+                        %td= l(license.expiry_date, format: :monthfull_day_year)
+                        %td= license.days_remaining
+
+    = turbo_frame_tag 'renew-license-form' do
+        = link_to t('admin.index.renew_license'), new_admin_license_path, class: "btn btn-primary", role: "button", data: { turbo_frame: "renew-license-form" }

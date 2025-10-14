@@ -2,7 +2,6 @@ class Admin::LicensesController < ApplicationController
 
   def index
     @licenses = License.current_license
-    respond_to :js
   end
 
   def new
@@ -12,12 +11,10 @@ class Admin::LicensesController < ApplicationController
   def create
     @license = License.new(license_params)
 
-    respond_to do |format|
-      if @license.save
-         format.js { flash.now[:notice] = t(".success") }
-      else
-        format.js { render :new }
-      end
+    if @license.save
+      render :create_success
+    else
+      render :new
     end
   end
 

@@ -175,6 +175,7 @@ module SubmissionFilter
 
     filters_boolean_map = {
       show_views: { api_key: :also_include_views, default: 'true' },
+      user_ontologies_only: { api_key: :administeredBy, default: 'true' },
       private_only: { api_key: :viewingRestriction, default: 'private' },
       show_retired: { api_key: :status, default: 'retired' }
     }
@@ -191,7 +192,7 @@ module SubmissionFilter
       @filters[:show_retired] = ''
       request_params[:status] = 'alpha,beta,production'
     else
-      request_params[:status] = 'alpha,beta,production,retired'
+      request_params[:status] = 'retired'
       @filters[:show_retired] = 'true'
     end
 

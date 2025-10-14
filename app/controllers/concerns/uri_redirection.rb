@@ -23,7 +23,7 @@ module UriRedirection
   def redirect_to_file
     # check for hasOntologySyntax field for turtle format
     ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    return ontology_not_found(acronym) if ontology.nil? || ontology.errors
+    return ontology_not_found(params[:id]) if ontology.nil? || ontology.errors
     ontology_syntax = ontology.explore.latest_submission(include: 'hasOntologySyntax').hasOntologySyntax
 
     return not_acceptable("Invalid requested format, valid format are: HTML, JSON, XML, CSV.\nNTriples and Turtle format is available for some resources\nYou can download the original file you can get it from: #{rest_url}/ontologies/#{params[:id]}/download\n") if accept_header.nil? || (ontology_syntax != "http://www.w3.org/ns/formats/Turtle" && accept_header== "text/turtle") || (ontology_syntax != "http://www.w3.org/ns/formats/N-Triples" && accept_header== "application/ntriples")
