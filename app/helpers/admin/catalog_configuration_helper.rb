@@ -22,6 +22,19 @@ module Admin::CatalogConfigurationHelper
     end
   end
 
+  def get_theme_taxonomy_ontologies
+    params = {
+      include: "themeTaxonomy",
+      display_links: false,
+      display_context: false,
+      _ts: Time.current.to_i
+    }
+    result = LinkedData::Client::HTTP.get("#{LinkedData::Client.settings.rest_url}/", params).to_hash
+    ontologies = []
+    ontologies = result[:themeTaxonomy]&.filter { |u| u.strip.start_with?("http://localhost:3000/") }.map { |u| u.strip.split('/').last }
+    return ontologies
+  end
+
   private
   
   def description_tooltip_help_text(label, description)

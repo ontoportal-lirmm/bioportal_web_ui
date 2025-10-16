@@ -31,7 +31,20 @@
                   - label_tooltip = attr_metadata_header_label(attr_metadata)
                   - value_attr = @catalog_data[key.to_sym]
                   .form-group
-                    - if attr_metadata.enforce.include?("string")
+                    - if attr_metadata.enforce.include?("list")
+                      - if attr_metadata.enforcedValues.nil?
+                        = hidden_field_tag "config[#{key}][]", "", id: "empty_config_#{key}"
+                        = render Input::InputFieldComponent.new(name: "config[#{key}]", label: label_tooltip, error_message: attribute_error(key.to_s)) do
+                          = render NestedFormInputsComponent.new do |c|
+                            - c.template do
+                              = text_input(name: "config[#{key}][]", value: "")
+                            - Array(value_attr).each_with_index do |val, i|
+                              - c.row do
+                                = text_input(name: "config[#{key}][]", value: val || "")
+                      - else
+                        = render Input::InputFieldComponent.new(name: "list_fields_#{key}", label: label_tooltip) do
+                          = link_to_modal("#{t('admin.catalog_configuration.edit_button')}", admin_edit_nested_form_catalog_configuration_path(key), { id: "edit_nested_form_#{key}", data: { show_modal_title_value: "#{label_tooltip}", show_modal_size_value: 'modal-xl' } })
+                    - elsif attr_metadata.enforce.include?("string")
                       = text_input(name: "config[#{key}]", value: value_attr || "", label: label_tooltip)
                     - elsif attr_metadata.enforce.include?("url")
                       = url_input(name: "config[#{key}]", value: value_attr || "", label: label_tooltip)
@@ -52,19 +65,5 @@
                       - else
                         = render Input::InputFieldComponent.new(name: "config[#{key}]", error_message: attribute_error(key.to_s)) do
                           = render NestedAgentSearchInputComponent.new(label: label_tooltip, agents: value_attr || [], agent_type: "", name_prefix: "config[#{key}]", editable: false, parent_id: key.to_s, create_new_agent_action: false)
-                    - elsif attr_metadata.enforce.include?("list")
-                      - if attr_metadata.enforcedValues.nil?
-                        = hidden_field_tag "config[#{key}][]", "", id: "empty_config_#{key}"
-                        = render Input::InputFieldComponent.new(name: "config[#{key}]", label: label_tooltip, error_message: attribute_error(key.to_s)) do
-                          = render NestedFormInputsComponent.new do |c|
-                            - c.template do
-                              = text_input(name: "config[#{key}][]", value: "")
-                            - Array(value_attr).each_with_index do |val, i|
-                              - c.row do
-                                = text_input(name: "config[#{key}][]", value: val || "")
-                      - else
-                        = render Input::InputFieldComponent.new(name: "list_fields_#{key}", label: label_tooltip) do
-                          = link_to_modal("#{t('admin.catalog_configuration.edit_button')}", admin_edit_nested_form_catalog_configuration_path(key), { id: "edit_nested_form_#{key}", data: { show_modal_title_value: "#{label_tooltip}", show_modal_size_value: 'modal-xl' } })              
-    
       .save-button
         = form_save_button

@@ -294,7 +294,7 @@ module SubmissionsHelper
       end
     end
 
-    reject_metadata = %w[abstract description uploadFilePath contact pullLocation hasOntologyLanguage hasLicense bugDatabase knownUsage version notes deprecated status]
+    reject_metadata = %w[hasDomain abstract description uploadFilePath contact pullLocation hasOntologyLanguage hasLicense bugDatabase knownUsage version notes deprecated status]
     label = inline_save? ? '' : nil
 
     if selected_attribute?('abstract')
@@ -349,6 +349,10 @@ module SubmissionsHelper
       output += attribute_form_group_container('deprecated') do
         raw attribute_input('deprecated', help: metadata_deprecated_help)
       end
+    end
+
+    if selected_attribute?('hasDomain')
+      output += ontology_submission_subjects_input
     end
 
     submission_metadata.reject { |attr| reject_metadata.include?(attr['attribute']) || !selected_attribute?(attr['attribute']) }.each do |attr|

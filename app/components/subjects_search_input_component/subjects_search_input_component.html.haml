@@ -1,0 +1,17 @@
+= render NestedFormInputsComponent.new do |c|
+  - c.header do
+    = @label
+
+  - c.template do
+    .subjects-container{ data: { controller: "subjects" } }
+      .search-wrapper{ data: { subjects_target: "searchWrapper" } }
+        = helpers.subjects_ontologies_content_autocomplete(ontologies: helpers.get_theme_taxonomy_ontologies || [])
+      .subjects-list{ data: { subjects_target: "list" } }
+
+  - Array(@values).each_with_index do |v, i|
+    - c.row do
+      .nested-subjects-form-input-row
+        = helpers.text_input(label: '', name: "submission[hasDomain][#{i}]", value: v, readonly: true)
+  
+  - c.empty_state do
+    = hidden_field_tag "submission[hasDomain][0]", ""

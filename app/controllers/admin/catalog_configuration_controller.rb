@@ -70,7 +70,7 @@ class Admin::CatalogConfigurationController < ApplicationController
         audience publishingPrinciples repository bugDatabase 
         mailingList toDoList award
       ],
-      usage: %w[knownUsage coverage example],
+      usage: %w[knownUsage coverage example themeTaxonomy],
       methodology_and_provenance: %w[accrualMethod accrualPeriodicity accrualPolicy],
       media: %w[associatedMedia depiction logo],
       other: %w[color federated_portals relation]

@@ -148,6 +148,24 @@ module SubmissionInputsHelper
     end
   end
 
+  def ontology_submission_subjects_input
+    attr_key = "hasDomain"
+    label = "Subjects"
+    attr = SubmissionMetadataInput.new(attribute_key: attr_key, submission: @submission, label: label, attr_metadata: attr_metadata(attr_key))
+    output = render(TurboFrameComponent.new(id: "submission#{attr}_from_group_input")) do
+      tag.div(class: 'd-flex w-100 mb-3') do
+        html = tag.div(class: 'flex-grow-1 mr-1') do
+          render Input::InputFieldComponent.new(name: '', label: attr_header_label(attr, label, show_tooltip: true), error_message: attribute_error(attr_key.to_sym)) do
+            render SubjectsSearchInputComponent.new(attr: attr, attr_key: attr_key, values: attr.values, label: nil)
+          end
+        end
+        html
+      end
+    end
+
+    return output
+  end
+
   def ontology_skos_language_help
     content_tag(:div, class: 'upload-ontology-desc has_ontology_language_input') do
       link = link_to(t('submission_inputs.ontology_skos_language_link'), "https://doc.jonquetlab.lirmm.fr/share/618372fb-a852-4f3e-8e9f-8b07ebc053e6", target: "_blank")
