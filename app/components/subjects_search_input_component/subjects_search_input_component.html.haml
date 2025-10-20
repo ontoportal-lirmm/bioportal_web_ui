@@ -1,11 +1,14 @@
 = render NestedFormInputsComponent.new do |c|
   - c.header do
-    = @label
+    - if @ontologies.empty?
+      = render Display::AlertComponent.new(type:'warning', closable: false, message: t('submission_inputs.theme_taxonomy_not_set'))
+    - else
+      = t('submission_inputs.subjects_notice', ontologies: @ontologies.join(','))
 
   - c.template do
     .subjects-container{ data: { controller: "subjects" } }
       .search-wrapper{ data: { subjects_target: "searchWrapper" } }
-        = helpers.subjects_ontologies_content_autocomplete(ontologies: helpers.get_theme_taxonomy_ontologies || [])
+        = helpers.subjects_ontologies_content_autocomplete(ontologies: @ontologies)
       .subjects-list{ data: { subjects_target: "list" } }
 
   - Array(@values).each_with_index do |v, i|

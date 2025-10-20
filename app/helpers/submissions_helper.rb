@@ -256,10 +256,6 @@ module SubmissionsHelper
       output += has_ontology_language_input
     end
 
-    if selected_attribute?('categories')
-      output += ontology_categories_input
-    end
-
     if selected_attribute?('groups')
       output += ontology_groups_input
     end
@@ -294,7 +290,7 @@ module SubmissionsHelper
       end
     end
 
-    reject_metadata = %w[hasDomain abstract description uploadFilePath contact pullLocation hasOntologyLanguage hasLicense bugDatabase knownUsage version notes deprecated status]
+    reject_metadata = %w[keywords hasDomain abstract description uploadFilePath contact pullLocation hasOntologyLanguage hasLicense bugDatabase knownUsage version notes deprecated status]
     label = inline_save? ? '' : nil
 
     if selected_attribute?('abstract')
@@ -351,8 +347,18 @@ module SubmissionsHelper
       end
     end
 
+    if selected_attribute?('categories')
+      output += ontology_categories_input
+    end
+
     if selected_attribute?('hasDomain')
       output += ontology_submission_subjects_input
+    end
+
+    if selected_attribute?('keywords')
+      output += attribute_form_group_container('keywords') do
+        raw attribute_input('keywords', label: label)
+      end
     end
 
     submission_metadata.reject { |attr| reject_metadata.include?(attr['attribute']) || !selected_attribute?(attr['attribute']) }.each do |attr|

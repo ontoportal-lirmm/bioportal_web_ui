@@ -2,10 +2,10 @@
 
 class SubjectsSearchInputComponent < ViewComponent::Base
 
-  def initialize(attr:, attr_key:, values: [], label: nil, attr_header_label: nil, error_message: nil)
+  def initialize(attr:, attr_key:, values: [], ontologies: [])
     @attr = attr
     @attr_key = attr_key
     @values = values
-    @label = label
+    @ontologies = ontologies
   end
 end

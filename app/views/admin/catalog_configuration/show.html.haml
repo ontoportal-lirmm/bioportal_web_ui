@@ -32,7 +32,10 @@
                   - value_attr = @catalog_data[key.to_sym]
                   .form-group
                     - if attr_metadata.enforce.include?("list")
-                      - if attr_metadata.enforcedValues.nil?
+                      - if key == "themeTaxonomy"
+                        = hidden_field_tag "config[#{key}][]", "", id: "empty_config_#{key}"
+                        = ontologies_selector(id:'theme_taxonomy_ontologies_selector', label: label_tooltip, name: "config[#{key}]", selected: value_attr, show_advanced_options: false)
+                      - elsif attr_metadata.enforcedValues.nil?
                         = hidden_field_tag "config[#{key}][]", "", id: "empty_config_#{key}"
                         = render Input::InputFieldComponent.new(name: "config[#{key}]", label: label_tooltip, error_message: attribute_error(key.to_s)) do
                           = render NestedFormInputsComponent.new do |c|

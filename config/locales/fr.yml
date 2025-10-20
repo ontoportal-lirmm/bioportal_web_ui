@@ -1588,6 +1588,8 @@ fr:
       de version dans une ontologie, consultez %{link}
     version_helper_link: recommandations.
     visibility: Visibilité
+    theme_taxonomy_not_set: Veuillez définir le champ themeTaxonomy dans la page d'administration pour l'utiliser pour la recherche des sujets
+    subjects_notice: Ces sujets proviennent de l'ensemble d'ontologies %{ontologies}. Pour ajouter votre sujet, veuillez l'indiquer dans la section Keywords.
   submissions:
     actions: Actions
     delete_submission_alert:

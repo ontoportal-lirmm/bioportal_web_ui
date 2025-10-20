@@ -152,11 +152,12 @@ module SubmissionInputsHelper
     attr_key = "hasDomain"
     label = "Subjects"
     attr = SubmissionMetadataInput.new(attribute_key: attr_key, submission: @submission, label: label, attr_metadata: attr_metadata(attr_key))
+    ontologies = get_theme_taxonomy_ontologies || []
     output = render(TurboFrameComponent.new(id: "submission#{attr}_from_group_input")) do
       tag.div(class: 'd-flex w-100 mb-3') do
         html = tag.div(class: 'flex-grow-1 mr-1') do
           render Input::InputFieldComponent.new(name: '', label: attr_header_label(attr, label, show_tooltip: true), error_message: attribute_error(attr_key.to_sym)) do
-            render SubjectsSearchInputComponent.new(attr: attr, attr_key: attr_key, values: attr.values, label: nil)
+            render SubjectsSearchInputComponent.new(attr: attr, attr_key: attr_key, values: attr.values, ontologies: ontologies)
           end
         end
         html

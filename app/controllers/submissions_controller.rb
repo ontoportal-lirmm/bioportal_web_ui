@@ -71,10 +71,10 @@ class SubmissionsController < ApplicationController
     ontology_not_found(params[:ontology_id]) unless @ontology
     category_attributes = submission_metadata.group_by{|x| x['category']}.transform_values{|x| x.map{|attr| attr['attribute']} }
     category_attributes = category_attributes.reject{|key| ['no'].include?(key.to_s)}
-    category_attributes['general'] << %w[acronym name groups administeredBy categories]
+    category_attributes['general'] << %w[acronym name groups administeredBy]
     category_attributes['licensing'] << 'viewingRestriction'
     category_attributes['relations'] << 'viewOf'
-    category_attributes["description"] << ("hasDomain")
+    category_attributes["description"] << %w[hasDomain categories]
     @selected_attributes = Array(params[:properties])
     if @selected_attributes.empty?
       @categories_order = ['general', 'description', 'dates', 'licensing', 'persons and organizations', 'links', 'media', 'community', 'usage' ,'relations', 'content','methodology', 'object description properties']

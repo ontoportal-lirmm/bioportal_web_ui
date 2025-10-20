@@ -96,6 +96,7 @@ class Admin::CatalogConfigurationController < ApplicationController
     agent_params = build_catalog_params(agents_only: true)
     catalog_agents = LinkedData::Client::HTTP.get(CATALOG_PATH, agent_params).to_hash
     @catalog_data.merge!(catalog_agents.to_hash)
+    @catalog_data = sanitize_catalog_data(@catalog_data)
     session[:catalog_data] = @catalog_data
     @catalog_data
   rescue StandardError => e
@@ -147,6 +148,13 @@ class Admin::CatalogConfigurationController < ApplicationController
     false
   end
 
+  def sanitize_catalog_data(catalog_data)
+    catalog_data_sanitized = catalog_data
+    # sanitize themeTaxonomy to let only the acronyms of the ontologies
+    catalog_data_sanitized[:themeTaxonomy] = catalog_data_sanitized[:themeTaxonomy].select { |url| url.start_with?($UI_URL) }.map { |url| url.split('/').last }
+    return catalog_data_sanitized
+  end
+
   def sanitize_config_params
     config = params.require(:config).permit!.to_h
 
@@ -155,7 +163,8 @@ class Admin::CatalogConfigurationController < ApplicationController
     end
 
     config['rightsHolder'] = config['rightsHolder']&.first&.presence || '' if config['rightsHolder']
-
+    config['themeTaxonomy'] = config['themeTaxonomy'].map { |value| "#{$UI_URL.chomp('/')}/#{value}" }
+    config['themeTaxonomy'] << "http://vocabularies.unesco.org/thesaurus"
     config.compact
   end
 

@@ -31,7 +31,7 @@ module Admin::CatalogConfigurationHelper
     }
     result = LinkedData::Client::HTTP.get("#{LinkedData::Client.settings.rest_url}/", params).to_hash
     ontologies = []
-    ontologies = result[:themeTaxonomy]&.filter { |u| u.strip.start_with?("http://localhost:3000/") }.map { |u| u.strip.split('/').last }
+    ontologies = result[:themeTaxonomy]&.filter { |u| u.strip.start_with?($UI_URL) }.map { |u| u.strip.split('/').last }
     return ontologies
   end
 
