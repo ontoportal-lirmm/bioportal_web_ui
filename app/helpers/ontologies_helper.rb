@@ -322,23 +322,28 @@ module OntologiesHelper
 
   def subject_chip(subject)
     begin
-      agroportal_uri = "https://data.agroportal.lirmm.fr/ontologies/AGROVOC/classes/#{CGI.escape(subject.strip)}"
-      response = LinkedData::Client::HTTP.get(
-        agroportal_uri,
-        params = {
-          lang: "en",
-          display_context: false,
-          display_links: false,
-          include: "prefLabel"
-        }
-      )
-
-      if response.prefLabel
-        text = response.prefLabel
-        url = agroportal_uri.sub('data.', '')
-      else
-        text = subject.split('/').last.strip
-        url = subject
+      theme_taxonomy_ontologies = get_theme_taxonomy_ontologies()
+      text = subject.split('/').last.strip
+      url = subject
+      if !theme_taxonomy_ontologies.empty?
+        theme_taxonomy_ontologies.each do |ontology_acronym|
+          class_uri = "#{rest_url}/ontologies/#{ontology_acronym}/classes/#{CGI.escape(subject.strip)}"
+          response = LinkedData::Client::HTTP.get(
+            class_uri,
+            params = {
+              lang: "en",
+              display_context: false,
+              display_links: false,
+              include: "prefLabel"
+            }
+          )
+          
+          if response.prefLabel
+            text = response.prefLabel
+            url = class_uri.sub('data.', '')
+            break
+          end
+        end
       end
 
       render ChipButtonComponent.new(
@@ -349,7 +354,7 @@ module OntologiesHelper
         target: "_blank"
       )
     rescue => e
-      Rails.logger.warn("Failed to fetch prefLabel from AGROVOC for '#{subject}': #{e.message}")
+      Rails.logger.warn("Failed to fetch prefLabel from ontology for '#{subject}': #{e.message}")
       nil
     end
   end

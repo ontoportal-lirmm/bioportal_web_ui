@@ -59,6 +59,7 @@ Rails.application.routes.draw do
 
     get ':ontology/collections', to: 'collections#index'
     get ':ontology/collections/show', to: 'collections#show'
+    get 'subject_chips', to: "ontologies#subject_chips"
   end
 
 

@@ -1,0 +1,4 @@
+= render TurboFrameComponent.new(id: "subject_chips") do
+    - if @subjects.present?
+        = horizontal_list_container(show_ontology_domains(@subjects).uniq) do |v|
+            = subject_chip(v)
