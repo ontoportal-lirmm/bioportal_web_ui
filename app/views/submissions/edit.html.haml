@@ -3,13 +3,6 @@
   .edit-ontology-container
     .ontology-details-path
       %a{href: "/ontologies"} Ontologies
-      %h3
-      - if @ontology.viewOf
-        = inline_svg_tag 'arrow-right-outlined.svg'
-        %div
-          - viewOfAcronym = @ontology.viewOf.split('/').last
-          %a{href: "/ontologies/#{viewOfAcronym}"}
-            = viewOfAcronym
       = inline_svg_tag 'arrow-right-outlined.svg'
       %a{href: "/ontologies/#{@ontology.acronym}"}= @ontology.acronym
       = inline_svg_tag 'arrow-right-outlined.svg'
@@ -20,7 +13,7 @@
         = params["id"]
       
     = turbo_frame_tag(params[:container_id] || 'test') do
-      = form_for :submission, url: ontology_submission_path(@ontology.acronym, params["id"]), html: { id: "ontology_submission_form", method: :put, multipart: true, 'data-turbo': false, 'data-turbo-frame': '_top', novalidate: 'true'} do
+      = form_for :submission, url: ontology_submission_path(@ontology.acronym, params["id"]), html: { id: "ontology_submission_form", method: :put, multipart: true, 'data-turbo': true, 'data-turbo-frame': '_top', novalidate: 'true'} do
         .edit-ontology-title
           %div
             = t('submission_inputs.edit_ontology_title')

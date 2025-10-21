@@ -137,6 +137,8 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
     sleep 1
     wait_for '.notification'
     assert_selector '.notification', text: "Submission updated successfully"
+
+    click_link @new_ontology.acronym
     assert_text "#{ontology_2.name} (#{@new_ontology.acronym})"
 
     selected_categories.each do |cat|
