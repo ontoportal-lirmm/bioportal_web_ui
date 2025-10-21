@@ -14,11 +14,11 @@ class Admin::CatalogConfigurationController < ApplicationController
 
   def update
     config = sanitize_config_params
-
-    if update_remote_config(config)
-      flash.now[:notice] = true
+    response = update_remote_config(config)
+    if response.status == 200
+      flash.now[:notice] = t('admin.catalog_configuration.configuration_updated_successfully')
     else
-      flash.now[:alert] = true
+      flash.now[:alert] = t('admin.catalog_configuration.configuration_update_error', error: response.body)
     end
 
     @catalog_data = load_catalog_data
@@ -142,10 +142,9 @@ class Admin::CatalogConfigurationController < ApplicationController
 
   def update_remote_config(config)
     response = LinkedData::Client::HTTP.patch(CATALOG_PATH, config)
-    response.status == 200
   rescue StandardError => e
     Rails.logger.error("Config update failed: #{e.message}")
-    false
+    OpenStruct.new(status: 500, body: e.message)
   end
 
   def sanitize_catalog_data(catalog_data)

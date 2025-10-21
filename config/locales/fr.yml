@@ -131,7 +131,7 @@ fr:
         Elle est utilisée pour la fédération OntoPortal. Pour l'instant, ces valeurs de données complètent, sans les remplacer, les fichiers de configuration.
       edit_button: Éditer
       configuration_updated_successfully: Configuration de l'API mise à jour avec succès
-      configuration_update_error: Problème lors de la mise à jour de la configuration
+      configuration_update_error: 'Problème lors de la mise à jour de la configuration: %{error}'
     licenses:
       create:
         success: Licence renouvelée
