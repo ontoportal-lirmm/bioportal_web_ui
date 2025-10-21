@@ -107,8 +107,7 @@ class SubmissionsController < ApplicationController
       if response_error?(response)
         show_new_errors(response, partial: 'submissions/form_content', id: 'test')
       else
-        redirect_to "/ontologies/#{acronym}",
-                    notice: t('submissions.submission_updated_successfully'), status: :see_other
+        redirect_to edit_ontology_submission_path(acronym), notice: t('submissions.submission_updated_successfully')
       end
     else
       @errors = response_errors(response) if response_error?(response)
