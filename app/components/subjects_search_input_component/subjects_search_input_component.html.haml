@@ -12,9 +12,13 @@
       .subjects-list{ data: { subjects_target: "list" } }
 
   - Array(@values).each_with_index do |v, i|
+    - value = v[:value]
+    - label =  v[:label]
     - c.row do
       .nested-subjects-form-input-row
-        = helpers.text_input(label: '', name: "submission[hasDomain][#{i}]", value: v, readonly: true)
-  
+        = helpers.text_input(name: "", value: label, readonly: true)
+        = hidden_field_tag "submission[hasDomain][#{i}]", value
+
+
   - c.empty_state do
     = hidden_field_tag "submission[hasDomain][0]", ""

@@ -320,43 +320,20 @@ module OntologiesHelper
     end
   end
 
-  def subject_chip(subject)
-    begin
-      theme_taxonomy_ontologies = get_theme_taxonomy_ontologies()
-      text = subject.split('/').last.strip
-      url = subject
-      if !theme_taxonomy_ontologies.empty?
-        theme_taxonomy_ontologies.each do |ontology_acronym|
-          class_uri = "#{rest_url}/ontologies/#{ontology_acronym}/classes/#{CGI.escape(subject.strip)}"
-          response = LinkedData::Client::HTTP.get(
-            class_uri,
-            params = {
-              lang: "en",
-              display_context: false,
-              display_links: false,
-              include: "prefLabel"
-            }
-          )
-          
-          if response.prefLabel
-            text = response.prefLabel
-            url = class_uri.sub('data.', '')
-            break
-          end
-        end
-      end
+  def subject_chip(subject, theme_taxonomy_ontologies)
+    resolved = resolve_subject_uri(subject, theme_taxonomy_ontologies)
+    return nil unless resolved
 
-      render ChipButtonComponent.new(
-        text: text.titleize,
-        tooltip: subject,
-        url: url,
-        type: "clickable",
-        target: "_blank"
-      )
-    rescue => e
-      Rails.logger.warn("Failed to fetch prefLabel from ontology for '#{subject}': #{e.message}")
-      nil
-    end
+    render ChipButtonComponent.new(
+      text: resolved[:text].titleize,
+      tooltip: subject,
+      url: resolved[:url],
+      type: "clickable",
+      target: "_blank"
+    )
+  rescue => e
+    Rails.logger.warn("Failed to fetch prefLabel from ontology for '#{subject}': #{e.message}")
+    nil
   end
 
   def keyword_chip(keyword)

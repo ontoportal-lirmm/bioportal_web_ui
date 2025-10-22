@@ -150,7 +150,7 @@ class Admin::CatalogConfigurationController < ApplicationController
   def sanitize_catalog_data(catalog_data)
     catalog_data_sanitized = catalog_data
     # sanitize themeTaxonomy to let only the acronyms of the ontologies
-    catalog_data_sanitized[:themeTaxonomy] = catalog_data_sanitized[:themeTaxonomy].select { |url| url.start_with?($UI_URL) }.map { |url| url.split('/').last }
+    catalog_data_sanitized[:themeTaxonomy] = catalog_data_sanitized[:themeTaxonomy].select { |url| url.start_with?(rest_url) }.map { |url| url.split('/').last }
     return catalog_data_sanitized
   end
 
@@ -162,7 +162,9 @@ class Admin::CatalogConfigurationController < ApplicationController
     end
 
     config['rightsHolder'] = config['rightsHolder']&.first&.presence || '' if config['rightsHolder']
-    config['themeTaxonomy'] = config['themeTaxonomy'].map { |value| "#{$UI_URL.chomp('/')}/#{value}" }
+
+    # rebuild themeTaxonomy as URIs
+    config['themeTaxonomy'] = config['themeTaxonomy'].map { |value| "#{rest_url.chomp('/')}/#{value}" }
     config['themeTaxonomy'] << "http://vocabularies.unesco.org/thesaurus"
     config.compact
   end

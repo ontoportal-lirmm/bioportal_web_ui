@@ -13,22 +13,31 @@ export default class extends Controller {
     if (!uriSpan || !labelSpan) return
 
     const uri = uriSpan.textContent.trim()
+    const label = labelSpan.textContent.trim()
 
-    // ✅ Count ALL .nested-form-input-row in the entire form (or page)
+    // Count ALL .nested-form-input-row in the entire form (or page)
     const existingRows = document.querySelectorAll('.nested-subjects-form-input-row')
     const nextIndex = existingRows.length
 
     // Create new hidden input (or visible, as you prefer)
-    const input = document.createElement("input")
-    input.type = "text"
-    input.name = `submission[hasDomain][${nextIndex}]`
-    input.value = uri
-    input.readOnly = true
-    input.className = "form-control"
-    input.style.fontSize = "13px";
+    const visibleInput = document.createElement("input")
+    visibleInput.type = "text"
+    visibleInput.name = `submission[hasDomain][${nextIndex}]`
+    visibleInput.value = label
+    visibleInput.readOnly = true
+    visibleInput.className = "form-control"
+    visibleInput.style.fontSize = "13px";
+
+    // Hidden input storing URI
+    const hiddenInput = document.createElement("input")
+    hiddenInput.type = "hidden"
+    hiddenInput.name = `submission[hasDomain][${nextIndex}]`
+    hiddenInput.value = uri
+    
     const row = document.createElement("div")
     row.className = "nested-subjects-form-input-row"
-    row.appendChild(input)
+    row.appendChild(visibleInput)
+    row.appendChild(hiddenInput)
 
     // Append to the same container where other rows live
     // We find it by looking for a common parent (e.g., the nested form wrapper)
