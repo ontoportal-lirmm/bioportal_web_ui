@@ -320,38 +320,20 @@ module OntologiesHelper
     end
   end
 
-  def subject_chip(subject)
-    begin
-      agroportal_uri = "https://data.agroportal.lirmm.fr/ontologies/AGROVOC/classes/#{CGI.escape(subject.strip)}"
-      response = LinkedData::Client::HTTP.get(
-        agroportal_uri,
-        params = {
-          lang: "en",
-          display_context: false,
-          display_links: false,
-          include: "prefLabel"
-        }
-      )
+  def subject_chip(subject, theme_taxonomy_ontologies)
+    resolved = resolve_subject_uri(subject, theme_taxonomy_ontologies)
+    return nil unless resolved
 
-      if response.prefLabel
-        text = response.prefLabel
-        url = agroportal_uri.sub('data.', '')
-      else
-        text = subject.split('/').last.strip
-        url = subject
-      end
-
-      render ChipButtonComponent.new(
-        text: text.titleize,
-        tooltip: subject,
-        url: url,
-        type: "clickable",
-        target: "_blank"
-      )
-    rescue => e
-      Rails.logger.warn("Failed to fetch prefLabel from AGROVOC for '#{subject}': #{e.message}")
-      nil
-    end
+    render ChipButtonComponent.new(
+      text: resolved[:text].titleize,
+      tooltip: subject,
+      url: resolved[:url],
+      type: "clickable",
+      target: "_blank"
+    )
+  rescue => e
+    Rails.logger.warn("Failed to fetch prefLabel from ontology for '#{subject}': #{e.message}")
+    nil
   end
 
   def keyword_chip(keyword)

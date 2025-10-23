@@ -510,6 +510,12 @@ class OntologiesController < ApplicationController
     render 'ontologies/ontologies_selector/ontologies_selector_results'
   end
 
+  # app/controllers/ontologies_controller.rb
+  def subject_chips
+    @subjects = Array(params[:subjects])
+    render  partial: 'ontologies/sections/metadata/subject_chips', layout: false
+  end
+
   private
 
   def get_views(ontology)

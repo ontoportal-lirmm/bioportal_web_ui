@@ -1,10 +1,10 @@
 = turbo_frame_tag 'catalog-config' do
   - if flash[:notice]
     .mb-2
-      = render Display::AlertComponent.new(message: t('admin.catalog_configuration.configuration_updated_successfully'), closable: true, type: "success")
+      = render Display::AlertComponent.new(message: flash[:notice], closable: true, type: "success")
   - if flash[:alert]
     .mb-2
-      = render Display::AlertComponent.new(message: t('admin.catalog_configuration.configuration_update_error'), closable: true, type: "danger")
+      = render Display::AlertComponent.new(message: flash[:alert], closable: true, type: "danger")
 
   %div.mb-3
     %div.catalog-configuration-page-description
@@ -31,17 +31,7 @@
                   - label_tooltip = attr_metadata_header_label(attr_metadata)
                   - value_attr = @catalog_data[key.to_sym]
                   .form-group
-                    - if attr_metadata.enforce.include?("string")
-                      = text_input(name: "config[#{key}]", value: value_attr || "", label: label_tooltip)
-                    - elsif attr_metadata.enforce.include?("url")
-                      = url_input(name: "config[#{key}]", value: value_attr || "", label: label_tooltip)
-                    - elsif attr_metadata.enforce.include?("integer")
-                      = text_input(name: "#{key.to_s}", value: value_attr || 0, label: label_tooltip, disabled: true)
-                    - elsif attr_metadata.enforce.include?("boolean")
-                      = switch_input(id: "config-boolean-#{key}", name: "config[#{key}]", label: label_tooltip, checked: (value_attr == true), value: (value_attr == true).to_s, boolean_switch: true)
-                    - elsif attr_metadata.enforce.include?("date")
-                      = date_input(name: "config[#{key}]", value: (Date.parse(value_attr).to_s rescue value_attr), label: label_tooltip, max_date: Date.today)
-                    - elsif attr_metadata.enforce.include?("Agent")
+                    - if attr_metadata.enforce.include?("Agent")
                       - if attr_metadata.enforce.include?("no_list")
                         = render Input::InputFieldComponent.new(name: nil, label: label_tooltip, error_message: attribute_error(key.to_s)) do
                           = render TurboFrameComponent.new(id: "#{key}_0") do
@@ -53,7 +43,10 @@
                         = render Input::InputFieldComponent.new(name: "config[#{key}]", error_message: attribute_error(key.to_s)) do
                           = render NestedAgentSearchInputComponent.new(label: label_tooltip, agents: value_attr || [], agent_type: "", name_prefix: "config[#{key}]", editable: false, parent_id: key.to_s, create_new_agent_action: false)
                     - elsif attr_metadata.enforce.include?("list")
-                      - if attr_metadata.enforcedValues.nil?
+                      - if key == "themeTaxonomy"
+                        = hidden_field_tag "config[#{key}][]", "", id: "empty_config_#{key}"
+                        = ontologies_selector(id:'theme_taxonomy_ontologies_selector', label: label_tooltip, name: "config[#{key}]", selected: value_attr, show_advanced_options: false)
+                      - elsif attr_metadata.enforcedValues.nil?
                         = hidden_field_tag "config[#{key}][]", "", id: "empty_config_#{key}"
                         = render Input::InputFieldComponent.new(name: "config[#{key}]", label: label_tooltip, error_message: attribute_error(key.to_s)) do
                           = render NestedFormInputsComponent.new do |c|
@@ -64,7 +57,16 @@
                                 = text_input(name: "config[#{key}][]", value: val || "")
                       - else
                         = render Input::InputFieldComponent.new(name: "list_fields_#{key}", label: label_tooltip) do
-                          = link_to_modal("#{t('admin.catalog_configuration.edit_button')}", admin_edit_nested_form_catalog_configuration_path(key), { id: "edit_nested_form_#{key}", data: { show_modal_title_value: "#{label_tooltip}", show_modal_size_value: 'modal-xl' } })              
-    
+                          = link_to_modal("#{t('admin.catalog_configuration.edit_button')}", admin_edit_nested_form_catalog_configuration_path(key), { id: "edit_nested_form_#{key}", data: { show_modal_title_value: "#{label_tooltip}", show_modal_size_value: 'modal-xl' } })
+                    - elsif attr_metadata.enforce.include?("string")
+                      = text_input(name: "config[#{key}]", value: value_attr || "", label: label_tooltip)
+                    - elsif attr_metadata.enforce.include?("url")
+                      = url_input(name: "config[#{key}]", value: value_attr || "", label: label_tooltip)
+                    - elsif attr_metadata.enforce.include?("integer")
+                      = text_input(name: "#{key.to_s}", value: value_attr || 0, label: label_tooltip, disabled: true)
+                    - elsif attr_metadata.enforce.include?("boolean")
+                      = switch_input(id: "config-boolean-#{key}", name: "config[#{key}]", label: label_tooltip, checked: (value_attr == true), value: (value_attr == true).to_s, boolean_switch: true)
+                    - elsif attr_metadata.enforce.include?("date")
+                      = date_input(name: "config[#{key}]", value: (Date.parse(value_attr).to_s rescue value_attr), label: label_tooltip, max_date: Date.today)
       .save-button
         = form_save_button

@@ -48,7 +48,7 @@ module SearchContent
     end
   end
 
-  def search_ontologies_content(query:, page: 1, page_size: 10, filter_by_ontologies: [], filter_by_types: [])
+  def search_ontologies_content(query:, page: 1, page_size: 10, filter_by_ontologies: [], filter_by_types: [], show_ontologies: true)
     acronyms = filter_by_ontologies
     original_query = query
     types = filter_by_types
@@ -70,7 +70,7 @@ module SearchContent
     selected_onto.uniq!
     [selected_onto.first].compact.each do |o|
       acr = o.acronym
-      acronyms << acr
+      acronyms << acr unless acronyms.include?(acr)
       query.gsub!(/\b#{acr}\b/, "")
       query.gsub!(/\b#{acr.downcase}\b/, "")
       query.gsub!('-', " ")
@@ -85,8 +85,8 @@ module SearchContent
       query = "*#{query}*"
     end
 
-    results = search_content( q: query, qf: qf.join(' '), page: page, pagesize: page_size, ontologies: acronyms.first, types: types.join(','))
-    [search_content_result_to_json(original_query, query, results, ontologies, selected_onto), results.page,results.nextPage, results.totalCount]
+    results = search_content( q: query, qf: qf.join(' '), ontologies: acronyms.join(','), types: types.join(','))
+    [search_content_result_to_json(original_query, query, results, ontologies, selected_onto, show_ontologies), results.page,results.nextPage, results.totalCount]
   end
 
 
@@ -97,18 +97,20 @@ module SearchContent
 
   private
 
-  def search_content_result_to_json(query, changed_query, results, ontologies, selected_onto = [])
+  def search_content_result_to_json(query, changed_query, results, ontologies, selected_onto = [], show_ontologies)
     json = []
-    selected_onto = selected_onto.empty? ? ontologies.select { |x| x.name.downcase.include?(query.downcase) || x.acronym.downcase.include?(query.downcase) } : selected_onto
+    if show_ontologies        
+      selected_onto = selected_onto.empty? ? ontologies.select { |x| x.name.downcase.include?(query.downcase) || x.acronym.downcase.include?(query.downcase) } : selected_onto
 
-    json += selected_onto.map do |x|
-      {
-        id: ontology_path(id: x.acronym, p: 'summary'),
-        name: x.name,
-        acronym: x.acronym,
-        type: x.viewOf.blank? ? 'Ontology' : 'Ontology View',
-        label: nil
-      }
+      json += selected_onto.map do |x|
+        {
+          id: ontology_path(id: x.acronym, p: 'summary'),
+          name: x.name,
+          acronym: x.acronym,
+          type: x.viewOf.blank? ? 'Ontology' : 'Ontology View',
+          label: nil
+        }
+      end
     end
 
     changed_query.gsub!('*', '')

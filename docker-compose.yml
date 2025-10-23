@@ -20,8 +20,8 @@ x-app: &default-app
   environment: &env
     BUNDLE_WITHOUT: ""
     BUNDLE_PATH: /srv/ontoportal/bundle
-    DB_HOST: db
-    CACHE_HOST: cache
+    DB_HOST: 127.0.0.1
+    MEMCACHE_SERVERS: 127.0.0.1:11211
   tmpfs:
     - /tmp
     - /app/tmp/pids
@@ -61,9 +61,7 @@ services:
     <<: *default-app
     ports:
       - "3000:3000"
-    links:
-      - db
-      - cache
+    network_mode: "host"
 
   production:
     <<: *default-app
@@ -108,7 +106,7 @@ services:
     environment:
       BUNDLE_WITHOUT: ""
       DB_HOST: 127.0.0.1
-      CACHE_HOST: 127.0.0.1
+      MEMCACHE_SERVERS: 127.0.0.1:11211
 
   chrome-server:
     image: selenium/standalone-chrome:112.0-chromedriver-112.0-grid-4.9.0-20230421

@@ -125,7 +125,7 @@ en:
         It's used for the OntoPortal federation. For the moment, these data values complement but do not replace the configuration files
       edit_button: Edit
       configuration_updated_successfully: Configuration updated successfully
-      configuration_update_error: Problem updating the configuration
+      configuration_update_error: 'Problem updating the configuration: %{error}'
     licenses:
       create:
         success: License renewed successfully
@@ -1538,6 +1538,8 @@ en:
       an ontology, see %{link}
     version_helper_link: guidelines and recommendations.
     visibility: Visibility
+    theme_taxonomy_not_set: Please set the themeTaxonomy field in the admin page to use it for subjects search
+    subjects_notice: These subjects are from these set of ontologies %{ontologies}. If you want to add your subject please add it in the keywords section.
   submissions:
     actions: Actions
     delete_submission_alert:
