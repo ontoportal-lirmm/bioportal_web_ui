@@ -1,6 +1,5 @@
 # Run ontologies_web_ui
 
-## Using OntoPortal UI utilities script
 ### See help
 
 ```bash 
@@ -32,9 +31,20 @@ Goals:
 ```bash 
 bin/ontoportal dev --api-url <an ontoportal api url> --api-key <my_api_key>
 ```
+- Examples
+  - With local api
+  ```
+  bin/ontoportal dev --api-url http://localhost:9393 --api-key 1de0a270-29c5-4dda-b043-7c3580628cd5
+  ```
+  - With stageportal api
+  ```
+  bin/ontoportal dev --api-url https://data.stageportal.lirmm.fr --api-key 1de0a270-29c5-4dda-b043-7c3580628cd5
+  ```
 
 ### Run test with a local OntoPortal API
 ```bash 
-bin/ontoportal test 
+bin/ontoportal test # Running all tests
+./bin/ontoportal test test/system/submission_flows_test.rb # Running All tests from one file
+./bin/ontoportal test test/system/submission_flows_test.rb:75 # Running speicif test which line 75 is inside
 ```
 
