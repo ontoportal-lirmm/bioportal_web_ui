@@ -324,8 +324,7 @@ module ApplicationHelper
     items = [["/ontologies", t('layout.header.browse')],
              ["/mappings", t('layout.header.mappings')],
              ["/recommender", t("layout.header.recommender")],
-             ["/annotator", t("layout.header.annotator")],
-             ["/landscape", t("layout.header.landscape")]]
+             ["/annotator", t("layout.header.annotator")]]
   end
 
   def beta_badge(text = t('application.beta_badge_text'), tooltip: t('application.beta_badge_tooltip'))
