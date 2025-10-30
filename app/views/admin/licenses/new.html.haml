@@ -1,0 +1,15 @@
+= turbo_frame_tag "renew-license-form" do
+    = form_with(model: [:admin, @license]) do |form|
+        - if @license.errors.any?
+            - error_summary = pluralize(@license.errors.count, "error") + " " + t("admin.licenses.form.license_from_being_saved")
+            - error_details = @license.errors.full_messages.map { |msg| content_tag(:p, msg, class: "font-italic pl-3 mb-0") }.join
+            - full_error_html = (error_summary + "<br>".html_safe + error_details).html_safe
+            = render Display::AlertComponent.new(message: full_error_html, closable: true, type: "danger")
+
+        %div.form-group
+            %label{for: "license_encrypted_key"} License key
+            = text_area(:license, :encrypted_key, rows: 10, required: true, class: "form-control", aria: { describedBy: "licenseKeyHelpBlock" })
+            %small#licenseKeyHelpBlock.form-text.text-muted
+            = t("admin.licenses.form.paste_your_license")
+        %div.form-group
+            = form.submit t("admin.licenses.form.submit"), class: "btn btn-primary"

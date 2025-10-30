@@ -59,6 +59,7 @@ Rails.application.routes.draw do
 
     get ':ontology/collections', to: 'collections#index'
     get ':ontology/collections/show', to: 'collections#show'
+    get 'subject_chips', to: "ontologies#subject_chips"
   end
 
   # user ontologies
@@ -96,13 +97,14 @@ Rails.application.routes.draw do
       get ':collection/schema', to: 'search#show'
       get ':collection/data', to: 'search#search'
     end
-
+    resources :analytics, only: [:index]
   end
 
   post 'admin/clearcache', to: 'admin#clearcache'
   post 'admin/resetcache', to: 'admin#resetcache'
   post 'admin/clear_goo_cache', to: 'admin#clear_goo_cache'
   post 'admin/clear_http_cache', to: 'admin#clear_http_cache'
+  get 'metadata_administration', to: 'admin#metadata_administration'
   get 'admin/ontologies_report', to: 'admin#ontologies_report'
   post 'admin/refresh_ontologies_report', to: 'admin#refresh_ontologies_report'
   delete 'admin/ontologies', to: 'admin#delete_ontologies'

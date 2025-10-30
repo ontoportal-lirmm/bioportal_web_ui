@@ -1,6 +1,6 @@
 ---
 fr:
-  activaterecord:
+  activerecord:
     errors:
       models:
         license:
@@ -8,8 +8,7 @@ fr:
             encrypted_key:
               appliance_id_mismatch: ne correspond pas à l'ID de la machine virtuelle.
               invalid_license_key: est une clé de licence invalide.
-              no_appliance_id_for_comparison: n'a pas pu être validée. Impossible
-                de récupérer l'ID de la machine virtuelle.
+              no_appliance_id_for_comparison: n'a pas pu être validée. Impossible de récupérer l'ID de la machine virtuelle.
   admin:
     analytics:
       active_users: Utilisateurs actifs
@@ -132,7 +131,7 @@ fr:
         Elle est utilisée pour la fédération OntoPortal. Pour l'instant, ces valeurs de données complètent, sans les remplacer, les fichiers de configuration.
       edit_button: Éditer
       configuration_updated_successfully: Configuration de l'API mise à jour avec succès
-      configuration_update_error: Problème lors de la mise à jour de la configuration
+      configuration_update_error: 'Problème lors de la mise à jour de la configuration: %{error}'
     licenses:
       create:
         success: Licence renouvelée
@@ -633,6 +632,7 @@ fr:
     support_and_collaborations: Support & Collaborations
     twitter_news: Nouvelles
     users: Utilisateurs
+    agents: Agents
     view_full_site: Voir le site complet
     viewing_slice: 'Affichage de la slice:'
   instances:
@@ -1593,6 +1593,8 @@ fr:
       de version dans une ontologie, consultez %{link}
     version_helper_link: recommandations.
     visibility: Visibilité
+    theme_taxonomy_not_set: Veuillez définir le champ themeTaxonomy dans la page d'administration pour l'utiliser pour la recherche des sujets
+    subjects_notice: Ces sujets proviennent de l'ensemble d'ontologies %{ontologies}. Pour ajouter votre sujet, veuillez l'indiquer dans la section Keywords.
   submissions:
     actions: Actions
     delete_submission_alert:

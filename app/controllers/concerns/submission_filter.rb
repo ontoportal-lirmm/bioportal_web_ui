@@ -184,6 +184,7 @@ module SubmissionFilter
     filters_boolean_map = {
       show_views: { api_key: :also_include_views, default: 'true' },
       public_only: { api_key: :viewingRestriction, default: 'public' },
+      user_ontologies_only: { api_key: :administeredBy, default: 'true' },
       private_only: { api_key: :viewingRestriction, default: 'private' },
       show_retired: { api_key: :status, default: 'retired' }
     }
