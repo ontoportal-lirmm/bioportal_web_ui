@@ -145,8 +145,8 @@ module AgentHelper
     render_to_string(partial: partial, locals: { agent: agent })
   end
 
-  def agents_rest_url
-    rest_url + agents_path + "?page=1&pagesize=10" + "&apikey=#{get_apikey}"
+  def agents_rest_url(page = 1, pagesize = 10, display = nil)
+    rest_url + agents_path +  "?page=#{page}&pagesize=#{pagesize}" + (display ? "&display=#{display}" : '') + "&apikey=#{get_apikey}" 
   end
   
   def agent_field_name(name, name_prefix = '')
