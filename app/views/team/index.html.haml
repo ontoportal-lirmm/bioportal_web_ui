@@ -1,0 +1,31 @@
+.team-page-container
+  .team-page-header
+    %h2= t('layout.footer.team')
+    %p= t('layout.team.page_description')
+
+  .team-members-grid
+    - @team_members.each do |member|
+      .team-member-card
+        .team-member-image
+          - if member['image']
+            %img{src: asset_path("team/#{member['image']}"), alt: member['name'], onerror: "this.src='#{asset_path('team/placeholder.svg')}'"}
+          - else
+            .team-member-placeholder
+              = member['name'] ? member['name'][0] : '?'
+        .team-member-info
+          %h3.team-member-name= member['name']
+          %p.team-member-position= member['position']
+          %p.team-member-bio= member['bio']
+        .team-member-links
+          - if member['email']
+            %a.team-member-link{href: "mailto:#{member['email']}", title: "Email"}
+              %i.fas.fa-envelope
+          - if member['linkedin']
+            %a.team-member-link{href: member['linkedin'], target: "_blank", title: "LinkedIn"}
+              %i.fab.fa-linkedin
+          - if member['github']
+            %a.team-member-link{href: member['github'], target: "_blank", title: "GitHub"}
+              %i.fab.fa-github
+          - if member['dribbble']
+            %a.team-member-link{href: member['dribbble'], target: "_blank", title: "Dribbble"}
+              %i.fab.fa-dribbble

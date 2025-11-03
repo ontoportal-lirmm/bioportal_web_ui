@@ -123,6 +123,7 @@ Rails.application.routes.draw do
 
   get 'change_requests/create_synonym'
   match 'change_requests', to: 'change_requests#create', via: :post
+  get 'team', to: 'team#index'
 
   # resource for metadata ontologies
   scope :ontologies_metadata_curator do

@@ -742,6 +742,8 @@ en:
       terms_anchor: "#h-agroportal-terms-and-conditions-english"
       tools: Tools
       wiki: Wiki
+    team:
+      page_description: "Meet the talented individuals who make our mission possible. Our team combines expertise in semantic technologies, data science, and software development to deliver innovative solutions."
     header:
       account_setting: Account settings
       annotator: Annotator
