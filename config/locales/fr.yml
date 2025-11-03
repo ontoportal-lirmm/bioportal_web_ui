@@ -766,6 +766,8 @@ fr:
       terms_anchor: "#h-conditions-generales-dutilisation-dagroportal-francais"
       tools: Outils
       wiki: Wiki
+    team:
+      page_description: "Rencontrez les talents exceptionnels qui rendent notre mission possible. Notre équipe combine expertise en technologies sémantiques, science des données et développement logiciel pour offrir des solutions innovantes."
     header:
       account_setting: Paramètres du compte
       annotator: Annotateur

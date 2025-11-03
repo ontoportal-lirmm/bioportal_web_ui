@@ -1,0 +1,51 @@
+# Team members configuration
+# Edit this file to add/remove team members
+# Pictures should be placed in app/assets/images/team/
+
+team_members:
+  - name: "Dr. Sarah Johnson"
+    position: "Lead Developer"
+    bio: "Passionate about semantic web technologies and ontology development. Leading the development team with 10+ years of experience."
+    image: "sarah.png"
+    email: "sarah.johnson@example.com"
+    linkedin: "https://linkedin.com/in/sarahjohnson"
+    github: "https://github.com/sarahjohnson"
+
+  - name: "Michael Chen"
+    position: "Senior Backend Engineer"
+    bio: "Specializes in RESTful API design and data architecture. Ensuring robust and scalable backend services."
+    image: "sarah.png"
+    email: "michael.chen@example.com"
+    linkedin: "https://linkedin.com/in/michaelchen"
+    github: "https://github.com/michaelchen"
+
+  - name: "Emily Rodriguez"
+    position: "UX/UI Designer"
+    bio: "Creating intuitive and user-friendly interfaces. Focuses on accessibility and user experience."
+    image: "sarah.png"
+    email: "emily.rodriguez@example.com"
+    linkedin: "https://linkedin.com/in/emilyrodriguez"
+    dribbble: "https://dribbble.com/emilyrodriguez"
+
+  - name: "David Kim"
+    position: "Data Scientist"
+    bio: "Analyzing biomedical data and developing ML models for ontology classification and semantic similarity."
+    image: "sarah.png"
+    email: "david.kim@example.com"
+    linkedin: "https://linkedin.com/in/davidkim"
+    github: "https://github.com/davidkim"
+
+  - name: "Lisa Anderson"
+    position: "Project Manager"
+    bio: "Coordinating projects and ensuring timely delivery. Expert in agile methodologies and stakeholder communication."
+    image: "sarah.png"
+    email: "lisa.anderson@example.com"
+    linkedin: "https://linkedin.com/in/lisaanderson"
+
+  - name: "James Wilson"
+    position: "DevOps Engineer"
+    bio: "Maintaining infrastructure and deployment pipelines. Ensures high availability and performance of our services."
+    image: "sarah.png"
+    email: "james.wilson@example.com"
+    linkedin: "https://linkedin.com/in/jameswilson"
+    github: "https://github.com/jameswilson"
