@@ -1,90 +1,91 @@
 -if ontology
   .browse-ontology-container
-    .d-flex
-      .browse-ontology-description
-        .browse-ontology-title-bar
-          %a.browse-ontology-title{:href => onto_link, data: {'turbo': 'false'} , style: style_text, target: external_ontology? ? '_blank' : ''}
-            = ontology[:name]+" ("+ontology[:acronym]+")"
-            = private_ontology_icon(ontology[:private])
-            - if external_ontology?
-              %div{class: "federated-icon-#{@portal_name&.downcase} d-inline"}
-                = render Display::InfoTooltipComponent.new(text: "Federated ontology from #{ontology[:sources].map{|x| link_to(x,x)}.join(', ')}", icon: 'external-link.svg')
-            - if session[:user]&.admin? || ontology[:ontology][:administeredBy].include?(current_user&.id)
-              - ontology_status = status_string(ontology)
-              = render Display::InfoTooltipComponent.new(text: ontology_status, icon: submission_status_icons(ontology_status))
-        .browse-desc-container{data:{controller:"text-truncate", 'text-truncate-more-text-value': t('components.show_more') , 'text-truncate-less-text-value': t('components.show_less')}}
-          %p.browse-desc-text{'data-text-truncate-target': 'content'}
-            = ontology[:description]
-          .browse-show-more-button{data:{'text-truncate-target': 'button', 'action':"click->text-truncate#toggle"}}
-            = t('components.show_more')
+    .d-flex.flex-column.h-100
+      .d-flex
+        .browse-ontology-description
+          .browse-ontology-title-bar
+            %a.browse-ontology-title{:href => onto_link, data: {'turbo': 'false'} , style: style_text, target: external_ontology? ? '_blank' : ''}
+              = ontology[:name]+" ("+ontology[:acronym]+")"
+              = private_ontology_icon(ontology[:private])
+              - if external_ontology?
+                %div{class: "federated-icon-#{@portal_name&.downcase} d-inline"}
+                  = render Display::InfoTooltipComponent.new(text: "Federated ontology from #{ontology[:sources].map{|x| link_to(x,x)}.join(', ')}", icon: 'external-link.svg')
+              - if session[:user]&.admin? || ontology[:ontology][:administeredBy].include?(current_user&.id)
+                - ontology_status = status_string(ontology)
+                = render Display::InfoTooltipComponent.new(text: ontology_status, icon: submission_status_icons(ontology_status))
+          .browse-desc-container{data:{controller:"text-truncate", 'text-truncate-more-text-value': t('components.show_more') , 'text-truncate-less-text-value': t('components.show_less')}}
+            %p.browse-desc-text{'data-text-truncate-target': 'content'}
+              = ontology[:description]
+            .browse-show-more-button{data:{'text-truncate-target': 'button', 'action':"click->text-truncate#toggle"}}
+              = t('components.show_more')
 
 
-          - unless ontology[:fairScore].nil? || ontology[:fairScore].zero? || ontology[:acronym] == 'AGROVOC'
-            .browse-fair
-              %p.browse-fair-title
-                = t('components.fair_score')
-              .browse-progress-bar
-                .browse-faire-progress{:style => "width: #{ontology[:normalizedFairScore].to_s+"%"}; #{color ? 'background-color:' + color : ''}"}
-              %p.browse-fair-score
-                = ontology[:fairScore]
-              %a.browse-fair-details{:href => "#{onto_link}#fair-details", 'data-turbo': 'false', style: style_text}= t('components.details_details')
+            - unless ontology[:fairScore].nil? || ontology[:fairScore].zero? || ontology[:acronym] == 'AGROVOC'
+              .browse-fair
+                %p.browse-fair-title
+                  = t('components.fair_score')
+                .browse-progress-bar
+                  .browse-faire-progress{:style => "width: #{ontology[:normalizedFairScore].to_s+"%"}; #{color ? 'background-color:' + color : ''}"}
+                %p.browse-fair-score
+                  = ontology[:fairScore]
+                %a.browse-fair-details{:href => "#{onto_link}#fair-details", 'data-turbo': 'false', style: style_text}= t('components.details_details')
 
-      .browse-ontology-cards{style: color ? "color: #{color} !important" : ''}
-        = render SquareBadgeComponent.new(label: t('components.classes'),
-                                          count: ontology[:class_count_formatted],
-                                          link:  "#{onto_link}?p=classes",
-                                          color: color)
+        .browse-ontology-cards{style: color ? "color: #{color} !important" : ''}
+          = render SquareBadgeComponent.new(label: t('components.classes'),
+                                            count: ontology[:class_count_formatted],
+                                            link:  "#{onto_link}?p=classes",
+                                            color: color)
 
-        = render SquareBadgeComponent.new(label: ontology[:format] == 'SKOS' ? t('components.concepts') : t('components.instances'),
-                                                   count: ontology[:individual_count_formatted], color: color,
-                                                  link:  "#{onto_link}?p=#{ontology[:format] == 'SKOS' ? "classes" : "instances"}")
+          = render SquareBadgeComponent.new(label: ontology[:format] == 'SKOS' ? t('components.concepts') : t('components.instances'),
+                                                     count: ontology[:individual_count_formatted], color: color,
+                                                    link:  "#{onto_link}?p=#{ontology[:format] == 'SKOS' ? "classes" : "instances"}")
 
-        = render SquareBadgeComponent.new(label: t('components.projects'),  count: ontology[:project_count], color: color,
-                                          link:  "#{onto_link}#projects_section" )
+          = render SquareBadgeComponent.new(label: t('components.projects'),  count: ontology[:project_count], color: color,
+                                            link:  "#{onto_link}#projects_section" )
 
-        = render SquareBadgeComponent.new(label: t('components.notes'),  count: ontology[:note_count], color: color,
-                                          link: "#{onto_link}?p=notes" )
-
-
-    .d-flex.w-100.mt-1.flex-wrap
-      - if ontology[:creationDate]
-        %span.mr-1
-          = render ChipButtonComponent.new(type: "clickable", style: style_bg) do
-            %span.mr-1= t('components.submitted')
-            %span.browse-uploaded-date{data:{controller: 'timeago', 'timeago-datetime-value': ontology[:creationDate], 'timeago-add-suffix-value': 'true'}}
-            - if ontology[:contact]
-              %span.mx-1= t('components.by')
-              %span.contact-name-wrapper
-                %span.browse-uploaded-date.text-truncate
-                  = ontology[:contact].titleize
-
-      - if ontology[:released]
-        - date = render DateTimeFieldComponent.new(value: ontology[:released])
-        %span{data:{controller:'tooltip'}, title: t('components.creation_date', date: date)}
-          = render ChipButtonComponent.new(type: "clickable", style: style_bg) do
-            = DateTime.parse(date).year rescue date
-
-      - if ontology[:format]
-        %span.mx-1
-          = render ChipButtonComponent.new(type: "clickable", style: style_bg) do
-            = ontology[:format]
-      - if ontology_retired?(ontology)
-        %span.mx-1
-          = ontology_retired_badge(ontology)
-      - if ontology[:viewOfOnt]
-        %span.mx-1{data:{controller:'tooltip'}, title: t('components.view_of_the_ontology', ontology: ontology[:viewOfOnt].split('/').last )}
-          = render ChipButtonComponent.new(type: "clickable", text: t('components.view'), style: style_bg)
+          = render SquareBadgeComponent.new(label: t('components.notes'),  count: ontology[:note_count], color: color,
+                                            link: "#{onto_link}?p=notes" )
 
 
-      - ontology[:sources]&.each do |id|
-        - config = ontology_portal_config(id)&.last || internal_portal_config(id) || {}
-        - unless config.blank?
-          %span{style: "padding: 3px 0; margin-right: 0.25rem;"}
-            = portal_button(name: config[:name], color: config[:color], light_color: config[:"light-color"], link: ontoportal_ui_link(id), tooltip: "Source #{config[:name]}")
+      .d-flex.w-100.mt-auto.flex-wrap.pt-2
+        - if ontology[:creationDate]
+          %span.mr-1
+            = render ChipButtonComponent.new(type: "clickable", style: style_bg) do
+              %span.mr-1= t('components.submitted')
+              %span.browse-uploaded-date{data:{controller: 'timeago', 'timeago-datetime-value': ontology[:creationDate], 'timeago-add-suffix-value': 'true'}}
+              - if ontology[:contact]
+                %span.mx-1= t('components.by')
+                %span.contact-name-wrapper
+                  %span.browse-uploaded-date.text-truncate
+                    = ontology[:contact].titleize
 
-      - if session[:user]&.admin?
-        %div.mx-1{title: content_tag(:div, debug(ontology), style: 'height: 300px; overflow: scroll'), data:{controller: 'tooltip', 'tooltip-interactive-value': 'true'}}
-          = render ChipButtonComponent.new(type: "clickable", text: t('components.debug') , class: 'admin-background')
+        - if ontology[:released]
+          - date = render DateTimeFieldComponent.new(value: ontology[:released])
+          %span{data:{controller:'tooltip'}, title: t('components.creation_date', date: date)}
+            = render ChipButtonComponent.new(type: "clickable", style: style_bg) do
+              = DateTime.parse(date).year rescue date
+
+        - if ontology[:format]
+          %span.mx-1
+            = render ChipButtonComponent.new(type: "clickable", style: style_bg) do
+              = ontology[:format]
+        - if ontology_retired?(ontology)
+          %span.mx-1
+            = ontology_retired_badge(ontology)
+        - if ontology[:viewOfOnt]
+          %span.mx-1{data:{controller:'tooltip'}, title: t('components.view_of_the_ontology', ontology: ontology[:viewOfOnt].split('/').last )}
+            = render ChipButtonComponent.new(type: "clickable", text: t('components.view'), style: style_bg)
+
+
+        - ontology[:sources]&.each do |id|
+          - config = ontology_portal_config(id)&.last || internal_portal_config(id) || {}
+          - unless config.blank?
+            %span{style: "padding: 3px 0; margin-right: 0.25rem;"}
+              = portal_button(name: config[:name], color: config[:color], light_color: config[:"light-color"], link: ontoportal_ui_link(id), tooltip: "Source #{config[:name]}")
+
+        - if session[:user]&.admin?
+          %div.mx-1{title: content_tag(:div, debug(ontology), style: 'height: 300px; overflow: scroll'), data:{controller: 'tooltip', 'tooltip-interactive-value': 'true'}}
+            = render ChipButtonComponent.new(type: "clickable", text: t('components.debug') , class: 'admin-background')
 - else
   .browse-ontology-container
     .browse-sket
