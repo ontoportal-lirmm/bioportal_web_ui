@@ -762,6 +762,7 @@ en:
       support: Support
       agents : Agents
       sparql_editor: SPARQL Editor
+      explore: Explore
     notices:
       at: at
       slice: Slice

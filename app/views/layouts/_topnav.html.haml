@@ -41,14 +41,12 @@
         = render DropdownButtonComponent.new do |d|
           - d.header do
             = link_to("#", class: "nav-link top-nav-nav-link", role: "button") do
-              = "Explore"
+              = t('layout.header.explore')
           - d.with_section(divide: false) do |s|
             - s.item do
               = link_to(t("home.agents"), "/agents")
             - s.item do
               = link_to(t('taxonomy.groups_and_categories'), '/groups')
-            - s.item do
-              = link_to(t('application.projects'), '/projects')
             - s.item do
               = link_to("Landscape", "/landscape")
             - s.item do
