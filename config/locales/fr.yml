@@ -301,7 +301,7 @@ fr:
     input_hint: Entrez ou collez un texte à annoter...
     insert_sample_text: Insérer un texte d'exemple
     lemmatize: Lématiser
-    match_longest_only: Mot le le plus long uniquement
+    match_longest_only: Mot le plus long uniquement
     negation: Négation
     ontology: Ontologie
     options: Options
@@ -769,6 +769,7 @@ fr:
     header:
       account_setting: Paramètres du compte
       annotator: Annotateur
+      user_ontologies: Mes ontologies
       browse: Parcourir
       cite_us: Nous citer
       documentation: Documentation
@@ -784,6 +785,8 @@ fr:
       submit_feedback: Soumettre un retour d'expérience
       support: Support
       agents : Agents
+      sparql_editor: Editeur SPARQL
+      explore: Explorer
     notices:
       at: à
       slice: Slice
@@ -986,8 +989,11 @@ fr:
       search_placeholder: Filtrer les ontologies, e.g., AGROVOC, plante
       show_my_ontologies: Afficher mes ontologies seulement
       show_ontology_views: Afficher les vues de l'ontologie
+      show_public_ontology: Afficher seulement les ontologies publiques
       show_private_ontology: Afficher seulement les ontologies privées
       show_retired_ontologies: Afficher les ontologies retirées
+    user_ontologies:
+      no_ontology_found: "Prêt à contribuer ?\n Soumettez votre première ontologie et commencez à constituer votre collection."
     taxonomy_information_tooltip: Voir plus d'informations sur les %{taxonomy_type} dans       
     categories: Catégories
     change_notes: Notes de changement
@@ -1259,6 +1265,7 @@ fr:
         %{site}.
     see_details: Voir les détails
     showing: Affichage
+    showing_ontologies_user_size: Affichage de %{ontologies_size} sur %{analytics_size} ontologie en %{time}s
     showing_ontologies_size: Affichage de %{ontologies_size} sur %{analytics_size} de %{portals}
     submission: Soumission
     submit_new_ontology: Soumettre une nouvelle ontologie
@@ -1599,16 +1606,17 @@ fr:
     download: Télécharger
     edit_button: Éditer
     filter:
-      all_formats: Tous les formats
-      sort_by_classes: Trier par nombre de classes
-      sort_by_creation_date: Trier par date de création
-      sort_by_fair_score: Trier par score FAIR
-      sort_by_instances_concepts: Trier par nombre d'instances/concepts
-      sort_by_name: Trier par nom
-      sort_by_notes: Trier par notes
-      sort_by_popularity: Trier par popularité
-      sort_by_projects: Trier par projets
-      sort_by_submitted_date: Trier par date de soumission
+      all_formats: Formats
+      sort: Trier
+      sort_by_classes:  Nombre de classes
+      sort_by_creation_date: Date de création
+      sort_by_fair_score: Score FAIR
+      sort_by_instances_concepts: Nombre d'instances
+      sort_by_name: Nom
+      sort_by_notes: Notes
+      sort_by_popularity: Popularité
+      sort_by_projects: Projets
+      sort_by_submitted_date: Date de soumission
     go_to_api: Aller à l'API
     id: ID
     modified: Modifié

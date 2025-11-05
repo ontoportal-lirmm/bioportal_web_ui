@@ -267,12 +267,12 @@
   border-radius: 14px;
   box-shadow: rgba(100, 100, 111, 0.08) 0 7px 29px 0;
   border: none;
-  // border: 1px solid #dee2e6;
+  border: 1px solid #dee2e6;
   padding: 20px 20px;
   margin-bottom: 20px;
   font-size: 16px;
   position: absolute;
-  width: 828px;
+  width: 525px;
   z-index: 1;
 
 }
@@ -288,6 +288,8 @@
 .browse-search-bar select {
   border: none;
   background-color: white;
+  border-radius: 14px;
+  border: 1px solid #dee2e6;
   padding: 20px 20px;
   margin: 1px;
   font-size: 16px;
@@ -307,17 +309,16 @@
 
 .browse-search-bar .browse-format-filter {
   position: absolute;
-  margin-left: 500px;
+  margin-left: 530px;
   z-index: 2;
-  width: 150px;
+  width: 115px;
 }
 
 .browse-search-bar .browse-sort-by-filter {
   position: absolute;
-  margin-left: 632px;
+  margin-left: 650px;
   z-index: 2;
-  width: 200px;
-  border-radius: 0 14px 14px 0;
+  width: 170px;
 }
 
 .browse-search-button {
