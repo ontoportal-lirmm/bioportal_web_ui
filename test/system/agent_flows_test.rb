@@ -19,7 +19,7 @@ class AgentFlowsTest < ApplicationSystemTestCase
 
   test "go agents page and create an agent person and edit it" do
     visit root_url
-    click_on "Support"
+    click_on "Explore"
     click_link(href: '/agents')
 
     wait_for_text "Create agent"
