@@ -33,7 +33,8 @@
                 = link_to(t('layout.header.account_setting'), "/account")
             - d.with_section do |s|
               - s.item do
-                = link_to(t('layout.header.user_ontologies'), "/my-ontologies")
+                = link_to(t('layout.header.user_ontologies') + ' ', "/my-ontologies")
+                %span.experimental-badge PREVIEW
             - d.with_section do |s|
               - s.item do
                 = link_to(t('layout.header.logout'), logout_path)
@@ -50,7 +51,8 @@
             - s.item do
               = link_to("Landscape", "/landscape")
             - s.item do
-              = link_to(t("layout.header.sparql_editor"), "#")
+              = link_to(t("layout.header.sparql_editor") + ' ', "#")
+              %span.experimental-badge PREVIEW
             - s.item do
               = link_to(t("statistics.ontology_visits"), "/visits")
             - s.item do
