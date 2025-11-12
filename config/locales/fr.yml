@@ -1758,3 +1758,7 @@ fr:
     name: nom
     ontology_visits: Visites de l'ontologie
     visits: visites
+  sparql_endpoint:
+    description: Interrogez des ensembles de données structurés à l'aide de SPARQL
+      pour récupérer, filtrer et manipuler efficacement des artefacts sémantiques.
+    title: Éditeur de requêtes SPARQL

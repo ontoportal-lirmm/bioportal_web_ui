@@ -1703,3 +1703,7 @@ en:
     name: name
     ontology_visits: Ontology visits
     visits: visits
+  sparql_endpoint:
+    description: 'Query structured datasets using SPARQL to retrieve, filter, and
+      manipulate semantic artefacts efficiently. '
+    title: SPARQL Query Editor
