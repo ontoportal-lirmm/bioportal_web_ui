@@ -457,6 +457,9 @@ module ApplicationHelper
   end
 
   def category_is_parent?(parents_list, category)
+    # Handle nil or empty parents_list
+    return [false, ''] unless parents_list.respond_to?(:keys)
+
     is_parent = parents_list.keys.include?(category.id)
     parent_error_message = t('admin.categories.category_used_parent')
     parents_list[category.id].each do |c|
