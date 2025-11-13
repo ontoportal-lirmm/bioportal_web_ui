@@ -137,7 +137,8 @@
       .home-sub-section-middle
         %div.align-items
           %h4.margin-items= t('home.agents')
-          = render IconWithTooltipComponent.new(icon: 'json.svg',link: agents_rest_url, size:'small', style: "margin-left: 8px; vertical-align: top;", title: t("components.go_to_api"))  
+          = render Display::InfoTooltipComponent.new(text: t('agents.description', portalName: $SITE) )
+          = agents_homepage_link          
         %hr.home-section-line/
         = turbo_frame_tag "agents_frame", src: home_agents_path, loading: "lazy" do
           .home-agents-container

@@ -307,6 +307,11 @@ module AgentHelper
     return orcid.split("/").last
   end
 
+  def agents_homepage_link(style: '', ontology: nil)
+    custom_style = "font-size: 50px; line-height: 0.5; margin-left: 6px; margin-bottom: 6px; vertical-align: top; #{style}".strip
+    ontology = ontology || 'all'
+    render IconWithTooltipComponent.new(icon: 'json.svg',link: agents_rest_url, target: '_blank', title: t('home.go_to_api'), size:'small', style: custom_style)  
+  end
 
   def agents_create_button
     link_to_modal(
