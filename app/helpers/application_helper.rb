@@ -33,6 +33,10 @@ module ApplicationHelper
   def read_only_enabled?
     $READ_ONLY_PORTAL && !current_user_admin?
   end
+  
+  def agents_enabled?
+    $AGENTS_ENABLED 
+  end
 
   def portal_name_from_uri(uri)
     URI.parse(uri).hostname.split('.').first

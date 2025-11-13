@@ -15,13 +15,20 @@ Rails.application.routes.draw do
   get '/notes/new_reply', to: 'notes#new_reply'
   delete '/notes', to: 'notes#destroy'
   resources :notes, constraints: { id: /.+/ }
-  get 'agents/:id', to: 'agents#details',  constraints: { id: /[0-9a-f\-]+/ }
-  get 'agents/:id/show', to: 'agents#show',  constraints: { id: /[0-9]+/ }
-  get 'agents/show_search', to: 'agents#show_search'
-  get 'agents/:id/usages', to: 'agents#agent_usages', constraints: { id: /.+/ }
-  post 'agents/:id/usages', to: 'agents#update_agent_usages', constraints: { id: /.+/ }
-  resources :agents, constraints: { id: /.+/ }
-  post 'agents/:id', to: 'agents#update', constraints: { id: /.+/ }
+
+  # Agents
+  if $AGENTS_ENABLED
+    get 'agents/:id', to: 'agents#details',  constraints: { id: /[0-9a-f\-]+/ }
+    get 'agents/:id/show', to: 'agents#show',  constraints: { id: /[0-9]+/ }
+    get 'agents/show_search', to: 'agents#show_search'
+    get 'agents/:id/usages', to: 'agents#agent_usages', constraints: { id: /.+/ }
+    post 'agents/:id/usages', to: 'agents#update_agent_usages', constraints: { id: /.+/ }
+    resources :agents, constraints: { id: /.+/ }
+    post 'agents/:id', to: 'agents#update', constraints: { id: /.+/ }
+  else
+    match 'agents/*path', to: 'errors#not_found', via: :all
+    match 'agents', to: 'errors#not_found', via: :all
+  end
 
   resources :projects, constraints: { id: /[^\/]+/ }
 

@@ -299,8 +299,9 @@ module AgentHelper
     ) do
       chip_content
     end
-  
-    url.present? ? link_to(chip, url, class: 'text-decoration-none', target: target, rel: 'noopener noreferrer') : chip
+
+    chip_is_clickable = url.present? && agents_enabled?
+    chip_is_clickable ? link_to(chip, url, class: 'text-decoration-none', target: target, rel: 'noopener noreferrer') : chip
   end
 
   def orcid_number(orcid)
