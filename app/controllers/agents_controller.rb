@@ -1,5 +1,7 @@
 class AgentsController < ApplicationController
-  include TurboHelper, AgentHelper
+  include TurboHelper, AgentHelper, ApplicationHelper
+  
+  before_action :authorize_admin unless helpers.agents_enabled?
   before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
       layout :determine_layout, only: [:index, :details]
   def index

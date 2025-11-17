@@ -582,6 +582,7 @@ fr:
     fill_text: Veuillez remplir le texte approprié à partir de l'image fournie
     get_annotations: Obtenir des annotations
     get_recommendations: Obtenir des recommandations
+    go_to_api: Aller à l'API
     include_comment: Veuillez inclure votre commentaire
     include_email: Veuillez inclure votre email
     include_name: Veuillez inclure votre nom

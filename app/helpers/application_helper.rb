@@ -33,6 +33,10 @@ module ApplicationHelper
   def read_only_enabled?
     $READ_ONLY_PORTAL && !current_user_admin?
   end
+  
+  def agents_enabled?
+    $AGENTS_ENABLED 
+  end
 
   def portal_name_from_uri(uri)
     URI.parse(uri).hostname.split('.').first
@@ -457,6 +461,9 @@ module ApplicationHelper
   end
 
   def category_is_parent?(parents_list, category)
+    # Handle nil or empty parents_list
+    return [false, ''] unless parents_list.respond_to?(:keys)
+
     is_parent = parents_list.keys.include?(category.id)
     parent_error_message = t('admin.categories.category_used_parent')
     parents_list[category.id].each do |c|
