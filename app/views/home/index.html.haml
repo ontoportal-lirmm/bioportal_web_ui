@@ -134,7 +134,7 @@
             %a{:href => "/landscape#fairness_assessment"}
               %div.home-fair-details
                 %p= t('home.fair_details')
-      - if $AGENTS_ENABLED
+      - if agents_enabled?
         .home-sub-section-middle
           %div.align-items
             %h4.margin-items= t('home.agents')
