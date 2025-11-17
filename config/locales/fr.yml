@@ -1762,3 +1762,4 @@ fr:
     description: Interrogez des ensembles de données structurés à l'aide de SPARQL
       pour récupérer, filtrer et manipuler efficacement des artefacts sémantiques.
     title: Éditeur de requêtes SPARQL
+    private_ontology_warning: Rendez l'ontologie publique pour activer l'accès depuis l’endpoint SPARQL.

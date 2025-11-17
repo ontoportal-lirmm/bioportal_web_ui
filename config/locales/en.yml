@@ -1707,3 +1707,5 @@ en:
     description: 'Query structured datasets using SPARQL to retrieve, filter, and
       manipulate semantic artefacts efficiently. '
     title: SPARQL Query Editor
+    private_ontology_warning: Make the ontology public to enable access from the SPARQL endpoint.
+
