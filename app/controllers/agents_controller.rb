@@ -1,5 +1,5 @@
 class AgentsController < ApplicationController
-  before_action :authorize_admin unless @AGENTS_ENABLED
+  before_action :authorize_admin unless agents_enabled?
   include TurboHelper, AgentHelper
   before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
       layout :determine_layout, only: [:index, :details]
