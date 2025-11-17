@@ -10,6 +10,7 @@ $REST_URL = ENV['API_URL']
 $BIOMIXER_URL = ENV['BIOMIXER_URL']
 $ANNOTATOR_URL = $PROXY_URL = ENV['ANNOTATOR_URL'].blank? ? "https://services.tesportal.lirmm.fr/annotator" : ENV['ANNOTATOR_URL']
 $FAIRNESS_URL = ENV['FAIRNESS_URL']
+$AGENTS_ENABLED = ENV["AGENTS_ENABLED"].to_s.downcase == "true"
 
 # Resource term
 $RESOURCE_TERM = ENV['RESOURCE_TERM'] || 'ontology'

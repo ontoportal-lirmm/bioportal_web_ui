@@ -44,8 +44,9 @@
             = link_to("#", class: "nav-link top-nav-nav-link", role: "button") do
               = t('layout.header.explore')
           - d.with_section(divide: false) do |s|
-            - s.item do
-              = link_to(t("home.agents"), "/agents")
+            - if agents_enabled?
+              - s.item do
+                = link_to(t("home.agents"), "/agents")
             - s.item do
               = link_to(t('taxonomy.groups_and_categories'), '/groups')
             - s.item do

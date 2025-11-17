@@ -14,6 +14,7 @@ env:
   API_URL: http://localhost:9393
   REMOTE_API_KEY: 8b5b7825-538d-40e0-9e9e-5ab9274a9aeb
   REMOTE_API_URL: https://data.bioontology.org
+  AGENTS_ENABLED: true
   BIOMIXER_URL: ${{ secrets.BIOMIXER_URL }}
   FAIRNESS_URL: ${{ secrets.FAIRNESS_URL }}
   ANNOTATOR_URL: ${{ secrets.ANNOTATOR_URL }}

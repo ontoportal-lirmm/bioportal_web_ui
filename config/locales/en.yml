@@ -568,6 +568,7 @@ en:
     fill_text: Please fill in the proper text from the supplied image
     get_annotations: Get annotations
     get_recommendations: Get recommendations
+    go_to_api: Go to API
     include_comment: Please include your comment
     include_email: Please include your email
     include_name: Please include your name
