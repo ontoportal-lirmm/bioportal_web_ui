@@ -5,7 +5,6 @@ import { getYasgui } from '../mixins/useYasgui'
 export default class extends Controller {
   static values = {
     proxy: String,
-    username: String,
     apikey: String,
     graph: String,
   }
@@ -19,7 +18,6 @@ export default class extends Controller {
           endpoint: this.#proxyUrl(), 
           acceptHeaderGraph: false,
           acceptHeaderUpdate: false,
-          namedGraphs: [this.graphValue],
         }
       })
 
@@ -28,7 +26,7 @@ export default class extends Controller {
   }
 
   #proxyUrl(){
-    return `${this.proxyValue}?apikey=${this.apikeyValue}&username=${this.usernameValue}`
+    return `${this.proxyValue}?default-graph-uri=${this.graphValue}&apikey=${this.apikeyValue}`
   }
 
   #addExampleTabs() {
@@ -54,7 +52,7 @@ WHERE {
   BIND(datatype(?object) AS ?datatype)
 }
 GROUP BY ?property ?datatype
-ORDER BY DESC(?usageCount)`
+ORDER BY DESC(?usageCount) LIMIT 50`
         },
         {
           name: "Explore All Triples",

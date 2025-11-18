@@ -22,7 +22,6 @@ x-app: &default-app
     BUNDLE_PATH: /srv/ontoportal/bundle
     DB_HOST: 127.0.0.1
     MEMCACHE_SERVERS: 127.0.0.1:11211
-    SPARQL_ENDPOINT_URL: http://0.0.0.0:8890/sparql
   tmpfs:
     - /tmp
     - /app/tmp/pids
