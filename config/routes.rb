@@ -142,8 +142,10 @@ Rails.application.routes.draw do
   get 'home/metrics', to: 'home#metrics'
   get 'home/agents', to: 'home#agents'
   get 'status/:portal_name', to: 'home#federation_portals_status'
-
+  
+  # SPARQL 
   match 'sparql_proxy', to: 'admin#sparql_endpoint', via: [:get, :post]
+  get 'sparql', to: 'sparql_endpoint#index', as: 'sparql_endpoint'
 
   # Top-level pages
   match '/feedback', to: 'home#feedback', via: [:get, :post]

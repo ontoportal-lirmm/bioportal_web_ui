@@ -6,6 +6,7 @@ $AGENTS_ENABLED = ENV["AGENTS_ENABLED"].to_s.downcase == "true"
 # Organization info
 $ORG = ENV['ORG']
 $ORG_URL = ENV['ORG_URL']
+$SPARQL_ENDPOINT_URL = ENV['SPARQL_ENDPOINT_URL']
 
 # Site name (required)
 $SITE = ENV['SITE']

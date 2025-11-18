@@ -60,9 +60,9 @@ module SparqlHelper
     end
   end
 
-  def sparql_query_container(username: current_user&.username, graph: nil, apikey: get_apikey)
+  def sparql_query_container(username: current_user&.username, graph: nil, apikey: get_apikey, sparql_endpoint: "/sparql_proxy/")
     content_tag(:div, '', data: { controller: 'sparql',
-                                  'sparql-proxy-value': '/sparql_proxy/',
+                                  'sparql-proxy-value': $SPARQL_ENDPOINT_URL,
                                   'sparql-apikey-value': apikey,
                                   'sparql-username-value': username,
                                   'sparql-graph-value': graph })
