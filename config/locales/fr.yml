@@ -1764,3 +1764,4 @@ fr:
       pour récupérer, filtrer et manipuler efficacement des artefacts sémantiques.
     title: Éditeur de requêtes SPARQL
     private_ontology_warning: Rendez l'ontologie publique pour activer l'accès depuis l’endpoint SPARQL.
+    edit_sample_queries: Éditer les requêtes d'exemple

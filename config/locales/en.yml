@@ -1709,4 +1709,4 @@ en:
       manipulate semantic artefacts efficiently. '
     title: SPARQL Query Editor
     private_ontology_warning: Make the ontology public to enable access from the SPARQL endpoint.
-
+    edit_sample_queries: Edit sample queries

@@ -60,14 +60,28 @@ module SparqlHelper
     end
   end
 
-  def sparql_query_container(username: current_user&.username, graph: nil, apikey: get_apikey, sparql_endpoint: "/sparql_proxy/")
+  def sparql_query_container(username: current_user&.username, graph: nil, apikey: get_apikey, sample_queries: nil, sparql_endpoint: "/sparql_proxy/")
     content_tag(:div, '', data: { controller: 'sparql',
                                   'sparql-proxy-value': $SPARQL_ENDPOINT_URL,
                                   'sparql-apikey-value': apikey,
                                   'sparql-username-value': username,
-                                  'sparql-graph-value': graph })
+                                  'sparql-graph-value': graph,
+                                  'sparql-sample-queries-value': sample_queries,
+                                })
   end
 
+  def get_catalog_sample_queries
+    begin
+      response = LinkedData::Client::HTTP.get("#{$REST_URL}", {include: "sampleQueries", display_context: false, display_links: false}, headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      })
+      response.to_hash[:sampleQueries]
+    rescue => e
+      logger.error "Failed to fetch catalog sample queries: #{e.message}"
+      []
+    end
+  end
   private
 
   def is_allowed_query?(sparql_query)
