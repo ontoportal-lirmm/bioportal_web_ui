@@ -667,6 +667,12 @@ module OntologiesHelper
                                       size: 'medium', title: t('ontologies.add_new_submission'))
   end
 
+  def ontology_admin_button
+    return unless @ontology.admin?(session[:user])
+    render RoundedButtonComponent.new(link: admin_ontology_path(@ontology.acronym), icon: 'icons/settings.svg',
+                                      size: 'medium', title: t('ontologies.administration'))
+  end
+
   def ontology_edit_button
     return unless @ontology.admin?(session[:user])
     render RoundedButtonComponent.new(link: edit_ontology_submission_path(ontology_id: @ontology.acronym, id: @submission_latest.id.split('/').last), icon: 'edit.svg',

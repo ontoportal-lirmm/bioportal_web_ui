@@ -1,0 +1,25 @@
+= turbo_frame_tag "admin_log_frame" do
+  - if @log.blank?
+    %p= t('ontologies.admin.log.no_log')
+  - else
+    - begin
+      - logs = @log.is_a?(String) ? JSON.parse(@log) : @log
+      - logs = [logs] unless logs.is_a?(Array)
+      - logs.each do |entry|
+        - entry = entry.to_h
+        - if entry.is_a?(Hash)
+          - severity_class = case entry[:severity]
+            - when 'ERROR' then 'text-danger'
+            - when 'DEBUG' then 'text-warning'
+            - when 'INFO' then 'text-success'
+            - else ''
+          = "[#{entry[:timestamp]}] <span class=\"#{severity_class}\">#{entry[:severity]}:</span> #{entry[:message]}".html_safe
+        - else
+          = entry.to_s
+    - rescue => e
+      - if @log.is_a?(String)
+        - @log.split("\n").each do |line|
+          %div= line
+      - else
+        %div= @log.to_s
+        %div.text-danger= t('ontologies.admin.log.parse_error', message: e.message)

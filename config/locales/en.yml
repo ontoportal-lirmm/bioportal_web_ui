@@ -946,6 +946,32 @@ en:
       - %{message}'
   ontologies:
     access_rights_information: Additional license and access rights information
+    admin:
+      title: "Administration page"
+      submissions:
+        title: "Submissions"
+        table:
+          select: "Select"
+          submission_id: "Submission ID"
+          release_date: "Release Date"
+          status: "Status"
+          actions: "Actions"
+        delete: "Delete"
+        confirm_delete: "Are you sure?"
+        delete_selected: "Delete Selected"
+        confirm_delete_selected: "Are you sure you want to delete selected submissions?"
+        select_at_least_one: "Please select at least one submission to delete."
+      log:
+        title: "Processing Log"
+        loading: "Loading log..."
+        no_log: "No log available."
+        parse_error: "Error parsing log: %{message}"
+      ontology:
+        title: "Ontology"
+        warning: "Warning: Deleting the ontology is irreversible. All submissions and metadata will be lost."
+        delete: "Delete Ontology"
+        confirm_delete: "Are you sure you want to delete the ENTIRE ontology? This cannot be undone."
+    administration: "Administration"
     add_new_submission: Add new submission
     admin_links: Administration links
     administrator: 'Administrator:'

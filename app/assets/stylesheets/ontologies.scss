@@ -316,3 +316,54 @@ $widget-table-border-color: #EFEFEF;
   border-radius: 10px;
   position: relative;
 }
+
+// Ontology Administration Page
+.ontology_admin {
+  padding: 20px;
+
+  h2 {
+    margin-bottom: 20px;
+    color: var(--primary-color);
+  }
+
+  .admin-section {
+    margin-bottom: 30px;
+    
+    .card-header {
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    
+    .card-body {
+      padding: 20px;
+    }
+  }
+
+  .admin-warning-text {
+    color: #dc3545;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+  }
+
+  .admin-log-container {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 15px;
+    max-height: 500px;
+    overflow-y: auto;
+    font-family: monospace;
+    white-space: pre-wrap;
+    font-size: 0.9em;
+    line-height: 1.4;
+  }
+  
+  .admin-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+  }
+}

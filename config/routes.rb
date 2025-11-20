@@ -69,7 +69,11 @@ Rails.application.routes.draw do
   resources :ontologies do
     resources :submissions do
       get 'edit_properties'
+      delete :destroy, on: :collection
     end
+
+    get 'admin', on: :member
+    get 'admin/log', to: 'ontologies#admin_log', on: :member
 
     get 'metrics'
     get 'metrics_evolution'

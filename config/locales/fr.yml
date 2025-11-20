@@ -978,6 +978,32 @@ fr:
   ontologies:
     access_rights_information: Informations supplémentaires sur la licence et les
       droits d'accès
+    admin:
+      title: "Page d'administration"
+      submissions:
+        title: "Soumissions"
+        table:
+          select: "Sélectionner"
+          submission_id: "ID de soumission"
+          release_date: "Date de publication"
+          status: "Statut"
+          actions: "Actions"
+        delete: "Supprimer"
+        confirm_delete: "Êtes-vous sûr ?"
+        delete_selected: "Supprimer la sélection"
+        confirm_delete_selected: "Êtes-vous sûr de vouloir supprimer les soumissions sélectionnées ?"
+        select_at_least_one: "Veuillez sélectionner au moins une soumission à supprimer."
+      log:
+        title: "Journal de traitement"
+        loading: "Chargement du journal..."
+        no_log: "Aucun journal disponible."
+        parse_error: "Erreur lors de l'analyse du journal : %{message}"
+      ontology:
+        title: "Ontologie"
+        warning: "Attention : La suppression de l'ontologie est irréversible. Toutes les soumissions et métadonnées seront perdues."
+        delete: "Supprimer l'ontologie"
+        confirm_delete: "Êtes-vous sûr de vouloir supprimer TOUTE l'ontologie ? Cette action est irréversible."
+    administration: "Administration"
     add_new_submission: Ajouter une nouvelle soumission
     admin_links: Liens d'administratiion
     administrator: 'Administrateur :'
