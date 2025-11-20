@@ -68,6 +68,7 @@ class SubmissionsController < ApplicationController
 
   def edit
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
+    @submission_latest = @ontology.explore.latest_submission({ display: 'sampleQueries' })
     ontology_not_found(params[:ontology_id]) unless @ontology
     category_attributes = submission_metadata.group_by{|x| x['category']}.transform_values{|x| x.map{|attr| attr['attribute']} }
     category_attributes = category_attributes.reject{|key| ['no'].include?(key.to_s)}

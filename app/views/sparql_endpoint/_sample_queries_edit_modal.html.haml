@@ -1,0 +1,8 @@
+= render_in_modal do
+  - @title = t('admin.categories.edit.edit_category')
+  .sparql-notifications
+  .edit_sparql_container 
+    = sparql_query_container(sparql_endpoint: $SPARQL_ENDPOINT_URL, sample_queries: @sample_queries, graph: @graph)
+  .save-button
+    = regular_button('queries-save-button', t('components.save_button'), variant: "primary", size: "slim") do
+      = inline_svg_tag "check.svg"

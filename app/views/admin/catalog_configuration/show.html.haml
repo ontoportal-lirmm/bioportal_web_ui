@@ -42,6 +42,9 @@
                       - else
                         = render Input::InputFieldComponent.new(name: "config[#{key}]", error_message: attribute_error(key.to_s)) do
                           = render NestedAgentSearchInputComponent.new(label: label_tooltip, agents: value_attr || [], agent_type: "", name_prefix: "config[#{key}]", editable: false, parent_id: key.to_s, create_new_agent_action: false)
+                    - elsif key == "sampleQueries"
+                      = render Input::InputFieldComponent.new(name: "config[#{key}]", label: "Sample Queries", error_message: attribute_error(key.to_s)) do
+                        = render SampleQueriesEditComponent.new()
                     - elsif attr_metadata.enforce.include?("list")
                       - if key == "themeTaxonomy"
                         = hidden_field_tag "config[#{key}][]", "", id: "empty_config_#{key}"
@@ -68,5 +71,6 @@
                       = switch_input(id: "config-boolean-#{key}", name: "config[#{key}]", label: label_tooltip, checked: (value_attr == true), value: (value_attr == true).to_s, boolean_switch: true)
                     - elsif attr_metadata.enforce.include?("date")
                       = date_input(name: "config[#{key}]", value: (Date.parse(value_attr).to_s rescue value_attr), label: label_tooltip, max_date: Date.today)
+
       .save-button
         = form_save_button
