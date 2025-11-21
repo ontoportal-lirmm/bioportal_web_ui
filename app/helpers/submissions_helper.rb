@@ -208,7 +208,7 @@ module SubmissionsHelper
   end
 
   def ontology_properties
-    ['acronym', 'name', [t('submission_inputs.visibility'), :viewingRestriction], 'viewOf', ['Groups', :group], ['Categories', :hasDomain], [t('submission_inputs.administrators'), :administeredBy]]
+    ['acronym', 'name', [t('submission_inputs.visibility'), :viewingRestriction], 'viewOf', ['Groups', :group], ['Categories', :hasDomain], [t('submission_inputs.administrators'), :administeredBy], ['SPARQL Queries', :sampleQueries]]
   end
 
   def submission_editable_properties
@@ -290,7 +290,7 @@ module SubmissionsHelper
       end
     end
 
-    reject_metadata = %w[keywords hasDomain abstract description uploadFilePath contact pullLocation hasOntologyLanguage hasLicense bugDatabase knownUsage version notes deprecated status]
+    reject_metadata = %w[keywords hasDomain abstract description uploadFilePath contact pullLocation hasOntologyLanguage hasLicense bugDatabase knownUsage version notes deprecated status sampleQueries]
     label = inline_save? ? '' : nil
 
     if selected_attribute?('abstract')
@@ -367,6 +367,11 @@ module SubmissionsHelper
       end
     end
 
+    if selected_attribute?('sampleQueries')
+      output += render Input::InputFieldComponent.new(name: "config[sampleQueries]", label: "Sample Queries", error_message: attribute_error("sampleQueries")) do
+        render SampleQueriesEditComponent.new(graph: @submission.id)
+      end  
+    end
     render TurboFrameComponent.new(id: frame_id) do
       output.html_safe
     end

@@ -68,11 +68,10 @@ class SubmissionsController < ApplicationController
 
   def edit
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
-    @submission_latest = @ontology.explore.latest_submission({ display: 'sampleQueries' })
     ontology_not_found(params[:ontology_id]) unless @ontology
     category_attributes = submission_metadata.group_by{|x| x['category']}.transform_values{|x| x.map{|attr| attr['attribute']} }
     category_attributes = category_attributes.reject{|key| ['no'].include?(key.to_s)}
-    category_attributes['general'] << %w[acronym name groups administeredBy]
+    category_attributes['general'] << %w[acronym name groups administeredBy sampleQueries]
     category_attributes['licensing'] << 'viewingRestriction'
     category_attributes['relations'] << 'viewOf'
     category_attributes["description"] << %w[hasDomain categories]
@@ -97,10 +96,11 @@ class SubmissionsController < ApplicationController
         return
       end
     end
-
+    headers = {
+      'Cache-Control' => 'no-cache'
+    }
     if params[:submission].nil?
-      return redirect_to "/ontologies/#{acronym}",
-                         notice: t('submissions.submission_updated_successfully')
+      return redirect_to edit_ontology_submission_path(acronym), headers: headers, notice: t('submissions.submission_updated_successfully')
     end
 
     @submission, response = update_submission(update_submission_hash(acronym), submission_id, @ontology)
@@ -108,7 +108,7 @@ class SubmissionsController < ApplicationController
       if response_error?(response)
         show_new_errors(response, partial: 'submissions/form_content', id: 'test')
       else
-        redirect_to edit_ontology_submission_path(acronym), notice: t('submissions.submission_updated_successfully')
+        redirect_to edit_ontology_submission_path(acronym),headers: headers, notice: t('submissions.submission_updated_successfully')
       end
     else
       @errors = response_errors(response) if response_error?(response)

@@ -82,6 +82,17 @@ module SparqlHelper
       []
     end
   end
+  def get_ontology_sample_queries(graph)
+    begin
+      response = LinkedData::Client::Models::Ontology.find_by_acronym(graph.gsub($REST_URL + '/ontologies/', '').split("/")[0], {include: "sampleQueries", display_context: false, display_links: false, headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      }}).first.sampleQueries
+    rescue => e
+      logger.error "Failed to fetch ontology sample queries: #{e.message}"
+      []
+    end
+  end 
   private
 
   def is_allowed_query?(sparql_query)

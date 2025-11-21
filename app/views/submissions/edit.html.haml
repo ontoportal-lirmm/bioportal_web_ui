@@ -37,9 +37,6 @@
                     - properties = @category_attributes[key]
                     .edit-ontology-tab.tab-pane.fade{id: key.parameterize+'-tab', class: section.eql?(key.parameterize) ? 'active show' : ''}
                       = render TurboFrameComponent.new(id: "ontology-content-#{index}", loading:"lazy", src: "edit_properties?properties=#{properties.join(',')}&container_id=ontology-content-#{index}")
-                      - if key == 'general'
-                        = render Input::InputFieldComponent.new(name: "config[#{key}]", label: "Sample Queries", error_message: attribute_error(key.to_s)) do
-                          = render SampleQueriesEditComponent.new(sample_queries: @ontology.sampleQueries , graph: @submission_latest.id.gsub($REST_URL, 'http://data.bioontology.org'))
                 - else
                   - link  = ontology_submission_edit_properties_path(@ontology.acronym, params[:id], properties: @selected_attributes.join(','), container_id: 'ontology-content-0')
                   = render TurboFrameComponent.new(id: "ontology-content-0", loading:"lazy", src: link)
