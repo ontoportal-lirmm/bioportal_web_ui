@@ -97,7 +97,9 @@ class SubmissionsController < ApplicationController
       end
     end
     headers = {
-      'Cache-Control' => 'no-cache'
+      'Cache-Control' => 'no-cache, no-store, must-revalidate',
+      'Pragma' => 'no-cache',
+      'Expires' => '0'
     }
     if params[:submission].nil?
       return redirect_to edit_ontology_submission_path(acronym), headers: headers, notice: t('submissions.submission_updated_successfully')

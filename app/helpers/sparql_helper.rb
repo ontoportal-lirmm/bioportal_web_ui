@@ -69,25 +69,24 @@ module SparqlHelper
                                   'sparql-sample-queries-value': sample_queries,
                                 })
   end
-
+  NO_CACHE_HEADERS = {
+    'Cache-Control' => 'no-cache, no-store, must-revalidate',
+    'Pragma' => 'no-cache',
+    'Expires' => '0'
+  }.freeze
   def get_catalog_sample_queries
     begin
-      response = LinkedData::Client::HTTP.get("#{$REST_URL}", {include: "sampleQueries", display_context: false, display_links: false}, headers: {
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
-      })
+      response = LinkedData::Client::HTTP.get("#{$REST_URL}", {include: "sampleQueries", display_context: false, display_links: false}, headers: NO_CACHE_HEADERS)
       response.to_hash[:sampleQueries]
     rescue => e
       logger.error "Failed to fetch catalog sample queries: #{e.message}"
       []
     end
   end
+
   def get_ontology_sample_queries(graph)
     begin
-      response = LinkedData::Client::Models::Ontology.find_by_acronym(graph.gsub($REST_URL + '/ontologies/', '').split("/")[0], {include: "sampleQueries", display_context: false, display_links: false, headers: {
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
-      }}).first.sampleQueries
+      response = LinkedData::Client::Models::Ontology.find_by_acronym(graph.gsub($REST_URL + '/ontologies/', '').split("/")[0], {include: "sampleQueries", display_context: false, display_links: false, headers: NO_CACHE_HEADERS }).first.sampleQueries
     rescue => e
       logger.error "Failed to fetch ontology sample queries: #{e.message}"
       []
