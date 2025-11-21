@@ -73,7 +73,7 @@ class Admin::CatalogConfigurationController < ApplicationController
       usage: %w[knownUsage coverage example themeTaxonomy],
       methodology_and_provenance: %w[accrualMethod accrualPeriodicity accrualPolicy],
       media: %w[associatedMedia depiction logo],
-      other: %w[color federated_portals relation]
+      other: %w[color federated_portals relation sampleQueries]
     }.freeze
   end
 
@@ -164,8 +164,8 @@ class Admin::CatalogConfigurationController < ApplicationController
     config['rightsHolder'] = config['rightsHolder']&.first&.presence || '' if config['rightsHolder']
 
     # rebuild themeTaxonomy as URIs
-    config['themeTaxonomy'] = config['themeTaxonomy'].map { |value| "#{rest_url.chomp('/')}/#{value}" }
-    config['themeTaxonomy'] << "http://vocabularies.unesco.org/thesaurus"
+    config['themeTaxonomy'] = config['themeTaxonomy'].map { |value| "#{rest_url.chomp('/')}/#{value}" } if config['themeTaxonomy']
+    config['themeTaxonomy'] << "http://vocabularies.unesco.org/thesaurus" if config['themeTaxonomy']
     config.compact
   end
 
