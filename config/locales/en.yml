@@ -957,12 +957,15 @@ en:
           status: "Status"
           actions: "Actions"
         delete: "Delete"
-        confirm_delete: "Are you sure?"
+        confirm_delete: "Are you sure you want to delete the submission %{submission_id} ?"
         delete_selected: "Delete Selected"
         confirm_delete_selected: "Are you sure you want to delete selected submissions?"
         select_at_least_one: "Please select at least one submission to delete."
+        submission_deleted: "Submission %{submission_id} deleted"
+        submissions_deleted: "Submissions queued for deletion: %{submission_ids}"
+        error_deleting_submissions: "Error deleting submissions: %{message}"
       log:
-        title: "Processing Log"
+        title: "Processing logs"
         loading: "Loading log..."
         no_log: "No log available."
         parse_error: "Error parsing log: %{message}"
@@ -971,7 +974,6 @@ en:
         warning: "Warning: Deleting the ontology is irreversible. All submissions and metadata will be lost."
         delete: "Delete Ontology"
         confirm_delete: "Are you sure you want to delete the ENTIRE ontology? This cannot be undone."
-    administration: "Administration"
     add_new_submission: Add new submission
     admin_links: Administration links
     administrator: 'Administrator:'
