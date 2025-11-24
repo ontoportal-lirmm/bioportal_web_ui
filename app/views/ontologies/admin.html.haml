@@ -1,0 +1,105 @@
+%div.ontology_admin.container.mt-4
+  .ontology-details-path
+    %a{href: "/ontologies"} Ontologies
+    = inline_svg_tag 'arrow-right-outlined.svg'
+    %a{href: "/ontologies/#{@ontology.acronym}"}= @ontology.acronym
+    = inline_svg_tag 'arrow-right-outlined.svg'
+    %div
+      = "Administration"
+
+  .d-flex.justify-content-between
+    = render PageHeaderComponent.new(title: t('ontologies.admin.title') , description: "")
+  %br
+
+  .admin-section
+    .edit-ontology-title
+      %div
+        = t('ontologies.admin.submissions.title')
+      %hr
+    = render Layout::CardComponent.new do |c|
+      = form_tag "/ontologies/#{@ontology.acronym}/submissions", method: :delete, id: "bulk_delete_form" do
+        = render TableComponent.new(id: 'submissions_table', stripped: true) do |t|
+          - t.header do |h|
+            - h.th { t('ontologies.admin.submissions.table.select') }
+            - h.th { t('ontologies.admin.submissions.table.submission_id') }
+            - h.th { t('ontologies.admin.submissions.table.release_date') }
+            - h.th { t('ontologies.admin.submissions.table.status') }
+            - h.th { t('ontologies.admin.submissions.table.actions') }
+
+          - submissions = @ontology.explore.submissions.each 
+          - latest_sub_id = submissions.map(&:submissionId).max
+          - submissions.each do |sub|
+            - t.row do |r|
+              - if sub.submissionId != latest_sub_id
+                - r.td { check_box_tag "ids[]", sub.submissionId}
+              - else
+                - r.td { "" }
+              - r.td { sub.submissionId.to_s }
+              - r.td { sub.released }
+              - r.td { sub.status }
+              - r.td do
+                - if sub.submissionId != latest_sub_id
+                  = link_to "/ontologies/#{@ontology.acronym}/submissions?id=#{sub.submissionId}", method: :delete, data: { confirm: t('ontologies.admin.submissions.confirm_delete', submission_id: sub.submissionId) }, class: "btn btn-danger btn-sm" do
+                    = inline_svg_tag('icons/delete.svg', width: '16px', height: '16px', class: 'text-white')
+                    = t('ontologies.admin.submissions.delete')
+
+        .admin-actions
+          = submit_tag t('ontologies.admin.submissions.delete_selected'), data: { confirm: t('ontologies.admin.submissions.confirm_delete_selected') }, class: "btn btn-danger", id: "bulk_delete_button"
+
+  .admin-section
+    .edit-ontology-title
+      %div.d-flex.justify-content-between.align-items-center.mb-2
+        %div
+          = t('ontologies.admin.log.title')
+        = link_to admin_log_ontology_path(@ontology.acronym), data: { turbo_frame: "admin_log_frame", turbo: "true" }, class: "btn btn-sm btn-outline-primary" do
+          %i.fas.fa-sync-alt.me-1
+      %hr
+    = render Layout::CardComponent.new do |c|
+      %div#admin_log_container.admin-log-container
+        -# = "hello"
+        = turbo_frame_tag "admin_log_frame", src: admin_log_ontology_path(@ontology.acronym), loading: "lazy" do
+          = t('ontologies.admin.log.loading')
+
+  .admin-section
+    .edit-ontology-title
+      %div
+        = t('ontologies.admin.ontology.title')
+      %hr
+    = render Layout::CardComponent.new do |c|
+      %p.admin-warning-text
+        %strong= t('ontologies.admin.ontology.warning')
+      .admin-actions
+        = link_to ontology_path(@ontology.acronym), method: :delete, data: { confirm: t('ontologies.admin.ontology.confirm_delete') }, class: "btn btn-danger" do
+          = inline_svg_tag('icons/delete.svg', width: '16px', height: '16px', class: 'text-white')
+          = t('ontologies.admin.ontology.delete')
+
+:javascript
+  // Checkboxes validation
+  document.addEventListener("turbo:load", function() {
+    const bulkDeleteForm = document.getElementById('bulk_delete_form');
+    const bulkDeleteButton = document.getElementById('bulk_delete_button');
+    
+    if (bulkDeleteForm && bulkDeleteButton) {
+      bulkDeleteButton.addEventListener('click', function(event) {
+        const checkboxes = bulkDeleteForm.querySelectorAll('input[name="ids[]"]:checked');
+        if (checkboxes.length === 0) {
+          event.preventDefault();
+          event.stopPropagation();
+          alert("#{t('ontologies.admin.submissions.select_at_least_one')}");
+          return false;
+        }
+      });
+    }
+  });
+
+  // Highlight logs after refresh
+  document.addEventListener("turbo:frame-load", function(event) {
+    if (event.target.id === "admin_log_frame") {
+      event.target.classList.add("log-refresh-flash");
+
+      setTimeout(() => {
+        event.target.classList.remove("log-refresh-flash");
+      }, 200);
+    }
+  });
+
