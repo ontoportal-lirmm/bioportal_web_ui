@@ -149,7 +149,9 @@ Rails.application.routes.draw do
   
   # SPARQL 
   match 'sparql_proxy', to: 'admin#sparql_endpoint', via: [:get, :post]
-  get 'sparql', to: 'sparql_endpoint#index', as: 'sparql_endpoint'
+  if $SPARQL_ENDPOINT_URL
+    get 'sparql', to: 'sparql_endpoint#index', as: 'sparql_endpoint'
+  end
   get 'sparql/edit_sample_queries', to: 'sparql_endpoint#edit_sample_queries', as: 'edit_sample_queries'
 
   # Top-level pages

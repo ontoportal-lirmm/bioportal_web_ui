@@ -38,6 +38,10 @@ module ApplicationHelper
     $AGENTS_ENABLED 
   end
 
+  def sparql_enabled?
+    $SPARQL_ENDPOINT_URL
+  end
+
   def portal_name_from_uri(uri)
     URI.parse(uri).hostname.split('.').first
   end

@@ -11,7 +11,8 @@
 
 %div
   %div.mx-1
-    - sections = [t('admin.index.analytics'), t('admin.index.site_administration'), t('admin.index.catalog_config'), t('admin.index.licensing'), t('admin.index.ontology_administration'), t('admin.index.metadata_administration'), t('admin.index.users'), t('admin.index.groups'), t('admin.index.categories'), t('admin.index.persons_and_organizations'), t('admin.index.search'), t('admin.index.sparql')]
+    - sections = [t('admin.index.analytics'), t('admin.index.site_administration'), t('admin.index.catalog_config'), t('admin.index.licensing'), t('admin.index.ontology_administration'), t('admin.index.metadata_administration'), t('admin.index.users'), t('admin.index.groups'), t('admin.index.categories'), t('admin.index.persons_and_organizations'), t('admin.index.search')]
+    - sections << t('admin.index.sparql') if sparql_enabled?
     - selected = params[:section] || sections.first.downcase
     = render Layout::VerticalTabsComponent.new(header:  t('admin.index.administration_console'), titles: sections, selected: selected, url_parameter: 'section') do |t|
       - t.item_content do
@@ -36,5 +37,6 @@
         = render TurboFrameComponent.new(id: 'agents-list', src: admin_agents_path, loading: 'lazy')
       - t.item_content do
         = render TurboFrameComponent.new(id: 'search-admin', src: '/admin/search', loading: 'lazy')
-      - t.item_content do
-        = sparql_query_container
+      - if sparql_enabled?
+        - t.item_content do
+          = sparql_query_container
