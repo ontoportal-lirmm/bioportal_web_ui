@@ -9,7 +9,9 @@
                 %circle{cx: "5.5", cy: "5.5", fill: "var(--admin-color)", r: "5.5"}
               %p{style: "margin: 10px"}= t("ontologies.browser.admin_welcome")
 
-    .browse-submit-new-ontology-and-you-are-admin-container
+    %br
+    = render PageHeaderComponent.new(title: t('layout.header.user_ontologies'), description: "")
+    %br
     %a#back_top_btn.btn.btn-primary.btn-floating.btn-lg
       %i.fas.fa-arrow-up.text-white
 
