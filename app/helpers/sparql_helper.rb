@@ -60,9 +60,12 @@ module SparqlHelper
     end
   end
 
-  def sparql_query_container(username: current_user&.username, graph: nil, apikey: get_apikey, sample_queries: nil, sparql_endpoint: "/sparql_proxy/")
+  def sparql_query_container(username: current_user&.username, graph: nil, apikey: get_apikey, sample_queries: nil, sparql_endpoint: $SPARQL_ENDPOINT_URL)
+    if sample_queries.nil? 
+      sample_queries = get_catalog_sample_queries
+    end
     content_tag(:div, '', data: { controller: 'sparql',
-                                  'sparql-proxy-value': $SPARQL_ENDPOINT_URL,
+                                  'sparql-proxy-value': sparql_endpoint,
                                   'sparql-apikey-value': apikey,
                                   'sparql-username-value': username,
                                   'sparql-graph-value': graph,
@@ -76,7 +79,7 @@ module SparqlHelper
   }.freeze
   def get_catalog_sample_queries
     begin
-      response = LinkedData::Client::HTTP.get("#{$REST_URL}", {include: "sampleQueries", display_context: false, display_links: false}, headers: NO_CACHE_HEADERS)
+      response = LinkedData::Client::HTTP.get("#{$REST_URL}", {include: "sampleQueries", display_context: false, display_links: false, _ts: Time.now.to_i})
       response.to_hash[:sampleQueries]
     rescue => e
       logger.error "Failed to fetch catalog sample queries: #{e.message}"
@@ -86,7 +89,7 @@ module SparqlHelper
 
   def get_ontology_sample_queries(graph)
     begin
-      response = LinkedData::Client::Models::Ontology.find_by_acronym(graph.gsub($REST_URL + '/ontologies/', '').split("/")[0], {include: "sampleQueries", display_context: false, display_links: false, headers: NO_CACHE_HEADERS }).first.sampleQueries
+      response = LinkedData::Client::Models::Ontology.find_by_acronym(graph.gsub($REST_URL + '/ontologies/', '').split("/")[0], {include: "sampleQueries", display_context: false, display_links: false, _ts: Time.now.to_i}).first.sampleQueries
     rescue => e
       logger.error "Failed to fetch ontology sample queries: #{e.message}"
       []

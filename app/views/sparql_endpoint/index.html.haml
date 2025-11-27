@@ -1,6 +1,5 @@
 .container.d-flex.flex-column.py-4{ style: "width: 1248px;" }
   .d-flex.justify-content-between
     = render PageHeaderComponent.new(title: t('sparql_endpoint.title'), description: t('sparql_endpoint.description'))
-  - sample_queries = get_catalog_sample_queries
   .sparql-page-text-area
-    = sparql_query_container(sparql_endpoint: $SPARQL_ENDPOINT_URL, sample_queries: sample_queries)
+    = sparql_query_container

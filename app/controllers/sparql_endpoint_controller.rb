@@ -2,9 +2,7 @@ class SparqlEndpointController < ApplicationController
   layout :determine_layout
   
   include SparqlHelper
-
   def index
-    
   end
 
   def edit_sample_queries

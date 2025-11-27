@@ -2,7 +2,7 @@
   - @title = t('admin.categories.edit.edit_category')
   .sparql-notifications
   .edit_sparql_container 
-    = sparql_query_container(sparql_endpoint: $SPARQL_ENDPOINT_URL, sample_queries: @sample_queries, graph: @graph)
+    = sparql_query_container(sample_queries: @sample_queries, graph: @graph)
   .save-button{style: "display: flex; justify-content: flex-end; width: 100%;"}
     = regular_button('queries-save-button', t('components.save_button'), variant: "primary", size: "slim") do
       = inline_svg_tag "check.svg"
