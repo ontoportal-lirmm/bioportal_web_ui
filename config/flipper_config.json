@@ -1,0 +1,1 @@
+{"version":1,"features":{"Agents":{"boolean":null,"expression":null,"actors":[],"percentage_of_actors":null,"percentage_of_time":null,"groups":["admins"]},"SPARQL Endpoint":{"boolean":"true","expression":null,"actors":[],"percentage_of_actors":null,"percentage_of_time":null,"groups":[]}}}
