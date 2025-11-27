@@ -16,6 +16,11 @@ class ActiveSupport::TestCase
   parallelize(workers: 1)
 
   # Add more helper methods to be used by all tests here...
+  FLIPPER_FEATURES = ['SPARQL Endpoint', 'Agents'].freeze
+
+  setup do
+    FLIPPER_FEATURES.each { |feature| Flipper.enable(feature) }
+  end
 
   WebMock.allow_net_connect!
 
