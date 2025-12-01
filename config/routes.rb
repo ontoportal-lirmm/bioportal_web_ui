@@ -105,7 +105,7 @@ Rails.application.routes.draw do
     end
     resources :analytics, only: [:index]
     constraints lambda { |request| request.session[:user]&.admin? } do
-      mount Flipper::UI.app(Flipper) => '/flipper'
+      mount Flipper::UI.app(Flipper) => '/flipper', as: :flipper
     end
   end
 

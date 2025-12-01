@@ -15,18 +15,14 @@ class ActiveSupport::TestCase
   # Run tests in parallel with specified workers
   parallelize(workers: 1)
 
-  # Add more helper methods to be used by all tests here...
-  FLIPPER_FEATURES = ['SPARQL Endpoint', 'Agents'].freeze
-
-  setup do
-    FLIPPER_FEATURES.each { |feature| Flipper.enable(feature) }
-  end
 
   WebMock.allow_net_connect!
 
   Capybara.server_host = "0.0.0.0"
-  Capybara.app_host = "http://#{Socket.gethostname}:#{Capybara.server_port}"
-end
+  Capybara.app_host = "http://#{Socket.gethostname}:#{Capybara.server_port}" 
+  
+  FlipperSetup.configure!
+  end
 
 # Define the fixtures helper method
 def fixtures(fixture_name)
