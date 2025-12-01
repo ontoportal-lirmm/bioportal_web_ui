@@ -194,3 +194,4 @@ gem "sparql", "~> 3.3"
 gem 'flipper'
 gem 'flipper-ui'
 gem 'flipper-active_record'
+gem 'flipper-active_support_cache_store'
