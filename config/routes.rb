@@ -76,6 +76,7 @@ Rails.application.routes.draw do
 
     get 'admin', on: :member
     get 'admin/log', to: 'ontologies#admin_log', on: :member
+    get 'admin/submissions', to: 'ontologies#admin_submissions', on: :member
 
     get 'metrics'
     get 'metrics_evolution'

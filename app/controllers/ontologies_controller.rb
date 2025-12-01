@@ -516,7 +516,6 @@ class OntologiesController < ApplicationController
 
   def admin
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    @submission = @ontology.explore.latest_submission(include: 'all')
     render 'ontologies/admin'
   end
 
@@ -525,6 +524,11 @@ class OntologiesController < ApplicationController
     log_url = "/ontologies/#{@ontology.acronym}/admin/log"
     @log = LinkedData::Client::HTTP.get(log_url)
     render partial: 'ontologies/admin/log', layout: false
+  end
+
+  def admin_submissions
+    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
+    render partial: 'ontologies/admin/submissions_table', ontology: @ontology, layout: false
   end
 
   def destroy
