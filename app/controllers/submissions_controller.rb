@@ -131,10 +131,10 @@ class SubmissionsController < ApplicationController
       response = LinkedData::Client::HTTP.delete("/ontologies/#{acronym}/submissions?ontology_submission_ids=#{params[:ids].join(',')}")
     end
     if response_success?(response)
-      notice = params[:id] ? t('ontologies.admin.submission_deleted', submission_id: params[:id]) : t('ontologies.admin.submissions_deleted', submission_ids: params[:ids].join(','))
+      notice = params[:id] ? t('ontologies.admin.submissions.submission_deleted', submission_id: params[:id]) : t('ontologies.admin.submissions.submissions_deleted', submission_ids: params[:ids].join(','))
       redirect_to admin_ontology_path(acronym), notice: notice
     else
-      redirect_to admin_ontology_path(acronym), alert: response.body || t('ontologies.admin.error_deleting_submissions', message: response.body)
+      redirect_to admin_ontology_path(acronym), alert: response.body || t('ontologies.admin.submissions.error_deleting_submissions', message: response.body)
     end
   end
 
