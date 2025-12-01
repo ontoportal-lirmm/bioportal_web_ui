@@ -14,3 +14,9 @@
     %dive.site-admin-page-section.p-2
       = render TurboFrameComponent.new(id: 'update_check_frame', src: '/admin/update_check_enabled') do |c|
         - c.loader { t('admin.main.checking_for_updates') }
+
+  %div.mb-5
+    %div.site-admin-page-header
+      Feature Flags
+    %dive.site-admin-page-section.d-flex
+      = link_to 'Flipper UI', admin_flipper_path, class: 'btn btn-primary mx-1', target: '_blank'
