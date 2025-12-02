@@ -1,5 +1,5 @@
 = turbo_frame_tag "admin_submissions_frame" do
-  = form_tag "/ontologies/#{@ontology.acronym}/submissions", method: :delete, id: "bulk_delete_form" do
+  = form_tag submissions_ontology_administration_path(@ontology.acronym), method: :delete, id: "bulk_delete_form", data: { turbo_frame: "_top" } do
     = render TableComponent.new(id: 'submissions_table', stripped: true) do |t|
       - t.header do |h|
         - h.th { t('ontologies.admin.submissions.table.select') }
@@ -8,7 +8,7 @@
         - h.th { t('ontologies.admin.submissions.table.status') }
         - h.th { t('ontologies.admin.submissions.table.actions') }
 
-      - submissions = @ontology.explore.submissions(invalidate_cache: true)
+      - submissions = @ontology.explore.submissions(invalidate_cache: true, include: 'submissionId,released,status')
       - latest_sub_id = submissions.map(&:submissionId).max
       - submissions.each do |sub|
         - t.row do |r|
@@ -21,7 +21,7 @@
           - r.td { sub.status }
           - r.td do
             - if sub.submissionId != latest_sub_id
-              = link_to "/ontologies/#{@ontology.acronym}/submissions?id=#{sub.submissionId}", method: :delete, data: { confirm: t('ontologies.admin.submissions.confirm_delete', submission_id: sub.submissionId) }, class: "btn btn-danger btn-sm" do
+              = link_to "/ontologies/#{@ontology.acronym}/administration/submissions/#{sub.submissionId}", method: :delete, data: { confirm: t('ontologies.admin.submissions.confirm_delete', submission_id: sub.submissionId) }, class: "btn btn-danger btn-sm" do
                 = inline_svg_tag('icons/delete.svg', width: '16px', height: '16px', class: 'text-white')
                 = t('ontologies.admin.submissions.delete')
 

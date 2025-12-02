@@ -1,9 +1,8 @@
 class SubmissionsController < ApplicationController
   include SubmissionsHelper, SubmissionUpdater, OntologyUpdater
   layout :determine_layout
-  before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new, :destroy]
-  before_action :authorize_read_only, :only => [:new, :create, :edit, :update, :destroy]
-  before_action :authorize_ontology_admin, only: [:destroy]
+  before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
+  before_action :authorize_read_only, :only => [:new, :create, :edit, :update]
   before_action :submission_metadata, only: [:create, :edit, :new, :update, :index]
   
 
@@ -123,27 +122,7 @@ class SubmissionsController < ApplicationController
 
   end
 
-  def destroy
-    acronym = params[:ontology_id]
-    if params[:id]
-      response = LinkedData::Client::HTTP.delete("/ontologies/#{acronym}/submissions/#{params[:id]}")
-    elsif params[:ids]
-      response = LinkedData::Client::HTTP.delete("/ontologies/#{acronym}/submissions?ontology_submission_ids=#{params[:ids].join(',')}")
-    end
-    if response_success?(response)
-      notice = params[:id] ? t('ontologies.admin.submissions.submission_deleted', submission_id: params[:id]) : t('ontologies.admin.submissions.submissions_deleted', submission_ids: params[:ids].join(','))
-      redirect_to admin_ontology_path(acronym), notice: notice
-    else
-      redirect_to admin_ontology_path(acronym), alert: response.body || t('ontologies.admin.submissions.error_deleting_submissions', message: response.body)
-    end
-  end
 
-  private
-
-  def authorize_ontology_admin
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology_id]).first
-    redirect_to_home unless session[:user] && (@ontology.administeredBy.include?(session[:user].id) || session[:user].admin?)
-  end
 
 
 end

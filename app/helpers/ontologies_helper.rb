@@ -670,7 +670,7 @@ module OntologiesHelper
 
   def ontology_admin_button
     return unless @ontology.admin?(session[:user])
-    render RoundedButtonComponent.new(link: admin_ontology_path(@ontology.acronym), icon: 'icons/settings.svg',
+    render RoundedButtonComponent.new(link: ontology_administration_path(@ontology.acronym), icon: 'icons/settings.svg',
                                       size: 'medium', title: t('ontologies.admin.title'))
   end
 

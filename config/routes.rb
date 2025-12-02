@@ -69,14 +69,16 @@ Rails.application.routes.draw do
   get '/user_ontologies_filter', to: 'my_ontologies#user_ontologies_filter'
 
   resources :ontologies do
-    resources :submissions do
-      get 'edit_properties'
-      delete :destroy, on: :collection
+    resource :administration, controller: 'ontologies_administration', only: [:show, :destroy] do
+      get 'log'
+      get 'submissions'
+      delete 'submissions', action: :destroy_submission
+      delete 'submissions/:id', action: :destroy_submission
     end
 
-    get 'admin', on: :member
-    get 'admin/log', to: 'ontologies#admin_log', on: :member
-    get 'admin/submissions', to: 'ontologies#admin_submissions', on: :member
+    resources :submissions do
+      get 'edit_properties'
+    end
 
     get 'metrics'
     get 'metrics_evolution'
