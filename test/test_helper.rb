@@ -20,9 +20,10 @@ class ActiveSupport::TestCase
 
   Capybara.server_host = "0.0.0.0"
   Capybara.app_host = "http://#{Socket.gethostname}:#{Capybara.server_port}" 
-  
-  FlipperSetup.configure!
+  setup do
+    FlipperSetup.test_configure!
   end
+end
 
 # Define the fixtures helper method
 def fixtures(fixture_name)

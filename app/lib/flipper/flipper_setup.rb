@@ -19,14 +19,7 @@ module FlipperSetup
       end
     end
   end
-
-
-
-  def self.enable_feature(name)
-    Flipper.enable(name)
-  end
-
-  def self.disable_feature(name)
-    Flipper.disable(name)
+  def self.test_configure!
+    FEATURES.each { |feature| Flipper.enable(feature) }
   end
 end
