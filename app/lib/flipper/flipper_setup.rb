@@ -17,6 +17,9 @@ module FlipperSetup
 
         flipper
       end
+      Flipper.register(:admins) do |actor, context|
+        actor.respond_to?(:admin?) && actor.admin?
+      end
     end
   end
   def self.test_configure!
