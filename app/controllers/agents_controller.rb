@@ -1,9 +1,10 @@
 class AgentsController < ApplicationController
   include TurboHelper, AgentHelper, ApplicationHelper
   
-  before_action :authorize_admin unless helpers.agents_enabled?
+  before_action :check_agents_enabled
   before_action :authorize_and_redirect, :only => [:edit, :update, :create, :new]
-      layout :determine_layout, only: [:index, :details]
+  layout :determine_layout, only: [:index, :details]
+
   def index
   end
 
@@ -468,5 +469,11 @@ class AgentsController < ApplicationController
       end
     end
     return errors
+  end
+
+  def check_agents_enabled
+    unless helpers.agents_enabled? || current_user_admin?
+      redirect_to root_path, alert: 'Agents endpoint is not available'
+    end
   end
 end
