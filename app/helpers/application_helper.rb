@@ -35,11 +35,13 @@ module ApplicationHelper
   end
   
   def agents_enabled?
-    $AGENTS_ENABLED 
+    user = current_user rescue nil
+    Flipper.enabled?('Agents', user)
   end
 
   def sparql_enabled?
-    $SPARQL_ENDPOINT_URL
+    user = current_user rescue nil
+    Flipper.enabled?('SPARQL Endpoint', user) && $SPARQL_ENDPOINT_URL
   end
 
   def portal_name_from_uri(uri)
@@ -80,6 +82,8 @@ module ApplicationHelper
   end
 
   def current_user
+    # Safely return session[:user] or nil if no session context
+    return nil unless respond_to?(:session) && session
     session[:user]
   end
 

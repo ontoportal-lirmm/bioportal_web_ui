@@ -107,6 +107,9 @@ Rails.application.routes.draw do
       get ':collection/data', to: 'search#search'
     end
     resources :analytics, only: [:index]
+    constraints lambda { |request| request.session[:user]&.admin? } do
+      mount Flipper::UI.app(Flipper) => '/flipper', as: :flipper
+    end
   end
 
   post 'admin/clearcache', to: 'admin#clearcache'
@@ -152,10 +155,10 @@ Rails.application.routes.draw do
   
   # SPARQL 
   match 'sparql_proxy', to: 'admin#sparql_endpoint', via: [:get, :post]
-  if $SPARQL_ENDPOINT_URL
-    get 'sparql', to: 'sparql_endpoint#index', as: 'sparql_endpoint'
-  end
+  get 'sparql', to: 'sparql_endpoint#index', as: 'sparql_endpoint'
   get 'sparql/edit_sample_queries', to: 'sparql_endpoint#edit_sample_queries', as: 'edit_sample_queries'
+
+
 
   # Top-level pages
   match '/feedback', to: 'home#feedback', via: [:get, :post]

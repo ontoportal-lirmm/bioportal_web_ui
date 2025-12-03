@@ -189,3 +189,9 @@ gem 'concurrent-ruby', '1.3.4'
 gem 'nokogiri', '~> 1.13.10'
 gem 'rexml'
 gem "sparql", "~> 3.3"
+
+# Feature flipping
+gem 'flipper'
+gem 'flipper-ui'
+gem 'flipper-active_record'
+gem 'flipper-active_support_cache_store'
