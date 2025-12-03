@@ -997,6 +997,7 @@ fr:
         submission_deleted: "Soumission %{submission_id} supprimée"
         submissions_deleted: "Soumissions %{submission_ids} supprimées"
         error_deleting_submissions: "Erreur lors de la suppression des soumissions: %{message}"
+        loading: "Chargement des soumissions..."
       log:
         title: "Journal de traitement"
         loading: "Chargement du journal..."

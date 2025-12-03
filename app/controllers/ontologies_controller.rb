@@ -28,7 +28,7 @@ class OntologiesController < ApplicationController
   before_action :submission_metadata, only: [:show]
   before_action :set_federated_portals, only: [:index, :ontologies_filter]
   before_action :authorize_read_only, :only => [:new, :create, :edit, :update, :destroy]
-  before_action :authorize_ontology_admin, only: [:edit, :admin, :admin_log, :destroy]
+  before_action :authorize_ontology_admin, only: [:edit]
 
   KNOWN_PAGES = Set.new(["terms", "classes", "mappings", "notes", "widgets", "summary", "properties", "instances", "schemes", "collections", "sparql"])
   EXTERNAL_MAPPINGS_GRAPH = "http://data.bioontology.org/metadata/ExternalMappings"
@@ -514,28 +514,6 @@ class OntologiesController < ApplicationController
     render  partial: 'ontologies/sections/metadata/subject_chips', layout: false
   end
 
-  def admin
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    @submission = @ontology.explore.latest_submission(include: 'all')
-    render 'ontologies/admin'
-  end
-
-  def admin_log
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    log_url = "/ontologies/#{@ontology.acronym}/admin/log"
-    @log = LinkedData::Client::HTTP.get(log_url)
-    render partial: 'ontologies/admin/log', layout: false
-  end
-
-  def destroy
-    @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:id]).first
-    response = @ontology.delete
-    if response_success?(response)
-      redirect_to ontologies_path, notice: "Ontology deleted successfully"
-    else
-      redirect_to admin_ontology_path(@ontology.acronym), alert: "Error deleting ontology"
-    end
-  end
 
   private
 

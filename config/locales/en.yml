@@ -948,7 +948,7 @@ en:
   ontologies:
     access_rights_information: Additional license and access rights information
     admin:
-      title: "Administration page"
+      title: "Administration"
       submissions:
         title: "Submissions"
         table:
@@ -965,6 +965,7 @@ en:
         submission_deleted: "Submission %{submission_id} deleted"
         submissions_deleted: "Submissions queued for deletion: %{submission_ids}"
         error_deleting_submissions: "Error deleting submissions: %{message}"
+        loading: "Loading submissions..."
       log:
         title: "Processing logs"
         loading: "Loading log..."

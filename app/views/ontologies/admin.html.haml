@@ -17,61 +17,37 @@
         = t('ontologies.admin.submissions.title')
       %hr
     = render Layout::CardComponent.new do |c|
-      = form_tag "/ontologies/#{@ontology.acronym}/submissions", method: :delete, id: "bulk_delete_form" do
-        = render TableComponent.new(id: 'submissions_table', stripped: true) do |t|
-          - t.header do |h|
-            - h.th { t('ontologies.admin.submissions.table.select') }
-            - h.th { t('ontologies.admin.submissions.table.submission_id') }
-            - h.th { t('ontologies.admin.submissions.table.release_date') }
-            - h.th { t('ontologies.admin.submissions.table.status') }
-            - h.th { t('ontologies.admin.submissions.table.actions') }
-
-          - submissions = @ontology.explore.submissions.each 
-          - latest_sub_id = submissions.map(&:submissionId).max
-          - submissions.each do |sub|
-            - t.row do |r|
-              - if sub.submissionId != latest_sub_id
-                - r.td { check_box_tag "ids[]", sub.submissionId}
-              - else
-                - r.td { "" }
-              - r.td { sub.submissionId.to_s }
-              - r.td { sub.released }
-              - r.td { sub.status }
-              - r.td do
-                - if sub.submissionId != latest_sub_id
-                  = link_to "/ontologies/#{@ontology.acronym}/submissions?id=#{sub.submissionId}", method: :delete, data: { confirm: t('ontologies.admin.submissions.confirm_delete', submission_id: sub.submissionId) }, class: "btn btn-danger btn-sm" do
-                    = inline_svg_tag('icons/delete.svg', width: '16px', height: '16px', class: 'text-white')
-                    = t('ontologies.admin.submissions.delete')
-
-        .admin-actions
-          = submit_tag t('ontologies.admin.submissions.delete_selected'), data: { confirm: t('ontologies.admin.submissions.confirm_delete_selected') }, class: "btn btn-danger", id: "bulk_delete_button"
+      = turbo_frame_tag "admin_submissions_frame", src: submissions_ontology_administration_path(@ontology.acronym), loading: "lazy" do
+        .text-center.p-4
+          %i.fas.fa-spinner.fa-spin.me-2
+          = t('ontologies.admin.submissions.loading')
 
   .admin-section
     .edit-ontology-title
       %div.d-flex.justify-content-between.align-items-center.mb-2
         %div
           = t('ontologies.admin.log.title')
-        = link_to admin_log_ontology_path(@ontology.acronym), data: { turbo_frame: "admin_log_frame", turbo: "true" }, class: "btn btn-sm btn-outline-primary" do
+        = link_to log_ontology_administration_path(@ontology.acronym), data: { turbo_frame: "admin_log_frame", turbo: "true" }, class: "btn btn-sm btn-outline-primary" do
           %i.fas.fa-sync-alt.me-1
       %hr
     = render Layout::CardComponent.new do |c|
       %div#admin_log_container.admin-log-container
         -# = "hello"
-        = turbo_frame_tag "admin_log_frame", src: admin_log_ontology_path(@ontology.acronym), loading: "lazy" do
+        = turbo_frame_tag "admin_log_frame", src: log_ontology_administration_path(@ontology.acronym), loading: "lazy" do
           = t('ontologies.admin.log.loading')
 
-  .admin-section
-    .edit-ontology-title
-      %div
-        = t('ontologies.admin.ontology.title')
-      %hr
-    = render Layout::CardComponent.new do |c|
-      %p.admin-warning-text
-        %strong= t('ontologies.admin.ontology.warning')
-      .admin-actions
-        = link_to ontology_path(@ontology.acronym), method: :delete, data: { confirm: t('ontologies.admin.ontology.confirm_delete') }, class: "btn btn-danger" do
-          = inline_svg_tag('icons/delete.svg', width: '16px', height: '16px', class: 'text-white')
-          = t('ontologies.admin.ontology.delete')
+  -# .admin-section
+  -#   .edit-ontology-title
+  -#     %div
+  -#       = t('ontologies.admin.ontology.title')
+  -#     %hr
+  -#   = render Layout::CardComponent.new do |c|
+  -#     %p.admin-warning-text
+  -#       %strong= t('ontologies.admin.ontology.warning')
+  -#     .admin-actions
+  -#       = link_to ontology_administration_path(@ontology.acronym), method: :delete, data: { confirm: t('ontologies.admin.ontology.confirm_delete') }, class: "btn btn-danger" do
+  -#         = inline_svg_tag('icons/delete.svg', width: '16px', height: '16px', class: 'text-white')
+  -#         = t('ontologies.admin.ontology.delete')
 
 :javascript
   // Checkboxes validation
