@@ -38,7 +38,7 @@ export default class extends Controller {
     setTimeout(() => {
       const queries = this.sampleQueriesValue;
       this.yasgui.getTab().close()
-      for (let i = 0; i < queries.length; i++) {
+      for (let i = queries.length - 1; i >= 0; i--) {
         const tab = this.yasgui.addTab(true, { name: `Sample query ${i + 1}` }, { atIndex: 0 });
         tab.setQuery(queries[i]);
       }
