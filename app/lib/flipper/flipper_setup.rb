@@ -13,7 +13,9 @@ module FlipperSetup
             10.minutes
           )
         )
-        FEATURES.each { |f| flipper.enable(f) }
+        if primary_adapter.features.empty?
+          FEATURES.each { |f| flipper.enable(f) }
+        end
 
         flipper
       end
