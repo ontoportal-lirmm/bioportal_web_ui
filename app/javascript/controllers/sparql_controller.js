@@ -21,9 +21,7 @@ export default class extends Controller {
         }
       })
 
-    if (this.sampleQueriesValue.length > 0) {
-      this.#addExampleTabs()
-    }
+    this.#addExampleTabs()
 
     this.#setupSaveButton()
 
@@ -34,13 +32,25 @@ export default class extends Controller {
   }
 
   #addExampleTabs() {
+    const defaultQuery = `# Add a description of your sample Query here
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT * WHERE {
+  ?sub ?pred ?obj .
+} LIMIT 10`;
 
     setTimeout(() => {
       const queries = this.sampleQueriesValue;
       this.yasgui.getTab().close()
-      for (let i = queries.length - 1; i >= 0; i--) {
-        const tab = this.yasgui.addTab(true, { name: `Sample query ${i + 1}` }, { atIndex: 0 });
-        tab.setQuery(queries[i]);
+      if (queries.length === 0) {
+        const tab = this.yasgui.addTab(true, { name: 'Sample query' }, { atIndex: 0 });
+        tab.setQuery(defaultQuery);
+      } else {
+        for (let i = queries.length - 1; i >= 0; i--) {
+          const tab = this.yasgui.addTab(true, { name: `Sample query ${i + 1}` }, { atIndex: 0 });
+          tab.setQuery(queries[i]);
+        }
       }
     }, 50);
   }
