@@ -41,8 +41,66 @@ jobs:
             echo "Directory test/system does not exist"
             exit 1
           fi
+
+  pull-images:
+    runs-on: ubuntu-latest
+    outputs:
+      cache-key: ${{ steps.cache-key.outputs.key }}
+    steps:
+      - name: Generate cache key
+        id: cache-key
+        run: echo "key=docker-images-v2" >> $GITHUB_OUTPUT
+
+      - name: Check Docker image cache
+        id: cache-check
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/docker-images
+          key: ${{ steps.cache-key.outputs.key }}
+          lookup-only: true
+
+      - name: Pull and save Docker images
+        if: steps.cache-check.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/docker-images
+          
+          # Pull all images in parallel (API)
+          echo "Pulling Docker images..."
+          
+          # API images (from ontoportal_docker)
+          docker pull agroportal/ontologies_api:development &
+          docker pull agroportal/ncbo_cron:development &
+          docker pull ontoportal/mgrep-ncbo:0.1 &
+          docker pull redis:latest &
+          docker pull solr:8 &
+          docker pull tenforce/virtuoso:virtuoso7.2.5 &
+          
+          wait
+          echo "All images pulled successfully"
+          
+          # Save images to tar files
+          echo "Saving images to cache..."
+
+          # API
+          docker save agroportal/ontologies_api:development -o ~/docker-images/ontologies_api.tar
+          docker save agroportal/ncbo_cron:development -o ~/docker-images/ncbo_cron.tar
+          docker save ontoportal/mgrep-ncbo:0.1 -o ~/docker-images/mgrep.tar
+          docker save redis:latest -o ~/docker-images/redis.tar
+          docker save solr:8 -o ~/docker-images/solr.tar
+          docker save tenforce/virtuoso:virtuoso7.2.5 -o ~/docker-images/virtuoso.tar
+          
+          echo "Images saved successfully"
+          ls -lh ~/docker-images/
+
+      - name: Save Docker images to cache
+        if: steps.cache-check.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/docker-images
+          key: ${{ steps.cache-key.outputs.key }}
+
   test:
-    needs: discover-tests
+    needs: [discover-tests, pull-images]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -71,6 +129,28 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Restore Docker images from cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/docker-images
+          key: ${{ needs.pull-images.outputs.cache-key }}
+          fail-on-cache-miss: true
+
+      - name: Load Docker images
+        run: |
+          echo "Loading Docker images from cache..."
+          
+          # API
+          docker load -i ~/docker-images/ontologies_api.tar
+          docker load -i ~/docker-images/ncbo_cron.tar
+          docker load -i ~/docker-images/mgrep.tar
+          docker load -i ~/docker-images/redis.tar
+          docker load -i ~/docker-images/solr.tar
+          docker load -i ~/docker-images/virtuoso.tar
+          
+          echo "Images loaded successfully"
+          docker images
 
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@v1
