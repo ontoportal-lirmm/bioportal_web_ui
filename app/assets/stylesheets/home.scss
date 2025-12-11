@@ -4,6 +4,13 @@ i.fa.fa-caret-square-o-down {
 }
 
 
+.agent-name-container{
+  color: var(--primary-color);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .home-header-container{
   height: 310px;

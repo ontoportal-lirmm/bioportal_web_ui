@@ -8,20 +8,22 @@
         .home-agents-item
           %h4.d-flex.justify-content-between
             - agent_name = (agent["name"] || "Unknown Agent")
-            - truncated_name = agent_name.length > 47 ? agent_name[0..44] + "..." : agent_name
+            - truncated_name = agent_name.length > 45 ? agent_name[0..42] + "..." : agent_name
             - agent_type_icon = inline_svg_tag "icons/#{agent['agentType']}.svg"
             .d-flex
               .agent-chip-circle
                 = agent_type_icon
             .d-flex.align-items-center
               .agent-name-container
-                = link_to truncated_name, "/agents/#{agent_id}", style: "color: var(--primary-color); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;", target: "_blank", data: { turbo: false }
+                = link_to truncated_name, "/agents/#{agent_id}", target: "_blank", data: { turbo: false }
               %span{style: "margin-left: 10px; color: #888; font-size: 12px; font-weight: 300;"}
-                = "#{usage_count} usage#{usage_count != 1 ? 's' : ''}"
+                - usages_text = t('agents.index.usages')
+                - usages_text = usages_text.chop if usage_count == 1
+                = "#{usage_count} #{usages_text}" if usage_count > 1
     .home-agents-actions
       - if @agents_data&.[]("collection")&.any?
         .agents-count-badge
-          = format_number_abbreviated(@agents_data['totalCount'])
+          = @agents_data['totalCount']
           %span.badge-text= t('home.agents')
       = link_to "/agents?page=1&pagesize=10&apikey=1de0a270-29c5-4dda-b043-7c3580628cd5", target: "_blank", style: "font-size: 0.9em; color: var(--primary-color) !important;" do
         = t('home.fair_details')

@@ -587,6 +587,7 @@ fr:
     include_email: Veuillez inclure votre email
     include_name: Veuillez inclure votre nom
     index:
+      agents_tooltip: Top 5 des agents avec le plus d'utilisation d'ontologie.
       tagline: Le foyer des ontologies et des artefacts sémantiques dans l'agroalimentaire
         et les domaines connexes.
       title: Bienvenue sur %{site}
