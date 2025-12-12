@@ -41,7 +41,13 @@ SELECT * WHERE {
 } LIMIT 10`;
 
     setTimeout(() => {
-      const queries = this.sampleQueriesValue;
+      let queries = this.sampleQueriesValue;
+      // Strip padding comments added to preserve order
+      queries = queries.map(query => {
+        // Remove trailing padding comment (e.g., "# " followed by spaces)
+        return query.replace(/\n#\s*$/, '').trimEnd();
+      });
+
       this.yasgui.getTab().close()
       if (queries.length === 0) {
         const tab = this.yasgui.addTab(true, { name: 'Sample query' }, { atIndex: 0 });
@@ -59,30 +65,39 @@ SELECT * WHERE {
     const saveButton = document.getElementById('queries-save-button');
     if (saveButton) {
       saveButton.addEventListener('click', (e) => {
-        this.#showMessage('Queries saved successfully', 'success');
         e.preventDefault();
         this.#saveCurrentQuery();
+        this.#showMessage('Queries saved successfully', 'success');
       });
     }
   }
 
   #saveCurrentQuery() {
-
-
-
     const tabElements = document.querySelectorAll('.edit_sparql_container [role="tab"]');
     const queries = [];
-    tabElements.forEach(tabElement => {
-      console.log('tabElement.id :', tabElement.id);
+
+    tabElements.forEach((tabElement, index) => {
       const tab = this.yasgui.getTab(`${tabElement.id.split('-')[1]}`);
-      query = tab.getQuery();
+      const query = tab.getQuery();
       if (query) {
         queries.push(query);
       }
-    })
+    });
+
     if (queries.length > 0) {
+      // Pad all queries to the same length to prevent backend sorting by length
+      const maxLength = Math.max(...queries.map(q => q.length));
+      const paddedQueries = queries.map(query => {
+        // Add padding as a comment at the end to reach maxLength
+        const paddingNeeded = maxLength - query.length;
+        if (paddingNeeded > 0) {
+          return query + '\n# ' + ' '.repeat(paddingNeeded);
+        }
+        return query;
+      });
+
       const ontologyId = this.#extractOntologyId();
-      this.#sendSaveRequest(queries, ontologyId);
+      this.#sendSaveRequest(paddedQueries, ontologyId);
     }
   }
 
@@ -100,8 +115,6 @@ SELECT * WHERE {
   }
 
   #sendSaveRequest(queries, ontologyId) {
-    console.log('queryKey :', queries);
-
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     const formData = new FormData();
     formData.append('_method', 'patch');
@@ -114,7 +127,6 @@ SELECT * WHERE {
     } else {
       formData.append(queryKey, queries);
     }
-
     const endpoint = ontologyId ? `${ontologyId}` : '/admin/catalog_configuration'
     const graph = this.graphValue;
 
