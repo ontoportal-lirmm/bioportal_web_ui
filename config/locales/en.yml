@@ -155,14 +155,6 @@ en:
             will expire in 1 day.
           other: This installation of the OntoPortal Appliance is a trial license,
             which will expire in %{count} days.
-    main:
-      cache_management: Cache management
-      checking_for_updates: Checking for updates ...
-      clear_cache: Flush UI cache
-      clear_goo_cache: Flush GOO cache
-      clear_http_cache: Flush HTTP cache
-      reset_cache: Reset UI cache connection
-      version_management: Version management
     memcache:
       title: Memcache stats
     new_ontologies_created_title: 'The following ontologies: %{count} were created
@@ -218,6 +210,17 @@ en:
         multi_valued: Multi valued
         stored: Stored
         type: Type
+    site_administration:
+      cache_management: Cache management
+      checking_for_updates: Checking for updates ...
+      clear_cache: Flush UI cache
+      clear_goo_cache: Flush GOO cache
+      clear_http_cache: Flush HTTP cache
+      flipper_description: Use Flipper to control the visibility of specific %{portal_name}
+        features within the user interface.
+      reset_cache: Reset UI cache connection
+      settings: Settings
+      version_management: Version management
     submission_deleted_successfully: Submission %{id} for ontology %{ont} was deleted
       successfully
     submission_not_found: Submission %{id} for ontology %{ont} was not found

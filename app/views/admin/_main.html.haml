@@ -1,22 +1,23 @@
 %div
   %div#site-admin-clear-caches
     %div.site-admin-page-header
-      = t('admin.main.cache_management')
+      = t('admin.site_administration.cache_management')
     %dive.site-admin-page-section.d-flex
-      = action_button(t('admin.main.clear_cache'), admin_clearcache_path, class_style: 'btn btn-primary mx-1')
-      = action_button(t('admin.main.reset_cache'), admin_resetcache_path, class_style: 'btn btn-primary mx-1')
-      = action_button(t('admin.main.clear_goo_cache'), admin_clear_goo_cache_path, class_style: 'btn btn-primary mx-1')
-      = action_button(t('admin.main.clear_http_cache'), admin_clear_http_cache_path, class_style: 'btn btn-primary mx-1')
+      = action_button(t('admin.site_administration.clear_cache'), admin_clearcache_path, class_style: 'btn btn-primary mx-1')
+      = action_button(t('admin.site_administration.reset_cache'), admin_resetcache_path, class_style: 'btn btn-primary mx-1')
+      = action_button(t('admin.site_administration.clear_goo_cache'), admin_clear_goo_cache_path, class_style: 'btn btn-primary mx-1')
+      = action_button(t('admin.site_administration.clear_http_cache'), admin_clear_http_cache_path, class_style: 'btn btn-primary mx-1')
 
   %div.mb-5
     %div.site-admin-page-header
-      = t('admin.main.version_management')
+      = t('admin.site_administration.version_management')
     %dive.site-admin-page-section.p-2
       = render TurboFrameComponent.new(id: 'update_check_frame', src: '/admin/update_check_enabled') do |c|
-        - c.loader { t('admin.main.checking_for_updates') }
+        - c.loader { t('admin.site_administration.checking_for_updates') }
 
   %div.mb-5
     %div.site-admin-page-header
-      Feature Flags
+      = t('admin.site_administration.settings')
+      = description_tooltip(t('admin.index.site_administration'), t('admin.site_administration.flipper_description', portal_name: portal_name))
     %dive.site-admin-page-section.d-flex
       = link_to 'Flipper UI', admin_flipper_path, class: 'btn btn-primary mx-1', target: '_blank'
