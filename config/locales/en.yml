@@ -108,7 +108,7 @@ en:
       licensing: Licensing
       metadata_administration: Metadata Administration
       ontology_administration: Ontology Administration
-      persons_and_organizations: Persons & Organizations
+      agents: Agents
       renew_license: Renew license
       report_generated_on: 'Report generated on:'
       search: Search & Indexation
@@ -1623,6 +1623,8 @@ en:
     groups_and_categories: Groups and Categories
     no_taxonomy_created: No %{type} are created yet
     show_sub_categories: Show sub categories
+    groups: Groups
+    categories: Categories
   tools:
     converter:
       description: 'The Content Converter tool offers the capability to export any
