@@ -991,7 +991,7 @@ en:
       show_ontology_views: Show ontology views
       show_public_ontology: Show public ontology only
       show_private_ontology: Show private ontology only
-      show_retired_ontologies: Show retired ontologies
+      show_retired_ontologies: Show retired ontologies only
     user_ontologies:
       no_ontology_found: "Ready to contribute?\n Submit your first ontology and start building your collection."
 

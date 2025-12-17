@@ -1025,7 +1025,7 @@ fr:
       show_ontology_views: Afficher les vues de l'ontologie
       show_public_ontology: Afficher seulement les ontologies publiques
       show_private_ontology: Afficher seulement les ontologies privées
-      show_retired_ontologies: Afficher les ontologies retirées
+      show_retired_ontologies: Afficher les ontologies retirées seulement
     user_ontologies:
       no_ontology_found: "Prêt à contribuer ?\n Soumettez votre première ontologie et commencez à constituer votre collection."
     taxonomy_information_tooltip: Voir plus d'informations sur les %{taxonomy_type} dans       
