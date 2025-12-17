@@ -208,7 +208,7 @@ module SubmissionsHelper
   end
 
   def ontology_properties
-    ['acronym', 'name', [t('submission_inputs.visibility'), :viewingRestriction], 'viewOf', ['Groups', :group], ['Categories', :hasDomain], [t('submission_inputs.administrators'), :administeredBy], ['SPARQL Queries', :sampleQueries]]
+    ['acronym', 'name', [t('submission_inputs.visibility'), :viewingRestriction], 'viewOf', ['Groups', :group], ['Categories', :hasDomain], [t('submission_inputs.administrators'), :administeredBy], ['Sample Queries', :sampleQueries]]
   end
 
   def submission_editable_properties
