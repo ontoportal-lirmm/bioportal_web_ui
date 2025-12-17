@@ -41,7 +41,7 @@ module ApplicationHelper
 
   def sparql_enabled?
     user = current_user rescue nil
-    Flipper.enabled?('SPARQL Endpoint', user) && $SPARQL_ENDPOINT_URL
+    Flipper.enabled?('SPARQL', user) && $SPARQL_ENDPOINT_URL
   end
 
   def portal_name_from_uri(uri)
