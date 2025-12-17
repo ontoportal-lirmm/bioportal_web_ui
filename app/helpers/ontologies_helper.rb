@@ -302,22 +302,13 @@ module OntologiesHelper
   end
 
   def category_chip(domain)
-    acronym = domain.split('/').last.strip
-    begin
-      category = LinkedData::Client::Models::Category.find(acronym)
-      return if category.nil? || category.status == 404
-    
-      render ChipButtonComponent.new(
-        text: acronym.upcase,
-        tooltip: category.name, 
-        type: "clickable",
-        url: categories_browse_url(category.acronym),
-        target: "_blank"
-      )
-    rescue => e
-      Rails.logger.warn("Failed to fetch category for '#{acronym}': #{e.message}")
-      nil
-    end
+    render ChipButtonComponent.new(
+      text: domain.split('/').last.upcase.strip,
+      tooltip: domain.split('/').last.upcase.strip, 
+      type: "clickable",
+      url: domain,
+      target: "_blank"
+    )
   end
 
   def subject_chip(subject, theme_taxonomy_ontologies)
@@ -355,8 +346,9 @@ module OntologiesHelper
     return domain unless link?(domain)
 
     acronym = domain.split('/').last.upcase.strip
-    category = LinkedData::Client::Models::Group.find(acronym)
-    category ? category.name : acronym.titleize
+    acronym
+    # category = LinkedData::Client::Models::Group.find(acronym)
+    # category ? category.name : acronym.titleize
   end
 
 
@@ -658,8 +650,8 @@ module OntologiesHelper
 
   def count_subscriptions(ontology_id)
     ontology_id = ontology_id.split('/').last
-    users = LinkedData::Client::Models::User.all(include: 'all', display_context: false, display_links: false)
-    users.select { |u| u.subscription.find { |s| s.ontology && s.ontology.split('/').last.eql?(ontology_id) } }.count
+    subscriptions = LinkedData::Client::HTTP.get("/#{ontology_id}/subscriptions", { display_context: false, display_links: false }) rescue []
+    subscriptions.size
   end
 
   def new_submission_button

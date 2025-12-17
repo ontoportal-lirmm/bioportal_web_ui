@@ -258,7 +258,6 @@ class OntologiesController < ApplicationController
       redirect_to "/ontologies/#{params[:acronym]}?p=classes&conceptid=#{params[:conceptid]}", status: :moved_permanently
       return
     end
-
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology]).first
 
     if @ontology.nil? || @ontology.errors
@@ -279,7 +278,6 @@ class OntologiesController < ApplicationController
 
 
     # Get the latest submission (not necessarily the latest 'ready' submission)
-
     @submission_latest = @ontology.explore.latest_submission(include: 'all', invalidate_cache: invalidate_cache?) rescue @ontology.explore.latest_submission(include: '')
 
 
@@ -333,19 +331,18 @@ class OntologiesController < ApplicationController
 
   # Main ontology description page (with metadata): /ontologies/ACRONYM
   def summary
-
-    @metrics = @ontology.explore.metrics rescue []
+    @metrics = []
     #@reviews = @ontology.explore.reviews.sort {|a,b| b.created <=> a.created} || []
-    @projects = @ontology.explore.projects.sort { |a, b| a.name.downcase <=> b.name.downcase } || []
-    @analytics = LinkedData::Client::HTTP.get(@ontology.links['analytics'])
+    @projects = []
+    @analytics = {}
 
     # Call to fairness assessment service
     tmp = fairness_service_enabled? ? get_fair_score(@ontology.acronym) : nil
     @fair_scores_data = create_fair_scores_data(tmp.values.first) unless tmp.nil?
-
-    @views = get_views(@ontology)
+    @views = []
     @view_decorators = @views.map { |view| ViewDecorator.new(view, view_context) }
     @ontology_relations_data = ontology_relations_data
+
     @relations_array_display = @relations_array.map do |relation|
       attr = relation.split(':').last
       ["#{helpers.attr_label(attr, attr_metadata: helpers.attr_metadata(attr), show_tooltip: false)}(#{relation})",
@@ -354,7 +351,6 @@ class OntologiesController < ApplicationController
     @relations_array_display.unshift(['View of (bpm:viewOf)', 'bpm:viewOf'])
 
     category_attributes = submission_metadata.group_by { |x| x['category'] }.transform_values { |x| x.map { |attr| attr['attribute'] } }
-
     @config_properties = properties_hash_values(category_attributes["object description properties"])
     @methodology_properties = properties_hash_values(category_attributes["methodology"])
     @agents_properties = properties_hash_values(category_attributes["persons and organizations"])

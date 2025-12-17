@@ -14,6 +14,7 @@ class TurboFrameComponent < ViewComponent::Base
 
   def turbo_frame_html_options
     out = {
+      loading: 'lazy',
       data: {
         'turbo-frame-error-target': 'frame',
         action: 'turbo:before-fetch-response->turbo-frame-error#showError turbo:before-fetch-request->turbo-frame-error#hideError'
@@ -29,6 +30,7 @@ class TurboFrameComponent < ViewComponent::Base
       end
       @html_options[:class] ||= ''
       @html_options[:class] += " #{out[:class]}"
+      @html_options[:loading] = "lazy"
     end
 
     if @src && !@src.empty?
