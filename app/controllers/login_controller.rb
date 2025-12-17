@@ -10,7 +10,13 @@ class LoginController < ApplicationController
       orig_params = Hash[uri.query.split("&").map {|e| e.split("=",2)}].symbolize_keys
       session[:redirect] = orig_params[:redirect]
     else
-      session[:redirect] = "/my-ontologies"
+      referer = request.referer
+      path = URI(referer).path rescue "/" if referer
+      if path == "/ontologies" || path == "/" || path == "/login"
+        session[:redirect] = "/my-ontologies"
+      else
+        session[:redirect] = referer
+      end
     end
   end
 

@@ -1690,7 +1690,7 @@ en:
     not_permitted: Not permitted
     recaptcha_validation: Please fill in the proper text from the supplied image
     show:
-      accessible_semantic_resources: Accessible Ontologies
+      accessible_semantic_resources: Accessible ontologies
       api_documentation: API documentation
       api_key_description: Your API Key can be used to access  %{portal} Web services
       custom_semantic_resource: Custom ontology set

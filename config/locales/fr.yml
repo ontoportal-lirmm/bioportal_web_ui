@@ -1742,7 +1742,7 @@ fr:
     recaptcha_validation: Veuillez remplir le texte approprié à partir de l'image
       fournie
     show:
-      accessible_semantic_resources: Ontologies Accessibles
+      accessible_semantic_resources: Ontologies accessibles
       api_documentation: Documentation de l'API
       api_key_description: Votre clé API peut être utilisée pour accéder aux services
         Web de %{portal}
