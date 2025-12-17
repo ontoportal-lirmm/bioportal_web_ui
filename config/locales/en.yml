@@ -1581,7 +1581,7 @@ en:
     version_helper_link: guidelines and recommendations.
     visibility: Visibility
     theme_taxonomy_not_set: Please set the themeTaxonomy field in the admin page to use it for subjects search
-    subjects_notice: These subjects are from these set of ontologies %{ontologies}. If you want to add your subject please add it in the keywords section.
+    subjects_notice: "The 'Subjects' must be selected from the following set of ontologies: %{ontologies}. If you wish to add another keyword or controlled term, use the 'Keywords' property."
   submissions:
     actions: Actions
     delete_submission_alert:

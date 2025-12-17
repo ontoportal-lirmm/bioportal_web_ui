@@ -145,33 +145,31 @@ module CheckResolvabilityHelper
     # Use a cache key that includes the subject and any relevant versioning
     cache_key = "resolved_subject:#{Digest::MD5.hexdigest(normalized_subject)}"
 
-    Rails.cache.fetch(cache_key, expires_in: 1.week) do
-      text = normalized_subject
-      url = normalized_subject
+    text = normalized_subject
+    url = normalized_subject
 
-      unless theme_taxonomy_ontologies.empty?
-        theme_taxonomy_ontologies.each do |ontology_acronym|
-          class_uri = "#{rest_url}/ontologies/#{ontology_acronym}/classes/#{CGI.escape(normalized_subject)}"
-          response = LinkedData::Client::HTTP.get(
-            class_uri,
-            params: {
-              lang: "en",
-              display_context: false,
-              display_links: false,
-              include: "prefLabel"
-            }
-          )
+    unless theme_taxonomy_ontologies.empty?
+      theme_taxonomy_ontologies.each do |ontology_acronym|
+        class_uri = "#{rest_url}/ontologies/#{ontology_acronym}/classes/#{CGI.escape(normalized_subject)}"
+        response = LinkedData::Client::HTTP.get(
+          class_uri,
+          params: {
+            lang: portal_lang,
+            display_context: false,
+            display_links: false,
+            include: "prefLabel"
+          }
+        )
 
-          if response.prefLabel
-            url = class_uri.sub('data.', '')
-            text = response.prefLabel
-            break
-          end
+        if response.prefLabel
+          url = class_uri.sub('data.', '')
+          text = response.prefLabel
+          break
         end
       end
-
-      { text: text, url: url }
     end
+
+    { text: text, url: url }    
   end
 
 end

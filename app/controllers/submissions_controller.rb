@@ -75,6 +75,7 @@ class SubmissionsController < ApplicationController
     category_attributes['licensing'] << 'viewingRestriction'
     category_attributes['relations'] << 'viewOf'
     category_attributes["description"] << %w[hasDomain categories]
+    category_attributes["usage"].delete("hasDomain")
     @selected_attributes = Array(params[:properties])
     if @selected_attributes.empty?
       @categories_order = ['general', 'description', 'dates', 'licensing', 'persons and organizations', 'links', 'media', 'community', 'usage' ,'relations', 'content','methodology', 'object description properties']
