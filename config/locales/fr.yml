@@ -1727,6 +1727,7 @@ fr:
       error_delete_message: Impossible de supprimer cet utilisateur car il est encore
         utilisé
       first_name: Prénom
+      last_login: Dernière connexion
       last_name: Nom
       login_as: Se connecter comme
       ontologies: Ontologies

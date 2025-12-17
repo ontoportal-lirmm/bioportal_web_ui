@@ -1676,6 +1676,7 @@ en:
       email: Email
       error_delete_message: Can't delete this user because still used
       first_name: First name
+      last_login: Last login
       last_name: Last name
       login_as: Login as
       ontologies: Ontologies
