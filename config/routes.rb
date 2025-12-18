@@ -69,12 +69,13 @@ Rails.application.routes.draw do
   get '/user_ontologies_filter', to: 'my_ontologies#user_ontologies_filter'
 
   resources :ontologies do
-    resource :administration, controller: 'ontologies_administration', only: [:show, :destroy] do
-      get 'log'
-      get 'submissions'
-      delete 'submissions', action: :destroy_submission
-      delete 'submissions/:id', action: :destroy_submission
-    end
+    # TODO: reenable in the next releases
+    # resource :administration, controller: 'ontologies_administration', only: [:show, :destroy] do
+    #   get 'log'
+    #   get 'submissions'
+    #   delete 'submissions', action: :destroy_submission
+    #   delete 'submissions/:id', action: :destroy_submission
+    # end
 
     resources :submissions do
       get 'edit_properties'
