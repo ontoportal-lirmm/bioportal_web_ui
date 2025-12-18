@@ -5,6 +5,9 @@
 .ontology-details-header-container
   .ontology-details-path
     %a{href: "/ontologies"} Ontologies
+    - if @ontology.administeredBy.include?(current_user&.id)
+      = inline_svg_tag 'arrow-right-outlined.svg'
+      %a{href: "/my-ontologies"} My ontologies
     - if @ontology.viewOf
       = inline_svg_tag 'arrow-right-outlined.svg'
       %div
