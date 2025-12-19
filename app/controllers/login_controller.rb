@@ -12,12 +12,7 @@ class LoginController < ApplicationController
     else
       referer = request.referer
       path = URI(referer).path rescue "/" if referer
-
-      if path == "/ontologies" || path == "/" || path == "/login"
-        @redirect_url = "/my-ontologies"
-      else
-        @redirect_url = referer
-      end
+      @redirect_url = referer
     end
     session[:redirect] = @redirect_url
   end
@@ -43,7 +38,7 @@ class LoginController < ApplicationController
     if logged_in_user && !logged_in_user.errors
       login(logged_in_user)
       raw_redirect = params[:redirect] || session[:redirect]
-      redirect = raw_redirect ? CGI.unescape(raw_redirect) : "/my-ontologies"
+      redirect = raw_redirect ? CGI.unescape(raw_redirect) : "/"
       redirect_to redirect, allow_other_host: true
     else
       @errors << t('login.invalid_account_combination')
