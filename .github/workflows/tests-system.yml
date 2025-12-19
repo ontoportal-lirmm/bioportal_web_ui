@@ -18,6 +18,7 @@ env:
   FAIRNESS_URL: ${{ secrets.FAIRNESS_URL }}
   ANNOTATOR_URL: ${{ secrets.ANNOTATOR_URL }}
   DB_HOST: 127.0.0.1
+  AGENTS_ENABLED: true
 jobs:
   test:
     runs-on: ubuntu-latest

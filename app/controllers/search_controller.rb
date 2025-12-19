@@ -120,13 +120,15 @@ class SearchController < ApplicationController
     acronyms = params[:ontologies]&.split(',') || []
     page_size = (params[:page_size] || 10).to_i
     type = params[:types]&.split(',') || []
+    show_ontologies = !params[:show_ontologies].eql?('false')
 
 
     results, page, next_page, total_count = search_ontologies_content(query: query,
                                          page: page,
                                          page_size: page_size,
                                          filter_by_ontologies: acronyms,
-                                        filter_by_types: type)
+                                        filter_by_types: type,
+                                        show_ontologies: show_ontologies)
 
     render json: results
   end

@@ -42,6 +42,10 @@ export default class extends Controller {
                 checks = event.target.checked ?  ['true'] : []
                 filter = "show_retired"
                 break;
+            case "public_only":
+                checks = event.target.checked ?  ['true'] : []
+                filter = "public_only"
+                break;
             case "private_only":
                 checks = event.target.checked ?  ['true'] : []
                 filter = "private_only"
@@ -49,6 +53,11 @@ export default class extends Controller {
             case "user_ontologies_only":
                 checks = event.target.checked ?  ['true'] : []
                 filter = "user_ontologies_only"
+                break;
+            case "portals":
+                const inFederationBlock = event.target.closest('#browse-portal-filter');
+                checks = Array.from(inFederationBlock.querySelectorAll('input:checked')).map(x => x.value);
+                filter = "portals"
                 break;
             default:
                 checks = this.#getSelectedChecks(event).map(x => x.value)

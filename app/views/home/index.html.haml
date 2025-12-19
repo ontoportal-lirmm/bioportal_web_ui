@@ -134,6 +134,27 @@
             %a{:href => "/landscape#fairness_assessment"}
               %div.home-fair-details
                 %p= t('home.fair_details')
+      - if agents_enabled?
+        .home-sub-section-middle
+          %div.align-items
+            %h4.margin-items= t('home.agents')
+            = render Display::InfoTooltipComponent.new(text: t('home.index.agents_tooltip', portalName: $SITE) )
+            = render IconWithTooltipComponent.new(icon: 'json.svg',link: agents_rest_url, size:'small', style: "margin:0px 0px 6px 6px; vertical-align: top;", title: t("components.go_to_api"))  
+          %hr.home-section-line/
+          = turbo_frame_tag "agents_frame", src: home_agents_path, loading: "lazy" do
+            .home-agents-container
+              .home-agents-list
+                - 5.times do
+                  .home-agents-item
+                    %h4.d-flex.justify-content-between
+                      .d-flex
+                        .agent-chip-circle
+                          .placeholder.home-placeholder-agent-circle
+                      .d-flex.align-items-center
+                        .placeholder.home-placeholder-agent-name
+              .home-agents-actions
+                .placeholder.home-placeholder-agents-badge
+                .placeholder.home-placeholder-see-details
       - if !$TWITTER_NEWS.blank?
         .home-sub-section-right
           %h4= t('home.twitter_news')

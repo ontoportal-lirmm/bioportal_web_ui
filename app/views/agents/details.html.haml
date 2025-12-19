@@ -95,11 +95,12 @@
               - unless @agent.subjects.nil? || @agent.subjects.empty?
                 - l.row do 
                   = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.subjects")) do
+                    - theme_taxonomy_ontologies = get_theme_taxonomy_ontologies() || []
                     = horizontal_list_container(@agent.subjects) do |subject|
-                      = subject_chip(subject)
-              - unless @agent.categories.nil? || @agent.categories.empty?
+                      = subject_chip(subject, theme_taxonomy_ontologies)
+              - unless @agent.keywords.nil? || @agent.keywords.empty?
                 - l.row do 
                   = render FieldContainerComponent.new(label: t("agents.profile.keywords")) do
-                    - keywords =  @agent.keywords.map{|x| x.split(',')}.flatten
+                    - keywords =  @agent.keywords.map{|x| x.split(',')}.flatten.map(&:downcase).uniq
                     = horizontal_list_container(keywords) do |v|    
                       = keyword_chip(v)

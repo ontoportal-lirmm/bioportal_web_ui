@@ -49,8 +49,8 @@
     - unless subjects.empty?
       - l.row do
         = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.subjects")) do
-          = horizontal_list_container(show_ontology_domains(subjects).uniq) do |v|
-            = subject_chip(v)
+          = turbo_frame_tag("subject_chips", src: subject_chips_path(subjects: subjects)) do
+            = render LoaderComponent.new(small: true)
     - unless  Array(@submission_latest&.keywords).empty? && Array(@submission_latest&.keyClasses).empty?
       - l.row do
         = render FieldContainerComponent.new(label: t("ontologies.sections.metadata.keywords")) do
