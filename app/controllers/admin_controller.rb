@@ -1,12 +1,10 @@
 class AdminController < ApplicationController
-  include TurboHelper, HomeHelper, SparqlHelper
+  include TurboHelper, HomeHelper, SparqlHelper, AdminHelper
   layout :determine_layout
   before_action :authorize_admin
   before_action :cache_setup
 
-  ADMIN_URL = "#{LinkedData::Client.settings.rest_url}/admin/"
-  ONTOLOGIES_URL = "#{ADMIN_URL}ontologies_report"
-  USERS_URL = "#{LinkedData::Client.settings.rest_url}/users"
+    USERS_URL = "#{LinkedData::Client.settings.rest_url}/users"
   ONTOLOGY_URL = lambda { |acronym| "#{ADMIN_URL}ontologies/#{acronym}" }
   PARSE_LOG_URL = lambda { |acronym| "#{ONTOLOGY_URL.call(acronym)}/log" }
 
