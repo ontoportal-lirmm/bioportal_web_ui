@@ -322,7 +322,7 @@ module OntologiesHelper
 
   def subject_chip(subject, theme_taxonomy_ontologies)
     resolved = resolve_subject_uri(subject, theme_taxonomy_ontologies)
-    return nil unless resolved
+    return unless resolved
 
     render ChipButtonComponent.new(
       text: resolved[:text].titleize,

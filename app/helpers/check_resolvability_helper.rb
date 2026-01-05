@@ -142,8 +142,6 @@ module CheckResolvabilityHelper
     # Normalize the subject for consistent caching (e.g., strip whitespace)
     normalized_subject = subject.strip
 
-    # Use a cache key that includes the subject and any relevant versioning
-    cache_key = "resolved_subject:#{Digest::MD5.hexdigest(normalized_subject)}"
 
     text = normalized_subject
     url = normalized_subject
@@ -153,12 +151,10 @@ module CheckResolvabilityHelper
         class_uri = "#{rest_url}/ontologies/#{ontology_acronym}/classes/#{CGI.escape(normalized_subject)}"
         response = LinkedData::Client::HTTP.get(
           class_uri,
-          params: {
-            lang: portal_lang,
-            display_context: false,
-            display_links: false,
-            include: "prefLabel"
-          }
+          lang: portal_lang,
+          display_context: false,
+          display_links: false,
+          include: "prefLabel"
         )
 
         if response.prefLabel
@@ -169,7 +165,7 @@ module CheckResolvabilityHelper
       end
     end
 
-    { text: text, url: url }    
+    { text: text, url: url }
   end
 
 end
