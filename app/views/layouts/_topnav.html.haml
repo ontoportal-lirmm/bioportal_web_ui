@@ -5,6 +5,9 @@
         %img{:src => asset_path("logo-white.svg")}/
         %p
           = portal_name
+      %input#nav-menu{:type => "checkbox", 'data-topnav-responsiveness-target': 'navMenu'}
+      %label.menu-btn{:for => "nav-menu"}
+        %i.fas.fa-bars
     .nav-items
       %ul.top-nav-ul
         - navitems.each do |navItem|
@@ -26,7 +29,7 @@
         - else
           = render DropdownButtonComponent.new do |d|
             - d.header do
-              = link_to("#", class: "nav-link top-nav-nav-link", role: "button") do
+              = link_to("#", class: "nav-link top-nav-nav-link supportMenuDropdownLink", role: "button") do
                 = session[:user].username
             - d.with_section(divide: false) do |s|
               - s.item do
@@ -40,7 +43,7 @@
 
         = render DropdownButtonComponent.new do |d|
           - d.header do
-            = link_to("#", class: "nav-link top-nav-nav-link", role: "button") do
+            = link_to("#", class: "nav-link top-nav-nav-link supportMenuDropdownLink", role: "button") do
               = t('layout.header.explore')
           - d.with_section(divide: false) do |s|
             - if agents_enabled?
@@ -60,7 +63,7 @@
 
         = render DropdownButtonComponent.new do |d|
           - d.header do
-            = link_to("#", class: "nav-link top-nav-nav-link", role: "button") do
+            = link_to("#", class: "nav-link top-nav-nav-link supportMenuDropdownLink", role: "button") do
               = t('layout.header.support')
           - d.with_section(divide: false) do |s|
             - s.item do
