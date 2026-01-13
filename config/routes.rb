@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   get '/notes/new_reply', to: 'notes#new_reply'
   delete '/notes', to: 'notes#destroy'
   resources :notes, constraints: { id: /.+/ }
+
+  # Agents
   get 'agents/:id', to: 'agents#details',  constraints: { id: /[0-9a-f\-]+/ }
   get 'agents/:id/show', to: 'agents#show',  constraints: { id: /[0-9]+/ }
   get 'agents/show_search', to: 'agents#show_search'
@@ -59,10 +61,22 @@ Rails.application.routes.draw do
 
     get ':ontology/collections', to: 'collections#index'
     get ':ontology/collections/show', to: 'collections#show'
+    get 'subject_chips', to: "ontologies#subject_chips"
   end
 
+  # user ontologies
+  resources :my_ontologies, only: [:index, :new]
+  get '/user_ontologies_filter', to: 'my_ontologies#user_ontologies_filter'
 
   resources :ontologies do
+    # TODO: reenable in the next releases
+    # resource :administration, controller: 'ontologies_administration', only: [:show, :destroy] do
+    #   get 'log'
+    #   get 'submissions'
+    #   delete 'submissions', action: :destroy_submission
+    #   delete 'submissions/:id', action: :destroy_submission
+    # end
+
     resources :submissions do
       get 'edit_properties'
     end
@@ -93,13 +107,17 @@ Rails.application.routes.draw do
       get ':collection/schema', to: 'search#show'
       get ':collection/data', to: 'search#search'
     end
-
+    resources :analytics, only: [:index]
+    constraints lambda { |request| request.session[:user]&.admin? } do
+      mount Flipper::UI.app(Flipper) => '/flipper', as: :flipper
+    end
   end
 
   post 'admin/clearcache', to: 'admin#clearcache'
   post 'admin/resetcache', to: 'admin#resetcache'
   post 'admin/clear_goo_cache', to: 'admin#clear_goo_cache'
   post 'admin/clear_http_cache', to: 'admin#clear_http_cache'
+  get 'metadata_administration', to: 'admin#metadata_administration'
   get 'admin/ontologies_report', to: 'admin#ontologies_report'
   post 'admin/refresh_ontologies_report', to: 'admin#refresh_ontologies_report'
   delete 'admin/ontologies', to: 'admin#delete_ontologies'
@@ -133,9 +151,15 @@ Rails.application.routes.draw do
 
   get '' => 'home#index'
   get 'home/metrics', to: 'home#metrics'
+  get 'home/agents', to: 'home#agents'
   get 'status/:portal_name', to: 'home#federation_portals_status'
-
+  
+  # SPARQL 
   match 'sparql_proxy', to: 'admin#sparql_endpoint', via: [:get, :post]
+  get 'sparql', to: 'sparql_endpoint#index', as: 'sparql_endpoint'
+  get 'sparql/edit_sample_queries', to: 'sparql_endpoint#edit_sample_queries', as: 'edit_sample_queries'
+
+
 
   # Top-level pages
   match '/feedback', to: 'home#feedback', via: [:get, :post]

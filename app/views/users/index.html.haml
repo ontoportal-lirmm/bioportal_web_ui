@@ -14,6 +14,7 @@
       - h.th {t('users.index.ontologies')}
       - h.th {t('users.index.project')}
       - h.th {t('users.index.created')}
+      - h.th {t('users.index.last_login')}
       - h.th {t('users.index.actions')}
     - @users.each do |user|
       - t.row(id: user.id.split('/').last) do |r|
@@ -25,6 +26,7 @@
         - r.td {(user.ontologies&.size || 0).to_s}
         - r.td {(user.projects&.size || 0).to_s}
         - r.td {Date.parse(user.created).to_s}
+        - r.td { user.lastLoginAt ? DateTime.parse(user.lastLoginAt).strftime('%Y-%m-%d %H:%M') : '-' }
         - r.td do
           - count = (user.ontologies&.size || 0) +  (user.projects&.size || 0)
           %div.d-flex.align-items-center{style: 'min-width: 200px'}

@@ -114,7 +114,7 @@ fr:
       licensing: Licences
       metadata_administration: Administration des métadonnées
       ontology_administration: Administration des ontologies
-      persons_and_organizations: Personnes et Organisations
+      agents: Agents
       renew_license: Renouveler la licence
       report_generated_on: 'Rapport généré le :'
       search: Recherche et Indexation
@@ -131,7 +131,7 @@ fr:
         Elle est utilisée pour la fédération OntoPortal. Pour l'instant, ces valeurs de données complètent, sans les remplacer, les fichiers de configuration.
       edit_button: Éditer
       configuration_updated_successfully: Configuration de l'API mise à jour avec succès
-      configuration_update_error: Problème lors de la mise à jour de la configuration
+      configuration_update_error: 'Problème lors de la mise à jour de la configuration: %{error}'
     licenses:
       create:
         success: Licence renouvelée
@@ -158,14 +158,6 @@ fr:
             provisoire, qui expirera dans %{count} jours.
           other: Cette installation de la machine virtuelle OntoPortal a une licence
             provisoire, qui expirera dans %{count} jours.
-    main:
-      cache_management: Gestion du cache
-      checking_for_updates: Vérification des mises à jour ...
-      clear_cache: Vider le cache de l'UI
-      clear_goo_cache: Vider le cache GOO
-      clear_http_cache: Vider le cache HTTP
-      reset_cache: 'Réinitialiser la connexion au cache de l''UI '
-      version_management: Gestion des versions
     memcache:
       title: Statistiques Memcache
     new_ontologies_created_title: 'Les ontologies suivantes : %{count} ont été créées
@@ -227,6 +219,17 @@ fr:
         multi_valued: Multivalué
         stored: Stocké
         type: Type
+    site_administration:
+      cache_management: Gestion du cache
+      checking_for_updates: Vérification des mises à jour ...
+      clear_cache: Vider le cache de l'UI
+      clear_goo_cache: Vider le cache GOO
+      clear_http_cache: Vider le cache HTTP
+      flipper_description: Utilisez Flipper pour contrôler la visibilité de fonctionnalités
+        spécifiques de %{portal_name} dans l'interface utilisateur.
+      reset_cache: 'Réinitialiser la connexion au cache de l''UI '
+      settings: Paramètres
+      version_management: Gestion des versions
     submission_deleted_successfully: Soumission %{id} pour l'ontologie %{ont} supprimée
     submission_not_found: Soumission %{id} pour l'ontologie %{ont} non trouvée
     turbo_confirm: Êtes-vous sûr de vouloir %{name} ?
@@ -301,7 +304,7 @@ fr:
     input_hint: Entrez ou collez un texte à annoter...
     insert_sample_text: Insérer un texte d'exemple
     lemmatize: Lématiser
-    match_longest_only: Mot le le plus long uniquement
+    match_longest_only: Mot le plus long uniquement
     negation: Négation
     ontology: Ontologie
     options: Options
@@ -582,10 +585,12 @@ fr:
     fill_text: Veuillez remplir le texte approprié à partir de l'image fournie
     get_annotations: Obtenir des annotations
     get_recommendations: Obtenir des recommandations
+    go_to_api: Aller à l'API
     include_comment: Veuillez inclure votre commentaire
     include_email: Veuillez inclure votre email
     include_name: Veuillez inclure votre nom
     index:
+      agents_tooltip: Top 5 des agents avec le plus d'utilisation d'ontologie.
       tagline: Le foyer des ontologies et des artefacts sémantiques dans l'agroalimentaire
         et les domaines connexes.
       title: Bienvenue sur %{site}
@@ -769,6 +774,7 @@ fr:
     header:
       account_setting: Paramètres du compte
       annotator: Annotateur
+      user_ontologies: Mes ontologies
       browse: Parcourir
       cite_us: Nous citer
       documentation: Documentation
@@ -784,6 +790,8 @@ fr:
       submit_feedback: Soumettre un retour d'expérience
       support: Support
       agents : Agents
+      sparql_editor: Editeur SPARQL
+      explore: Explorer
     notices:
       at: à
       slice: Slice
@@ -975,6 +983,35 @@ fr:
   ontologies:
     access_rights_information: Informations supplémentaires sur la licence et les
       droits d'accès
+    admin:
+      title: "Page d'administration"
+      submissions:
+        title: "Soumissions"
+        table:
+          select: "Sélectionner"
+          submission_id: "ID de soumission"
+          release_date: "Date de publication"
+          status: "Statut"
+          actions: "Actions"
+        delete: "Supprimer"
+        confirm_delete: "Êtes-vous sûr de vouloir supprimer la soumission %{submission_id} ??"
+        delete_selected: "Supprimer la sélection"
+        confirm_delete_selected: "Êtes-vous sûr de vouloir supprimer les soumissions sélectionnées ?"
+        select_at_least_one: "Veuillez sélectionner au moins une soumission à supprimer."
+        submission_deleted: "Soumission %{submission_id} supprimée"
+        submissions_deleted: "Soumissions %{submission_ids} supprimées"
+        error_deleting_submissions: "Erreur lors de la suppression des soumissions: %{message}"
+        loading: "Chargement des soumissions..."
+      log:
+        title: "Journal de traitement"
+        loading: "Chargement du journal..."
+        no_log: "Aucun journal disponible."
+        parse_error: "Erreur lors de l'analyse du journal : %{message}"
+      ontology:
+        title: "Ontologie"
+        warning: "Attention : La suppression de l'ontologie est irréversible. Toutes les soumissions et métadonnées seront perdues."
+        delete: "Supprimer l'ontologie"
+        confirm_delete: "Êtes-vous sûr de vouloir supprimer l'ontologie ? Cette action est irréversible."
     add_new_submission: Ajouter une nouvelle soumission
     admin_links: Liens d'administratiion
     administrator: 'Administrateur :'
@@ -986,8 +1023,11 @@ fr:
       search_placeholder: Filtrer les ontologies, e.g., AGROVOC, plante
       show_my_ontologies: Afficher mes ontologies seulement
       show_ontology_views: Afficher les vues de l'ontologie
+      show_public_ontology: Afficher seulement les ontologies publiques
       show_private_ontology: Afficher seulement les ontologies privées
-      show_retired_ontologies: Afficher les ontologies retirées
+      show_retired_ontologies: Afficher les ontologies retirées seulement
+    user_ontologies:
+      no_ontology_found: "Prêt à contribuer ?\n Soumettez votre première ontologie et commencez à constituer votre collection."
     taxonomy_information_tooltip: Voir plus d'informations sur les %{taxonomy_type} dans       
     categories: Catégories
     change_notes: Notes de changement
@@ -1259,6 +1299,7 @@ fr:
         %{site}.
     see_details: Voir les détails
     showing: Affichage
+    showing_ontologies_user_size: Affichage de %{ontologies_size} sur %{analytics_size} ontologie en %{time}s
     showing_ontologies_size: Affichage de %{ontologies_size} sur %{analytics_size} de %{portals}
     submission: Soumission
     submit_new_ontology: Soumettre une nouvelle ontologie
@@ -1588,6 +1629,8 @@ fr:
       de version dans une ontologie, consultez %{link}
     version_helper_link: recommandations.
     visibility: Visibilité
+    theme_taxonomy_not_set: Veuillez définir le champ themeTaxonomy dans la page d'administration pour l'utiliser pour la recherche des sujets
+    subjects_notice: "Les 'Subjets' doivent être sélectionnés dans l'ensemble d'ontologies suivant: %{ontologies}. Si vous souhaitez ajouter un autre mot-clés ou termes de vocabulaires, utiliser la propriété 'Keywords'."
   submissions:
     actions: Actions
     delete_submission_alert:
@@ -1597,16 +1640,17 @@ fr:
     download: Télécharger
     edit_button: Éditer
     filter:
-      all_formats: Tous les formats
-      sort_by_classes: Trier par nombre de classes
-      sort_by_creation_date: Trier par date de création
-      sort_by_fair_score: Trier par score FAIR
-      sort_by_instances_concepts: Trier par nombre d'instances/concepts
-      sort_by_name: Trier par nom
-      sort_by_notes: Trier par notes
-      sort_by_popularity: Trier par popularité
-      sort_by_projects: Trier par projets
-      sort_by_submitted_date: Trier par date de soumission
+      all_formats: Formats
+      sort: Trier
+      sort_by_classes:  Nombre de classes
+      sort_by_creation_date: Date de création
+      sort_by_fair_score: Score FAIR
+      sort_by_instances_concepts: Nombre d'instances
+      sort_by_name: Nom
+      sort_by_notes: Notes
+      sort_by_popularity: Popularité
+      sort_by_projects: Projets
+      sort_by_submitted_date: Date de soumission
     go_to_api: Aller à l'API
     id: ID
     modified: Modifié
@@ -1629,6 +1673,8 @@ fr:
     groups_and_categories: Groupes et Catégories
     no_taxonomy_created: Aucun %{type} n'a encore été créé
     show_sub_categories: Afficher les sous-catégories
+    groups: Groupes
+    categories: Catégories
   tools:
     converter:
       description: 'L''outil de conversion de contenu offre la possibilité de d''exporter
@@ -1683,6 +1729,7 @@ fr:
       error_delete_message: Impossible de supprimer cet utilisateur car il est encore
         utilisé
       first_name: Prénom
+      last_login: Dernière connexion
       last_name: Nom
       login_as: Se connecter comme
       ontologies: Ontologies
@@ -1695,7 +1742,7 @@ fr:
     recaptcha_validation: Veuillez remplir le texte approprié à partir de l'image
       fournie
     show:
-      accessible_semantic_resources: Ontologies Accessibles
+      accessible_semantic_resources: Ontologies accessibles
       api_documentation: Documentation de l'API
       api_key_description: Votre clé API peut être utilisée pour accéder aux services
         Web de %{portal}
@@ -1748,3 +1795,9 @@ fr:
     name: nom
     ontology_visits: Visites de l'ontologie
     visits: visites
+  sparql_endpoint:
+    description: Interrogez des ensembles de données structurés à l'aide de SPARQL
+      pour récupérer, filtrer et manipuler efficacement des artefacts sémantiques.
+    title: Éditeur de requêtes SPARQL
+    private_ontology_warning: Rendez l'ontologie publique pour activer l'accès depuis l’endpoint SPARQL.
+    edit_sample_queries: Éditer les requêtes d'exemple

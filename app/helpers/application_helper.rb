@@ -33,6 +33,16 @@ module ApplicationHelper
   def read_only_enabled?
     $READ_ONLY_PORTAL && !current_user_admin?
   end
+  
+  def agents_enabled?
+    user = current_user rescue nil
+    Flipper.enabled?('Agents', user)
+  end
+
+  def sparql_enabled?
+    user = current_user rescue nil
+    Flipper.enabled?('SPARQL', user) && $SPARQL_ENDPOINT_URL
+  end
 
   def portal_name_from_uri(uri)
     URI.parse(uri).hostname.split('.').first
@@ -72,6 +82,8 @@ module ApplicationHelper
   end
 
   def current_user
+    # Safely return session[:user] or nil if no session context
+    return nil unless respond_to?(:session) && session
     session[:user]
   end
 
@@ -325,7 +337,7 @@ module ApplicationHelper
              ["/mappings", t('layout.header.mappings')],
              ["/recommender", t("layout.header.recommender")],
              ["/annotator", t("layout.header.annotator")],
-             ["/landscape", t("layout.header.landscape")]]
+             ["/projects", t('application.projects')]]
   end
 
   def beta_badge(text = t('application.beta_badge_text'), tooltip: t('application.beta_badge_tooltip'))
@@ -417,12 +429,12 @@ module ApplicationHelper
     render Display::EmptyStateComponent.new(text: text)
   end
 
-  def ontologies_selector(id:, label: nil, name: nil, selected: nil, placeholder: nil, multiple: true, ontologies: onts_for_select)
+  def ontologies_selector(id:, label: nil, name: nil, selected: nil, placeholder: nil, multiple: true, ontologies: onts_for_select, show_advanced_options: true)
     content_tag(:div) do
       render(Input::SelectComponent.new(id: id, label: label, name: name, value: ontologies, multiple: multiple, selected: selected, placeholder: placeholder)) +
       content_tag(:div, class: 'ontologies-selector-button', 'data-controller': 'ontologies-selector', 'data-ontologies-selector-id-value': id) do      
         content_tag(:div, t('ontologies_selector.clear_selection'), class: 'clear-selection', 'data-action': 'click->ontologies-selector#clear') +
-        link_to_modal(t('ontologies_selector.ontologies_advanced_selection'), "/ontologies_selector?id=#{id}", data: { show_modal_title_value: t('ontologies_selector.ontologies_advanced_selection')})
+        (show_advanced_options ? link_to_modal(t('ontologies_selector.ontologies_advanced_selection'), "/ontologies_selector?id=#{id}", data: { show_modal_title_value: t('ontologies_selector.ontologies_advanced_selection') }) : ''.html_safe)
       end
     end
   end
@@ -457,6 +469,9 @@ module ApplicationHelper
   end
 
   def category_is_parent?(parents_list, category)
+    # Handle nil or empty parents_list
+    return [false, ''] unless parents_list.respond_to?(:keys)
+
     is_parent = parents_list.keys.include?(category.id)
     parent_error_message = t('admin.categories.category_used_parent')
     parents_list[category.id].each do |c|

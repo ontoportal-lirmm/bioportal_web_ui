@@ -8,10 +8,13 @@ class LoginController < ApplicationController
       # Get the original, encoded redirect
       uri = URI.parse(request.url)
       orig_params = Hash[uri.query.split("&").map {|e| e.split("=",2)}].symbolize_keys
-      session[:redirect] = orig_params[:redirect]
+      @redirect_url = orig_params[:redirect]
     else
-      session[:redirect] = request.referer
+      referer = request.referer
+      path = URI(referer).path rescue "/" if referer
+      @redirect_url = referer
     end
+    session[:redirect] = @redirect_url
   end
 
   # logs in a user
@@ -26,15 +29,20 @@ class LoginController < ApplicationController
 
     @errors << t("login.invalid_account_combination") if username.nil?
 
-    return render :action => 'index' if @errors.any?
+    if @errors.any?
+      @redirect_url = params[:redirect]
+      return render :action => 'index'
+    end
 
     logged_in_user = LinkedData::Client::Models::User.authenticate(username, params[:user][:password])
     if logged_in_user && !logged_in_user.errors
       login(logged_in_user)
-      redirect = session[:redirect] ? CGI.unescape(session[:redirect]) : "/"
+      raw_redirect = params[:redirect] || session[:redirect]
+      redirect = raw_redirect ? CGI.unescape(raw_redirect) : "/"
       redirect_to redirect, allow_other_host: true
     else
       @errors << t('login.invalid_account_combination')
+      @redirect_url = params[:redirect] || session[:redirect]
       render :action => 'index'
     end
   end

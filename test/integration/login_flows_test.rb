@@ -45,7 +45,7 @@ class LoginFlowsTest < ActionDispatch::IntegrationTest
       }
     }
 
-    assert_redirected_to ontologies_url
+    assert_redirected_to "/my-ontologies"
     follow_redirect!
 
     assert_select '.notification', text: 'Account was successfully created'

@@ -130,7 +130,7 @@ dev() {
           echo "Run: bundle config local.$value ${!path}"
           container_path="/app/tmp/$value"
           docker_run_cmd+=" -v $host_path:$container_path"
-          bash_cmd+="(bundle config local.ontologies_api_client $container_path) &&"
+          bash_cmd+="(git config --global --add safe.directory $container_path && bundle config local.ontologies_api_client $container_path) &&"
         else
           bash_cmd+=" (bundle config unset local.ontologies_api_client) &&"
         fi

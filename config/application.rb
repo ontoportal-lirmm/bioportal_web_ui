@@ -25,7 +25,8 @@ module BioportalWebUi
     config.exceptions_app = self.routes
 
     config.autoload_paths += %W[#{config.root}/app/lib/kgcl]
-
+    config.autoload_paths += %W[#{config.root}/app/lib/flipper]
+ 
     config.settings = config_for :settings
     # Initialize configuration for KGCL change request functionality.
     config.change_request = config_for :change_request

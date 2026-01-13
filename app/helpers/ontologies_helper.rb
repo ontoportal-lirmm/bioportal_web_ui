@@ -81,8 +81,8 @@ module OntologiesHelper
     end
   end
 
-  def ontologies_with_filters_url(filters, page: 1, count: false)
-    url = '/ontologies_filter?'
+  def ontologies_with_filters_url(filters, page: 1, count: false, user: false)
+    url = user ? "/user_ontologies_filter?" : '/ontologies_filter?'
     url += "page=#{page}" if page
     url += "count=#{page}" if count
     if filters
@@ -320,38 +320,20 @@ module OntologiesHelper
     end
   end
 
-  def subject_chip(subject)
-    begin
-      agroportal_uri = "https://data.agroportal.lirmm.fr/ontologies/AGROVOC/classes/#{CGI.escape(subject.strip)}"
-      response = LinkedData::Client::HTTP.get(
-        agroportal_uri,
-        params = {
-          lang: "en",
-          display_context: false,
-          display_links: false,
-          include: "prefLabel"
-        }
-      )
+  def subject_chip(subject, theme_taxonomy_ontologies)
+    resolved = resolve_subject_uri(subject, theme_taxonomy_ontologies)
+    return unless resolved
 
-      if response.prefLabel
-        text = response.prefLabel
-        url = agroportal_uri.sub('data.', '')
-      else
-        text = subject.split('/').last.strip
-        url = subject
-      end
-
-      render ChipButtonComponent.new(
-        text: text.titleize,
-        tooltip: subject,
-        url: url,
-        type: "clickable",
-        target: "_blank"
-      )
-    rescue => e
-      Rails.logger.warn("Failed to fetch prefLabel from AGROVOC for '#{subject}': #{e.message}")
-      nil
-    end
+    render ChipButtonComponent.new(
+      text: resolved[:text].titleize,
+      tooltip: subject,
+      url: resolved[:url],
+      type: "clickable",
+      target: "_blank"
+    )
+  rescue => e
+    Rails.logger.warn("Failed to fetch prefLabel from ontology for '#{subject}': #{e.message}")
+    nil
   end
 
   def keyword_chip(keyword)
@@ -490,7 +472,8 @@ module OntologiesHelper
       sections += %w[properties]
       sections += %w[schemes collections] if skos?
       sections += %w[instances] unless skos?
-      sections += %w[notes mappings widgets sparql]
+      sections += %w[notes mappings widgets]
+      sections << 'sparql' if sparql_enabled?
     end
     sections
   end
@@ -683,6 +666,12 @@ module OntologiesHelper
     return unless @ontology.admin?(session[:user])
     render RoundedButtonComponent.new(link: new_ontology_submission_path(@ontology.acronym), icon: 'icons/plus.svg',
                                       size: 'medium', title: t('ontologies.add_new_submission'))
+  end
+
+  def ontology_admin_button
+    return unless @ontology.admin?(session[:user])
+    render RoundedButtonComponent.new(link: ontology_administration_path(@ontology.acronym), icon: 'icons/settings.svg',
+                                      size: 'medium', title: t('ontologies.admin.title'))
   end
 
   def ontology_edit_button

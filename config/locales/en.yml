@@ -108,7 +108,7 @@ en:
       licensing: Licensing
       metadata_administration: Metadata Administration
       ontology_administration: Ontology Administration
-      persons_and_organizations: Persons & Organizations
+      agents: Agents
       renew_license: Renew license
       report_generated_on: 'Report generated on:'
       search: Search & Indexation
@@ -125,7 +125,7 @@ en:
         It's used for the OntoPortal federation. For the moment, these data values complement but do not replace the configuration files
       edit_button: Edit
       configuration_updated_successfully: Configuration updated successfully
-      configuration_update_error: Problem updating the configuration
+      configuration_update_error: 'Problem updating the configuration: %{error}'
     licenses:
       create:
         success: License renewed successfully
@@ -155,14 +155,6 @@ en:
             will expire in 1 day.
           other: This installation of the OntoPortal Appliance is a trial license,
             which will expire in %{count} days.
-    main:
-      cache_management: Cache management
-      checking_for_updates: Checking for updates ...
-      clear_cache: Flush UI cache
-      clear_goo_cache: Flush GOO cache
-      clear_http_cache: Flush HTTP cache
-      reset_cache: Reset UI cache connection
-      version_management: Version management
     memcache:
       title: Memcache stats
     new_ontologies_created_title: 'The following ontologies: %{count} were created
@@ -218,6 +210,17 @@ en:
         multi_valued: Multi valued
         stored: Stored
         type: Type
+    site_administration:
+      cache_management: Cache management
+      checking_for_updates: Checking for updates ...
+      clear_cache: Flush UI cache
+      clear_goo_cache: Flush GOO cache
+      clear_http_cache: Flush HTTP cache
+      flipper_description: Use Flipper to control the visibility of specific %{portal_name}
+        features within the user interface.
+      reset_cache: Reset UI cache connection
+      settings: Settings
+      version_management: Version management
     submission_deleted_successfully: Submission %{id} for ontology %{ont} was deleted
       successfully
     submission_not_found: Submission %{id} for ontology %{ont} was not found
@@ -568,10 +571,12 @@ en:
     fill_text: Please fill in the proper text from the supplied image
     get_annotations: Get annotations
     get_recommendations: Get recommendations
+    go_to_api: Go to API
     include_comment: Please include your comment
     include_email: Please include your email
     include_name: Please include your name
     index:
+      agents_tooltip: Top 5 agents with the highest ontology usage
       tagline: The home of ontologies and semantic artefacts in agri-food and related
         domains.
       title: Welcome to %{site}
@@ -745,6 +750,7 @@ en:
     header:
       account_setting: Account settings
       annotator: Annotator
+      user_ontologies: My ontologies
       browse: Browse
       cite_us: Cite Us
       documentation: Documentation
@@ -760,6 +766,8 @@ en:
       submit_feedback: Send Feedback
       support: Support
       agents : Agents
+      sparql_editor: SPARQL Editor
+      explore: Explore
     notices:
       at: at
       slice: Slice
@@ -943,6 +951,35 @@ en:
       - %{message}'
   ontologies:
     access_rights_information: Additional license and access rights information
+    admin:
+      title: "Administration"
+      submissions:
+        title: "Submissions"
+        table:
+          select: "Select"
+          submission_id: "Submission ID"
+          release_date: "Release Date"
+          status: "Status"
+          actions: "Actions"
+        delete: "Delete"
+        confirm_delete: "Are you sure you want to delete the submission %{submission_id} ?"
+        delete_selected: "Delete Selected"
+        confirm_delete_selected: "Are you sure you want to delete selected submissions?"
+        select_at_least_one: "Please select at least one submission to delete."
+        submission_deleted: "Submission %{submission_id} deleted"
+        submissions_deleted: "Submissions queued for deletion: %{submission_ids}"
+        error_deleting_submissions: "Error deleting submissions: %{message}"
+        loading: "Loading submissions..."
+      log:
+        title: "Processing logs"
+        loading: "Loading log..."
+        no_log: "No log available."
+        parse_error: "Error parsing log: %{message}"
+      ontology:
+        title: "Ontology"
+        warning: "Warning: Deleting the ontology is irreversible. All submissions and metadata will be lost."
+        delete: "Delete Ontology"
+        confirm_delete: "Are you sure you want to delete the ENTIRE ontology? This cannot be undone."
     add_new_submission: Add new submission
     admin_links: Administration links
     administrator: 'Administrator:'
@@ -952,8 +989,12 @@ en:
       search_placeholder: Filter ontologies, e.g., AGROVOC, plant
       show_my_ontologies: Show my ontologies only
       show_ontology_views: Show ontology views
+      show_public_ontology: Show public ontology only
       show_private_ontology: Show private ontology only
-      show_retired_ontologies: Show retired ontologies
+      show_retired_ontologies: Show retired ontologies only
+    user_ontologies:
+      no_ontology_found: "Ready to contribute?\n Submit your first ontology and start building your collection."
+
     taxonomy_information_tooltip: See more information about %{taxonomy_type} in 
     categories: Categories
     change_notes: Change notes
@@ -1211,6 +1252,7 @@ en:
       widgets: Widgets are only available for ontologies stored in %{site}.
     see_details: See details
     showing: Showing
+    showing_ontologies_user_size: Showing %{ontologies_size} of %{analytics_size} ontology in %{time}s
     showing_ontologies_size: Showing %{ontologies_size} of %{analytics_size} from %{portals}
     submission: Submission
     submit_new_ontology: Submit new ontology
@@ -1538,6 +1580,8 @@ en:
       an ontology, see %{link}
     version_helper_link: guidelines and recommendations.
     visibility: Visibility
+    theme_taxonomy_not_set: Please set the themeTaxonomy field in the admin page to use it for subjects search
+    subjects_notice: "The 'Subjects' must be selected from the following set of ontologies: %{ontologies}. If you wish to add another keyword or controlled term, use the 'Keywords' property."
   submissions:
     actions: Actions
     delete_submission_alert:
@@ -1547,16 +1591,17 @@ en:
     download: Download
     edit_button: Edit
     filter:
-      all_formats: All formats
-      sort_by_classes: Sort by classes count
-      sort_by_creation_date: Sort by creation date
-      sort_by_fair_score: Sort by FAIR score
-      sort_by_instances_concepts: Sort by instances/concepts count
-      sort_by_name: Sort by name
-      sort_by_notes: Sort by notes
-      sort_by_popularity: Sort by popularity
-      sort_by_projects: Sort by projects
-      sort_by_submitted_date: Sort by submitted date
+      all_formats: Formats
+      sort: Sort
+      sort_by_classes: Classes count
+      sort_by_creation_date: Creation date
+      sort_by_fair_score: FAIR score
+      sort_by_instances_concepts: Instances count
+      sort_by_name: Name
+      sort_by_notes: Notes
+      sort_by_popularity: Popularity
+      sort_by_projects: Projects
+      sort_by_submitted_date: Submitted date
     go_to_api: Go to API
     id: ID
     modified: Modified
@@ -1578,6 +1623,8 @@ en:
     groups_and_categories: Groups and Categories
     no_taxonomy_created: No %{type} are created yet
     show_sub_categories: Show sub categories
+    groups: Groups
+    categories: Categories
   tools:
     converter:
       description: 'The Content Converter tool offers the capability to export any
@@ -1631,6 +1678,7 @@ en:
       email: Email
       error_delete_message: Can't delete this user because still used
       first_name: First name
+      last_login: Last login
       last_name: Last name
       login_as: Login as
       ontologies: Ontologies
@@ -1642,7 +1690,7 @@ en:
     not_permitted: Not permitted
     recaptcha_validation: Please fill in the proper text from the supplied image
     show:
-      accessible_semantic_resources: Accessible Ontologies
+      accessible_semantic_resources: Accessible ontologies
       api_documentation: API documentation
       api_key_description: Your API Key can be used to access  %{portal} Web services
       custom_semantic_resource: Custom ontology set
@@ -1692,3 +1740,9 @@ en:
     name: name
     ontology_visits: Ontology visits
     visits: visits
+  sparql_endpoint:
+    description: 'Query structured datasets using SPARQL to retrieve, filter, and
+      manipulate semantic artefacts efficiently. '
+    title: SPARQL Query Editor
+    private_ontology_warning: Make the ontology public to enable access from the SPARQL endpoint.
+    edit_sample_queries: Edit sample queries

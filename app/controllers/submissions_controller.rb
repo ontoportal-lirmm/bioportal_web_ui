@@ -58,8 +58,7 @@ class SubmissionsController < ApplicationController
 
   # Called when form to "Edit submission" is submitted
   def edit_properties
-    display_submission_attributes params[:ontology_id], params[:properties]&.split(','), submissionId: params[:submission_id],
-                                  inline_save: params[:inline_save]&.eql?('true')
+    display_submission_attributes(params[:ontology_id], params[:properties]&.split(','), submissionId: params[:submission_id], inline_save: params[:inline_save]&.eql?('true'))
 
     attribute_template_output = render_to_string(inline: helpers.render_submission_inputs(params[:container_id] || 'metadata_by_ontology', @submission))
 
@@ -72,9 +71,11 @@ class SubmissionsController < ApplicationController
     ontology_not_found(params[:ontology_id]) unless @ontology
     category_attributes = submission_metadata.group_by{|x| x['category']}.transform_values{|x| x.map{|attr| attr['attribute']} }
     category_attributes = category_attributes.reject{|key| ['no'].include?(key.to_s)}
-    category_attributes['general'] << %w[acronym name groups administeredBy categories]
+    category_attributes['general'] << %w[acronym name groups administeredBy sampleQueries]
     category_attributes['licensing'] << 'viewingRestriction'
     category_attributes['relations'] << 'viewOf'
+    category_attributes["description"] << %w[hasDomain categories]
+    category_attributes["usage"].delete("hasDomain")
     @selected_attributes = Array(params[:properties])
     if @selected_attributes.empty?
       @categories_order = ['general', 'description', 'dates', 'licensing', 'persons and organizations', 'links', 'media', 'community', 'usage' ,'relations', 'content','methodology', 'object description properties']
@@ -96,10 +97,13 @@ class SubmissionsController < ApplicationController
         return
       end
     end
-
+    headers = {
+      'Cache-Control' => 'no-cache, no-store, must-revalidate',
+      'Pragma' => 'no-cache',
+      'Expires' => '0'
+    }
     if params[:submission].nil?
-      return redirect_to "/ontologies/#{acronym}",
-                         notice: t('submissions.submission_updated_successfully')
+      return redirect_to edit_ontology_submission_path(acronym), headers: headers, notice: t('submissions.submission_updated_successfully')
     end
 
     @submission, response = update_submission(update_submission_hash(acronym), submission_id, @ontology)
@@ -107,8 +111,7 @@ class SubmissionsController < ApplicationController
       if response_error?(response)
         show_new_errors(response, partial: 'submissions/form_content', id: 'test')
       else
-        redirect_to "/ontologies/#{acronym}",
-                    notice: t('submissions.submission_updated_successfully'), status: :see_other
+        redirect_to edit_ontology_submission_path(acronym),headers: headers, notice: t('submissions.submission_updated_successfully')
       end
     else
       @errors = response_errors(response) if response_error?(response)
@@ -119,6 +122,8 @@ class SubmissionsController < ApplicationController
     end
 
   end
+
+
 
 
 end
