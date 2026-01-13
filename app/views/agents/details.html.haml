@@ -13,7 +13,9 @@
         = agent_type_icon
       = render PageHeaderComponent.new(title: "#{@agent.name}", description: nil)
     .d-flex.align-items-center
-      = render RoundedButtonComponent.new(link: @agent.id + "?apikey=#{get_apikey}&display=all", target: '_blank', size: 'medium', title: t("components.go_to_api"))
+      - agent_link = @agent.id + "?display=all"
+      - agent_link += "&apikey=#{get_apikey}" unless session[:user].nil?
+      = render RoundedButtonComponent.new(link: agent_link, target: '_blank', size: 'medium', title: t("components.go_to_api"))
       - if current_user_admin? || @agent.creator.eql?(current_user&.id.to_s) 
         .span.m-2
         = agents_edit_button
