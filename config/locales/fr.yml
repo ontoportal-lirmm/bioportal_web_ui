@@ -1256,7 +1256,7 @@ fr:
       note: 'Note :'
       or: OU
       other_links: Autres liens
-      person_and_organization: Personnes et organisations
+      person_and_organization: Agents
       projects_and_usage_information: Informations sur les projets et l'utilisation
       properties: Propriétés
       properties_search_placeholder: Rechercher une propriété dans %{acronym}

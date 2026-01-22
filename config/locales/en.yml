@@ -1214,7 +1214,7 @@ en:
       note: 'Note:'
       or: OR
       other_links: Other links
-      person_and_organization: Persons and organizations
+      person_and_organization: Agents
       projects_and_usage_information: Projects and usage information
       properties: Properties
       properties_search_placeholder: Search a property in %{acronym}
