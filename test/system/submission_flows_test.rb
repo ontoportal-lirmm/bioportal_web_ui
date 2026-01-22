@@ -101,8 +101,8 @@ class SubmissionFlowsTest < ApplicationSystemTestCase
       click_on "Licensing"
       submission_licensing_edit_fill(ontology_2, submission_2)
 
-      # Persons and organizations tab
-      click_on t('ontologies.sections.person_and_organization')
+      # Agents tab
+      click_on "Agents"
       submission_agent_edit_fill(submission_2)
 
       # Links tab
