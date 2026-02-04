@@ -11,7 +11,7 @@ class OntologiesRedirectionController < ApplicationController
 
         if resource_id.nil?
             @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:acronym]).first
-            return ontology_not_found(acronym) if @ontology.nil? || @ontology.errors
+            return ontology_not_found(params[:acronym]) if @ontology.nil? || @ontology.errors
             @submission_latest = @ontology.explore.latest_submission(include: "URI")
             resource_id = @submission_latest.URI
         end

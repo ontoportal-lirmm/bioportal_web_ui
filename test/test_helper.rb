@@ -15,12 +15,14 @@ class ActiveSupport::TestCase
   # Run tests in parallel with specified workers
   parallelize(workers: 1)
 
-  # Add more helper methods to be used by all tests here...
 
   WebMock.allow_net_connect!
 
   Capybara.server_host = "0.0.0.0"
-  Capybara.app_host = "http://#{Socket.gethostname}:#{Capybara.server_port}"
+  Capybara.app_host = "http://#{Socket.gethostname}:#{Capybara.server_port}" 
+  setup do
+    FlipperSetup.test_configure!
+  end
 end
 
 # Define the fixtures helper method

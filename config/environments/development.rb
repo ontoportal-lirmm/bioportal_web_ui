@@ -71,7 +71,7 @@ Rails.application.configure do
   config.assets.quiet = true
 
   # memcache setup
-  config.cache_store = ActiveSupport::Cache::MemCacheStore.new('cache:11211', namespace: 'BioPortal')
+  config.cache_store = :mem_cache_store, ENV["MEMCACHE_SERVERS"] || "localhost:11211", { :namespace => 'bioportal_web_ui', :expires_in => 1.day }
 
   # Silence cache output
   config.cache_store.logger = Logger.new("/dev/null") if config.cache_store.respond_to?(:logger)

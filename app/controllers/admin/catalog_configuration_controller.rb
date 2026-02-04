@@ -14,11 +14,11 @@ class Admin::CatalogConfigurationController < ApplicationController
 
   def update
     config = sanitize_config_params
-
-    if update_remote_config(config)
-      flash.now[:notice] = true
+    response = update_remote_config(config)
+    if response.status == 200
+      flash.now[:notice] = t('admin.catalog_configuration.configuration_updated_successfully')
     else
-      flash.now[:alert] = true
+      flash.now[:alert] = t('admin.catalog_configuration.configuration_update_error', error: response.body)
     end
 
     @catalog_data = load_catalog_data
@@ -62,7 +62,7 @@ class Admin::CatalogConfigurationController < ApplicationController
         bibliographicCitation isReferencedBy
       ],
       dates: %w[created modified],
-      persons_and_organizations: %w[
+      agents: %w[
         creator contributor publisher contactPoint curatedBy 
         translator endorsedBy fundedBy funding
       ],
@@ -70,10 +70,10 @@ class Admin::CatalogConfigurationController < ApplicationController
         audience publishingPrinciples repository bugDatabase 
         mailingList toDoList award
       ],
-      usage: %w[knownUsage coverage example],
+      usage: %w[knownUsage coverage example themeTaxonomy],
       methodology_and_provenance: %w[accrualMethod accrualPeriodicity accrualPolicy],
       media: %w[associatedMedia depiction logo],
-      other: %w[color federated_portals relation]
+      other: %w[color federated_portals relation sampleQueries]
     }.freeze
   end
 
@@ -96,6 +96,7 @@ class Admin::CatalogConfigurationController < ApplicationController
     agent_params = build_catalog_params(agents_only: true)
     catalog_agents = LinkedData::Client::HTTP.get(CATALOG_PATH, agent_params).to_hash
     @catalog_data.merge!(catalog_agents.to_hash)
+    @catalog_data = sanitize_catalog_data(@catalog_data)
     session[:catalog_data] = @catalog_data
     @catalog_data
   rescue StandardError => e
@@ -141,10 +142,16 @@ class Admin::CatalogConfigurationController < ApplicationController
 
   def update_remote_config(config)
     response = LinkedData::Client::HTTP.patch(CATALOG_PATH, config)
-    response.status == 200
   rescue StandardError => e
     Rails.logger.error("Config update failed: #{e.message}")
-    false
+    OpenStruct.new(status: 500, body: e.message)
+  end
+
+  def sanitize_catalog_data(catalog_data)
+    catalog_data_sanitized = catalog_data
+    # sanitize themeTaxonomy to let only the acronyms of the ontologies
+    catalog_data_sanitized[:themeTaxonomy] = catalog_data_sanitized[:themeTaxonomy].select { |url| url.start_with?(rest_url) }.map { |url| url.split('/').last }
+    return catalog_data_sanitized
   end
 
   def sanitize_config_params
@@ -156,6 +163,9 @@ class Admin::CatalogConfigurationController < ApplicationController
 
     config['rightsHolder'] = config['rightsHolder']&.first&.presence || '' if config['rightsHolder']
 
+    # rebuild themeTaxonomy as URIs
+    config['themeTaxonomy'] = config['themeTaxonomy'].map { |value| "#{rest_url.chomp('/')}/#{value}" } if config['themeTaxonomy']
+    config['themeTaxonomy'] << "http://vocabularies.unesco.org/thesaurus" if config['themeTaxonomy']
     config.compact
   end
 

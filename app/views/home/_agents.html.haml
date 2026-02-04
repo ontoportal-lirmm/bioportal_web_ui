@@ -1,0 +1,29 @@
+= turbo_frame_tag "agents_frame" do
+  .home-agents-container
+    .home-agents-list
+      - sorted_agents = @agents_data["collection"].sort_by { |agent| -((agent["usages"] || {}).count) }[0..4]
+      - sorted_agents.each do |agent|
+        - agent_id = agent["@id"].split("/").last
+        - usage_count = (agent["usages"] || {}).count
+        .home-agents-item
+          %h4.d-flex.justify-content-between
+            - agent_name = (agent["name"] || "Unknown Agent")
+            - truncated_name = agent_name.length > 45 ? agent_name[0..42] + "..." : agent_name
+            - agent_type_icon = inline_svg_tag "icons/#{agent['agentType']}.svg"
+            .d-flex
+              .agent-chip-circle
+                = agent_type_icon
+            .d-flex.align-items-center
+              .agent-name-container
+                = link_to truncated_name, "/agents/#{agent_id}", target: "_blank", data: { turbo: false }
+              %span{style: "margin-left: 10px; color: #888; font-size: 12px; font-weight: 300;"}
+                - usages_text = t('agents.index.usages')
+                - usages_text = usages_text.chop if usage_count == 1
+                = "#{usage_count} #{usages_text}" if usage_count > 1
+    .home-agents-actions
+      - if @agents_data&.[]("collection")&.any?
+        .agents-count-badge
+          = @agents_data['totalCount']
+          %span.badge-text= t('home.agents')
+      = link_to "/agents", target: "_blank", style: "font-size: 0.9em; color: var(--primary-color) !important;" do
+        = t('home.fair_details')

@@ -145,8 +145,10 @@ module AgentHelper
     render_to_string(partial: partial, locals: { agent: agent })
   end
 
-  def agents_rest_url
-    rest_url + agents_path + "?page=1&pagesize=10" + "&apikey=#{get_apikey}"
+  def agents_rest_url(page = 1, pagesize = 10, display = nil)
+    url = rest_url + agents_path + "?page=#{page}&pagesize=#{pagesize}" + (display ? "&display=#{display}" : '')
+    url += "&apikey=#{get_apikey}" unless session[:user].nil?
+    url
   end
   
   def agent_field_name(name, name_prefix = '')
@@ -276,7 +278,7 @@ module AgentHelper
       name = agent
       title = nil
     else
-      name = agent.agentType.eql?("organization") ? (agent.acronym || agent.name) : agent.name
+      name = agent.agentType.eql?("organization") ? (agent.acronym.presence || agent.name) : agent.name
       agent_icon = agent.agentType.eql?("organization") ? organization_icon : person_icon
       title = agent_tooltip(agent)
     end
@@ -299,14 +301,20 @@ module AgentHelper
     ) do
       chip_content
     end
-  
-    url.present? ? link_to(chip, url, class: 'text-decoration-none', target: target, rel: 'noopener noreferrer') : chip
+
+    chip_is_clickable = url.present? && agents_enabled?
+    chip_is_clickable ? link_to(chip, url, class: 'text-decoration-none', target: target, rel: 'noopener noreferrer') : chip
   end
 
   def orcid_number(orcid)
     return orcid.split("/").last
   end
 
+  def agents_homepage_link(style: '', ontology: nil)
+    custom_style = "font-size: 50px; line-height: 0.5; margin-left: 6px; margin-bottom: 6px; vertical-align: top; #{style}".strip
+    ontology = ontology || 'all'
+    render IconWithTooltipComponent.new(icon: 'json.svg',link: agents_rest_url, target: '_blank', title: t('home.go_to_api'), size:'small', style: custom_style)  
+  end
 
   def agents_create_button
     link_to_modal(

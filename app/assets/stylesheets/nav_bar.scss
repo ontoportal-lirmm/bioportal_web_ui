@@ -42,6 +42,7 @@
 
 .nav-items > ul > li {
     margin-left: 17px;
+    white-space: nowrap;
 }
 
 .nav-items > ul > li > a {
@@ -60,7 +61,7 @@
 }
 
 .nav-search-container {
-    width: 50% ;
+    width: 350px ;
     position: relative;
 }
 .nav-search-container div > input {

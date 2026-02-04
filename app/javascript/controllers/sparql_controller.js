@@ -1,31 +1,193 @@
 import { Controller } from '@hotwired/stimulus'
 import { getYasgui } from '../mixins/useYasgui'
 
-// Connects to data-controller="sparql"
 export default class extends Controller {
-  static  values = {
+  static values = {
     proxy: String,
-    username: String,
     apikey: String,
     graph: String,
+    sampleQueries: Array
   }
-  connect () {
+
+  connect() {
     localStorage.removeItem('yagui__config');
     this.yasgui = getYasgui(this.element,
       {
-        corsProxy: this.proxyValue,
         copyEndpointOnNewTab: true,
         requestConfig: {
           endpoint: this.#proxyUrl(),
           acceptHeaderGraph: false,
           acceptHeaderUpdate: false,
-          namedGraphs: [this.graphValue],
         }
       })
 
+    this.#addExampleTabs()
+
+    this.#setupSaveButton()
+
   }
 
-  #proxyUrl(){
-    return `${this.proxyValue}?apikey=${this.apikeyValue}&username=${this.usernameValue}`
+  #proxyUrl() {
+    return `${this.proxyValue}?default-graph-uri=${this.graphValue}&apikey=${this.apikeyValue}`
+  }
+
+  #addExampleTabs() {
+    const defaultQuery = `# Add a description of your sample Query here
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT * WHERE {
+  ?sub ?pred ?obj .
+} LIMIT 10`;
+
+    setTimeout(() => {
+      let queries = this.sampleQueriesValue;
+      // Strip padding comments added to preserve order
+      queries = queries.map(query => {
+        // Remove trailing padding comment (e.g., "# " followed by spaces)
+        return query.replace(/\n#\s*$/, '').trimEnd();
+      });
+
+      this.yasgui.getTab().close()
+      if (queries.length === 0) {
+        const tab = this.yasgui.addTab(true, { name: 'Sample query' }, { atIndex: 0 });
+        tab.setQuery(defaultQuery);
+      } else {
+        for (let i = queries.length - 1; i >= 0; i--) {
+          const tab = this.yasgui.addTab(true, { name: `Sample query ${i + 1}` }, { atIndex: 0 });
+          tab.setQuery(queries[i]);
+        }
+      }
+    }, 50);
+  }
+
+  #setupSaveButton() {
+    const saveButton = document.getElementById('queries-save-button');
+    if (saveButton) {
+      saveButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.#saveCurrentQuery();
+        this.#showMessage('Queries saved successfully', 'success');
+      });
+    }
+  }
+
+  #saveCurrentQuery() {
+    const tabElements = document.querySelectorAll('.edit_sparql_container [role="tab"]');
+    const queries = [];
+
+    tabElements.forEach((tabElement, index) => {
+      const tab = this.yasgui.getTab(`${tabElement.id.split('-')[1]}`);
+      const query = tab.getQuery();
+      if (query) {
+        queries.push(query);
+      }
+    });
+
+    if (queries.length > 0) {
+      // Pad all queries to the same length to prevent backend sorting by length
+      const maxLength = Math.max(...queries.map(q => q.length));
+      const paddedQueries = queries.map(query => {
+        // Add padding as a comment at the end to reach maxLength
+        const paddingNeeded = maxLength - query.length;
+        if (paddingNeeded > 0) {
+          return query + '\n# ' + ' '.repeat(paddingNeeded);
+        }
+        return query;
+      });
+
+      const ontologyId = this.#extractOntologyId();
+      this.#sendSaveRequest(paddedQueries, ontologyId);
+    }
+  }
+
+
+
+  #extractOntologyId() {
+    const graph = this.graphValue;
+    if (graph) {
+      const match = graph.match(/\/ontologies\/([^\/]+)\/submissions\/([^\/]+)/);
+      if (match) {
+        return `/ontologies/${match[1]}/submissions/${match[2]}`;
+      }
+    }
+    return null;
+  }
+
+  #sendSaveRequest(queries, ontologyId) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    const formData = new FormData();
+    formData.append('_method', 'patch');
+
+    const queryKey = ontologyId ? 'ontology[sampleQueries][]' : 'config[sampleQueries][]';
+    if (Array.isArray(queries)) {
+      queries.forEach(query => {
+        formData.append(queryKey, query);
+      });
+    } else {
+      formData.append(queryKey, queries);
+    }
+    const endpoint = ontologyId ? `${ontologyId}` : '/admin/catalog_configuration'
+    const graph = this.graphValue;
+
+    const match = graph.match(/\/ontologies\/([^\/]+)\/submissions\/([^\/]+)/);
+
+    if (ontologyId) {
+      formData.append('ontology_id', match[1]);
+    }
+
+    fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-Token': csrfToken
+      },
+      body: formData
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log('Queries saved successfully');
+        } else {
+          console.error('Failed to save queries');
+        }
+      })
+      .catch(error => {
+        console.error('Error saving queries:', error);
+      });
+  }
+
+
+  #showMessage(message, type) {
+    const notificationContainer = document.querySelector('.sparql-notifications');
+    const messageDiv = document.createElement('div');
+    messageDiv.textContent = message;
+    messageDiv.style.padding = '10px 20px';
+    messageDiv.style.borderRadius = '4px';
+    messageDiv.style.backgroundColor = type === 'success' ? '#d4edda' : '#f8d7da';
+    messageDiv.style.color = type === 'success' ? '#155724' : '#721c24';
+    messageDiv.style.border = type === 'success' ? '1px solid #c3e6cb' : '1px solid #f5c6cb';
+    messageDiv.style.marginBottom = '10px'
+
+    if (notificationContainer) {
+      notificationContainer.appendChild(messageDiv);
+
+      setTimeout(() => {
+        if (notificationContainer.contains(messageDiv)) {
+          notificationContainer.removeChild(messageDiv);
+        }
+      }, 3000);
+    } else {
+      messageDiv.style.position = 'fixed';
+      messageDiv.style.top = '20px';
+      messageDiv.style.right = '20px';
+      messageDiv.style.zIndex = '1000';
+
+      document.body.appendChild(messageDiv);
+
+      setTimeout(() => {
+        if (document.body.contains(messageDiv)) {
+          document.body.removeChild(messageDiv);
+        }
+      }, 3000);
+    }
   }
 }

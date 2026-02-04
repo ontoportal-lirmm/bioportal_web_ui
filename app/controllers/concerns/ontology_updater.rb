@@ -26,7 +26,7 @@ module OntologyUpdater
     return {} unless params[:ontology]
 
     p = params.require(:ontology).permit(:name, :acronym, { administeredBy: [] }, :viewingRestriction, { acl: [] },
-                                         { hasDomain: [] }, :viewOf, :isView, :subscribe_notifications, { group: [] })
+                                         { hasDomain: [] }, :viewOf, :isView, :subscribe_notifications, { group: [] }, { sampleQueries: [] })
 
     p[:administeredBy].reject!(&:blank?) if p[:administeredBy]
     # p[:acl].reject!(&:blank?)

@@ -8,11 +8,15 @@
             = t('taxonomy.description', portal: portal_name)
 
         = render TabsContainerComponent.new do |c|
-            - c.item(title: 'Groups', selected: !@category_section_active)
+            - groups_link = "#{$REST_URL}/groups?display=all"
+            - groups_link += "&apikey=#{get_apikey}" unless session[:user].nil?
+            - c.item(title: t('taxonomy.groups'), selected: !@category_section_active, actions: rounded_button_component(groups_link))
             - c.item_content do
                 = render partial: '/taxonomy/taxonomies', locals: { taxonomies: @groups, type: 'groups' }
 
-            - c.item(title: 'Categories', selected: @category_section_active)
+            - categories_link = "#{$REST_URL}/categories?display=all"
+            - categories_link += "&apikey=#{get_apikey}" unless session[:user].nil?
+            - c.item(title: t('taxonomy.categories'), selected: @category_section_active, actions: rounded_button_component(categories_link))
             - c.item_content do
                 = render partial: '/taxonomy/taxonomies', locals: { taxonomies: @categories, type: 'categories' }
 :javascript

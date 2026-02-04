@@ -1,0 +1,24 @@
+= render NestedFormInputsComponent.new do |c|
+  - c.header do
+    - if @ontologies.empty?
+      = render Display::AlertComponent.new(type:'warning', closable: false, message: t('submission_inputs.theme_taxonomy_not_set'))
+    - else
+      = t('submission_inputs.subjects_notice', ontologies: @ontologies.join(','))
+
+  - c.template do
+    .subjects-container{ data: { controller: "subjects" } }
+      .search-wrapper{ data: { subjects_target: "searchWrapper" } }
+        = helpers.subjects_ontologies_content_autocomplete(ontologies: @ontologies)
+      .subjects-list{ data: { subjects_target: "list" } }
+
+  - Array(@values).each_with_index do |v, i|
+    - value = v[:value]
+    - label =  v[:label]
+    - c.row do
+      .nested-subjects-form-input-row
+        = helpers.text_input(name: "", value: label, readonly: true)
+        = hidden_field_tag "submission[hasDomain][#{i}]", value
+
+
+  - c.empty_state do
+    = hidden_field_tag "submission[hasDomain][0]", ""

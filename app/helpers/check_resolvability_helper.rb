@@ -136,4 +136,36 @@ module CheckResolvabilityHelper
     text += " (Average response time: #{response_time}s)" if response_time
     text
   end
+
+  # Resolve subject URIs
+  def resolve_subject_uri(subject, theme_taxonomy_ontologies)
+    # Normalize the subject for consistent caching (e.g., strip whitespace)
+    normalized_subject = subject.strip
+
+
+    text = normalized_subject
+    url = normalized_subject
+
+    unless theme_taxonomy_ontologies.empty?
+      theme_taxonomy_ontologies.each do |ontology_acronym|
+        class_uri = "#{rest_url}/ontologies/#{ontology_acronym}/classes/#{CGI.escape(normalized_subject)}"
+        response = LinkedData::Client::HTTP.get(
+          class_uri,
+          lang: portal_lang,
+          display_context: false,
+          display_links: false,
+          include: "prefLabel"
+        )
+
+        if response.prefLabel
+          url = class_uri.sub('data.', '')
+          text = response.prefLabel
+          break
+        end
+      end
+    end
+
+    { text: text, url: url }
+  end
+
 end
