@@ -4,8 +4,9 @@
 # server in each group is considered to be the first
 # unless any hosts have the primary property set.
 # Don't declare `role :all`, it's a meta role
-role :app, %w{testportal.lirmm.fr}
-role :db, %w{testportal.lirmm.fr} # sufficient to run db:migrate only on one system
+role :app, %w{test.agroportal.eu}
+role :db, %w{test.agroportal.eu} # sufficient to run db:migrate only on one system
+set :branch, ENV.include?('BRANCH') ? ENV['BRANCH'] : 'test'
 # Extended Server Syntax
 # ======================
 # This can be used to drop a more detailed server
@@ -14,4 +15,3 @@ role :db, %w{testportal.lirmm.fr} # sufficient to run db:migrate only on one sys
 # extended properties on the server.
 #server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
 set :log_level, :error
-set :branch, ENV.include?('BRANCH') ? ENV['BRANCH'] : 'test'
