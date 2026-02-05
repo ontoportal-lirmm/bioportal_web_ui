@@ -146,7 +146,9 @@ module AgentHelper
   end
 
   def agents_rest_url(page = 1, pagesize = 10, display = nil)
-    rest_url + agents_path +  "?page=#{page}&pagesize=#{pagesize}" + (display ? "&display=#{display}" : '') + "&apikey=#{get_apikey}" 
+    url = rest_url + agents_path + "?page=#{page}&pagesize=#{pagesize}" + (display ? "&display=#{display}" : '')
+    url += "&apikey=#{get_apikey}" unless session[:user].nil?
+    url
   end
   
   def agent_field_name(name, name_prefix = '')
@@ -276,7 +278,7 @@ module AgentHelper
       name = agent
       title = nil
     else
-      name = agent.agentType.eql?("organization") ? (agent.acronym || agent.name) : agent.name
+      name = agent.agentType.eql?("organization") ? (agent.acronym.presence || agent.name) : agent.name
       agent_icon = agent.agentType.eql?("organization") ? organization_icon : person_icon
       title = agent_tooltip(agent)
     end

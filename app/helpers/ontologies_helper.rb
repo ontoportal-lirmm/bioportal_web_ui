@@ -704,7 +704,9 @@ module OntologiesHelper
     end
 
   def submission_json_button
-    render RoundedButtonComponent.new(link: "#{(@submission_latest || @ontology).id}?display=all&apikey=#{get_apikey}",
+    link = "#{(@submission_latest || @ontology).id}?display=all"
+    link += "&apikey=#{get_apikey}" unless session[:user].nil?
+    render RoundedButtonComponent.new(link: link,
                                       target: '_blank',
                                       size: 'medium',
                                       title: t('ontologies.go_to_api'))

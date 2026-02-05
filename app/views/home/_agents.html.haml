@@ -25,5 +25,5 @@
         .agents-count-badge
           = @agents_data['totalCount']
           %span.badge-text= t('home.agents')
-      = link_to "/agents?page=1&pagesize=10&apikey=1de0a270-29c5-4dda-b043-7c3580628cd5", target: "_blank", style: "font-size: 0.9em; color: var(--primary-color) !important;" do
+      = link_to "/agents", target: "_blank", style: "font-size: 0.9em; color: var(--primary-color) !important;" do
         = t('home.fair_details')

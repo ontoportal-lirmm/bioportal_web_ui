@@ -357,7 +357,7 @@ class OntologiesController < ApplicationController
 
     @config_properties = properties_hash_values(category_attributes["object description properties"])
     @methodology_properties = properties_hash_values(category_attributes["methodology"])
-    @agents_properties = properties_hash_values(category_attributes["persons and organizations"])
+    @agents_properties = properties_hash_values(category_attributes['agents'])
     @dates_properties = properties_hash_values(category_attributes["dates"])
     @links_properties = properties_hash_values([:isFormatOf, :hasFormat, :source, :includedInDataCatalog])
     @content_properties = properties_hash_values(category_attributes["content"])

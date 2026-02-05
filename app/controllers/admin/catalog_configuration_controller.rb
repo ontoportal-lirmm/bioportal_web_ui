@@ -62,7 +62,7 @@ class Admin::CatalogConfigurationController < ApplicationController
         bibliographicCitation isReferencedBy
       ],
       dates: %w[created modified],
-      persons_and_organizations: %w[
+      agents: %w[
         creator contributor publisher contactPoint curatedBy 
         translator endorsedBy fundedBy funding
       ],
