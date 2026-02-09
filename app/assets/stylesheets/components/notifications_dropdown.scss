@@ -1,7 +1,6 @@
 .notifications-container {
     display: inline-block;
-    margin-right: 15px;
-    position: relative; // Ensure dropdown positions relative to this
+    position: relative;
 
     details {
         &[open] {
@@ -19,7 +18,7 @@
     }
 
     summary.nav-link {
-        list-style: none; // Remove default triangle
+        list-style: none;
 
         &::-webkit-details-marker {
             display: none;
@@ -73,26 +72,53 @@
 
         .notifications-header {
             padding: 12px 16px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #eee;
-            font-weight: 600;
-            color: #333;
+            font-weight: bold;
+            border-bottom: 1px solid #f0f2f5;
+            color: #2c3e50;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .notifications-list {
-            max-height: 400px;
+            max-height: 350px;
             overflow-y: auto;
+
+            .notifications-empty-state {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 40px 20px;
+                text-align: center;
+                color: #95a5a6;
+
+                .empty-box-image {
+                    width: 120px;
+                    height: 120px;
+                    margin-bottom: 20px;
+                    opacity: 0.6;
+                }
+
+                p {
+                    font-size: 1rem;
+                    margin: 0;
+                }
+            }
         }
 
-        .notification-item {
-            padding: 12px 16px;
-            border-bottom: 1px solid #f0f0f0;
+        .notification-item,
+        .skeleton-item {
             display: flex;
+            padding: 18px 16px;
+            border-bottom: 1px solid #f0f2f5;
+            gap: 12px;
+            transition: background-color 0.2s;
+            height: 80px;
+            box-sizing: border-box;
+            text-decoration: none;
+            color: inherit;
             align-items: start;
-            transition: background 0.2s;
             cursor: pointer;
 
             &:hover {
@@ -100,7 +126,7 @@
             }
 
             &.unseen {
-                background-color: rgba(235, 250, 235, 0.6); // Light green background
+                background-color: rgba(235, 250, 235, 0.6);
 
                 &:hover {
                     background-color: rgba(220, 245, 220, 0.8);
@@ -112,8 +138,7 @@
             }
 
             .notification-icon {
-                margin-right: 12px;
-                color: #3498db;
+                color: var(--primary-color);
                 margin-top: 3px;
             }
 
@@ -145,6 +170,83 @@
                 }
             }
         }
+
+        .notifications-skeleton {
+            .skeleton-item {
+                .skeleton-icon {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 4px;
+                    background: #eee;
+                    position: relative;
+                    overflow: hidden;
+                    flex-shrink: 0;
+                    margin-top: 6px;
+
+                    &::after {
+                        @extend %shimmer;
+                    }
+                }
+
+                .skeleton-content {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+
+                    .skeleton-line {
+                        background: #eee;
+                        border-radius: 4px;
+                        position: relative;
+                        overflow: hidden;
+
+                        &::after {
+                            @extend %shimmer;
+                        }
+
+                        &.title {
+                            height: 12px;
+                            width: 40%;
+                            margin-bottom: 4px;
+                        }
+
+                        &.message {
+                            height: 12px;
+                            width: 85%;
+                            margin-bottom: 4px;
+                        }
+
+                        &.time {
+                            height: 10px;
+                            width: 20%;
+                            margin-bottom: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+%shimmer {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(90deg,
+            rgba(255, 255, 255, 0) 0,
+            rgba(255, 255, 255, 0.2) 20%,
+            rgba(255, 255, 255, 0.5) 60%,
+            rgba(255, 255, 255, 0));
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
     }
 }
 

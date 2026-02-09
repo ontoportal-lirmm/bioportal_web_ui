@@ -4,29 +4,12 @@ class NotificationsController < ApplicationController
     per_page = 5
     
     begin
-      # Fetch notifications from the API
       url = "#{rest_url}/notifications"
-      # Using page_size instead of size, as it is more common in this codebase
-      response = LinkedData::Client::HTTP.get(url, { page: page, page_size: per_page, apikey: get_apikey })
+      response = LinkedData::Client::HTTP.get(url, { page: page, pagesize: per_page, apikey: get_apikey })
 
-      if response.is_a?(Array) || (response.respond_to?(:collection) && response.collection.nil?)
-        # Handle array response
-        all_items = response.is_a?(Array) ? response : (response.respond_to?(:collection) ? [] : response)
-        
-        # Enforce per_page limit client-side if API returns more
-        @notifications = all_items.take(per_page)
-        
-        # Simple pagination inference: if we got at least per_page items, assume next page
-        # Note: accurate pagination with flat array response requires knowing total count or getting full list
-        @next_page = all_items.size >= per_page ? page + 1 : nil
-      elsif response && response.collection
-        @notifications = response.collection
-        if response.respond_to?(:page)
-          total_pages = response.page.totalPages.to_i
-          @next_page = page < total_pages ? page + 1 : nil
-        else
-          @next_page = response.collection.size >= per_page ? page + 1 : nil
-        end
+      if response.is_a?(Array)
+        @notifications = response.take(per_page)
+        @next_page = response.size >= per_page ? page + 1 : nil
       else
         @notifications = []
         @next_page = nil
@@ -41,7 +24,6 @@ class NotificationsController < ApplicationController
 
   def status
     begin
-      # Fetch status from the API
       url = "#{rest_url}/notifications/status"
       response = LinkedData::Client::HTTP.get(url, { apikey: get_apikey })
       
