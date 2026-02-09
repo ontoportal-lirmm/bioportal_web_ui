@@ -27,6 +27,18 @@
         - if session[:user].nil?
           %a.nav-a{:href => "/login"}= t('layout.header.login')
         - else
+          .notifications-container
+            %details.dropdown
+              %summary.nav-link
+                %i.fas.fa-bell
+                = turbo_frame_tag "notifications_status", src: status_notifications_path do
+                  %span.badge.hidden 0
+              
+              .notifications-dropdown
+                .notifications-header Notifications
+                .notifications-list
+                  = turbo_frame_tag "notifications_list", src: notifications_path, loading: "lazy" do
+                    .p-4.text-center Loading...
           = render DropdownButtonComponent.new do |d|
             - d.header do
               = link_to("#", class: "nav-link top-nav-nav-link supportMenuDropdownLink", role: "button") do

@@ -1,0 +1,10 @@
+= turbo_frame_tag "notifications_list" do
+  = render InfiniteScrollComponent.new(id: "notifications_list", collection: @notifications, next_url: notifications_path(page: @next_page), current_page: @current_page, next_page: @next_page) do
+    - @notifications.each do |notification|
+      .notification-item{class: ("unseen" if notification.respond_to?(:seen_at) && notification.seen_at.nil?)}
+        .notification-icon
+          %i.fas.fa-info-circle
+        .notification-content
+          .notification-title= notification.title
+          .notification-message= raw notification.body
+          .notification-time= time_ago_in_words(notification.created_at.is_a?(String) ? Time.parse(notification.created_at) : notification.created_at) 
