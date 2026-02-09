@@ -973,6 +973,8 @@ fr:
       save: sauvegarder
     thread:
       submitted_by: soumis par
+  notifications:
+    you_have_no_notifications: Vous n'avez aucune notification
   ontolobridge:
     error_saving_new_term_instructions: Impossible d'enregistrer les nouvelles instructions
       de terme pour %{acronym} en raison d'une erreur serveur
