@@ -53,7 +53,8 @@
         - c.header do  |h|
           = t("ontologies.sections.visits")
           - if visits_data(@ontology)
-            = link_to(@ontology.links["analytics"] + "?apikey=#{get_apikey}&format=csv", title: t("ontologies.sections.download_as_csv")) do
+            - analytics_link, analytics_target = api_button_link_and_target(@ontology.links["analytics"] + "?format=csv")
+            = link_to(analytics_link, title: t("ontologies.sections.download_as_csv"), target: analytics_target) do
               = inline_svg("summary/download.svg", width: '30px', height: '20px')
 
         = render Layout::ListComponent.new do |l|

@@ -45,8 +45,8 @@
                   .dropdown-menu
                     - links = download_link(sub,@ontology)
                     - links.each do |value|
-                      - link,label = value.values               
-                      %a.dropdown-item{ href: link }= label
+                      - link,label,target = value.values               
+                      %a.dropdown-item{ href: link, target: target }= label
                  
                 -# = raw download_link(sub, @ontology)
                 - if @ontology.admin?(session[:user])

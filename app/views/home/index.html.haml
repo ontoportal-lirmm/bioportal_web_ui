@@ -139,7 +139,8 @@
           %div.align-items
             %h4.margin-items= t('home.agents')
             = render Display::InfoTooltipComponent.new(text: t('home.index.agents_tooltip', portalName: $SITE) )
-            = render IconWithTooltipComponent.new(icon: 'json.svg',link: agents_rest_url, size:'small', style: "margin:0px 0px 6px 6px; vertical-align: top;", title: t("components.go_to_api"))  
+            - agents_link, agents_target = api_button_link_and_target(agents_rest_url)
+            = render IconWithTooltipComponent.new(icon: 'json.svg',link: agents_link, size:'small', style: "margin:0px 0px 6px 6px; vertical-align: top;", title: t("components.go_to_api"), target: agents_target)  
           %hr.home-section-line/
           = turbo_frame_tag "agents_frame", src: home_agents_path, loading: "lazy" do
             .home-agents-container

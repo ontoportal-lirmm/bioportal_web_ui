@@ -10,7 +10,7 @@
     %div.catalog-configuration-page-description
       = t('admin.index.catalog_config')
       .btn
-        = rounded_button_component("#{$REST_URL}?apikey=#{get_apikey}&_ts=#{Time.now.to_i}&display=all")
+        = rounded_button_component("#{$REST_URL}?_ts=#{Time.now.to_i}&display=all")
       = description_tooltip(t('admin.index.catalog_config'), t('admin.catalog_configuration.description_text', portal_name: portal_name))
 
   %div.mb-3

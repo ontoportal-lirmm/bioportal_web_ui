@@ -175,17 +175,23 @@ module OntologiesHelper
         links << { href: uri, label: t('ontologies.home_page') }
       end
     else
-      uri = submission.id + "/download?apikey=#{get_apikey}"
-      links << { href: uri, label: submission.pretty_format }
+      uri = submission.id + "/download"
+      href, target = api_button_link_and_target(uri)
+      links << { href: href, label: submission.pretty_format, target: target }
       if submission_ready?(submission)
-        links << { href: "#{ontology.id}/download?apikey=#{get_apikey}&download_format=csv", label: "CSV" }
+        uri = "#{ontology.id}/download?download_format=csv"
+        href, target = api_button_link_and_target(uri)
+        links << { href: href, label: "CSV", target: target }
         unless submission.hasOntologyLanguage.eql?('UMLS')
-          links << { href: "#{ontology.id}/download?apikey=#{get_apikey}&download_format=rdf", label: "RDF/XML" }
+          uri = "#{ontology.id}/download?download_format=rdf"
+          href, target = api_button_link_and_target(uri)
+          links << { href: href, label: "RDF/XML", target: target }
         end
       end
       unless submission.diffFilePath.nil?
-        uri = submission.id + "/download_diff?apikey=#{get_apikey}"
-        links << { href: uri, label: "DIFF" }
+        uri = submission.id + "/download_diff"
+        href, target = api_button_link_and_target(uri)
+        links << { href: href, label: "DIFF", target: target }
       end
     end
     links
@@ -537,7 +543,7 @@ module OntologiesHelper
   end
 
   def ontology_object_json_link(ontology_acronym, object_type, id)
-    "#{rest_url}/ontologies/#{ontology_acronym}/#{object_type}/#{escape(id)}?display=all&apikey=#{get_apikey}"
+    "#{rest_url}/ontologies/#{ontology_acronym}/#{object_type}/#{escape(id)}?display=all"
   end
 
   def render_permalink_link
@@ -549,8 +555,9 @@ module OntologiesHelper
   end
 
   def render_concepts_json_button(link)
+    link, target = api_button_link_and_target(link)
     content_tag(:div, class: 'concepts_json_button') do
-      render RoundedButtonComponent.new(link: link, target: '_blank')
+      render RoundedButtonComponent.new(link: link, target: target)
     end
   end
 
@@ -635,13 +642,10 @@ module OntologiesHelper
         title = label + '<br>' + link_to(Array(value).first, target: '_blank')
       end
 
-      url = Array(value).first || ''
-      if url.include?(rest_hostname)
-        url = url['?'] ? "#{url}&apikey=#{get_apikey}" : "#{url}?apikey=#{get_apikey}"
-      end
+      url, target_attr = api_button_link_and_target(url || '')
 
       content_tag(:span, data: {controller: "tooltip" }, title: title) do
-        link_to(inline_svg("#{icon}.svg", width: "32", height: '32'), url, link_options.merge(target: '_blank'))
+        link_to(inline_svg("#{icon}.svg", width: "32", height: '32'), url, link_options.merge(target: target_attr))
       end
     end.join.html_safe
   end
@@ -705,9 +709,9 @@ module OntologiesHelper
 
   def submission_json_button
     link = "#{(@submission_latest || @ontology).id}?display=all"
-    link += "&apikey=#{get_apikey}" unless session[:user].nil?
+    link, target = api_button_link_and_target(link)
     render RoundedButtonComponent.new(link: link,
-                                      target: '_blank',
+                                      target: target,
                                       size: 'medium',
                                       title: t('ontologies.go_to_api'))
   end
@@ -780,7 +784,8 @@ module OntologiesHelper
   end
 
   def service_button(link:, title: )
-    render IconWithTooltipComponent.new(icon: "json.svg",link: link, target: '_blank', title: title)
+    link, target = api_button_link_and_target(link)
+    render IconWithTooltipComponent.new(icon: "json.svg",link: link, target: target, title: title)
   end
 
   def n_triples_to_table(n_triples_string)

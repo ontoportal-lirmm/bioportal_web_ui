@@ -39,7 +39,7 @@ class HomeController < ApplicationController
     require 'json'
 
     @agents_data = Rails.cache.fetch("agents_data_home_page", expires_in: 1.hour) do
-      api_url = agents_rest_url(page=1, pagesize=1000, display='name,agentType,usages')  + "&apikey=#{get_apikey}"
+      api_url = agents_rest_url(page=1, pagesize=1000, display='name,agentType,usages')
       uri = URI(api_url)
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true if uri.scheme == 'https'

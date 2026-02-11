@@ -116,7 +116,8 @@ module ComponentsHelper
   end
 
   def rounded_button_component(link)
-    render RoundedButtonComponent.new(link: link, target: '_blank', size: 'small', title: t("components.go_to_api"))
+    link, target = api_button_link_and_target(link)
+    render RoundedButtonComponent.new(link: link, target: target, size: 'small', title: t("components.go_to_api"))
   end
 
   def copy_link_to_clipboard(url, show_content: false)

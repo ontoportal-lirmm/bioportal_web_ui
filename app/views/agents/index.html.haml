@@ -2,7 +2,8 @@
   .d-flex.justify-content-between
     = render PageHeaderComponent.new(title: "Agents" , description: t('agents.description', portalName: $SITE))
     .d-flex.align-items-center
-      = render RoundedButtonComponent.new(link: agents_rest_url, target: '_blank', size: 'medium', title: t("components.go_to_api"))
+      - link, target = api_button_link_and_target(agents_rest_url)
+      = render RoundedButtonComponent.new(link: link, target: target, size: 'medium', title: t("components.go_to_api"))
       - if session[:user]
         .span.m-2
         = agents_create_button

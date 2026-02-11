@@ -7,7 +7,7 @@
                       data: { show_modal_title_value: t('admin.groups.index.create_a_new_group')})
 
     = action_button(t('admin.groups.index.synchronize_groups_slices'), admin_groups_synchronize_groups_url)
-    = rounded_button_component("#{$REST_URL}/groups?display=all&apikey=#{get_apikey}")
+    = rounded_button_component("#{$REST_URL}/groups?display=all")
 
   %div.my-1
     = render_alerts_container

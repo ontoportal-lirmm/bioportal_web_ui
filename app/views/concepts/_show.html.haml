@@ -5,14 +5,15 @@
   - else
     %div{'data-controller': 'concepts-json', 'data-action': 'click->concepts-json#update'}
       = ontology_object_tabs_component(ontology_id: @ontology.acronym, objects_title: "classes", object_id: @concept.id) do |c|
-        - apikey = "apikey=#{get_apikey}"
         - baseClassUrl = "#{@ontology.id}/classes/#{escape(@concept.id)}"
-        - tab_item_component(container_tabs: c, title: t('concepts.details'), path: '#details', selected: true, json_link: "#{baseClassUrl}?#{apikey}&display=all") do
+        - detail_link = api_button_link_and_target("#{baseClassUrl}?display=all")[0]
+        - tab_item_component(container_tabs: c, title: t('concepts.details'), path: '#details', selected: true, json_link: detail_link) do
           = render :partial =>'/concepts/details'
 
         - unless skos?
           - count_span = content_tag(:span, "#{t('concepts.instances')} (#{content_tag(:span, "", id: 'concept_instances_sorted_list_count')})".html_safe)
-          - tab_item_component(container_tabs: c, title: count_span, path: '#instances', json_link: "#{baseClassUrl}/instances?#{apikey}") do
+          - instance_link = api_button_link_and_target("#{baseClassUrl}/instances")[0]
+          - tab_item_component(container_tabs: c, title: count_span, path: '#instances', json_link: instance_link) do
             = render :partial =>'instances/instances' , locals: {id: "class-instances-data-table"}
 
 
@@ -21,12 +22,14 @@
 
 
         - count_span = content_tag(:span, "#{t('concepts.notes')} (#{content_tag(:span, @notes.length, id: 'note_count')})".html_safe)
-        - tab_item_component(container_tabs: c, title: count_span, path: '#notes', json_link: "#{baseClassUrl}/notes?#{apikey}") do
+        - notes_link = api_button_link_and_target("#{baseClassUrl}/notes")[0]
+        - tab_item_component(container_tabs: c, title: count_span, path: '#notes', json_link: notes_link) do
           = render :partial =>'/notes/list'
 
 
         - count_span = content_tag(:span, "#{t('concepts.mappings')} (#{content_tag(:span, concept_mappings_loader(ontology_acronym: @ontology.acronym, concept_id: @concept.id))})".html_safe, class: "d-flex")
-        - tab_item_component(container_tabs: c, title: count_span, path: '#mappings', json_link: "#{baseClassUrl}/mappings?#{apikey}") do
+        - mappings_link = api_button_link_and_target("#{baseClassUrl}/mappings")[0]
+        - tab_item_component(container_tabs: c, title: count_span, path: '#mappings', json_link: mappings_link) do
           = render TurboFrameComponent.new(id:'concept_mappings',
           src:"/ajax/mappings/get_concept_table?ontologyid=#{@ontology.acronym}&conceptid=#{CGI.escape(@concept.id)}")
 

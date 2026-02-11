@@ -27,7 +27,8 @@ module ApplicationHelper
 
   def search_json_link(link = @json_url, style: '')
     custom_style = "font-size: 50px; line-height: 0.5; margin-left: 6px; #{style}".strip
-    render IconWithTooltipComponent.new(icon: "json.svg",link: link, target: '_blank', title: t('fair_score.go_to_api'), size:'small', style: custom_style)
+    link, target = api_button_link_and_target(link)
+    render IconWithTooltipComponent.new(icon: "json.svg",link: link, target: target, title: t('fair_score.go_to_api'), size:'small', style: custom_style)
   end
 
   def read_only_enabled?
@@ -66,6 +67,15 @@ module ApplicationHelper
       return session[:user].apikey
     else
       return LinkedData::Client.settings.apikey
+    end
+  end
+
+  def api_button_link_and_target(link)
+    if session[:user].nil?
+      ["/login?redirect=#{escape(link)}", '_top']
+    else
+      link = append_apikey_if_rest_url(link, session[:user])
+      [link, '_blank']
     end
   end
 
@@ -505,6 +515,24 @@ module ApplicationHelper
 
   def id_to_acronym(id)
     id.split('/').last
+  end
+
+  private
+
+  def append_apikey_if_rest_url(link, user)
+    return link if link.blank? || user.nil?
+    rest_url = LinkedData::Client.settings.rest_url
+    fairness_url = $FAIRNESS_URL
+    if link.include?(rest_url) || (fairness_url.present? && link.include?(fairness_url))
+      uri = URI.parse(link) rescue nil
+      return link unless uri
+      params = URI.decode_www_form(uri.query || [])
+      params.reject! { |k, v| k == "apikey" }
+      params << ["apikey", user.apikey]
+      uri.query = URI.encode_www_form(params)
+      link = uri.to_s
+    end
+    link
   end
 
 end

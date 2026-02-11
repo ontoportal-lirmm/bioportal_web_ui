@@ -144,7 +144,8 @@ module FairScoreHelper
   def fairness_link(style: '', ontology: nil)
     custom_style = "font-size: 50px; line-height: 0.5; margin-left: 6px; #{style}".strip
     ontology = ontology || 'all'
-    render IconWithTooltipComponent.new(icon: 'json.svg',link: "#{get_fairness_service_url}&ontologies=#{ontology}&combined=true", target: '_blank', title: t('fair_score.go_to_api'), size:'small', style: custom_style)  
+    link, target = api_button_link_and_target("#{get_fairness_service_url}&ontologies=#{ontology}&combined=true")
+    render IconWithTooltipComponent.new(icon: 'json.svg',link: link, target: target, title: t('fair_score.go_to_api'), size:'small', style: custom_style)  
   end
 
   private
