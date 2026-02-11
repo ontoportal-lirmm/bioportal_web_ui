@@ -185,7 +185,7 @@ class ConceptDetailsComponent < ViewComponent::Base
 
   def convert_dates(hash)
     hash.transform_values do |property|
-      if property[:key].to_s.include?("modified") || property[:key].to_s.include?("created")
+      if property[:key].to_s.include?("http://purl.org/dc/terms/created") || property[:key].to_s.include?("http://purl.org/dc/terms/modified")
         value = property[:values].first
         parsed_date = l(Date.parse(value), format: :monthfull_day_year.to_sym) rescue value
         property[:values] = [parsed_date]
