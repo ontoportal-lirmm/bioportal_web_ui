@@ -943,6 +943,8 @@ en:
       save: save
     thread:
       submitted_by: submitted by
+  notifications:
+    you_have_no_notifications: You have no notifications
   ontolobridge:
     error_saving_new_term_instructions: Unable to save new term instructions for %{acronym}
       due to a server error

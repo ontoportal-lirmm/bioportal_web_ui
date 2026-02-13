@@ -250,5 +250,10 @@ Rails.application.routes.draw do
   # Install the default route as the lowest priority.
   get '/:controller(/:action(/:id))'
 
+  resources :notifications, only: [:index] do
+    collection do
+      get :status
+    end
+  end
   mount Lookbook::Engine, at: '/lookbook'
 end
